@@ -25,7 +25,7 @@ class WarCard extends StatelessWidget {
             case 'warEnded':
               return _warEnded(context, clanTag);
             default:
-              return Text('Clan state unknown');
+              return const Text('Clan state unknown');
           }
         }(),
       ),
@@ -45,7 +45,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl: currentWarInfo.clan!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
@@ -133,7 +133,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl: currentWarInfo.opponent!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
@@ -157,7 +157,7 @@ class WarCard extends StatelessWidget {
               width: 70,
               height: 70,
               child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: currentWarInfo.clan!.badgeUrls.large,
                   fit: BoxFit.cover),
             ),
@@ -178,7 +178,7 @@ class WarCard extends StatelessWidget {
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               AppLocalizations.of(context)?.warPreparation ?? 'Preparation',
               textAlign: TextAlign.center,
@@ -196,7 +196,7 @@ class WarCard extends StatelessWidget {
               width: 70,
               height: 70,
               child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: currentWarInfo.opponent!.badgeUrls.large,
                   fit: BoxFit.cover),
             ),
@@ -224,7 +224,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl: currentWarInfo.clan!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),
@@ -255,7 +255,7 @@ class WarCard extends StatelessWidget {
                     '${currentWarInfo.clan!.destructionPercentage % 1 == 0 ? currentWarInfo.clan!.destructionPercentage.toInt().toString().padLeft(6, ' ') : currentWarInfo.clan!.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent!.destructionPercentage % 1 == 0 ? ('${currentWarInfo.opponent!.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${currentWarInfo.opponent!.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}',
                     style: Theme.of(context).textTheme.bodySmall),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -268,7 +268,7 @@ class WarCard extends StatelessWidget {
                 width: 70,
                 height: 70,
                 child: CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl: currentWarInfo.opponent!.badgeUrls.large,
                     fit: BoxFit.cover),
               ),

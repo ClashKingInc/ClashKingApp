@@ -19,7 +19,7 @@ FutureOr<void> backgroundCallback(Uri? data) async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   static final ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: const Color.fromARGB(255, 61, 60, 60),
@@ -210,7 +210,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           themeMode: Provider.of<ThemeNotifier>(context).themeMode,
           locale: appState.locale,
-          localizationsDelegates: [
+          localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -222,7 +222,7 @@ class MyApp extends StatelessWidget {
           title: 'ClashKing',
           darkTheme: darkTheme,
           theme: lightTheme,
-          home: StartupWidget(),
+          home: const StartupWidget(),
         );
       },
     );

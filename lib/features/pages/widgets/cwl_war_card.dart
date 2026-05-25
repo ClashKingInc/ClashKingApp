@@ -140,7 +140,7 @@ class CurrentWarInfoCard extends StatelessWidget {
             height: 70,
             child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
               imageUrl: clan.badgeUrls.large,
               fit: BoxFit.cover,
             ),

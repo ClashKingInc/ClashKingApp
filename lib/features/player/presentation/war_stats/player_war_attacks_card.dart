@@ -206,7 +206,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
                           children: [
                             buildStarsIcon(attack.stars.round()),
                             const SizedBox(width: 4),
-                            Text(
+                            const Text(
                               "-"
                             ),
                             const SizedBox(width: 4),

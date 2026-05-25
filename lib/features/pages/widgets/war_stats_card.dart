@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class WarStatsCard extends StatefulWidget {
   final Clan clan;
-  WarStatsCard({super.key, required this.clan});
+  const WarStatsCard({super.key, required this.clan});
 
   @override
   WarStatsCardState createState() => WarStatsCardState();
@@ -31,14 +31,14 @@ class WarStatsCardState extends State<WarStatsCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 70,
                 width: 70,
                 child: MobileWebImage(
                   imageUrl: ImageAssets.warClan,
                 ),
               ),
-              SizedBox(width: 24),
+              const SizedBox(width: 24),
               Expanded(
                 child: Column(
                   children: [

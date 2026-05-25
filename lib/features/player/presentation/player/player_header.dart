@@ -70,15 +70,15 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
               _buildPlayerMainInfo(hallImageUrl),
             ],
           ),
-          SizedBox(height: 46),
+          const SizedBox(height: 46),
           _buildPlayerDetails(context, stars),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: hallChips,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildWarButtons(context),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -97,7 +97,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             BlendMode.darken,
           ),
           child: CachedNetworkImage(
-            errorWidget: (context, url, error) => Icon(Icons.error),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
             imageUrl: imageUrl,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -128,7 +128,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.sports_esports_rounded,
+            icon: const Icon(Icons.sports_esports_rounded,
                 color: Colors.white, size: 32),
             onPressed: () {
               final languageCode =
@@ -152,7 +152,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
             onPressed: () {
               showMenu(
                 context: context,
-                position: RelativeRect.fromLTRB(100, 100, 0, 0),
+                position: const RelativeRect.fromLTRB(100, 100, 0, 0),
                 items: [
                   PopupMenuItem(
                     value: 'achievements',
@@ -162,7 +162,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                             imageUrl:
                                 widget.player.clanOverview.badgeUrls.small,
                             width: 20),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(AppLocalizations.of(context)!.gameAchievements),
                       ],
                     ),
@@ -180,8 +180,8 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                     value: 'war_stats',
                     child: Row(
                       children: [
-                        MobileWebImage(imageUrl: ImageAssets.war, width: 20),
-                        SizedBox(width: 8),
+                        const MobileWebImage(imageUrl: ImageAssets.war, width: 20),
+                        const SizedBox(width: 8),
                         Text(AppLocalizations.of(context)!.warStats),
                       ],
                     ),
@@ -198,9 +198,9 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                     value: 'todolist',
                     child: Row(
                       children: [
-                        MobileWebImage(
+                        const MobileWebImage(
                             imageUrl: ImageAssets.iconBuilderPotion, width: 20),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(AppLocalizations.of(context)!.todoTitle),
                       ],
                     ),
@@ -210,7 +210,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
                           context: context,
                           builder: (context) => Dialog(
                             backgroundColor: Colors.transparent,
-                            insetPadding: EdgeInsets.all(8),
+                            insetPadding: const EdgeInsets.all(8),
                             child: IntrinsicHeight(
                               child: PlayerToDoBodyCard(
                                 player: widget.player,
@@ -237,12 +237,12 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
       bottom: -72,
       child: Row(
         children: [
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           CachedNetworkImage(
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
               imageUrl: hallImageUrl,
               width: 190),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
         ],
       ),
     );
@@ -256,14 +256,14 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 22),
+              const SizedBox(height: 22),
               stars.isNotEmpty
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: stars,
                     )
-                  : SizedBox(height: 22),
-              SizedBox(height: 8),
+                  : const SizedBox(height: 22),
+              const SizedBox(height: 8),
               Text(
                 widget.player.name,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -290,7 +290,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
         });
       },
       child: Container(
-        padding: EdgeInsets.only(top: 2.0, bottom: 10.0),
+        padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
         child: Text(
           widget.player.tag,
           style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
@@ -304,7 +304,7 @@ class PlayerInfoHeaderState extends State<PlayerInfoHeader>
     return List<Widget>.generate(
       count,
       (index) => CachedNetworkImage(
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
         imageUrl: ImageAssets.builderBaseStar,
         width: 22.0,
         height: 22.0,

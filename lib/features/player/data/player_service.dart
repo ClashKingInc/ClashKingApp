@@ -19,7 +19,7 @@ class PlayerService extends ChangeNotifier {
   final ApiService _apiService;
   bool _isLoading = false;
   List<Player> _profiles = [];
-  List<Map<String, dynamic>> _clans = [];
+  final List<Map<String, dynamic>> _clans = [];
 
   bool get isLoading => _isLoading;
   List<Player> get profiles => _profiles;

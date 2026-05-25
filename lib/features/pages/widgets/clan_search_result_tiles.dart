@@ -8,7 +8,7 @@ import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart
 class ClanSearchResultTile extends StatefulWidget {
   final dynamic clan;
 
-  ClanSearchResultTile({required this.clan});
+  const ClanSearchResultTile({super.key, required this.clan});
 
   @override
   ClanSearchResultTileState createState() => ClanSearchResultTileState();
@@ -32,7 +32,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
             context: context,
             barrierDismissible: false,
             builder: (BuildContext context) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             },
@@ -61,11 +61,11 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.only(right: 8),
                       child: SizedBox(
                         width: 50,
                         child: CachedNetworkImage(
@@ -77,7 +77,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                   ],
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,8 +99,8 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                                       .clan['location']['countryCode']
                                       .toLowerCase()),
                                   width: 16)
-                              : SizedBox.shrink(),
-                          SizedBox(width: 8),
+                              : const SizedBox.shrink(),
+                          const SizedBox(width: 8),
                           CachedNetworkImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
@@ -115,7 +115,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
                             color: Theme.of(context).colorScheme.tertiary),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [

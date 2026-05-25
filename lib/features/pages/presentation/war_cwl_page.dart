@@ -93,7 +93,7 @@ class WarCwlPage extends StatelessWidget {
             LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
             const SizedBox(height: 4),
             if (!hasClan)
-              Padding(
+              const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(child: NoClanCard()),
               )
@@ -106,7 +106,7 @@ class WarCwlPage extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: WarCard(
                       currentWarInfo: warCwl.warInfo, clanTag: clan.tag),
                 ),
@@ -137,7 +137,7 @@ class WarCwlPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          child: CwlCard(),
+                          child: const CwlCard(),
                         ),
                         if (warCwl.getActiveWarByTag(clan.tag) != null)
                           GestureDetector(
@@ -148,7 +148,7 @@ class WarCwlPage extends StatelessWidget {
                                     war: warCwl.getActiveWarByTag(clan.tag)!),
                               ),
                             ),
-                            child: CurrentWarInfoCard(),
+                            child: const CurrentWarInfoCard(),
                           )
                       ],
                     ),

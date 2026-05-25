@@ -13,7 +13,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   final WarWidgetSyncService _warWidgetSyncService;
-  Locale _locale = Locale('en'); // Default language is English
+  Locale _locale = const Locale('en'); // Default language is English
   Locale get locale => _locale; // Getter for the locale
   bool isLoading = false; // Loading state of the app
 
@@ -46,7 +46,7 @@ class MyAppState extends ChangeNotifier {
       }
     }
 
-    return Locale('en'); // Fallback to English
+    return const Locale('en'); // Fallback to English
   }
 
 // Load the language from the shared preferences or set to the system locale

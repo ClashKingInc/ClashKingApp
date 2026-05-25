@@ -144,11 +144,11 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                       children: [
                         const SizedBox(height: 16),
                         // Skeleton loading for stat cards
-                        Row(
+                        const Row(
                           children: [
-                            Expanded(child: const StatCardSkeleton()),
-                            const SizedBox(width: 8),
-                            Expanded(child: const StatCardSkeleton()),
+                            Expanded(child: StatCardSkeleton()),
+                            SizedBox(width: 8),
+                            Expanded(child: StatCardSkeleton()),
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -560,7 +560,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
           SnackBar(
             content: Row(
               children: [
-                Icon(Icons.error, color: Colors.white, size: 20),
+                const Icon(Icons.error, color: Colors.white, size: 20),
                 const SizedBox(width: 12),
                 Expanded(child: Text('Failed to load filtered data: $e')),
               ],

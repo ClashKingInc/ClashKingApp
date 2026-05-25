@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class NoClanCard extends StatelessWidget {
+  const NoClanCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+      style: Theme.of(context).textTheme.labelLarge ?? const TextStyle(),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 80,
                 width: 80,
                 child: MobileWebImage(imageUrl: ImageAssets.clanCastle),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

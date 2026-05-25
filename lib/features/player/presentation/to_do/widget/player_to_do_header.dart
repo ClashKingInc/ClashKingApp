@@ -13,7 +13,7 @@ class PlayerToDoHeader extends StatefulWidget {
   final List<Player> players;
   final Map<String, WarMemberPresence> memberPresenceMap;
 
-  PlayerToDoHeader({super.key, required this.players, required this.memberPresenceMap});
+  const PlayerToDoHeader({super.key, required this.players, required this.memberPresenceMap});
 
   @override
   PlayerToDoHeaderState createState() => PlayerToDoHeaderState();
@@ -84,7 +84,7 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
                 imageUrl: "https://assets.clashk.ing/landscape/todo-landscape.png",
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -100,7 +100,7 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white)),
             Text(loc.todoAccountsNumberInactive(inactive),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white)),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Wrap(
               alignment: WrapAlignment.start,
               spacing: 7.0,
@@ -125,7 +125,7 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
           right: 20,
           child: Row(
             children: [
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Container(
                   height: 8,
@@ -138,12 +138,12 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
                     child: LinearProgressIndicator(
                       value: progressRatio,
                       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
                     ),
                   ),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text('${(progressRatio * 100).toInt()}%',
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white)),
             ],
@@ -163,15 +163,15 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface),
             children: [
               TextSpan(text: "${loc.todoExplanationIntro}\n\n"),
-              TextSpan(text: "${loc.todoExplanationLegendsTitle}\n", style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: "${loc.todoExplanationLegendsTitle}\n", style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: "${loc.todoExplanationLegends}\n\n"),
-              TextSpan(text: "${loc.todoExplanationRaidsTitle}\n", style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: "${loc.todoExplanationRaidsTitle}\n", style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: "${loc.todoExplanationRaids}\n\n"),
-              TextSpan(text: "${loc.todoExplanationClanWarsTitle}\n", style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: "${loc.todoExplanationClanWarsTitle}\n", style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: "${loc.todoExplanationClanWars}\n\n"),
-              TextSpan(text: "${loc.todoExplanationCwlTitle}\n", style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: "${loc.todoExplanationCwlTitle}\n", style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: "${loc.todoExplanationCwl}\n\n"),
-              TextSpan(text: "${loc.todoExplanationPassAndGamesTitle}\n", style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: "${loc.todoExplanationPassAndGamesTitle}\n", style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: "${loc.todoExplanationPassAndGames}\n\n"),
               TextSpan(text: loc.todoExplanationConclusion),
             ],
@@ -186,11 +186,11 @@ class PlayerToDoHeaderState extends State<PlayerToDoHeader> {
       avatar: CircleAvatar(
         backgroundColor: Colors.transparent,
         child: CachedNetworkImage(
-          errorWidget: (context, url, error) => Icon(Icons.error),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
           imageUrl: imageUrl,
         ),
       ),
-      labelPadding: EdgeInsets.symmetric(horizontal: 4.0),
+      labelPadding: const EdgeInsets.symmetric(horizontal: 4.0),
       label: Text('$value/$max', style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white)),
       shape: RoundedRectangleBorder(
         side: BorderSide(color: value >= max ? Colors.green : Colors.red, width: 1.0),

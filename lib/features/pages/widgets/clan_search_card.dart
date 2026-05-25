@@ -111,7 +111,7 @@ class ClanSearchCardState extends State<ClanSearchCard> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) {
-                                return ClanSearchFilters();
+                                return const ClanSearchFilters();
                               },
                             ).then((String? filters) {
                               if (filters != null) {

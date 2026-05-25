@@ -276,7 +276,7 @@ class CocAccountService extends ChangeNotifier {
       spanFetchAccounts.finish();
 
       if (cocAccounts.isEmpty) {
-        transaction.finish(status: SpanStatus.ok());
+        transaction.finish(status: const SpanStatus.ok());
         return;
       }
 
@@ -293,7 +293,7 @@ class CocAccountService extends ChangeNotifier {
           playerTags, playerService, clanService, warCwlService);
       spanBulkLoad.finish();
 
-      transaction.finish(status: SpanStatus.ok());
+      transaction.finish(status: const SpanStatus.ok());
       _lastRefresh = DateTime.now();
       initializeSelectedTag();
     } on HttpException catch (e) {
@@ -306,7 +306,7 @@ class CocAccountService extends ChangeNotifier {
       }
     } catch (e, stack) {
       transaction.throwable = e;
-      transaction.status = SpanStatus.internalError();
+      transaction.status = const SpanStatus.internalError();
       transaction.finish();
       Sentry.captureException(e, stackTrace: stack);
       rethrow;

@@ -19,7 +19,7 @@ class PlayerInfosCard extends StatelessWidget {
     final selectedProfile = playerService.getSelectedProfile(cocAccountService);
 
     if (selectedProfile == null) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -38,7 +38,7 @@ class PlayerInfosCard extends StatelessWidget {
         : AppLocalizations.of(context)?.warStatusUnready ?? 'Unready';
 
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+      style: Theme.of(context).textTheme.labelLarge ?? const TextStyle(),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -61,7 +61,7 @@ class PlayerInfosCard extends StatelessWidget {
                                 .textTheme
                                 .labelLarge
                                 ?.copyWith(fontWeight: FontWeight.bold) ??
-                            TextStyle(fontWeight: FontWeight.bold),
+                            const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
                         selectedProfile.tag,
@@ -69,7 +69,7 @@ class PlayerInfosCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,7 +93,7 @@ class PlayerInfosCard extends StatelessWidget {
                             IconChip(
                                 icon: LucideIcons.chevronsUpDown,
                                 label: ratioDonation.toStringAsFixed(2),
-                                color: Color.fromARGB(255, 0, 136, 255),
+                                color: const Color.fromARGB(255, 0, 136, 255),
                                 size: 20,
                                 description: AppLocalizations.of(context)!
                                     .playerRatioDescription(

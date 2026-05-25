@@ -13,7 +13,7 @@ class ImageChip extends StatefulWidget {
   final BuildContext? context;
   final GestureTapCallback? onTap;
 
-  ImageChip({
+  const ImageChip({super.key, 
     required this.imageUrl,
     this.label = '',
     this.labelWidget = const SizedBox(),
@@ -41,7 +41,7 @@ class ImageChipState extends State<ImageChip> {
       _timer?.cancel();
     } else {
       tooltip?.ensureTooltipVisible();
-      _timer = Timer(Duration(seconds: 5), () {
+      _timer = Timer(const Duration(seconds: 5), () {
         tooltip?.deactivate();
         setState(() {
           _isTooltipVisible = false;
@@ -99,8 +99,8 @@ class ImageChipState extends State<ImageChip> {
                     .textTheme
                     .bodyMedium
                     ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                showDuration: Duration(seconds: 5),
-                margin: EdgeInsets.symmetric(horizontal: 64),
+                showDuration: const Duration(seconds: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 64),
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .scaffoldBackgroundColor
@@ -111,7 +111,7 @@ class ImageChipState extends State<ImageChip> {
                       color: Colors.black.withValues(alpha: 0.1),
                       spreadRadius: 2,
                       blurRadius: 2,
-                      offset: Offset(0, 1),
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
@@ -133,7 +133,7 @@ class IconChip extends StatefulWidget {
   final BuildContext? context;
   final GestureTapCallback? onTap;
 
-  IconChip({
+  const IconChip({super.key, 
     required this.icon,
     required this.label,
     this.size = 24,
@@ -163,7 +163,7 @@ class IconChipState extends State<IconChip> {
     } else {
       tooltip?.ensureTooltipVisible();
       _timer?.cancel();
-      _timer = Timer(Duration(seconds: 5), () {
+      _timer = Timer(const Duration(seconds: 5), () {
         if (_isTooltipVisible) {
           tooltip?.deactivate();
           if (mounted) {
@@ -219,7 +219,7 @@ class IconChipState extends State<IconChip> {
                   .textTheme
                   .bodyMedium
                   ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-              margin: EdgeInsets.symmetric(horizontal: 64),
+              margin: const EdgeInsets.symmetric(horizontal: 64),
               decoration: BoxDecoration(
                 color: Theme.of(context)
                     .scaffoldBackgroundColor
@@ -230,7 +230,7 @@ class IconChipState extends State<IconChip> {
                     color: Colors.black.withValues(alpha: 0.1),
                     spreadRadius: 2,
                     blurRadius: 2,
-                    offset: Offset(0, 1),
+                    offset: const Offset(0, 1),
                   ),
                 ],
               ),
@@ -258,7 +258,7 @@ class CustomChip extends StatefulWidget {
   final double labelPadding;
   final String description;
 
-  CustomChip({
+  const CustomChip({super.key, 
     required this.icon,
     required this.label,
     this.size = 24,
@@ -285,7 +285,7 @@ class CustomChipState extends State<CustomChip> {
     } else {
       tooltip?.ensureTooltipVisible();
       _timer?.cancel();
-      _timer = Timer(Duration(seconds: 5), () {
+      _timer = Timer(const Duration(seconds: 5), () {
         if (_isTooltipVisible) {
           tooltip?.deactivate();
           if (mounted) {
@@ -317,7 +317,7 @@ class CustomChipState extends State<CustomChip> {
             .textTheme
             .bodyMedium
             ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-        margin: EdgeInsets.symmetric(horizontal: 64),
+        margin: const EdgeInsets.symmetric(horizontal: 64),
         decoration: BoxDecoration(
           color:
               Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
@@ -327,7 +327,7 @@ class CustomChipState extends State<CustomChip> {
               color: Colors.black.withValues(alpha: 0.1),
               spreadRadius: 2,
               blurRadius: 2,
-              offset: Offset(0, 1),
+              offset: const Offset(0, 1),
             ),
           ],
         ),

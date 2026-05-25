@@ -10,14 +10,14 @@ class GameDataService {
   static const String _translationsUrl =
       "${ApiService.apiUrlV2}/static/app-translations";
 
-  static Map<String, dynamic> _petsData = {};
-  static Map<String, dynamic> _heroesData = {};
-  static Map<String, dynamic> _troopsData = {};
-  static Map<String, dynamic> _spellsData = {};
-  static Map<String, dynamic> _gearsData = {};
-  static Map<String, dynamic> _leagueData = {};
-  static Map<String, dynamic> _playerLeagueData = {};
-  static Map<String, dynamic> _gameData = {};
+  static final Map<String, dynamic> _petsData = {};
+  static final Map<String, dynamic> _heroesData = {};
+  static final Map<String, dynamic> _troopsData = {};
+  static final Map<String, dynamic> _spellsData = {};
+  static final Map<String, dynamic> _gearsData = {};
+  static final Map<String, dynamic> _leagueData = {};
+  static final Map<String, dynamic> _playerLeagueData = {};
+  static final Map<String, dynamic> _gameData = {};
   static final Map<String, dynamic> _bundleData = {};
   static final Map<String, String> _translationsData = {};
   static String _translationLocale = 'EN';

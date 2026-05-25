@@ -60,7 +60,7 @@ class LegendSeason extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                             imageUrl: ImageAssets.legendBlazon,
                             width: 40,
                           ),
@@ -132,7 +132,7 @@ class LegendSeason extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium),
                 CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl:
                       'https://assets.clashk.ing/stickers/Villager_HV_Villager_12.png',
                   height: 300,
@@ -165,7 +165,7 @@ class LegendSeason extends StatelessWidget {
           children: [
             CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: icon, width: 15, height: 15),
+  errorWidget: (context, url, error) => const Icon(Icons.error),imageUrl: icon, width: 15, height: 15),
             const SizedBox(width: 4),
             Text(
                 "${NumberFormat('#,###', locale).format(count)}/$attacksPossible",
@@ -176,7 +176,7 @@ class LegendSeason extends StatelessWidget {
           children: [
             CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
               imageUrl: ImageAssets.trophies,
               width: 15,
               height: 15,
@@ -195,7 +195,7 @@ class LegendSeason extends StatelessWidget {
               children: [
                 CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: ImageAssets.trophies,
                   width: 16,
                   height: 16,
@@ -203,7 +203,7 @@ class LegendSeason extends StatelessWidget {
                 ),
                 CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: ImageAssets.builderBaseStar,
                   width: 8,
                   height: 8,

@@ -186,7 +186,7 @@ class EnhancedStatCard extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MobileWebImage(
+                  const MobileWebImage(
                       imageUrl: ImageAssets.brokenSword, width: 16, height: 16),
                   const SizedBox(width: 4),
                   Text(

@@ -26,7 +26,7 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
         children: [
           Text(localizations?.gameHeroesEquipments ?? "Heroes Equipments",
               style: Theme.of(context).textTheme.bodyMedium),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Wrap(
             spacing: 12,
             runSpacing: 12,
@@ -41,7 +41,7 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
                     children: [
                       CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                         imageUrl: gear.imageUrl,
                         width: 35,
                         height: 35,

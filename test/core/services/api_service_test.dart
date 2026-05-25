@@ -21,7 +21,7 @@ void main() {
       const input =
           'https://api-assets.clashofclans.com/leagues/256/image.png';
       final result = ApiService.cocAssetsProxyUrl(input);
-      expect(result, startsWith('https://coc-assets.clashk.ing/'));
+      expect(result, startsWith('https://proxy.clashk.ing/images/'));
       expect(result, isNot(contains('clashofclans.com')));
     });
 
@@ -45,7 +45,7 @@ void main() {
 
     test('FormatException returns format message', () {
       expect(
-        ApiService.getErrorMessage(FormatException('bad payload')),
+        ApiService.getErrorMessage(const FormatException('bad payload')),
         'Invalid response format.',
       );
     });

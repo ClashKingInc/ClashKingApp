@@ -114,21 +114,21 @@ class ClanWarLogState extends State<ClanWarLog> {
             '50v50': '50',
           },
         ),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         filteredWarLogData.isEmpty
             ? Column(
                 children: [
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
                           AppLocalizations.of(context)?.generalNoDataAvailable ??
                               'No data available'),
                     ),
                   ),
-                  SizedBox(height: 32),
-                  MobileWebImage(
+                  const SizedBox(height: 32),
+                  const MobileWebImage(
                     imageUrl: ImageAssets.villager,
                     height: 250,
                     width: 200,
@@ -146,7 +146,7 @@ class ClanWarLogState extends State<ClanWarLog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Center(
             child: Column(
               children: List<Widget>.generate(warLogData.length, (index) {
@@ -159,7 +159,7 @@ class ClanWarLogState extends State<ClanWarLog> {
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       },
@@ -183,7 +183,7 @@ class ClanWarLogState extends State<ClanWarLog> {
                                           .onSurface),
                                 ),
                               ),
-                              duration: Duration(seconds: 1),
+                              duration: const Duration(seconds: 1),
                               backgroundColor:
                                   Theme.of(context).colorScheme.surface,
                             ),

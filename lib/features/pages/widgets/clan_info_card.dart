@@ -57,7 +57,7 @@ class ClanInfoCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -73,14 +73,14 @@ class ClanInfoCard extends StatelessWidget {
                             height: 10,
                           ),
                         ],
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           clanInfo.name,
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Icon(
@@ -88,24 +88,24 @@ class ClanInfoCard extends StatelessWidget {
                           size: 16,
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           '${clanInfo.members.toString()}/50   |   ',
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
-                        SizedBox(
+                        const SizedBox(
                             height: 16,
                             width: 16,
                             child:
                                 MobileWebImage(imageUrl: ImageAssets.trophies)),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         Text(
                           clanInfo.clanPoints.toString(),
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         SizedBox(
@@ -115,7 +115,7 @@ class ClanInfoCard extends StatelessWidget {
                               imageUrl: ImageAssets.getLeagueImage(
                                   clanInfo.warLeague?.name ?? "Unranked")),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           clanInfo.warLeague?.name ?? "Unranked",
                           style: Theme.of(context).textTheme.labelLarge,

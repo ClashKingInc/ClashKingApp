@@ -75,7 +75,7 @@ class PlayerScreenState extends State<PlayerScreen>
   Widget _buildPlayerContent(Player player) {
     return Column(
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         PlayerSuperTroopSection(superTroops: player.superTroops),
         PlayerItemSection(
             title: AppLocalizations.of(context)!.gameHeroes,
@@ -101,7 +101,7 @@ class PlayerScreenState extends State<PlayerScreen>
             title: AppLocalizations.of(context)!.gamePets,
             items: player.pets,
             townHallLevel: player.townHallLevel),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }
@@ -109,7 +109,7 @@ class PlayerScreenState extends State<PlayerScreen>
   Widget _buildBuilderContent(Player player) {
     return Column(
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         PlayerItemSection(
             title: AppLocalizations.of(context)!.gameHeroes,
             items: player.bbHeroes,
@@ -118,7 +118,7 @@ class PlayerScreenState extends State<PlayerScreen>
             title: AppLocalizations.of(context)!.gameTroops,
             items: player.bbTroops,
             townHallLevel: player.builderHallLevel),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }

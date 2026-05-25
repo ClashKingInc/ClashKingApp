@@ -19,7 +19,7 @@ class PlayerLegendHistory extends StatelessWidget {
   Widget buildSeasonInfo(
       PlayerLegendRanking? season, BuildContext context, String title) {
     if (season == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,7 +52,7 @@ class PlayerLegendHistory extends StatelessWidget {
                 children: <Widget>[
                   Center(
                     child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       imageUrl: ImageAssets.legendBlazonBordersNoPadding,
                       height: 80,
                     ),
@@ -80,7 +80,7 @@ class PlayerLegendHistory extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       imageUrl: ImageAssets.bestTrophies,
                       height: 20,
                     ),
@@ -96,7 +96,7 @@ class PlayerLegendHistory extends StatelessWidget {
                 Row(
                   children: [
                     CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       imageUrl: ImageAssets.sword,
                       height: 20,
                     ),

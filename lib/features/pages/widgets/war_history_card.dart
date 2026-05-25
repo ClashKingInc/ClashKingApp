@@ -30,9 +30,9 @@ class WarHistoryCard extends StatelessWidget {
         );
       },
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+        style: Theme.of(context).textTheme.labelLarge ?? const TextStyle(),
         child: Card(
-          margin: EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
+          margin: const EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -43,11 +43,11 @@ class WarHistoryCard extends StatelessWidget {
                   height: 70,
                   width: 70,
                   child: CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl: ImageAssets.warClan,
                   ),
                 ),
-                SizedBox(width: 24),
+                const SizedBox(width: 24),
                 Expanded(
                   child: Column(
                     children: [
@@ -62,7 +62,7 @@ class WarHistoryCard extends StatelessWidget {
                             icon: Container(
                               width: 16,
                               height: 16,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.green,
                                 shape: BoxShape.circle,
                               ),
@@ -79,7 +79,7 @@ class WarHistoryCard extends StatelessWidget {
                             icon: Container(
                               width: 16,
                               height: 16,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
@@ -96,7 +96,7 @@ class WarHistoryCard extends StatelessWidget {
                             icon: Container(
                               width: 16,
                               height: 16,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.blue,
                                 shape: BoxShape.circle,
                               ),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class CwlRoundsTab extends StatefulWidget {
   final WarCwl warCwl;
 
-  CwlRoundsTab({
+  const CwlRoundsTab({
     super.key,
     required this.warCwl,
   });
@@ -22,7 +22,7 @@ class CwlRoundsTabState extends State<CwlRoundsTab> {
     final currentRound = widget.warCwl.leagueInfo?.getCurrentRounds();
 
     if (rounds == null || currentRound == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Column(

@@ -53,34 +53,34 @@ class _ClanJoinLeaveStatsState extends State<ClanJoinLeaveStats> {
                   StatTile(
                     label: AppLocalizations.of(context)!.warEventsTitle,
                     value: '${stats.totalEvents}',
-                    icon: Icon(Icons.event),
+                    icon: const Icon(Icons.event),
                   ),
                   StatTile(
                     label: AppLocalizations.of(context)!.joinLeaveJoins,
                     value: '${stats.totalJoins}',
                     icon:
-                        Icon(LucideIcons.logIn, size: 24, color: Colors.green),
+                        const Icon(LucideIcons.logIn, size: 24, color: Colors.green),
                   ),
                   StatTile(
                     label: AppLocalizations.of(context)!.joinLeaveLeaves,
                     value: '${stats.totalLeaves}',
-                    icon: Icon(LucideIcons.logOut, size: 24, color: Colors.red),
+                    icon: const Icon(LucideIcons.logOut, size: 24, color: Colors.red),
                   ),
                   StatTile(
                     label: AppLocalizations.of(context)!.joinLeaveUniquePlayers,
                     value: '${stats.uniquePlayers}',
-                    icon: Icon(Icons.group),
+                    icon: const Icon(Icons.group),
                   ),
                   StatTile(
                     label: AppLocalizations.of(context)!.joinLeaveMovingPlayers,
                     value: '${stats.movingPlayers}',
-                    icon: Icon(LucideIcons.activity,
-                        color: const Color.fromARGB(255, 255, 196, 0)),
+                    icon: const Icon(LucideIcons.activity,
+                        color: Color.fromARGB(255, 255, 196, 0)),
                   ),
                   StatTile(
                     label: AppLocalizations.of(context)!.joinLeaveStillInClan,
                     value: '${stats.playerStillInClan}',
-                    icon: MobileWebImage(
+                    icon: const MobileWebImage(
                       imageUrl: ImageAssets.clanCastle,
                       width: 24,
                       height: 24,
@@ -89,25 +89,25 @@ class _ClanJoinLeaveStatsState extends State<ClanJoinLeaveStats> {
                   StatTile(
                     label: AppLocalizations.of(context)!.joinLeaveLeftForever,
                     value: '${stats.playerLeftClan}',
-                    icon: Icon(Icons.waving_hand),
+                    icon: const Icon(Icons.waving_hand),
                   ),
                   StatTile(
                     label: AppLocalizations.of(context)!.joinLeaveRejoinedPlayers,
                     value: '${stats.rejoinedPlayers}',
-                    icon: Icon(Icons.repeat),
+                    icon: const Icon(Icons.repeat),
                   ),
                   if (stats.avgTimeBetweenJoinLeave != null)
                     StatTile(
                       label: AppLocalizations.of(context)!.joinLeaveAvgTimeJoinLeave,
                       value: formatSecondsToHHMM(
                           stats.avgTimeBetweenJoinLeave ?? 0),
-                      icon: Icon(Icons.timer),
+                      icon: const Icon(Icons.timer),
                     ),
                   if (stats.mostMovingHour != null)
                     StatTile(
                       label: AppLocalizations.of(context)!.joinLeavePeakHour,
                       value: '${stats.mostMovingHour}:00',
-                      icon: Icon(Icons.access_time),
+                      icon: const Icon(Icons.access_time),
                     ),
                 ],
               ),
@@ -124,8 +124,8 @@ class _ClanJoinLeaveStatsState extends State<ClanJoinLeaveStats> {
                     final player = entry.value;
                     final icon = index < podiumIcons.length
                         ? Text(podiumIcons[index],
-                            style: TextStyle(fontSize: 20))
-                        : Icon(LucideIcons.user);
+                            style: const TextStyle(fontSize: 20))
+                        : const Icon(LucideIcons.user);
 
                     return StatTile(
                       label: player.name,

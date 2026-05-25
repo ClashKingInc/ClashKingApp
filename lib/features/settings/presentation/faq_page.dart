@@ -9,6 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class FaqScreen extends StatefulWidget {
+  const FaqScreen({super.key});
+
   @override
   State<FaqScreen> createState() => _FaqScreenState();
 }
@@ -23,7 +25,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -41,7 +43,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
           children: [
             // Search bar
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainer,
@@ -81,7 +83,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                           )
                         : null,
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16,
                     ),
@@ -99,7 +101,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: ListView(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   children: _buildFilteredFAQItems(),
                 ),
               ),
@@ -121,7 +123,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.info,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -129,7 +131,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqWhatIsClashKingProjectAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildActionButton(
@@ -153,7 +155,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.phone_android,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -161,7 +163,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqFeaturesGuideDescription,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.person,
@@ -202,9 +204,9 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                     context,
                   )!.faqFeaturesCwlDescription,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Theme.of(
                       context,
@@ -224,7 +226,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context)!.faqAppDevelopmentNotice,
@@ -248,7 +250,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.smart_toy,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -256,7 +258,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqWhatCanBotDoAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.track_changes,
@@ -291,14 +293,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                     context,
                   )!.faqBotFeatureCommandsDesc,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildActionButton(
                       context: context,
                       label: AppLocalizations.of(context)!.faqInviteBotToServer,
                       icon: LucideIcons.bot,
-                      color: Color(0xFF5865F2),
+                      color: const Color(0xFF5865F2),
                       onPressed: () async {
                         launchUrl(
                           Uri.parse(
@@ -320,7 +322,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.info,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -328,14 +330,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqFanContentPolicy,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildActionButton(
                       context: context,
                       label: "Supercell Fan Content Policy",
                       icon: Icons.policy,
-                      color: Color(0xFF4CAF50),
+                      color: const Color(0xFF4CAF50),
                       onPressed: () async {
                         launchUrl(
                           Uri.parse(
@@ -361,7 +363,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.favorite,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -369,14 +371,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqSupportWorkAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqWaysToSupport,
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Column(
                   children: [
                     Row(
@@ -425,14 +427,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         _buildActionButton(
                           context: context,
                           label: AppLocalizations.of(context)!.faqJoinDiscord,
                           icon: Icons.discord,
-                          color: Color(0xFF5865F2),
+                          color: const Color(0xFF5865F2),
                           onPressed: () async {
                             launchUrl(
                               Uri.parse('https://discord.gg/clashking'),
@@ -472,7 +474,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.help,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -480,7 +482,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqNeedHelpAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildActionButton(
@@ -545,7 +547,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       context: context,
                       label: AppLocalizations.of(context)!.faqJoinDiscord,
                       icon: Icons.discord,
-                      color: Color(0xFF5865F2),
+                      color: const Color(0xFF5865F2),
                       onPressed: () async {
                         launchUrl(Uri.parse('https://discord.gg/clashking'));
                       },
@@ -565,43 +567,43 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.warning,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: RichText(
               text: TextSpan(
                 style: Theme.of(context).textTheme.bodyMedium,
                 children: <TextSpan>[
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqClanNotTracked,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
                     ),
                   ),
-                  TextSpan(text: '\n'),
+                  const TextSpan(text: '\n'),
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqClanNotTrackedAnswer,
                   ),
-                  TextSpan(text: '\n\n'),
+                  const TextSpan(text: '\n\n'),
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqTrackingDown,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
                     ),
                   ),
-                  TextSpan(text: '\n'),
+                  const TextSpan(text: '\n'),
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqTrackingDownAnswer,
                   ),
-                  TextSpan(text: '\n\n'),
+                  const TextSpan(text: '\n\n'),
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqApiLimitation,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
                     ),
                   ),
-                  TextSpan(text: '\n'),
+                  const TextSpan(text: '\n'),
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqApiLimitationAnswer,
                   ),
@@ -616,7 +618,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.translate,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -624,7 +626,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqTranslationIssueAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildActionButton(
@@ -633,7 +635,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         context,
                       )!.translationHelpUsTranslate,
                       icon: Icons.language,
-                      color: Color(0xFF2196F3),
+                      color: const Color(0xFF2196F3),
                       onPressed: () async {
                         launchUrl(
                           Uri.parse('https://crowdin.com/project/clashkingapp'),
@@ -652,7 +654,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.cloud_off,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -662,14 +664,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   )!.faqTroubleshootingDataDescription,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqTroubleshootingSolutions,
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ...AppLocalizations.of(
                       context,
                     )!.faqTroubleshootingDataSolution1.isNotEmpty
@@ -714,7 +716,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.bug_report,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -724,14 +726,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   )!.faqTroubleshootingCrashDescription,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqTroubleshootingSolutions,
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ...AppLocalizations.of(
                       context,
                     )!.faqTroubleshootingCrashSolution1.isNotEmpty
@@ -794,7 +796,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.account_circle,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -804,14 +806,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   )!.faqTroubleshootingAccountDescription,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqTroubleshootingSolutions,
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ...AppLocalizations.of(
                       context,
                     )!.faqTroubleshootingAccountSolution1.isNotEmpty
@@ -859,7 +861,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
 
   Widget _buildSectionHeader(String title) {
     return Container(
-      margin: EdgeInsets.only(top: 24, bottom: 16),
+      margin: const EdgeInsets.only(top: 24, bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -871,7 +873,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Container(
             height: 3,
             width: 50,
@@ -897,11 +899,11 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
   }) {
     if (_searchQuery.isNotEmpty &&
         !question.toLowerCase().contains(_searchQuery)) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -920,14 +922,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
           BoxShadow(
             color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.08),
             blurRadius: 12,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
           BoxShadow(
             color: Theme.of(
               context,
             ).colorScheme.primary.withValues(alpha: 0.02),
             blurRadius: 6,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -938,7 +940,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
           collapsedIconColor: Theme.of(
             context,
           ).colorScheme.primary.withValues(alpha: 0.7),
-          tilePadding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+          tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
           childrenPadding: EdgeInsets.zero,
           title: Row(
             children: [
@@ -948,7 +950,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   size: 20,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
               ],
               Expanded(
                 child: Text(
@@ -979,8 +981,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
       child: GestureDetector(
         onTap: onPressed,
         child: Container(
-          margin: EdgeInsets.all(4),
-          padding: EdgeInsets.all(16),
+          margin: const EdgeInsets.all(4),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -998,14 +1000,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               BoxShadow(
                 color: color.withValues(alpha: 0.1),
                 blurRadius: 8,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
               BoxShadow(
                 color: Theme.of(
                   context,
                 ).colorScheme.shadow.withValues(alpha: 0.05),
                 blurRadius: 4,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
               ),
             ],
           ),
@@ -1013,7 +1015,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 32, color: color),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 label,
                 textAlign: TextAlign.center,
@@ -1037,8 +1039,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
     required String description,
   }) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
@@ -1051,7 +1053,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -1075,7 +1077,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               size: 24,
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1087,7 +1089,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   description,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -1104,12 +1106,12 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
 
   Widget _buildSolutionItem(String solution) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(top: 6),
+            margin: const EdgeInsets.only(top: 6),
             width: 6,
             height: 6,
             decoration: BoxDecoration(
@@ -1117,7 +1119,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               solution,

@@ -58,7 +58,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               content: Text(AppLocalizations.of(context)!
                   .authErrorEmailAlreadyRegistered),
               backgroundColor: Colors.orange,
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ),
           );
         }
@@ -141,7 +141,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
     if (isMaintenanceError(e)) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+        MaterialPageRoute(builder: (context) => const MaintenanceScreen()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -170,7 +170,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               constraints:
                   BoxConstraints(minHeight: MediaQuery.of(context).size.height),
               child: Padding(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -182,23 +182,23 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           width: 80,
                           child: CachedNetworkImage(
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             imageUrl: logoUrl,
                           ),
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         SizedBox(
                           width: 160,
                           child: CachedNetworkImage(
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             imageUrl: textLogoUrl,
                           ),
                         ),
                       ],
                     ),
 
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // ClashKing Description
                     Text(
@@ -208,7 +208,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       textAlign: TextAlign.center,
                     ),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Auth Tabs
                     ConstrainedBox(
@@ -245,23 +245,23 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               indicatorPadding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
                               dividerColor: Colors.transparent,
-                              labelStyle: TextStyle(
+                              labelStyle: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),
-                              unselectedLabelStyle: TextStyle(
+                              unselectedLabelStyle: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                               ),
                               tabs: [
                                 Tab(
-                                  icon: Icon(Icons.discord, size: 20),
+                                  icon: const Icon(Icons.discord, size: 20),
                                   text: AppLocalizations.of(context)!
                                       .authDiscordTitle,
                                   height: 50,
                                 ),
                                 Tab(
-                                  icon: Icon(Icons.email_outlined, size: 20),
+                                  icon: const Icon(Icons.email_outlined, size: 20),
                                   text: AppLocalizations.of(context)!.authEmail,
                                   height: 50,
                                 ),
@@ -288,7 +288,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       ),
                     ),
 
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // Help Section
                     Column(
@@ -302,7 +302,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                   color:
                                       Theme.of(context).colorScheme.onSurface),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -326,11 +326,11 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                     ),
                               ),
                               style: TextButton.styleFrom(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 4),
                               ),
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             TextButton.icon(
                               onPressed: () async => launchUrl(
                                 Uri.parse(
@@ -353,7 +353,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                     ),
                               ),
                               style: TextButton.styleFrom(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 4),
                               ),
                             ),
@@ -379,13 +379,13 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 12),
-              Icon(
+              const SizedBox(height: 12),
+              const Icon(
                 Icons.discord,
                 size: 48,
                 color: Color(0xFF5865F2),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Text(
                 AppLocalizations.of(context)!.authDiscordSignIn,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -393,7 +393,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 6),
+              const SizedBox(height: 6),
               Text(
                 AppLocalizations.of(context)!.authDiscordDescription,
                 style: Theme.of(context)
@@ -410,16 +410,16 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           child: ElevatedButton(
             onPressed: _isLoading ? null : _signInWithDiscord,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF5865F2),
+              backgroundColor: const Color(0xFF5865F2),
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               elevation: 2,
             ),
             child: _isLoading
-                ? SizedBox(
+                ? const SizedBox(
                     height: 20,
                     width: 20,
                     child: CircularProgressIndicator(
@@ -430,18 +430,18 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.discord, size: 20),
-                      SizedBox(width: 8),
+                      const Icon(Icons.discord, size: 20),
+                      const SizedBox(width: 8),
                       Text(
                         AppLocalizations.of(context)!.authDiscordContinue,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
       ],
     );
   }
@@ -455,7 +455,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
 
                   // Email description
                   Text(
@@ -465,7 +465,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     textAlign: TextAlign.center,
                   ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // Email Field
                   TextFormField(
@@ -473,12 +473,12 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.authEmail,
-                      prefixIcon: Icon(Icons.email_outlined, size: 20),
+                      prefixIcon: const Icon(Icons.email_outlined, size: 20),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                       isDense: true,
                     ),
                     validator: (value) {
@@ -494,7 +494,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     },
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Password Field
                   TextFormField(
@@ -503,7 +503,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     decoration: InputDecoration(
                       labelText:
                           AppLocalizations.of(context)!.authPasswordLabel,
-                      prefixIcon: Icon(Icons.lock_outline, size: 20),
+                      prefixIcon: const Icon(Icons.lock_outline, size: 20),
                       suffixIcon: IconButton(
                         icon: Icon(
                             _obscurePassword
@@ -517,7 +517,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                       isDense: true,
                     ),
                     validator: (value) {
@@ -530,7 +530,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   ),
 
                   // Authentication Links
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -538,12 +538,12 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => RegisterPage()),
+                                builder: (context) => const RegisterPage()),
                           );
                         },
                         style: TextButton.styleFrom(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                              const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                         ),
                         child: Text(
                           AppLocalizations.of(context)!.authSignUp,
@@ -558,13 +558,13 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => ForgotPasswordPage(),
+                              builder: (context) => const ForgotPasswordPage(),
                             ),
                           );
                         },
                         style: TextButton.styleFrom(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                              const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                         ),
                         child: Text(
                           AppLocalizations.of(context)!.authPasswordForgot,
@@ -588,14 +588,14 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             child: ElevatedButton(
               onPressed: _isLoading ? null : _signInWithEmail,
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 2,
               ),
               child: _isLoading
-                  ? SizedBox(
+                  ? const SizedBox(
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator(
@@ -606,12 +606,12 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   : Text(
                       AppLocalizations.of(context)!.authLogin,
                       style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                          const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
             ),
           ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
         ],
       ),
     );
@@ -691,10 +691,10 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
       if (mounted) {
         if (context.read<CocAccountService>().cocAccounts.isNotEmpty) {
           // ✅ User has CoC account → Go to home page
-          nextPage = MyHomePage();
+          nextPage = const MyHomePage();
         } else {
           // ❌ No account → Go to add account page
-          nextPage = AddCocAccountPage();
+          nextPage = const AddCocAccountPage();
         }
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => nextPage),

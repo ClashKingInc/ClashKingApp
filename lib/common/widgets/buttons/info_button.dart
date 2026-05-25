@@ -4,7 +4,7 @@ class InfoButton extends StatefulWidget {
   final TextSpan textSpan;
   final String title;
 
-  InfoButton({
+  const InfoButton({super.key, 
     required this.textSpan,
     required this.title,
   });
@@ -41,7 +41,7 @@ void showInfoPopup(BuildContext context, TextSpan textSpan, String title) {
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () {
               Navigator.of(context).pop();
             },

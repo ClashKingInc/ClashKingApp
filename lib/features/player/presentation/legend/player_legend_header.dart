@@ -40,7 +40,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                 Colors.black.withValues(alpha: 0.7),
                 BlendMode.darken,
               ),
-              child: MobileWebImage(
+              child: const MobileWebImage(
                 imageUrl: ImageAssets.legendPageBackground,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -69,12 +69,12 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                               color: Colors.grey,
                             )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     if (currentTrophies > 0)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          MobileWebImage(
+                          const MobileWebImage(
                             imageUrl: ImageAssets.legendBlazon,
                             width: 60,
                           ),
@@ -91,7 +91,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                     color: Colors.white,
                                     fontSize: 32,
                                   )),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Column(
                             children: [
                               Text(
@@ -104,7 +104,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                             ? Colors.green
                                             : Colors.red),
                               ),
-                              SizedBox(height: 32),
+                              const SizedBox(height: 32),
                             ],
                           ),
                         ],
@@ -113,7 +113,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          MobileWebImage(
+                          const MobileWebImage(
                             imageUrl: ImageAssets.legendBlazonBorders,
                             width: 60,
                           ),
@@ -126,7 +126,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                           ),
                         ],
                       ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Expanded(
@@ -156,7 +156,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: Colors.white, width: 1),
                                       ),
                                     ),
@@ -197,12 +197,12 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                             ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: Colors.white, width: 1),
                                       ),
                                     ),
                                   Chip(
-                                    avatar: CircleAvatar(
+                                    avatar: const CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: MobileWebImage(
                                           imageUrl: ImageAssets.planet),
@@ -225,7 +225,7 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
                                             ?.copyWith(color: Colors.white)),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
-                                      side: BorderSide(
+                                      side: const BorderSide(
                                           color: Colors.white, width: 1),
                                     ),
                                   ),
@@ -263,32 +263,32 @@ class _LegendHeaderCardState extends State<LegendHeaderCard> {
               TextSpan(
                   text:
                       "${AppLocalizations.of(context)!.legendsInaccurateApiDelayTitle}\n",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text:
                       "${AppLocalizations.of(context)!.legendsInaccurateApiDelayBody}\n"),
               TextSpan(
                   text: AppLocalizations.of(context)!
                       .legendsInaccurateConcurrentTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text: AppLocalizations.of(context)!
                       .legendsInaccurateMultipleAttacksTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text: AppLocalizations.of(context)!
                       .legendsInaccurateMultipleAttacksBody),
               TextSpan(
                   text: AppLocalizations.of(context)!
                       .legendsInaccurateSimultaneousTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text:
                       "${AppLocalizations.of(context)!.legendsInaccurateSimultaneousBody}\n"),
               TextSpan(
                   text:
                       "${AppLocalizations.of(context)!.legendsInaccurateNetGainTitle}\n",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                   text:
                       "${AppLocalizations.of(context)!.legendsInaccurateNetGainBody}\n\n"),

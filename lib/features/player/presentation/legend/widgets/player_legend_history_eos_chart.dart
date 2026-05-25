@@ -42,7 +42,7 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                 Expanded(
                   child: LineChart(
                     LineChartData(
-                      gridData: FlGridData(
+                      gridData: const FlGridData(
                         show: true,
                         drawHorizontalLine: true,
                         horizontalInterval: 30,
@@ -85,10 +85,10 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                             },
                           ),
                         ),
-                        rightTitles: AxisTitles(
+                        rightTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
                         ),
-                        topTitles: AxisTitles(
+                        topTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
                         ),
                       ),
@@ -106,7 +106,7 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                           isCurved: false,
                           barWidth: 2,
                           isStrokeCapRound: true,
-                          dotData: FlDotData(show: true),
+                          dotData: const FlDotData(show: true),
                           belowBarData: BarAreaData(
                             show: true,
                             color: Theme.of(context)

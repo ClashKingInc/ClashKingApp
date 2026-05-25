@@ -96,7 +96,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.check_circle,
                   size: 64,
                   color: Colors.green,
@@ -130,7 +130,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
         // Then navigate to login page
         if (mounted) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => LoginPage()),
+            MaterialPageRoute(builder: (context) => const LoginPage()),
             (route) => false,
           );
         }
@@ -180,7 +180,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                     height: 100,
                     width: 100,
                     child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       imageUrl: logoUrl,
                     ),
                   ),
@@ -343,7 +343,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                                     size: 16,
                                     color: met ? Colors.green : Theme.of(context).hintColor,
                                   ),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       label,

@@ -18,7 +18,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(left: 8, right: 8, bottom: 4),
+      margin: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Column(
           children: [
@@ -33,7 +33,7 @@ class LegendTrophiesStartEndCard extends StatelessWidget {
         ),
         CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
           imageUrl:
               "https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_Border.png",
           width: 80,

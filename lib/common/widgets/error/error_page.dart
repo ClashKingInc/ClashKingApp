@@ -10,7 +10,7 @@ class ErrorPage extends StatefulWidget {
   final Future<void> Function() onRetry;
   final bool isNetworkError;
 
-  ErrorPage({super.key, required this.onRetry, this.isNetworkError = false});
+  const ErrorPage({super.key, required this.onRetry, this.isNetworkError = false});
 
   @override
   State<ErrorPage> createState() => _ErrorPageState();
@@ -23,7 +23,7 @@ class _ErrorPageState extends State<ErrorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: CocAccountsAppBar(),
+      appBar: const CocAccountsAppBar(),
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
@@ -56,7 +56,7 @@ class _ErrorPageState extends State<ErrorPage> {
                               ),
                             ),
                           ),
-                        MobileWebImage(
+                        const MobileWebImage(
                           imageUrl: ImageAssets.sleepingApprenticeBuilder,
                           fit: BoxFit.contain,
                         ),
@@ -78,7 +78,7 @@ class _ErrorPageState extends State<ErrorPage> {
                                   ),
                                 ],
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.wifi_off,
                                 color: Colors.white,
                                 size: 20,
@@ -158,7 +158,7 @@ class _ErrorPageState extends State<ErrorPage> {
                         elevation: _isRetrying ? 1 : 3,
                       ),
                       icon: _isRetrying 
-                          ? SizedBox(
+                          ? const SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
@@ -212,7 +212,7 @@ class _ErrorPageState extends State<ErrorPage> {
                               ),
                         ),
                         style: TextButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 4),
                         ),
                       ),

@@ -39,7 +39,7 @@ class _PlayerWarAttacksTabState extends State<PlayerWarAttacksTab> {
                 color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 4.0,
                 spreadRadius: 1.0,
-                offset: Offset(0.0, 2.0),
+                offset: const Offset(0.0, 2.0),
               ),
             ],
           ),

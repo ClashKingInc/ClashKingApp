@@ -67,7 +67,7 @@ class LegendSeasonChart extends StatelessWidget {
         barWidth: 2,
         isStrokeCapRound: true,
         color: Theme.of(context).colorScheme.primary,
-        dotData: FlDotData(show: true),
+        dotData: const FlDotData(show: true),
         belowBarData: BarAreaData(
           show: true,
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
@@ -129,10 +129,10 @@ class LegendSeasonChart extends StatelessWidget {
                         },
                       ),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),

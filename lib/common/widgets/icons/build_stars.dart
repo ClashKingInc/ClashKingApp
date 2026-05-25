@@ -9,7 +9,7 @@ Widget buildStarsIcon(int filledStars) {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 1),
           child: i < filledStars
-              ? MobileWebImage(
+              ? const MobileWebImage(
                   imageUrl: ImageAssets.attackStar, width: 12, height: 12)
               : const Icon(Icons.star_border, size: 14),
         ),

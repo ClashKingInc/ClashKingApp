@@ -7,7 +7,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io' show Platform;
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
-final storage = FlutterSecureStorage();
+final storage = const FlutterSecureStorage();
 
 Future<void> storePrefs(String name, String token) async {
   try {
@@ -150,7 +150,7 @@ String formatSecondsToHHMM(double seconds) {
 DateTime findLastMondayOfMonth(int year, int month) {
   DateTime firstDayOfNextMonth = DateTime(year, month + 1, 1);
 
-  DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+  DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(const Duration(days: 1));
 
   int weekdayOfLastDay = lastDayOfMonth.weekday;
 

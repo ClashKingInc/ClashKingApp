@@ -108,22 +108,22 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
             '50v50': '50',
           },
         ),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         filteredWarLogData.isEmpty
             ? Column(
                 children: [
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Text(
                           AppLocalizations.of(context)?.generalNoDataAvailable ??
                               'No data available'),
                     ),
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl:
                         'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
                     height: 250,
@@ -141,7 +141,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 2),
+          const SizedBox(height: 2),
           Center(
             child: Column(
               children: List<Widget>.generate(warLogData.length, (index) {
@@ -154,7 +154,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       },
@@ -178,7 +178,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                           .onSurface),
                                 ),
                               ),
-                              duration: Duration(seconds: 1),
+                              duration: const Duration(seconds: 1),
                               backgroundColor:
                                   Theme.of(context).colorScheme.surface,
                             ),
@@ -199,7 +199,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                   },
                   child: Card(
                     margin:
-                        EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
+                        const EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -216,7 +216,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                       height: 70,
                                       child: CachedNetworkImage(
                                           errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                              const Icon(Icons.error),
                                           imageUrl:
                                               warLogDetail.clan.badgeUrls.large,
                                           fit: BoxFit.cover),
@@ -275,7 +275,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                                 fontWeight: FontWeight.bold)),
                                     Text(
                                         '${warLogDetail.clan.destructionPercentage % 1 == 0 ? warLogDetail.clan.destructionPercentage.toInt().toString().padLeft(6, ' ') : warLogDetail.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${warLogDetail.opponent.destructionPercentage % 1 == 0 ? ('${warLogDetail.opponent.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${warLogDetail.opponent.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}'),
-                                    SizedBox(height: 2),
+                                    const SizedBox(height: 2),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -283,7 +283,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                         CachedNetworkImage(
                                             errorWidget:
                                                 (context, url, error) =>
-                                                    Icon(Icons.error),
+                                                    const Icon(Icons.error),
                                             imageUrl:
                                                 'https://assets.clashk.ing/icons/Icon_HV_XP.png',
                                             width: 20,
@@ -304,7 +304,7 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
                                       height: 70,
                                       child: CachedNetworkImage(
                                           errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                              const Icon(Icons.error),
                                           imageUrl: warLogDetail
                                               .opponent.badgeUrls.large,
                                           fit: BoxFit.cover),

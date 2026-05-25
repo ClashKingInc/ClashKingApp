@@ -84,7 +84,7 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.calendar_today, size: 24),
+                  icon: const Icon(Icons.calendar_today, size: 24),
                   onPressed: () async {
                     DateTime? picked = await showDatePicker(
                       context: context,
@@ -100,7 +100,7 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
                   },
                 ),
                 IconButton(
-                  icon: Icon(LucideIcons.listRestart),
+                  icon: const Icon(LucideIcons.listRestart),
                   onPressed: resetDateFilter,
                   tooltip: loc.generalReset,
                 ),
@@ -113,7 +113,7 @@ class ClanJoinLeaveEventsState extends State<ClanJoinLeaveEvents>
             ),
             Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 48,
                 ),
                 IconButton(

@@ -6,7 +6,7 @@ class WarAccessDeniedCard extends StatefulWidget {
   final String clanName;
   final String clanBadgeUrl;
 
-  WarAccessDeniedCard({
+  const WarAccessDeniedCard({
     super.key,
     required this.clanName,
     required this.clanBadgeUrl
@@ -39,7 +39,7 @@ class WarAccessDeniedCardState extends State<WarAccessDeniedCard> {
                     child: Center(
                       child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
+  errorWidget: (context, url, error) => const Icon(Icons.error),imageUrl: 
                         widget.clanBadgeUrl,
                         fit: BoxFit.cover),
                     ),

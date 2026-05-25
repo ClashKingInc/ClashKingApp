@@ -22,7 +22,7 @@ class PlayerLegendStats {
       return seasons.values.cast<PlayerLegendSeason?>().firstWhere((season) =>
           season != null &&
           now.isAfter(season.start) &&
-          now.isBefore(season.end.add(Duration(days: 1))),
+          now.isBefore(season.end.add(const Duration(days: 1))),
           orElse: () => null);
     } catch (_) {
       return null;

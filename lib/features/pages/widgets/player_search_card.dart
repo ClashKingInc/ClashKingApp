@@ -9,13 +9,13 @@ import 'dart:async';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class PlayerSearchCard extends StatefulWidget {
-  PlayerSearchCard({super.key});
+  const PlayerSearchCard({super.key});
   @override
   PlayerSearchCardState createState() => PlayerSearchCardState();
 }
 
 class PlayerSearchCardState extends State<PlayerSearchCard> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   Future<List<dynamic>>? _searchResults;
   bool isSearching = false;
   bool isEmpty = true;
@@ -129,7 +129,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       isSearching
-                          ? SizedBox(
+                          ? const SizedBox(
                               width: 20.0,
                               height: 20.0,
                               child: CircularProgressIndicator(),
@@ -155,7 +155,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
                                 ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                     ],
                   ),
                 ),
@@ -166,9 +166,9 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
             future: _searchResults,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               } else if (snapshot.hasError) {
-                return Center(child: Text("No results found."));
+                return const Center(child: Text("No results found."));
               } else if (snapshot.hasData &&
                   snapshot.data != null &&
                   snapshot.data != [] &&
@@ -188,11 +188,11 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                           AppLocalizations.of(context)!.searchNoResult,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                     ],
                   );
                 } else {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               }
             },

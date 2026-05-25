@@ -43,7 +43,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                 Center(
                                   child: CachedNetworkImage(
 
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                                     imageUrl: ImageAssets.legendBlazonBordersNoPadding,
                                     height: 80,
                                   ),
@@ -95,7 +95,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                                       imageUrl: ImageAssets.bestTrophies,
                                     ),
                                   ),
@@ -112,7 +112,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                                         imageUrl: ImageAssets.planet),
                                   ),
                                   label: Text(
@@ -128,7 +128,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                                       imageUrl: ImageAssets.sword,
                                     ),
                                   ),
@@ -145,7 +145,7 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                                       imageUrl: ImageAssets.shieldWithArrow,
                                     ),
                                   ),

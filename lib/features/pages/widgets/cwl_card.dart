@@ -26,7 +26,7 @@ class CwlCardState extends State<CwlCard> {
 
     final clanTag = playerService.getSelectedProfile(cocService)?.clanTag;
     if (clanTag == null || clanTag.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     final clanWarLeague = clanService.getClanByTag(clanTag)?.warLeague?.name;
@@ -34,7 +34,7 @@ class CwlCardState extends State<CwlCard> {
     final clan = warCwl?.leagueInfo?.getClanDetails(clanTag);
 
     if (clanWarLeague == null || clan == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Card(
@@ -47,11 +47,11 @@ class CwlCardState extends State<CwlCard> {
               height: 70,
               width: 70,
               child: CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
                 imageUrl: ImageAssets.getLeagueImage(clanWarLeague),
               ),
             ),
-            SizedBox(width: 24),
+            const SizedBox(width: 24),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

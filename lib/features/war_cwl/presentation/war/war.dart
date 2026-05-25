@@ -334,7 +334,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                               color: Colors.black.withValues(alpha: 0.3),
                               blurRadius: 4,
                               spreadRadius: 1,
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                         ),

@@ -26,8 +26,8 @@ DateTime findSeasonStartDate(DateTime date) {
   date = DateTime.utc(year, month, day, 0, 0, 0, 0);
 
   DateTime lastDayCurrentMonth = (month == 12)
-      ? DateTime.utc(year + 1, 1, 1).subtract(Duration(days: 1))
-      : DateTime.utc(year, month + 1, 1).subtract(Duration(days: 1));
+      ? DateTime.utc(year + 1, 1, 1).subtract(const Duration(days: 1))
+      : DateTime.utc(year, month + 1, 1).subtract(const Duration(days: 1));
 
   int daysToLastMondayOfCurrentMonth =
       (lastDayCurrentMonth.weekday - DateTime.monday + 7) % 7;
@@ -77,7 +77,7 @@ List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
     seasonStart =
         findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
     seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
-        .subtract(Duration(days: 1));
+        .subtract(const Duration(days: 1));
   }
   return [seasonStart, seasonEnd];
 }

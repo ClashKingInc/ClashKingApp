@@ -357,7 +357,7 @@ class AuthService extends ChangeNotifier {
     _accessToken = null;
     notifyListeners();
     globalNavigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 

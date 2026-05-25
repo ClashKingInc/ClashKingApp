@@ -114,7 +114,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
           else if (icon is String)
             CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: icon, height: 20),
+  errorWidget: (context, url, error) => const Icon(Icons.error),imageUrl: icon, height: 20),
           const SizedBox(width: 4),
           Icon(
             _sortCriterion == criterion
@@ -159,7 +159,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                         child: Transform.translate(
                           offset: const Offset(2, -6),
                           child: Text("(${day.totalAttacks})",
-                              textScaler: TextScaler.linear(0.7),
+                              textScaler: const TextScaler.linear(0.7),
                               style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ),
@@ -175,7 +175,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                         child: Transform.translate(
                           offset: const Offset(2, -6),
                           child: Text("(${day.totalDefenses})",
-                              textScaler: TextScaler.linear(0.7),
+                              textScaler: const TextScaler.linear(0.7),
                               style: Theme.of(context).textTheme.labelSmall),
                         ),
                       ),
@@ -197,7 +197,7 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                             day.trophiesTotal > 0
                                 ? "(+${day.trophiesTotal})"
                                 : "(${day.trophiesTotal})",
-                            textScaler: TextScaler.linear(0.7),
+                            textScaler: const TextScaler.linear(0.7),
                             style: Theme.of(context)
                                 .textTheme
                                 .labelSmall
@@ -222,12 +222,12 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
           crossFadeState:
               isSelected ? CrossFadeState.showSecond : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 300),
-          firstChild: Divider(height: 1, indent: 16, endIndent: 16),
+          firstChild: const Divider(height: 1, indent: 16, endIndent: 16),
           secondChild: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,9 +263,9 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                   ],
                 ),
                 if (day.usageCount.isNotEmpty) ...[
-                  SizedBox(height: 12),
-                  Divider(height: 1, indent: 32, endIndent: 32),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
+                  const Divider(height: 1, indent: 32, endIndent: 32),
+                  const SizedBox(height: 12),
                   PlayerLegendSeasonUsedGear(
                       context: context,
                       gears: day
@@ -274,8 +274,8 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                           .toList(),
                       usageCount: day.usageCount),
                 ],
-                SizedBox(height: 16),
-                Divider(height: 1, indent: 16, endIndent: 16),
+                const SizedBox(height: 16),
+                const Divider(height: 1, indent: 16, endIndent: 16),
               ],
             ),
           ),

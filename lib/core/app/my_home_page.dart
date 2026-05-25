@@ -47,7 +47,7 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
@@ -64,15 +64,15 @@ class MyHomePageState extends State<MyHomePage> {
         unselectedItemColor: Theme.of(context).colorScheme.tertiary,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
+            icon: const Icon(Icons.dashboard),
             label: AppLocalizations.of(context)?.dashboardTitle ?? 'Dashboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shield),
+            icon: const Icon(Icons.shield),
             label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CustomIcons.swordCross),
+            icon: const Icon(CustomIcons.swordCross),
             label: AppLocalizations.of(context)?.warLeague ?? 'War/League',
           ),
           /*BottomNavigationBarItem(

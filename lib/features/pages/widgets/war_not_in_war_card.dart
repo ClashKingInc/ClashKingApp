@@ -6,7 +6,7 @@ class NotInWarCard extends StatefulWidget {
   final String clanName;
   final String clanBadgeUrl;
 
-  NotInWarCard({super.key, required this.clanName, required this.clanBadgeUrl});
+  const NotInWarCard({super.key, required this.clanName, required this.clanBadgeUrl});
 
   @override
   NotInWarCardState createState() => NotInWarCardState();
@@ -30,7 +30,7 @@ class NotInWarCardState extends State<NotInWarCard> {
                     child: Center(
                       child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                           imageUrl: widget.clanBadgeUrl, fit: BoxFit.cover),
                     ),
                   ),

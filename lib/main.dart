@@ -133,7 +133,7 @@ Future<void> main() async {
             Provider(create: (_) => UserService()),
             Provider(create: (_) => TokenService()),
           ],
-          child: MyApp(),
+          child: const MyApp(),
         ),
       );
     },

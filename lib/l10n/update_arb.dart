@@ -39,7 +39,7 @@ void main() {
     });
 
     if (updated) {
-      file.writeAsStringSync(JsonEncoder.withIndent('  ').convert(targetJson));
+      file.writeAsStringSync(const JsonEncoder.withIndent('  ').convert(targetJson));
       DebugUtils.debugSuccess('✅ ${file.path} has been updated.');
     } else {
       DebugUtils.debugInfo('📝 ${file.path} is already up-to-date.');

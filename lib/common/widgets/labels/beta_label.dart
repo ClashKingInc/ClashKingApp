@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class BetaLabel extends StatelessWidget {
+  const BetaLabel({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -10,11 +12,11 @@ class BetaLabel extends StatelessWidget {
       child: GestureDetector(
         onTap: () => showBetaPopup(context),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(8),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 4,
@@ -44,7 +46,7 @@ void showBetaPopup(BuildContext context) {
         content: Text(AppLocalizations.of(context)!.betaDescription),
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () {
               Navigator.of(context).pop();
             },

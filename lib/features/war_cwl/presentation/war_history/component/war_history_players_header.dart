@@ -15,7 +15,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onFilter;
 
-  WarHistoryPlayersStatsHeader({
+  const WarHistoryPlayersStatsHeader({
     super.key,
     required this.clan,
     required this.isCWLChecked,
@@ -45,7 +45,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                 ),
                 child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: "https://assets.clashk.ing/landscape/war-stats.png",
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -70,14 +70,14 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                           .titleSmall
                           ?.copyWith(color: Colors.white),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                       imageUrl: clan.badgeUrls.medium,
                       width: 50,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       clan.name,
                       style: Theme.of(context)
@@ -92,7 +92,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                           .labelLarge
                           ?.copyWith(color: Colors.grey),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 0,
                       runSpacing: 0,
@@ -109,7 +109,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                           selected: isCWLChecked,
                           onSelected: (bool selected) => onCWLChanged(),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         FilterChip(
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
@@ -122,7 +122,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                           selected: isRandomChecked,
                           onSelected: (bool selected) => onRandomChanged(),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         FilterChip(
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
@@ -137,7 +137,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
@@ -157,7 +157,7 @@ class WarHistoryPlayersStatsHeader extends StatelessWidget {
           top: 40,
           right: 10,
           child: IconButton(
-            icon: Icon(Icons.filter_list, color: Colors.white),
+            icon: const Icon(Icons.filter_list, color: Colors.white),
             onPressed: onFilter,
           ),
         ),

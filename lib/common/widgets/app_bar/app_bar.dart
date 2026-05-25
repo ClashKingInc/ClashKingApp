@@ -9,8 +9,10 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBar({super.key});
+
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddCocAccountPage(),
+                builder: (context) => const AddCocAccountPage(),
               ),
             );
           }
@@ -58,10 +60,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     width: 30,
                     child: CachedNetworkImage(
                       imageUrl: profile.townHallPic,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                   ),
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   Text(
                     profile.name,
                     overflow: TextOverflow.ellipsis,
@@ -76,8 +78,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             value: "manageAccounts",
             child: Row(
               children: <Widget>[
-                Icon(Icons.settings),
-                SizedBox(width: 4),
+                const Icon(Icons.settings),
+                const SizedBox(width: 4),
                 Text(AppLocalizations.of(context)?.generalManage ?? 'Manage'),
               ],
             ),
@@ -92,7 +94,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: Theme.of(context).textTheme.bodyMedium,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -108,14 +110,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: CachedNetworkImage(
                     imageUrl: authService.currentUser?.avatarUrl ?? "",
                     fit: BoxFit.cover,
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                   ),
                 ),
               ),
             ),
           ],
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
       ],
     );
   }
