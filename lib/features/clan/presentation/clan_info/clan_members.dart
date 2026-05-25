@@ -180,7 +180,7 @@ class ClanMembersState extends State<ClanMembers> {
                           children: [
                             CachedNetworkImage(
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               imageUrl:
                                   ImageAssets.townHall(member.townHallLevel),
                               width: 40,
@@ -278,7 +278,7 @@ class ClanMembersState extends State<ClanMembers> {
       children: [
         const SizedBox(width: 20),
         CachedNetworkImage(
-            errorWidget: (context, url, error) => Icon(Icons.error),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
             imageUrl: imageUrl,
             width: 24),
         const SizedBox(width: 8),

@@ -9,7 +9,7 @@ import 'package:clipboard/clipboard.dart';
 class ClanJoinLeaveHeader extends StatefulWidget {
   final Clan clanInfo;
 
-  ClanJoinLeaveHeader({super.key, required this.clanInfo});
+  const ClanJoinLeaveHeader({super.key, required this.clanInfo});
 
   @override
   ClanJoinLeaveHeaderState createState() => ClanJoinLeaveHeaderState();
@@ -37,7 +37,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
                   BlendMode.darken,
                 ),
                 child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: backgroundImageUrl,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -49,7 +49,7 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
             bottom: 10,
             child: Column(children: [
               CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
                 imageUrl: widget.clanInfo.badgeUrls.large,
                 width: 100,
               ),
@@ -74,10 +74,10 @@ class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
                   });
                 },
                 child: Container(
-                  padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
+                  padding: const EdgeInsets.only(top: 2.0, bottom: 4.0),
                   child: Text(
                     widget.clanInfo.tag,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),

@@ -10,7 +10,7 @@ class PlayerToDoScreen extends StatefulWidget {
   final List<Player> players;
   final Map<String, WarMemberPresence> memberPresenceMap;
 
-  PlayerToDoScreen(
+  const PlayerToDoScreen(
       {super.key, required this.players, required this.memberPresenceMap});
 
   @override
@@ -81,7 +81,7 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen>
                     active: false,
                   ),
                 ]),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
           ],
         ),
       ),

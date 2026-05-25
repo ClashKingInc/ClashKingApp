@@ -75,7 +75,7 @@ class ClanWarStatsPlayers extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: Icon(LucideIcons.listRestart),
+              icon: const Icon(LucideIcons.listRestart),
               onPressed: () {
                 resetFilters();
               },
@@ -104,7 +104,7 @@ class ClanWarStatsPlayers extends StatelessWidget {
               );
 
               if (totalAttacks == 0) {
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               }
 
               return GestureDetector(
@@ -129,14 +129,14 @@ class ClanWarStatsPlayers extends StatelessWidget {
                     if (context.mounted) {
                       navigator.pop();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to load player data')),
+                        const SnackBar(content: Text('Failed to load player data')),
                       );
                     }
                   }
                 },
                 child: Card(
                   child: Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
                         Row(
@@ -149,7 +149,7 @@ class ClanWarStatsPlayers extends StatelessWidget {
                                       member.townhallLevel),
                                   height: 50,
                                 ),
-                                SizedBox(width: 16),
+                                const SizedBox(width: 16),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,8 +165,8 @@ class ClanWarStatsPlayers extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(totalAttacks.toString()),
-                                    SizedBox(width: 8),
-                                    MobileWebImage(
+                                    const SizedBox(width: 8),
+                                    const MobileWebImage(
                                         imageUrl: ImageAssets.warClan,
                                         height: 16,
                                         width: 16),
@@ -176,8 +176,8 @@ class ClanWarStatsPlayers extends StatelessWidget {
                                   children: [
                                     Text(memberWarStats.missedAttacks
                                         .toString()),
-                                    SizedBox(width: 8),
-                                    MobileWebImage(
+                                    const SizedBox(width: 8),
+                                    const MobileWebImage(
                                         imageUrl: ImageAssets.brokenSword,
                                         height: 16,
                                         width: 16),
@@ -187,13 +187,13 @@ class ClanWarStatsPlayers extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               children: [
-                                Row(
+                                const Row(
                                   children: [
                                     Icon(Icons.percent, size: 16),
                                     Icon(Icons.star, size: 16),

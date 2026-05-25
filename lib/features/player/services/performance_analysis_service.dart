@@ -26,7 +26,7 @@ class PerformanceAnalysisService {
         'failed-attacks',
         localizations?.performanceAnalysisFailedAttacks ?? 'Failed Attacks (0-1 Stars)',
         localizations?.performanceAnalysisFailedAttacksDesc ?? 'Shows attacks that failed to get 2+ stars',
-        WarStatsFilter(
+        const WarStatsFilter(
           allowedStars: [0, 1],
         ),
       ));
@@ -40,7 +40,7 @@ class PerformanceAnalysisService {
         'missed-perfects',
         localizations?.performanceAnalysisMissedPerfects ?? 'Missed Perfect Attacks',
         localizations?.performanceAnalysisMissedPerfectsDesc ?? 'Shows attacks that got 2 stars - potential perfect opportunities',
-        WarStatsFilter(
+        const WarStatsFilter(
           allowedStars: [2],
         ),
       ));
@@ -106,7 +106,7 @@ class PerformanceAnalysisService {
           'cwl-issues',
           localizations?.performanceAnalysisCwlIssues ?? 'CWL Performance Issues',
           localizations?.performanceAnalysisCwlIssuesDesc ?? 'Shows CWL attacks - lower success than regular wars',
-          WarStatsFilter(
+          const WarStatsFilter(
             warTypes: ['cwl'],
           ),
         ));
@@ -118,7 +118,7 @@ class PerformanceAnalysisService {
           'random-war-issues',
           localizations?.performanceAnalysisRandomWarIssues ?? 'Random War Issues',
           localizations?.performanceAnalysisRandomWarIssuesDesc ?? 'Shows random war attacks - lower success than CWL',
-          WarStatsFilter(
+          const WarStatsFilter(
             warTypes: ['random'],
           ),
         ));
@@ -130,7 +130,7 @@ class PerformanceAnalysisService {
       'fresh-only',
       localizations?.performanceAnalysisFreshOnly ?? 'Fresh Attack Analysis',
       localizations?.performanceAnalysisFreshOnlyDesc ?? 'Analyzes performance on fresh bases only',
-      WarStatsFilter(
+      const WarStatsFilter(
         freshAttacksOnly: true,
       ),
     ));
@@ -151,7 +151,7 @@ class PerformanceAnalysisService {
       'high-stakes',
       localizations?.performanceAnalysisHighStakes ?? 'High-Stakes Attacks',
       localizations?.performanceAnalysisHighStakesDesc ?? 'Shows attacks from top 5 war positions',
-      WarStatsFilter(
+      const WarStatsFilter(
         maxMapPosition: 5,
       ),
     ));
@@ -161,7 +161,7 @@ class PerformanceAnalysisService {
       'cleanup-crew',
       localizations?.performanceAnalysisCleanupCrew ?? 'Cleanup Attacks',
       localizations?.performanceAnalysisCleanupCrewDesc ?? 'Shows attacks from lower war positions',
-      WarStatsFilter(
+      const WarStatsFilter(
         minMapPosition: 6,
       ),
     ));

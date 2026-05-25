@@ -25,7 +25,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 class SettingsInfoScreen extends StatefulWidget {
   final User user;
 
-  SettingsInfoScreen({required this.user});
+  const SettingsInfoScreen({super.key, required this.user});
 
   @override
   State<SettingsInfoScreen> createState() => _SettingsInfoScreenState();
@@ -38,7 +38,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.generalSettings),
-        actions: [],
+        actions: const [],
       ),
       body: ResponsiveLayoutWrapper(
         child: ListView(
@@ -52,7 +52,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               await _showLanguageSelection(context);
             },
           ),
-          Divider(),
+          const Divider(),
           Consumer<ThemeNotifier>(
             builder: (context, themeNotifier, child) {
               return _buildListTile(
@@ -65,7 +65,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               );
             },
           ),
-          Divider(),
+          const Divider(),
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.faqTitle,
@@ -74,22 +74,22 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             onTap: () async {
               // Open FAQ page
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => FaqScreen()),
+                MaterialPageRoute(builder: (context) => const FaqScreen()),
               );
             },
           ),
-          Divider(),
+          const Divider(),
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.translationHelpUsTranslate,
             leadingIcon: Icons.language,
             onTap: () async {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => TranslationScreen()),
+                MaterialPageRoute(builder: (context) => const TranslationScreen()),
               );
             },
           ),
-          Divider(),
+          const Divider(),
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.translationSuggestFeatures,
@@ -97,11 +97,11 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             onTap: () async {
               // Open Features vote
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => FeatureRequests()),
+                MaterialPageRoute(builder: (context) => const FeatureRequests()),
               );
             },
           ),
-          Divider(),
+          const Divider(),
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.faqJoinDiscord,
@@ -110,7 +110,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               launchUrl(Uri.parse('https://discord.gg/clashking'));
             },
           ),
-          Divider(),
+          const Divider(),
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.settingsLicenses,
@@ -128,14 +128,14 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                     imageUrl: Theme.of(context).brightness == Brightness.dark
                         ? "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
                         : "https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png",
-                    errorWidget: (context, url, error) => Icon(Icons.apps),
+                    errorWidget: (context, url, error) => const Icon(Icons.apps),
                   ),
                 ),
                 applicationLegalese: '© ${DateTime.now().year} ClashKing',
               );
             },
           ),
-          Divider(),
+          const Divider(),
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.settingsPrivacyPolicy,
@@ -149,7 +149,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               );
             },
           ),
-          Divider(),
+          const Divider(),
           _buildListTile(
             context,
             title: AppLocalizations.of(context)!.authLogout,
@@ -165,7 +165,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               );
             },
           ),
-          Divider(),
+          const Divider(),
           _buildVersionInfoTile(context),
         ],
       ),
@@ -210,8 +210,8 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                       width: 32,
                       height: 32,
                       placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                     title: Text(locale.languageName),
                     onTap: () {
@@ -255,7 +255,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
 
       // Navigate to login page
       globalNavigatorKey.currentState?.pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
       DebugUtils.debugSuccess("SettingsInfoScreen: All service data cleared successfully.");
     } else {

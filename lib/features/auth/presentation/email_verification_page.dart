@@ -63,7 +63,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
         if (mounted) {
           // Navigate to StartupWidget to show loading screen and handle proper navigation
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => StartupWidget()),
+            MaterialPageRoute(builder: (context) => const StartupWidget()),
           );
         }
       }
@@ -71,7 +71,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
       if (mounted) {
         if (e.toString().contains("503") || e.toString().contains("500")) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+            MaterialPageRoute(builder: (context) => const MaintenanceScreen()),
           );
         } else {
           String errorString = e.toString().toLowerCase();
@@ -183,11 +183,11 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
       ),
       body: ResponsiveLayoutWrapper(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Logo
             Center(
@@ -195,13 +195,13 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                 height: 100,
                 width: 100,
                 child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: logoUrl,
                 ),
               ),
             ),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             Text(
               AppLocalizations.of(context)!.authEmailVerificationCheckEmail,
@@ -211,7 +211,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
               textAlign: TextAlign.center,
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             Text(
               AppLocalizations.of(context)!.authEmailVerificationSentTo,
@@ -222,7 +222,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
               textAlign: TextAlign.center,
             ),
 
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             Text(
               widget.email,
@@ -232,7 +232,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
               textAlign: TextAlign.center,
             ),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Verification card
             Card(
@@ -249,7 +249,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                       textAlign: TextAlign.center,
                     ),
 
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
                     // 6-digit code input
                     TextFormField(
@@ -285,14 +285,14 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                       },
                     ),
 
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
                     // Show loading when verifying
                     if (_isLoading) ...[
                       Column(
                         children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 16),
+                          const CircularProgressIndicator(),
+                          const SizedBox(height: 16),
                           Text(
                             AppLocalizations.of(context)!
                                 .authEmailVerificationVerifying,
@@ -329,7 +329,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                         ),
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       // Resend email button
                       SizedBox(
@@ -357,7 +357,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                         ),
                       ),
 
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Back to login
                       Center(
@@ -365,7 +365,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                           onPressed: () {
                             // Navigate back to login page specifically
                             Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) => LoginPage()),
+                              MaterialPageRoute(builder: (context) => const LoginPage()),
                               (route) => false,
                             );
                           },

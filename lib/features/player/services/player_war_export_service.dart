@@ -15,7 +15,7 @@ class PlayerWarExportService {
     String? playerName,
   }) async {
     // Build API URL for new export endpoint
-    final baseUrl = ApiService.apiUrlV2;
+    const baseUrl = ApiService.apiUrlV2;
     final uri = Uri.parse('$baseUrl/exports/war/player-stats');
     
     // Build request body as PlayerWarhitsFilter

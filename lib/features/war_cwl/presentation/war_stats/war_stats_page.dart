@@ -30,7 +30,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
   List<PlayerWarStats> filteredPlayers = [];
   ClanWarStatsFilter _currentFilter = ClanWarStatsFilter.defaultFilter();
   ClanWarStats? _filteredClanWarStats;
-  bool _isLoadingFiltered = false;
+  final bool _isLoadingFiltered = false;
   bool _hasAppliedFilters = false;
 
   // Track selected Town Hall levels for members and enemies
@@ -232,7 +232,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                               .colorScheme
                               .primary
                               .withAlpha(150),
-                          labelPadding: EdgeInsets.all(0),
+                          labelPadding: const EdgeInsets.all(0),
                           label: MobileWebImage(
                               imageUrl: ImageAssets.townHall(thLevel),
                               height: 24),
@@ -245,7 +245,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                         );
                       }).toList(),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                         AppLocalizations.of(context)!
                             .warOpponentSelectOpponentsThLevel,
@@ -259,7 +259,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                               .colorScheme
                               .primary
                               .withAlpha(150),
-                          labelPadding: EdgeInsets.all(0),
+                          labelPadding: const EdgeInsets.all(0),
                           label: MobileWebImage(
                               imageUrl: ImageAssets.townHall(thLevel),
                               height: 24),
@@ -272,7 +272,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                         );
                       }).toList(),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     CheckboxListTile(
                       title: Text(
                           AppLocalizations.of(context)!.warOpponentEqualThLevel,
@@ -516,7 +516,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                         ],
                         children: [
                           Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Column(
                               children: [
                                 ClanWarLog(
@@ -527,7 +527,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Column(
                               children: [
                                 ClanWarStatsPlayers(

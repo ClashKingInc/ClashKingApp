@@ -39,7 +39,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
               _buildAction(context),
             ],
           ),
-          SizedBox(height: 46),
+          const SizedBox(height: 46),
           _buildClanTitleSection(context, loc),
           const SizedBox(height: 12),
           _buildClanChips(context, loc),
@@ -65,7 +65,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
             BlendMode.darken,
           ),
           child: CachedNetworkImage(
-            errorWidget: (context, url, error) => Icon(Icons.error),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
             imageUrl: ImageAssets.clanPageBackground,
             fit: BoxFit.cover,
           ),
@@ -90,7 +90,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
     return Positioned(
       bottom: -52,
       child: CachedNetworkImage(
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
         imageUrl: clanInfo.badgeUrls.large,
         width: 150,
       ),
@@ -322,7 +322,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
             onPressed: () {
               showMenu(
                 context: context,
-                position: RelativeRect.fromLTRB(100, 100, 0, 0),
+                position: const RelativeRect.fromLTRB(100, 100, 0, 0),
                 items: [
                   PopupMenuItem(
                     value: 'Stats',
@@ -330,7 +330,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                       children: [
                         MobileWebImage(
                             imageUrl: clanInfo.badgeUrls.small, width: 20),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(AppLocalizations.of(context)!.generalStats),
                       ],
                     ),

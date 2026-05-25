@@ -37,9 +37,9 @@ class PlayerSuperTroopSection extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6),
                           child: CachedNetworkImage(
                             placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                                const CircularProgressIndicator(),
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             imageUrl: troop.imageUrl,
                             width: 50,
                             height: 50,

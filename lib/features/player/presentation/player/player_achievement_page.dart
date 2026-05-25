@@ -13,7 +13,7 @@ import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 class PlayerAchievementScreen extends StatefulWidget {
   final Player player;
 
-  PlayerAchievementScreen({super.key, required this.player});
+  const PlayerAchievementScreen({super.key, required this.player});
 
   @override
   PlayerAchievementScreenState createState() => PlayerAchievementScreenState();
@@ -21,11 +21,15 @@ class PlayerAchievementScreen extends StatefulWidget {
 
 class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
     with SingleTickerProviderStateMixin {
+  static const String _keepYourAccountSafe = 'Keep Your Account Safe!';
+  static const String _dragonSlayer = 'Dragon Slayer';
+  static const String _ungratefulChild = 'Ungrateful Child';
+
   String currentFilter = 'All';
   int achievementCompleted = 0;
   int achievementTotal = 0;
   String achievementStringRatio = '';
-  
+
   // Progress per village
   int homeCompleted = 0;
   int homeTotal = 0;
@@ -38,18 +42,18 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
   void initState() {
     super.initState();
     var filteredAchievements = widget.player.achievements
-        .where((achievement) => achievement.name != "Keep Your Account Safe!")
+        .where((achievement) => achievement.name != _keepYourAccountSafe)
         .toList();
     achievementTotal = filteredAchievements.length;
-    
+
     // Calculate progress per village
     _calculateProgressPerVillage(filteredAchievements);
-    
+
     for (var achievement in filteredAchievements) {
       if (achievement.value >= achievement.target && achievement.stars == 3) {
         achievementCompleted++;
-      } else if ((achievement.name == 'Dragon Slayer' ||
-              achievement.name == 'Ungrateful Child') &&
+      } else if ((achievement.name == _dragonSlayer ||
+              achievement.name == _ungratefulChild) &&
           achievement.value >= 1) {
         achievementCompleted++;
       }
@@ -68,13 +72,15 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
       currentFilter = newFilter;
     });
   }
-  
+
   void _calculateProgressPerVillage(List<dynamic> achievements) {
     for (var achievement in achievements) {
-      bool isCompleted = (achievement.value >= achievement.target && achievement.stars == 3) ||
-          ((achievement.name == 'Dragon Slayer' || achievement.name == 'Ungrateful Child') &&
+      bool isCompleted =
+          (achievement.value >= achievement.target && achievement.stars == 3) ||
+          ((achievement.name == _dragonSlayer ||
+                  achievement.name == _ungratefulChild) &&
               achievement.value >= 1);
-      
+
       switch (achievement.village) {
         case 'home':
           homeTotal++;
@@ -108,13 +114,16 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
               labelStyle: Theme.of(context).textTheme.bodyLarge,
               unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               tabs: [
-                Tab(text: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Village'),
-                Tab(text: AppLocalizations.of(context)?.generalOthers ?? 'Others'),
+                Tab(
+                  text:
+                      AppLocalizations.of(context)?.gameBaseHome ??
+                      'Home Village',
+                ),
+                Tab(
+                  text: AppLocalizations.of(context)?.generalOthers ?? 'Others',
+                ),
               ],
-              children: [
-                _buildTabContent('home'),
-                _buildTabContent('others'),
-              ],
+              children: [_buildTabContent('home'), _buildTabContent('others')],
             ),
           ],
         ),
@@ -136,7 +145,7 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                 Colors.black.withValues(alpha: 0.7),
                 BlendMode.darken,
               ),
-              child: MobileWebImage(
+              child: const MobileWebImage(
                 imageUrl: ImageAssets.playerAchievementPageBackground,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -148,9 +157,11 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
           top: 40,
           left: 10,
           child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary,
-                size: 32),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 32,
+            ),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -166,16 +177,19 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                 child: Column(
                   children: [
                     Text(
-                      AppLocalizations.of(context)?.gameAchievements ?? 'Achievements',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(color: Colors.white),
+                      AppLocalizations.of(context)?.gameAchievements ??
+                          'Achievements',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium?.copyWith(color: Colors.white),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Container(
                       width: 250,
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                       child: Column(
                         children: [
                           Container(
@@ -188,8 +202,8 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
-                                value: achievementTotal > 0 
-                                    ? achievementCompleted / achievementTotal 
+                                value: achievementTotal > 0
+                                    ? achievementCompleted / achievementTotal
                                     : 0.0,
                                 minHeight: 8,
                                 backgroundColor: Colors.transparent,
@@ -199,10 +213,10 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                               ),
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             '${achievementCompleted.toString()}/${achievementTotal.toString()} ${AppLocalizations.of(context)?.generalCompleted ?? 'completed'} • $achievementStringRatio%',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -225,128 +239,140 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
   Widget _buildTabContent(String category) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        children: _buildAchievementsForCategory(category),
-      ),
+      child: Column(children: _buildAchievementsForCategory(category)),
     );
   }
 
   List<Widget> _buildAchievementsForCategory(String category) {
     List<dynamic> filteredAchievements;
-    
+
     if (category == 'home') {
       filteredAchievements = widget.player.achievements
-          .where((achievement) =>
-              achievement.name != "Keep Your Account Safe!" &&
-              achievement.village == 'home')
+          .where(
+            (achievement) =>
+                achievement.name != _keepYourAccountSafe &&
+                achievement.village == 'home',
+          )
           .toList();
     } else {
       // Others = Builder Base + Clan Capital
       filteredAchievements = widget.player.achievements
-          .where((achievement) =>
-              achievement.name != "Keep Your Account Safe!" &&
-              (achievement.village == 'builderBase' || achievement.village == 'clanCapital'))
+          .where(
+            (achievement) =>
+                achievement.name != _keepYourAccountSafe &&
+                (achievement.village == 'builderBase' ||
+                    achievement.village == 'clanCapital'),
+          )
           .toList();
     }
-    
-    return filteredAchievements.map((achievement) {
-          int stars = achievement.stars;
-          if ((achievement.name == 'Dragon Slayer' ||
-                  achievement.name == 'Ungrateful Child') &&
-              achievement.value >= 1) {
-            stars += 2;
-          }
-          double progress = min<double>(
-              (achievement.value.toDouble() / max<double>(achievement.target.toDouble(), 1.0)) * 100, 
-              100.0
-          );
-          String progressStr = progress == progress.toInt()
-              ? progress.toInt().toString()
-              : progress.toStringAsFixed(2);
-          String progressStringRatio =
-              '${formatNumber(achievement.value)}/${achievement.target.toString().replaceAll(RegExp('000000\$'), 'M')} - $progressStr%';
 
-          return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: progress >= 100 
-                        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
-                        : Theme.of(context).colorScheme.surface,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                achievement.name,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold, 
-                                  fontSize: 16,
-                                  color: Theme.of(context).colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Row(
-                              children: generateStars(stars, 20).map((star) {
-                                return Container(
-                                  margin: EdgeInsets.only(left: 2),
-                                  child: star,
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          achievement.info.replaceAll(RegExp('000000 '), 'M '),
+    return filteredAchievements.map((achievement) {
+      int stars = achievement.stars;
+      if ((achievement.name == _dragonSlayer ||
+              achievement.name == _ungratefulChild) &&
+          achievement.value >= 1) {
+        stars += 2;
+      }
+      double progress = min<double>(
+        (achievement.value.toDouble() /
+                max<double>(achievement.target.toDouble(), 1.0)) *
+            100,
+        100.0,
+      );
+      String progressStr = progress == progress.toInt()
+          ? progress.toInt().toString()
+          : progress.toStringAsFixed(2);
+      String progressStringRatio =
+          '${formatNumber(achievement.value)}/${achievement.target.toString().replaceAll(RegExp('000000\$'), 'M')} - $progressStr%';
+
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: progress >= 100
+                  ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+                  : Theme.of(context).colorScheme.surface,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          achievement.name,
                           style: TextStyle(
-                            fontSize: 13, 
-                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
-                        SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              progressStringRatio,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        LinearProgressIndicator(
-                          value: progress / 100,
-                          minHeight: 6,
-                          backgroundColor: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            progress >= 100 
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ],
+                      ),
+                      const SizedBox(width: 8),
+                      Row(
+                        children: generateStars(stars, 20).map((star) {
+                          return Container(
+                            margin: const EdgeInsets.only(left: 2),
+                            child: star,
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    achievement.info.replaceAll(RegExp('000000 '), 'M '),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
-                ),
-              ));
-        }).toList();
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        progressStringRatio,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: progress / 100,
+                    minHeight: 6,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.2),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      progress >= 100
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }).toList();
   }
 
   Widget _buildAchievementChips(BuildContext context) {
@@ -382,10 +408,9 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
     if (numberStr.endsWith('000000')) {
       return numberStr.replaceAll(RegExp('000000\$'), 'M');
     } else {
-      return NumberFormat("#,###")
-          .format(number)
-          .toString()
-          .replaceAll(',', ' ');
+      return NumberFormat(
+        "#,###",
+      ).format(number).toString().replaceAll(',', ' ');
     }
   }
 }

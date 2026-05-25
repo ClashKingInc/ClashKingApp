@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class CreatorCodeCard extends StatefulWidget {
+  const CreatorCodeCard({super.key});
+
   @override
   CreatorCodeCardState createState() => CreatorCodeCardState();
 }
@@ -27,7 +29,7 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
             return AlertDialog(
               title: Text(
                 AppLocalizations.of(context)!.gameCreatorCodeDialogTitle,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               content: Text(
                 AppLocalizations.of(context)!.gameCreatorCodeDialogDescription),
@@ -71,8 +73,8 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
             children: <Widget>[
               CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl, height: 80),
-              SizedBox(width: 16),
+  errorWidget: (context, url, error) => const Icon(Icons.error),imageUrl: logoUrl, height: 80),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,12 +84,12 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
                       AppLocalizations.of(context)?.gameCreatorCode ??
                           'Creator Code : ClashKing',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       AppLocalizations.of(context)?.gameCreatorCodeDescription ??
                           'Tap for info • Support us for free!',

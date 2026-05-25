@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class PlayerSearchResultTile extends StatefulWidget {
   final dynamic player;
 
-  PlayerSearchResultTile({required this.player});
+  const PlayerSearchResultTile({super.key, required this.player});
 
   @override
   PlayerSearchResultTileState createState() => PlayerSearchResultTileState();
@@ -55,7 +55,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
             context: context,
             barrierDismissible: false,
             builder: (BuildContext context) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             },
@@ -78,7 +78,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     SizedBox(
@@ -92,7 +92,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                   ],
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +103,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
                           color: Theme.of(context).colorScheme.tertiary),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

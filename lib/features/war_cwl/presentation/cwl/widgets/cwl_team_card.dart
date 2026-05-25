@@ -67,9 +67,9 @@ class CwlTeamCard extends StatelessWidget {
                     imageUrl: clan.badgeUrls.medium,
                     width: 40,
                     height: 40,
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +90,7 @@ class CwlTeamCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text("${clan.stars}  "),
-                          SizedBox(
+                          const SizedBox(
                             child: MobileWebImage(
                               imageUrl: ImageAssets.attackStar,
                               width: 15,
@@ -104,7 +104,7 @@ class CwlTeamCard extends StatelessWidget {
                         children: [
                           Text(
                               "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(clan.destructionPercentageInflicted)}  "),
-                          SizedBox(
+                          const SizedBox(
                             child: MobileWebImage(
                               imageUrl: ImageAssets.hitrate,
                               width: 15,
@@ -118,7 +118,7 @@ class CwlTeamCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Wrap(
               alignment: WrapAlignment.center,
               children: sortedTownHalls.map((entry) {
@@ -184,28 +184,28 @@ class CwlTeamCard extends StatelessWidget {
                             StatTile(
                                 label: AppLocalizations.of(context)!.warAttacksTitle,
                                 value: '${clan.attackCount}',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.sword,
                                     width: 16,
                                     height: 16)),
                             StatTile(
                                 label: AppLocalizations.of(context)!.warStatusMissed,
                                 value: '${clan.missedAttacks}',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.brokenSword,
                                     width: 16,
                                     height: 16)),
                             StatTile(
                                 label: AppLocalizations.of(context)!.generalTotal,
                                 value: '${clan.stars}',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
                             StatTile(
                                 label: AppLocalizations.of(context)!.warAbbreviationAvg,
                                 value: clan.averageStars.toStringAsFixed(1),
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
@@ -230,7 +230,7 @@ class CwlTeamCard extends StatelessWidget {
                                     AppLocalizations.of(context)!.warDestructionTitle,
                                 value:
                                     '${clan.destructionPercentageInflicted.toStringAsFixed(1)}%',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.hitrate,
                                     width: 16,
                                     height: 16)),
@@ -239,7 +239,7 @@ class CwlTeamCard extends StatelessWidget {
                                     AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                                 value:
                                     clan.averageDestruction.toStringAsFixed(1),
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.hitrate,
                                     width: 16,
                                     height: 16)),
@@ -261,28 +261,28 @@ class CwlTeamCard extends StatelessWidget {
                             StatTile(
                                 label: AppLocalizations.of(context)!.warDefensesTitle,
                                 value: '${clan.defenseCount}',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.shieldWithArrow,
                                     width: 16,
                                     height: 16)),
                             StatTile(
                                 label: AppLocalizations.of(context)!.warStatusMissed,
                                 value: '${clan.missedDefenses}',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.shield,
                                     width: 16,
                                     height: 16)),
                             StatTile(
                                 label: AppLocalizations.of(context)!.generalTotal,
                                 value: '${clan.defStars}',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
                             StatTile(
                                 label: AppLocalizations.of(context)!.warAbbreviationAvg,
                                 value: clan.defAverageStars.toStringAsFixed(1),
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.attackStar,
                                     width: 16,
                                     height: 16)),
@@ -307,7 +307,7 @@ class CwlTeamCard extends StatelessWidget {
                                     AppLocalizations.of(context)!.warDestructionTitle,
                                 value:
                                     '${clan.destructionPercentage.toStringAsFixed(1)}%',
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.hitrate,
                                     width: 16,
                                     height: 16)),
@@ -315,7 +315,7 @@ class CwlTeamCard extends StatelessWidget {
                                 label:
                                     AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
                                 value: clan.defAverageDestruction.toStringAsFixed(1),
-                                icon: MobileWebImage(
+                                icon: const MobileWebImage(
                                     imageUrl: ImageAssets.hitrate,
                                     width: 16,
                                     height: 16)),

@@ -31,7 +31,7 @@ class WarHistoryHeader extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
                 imageUrl: ImageAssets.warPageBackground,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -48,7 +48,7 @@ class WarHistoryHeader extends StatelessWidget {
                   height: 60,
                   width: 60,
                   child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       imageUrl: clan.badgeUrls.medium),
                 ),
                 Column(
@@ -72,7 +72,7 @@ class WarHistoryHeader extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Wrap(
               alignment: WrapAlignment.start,
               spacing: 7.0,
@@ -119,7 +119,7 @@ class WarHistoryHeader extends StatelessWidget {
                             warLogStats.totalTies, warLogStats.tiePercentage)),
               ],
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         ),
         Positioned(

@@ -11,7 +11,7 @@ class PlayerToDoBody extends StatefulWidget {
   final Map<String, String> filterOptions;
   final bool active;
 
-  PlayerToDoBody({
+  const PlayerToDoBody({
     super.key,
     required this.filterOptions,
     required this.active,

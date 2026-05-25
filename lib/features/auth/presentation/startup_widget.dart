@@ -14,6 +14,8 @@ import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 
 class StartupWidget extends StatefulWidget {
+  const StartupWidget({super.key});
+
   @override
   StartupWidgetState createState() => StartupWidgetState();
 }
@@ -84,7 +86,7 @@ class StartupWidgetState extends State<StartupWidget> {
           isNetworkError: isNetworkError(error),
           onRetry: () async {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => StartupWidget()),
+              MaterialPageRoute(builder: (context) => const StartupWidget()),
             );
           },
         ),
@@ -98,14 +100,14 @@ class StartupWidgetState extends State<StartupWidget> {
       if (authService.isAuthenticated && mounted) {
         if (context.read<CocAccountService>().cocAccounts.isNotEmpty) {
           // ✅ User connected and has CoC account → Go to home page
-          nextPage = MyHomePage();
+          nextPage = const MyHomePage();
         } else {
           // ❌ No account → Go to add account page
-          nextPage = AddCocAccountPage();
+          nextPage = const AddCocAccountPage();
         }
       } else {
         // ❌ User not connected → Go to login page
-        nextPage = LoginPage();
+        nextPage = const LoginPage();
       }
       if (mounted) {
         Navigator.of(context).pushReplacement(

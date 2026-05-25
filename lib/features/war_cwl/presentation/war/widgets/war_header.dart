@@ -51,7 +51,7 @@ class _WarHeaderState extends State<WarHeader> {
                 Colors.black.withValues(alpha: 0.5),
                 BlendMode.darken,
               ),
-              child: MobileWebImage(
+              child: const MobileWebImage(
                 imageUrl: ImageAssets.warPageBackground,
                 width: double.infinity,
                 fit: BoxFit.cover

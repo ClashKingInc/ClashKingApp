@@ -9,7 +9,7 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 class WarHistoryScreen extends StatefulWidget {
   final Clan clan;
 
-  WarHistoryScreen({super.key, required this.clan});
+  const WarHistoryScreen({super.key, required this.clan});
 
   @override
   WarHistoryScreenState createState() => WarHistoryScreenState();
@@ -57,7 +57,7 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
               ],
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
                       WarLogHistoryTab(clan: widget.clan),
@@ -65,7 +65,7 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
                       WarLogHistoryStats(

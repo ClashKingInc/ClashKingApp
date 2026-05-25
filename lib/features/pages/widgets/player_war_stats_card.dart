@@ -20,7 +20,7 @@ class PlayerWarStatsCard extends StatelessWidget {
     final allStats = warStats?.statsByType["all"];
 
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+      style: Theme.of(context).textTheme.labelLarge ?? const TextStyle(),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -53,14 +53,14 @@ class PlayerWarStatsCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        SizedBox(
+                        const SizedBox(
                           height: 60,
                           width: 60,
                           child: MobileWebImage(imageUrl: ImageAssets.war),
                         ),
                       ],
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,

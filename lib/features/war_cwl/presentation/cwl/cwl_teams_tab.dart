@@ -25,12 +25,12 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
   void toggleShowStats(GlobalKey<State<StatefulWidget>> key) {
     setState(() {
       showFullStats = !showFullStats;
-      Future.delayed(Duration(milliseconds: 200), () {
+      Future.delayed(const Duration(milliseconds: 200), () {
         final context = key.currentContext;
         if (context != null && context.mounted) {
           Scrollable.ensureVisible(
             context,
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             alignment: 0.1,
             curve: Curves.easeInOut,
           );

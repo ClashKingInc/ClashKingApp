@@ -19,7 +19,7 @@ class CwlScreen extends StatefulWidget {
   final String clanTag;
   final CwlClan clanInfo;
 
-  CwlScreen({
+  const CwlScreen({
     super.key,
     required this.warCwl,
     required this.clanTag,
@@ -49,7 +49,7 @@ class CwlScreenState extends State<CwlScreen> {
                     child: ColorFiltered(
                       colorFilter: ColorFilter.mode(
                           Colors.black.withAlpha(128), BlendMode.darken),
-                      child: MobileWebImage(
+                      child: const MobileWebImage(
                         imageUrl: ImageAssets.cwlPageBackground,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -80,7 +80,7 @@ class CwlScreenState extends State<CwlScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      SizedBox(height: 36),
+                      const SizedBox(height: 36),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -109,7 +109,7 @@ class CwlScreenState extends State<CwlScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Wrap(
                         alignment: WrapAlignment.center,
                         spacing: 7.0,

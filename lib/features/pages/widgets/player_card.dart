@@ -34,7 +34,7 @@ class PlayerCard extends StatelessWidget {
         : AppLocalizations.of(context)?.warStatusUnready ?? 'Unready';
 
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+      style: Theme.of(context).textTheme.labelLarge ?? const TextStyle(),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -59,7 +59,7 @@ class PlayerCard extends StatelessWidget {
                           width: 100,
                           child: CachedNetworkImage(
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               imageUrl: player.townHallPic),
                         ),
                         Text(
@@ -68,7 +68,7 @@ class PlayerCard extends StatelessWidget {
                                   .textTheme
                                   .labelLarge
                                   ?.copyWith(fontWeight: FontWeight.bold)) ??
-                              TextStyle(fontWeight: FontWeight.bold),
+                              const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           player.tag,
@@ -76,7 +76,7 @@ class PlayerCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,7 +99,7 @@ class PlayerCard extends StatelessWidget {
                               IconChip(
                                   icon: LucideIcons.chevronsUpDown,
                                   label: player.donationRatio,
-                                  color: Color.fromARGB(255, 0, 136, 255),
+                                  color: const Color.fromARGB(255, 0, 136, 255),
                                   size: 20,
                                   description: AppLocalizations.of(context)!
                                       .playerRatioDescription(

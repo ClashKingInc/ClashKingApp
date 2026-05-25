@@ -86,8 +86,8 @@ class DashboardPage extends StatelessWidget {
             : ListView(
                 children: <Widget>[
                   LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: CreatorCodeCard(),
                   ),
                   Padding(
@@ -105,7 +105,7 @@ class DashboardPage extends StatelessWidget {
                           );
                         }
                       },
-                      child: PlayerSearchCard(),
+                      child: const PlayerSearchCard(),
                     ),
                   ),
                   const Padding(

@@ -34,12 +34,12 @@ class ClanCapitalCard extends StatelessWidget {
                           imageUrl:
                               'https://assets.clashk.ing/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${clanInfo?.clanCapital?.capitalHallLevel}.png'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 100,
                     ),
                   ],
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   flex: 7,
                   child: Column(
@@ -50,7 +50,7 @@ class ClanCapitalCard extends StatelessWidget {
                         textAlign: TextAlign.center,
                         softWrap: true,
                       ),
-                      SizedBox(height: 2.0),
+                      const SizedBox(height: 2.0),
                       Wrap(
                         alignment: WrapAlignment.start,
                         spacing: 7.0,

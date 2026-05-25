@@ -20,7 +20,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
   final VoidCallback onExport;
   final bool hasActiveFilters;
 
-  PlayerWarStatsHeader({
+  const PlayerWarStatsHeader({
     super.key,
     required this.name,
     required this.tag,
@@ -52,7 +52,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
                   Colors.black.withValues(alpha: 0.7),
                   BlendMode.darken,
                 ),
-                child: MobileWebImage(
+                child: const MobileWebImage(
                   imageUrl: ImageAssets.playerWarStatsPageBackground,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -77,12 +77,12 @@ class PlayerWarStatsHeader extends StatelessWidget {
                           .titleSmall
                           ?.copyWith(color: Colors.white),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     MobileWebImage(
                       imageUrl: picture,
                       width: 50,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       name,
                       style: Theme.of(context)
@@ -97,7 +97,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
                           .labelLarge
                           ?.copyWith(color: Colors.grey),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 0,
                       runSpacing: 0,
@@ -114,7 +114,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
                           selected: isCWLChecked,
                           onSelected: (bool selected) => onCWLChanged(),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         FilterChip(
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
@@ -128,7 +128,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
                           selected: isRandomChecked,
                           onSelected: (bool selected) => onRandomChanged(),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         FilterChip(
                           visualDensity: VisualDensity.compact,
                           selectedColor: Theme.of(context).colorScheme.primary,
@@ -144,7 +144,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
@@ -168,7 +168,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
             children: [
               // Export button
               IconButton(
-                icon: Icon(Icons.download_outlined, color: Colors.white),
+                icon: const Icon(Icons.download_outlined, color: Colors.white),
                 onPressed: onExport,
                 tooltip:
                     AppLocalizations.of(context)?.generalExport ?? 'Export',

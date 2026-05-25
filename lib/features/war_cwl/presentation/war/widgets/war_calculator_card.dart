@@ -55,14 +55,14 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
           children: [
             Container(
               height: 60,
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.calculate,
                       color: Theme.of(context).colorScheme.onSurface),
                   Padding(
-                    padding: EdgeInsets.only(left: 4.0),
+                    padding: const EdgeInsets.only(left: 4.0),
                     child: Text(
                         AppLocalizations.of(context)?.warCalculatorFast ??
                             'Fast calculator'),

@@ -10,7 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class ClanCapitalScreen extends StatefulWidget {
   final Clan clanInfo;
-  ClanCapitalScreen({super.key, required this.clanInfo});
+  const ClanCapitalScreen({super.key, required this.clanInfo});
 
   @override
   ClanCapitalScreenState createState() => ClanCapitalScreenState();
@@ -38,13 +38,13 @@ class ClanCapitalScreenState extends State<ClanCapitalScreen>
 
   void incrementWeek() {
     setState(() {
-      selectedWeek = selectedWeek.add(Duration(days: 7));
+      selectedWeek = selectedWeek.add(const Duration(days: 7));
     });
   }
 
   void decrementWeek() {
     setState(() {
-      selectedWeek = selectedWeek.subtract(Duration(days: 7));
+      selectedWeek = selectedWeek.subtract(const Duration(days: 7));
     });
   }
 
@@ -77,19 +77,19 @@ class ClanCapitalScreenState extends State<ClanCapitalScreen>
     } else {
       return Column(
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Card(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Text(
                 AppLocalizations.of(context)?.generalNoDataAvailable ??
                     'No data available',
               ),
             ),
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           CachedNetworkImage(
-            errorWidget: (context, url, error) => Icon(Icons.error),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
             imageUrl: ImageAssets.villager,
             height: 250,
             width: 200,

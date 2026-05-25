@@ -31,7 +31,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
     WarMemberPresence memberCwl = WarMemberPresence.empty();
 
     if (player == null) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -69,7 +69,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
       child: Stack(
         children: [
           DefaultTextStyle(
-            style: Theme.of(context).textTheme.labelLarge ?? TextStyle(),
+            style: Theme.of(context).textTheme.labelLarge ?? const TextStyle(),
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -84,8 +84,8 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                             Text(AppLocalizations.of(context)!.todoTitle,
                                 style:
                                     (Theme.of(context).textTheme.labelLarge)),
-                            SizedBox(height: 12),
-                            SizedBox(
+                            const SizedBox(height: 12),
+                            const SizedBox(
                               height: 90,
                               width: 100,
                               child: MobileWebImage(
@@ -94,7 +94,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -102,7 +102,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                               iconToDo(player, memberCwl),
                               Row(
                                 children: [
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Expanded(
                                     child: Container(
                                       height: 8,
@@ -120,13 +120,13 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                                           backgroundColor: Theme.of(context)
                                               .scaffoldBackgroundColor,
                                           valueColor:
-                                              AlwaysStoppedAnimation<Color>(
+                                              const AlwaysStoppedAnimation<Color>(
                                                   Colors.green),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   Text(
                                     '$percent%',
                                     style:
@@ -203,7 +203,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
                               style: Theme.of(context).textTheme.labelLarge,
                               textAlign: TextAlign.center,
                             ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Wrap(
                         alignment: WrapAlignment.start,
                         spacing: 7.0,
@@ -386,7 +386,7 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
             ),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
       ],
     );
   }

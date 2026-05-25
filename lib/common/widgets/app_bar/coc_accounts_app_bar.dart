@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CocAccountsAppBar({super.key});
+
   @override
   Size get preferredSize => const Size.fromHeight(60.0);
 
@@ -15,7 +17,7 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       leading: IconButton(
-        icon: Icon(Icons.logout),
+        icon: const Icon(Icons.logout),
         tooltip: AppLocalizations.of(context)!.authLogout,
         onPressed: () async {
           final authService = context.read<AuthService>();
@@ -32,7 +34,7 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
                     overflow: TextOverflow.ellipsis,
                   )
                 : Text(AppLocalizations.of(context)!.generalLoading),
-            Padding(padding: EdgeInsets.all(5)),
+            const Padding(padding: EdgeInsets.all(5)),
             CircleAvatar(
               radius: 20,
               backgroundColor: Colors.transparent,
@@ -42,13 +44,13 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
                         imageUrl: user.avatarUrl,
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
-                            CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       )
                     : null,
               ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
           ],
         ),
       ],

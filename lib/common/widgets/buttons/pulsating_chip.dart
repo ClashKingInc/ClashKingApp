@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PulsatingChip extends StatefulWidget {
   final Widget child;
 
-  PulsatingChip({required this.child});
+  const PulsatingChip({super.key, required this.child});
 
   @override
   PulsatingChipState createState() => PulsatingChipState();

@@ -15,7 +15,7 @@ class ApiService {
   static const String apiUrlV2 = "https://go.api.clashk.ing/v2";
   static const String assetUrl = "https://assets.clashk.ing";
   static const String proxyUrl = "https://proxy.clashk.ing/v1";
-  static const String cocAssetsUrl = "https://coc-assets.clashk.ing";
+  static const String cocAssetsUrl = "https://proxy.clashk.ing/images";
   static const String bunnyUrl = "https://cdn.clashk.ing";
   static const String discordUrl = "https://discord.gg/clashking";
   static const Duration _defaultTimeout = Duration(seconds: 15);

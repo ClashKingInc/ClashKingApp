@@ -9,6 +9,8 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
   @override
   ForgotPasswordPageState createState() => ForgotPasswordPageState();
 }
@@ -83,7 +85,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     height: 100,
                     width: 100,
                     child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       imageUrl: logoUrl,
                     ),
                   ),
@@ -120,7 +122,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           TextFormField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -228,7 +230,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                       child: Column(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.check_circle,
                             size: 48,
                             color: Colors.green,

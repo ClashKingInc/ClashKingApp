@@ -15,7 +15,7 @@ class PlayersWarHistoryScreen extends StatefulWidget {
   final Clan clan;
   final List<String> discordUser;
 
-  PlayersWarHistoryScreen(
+  const PlayersWarHistoryScreen(
       {super.key, required this.clan, required this.discordUser});
 
   @override
@@ -202,10 +202,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                               .colorScheme
                               .primary
                               .withValues(alpha: 0.7),
-                          labelPadding: EdgeInsets.all(0),
+                          labelPadding: const EdgeInsets.all(0),
                           label: CachedNetworkImage(
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               imageUrl: ImageAssets.townHall(thLevel),
                               height: 24),
                           selected: memberThSelection[thLevel]!,
@@ -217,7 +217,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                         );
                       }).toList(),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(AppLocalizations.of(context)!.warOpponentSelectOpponentsThLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Wrap(
@@ -229,10 +229,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                               .colorScheme
                               .primary
                               .withValues(alpha: 0.7),
-                          labelPadding: EdgeInsets.all(0),
+                          labelPadding: const EdgeInsets.all(0),
                           label: CachedNetworkImage(
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               imageUrl: ImageAssets.townHall(thLevel),
                               height: 24),
                           selected: enemyThSelection[thLevel]!,
@@ -244,7 +244,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                         );
                       }).toList(),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     CheckboxListTile(
                       title: Text(AppLocalizations.of(context)!.warOpponentEqualThLevel,
                           style: Theme.of(context).textTheme.bodyMedium),
@@ -449,7 +449,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                 },
                 onBack: () => Navigator.of(context).pop(),
                 onFilter: showFilterDialog),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -479,7 +479,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                   },
                 ),
                 IconButton(
-                  icon: Icon(LucideIcons.listRestart),
+                  icon: const Icon(LucideIcons.listRestart),
                   onPressed: () {
                     _resetFilters();
                   },
@@ -487,7 +487,7 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             ...sortedMembers.map(
               (member) {
                 MemberWarStats? memberWarStats =
@@ -498,10 +498,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                 }
 
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
                           Row(
@@ -511,12 +511,12 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                                 children: [
                                   CachedNetworkImage(
                                     errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
+                                        const Icon(Icons.error),
                                     imageUrl: ImageAssets.townHall(
                                         member.townHallLevel),
                                     height: 50,
                                   ),
-                                  SizedBox(width: 16),
+                                  const SizedBox(width: 16),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -535,10 +535,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                                       Text(memberWarStats?.warsParticipated
                                               .toString() ??
                                           ""),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       CachedNetworkImage(
                                           errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                              const Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/icons/Icon_HV_Clan_War.png",
                                           height: 16,
@@ -550,10 +550,10 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                                       Text(memberWarStats?.missedAttacks
                                               .toString() ??
                                           ""),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       CachedNetworkImage(
                                           errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                              const Icon(Icons.error),
                                           imageUrl:
                                               "https://assets.clashk.ing/bot/icons/broken_sword.png",
                                           height: 16,
@@ -564,13 +564,13 @@ class PlayersWarHistoryScreenState extends State<PlayersWarHistoryScreen>
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 children: [
-                                  Row(
+                                  const Row(
                                     children: [
                                       Icon(Icons.percent, size: 16),
                                       Icon(Icons.star, size: 16),

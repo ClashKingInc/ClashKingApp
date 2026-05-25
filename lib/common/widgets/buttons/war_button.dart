@@ -19,13 +19,13 @@ Widget buildWarButton(BuildContext context,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MobileWebImage(
+          const MobileWebImage(
             width: 20,
             imageUrl: ImageAssets.war,
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Shimmer.fromColors(
-            period: Duration(seconds: 3),
+            period: const Duration(seconds: 3),
             baseColor: Colors.white,
             highlightColor: Colors.white.withValues(alpha: 0.4),
             child: Text(label, style: Theme.of(context).textTheme.bodyMedium),

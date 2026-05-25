@@ -139,12 +139,12 @@ class WarStatsView extends StatelessWidget {
                           width: 30,
                           height: 30,
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(AppLocalizations.of(context)!
                             .gameTownHallLevelNumber(defTh ?? 1)),
                       ],
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(

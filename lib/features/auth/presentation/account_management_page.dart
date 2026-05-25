@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class AccountManagementPage extends StatefulWidget {
+  const AccountManagementPage({super.key});
+
   @override
   AccountManagementPageState createState() => AccountManagementPageState();
 }
@@ -83,23 +85,23 @@ class AccountManagementPageState extends State<AccountManagementPage> {
         builder: (context, authService, child) {
           final user = authService.currentUser;
           if (user == null) {
-            return Center(child: Text('No user data available'));
+            return const Center(child: Text('No user data available'));
           }
 
           return SingleChildScrollView(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // User Info Section
                 _buildUserInfoSection(user),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // Connected Accounts Section
                 _buildConnectedAccountsSection(user),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // Link Accounts Section
                 if (!user.hasEmailAuth) _buildLinkEmailSection(),
@@ -116,7 +118,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -127,10 +129,10 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                   backgroundImage: NetworkImage(user.avatarUrl),
                   onBackgroundImageError: (_, _) {},
                   child: user.avatarUrl.isEmpty
-                      ? Icon(Icons.person, size: 30)
+                      ? const Icon(Icons.person, size: 30)
                       : null,
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +144,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                             ),
                       ),
                       if (user.email != null) ...[
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           user.email!,
                           style:
@@ -151,7 +153,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                                   ),
                         ),
                       ],
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         'User ID: ${user.userId}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -180,7 +182,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
               ),
         ),
 
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
 
         // Discord Account
         Card(
@@ -188,7 +190,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundColor: Color(0xFF5865F2),
               child: Icon(Icons.discord, color: Colors.white),
             ),
@@ -197,12 +199,12 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                 ? AppLocalizations.of(context)!.authAccountConnectedStatus
                 : AppLocalizations.of(context)!.authAccountNotConnected),
             trailing: user.hasDiscordAuth
-                ? Icon(Icons.check_circle, color: Colors.green)
-                : Icon(Icons.circle_outlined, color: Colors.grey),
+                ? const Icon(Icons.check_circle, color: Colors.green)
+                : const Icon(Icons.circle_outlined, color: Colors.grey),
           ),
         ),
 
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
 
         // Email Account
         Card(
@@ -212,22 +214,22 @@ class AccountManagementPageState extends State<AccountManagementPage> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(Icons.email, color: Colors.white),
+              child: const Icon(Icons.email, color: Colors.white),
             ),
             title: Text(AppLocalizations.of(context)!.authAccountEmailAndPassword),
             subtitle: Text(user.hasEmailAuth
                 ? AppLocalizations.of(context)!.authAccountConnectedStatus
                 : AppLocalizations.of(context)!.authAccountNotConnected),
             trailing: user.hasEmailAuth
-                ? Icon(Icons.check_circle, color: Colors.green)
-                : Icon(Icons.circle_outlined, color: Colors.grey),
+                ? const Icon(Icons.check_circle, color: Colors.green)
+                : const Icon(Icons.circle_outlined, color: Colors.grey),
           ),
         ),
 
         if (user.hasMultipleAuthMethods) ...[
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.green.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
@@ -237,8 +239,8 @@ class AccountManagementPageState extends State<AccountManagementPage> {
             ),
             child: Row(
               children: [
-                Icon(Icons.security, color: Colors.green),
-                SizedBox(width: 8),
+                const Icon(Icons.security, color: Colors.green),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     AppLocalizations.of(context)!.authAccountSecured,
@@ -263,20 +265,20 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                 fontWeight: FontWeight.bold,
               ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           AppLocalizations.of(context)!.authAccountAddEmailAuth,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Colors.grey[600],
               ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Card(
           elevation: 2,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Form(
               key: _formKey,
               child: Column(
@@ -286,7 +288,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     controller: _usernameController,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.authUsernameLabel,
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -303,7 +305,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     },
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   // Email Field
                   TextFormField(
@@ -311,7 +313,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.authEmail,
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -329,7 +331,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     },
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   // Password Field
                   TextFormField(
@@ -337,7 +339,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.authPasswordLabel,
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       suffixIcon: IconButton(
                         icon: Icon(_obscurePassword
                             ? Icons.visibility
@@ -365,7 +367,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     },
                   ),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Link Button
                   SizedBox(
@@ -373,22 +375,22 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _linkEmailAccount,
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: _isLoading
-                          ? CircularProgressIndicator(color: Colors.white)
+                          ? const CircularProgressIndicator(color: Colors.white)
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.link),
-                                SizedBox(width: 8),
+                                const Icon(Icons.link),
+                                const SizedBox(width: 8),
                                 Text(
                                   AppLocalizations.of(context)!
                                       .authAccountLinkEmail,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),

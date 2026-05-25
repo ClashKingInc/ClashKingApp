@@ -11,7 +11,7 @@ class ClanCapitalHeader extends StatefulWidget {
   final List<String> user;
   final Clan? clanInfo;
 
-  ClanCapitalHeader({
+  const ClanCapitalHeader({
     super.key,
     required this.user,
     required this.clanInfo,
@@ -43,7 +43,7 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                       Colors.black.withValues(alpha: 0.3),
                       BlendMode.darken,
                     ),
-                    child: MobileWebImage(
+                    child: const MobileWebImage(
                       imageUrl: ImageAssets.clanCapitalPageBackground,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -64,7 +64,7 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                 bottom: -62,
                 child: Row(
                   children: [
-                    Column(
+                    const Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -86,12 +86,12 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                         SizedBox(height: 8),
                       ],
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Column(
                       children: [
                         ClipRect(
                           child: Transform.translate(
-                            offset: Offset(0, -6),
+                            offset: const Offset(0, -6),
                             child: Transform.scale(
                               scale: (widget.clanInfo?.clanCapital
                                           ?.capitalHallLevel ==
@@ -114,8 +114,8 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
                         ),
                       ],
                     ),
-                    SizedBox(width: 16),
-                    Column(
+                    const SizedBox(width: 16),
+                    const Column(
                       children: [
                         SizedBox(height: 10),
                         SizedBox(
@@ -136,13 +136,13 @@ class ClanCapitalHeaderState extends State<ClanCapitalHeader>
               ),
             ],
           ),
-          SizedBox(height: 80),
+          const SizedBox(height: 80),
           ImageChip(
                             context: context,
             imageUrl: ImageAssets.capitalTrophy,
             label: NumberFormat('#,###').format(widget.clanInfo?.clanCapitalPoints),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
         ],
       ),
     );

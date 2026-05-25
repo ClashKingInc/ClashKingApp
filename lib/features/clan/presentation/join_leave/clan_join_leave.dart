@@ -9,7 +9,7 @@ import 'package:scrollable_tab_view/scrollable_tab_view.dart';
 class ClanJoinLeaveScreen extends StatefulWidget {
   final Clan clanInfo;
 
-  ClanJoinLeaveScreen({super.key, required this.clanInfo});
+  const ClanJoinLeaveScreen({super.key, required this.clanInfo});
 
   @override
   ClanJoinLeaveScreenState createState() => ClanJoinLeaveScreenState();

@@ -208,7 +208,7 @@ class WarStatisticsTab extends StatelessWidget {
         SizedBox(
           width: 25,
           child: imageUrl != null
-              ? CachedNetworkImage(imageUrl: imageUrl, errorWidget: (c, u, e) => Icon(Icons.error))
+              ? CachedNetworkImage(imageUrl: imageUrl, errorWidget: (c, u, e) => const Icon(Icons.error))
               : Icon(icon, size: 25),
         ),
         Expanded(
@@ -249,7 +249,7 @@ class WarStatisticsTab extends StatelessWidget {
                     : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png";
                 return SizedBox(
                   width: 25,
-                  child: CachedNetworkImage(imageUrl: image, errorWidget: (c, u, e) => Icon(Icons.error)),
+                  child: CachedNetworkImage(imageUrl: image, errorWidget: (c, u, e) => const Icon(Icons.error)),
                 );
               }),
             ),

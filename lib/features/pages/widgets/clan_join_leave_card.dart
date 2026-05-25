@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ClanJoinLeaveCard extends StatelessWidget {
-  ClanJoinLeaveCard({
+  const ClanJoinLeaveCard({
     super.key,
   });
 
@@ -30,10 +30,10 @@ class ClanJoinLeaveCard extends StatelessWidget {
           children: <Widget>[
             Row(
               children: [
-                Column(
+                const Column(
                   children: <Widget>[
                     SizedBox(width: 100),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     SizedBox(
                       height: 80,
                       width: 80,

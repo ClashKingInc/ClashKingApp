@@ -7,6 +7,8 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ClanSearchFilters extends StatefulWidget {
+  const ClanSearchFilters({super.key});
+
   @override
   ClanSearchFiltersState createState() => ClanSearchFiltersState();
 }
@@ -143,7 +145,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
     ];
 
     return AlertDialog(
-      insetPadding: EdgeInsets.all(16),
+      insetPadding: const EdgeInsets.all(16),
       backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       title: Text(AppLocalizations.of(context)!.generalFilters,
@@ -157,7 +159,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(AppLocalizations.of(context)!.warFrequency,
                         style: Theme.of(context).textTheme.bodyMedium),
                     DropdownButton<String>(
@@ -183,7 +185,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(AppLocalizations.of(context)!.clanLocation,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Row(
@@ -235,7 +237,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .onSurface),
-                                        SizedBox(width: 8.0),
+                                        const SizedBox(width: 8.0),
                                         Text(item['name'],
                                             overflow: TextOverflow.ellipsis),
                                       ],
@@ -253,7 +255,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             },
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   ],
@@ -263,16 +265,16 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(AppLocalizations.of(context)!.clanMembers,
                         style: Theme.of(context).textTheme.bodyMedium),
                     Row(
                       children: [
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Expanded(
                           flex: 1,
                           child: IconButton(
-                            padding: EdgeInsets.only(right: 8),
+                            padding: const EdgeInsets.only(right: 8),
                             icon: Icon(Icons.remove,
                                 color: Theme.of(context).colorScheme.onSurface,
                                 size: 16),
@@ -313,7 +315,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             onPressed: _incrementMin,
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         IconButton(
                           icon: Icon(Icons.remove,
                               color: Theme.of(context).colorScheme.onSurface,
@@ -354,10 +356,10 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             onPressed: _incrementMax,
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
@@ -365,16 +367,16 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(AppLocalizations.of(context)!.clanMinimumPoints,
                         style: Theme.of(context).textTheme.bodyMedium),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Expanded(
                           flex: 1,
                           child: IconButton(
-                            padding: EdgeInsets.only(right: 8),
+                            padding: const EdgeInsets.only(right: 8),
                             icon: Icon(Icons.remove,
                                 color: Theme.of(context).colorScheme.onSurface,
                                 size: 16),
@@ -419,7 +421,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
@@ -427,16 +429,16 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Column(
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(AppLocalizations.of(context)!.clanMinimumLevel,
                         style: Theme.of(context).textTheme.bodyMedium),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Expanded(
                           flex: 1,
                           child: IconButton(
-                            padding: EdgeInsets.only(right: 8),
+                            padding: const EdgeInsets.only(right: 8),
                             icon: Icon(Icons.remove,
                                 color: Theme.of(context).colorScheme.onSurface,
                                 size: 16),
@@ -481,7 +483,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),

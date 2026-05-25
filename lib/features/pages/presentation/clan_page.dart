@@ -81,8 +81,8 @@ class ClanPage extends StatelessWidget {
         child: ListView(children: <Widget>[
           LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
           const SizedBox(height: 4),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: ClanSearchCard(),
           ),
           if (hasClan)
@@ -95,8 +95,8 @@ class ClanPage extends StatelessWidget {
                       builder: (context) => ClanInfoScreen(clanInfo: clanInfo),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: ClanInfoCard(),
                   ),
                 ),
@@ -108,8 +108,8 @@ class ClanPage extends StatelessWidget {
                           ClanJoinLeaveScreen(clanInfo: clanInfo),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: ClanJoinLeaveCard(),
                   ),
                 ),
@@ -122,16 +122,16 @@ class ClanPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: ClanCapitalCard(),
                   ),
                 ),
               ],
             )
           else
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Card(child: NoClanCard()),
             ),
           const SizedBox(height: 16),

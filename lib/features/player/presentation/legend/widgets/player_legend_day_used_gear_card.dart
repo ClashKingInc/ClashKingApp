@@ -45,7 +45,7 @@ class LegendUsedGearCard extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                             imageUrl: gear.imageUrl,
                             width: 40,
                             height: 40,

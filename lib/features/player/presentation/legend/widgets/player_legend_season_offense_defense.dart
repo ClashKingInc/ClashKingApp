@@ -47,7 +47,7 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
               children: [
                 CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl:
                       "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                   width: 16,
@@ -56,7 +56,7 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
                 ),
                 CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl: "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                   width: 8,
                   height: 8,
@@ -93,7 +93,7 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: CachedNetworkImage(
   
-  errorWidget: (context, url, error) => Icon(Icons.error),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
                               imageUrl: icon,
                               width: 20,
                             ),

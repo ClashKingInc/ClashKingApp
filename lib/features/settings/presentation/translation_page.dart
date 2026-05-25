@@ -5,6 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class TranslationScreen extends StatelessWidget {
+  const TranslationScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,17 +26,17 @@ class TranslationScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.translationThankYouContent,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.0),
                   child: CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl:
                         "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // remplacez par votre URL d'image
                     height: 200,
@@ -43,7 +45,7 @@ class TranslationScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Text(
                 AppLocalizations.of(context)!.translationHelpUsTranslate,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -51,11 +53,11 @@ class TranslationScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                   AppLocalizations.of(context)!.translationHelpTranslateContent,
                   style: Theme.of(context).textTheme.bodyMedium),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () async {
@@ -65,7 +67,7 @@ class TranslationScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
-                  icon: Icon(Icons.language),
+                  icon: const Icon(Icons.language),
                   label: Text(
                     AppLocalizations.of(context)!
                         .translationHelpTranslateButton,
@@ -76,16 +78,16 @@ class TranslationScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     await launchUrl(Uri.parse("https://discord.gg/clashking"));
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF5865F2),
+                    backgroundColor: const Color(0xFF5865F2),
                   ),
-                  icon: Icon(Icons.discord),
+                  icon: const Icon(Icons.discord),
                   label: Text(
                     AppLocalizations.of(context)!.faqJoinDiscord,
                     style: Theme.of(context)
@@ -95,7 +97,7 @@ class TranslationScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.translationCurrentTranslators,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -103,7 +105,7 @@ class TranslationScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 '''
   • AlejandroMoc

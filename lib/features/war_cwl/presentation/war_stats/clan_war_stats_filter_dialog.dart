@@ -165,7 +165,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
     return Column(
       children: [
         ListTile(
-          title: Text('Start Date'),
+          title: const Text('Start Date'),
           subtitle:
               Text(_filter.startDate?.toString().split(' ')[0] ?? 'Not set'),
           trailing: const Icon(Icons.calendar_today),
@@ -183,7 +183,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
           },
         ),
         ListTile(
-          title: Text('End Date'),
+          title: const Text('End Date'),
           subtitle:
               Text(_filter.endDate?.toString().split(' ')[0] ?? 'Not set'),
           trailing: const Icon(Icons.calendar_today),

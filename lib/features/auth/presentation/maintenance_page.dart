@@ -14,7 +14,7 @@ class MaintenanceScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          MobileWebImage(
+          const MobileWebImage(
               imageUrl: ImageAssets.sleepingApprenticeBuilder, width: 250),
           const SizedBox(height: 20),
           Text(
@@ -34,7 +34,7 @@ class MaintenanceScreen extends StatelessWidget {
           const SizedBox(height: 40),
           TextButton(
               onPressed: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => StartupWidget()),
+                    MaterialPageRoute(builder: (context) => const StartupWidget()),
                   ),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [

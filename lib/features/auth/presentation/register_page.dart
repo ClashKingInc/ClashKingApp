@@ -11,6 +11,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   RegisterPageState createState() => RegisterPageState();
 }
@@ -97,7 +99,7 @@ class RegisterPageState extends State<RegisterPage> {
       if (mounted) {
         if (e.toString().contains("503") || e.toString().contains("500")) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => MaintenanceScreen()),
+            MaterialPageRoute(builder: (context) => const MaintenanceScreen()),
           );
         } else {
           String errorString = e.toString().toLowerCase();
@@ -138,7 +140,7 @@ class RegisterPageState extends State<RegisterPage> {
                 overflow: TextOverflow.visible, // Show all text
               ),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 6), // Longer duration for longer text
+              duration: const Duration(seconds: 6), // Longer duration for longer text
               action: SnackBarAction(
                 label: AppLocalizations.of(context)!.generalOk,
                 textColor: Colors.white,
@@ -214,7 +216,7 @@ class RegisterPageState extends State<RegisterPage> {
       ),
       body: ResponsiveLayoutWrapper(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Form(
           key: _formKey,
           child: Column(
@@ -226,13 +228,13 @@ class RegisterPageState extends State<RegisterPage> {
                   height: 100,
                   width: 100,
                   child: CachedNetworkImage(
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageUrl: logoUrl,
                   ),
                 ),
               ),
 
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               Text(
                 AppLocalizations.of(context)!.authJoinClashKing,
@@ -242,7 +244,7 @@ class RegisterPageState extends State<RegisterPage> {
                 textAlign: TextAlign.center,
               ),
 
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
 
               Text(
                 AppLocalizations.of(context)!.authCreateAccountToGetStarted,
@@ -253,7 +255,7 @@ class RegisterPageState extends State<RegisterPage> {
                 textAlign: TextAlign.center,
               ),
 
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               // Registration form card
               Center(
@@ -265,7 +267,7 @@ class RegisterPageState extends State<RegisterPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       // Username Field
                       TextFormField(
                         controller: _usernameController,
@@ -274,7 +276,7 @@ class RegisterPageState extends State<RegisterPage> {
                         decoration: InputDecoration(
                           labelText:
                               AppLocalizations.of(context)!.authUsernameLabel,
-                          prefixIcon: Icon(Icons.person),
+                          prefixIcon: const Icon(Icons.person),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -292,7 +294,7 @@ class RegisterPageState extends State<RegisterPage> {
                         },
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       // Email Field
                       TextFormField(
@@ -303,7 +305,7 @@ class RegisterPageState extends State<RegisterPage> {
                         decoration: InputDecoration(
                           labelText:
                               AppLocalizations.of(context)!.authEmail,
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: const Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -322,7 +324,7 @@ class RegisterPageState extends State<RegisterPage> {
                         },
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       // Password Field
                       TextFormField(
@@ -333,7 +335,7 @@ class RegisterPageState extends State<RegisterPage> {
                         decoration: InputDecoration(
                           labelText:
                               AppLocalizations.of(context)!.authPasswordLabel,
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
                           suffixIcon: IconButton(
                             icon: Icon(_obscurePassword
                                 ? Icons.visibility
@@ -362,7 +364,7 @@ class RegisterPageState extends State<RegisterPage> {
                       ),
 
                       // Dynamic password requirements checklist (placed below password field)
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Builder(builder: (context) {
                         final header = AppLocalizations.of(context)!.authPasswordHeader;
                         final labelUpper = AppLocalizations.of(context)!.authPasswordUppercase;
@@ -381,7 +383,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   size: 16,
                                   color: met ? Colors.green : Theme.of(context).hintColor,
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     label,
@@ -416,7 +418,7 @@ class RegisterPageState extends State<RegisterPage> {
                         );
                       }),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       // Confirm Password Field
                       TextFormField(
@@ -427,7 +429,7 @@ class RegisterPageState extends State<RegisterPage> {
                         decoration: InputDecoration(
                           labelText:
                               AppLocalizations.of(context)!.authPasswordConfirm,
-                          prefixIcon: Icon(Icons.lock_outline),
+                          prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
                             icon: Icon(_obscureConfirmPassword
                                 ? Icons.visibility
@@ -454,7 +456,7 @@ class RegisterPageState extends State<RegisterPage> {
                         onFieldSubmitted: (_) => _register(),
                       ),
 
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
 
                       // Register Button
                       SizedBox(
@@ -491,7 +493,7 @@ class RegisterPageState extends State<RegisterPage> {
                                 ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
                       // Back to Login
                       TextButton(

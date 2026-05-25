@@ -16,6 +16,8 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class AddCocAccountPage extends StatefulWidget {
+  const AddCocAccountPage({super.key});
+
   @override
   AddCocAccountPageState createState() => AddCocAccountPageState();
 }
@@ -83,7 +85,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       Navigator.of(context).pop();
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
+      ).pushReplacement(MaterialPageRoute(builder: (context) => const MyHomePage()));
     }
   }
 
@@ -113,7 +115,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         }
       },
       child: Scaffold(
-        appBar: CocAccountsAppBar(),
+        appBar: const CocAccountsAppBar(),
         resizeToAvoidBottomInset: false,
         body: ResponsiveLayoutWrapper(
           child: Column(
@@ -122,7 +124,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
               Expanded(
                 child: Column(
                   children: [
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
@@ -132,20 +134,20 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                             width: 70,
                             child: CachedNetworkImage(
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               imageUrl: logoUrl,
                             ),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: 150,
                             child: CachedNetworkImage(
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                               imageUrl: textLogoUrl,
                             ),
                           ),
-                          SizedBox(height: 32),
+                          const SizedBox(height: 32),
                           if (_isFirstConnection) ...[
                             Text(
                               AppLocalizations.of(context)!.accountsWelcome,
@@ -178,7 +180,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Expanded(
                       child: Card(
                         child: Padding(
@@ -200,11 +202,11 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                         ),
                                       ),
                                       suffixIcon: _isAddingLoading
-                                          ? SizedBox(
+                                          ? const SizedBox(
                                               height: 24,
                                               width: 24,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(
+                                                padding: EdgeInsets.all(
                                                   8.0,
                                                 ),
                                                 child:
@@ -232,13 +234,13 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                     ],
                                   ),
                                   if (_errorMessage.isNotEmpty) ...[
-                                    SizedBox(height: 8),
+                                    const SizedBox(height: 8),
                                     Text(
                                       _errorMessage,
-                                      style: TextStyle(color: Colors.red),
+                                      style: const TextStyle(color: Colors.red),
                                     ),
                                   ],
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   Row(
                                     children: [
                                       Icon(
@@ -248,7 +250,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                           context,
                                         ).colorScheme.primary,
                                       ),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
                                           AppLocalizations.of(
@@ -267,7 +269,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                 ],
                               ),
                               Expanded(
@@ -313,7 +315,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                 child: CachedNetworkImage(
                                                   errorWidget:
                                                       (context, url, error) =>
-                                                          Icon(Icons.error),
+                                                          const Icon(Icons.error),
                                                   imageUrl:
                                                       ImageAssets.townHall(
                                                     _tempUserAccounts[index]
@@ -366,7 +368,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                         mainAxisSize:
                                                             MainAxisSize.min,
                                                         children: [
-                                                          Icon(
+                                                          const Icon(
                                                             Icons.verified,
                                                             color: Colors.green,
                                                             size: 16,
@@ -379,7 +381,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                               context,
                                                             )!
                                                                 .accountVerified,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                               color:
                                                                   Colors.green,
                                                               fontSize: 12,
@@ -438,7 +440,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: [
-                                                            Icon(
+                                                            const Icon(
                                                               Icons
                                                                   .warning_outlined,
                                                               color:
@@ -454,7 +456,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                                 context,
                                                               )!
                                                                   .accountVerify,
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                 color: Colors
                                                                     .orange,
                                                                 fontSize: 12,
@@ -497,12 +499,12 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                             _tempUserAccounts[
                                                                     index]
                                                                 ["player_tag"]
-                                                        ? SizedBox(
+                                                        ? const SizedBox(
                                                             height: 24,
                                                             width: 24,
                                                             child: Padding(
                                                               padding:
-                                                                  const EdgeInsets
+                                                                  EdgeInsets
                                                                       .all(
                                                                 8.0,
                                                               ),
