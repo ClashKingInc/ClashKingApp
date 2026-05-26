@@ -5,7 +5,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:9.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -15,12 +14,33 @@ allprojects {
         google()
         mavenCentral()
     }
-    // Pin glance-appwidget to a version that doesn't require compileSdk 37.
-    // glance-appwidget 1.3+ requires API 37 which AGP 9.1.0 can't handle.
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
-            force 'androidx.glance:glance:1.1.1'
-            force 'androidx.glance:glance-appwidget:1.1.1'
+            force 'androidx.test.espresso:espresso-core:3.6.1'
+            force 'androidx.test.espresso:espresso-idling-resource:3.6.1'
+        }
+    }
+}
+
+subprojects { project ->
+    project.plugins.withId("com.android.library") {
+        if (project.file("src/main/kotlin").exists() && !project.plugins.hasPlugin("org.jetbrains.kotlin.android")) {
+            project.apply plugin: "org.jetbrains.kotlin.android"
+        }
+    }
+    project.plugins.withId("org.jetbrains.kotlin.android") {
+        if (project.name != "app") {
+            project.afterEvaluate {
+                def targetCompatibility = project.android?.compileOptions?.targetCompatibility
+                def kotlinJvmTarget = targetCompatibility == JavaVersion.VERSION_1_8
+                    ? "1.8"
+                    : (targetCompatibility?.majorVersion ?: "17")
+                project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                    kotlinOptions {
+                        jvmTarget = kotlinJvmTarget
+                    }
+                }
+            }
         }
     }
 }
@@ -28,18 +48,6 @@ allprojects {
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-
-subprojects {
-    project.evaluationDependsOn(':app')
-}
-
-// Force compileSdk 36 on all plugin subprojects AFTER each project is fully configured,
-// so outdated plugins (e.g. scrollable_tab_view at 31) satisfy dependency requirements.
-gradle.afterProject { project ->
-    if (project != rootProject && project.hasProperty('android')) {
-        project.android.compileSdkVersion(36)
-    }
 }
 
 tasks.register("clean", Delete) {
