@@ -33,4 +33,14 @@ class ThemeNotifier with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    _themeMode = mode;
+    await storePrefs('themeMode', switch (mode) {
+      ThemeMode.dark => 'dark',
+      ThemeMode.light => 'light',
+      ThemeMode.system => 'system',
+    });
+    notifyListeners();
+  }
 }

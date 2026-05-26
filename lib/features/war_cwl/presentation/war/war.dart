@@ -12,7 +12,7 @@ import 'package:clashkingapp/features/war_cwl/presentation/war/war_team_tab.dart
     show WarTeamTab;
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
@@ -54,7 +54,9 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    DebugUtils.debugInfo("war data ${widget.war.clan?.name} ${widget.war.opponent?.name}");
+    DebugUtils.debugInfo(
+      "war data ${widget.war.clan?.name} ${widget.war.opponent?.name}",
+    );
     final clanMembers = widget.war.clan?.members ?? [];
     final opponentMembers = widget.war.opponent?.members ?? [];
 
@@ -63,34 +65,40 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
         case 'rattacks':
           return members.where((m) => (m.attacks?.isNotEmpty ?? false)).toList()
             ..sort((a, b) {
-              final aBest = a.attacks!.reduce((curr, next) =>
-                  next.stars > curr.stars ||
-                          (next.stars == curr.stars &&
-                              next.destructionPercentage >
-                                  curr.destructionPercentage)
-                      ? next
-                      : curr);
+              final aBest = a.attacks!.reduce(
+                (curr, next) =>
+                    next.stars > curr.stars ||
+                        (next.stars == curr.stars &&
+                            next.destructionPercentage >
+                                curr.destructionPercentage)
+                    ? next
+                    : curr,
+              );
 
-              final bBest = b.attacks!.reduce((curr, next) =>
-                  next.stars > curr.stars ||
-                          (next.stars == curr.stars &&
-                              next.destructionPercentage >
-                                  curr.destructionPercentage)
-                      ? next
-                      : curr);
+              final bBest = b.attacks!.reduce(
+                (curr, next) =>
+                    next.stars > curr.stars ||
+                        (next.stars == curr.stars &&
+                            next.destructionPercentage >
+                                curr.destructionPercentage)
+                    ? next
+                    : curr,
+              );
 
               if (aBest.stars != bBest.stars) {
                 return bBest.stars.compareTo(aBest.stars);
               } else {
-                return bBest.destructionPercentage
-                    .compareTo(aBest.destructionPercentage);
+                return bBest.destructionPercentage.compareTo(
+                  aBest.destructionPercentage,
+                );
               }
             });
 
         case 'rdefenses':
           return members
               .where(
-                  (m) => m.opponentAttacks > 0 && m.bestOpponentAttack != null)
+                (m) => m.opponentAttacks > 0 && m.bestOpponentAttack != null,
+              )
               .toList()
             ..sort((a, b) {
               final aDef = a.bestOpponentAttack!;
@@ -99,8 +107,9 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
               if (aDef.stars != bDef.stars) {
                 return aDef.stars.compareTo(bDef.stars);
               } else {
-                return aDef.destructionPercentage
-                    .compareTo(bDef.destructionPercentage);
+                return aDef.destructionPercentage.compareTo(
+                  bDef.destructionPercentage,
+                );
               }
             });
 
@@ -160,10 +169,14 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
 
               if (bStars != aStars) return bStars.compareTo(aStars);
 
-              final aDestruction = a.attacks!
-                  .fold<double>(0, (sum, a) => sum + a.destructionPercentage);
-              final bDestruction = b.attacks!
-                  .fold<double>(0, (sum, a) => sum + a.destructionPercentage);
+              final aDestruction = a.attacks!.fold<double>(
+                0,
+                (sum, a) => sum + a.destructionPercentage,
+              );
+              final bDestruction = b.attacks!.fold<double>(
+                0,
+                (sum, a) => sum + a.destructionPercentage,
+              );
 
               return bDestruction.compareTo(aDestruction);
             });
@@ -182,9 +195,11 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
             });
         case 'bestPerformance':
           return members
-              .where((m) =>
-                  (m.attacks != null && m.attacks!.isNotEmpty) ||
-                  m.bestOpponentAttack != null)
+              .where(
+                (m) =>
+                    (m.attacks != null && m.attacks!.isNotEmpty) ||
+                    m.bestOpponentAttack != null,
+              )
               .toList()
             ..sort((a, b) {
               // Atk : stars + destruction
@@ -193,11 +208,17 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
               final bAtkStars =
                   b.attacks?.fold<int>(0, (sum, a) => sum + a.stars) ?? 0;
 
-              final aAtkDestr = a.attacks?.fold<double>(
-                      0, (sum, a) => sum + a.destructionPercentage) ??
+              final aAtkDestr =
+                  a.attacks?.fold<double>(
+                    0,
+                    (sum, a) => sum + a.destructionPercentage,
+                  ) ??
                   0;
-              final bAtkDestr = b.attacks?.fold<double>(
-                      0, (sum, a) => sum + a.destructionPercentage) ??
+              final bAtkDestr =
+                  b.attacks?.fold<double>(
+                    0,
+                    (sum, a) => sum + a.destructionPercentage,
+                  ) ??
                   0;
 
               // Def
@@ -210,21 +231,22 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                   b.bestOpponentAttack?.destructionPercentage ?? 0.0;
 
               // Final score
-              final aScore = aAtkStars * 100 + aAtkDestr - aDefStars * 100 - aDefDestr;
-              final bScore = bAtkStars * 100 + bAtkDestr - bDefStars * 100 - bDefDestr;
+              final aScore =
+                  aAtkStars * 100 + aAtkDestr - aDefStars * 100 - aDefDestr;
+              final bScore =
+                  bAtkStars * 100 + bAtkDestr - bDefStars * 100 - bDefDestr;
 
               return bScore.compareTo(aScore);
             });
 
         default:
-          return members
-            ..sort((a, b) {
-              if (a.mapPosition != b.mapPosition) {
-                return a.mapPosition.compareTo(b.mapPosition);
-              } else {
-                return a.name.compareTo(b.name);
-              }
-            });
+          return members..sort((a, b) {
+            if (a.mapPosition != b.mapPosition) {
+              return a.mapPosition.compareTo(b.mapPosition);
+            } else {
+              return a.name.compareTo(b.name);
+            }
+          });
       }
     }
 
@@ -267,63 +289,69 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                   child: Column(
                     children: [
                       FilterDropdown(
-                          sortBy: filterBy,
-                          updateSortBy: (value) {
-                            setState(() {
-                              filterBy = value;
-                            });
-                          },
-                          sortByOptions: {
-                            AppLocalizations.of(context)!.warPositionMap:
-                                'all',
-                            AppLocalizations.of(context)!.warAttacksTitle:
-                                'rattacks',
-                            AppLocalizations.of(context)!.warDefensesTitle:
-                                'rdefenses',
-                            AppLocalizations.of(context)!.warAttacksBest:
-                                'bestAttacks',
-                            AppLocalizations.of(context)!.warDefensesBest:
-                                'bestDefenses',
-                            AppLocalizations.of(context)!.warStarsBestPerformance:
-                                'bestPerformance',
-                            AppLocalizations.of(context)!.warAttacksNone:
-                                'noattacks',
-                            AppLocalizations.of(context)!.warDefensesNone:
-                                'nodefenses',
-                            generateStarsWithIconBefore(
-                                3, 16, ImageAssets.sword): '3stars',
-                            generateStarsWithIconBefore(
-                                2, 16, ImageAssets.sword): '2stars',
-                            generateStarsWithIconBefore(
-                                1, 16, ImageAssets.sword): '1star',
-                            generateStarsWithIconBefore(
-                                0, 16, ImageAssets.sword): '0star',
-                            generateStarsWithIconBefore(
-                                    3, 16, ImageAssets.shieldWithArrow):
-                                'def_3stars',
-                            generateStarsWithIconBefore(
-                                    2, 16, ImageAssets.shieldWithArrow):
-                                'def_2stars',
-                            generateStarsWithIconBefore(
-                                    1, 16, ImageAssets.shieldWithArrow):
-                                'def_1star',
-                            generateStarsWithIconBefore(
-                                    0, 16, ImageAssets.shieldWithArrow):
-                                'def_0star',
-                          }),
+                        sortBy: filterBy,
+                        updateSortBy: (value) {
+                          setState(() {
+                            filterBy = value;
+                          });
+                        },
+                        sortByOptions: {
+                          AppLocalizations.of(context)!.warPositionMap: 'all',
+                          AppLocalizations.of(context)!.warAttacksTitle:
+                              'rattacks',
+                          AppLocalizations.of(context)!.warDefensesTitle:
+                              'rdefenses',
+                          AppLocalizations.of(context)!.warAttacksBest:
+                              'bestAttacks',
+                          AppLocalizations.of(context)!.warDefensesBest:
+                              'bestDefenses',
+                          AppLocalizations.of(context)!.warStarsBestPerformance:
+                              'bestPerformance',
+                          AppLocalizations.of(context)!.warAttacksNone:
+                              'noattacks',
+                          AppLocalizations.of(context)!.warDefensesNone:
+                              'nodefenses',
+                          generateStarsWithIconBefore(3, 16, ImageAssets.sword):
+                              '3stars',
+                          generateStarsWithIconBefore(2, 16, ImageAssets.sword):
+                              '2stars',
+                          generateStarsWithIconBefore(1, 16, ImageAssets.sword):
+                              '1star',
+                          generateStarsWithIconBefore(0, 16, ImageAssets.sword):
+                              '0star',
+                          generateStarsWithIconBefore(
+                            3,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_3stars',
+                          generateStarsWithIconBefore(
+                            2,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_2stars',
+                          generateStarsWithIconBefore(
+                            1,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_1star',
+                          generateStarsWithIconBefore(
+                            0,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_0star',
+                        },
+                      ),
                       const SizedBox(height: 8),
                       CustomSlidingSegmentedControl<int>(
                         initialValue: _currentSegment,
                         children: {
                           1: Text(AppLocalizations.of(context)!.warMyTeam),
-                          2: Text(
-                              AppLocalizations.of(context)!.warEnemiesTeam),
+                          2: Text(AppLocalizations.of(context)!.warEnemiesTeam),
                         },
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .tertiary
-                              .withAlpha(50),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.tertiary.withAlpha(50),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         thumbDecoration: BoxDecoration(
@@ -354,7 +382,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ],

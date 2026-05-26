@@ -14,7 +14,8 @@ Future<String> fetchWarSummary(String? clanTag) async {
     return jsonEncode({
       "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
       "timeState": "",
-      "state": "notInClan"
+      "state": "notInClan",
+      "mode": "war"
     });
   }
 
@@ -25,7 +26,7 @@ Future<String> fetchWarSummary(String? clanTag) async {
     }
 
     final encodedTag = Uri.encodeComponent(clanTag);
-    
+
     final response = await http.get(
       Uri.parse("${ApiService.apiUrlV2}/war/$encodedTag/war-summary"),
       headers: {
@@ -38,7 +39,8 @@ Future<String> fetchWarSummary(String? clanTag) async {
       final data = jsonDecode(utf8.decode(response.bodyBytes));
       return _buildWarWidgetData(data, clanTag);
     } else {
-      Sentry.captureMessage("War summary API returned status ${response.statusCode} for clan $clanTag");
+      Sentry.captureMessage(
+          "War summary API returned status ${response.statusCode} for clan $clanTag");
       return _buildErrorResult();
     }
   } catch (e, stackTrace) {
@@ -50,34 +52,44 @@ Future<String> fetchWarSummary(String? clanTag) async {
 
 // Build the war widget data from the API response
 String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
-  final String updatedAt = "Updated at ${DateFormat('HH:mm').format(DateTime.now())}";
-  
-  DebugUtils.debugWidget("🔍 API data - isInWar: ${data["isInWar"]}, isInCwl: ${data["isInCwl"]}");
-  
+  final String updatedAt =
+      "Updated at ${DateFormat('HH:mm').format(DateTime.now())}";
+
+  DebugUtils.debugWidget(
+      "🔍 API data - isInWar: ${data["isInWar"]}, isInCwl: ${data["isInCwl"]}");
+
+  final warInfo = data["war_info"] ?? {};
+  final currentWarInfo = warInfo["currentWarInfo"] ?? {};
+  final currentWarState = currentWarInfo["state"] ?? warInfo["state"];
+
   // Check if in regular war
-  if (data["isInWar"] == true) {
+  if (data["isInWar"] == true ||
+      currentWarState == "preparation" ||
+      currentWarState == "inWar" ||
+      currentWarState == "warEnded") {
     DebugUtils.debugWidget("✅ Building regular war data");
-    return _buildRegularWarData(data["war_info"], updatedAt);
+    return _buildRegularWarData(warInfo, updatedAt);
   }
-  
+
   // Check if in CWL
   if (data["isInCwl"] == true && data["league_info"] != null) {
     DebugUtils.debugWidget("✅ Building CWL war data");
     return _buildCwlWarData(data, updatedAt, clanTag);
   }
-  
+
   // Handle different states
-  final warInfo = data["war_info"] ?? {};
   final state = warInfo["state"] ?? "notInWar";
-  
-  DebugUtils.debugWidget("⚠️ Not in war or CWL - state: $state, war_info: ${jsonEncode(warInfo)}");
-  
+
+  DebugUtils.debugWidget(
+      "⚠️ Not in war or CWL - state: $state, war_info: ${jsonEncode(warInfo)}");
+
   switch (state) {
     case "accessDenied":
       return jsonEncode({
         "updatedAt": updatedAt,
         "timeState": "",
         "state": "accessDenied",
+        "mode": "war",
         "statusIcon": "🔒",
         "primaryText": "War Log Private",
         "secondaryText": "",
@@ -89,8 +101,9 @@ String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
         "updatedAt": updatedAt,
         "timeState": "",
         "state": "notInWar",
+        "mode": "war",
         "statusIcon": "😴",
-        "primaryText": "Not in War", 
+        "primaryText": "Not in War",
         "secondaryText": "",
         "colorTheme": "neutral"
       });
@@ -101,18 +114,18 @@ String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
 String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
   final currentWar = warInfo["currentWarInfo"] ?? {};
   final state = currentWar["state"] ?? "unknown";
-  
+
   String timeState = "";
   String score = "";
   String statusIcon = "⚔️";
   String primaryText = "";
   String secondaryText = "";
   String colorTheme = "active";
-  
+
   final clanStars = currentWar["clan"]?["stars"] ?? 0;
   final opponentStars = currentWar["opponent"]?["stars"] ?? 0;
   final teamSize = currentWar["teamSize"] ?? 0;
-  
+
   // Handle different war states with status as primary, score as secondary
   if (state == "preparation") {
     statusIcon = "🛡️";
@@ -123,10 +136,12 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
       final startTime = DateTime.parse(currentWar["startTime"]);
       final timeUntilStart = startTime.difference(DateTime.now());
       if (timeUntilStart.inHours > 0) {
-        timeState = "Starts in ${timeUntilStart.inHours}h ${timeUntilStart.inMinutes % 60}m";
+        timeState =
+            "Starts in ${timeUntilStart.inHours}h ${timeUntilStart.inMinutes % 60}m";
         primaryText = timeState;
       } else {
-        timeState = "Starts at ${DateFormat('HH:mm').format(startTime.toLocal())}";
+        timeState =
+            "Starts at ${DateFormat('HH:mm').format(startTime.toLocal())}";
         primaryText = timeState;
       }
     }
@@ -134,12 +149,17 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
   } else if (state == "inWar") {
     statusIcon = "⚔️";
     secondaryText = "$clanStars - $opponentStars";
-    colorTheme = clanStars > opponentStars ? "winning" : clanStars < opponentStars ? "losing" : "tied";
+    colorTheme = clanStars > opponentStars
+        ? "winning"
+        : clanStars < opponentStars
+            ? "losing"
+            : "tied";
     if (currentWar["endTime"] != null) {
       final endTime = DateTime.parse(currentWar["endTime"]);
       final timeUntilEnd = endTime.difference(DateTime.now());
       if (timeUntilEnd.inHours > 0) {
-        timeState = "${timeUntilEnd.inHours}h ${timeUntilEnd.inMinutes % 60}m left";
+        timeState =
+            "${timeUntilEnd.inHours}h ${timeUntilEnd.inMinutes % 60}m left";
       } else {
         timeState = "Ends at ${DateFormat('HH:mm').format(endTime.toLocal())}";
       }
@@ -161,6 +181,7 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
 
   return jsonEncode({
     "state": state,
+    "mode": "war",
     "updatedAt": updatedAt,
     "timeState": timeState,
     "score": score,
@@ -170,16 +191,19 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
     "colorTheme": colorTheme,
     "clan": {
       "name": clan["name"] ?? "Unknown",
-      "badgeUrlMedium": clan["badgeUrls"]?["medium"] ?? "https://assets.clashk.ing/clashkinglogo.png",
+      "badgeUrlMedium": clan["badgeUrls"]?["medium"] ??
+          "https://assets.clashk.ing/clashkinglogo.png",
       "percent": "${(clan["destructionPercentage"] ?? 0).toStringAsFixed(2)}%",
       "attacks": "${clan["attacks"] ?? 0}/${teamSize * 2}",
       "stars": clanStars,
       "maxStars": teamSize * 3
     },
     "opponent": {
-      "name": opponent["name"] ?? "Unknown", 
-      "badgeUrlMedium": opponent["badgeUrls"]?["medium"] ?? "https://assets.clashk.ing/clashkinglogo.png",
-      "percent": "${(opponent["destructionPercentage"] ?? 0).toStringAsFixed(2)}%",
+      "name": opponent["name"] ?? "Unknown",
+      "badgeUrlMedium": opponent["badgeUrls"]?["medium"] ??
+          "https://assets.clashk.ing/clashkinglogo.png",
+      "percent":
+          "${(opponent["destructionPercentage"] ?? 0).toStringAsFixed(2)}%",
       "attacks": "${opponent["attacks"] ?? 0}/${teamSize * 2}",
       "stars": opponentStars,
       "maxStars": teamSize * 3
@@ -188,21 +212,24 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
 }
 
 // Build data for CWL war
-String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clanTag) {
+String _buildCwlWarData(
+    Map<String, dynamic> data, String updatedAt, String clanTag) {
   DebugUtils.debugCwl("🏅 CWL Debug - clan_tag: '$clanTag'");
   DebugUtils.debugCwl("🏅 CWL Debug - clan_tag length: ${clanTag.length}");
-  
+
   // Use WarCwl class to properly find the war for this clan
   final warCwl = WarCwl.fromJson(data, clanTag);
-  DebugUtils.debugCwl("🔍 WarCwl created with ${warCwl.warLeagueInfos.length} wars");
+  DebugUtils.debugCwl(
+      "🔍 WarCwl created with ${warCwl.warLeagueInfos.length} wars");
   final activeWar = warCwl.getActiveWarByTag(clanTag);
-  
+
   if (activeWar == null) {
     DebugUtils.debugWarning("⚠️ No wars found with our clan in CWL data");
     return jsonEncode({
       "updatedAt": updatedAt,
       "timeState": "CWL Period",
       "state": "cwl",
+      "mode": "cwl",
       "score": "-",
       "statusIcon": "🏅",
       "primaryText": "CWL Period",
@@ -212,27 +239,28 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
       "opponent": null
     });
   }
-  
+
   // Use WarInfo properties directly
   final currentWar = activeWar;
-  
+
   DebugUtils.debugCwl("🏅 CWL Processing war with state: ${currentWar.state}");
-  
+
   final state = currentWar.state;
   DebugUtils.debugCwl("🏅 CWL Processing war with state: $state");
-  
+
   String timeState = "CWL";
   String score = "";
   String statusIcon = "🏅";
   String primaryText = "";
   String secondaryText = "";
   String colorTheme = "cwl";
-  
+
   final clanStars = currentWar.clan?.stars ?? 0;
   final opponentStars = currentWar.opponent?.stars ?? 0;
-  
-  DebugUtils.debugCwl("🏅 CWL Stars - Clan: $clanStars, Opponent: $opponentStars");
-  
+
+  DebugUtils.debugCwl(
+      "🏅 CWL Stars - Clan: $clanStars, Opponent: $opponentStars");
+
   if (state == "preparation") {
     statusIcon = "🏅";
     primaryText = "CWL Preparation";
@@ -242,10 +270,12 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
       final startTime = currentWar.startTime!;
       final timeUntilStart = startTime.difference(DateTime.now());
       if (timeUntilStart.inHours > 0) {
-        timeState = "Starts in ${timeUntilStart.inHours}h ${timeUntilStart.inMinutes % 60}m";
+        timeState =
+            "Starts in ${timeUntilStart.inHours}h ${timeUntilStart.inMinutes % 60}m";
         primaryText = timeState;
       } else {
-        timeState = "Starts at ${DateFormat('HH:mm').format(startTime.toLocal())}";
+        timeState =
+            "Starts at ${DateFormat('HH:mm').format(startTime.toLocal())}";
         primaryText = timeState;
       }
     }
@@ -253,12 +283,17 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
   } else if (state == "inWar") {
     statusIcon = "🏅";
     secondaryText = "$clanStars - $opponentStars";
-    colorTheme = clanStars > opponentStars ? "winning" : clanStars < opponentStars ? "losing" : "tied";
+    colorTheme = clanStars > opponentStars
+        ? "winning"
+        : clanStars < opponentStars
+            ? "losing"
+            : "tied";
     if (currentWar.endTime != null) {
       final endTime = currentWar.endTime!;
       final timeUntilEnd = endTime.difference(DateTime.now());
       if (timeUntilEnd.inHours > 0) {
-        timeState = "${timeUntilEnd.inHours}h ${timeUntilEnd.inMinutes % 60}m left";
+        timeState =
+            "${timeUntilEnd.inHours}h ${timeUntilEnd.inMinutes % 60}m left";
       } else {
         timeState = "Ends at ${DateFormat('HH:mm').format(endTime.toLocal())}";
       }
@@ -276,32 +311,39 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
   }
 
   final teamSize = currentWar.teamSize ?? 15; // CWL default
-  
+
   // Determine which clan is "ours" and which is the "opponent"
   // Normalize clan tags for comparison
   String normalizeClanTag(String tag) {
     if (!tag.startsWith('#')) return '#$tag';
     return tag;
   }
-  
+
   final normalizedOurTag = normalizeClanTag(clanTag);
   final warClanTag = currentWar.clan?.tag;
-  
-  bool isOurClanFirst = warClanTag != null && normalizeClanTag(warClanTag) == normalizedOurTag;
-  
+
+  bool isOurClanFirst =
+      warClanTag != null && normalizeClanTag(warClanTag) == normalizedOurTag;
+
   // Set up our clan and opponent data based on which position we're in
   final ourClan = isOurClanFirst ? currentWar.clan : currentWar.opponent;
   final theirClan = isOurClanFirst ? currentWar.opponent : currentWar.clan;
   final ourStars = isOurClanFirst ? clanStars : opponentStars;
   final theirStars = isOurClanFirst ? opponentStars : clanStars;
-  
-  DebugUtils.debugCwl("🏅 CWL Final data - Our Clan: ${ourClan?.name ?? "Unknown"}, Their Clan: ${theirClan?.name ?? "Unknown"}");
-  DebugUtils.debugCwl("🏅 CWL Position - Our clan is ${isOurClanFirst ? 'first' : 'second'} in war data");
+
+  DebugUtils.debugCwl(
+      "🏅 CWL Final data - Our Clan: ${ourClan?.name ?? "Unknown"}, Their Clan: ${theirClan?.name ?? "Unknown"}");
+  DebugUtils.debugCwl(
+      "🏅 CWL Position - Our clan is ${isOurClanFirst ? 'first' : 'second'} in war data");
 
   // Update score and color theme based on our clan's position
   if (state == "inWar") {
     secondaryText = "$ourStars - $theirStars";
-    colorTheme = ourStars > theirStars ? "winning" : ourStars < theirStars ? "losing" : "tied";
+    colorTheme = ourStars > theirStars
+        ? "winning"
+        : ourStars < theirStars
+            ? "losing"
+            : "tied";
     score = "$ourStars - $theirStars";
   } else if (state == "warEnded") {
     final isWin = ourStars > theirStars;
@@ -321,7 +363,7 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
     "stars": ourStars,
     "maxStars": teamSize * 3
   };
-  
+
   final opponentData = {
     "name": theirClan?.name ?? "CWL Opponent",
     "badgeUrlMedium": theirClan?.badgeUrls.medium,
@@ -332,7 +374,8 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
   };
 
   final result = {
-    "state": "cwl", 
+    "state": "cwl",
+    "mode": "cwl",
     "updatedAt": updatedAt,
     "timeState": timeState,
     "score": score,
@@ -341,9 +384,11 @@ String _buildCwlWarData(Map<String, dynamic> data, String updatedAt, String clan
     "secondaryText": secondaryText,
     "colorTheme": colorTheme,
     "clan": clanData,
+    "cwlRank": warCwl.leagueInfo?.getClanDetails(clanTag)?.rank,
+    "cwlLeague": warCwl.leagueInfo?.season,
     "opponent": opponentData
   };
-  
+
   DebugUtils.debugWidget("🏅 CWL Widget data created: ${jsonEncode(result)}");
   return jsonEncode(result);
 }
@@ -354,6 +399,7 @@ String _buildErrorResult() {
     "updatedAt": "Error at ${DateFormat('HH:mm').format(DateTime.now())}",
     "timeState": "Refresh failed",
     "state": "error",
+    "mode": "war",
     "statusIcon": "⚠️",
     "primaryText": "Unable to load war data",
     "secondaryText": "Tap to open ClashKing",

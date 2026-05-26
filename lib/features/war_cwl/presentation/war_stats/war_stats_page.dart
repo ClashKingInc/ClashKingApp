@@ -11,7 +11,7 @@ import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_p
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_header.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 
 class ClanWarStatsScreen extends StatefulWidget {
   final Clan clan;
@@ -35,10 +35,10 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
 
   // Track selected Town Hall levels for members and enemies
   Map<int, bool> memberThSelection = {
-    for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) i: false
+    for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) i: false,
   };
   Map<int, bool> enemyThSelection = {
-    for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) i: false
+    for (int i = 1; i <= GameDataService.getMaxTownHallLevel(); i++) i: false,
   };
 
   bool equalThSelected = false;
@@ -74,11 +74,11 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
 
       memberThSelection = {
         for (int i = 6; i <= GameDataService.getMaxTownHallLevel(); i++)
-          i: false
+          i: false,
       };
       enemyThSelection = {
         for (int i = 6; i <= GameDataService.getMaxTownHallLevel(); i++)
-          i: false
+          i: false,
       };
       equalThSelected = false;
       showUppedTownHall = true;
@@ -99,10 +99,11 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
     final List<String> selectedTypes = _getSelectedTypes();
 
     final playersByTag = {
-      for (var player in filteredPlayers) player.tag: player
+      for (var player in filteredPlayers) player.tag: player,
     };
 
-    filteredPlayers = _displayedClanWarStats?.players
+    filteredPlayers =
+        _displayedClanWarStats?.players
             .where((member) => playersByTag.containsKey(member.tag))
             .toList() ??
         [];
@@ -121,20 +122,24 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
         break;
       case "Average Stars":
         filteredPlayers.sort((a, b) {
-          final statB =
-              playersByTag[b.tag]!.getStatsForTypes(selectedTypes).averageStars;
-          final statA =
-              playersByTag[a.tag]!.getStatsForTypes(selectedTypes).averageStars;
+          final statB = playersByTag[b.tag]!
+              .getStatsForTypes(selectedTypes)
+              .averageStars;
+          final statA = playersByTag[a.tag]!
+              .getStatsForTypes(selectedTypes)
+              .averageStars;
           return statB.compareTo(statA);
         });
         break;
       case "No Star Attacks":
         filteredPlayers.sort((a, b) {
-          final statB = playersByTag[b.tag]!
+          final statB =
+              playersByTag[b.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["0"] ??
               0;
-          final statA = playersByTag[a.tag]!
+          final statA =
+              playersByTag[a.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["0"] ??
               0;
@@ -143,11 +148,13 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
         break;
       case "One Star Attacks":
         filteredPlayers.sort((a, b) {
-          final statB = playersByTag[b.tag]!
+          final statB =
+              playersByTag[b.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["1"] ??
               0;
-          final statA = playersByTag[a.tag]!
+          final statA =
+              playersByTag[a.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["1"] ??
               0;
@@ -156,11 +163,13 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
         break;
       case "Two Stars Attacks":
         filteredPlayers.sort((a, b) {
-          final statB = playersByTag[b.tag]!
+          final statB =
+              playersByTag[b.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["2"] ??
               0;
-          final statA = playersByTag[a.tag]!
+          final statA =
+              playersByTag[a.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["2"] ??
               0;
@@ -169,11 +178,13 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
         break;
       case "Three Stars Attacks":
         filteredPlayers.sort((a, b) {
-          final statB = playersByTag[b.tag]!
+          final statB =
+              playersByTag[b.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["3"] ??
               0;
-          final statA = playersByTag[a.tag]!
+          final statA =
+              playersByTag[a.tag]!
                   .getStatsForTypes(selectedTypes)
                   .starsCount["3"] ??
               0;
@@ -182,10 +193,12 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
         break;
       case "War Participation":
         filteredPlayers.sort((a, b) {
-          final statB =
-              playersByTag[b.tag]!.getStatsForTypes(selectedTypes).warsCounts;
-          final statA =
-              playersByTag[a.tag]!.getStatsForTypes(selectedTypes).warsCounts;
+          final statB = playersByTag[b.tag]!
+              .getStatsForTypes(selectedTypes)
+              .warsCounts;
+          final statA = playersByTag[a.tag]!
+              .getStatsForTypes(selectedTypes)
+              .warsCounts;
           return statB.compareTo(statA);
         });
         break;
@@ -212,30 +225,34 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text(AppLocalizations.of(context)!.generalFilters,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleSmall),
+              title: Text(
+                AppLocalizations.of(context)!.generalFilters,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                        AppLocalizations.of(context)!
-                            .warOpponentSelectMembersThLevel,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                      AppLocalizations.of(
+                        context,
+                      )!.warOpponentSelectMembersThLevel,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     Wrap(
                       spacing: 4.0,
                       children: memberThSelection.keys.map((thLevel) {
                         return FilterChip(
                           showCheckmark: false,
-                          selectedColor: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withAlpha(150),
+                          selectedColor: Theme.of(
+                            context,
+                          ).colorScheme.primary.withAlpha(150),
                           labelPadding: EdgeInsets.all(0),
                           label: MobileWebImage(
-                              imageUrl: ImageAssets.townHall(thLevel),
-                              height: 24),
+                            imageUrl: ImageAssets.townHall(thLevel),
+                            height: 24,
+                          ),
                           selected: memberThSelection[thLevel]!,
                           onSelected: (bool selected) {
                             setState(() {
@@ -247,22 +264,24 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                        AppLocalizations.of(context)!
-                            .warOpponentSelectOpponentsThLevel,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                      AppLocalizations.of(
+                        context,
+                      )!.warOpponentSelectOpponentsThLevel,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     Wrap(
                       spacing: 4.0,
                       children: enemyThSelection.keys.map((thLevel) {
                         return FilterChip(
                           showCheckmark: false,
-                          selectedColor: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withAlpha(150),
+                          selectedColor: Theme.of(
+                            context,
+                          ).colorScheme.primary.withAlpha(150),
                           labelPadding: EdgeInsets.all(0),
                           label: MobileWebImage(
-                              imageUrl: ImageAssets.townHall(thLevel),
-                              height: 24),
+                            imageUrl: ImageAssets.townHall(thLevel),
+                            height: 24,
+                          ),
                           selected: enemyThSelection[thLevel]!,
                           onSelected: (bool selected) {
                             setState(() {
@@ -275,8 +294,9 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                     SizedBox(height: 10),
                     CheckboxListTile(
                       title: Text(
-                          AppLocalizations.of(context)!.warOpponentEqualThLevel,
-                          style: Theme.of(context).textTheme.bodyMedium),
+                        AppLocalizations.of(context)!.warOpponentEqualThLevel,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                       value: equalThSelected,
                       onChanged: (bool? value) {
                         setState(() {
@@ -306,10 +326,7 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                         .map((entry) => entry.key)
                         .toList();
 
-                    updateThFilters(
-                      newAttackerThFilter,
-                      newDefenderThFilter,
-                    );
+                    updateThFilters(newAttackerThFilter, newDefenderThFilter);
 
                     Navigator.of(context).pop();
                   },
@@ -325,10 +342,11 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
   // Temporarily disabled clan war stats filters
   void _showAdvancedFilterDialog() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return Text(AppLocalizations.of(context)!.generalComingSoon);
-        });
+      context: context,
+      builder: (context) {
+        return Text(AppLocalizations.of(context)!.generalComingSoon);
+      },
+    );
     //   showDialog(
     //     context: context,
     //     builder: (context) => ClanWarStatsFilterDialog(
@@ -436,8 +454,12 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                 // TODO: Implement clan war stats export
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(AppLocalizations.of(context)!
-                          .exportClanWarStatsComingSoon)),
+                    content: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.exportClanWarStatsComingSoon,
+                    ),
+                  ),
                 );
               },
             ),
@@ -456,8 +478,9 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                           padding: const EdgeInsets.all(12.0),
                           margin: const EdgeInsets.symmetric(horizontal: 16.0),
                           decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Row(
@@ -465,21 +488,19 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                               Icon(
                                 Icons.filter_alt,
                                 size: 16,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimaryContainer,
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   _getFilterSummary(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
+                                  style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimaryContainer,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimaryContainer,
                                       ),
                                 ),
                               ),
@@ -487,9 +508,9 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                                 icon: Icon(
                                   Icons.close,
                                   size: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryContainer,
                                 ),
                                 onPressed: _clearAdvancedFilters,
                               ),
@@ -503,16 +524,22 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                         labelColor: Theme.of(context).colorScheme.onSurface,
                         labelPadding: EdgeInsets.zero,
                         labelStyle: Theme.of(context).textTheme.bodyLarge,
-                        unselectedLabelColor:
-                            Theme.of(context).colorScheme.onSurface,
+                        unselectedLabelColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface,
                         tabs: [
                           Tab(
-                              text: AppLocalizations.of(context)?.warLog ??
-                                  'War Log'),
+                            text:
+                                AppLocalizations.of(context)?.warLog ??
+                                'War Log',
+                          ),
                           Tab(
-                              text: AppLocalizations.of(context)
-                                      ?.navigationStatistics ??
-                                  'Statistics'),
+                            text:
+                                AppLocalizations.of(
+                                  context,
+                                )?.navigationStatistics ??
+                                'Statistics',
+                          ),
                         ],
                         children: [
                           Padding(
@@ -536,7 +563,8 @@ class _ClanWarStatsScreenState extends State<ClanWarStatsScreen> {
                                   sortBy: _sortBy,
                                   selectedTypes: _getSelectedTypes(),
                                   filteredPlayers: filteredPlayers,
-                                  allPlayers: _displayedClanWarStats?.players
+                                  allPlayers:
+                                      _displayedClanWarStats?.players
                                           .map((player) => player.tag)
                                           .toList() ??
                                       [],

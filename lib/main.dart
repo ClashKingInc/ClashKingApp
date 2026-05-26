@@ -8,12 +8,12 @@ import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/data/user_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/core/services/android_workmanager_service.dart';
 import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/app/my_app.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -27,7 +27,7 @@ import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 // CallbackDispatcher for background execution (Android only)
 @pragma('vm:entry-point')
 void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
+  AndroidWorkmanagerService.instance.executeTask((task, inputData) async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
       await ApiService.loadConfig();
@@ -59,30 +59,36 @@ void _initializeDeepLinks() {
   final appLinks = AppLinks();
 
   // Handle deep links when app is already running
-  appLinks.uriLinkStream.listen((uri) {
-    DebugUtils.debugInfo("🔗 Deep link received (running): $uri");
-    DeepLinkHandler.queueDeepLink(uri);
-    DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
-      DebugUtils.debugError(" Deep link handling error: $err");
-      Sentry.captureException(err);
-    });
-  }, onError: (err) {
-    DebugUtils.debugError(" Deep link error: $err");
-  });
-
-  // Handle initial deep link when app starts from a deep link
-  appLinks.getInitialLink().then((uri) {
-    if (uri != null) {
-      DebugUtils.debugInfo("🔗 Initial deep link: $uri");
+  appLinks.uriLinkStream.listen(
+    (uri) {
+      DebugUtils.debugInfo("🔗 Deep link received (running): $uri");
       DeepLinkHandler.queueDeepLink(uri);
       DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
         DebugUtils.debugError(" Deep link handling error: $err");
         Sentry.captureException(err);
       });
-    }
-  }).catchError((err) {
-    DebugUtils.debugError(" Initial deep link error: $err");
-  });
+    },
+    onError: (err) {
+      DebugUtils.debugError(" Deep link error: $err");
+    },
+  );
+
+  // Handle initial deep link when app starts from a deep link
+  appLinks
+      .getInitialLink()
+      .then((uri) {
+        if (uri != null) {
+          DebugUtils.debugInfo("🔗 Initial deep link: $uri");
+          DeepLinkHandler.queueDeepLink(uri);
+          DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
+            DebugUtils.debugError(" Deep link handling error: $err");
+            Sentry.captureException(err);
+          });
+        }
+      })
+      .catchError((err) {
+        DebugUtils.debugError(" Initial deep link error: $err");
+      });
 }
 
 Future<void> main() async {
@@ -102,7 +108,14 @@ Future<void> main() async {
     },
     appRunner: () async {
       if (!kIsWeb) {
-        Workmanager().initialize(callbackDispatcher);
+        if (defaultTargetPlatform == TargetPlatform.iOS) {
+          await HomeWidget.setAppGroupId('group.com.clashking.apps');
+        }
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          await AndroidWorkmanagerService.instance.initialize(
+            callbackDispatcher,
+          );
+        }
         // Initialize war widget service for background callbacks
         WarWidgetService.initialize();
         // Override with the app-level callback (handles widget taps → WarWidgetSyncService)
@@ -110,8 +123,9 @@ Future<void> main() async {
       }
 
       await Future.wait([
-        GameDataService.loadGameData()
-            .then((_) => DebugUtils.debugSuccess("GameDataService OK")),
+        GameDataService.loadGameData().then(
+          (_) => DebugUtils.debugSuccess("GameDataService OK"),
+        ),
       ]);
 
       FlutterNativeSplash.remove();

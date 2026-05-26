@@ -18,8 +18,9 @@ class DeepLinkHandler {
     DebugUtils.debugInfo("🔗 Queued deep link: $uri");
   }
 
-  static Future<void> tryHandlePendingDeepLink(
-      [BuildContext? explicitContext]) async {
+  static Future<void> tryHandlePendingDeepLink([
+    BuildContext? explicitContext,
+  ]) async {
     if (_pendingUri == null || _isHandling) {
       return;
     }
@@ -43,18 +44,20 @@ class DeepLinkHandler {
 
   static Future<bool> _dispatchDeepLink(BuildContext context, Uri uri) async {
     DebugUtils.debugInfo(
-        "🔗 Deep link received: $uri (host=${uri.host}, path=${uri.path})");
+      "🔗 Deep link received: $uri (host=${uri.host}, path=${uri.path})",
+    );
 
     final route = _extractRoute(uri);
     if (route == 'oauth') {
-      DebugUtils.debugInfo("🔗 OAuth deep link handled by flutter_web_auth_2");
+      DebugUtils.debugInfo("🔗 OAuth deep link handled by auth listener");
       return true;
     }
 
     final authService = context.read<AuthService>();
     if (!authService.isAuthenticated) {
       DebugUtils.debugInfo(
-          "🔗 Deferring deep link until authentication completes: $uri");
+        "🔗 Deferring deep link until authentication completes: $uri",
+      );
       return false;
     }
 
@@ -81,8 +84,9 @@ class DeepLinkHandler {
   }
 
   static String _extractRoute(Uri uri) {
-    final pathSegments =
-        uri.pathSegments.where((segment) => segment.isNotEmpty).toList();
+    final pathSegments = uri.pathSegments
+        .where((segment) => segment.isNotEmpty)
+        .toList();
     if (pathSegments.isNotEmpty) {
       return pathSegments.first.toLowerCase();
     }
@@ -91,7 +95,8 @@ class DeepLinkHandler {
   }
 
   static String? _extractNormalizedTag(Uri uri) {
-    final rawTag = uri.queryParameters['tag'] ??
+    final rawTag =
+        uri.queryParameters['tag'] ??
         uri.queryParameters['player_tag'] ??
         uri.queryParameters['clan_tag'];
     if (rawTag == null) {
@@ -129,8 +134,9 @@ class DeepLinkHandler {
     );
 
     try {
-      final player =
-          await context.read<PlayerService>().getPlayerAndClanData(playerTag);
+      final player = await context.read<PlayerService>().getPlayerAndClanData(
+        playerTag,
+      );
       if (rootNavigator.canPop()) {
         rootNavigator.pop();
       }
@@ -138,9 +144,7 @@ class DeepLinkHandler {
         return;
       }
       await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => PlayerScreen(selectedPlayer: player),
-        ),
+        MaterialPageRoute(builder: (_) => PlayerScreen(selectedPlayer: player)),
       );
     } catch (error) {
       if (rootNavigator.canPop()) {
@@ -162,10 +166,7 @@ class DeepLinkHandler {
 
     if (clanTag == null) {
       DebugUtils.debugError(" Clan tag missing from deep link");
-      _showSnackBar(
-        context,
-        l10n?.deepLinkInvalidClan ?? 'Invalid clan link.',
-      );
+      _showSnackBar(context, l10n?.deepLinkInvalidClan ?? 'Invalid clan link.');
       return;
     }
 
@@ -185,11 +186,9 @@ class DeepLinkHandler {
       if (!context.mounted) {
         return;
       }
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => ClanInfoScreen(clanInfo: clan),
-        ),
-      );
+      await Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => ClanInfoScreen(clanInfo: clan)));
     } catch (error) {
       if (rootNavigator.canPop()) {
         rootNavigator.pop();
@@ -209,8 +208,8 @@ class DeepLinkHandler {
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }

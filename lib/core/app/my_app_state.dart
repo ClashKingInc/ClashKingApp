@@ -10,12 +10,21 @@ class MyAppState extends ChangeNotifier {
             warWidgetSyncService ?? const WarWidgetSyncService() {
     _loadLanguage();
     _warWidgetSyncService.registerPeriodicRefresh();
+    _scheduleInitialWidgetUpdate();
   }
 
   final WarWidgetSyncService _warWidgetSyncService;
   Locale _locale = Locale('en'); // Default language is English
   Locale get locale => _locale; // Getter for the locale
   bool isLoading = false; // Loading state of the app
+
+  void _scheduleInitialWidgetUpdate() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future<void>.delayed(const Duration(seconds: 2), () async {
+        await _warWidgetSyncService.updateWidgets();
+      });
+    });
+  }
 
   /* Language management */
 

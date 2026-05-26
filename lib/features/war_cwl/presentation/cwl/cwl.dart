@@ -12,7 +12,7 @@ import 'dart:ui';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:intl/intl.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 
 class CwlScreen extends StatefulWidget {
   final WarCwl warCwl;
@@ -48,7 +48,9 @@ class CwlScreenState extends State<CwlScreen> {
                     imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                     child: ColorFiltered(
                       colorFilter: ColorFilter.mode(
-                          Colors.black.withAlpha(128), BlendMode.darken),
+                        Colors.black.withAlpha(128),
+                        BlendMode.darken,
+                      ),
                       child: MobileWebImage(
                         imageUrl: ImageAssets.cwlPageBackground,
                         width: double.infinity,
@@ -61,9 +63,11 @@ class CwlScreenState extends State<CwlScreen> {
                   top: 40,
                   left: 10,
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        size: 32),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 32,
+                    ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
@@ -71,10 +75,11 @@ class CwlScreenState extends State<CwlScreen> {
                   top: 40,
                   right: 10,
                   child: DownloadCwlExcelButton(
-                      url:
-                          "${ApiService.apiUrlV2}/exports/war/cwl-summary?tag=${widget.clanTag.replaceAll('#', '!')}",
-                      fileName:
-                          "cwl_summary_${widget.clanInfo.tag.replaceAll('#', '')}.xlsx"),
+                    url:
+                        "${ApiService.apiUrlV2}/exports/war/cwl-summary?tag=${widget.clanTag.replaceAll('#', '!')}",
+                    fileName:
+                        "cwl_summary_${widget.clanInfo.tag.replaceAll('#', '')}.xlsx",
+                  ),
                 ),
                 Positioned(
                   child: Column(
@@ -87,22 +92,19 @@ class CwlScreenState extends State<CwlScreen> {
                           SizedBox(
                             height: 70,
                             child: MobileWebImage(
-                                imageUrl: widget.clanInfo.badgeUrls.medium),
+                              imageUrl: widget.clanInfo.badgeUrls.medium,
+                            ),
                           ),
                           Column(
                             children: [
                               Text(
                                 widget.clanInfo.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(color: Colors.white),
                               ),
                               Text(
                                 widget.clanInfo.tag,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
+                                style: Theme.of(context).textTheme.labelLarge
                                     ?.copyWith(color: Colors.white),
                               ),
                             ],
@@ -122,8 +124,9 @@ class CwlScreenState extends State<CwlScreen> {
                             imageUrl: ImageAssets.podium,
                             labelPadding: 6,
                             label: clan.rank.toString(),
-                            description: AppLocalizations.of(context)!
-                                .cwlRank(clan.rank),
+                            description: AppLocalizations.of(
+                              context,
+                            )!.cwlRank(clan.rank),
                           ),
                           ImageChip(
                             context: context,
@@ -132,8 +135,9 @@ class CwlScreenState extends State<CwlScreen> {
                             imageUrl: ImageAssets.builderBaseStar,
                             labelPadding: 2,
                             label: clan.stars.toString(),
-                            description: AppLocalizations.of(context)!
-                                .cwlStars(clan.stars),
+                            description: AppLocalizations.of(
+                              context,
+                            )!.cwlStars(clan.stars),
                           ),
                           ImageChip(
                             context: context,
@@ -141,13 +145,15 @@ class CwlScreenState extends State<CwlScreen> {
                             edgeColor: Colors.white,
                             imageUrl: ImageAssets.hitrate,
                             labelPadding: 6,
-                            label: NumberFormat('#,###',
-                                    Localizations.localeOf(context).toString())
-                                .format(clan.destructionPercentageInflicted),
+                            label: NumberFormat(
+                              '#,###',
+                              Localizations.localeOf(context).toString(),
+                            ).format(clan.destructionPercentageInflicted),
                             description: AppLocalizations.of(context)!
-                                .cwlDestructionPercentage(clan
-                                    .destructionPercentageInflicted
-                                    .toStringAsFixed(0)),
+                                .cwlDestructionPercentage(
+                                  clan.destructionPercentageInflicted
+                                      .toStringAsFixed(0),
+                                ),
                           ),
                           ImageChip(
                             context: context,
@@ -156,8 +162,9 @@ class CwlScreenState extends State<CwlScreen> {
                             imageUrl: ImageAssets.war,
                             labelPadding: 6,
                             label: clan.warsPlayed.toString(),
-                            description: AppLocalizations.of(context)!
-                                .cwlCurrentRound(clan.warsPlayed),
+                            description: AppLocalizations.of(
+                              context,
+                            )!.cwlCurrentRound(clan.warsPlayed),
                           ),
                           ImageChip(
                             context: context,
@@ -168,8 +175,10 @@ class CwlScreenState extends State<CwlScreen> {
                             label:
                                 "${clan.attackCount}/${widget.warCwl.teamSize * clan.warsPlayed}",
                             description: AppLocalizations.of(context)!
-                                .cwlTotalAttacks(clan.attackCount,
-                                    widget.warCwl.teamSize * clan.warsPlayed),
+                                .cwlTotalAttacks(
+                                  clan.attackCount,
+                                  widget.warCwl.teamSize * clan.warsPlayed,
+                                ),
                           ),
                           ImageChip(
                             context: context,
@@ -178,8 +187,9 @@ class CwlScreenState extends State<CwlScreen> {
                             imageUrl: ImageAssets.brokenSword,
                             labelPadding: 6,
                             label: clan.missedAttacks.toString(),
-                            description:
-                                AppLocalizations.of(context)!.warAttacksMissed,
+                            description: AppLocalizations.of(
+                              context,
+                            )!.warAttacksMissed,
                           ),
                         ],
                       ),
@@ -199,8 +209,12 @@ class CwlScreenState extends State<CwlScreen> {
               onTap: (value) {},
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.cwlRounds ?? 'Rounds'),
-                Tab(text: AppLocalizations.of(context)?.navigationTeam ?? 'Teams'),
-                Tab(text: AppLocalizations.of(context)?.clanMembers ?? "Members")
+                Tab(
+                  text: AppLocalizations.of(context)?.navigationTeam ?? 'Teams',
+                ),
+                Tab(
+                  text: AppLocalizations.of(context)?.clanMembers ?? "Members",
+                ),
               ],
               children: [
                 CwlRoundsTab(warCwl: widget.warCwl),

@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
+const String _widgetAppGroup = 'group.com.clashking.apps';
+
 class WarWidgetService {
   static final WarWidgetService _instance = WarWidgetService._internal();
   factory WarWidgetService() => _instance;
@@ -32,7 +34,11 @@ class WarWidgetService {
       final warInfo = await fetchWarSummary(clanTag);
 
       // Save to widget data
-      await HomeWidget.saveWidgetData<String>('warInfo', warInfo);
+      await HomeWidget.saveWidgetData<String>(
+        'warInfo',
+        warInfo,
+        appGroupId: _widgetAppGroup,
+      );
 
       // Update the widget
       await HomeWidget.updateWidget(
@@ -51,7 +57,7 @@ class WarWidgetService {
   // Initialize widget background callbacks
   static void initialize() {
     // Set up the callback for when the widget refresh button is tapped
-    HomeWidget.setAppGroupId('group.com.clashking.clashkingapp');
+    HomeWidget.setAppGroupId(_widgetAppGroup);
 
     // Register callback for widget interactions
     HomeWidget.registerInteractivityCallback(_backgroundCallback);

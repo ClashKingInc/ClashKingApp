@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'package:app_links/app_links.dart';
 import 'package:crypto/crypto.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'discord_auth_helper_web.dart'
     if (dart.library.io) 'discord_auth_helper_mobile.dart';
@@ -37,11 +39,8 @@ class DiscordAuthHelper {
             ? {'code': code, 'code_verifier': codeVerifier}
             : null;
       } else {
-        final result = await FlutterWebAuth2.authenticate(
-          url: url.toString(),
-          callbackUrlScheme: callbackUrlScheme,
-        );
-        final code = Uri.parse(result).queryParameters['code'];
+        final result = await _launchDiscordAuth(url);
+        final code = result.queryParameters['code'];
         return code != null
             ? {'code': code, 'code_verifier': codeVerifier}
             : null;
@@ -56,7 +55,9 @@ class DiscordAuthHelper {
     const String charset =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
     return List.generate(
-        128, (i) => charset[Random.secure().nextInt(charset.length)]).join();
+      128,
+      (i) => charset[Random.secure().nextInt(charset.length)],
+    ).join();
   }
 
   static String _generateCodeChallenge(String codeVerifier) {
@@ -75,5 +76,44 @@ class DiscordAuthHelper {
     } else {
       return "clashking://com.clashking.clashkingapp/oauth";
     }
+  }
+
+  static Future<Uri> _launchDiscordAuth(Uri url) async {
+    final appLinks = AppLinks();
+    final completer = Completer<Uri>();
+    late final StreamSubscription<Uri> subscription;
+
+    subscription = appLinks.uriLinkStream.listen(
+      (uri) {
+        if (_isOAuthRedirect(uri) && !completer.isCompleted) {
+          completer.complete(uri);
+        }
+      },
+      onError: (error) {
+        if (!completer.isCompleted) {
+          completer.completeError(error);
+        }
+      },
+    );
+
+    try {
+      final launched = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        throw Exception('Could not open Discord auth URL.');
+      }
+
+      return await completer.future.timeout(const Duration(minutes: 2));
+    } finally {
+      await subscription.cancel();
+    }
+  }
+
+  static bool _isOAuthRedirect(Uri uri) {
+    return uri.scheme == callbackUrlScheme &&
+        uri.host == 'com.clashking.clashkingapp' &&
+        uri.path == '/oauth';
   }
 }

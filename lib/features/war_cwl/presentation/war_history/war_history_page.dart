@@ -3,7 +3,7 @@ import 'package:clashkingapp/features/war_cwl/presentation/war_history/component
 import 'package:clashkingapp/features/war_cwl/presentation/war_history/component/war_log_history_stats_tab.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_history/component/war_log_history_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class WarHistoryScreen extends StatefulWidget {
@@ -52,26 +52,22 @@ class WarHistoryScreenState extends State<WarHistoryScreen>
               tabs: [
                 Tab(text: AppLocalizations.of(context)?.warLog ?? 'War Log'),
                 Tab(
-                    text: AppLocalizations.of(context)?.navigationStatistics ??
-                        'Statistics'),
+                  text:
+                      AppLocalizations.of(context)?.navigationStatistics ??
+                      'Statistics',
+                ),
               ],
               children: [
                 Padding(
                   padding: EdgeInsets.all(8),
                   child: Column(
-                    children: [
-                      WarLogHistoryTab(clan: widget.clan),
-                    ],
+                    children: [WarLogHistoryTab(clan: widget.clan)],
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(8),
                   child: Column(
-                    children: [
-                      WarLogHistoryStats(
-                        clan: widget.clan,
-                      ),
-                    ],
+                    children: [WarLogHistoryStats(clan: widget.clan)],
                   ),
                 ),
               ],

@@ -1,7 +1,7 @@
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -39,11 +39,15 @@ class PlayerScreenState extends State<PlayerScreen>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              PlayerInfoHeader(selectedTab: selectedTab, player: widget.selectedPlayer),
+              PlayerInfoHeader(
+                selectedTab: selectedTab,
+                player: widget.selectedPlayer,
+              ),
               ScrollableTab(
                 labelColor: Theme.of(context).colorScheme.onSurface,
-                unselectedLabelColor:
-                    Theme.of(context).colorScheme.onSurface.withValues(alpha : 0.6),
+                unselectedLabelColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.6),
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                 ),
@@ -54,11 +58,15 @@ class PlayerScreenState extends State<PlayerScreen>
                 },
                 tabs: [
                   Tab(
-                      text: AppLocalizations.of(context)?.gameBaseHome ??
-                          'Home Base'),
+                    text:
+                        AppLocalizations.of(context)?.gameBaseHome ??
+                        'Home Base',
+                  ),
                   Tab(
-                      text: AppLocalizations.of(context)?.gameBaseBuilder ??
-                          'Builder Base'),
+                    text:
+                        AppLocalizations.of(context)?.gameBaseBuilder ??
+                        'Builder Base',
+                  ),
                 ],
                 children: [
                   _buildPlayerContent(widget.selectedPlayer),
@@ -78,29 +86,35 @@ class PlayerScreenState extends State<PlayerScreen>
         SizedBox(height: 10),
         PlayerSuperTroopSection(superTroops: player.superTroops),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameHeroes,
-            items: player.heroes,
-            townHallLevel: player.townHallLevel),
+          title: AppLocalizations.of(context)!.gameHeroes,
+          items: player.heroes,
+          townHallLevel: player.townHallLevel,
+        ),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameEquipment,
-            items: player.equipments,
-            townHallLevel: player.townHallLevel),
+          title: AppLocalizations.of(context)!.gameEquipment,
+          items: player.equipments,
+          townHallLevel: player.townHallLevel,
+        ),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameTroops,
-            items: player.troops,
-            townHallLevel: player.townHallLevel),
+          title: AppLocalizations.of(context)!.gameTroops,
+          items: player.troops,
+          townHallLevel: player.townHallLevel,
+        ),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameSpells,
-            items: player.spells,
-            townHallLevel: player.townHallLevel),
+          title: AppLocalizations.of(context)!.gameSpells,
+          items: player.spells,
+          townHallLevel: player.townHallLevel,
+        ),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameSiegeMachines,
-            items: player.siegeMachines,
-            townHallLevel: player.townHallLevel),
+          title: AppLocalizations.of(context)!.gameSiegeMachines,
+          items: player.siegeMachines,
+          townHallLevel: player.townHallLevel,
+        ),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gamePets,
-            items: player.pets,
-            townHallLevel: player.townHallLevel),
+          title: AppLocalizations.of(context)!.gamePets,
+          items: player.pets,
+          townHallLevel: player.townHallLevel,
+        ),
         SizedBox(height: 10),
       ],
     );
@@ -111,13 +125,15 @@ class PlayerScreenState extends State<PlayerScreen>
       children: [
         SizedBox(height: 10),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameHeroes,
-            items: player.bbHeroes,
-            townHallLevel: player.builderHallLevel),
+          title: AppLocalizations.of(context)!.gameHeroes,
+          items: player.bbHeroes,
+          townHallLevel: player.builderHallLevel,
+        ),
         PlayerItemSection(
-            title: AppLocalizations.of(context)!.gameTroops,
-            items: player.bbTroops,
-            townHallLevel: player.builderHallLevel),
+          title: AppLocalizations.of(context)!.gameTroops,
+          items: player.bbTroops,
+          townHallLevel: player.builderHallLevel,
+        ),
         SizedBox(height: 10),
       ],
     );

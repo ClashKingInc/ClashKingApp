@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:clashkingapp/core/utils/file_opener.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -6,13 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_html/html.dart' as html;
-import 'package:open_filex/open_filex.dart';
 
 class DownloadCwlExcelButton extends StatefulWidget {
   final String url;
   final String fileName;
 
-  const DownloadCwlExcelButton({super.key, required this.url, required this.fileName});
+  const DownloadCwlExcelButton({
+    super.key,
+    required this.url,
+    required this.fileName,
+  });
 
   @override
   State<DownloadCwlExcelButton> createState() => _DownloadCwlExcelButtonState();
@@ -56,8 +60,8 @@ class _DownloadCwlExcelButtonState extends State<DownloadCwlExcelButton> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(loc.downloadSuccess(filePath))),
           );
-          try{
-            await OpenFilex.open(filePath);
+          try {
+            await openLocalFile(filePath);
           } catch (e) {
             DebugUtils.debugError(' Error opening file : $e');
           }
@@ -66,9 +70,9 @@ class _DownloadCwlExcelButtonState extends State<DownloadCwlExcelButton> {
     } catch (e) {
       DebugUtils.debugError(' Error downloading file : $e');
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(loc.downloadError)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(loc.downloadError)));
       }
     } finally {
       if (mounted) {
@@ -94,9 +98,9 @@ class _DownloadCwlExcelButtonState extends State<DownloadCwlExcelButton> {
             icon: const Icon(Icons.download),
             tooltip: loc.downloadTooltip,
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(loc.downloadInProgress)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(loc.downloadInProgress)));
               downloadExcel(context);
             },
           );
