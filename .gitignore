@@ -105,7 +105,6 @@ app.*.map.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/ios/ExportOptions.plist
 **/ios/WIDGET_SETUP_INSTRUCTIONS.md
-**/ios/WarWidget/
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3

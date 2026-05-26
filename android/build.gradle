@@ -34,8 +34,7 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-// Force compileSdk 36 on all plugin subprojects AFTER each project is fully configured,
-// so outdated plugins (e.g. scrollable_tab_view at 31) satisfy dependency requirements.
+// Force compileSdk 36 on all plugin subprojects AFTER each project is fully configured.
 gradle.afterProject { project ->
     if (project != rootProject && project.hasProperty('android')) {
         project.android.compileSdkVersion(36)
