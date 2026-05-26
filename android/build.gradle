@@ -24,6 +24,7 @@ allprojects {
 
 subprojects { project ->
     project.plugins.withId("com.android.library") {
+        project.android.compileSdkVersion(36)
         if (project.file("src/main/kotlin").exists() && !project.plugins.hasPlugin("org.jetbrains.kotlin.android")) {
             project.apply plugin: "org.jetbrains.kotlin.android"
         }
