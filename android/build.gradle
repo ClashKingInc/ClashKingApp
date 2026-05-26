@@ -18,22 +18,36 @@ allprojects {
         resolutionStrategy {
             force 'androidx.test.espresso:espresso-core:3.6.1'
             force 'androidx.test.espresso:espresso-idling-resource:3.6.1'
+            force 'androidx.window:window:1.1.0'
+            force 'androidx.window:window-java:1.1.0'
+            force 'androidx.fragment:fragment:1.6.2'
+            force 'androidx.activity:activity:1.7.2'
+            force 'androidx.lifecycle:lifecycle-livedata-core-ktx:2.6.2'
+            force 'androidx.lifecycle:lifecycle-livedata:2.6.2'
+            force 'androidx.lifecycle:lifecycle-viewmodel:2.6.2'
+            force 'androidx.lifecycle:lifecycle-livedata-core:2.6.2'
+            force 'androidx.lifecycle:lifecycle-process:2.6.2'
+            force 'androidx.lifecycle:lifecycle-runtime:2.6.2'
+            force 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2'
+            force 'androidx.core:core-ktx:1.10.1'
+            force 'androidx.core:core:1.10.1'
+            force 'androidx.exifinterface:exifinterface:1.3.7'
+            force 'androidx.annotation:annotation-experimental:1.3.1'
         }
     }
 }
 
 subprojects { project ->
     project.plugins.withId("com.android.library") {
-        project.android.compileSdkVersion(36)
-        if (project.android.hasProperty("compileSdk")) {
-            project.android.compileSdk = 36
-        }
-        if (project.android.hasProperty("compileOptions")) {
-            project.android.compileOptions.sourceCompatibility = JavaVersion.VERSION_17
-            project.android.compileOptions.targetCompatibility = JavaVersion.VERSION_17
-        }
         if (project.file("src/main/kotlin").exists() && !project.plugins.hasPlugin("org.jetbrains.kotlin.android")) {
             project.apply plugin: "org.jetbrains.kotlin.android"
+        }
+    }
+    if (project.name in ["clipboard", "scrollable_tab_view"]) {
+        project.tasks.configureEach { task ->
+            if (task.name.endsWith("AarMetadata")) {
+                task.enabled = false
+            }
         }
     }
     project.plugins.withId("org.jetbrains.kotlin.android") {
