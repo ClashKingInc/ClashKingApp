@@ -18,5 +18,8 @@ import Flutter
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "LiveActivityDebugPlugin") {
       LiveActivityDebugPlugin.register(with: registrar)
     }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "NotificationDebugPlugin") {
+      NotificationDebugPlugin.register(with: registrar)
+    }
   }
 }

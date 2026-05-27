@@ -26,8 +26,24 @@ allprojects {
 }
 
 rootProject.buildDir = '../build'
-subprojects {
+subprojects { project ->
     project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+subprojects { project ->
+    if (project.name == 'home_widget') {
+        project.plugins.withId('com.android.library') {
+            project.plugins.apply('org.jetbrains.kotlin.android')
+            project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = '1.8'
+                }
+                compilerOptions {
+                    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                }
+            }
+        }
+    }
 }
 
 subprojects {

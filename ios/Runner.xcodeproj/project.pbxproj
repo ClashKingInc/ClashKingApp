@@ -18,6 +18,7 @@
 		85570AD4F721ED654CE63172 /* WarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E223143FC70BD5897F9C2C /* WarWidget.swift */; };
 		8A468EAF2E9EA6169A21D5F8 /* WarWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C46F666A08397DF7912E16DF /* WarWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8F61A4096E33485A9D04CE78 /* LiveActivityDebugPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51C3A46A46B4A91AE9B9C93 /* LiveActivityDebugPlugin.swift */; };
+		936AC1184CB34B09A1918BA1 /* NotificationDebugPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936AC1174CB34B09A1918BA1 /* NotificationDebugPlugin.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -87,6 +88,7 @@
 		8040D707CD9DBBB4887858DA /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82B09A9673A89B077691774B /* LiquidGlassPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiquidGlassPlugin.swift; sourceTree = "<group>"; };
 		E51C3A46A46B4A91AE9B9C93 /* LiveActivityDebugPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveActivityDebugPlugin.swift; sourceTree = "<group>"; };
+		936AC1174CB34B09A1918BA1 /* NotificationDebugPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationDebugPlugin.swift; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,6 +231,7 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				82B09A9673A89B077691774B /* LiquidGlassPlugin.swift */,
 				E51C3A46A46B4A91AE9B9C93 /* LiveActivityDebugPlugin.swift */,
+				936AC1174CB34B09A1918BA1 /* NotificationDebugPlugin.swift */,
 				AE3F04A64263CBA122A97C3B /* Runner.entitlements */,
 			);
 			path = Runner;
@@ -492,6 +495,7 @@
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				1FF3E2F11733D88E9D0E1F8A /* LiquidGlassPlugin.swift in Sources */,
 				8F61A4096E33485A9D04CE78 /* LiveActivityDebugPlugin.swift in Sources */,
+				936AC1184CB34B09A1918BA1 /* NotificationDebugPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

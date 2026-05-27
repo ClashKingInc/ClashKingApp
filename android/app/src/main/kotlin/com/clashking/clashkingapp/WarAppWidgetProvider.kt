@@ -10,24 +10,25 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetBackgroundIntent
-import es.antonborri.home_widget.HomeWidgetProvider
+import android.appwidget.AppWidgetProvider
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-class WarAppWidgetProvider : HomeWidgetProvider() {
+class WarAppWidgetProvider : AppWidgetProvider() {
 
     companion object {
         const val ACTION_UPDATE_WIDGET = "com.clashking.clashkingapp.ACTION_UPDATE_WIDGET"
+        private const val HOME_WIDGET_PREFERENCES = "HomeWidgetPreferences"
+        private const val HOME_WIDGET_BACKGROUND_ACTION = "es.antonborri.home_widget.action.BACKGROUND"
     }
 
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray,
-        widgetData: SharedPreferences
+        appWidgetIds: IntArray
     ) {
+        val widgetData = context.getSharedPreferences(HOME_WIDGET_PREFERENCES, Context.MODE_PRIVATE)
         for (appWidgetId in appWidgetIds) {
             Log.d("TAG", "onUpdate: $widgetData")
             updateAppWidget(context, appWidgetManager, appWidgetId, widgetData)
@@ -175,9 +176,14 @@ class WarAppWidgetProvider : HomeWidgetProvider() {
             AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views)
 
             // Creating the PendingIntent to initiate the refresh
-            val refreshIntent = HomeWidgetBackgroundIntent.getBroadcast(
+            val refreshIntent = PendingIntent.getBroadcast(
                 context,
-                Uri.parse("warWidget://refreshClicked")
+                0,
+                Intent(HOME_WIDGET_BACKGROUND_ACTION).apply {
+                    data = Uri.parse("warWidget://refreshClicked")
+                    setPackage(context.packageName)
+                },
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             // Send the PendingIntent
             refreshIntent.send()// Send the PendingIntent directly

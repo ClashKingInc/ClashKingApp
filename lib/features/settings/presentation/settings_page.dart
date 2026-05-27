@@ -13,6 +13,7 @@ import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
+import 'package:clashkingapp/features/settings/presentation/notification_settings_page.dart';
 import 'package:clashkingapp/features/settings/presentation/translation_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/l10n/locale.dart';
@@ -75,6 +76,18 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                     trailingText: _themeModeLabel(themeNotifier.themeMode),
                     onTap: () =>
                         _showThemeModeSelection(context, themeNotifier),
+                  );
+                },
+              ),
+              _SettingsTile(
+                icon: LucideIcons.bellRing,
+                title: 'Notifications',
+                subtitle: 'Choose alerts and send local test previews.',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationSettingsPage(),
+                    ),
                   );
                 },
               ),
