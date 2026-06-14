@@ -122,7 +122,7 @@ class DashboardPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: PlayerWarStatsCard(),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
                 ],
               ),
       ),

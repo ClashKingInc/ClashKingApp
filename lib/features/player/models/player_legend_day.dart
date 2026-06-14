@@ -35,8 +35,8 @@ class PlayerLegendDay {
 
   factory PlayerLegendDay.fromJson(Map<String, dynamic> json) {
     return PlayerLegendDay(
-      attacks: List<int>.from(json['attacks'] ?? []),
-      defenses: List<int>.from(json['defenses'] ?? []),
+      attacks:  (json['attacks'] as List?)?.map((e) => (e as num?)?.toInt() ?? 0).toList() ?? [],
+      defenses: (json['defenses'] as List?)?.map((e) => (e as num?)?.toInt() ?? 0).toList() ?? [],
       trophiesGainedTotal: json['trophies_gained_total'] ?? 0,
       trophiesLostTotal: json['trophies_lost_total'] ?? 0,
       trophiesTotal: json['trophies_total'] ?? 0,

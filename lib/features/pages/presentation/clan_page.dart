@@ -139,7 +139,7 @@ class ClanPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Card(child: NoClanCard()),
               ),
-            const SizedBox(height: 16),
+            SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
           ],
         ),
       ),

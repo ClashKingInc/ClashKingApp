@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -72,20 +73,12 @@ class _NativeLiquidGlassBarState extends State<NativeLiquidGlassBar> {
         widget.shadowOpacity ?? (isDark ? 0.35 : 0.16);
 
     if (kIsWeb || !Platform.isIOS) {
+      final surfaceColor = widget.selected
+          ? colorScheme.surfaceContainerHighest
+          : colorScheme.surface;
       return DecoratedBox(
         decoration: BoxDecoration(
-          color:
-              (widget.selected
-                      ? colorScheme.surfaceContainerHighest
-                      : colorScheme.surface)
-                  .withValues(alpha: widget.opacity),
           borderRadius: BorderRadius.circular(widget.cornerRadius),
-          border: Border.all(
-            color: colorScheme.outlineVariant.withValues(
-              alpha: effectiveBorderOpacity,
-            ),
-            width: 0.8,
-          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: effectiveShadowOpacity),
@@ -93,6 +86,24 @@ class _NativeLiquidGlassBarState extends State<NativeLiquidGlassBar> {
               offset: const Offset(0, 12),
             ),
           ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(widget.cornerRadius),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: surfaceColor.withValues(alpha: widget.opacity * 0.65),
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withValues(
+                    alpha: effectiveBorderOpacity,
+                  ),
+                  width: 0.8,
+                ),
+              ),
+              child: const SizedBox.expand(),
+            ),
+          ),
         ),
       );
     }
@@ -193,14 +204,7 @@ class _NativeLiquidGlassTabBarState extends State<NativeLiquidGlassTabBar> {
             children: [
               DecoratedBox(
                 decoration: BoxDecoration(
-                  color: colorScheme.surface.withValues(alpha: 0.74),
                   borderRadius: BorderRadius.circular(widget.cornerRadius),
-                  border: Border.all(
-                    color: colorScheme.outlineVariant.withValues(
-                      alpha: effectiveBorderOpacity,
-                    ),
-                    width: 0.8,
-                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(
@@ -211,6 +215,24 @@ class _NativeLiquidGlassTabBarState extends State<NativeLiquidGlassTabBar> {
                     ),
                   ],
                 ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(widget.cornerRadius),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface.withValues(alpha: 0.65),
+                        border: Border.all(
+                          color: colorScheme.outlineVariant.withValues(
+                            alpha: effectiveBorderOpacity,
+                          ),
+                          width: 0.8,
+                        ),
+                      ),
+                      child: const SizedBox.expand(),
+                    ),
+                  ),
+                ),
               ),
               if (selectedVisible)
                 AnimatedPositioned(
@@ -220,13 +242,22 @@ class _NativeLiquidGlassTabBarState extends State<NativeLiquidGlassTabBar> {
                   top: widget.inset,
                   width: itemWidth - widget.inset * 2,
                   height: widget.height - widget.inset * 2,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainerHighest.withValues(
-                        alpha: 0.8,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        widget.selectedCornerRadius,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      widget.selectedCornerRadius,
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerHighest.withValues(
+                            alpha: 0.72,
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            widget.selectedCornerRadius,
+                          ),
+                        ),
+                        child: const SizedBox.expand(),
                       ),
                     ),
                   ),

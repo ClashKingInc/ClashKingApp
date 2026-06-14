@@ -77,6 +77,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         await _applyFilters(_currentFilter);
       }
 
+      if (!mounted) return;
       setState(() {
         // Update the widget's player data would require parent state management
         // For now, we'll just refresh the filtered data
@@ -84,9 +85,12 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Data refreshed successfully'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)?.warStatsRefreshSuccess ??
+                  'Data refreshed successfully',
+            ),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -94,7 +98,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to refresh data: ${e.toString()}'),
+            content: Text(
+              AppLocalizations.of(context)?.warStatsRefreshFailed(e.toString()) ??
+                  'Failed to refresh data: ${e.toString()}',
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -570,7 +577,12 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
               children: [
                 Icon(Icons.error, color: Colors.white, size: 20),
                 const SizedBox(width: 12),
-                Expanded(child: Text('Failed to load filtered data: $e')),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)?.warStatsFilterFailed(e.toString()) ??
+                        'Failed to load filtered data: $e',
+                  ),
+                ),
               ],
             ),
             backgroundColor: Colors.red,
@@ -865,7 +877,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
   void _showExportError(String error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Export failed: $error'),
+        content: Text(
+          AppLocalizations.of(context)?.warStatsExportFailed(error) ??
+              'Export failed: $error',
+        ),
         backgroundColor: Theme.of(context).colorScheme.error,
       ),
     );

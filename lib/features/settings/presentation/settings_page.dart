@@ -60,7 +60,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           _ProfileHeader(user: widget.user),
           const SizedBox(height: 14),
           _SettingsSection(
-            title: 'Preferences',
+            title: l10n.settingsPreferences,
             children: [
               _SettingsTile(
                 icon: Icons.language,
@@ -73,7 +73,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   return _SettingsTile(
                     icon: LucideIcons.sunMoon,
                     title: l10n.settingsToggleTheme,
-                    trailingText: _themeModeLabel(themeNotifier.themeMode),
+                    trailingText: _themeModeLabel(context, themeNotifier.themeMode),
                     onTap: () =>
                         _showThemeModeSelection(context, themeNotifier),
                   );
@@ -81,8 +81,8 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               ),
               _SettingsTile(
                 icon: LucideIcons.bellRing,
-                title: 'Notifications',
-                subtitle: 'Choose alerts and send local test previews.',
+                title: l10n.settingsNotificationsTitle,
+                subtitle: l10n.settingsNotificationsSubtitle,
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -95,30 +95,30 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           ),
           if (kDebugMode && LiveActivityDebugService.isSupportedPlatform)
             _SettingsSection(
-              title: 'Live Activity Test',
+              title: l10n.settingsLiveActivityTest,
               children: [
                 _SettingsTile(
                   icon: LucideIcons.radio,
-                  title: 'Start test activity',
-                  subtitle: 'Shows a local clan-war preview.',
+                  title: l10n.settingsLiveActivityStart,
+                  subtitle: l10n.settingsLiveActivityStartSubtitle,
                   onTap: () => _runLiveActivityAction('start'),
                 ),
                 _SettingsTile(
                   icon: LucideIcons.refreshCw,
-                  title: 'Update score',
-                  subtitle: 'Advances the fake war score.',
+                  title: l10n.settingsLiveActivityUpdate,
+                  subtitle: l10n.settingsLiveActivityUpdateSubtitle,
                   onTap: () => _runLiveActivityAction('update'),
                 ),
                 _SettingsTile(
                   icon: LucideIcons.circleStop,
-                  title: 'End test activity',
-                  subtitle: 'Removes the local preview.',
+                  title: l10n.settingsLiveActivityEnd,
+                  subtitle: l10n.settingsLiveActivityEndSubtitle,
                   onTap: () => _runLiveActivityAction('end'),
                 ),
               ],
             ),
           _SettingsSection(
-            title: 'Support',
+            title: l10n.settingsSupport,
             children: [
               _SettingsTile(
                 icon: Icons.question_answer_outlined,
@@ -160,7 +160,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             ],
           ),
           _SettingsSection(
-            title: 'About',
+            title: l10n.settingsAbout,
             children: [
               _SettingsTile(
                 icon: Icons.article_outlined,
@@ -183,12 +183,14 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             ],
           ),
           _SettingsSection(
-            title: 'Account',
+            title: l10n.settingsAccount,
             children: [
               _SettingsTile(
                 icon: Icons.alternate_email,
                 title: widget.user.email ?? widget.user.username,
-                subtitle: widget.user.email == null ? 'Signed in' : 'Email',
+                subtitle: widget.user.email == null
+                    ? l10n.settingsSignedIn
+                    : l10n.authEmail,
                 showChevron: false,
               ),
               _SettingsTile(
@@ -210,11 +212,12 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     );
   }
 
-  String _themeModeLabel(ThemeMode mode) {
+  String _themeModeLabel(BuildContext context, ThemeMode mode) {
+    final l10n = AppLocalizations.of(context)!;
     return switch (mode) {
-      ThemeMode.light => 'Light',
-      ThemeMode.dark => 'Dark',
-      ThemeMode.system => 'System',
+      ThemeMode.light => l10n.settingsThemeLight,
+      ThemeMode.dark => l10n.settingsThemeDark,
+      ThemeMode.system => l10n.settingsThemeSystem,
     };
   }
 
@@ -271,6 +274,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     BuildContext context,
     ThemeNotifier themeNotifier,
   ) async {
+    final l10n = AppLocalizations.of(context)!;
     final selected = await showModalBottomSheet<ThemeMode>(
       context: context,
       showDragHandle: true,
@@ -280,23 +284,23 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
             child: _SettingsSection(
-              title: 'Appearance',
+              title: l10n.settingsAppearance,
               children: [
                 _ThemeModeTile(
-                  title: 'System',
-                  subtitle: 'Match this device',
+                  title: l10n.settingsThemeSystem,
+                  subtitle: l10n.settingsThemeMatchDevice,
                   icon: Icons.brightness_auto_outlined,
                   selected: current == ThemeMode.system,
                   value: ThemeMode.system,
                 ),
                 _ThemeModeTile(
-                  title: 'Light',
+                  title: l10n.settingsThemeLight,
                   icon: Icons.light_mode_outlined,
                   selected: current == ThemeMode.light,
                   value: ThemeMode.light,
                 ),
                 _ThemeModeTile(
-                  title: 'Dark',
+                  title: l10n.settingsThemeDark,
                   icon: Icons.dark_mode_outlined,
                   selected: current == ThemeMode.dark,
                   value: ThemeMode.dark,
@@ -598,12 +602,13 @@ class _ThemeModeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return _SettingsTile(
       icon: icon,
       title: title,
       subtitle: subtitle,
       showChevron: false,
-      trailingText: selected ? 'Selected' : null,
+      trailingText: selected ? l10n.settingsThemeSelected : null,
       onTap: () => Navigator.pop(context, value),
     );
   }

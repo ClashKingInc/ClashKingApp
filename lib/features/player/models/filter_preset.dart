@@ -24,10 +24,10 @@ class FilterPreset {
 
   factory FilterPreset.fromJson(Map<String, dynamic> json) {
     return FilterPreset(
-      id: json['id'],
-      name: json['name'],
-      filter: WarStatsFilter.fromJson(json['filter']),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      filter: WarStatsFilter.fromJson(json['filter'] ?? {}),
+      createdAt: json['createdAt'] != null ? DateTime.fromMillisecondsSinceEpoch((json['createdAt'] as num).toInt()) : DateTime.now(),
     );
   }
 

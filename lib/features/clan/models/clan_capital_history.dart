@@ -58,15 +58,15 @@ class CapitalHistoryItem {
 
   factory CapitalHistoryItem.fromJson(Map<String, dynamic> json) {
     return CapitalHistoryItem(
-      state: json['state'],
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
-      capitalTotalLoot: json['capitalTotalLoot'],
-      raidsCompleted: json['raidsCompleted'],
-      totalAttacks: json['totalAttacks'],
-      enemyDistrictsDestroyed: json['enemyDistrictsDestroyed'],
-      offensiveReward: json['offensiveReward'],
-      defensiveReward: json['defensiveReward'],
+      state: json['state']?.toString() ?? '',
+      startTime: DateTime.tryParse(json['startTime'] ?? '') ?? DateTime(1970),
+      endTime: DateTime.tryParse(json['endTime'] ?? '') ?? DateTime(1970),
+      capitalTotalLoot: (json['capitalTotalLoot'] as num?)?.toInt() ?? 0,
+      raidsCompleted: (json['raidsCompleted'] as num?)?.toInt() ?? 0,
+      totalAttacks: (json['totalAttacks'] as num?)?.toInt() ?? 0,
+      enemyDistrictsDestroyed: (json['enemyDistrictsDestroyed'] as num?)?.toInt() ?? 0,
+      offensiveReward: (json['offensiveReward'] as num?)?.toInt() ?? 0,
+      defensiveReward: (json['defensiveReward'] as num?)?.toInt() ?? 0,
       members: json['members'] != null
           ? List<RaidMember>.from(
               json['members'].map((x) => RaidMember.fromJson(x)))
@@ -98,12 +98,12 @@ class RaidMember {
 
   factory RaidMember.fromJson(Map<String, dynamic> json) {
     return RaidMember(
-      tag: json['tag'],
-      name: json['name'],
-      attacks: json['attacks'],
-      attackLimit: json['attackLimit'],
-      bonusAttackLimit: json['bonusAttackLimit'],
-      capitalResourcesLooted: json['capitalResourcesLooted'],
+      tag: json['tag']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      attacks: (json['attacks'] as num?)?.toInt() ?? 0,
+      attackLimit: (json['attackLimit'] as num?)?.toInt() ?? 0,
+      bonusAttackLimit: (json['bonusAttackLimit'] as num?)?.toInt() ?? 0,
+      capitalResourcesLooted: (json['capitalResourcesLooted'] as num?)?.toInt() ?? 0,
     );
   }
 }
@@ -125,10 +125,10 @@ class RaidAttackLog {
 
   factory RaidAttackLog.fromJson(Map<String, dynamic> json) {
     return RaidAttackLog(
-      defender: RaidDefender.fromJson(json['defender']),
-      attackCount: json['attackCount'],
-      districtCount: json['districtCount'],
-      districtsDestroyed: json['districtsDestroyed'],
+      defender: RaidDefender.fromJson(json['defender'] ?? {}),
+      attackCount: (json['attackCount'] as num?)?.toInt() ?? 0,
+      districtCount: (json['districtCount'] as num?)?.toInt() ?? 0,
+      districtsDestroyed: (json['districtsDestroyed'] as num?)?.toInt() ?? 0,
       districts: List<District>.from(
           json['districts'].map((x) => District.fromJson(x))),
     );
@@ -150,10 +150,10 @@ class RaidDefender {
 
   factory RaidDefender.fromJson(Map<String, dynamic> json) {
     return RaidDefender(
-      tag: json['tag'],
-      name: json['name'],
-      level: json['level'],
-      badgeUrls: Map<String, String>.from(json['badgeUrls']),
+      tag: json['tag']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      level: (json['level'] as num?)?.toInt() ?? 0,
+      badgeUrls: Map<String, String>.from(json['badgeUrls'] ?? {}),
     );
   }
 }
@@ -181,13 +181,13 @@ class District {
 
   factory District.fromJson(Map<String, dynamic> json) {
     return District(
-      id: json['id'],
-      name: json['name'],
-      districtHallLevel: json['districtHallLevel'],
-      destructionPercent: json['destructionPercent'],
-      stars: json['stars'],
-      attackCount: json['attackCount'],
-      totalLooted: json['totalLooted'],
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      name: json['name']?.toString() ?? '',
+      districtHallLevel: (json['districtHallLevel'] as num?)?.toInt() ?? 0,
+      destructionPercent: (json['destructionPercent'] as num?)?.toInt() ?? 0,
+      stars: (json['stars'] as num?)?.toInt() ?? 0,
+      attackCount: (json['attackCount'] as num?)?.toInt() ?? 0,
+      totalLooted: (json['totalLooted'] as num?)?.toInt() ?? 0,
       attacks: json['attacks'] != null
           ? List<Attack>.from(json['attacks'].map((x) => Attack.fromJson(x)))
           : [],
@@ -210,10 +210,10 @@ class Attack {
 
   factory Attack.fromJson(Map<String, dynamic> json) {
     return Attack(
-      tag: json['attacker']['tag'],
-      name: json['attacker']['name'],
-      destructionPercent: json['destructionPercent'],
-      stars: json['stars'],
+      tag: json['attacker']?['tag']?.toString() ?? '',
+      name: json['attacker']?['name']?.toString() ?? '',
+      destructionPercent: (json['destructionPercent'] as num?)?.toInt() ?? 0,
+      stars: (json['stars'] as num?)?.toInt() ?? 0,
     );
   }
 }

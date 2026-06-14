@@ -200,7 +200,7 @@ class WarCwlPage extends StatelessWidget {
                 clan.isWarLogPublic == true &&
                 clan.clanWarStats != null)
               WarHistoryCard(clan: clan),
-            const SizedBox(height: 16),
+            SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
           ],
         ),
       ),

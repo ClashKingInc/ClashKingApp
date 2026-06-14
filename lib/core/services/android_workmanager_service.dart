@@ -18,7 +18,7 @@ class AndroidWorkmanagerService {
     return WorkmanagerPlatform.instance.initialize(callbackDispatcher);
   }
 
-  void executeTask(BackgroundTaskHandler backgroundTaskHandler) async {
+  Future<void> executeTask(BackgroundTaskHandler backgroundTaskHandler) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _backgroundTaskHandler = backgroundTaskHandler;

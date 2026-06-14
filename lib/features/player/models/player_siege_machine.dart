@@ -18,7 +18,7 @@ class PlayerSiegeMachine extends PlayerItem {
 
   factory PlayerSiegeMachine.fromJson(Map<String, dynamic> json) {
     return PlayerSiegeMachine(
-      name: json['name'],
+      name: json['name']?.toString() ?? 'Unknown',
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',

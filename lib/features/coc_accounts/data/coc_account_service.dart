@@ -1,3 +1,4 @@
+import 'dart:async' show unawaited;
 import 'dart:convert';
 import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -17,6 +18,12 @@ class CocAccountService extends ChangeNotifier {
 
   CocAccountService({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
+
+  bool _disposed = false;
+
+  void _safeNotify() {
+    if (!_disposed) notifyListeners();
+  }
 
   final ApiService _apiService;
   List<Map<String, dynamic>> _cocAccounts = [];
@@ -40,13 +47,13 @@ class CocAccountService extends ChangeNotifier {
     profiles = [];
     _isLoading = false;
     _lastRefresh = null;
-    notifyListeners();
+    _safeNotify();
   }
 
   /// Fetches the user's linked Clash of Clans accounts from the backend.
   Future<void> fetchCocAccounts() async {
     _isLoading = true;
-    notifyListeners();
+    _safeNotify();
 
     try {
       final response = await _apiService.getResponse(
@@ -74,7 +81,7 @@ class CocAccountService extends ChangeNotifier {
       rethrow;
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -109,7 +116,7 @@ class CocAccountService extends ChangeNotifier {
 
   void addLocalAccount(Map<String, dynamic> account) {
     _cocAccounts.add(account);
-    notifyListeners();
+    _safeNotify();
   }
 
   /// Adds a Clash of Clans account (with ownership verification).
@@ -149,7 +156,7 @@ class CocAccountService extends ChangeNotifier {
       if (response.statusCode == 200) {
         _cocAccounts
             .removeWhere((account) => account["player_tag"] == playerTag);
-        notifyListeners();
+        _safeNotify();
       } else {
         Sentry.captureMessage(
             "Error removing CoC account, status code: ${response.statusCode}, body: ${response.body}",
@@ -193,12 +200,12 @@ class CocAccountService extends ChangeNotifier {
       }
     }
 
-    notifyListeners();
+    _safeNotify();
   }
 
-  void initializeSelectedTag() {
+  Future<void> initializeSelectedTag() async {
     if (_cocAccounts.isNotEmpty && selectedTagNotifier.value == null) {
-      setSelectedTag(_cocAccounts.first["player_tag"]);
+      await setSelectedTag(_cocAccounts.first["player_tag"]);
     }
   }
 
@@ -226,7 +233,7 @@ class CocAccountService extends ChangeNotifier {
   /// Updates the last refresh timestamp and notifies listeners
   void updateRefreshTime() {
     _lastRefresh = DateTime.now();
-    notifyListeners();
+    _safeNotify();
   }
 
   /// Refresh data for specific page using bulk endpoint for consistency
@@ -245,7 +252,7 @@ class CocAccountService extends ChangeNotifier {
       await _loadDataWithBulkEndpoint(
           playerTags, playerService, clanService, warCwlService);
       _lastRefresh = DateTime.now();
-      notifyListeners();
+      _safeNotify();
       DebugUtils.debugSuccess("Page refresh completed successfully");
     } catch (e) {
       DebugUtils.debugError(" Page refresh failed: $e");
@@ -295,7 +302,7 @@ class CocAccountService extends ChangeNotifier {
 
       transaction.finish(status: SpanStatus.ok());
       _lastRefresh = DateTime.now();
-      initializeSelectedTag();
+      await initializeSelectedTag();
     } on HttpException catch (e) {
       if (e.message.contains("503")) {
         throw Exception("503");
@@ -399,7 +406,7 @@ class CocAccountService extends ChangeNotifier {
         DebugUtils.debugSuccess("All data linked successfully");
       } else if (response.statusCode == 503 || response.statusCode == 500) {
         throw HttpException(response.statusCode.toString(),
-            uri: response.request!.url);
+            uri: response.request?.url);
       } else {
         DebugUtils.debugError(
             " Bulk endpoint failed, falling back to individual calls");
@@ -527,18 +534,18 @@ class CocAccountService extends ChangeNotifier {
         DebugUtils.debugInfo(
             "🔄 Clan changed! Refreshing war widget in background...");
         // Don't await - let it run in background
-        WarWidgetService.handleWidgetRefresh().catchError((error) {
+        unawaited(WarWidgetService.handleWidgetRefresh().catchError((error) {
           DebugUtils.debugError(" Background widget refresh error: $error");
-        });
+        }));
       } else {
         DebugUtils.debugInfo("✅ Same clan, no widget refresh needed");
       }
     } catch (e) {
       DebugUtils.debugWarning("⚠️ Error checking clan change: $e");
       // If there's an error, refresh anyway to be safe (in background)
-      WarWidgetService.handleWidgetRefresh().catchError((error) {
+      unawaited(WarWidgetService.handleWidgetRefresh().catchError((error) {
         DebugUtils.debugError(" Background widget refresh error: $error");
-      });
+      }));
     }
   }
 
@@ -582,7 +589,7 @@ class CocAccountService extends ChangeNotifier {
             _cocAccounts[accountIndex]["townHallLevel"] = townHallLevel;
             DebugUtils.debugSuccess(
                 "✅ Updated account display data for $playerTag: $playerName (TH$townHallLevel)");
-            notifyListeners();
+            _safeNotify();
           }
         }
 
@@ -649,7 +656,7 @@ class CocAccountService extends ChangeNotifier {
         .indexWhere((account) => account["player_tag"] == playerTag);
     if (accountIndex != -1) {
       _cocAccounts[accountIndex]["is_verified"] = isVerified;
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -668,7 +675,7 @@ class CocAccountService extends ChangeNotifier {
     _selectedTag = null;
     selectedTagNotifier.value = null;
     profiles.clear();
-    notifyListeners();
+    _safeNotify();
   }
 
   String _extractErrorMessage(Map<String, dynamic> data) {
@@ -690,6 +697,7 @@ class CocAccountService extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     selectedTagNotifier.dispose();
     super.dispose();
   }

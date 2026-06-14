@@ -9,6 +9,7 @@ class ScrollableTab extends StatefulWidget {
   final ValueChanged<int>? onTap;
   final List<Widget> tabs;
   final List<Widget> children;
+  final bool scrollable;
 
   const ScrollableTab({
     super.key,
@@ -18,6 +19,7 @@ class ScrollableTab extends StatefulWidget {
     this.labelStyle,
     this.unselectedLabelColor,
     this.onTap,
+    this.scrollable = false,
     required this.tabs,
     required this.children,
   }) : assert(tabs.length == children.length);
@@ -41,8 +43,10 @@ class _ScrollableTabState extends State<ScrollableTab> {
           DecoratedBox(
             decoration: widget.tabBarDecoration ?? const BoxDecoration(),
             child: TabBar(
-              isScrollable: true,
-              tabAlignment: TabAlignment.start,
+              isScrollable: widget.scrollable,
+              tabAlignment: widget.scrollable
+                  ? TabAlignment.start
+                  : TabAlignment.fill,
               labelColor: widget.labelColor,
               labelPadding: widget.labelPadding,
               labelStyle: widget.labelStyle,

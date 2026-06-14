@@ -169,7 +169,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return showGeneralDialog<void>(
       context: context,
-      barrierLabel: 'Accounts',
+      barrierLabel: AppLocalizations.of(context)?.accountsMenuTitle ?? 'Accounts',
       barrierDismissible: true,
       barrierColor: Colors.transparent,
       transitionDuration: const Duration(milliseconds: 180),
@@ -240,6 +240,7 @@ class _AccountGlassMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Stack(
       fit: StackFit.expand,
@@ -269,7 +270,7 @@ class _AccountGlassMenu extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'Accounts',
+                          l10n?.accountsMenuTitle ?? 'Accounts',
                           style: Theme.of(context).textTheme.labelLarge
                               ?.copyWith(
                                 color: colorScheme.onSurfaceVariant,
@@ -379,7 +380,7 @@ class _AccountMenuRow extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: colorScheme.onSurface,
-                      fontSize: 17,
+                      fontSize: 15,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -415,16 +416,16 @@ class _SelectedAccountLabel extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          height: 32,
-          width: 32,
+          height: 26,
+          width: 26,
           child: selectedProfile == null
-              ? const Icon(Icons.shield_outlined)
+              ? const Icon(Icons.shield_outlined, size: 20)
               : CachedNetworkImage(
                   imageUrl: selectedProfile!.townHallPic,
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 7),
         Expanded(
           child: Text(
             selectedProfile?.name ??
@@ -434,8 +435,8 @@ class _SelectedAccountLabel extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurface,
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
             ),
           ),
         ),

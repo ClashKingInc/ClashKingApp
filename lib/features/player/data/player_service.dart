@@ -16,6 +16,18 @@ class PlayerService extends ChangeNotifier {
   PlayerService({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
 
+  bool _disposed = false;
+
+  void _safeNotify() {
+    if (!_disposed) notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
   final ApiService _apiService;
   bool _isLoading = false;
   List<Player> _profiles = [];
@@ -47,7 +59,7 @@ class PlayerService extends ChangeNotifier {
       {bool notify = true, bool throwOnError = false}) async {
     _isLoading = true;
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
 
     final Map<String, String> clanTagsByPlayer = {};
@@ -88,9 +100,9 @@ class PlayerService extends ChangeNotifier {
               level: SentryLevel.error);
         }
       } else if (response.statusCode == 503) {
-        throw HttpException("503", uri: response.request!.url);
+        throw HttpException("503", uri: response.request?.url);
       } else if (response.statusCode == 500) {
-        throw HttpException("500", uri: response.request!.url);
+        throw HttpException("500", uri: response.request?.url);
       } else {
         Sentry.captureMessage("Error initializing accounts data",
             level: SentryLevel.error);
@@ -105,7 +117,7 @@ class PlayerService extends ChangeNotifier {
     } finally {
       _isLoading = false;
       if (notify) {
-        notifyListeners();
+        _safeNotify();
       }
     }
     return clanTagsByPlayer;
@@ -117,7 +129,7 @@ class PlayerService extends ChangeNotifier {
       {bool notify = true, bool throwOnError = false}) async {
     _isLoading = true;
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
 
     try {
@@ -170,14 +182,14 @@ class PlayerService extends ChangeNotifier {
     } finally {
       _isLoading = false;
       if (notify) {
-        notifyListeners();
+        _safeNotify();
       }
     }
   }
 
   Future<Player> getPlayerAndClanData(String playerTag) async { // NOSONAR
     _isLoading = true;
-    notifyListeners();
+    _safeNotify();
 
     try {
       // Try bulk endpoint first
@@ -345,7 +357,7 @@ class PlayerService extends ChangeNotifier {
       rethrow;
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -366,13 +378,12 @@ class PlayerService extends ChangeNotifier {
       {bool notify = true, bool throwOnError = false}) async {
     DebugUtils.debugApi("🏰 Loading player data for tags: $playerTags");
 
-    final response = await _apiService.postResponse(
-      '/war/players/warhits',
-      body: {"player_tags": playerTags, "limit": 50},
-      requiresAuth: true,
-    );
-
     try {
+      final response = await _apiService.postResponse(
+        '/war/players/warhits',
+        body: {"player_tags": playerTags, "limit": 50},
+        requiresAuth: true,
+      );
       if (response.statusCode == 200) {
         final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
@@ -414,7 +425,7 @@ class PlayerService extends ChangeNotifier {
       }
     } finally {
       if (notify) {
-        notifyListeners();
+        _safeNotify();
       }
     }
   }
@@ -436,17 +447,17 @@ class PlayerService extends ChangeNotifier {
     DebugUtils.debugInfo(
         "🔍 War Stats Request Body: ${jsonEncode(requestBody)}");
 
-    final response = await _apiService.postResponse(
-      '/war/players/warhits',
-      body: requestBody,
-      requiresAuth: true,
-    );
-
-    // Debug logging for response
-    DebugUtils.debugInfo(
-        "📡 War Stats Response Status: ${response.statusCode}");
-
     try {
+      final response = await _apiService.postResponse(
+        '/war/players/warhits',
+        body: requestBody,
+        requiresAuth: true,
+      );
+
+      // Debug logging for response
+      DebugUtils.debugInfo(
+          "📡 War Stats Response Status: ${response.statusCode}");
+
       if (response.statusCode == 200) {
         final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
@@ -562,7 +573,7 @@ class PlayerService extends ChangeNotifier {
     DebugUtils.debugSuccess(
         "Processed all bulk player data: ${_profiles.map((p) => p.tag).toList()}");
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -589,11 +600,11 @@ class PlayerService extends ChangeNotifier {
 
     DebugUtils.debugSuccess("Processed all bulk war stats");
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
   }
 
   void notifyDataChanged() {
-    notifyListeners();
+    _safeNotify();
   }
 }

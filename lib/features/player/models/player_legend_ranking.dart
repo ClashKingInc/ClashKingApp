@@ -53,7 +53,7 @@ class PlayerLegendClan {
     return PlayerLegendClan(
       tag: json['tag'] ?? "",
       name: json['name'] ?? "",
-      badgeUrls: Map<String, String>.from(json['badgeUrls'])
+      badgeUrls: Map<String, String>.from(json['badgeUrls'] ?? {})
     );
   }
 }

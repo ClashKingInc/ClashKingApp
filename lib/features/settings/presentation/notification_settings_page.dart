@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -7,12 +7,14 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_hero.dart';
-import 'package:flutter/foundation.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
@@ -41,6 +43,81 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   var _selectedSampleId = NotificationDebugService.fallbackSamples.first.id;
   var _isSending = false;
 
+  static const _kPrefsPrefix = 'notif_settings_';
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_loadPreferences());
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() {
+      final enabledList = prefs.getStringList('${_kPrefsPrefix}enabled_types');
+      if (enabledList != null) {
+        _enabledTypes..clear()..addAll(enabledList);
+      }
+      final attackModes = prefs.getStringList(
+        '${_kPrefsPrefix}war_attack_modes',
+      );
+      if (attackModes != null) {
+        _warAttackModes..clear()..addAll(attackModes);
+      }
+      final eventTypesList = prefs.getStringList(
+        '${_kPrefsPrefix}event_types',
+      );
+      if (eventTypesList != null) {
+        _eventTypes..clear()..addAll(eventTypesList);
+      }
+      final reminderTimings = prefs.getStringList(
+        '${_kPrefsPrefix}reminder_timings',
+      );
+      if (reminderTimings != null) {
+        _warReminderTimings..clear()..addAll(reminderTimings);
+      }
+      final scopeIndex = prefs.getInt('${_kPrefsPrefix}account_scope');
+      if (scopeIndex != null &&
+          scopeIndex < _NotificationAccountScope.values.length) {
+        _accountScope = _NotificationAccountScope.values[scopeIndex];
+      }
+      final accounts = prefs.getStringList(
+        '${_kPrefsPrefix}selected_accounts',
+      );
+      if (accounts != null) {
+        _selectedAccounts..clear()..addAll(accounts);
+      }
+    });
+  }
+
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await Future.wait([
+      prefs.setStringList(
+        '${_kPrefsPrefix}enabled_types',
+        _enabledTypes.toList(),
+      ),
+      prefs.setStringList(
+        '${_kPrefsPrefix}war_attack_modes',
+        _warAttackModes.toList(),
+      ),
+      prefs.setStringList(
+        '${_kPrefsPrefix}event_types',
+        _eventTypes.toList(),
+      ),
+      prefs.setStringList(
+        '${_kPrefsPrefix}reminder_timings',
+        _warReminderTimings.toList(),
+      ),
+      prefs.setInt('${_kPrefsPrefix}account_scope', _accountScope.index),
+      prefs.setStringList(
+        '${_kPrefsPrefix}selected_accounts',
+        _selectedAccounts.toList(),
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -60,7 +137,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(AppLocalizations.of(context)?.settingsNotificationsTitle ?? 'Notifications'),
         centerTitle: false,
         backgroundColor: colorScheme.surface,
         surfaceTintColor: Colors.transparent,
@@ -100,6 +177,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         _warAttackModes.remove(mode);
                       }
                     });
+                    unawaited(_savePreferences());
                   },
                 ),
               ),
@@ -129,6 +207,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         ..clear()
                         ..addAll(timings);
                     });
+                    unawaited(_savePreferences());
                   },
                 ),
               ),
@@ -151,6 +230,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         _eventTypes.remove(event);
                       }
                     });
+                    unawaited(_savePreferences());
                   },
                 ),
               ),
@@ -180,6 +260,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   setState(() {
                     _accountScope = value;
                   });
+                  unawaited(_savePreferences());
                 },
               ),
               if (_accountScope == _NotificationAccountScope.selected)
@@ -193,11 +274,12 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         _selectedAccounts.remove(tag);
                       }
                     });
+                    unawaited(_savePreferences());
                   },
                 ),
             ],
           ),
-          if (kDebugMode)
+          if (kDebugMode && NotificationDebugService.isSupportedPlatform)
             _Section(
               title: 'Test notification',
               children: [
@@ -244,6 +326,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         _expandedNotificationOptions.remove(type);
       }
     });
+    unawaited(_savePreferences());
   }
 
   void _toggleExpanded(String type, bool expanded) {
@@ -755,96 +838,14 @@ class _WarReminderTimingPicker extends StatelessWidget {
   }
 
   Future<void> _showTimingSheet(BuildContext context) async {
-    final colorScheme = Theme.of(context).colorScheme;
-    var selectedHour = 1;
     final selection = await showModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
-      builder: (context) {
-        return SafeArea(
-          child: StatefulBuilder(
-            builder: (context, setSheetState) {
-              final hourValue = '${selectedHour}h';
-              final hourAlreadySelected = selectedTimings.contains(hourValue);
-
-              return ListView(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-                children: [
-                  Text(
-                    'Add war reminder',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Pick an hour value, or use one of the short final reminders.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 156,
-                    child: CupertinoPicker(
-                      itemExtent: 38,
-                      scrollController: FixedExtentScrollController(),
-                      onSelectedItemChanged: (index) {
-                        setSheetState(() {
-                          selectedHour = index + 1;
-                        });
-                      },
-                      children: [
-                        for (var hour = 1; hour <= 47; hour++)
-                          Center(
-                            child: Text(
-                              hour == 1 ? '1 hour left' : '$hour hours left',
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  FilledButton(
-                    onPressed: hourAlreadySelected
-                        ? null
-                        : () => Navigator.of(context).pop(hourValue),
-                    child: Text(
-                      hourAlreadySelected
-                          ? '${_timingLabel(hourValue)} already added'
-                          : 'Add ${_timingLabel(hourValue)}',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: selectedTimings.contains('30m')
-                              ? null
-                              : () => Navigator.of(context).pop('30m'),
-                          child: const Text('30 minutes'),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: selectedTimings.contains('15m')
-                              ? null
-                              : () => Navigator.of(context).pop('15m'),
-                          child: const Text('15 minutes'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+      builder: (context) => _HourPickerSheet(
+        selectedTimings: selectedTimings,
+        timingLabel: _timingLabel,
+      ),
     );
-
     if (selection == null) return;
     onChanged({...selectedTimings, selection});
   }
@@ -862,6 +863,115 @@ class _WarReminderTimingPicker extends StatelessWidget {
       return hours == 1 ? '1 hour left' : '$hours hours left';
     }
     return timing == '30m' ? '30 minutes left' : '15 minutes left';
+  }
+}
+
+class _HourPickerSheet extends StatefulWidget {
+  const _HourPickerSheet({
+    required this.selectedTimings,
+    required this.timingLabel,
+  });
+
+  final Set<String> selectedTimings;
+  final String Function(String) timingLabel;
+
+  @override
+  State<_HourPickerSheet> createState() => _HourPickerSheetState();
+}
+
+class _HourPickerSheetState extends State<_HourPickerSheet> {
+  late final FixedExtentScrollController _ctrl;
+  var _selectedHour = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = FixedExtentScrollController();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final hourValue = '${_selectedHour}h';
+    final hourAlreadySelected = widget.selectedTimings.contains(hourValue);
+
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+        children: [
+          Text(
+            'Add war reminder',
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Pick an hour value, or use one of the short final reminders.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 156,
+            child: CupertinoPicker(
+              itemExtent: 38,
+              scrollController: _ctrl,
+              onSelectedItemChanged:
+                  (index) => setState(() => _selectedHour = index + 1),
+              children: [
+                for (var hour = 1; hour <= 47; hour++)
+                  Center(
+                    child: Text(
+                      hour == 1 ? '1 hour left' : '$hour hours left',
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          FilledButton(
+            onPressed: hourAlreadySelected
+                ? null
+                : () => Navigator.of(context).pop(hourValue),
+            child: Text(
+              hourAlreadySelected
+                  ? '${widget.timingLabel(hourValue)} already added'
+                  : 'Add ${widget.timingLabel(hourValue)}',
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: widget.selectedTimings.contains('30m')
+                      ? null
+                      : () => Navigator.of(context).pop('30m'),
+                  child: const Text('30 minutes'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: widget.selectedTimings.contains('15m')
+                      ? null
+                      : () => Navigator.of(context).pop('15m'),
+                  child: const Text('15 minutes'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -1058,46 +1168,22 @@ class _ScopeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!kIsWeb && Platform.isIOS) {
-      return Padding(
-        padding: const EdgeInsets.all(12),
-        child: SizedBox(
-          width: double.infinity,
-          child: CupertinoSlidingSegmentedControl<_NotificationAccountScope>(
-            groupValue: value,
-            children: const {
-              _NotificationAccountScope.all: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                child: Text('All accounts'),
-              ),
-              _NotificationAccountScope.selected: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                child: Text('Selected'),
-              ),
-            },
-            onValueChanged: (selection) {
-              if (selection != null) onChanged(selection);
-            },
-          ),
-        ),
-      );
-    }
-
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(12),
       child: SizedBox(
         width: double.infinity,
         child: SegmentedButton<_NotificationAccountScope>(
-          segments: const [
+          segments: [
             ButtonSegment(
               value: _NotificationAccountScope.all,
-              icon: Icon(LucideIcons.users),
-              label: Text('All accounts'),
+              icon: const Icon(LucideIcons.users),
+              label: Text(l10n?.notifScopeAllAccounts ?? 'All accounts'),
             ),
             ButtonSegment(
               value: _NotificationAccountScope.selected,
-              icon: Icon(LucideIcons.userCheck),
-              label: Text('Selected'),
+              icon: const Icon(LucideIcons.userCheck),
+              label: Text(l10n?.notifScopeSelected ?? 'Selected'),
             ),
           ],
           selected: {value},
@@ -1128,12 +1214,13 @@ class _AccountPicker extends StatelessWidget {
         _normalizeTag(profile.tag): profile,
     };
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     if (accounts.isEmpty) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
         child: Text(
-          'No linked accounts loaded yet.',
+          l10n?.notifNoAccountsLoadedYet ?? 'No linked accounts loaded yet.',
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
@@ -1162,12 +1249,12 @@ class _AccountPicker extends StatelessWidget {
         .take(3)
         .toList();
     final summary = selectedCount == 0
-        ? 'No accounts selected'
+        ? (l10n?.notifNoAccountsSelected ?? 'No accounts selected')
         : selectedCount == 1
         ? accountOptions
               .firstWhere((account) => selectedAccounts.contains(account.tag))
               .name
-        : '$selectedCount accounts selected';
+        : (l10n?.notifAccountsSelected(selectedCount) ?? '$selectedCount accounts selected');
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -1194,7 +1281,7 @@ class _AccountPicker extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Selected accounts',
+                      l10n?.notifSelectedAccounts ?? 'Selected accounts',
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                         fontWeight: FontWeight.w700,
@@ -1229,6 +1316,7 @@ class _AccountPicker extends StatelessWidget {
     BuildContext context,
     List<_AccountOption> accounts,
   ) async {
+    final l10n = AppLocalizations.of(context);
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
@@ -1243,7 +1331,7 @@ class _AccountPicker extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
                   children: [
                     Text(
-                      'Selected accounts',
+                      l10n?.notifSelectedAccounts ?? 'Selected accounts',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),

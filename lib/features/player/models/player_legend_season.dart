@@ -70,24 +70,25 @@ class PlayerLegendSeason {
         json['season_stars_distribution_defenses_percentages'] ?? {};
 
     return PlayerLegendSeason(
-      start: DateTime.parse(json['season_start']),
-      end: DateTime.parse(json['season_end']),
+      start: json['season_start'] != null ? DateTime.parse(json['season_start']) : DateTime(1970),
+      end:   json['season_end']   != null ? DateTime.parse(json['season_end'])   : DateTime(1970),
       duration: json['season_duration'] ?? 0,
       daysInLegend: json['season_days_in_legend'] ?? 0,
-      dayOfSeason: DateTime.now()
-                  .difference(DateTime.parse(json['season_start']))
-                  .inDays + 1>
-              json['season_duration']
-          ? json['season_duration']
-          : DateTime.now()
-              .difference(DateTime.parse(json['season_start']))
-              .inDays + 1,
+      dayOfSeason: json['season_start'] != null
+          ? (DateTime.now()
+                          .difference(DateTime.parse(json['season_start']))
+                          .inDays + 1 >
+                      (json['season_duration'] ?? 0)
+                  ? json['season_duration'] ?? 0
+                  : DateTime.now()
+                          .difference(DateTime.parse(json['season_start']))
+                          .inDays + 1)
+          : 0,
       endTrophies: json['season_end_trophies'] ?? 0,
       trophiesGainedTotal: json['season_trophies_gained_total'] ?? 0,
       trophiesLostTotal: json['season_trophies_lost_total'] ?? 0,
       trophiesNet: json['season_trophies_net'] ?? 0,
-      trophiesNetRevised:
-          5000 - (json['season_trophies_net_revised'] ?? 0) as int,
+      trophiesNetRevised: 5000 - ((json['season_trophies_net_revised'] ?? 0) as num).toInt(),
       totalAttacks: json['season_total_attacks'] ?? 0,
       totalDefenses: json['season_total_defenses'] ?? 0,
       avgGainedPerAttack:

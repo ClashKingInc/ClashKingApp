@@ -125,6 +125,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         }
 
         if (_isFirstConnection) {
+          // Allow back navigation even during first-connection to avoid
+          // trapping users when account addition fails (e.g. network error).
+          if (context.mounted) Navigator.of(context).pop();
           return;
         }
 
@@ -621,6 +624,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           ),
         );
 
+        if (!mounted) return;
         if (result == true) {
           // Account was successfully verified and added
           setState(() {

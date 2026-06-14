@@ -202,7 +202,7 @@ class _HomeBaseStats extends StatelessWidget {
           leagueName: player.league,
           trophies: formatter.format(player.trophies),
           leagueUrl: player.leagueUrl,
-          seasonName: 'May 25th Season',
+          seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
           attackWins: formatter.format(player.attackWins),
           defenseWins: formatter.format(player.defenseWins),
         ),
@@ -392,15 +392,21 @@ void _openWar(BuildContext context, WarInfo warInfo) {
 }
 
 void _openCwl(BuildContext context, Player player) {
+  final warCwl = player.clan?.warCwl;
+  final leagueInfo = warCwl?.leagueInfo;
+  if (warCwl == null || leagueInfo == null || leagueInfo.clans.isEmpty) return;
+  final clanTag = player.clan!.tag;
+  final clanInfo = leagueInfo.clans.firstWhere(
+    (clan) => clan.tag == clanTag,
+    orElse: () => leagueInfo.clans.first,
+  );
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => CwlScreen(
-        warCwl: player.clan!.warCwl!,
-        clanTag: player.clan!.tag,
-        clanInfo: player.clan!.warCwl!.leagueInfo!.clans.firstWhere(
-          (clan) => clan.tag == player.clan?.tag,
-        ),
+        warCwl: warCwl,
+        clanTag: clanTag,
+        clanInfo: clanInfo,
       ),
     ),
   );

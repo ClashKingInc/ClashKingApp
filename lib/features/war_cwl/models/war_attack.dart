@@ -21,12 +21,12 @@ class WarAttack {
 
   factory WarAttack.fromJson(Map<String, dynamic> json) {
     return WarAttack(
-      attackerTag: json['attackerTag'],
-      defenderTag: json['defenderTag'],
-      stars: json['stars'],
-      destructionPercentage: json['destructionPercentage'],
-      order: json['order'],
-      duration: json['duration'], // Attack duration from API
+      attackerTag: json['attackerTag']?.toString() ?? '',
+      defenderTag: json['defenderTag']?.toString() ?? '',
+      stars: (json['stars'] as num?)?.toInt() ?? 0,
+      destructionPercentage: (json['destructionPercentage'] as num?)?.toInt() ?? 0,
+      order: (json['order'] as num?)?.toInt() ?? 0,
+      duration: (json['duration'] as num?)?.toInt(), // Attack duration from API
       defender: json['defender'] != null
           ? MiniMember.fromJson(json['defender'])
           : null,
@@ -66,11 +66,11 @@ class MiniMember {
 
   factory MiniMember.fromJson(Map<String, dynamic> json) {
     return MiniMember(
-      tag: json['tag'],
-      name: json['name'],
-      townhallLevel: json['townhallLevel'],
-      mapPosition: json['mapPosition'],
-      opponentAttacks: json['opponentAttacks']
+      tag: json['tag']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      townhallLevel: (json['townhallLevel'] as num?)?.toInt() ?? 0,
+      mapPosition: (json['mapPosition'] as num?)?.toInt() ?? 0,
+      opponentAttacks: (json['opponentAttacks'] as num?)?.toInt(),
     );
   }
 }

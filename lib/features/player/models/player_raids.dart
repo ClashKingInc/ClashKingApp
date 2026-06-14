@@ -9,8 +9,8 @@ class PlayerRaids {
 
   factory PlayerRaids.fromJson(Map<String, dynamic> json) {
     return PlayerRaids(
-      attackLimit: json['attack_limit'] as int,
-      attackDone: json['attacks_done'] as int,
+      attackLimit: (json['attack_limit'] as num?)?.toInt() ?? 5,
+      attackDone:  (json['attacks_done'] as num?)?.toInt() ?? 0,
     );
   }
 

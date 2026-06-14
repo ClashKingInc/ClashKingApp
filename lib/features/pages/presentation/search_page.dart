@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/player/presentation/player/player_page.dar
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum _SearchMode { players, clans }
@@ -31,6 +32,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   static const int _recentLimit = 5;
   static const String _recentKey = 'clashking_recent_search_results';
+  static final RegExp _tagRegExp = RegExp(r'^[PYLQGRJCUV0289]{3,9}$');
 
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -147,7 +149,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<dynamic>> _searchPlayers(String query) async {
     const timeout = Duration(seconds: 10);
     final normalizedTag = query.replaceFirst('#', '');
-    final isTag = RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(normalizedTag);
+    final isTag = _tagRegExp.hasMatch(normalizedTag);
     final Uri uri;
 
     if (isTag) {
@@ -193,6 +195,7 @@ class _SearchPageState extends State<SearchPage> {
       context: context,
       builder: (context) => ClanSearchFilters(),
     );
+    if (!mounted) return;
     if (filters == null) return;
     setState(() {
       _clanFilters = filters;
@@ -204,6 +207,8 @@ class _SearchPageState extends State<SearchPage> {
   Future<void> _openPlayer(dynamic rawPlayer) async {
     final player = rawPlayer as Map<String, dynamic>;
     final navigator = Navigator.of(context);
+    final playerService = context.read<PlayerService>();
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -211,22 +216,26 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     try {
-      final selectedPlayer = await PlayerService().getPlayerAndClanData(
+      final selectedPlayer = await playerService.getPlayerAndClanData(
         player['tag'],
       );
       await _saveRecent(_RecentSearchItem.fromPlayer(player));
-      if (!mounted) return;
       navigator.pop();
+      if (!mounted) return;
       navigator.push(
         MaterialPageRoute(
           builder: (context) => PlayerScreen(selectedPlayer: selectedPlayer),
         ),
       );
     } catch (_) {
-      if (!mounted) return;
       navigator.pop();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to load player data.')),
+        SnackBar(
+          content: Text(
+            l10n?.searchErrorPlayerLoadFailed ?? 'Failed to load player data.',
+          ),
+        ),
       );
     }
   }
@@ -234,6 +243,8 @@ class _SearchPageState extends State<SearchPage> {
   Future<void> _openClan(dynamic rawClan) async {
     final clan = rawClan as Map<String, dynamic>;
     final navigator = Navigator.of(context);
+    final clanService = context.read<ClanService>();
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -241,27 +252,33 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     try {
-      final clanInfo = await _loadClanForResult(clan);
+      final clanInfo = await _loadClanForResult(clan, clanService);
       await _saveRecent(_RecentSearchItem.fromClan(clan));
-      if (!mounted) return;
       navigator.pop();
+      if (!mounted) return;
       navigator.push(
         MaterialPageRoute(
           builder: (context) => ClanInfoScreen(clanInfo: clanInfo),
         ),
       );
     } catch (_) {
-      if (!mounted) return;
       navigator.pop();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to load clan data.')),
+        SnackBar(
+          content: Text(
+            l10n?.searchErrorClanLoadFailed ?? 'Failed to load clan data.',
+          ),
+        ),
       );
     }
   }
 
-  Future<Clan> _loadClanForResult(Map<String, dynamic> clan) async {
+  Future<Clan> _loadClanForResult(
+    Map<String, dynamic> clan,
+    ClanService clanService,
+  ) async {
     final tag = clan['tag']?.toString() ?? '';
-    final clanService = ClanService();
 
     try {
       return await clanService.getClanAndWarData(tag);
@@ -297,10 +314,10 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
     final hint = _mode == _SearchMode.players
-        ? AppLocalizations.of(context)?.playerSearchPlaceholder ??
-              "Player name or tag"
-        : AppLocalizations.of(context)?.clanSearchPlaceholder ?? "Clan name";
+        ? l10n?.playerSearchPlaceholder ?? 'Player name or tag'
+        : l10n?.clanSearchPlaceholder ?? 'Clan name';
     final showRecents =
         _recentItems.isNotEmpty && _controller.text.trim().isEmpty;
 
@@ -324,7 +341,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   if (_mode == _SearchMode.clans)
                     IconButton(
-                      tooltip: 'Filters',
+                      tooltip: l10n?.searchFilters ?? 'Filters',
                       onPressed: _showClanFilters,
                       icon: Icon(
                         Icons.filter_list,
@@ -343,7 +360,7 @@ class _SearchPageState extends State<SearchPage> {
                     )
                   else if (_controller.text.isNotEmpty)
                     IconButton(
-                      tooltip: 'Clear',
+                      tooltip: l10n?.searchClear ?? 'Clear',
                       onPressed: () {
                         _controller.clear();
                         setState(() {
@@ -378,7 +395,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           if (showRecents) ...[
             const SizedBox(height: 18),
-            Text('Recent', style: Theme.of(context).textTheme.titleMedium),
+            Text(l10n?.searchRecent ?? 'Recent', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 10),
             ..._recentItems
                 .take(_recentLimit)
@@ -427,6 +444,7 @@ class _ModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return SizedBox(
       height: 52,
@@ -466,14 +484,14 @@ class _ModeSelector extends StatelessWidget {
                 children: [
                   _ModeButton(
                     icon: Icons.person_search,
-                    label: 'Players',
+                    label: l10n?.searchTabPlayers ?? 'Players',
                     selected: mode == _SearchMode.players,
                     colorScheme: colorScheme,
                     onTap: () => onChanged(_SearchMode.players),
                   ),
                   _ModeButton(
                     icon: Icons.shield_outlined,
-                    label: 'Clans',
+                    label: l10n?.searchTabClans ?? 'Clans',
                     selected: mode == _SearchMode.clans,
                     colorScheme: colorScheme,
                     onTap: () => onChanged(_SearchMode.clans),
