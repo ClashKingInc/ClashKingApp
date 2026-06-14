@@ -149,11 +149,8 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
   } else if (state == "inWar") {
     statusIcon = "⚔️";
     secondaryText = "$clanStars - $opponentStars";
-    colorTheme = clanStars > opponentStars
-        ? "winning"
-        : clanStars < opponentStars
-            ? "losing"
-            : "tied";
+    final warColorTheme = clanStars < opponentStars ? "losing" : "tied";
+    colorTheme = clanStars > opponentStars ? "winning" : warColorTheme;
     if (currentWar["endTime"] != null) {
       final endTime = DateTime.parse(currentWar["endTime"]);
       final timeUntilEnd = endTime.difference(DateTime.now());
@@ -283,11 +280,8 @@ String _buildCwlWarData(
   } else if (state == "inWar") {
     statusIcon = "🏅";
     secondaryText = "$clanStars - $opponentStars";
-    colorTheme = clanStars > opponentStars
-        ? "winning"
-        : clanStars < opponentStars
-            ? "losing"
-            : "tied";
+    final warColorTheme = clanStars < opponentStars ? "losing" : "tied";
+    colorTheme = clanStars > opponentStars ? "winning" : warColorTheme;
     if (currentWar.endTime != null) {
       final endTime = currentWar.endTime!;
       final timeUntilEnd = endTime.difference(DateTime.now());
@@ -339,11 +333,8 @@ String _buildCwlWarData(
   // Update score and color theme based on our clan's position
   if (state == "inWar") {
     secondaryText = "$ourStars - $theirStars";
-    colorTheme = ourStars > theirStars
-        ? "winning"
-        : ourStars < theirStars
-            ? "losing"
-            : "tied";
+    final cwlColorTheme = ourStars < theirStars ? "losing" : "tied";
+    colorTheme = ourStars > theirStars ? "winning" : cwlColorTheme;
     score = "$ourStars - $theirStars";
   } else if (state == "warEnded") {
     final isWin = ourStars > theirStars;

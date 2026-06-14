@@ -1067,7 +1067,7 @@ class _XpPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          MobileWebImage(imageUrl: ImageAssets.xp, width: 16, height: 16),
+          const MobileWebImage(imageUrl: ImageAssets.xp, width: 16, height: 16),
           const SizedBox(width: 4),
           Text(
             'Level $level',

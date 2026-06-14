@@ -890,7 +890,7 @@ class _TownHallMaxBadge extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   else ...[
-                    _PopupLabel(text: 'Time Remaining:'),
+                    const _PopupLabel(text: 'Time Remaining:'),
                     const SizedBox(height: 6),
                     _RemainingRow(
                       icon: Icons.schedule_rounded,
@@ -900,7 +900,7 @@ class _TownHallMaxBadge extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    _PopupLabel(text: 'Resources:'),
+                    const _PopupLabel(text: 'Resources:'),
                     const SizedBox(height: 6),
                     if (summary.resources.isEmpty)
                       Text(

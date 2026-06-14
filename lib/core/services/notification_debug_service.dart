@@ -4,6 +4,8 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+const _kWarStateGroup = 'War state';
+
 class NotificationDebugService {
   static const MethodChannel _channel = MethodChannel(
     'clashking/notification_debug',
@@ -31,7 +33,7 @@ class NotificationDebugService {
     NotificationSample(
       id: 'warMatched',
       label: 'War matched',
-      group: 'War state',
+      group: _kWarStateGroup,
       title: 'War matched',
       body: 'Home Clan matched with Pine Riders. Preparation day started.',
       assetUrl: ImageAssets.warClan,
@@ -39,7 +41,7 @@ class NotificationDebugService {
     NotificationSample(
       id: 'warStarted',
       label: 'War started',
-      group: 'War state',
+      group: _kWarStateGroup,
       title: 'Battle day started',
       body: 'Home Clan vs Pine Riders is live. Good luck.',
       assetUrl: ImageAssets.sword,
@@ -47,7 +49,7 @@ class NotificationDebugService {
     NotificationSample(
       id: 'warEnded',
       label: 'War ended',
-      group: 'War state',
+      group: _kWarStateGroup,
       title: 'War ended',
       body: 'Home Clan 86-82 Pine Riders.',
       assetUrl: ImageAssets.warClan,

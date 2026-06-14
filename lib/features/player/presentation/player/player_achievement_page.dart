@@ -182,7 +182,7 @@ class PlayerAchievementScreenState extends State<PlayerAchievementScreen>
                     SizedBox(height: 16),
                     Container(
                       width: 250,
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 12,
                       ),

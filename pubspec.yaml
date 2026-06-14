@@ -61,6 +61,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   intl: ^0.20.2
   url_launcher: ^6.3.2
+  open_filex: ^4.6.0
   webview_flutter: ^4.13.0
   flutter_native_splash: ^2.4.7
   path_provider: ^2.1.5

@@ -69,21 +69,23 @@ class PlayerLegendSeason {
     Map<String, dynamic> defensePercentJson =
         json['season_stars_distribution_defenses_percentages'] ?? {};
 
+    final int dayOfSeasonValue;
+    if (json['season_start'] != null) {
+      final daysPassed = DateTime.now()
+              .difference(DateTime.parse(json['season_start']))
+              .inDays + 1;
+      final duration = json['season_duration'] ?? 0;
+      dayOfSeasonValue = daysPassed > duration ? duration : daysPassed;
+    } else {
+      dayOfSeasonValue = 0;
+    }
+
     return PlayerLegendSeason(
       start: json['season_start'] != null ? DateTime.parse(json['season_start']) : DateTime(1970),
       end:   json['season_end']   != null ? DateTime.parse(json['season_end'])   : DateTime(1970),
       duration: json['season_duration'] ?? 0,
       daysInLegend: json['season_days_in_legend'] ?? 0,
-      dayOfSeason: json['season_start'] != null
-          ? (DateTime.now()
-                          .difference(DateTime.parse(json['season_start']))
-                          .inDays + 1 >
-                      (json['season_duration'] ?? 0)
-                  ? json['season_duration'] ?? 0
-                  : DateTime.now()
-                          .difference(DateTime.parse(json['season_start']))
-                          .inDays + 1)
-          : 0,
+      dayOfSeason: dayOfSeasonValue,
       endTrophies: json['season_end_trophies'] ?? 0,
       trophiesGainedTotal: json['season_trophies_gained_total'] ?? 0,
       trophiesLostTotal: json['season_trophies_lost_total'] ?? 0,

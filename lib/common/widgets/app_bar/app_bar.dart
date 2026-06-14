@@ -54,7 +54,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      _TopGlassSurface(cornerRadius: 23),
+                      const _TopGlassSurface(cornerRadius: 23),
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -95,7 +95,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      _TopGlassSurface(cornerRadius: 23),
+                      const _TopGlassSurface(cornerRadius: 23),
                       Material(
                         color: Colors.transparent,
                         shape: const CircleBorder(),

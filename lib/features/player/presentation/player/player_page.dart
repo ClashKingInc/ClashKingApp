@@ -75,7 +75,8 @@ class PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _selectTab(int index) {
-    final boundedIndex = index < 0 ? 0 : (index > 2 ? 2 : index);
+    final clampedIndex = index > 2 ? 2 : index;
+    final boundedIndex = index < 0 ? 0 : clampedIndex;
     if (boundedIndex == selectedTab) return;
     setState(() => selectedTab = boundedIndex);
   }

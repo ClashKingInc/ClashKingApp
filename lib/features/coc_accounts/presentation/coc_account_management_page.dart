@@ -99,7 +99,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       Navigator.of(context).pop();
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
+      ).pushReplacement(MaterialPageRoute(builder: (context) => const MyHomePage()));
     }
   }
 
@@ -374,7 +374,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                       mainAxisSize:
                                                           MainAxisSize.min,
                                                       children: [
-                                                        Icon(
+                                                        const Icon(
                                                           Icons.verified,
                                                           color: Colors.green,
                                                           size: 16,

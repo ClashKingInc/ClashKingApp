@@ -16,6 +16,25 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+class _NotifGroup {
+  static const leagueBattles = 'League battles';
+  static const warAttacks = 'War attacks';
+  static const warState = 'War state';
+  static const warReminders = 'War reminders';
+  static const events = 'Events';
+  static const upgradeFinishes = 'Upgrade finishes';
+  static const monthlySupport = 'Monthly support';
+  static const clanGames = 'Clan Games';
+  static const cwl = 'CWL';
+  static const raidWeekend = 'Raid Weekend';
+}
+
+class _Timing {
+  static const oneHourLeft = '1 hour left';
+  static const thirtyMin = '30 minutes left';
+  static const fifteenMin = '15 minutes left';
+}
+
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
 
@@ -26,16 +45,16 @@ class NotificationSettingsPage extends StatefulWidget {
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   final Set<String> _enabledTypes = {
-    'League battles',
-    'War attacks',
-    'War state',
-    'War reminders',
-    'Events',
-    'Upgrade finishes',
-    'Monthly support',
+    _NotifGroup.leagueBattles,
+    _NotifGroup.warAttacks,
+    _NotifGroup.warState,
+    _NotifGroup.warReminders,
+    _NotifGroup.events,
+    _NotifGroup.upgradeFinishes,
+    _NotifGroup.monthlySupport,
   };
   final Set<String> _warAttackModes = {'defenses'};
-  final Set<String> _eventTypes = {'Clan Games', 'CWL', 'Raid Weekend'};
+  final Set<String> _eventTypes = {_NotifGroup.clanGames, _NotifGroup.cwl, _NotifGroup.raidWeekend};
   final Set<String> _warReminderTimings = {'1h', '30m', '15m'};
   final Set<String> _expandedNotificationOptions = {};
   final Set<String> _selectedAccounts = {};
@@ -151,22 +170,22 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             children: [
               _NotificationToggleRow(
                 icon: LucideIcons.shield,
-                title: 'League battles',
+                title: _NotifGroup.leagueBattles,
                 subtitle:
                     'Defense results with attacker, stars, percentage, and league context.',
-                enabled: _enabledTypes.contains('League battles'),
-                onChanged: (value) => _toggleType('League battles', value),
+                enabled: _enabledTypes.contains(_NotifGroup.leagueBattles),
+                onChanged: (value) => _toggleType(_NotifGroup.leagueBattles, value),
               ),
               _NotificationDisclosureRow(
                 icon: LucideIcons.swords,
-                title: 'War attacks',
+                title: _NotifGroup.warAttacks,
                 subtitle:
                     'War attack results, defense alerts, and 5v5 attack feed options.',
-                enabled: _enabledTypes.contains('War attacks'),
-                expanded: _expandedNotificationOptions.contains('War attacks'),
-                onChanged: (value) => _toggleType('War attacks', value),
+                enabled: _enabledTypes.contains(_NotifGroup.warAttacks),
+                expanded: _expandedNotificationOptions.contains(_NotifGroup.warAttacks),
+                onChanged: (value) => _toggleType(_NotifGroup.warAttacks, value),
                 onExpandChanged: (expanded) =>
-                    _toggleExpanded('War attacks', expanded),
+                    _toggleExpanded(_NotifGroup.warAttacks, expanded),
                 options: _WarAttackModePicker(
                   selectedModes: _warAttackModes,
                   onChanged: (mode, selected) {
@@ -183,22 +202,22 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               ),
               _NotificationToggleRow(
                 icon: LucideIcons.flag,
-                title: 'War state',
+                title: _NotifGroup.warState,
                 subtitle: 'War matched, battle day started, and war ended.',
-                enabled: _enabledTypes.contains('War state'),
-                onChanged: (value) => _toggleType('War state', value),
+                enabled: _enabledTypes.contains(_NotifGroup.warState),
+                onChanged: (value) => _toggleType(_NotifGroup.warState, value),
               ),
               _NotificationDisclosureRow(
                 icon: LucideIcons.alarmClock,
-                title: 'War reminders',
+                title: _NotifGroup.warReminders,
                 subtitle: 'Custom reminders before war ends.',
-                enabled: _enabledTypes.contains('War reminders'),
+                enabled: _enabledTypes.contains(_NotifGroup.warReminders),
                 expanded: _expandedNotificationOptions.contains(
-                  'War reminders',
+                  _NotifGroup.warReminders,
                 ),
-                onChanged: (value) => _toggleType('War reminders', value),
+                onChanged: (value) => _toggleType(_NotifGroup.warReminders, value),
                 onExpandChanged: (expanded) =>
-                    _toggleExpanded('War reminders', expanded),
+                    _toggleExpanded(_NotifGroup.warReminders, expanded),
                 options: _WarReminderTimingPicker(
                   selectedTimings: _warReminderTimings,
                   onChanged: (timings) {
@@ -213,13 +232,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               ),
               _NotificationDisclosureRow(
                 icon: LucideIcons.calendarDays,
-                title: 'Events',
+                title: _NotifGroup.events,
                 subtitle: 'Clan Games, CWL, Raid Weekend, and season events.',
-                enabled: _enabledTypes.contains('Events'),
-                expanded: _expandedNotificationOptions.contains('Events'),
-                onChanged: (value) => _toggleType('Events', value),
+                enabled: _enabledTypes.contains(_NotifGroup.events),
+                expanded: _expandedNotificationOptions.contains(_NotifGroup.events),
+                onChanged: (value) => _toggleType(_NotifGroup.events, value),
                 onExpandChanged: (expanded) =>
-                    _toggleExpanded('Events', expanded),
+                    _toggleExpanded(_NotifGroup.events, expanded),
                 options: _EventTypePicker(
                   selectedEvents: _eventTypes,
                   onChanged: (event, selected) {
@@ -236,18 +255,18 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               ),
               _NotificationToggleRow(
                 icon: LucideIcons.hammer,
-                title: 'Upgrade finishes',
+                title: _NotifGroup.upgradeFinishes,
                 subtitle:
                     'Troops, heroes, pets, spells, equipment, and buildings.',
-                enabled: _enabledTypes.contains('Upgrade finishes'),
-                onChanged: (value) => _toggleType('Upgrade finishes', value),
+                enabled: _enabledTypes.contains(_NotifGroup.upgradeFinishes),
+                onChanged: (value) => _toggleType(_NotifGroup.upgradeFinishes, value),
               ),
               _NotificationToggleRow(
                 icon: LucideIcons.heartHandshake,
-                title: 'Monthly support',
+                title: _NotifGroup.monthlySupport,
                 subtitle: 'Monthly reminder to support ClashKing.',
-                enabled: _enabledTypes.contains('Monthly support'),
-                onChanged: (value) => _toggleType('Monthly support', value),
+                enabled: _enabledTypes.contains(_NotifGroup.monthlySupport),
+                onChanged: (value) => _toggleType(_NotifGroup.monthlySupport, value),
               ),
             ],
           ),
@@ -424,7 +443,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       NotificationSample(
         id: 'warMatched',
         label: 'War matched',
-        group: 'War state',
+        group: _NotifGroup.warState,
         title: 'War matched',
         body: '$clan matched with Pine Riders. Preparation day started.',
         assetUrl: context.clanBadgeUrl,
@@ -432,7 +451,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       NotificationSample(
         id: 'warStarted',
         label: 'War started',
-        group: 'War state',
+        group: _NotifGroup.warState,
         title: 'Battle day started',
         body: '$clan vs Pine Riders is live. Good luck.',
         assetUrl: ImageAssets.sword,
@@ -440,7 +459,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       NotificationSample(
         id: 'warEnded',
         label: 'War ended',
-        group: 'War state',
+        group: _NotifGroup.warState,
         title: 'War ended',
         body: '$clan 86 - 82 Pine Riders. Final results are available.',
         assetUrl: ImageAssets.warClan,
@@ -449,69 +468,69 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         id: 'warReminder60',
         label: 'War reminder: 1h',
         group: 'Reminders',
-        title: '1 hour left',
-        body: '$player has remaining war attacks. 1 hour left.',
+        title: _Timing.oneHourLeft,
+        body: '$player has remaining war attacks. ${_Timing.oneHourLeft}.',
         assetUrl: ImageAssets.iconClock,
       ),
       NotificationSample(
         id: 'warReminder30',
         label: 'War reminder: 30m',
         group: 'Reminders',
-        title: '30 minutes left',
-        body: '$player has remaining war attacks. 30 minutes left.',
+        title: _Timing.thirtyMin,
+        body: '$player has remaining war attacks. ${_Timing.thirtyMin}.',
         assetUrl: ImageAssets.iconClock,
       ),
       NotificationSample(
         id: 'warReminder15',
         label: 'War reminder: 15m',
         group: 'Reminders',
-        title: '15 minutes left',
-        body: '$player has remaining war attacks. 15 minutes left.',
+        title: _Timing.fifteenMin,
+        body: '$player has remaining war attacks. ${_Timing.fifteenMin}.',
         assetUrl: ImageAssets.iconClock,
       ),
       NotificationSample(
         id: 'clanGamesStarted',
-        label: 'Clan Games',
-        group: 'Events',
-        title: 'Clan Games started',
-        body: '$clan can start earning Clan Games points.',
+        label: _NotifGroup.clanGames,
+        group: _NotifGroup.events,
+        title: '${_NotifGroup.clanGames} started',
+        body: '$clan can start earning ${_NotifGroup.clanGames} points.',
         assetUrl: ImageAssets.clanGamesMedals,
       ),
       NotificationSample(
         id: 'cwlStarted',
-        label: 'CWL started',
-        group: 'Events',
-        title: 'CWL started',
+        label: '${_NotifGroup.cwl} started',
+        group: _NotifGroup.events,
+        title: '${_NotifGroup.cwl} started',
         body: '$clan can begin Clan War League preparation.',
         assetUrl: ImageAssets.cwlSwordsNoBorder,
       ),
       NotificationSample(
         id: 'raidWeekendStarted',
-        label: 'Raid Weekend',
-        group: 'Events',
-        title: 'Raid Weekend started',
+        label: _NotifGroup.raidWeekend,
+        group: _NotifGroup.events,
+        title: '${_NotifGroup.raidWeekend} started',
         body: '$clan can start Capital Raid attacks.',
         assetUrl: ImageAssets.raidAttacks,
       ),
       NotificationSample(
         id: 'seasonStarted',
         label: 'Season start',
-        group: 'Events',
+        group: _NotifGroup.events,
         title: 'New season started',
         body: '$league season has started for $player.',
         assetUrl: context.leagueIconUrl,
       ),
-      NotificationSample(
+      const NotificationSample(
         id: 'specialEventStarted',
         label: 'Special event',
-        group: 'Events',
+        group: _NotifGroup.events,
         title: 'A new event is live',
         body: 'A new Clash event is available.',
         assetUrl: ImageAssets.darkModeLogo,
       ),
-      NotificationSample(
+      const NotificationSample(
         id: 'monthlySupport',
-        label: 'Monthly support',
+        label: _NotifGroup.monthlySupport,
         group: 'Support',
         title: 'Support ClashKing',
         body:
@@ -860,9 +879,9 @@ class _WarReminderTimingPicker extends StatelessWidget {
   static String _timingLabel(String timing) {
     if (timing.endsWith('h')) {
       final hours = int.tryParse(timing.replaceAll('h', '')) ?? 0;
-      return hours == 1 ? '1 hour left' : '$hours hours left';
+      return hours == 1 ? _Timing.oneHourLeft : '$hours hours left';
     }
-    return timing == '30m' ? '30 minutes left' : '15 minutes left';
+    return timing == '30m' ? _Timing.thirtyMin : _Timing.fifteenMin;
   }
 }
 
@@ -930,7 +949,7 @@ class _HourPickerSheetState extends State<_HourPickerSheet> {
                 for (var hour = 1; hour <= 47; hour++)
                   Center(
                     child: Text(
-                      hour == 1 ? '1 hour left' : '$hour hours left',
+                      hour == 1 ? _Timing.oneHourLeft : '$hour hours left',
                     ),
                   ),
               ],
@@ -985,9 +1004,9 @@ class _EventTypePicker extends StatelessWidget {
   final void Function(String event, bool selected) onChanged;
 
   static const _events = [
-    ('Clan Games', ImageAssets.clanGamesMedals),
-    ('CWL', ImageAssets.cwlSwordsNoBorder),
-    ('Raid Weekend', ImageAssets.raidAttacks),
+    (_NotifGroup.clanGames, ImageAssets.clanGamesMedals),
+    (_NotifGroup.cwl, ImageAssets.cwlSwordsNoBorder),
+    (_NotifGroup.raidWeekend, ImageAssets.raidAttacks),
     ('Season starts', ImageAssets.iconGoldPass),
     ('Special events', ImageAssets.darkModeLogo),
   ];
@@ -1232,11 +1251,10 @@ class _AccountPicker extends StatelessWidget {
       final tag = account['player_tag']?.toString() ?? '';
       final profile = profilesByTag[_normalizeTag(tag)];
       final accountName = account['name']?.toString();
+      final String nameFromAccount = accountName?.isNotEmpty == true ? accountName! : tag;
       final name = profile != null && profile.name != 'Unknown'
           ? profile.name
-          : accountName?.isNotEmpty == true
-          ? accountName!
-          : tag;
+          : nameFromAccount;
       final townHall =
           profile?.townHallLevel ?? _parseTownHall(account['townHallLevel']);
       return _AccountOption(tag: tag, name: name, townHallLevel: townHall ?? 1);
@@ -1248,13 +1266,16 @@ class _AccountPicker extends StatelessWidget {
         .where((account) => selectedAccounts.contains(account.tag))
         .take(3)
         .toList();
-    final summary = selectedCount == 0
-        ? (l10n?.notifNoAccountsSelected ?? 'No accounts selected')
-        : selectedCount == 1
-        ? accountOptions
-              .firstWhere((account) => selectedAccounts.contains(account.tag))
-              .name
-        : (l10n?.notifAccountsSelected(selectedCount) ?? '$selectedCount accounts selected');
+    final String summary;
+    if (selectedCount == 0) {
+      summary = l10n?.notifNoAccountsSelected ?? 'No accounts selected';
+    } else if (selectedCount == 1) {
+      summary = accountOptions
+          .firstWhere((account) => selectedAccounts.contains(account.tag))
+          .name;
+    } else {
+      summary = l10n?.notifAccountsSelected(selectedCount) ?? '$selectedCount accounts selected';
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -1728,10 +1749,10 @@ class _NotificationContext {
     required List<Player> profiles,
     required Set<String> selectedAccounts,
   }) {
+    final String? fallbackTag = service.accounts.isNotEmpty ? service.accounts.first : null;
     final preferredTag = selectedAccounts.isNotEmpty
         ? selectedAccounts.first
-        : service.selectedTag ??
-              (service.accounts.isNotEmpty ? service.accounts.first : null);
+        : service.selectedTag ?? fallbackTag;
     final normalizedPreferredTag = _normalizeTag(preferredTag ?? '');
     final matchingProfiles = profiles.where(
       (profile) => _normalizeTag(profile.tag) == normalizedPreferredTag,
@@ -1747,17 +1768,17 @@ class _NotificationContext {
     );
 
     final accountName = account['name']?.toString();
+    final String playerNameFallback = accountName?.isNotEmpty == true ? accountName! : 'Magic Jr.';
     final playerName = profile != null && profile.name != 'Unknown'
         ? profile.name
-        : accountName?.isNotEmpty == true
-        ? accountName!
-        : 'Magic Jr.';
+        : playerNameFallback;
     final playerTag = preferredTag ?? profile?.tag ?? '#2J8V28GV0';
-    final clanName = profile?.clanOverview.name.isNotEmpty == true
-        ? profile!.clanOverview.name
-        : account['clan_name']?.toString().isNotEmpty == true
+    final String clanNameFallback = account['clan_name']?.toString().isNotEmpty == true
         ? account['clan_name'].toString()
         : 'your clan';
+    final clanName = profile?.clanOverview.name.isNotEmpty == true
+        ? profile!.clanOverview.name
+        : clanNameFallback;
     final clanBadgeUrl =
         profile?.clanOverview.badgeUrls.medium.isNotEmpty == true
         ? profile!.clanOverview.badgeUrls.medium
@@ -1773,11 +1794,10 @@ class _NotificationContext {
     final leagueIconUrl = profile?.leagueUrl.isNotEmpty == true
         ? profile!.leagueUrl
         : ImageAssets.legendBlazon;
+    final int? parsedTownHall = _parseTownHall(account['townHallLevel']);
     final townHallLevel = (profile?.townHallLevel ?? 0) > 0
         ? profile!.townHallLevel
-        : _parseTownHall(account['townHallLevel']) != null
-        ? _parseTownHall(account['townHallLevel'])!
-        : 18;
+        : parsedTownHall ?? 18;
     final hero = (profile?.heroes ?? const <PlayerHero>[])
         .where((hero) => hero.isUnlocked)
         .fold<PlayerHero?>(null, (best, hero) {

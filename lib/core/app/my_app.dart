@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
       yearForegroundColor: WidgetStateProperty.all(Colors.white),
       todayForegroundColor: WidgetStateProperty.all(Colors.white),
     ),
-    cardTheme: CardThemeData(
+    cardTheme: const CardThemeData(
       surfaceTintColor: Colors.transparent,
-      color: const Color(0xFF151516),
+      color: Color(0xFF151516),
       elevation: 2.0,
     ),
     snackBarTheme: const SnackBarThemeData(

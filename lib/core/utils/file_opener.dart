@@ -1,6 +1,5 @@
-import 'package:url_launcher/url_launcher.dart';
+import 'package:open_filex/open_filex.dart';
 
 Future<void> openLocalFile(String filePath) async {
-  final uri = Uri.file(filePath);
-  await launchUrl(uri, mode: LaunchMode.externalApplication);
+  await OpenFilex.open(filePath);
 }
