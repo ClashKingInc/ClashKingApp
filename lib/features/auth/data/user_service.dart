@@ -1,7 +1,9 @@
 import 'package:clashkingapp/core/services/api_service.dart';
 
 class UserService {
-  final ApiService _apiService = ApiService();
+  UserService({ApiService? apiService}) : _apiService = apiService ?? ApiService();
+
+  final ApiService _apiService;
 
   Future<Map<String, dynamic>> getClashKingUser() async {
     return await _apiService.get('/auth/me');

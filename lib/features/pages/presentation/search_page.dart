@@ -148,7 +148,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<List<dynamic>> _searchPlayers(String query) async {
     const timeout = Duration(seconds: 10);
-    final normalizedTag = query.replaceFirst('#', '');
+    final normalizedTag = query.replaceFirst('#', '').toUpperCase();
     final isTag = _tagRegExp.hasMatch(normalizedTag);
     final Uri uri;
 

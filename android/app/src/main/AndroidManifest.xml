@@ -2,6 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- open_filex brings in media permissions we don't need — remove them -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove" />
     
     <application
         android:label="ClashKing"
@@ -35,6 +39,11 @@
                 <data android:scheme="clashking" android:host="player" />
                 <data android:scheme="clashking" android:host="clan" />
                 <data android:scheme="clashking" android:host="war" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="clashking" android:host="com.clashking.clashkingapp" android:path="/oauth" />
             </intent-filter>
         </activity>

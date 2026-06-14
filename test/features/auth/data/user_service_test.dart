@@ -6,35 +6,6 @@ import 'package:http/http.dart' as http;
 
 import '../../../helpers/fake_services.dart';
 
-// ---------------------------------------------------------------------------
-// A testable variant of [UserService] that redirects calls through a
-// provided [FakeApiService], since the production class creates its own
-// [ApiService] internally and does not support injection.
-// ---------------------------------------------------------------------------
-
-class _TestableUserService extends UserService {
-  _TestableUserService(this._fakeApi);
-
-  final FakeApiService _fakeApi;
-
-  @override
-  Future<Map<String, dynamic>> getClashKingUser() async {
-    // Delegate through the fake, which honours getStubs/throwOnGet.
-    return _fakeApi.get('/auth/me');
-  }
-
-  @override
-  Future<List<String>> getClashAccounts() async {
-    final response = await _fakeApi.get('/users/coc-accounts');
-
-    if (response.containsKey('accounts') && response['accounts'] is List) {
-      return List<String>.from(response['accounts']);
-    }
-
-    return [];
-  }
-}
-
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +22,7 @@ void main() {
         jsonEncode({'user_id': 'u1', 'discord_username': 'TestUser'}),
         200,
       );
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashKingUser();
       expect(result['user_id'], 'u1');
       expect(result['discord_username'], 'TestUser');
@@ -68,7 +39,7 @@ void main() {
         }),
         200,
       );
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashKingUser();
       expect(result['user_id'], 'abc123');
       expect(result['avatar_url'], 'https://example.com/avatar.png');
@@ -77,7 +48,7 @@ void main() {
     test('throws on 401 response', () async {
       final fakeApi = FakeApiService();
       fakeApi.getStubs['/auth/me'] = http.Response('Unauthorized', 401);
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       await expectLater(
         () => service.getClashKingUser(),
         throwsA(anything),
@@ -87,7 +58,7 @@ void main() {
     test('throws on network error', () async {
       final fakeApi = FakeApiService();
       fakeApi.throwOnGet['/auth/me'] = Exception('Network error');
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       await expectLater(
         () => service.getClashKingUser(),
         throwsA(anything),
@@ -108,7 +79,7 @@ void main() {
         }),
         200,
       );
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashAccounts();
       expect(result, hasLength(3));
       expect(result, containsAll(['#ABC123', '#DEF456', '#GHI789']));
@@ -120,7 +91,7 @@ void main() {
         jsonEncode({'accounts': ['#ONLY1']}),
         200,
       );
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashAccounts();
       expect(result, hasLength(1));
       expect(result.first, '#ONLY1');
@@ -132,7 +103,7 @@ void main() {
         jsonEncode({'other_key': 'value'}),
         200,
       );
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashAccounts();
       expect(result, isEmpty);
     });
@@ -143,7 +114,7 @@ void main() {
         jsonEncode({'accounts': 'not-a-list'}),
         200,
       );
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashAccounts();
       expect(result, isEmpty);
     });
@@ -154,7 +125,7 @@ void main() {
         jsonEncode({'accounts': []}),
         200,
       );
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashAccounts();
       expect(result, isEmpty);
     });
@@ -163,7 +134,7 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.getStubs['/users/coc-accounts'] =
           http.Response(jsonEncode({}), 200);
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       final result = await service.getClashAccounts();
       expect(result, isEmpty);
     });
@@ -172,7 +143,7 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.getStubs['/users/coc-accounts'] =
           http.Response('Unauthorized', 401);
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       await expectLater(
         () => service.getClashAccounts(),
         throwsA(anything),
@@ -182,7 +153,7 @@ void main() {
     test('throws on network error', () async {
       final fakeApi = FakeApiService();
       fakeApi.throwOnGet['/users/coc-accounts'] = Exception('Network error');
-      final service = _TestableUserService(fakeApi);
+      final service = UserService(apiService: fakeApi);
       await expectLater(
         () => service.getClashAccounts(),
         throwsA(anything),
