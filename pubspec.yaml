@@ -47,7 +47,7 @@ dependencies:
   workmanager_platform_interface: ^0.9.1+1
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
-  sentry_flutter: 9.20.0
+  sentry_flutter: 9.22.0
   retry: ^3.1.2
   flutter_secure_storage: ^10.0.0
   collection: ^1.19.1
