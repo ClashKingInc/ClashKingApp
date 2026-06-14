@@ -117,21 +117,17 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         : ImageAssets.lightModeTextLogo);
 
     return PopScope(
-      canPop: !_isFirstConnection,
+      // During first-connection this page may be the root route — allow
+      // immediate pop so the system back gesture / back arrow always works.
+      canPop: _isFirstConnection,
       onPopInvokedWithResult: (didPop, _) async {
         if (didPop) {
           unawaited(_persistAccountOrder(cocService));
           return;
         }
-
-        if (_isFirstConnection) {
-          // Allow back navigation even during first-connection to avoid
-          // trapping users when account addition fails (e.g. network error).
-          if (context.mounted) Navigator.of(context).pop();
-          return;
-        }
-
-        if (!didPop) {
+        // Only reached when !_isFirstConnection (canPop was false):
+        // show a loader while refreshing account data before popping.
+        if (context.mounted) {
           showDialog(
             context: context,
             barrierDismissible: false,
