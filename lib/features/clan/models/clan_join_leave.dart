@@ -19,7 +19,7 @@ class ClanJoinLeave {
       timeStampStart: json['timestamp_start'] ?? 0,
       timeStampEnd: json['timestamp_end'] ?? 0,
       stats: JoinLeaveStats.fromJson(json['stats']),
-      joinLeaveList: (json['join_leave_list'] as List<dynamic>)
+      joinLeaveList: (json['join_leave_list'] as List<dynamic>? ?? [])
           .map((e) => JoinLeaveEvent.fromJson(e))
           .toList(),
     );
@@ -91,7 +91,7 @@ class JoinLeaveStats {
       lastEvent: json['last_event'] ?? "",
       mostMovingHour: json['most_moving_hour'] ?? 0,
       avgTimeBetweenJoinLeave: (json['avg_time_between_join_leave'] as num?)?.toDouble(),
-      mostMovingPlayers: (json['most_moving_players'] as List<dynamic>)
+      mostMovingPlayers: (json['most_moving_players'] as List<dynamic>? ?? [])
           .map((e) => MostActivePlayer.fromJson(e))
           .toList(),
     );
@@ -139,7 +139,7 @@ class JoinLeaveEvent {
     return JoinLeaveEvent(
       type: json['type'] ?? "",
       clan: json['clan'] ?? "",
-      time: DateTime.parse(json['time']),
+      time: DateTime.tryParse(json['time'] ?? '') ?? DateTime(1970),
       tag: json['tag'] ?? "",
       name: json['name'] ?? "",
       th: json['th'] ?? 0,

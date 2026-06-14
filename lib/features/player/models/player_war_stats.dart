@@ -286,11 +286,11 @@ class PlayerWarTypeStats {
       totalDefenses: json['totalDefenses'] ?? 0,
       missedAttacks: json['missedAttacks'] ?? 0,
       missedDefenses: json['missedDefenses'] ?? 0,
-      starsCount: Map<String, int>.from(json['starsCount']),
-      starsCountDef: Map<String, int>.from(json['starsCountDef']),
-      byEnemyTownhall: (json['byEnemyTownhall'] as Map<String, dynamic>).map(
+      starsCount: Map<String, int>.from(json['starsCount'] ?? {}),
+      starsCountDef: Map<String, int>.from(json['starsCountDef'] ?? {}),
+      byEnemyTownhall: ((json['byEnemyTownhall'] as Map<String, dynamic>?) ?? {}).map(
           (key, value) => MapEntry(key, EnemyTownhallStats.fromJson(value))),
-      byEnemyTownhallDef: (json['byEnemyTownhallDef'] as Map<String, dynamic>)
+      byEnemyTownhallDef: ((json['byEnemyTownhallDef'] as Map<String, dynamic>?) ?? {})
           .map((key, value) =>
               MapEntry(key, EnemyTownhallStats.fromJson(value))),
     );

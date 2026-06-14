@@ -15,7 +15,7 @@ class EnemyTownhallStats {
     return EnemyTownhallStats(
       averageStars: (json['averageStars'] as num).toDouble(),
       averageDestruction: (json['averageDestruction'] as num).toDouble(),
-      count: json['count'],
+      count: (json['count'] as num?)?.toInt() ?? 0,
       starsCount: Map<String, int>.from(json['starsCount']),
     );
   }

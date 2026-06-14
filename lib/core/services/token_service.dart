@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class TokenService {
@@ -147,7 +148,17 @@ class TokenService {
         return androidInfo.id;
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
-        return iosInfo.identifierForVendor ?? "unknown-ios-device";
+        final vendorId = iosInfo.identifierForVendor;
+        if (vendorId != null) return vendorId;
+        // identifierForVendor is null when the device hasn't been unlocked
+        // after reboot or under MDM restrictions — fall back to a stable UUID
+        // persisted in the keychain so the same device always gets the same ID.
+        const fallbackKey = 'device_id_fallback';
+        final stored = await _secureStorage.read(key: fallbackKey);
+        if (stored != null) return stored;
+        final generated = const Uuid().v4();
+        await _secureStorage.write(key: fallbackKey, value: generated);
+        return generated;
       } else {
         return "unsupported-platform";
       }

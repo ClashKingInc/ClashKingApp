@@ -2,7 +2,6 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/pages/widgets/player_to_do_card.dart';
 import 'package:clashkingapp/features/pages/widgets/player_war_stats_card.dart';
 import 'package:clashkingapp/features/pages/widgets/utils_creator_code_card.dart';
-import 'package:clashkingapp/features/pages/widgets/player_search_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/pages/widgets/player_card.dart';
 import 'package:clashkingapp/features/pages/widgets/player_legend_card.dart';
@@ -21,7 +20,8 @@ class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   @override
-  Widget build(BuildContext context) { // NOSONAR
+  Widget build(BuildContext context) {
+    // NOSONAR
     final playerService = context.watch<PlayerService>();
     final clanService = context.read<ClanService>();
     final warCwlService = context.read<WarCwlService>();
@@ -37,7 +37,11 @@ class DashboardPage extends StatelessWidget {
             final playerTags = cocService.getAccountTags();
             if (playerTags.isNotEmpty) {
               await cocService.refreshPageData(
-                  playerTags, playerService, clanService, warCwlService);
+                playerTags,
+                playerService,
+                clanService,
+                warCwlService,
+              );
             }
           } catch (e) {
             if (context.mounted) {
@@ -50,10 +54,11 @@ class DashboardPage extends StatelessWidget {
                       onRetry: () async {
                         // Trigger refresh while staying on error page
                         await cocService.refreshPageData(
-                            cocService.getAccountTags(),
-                            playerService,
-                            clanService,
-                            warCwlService);
+                          cocService.getAccountTags(),
+                          playerService,
+                          clanService,
+                          warCwlService,
+                        );
                         // Only pop if refresh succeeds
                         if (context.mounted) {
                           Navigator.of(context).pop();
@@ -66,8 +71,12 @@ class DashboardPage extends StatelessWidget {
                 // Show SnackBar for other errors
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(AppLocalizations.of(context)!
-                          .generalRefreshFailed(e.toString()))),
+                    content: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.generalRefreshFailed(e.toString()),
+                    ),
+                  ),
                 );
               }
             }
@@ -88,24 +97,6 @@ class DashboardPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: CreatorCodeCard(),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (player.legendsBySeason != null &&
-                            player.legendsBySeason!.allSeasons.isNotEmpty) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PlayerLegendScreen(player: player),
-                            ),
-                          );
-                        }
-                      },
-                      child: PlayerSearchCard(),
-                    ),
-                  ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: PlayerCard(),
@@ -114,9 +105,8 @@ class DashboardPage extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PlayerLegendScreen(
-                          player: player,
-                        ),
+                        builder: (context) =>
+                            PlayerLegendScreen(player: player),
                       ),
                     ),
                     child: const Padding(
@@ -132,7 +122,7 @@ class DashboardPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: PlayerWarStatsCard(),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
                 ],
               ),
       ),

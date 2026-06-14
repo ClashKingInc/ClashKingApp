@@ -18,7 +18,7 @@ class PlayerPet extends PlayerItem {
 
   factory PlayerPet.fromJson(Map<String, dynamic> json) {
     return PlayerPet(
-      name: json['name'],
+      name: json['name']?.toString() ?? 'Unknown',
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       village: json['village'] ?? 'home',

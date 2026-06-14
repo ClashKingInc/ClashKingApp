@@ -178,33 +178,6 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> verifyEmail(String verificationToken) async {
-    try {
-      DebugUtils.debugInfo("🔄 Starting email verification process...");
-
-      final response = await _apiService.post('/auth/verify-email', {
-        'token': verificationToken,
-      });
-
-      await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
-      _currentUser = User.fromJson(response['user']);
-      _isAuthenticated = true;
-      _accessToken = response['access_token'];
-
-      DebugUtils.debugSuccess("🔄 Email verification completed successfully");
-      notifyListeners();
-    } catch (e) {
-      DebugUtils.debugError(" Email verification error: $e");
-      throw Exception(
-        _localized(
-          'Email verification failed.',
-          (l10n) => l10n.authErrorEmailVerificationFailed,
-        ),
-      );
-    }
-  }
-
   Future<void> verifyEmailWithCode(String email, String code) async {
     try {
       DebugUtils.debugInfo("🔄 Starting email verification with code...");

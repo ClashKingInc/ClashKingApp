@@ -4,7 +4,7 @@ import 'package:clashkingapp/features/clan/presentation/join_leave/clan_join_lea
 import 'package:clashkingapp/features/clan/presentation/join_leave/clan_join_leave_stats.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 
 class ClanJoinLeaveScreen extends StatefulWidget {
   final Clan clanInfo;
@@ -37,10 +37,9 @@ class ClanJoinLeaveScreenState extends State<ClanJoinLeaveScreen>
               ),
               ScrollableTab(
                 labelColor: Theme.of(context).colorScheme.onSurface,
-                unselectedLabelColor: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.6),
+                unselectedLabelColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.6),
                 tabBarDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                 ),

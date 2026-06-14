@@ -181,34 +181,32 @@ void main() {
 
     test('populates joinLeaveList on 200', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/clans/join-leave?current_season=true'] =
+      // New implementation: GET /clan/:tag/join-leave + /clan/:tag/join-leave/stats
+      final encodedTag = Uri.encodeComponent('#CLAN1');
+      fakeApi.getStubs['/clan/$encodedTag/join-leave?current_season=true'] =
+          http.Response(
+        jsonEncode({'items': [], 'timestamp_start': 0, 'timestamp_end': 0}),
+        200,
+      );
+      fakeApi.getStubs['/clan/$encodedTag/join-leave/stats?current_season=true'] =
           http.Response(
         jsonEncode({
-          'items': [
-            {
-              'clan_tag': '#CLAN1',
-              'timestamp_start': 0,
-              'timestamp_end': 0,
-              'stats': {
-                'total_events': 0,
-                'total_joins': 0,
-                'total_leaves': 0,
-                'unique_players': 0,
-                'moving_players': 0,
-                'players_still_in_clan': 0,
-                'players_left_forever': 0,
-                'rejoined_players': 0,
-                'most_moving_players': [],
-              },
-              'join_leave_list': [],
-            }
-          ]
+          'stats': {
+            'total_events': 0,
+            'total_joins': 0,
+            'total_leaves': 0,
+            'unique_players': 0,
+            'moving_players': 0,
+            'players_still_in_clan': 0,
+            'players_left_forever': 0,
+            'rejoined_players': 0,
+            'most_moving_players': [],
+          }
         }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
-      final result =
-          await service.loadClanJoinLeaveData(['#CLAN1']);
+      final result = await service.loadClanJoinLeaveData(['#CLAN1']);
       expect(result, isNotEmpty);
     });
 

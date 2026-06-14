@@ -20,7 +20,7 @@ class PlayerSuperTroop extends PlayerItem {
 
   factory PlayerSuperTroop.fromJson(Map<String, dynamic> json) {
     return PlayerSuperTroop(
-      name: json['name'],
+      name: json['name']?.toString() ?? 'Unknown',
       level: json['level'] ?? 0,
       maxLevel: json['maxLevel'] ?? 0,
       superTroopIsActive: json['superTroopIsActive'] ?? false,

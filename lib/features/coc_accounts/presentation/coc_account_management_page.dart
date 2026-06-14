@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
@@ -61,8 +63,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         await cocService.updateAccountOrder(playerTags);
       } catch (error) {
         setState(() {
-          _errorMessage =
-              AppLocalizations.of(context)!.accountsErrorFailedToUpdateOrder;
+          _errorMessage = AppLocalizations.of(
+            context,
+          )!.accountsErrorFailedToUpdateOrder;
         });
       }
       _isOrderChanged = false;
@@ -84,7 +87,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         Navigator.of(context).pop();
         setState(() {
           _errorMessage = AppLocalizations.of(context)!.generalRefreshFailed(
-              error.toString().replaceAll('Exception: ', ''));
+            error.toString().replaceAll('Exception: ', ''),
+          );
         });
       }
       return;
@@ -93,11 +97,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     // Navigate to the home page
     if (mounted) {
       Navigator.of(context).pop();
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => MyHomePage(),
-        ),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (context) => const MyHomePage()));
     }
   }
 
@@ -107,23 +109,29 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final userAccounts = cocService.cocAccounts;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    final logoUrl =
-        (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
+    final logoUrl = (isDarkMode
+        ? ImageAssets.darkModeLogo
+        : ImageAssets.lightModeLogo);
     final textLogoUrl = (isDarkMode
         ? ImageAssets.darkModeTextLogo
         : ImageAssets.lightModeTextLogo);
 
     return PopScope(
+      // During first-connection this page may be the root route — allow
+      // immediate pop so the system back gesture / back arrow always works.
       canPop: _isFirstConnection,
       onPopInvokedWithResult: (didPop, _) async {
-        if (!didPop && !_isFirstConnection) {
-          // Act like confirm button when not on welcome screen
+        if (didPop) {
+          unawaited(_persistAccountOrder(cocService));
+          return;
+        }
+        // Only reached when !_isFirstConnection (canPop was false):
+        // show a loader while refreshing account data before popping.
+        if (context.mounted) {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            builder: (_) => const Center(child: CircularProgressIndicator()),
           );
           await _loadAllAccountData();
         }
@@ -140,43 +148,54 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(children: [
-                      SizedBox(
-                        height: 70,
-                        width: 70,
-                        child: CachedNetworkImage(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 70,
+                          width: 70,
+                          child: CachedNetworkImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
-                            imageUrl: logoUrl),
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: 150,
-                        child: CachedNetworkImage(
+                            imageUrl: logoUrl,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: 150,
+                          child: CachedNetworkImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
-                            imageUrl: textLogoUrl),
-                      ),
-                      const SizedBox(height: 32),
-                      if (_isFirstConnection) ...[
-                        Text(AppLocalizations.of(context)!.accountsWelcome,
+                            imageUrl: textLogoUrl,
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                        if (_isFirstConnection) ...[
+                          Text(
+                            AppLocalizations.of(context)!.accountsWelcome,
                             style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center),
-                        Text(
-                            AppLocalizations.of(context)!
-                                .accountsWelcomeMessage,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.accountsWelcomeMessage,
                             style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center),
-                      ] else ...[
-                        Text(AppLocalizations.of(context)!.accountsManageTitle,
+                            textAlign: TextAlign.center,
+                          ),
+                        ] else ...[
+                          Text(
+                            AppLocalizations.of(context)!.accountsManageTitle,
                             style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center),
-                        Text(
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
                             AppLocalizations.of(context)!.authAccountManagement,
                             style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ],
-                    ]),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Expanded(
@@ -190,8 +209,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                 TextField(
                                   controller: _playerTagController,
                                   decoration: InputDecoration(
-                                    labelText: AppLocalizations.of(context)!
-                                        .accountsPlayerTag,
+                                    labelText: AppLocalizations.of(
+                                      context,
+                                    )!.accountsPlayerTag,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16.0),
                                     ),
@@ -206,19 +226,22 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                             ),
                                           )
                                         : IconButton(
-                                            icon: Icon(Icons.add_circle,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
-                                            tooltip:
-                                                AppLocalizations.of(context)!
-                                                    .accountsAdd,
+                                            icon: Icon(
+                                              Icons.add_circle,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                            ),
+                                            tooltip: AppLocalizations.of(
+                                              context,
+                                            )!.accountsAdd,
                                             onPressed: _addAccount,
                                           ),
                                   ),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[a-zA-Z0-9#]')),
+                                      RegExp(r'[a-zA-Z0-9#]'),
+                                    ),
                                   ],
                                 ),
                                 if (_errorMessage.isNotEmpty) ...[
@@ -231,23 +254,26 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                 SizedBox(height: 8),
                                 Row(
                                   children: [
-                                    Icon(Icons.info_outline,
-                                        size: 16,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                    Icon(
+                                      Icons.info_outline,
+                                      size: 16,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                    ),
                                     SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
-                                        AppLocalizations.of(context)!
-                                            .accountsAddInstruction,
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.accountsAddInstruction,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall
                                             ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurface,
                                             ),
                                       ),
                                     ),
@@ -260,11 +286,12 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                               child: userAccounts.isEmpty
                                   ? Center(
                                       child: Text(
-                                        AppLocalizations.of(context)!
-                                            .accountsNoneFound,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.accountsNoneFound,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                     )
                                   : ReorderableListView(
@@ -273,18 +300,22 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                           final item = _tempUserAccounts
                                               .removeAt(oldIndex);
                                           _tempUserAccounts.insert(
-                                              newIndex, item);
+                                            newIndex,
+                                            item,
+                                          );
                                           _isOrderChanged = true;
                                         });
                                       },
                                       children: [
-                                        for (int index = 0;
-                                            index < _tempUserAccounts.length;
-                                            index++)
+                                        for (
+                                          int index = 0;
+                                          index < _tempUserAccounts.length;
+                                          index++
+                                        )
                                           ListTile(
                                             key: ValueKey(
-                                                _tempUserAccounts[index]
-                                                    ["player_tag"]),
+                                              _tempUserAccounts[index]["player_tag"],
+                                            ),
                                             contentPadding: EdgeInsets.zero,
                                             leading: CircleAvatar(
                                               backgroundColor:
@@ -294,55 +325,63 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                     (context, url, error) =>
                                                         Icon(Icons.error),
                                                 imageUrl: ImageAssets.townHall(
-                                                    _tempUserAccounts[index]
-                                                            ["townHallLevel"] ??
-                                                        1),
+                                                  _tempUserAccounts[index]["townHallLevel"] ??
+                                                      1,
+                                                ),
                                               ),
                                             ),
-                                            title: Text(_tempUserAccounts[index]
-                                                    ["name"] ??
-                                                ""),
+                                            title: Text(
+                                              _tempUserAccounts[index]["name"] ??
+                                                  "",
+                                            ),
                                             subtitle: Text(
-                                                _tempUserAccounts[index]
-                                                        ["player_tag"] ??
-                                                    ""),
+                                              _tempUserAccounts[index]["player_tag"] ??
+                                                  "",
+                                            ),
                                             trailing: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 // Verification status with better UX
-                                                if (_tempUserAccounts[index]
-                                                        ["isVerified"] ==
+                                                if (_tempUserAccounts[index]["isVerified"] ==
                                                     true)
                                                   Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 4),
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 4,
+                                                        ),
                                                     decoration: BoxDecoration(
                                                       color: Colors.green
                                                           .withValues(
-                                                              alpha: 0.1),
+                                                            alpha: 0.1,
+                                                          ),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              12),
+                                                            12,
+                                                          ),
                                                       border: Border.all(
-                                                          color: Colors.green
-                                                              .withValues(
-                                                                  alpha: 0.3)),
+                                                        color: Colors.green
+                                                            .withValues(
+                                                              alpha: 0.3,
+                                                            ),
+                                                      ),
                                                     ),
                                                     child: Row(
                                                       mainAxisSize:
                                                           MainAxisSize.min,
                                                       children: [
-                                                        Icon(Icons.verified,
-                                                            color: Colors.green,
-                                                            size: 16),
+                                                        const Icon(
+                                                          Icons.verified,
+                                                          color: Colors.green,
+                                                          size: 16,
+                                                        ),
                                                         const SizedBox(
-                                                            width: 4),
+                                                          width: 4,
+                                                        ),
                                                         Text(
                                                           AppLocalizations.of(
-                                                                  context)!
-                                                              .accountVerified,
+                                                            context,
+                                                          )!.accountVerified,
                                                           style: TextStyle(
                                                             color: Colors.green,
                                                             fontSize: 12,
@@ -355,62 +394,66 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                   )
                                                 else
                                                   InkWell(
-                                                    onTap: () =>
-                                                        _showVerificationDialog(
-                                                      _tempUserAccounts[index]
-                                                          ["player_tag"],
-                                                      _tempUserAccounts[index]
-                                                              ["name"] ??
+                                                    onTap: () => _showVerificationDialog(
+                                                      _tempUserAccounts[index]["player_tag"],
+                                                      _tempUserAccounts[index]["name"] ??
                                                           "Unknown Player",
-                                                      _tempUserAccounts[index][
-                                                              "townHallLevel"] ??
+                                                      _tempUserAccounts[index]["townHallLevel"] ??
                                                           1,
                                                     ),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            12),
+                                                          12,
+                                                        ),
                                                     child: Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 4),
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 8,
+                                                            vertical: 4,
+                                                          ),
                                                       decoration: BoxDecoration(
                                                         color: Colors.orange
                                                             .withValues(
-                                                                alpha: 0.1),
+                                                              alpha: 0.1,
+                                                            ),
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
+                                                            BorderRadius.circular(
+                                                              12,
+                                                            ),
                                                         border: Border.all(
-                                                            color: Colors.orange
-                                                                .withValues(
-                                                                    alpha:
-                                                                        0.3)),
+                                                          color: Colors.orange
+                                                              .withValues(
+                                                                alpha: 0.3,
+                                                              ),
+                                                        ),
                                                       ),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
                                                         children: [
                                                           Icon(
-                                                              Icons
-                                                                  .warning_outlined,
-                                                              color:
-                                                                  Colors.orange,
-                                                              size: 16),
+                                                            Icons
+                                                                .warning_outlined,
+                                                            color:
+                                                                Colors.orange,
+                                                            size: 16,
+                                                          ),
                                                           const SizedBox(
-                                                              width: 4),
+                                                            width: 4,
+                                                          ),
                                                           Text(
                                                             AppLocalizations.of(
-                                                                    context)!
-                                                                .accountVerify,
-                                                            style: const TextStyle(
-                                                              color:
-                                                                  Colors.orange,
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
+                                                              context,
+                                                            )!.accountVerify,
+                                                            style:
+                                                                const TextStyle(
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
                                                           ),
                                                         ],
                                                       ),
@@ -419,8 +462,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                 const SizedBox(width: 8),
                                                 // Drag handle with better visual design
                                                 Container(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
+                                                  padding: const EdgeInsets.all(
+                                                    8,
+                                                  ),
                                                   child: Icon(
                                                     Icons.drag_indicator,
                                                     color: Theme.of(context)
@@ -431,31 +475,30 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                 ),
                                                 // Delete button with confirmation
                                                 IconButton(
-                                                  icon: _deletingPlayerTag == // NOSONAR
-                                                          _tempUserAccounts[
-                                                                  index]
-                                                              ["player_tag"]
+                                                  icon:
+                                                      _deletingPlayerTag == // NOSONAR
+                                                          _tempUserAccounts[index]["player_tag"]
                                                       ? SizedBox(
                                                           height: 24,
                                                           width: 24,
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
+                                                                const EdgeInsets.all(
+                                                                  8.0,
+                                                                ),
                                                             child:
                                                                 CircularProgressIndicator(),
                                                           ),
                                                         )
-                                                      : Icon(Icons.delete,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .primary),
-                                                  onPressed: () =>
-                                                      _removeAccount(
-                                                          _tempUserAccounts[
-                                                                  index]
-                                                              ["player_tag"]),
+                                                      : Icon(
+                                                          Icons.delete,
+                                                          color: Theme.of(
+                                                            context,
+                                                          ).colorScheme.primary,
+                                                        ),
+                                                  onPressed: () => _removeAccount(
+                                                    _tempUserAccounts[index]["player_tag"],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -494,10 +537,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         ? Theme.of(context).colorScheme.surface
                         : null,
                     foregroundColor: userAccounts.isEmpty
-                        ? Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.4)
+                        ? Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.4)
                         : null,
                   ),
                   child: Text(AppLocalizations.of(context)!.generalConfirm),
@@ -508,6 +550,19 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _persistAccountOrder(CocAccountService cocService) async {
+    if (!_isOrderChanged) return;
+    final playerTags = _tempUserAccounts
+        .map((account) => account["player_tag"].toString())
+        .toList();
+    try {
+      await cocService.updateAccountOrder(playerTags);
+      _isOrderChanged = false;
+    } catch (error) {
+      DebugUtils.debugError("Failed to persist account order: $error");
+    }
   }
 
   void _setError(String message) {
@@ -535,14 +590,16 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final cocService = context.read<CocAccountService>();
 
     // Check if the player tag is already in the list
-    if (cocService.cocAccounts
-        .any((account) => account["player_tag"] == playerTag)) {
+    if (cocService.cocAccounts.any(
+      (account) => account["player_tag"] == playerTag,
+    )) {
       _setError(AppLocalizations.of(context)!.accountsErrorAlreadyLinkedToYou);
       return;
     }
 
-    final Map<String, dynamic> response =
-        await cocService.addCocAccount(playerTag);
+    final Map<String, dynamic> response = await cocService.addCocAccount(
+      playerTag,
+    );
 
     if (response["code"] != 200 && mounted) {
       final errorCode = response["code"];
@@ -563,6 +620,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           ),
         );
 
+        if (!mounted) return;
         if (result == true) {
           // Account was successfully verified and added
           setState(() {
@@ -598,8 +656,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       "player_tag": response["account"]["tag"],
       "name": response["account"]["name"],
       "townHallLevel": response["account"]["townHallLevel"] ?? 1,
-      "is_verified": response["account"]["is_verified"] ??
-          false // Default false for security
+      "is_verified":
+          response["account"]["is_verified"] ??
+          false, // Default false for security
     };
 
     // Add the account to the local list
@@ -623,14 +682,18 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     await cocService.removeCocAccount(playerTag);
 
     setState(() {
-      _tempUserAccounts
-          .removeWhere((account) => account["player_tag"] == playerTag);
+      _tempUserAccounts.removeWhere(
+        (account) => account["player_tag"] == playerTag,
+      );
       _deletingPlayerTag = null;
     });
   }
 
   Future<void> _showVerificationDialog(
-      String playerTag, String playerName, int playerTownHall) async {
+    String playerTag,
+    String playerName,
+    int playerTownHall,
+  ) async {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AccountVerificationDialog(
@@ -667,7 +730,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         } catch (e) {
           // Fallback to account data if player not found in PlayerService
           DebugUtils.debugWarning(
-              "⚠️ Player not found in PlayerService for tag: $playerTag, using fallback");
+            "⚠️ Player not found in PlayerService for tag: $playerTag, using fallback",
+          );
           return {
             "player_tag": playerTag,
             "name": account["name"] ?? "Unknown Player",

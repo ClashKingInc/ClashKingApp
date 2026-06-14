@@ -24,7 +24,7 @@ class StartupWidgetState extends State<StartupWidget> {
   @override
   void initState() {
     super.initState();
-    _initAuth();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initAuth());
   }
 
   Future<void> _initAuth() async {

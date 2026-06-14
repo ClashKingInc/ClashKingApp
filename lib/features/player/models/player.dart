@@ -477,7 +477,7 @@ class Player {
             [];
 
     lastOnline = json['last_online'] != null
-        ? DateTime.fromMillisecondsSinceEpoch(json['last_online'] * 1000,
+        ? DateTime.fromMillisecondsSinceEpoch(((json['last_online'] as num) * 1000).toInt(),
             isUtc: true)
         : DateTime.utc(1970, 1, 1);
 

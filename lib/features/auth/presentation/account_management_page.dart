@@ -82,7 +82,12 @@ class AccountManagementPageState extends State<AccountManagementPage> {
         builder: (context, authService, child) {
           final user = authService.currentUser;
           if (user == null) {
-            return Center(child: Text('No user data available'));
+            return Center(
+              child: Text(
+                AppLocalizations.of(context)?.accountNoUserData ??
+                    'No user data available',
+              ),
+            );
           }
 
           return SingleChildScrollView(

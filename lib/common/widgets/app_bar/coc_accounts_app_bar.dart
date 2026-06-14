@@ -12,16 +12,20 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final authService = context.watch<AuthService>();
     final user = authService.currentUser;
+    final canPop = Navigator.of(context).canPop();
 
     return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.logout),
-        tooltip: AppLocalizations.of(context)!.authLogout,
-        onPressed: () async {
-          final authService = context.read<AuthService>();
-          await authService.logout();
-        },
-      ),
+      leading: canPop
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new),
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              onPressed: () => Navigator.of(context).maybePop(),
+            )
+          : IconButton(
+              icon: const Icon(Icons.logout),
+              tooltip: AppLocalizations.of(context)?.authLogout ?? 'Log out',
+              onPressed: () => context.read<AuthService>().logout(),
+            ),
       actions: <Widget>[
         Row(
           children: <Widget>[

@@ -4,14 +4,17 @@ import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 
 class PlayerToDoScreen extends StatefulWidget {
   final List<Player> players;
   final Map<String, WarMemberPresence> memberPresenceMap;
 
-  PlayerToDoScreen(
-      {super.key, required this.players, required this.memberPresenceMap});
+  PlayerToDoScreen({
+    super.key,
+    required this.players,
+    required this.memberPresenceMap,
+  });
 
   @override
   PlayerToDoScreenState createState() => PlayerToDoScreenState();
@@ -35,13 +38,19 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen>
     };
 
     final activePlayers = widget.players
-        .where((player) => player.lastOnline
-            .isAfter(DateTime.now().subtract(const Duration(days: 14))))
+        .where(
+          (player) => player.lastOnline.isAfter(
+            DateTime.now().subtract(const Duration(days: 14)),
+          ),
+        )
         .toList();
 
     final inactivePlayers = widget.players
-        .where((player) => player.lastOnline
-            .isBefore(DateTime.now().subtract(const Duration(days: 14))))
+        .where(
+          (player) => player.lastOnline.isBefore(
+            DateTime.now().subtract(const Duration(days: 14)),
+          ),
+        )
         .toList();
 
     return Scaffold(
@@ -53,34 +62,35 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen>
               memberPresenceMap: widget.memberPresenceMap,
             ),
             ScrollableTab(
-                tabBarDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
+              tabBarDecoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              labelPadding: EdgeInsets.zero,
+              labelStyle: Theme.of(context).textTheme.bodyLarge,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+              onTap: (value) {
+                setState(() {});
+              },
+              tabs: [
+                Tab(text: AppLocalizations.of(context)!.todoAccountsActive),
+                Tab(text: AppLocalizations.of(context)!.todoAccountsInactive),
+              ],
+              children: [
+                PlayerToDoBody(
+                  players: activePlayers,
+                  memberPresenceMap: widget.memberPresenceMap,
+                  filterOptions: filterOptions,
+                  active: true,
                 ),
-                labelColor: Theme.of(context).colorScheme.onSurface,
-                labelPadding: EdgeInsets.zero,
-                labelStyle: Theme.of(context).textTheme.bodyLarge,
-                unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
-                onTap: (value) {
-                  setState(() {});
-                },
-                tabs: [
-                  Tab(text: AppLocalizations.of(context)!.todoAccountsActive),
-                  Tab(text: AppLocalizations.of(context)!.todoAccountsInactive),
-                ],
-                children: [
-                  PlayerToDoBody(
-                    players: activePlayers,
-                    memberPresenceMap: widget.memberPresenceMap,
-                    filterOptions: filterOptions,
-                    active: true,
-                  ),
-                  PlayerToDoBody(
-                    players: inactivePlayers,
-                    memberPresenceMap: widget.memberPresenceMap,
-                    filterOptions: filterOptions,
-                    active: false,
-                  ),
-                ]),
+                PlayerToDoBody(
+                  players: inactivePlayers,
+                  memberPresenceMap: widget.memberPresenceMap,
+                  filterOptions: filterOptions,
+                  active: false,
+                ),
+              ],
+            ),
             SizedBox(height: 8),
           ],
         ),

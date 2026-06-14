@@ -8,7 +8,7 @@ import 'package:clashkingapp/features/player/presentation/legend/widgets/player_
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_chart.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_list.dart';
 import 'package:flutter/material.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/functions/legend_functions.dart';
@@ -24,10 +24,12 @@ class PlayerLegendScreen extends StatefulWidget {
 class _PlayerLegendScreenState extends State<PlayerLegendScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  DateTime selectedDate =
-      DateTime.now().toUtc().subtract(const Duration(hours: 5));
-  DateTime selectedMonth =
-      DateTime.now().toUtc().subtract(const Duration(hours: 5));
+  DateTime selectedDate = DateTime.now().toUtc().subtract(
+    const Duration(hours: 5),
+  );
+  DateTime selectedMonth = DateTime.now().toUtc().subtract(
+    const Duration(hours: 5),
+  );
   bool showBySeasonTable = false;
   bool showHistoryTable = false;
 
@@ -47,17 +49,20 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
   void incrementDate() =>
       setState(() => selectedDate = selectedDate.add(const Duration(days: 1)));
   void decrementDate() => setState(
-      () => selectedDate = selectedDate.subtract(const Duration(days: 1)));
+    () => selectedDate = selectedDate.subtract(const Duration(days: 1)),
+  );
 
-  void incrementMonth() =>
-      setState(() => selectedMonth = selectedMonth.month == 12
-          ? DateTime(selectedMonth.year + 1, 1, 1)
-          : DateTime(selectedMonth.year, selectedMonth.month + 1, 1));
+  void incrementMonth() => setState(
+    () => selectedMonth = selectedMonth.month == 12
+        ? DateTime(selectedMonth.year + 1, 1, 1)
+        : DateTime(selectedMonth.year, selectedMonth.month + 1, 1),
+  );
 
-  void decrementMonth() =>
-      setState(() => selectedMonth = selectedMonth.month == 1
-          ? DateTime(selectedMonth.year - 1, 12, 1)
-          : DateTime(selectedMonth.year, selectedMonth.month - 1, 1));
+  void decrementMonth() => setState(
+    () => selectedMonth = selectedMonth.month == 1
+        ? DateTime(selectedMonth.year - 1, 12, 1)
+        : DateTime(selectedMonth.year, selectedMonth.month - 1, 1),
+  );
 
   void toggleBySeasonView() =>
       setState(() => showBySeasonTable = !showBySeasonTable);
@@ -66,12 +71,13 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
 
   @override
   Widget build(BuildContext context) {
-
     final legends = widget.player.legendsBySeason;
     if (legends == null) {
       return Center(
-        child: Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
-            'No data available'),
+        child: Text(
+          AppLocalizations.of(context)?.generalNoDataAvailable ??
+              'No data available',
+        ),
       );
     }
 
@@ -93,11 +99,19 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                 unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
                 onTap: (_) => setState(() {}),
                 tabs: [
-                  Tab(text: AppLocalizations.of(context)?.statsByDay ?? "By Day"),
                   Tab(
-                      text: AppLocalizations.of(context)?.statsBySeason ??
-                          "By Season"),
-                  Tab(text: AppLocalizations.of(context)?.generalHistory ?? "History"),
+                    text: AppLocalizations.of(context)?.statsByDay ?? "By Day",
+                  ),
+                  Tab(
+                    text:
+                        AppLocalizations.of(context)?.statsBySeason ??
+                        "By Season",
+                  ),
+                  Tab(
+                    text:
+                        AppLocalizations.of(context)?.generalHistory ??
+                        "History",
+                  ),
                 ],
                 children: [
                   LegendByDayTab(player: widget.player),
@@ -114,8 +128,9 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                                   showBySeasonTable
                                       ? Icons.bar_chart
                                       : Icons.table_chart,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                   size: 24,
                                 ),
                                 onPressed: toggleBySeasonView,
@@ -128,31 +143,34 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                                 width: 30,
                                 height: 30,
                                 child: IconButton(
-                                  icon: Icon(Icons.arrow_back,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      size: 16),
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                    size: 16,
+                                  ),
                                   onPressed: decrementMonth,
                                 ),
                               ),
                               Text(
                                 DateFormat(
-                                        'MMMM yyyy',
-                                        Localizations.localeOf(context)
-                                            .languageCode)
-                                    .format(selectedMonth),
+                                  'MMMM yyyy',
+                                  Localizations.localeOf(context).languageCode,
+                                ).format(selectedMonth),
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               SizedBox(
                                 width: 30,
                                 height: 30,
                                 child: IconButton(
-                                  icon: Icon(Icons.arrow_forward,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      size: 16),
+                                  icon: Icon(
+                                    Icons.arrow_forward,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                    size: 16,
+                                  ),
                                   onPressed: incrementMonth,
                                 ),
                               ),
@@ -162,14 +180,17 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                         ],
                       ),
                       LegendSeason(
-                          player: widget.player,
-                          season: legends.getSpecificSeason(selectedMonth)),
+                        player: widget.player,
+                        season: legends.getSpecificSeason(selectedMonth),
+                      ),
                       showBySeasonTable
                           ? PlayerLegendSeasonList(
                               player: widget.player,
-                              season: legends.getSpecificSeason(selectedMonth))
+                              season: legends.getSpecificSeason(selectedMonth),
+                            )
                           : LegendSeasonChart(
-                              season: legends.getSpecificSeason(selectedMonth))
+                              season: legends.getSpecificSeason(selectedMonth),
+                            ),
                     ],
                   ),
                   Column(
@@ -192,9 +213,11 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                       PlayerLegendHistory(player: widget.player),
                       showHistoryTable
                           ? PlayerLegendHistoryEosList(
-                              rankings: widget.player.legendRanking)
+                              rankings: widget.player.legendRanking,
+                            )
                           : PlayerLegendHistoryEosChart(
-                              rankings: widget.player.legendRanking),
+                              rankings: widget.player.legendRanking,
+                            ),
                     ],
                   ),
                 ],

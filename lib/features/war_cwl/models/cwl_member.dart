@@ -61,9 +61,9 @@ class CwlMember {
       DebugUtils.debugInfo("🔍 Stats structure: ${json['stats']}");
       
       return CwlMember(
-          tag: json['tag'],
-          name: json['name'],
-          townhallLevel: json['townHallLevel'],
+          tag: json['tag']?.toString() ?? '',
+          name: json['name']?.toString() ?? '',
+          townhallLevel: (json['townHallLevel'] as num?)?.toInt() ?? 0,
           avgMapPosition: json['avgMapPosition']?.toDouble(),
           avgOpponentPosition: json['avgOpponentPosition']?.toDouble(),
           avgAttackOrder: json['avgAttackOrder']?.toDouble(),

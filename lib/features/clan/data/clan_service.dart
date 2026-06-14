@@ -16,6 +16,18 @@ class ClanService extends ChangeNotifier {
   ClanService({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
 
+  bool _disposed = false;
+
+  void _safeNotify() {
+    if (!_disposed) notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
   final ApiService _apiService;
   final Map<String, Clan> _clans = {};
   List<Clan> fetchedClans = [];
@@ -40,7 +52,7 @@ class ClanService extends ChangeNotifier {
 
     _isLoading = true;
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
 
     try {
@@ -95,7 +107,7 @@ class ClanService extends ChangeNotifier {
     } finally {
       _isLoading = false;
       if (notify) {
-        notifyListeners();
+        _safeNotify();
       }
     }
   }
@@ -106,7 +118,7 @@ class ClanService extends ChangeNotifier {
     }
 
     _isLoading = true;
-    notifyListeners();
+    _safeNotify();
 
     try {
       DebugUtils.debugApi("Loading clan data for tag: $clanTag");
@@ -135,7 +147,7 @@ class ClanService extends ChangeNotifier {
       rethrow;
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotify();
     }
   }
 
@@ -179,41 +191,22 @@ class ClanService extends ChangeNotifier {
 
     _isLoading = true;
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
 
     try {
       DebugUtils.debugApi("Loading clan join/leave data for tags: $clanTags");
-      final response = await _apiService.postResponse(
-        '/clans/join-leave?current_season=true',
-        body: {"clan_tags": clanTags},
-        requiresAuth: true,
+
+      // The old bulk POST /clans/join-leave doesn't exist in the Go API.
+      // Call GET /clan/:tag/join-leave and /clan/:tag/join-leave/stats in
+      // parallel for each clan, then combine into ClanJoinLeave objects.
+      final results = await Future.wait(
+        clanTags.map((tag) => _fetchSingleClanJoinLeave(tag)),
       );
 
-      if (response.statusCode == 200) {
-        final responseBody = ApiService.decodeResponseBody(response);
-        final data = jsonDecode(responseBody);
-        if (data.containsKey("items") && data["items"] is List) {
-          joinLeaveList = (data["items"] as List)
-              .whereType<Map<String, dynamic>>()
-              .map((clan) => ClanJoinLeave.fromJson(clan))
-              .toList();
-        } else {
-          Sentry.captureMessage("$_errLoadingClanData: $data",
-              level: SentryLevel.error);
-        }
-
-        return joinLeaveList;
-      } else {
-        Sentry.captureMessage(_errLoadingClanData,
-            level: SentryLevel.error);
-        if (throwOnError) {
-          throw HttpException(
-            "Failed to load clan join/leave data (${response.statusCode})",
-            uri: response.request?.url,
-          );
-        }
-      }
+      joinLeaveList =
+          results.whereType<ClanJoinLeave>().toList();
+      return joinLeaveList;
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("$_errLoadingClanData: $e");
@@ -223,11 +216,72 @@ class ClanService extends ChangeNotifier {
     } finally {
       _isLoading = false;
       if (notify) {
-        notifyListeners();
+        _safeNotify();
       }
     }
 
     return List<ClanJoinLeave>.empty();
+  }
+
+  Future<ClanJoinLeave?> _fetchSingleClanJoinLeave(String tag) async {
+    final encodedTag = Uri.encodeComponent(tag);
+    final base = '/clan/$encodedTag/join-leave';
+
+    try {
+      final responses = await Future.wait([
+        _apiService.getResponse(
+          '$base?current_season=true',
+          requiresAuth: true,
+        ),
+        _apiService.getResponse(
+          '$base/stats?current_season=true',
+          requiresAuth: true,
+        ),
+      ]);
+
+      final eventsResponse = responses[0];
+      final statsResponse = responses[1];
+
+      if (eventsResponse.statusCode != 200 || statsResponse.statusCode != 200) {
+        DebugUtils.debugWarning(
+          "⚠️ Join-leave fetch failed for $tag "
+          "(events: ${eventsResponse.statusCode}, stats: ${statsResponse.statusCode})",
+        );
+        return null;
+      }
+
+      final eventsData =
+          jsonDecode(ApiService.decodeResponseBody(eventsResponse))
+              as Map<String, dynamic>;
+      final statsData =
+          jsonDecode(ApiService.decodeResponseBody(statsResponse))
+              as Map<String, dynamic>;
+
+      // Go v2 uses event_type/player_tag/player_name/townhall_level.
+      // Map to the field names ClanJoinLeave.fromJson / JoinLeaveEvent.fromJson expect.
+      final items = (eventsData['items'] as List<dynamic>? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => <String, dynamic>{
+                'type': e['event_type'] ?? '',
+                'clan': tag,
+                'time': e['time'] ?? '',
+                'tag': e['player_tag'] ?? '',
+                'name': e['player_name'] ?? '',
+                'th': (e['townhall_level'] as num?)?.toInt() ?? 0,
+              })
+          .toList();
+
+      return ClanJoinLeave.fromJson({
+        'clan_tag': tag,
+        'timestamp_start': eventsData['timestamp_start'] ?? 0,
+        'timestamp_end': eventsData['timestamp_end'] ?? 0,
+        'stats': statsData['stats'] ?? {},
+        'join_leave_list': items,
+      });
+    } catch (e) {
+      DebugUtils.debugError("Join-leave fetch error for $tag: $e");
+      return null;
+    }
   }
 
   void linkJoinLeaveToClans() {
@@ -250,7 +304,7 @@ class ClanService extends ChangeNotifier {
     List<CapitalHistoryItems> history = [];
     _isLoading = true;
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
 
     try {
@@ -300,7 +354,7 @@ class ClanService extends ChangeNotifier {
     } finally {
       _isLoading = false;
       if (notify) {
-        notifyListeners();
+        _safeNotify();
       }
     }
   }
@@ -429,13 +483,12 @@ class ClanService extends ChangeNotifier {
       ...filter.toJson(),
     };
 
-    final response = await _apiService.postResponse(
-      '/war/clans/warhits',
-      body: requestBody,
-      requiresAuth: true,
-    );
-
     try {
+      final response = await _apiService.postResponse(
+        '/war/clans/warhits',
+        body: requestBody,
+        requiresAuth: true,
+      );
       if (response.statusCode == 200) {
         final responseBody = ApiService.decodeResponseBody(response);
         final data = jsonDecode(responseBody);
@@ -605,11 +658,11 @@ class ClanService extends ChangeNotifier {
 
     DebugUtils.debugSuccess("Processed all bulk clan data");
     if (notify) {
-      notifyListeners();
+      _safeNotify();
     }
   }
 
   void notifyDataChanged() {
-    notifyListeners();
+    _safeNotify();
   }
 }

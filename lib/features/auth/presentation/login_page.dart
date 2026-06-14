@@ -620,7 +620,7 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
   @override
   void initState() {
     super.initState();
-    _initPostAuth();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initPostAuth());
   }
 
   Future<void> _initPostAuth() async {

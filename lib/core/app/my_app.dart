@@ -22,9 +22,9 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: const Color.fromARGB(255, 61, 60, 60),
+    scaffoldBackgroundColor: const Color(0xFF030304),
     datePickerTheme: DatePickerThemeData(
-      backgroundColor: const Color.fromARGB(255, 61, 60, 60),
+      backgroundColor: const Color(0xFF0B0B0C),
       surfaceTintColor: Colors.transparent,
       headerForegroundColor: Colors.white,
       headerBackgroundColor: const Color(0xFFD90709),
@@ -32,17 +32,14 @@ class MyApp extends StatelessWidget {
       yearForegroundColor: WidgetStateProperty.all(Colors.white),
       todayForegroundColor: WidgetStateProperty.all(Colors.white),
     ),
-    cardTheme: CardThemeData(
+    cardTheme: const CardThemeData(
       surfaceTintColor: Colors.transparent,
-      color: const Color.fromARGB(255, 31, 31, 31).withValues(alpha: 1.0),
+      color: Color(0xFF151516),
       elevation: 2.0,
     ),
     snackBarTheme: const SnackBarThemeData(
-      backgroundColor: Color.fromARGB(255, 31, 31, 31),
-      contentTextStyle: TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
+      backgroundColor: Color(0xFF151516),
+      contentTextStyle: TextStyle(color: Colors.white, fontSize: 16),
     ),
     canvasColor: Colors.transparent,
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -58,9 +55,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -85,11 +80,11 @@ class MyApp extends StatelessWidget {
       ),
     ),
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 31, 31, 31),
+      seedColor: const Color(0xFF0B0B0C),
       primary: const Color(0xFFD90709),
       secondary: const Color.fromARGB(255, 2, 108, 194),
       tertiary: Colors.grey,
-      surface: const Color.fromARGB(255, 31, 31, 31),
+      surface: const Color(0xFF0B0B0C),
       error: const Color.fromARGB(255, 255, 0, 0),
       onPrimary: const Color(0xFFFFFFFF),
       onSecondary: const Color(0xFFFFFFFF),
@@ -99,15 +94,60 @@ class MyApp extends StatelessWidget {
     ),
     brightness: Brightness.dark,
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      bodyMedium: TextStyle(color: Colors.white, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      bodySmall: TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      titleLarge: TextStyle(color: Colors.white, fontSize: 24, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      titleMedium: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      titleSmall: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      labelLarge: TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      labelMedium: TextStyle(color: Colors.white, fontSize: 10, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      labelSmall: TextStyle(color: Colors.white, fontSize: 8, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+      bodyLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      bodyMedium: TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      bodySmall: TextStyle(
+        color: Colors.white,
+        fontSize: 12,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      titleLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      titleMedium: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      labelLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 12,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      labelMedium: TextStyle(
+        color: Colors.white,
+        fontSize: 10,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      labelSmall: TextStyle(
+        color: Colors.white,
+        fontSize: 8,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
     ),
   );
 
@@ -130,10 +170,7 @@ class MyApp extends StatelessWidget {
     ),
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: Colors.white,
-      contentTextStyle: TextStyle(
-        color: Colors.black,
-        fontSize: 16,
-      ),
+      contentTextStyle: TextStyle(color: Colors.black, fontSize: 16),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -148,9 +185,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -190,15 +225,60 @@ class MyApp extends StatelessWidget {
       brightness: Brightness.light,
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      bodyMedium: TextStyle(color: Colors.black, fontSize: 14, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      bodySmall: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      titleLarge: TextStyle(color: Colors.black, fontSize: 24, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      titleMedium: TextStyle(color: Colors.black, fontSize: 20, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      titleSmall: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      labelLarge: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      labelMedium: TextStyle(color: Colors.black, fontSize: 10, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
-      labelSmall: TextStyle(color: Colors.black, fontSize: 8, fontFamily: 'Roboto', fontWeight: FontWeight.w500),
+      bodyLarge: TextStyle(
+        color: Colors.black,
+        fontSize: 16,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      bodyMedium: TextStyle(
+        color: Colors.black,
+        fontSize: 14,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      bodySmall: TextStyle(
+        color: Colors.black,
+        fontSize: 12,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      titleLarge: TextStyle(
+        color: Colors.black,
+        fontSize: 24,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      titleMedium: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: TextStyle(
+        color: Colors.black,
+        fontSize: 18,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      labelLarge: TextStyle(
+        color: Colors.black,
+        fontSize: 12,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      labelMedium: TextStyle(
+        color: Colors.black,
+        fontSize: 10,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
+      labelSmall: TextStyle(
+        color: Colors.black,
+        fontSize: 8,
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+      ),
     ),
   );
 

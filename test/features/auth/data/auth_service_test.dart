@@ -249,42 +249,6 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
-  // verifyEmail
-  // ---------------------------------------------------------------------------
-
-  group('AuthService — verifyEmail (success)', () {
-    test('sets isAuthenticated = true', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/verify-email'] = http.Response(
-        jsonEncode({
-          'access_token': 'acc',
-          'refresh_token': 'ref',
-          'user': userJson(),
-        }),
-        200,
-      );
-      final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
-      await service.verifyEmail('TOKEN123');
-      expect(service.isAuthenticated, isTrue);
-    });
-
-    test('throws on error', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/verify-email'] =
-          http.Response('bad token', 400);
-      final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
-      await expectLater(
-        () => service.verifyEmail('BAD'),
-        throwsA(isA<Exception>()),
-      );
-    });
-  });
-
-  // ---------------------------------------------------------------------------
   // registerWithEmail
   // ---------------------------------------------------------------------------
 

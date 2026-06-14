@@ -10,10 +10,10 @@ import 'package:clashkingapp/features/player/presentation/war_stats/player_war_s
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_header.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_filter_dialog.dart';
 import 'package:clashkingapp/features/player/services/player_war_export_service.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:clashkingapp/core/utils/file_opener.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:scrollable_tab_view/scrollable_tab_view.dart';
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:provider/provider.dart';
 
 class PlayerWarStatsScreen extends StatefulWidget {
@@ -77,6 +77,7 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         await _applyFilters(_currentFilter);
       }
 
+      if (!mounted) return;
       setState(() {
         // Update the widget's player data would require parent state management
         // For now, we'll just refresh the filtered data
@@ -84,9 +85,12 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Data refreshed successfully'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)?.warStatsRefreshSuccess ??
+                  'Data refreshed successfully',
+            ),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -94,7 +98,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to refresh data: ${e.toString()}'),
+            content: Text(
+              AppLocalizations.of(context)?.warStatsRefreshFailed(e.toString()) ??
+                  'Failed to refresh data: ${e.toString()}',
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -155,297 +162,301 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
 
                         // Skeleton loading for attack cards
                         ...List.generate(
-                            3, (index) => const WarStatsSkeletonCard()),
+                          3,
+                          (index) => const WarStatsSkeletonCard(),
+                        ),
                       ],
                     )
                   : _hasAppliedFilters && _filteredWarStats == null
-                      ? _buildNoFilteredResultsWidget()
-                      : _displayedWarStats != null
-                          ? Column(
+                  ? _buildNoFilteredResultsWidget()
+                  : _displayedWarStats != null
+                  ? Column(
+                      children: [
+                        ScrollableTab(
+                          tabBarDecoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
+                          labelColor: Theme.of(context).colorScheme.onSurface,
+                          labelPadding: EdgeInsets.zero,
+                          labelStyle: Theme.of(context).textTheme.bodyLarge,
+                          unselectedLabelColor: Theme.of(
+                            context,
+                          ).colorScheme.onSurface,
+                          onTap: (value) {
+                            setState(() {});
+                          },
+                          tabs: [
+                            Tab(
+                              text: AppLocalizations.of(context)!.generalStats,
+                            ),
+                            Tab(
+                              text: AppLocalizations.of(
+                                context,
+                              )!.generalDetails,
+                            ),
+                            Tab(
+                              text: AppLocalizations.of(context)!.generalCharts,
+                            ),
+                          ],
+                          children: [
+                            Column(
                               children: [
-                                ScrollableTab(
-                                  tabBarDecoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.surface,
+                                // Filter bandeau under tabs
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(12.0),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 8.0,
+                                    vertical: 8.0,
                                   ),
-                                  labelColor:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  labelPadding: EdgeInsets.zero,
-                                  labelStyle:
-                                      Theme.of(context).textTheme.bodyLarge,
-                                  unselectedLabelColor:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  onTap: (value) {
-                                    setState(() {});
-                                  },
-                                  tabs: [
-                                    Tab(
-                                        text: AppLocalizations.of(context)!
-                                            .generalStats),
-                                    Tab(
-                                        text: AppLocalizations.of(context)!
-                                            .generalDetails),
-                                    Tab(
-                                        text: AppLocalizations.of(context)!
-                                            .generalCharts),
-                                  ],
-                                  children: [
-                                    Column(
-                                      children: [
-                                        // Filter bandeau under tabs
-                                        Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.all(12.0),
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 8.0),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            border: Border.all(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline
-                                                  .withValues(alpha: 0.3),
-                                            ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                _hasAppliedFilters
-                                                    ? Icons.filter_alt
-                                                    : Icons.info_outline,
-                                                size: 16,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  _hasAppliedFilters
-                                                      ? _getFilterSummary()
-                                                      : AppLocalizations.of(
-                                                                  context)
-                                                              ?.filtersShowingDefaultData(
-                                                                  _currentFilter
-                                                                      .limit) ??
-                                                          'Showing last ${_currentFilter.limit} wars (default)',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall
-                                                      ?.copyWith(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurface,
-                                                      ),
-                                                ),
-                                              ),
-                                              if (_hasAppliedFilters)
-                                                IconButton(
-                                                  icon: Icon(
-                                                    Icons.close,
-                                                    size: 16,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurface,
-                                                  ),
-                                                  onPressed: _clearFilters,
-                                                ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  Icons.tune,
-                                                  size: 16,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                ),
-                                                onPressed: _showFilterDialog,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        WarStatsView(
-                                          warStats: _displayedWarStats,
-                                          filterTypes: _getSelectedTypes(),
-                                          currentSeasonDate: DateTime.now(),
-                                          warDataLimit: 0,
-                                        ),
-                                      ],
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline
+                                          .withValues(alpha: 0.3),
                                     ),
-                                    Column(
-                                      children: [
-                                        // Filter bandeau under tabs
-                                        Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.all(12.0),
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 8.0),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            border: Border.all(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline
-                                                  .withValues(alpha: 0.3),
-                                            ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                _hasAppliedFilters
-                                                    ? Icons.filter_alt
-                                                    : Icons.info_outline,
-                                                size: 16,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        _hasAppliedFilters
+                                            ? Icons.filter_alt
+                                            : Icons.info_outline,
+                                        size: 16,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _hasAppliedFilters
+                                              ? _getFilterSummary()
+                                              : AppLocalizations.of(
+                                                      context,
+                                                    )?.filtersShowingDefaultData(
+                                                      _currentFilter.limit,
+                                                    ) ??
+                                                    'Showing last ${_currentFilter.limit} wars (default)',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
                                               ),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  _hasAppliedFilters
-                                                      ? _getFilterSummary()
-                                                      : AppLocalizations.of(
-                                                                  context)
-                                                              ?.filtersShowingDefaultData(
-                                                                  _currentFilter
-                                                                      .limit) ??
-                                                          'Showing last ${_currentFilter.limit} wars (default)',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall
-                                                      ?.copyWith(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurface,
-                                                      ),
-                                                ),
-                                              ),
-                                              if (_hasAppliedFilters)
-                                                IconButton(
-                                                  icon: Icon(
-                                                    Icons.close,
-                                                    size: 16,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurface,
-                                                  ),
-                                                  onPressed: _clearFilters,
-                                                ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  Icons.tune,
-                                                  size: 16,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                ),
-                                                onPressed: _showFilterDialog,
-                                              ),
-                                            ],
-                                          ),
                                         ),
-                                        PlayerWarAttacksTab(
-                                          wars: _filteredWars,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        // Filter bandeau under tabs
-                                        Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.all(12.0),
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 8.0),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            border: Border.all(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline
-                                                  .withValues(alpha: 0.3),
-                                            ),
+                                      ),
+                                      if (_hasAppliedFilters)
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.close,
+                                            size: 16,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
                                           ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                _hasAppliedFilters
-                                                    ? Icons.filter_alt
-                                                    : Icons.info_outline,
-                                                size: 16,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  _hasAppliedFilters
-                                                      ? _getFilterSummary()
-                                                      : AppLocalizations.of(
-                                                                  context)
-                                                              ?.filtersShowingDefaultData(
-                                                                  _currentFilter
-                                                                      .limit) ??
-                                                          'Showing last ${_currentFilter.limit} wars (default)',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall
-                                                      ?.copyWith(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurface,
-                                                      ),
-                                                ),
-                                              ),
-                                              if (_hasAppliedFilters)
-                                                IconButton(
-                                                  icon: Icon(
-                                                    Icons.close,
-                                                    size: 16,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurface,
-                                                  ),
-                                                  onPressed: _clearFilters,
-                                                ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  Icons.tune,
-                                                  size: 16,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                ),
-                                                onPressed: _showFilterDialog,
-                                              ),
-                                            ],
-                                          ),
+                                          onPressed: _clearFilters,
                                         ),
-                                        _buildPerformanceChartsTab(),
-                                      ],
-                                    ),
-                                  ],
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.tune,
+                                          size: 16,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                        onPressed: _showFilterDialog,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                WarStatsView(
+                                  warStats: _displayedWarStats,
+                                  filterTypes: _getSelectedTypes(),
+                                  currentSeasonDate: DateTime.now(),
+                                  warDataLimit: 0,
                                 ),
                               ],
-                            )
-                          : Center(
-                              child: Text(AppLocalizations.of(context)
-                                      ?.generalNoDataAvailable ??
-                                  'No data'),
                             ),
+                            Column(
+                              children: [
+                                // Filter bandeau under tabs
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(12.0),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 8.0,
+                                    vertical: 8.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline
+                                          .withValues(alpha: 0.3),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        _hasAppliedFilters
+                                            ? Icons.filter_alt
+                                            : Icons.info_outline,
+                                        size: 16,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _hasAppliedFilters
+                                              ? _getFilterSummary()
+                                              : AppLocalizations.of(
+                                                      context,
+                                                    )?.filtersShowingDefaultData(
+                                                      _currentFilter.limit,
+                                                    ) ??
+                                                    'Showing last ${_currentFilter.limit} wars (default)',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
+                                              ),
+                                        ),
+                                      ),
+                                      if (_hasAppliedFilters)
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.close,
+                                            size: 16,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                          ),
+                                          onPressed: _clearFilters,
+                                        ),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.tune,
+                                          size: 16,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                        onPressed: _showFilterDialog,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                PlayerWarAttacksTab(wars: _filteredWars),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                // Filter bandeau under tabs
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(12.0),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 8.0,
+                                    vertical: 8.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline
+                                          .withValues(alpha: 0.3),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        _hasAppliedFilters
+                                            ? Icons.filter_alt
+                                            : Icons.info_outline,
+                                        size: 16,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _hasAppliedFilters
+                                              ? _getFilterSummary()
+                                              : AppLocalizations.of(
+                                                      context,
+                                                    )?.filtersShowingDefaultData(
+                                                      _currentFilter.limit,
+                                                    ) ??
+                                                    'Showing last ${_currentFilter.limit} wars (default)',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
+                                              ),
+                                        ),
+                                      ),
+                                      if (_hasAppliedFilters)
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.close,
+                                            size: 16,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                          ),
+                                          onPressed: _clearFilters,
+                                        ),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.tune,
+                                          size: 16,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                        onPressed: _showFilterDialog,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                _buildPerformanceChartsTab(),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Center(
+                      child: Text(
+                        AppLocalizations.of(context)?.generalNoDataAvailable ??
+                            'No data',
+                      ),
+                    ),
             ],
           ),
         ),
@@ -476,8 +487,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(AppLocalizations.of(context)?.exportTitle ??
-                  'Export War Statistics'),
+              child: Text(
+                AppLocalizations.of(context)?.exportTitle ??
+                    'Export War Statistics',
+              ),
             ),
           ],
         ),
@@ -515,8 +528,9 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child:
-                Text(AppLocalizations.of(context)?.generalCancel ?? 'Cancel'),
+            child: Text(
+              AppLocalizations.of(context)?.generalCancel ?? 'Cancel',
+            ),
           ),
           ElevatedButton.icon(
             onPressed: () {
@@ -524,8 +538,9 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
               _performExport();
             },
             icon: const Icon(Icons.download),
-            label:
-                Text(AppLocalizations.of(context)?.generalExport ?? 'Export'),
+            label: Text(
+              AppLocalizations.of(context)?.generalExport ?? 'Export',
+            ),
           ),
         ],
       ),
@@ -562,7 +577,12 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
               children: [
                 Icon(Icons.error, color: Colors.white, size: 20),
                 const SizedBox(width: 12),
-                Expanded(child: Text('Failed to load filtered data: $e')),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)?.warStatsFilterFailed(e.toString()) ??
+                        'Failed to load filtered data: $e',
+                  ),
+                ),
               ],
             ),
             backgroundColor: Colors.red,
@@ -641,10 +661,9 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
             Icon(
               Icons.filter_alt_off,
               size: 64,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withValues(alpha: 0.4),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.4),
             ),
             const SizedBox(height: 16),
 
@@ -652,12 +671,11 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
             Text(
               AppLocalizations.of(context)!.generalNoFilteredResults,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.8),
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.8),
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
@@ -666,11 +684,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
             Text(
               AppLocalizations.of(context)!.generalAdjustFilters,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.7),
-                  ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -680,10 +697,9 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
               Container(
                 padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primaryContainer
-                      .withValues(alpha: 0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(
                     color: Theme.of(context).colorScheme.primaryContainer,
@@ -703,10 +719,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                       child: Text(
                         _getFilterSummary(),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer,
-                            ),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onPrimaryContainer,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -724,8 +740,9 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                 ElevatedButton.icon(
                   onPressed: _clearFilters,
                   icon: const Icon(Icons.clear),
-                  label:
-                      Text(AppLocalizations.of(context)!.generalClearFilters),
+                  label: Text(
+                    AppLocalizations.of(context)!.generalClearFilters,
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -758,12 +775,11 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.7),
-                  ),
+                fontWeight: FontWeight.w600,
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -771,8 +787,8 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
             child: Text(
               value,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
         ],
@@ -796,8 +812,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text(AppLocalizations.of(context)?.exportGenerating ??
-                  'Generating export...'),
+              Text(
+                AppLocalizations.of(context)?.exportGenerating ??
+                    'Generating export...',
+              ),
             ],
           ),
           duration: const Duration(seconds: 30),
@@ -831,24 +849,25 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(AppLocalizations.of(context)?.exportSuccess ??
-                'Export successful!'),
+            Text(
+              AppLocalizations.of(context)?.exportSuccess ??
+                  'Export successful!',
+            ),
             const SizedBox(height: 4),
             Text(
               'Saved to: $filePath',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.8),
-                  ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.8),
+              ),
             ),
           ],
         ),
         action: SnackBarAction(
           label: AppLocalizations.of(context)?.generalOpen ?? 'Open',
           textColor: Theme.of(context).colorScheme.primary,
-          onPressed: () => OpenFilex.open(filePath),
+          onPressed: () => openLocalFile(filePath),
         ),
         duration: const Duration(seconds: 6),
       ),
@@ -858,7 +877,10 @@ class _PlayerWarStatsScreenState extends State<PlayerWarStatsScreen> {
   void _showExportError(String error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Export failed: $error'),
+        content: Text(
+          AppLocalizations.of(context)?.warStatsExportFailed(error) ??
+              'Export failed: $error',
+        ),
         backgroundColor: Theme.of(context).colorScheme.error,
       ),
     );

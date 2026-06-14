@@ -1,18 +1,16 @@
 import 'package:clashkingapp/core/services/api_service.dart';
 
 class UserService {
-  final ApiService _apiService = ApiService();
+  UserService({ApiService? apiService}) : _apiService = apiService ?? ApiService();
+
+  final ApiService _apiService;
 
   Future<Map<String, dynamic>> getClashKingUser() async {
     return await _apiService.get('/auth/me');
   }
 
-  Future<Map<String, dynamic>> getDiscordProfile() async {
-    return await _apiService.get('/discord/me');
-  }
-
   Future<List<String>> getClashAccounts() async {
-    final response = await _apiService.get('/user/clash-accounts');
+    final response = await _apiService.get('/users/coc-accounts');
 
     if (response.containsKey('accounts') && response['accounts'] is List) {
       return List<String>.from(response['accounts']);

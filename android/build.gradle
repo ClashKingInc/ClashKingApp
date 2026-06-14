@@ -26,16 +26,31 @@ allprojects {
 }
 
 rootProject.buildDir = '../build'
-subprojects {
+subprojects { project ->
     project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+
+subprojects { project ->
+    if (project.name == 'home_widget') {
+        project.plugins.withId('com.android.library') {
+            project.plugins.apply('org.jetbrains.kotlin.android')
+            project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = '1.8'
+                }
+                compilerOptions {
+                    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                }
+            }
+        }
+    }
 }
 
 subprojects {
     project.evaluationDependsOn(':app')
 }
 
-// Force compileSdk 36 on all plugin subprojects AFTER each project is fully configured,
-// so outdated plugins (e.g. scrollable_tab_view at 31) satisfy dependency requirements.
+// Force compileSdk 36 on all plugin subprojects AFTER each project is fully configured.
 gradle.afterProject { project ->
     if (project != rootProject && project.hasProperty('android')) {
         project.android.compileSdkVersion(36)
