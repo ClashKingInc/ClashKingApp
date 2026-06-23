@@ -2134,19 +2134,19 @@
   "gameItemFlying": "Uçan",
   "gameItemUpgradeCost": "Yükseltme maliyeti",
   "gameItemUpgradeTime": "Yükseltme süresi",
-  "notifScopeAllAccounts": "All accounts",
+  "notifScopeAllAccounts": "Tüm hesaplar",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
-  "notifScopeSelected": "Selected",
+  "notifScopeSelected": "Seçili",
   "@notifScopeSelected": {
     "description": "Notification scope: only selected accounts"
   },
-  "settingsPreferences": "Preferences",
+  "settingsPreferences": "Tercihler",
   "@settingsPreferences": {
     "description": "Settings section: general preferences"
   },
-  "settingsNotificationsTitle": "Notifications",
+  "settingsNotificationsTitle": "Bildirimler",
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
