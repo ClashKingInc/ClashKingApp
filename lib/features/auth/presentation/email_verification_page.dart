@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
+import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -155,28 +156,39 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
             .replaceAll('NotFoundException: ', '');
 
         // Handle specific error cases
-        if (errorMessage.contains("already verified")) {
-          // Redirect to login page if email is already verified
+        if (errorMessage.contains("already verified") ||
+            errorMessage.contains("This email is already verified")) {
+          // Already verified → go straight to login
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => LoginPage(
-                prefillEmail: widget.email,
-              ),
+              builder: (context) => LoginPage(prefillEmail: widget.email),
             ),
           );
           return;
-        } else if (errorMessage.contains("expired")) {
-          errorMessage =
-              AppLocalizations.of(context)!.authEmailVerificationExpired;
-        } else if (errorMessage.contains("No pending verification")) {
-          errorMessage =
-              AppLocalizations.of(context)!.authEmailVerificationExpiredResend;
-        }
-        else if (errorMessage.contains("This email is already verified")) {
-          errorMessage =
-              AppLocalizations.of(context)!.authEmailVerificationAlreadyVerified;
         }
 
+        if (errorMessage.contains("expired") ||
+            errorMessage.contains("No pending verification")) {
+          // Verification expired or deleted → user must register again.
+          // Show a message then redirect to register page so they can restart.
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.authEmailVerificationExpired,
+              ),
+              backgroundColor: Colors.orange,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+          await Future.delayed(const Duration(seconds: 3));
+          if (mounted) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => RegisterPage()),
+              (route) => false,
+            );
+          }
+          return;
+        }
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

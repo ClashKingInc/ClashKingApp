@@ -11,12 +11,21 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class AuthService extends ChangeNotifier {
-  AuthService({ApiService? apiService, TokenService? tokenService})
-      : _apiService = apiService ?? ApiService(),
-        _tokenService = tokenService ?? TokenService();
+  AuthService({
+    ApiService? apiService,
+    TokenService? tokenService,
+    Future<Map<String, String>?> Function()? discordAuthCodeProvider,
+  })  : _apiService = apiService ?? ApiService(),
+        _tokenService = tokenService ?? TokenService(),
+        _discordAuthCodeProvider =
+            discordAuthCodeProvider ?? DiscordAuthHelper.getDiscordAuthCode;
 
   final ApiService _apiService;
   final TokenService _tokenService;
+
+  // Injectable so tests can drive the OAuth-code step without a real browser
+  // flow; defaults to the static DiscordAuthHelper implementation in production.
+  final Future<Map<String, String>?> Function() _discordAuthCodeProvider;
   String? _accessToken;
   bool _isAuthenticated = false;
   User? _currentUser;
@@ -260,6 +269,49 @@ class AuthService extends ChangeNotifier {
     } catch (e) {
       DebugUtils.debugError(" Password reset error: $e");
       rethrow; // Let the UI handle error parsing and localization
+    }
+  }
+
+  Future<void> linkDiscordWithCode() async {
+    try {
+      DebugUtils.debugInfo("🔄 Starting Discord linking via OAuth code...");
+      final result = await _discordAuthCodeProvider();
+      if (result == null) {
+        throw Exception(
+          _localized(
+            'Discord auth was cancelled.',
+            (l10n) => l10n.authErrorUserCancelledDiscordLogin,
+          ),
+        );
+      }
+
+      final deviceId = await _tokenService.getDeviceId();
+      final deviceName = await _tokenService.getDeviceName();
+
+      // requiresAuth: true so the bearer token is attached — the backend needs
+      // it to know which signed-in ClashKing account to link Discord to.
+      await _apiService.post(
+        '/auth/link-discord-code',
+        {
+          'code': result['code']!,
+          'redirect_uri': DiscordAuthHelper.getRedirectUri(),
+          'code_verifier': result['code_verifier']!,
+          'device_id': deviceId,
+          'device_name': deviceName,
+        },
+        requiresAuth: true,
+      );
+
+      DebugUtils.debugSuccess("🔄 Discord linking completed");
+      await initializeAuth();
+    } catch (e) {
+      DebugUtils.debugError(" Discord linking error: $e");
+      throw Exception(
+        _localized(
+          'Discord account linking failed.',
+          (l10n) => l10n.authErrorDiscordLinkFailed,
+        ),
+      );
     }
   }
 
