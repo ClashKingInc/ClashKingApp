@@ -29,10 +29,9 @@ jobs:
   e2e:
     name: Playwright E2E
     runs-on: ubuntu-latest
-    # Skip workflow_run events where the deployment failed
+    # Run always except when triggered by a failed workflow_run deployment
     if: >
-      github.event_name == 'workflow_call' ||
-      github.event_name == 'workflow_dispatch' ||
+      github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
 
     defaults:
