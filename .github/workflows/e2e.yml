@@ -1,6 +1,14 @@
 name: E2E Tests (Playwright)
 
 on:
+  # Called by web_deploy.yml after a PR preview deployment
+  workflow_call:
+    inputs:
+      base_url:
+        description: 'Base URL to test against'
+        required: true
+        type: string
+  # Triggered automatically after main-branch deployment
   workflow_run:
     workflows: ["Deploy Flutter Web to Cloudflare Pages"]
     types: [completed]
@@ -21,8 +29,9 @@ jobs:
   e2e:
     name: Playwright E2E
     runs-on: ubuntu-latest
-    # Only run after a successful deployment
+    # Skip workflow_run events where the deployment failed
     if: >
+      github.event_name == 'workflow_call' ||
       github.event_name == 'workflow_dispatch' ||
       github.event.workflow_run.conclusion == 'success'
 
