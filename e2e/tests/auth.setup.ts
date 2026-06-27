@@ -8,7 +8,7 @@ const AUTH_FILE = path.join(__dirname, '../playwright/.auth/user.json');
 // (e.g. http://127.0.0.1:8000).
 const API_BASE = (process.env.API_BASE_URL ?? 'https://go.api.clashk.ing').replace(/\/+$/, '');
 
-setup('authenticate with email', async ({ page }) => {
+setup('authenticate with email', async () => {
   const email = process.env.TEST_EMAIL;
   const password = process.env.TEST_PASSWORD;
   // Skip gracefully when credentials are not provided (e.g. fork PRs without secrets access).
@@ -47,36 +47,43 @@ setup('authenticate with email', async ({ page }) => {
       const body = await resp.text().catch(() => '<unreadable>');
       console.warn(`[auth.setup] API returned ${resp.status()}: ${body.slice(0, 200)}`);
     }
+  } catch (err) {
+    // Network-level error (DNS, timeout, connection refused) — treat as no tokens
+    console.warn(`[auth.setup] API call threw: ${err}`);
   } finally {
     await apiContext.dispose();
   }
 
+  const baseURL = (process.env.BASE_URL ?? 'https://app.clashk.ing').trim();
+  const origin = (() => { try { return new URL(baseURL).origin; } catch { return baseURL; } })();
+
+  fs.mkdirSync(path.dirname(AUTH_FILE), { recursive: true });
+
   if (!capturedTokens) {
-    console.warn('[auth.setup] tokens not captured — chromium-auth tests will be skipped');
-    // Include the app origin so Playwright's BrowserContext initialises correctly.
-    // An empty origins array causes "Cannot navigate to invalid URL" in dependent tests.
-    const baseURL = (process.env.BASE_URL ?? 'http://localhost:5000').trim();
-    fs.mkdirSync(path.dirname(AUTH_FILE), { recursive: true });
+    console.warn('[auth.setup] tokens not captured — chromium-auth tests will run with empty auth');
+    // Write a valid-but-empty state so Playwright can load the file.
+    // Tests that need real auth will fail or skip on their own assertions.
     fs.writeFileSync(AUTH_FILE, JSON.stringify({
       cookies: [],
-      origins: [{ origin: baseURL, localStorage: [] }],
+      origins: [{ origin, localStorage: [] }],
     }));
     return;
   }
 
-  // ── Write tokens to localStorage in SharedPreferences format ──────────────
+  // ── Write tokens directly into the storageState JSON ─────────────────────
   // shared_preferences_web stores String values as JSON.stringify(value) under
-  // the key 'flutter.<prefKey>'. Flutter's _readTokens() fallback reads from
-  // SharedPreferences and migrates tokens to SecureStorage on first run in
-  // each fresh browser context.
-  await page.goto('/');
-  await page.evaluate(({ at, rt }) => {
-    localStorage.setItem('flutter.access_token', JSON.stringify(at));
-    localStorage.setItem('flutter.refresh_token', JSON.stringify(rt));
-  }, { at: capturedTokens.access_token, rt: capturedTokens.refresh_token });
-
-  // ── Save storageState (now includes the localStorage tokens) ─────────────
-  fs.mkdirSync(path.dirname(AUTH_FILE), { recursive: true });
-  await page.context().storageState({ path: AUTH_FILE });
+  // the key 'flutter.<prefKey>'. We write the file directly instead of
+  // navigating to the app — avoids dependency on the preview URL being ready
+  // and removes a potential source of unhandled exceptions.
+  fs.writeFileSync(AUTH_FILE, JSON.stringify({
+    cookies: [],
+    origins: [{
+      origin,
+      localStorage: [
+        { name: 'flutter.access_token', value: JSON.stringify(capturedTokens.access_token) },
+        { name: 'flutter.refresh_token', value: JSON.stringify(capturedTokens.refresh_token) },
+      ],
+    }],
+  }));
   console.log(`[auth.setup] storageState saved → ${AUTH_FILE}`);
 });

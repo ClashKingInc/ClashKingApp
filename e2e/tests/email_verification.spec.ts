@@ -168,10 +168,8 @@ test.describe('Email verification page', () => {
     await page.waitForTimeout(5_000);
 
     // An error message appears: "Invalid or expired code" (authEmailVerificationCodeInvalid)
-    const errorEl = page
-      .locator('flt-semantics[aria-label*="Invalid" i]')
-      .or(page.locator('flt-semantics[aria-label*="expired" i]'))
-      .or(page.locator('flt-semantics[aria-label*="incorrect" i]'));
+    // Flutter web exposes text via textContent, not aria-label
+    const errorEl = page.getByText(/invalid|expired|incorrect/i);
     await expect(errorEl.first()).toBeAttached({ timeout: 8_000 });
   });
 
