@@ -83,10 +83,12 @@ test.describe('Login page — UI', () => {
 
     await page.getByRole('button', { name: 'Login', exact: true }).click();
 
-    // Wait for the Login button to disappear → app navigated away from login page
+    // Wait for the Login button to disappear → app navigated away from login page.
+    // Flutter web exposes the label via textContent, not aria-label; checking
+    // aria-label here would be vacuously true and never actually wait.
     await page.waitForFunction(
       () => !Array.from(document.querySelectorAll('flt-semantics'))
-        .some(el => el.getAttribute('aria-label') === 'Login'),
+        .some(el => (el.textContent ?? '').trim() === 'Login'),
       { timeout: 25_000, polling: 500 },
     );
 

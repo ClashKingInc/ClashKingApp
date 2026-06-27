@@ -47,10 +47,11 @@ async function navigateToResetPage(page: any): Promise<boolean> {
     await sendBtn.waitFor({ state: 'attached', timeout: 8_000 });
     await sendBtn.click({ timeout: 8_000 });
 
-    // Wait for success state — "Code Sent!" message or "Continue" button
+    // Wait for success state — "Code Sent!" message or "Continue" button.
+    // Flutter web exposes these strings via textContent, not aria-label.
     await page.waitForFunction(
       () => Array.from(document.querySelectorAll('flt-semantics'))
-        .some(el => /continue|code sent/i.test(el.getAttribute('aria-label') ?? '')),
+        .some(el => /continue|code sent/i.test(el.textContent ?? '')),
       { timeout: 12_000, polling: 500 },
     );
 

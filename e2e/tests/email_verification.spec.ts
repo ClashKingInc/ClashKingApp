@@ -58,10 +58,12 @@ async function registerAndNavigateToVerification(page: any): Promise<string | nu
     await createBtn.waitFor({ state: 'attached', timeout: 8_000 });
     await createBtn.click({ timeout: 8_000 });
 
-    // Wait for EmailVerificationPage ("Verify Email" appbar title or "Verify Code" button)
+    // Wait for EmailVerificationPage ("Verify Email" appbar title or "Verify Code" button).
+    // Flutter web exposes these strings via textContent, not aria-label, so inspect
+    // textContent — checking aria-label here would always time out and skip every test.
     await page.waitForFunction(
       () => Array.from(document.querySelectorAll('flt-semantics'))
-        .some(el => /verify/i.test(el.getAttribute('aria-label') ?? '')),
+        .some(el => /verify/i.test(el.textContent ?? '')),
       { timeout: 15_000, polling: 500 },
     );
   } catch {
