@@ -92,10 +92,7 @@ void _initializeDeepLinks() {
 }
 
 Future<void> main() async {
-  // Initialize Flutter binding BEFORE Sentry
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Load config from backend first
+  // Load config from backend first (HTTP only, no binding needed)
   await ApiService.loadConfig();
 
   await SentryFlutter.init(
@@ -107,6 +104,9 @@ Future<void> main() async {
       options.replay.onErrorSampleRate = 1.0;
     },
     appRunner: () async {
+      // Initialize binding in the same zone as runApp to avoid zone mismatch warning
+      WidgetsFlutterBinding.ensureInitialized();
+
       if (!kIsWeb) {
         if (defaultTargetPlatform == TargetPlatform.iOS) {
           await HomeWidget.setAppGroupId('group.com.clashking.apps');

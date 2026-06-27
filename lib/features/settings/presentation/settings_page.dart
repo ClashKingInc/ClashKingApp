@@ -9,6 +9,7 @@ import 'package:clashkingapp/core/services/live_activity_debug_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/auth/presentation/account_management_page.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
@@ -22,6 +23,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -194,6 +196,17 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                 showChevron: false,
               ),
               _SettingsTile(
+                icon: Icons.manage_accounts,
+                title: l10n.authAccountConnected,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AccountManagementPage(),
+                    ),
+                  );
+                },
+              ),
+              _SettingsTile(
                 icon: Icons.logout,
                 title: l10n.authLogout,
                 destructive: true,
@@ -317,11 +330,13 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     }
   }
 
-  void _showLicenses() {
+  Future<void> _showLicenses() async {
+    final info = await PackageInfo.fromPlatform();
+    if (!mounted) return;
     showLicensePage(
       context: context,
       applicationName: AppLocalizations.of(context)!.appTitle,
-      applicationVersion: '1.0.0+22',
+      applicationVersion: '${info.version}+${info.buildNumber}',
       applicationIcon: SizedBox(
         width: 48,
         height: 48,
