@@ -10,6 +10,7 @@ What’s new
 - Fixed startup loading so app setup errors no longer drop you into a partial session
 - Fixed ClashKing deep links so player and clan links now open reliably
 - Updated Turkish translations
+- Added Connected Accounts page in Settings to view and manage linked auth methods (Discord, Email)
 - Some minor library updates
 - Fixed bulk account loading timeouts during startup
 - Improved war and clan parsing for incomplete API payloads
