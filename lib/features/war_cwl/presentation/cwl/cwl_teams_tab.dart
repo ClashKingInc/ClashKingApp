@@ -7,34 +7,10 @@ import 'package:clashkingapp/features/war_cwl/presentation/cwl/widgets/cwl_team_
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-// Promotion / demotion positions for each CWL league (top N promoted, bottom N relegated).
-// Bronze III has no demotion. Champion I has no promotion.
-const Map<String, ({int promo, int demote})> _cwlThresholds = {
-  'Bronze League III':   (promo: 3, demote: 0),
-  'Bronze League II':    (promo: 3, demote: 8),
-  'Bronze League I':     (promo: 3, demote: 8),
-  'Silver League III':   (promo: 2, demote: 8),
-  'Silver League II':    (promo: 2, demote: 7),
-  'Silver League I':     (promo: 2, demote: 7),
-  'Gold League III':     (promo: 2, demote: 7),
-  'Gold League II':      (promo: 2, demote: 7),
-  'Gold League I':       (promo: 2, demote: 7),
-  'Crystal League III':  (promo: 2, demote: 7),
-  'Crystal League II':   (promo: 2, demote: 7),
-  'Crystal League I':    (promo: 2, demote: 7),
-  'Master League III':   (promo: 2, demote: 7),
-  'Master League II':    (promo: 2, demote: 7),
-  'Master League I':     (promo: 2, demote: 7),
-  'Champion League III': (promo: 2, demote: 7),
-  'Champion League II':  (promo: 2, demote: 7),
-  'Champion League I':   (promo: 0, demote: 7),
-};
-
 class CwlTeamsTab extends StatefulWidget {
   final WarCwl warCwl;
-  final String? warLeagueName;
 
-  const CwlTeamsTab({super.key, required this.warCwl, this.warLeagueName});
+  const CwlTeamsTab({super.key, required this.warCwl});
 
   @override
   CwlTeamsTabState createState() => CwlTeamsTabState();
@@ -117,60 +93,8 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
       clans.sort((a, b) => b.threeStarsDef.compareTo(a.threeStarsDef));
     }
 
-    final threshold = _cwlThresholds[widget.warLeagueName];
-
     return Column(
       children: [
-        if (threshold != null) ...[
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                if (threshold.promo > 0)
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withAlpha(40),
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
-                        border: Border.all(color: Colors.green.withAlpha(100)),
-                      ),
-                      child: Text(
-                        '↑ Top ${threshold.promo} promoted',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                if (threshold.promo > 0 && threshold.demote > 0)
-                  const SizedBox(width: 8),
-                if (threshold.demote > 0)
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.red.withAlpha(40),
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
-                        border: Border.all(color: Colors.red.withAlpha(100)),
-                      ),
-                      child: Text(
-                        '↓ Bottom ${clans.length - threshold.demote + 1}+ relegated',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
         const SizedBox(height: 12),
         FilterDropdown(
             sortBy: sortBy,

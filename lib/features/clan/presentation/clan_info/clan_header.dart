@@ -19,9 +19,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ClanInfoHeaderCard extends StatelessWidget {
   final Clan clanInfo;
-  final Map<String, dynamic>? ranking;
 
-  const ClanInfoHeaderCard({super.key, required this.clanInfo, this.ranking});
+  const ClanInfoHeaderCard({super.key, required this.clanInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -163,19 +162,6 @@ class ClanInfoHeaderCard extends StatelessWidget {
             imageUrl: ImageAssets.townHall(clanInfo.requiredTownhallLevel),
             label: clanInfo.requiredTownhallLevel.toString(),
           ),
-        if (ranking?['global_rank'] != null)
-          IconChip(
-            icon: Icons.public,
-            size: 16,
-            color: Theme.of(context).colorScheme.onSurface,
-            label: '#${ranking!['global_rank']}',
-          ),
-        if (ranking?['local_rank'] != null && ranking?['country_code'] != null)
-          ImageChip(
-            context: context,
-            imageUrl: ImageAssets.flag(ranking!['country_code'] as String),
-            label: '#${ranking!['local_rank']}',
-          ),
         IconChip(
           icon: Icons.mail,
           size: 16,
@@ -272,7 +258,6 @@ class ClanInfoHeaderCard extends StatelessWidget {
               clanInfo: clanInfo.warCwl!.leagueInfo!.clans.firstWhere(
                 (clan) => clan.tag == clanInfo.tag,
               ),
-              warLeagueName: clanInfo.warLeague?.name,
             ),
           ),
         );
