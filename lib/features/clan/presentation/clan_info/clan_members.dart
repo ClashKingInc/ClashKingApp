@@ -1,16 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_member.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+
+List<String> _recentSeasons({int count = 12}) {
+  final now = DateTime.now().toUtc();
+  return List.generate(count, (i) {
+    final dt = DateTime(now.year, now.month - i, 1);
+    return '${dt.year}-${dt.month.toString().padLeft(2, '0')}';
+  });
+}
 
 class ClanMembers extends StatefulWidget {
   final Clan clanInfo;
@@ -22,12 +32,16 @@ class ClanMembers extends StatefulWidget {
   ClanMembersState createState() => ClanMembersState();
 }
 
+const _donationFilters = {'donations', 'donationsReceived', 'donationsRatio'};
+
 class ClanMembersState extends State<ClanMembers> {
   String currentFilter = 'trophies';
+  String? _selectedSeason;
 
   void updateFilter(String newFilter) {
     setState(() {
       currentFilter = newFilter;
+      if (!_donationFilters.contains(newFilter)) _selectedSeason = null;
     });
   }
 
@@ -50,6 +64,27 @@ class ClanMembersState extends State<ClanMembers> {
     
     final cocService = context.watch<CocAccountService>();
     final activeUserTags = cocService.getAccountTags();
+    final clanService = context.watch<ClanService>();
+    final seasonalData = _selectedSeason != null
+        ? clanService.getSeasonalDonations(widget.clanInfo.tag, _selectedSeason!)
+        : null;
+
+    // Build a lookup map from tag → {donated, received} for seasonal data
+    final Map<String, ({int donated, int received})> seasonLookup = {};
+    if (seasonalData != null) {
+      for (final item in seasonalData) {
+        final tag = item['tag'] as String? ?? '';
+        seasonLookup[tag] = (
+          donated: (item['donated'] as num? ?? 0).toInt(),
+          received: (item['received'] as num? ?? 0).toInt(),
+        );
+      }
+    }
+
+    int getDonated(ClanMember m) =>
+        seasonLookup[m.tag]?.donated ?? m.donations;
+    int getReceived(ClanMember m) =>
+        seasonLookup[m.tag]?.received ?? m.donationsReceived;
 
     Map<String, int> roleWeights = {
       'leader': 4,
@@ -73,14 +108,16 @@ class ClanMembersState extends State<ClanMembers> {
         case 'builderBaseTrophies':
           return b.builderBaseTrophies.compareTo(a.builderBaseTrophies);
         case 'donations':
-          return b.donations.compareTo(a.donations);
+          return getDonated(b).compareTo(getDonated(a));
         case 'donationsReceived':
-          return b.donationsReceived.compareTo(a.donationsReceived);
+          return getReceived(b).compareTo(getReceived(a));
         case 'donationsRatio':
-          double ratioA = a.donations /
-              (a.donationsReceived == 0 ? 1 : a.donationsReceived);
-          double ratioB = b.donations /
-              (b.donationsReceived == 0 ? 1 : b.donationsReceived);
+          final dA = getDonated(a);
+          final rA = getReceived(a);
+          final dB = getDonated(b);
+          final rB = getReceived(b);
+          double ratioA = dA / (rA == 0 ? 1 : rA);
+          double ratioB = dB / (rB == 0 ? 1 : rB);
           return ratioB.compareTo(ratioA);
         default:
           return 0;
@@ -98,6 +135,21 @@ class ClanMembersState extends State<ClanMembers> {
                 updateSortBy: updateFilter,
                 sortByOptions: filterOptions,
               ),
+              if (_donationFilters.contains(currentFilter)) ...[
+                const SizedBox(height: 4),
+                _SeasonSelector(
+                  clanTag: widget.clanInfo.tag,
+                  selectedSeason: _selectedSeason,
+                  onSeasonChanged: (season) {
+                    setState(() => _selectedSeason = season);
+                    if (season != null) {
+                      context
+                          .read<ClanService>()
+                          .fetchDonationsBySeason(widget.clanInfo.tag, season);
+                    }
+                  },
+                ),
+              ],
               const SizedBox(height: 6),
             ],
           ),
@@ -214,7 +266,7 @@ class ClanMembersState extends State<ClanMembers> {
                       ),
                       Expanded(
                         flex: 3,
-                        child: _buildStatColumn(member),
+                        child: _buildStatColumn(member, getDonated, getReceived),
                       ),
                     ],
                   ),
@@ -226,7 +278,11 @@ class ClanMembersState extends State<ClanMembers> {
     );
   }
 
-  Widget _buildStatColumn(ClanMember member) {
+  Widget _buildStatColumn(
+    ClanMember member,
+    int Function(ClanMember) getDonated,
+    int Function(ClanMember) getReceived,
+  ) {
     switch (currentFilter) {
       case 'expLevel':
         return _iconText(ImageAssets.xp, member.expLevel.toString());
@@ -235,14 +291,15 @@ class ClanMembersState extends State<ClanMembers> {
             ImageAssets.trophies, member.builderBaseTrophies.toString());
       case 'donations':
         return _iconTextWithIcon(
-            LucideIcons.chevronUp, member.donations.toString(), Colors.green);
+            LucideIcons.chevronUp, getDonated(member).toString(), Colors.green);
       case 'donationsReceived':
         return _iconTextWithIcon(LucideIcons.chevronDown,
-            member.donationsReceived.toString(), Colors.red);
+            getReceived(member).toString(), Colors.red);
       case 'donationsRatio':
-        double ratio = member.donations /
-            (member.donationsReceived == 0 ? 1 : member.donationsReceived);
-        String display = ratio > 100
+        final donated = getDonated(member);
+        final received = getReceived(member);
+        double ratio = donated / (received == 0 ? 1 : received);
+        final display = ratio > 100
             ? ratio.toInt().toString()
             : ratio > 10
                 ? ratio.toStringAsFixed(1)
@@ -318,5 +375,64 @@ class ClanMembersState extends State<ClanMembers> {
       default:
         return loc.clanRoleMember;
     }
+  }
+}
+
+class _SeasonSelector extends StatelessWidget {
+  final String clanTag;
+  final String? selectedSeason;
+  final void Function(String?) onSeasonChanged;
+
+  const _SeasonSelector({
+    required this.clanTag,
+    required this.selectedSeason,
+    required this.onSeasonChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final seasons = _recentSeasons();
+    return SizedBox(
+      height: 32,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        itemCount: seasons.length + 1,
+        separatorBuilder: (context, i) => const SizedBox(width: 6),
+        itemBuilder: (context, i) {
+          if (i == 0) {
+            final isCurrent = selectedSeason == null;
+            return ChoiceChip(
+              label: const Text('Current'),
+              selected: isCurrent,
+              onSelected: (_) => onSeasonChanged(null),
+              labelStyle: TextStyle(
+                fontSize: 11,
+                color: isCurrent
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.onSurface,
+              ),
+            );
+          }
+          final season = seasons[i - 1];
+          final parts = season.split('-');
+          final label = parts.length == 2
+              ? DateFormat('MMM yy').format(DateTime(int.parse(parts[0]), int.parse(parts[1])))
+              : season;
+          final isSelected = selectedSeason == season;
+          return ChoiceChip(
+            label: Text(label),
+            selected: isSelected,
+            onSelected: (_) => onSeasonChanged(isSelected ? null : season),
+            labelStyle: TextStyle(
+              fontSize: 11,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Theme.of(context).colorScheme.onSurface,
+            ),
+          );
+        },
+      ),
+    );
   }
 }
