@@ -381,6 +381,22 @@ class ClanService extends ChangeNotifier {
 
     try {
       final warLogs = await Future.wait(clanTags.map((tag) async {
+        // Prefer v2 endpoint: more history (up to 50 wars), works even if log is private
+        final v2Response = await _apiService.getResponse(
+          '/war/$tag/previous?limit=50',
+          requiresAuth: true,
+        );
+
+        if (v2Response.statusCode == 200) {
+          final body = ApiService.decodeResponseBody(v2Response);
+          final jsonBody = json.decode(body) as Map<String, dynamic>;
+          final warLog = ClanWarLog.fromJson(jsonBody, tag);
+          warLog.warLogStats =
+              await WarLogStatsService.analyzeWarLogs(warLog.items);
+          return warLog;
+        }
+
+        // Fallback to CoC proxy (max 20 wars, private logs return 403)
         final response = await _apiService.getResponse(
           '',
           url:

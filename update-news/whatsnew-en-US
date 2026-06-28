@@ -3,6 +3,7 @@ What’s new
 - CWL screen has a new History tab showing the clan’s CWL ranking per season
 - CWL Teams tab now shows promotion and relegation zone indicators
 - Clan members list has a season selector when sorted by donations to view historical data
+- War history now loads up to 50 wars from ClashKing database (was limited to 20 via CoC API)
 - Tapping a troop, spell, hero, equipment or pet now shows a detailed popup with description and stats (housing space, attack speed, range, movement speed, upgrade resource, hero and rarity for equipment)
 - Item popup now shows DPS, HP/Heal at current level, targeting type (Ground/Air/Flying), and next-level upgrade cost & time
 - Player item sections now show two progress percentages: current TH max-level completion and overall max-level completion
