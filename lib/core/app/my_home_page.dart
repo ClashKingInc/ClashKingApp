@@ -165,15 +165,19 @@ class MyHomePageState extends State<MyHomePage> {
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                             ),
-                            child: InkWell(
-                              customBorder: const CircleBorder(),
-                              onTap: () => _onItemTapped(3),
-                              child: Icon(
-                                Icons.search,
-                                size: 30,
-                                color: isSearchSelected
-                                    ? colorScheme.primary
-                                    : colorScheme.onSurface,
+                            child: Semantics(
+                              label: 'Search',
+                              button: true,
+                              child: InkWell(
+                                customBorder: const CircleBorder(),
+                                onTap: () => _onItemTapped(3),
+                                child: Icon(
+                                  Icons.search,
+                                  size: 30,
+                                  color: isSearchSelected
+                                      ? colorScheme.primary
+                                      : colorScheme.onSurface,
+                                ),
                               ),
                             ),
                           ),
