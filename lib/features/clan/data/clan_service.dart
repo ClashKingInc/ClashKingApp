@@ -37,6 +37,7 @@ class ClanService extends ChangeNotifier {
   List<ClanWarLog> warLogList = [];
   List<ClanWarStats> warStatsList = [];
   final Map<String, Map<String, dynamic>> _clanRankings = {};
+  final Map<String, List<Map<String, dynamic>>> _seasonalDonations = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -668,6 +669,28 @@ class ClanService extends ChangeNotifier {
   }
 
   Map<String, dynamic>? getClanRanking(String clanTag) => _clanRankings[clanTag];
+
+  List<Map<String, dynamic>>? getSeasonalDonations(String clanTag, String season) =>
+      _seasonalDonations['$clanTag/$season'];
+
+  Future<void> fetchDonationsBySeason(String clanTag, String season) async {
+    final key = '$clanTag/$season';
+    if (_seasonalDonations.containsKey(key)) return;
+    try {
+      final response = await _apiService.getResponse(
+        '/clan/$clanTag/donations/$season',
+        requiresAuth: true,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        _seasonalDonations[key] =
+            (data['items'] as List<dynamic>).cast<Map<String, dynamic>>();
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
 
   Future<void> fetchClanRanking(String clanTag) async {
     try {

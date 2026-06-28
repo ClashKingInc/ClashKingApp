@@ -19,12 +19,14 @@ class CwlScreen extends StatefulWidget {
   final WarCwl warCwl;
   final String clanTag;
   final CwlClan clanInfo;
+  final String? warLeagueName;
 
   CwlScreen({
     super.key,
     required this.warCwl,
     required this.clanTag,
     required this.clanInfo,
+    this.warLeagueName,
   });
 
   @override
@@ -222,7 +224,7 @@ class CwlScreenState extends State<CwlScreen> {
               ],
               children: [
                 CwlRoundsTab(warCwl: widget.warCwl),
-                CwlTeamsTab(warCwl: widget.warCwl),
+                CwlTeamsTab(warCwl: widget.warCwl, warLeagueName: widget.warLeagueName),
                 CwlMembersTab(warCwl: widget.warCwl, clanTag: widget.clanTag),
                 CwlRankingHistoryTab(clanTag: widget.clanTag),
               ],

@@ -272,6 +272,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
               clanInfo: clanInfo.warCwl!.leagueInfo!.clans.firstWhere(
                 (clan) => clan.tag == clanInfo.tag,
               ),
+              warLeagueName: clanInfo.warLeague?.name,
             ),
           ),
         );
