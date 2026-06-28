@@ -41,6 +41,7 @@ class ClanService extends ChangeNotifier {
   final Map<String, Map<String, dynamic>> _clanCompositions = {};
   final Map<String, Map<String, dynamic>> _seasonTopPerformers = {};
   final Map<String, ClanJoinLeave> _singleClanJoinLeave = {};
+  final Map<String, List<String>> _memberTagOrder = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -704,6 +705,32 @@ class ClanService extends ChangeNotifier {
         final data = jsonDecode(ApiService.decodeResponseBody(response));
         _seasonalDonations[key] =
             (data['items'] as List<dynamic>).cast<Map<String, dynamic>>();
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
+
+  List<String>? getMemberTagOrder(String clanTag, String attribute) =>
+      _memberTagOrder['$clanTag/$attribute'];
+
+  Future<void> fetchMembersSortedBy(
+      String clanTag, String attribute, List<String> memberTags) async {
+    final key = '$clanTag/$attribute';
+    if (_memberTagOrder.containsKey(key)) return;
+    try {
+      final encodedAttr = Uri.encodeComponent(attribute);
+      final response = await _apiService.postResponse(
+        '/players/sorted/$encodedAttr',
+        body: {'player_tags': memberTags},
+        requiresAuth: true,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        final items = (data['items'] as List<dynamic>? ?? []);
+        _memberTagOrder[key] =
+            items.map((e) => (e as Map)['tag']?.toString() ?? '').toList();
         _safeNotify();
       }
     } catch (e) {

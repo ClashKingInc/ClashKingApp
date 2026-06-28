@@ -34,6 +34,15 @@ class ClanMembers extends StatefulWidget {
 
 const _donationFilters = {'donations', 'donationsReceived', 'donationsRatio'};
 
+// Hero sort keys → CoC attribute path used by /players/sorted/{attribute}
+const _heroSortKeys = {
+  'heroBK': 'heroes[name=Barbarian King].level',
+  'heroAQ': 'heroes[name=Archer Queen].level',
+  'heroGW': 'heroes[name=Grand Warden].level',
+  'heroRC': 'heroes[name=Royal Champion].level',
+  'heroMinion': 'heroes[name=Minion Prince].level',
+};
+
 class ClanMembersState extends State<ClanMembers> {
   String currentFilter = 'trophies';
   String? _selectedSeason;
@@ -43,6 +52,12 @@ class ClanMembersState extends State<ClanMembers> {
       currentFilter = newFilter;
       if (!_donationFilters.contains(newFilter)) _selectedSeason = null;
     });
+    if (_heroSortKeys.containsKey(newFilter)) {
+      final attr = _heroSortKeys[newFilter]!;
+      final tags = widget.clanInfo.memberList.map((m) => m.tag).toList();
+      context.read<ClanService>().fetchMembersSortedBy(
+            widget.clanInfo.tag, attr, tags);
+    }
   }
 
   @override
@@ -60,13 +75,25 @@ class ClanMembersState extends State<ClanMembers> {
           'donationsReceived',
       AppLocalizations.of(context)?.gameDonationsRatio ?? 'Donation Ratio':
           'donationsRatio',
+      'Barbarian King': 'heroBK',
+      'Archer Queen': 'heroAQ',
+      'Grand Warden': 'heroGW',
+      'Royal Champion': 'heroRC',
+      'Minion Prince': 'heroMinion',
     };
-    
+
     final cocService = context.watch<CocAccountService>();
     final activeUserTags = cocService.getAccountTags();
     final clanService = context.watch<ClanService>();
     final seasonalData = _selectedSeason != null
         ? clanService.getSeasonalDonations(widget.clanInfo.tag, _selectedSeason!)
+        : null;
+
+    // Hero sort: use API-returned tag order when available
+    final isHeroSort = _heroSortKeys.containsKey(currentFilter);
+    final heroTagOrder = isHeroSort
+        ? clanService.getMemberTagOrder(
+            widget.clanInfo.tag, _heroSortKeys[currentFilter]!)
         : null;
 
     // Build a lookup map from tag → {donated, received} for seasonal data
@@ -95,6 +122,13 @@ class ClanMembersState extends State<ClanMembers> {
 
     List<ClanMember> members = widget.clanInfo.memberList.toList();
 
+    if (isHeroSort && heroTagOrder != null) {
+      final tagIndex = {
+        for (int i = 0; i < heroTagOrder.length; i++) heroTagOrder[i]: i,
+      };
+      members.sort((a, b) =>
+          (tagIndex[a.tag] ?? 999).compareTo(tagIndex[b.tag] ?? 999));
+    } else {
     members.sort((a, b) {
       switch (currentFilter) {
         case 'role':
@@ -123,6 +157,7 @@ class ClanMembersState extends State<ClanMembers> {
           return 0;
       }
     });
+    } // end else (non-hero sort)
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -135,6 +170,10 @@ class ClanMembersState extends State<ClanMembers> {
                 updateSortBy: updateFilter,
                 sortByOptions: filterOptions,
               ),
+              if (isHeroSort && heroTagOrder == null) ...[
+                const SizedBox(height: 4),
+                const LinearProgressIndicator(),
+              ],
               if (_donationFilters.contains(currentFilter)) ...[
                 const SizedBox(height: 4),
                 _SeasonSelector(
