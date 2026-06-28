@@ -46,6 +46,14 @@ const _heroSortKeys = {
 class ClanMembersState extends State<ClanMembers> {
   String currentFilter = 'trophies';
   String? _selectedSeason;
+  String _searchQuery = '';
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   void updateFilter(String newFilter) {
     setState(() {
@@ -159,12 +167,48 @@ class ClanMembersState extends State<ClanMembers> {
     });
     } // end else (non-hero sort)
 
+    // Apply name/tag search filter
+    if (_searchQuery.isNotEmpty) {
+      final q = _searchQuery.toLowerCase();
+      members = members
+          .where((m) =>
+              m.name.toLowerCase().contains(q) ||
+              m.tag.toLowerCase().contains(q))
+          .toList();
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         Center(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search members…',
+                    prefixIcon: const Icon(Icons.search, size: 20),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear, size: 18),
+                            onPressed: () => setState(() {
+                              _searchQuery = '';
+                              _searchController.clear();
+                            }),
+                          )
+                        : null,
+                    isDense: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24)),
+                  ),
+                  onChanged: (v) => setState(() => _searchQuery = v),
+                ),
+              ),
+              const SizedBox(height: 4),
               FilterDropdown(
                 sortBy: currentFilter,
                 updateSortBy: updateFilter,

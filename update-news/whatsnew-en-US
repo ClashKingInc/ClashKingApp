@@ -2,6 +2,7 @@ What’s new
 - Clan info page now has Members, Composition, Top Players, and Activity tabs
 - Composition tab shows TH, league, and country distribution with visual bars
 - Members tab can now sort by hero level (BK, AQ, GW, RC, Minion Prince) using ClashKing data
+- Members tab has a name/tag search field to quickly filter large clans
 - Top Players tab shows per-season leaderboards for donations, war stars, gold looted, and more
 - Clan page now shows global and local rank chips in the header
 - CWL screen has a new History tab showing the clan’s CWL ranking per season
