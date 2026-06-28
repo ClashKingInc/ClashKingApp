@@ -173,8 +173,11 @@ test.describe('War / CWL page', () => {
     await expect(page.locator('flt-glass-pane')).toBeAttached();
   });
 
-  // §12.9 — War detail screen tabs (Statistics / Events / Teams — all three present in WarScreen)
+  // §12.9 — War detail screen tabs (Statistics / Events / Teams)
+  // Navigation path: War/League → War History → first war log entry → WarScreen.
+  // This path is always available (clan has war history) unlike an active war card.
   test('war detail screen shows Statistics, Events and Teams tabs', async ({ page }) => {
+    test.setTimeout(60_000);
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
     if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
     if (!(await openWarTab(page))) test.skip(true, 'Could not open War tab');
@@ -184,28 +187,33 @@ test.describe('War / CWL page', () => {
 
     await page.waitForTimeout(2_000);
 
-    // Need an active war to enter war detail
-    const warEl = page.getByText(/Preparation/i).or(page.getByText(/War ended/i));
-    if (await warEl.count() === 0) test.skip(true, 'Clan is not currently in a war');
+    // Step 1: open ClanWarStatsScreen via "War History" card.
+    const warHistoryEl = page.getByText(/War History/i).first();
+    if (await warHistoryEl.count() === 0) test.skip(true, 'War History card not present');
+    await warHistoryEl.click({ force: true });
+    await page.waitForTimeout(1_500);
 
-    // Open war detail via positional tap on the war card.
-    // NOTE: getByText(/War ended/i) also matches war log history entries, so the test
-    // may not skip even when no active war card exists. Guard below handles this.
-    const size = page.viewportSize();
-    await page.mouse.click((size?.width ?? 400) / 2, 200);
-    await page.waitForTimeout(2_000);
+    // Step 2: confirm we're on the War Log tab (ClanWarStatsScreen default).
+    const warLogTab = page.getByText('War Log', { exact: true });
+    if (await warLogTab.count() === 0) test.skip(true, 'War Log tab not found on ClanWarStatsScreen');
 
-    // Verify we landed on WarScreen and not ClanWarStatsScreen (War History).
-    // "Events" is unique to WarScreen's tab bar — it's absent on the War History screen
-    // (which has "War Log" + "Statistics") and absent on the main War/League page.
+    // Step 3: click the first war entry in the log to open WarScreen.
+    // Entries are rendered as GestureDetectors — tap the first "War ended" / "Victory" / "Defeat" text.
+    const firstEntry = page
+      .getByText(/War ended/i)
+      .or(page.getByText(/Victory/i))
+      .or(page.getByText(/Defeat/i))
+      .first();
+    if (await firstEntry.count() === 0) test.skip(true, 'No war log entries found');
+    await firstEntry.click({ force: true });
+
+    // An API call is made to fetch war data — wait for WarScreen to appear.
+    // "Events" tab is unique to WarScreen (ClanWarStatsScreen has "War Log" | "Statistics").
     const eventsTab = page.getByText('Events', { exact: true });
-    if (await eventsTab.count() === 0) {
-      test.skip(true, 'War detail screen did not open — no active war card or wrong screen opened');
-    }
+    await expect(eventsTab.first()).toBeAttached({ timeout: 15_000 });
 
     // WarScreen confirmed — assert all 3 tabs.
     await expect(page.getByText('Statistics', { exact: true }).first()).toBeAttached({ timeout: 5_000 });
-    await expect(eventsTab.first()).toBeAttached({ timeout: 5_000 });
 
     // Teams may be scrolled off in a narrow viewport — scroll the tab bar right to expose it.
     const tabBar = page.locator('flt-semantics').filter({ hasText: 'Statistics' }).first();
