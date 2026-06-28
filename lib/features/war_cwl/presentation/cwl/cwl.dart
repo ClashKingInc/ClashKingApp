@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_members_tab.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_ranking_history_tab.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_rounds_tab.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_teams_tab.dart';
 import 'package:flutter/material.dart';
@@ -215,11 +216,15 @@ class CwlScreenState extends State<CwlScreen> {
                 Tab(
                   text: AppLocalizations.of(context)?.clanMembers ?? "Members",
                 ),
+                Tab(
+                  text: AppLocalizations.of(context)?.generalHistory ?? "History",
+                ),
               ],
               children: [
                 CwlRoundsTab(warCwl: widget.warCwl),
                 CwlTeamsTab(warCwl: widget.warCwl),
                 CwlMembersTab(warCwl: widget.warCwl, clanTag: widget.clanTag),
+                CwlRankingHistoryTab(clanTag: widget.clanTag),
               ],
             ),
           ],

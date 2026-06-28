@@ -36,6 +36,7 @@ class ClanService extends ChangeNotifier {
   List<CapitalHistoryItems> capitalHistory = [];
   List<ClanWarLog> warLogList = [];
   List<ClanWarStats> warStatsList = [];
+  final Map<String, Map<String, dynamic>> _clanRankings = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -664,5 +665,23 @@ class ClanService extends ChangeNotifier {
 
   void notifyDataChanged() {
     _safeNotify();
+  }
+
+  Map<String, dynamic>? getClanRanking(String clanTag) => _clanRankings[clanTag];
+
+  Future<void> fetchClanRanking(String clanTag) async {
+    try {
+      final response = await _apiService.getResponse(
+        '/clan/$clanTag/ranking',
+        requiresAuth: true,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        _clanRankings[clanTag] = data as Map<String, dynamic>;
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   }
 }

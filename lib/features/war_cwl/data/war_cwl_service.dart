@@ -12,6 +12,7 @@ class WarCwlService extends ChangeNotifier {
 
   final ApiService _apiService;
   final Map<String, WarCwl> summaries = {};
+  final Map<String, List<Map<String, dynamic>>> _cwlRankingHistory = {};
 
   Future<void> loadAllWarData(List<String> clanTags,
       {bool notify = true, bool throwOnError = false}) async {
@@ -84,6 +85,27 @@ class WarCwlService extends ChangeNotifier {
 
   void notifyDataChanged() {
     notifyListeners();
+  }
+
+  List<Map<String, dynamic>>? getCwlRankingHistory(String clanTag) =>
+      _cwlRankingHistory[clanTag];
+
+  Future<void> fetchCwlRankingHistory(String clanTag) async {
+    try {
+      final response = await _apiService.getResponse(
+        '/cwl/$clanTag/ranking-history',
+        requiresAuth: true,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        final items = (data['items'] as List<dynamic>)
+            .cast<Map<String, dynamic>>();
+        _cwlRankingHistory[clanTag] = items;
+        notifyListeners();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   }
 
   static Future<WarInfo?> fetchWarDataFromTime(String tag, DateTime end) async {
