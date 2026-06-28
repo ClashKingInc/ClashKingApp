@@ -33,6 +33,7 @@ class ClanMembers extends StatefulWidget {
 }
 
 const _donationFilters = {'donations', 'donationsReceived', 'donationsRatio'};
+const _warOptFilter = 'warOpt';
 
 // Hero sort keys → CoC attribute path used by /players/sorted/{attribute}
 const _heroSortKeys = {
@@ -66,6 +67,9 @@ class ClanMembersState extends State<ClanMembers> {
       context.read<ClanService>().fetchMembersSortedBy(
             widget.clanInfo.tag, attr, tags);
     }
+    if (newFilter == _warOptFilter) {
+      context.read<ClanService>().fetchClanWarOpt(widget.clanInfo.tag);
+    }
   }
 
   @override
@@ -88,6 +92,7 @@ class ClanMembersState extends State<ClanMembers> {
       'Grand Warden': 'heroGW',
       'Royal Champion': 'heroRC',
       'Minion Prince': 'heroMinion',
+      'War Preference': _warOptFilter,
     };
 
     final cocService = context.watch<CocAccountService>();
@@ -103,6 +108,18 @@ class ClanMembersState extends State<ClanMembers> {
         ? clanService.getMemberTagOrder(
             widget.clanInfo.tag, _heroSortKeys[currentFilter]!)
         : null;
+
+    // War opt: build tag → 'in'/'out' lookup
+    final isWarOptSort = currentFilter == _warOptFilter;
+    final warOptItems = clanService.getClanWarOpt(widget.clanInfo.tag);
+    final Map<String, String> warOptMap = {};
+    if (warOptItems != null) {
+      for (final item in warOptItems) {
+        final tag = item['tag'] as String? ?? '';
+        final pref = item['warPreference'] as String? ?? '';
+        if (tag.isNotEmpty) warOptMap[tag] = pref;
+      }
+    }
 
     // Build a lookup map from tag → {donated, received} for seasonal data
     final Map<String, ({int donated, int received})> seasonLookup = {};
@@ -136,6 +153,11 @@ class ClanMembersState extends State<ClanMembers> {
       };
       members.sort((a, b) =>
           (tagIndex[a.tag] ?? 999).compareTo(tagIndex[b.tag] ?? 999));
+    } else if (isWarOptSort && warOptItems != null) {
+      // in before out, unknown last
+      int optWeight(String pref) => pref == 'in' ? 0 : pref == 'out' ? 1 : 2;
+      members.sort((a, b) =>
+          optWeight(warOptMap[a.tag] ?? '').compareTo(optWeight(warOptMap[b.tag] ?? '')));
     } else {
     members.sort((a, b) {
       switch (currentFilter) {
@@ -165,7 +187,7 @@ class ClanMembersState extends State<ClanMembers> {
           return 0;
       }
     });
-    } // end else (non-hero sort)
+    } // end else (non-hero/non-war-opt sort)
 
     // Apply name/tag search filter
     if (_searchQuery.isNotEmpty) {
@@ -215,6 +237,10 @@ class ClanMembersState extends State<ClanMembers> {
                 sortByOptions: filterOptions,
               ),
               if (isHeroSort && heroTagOrder == null) ...[
+                const SizedBox(height: 4),
+                const LinearProgressIndicator(),
+              ],
+              if (isWarOptSort && warOptItems == null) ...[
                 const SizedBox(height: 4),
                 const LinearProgressIndicator(),
               ],
@@ -349,7 +375,7 @@ class ClanMembersState extends State<ClanMembers> {
                       ),
                       Expanded(
                         flex: 3,
-                        child: _buildStatColumn(member, getDonated, getReceived),
+                        child: _buildStatColumn(member, getDonated, getReceived, warOptMap),
                       ),
                     ],
                   ),
@@ -365,6 +391,7 @@ class ClanMembersState extends State<ClanMembers> {
     ClanMember member,
     int Function(ClanMember) getDonated,
     int Function(ClanMember) getReceived,
+    Map<String, String> warOptMap,
   ) {
     switch (currentFilter) {
       case 'expLevel':
@@ -408,6 +435,18 @@ class ClanMembersState extends State<ClanMembers> {
       case 'townHallLevel':
         return _iconText(
             member.league.tinyIconUrl ?? "", member.trophies.toString());
+      case _warOptFilter:
+        final pref = warOptMap[member.tag] ?? '';
+        final isIn = pref == 'in';
+        final isOut = pref == 'out';
+        return _iconText(
+          isIn
+              ? ImageAssets.warPreferenceIn
+              : isOut
+                  ? ImageAssets.warPreferenceOut
+                  : ImageAssets.warPreferenceOut,
+          isIn ? 'In' : isOut ? 'Out' : '—',
+        );
       default:
         return const SizedBox.shrink();
     }

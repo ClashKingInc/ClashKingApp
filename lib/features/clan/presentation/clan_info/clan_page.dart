@@ -4,6 +4,8 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_activity_tab.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_composition_tab.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_games_tab.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_legend_tab.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_top_performers_tab.dart';
 import 'package:flutter/material.dart';
@@ -57,12 +59,16 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                 Tab(text: 'Composition'),
                 Tab(text: 'Top Players'),
                 Tab(text: 'Activity'),
+                Tab(text: 'Legend'),
+                Tab(text: 'Games'),
               ],
               children: [
                 ClanMembers(clanInfo: widget.clanInfo),
                 ClanCompositionTab(clanTag: widget.clanInfo.tag),
                 ClanTopPerformersTab(clanInfo: widget.clanInfo),
                 ClanActivityTab(clanInfo: widget.clanInfo),
+                ClanLegendTab(clanInfo: widget.clanInfo),
+                ClanGamesTab(clanInfo: widget.clanInfo),
               ],
             ),
           ],

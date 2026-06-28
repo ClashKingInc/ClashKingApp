@@ -1,5 +1,8 @@
 What’s new
-- Clan info page now has Members, Composition, Top Players, and Activity tabs
+- Clan info page now has Members, Composition, Top Players, Activity, Legend, and Games tabs
+- Legend tab shows all clan members in Legend League with today's attack count, trophies, and net trophy change
+- Games tab shows per-player Clan Games contribution with a season selector for historical data
+- Members tab can now sort by War Preference to see who is opted in or out of war
 - Composition tab shows TH, league, and country distribution with visual bars
 - Members tab can now sort by hero level (BK, AQ, GW, RC, Minion Prince) using ClashKing data
 - Members tab has a name/tag search field to quickly filter large clans

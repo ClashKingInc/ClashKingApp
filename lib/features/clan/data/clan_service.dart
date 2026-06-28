@@ -42,6 +42,9 @@ class ClanService extends ChangeNotifier {
   final Map<String, Map<String, dynamic>> _seasonTopPerformers = {};
   final Map<String, ClanJoinLeave> _singleClanJoinLeave = {};
   final Map<String, List<String>> _memberTagOrder = {};
+  final Map<String, List<Map<String, dynamic>>> _clanLegendDay = {};
+  final Map<String, Map<String, dynamic>> _clanGames = {};
+  final Map<String, List<Map<String, dynamic>>> _clanWarOpt = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -809,6 +812,78 @@ class ClanService extends ChangeNotifier {
         final data = jsonDecode(ApiService.decodeResponseBody(response));
         _clanRankings[clanTag] = data as Map<String, dynamic>;
         _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
+
+  List<Map<String, dynamic>>? getClanWarOpt(String clanTag) =>
+      _clanWarOpt[clanTag];
+
+  Future<void> fetchClanWarOpt(String clanTag) async {
+    if (_clanWarOpt.containsKey(clanTag)) return;
+    try {
+      final encodedTag = Uri.encodeComponent(clanTag);
+      final response = await _apiService.getResponse(
+        '/clan/$encodedTag/war-opt',
+        requiresAuth: false,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        final items = (data['items'] as List<dynamic>? ?? [])
+            .cast<Map<String, dynamic>>();
+        _clanWarOpt[clanTag] = items;
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
+
+  List<Map<String, dynamic>>? getClanLegendDay(String clanTag, String day) =>
+      _clanLegendDay['$clanTag/$day'];
+
+  Map<String, dynamic>? getClanGames(String clanTag, String season) =>
+      _clanGames['$clanTag/$season'];
+
+  Future<void> fetchClanGames(String clanTag, String season) async {
+    final key = '$clanTag/$season';
+    if (_clanGames.containsKey(key)) return;
+    try {
+      final encodedTag = Uri.encodeComponent(clanTag);
+      final response = await _apiService.getResponse(
+        '/clan/$encodedTag/games/$season',
+        requiresAuth: true,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        _clanGames[key] = data as Map<String, dynamic>;
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
+
+  Future<void> fetchClanLegendDay(
+      String clanTag, String day, List<String> playerTags) async {
+    final key = '$clanTag/$day';
+    if (_clanLegendDay.containsKey(key) || playerTags.isEmpty) return;
+    try {
+      final query = playerTags
+          .map((t) => 'players=${Uri.encodeQueryComponent(t)}')
+          .join('&');
+      final response = await _apiService.getResponse(
+        '/legends/players/day/$day?$query',
+        requiresAuth: false,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        if (data is List) {
+          _clanLegendDay[key] = data.cast<Map<String, dynamic>>();
+          _safeNotify();
+        }
       }
     } catch (e) {
       Sentry.captureException(e);
