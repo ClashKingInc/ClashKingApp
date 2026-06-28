@@ -1,6 +1,7 @@
 import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_activity_tab.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_composition_tab.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
@@ -55,11 +56,13 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                 Tab(text: 'Members'),
                 Tab(text: 'Composition'),
                 Tab(text: 'Top Players'),
+                Tab(text: 'Activity'),
               ],
               children: [
                 ClanMembers(clanInfo: widget.clanInfo),
                 ClanCompositionTab(clanTag: widget.clanInfo.tag),
                 ClanTopPerformersTab(clanInfo: widget.clanInfo),
+                ClanActivityTab(clanInfo: widget.clanInfo),
               ],
             ),
           ],

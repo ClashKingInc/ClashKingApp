@@ -40,6 +40,7 @@ class ClanService extends ChangeNotifier {
   final Map<String, List<Map<String, dynamic>>> _seasonalDonations = {};
   final Map<String, Map<String, dynamic>> _clanCompositions = {};
   final Map<String, Map<String, dynamic>> _seasonTopPerformers = {};
+  final Map<String, ClanJoinLeave> _singleClanJoinLeave = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -707,6 +708,17 @@ class ClanService extends ChangeNotifier {
       }
     } catch (e) {
       Sentry.captureException(e);
+    }
+  }
+
+  ClanJoinLeave? getSingleClanJoinLeave(String clanTag) => _singleClanJoinLeave[clanTag];
+
+  Future<void> fetchSingleClanJoinLeave(String clanTag) async {
+    if (_singleClanJoinLeave.containsKey(clanTag)) return;
+    final result = await _fetchSingleClanJoinLeave(clanTag);
+    if (result != null) {
+      _singleClanJoinLeave[clanTag] = result;
+      _safeNotify();
     }
   }
 
