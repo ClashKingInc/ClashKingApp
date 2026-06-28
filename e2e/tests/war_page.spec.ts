@@ -173,7 +173,7 @@ test.describe('War / CWL page', () => {
     await expect(page.locator('flt-glass-pane')).toBeAttached();
   });
 
-  // §12.9 — War detail screen tabs (Statistics / Events / Teams)
+  // §12.9 — War detail screen tabs (Statistics / Events / Teams — all three present in WarScreen)
   test('war detail screen shows Statistics, Events and Teams tabs', async ({ page }) => {
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
     if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
@@ -193,9 +193,10 @@ test.describe('War / CWL page', () => {
     await page.mouse.click((size?.width ?? 400) / 2, 200);
     await page.waitForTimeout(2_000);
 
-    // WarScreen has 2 tabs: Statistics | Events (Teams is CWL-only)
+    // WarScreen has 3 tabs: Statistics | Events | Teams
     await expect(page.getByText('Statistics', { exact: true }).first()).toBeAttached({ timeout: 8_000 });
     await expect(page.getByText('Events', { exact: true }).first()).toBeAttached({ timeout: 5_000 });
+    await expect(page.getByText('Teams', { exact: true }).first()).toBeAttached({ timeout: 5_000 });
   });
 
   // §12.10 — CWL detail screen tabs (Rounds / Teams / Members)
