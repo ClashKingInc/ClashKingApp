@@ -45,6 +45,7 @@ class ClanService extends ChangeNotifier {
   final Map<String, List<Map<String, dynamic>>> _clanLegendDay = {};
   final Map<String, Map<String, dynamic>> _clanGames = {};
   final Map<String, List<Map<String, dynamic>>> _clanWarOpt = {};
+  final Map<String, List<Map<String, dynamic>>> _clanMemberLocations = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -834,6 +835,30 @@ class ClanService extends ChangeNotifier {
         final items = (data['items'] as List<dynamic>? ?? [])
             .cast<Map<String, dynamic>>();
         _clanWarOpt[clanTag] = items;
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
+
+  List<Map<String, dynamic>>? getClanMemberLocations(String clanTag) =>
+      _clanMemberLocations[clanTag];
+
+  Future<void> fetchClanMemberLocations(
+      String clanTag, List<String> playerTags) async {
+    if (_clanMemberLocations.containsKey(clanTag) || playerTags.isEmpty) return;
+    try {
+      final response = await _apiService.postResponse(
+        '/players/location',
+        body: {'player_tags': playerTags},
+        requiresAuth: false,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        final items = (data['items'] as List<dynamic>? ?? [])
+            .cast<Map<String, dynamic>>();
+        _clanMemberLocations[clanTag] = items;
         _safeNotify();
       }
     } catch (e) {

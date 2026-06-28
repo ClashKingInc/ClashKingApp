@@ -42,7 +42,9 @@ const _heroSortKeys = {
   'heroGW': 'heroes[name=Grand Warden].level',
   'heroRC': 'heroes[name=Royal Champion].level',
   'heroMinion': 'heroes[name=Minion Prince].level',
+  'heroCumulative': 'cumulative_heroes',
 };
+const _locationFilter = 'memberCountry';
 
 class ClanMembersState extends State<ClanMembers> {
   String currentFilter = 'trophies';
@@ -70,6 +72,10 @@ class ClanMembersState extends State<ClanMembers> {
     if (newFilter == _warOptFilter) {
       context.read<ClanService>().fetchClanWarOpt(widget.clanInfo.tag);
     }
+    if (newFilter == _locationFilter) {
+      final tags = widget.clanInfo.memberList.map((m) => m.tag).toList();
+      context.read<ClanService>().fetchClanMemberLocations(widget.clanInfo.tag, tags);
+    }
   }
 
   @override
@@ -92,7 +98,9 @@ class ClanMembersState extends State<ClanMembers> {
       'Grand Warden': 'heroGW',
       'Royal Champion': 'heroRC',
       'Minion Prince': 'heroMinion',
+      'All Heroes': 'heroCumulative',
       'War Preference': _warOptFilter,
+      'Country': _locationFilter,
     };
 
     final cocService = context.watch<CocAccountService>();
@@ -118,6 +126,17 @@ class ClanMembersState extends State<ClanMembers> {
         final tag = item['tag'] as String? ?? '';
         final pref = item['warPreference'] as String? ?? '';
         if (tag.isNotEmpty) warOptMap[tag] = pref;
+      }
+    }
+
+    // Location: build tag → {country_name, country_code} lookup
+    final isLocationSort = currentFilter == _locationFilter;
+    final locationItems = clanService.getClanMemberLocations(widget.clanInfo.tag);
+    final Map<String, Map<String, dynamic>> locMap = {};
+    if (locationItems != null) {
+      for (final item in locationItems) {
+        final tag = item['tag'] as String? ?? '';
+        if (tag.isNotEmpty) locMap[tag] = item;
       }
     }
 
@@ -158,6 +177,12 @@ class ClanMembersState extends State<ClanMembers> {
       int optWeight(String pref) => pref == 'in' ? 0 : pref == 'out' ? 1 : 2;
       members.sort((a, b) =>
           optWeight(warOptMap[a.tag] ?? '').compareTo(optWeight(warOptMap[b.tag] ?? '')));
+    } else if (isLocationSort && locationItems != null) {
+      members.sort((a, b) {
+        final ca = locMap[a.tag]?['country_name'] as String? ?? 'zzz';
+        final cb = locMap[b.tag]?['country_name'] as String? ?? 'zzz';
+        return ca.compareTo(cb);
+      });
     } else {
     members.sort((a, b) {
       switch (currentFilter) {
@@ -241,6 +266,10 @@ class ClanMembersState extends State<ClanMembers> {
                 const LinearProgressIndicator(),
               ],
               if (isWarOptSort && warOptItems == null) ...[
+                const SizedBox(height: 4),
+                const LinearProgressIndicator(),
+              ],
+              if (isLocationSort && locationItems == null) ...[
                 const SizedBox(height: 4),
                 const LinearProgressIndicator(),
               ],
@@ -375,7 +404,7 @@ class ClanMembersState extends State<ClanMembers> {
                       ),
                       Expanded(
                         flex: 3,
-                        child: _buildStatColumn(member, getDonated, getReceived, warOptMap),
+                        child: _buildStatColumn(member, getDonated, getReceived, warOptMap, locMap),
                       ),
                     ],
                   ),
@@ -392,6 +421,7 @@ class ClanMembersState extends State<ClanMembers> {
     int Function(ClanMember) getDonated,
     int Function(ClanMember) getReceived,
     Map<String, String> warOptMap,
+    Map<String, Map<String, dynamic>> locMap,
   ) {
     switch (currentFilter) {
       case 'expLevel':
@@ -446,6 +476,35 @@ class ClanMembersState extends State<ClanMembers> {
                   ? ImageAssets.warPreferenceOut
                   : ImageAssets.warPreferenceOut,
           isIn ? 'In' : isOut ? 'Out' : '—',
+        );
+      case _locationFilter:
+        final loc = locMap[member.tag];
+        final code = loc?['country_code'] as String? ?? '';
+        final name = loc?['country_name'] as String? ?? '—';
+        if (code.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text('—', style: Theme.of(context).textTheme.bodySmall),
+          );
+        }
+        return Row(
+          children: [
+            const SizedBox(width: 8),
+            CachedNetworkImage(
+              imageUrl: ImageAssets.flag(code),
+              width: 22,
+              height: 16,
+              errorWidget: (ctx, url, err) => const SizedBox(width: 22),
+            ),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                name,
+                style: Theme.of(context).textTheme.bodySmall,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         );
       default:
         return const SizedBox.shrink();
