@@ -38,6 +38,8 @@ class ClanService extends ChangeNotifier {
   List<ClanWarStats> warStatsList = [];
   final Map<String, Map<String, dynamic>> _clanRankings = {};
   final Map<String, List<Map<String, dynamic>>> _seasonalDonations = {};
+  final Map<String, Map<String, dynamic>> _clanCompositions = {};
+  final Map<String, Map<String, dynamic>> _seasonTopPerformers = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -701,6 +703,56 @@ class ClanService extends ChangeNotifier {
         final data = jsonDecode(ApiService.decodeResponseBody(response));
         _seasonalDonations[key] =
             (data['items'] as List<dynamic>).cast<Map<String, dynamic>>();
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
+
+  Map<String, dynamic>? getClanComposition(String clanTag) => _clanCompositions[clanTag];
+
+  Map<String, dynamic>? getSeasonTopPerformers(String clanTag, String season) =>
+      _seasonTopPerformers['$clanTag/$season'];
+
+  Future<void> fetchSeasonTopPerformers(
+      String clanTag, String season, List<String> memberTags) async {
+    final key = '$clanTag/$season';
+    if (_seasonTopPerformers.containsKey(key)) return;
+    try {
+      final response = await _apiService.postResponse(
+        '/players/summary/$season/top?limit=5',
+        body: {'player_tags': memberTags},
+        requiresAuth: true,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        // Flatten list of {category: [items]} into a single map
+        final Map<String, dynamic> result = {};
+        for (final entry in (data['items'] as List<dynamic>? ?? [])) {
+          if (entry is Map<String, dynamic>) {
+            result.addAll(entry);
+          }
+        }
+        _seasonTopPerformers[key] = result;
+        _safeNotify();
+      }
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }
+
+  Future<void> fetchClanComposition(String clanTag) async {
+    if (_clanCompositions.containsKey(clanTag)) return;
+    try {
+      final encodedTag = Uri.encodeComponent(clanTag);
+      final response = await _apiService.getResponse(
+        '/clan/compo?clan_tags=$encodedTag',
+        requiresAuth: true,
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(ApiService.decodeResponseBody(response));
+        _clanCompositions[clanTag] = data as Map<String, dynamic>;
         _safeNotify();
       }
     } catch (e) {

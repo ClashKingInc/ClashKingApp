@@ -1,7 +1,10 @@
+import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_composition_tab.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_top_performers_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +43,25 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
               child: ClanInfoHeaderCard(clanInfo: widget.clanInfo, ranking: ranking),
             ),
             const SizedBox(height: 8),
-            ClanMembers(clanInfo: widget.clanInfo),
+            ScrollableTab(
+              scrollable: true,
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              unselectedLabelColor:
+                  Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              tabBarDecoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              tabs: const [
+                Tab(text: 'Members'),
+                Tab(text: 'Composition'),
+                Tab(text: 'Top Players'),
+              ],
+              children: [
+                ClanMembers(clanInfo: widget.clanInfo),
+                ClanCompositionTab(clanTag: widget.clanInfo.tag),
+                ClanTopPerformersTab(clanInfo: widget.clanInfo),
+              ],
+            ),
           ],
         ),
       ),

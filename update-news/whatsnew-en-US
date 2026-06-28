@@ -1,4 +1,7 @@
 What’s new
+- Clan info page now has Members, Composition, and Top Players tabs
+- Composition tab shows TH, league, and country distribution with visual bars
+- Top Players tab shows per-season leaderboards for donations, war stars, gold looted, and more
 - Clan page now shows global and local rank chips in the header
 - CWL screen has a new History tab showing the clan’s CWL ranking per season
 - CWL Teams tab now shows promotion and relegation zone indicators
