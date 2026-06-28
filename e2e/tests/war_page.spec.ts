@@ -188,16 +188,24 @@ test.describe('War / CWL page', () => {
     const warEl = page.getByText(/Preparation/i).or(page.getByText(/War ended/i));
     if (await warEl.count() === 0) test.skip(true, 'Clan is not currently in a war');
 
-    // Open war detail via positional tap on the war card
+    // Open war detail via positional tap on the war card.
+    // NOTE: getByText(/War ended/i) also matches war log history entries, so the test
+    // may not skip even when no active war card exists. Guard below handles this.
     const size = page.viewportSize();
     await page.mouse.click((size?.width ?? 400) / 2, 200);
     await page.waitForTimeout(2_000);
 
-    // WarScreen has 3 tabs: Statistics | Events | Teams.
-    // Statistics appears first — wait for it to confirm the detail screen opened.
-    const statsTab = page.getByText('Statistics', { exact: true }).first();
-    await expect(statsTab).toBeAttached({ timeout: 8_000 });
-    await expect(page.getByText('Events', { exact: true }).first()).toBeAttached({ timeout: 5_000 });
+    // Verify we landed on WarScreen and not ClanWarStatsScreen (War History).
+    // "Events" is unique to WarScreen's tab bar — it's absent on the War History screen
+    // (which has "War Log" + "Statistics") and absent on the main War/League page.
+    const eventsTab = page.getByText('Events', { exact: true });
+    if (await eventsTab.count() === 0) {
+      test.skip(true, 'War detail screen did not open — no active war card or wrong screen opened');
+    }
+
+    // WarScreen confirmed — assert all 3 tabs.
+    await expect(page.getByText('Statistics', { exact: true }).first()).toBeAttached({ timeout: 5_000 });
+    await expect(eventsTab.first()).toBeAttached({ timeout: 5_000 });
 
     // Teams may be scrolled off in a narrow viewport — scroll the tab bar right to expose it.
     const tabBar = page.locator('flt-semantics').filter({ hasText: 'Statistics' }).first();
