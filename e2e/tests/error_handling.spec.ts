@@ -169,7 +169,7 @@ test.describe('Error handling — API unreachable', () => {
     }
 
     // Now block the API.
-    await page.route(API_PATTERN, route => route.abort('failed'));
+    await page.route(API_V2_PATTERN, route => route.abort('failed'));
 
     // Trigger pull-to-refresh: drag down from top of the list.
     const size = page.viewportSize();

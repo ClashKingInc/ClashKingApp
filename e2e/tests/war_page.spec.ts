@@ -193,10 +193,9 @@ test.describe('War / CWL page', () => {
     await page.mouse.click((size?.width ?? 400) / 2, 200);
     await page.waitForTimeout(2_000);
 
-    // WarScreen tabs: Statistics | Events | Teams
+    // WarScreen has 2 tabs: Statistics | Events (Teams is CWL-only)
     await expect(page.getByText('Statistics', { exact: true }).first()).toBeAttached({ timeout: 8_000 });
     await expect(page.getByText('Events', { exact: true }).first()).toBeAttached({ timeout: 5_000 });
-    await expect(page.getByText('Teams', { exact: true }).first()).toBeAttached({ timeout: 5_000 });
   });
 
   // §12.10 — CWL detail screen tabs (Rounds / Teams / Members)
