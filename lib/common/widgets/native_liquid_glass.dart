@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:native_liquid_glass/native_liquid_glass.dart' as glass;
 
-class NativeLiquidGlassBar extends StatefulWidget {
+class NativeLiquidGlassBar extends StatelessWidget {
   const NativeLiquidGlassBar({
     super.key,
     required this.height,
@@ -26,113 +25,335 @@ class NativeLiquidGlassBar extends StatefulWidget {
   final bool selected;
 
   @override
-  State<NativeLiquidGlassBar> createState() => _NativeLiquidGlassBarState();
-}
-
-class _NativeLiquidGlassBarState extends State<NativeLiquidGlassBar> {
-  MethodChannel? _channel;
-
-  @override
-  void didUpdateWidget(covariant NativeLiquidGlassBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _sendUpdate());
-  }
-
-  Map<String, Object?> _params() {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveBorderOpacity =
-        widget.borderOpacity ?? (isDark ? 0.22 : 0.34);
-    final effectiveShadowOpacity =
-        widget.shadowOpacity ?? (isDark ? 0.35 : 0.16);
-
-    return {
-      'cornerRadius': widget.cornerRadius,
-      'opacity': widget.opacity,
-      'borderColor': colorScheme.outlineVariant.toARGB32(),
-      'borderOpacity': effectiveBorderOpacity,
-      'shadowOpacity': effectiveShadowOpacity,
-      'isDark': isDark,
-      'interactive': widget.interactive,
-      'selected': widget.selected,
-    };
-  }
-
-  void _sendUpdate() {
-    if (!mounted || _channel == null) return;
-    _channel!.invokeMethod<void>('update', _params());
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveBorderOpacity =
-        widget.borderOpacity ?? (isDark ? 0.22 : 0.34);
-    final effectiveShadowOpacity =
-        widget.shadowOpacity ?? (isDark ? 0.35 : 0.16);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final colorScheme = Theme.of(context).colorScheme;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final effectiveBorderOpacity = borderOpacity ?? (isDark ? 0.22 : 0.34);
+        final effectiveShadowOpacity = shadowOpacity ?? (isDark ? 0.35 : 0.16);
+        final resolvedHeight =
+            constraints.hasBoundedHeight && constraints.maxHeight.isFinite
+            ? constraints.maxHeight
+            : height;
 
-    if (kIsWeb || !Platform.isIOS) {
-      final surfaceColor = widget.selected
-          ? colorScheme.surfaceContainerHighest
-          : colorScheme.surface;
-      return DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.cornerRadius),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: effectiveShadowOpacity),
-              blurRadius: 24,
-              offset: const Offset(0, 12),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(widget.cornerRadius),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: surfaceColor.withValues(alpha: widget.opacity * 0.65),
-                border: Border.all(
-                  color: colorScheme.outlineVariant.withValues(
-                    alpha: effectiveBorderOpacity,
-                  ),
-                  width: 0.8,
-                ),
+        if (_supportsNativeLiquidGlass) {
+          return glass.LiquidGlassContainer(
+            height: height,
+            config: glass.LiquidGlassConfig(
+              effect: selected
+                  ? glass.LiquidGlassEffect.regular
+                  : glass.LiquidGlassEffect.clear,
+              shape: cornerRadius >= resolvedHeight / 2
+                  ? glass.LiquidGlassEffectShape.capsule
+                  : glass.LiquidGlassEffectShape.rect,
+              cornerRadius: cornerRadius,
+              tint: colorScheme.surface.withValues(alpha: opacity * 0.7),
+              backgroundColor: colorScheme.surface.withValues(
+                alpha: selected ? 0.34 : 0.22,
               ),
-              child: const SizedBox.expand(),
+              interactive: interactive,
+              border: glass.LiquidGlassBorder(
+                color: colorScheme.outlineVariant.withValues(
+                  alpha: selected
+                      ? effectiveBorderOpacity.clamp(0.42, 1.0)
+                      : effectiveBorderOpacity,
+                ),
+                width: 0.8,
+              ),
             ),
-          ),
-        ),
-      );
-    }
+            child: const SizedBox.expand(),
+          );
+        }
 
-    return IgnorePointer(
-      child: UiKitView(
-        viewType: 'clashking/liquid_glass_bar',
-        creationParams: _params(),
-        creationParamsCodec: const StandardMessageCodec(),
-        onPlatformViewCreated: (id) {
-          _channel = MethodChannel('clashking/liquid_glass_bar_$id');
-          _sendUpdate();
-        },
-      ),
+        return _FallbackLiquidGlassBar(
+          cornerRadius: cornerRadius,
+          opacity: opacity,
+          borderOpacity: effectiveBorderOpacity,
+          shadowOpacity: effectiveShadowOpacity,
+          selected: selected,
+        );
+      },
     );
   }
 }
 
-class NativeLiquidGlassTabBar extends StatefulWidget {
+class NativeLiquidGlassTabItem {
+  const NativeLiquidGlassTabItem({
+    required this.icon,
+    required this.label,
+    this.selectedIcon,
+    this.selectedItemColor,
+  });
+
+  final IconData icon;
+  final IconData? selectedIcon;
+  final String label;
+  final Color? selectedItemColor;
+}
+
+class NativeLiquidGlassTabBar extends StatelessWidget {
   const NativeLiquidGlassTabBar({
     super.key,
     required this.height,
     required this.itemCount,
     required this.selectedIndex,
+    this.onTabSelected,
+    this.items,
+    this.actionButton,
+    this.onActionButtonPressed,
     this.cornerRadius = 28,
     this.selectedCornerRadius = 20,
     this.inset = 7,
     this.borderOpacity,
     this.shadowOpacity,
+    this.iconSize = 22,
+  });
+
+  final double height;
+  final int itemCount;
+  final int selectedIndex;
+  final ValueChanged<int>? onTabSelected;
+  final List<NativeLiquidGlassTabItem>? items;
+  final NativeLiquidGlassTabItem? actionButton;
+  final VoidCallback? onActionButtonPressed;
+  final double cornerRadius;
+  final double selectedCornerRadius;
+  final double inset;
+  final double? borderOpacity;
+  final double? shadowOpacity;
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final effectiveBorderOpacity = borderOpacity ?? (isDark ? 0.22 : 0.34);
+    final effectiveShadowOpacity = shadowOpacity ?? (isDark ? 0.5 : 0.18);
+
+    if (_supportsNativeLiquidGlass &&
+        items != null &&
+        items!.length == itemCount &&
+        selectedIndex >= 0 &&
+        selectedIndex < itemCount &&
+        onTabSelected != null) {
+      return glass.LiquidGlassTabBar(
+        height: height,
+        currentIndex: selectedIndex,
+        onTabSelected: onTabSelected!,
+        onActionButtonPressed: onActionButtonPressed,
+        iosActionButton: actionButton == null
+            ? null
+            : glass.LiquidGlassTabItem(
+                label: actionButton!.label,
+                icon: glass.NativeLiquidGlassIcon.iconData(actionButton!.icon),
+                selectedIcon: glass.NativeLiquidGlassIcon.iconData(
+                  actionButton!.selectedIcon ?? actionButton!.icon,
+                ),
+                selectedItemColor:
+                    actionButton!.selectedItemColor ?? colorScheme.primary,
+              ),
+        items: items!
+            .map(
+              (item) => glass.LiquidGlassTabItem(
+                label: item.label,
+                icon: glass.NativeLiquidGlassIcon.iconData(item.icon),
+                selectedIcon: glass.NativeLiquidGlassIcon.iconData(
+                  item.selectedIcon ?? item.icon,
+                ),
+                selectedItemColor:
+                    item.selectedItemColor ?? colorScheme.primary,
+              ),
+            )
+            .toList(growable: false),
+        selectedItemColor: colorScheme.primary,
+        iosItemPositioning: glass.LiquidGlassTabBarItemPositioning.fill,
+        iconSize: iconSize,
+        labelTextStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+          fontWeight: FontWeight.w600,
+          height: 1.0,
+        ),
+      );
+    }
+
+    return _FallbackLiquidGlassTabBar(
+      height: height,
+      itemCount: itemCount,
+      selectedIndex: selectedIndex,
+      cornerRadius: cornerRadius,
+      selectedCornerRadius: selectedCornerRadius,
+      inset: inset,
+      borderOpacity: effectiveBorderOpacity,
+      shadowOpacity: effectiveShadowOpacity,
+    );
+  }
+}
+
+class NativeLiquidGlassIconButton extends StatelessWidget {
+  const NativeLiquidGlassIconButton({
+    super.key,
+    required this.icon,
+    required this.onPressed,
+    this.size = 62,
+    this.tint,
+    this.selected = false,
+  });
+
+  final IconData icon;
+  final VoidCallback onPressed;
+  final double size;
+  final Color? tint;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final iconColor =
+        tint ?? (selected ? colorScheme.primary : colorScheme.onSurface);
+
+    if (_supportsNativeLiquidGlass) {
+      return glass.LiquidGlassButton.icon(
+        size: size,
+        iconSize: 30,
+        icon: glass.NativeLiquidGlassIcon.iconData(icon),
+        iconColor: iconColor,
+        tint: colorScheme.surface.withValues(alpha: selected ? 0.72 : 0.58),
+        onPressed: onPressed,
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        NativeLiquidGlassBar(
+          height: size,
+          cornerRadius: size / 2,
+          interactive: true,
+          selected: selected,
+          borderOpacity: selected ? 0.44 : null,
+        ),
+        Material(
+          color: Colors.transparent,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              splashFactory: NoSplash.splashFactory,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: onPressed,
+              child: Icon(icon, size: 30, color: iconColor),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
+  const NativeLiquidGlassSegmentedControl({
+    super.key,
+    required this.values,
+    required this.labels,
+    required this.selected,
+    required this.onChanged,
+    this.height = 52,
+    this.color,
+    this.fallbackBuilder,
+  }) : assert(values.length == labels.length);
+
+  final List<T> values;
+  final List<String> labels;
+  final T selected;
+  final ValueChanged<T> onChanged;
+  final double height;
+  final Color? color;
+  final WidgetBuilder? fallbackBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedIndex = values.indexOf(selected);
+    if (_supportsNativeLiquidGlass && selectedIndex >= 0) {
+      return glass.LiquidGlassSegmentedControl(
+        labels: labels,
+        selectedIndex: selectedIndex,
+        height: height,
+        color: color ?? Theme.of(context).colorScheme.primary,
+        onValueChanged: (index) => onChanged(values[index]),
+      );
+    }
+
+    return fallbackBuilder?.call(context) ?? const SizedBox.shrink();
+  }
+}
+
+class _FallbackLiquidGlassBar extends StatelessWidget {
+  const _FallbackLiquidGlassBar({
+    required this.cornerRadius,
+    required this.opacity,
+    required this.borderOpacity,
+    required this.shadowOpacity,
+    required this.selected,
+  });
+
+  final double cornerRadius;
+  final double opacity;
+  final double borderOpacity;
+  final double shadowOpacity;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final surfaceColor = selected
+        ? colorScheme.surfaceContainerHighest
+        : colorScheme.surface;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(cornerRadius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: shadowOpacity),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(cornerRadius),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: surfaceColor.withValues(alpha: opacity * 0.65),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(
+                  alpha: borderOpacity,
+                ),
+                width: 0.8,
+              ),
+            ),
+            child: const SizedBox.expand(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FallbackLiquidGlassTabBar extends StatelessWidget {
+  const _FallbackLiquidGlassTabBar({
+    required this.height,
+    required this.itemCount,
+    required this.selectedIndex,
+    required this.cornerRadius,
+    required this.selectedCornerRadius,
+    required this.inset,
+    required this.borderOpacity,
+    required this.shadowOpacity,
   });
 
   final double height;
@@ -141,143 +362,51 @@ class NativeLiquidGlassTabBar extends StatefulWidget {
   final double cornerRadius;
   final double selectedCornerRadius;
   final double inset;
-  final double? borderOpacity;
-  final double? shadowOpacity;
-
-  @override
-  State<NativeLiquidGlassTabBar> createState() =>
-      _NativeLiquidGlassTabBarState();
-}
-
-class _NativeLiquidGlassTabBarState extends State<NativeLiquidGlassTabBar> {
-  MethodChannel? _channel;
-
-  @override
-  void didUpdateWidget(covariant NativeLiquidGlassTabBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _sendUpdate());
-  }
-
-  Map<String, Object?> _params() {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveBorderOpacity =
-        widget.borderOpacity ?? (isDark ? 0.22 : 0.34);
-    final effectiveShadowOpacity =
-        widget.shadowOpacity ?? (isDark ? 0.5 : 0.18);
-
-    return {
-      'itemCount': widget.itemCount,
-      'selectedIndex': widget.selectedIndex,
-      'cornerRadius': widget.cornerRadius,
-      'selectedCornerRadius': widget.selectedCornerRadius,
-      'inset': widget.inset,
-      'borderColor': colorScheme.outlineVariant.toARGB32(),
-      'borderOpacity': effectiveBorderOpacity,
-      'shadowOpacity': effectiveShadowOpacity,
-      'isDark': isDark,
-    };
-  }
-
-  void _sendUpdate() {
-    if (!mounted || _channel == null) return;
-    _channel!.invokeMethod<void>('update', _params());
-  }
+  final double borderOpacity;
+  final double shadowOpacity;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveBorderOpacity =
-        widget.borderOpacity ?? (isDark ? 0.22 : 0.34);
-    final effectiveShadowOpacity =
-        widget.shadowOpacity ?? (isDark ? 0.5 : 0.18);
+    final selectedVisible = selectedIndex >= 0 && selectedIndex < itemCount;
 
-    if (kIsWeb || !Platform.isIOS) {
-      final selectedVisible =
-          widget.selectedIndex >= 0 && widget.selectedIndex < widget.itemCount;
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          final itemWidth = constraints.maxWidth / widget.itemCount;
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(widget.cornerRadius),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(
-                        alpha: effectiveShadowOpacity,
-                      ),
-                      blurRadius: 24,
-                      offset: const Offset(0, 12),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(widget.cornerRadius),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: colorScheme.surface.withValues(alpha: 0.65),
-                        border: Border.all(
-                          color: colorScheme.outlineVariant.withValues(
-                            alpha: effectiveBorderOpacity,
-                          ),
-                          width: 0.8,
-                        ),
-                      ),
-                      child: const SizedBox.expand(),
-                    ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final itemWidth = constraints.maxWidth / itemCount;
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            NativeLiquidGlassBar(
+              height: height,
+              cornerRadius: cornerRadius,
+              opacity: 1,
+              borderOpacity: borderOpacity,
+              shadowOpacity: shadowOpacity,
+              selected: false,
+            ),
+            if (selectedVisible)
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 260),
+                curve: Curves.easeOutCubic,
+                left: itemWidth * selectedIndex + inset,
+                top: inset,
+                width: itemWidth - inset * 2,
+                height: height - inset * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest
+                        .withValues(alpha: 0.8),
+                    borderRadius: BorderRadius.circular(selectedCornerRadius),
                   ),
                 ),
               ),
-              if (selectedVisible)
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 260),
-                  curve: Curves.easeOutCubic,
-                  left: itemWidth * widget.selectedIndex + widget.inset,
-                  top: widget.inset,
-                  width: itemWidth - widget.inset * 2,
-                  height: widget.height - widget.inset * 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      widget.selectedCornerRadius,
-                    ),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: colorScheme.surfaceContainerHighest.withValues(
-                            alpha: 0.72,
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            widget.selectedCornerRadius,
-                          ),
-                        ),
-                        child: const SizedBox.expand(),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          );
-        },
-      );
-    }
-
-    return IgnorePointer(
-      child: UiKitView(
-        viewType: 'clashking/liquid_glass_tab_bar',
-        creationParams: _params(),
-        creationParamsCodec: const StandardMessageCodec(),
-        onPlatformViewCreated: (id) {
-          _channel = MethodChannel('clashking/liquid_glass_tab_bar_$id');
-          _sendUpdate();
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 }
+
+bool get supportsNativeLiquidGlass =>
+    !kIsWeb && glass.NativeLiquidGlassUtils.supportsLiquidGlass;
+
+bool get _supportsNativeLiquidGlass => supportsNativeLiquidGlass;

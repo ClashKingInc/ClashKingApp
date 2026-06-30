@@ -23,7 +23,10 @@ enum _SearchMode { players, clans }
 enum _RecentSearchType { player, clan }
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  const SearchPage({super.key, this.overlay = false, this.autofocus = false});
+
+  final bool overlay;
+  final bool autofocus;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -52,6 +55,17 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     _controller.addListener(_queueSearch);
     _loadRecents();
+    if (widget.autofocus) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (widget.overlay) {
+          Future.delayed(const Duration(milliseconds: 180), () {
+            if (mounted) _focusNode.requestFocus();
+          });
+        } else if (mounted) {
+          _focusNode.requestFocus();
+        }
+      });
+    }
   }
 
   @override
@@ -321,163 +335,277 @@ class _SearchPageState extends State<SearchPage> {
     final showRecents =
         _recentItems.isNotEmpty && _controller.text.trim().isEmpty;
 
-    return Scaffold(
-      body: ListView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-        children: [
-          _ModeSelector(mode: _mode, onChanged: _setMode),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            textInputAction: TextInputAction.search,
-            onSubmitted: (_) => _runSearch(),
-            decoration: InputDecoration(
-              hintText: hint,
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (_mode == _SearchMode.clans)
-                    IconButton(
-                      tooltip: l10n?.searchFilters ?? 'Filters',
-                      onPressed: _showClanFilters,
-                      icon: Icon(
-                        Icons.filter_list,
-                        color: _clanFilters.isEmpty
-                            ? colorScheme.onSurfaceVariant
-                            : colorScheme.primary,
-                      ),
-                    ),
-                  if (_isSearching)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14),
-                      child: SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    )
-                  else if (_controller.text.isNotEmpty)
-                    IconButton(
-                      tooltip: l10n?.searchClear ?? 'Clear',
-                      onPressed: () {
-                        _controller.clear();
-                        setState(() {
-                          _results = [];
-                          _hasSearched = false;
-                          _lastQuery = '';
-                        });
-                      },
-                      icon: const Icon(Icons.close),
-                    ),
-                ],
-              ),
-              filled: true,
-              fillColor: colorScheme.surface,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.35),
+    Widget searchField({required bool overlay}) {
+      return SizedBox(
+        height: 48,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            NativeLiquidGlassBar(
+              height: 48,
+              cornerRadius: 24,
+              interactive: true,
+              borderOpacity: Theme.of(context).brightness == Brightness.dark
+                  ? 0.22
+                  : 0.30,
+              shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                  ? 0.22
+                  : 0.08,
+            ),
+            TextField(
+              controller: _controller,
+              focusNode: _focusNode,
+              textInputAction: TextInputAction.search,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+              onSubmitted: (_) => _runSearch(),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
                 ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.35),
+                isDense: true,
+                prefixIcon: Icon(
+                  Icons.search_rounded,
+                  size: 20,
+                  color: colorScheme.onSurfaceVariant,
                 ),
+                prefixIconConstraints: const BoxConstraints(
+                  minWidth: 42,
+                  minHeight: 48,
+                ),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_mode == _SearchMode.clans)
+                      IconButton(
+                        tooltip: l10n?.searchFilters ?? 'Filters',
+                        onPressed: _showClanFilters,
+                        splashRadius: 18,
+                        icon: Icon(
+                          Icons.filter_list_rounded,
+                          color: _clanFilters.isEmpty
+                              ? colorScheme.onSurfaceVariant
+                              : colorScheme.onSurface,
+                        ),
+                      ),
+                    if (_isSearching)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 14),
+                        child: SizedBox.square(
+                          dimension: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                    else if (_controller.text.isNotEmpty)
+                      IconButton(
+                        tooltip: l10n?.searchClear ?? 'Clear',
+                        onPressed: () {
+                          _controller.clear();
+                          setState(() {
+                            _results = [];
+                            _hasSearched = false;
+                            _lastQuery = '';
+                          });
+                        },
+                        splashRadius: 18,
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                  ],
+                ),
+                suffixIconConstraints: const BoxConstraints(minHeight: 48),
+                filled: false,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: 14,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: colorScheme.primary, width: 1.2),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final resultChildren = <Widget>[
+      if (showRecents) ...[
+        Padding(
+          padding: EdgeInsets.only(top: widget.overlay ? 4 : 18),
+          child: Text(
+            l10n?.searchRecent ?? 'Recent',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: widget.overlay
+                  ? colorScheme.onSurfaceVariant
+                  : colorScheme.onSurface,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        ..._recentItems
+            .take(_recentLimit)
+            .map(
+              (item) => _RecentResultTile(
+                item: item,
+                overlay: widget.overlay,
+                onTap: () => _openRecent(item),
+              ),
+            ),
+      ],
+      if (!showRecents) SizedBox(height: widget.overlay ? 2 : 14),
+      if (_hasSearched && !_isSearching && _results.isEmpty)
+        Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: Center(
+            child: Text(
+              AppLocalizations.of(context)?.searchNoResult ?? 'No result.',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
             ),
           ),
-          if (showRecents) ...[
-            const SizedBox(height: 18),
-            Text(l10n?.searchRecent ?? 'Recent', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 10),
-            ..._recentItems
-                .take(_recentLimit)
-                .map(
-                  (item) => _RecentResultTile(
-                    item: item,
-                    onTap: () => _openRecent(item),
-                  ),
-                ),
-          ],
-          const SizedBox(height: 14),
-          if (_hasSearched && !_isSearching && _results.isEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)?.searchNoResult ?? 'No result.',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+        )
+      else
+        ..._results.map(
+          (result) => _SearchResultTile(
+            result: result as Map<String, dynamic>,
+            mode: _mode,
+            overlay: widget.overlay,
+            onTap: () => _mode == _SearchMode.players
+                ? _openPlayer(result)
+                : _openClan(result),
+          ),
+        ),
+    ];
+
+    if (widget.overlay) {
+      return Material(
+        color: colorScheme.surface,
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 12, 8),
+                child: Row(
+                  children: [
+                    Expanded(child: searchField(overlay: true)),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: TextButton.styleFrom(
+                        foregroundColor: colorScheme.onSurface,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: const Size(60, 40),
+                        textStyle: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      child: const Text('Cancel'),
+                    ),
+                  ],
                 ),
               ),
-            )
-          else
-            ..._results.map(
-              (result) => _SearchResultTile(
-                result: result as Map<String, dynamic>,
-                mode: _mode,
-                onTap: () => _mode == _SearchMode.players
-                    ? _openPlayer(result)
-                    : _openClan(result),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                child: _ModeSelector(
+                  mode: _mode,
+                  onChanged: _setMode,
+                  useNativeLiquidGlass: false,
+                  compact: true,
+                ),
               ),
-            ),
-        ],
-      ),
+              Expanded(
+                child: ListView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.fromLTRB(
+                    16,
+                    10,
+                    16,
+                    MediaQuery.paddingOf(context).bottom + 20,
+                  ),
+                  children: resultChildren,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final content = ListView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+      children: [
+        _ModeSelector(
+          mode: _mode,
+          onChanged: _setMode,
+          useNativeLiquidGlass: true,
+        ),
+        const SizedBox(height: 12),
+        searchField(overlay: false),
+        ...resultChildren,
+      ],
     );
+
+    return Scaffold(body: content);
   }
 }
 
 class _ModeSelector extends StatelessWidget {
-  const _ModeSelector({required this.mode, required this.onChanged});
+  const _ModeSelector({
+    required this.mode,
+    required this.onChanged,
+    this.useNativeLiquidGlass = true,
+    this.compact = false,
+  });
 
   final _SearchMode mode;
   final ValueChanged<_SearchMode> onChanged;
+  final bool useNativeLiquidGlass;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
 
-    return SizedBox(
-      height: 52,
+    final height = compact ? 40.0 : 52.0;
+    final inset = compact ? 4.0 : 5.0;
+    final selectedHeight = height - (inset * 2);
+    final selectedRadius = selectedHeight / 2;
+
+    Widget fallbackControl(BuildContext context) => SizedBox(
+      height: height,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final segmentWidth = constraints.maxWidth / 2;
           final selectedLeft = mode == _SearchMode.players
-              ? 5.0
-              : segmentWidth + 5.0;
+              ? inset
+              : segmentWidth + inset;
 
           return Stack(
             fit: StackFit.expand,
             children: [
-              const NativeLiquidGlassBar(
-                height: 52,
-                cornerRadius: 26,
-                borderOpacity: 0.28,
-                shadowOpacity: 0.08,
+              _ModeSegmentChrome(
+                height: height,
+                cornerRadius: height / 2,
+                native: useNativeLiquidGlass,
               ),
               AnimatedPositioned(
-                duration: const Duration(milliseconds: 240),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOutCubic,
                 left: selectedLeft,
-                top: 5,
-                width: segmentWidth - 10,
-                height: 42,
-                child: const NativeLiquidGlassBar(
-                  height: 42,
-                  cornerRadius: 21,
-                  interactive: true,
+                top: inset,
+                width: segmentWidth - (inset * 2),
+                height: selectedHeight,
+                child: _ModeSegmentChrome(
+                  height: selectedHeight,
+                  cornerRadius: selectedRadius,
                   selected: true,
-                  borderOpacity: 0.46,
-                  shadowOpacity: 0.12,
+                  native: useNativeLiquidGlass,
                 ),
               ),
               Row(
@@ -487,6 +615,7 @@ class _ModeSelector extends StatelessWidget {
                     label: l10n?.searchTabPlayers ?? 'Players',
                     selected: mode == _SearchMode.players,
                     colorScheme: colorScheme,
+                    compact: compact,
                     onTap: () => onChanged(_SearchMode.players),
                   ),
                   _ModeButton(
@@ -494,6 +623,7 @@ class _ModeSelector extends StatelessWidget {
                     label: l10n?.searchTabClans ?? 'Clans',
                     selected: mode == _SearchMode.clans,
                     colorScheme: colorScheme,
+                    compact: compact,
                     onTap: () => onChanged(_SearchMode.clans),
                   ),
                 ],
@@ -502,6 +632,67 @@ class _ModeSelector extends StatelessWidget {
           );
         },
       ),
+    );
+
+    if (!useNativeLiquidGlass) {
+      return fallbackControl(context);
+    }
+
+    return NativeLiquidGlassSegmentedControl<_SearchMode>(
+      height: height,
+      values: const [_SearchMode.players, _SearchMode.clans],
+      labels: [
+        l10n?.searchTabPlayers ?? 'Players',
+        l10n?.searchTabClans ?? 'Clans',
+      ],
+      selected: mode,
+      color: colorScheme.primary,
+      onChanged: onChanged,
+      fallbackBuilder: fallbackControl,
+    );
+  }
+}
+
+class _ModeSegmentChrome extends StatelessWidget {
+  const _ModeSegmentChrome({
+    required this.height,
+    required this.cornerRadius,
+    required this.native,
+    this.selected = false,
+  });
+
+  final double height;
+  final double cornerRadius;
+  final bool native;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    if (native) {
+      return NativeLiquidGlassBar(
+        height: height,
+        cornerRadius: cornerRadius,
+        interactive: selected,
+        selected: selected,
+        borderOpacity: selected ? 0.46 : 0.28,
+        shadowOpacity: selected ? 0.12 : 0.08,
+      );
+    }
+
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: selected
+            ? colorScheme.surface.withValues(alpha: 0.92)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(cornerRadius),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(
+            alpha: selected ? 0.34 : 0.22,
+          ),
+        ),
+      ),
+      child: SizedBox(height: height),
     );
   }
 }
@@ -512,6 +703,7 @@ class _ModeButton extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.colorScheme,
+    required this.compact,
     required this.onTap,
   });
 
@@ -519,32 +711,48 @@ class _ModeButton extends StatelessWidget {
   final String label;
   final bool selected;
   final ColorScheme colorScheme;
+  final bool compact;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? colorScheme.primary : colorScheme.onSurfaceVariant;
+    final color = selected
+        ? colorScheme.onSurface
+        : colorScheme.onSurfaceVariant;
 
     return Expanded(
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(24),
-          onTap: onTap,
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 20, color: color),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: color,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            splashFactory: NoSplash.splashFactory,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: onTap,
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 20, color: color),
+                  SizedBox(width: compact ? 6 : 8),
+                  Text(
+                    label,
+                    style:
+                        (compact
+                                ? Theme.of(context).textTheme.labelMedium
+                                : Theme.of(context).textTheme.labelLarge)
+                            ?.copyWith(
+                              color: color,
+                              fontWeight: selected
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                            ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -557,11 +765,13 @@ class _SearchResultTile extends StatelessWidget {
   const _SearchResultTile({
     required this.result,
     required this.mode,
+    required this.overlay,
     required this.onTap,
   });
 
   final Map<String, dynamic> result;
   final _SearchMode mode;
+  final bool overlay;
   final VoidCallback onTap;
 
   @override
@@ -580,6 +790,7 @@ class _SearchResultTile extends StatelessWidget {
       leading: isPlayer
           ? MobileWebImage(imageUrl: _townHallImage(result))
           : _ClanBadge(imageUrl: _clanBadge(result)),
+      overlay: overlay,
       onTap: onTap,
     );
   }
@@ -608,9 +819,14 @@ class _SearchResultTile extends StatelessWidget {
 }
 
 class _RecentResultTile extends StatelessWidget {
-  const _RecentResultTile({required this.item, required this.onTap});
+  const _RecentResultTile({
+    required this.item,
+    required this.overlay,
+    required this.onTap,
+  });
 
   final _RecentSearchItem item;
+  final bool overlay;
   final VoidCallback onTap;
 
   @override
@@ -622,6 +838,7 @@ class _RecentResultTile extends StatelessWidget {
       leading: item.type == _RecentSearchType.player
           ? MobileWebImage(imageUrl: item.imageUrl ?? ImageAssets.townHall(1))
           : _ClanBadge(imageUrl: item.imageUrl),
+      overlay: overlay,
       onTap: onTap,
     );
   }
@@ -633,6 +850,7 @@ class _EntityTile extends StatelessWidget {
     required this.tag,
     required this.subtitle,
     required this.leading,
+    required this.overlay,
     required this.onTap,
   });
 
@@ -640,11 +858,68 @@ class _EntityTile extends StatelessWidget {
   final String tag;
   final String subtitle;
   final Widget leading;
+  final bool overlay;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final tileContent = Row(
+      children: [
+        SizedBox.square(dimension: overlay ? 48 : 54, child: leading),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: overlay ? FontWeight.w700 : null,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                tag,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              if (subtitle.isNotEmpty) ...[
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        Icon(
+          overlay ? Icons.north_west_rounded : Icons.chevron_right,
+          color: overlay ? colorScheme.primary : colorScheme.onSurfaceVariant,
+        ),
+      ],
+    );
+
+    if (overlay) {
+      return InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          child: tileContent,
+        ),
+      );
+    }
 
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
@@ -654,49 +929,7 @@ class _EntityTile extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              SizedBox.square(dimension: 54, child: leading),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      tag,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    if (subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
-            ],
-          ),
-        ),
+        child: Padding(padding: const EdgeInsets.all(12), child: tileContent),
       ),
     );
   }

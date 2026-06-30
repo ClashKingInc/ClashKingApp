@@ -7,6 +7,7 @@ import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
@@ -17,6 +18,7 @@ import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class PlayerInfoHeader extends StatelessWidget {
   final int selectedTab;
@@ -151,6 +153,23 @@ class _IdentityPanel extends StatelessWidget {
                       tooltip: 'Open in game',
                       compact: true,
                       onTap: () => _showOpenPlayerDialog(context, player),
+                    ),
+                    Consumer<BookmarkService>(
+                      builder: (context, bookmarks, child) {
+                        final bookmarked = bookmarks.isPlayerBookmarked(
+                          player.tag,
+                        );
+                        return _HeaderIconButton(
+                          icon: bookmarked
+                              ? Icons.bookmark_rounded
+                              : Icons.bookmark_border_rounded,
+                          tooltip: bookmarked
+                              ? 'Remove player bookmark'
+                              : 'Bookmark player',
+                          compact: true,
+                          onTap: () => bookmarks.togglePlayer(player),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -403,11 +422,8 @@ void _openCwl(BuildContext context, Player player) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => CwlScreen(
-        warCwl: warCwl,
-        clanTag: clanTag,
-        clanInfo: clanInfo,
-      ),
+      builder: (context) =>
+          CwlScreen(warCwl: warCwl, clanTag: clanTag, clanInfo: clanInfo),
     ),
   );
 }

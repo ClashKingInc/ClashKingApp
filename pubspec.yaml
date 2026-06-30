@@ -59,6 +59,7 @@ dependencies:
   dio: ^5.8.0
   universal_html: ^2.3.0
   cupertino_icons: ^1.0.8
+  native_liquid_glass: ^0.2.10
   intl: ^0.20.2
   url_launcher: ^6.3.2
   open_filex: ^4.6.0
