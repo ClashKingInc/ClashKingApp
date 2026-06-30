@@ -99,6 +99,11 @@ class MyHomePageState extends State<MyHomePage> {
       key: _scaffoldKey,
       extendBody: true,
       drawer: const _AccountMenuDrawer(),
+      // Widen the edge-drag zone so the account drawer can be pulled open from
+      // further inside the screen. The default (~20px) sits exactly on top of
+      // the Android/Samsung system "back" gesture edge, which made the swipe
+      // close the app instead of opening the menu.
+      drawerEdgeDragWidth: MediaQuery.of(context).padding.left + 80,
       appBar: CustomAppBar(
         title: 'ClashKing',
         searchHint: 'Search players or clans',
