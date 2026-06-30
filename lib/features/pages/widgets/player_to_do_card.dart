@@ -15,7 +15,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PlayerToDoCard extends StatefulWidget {
-  const PlayerToDoCard({super.key});
+  const PlayerToDoCard({super.key, this.player});
+
+  /// When provided, the card shows this player's to-do instead of the currently
+  /// selected profile. Used to pin specific accounts on the home dashboard.
+  final Player? player;
 
   @override
   PlayerToDoCardState createState() => PlayerToDoCardState();
@@ -26,7 +30,8 @@ class PlayerToDoCardState extends State<PlayerToDoCard> {
   Widget build(BuildContext context) {
     final playerService = context.watch<PlayerService>();
     final cocAccountService = context.watch<CocAccountService>();
-    final player = playerService.getSelectedProfile(cocAccountService);
+    final player =
+        widget.player ?? playerService.getSelectedProfile(cocAccountService);
     final warCwlService = context.watch<WarCwlService>();
     WarMemberPresence memberCwl = WarMemberPresence.empty();
 

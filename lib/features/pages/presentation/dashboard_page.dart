@@ -1,10 +1,87 @@
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/features/pages/widgets/home_todo_card.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.expand();
+    final playerService = context.watch<PlayerService>();
+    final prefs = context.watch<PlayerCardPreferencesService>();
+    final pinnedTags = prefs.todoOnHomeTags;
+
+    final pinnedPlayers = playerService.profiles
+        .where((player) => pinnedTags.contains(_normalizeTag(player.tag)))
+        .toList(growable: false);
+
+    return Scaffold(
+      body: SafeArea(
+        bottom: false,
+        child: pinnedPlayers.isEmpty
+            ? const _EmptyDashboard()
+            : ListView(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  12,
+                  16,
+                  MediaQuery.paddingOf(context).bottom + 96,
+                ),
+                children: [
+                  HomeTodoCard(
+                    players: pinnedPlayers,
+                    allPlayers: playerService.profiles,
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  static String _normalizeTag(String tag) =>
+      tag.replaceAll('#', '').trim().toUpperCase();
+}
+
+class _EmptyDashboard extends StatelessWidget {
+  const _EmptyDashboard();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.checklist_rounded,
+              size: 44,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Nothing pinned yet',
+              textAlign: TextAlign.center,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Open the Players tab, expand a card\'s options, and turn on '
+              '"Show to-do on home" to pin an account here.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,4 +1,7 @@
 What’s new
+- Player cards now expand with options to enable notifications and pin an account’s to-do card to the home tab
+- The home tab now shows a single to-do card that combines the remaining tasks across all the accounts you pinned
+- The account menu can now be swiped open from further inside the screen, fixing accidental app exits on Samsung devices
 - Tapping a troop, spell, hero, equipment or pet now shows a detailed popup with description and stats (housing space, attack speed, range, movement speed, upgrade resource, hero and rarity for equipment)
 - Item popup now shows DPS, HP/Heal at current level, targeting type (Ground/Air/Flying), and next-level upgrade cost & time
 - Player item sections now show two progress percentages: current TH max-level completion and overall max-level completion
