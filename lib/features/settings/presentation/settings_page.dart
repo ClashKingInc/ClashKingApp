@@ -5,6 +5,7 @@ import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
+import 'package:clashkingapp/core/services/app_icon_service.dart';
 import 'package:clashkingapp/core/services/live_activity_debug_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
@@ -35,10 +36,28 @@ class SettingsInfoScreen extends StatefulWidget {
 }
 
 class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
+  final AppIconService _appIconService = AppIconService();
+
+  bool _supportsAlternateIcons = false;
+  bool _isChangingAppIcon = false;
+  String? _selectedAppIconName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppIconState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
+    final authService = context.watch<AuthService>();
+    final isLocalMode = authService.isLocalMode;
+    final hasDiscord =
+        widget.user.hasDiscordAuth ||
+        (!isLocalMode && widget.user.avatarUrl.isNotEmpty);
+    final hasEmail = widget.user.hasEmailAuth;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -73,12 +92,26 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   return _SettingsTile(
                     icon: LucideIcons.sunMoon,
                     title: l10n.settingsToggleTheme,
-                    trailingText: _themeModeLabel(context, themeNotifier.themeMode),
+                    trailingText: _themeModeLabel(
+                      context,
+                      themeNotifier.themeMode,
+                    ),
                     onTap: () =>
                         _showThemeModeSelection(context, themeNotifier),
                   );
                 },
               ),
+              if (_supportsAlternateIcons)
+                _SettingsTile(
+                  icon: LucideIcons.image,
+                  title: 'App Icon',
+                  trailingText: _isChangingAppIcon
+                      ? 'Changing...'
+                      : _appIconService
+                            .optionForName(_selectedAppIconName)
+                            .label,
+                  onTap: _isChangingAppIcon ? null : _showAppIconSelection,
+                ),
               _SettingsTile(
                 icon: LucideIcons.bellRing,
                 title: l10n.settingsNotificationsTitle,
@@ -186,6 +219,32 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             title: l10n.settingsAccount,
             children: [
               _SettingsTile(
+                icon: Icons.discord,
+                title: 'Discord',
+                subtitle: hasDiscord
+                    ? 'Bot-linked accounts and Discord data'
+                    : 'Sync bot-linked accounts and Discord data',
+                trailingText: hasDiscord ? 'Connected' : null,
+                onTap: hasDiscord
+                    ? () => _showConnectionPlaceholder('Disconnect Discord')
+                    : () => _showConnectionPlaceholder('Connect Discord'),
+              ),
+              _SettingsTile(
+                icon: Icons.alternate_email,
+                title: 'ClashKing account',
+                subtitle: hasEmail
+                    ? 'Email login is connected'
+                    : 'Add email login for account recovery',
+                trailingText: hasEmail ? 'Connected' : null,
+                onTap: hasEmail
+                    ? () => _showConnectionPlaceholder(
+                        'Disconnect ClashKing account',
+                      )
+                    : () => _showConnectionPlaceholder(
+                        'Connect ClashKing account',
+                      ),
+              ),
+              _SettingsTile(
                 icon: Icons.alternate_email,
                 title: widget.user.email ?? widget.user.username,
                 subtitle: widget.user.email == null
@@ -219,6 +278,21 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       ThemeMode.dark => l10n.settingsThemeDark,
       ThemeMode.system => l10n.settingsThemeSystem,
     };
+  }
+
+  Future<void> _loadAppIconState() async {
+    if (!AppIconService.isSupportedPlatform) return;
+
+    final supported = await _appIconService.supportsAlternateIcons();
+    final iconName = supported
+        ? await _appIconService.getAlternateIconName()
+        : null;
+
+    if (!mounted) return;
+    setState(() {
+      _supportsAlternateIcons = supported;
+      _selectedAppIconName = iconName;
+    });
   }
 
   Future<void> _showLanguageSelection(BuildContext context) async {
@@ -317,6 +391,49 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     }
   }
 
+  Future<void> _showAppIconSelection() async {
+    final selected = await showModalBottomSheet<AppIconOption>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        final current = _selectedAppIconName;
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+            child: _SettingsSection(
+              title: 'App Icon',
+              children: [
+                for (final option in AppIconService.options)
+                  _AppIconOptionTile(
+                    option: option,
+                    selected: option.iconName == current,
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (selected == null || selected.iconName == _selectedAppIconName) return;
+
+    setState(() => _isChangingAppIcon = true);
+    try {
+      await _appIconService.setAlternateIconName(selected.iconName);
+      if (!mounted) return;
+      setState(() => _selectedAppIconName = selected.iconName);
+    } on PlatformException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message ?? error.code)));
+    } finally {
+      if (mounted) {
+        setState(() => _isChangingAppIcon = false);
+      }
+    }
+  }
+
   void _showLicenses() {
     showLicensePage(
       context: context,
@@ -361,6 +478,16 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text(error.message ?? error.code)));
     }
+  }
+
+  void _showConnectionPlaceholder(String action) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '$action will be wired once the account connection API is available.',
+        ),
+      ),
+    );
   }
 
   Future<void> _logOut() async {
@@ -461,7 +588,7 @@ class _SettingsSection extends StatelessWidget {
           ),
           DecoratedBox(
             decoration: BoxDecoration(
-              color: colorScheme.surfaceContainer,
+              color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
               borderRadius: BorderRadius.circular(17),
               border: Border.all(
                 color: colorScheme.outlineVariant.withValues(alpha: 0.28),
@@ -610,6 +737,66 @@ class _ThemeModeTile extends StatelessWidget {
       showChevron: false,
       trailingText: selected ? l10n.settingsThemeSelected : null,
       onTap: () => Navigator.pop(context, value),
+    );
+  }
+}
+
+class _AppIconOptionTile extends StatelessWidget {
+  const _AppIconOptionTile({required this.option, required this.selected});
+
+  final AppIconOption option;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final secondary = colorScheme.onSurfaceVariant;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => Navigator.pop(context, option),
+        child: SizedBox(
+          height: 62,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(9),
+                  child: Image.asset(
+                    option.previewAsset,
+                    width: 36,
+                    height: 36,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    option.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+                if (selected)
+                  Text(
+                    'Selected',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: secondary,
+                      fontSize: 16,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
