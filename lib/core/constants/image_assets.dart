@@ -45,6 +45,81 @@ class ImageAssets {
     return defaultImage;
   }
 
+  static String getWarLeagueImage(String leagueName) {
+    final warLeague = _findLeague(GameDataService.warLeagueData, leagueName);
+    final warLeagueUrl = _cwlLeagueIconUrl(warLeague, leagueName);
+    if (warLeagueUrl != null) return warLeagueUrl;
+
+    final league = _findLeague(GameDataService.leagueData, leagueName);
+    final leagueUrl = _cwlLeagueIconUrl(league, leagueName);
+    if (leagueUrl != null) return leagueUrl;
+
+    return defaultImage;
+  }
+
+  static dynamic _findLeague(Map<String, dynamic> source, String leagueName) {
+    final leagues = source['leagues'];
+    if (leagues is! Map) return null;
+    return leagues[leagueName];
+  }
+
+  static String? _cwlLeagueIconUrl(dynamic league, String leagueName) {
+    if (league is String) return league;
+    if (league is Map && league['url'] is String) {
+      return league['url'] as String;
+    }
+    if (league is! Map) return null;
+
+    final tid = league['TID'] is Map
+        ? (league['TID'] as Map)['name']?.toString()
+        : null;
+    final resolvedName = league['name'] is String
+        ? league['name'] as String
+        : leagueName.trim();
+    const cwlFiles = {
+      'TID_LEAGUE_BRONZE1': 'Icon_HV_CWL_Bronze_1.png',
+      'TID_LEAGUE_BRONZE2': 'Icon_HV_CWL_Bronze_2.png',
+      'TID_LEAGUE_BRONZE3': 'Icon_HV_CWL_Bronze_3.png',
+      'TID_LEAGUE_SILVER1': 'Icon_HV_CWL_Silver_1.png',
+      'TID_LEAGUE_SILVER2': 'Icon_HV_CWL_Silver_12.png',
+      'TID_LEAGUE_SILVER3': 'Icon_HV_CWL_Silver_13.png',
+      'TID_LEAGUE_GOLD1': 'Icon_HV_CWL_Gold_1.png',
+      'TID_LEAGUE_GOLD2': 'Icon_HV_CWL_Gold_2.png',
+      'TID_LEAGUE_GOLD3': 'Icon_HV_CWL_Gold_3.png',
+      'TID_LEAGUE_CRYSTAL1': 'Icon_HV_CWL_Crystal_1.png',
+      'TID_LEAGUE_CRYSTAL2': 'Icon_HV_CWL_Crystal_2.png',
+      'TID_LEAGUE_CRYSTAL3': 'Icon_HV_CWL_Crystal_3.png',
+      'TID_LEAGUE_MASTER1': 'Icon_HV_CWL_Master_1.png',
+      'TID_LEAGUE_MASTER2': 'Icon_HV_CWL_Master_2.png',
+      'TID_LEAGUE_MASTER3': 'Icon_HV_CWL_Master_3.png',
+      'TID_LEAGUE_CHAMPION1': 'Icon_HV_CWL_Champion_1.png',
+      'TID_LEAGUE_CHAMPION2': 'Icon_HV_CWL_Champion_2.png',
+      'TID_LEAGUE_CHAMPION3': 'Icon_HV_CWL_Champion_3.png',
+      'Bronze League I': 'Icon_HV_CWL_Bronze_1.png',
+      'Bronze League II': 'Icon_HV_CWL_Bronze_2.png',
+      'Bronze League III': 'Icon_HV_CWL_Bronze_3.png',
+      'Silver League I': 'Icon_HV_CWL_Silver_1.png',
+      'Silver League II': 'Icon_HV_CWL_Silver_12.png',
+      'Silver League III': 'Icon_HV_CWL_Silver_13.png',
+      'Gold League I': 'Icon_HV_CWL_Gold_1.png',
+      'Gold League II': 'Icon_HV_CWL_Gold_2.png',
+      'Gold League III': 'Icon_HV_CWL_Gold_3.png',
+      'Crystal League I': 'Icon_HV_CWL_Crystal_1.png',
+      'Crystal League II': 'Icon_HV_CWL_Crystal_2.png',
+      'Crystal League III': 'Icon_HV_CWL_Crystal_3.png',
+      'Master League I': 'Icon_HV_CWL_Master_1.png',
+      'Master League II': 'Icon_HV_CWL_Master_2.png',
+      'Master League III': 'Icon_HV_CWL_Master_3.png',
+      'Champion League I': 'Icon_HV_CWL_Champion_1.png',
+      'Champion League II': 'Icon_HV_CWL_Champion_2.png',
+      'Champion League III': 'Icon_HV_CWL_Champion_3.png',
+      'Unranked': 'Icon_HV_CWL_Unranked.png',
+    };
+    final fileName = cwlFiles[tid] ?? cwlFiles[resolvedName];
+    if (fileName == null) return null;
+    return '$baseUrl/home-base/league-icons/$fileName';
+  }
+
   // 🏆 Wars & CWL & Trophies
   static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
   static const String warPreferenceOut = "$baseUrl/icons/Icon_HV_Out.png";
@@ -251,17 +326,21 @@ class ImageAssets {
         .where((part) => part.isNotEmpty)
         .toList();
 
-    return parts.map((part) {
-      if (part.length == 1) {
-        return part.toUpperCase();
-      }
-      return '${part[0].toUpperCase()}${part.substring(1)}';
-    }).join('_');
+    return parts
+        .map((part) {
+          if (part.length == 1) {
+            return part.toUpperCase();
+          }
+          return '${part[0].toUpperCase()}${part.substring(1)}';
+        })
+        .join('_');
   }
 
   static String _buildAssetUrl(List<String> segments) {
-    final encodedSegments =
-        segments.map(Uri.encodeComponent).join('/').replaceAll('%2F', '/');
+    final encodedSegments = segments
+        .map(Uri.encodeComponent)
+        .join('/')
+        .replaceAll('%2F', '/');
     return '$baseUrl/$encodedSegments';
   }
 

@@ -5,6 +5,7 @@ import 'package:clashkingapp/common/widgets/buttons/war_button.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
@@ -14,6 +15,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -79,8 +81,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
       top: 40,
       left: 10,
       child: IconButton(
-        icon: Icon(Icons.arrow_back,
-            size: 32, color: Theme.of(context).colorScheme.onPrimary),
+        icon: Icon(
+          Icons.arrow_back,
+          size: 32,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
         onPressed: () => Navigator.of(context).pop(),
       ),
     );
@@ -131,7 +136,8 @@ class ClanInfoHeaderCard extends StatelessWidget {
           ImageChip(
             context: context,
             imageUrl: ImageAssets.getLeagueImage(
-                clanInfo.warLeague?.name ?? "Unranked"),
+              clanInfo.warLeague?.name ?? "Unranked",
+            ),
             label: clanInfo.warLeague!.name,
           ),
         if (clanInfo.location?.name != null &&
@@ -142,10 +148,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
             label: clanInfo.location!.name,
           ),
         IconChip(
-            icon: Icons.groups,
-            size: 16,
-            color: Theme.of(context).colorScheme.onSurface,
-            label: "${clanInfo.members}/50"),
+          icon: Icons.groups,
+          size: 16,
+          color: Theme.of(context).colorScheme.onSurface,
+          label: "${clanInfo.members}/50",
+        ),
         ImageChip(
           context: context,
           imageUrl: ImageAssets.trophies,
@@ -224,25 +231,28 @@ class ClanInfoHeaderCard extends StatelessWidget {
         if (clanInfo.warCwl != null && clanInfo.warCwl!.isInCwl) ...[
           _buildCwlButton(context),
           const SizedBox(height: 16),
-        ]
+        ],
       ],
     );
   }
 
   Widget _buildWarButton(BuildContext context) {
-    return buildWarButton(context, onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => WarScreen(war: clanInfo.warCwl!.warInfo),
-        ),
-      );
-    },
-        label: clanInfo.warCwl!.warInfo.state == "preparation"
-            ? AppLocalizations.of(context)!.warPreparation
-            : clanInfo.warCwl!.warInfo.state == "inWar"
-                ? AppLocalizations.of(context)!.warOngoing
-                : AppLocalizations.of(context)!.warEnded);
+    return buildWarButton(
+      context,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WarScreen(war: clanInfo.warCwl!.warInfo),
+          ),
+        );
+      },
+      label: clanInfo.warCwl!.warInfo.state == "preparation"
+          ? AppLocalizations.of(context)!.warPreparation
+          : clanInfo.warCwl!.warInfo.state == "inWar"
+          ? AppLocalizations.of(context)!.warOngoing
+          : AppLocalizations.of(context)!.warEnded,
+    );
   }
 
   Widget _buildCwlButton(BuildContext context) {
@@ -281,6 +291,22 @@ class ClanInfoHeaderCard extends StatelessWidget {
       right: 10,
       child: Row(
         children: [
+          Consumer<BookmarkService>(
+            builder: (context, bookmarks, child) {
+              final bookmarked = bookmarks.isClanBookmarked(clanInfo.tag);
+              return IconButton(
+                tooltip: bookmarked ? 'Remove bookmark' : 'Bookmark clan',
+                icon: Icon(
+                  bookmarked
+                      ? Icons.bookmark_rounded
+                      : Icons.bookmark_border_rounded,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                onPressed: () => bookmarks.toggleClan(clanInfo),
+              );
+            },
+          ),
           if (clanInfo.description.contains("discord.gg") ||
               clanInfo.description.contains("discord.com"))
             IconButton(
@@ -293,8 +319,10 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     if (!await launchUrl(url) && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content: Text(AppLocalizations.of(context)!
-                                .errorCannotOpenLink)),
+                          content: Text(
+                            AppLocalizations.of(context)!.errorCannotOpenLink,
+                          ),
+                        ),
                       );
                     }
                   }
@@ -304,8 +332,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
               },
             ),
           IconButton(
-            icon: const Icon(Icons.sports_esports_rounded,
-                color: Colors.white, size: 28),
+            icon: const Icon(
+              Icons.sports_esports_rounded,
+              color: Colors.white,
+              size: 28,
+            ),
             onPressed: () {
               final lang = Localizations.localeOf(context).languageCode;
               final url = Uri.https('link.clashofclans.com', '/$lang', {
@@ -313,12 +344,17 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 'tag': clanInfo.tag,
               });
               showDialog(
-                  context: context, builder: (_) => OpenClashDialog(url: url));
+                context: context,
+                builder: (_) => OpenClashDialog(url: url),
+              );
             },
           ),
           IconButton(
-            icon: Icon(Icons.more_vert_rounded,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
+            icon: Icon(
+              Icons.more_vert_rounded,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 32,
+            ),
             onPressed: () {
               showMenu(
                 context: context,
@@ -329,7 +365,9 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     child: Row(
                       children: [
                         MobileWebImage(
-                            imageUrl: clanInfo.badgeUrls.small, width: 20),
+                          imageUrl: clanInfo.badgeUrls.small,
+                          width: 20,
+                        ),
                         SizedBox(width: 8),
                         Text(AppLocalizations.of(context)!.generalStats),
                       ],

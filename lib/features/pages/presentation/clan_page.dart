@@ -1,148 +1,533 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
-import 'package:clashkingapp/features/clan/presentation/clan_capital/clan_capital_page.dart';
-import 'package:clashkingapp/features/clan/presentation/join_leave/clan_join_leave.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
-import 'package:clashkingapp/features/pages/widgets/clan_capital_card.dart';
-import 'package:clashkingapp/features/pages/widgets/clan_info_card.dart';
-import 'package:clashkingapp/features/pages/widgets/clan_join_leave_card.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_no_clan_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
-import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
-class ClanPage extends StatelessWidget {
+class ClanPage extends StatefulWidget {
   const ClanPage({super.key});
 
   @override
+  State<ClanPage> createState() => _ClanPageState();
+}
+
+class _ClanPageState extends State<ClanPage> {
+  final Set<String> _requestedBookmarkClanTags = {};
+
+  @override
   Widget build(BuildContext context) {
-    // NOSONAR
     final cocService = context.watch<CocAccountService>();
     final clanService = context.watch<ClanService>();
     final playerService = context.watch<PlayerService>();
     final warCwlService = context.read<WarCwlService>();
-
-    final clanInfo = clanService.getClanByTag(
-      playerService.getSelectedProfile(cocService)?.clanTag ?? "",
-    );
-    final hasClan = clanInfo != null && clanInfo.tag.isNotEmpty;
+    final bookmarkService = context.watch<BookmarkService>();
+    final players = playerService.profiles;
+    final linkedClans = {
+      for (final player in players)
+        if (player.clan != null && player.clan!.tag.isNotEmpty)
+          player.clan!.tag: player.clan!,
+    };
+    final linkedCards = linkedClans.values.map((clan) {
+      final accountCount = players
+          .where((player) => player.clanTag == clan.tag)
+          .length;
+      return _ClanListItem.linked(clan: clan, accountCount: accountCount);
+    });
+    final missingBookmarkClanTags = bookmarkService.clans
+        .where(
+          (bookmark) =>
+              !linkedClans.containsKey(bookmark.tag) &&
+              !_requestedBookmarkClanTags.contains(bookmark.tag) &&
+              clanService.getClanByTag(bookmark.tag) == null,
+        )
+        .map((bookmark) => bookmark.tag)
+        .toList(growable: false);
+    if (missingBookmarkClanTags.isNotEmpty) {
+      _requestedBookmarkClanTags.addAll(missingBookmarkClanTags);
+      unawaited(
+        clanService.loadAllClanData(missingBookmarkClanTags, notify: true),
+      );
+    }
+    final bookmarkCards = bookmarkService.clans
+        .where((bookmark) => !linkedClans.containsKey(bookmark.tag))
+        .map(
+          (bookmark) => _ClanListItem.bookmarked(
+            bookmark,
+            hydratedClan: clanService.getClanByTag(bookmark.tag),
+          ),
+        );
+    final clans = [...linkedCards, ...bookmarkCards];
 
     return Scaffold(
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        onRefresh: () async {
-          try {
-            // Use bulk endpoint for consistent data structure
-            final playerTags = cocService.getAccountTags();
-            if (playerTags.isNotEmpty) {
-              await cocService.refreshPageData(
-                playerTags,
-                playerService,
-                clanService,
-                warCwlService,
-              );
-            }
-          } catch (e) {
-            if (context.mounted) {
-              if (isNetworkError(e)) {
-                // Navigate to error page for network errors
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ErrorPage(
-                      isNetworkError: true,
-                      onRetry: () async {
-                        // Trigger refresh while staying on error page
-                        await cocService.refreshPageData(
-                          cocService.getAccountTags(),
-                          playerService,
-                          clanService,
-                          warCwlService,
-                        );
-                        // Only pop if refresh succeeds
-                        if (context.mounted) {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    ),
-                  ),
-                );
-              } else {
-                // Show SnackBar for other errors
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.generalRefreshFailed(e.toString()),
-                    ),
-                  ),
-                );
-              }
-            }
-          }
-        },
+        onRefresh: () => _refresh(
+          context,
+          cocService,
+          playerService,
+          clanService,
+          warCwlService,
+        ),
         child: ListView(
-          children: <Widget>[
+          padding: EdgeInsets.fromLTRB(
+            16,
+            0,
+            16,
+            MediaQuery.paddingOf(context).bottom + 96,
+          ),
+          children: [
             LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-            const SizedBox(height: 4),
-            if (hasClan)
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ClanInfoScreen(clanInfo: clanInfo),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ClanInfoCard(),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ClanJoinLeaveScreen(clanInfo: clanInfo),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ClanJoinLeaveCard(),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ClanCapitalScreen(clanInfo: clanInfo),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ClanCapitalCard(),
-                    ),
-                  ),
-                ],
-              )
+            const SizedBox(height: 8),
+            if (clans.isEmpty)
+              Card(child: NoClanCard())
             else
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Card(child: NoClanCard()),
+              ...clans.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _ClanCard(
+                    item: item,
+                    onOpen: () => _openClan(context, clanService, item),
+                  ),
+                ),
               ),
-            SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _openClan(
+    BuildContext context,
+    ClanService clanService,
+    _ClanListItem item,
+  ) async {
+    if (item.clan != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ClanInfoScreen(clanInfo: item.clan!),
+        ),
+      );
+      return;
+    }
+
+    final loadedClan = await clanService.loadClanData(item.tag);
+    if (!context.mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ClanInfoScreen(clanInfo: loadedClan),
+      ),
+    );
+  }
+
+  Future<void> _refresh(
+    BuildContext context,
+    CocAccountService cocService,
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) async {
+    try {
+      final playerTags = cocService.getAccountTags();
+      if (playerTags.isNotEmpty) {
+        await cocService.refreshPageData(
+          playerTags,
+          playerService,
+          clanService,
+          warCwlService,
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      if (isNetworkError(e)) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ErrorPage(
+              isNetworkError: true,
+              onRetry: () async {
+                await cocService.refreshPageData(
+                  cocService.getAccountTags(),
+                  playerService,
+                  clanService,
+                  warCwlService,
+                );
+                if (context.mounted) Navigator.of(context).pop();
+              },
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.generalRefreshFailed(e.toString()),
+            ),
+          ),
+        );
+      }
+    }
+  }
+}
+
+class _ClanListItem {
+  const _ClanListItem({
+    required this.tag,
+    required this.name,
+    required this.badgeUrl,
+    required this.members,
+    required this.warLeague,
+    required this.clanPoints,
+    required this.countryCode,
+    required this.locationName,
+    required this.type,
+    required this.accountCount,
+    required this.bookmarked,
+    this.clan,
+  });
+
+  final String tag;
+  final String name;
+  final String badgeUrl;
+  final int members;
+  final String warLeague;
+  final int clanPoints;
+  final String countryCode;
+  final String locationName;
+  final String type;
+  final int accountCount;
+  final bool bookmarked;
+  final Clan? clan;
+
+  factory _ClanListItem.linked({
+    required Clan clan,
+    required int accountCount,
+  }) {
+    return _ClanListItem(
+      tag: clan.tag,
+      name: clan.name,
+      badgeUrl: clan.badgeUrls.large,
+      members: clan.members,
+      warLeague: clan.warLeague?.name ?? 'Unranked',
+      clanPoints: clan.clanPoints,
+      countryCode: clan.location?.countryCode ?? '',
+      locationName: clan.location?.name ?? '',
+      type: clan.type,
+      accountCount: accountCount,
+      bookmarked: false,
+      clan: clan,
+    );
+  }
+
+  factory _ClanListItem.bookmarked(BookmarkedClan clan, {Clan? hydratedClan}) {
+    final fullClan = hydratedClan;
+    return _ClanListItem(
+      tag: clan.tag,
+      name: fullClan?.name ?? clan.name,
+      badgeUrl: fullClan?.badgeUrls.large ?? clan.badgeUrl,
+      members: fullClan?.members ?? clan.memberCount,
+      warLeague: fullClan?.warLeague?.name ?? '',
+      clanPoints: fullClan?.clanPoints ?? 0,
+      countryCode: fullClan?.location?.countryCode ?? '',
+      locationName: fullClan?.location?.name ?? '',
+      type: fullClan?.type ?? '',
+      accountCount: 0,
+      bookmarked: true,
+      clan: fullClan,
+    );
+  }
+}
+
+class _ClanCard extends StatelessWidget {
+  const _ClanCard({required this.item, required this.onOpen});
+
+  final _ClanListItem item;
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final formatter = NumberFormat('#,###');
+    return Card(
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onOpen,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 14, 44, 14),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _ClanBadgeWithMembers(item: item),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: item.bookmarked ? 28 : 86,
+                          ),
+                          child: Text(
+                            item.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 17,
+                                ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          item.tag,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
+                        ),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            if (item.clanPoints > 0)
+                              _ClanImageChip(
+                                label: formatter.format(item.clanPoints),
+                                imageUrl: ImageAssets.trophies,
+                              ),
+                            if (item.warLeague.isNotEmpty)
+                              _ClanImageChip(
+                                label: item.warLeague,
+                                imageUrl: ImageAssets.getWarLeagueImage(
+                                  item.warLeague,
+                                ),
+                              ),
+                            if (item.countryCode.isNotEmpty &&
+                                item.locationName.isNotEmpty)
+                              _ClanImageChip(
+                                label: item.locationName,
+                                imageUrl: ImageAssets.flag(item.countryCode),
+                              ),
+                            if (item.type.isNotEmpty)
+                              _ClanIconChip(
+                                label: _clanTypeLabel(context, item.type),
+                                icon: Icons.mail_rounded,
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 14,
+              right: 14,
+              child: _ClanTrailingStatus(item: item),
+            ),
+            Positioned(
+              right: 10,
+              top: 0,
+              bottom: 0,
+              child: Icon(
+                Icons.chevron_right_rounded,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                size: 30,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ClanBadgeWithMembers extends StatelessWidget {
+  const _ClanBadgeWithMembers({required this.item});
+
+  final _ClanListItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox.square(
+          dimension: 64,
+          child: CachedNetworkImage(
+            imageUrl: item.badgeUrl,
+            errorWidget: (context, url, error) =>
+                const Icon(Icons.groups_rounded),
+          ),
+        ),
+        const SizedBox(height: 6),
+        _ClanIconChip(
+          label: '${item.members}/50',
+          icon: Icons.people_alt_rounded,
+        ),
+      ],
+    );
+  }
+}
+
+class _ClanTrailingStatus extends StatelessWidget {
+  const _ClanTrailingStatus({required this.item});
+
+  final _ClanListItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (item.bookmarked) {
+      return Icon(
+        Icons.bookmark_rounded,
+        size: 24,
+        color: colorScheme.onSurfaceVariant,
+      );
+    }
+
+    return _AccountCountChip(count: item.accountCount);
+  }
+}
+
+class _AccountCountChip extends StatelessWidget {
+  const _AccountCountChip({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+        child: Text(
+          '$count ${count == 1 ? 'account' : 'accounts'}',
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ClanImageChip extends StatelessWidget {
+  const _ClanImageChip({required this.label, required this.imageUrl});
+
+  final String label;
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ClanChipShell(
+      label: label,
+      leading: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.contain,
+        errorWidget: (context, url, error) =>
+            const Icon(Icons.shield_outlined, size: 14),
+      ),
+    );
+  }
+}
+
+class _ClanIconChip extends StatelessWidget {
+  const _ClanIconChip({required this.label, required this.icon});
+
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return _ClanChipShell(
+      label: label,
+      leading: Icon(icon, size: 14, color: colorScheme.onSurfaceVariant),
+    );
+  }
+}
+
+class _ClanChipShell extends StatelessWidget {
+  const _ClanChipShell({required this.label, required this.leading});
+
+  final String label;
+  final Widget leading;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox.square(dimension: 16, child: leading),
+            const SizedBox(width: 5),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _clanTypeLabel(BuildContext context, String type) {
+  final loc = AppLocalizations.of(context);
+  switch (type) {
+    case 'inviteOnly':
+      return loc?.clanInviteOnly ?? 'Invite only';
+    case 'open':
+      return loc?.clanOpened ?? 'Open';
+    case 'closed':
+      return loc?.generalClosed ?? 'Closed';
+    default:
+      return type;
   }
 }

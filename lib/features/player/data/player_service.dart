@@ -14,7 +14,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class PlayerService extends ChangeNotifier {
   PlayerService({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService();
 
   bool _disposed = false;
 
@@ -41,22 +41,74 @@ class PlayerService extends ChangeNotifier {
     String? selectedTag = cocAccountService.selectedTag;
     DebugUtils.debugInfo("🔍 SelectedTag: $selectedTag");
     DebugUtils.debugInfo(
-        "📊 Available profiles: ${profiles.map((p) => p.tag).toList()}");
+      "📊 Available profiles: ${profiles.map((p) => p.tag).toList()}",
+    );
 
     if (selectedTag == null) return null;
     try {
-      return profiles.firstWhere(
-        (profile) => profile.tag == selectedTag,
-      );
+      return profiles.firstWhere((profile) => profile.tag == selectedTag);
     } catch (e) {
       DebugUtils.debugWarning("⚠️ Profile not found for tag: $selectedTag");
       return null;
     }
   }
 
+  Future<void> loadPublicPlayerData(
+    List<String> playerTags, {
+    bool notify = true,
+  }) async {
+    _isLoading = true;
+    if (notify) {
+      _safeNotify();
+    }
+
+    try {
+      final loadedProfiles = <Player>[];
+
+      for (final rawTag in playerTags) {
+        final playerTag = rawTag.startsWith('#') ? rawTag : '#$rawTag';
+        final encodedTag = Uri.encodeComponent(playerTag);
+        final response = await _apiService.getResponse(
+          '',
+          url: '${ApiService.proxyUrl}/players/$encodedTag',
+        );
+
+        if (response.statusCode != 200) {
+          throw Exception(
+            "Failed to fetch player data: ${response.statusCode}",
+          );
+        }
+
+        final player = Player.fromJson(
+          jsonDecode(ApiService.decodeResponseBody(response)),
+        );
+        if (player.clanOverview.tag.isNotEmpty) {
+          await storePrefs(
+            'player_${player.tag}_clan_tag',
+            player.clanOverview.tag,
+          );
+        }
+        loadedProfiles.add(player);
+      }
+
+      _profiles = loadedProfiles;
+      DebugUtils.debugSuccess(
+        "Loaded public player profiles: ${_profiles.map((p) => p.tag).toList()}",
+      );
+    } finally {
+      _isLoading = false;
+      if (notify) {
+        _safeNotify();
+      }
+    }
+  }
+
   /// Init basic stats for the saved accounts.
-  Future<Map<String, String>> initPlayerData(List<String> playerTags, // NOSONAR
-      {bool notify = true, bool throwOnError = false}) async {
+  Future<Map<String, String>> initPlayerData(
+    List<String> playerTags, { // NOSONAR
+    bool notify = true,
+    bool throwOnError = false,
+  }) async {
     _isLoading = true;
     if (notify) {
       _safeNotify();
@@ -73,7 +125,8 @@ class PlayerService extends ChangeNotifier {
       );
 
       DebugUtils.debugApi(
-          "🔄 Players API response status: ${response.statusCode}");
+        "🔄 Players API response status: ${response.statusCode}",
+      );
 
       if (response.statusCode == 200) {
         final responseBody = ApiService.decodeResponseBody(response);
@@ -83,29 +136,38 @@ class PlayerService extends ChangeNotifier {
           _profiles = (data["items"] as List)
               .whereType<Map<String, dynamic>>()
               .map((account) {
-            final player = Player.fromJson(account);
-            DebugUtils.debugInfo(
-                "🔄 Created player: ${player.name} (${player.tag})");
-            if (player.clanOverview.tag.isNotEmpty) {
-              clanTagsByPlayer[player.tag] = player.clanOverview.tag;
-              storePrefs(
-                  'player_${player.tag}_clan_tag', player.clanOverview.tag);
-            }
-            return player;
-          }).toList();
+                final player = Player.fromJson(account);
+                DebugUtils.debugInfo(
+                  "🔄 Created player: ${player.name} (${player.tag})",
+                );
+                if (player.clanOverview.tag.isNotEmpty) {
+                  clanTagsByPlayer[player.tag] = player.clanOverview.tag;
+                  storePrefs(
+                    'player_${player.tag}_clan_tag',
+                    player.clanOverview.tag,
+                  );
+                }
+                return player;
+              })
+              .toList();
           DebugUtils.debugSuccess(
-              "✅ Initialized profiles: ${profiles.map((p) => p.tag).toList()}");
+            "✅ Initialized profiles: ${profiles.map((p) => p.tag).toList()}",
+          );
         } else {
-          Sentry.captureMessage("Error initializing player data: $data",
-              level: SentryLevel.error);
+          Sentry.captureMessage(
+            "Error initializing player data: $data",
+            level: SentryLevel.error,
+          );
         }
       } else if (response.statusCode == 503) {
         throw HttpException("503", uri: response.request?.url);
       } else if (response.statusCode == 500) {
         throw HttpException("500", uri: response.request?.url);
       } else {
-        Sentry.captureMessage("Error initializing accounts data",
-            level: SentryLevel.error);
+        Sentry.captureMessage(
+          "Error initializing accounts data",
+          level: SentryLevel.error,
+        );
         throw Exception("Error initializing accounts data");
       }
     } catch (e) {
@@ -124,9 +186,13 @@ class PlayerService extends ChangeNotifier {
   }
 
   /// Loads all stats for the saved accounts.
-  Future<void> loadPlayerData( // NOSONAR
-      List<String> playerTags, Map<String, String> clanTagsByPlayer,
-      {bool notify = true, bool throwOnError = false}) async {
+  Future<void> loadPlayerData(
+    // NOSONAR
+    List<String> playerTags,
+    Map<String, String> clanTagsByPlayer, {
+    bool notify = true,
+    bool throwOnError = false,
+  }) async {
     _isLoading = true;
     if (notify) {
       _safeNotify();
@@ -135,10 +201,7 @@ class PlayerService extends ChangeNotifier {
     try {
       final response = await _apiService.postResponse(
         '/players/extended',
-        body: {
-          "player_tags": playerTags,
-          "clan_tags": clanTagsByPlayer,
-        },
+        body: {"player_tags": playerTags, "clan_tags": clanTagsByPlayer},
         requiresAuth: true,
       );
 
@@ -147,10 +210,10 @@ class PlayerService extends ChangeNotifier {
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
-          final items =
-              (data["items"] as List).whereType<Map<String, dynamic>>();
+          final items = (data["items"] as List)
+              .whereType<Map<String, dynamic>>();
           final profilesByTag = {
-            for (final player in _profiles) player.tag: player
+            for (final player in _profiles) player.tag: player,
           };
 
           for (final item in items) {
@@ -163,14 +226,19 @@ class PlayerService extends ChangeNotifier {
           }
 
           DebugUtils.debugSuccess(
-              "Enriched profiles: ${_profiles.map((p) => p.tag).toList()}");
+            "Enriched profiles: ${_profiles.map((p) => p.tag).toList()}",
+          );
         } else {
-          Sentry.captureMessage("Error loading player data: $data",
-              level: SentryLevel.error);
+          Sentry.captureMessage(
+            "Error loading player data: $data",
+            level: SentryLevel.error,
+          );
         }
       } else {
-        Sentry.captureMessage("Error loading accounts data",
-            level: SentryLevel.error);
+        Sentry.captureMessage(
+          "Error loading accounts data",
+          level: SentryLevel.error,
+        );
         throw Exception("Error loading accounts data");
       }
     } catch (e) {
@@ -187,32 +255,36 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  Future<Player> getPlayerAndClanData(String playerTag) async { // NOSONAR
+  Future<Player> getPlayerAndClanData(String playerTag) async {
+    // NOSONAR
     _isLoading = true;
     _safeNotify();
 
     try {
       // Try bulk endpoint first
       DebugUtils.debugApi(
-          "🔄 Calling bulk initialization API for tag: $playerTag");
+        "🔄 Calling bulk initialization API for tag: $playerTag",
+      );
       try {
         final response = await _apiService.postResponse(
           '/initialization',
           body: {
-            "player_tags": [playerTag]
+            "player_tags": [playerTag],
           },
           requiresAuth: true,
         );
 
         DebugUtils.debugApi(
-            "🔄 Bulk API response status: ${response.statusCode}");
+          "🔄 Bulk API response status: ${response.statusCode}",
+        );
 
         if (response.statusCode == 200) {
           final responseBody = ApiService.decodeResponseBody(response);
           final data = jsonDecode(responseBody);
 
           DebugUtils.debugApi(
-              "🔄 Bulk response data keys: ${data.keys.toList()}");
+            "🔄 Bulk response data keys: ${data.keys.toList()}",
+          );
 
           // Process player data — merge into _profiles without replacing it.
           // Calling processBulkPlayerData would reassign _profiles entirely,
@@ -229,8 +301,10 @@ class PlayerService extends ChangeNotifier {
 
             final requestedPlayer = Player.fromJson(basicEntry);
             if (requestedPlayer.clanOverview.tag.isNotEmpty) {
-              storePrefs('player_${requestedPlayer.tag}_clan_tag',
-                  requestedPlayer.clanOverview.tag);
+              storePrefs(
+                'player_${requestedPlayer.tag}_clan_tag',
+                requestedPlayer.clanOverview.tag,
+              );
             }
 
             // Enrich with extended data if present
@@ -242,8 +316,9 @@ class PlayerService extends ChangeNotifier {
             }
 
             // Merge into _profiles — update existing slot or append
-            final existingIndex =
-                _profiles.indexWhere((p) => p.tag == playerTag);
+            final existingIndex = _profiles.indexWhere(
+              (p) => p.tag == playerTag,
+            );
             if (existingIndex != -1) {
               _profiles[existingIndex] = requestedPlayer;
             } else {
@@ -255,44 +330,52 @@ class PlayerService extends ChangeNotifier {
               processBulkWarStats(data["war_stats"], notify: false);
             } else {
               DebugUtils.debugInfo(
-                  "🔄 Loading war stats separately for player: $playerTag");
+                "🔄 Loading war stats separately for player: $playerTag",
+              );
               await loadPlayerWarStats([playerTag], notify: false);
             }
 
             DebugUtils.debugSuccess(
-                "Successfully loaded player via bulk: ${requestedPlayer.name} (${requestedPlayer.tag})");
+              "Successfully loaded player via bulk: ${requestedPlayer.name} (${requestedPlayer.tag})",
+            );
             return requestedPlayer;
           } else {
             DebugUtils.debugWarning(
-                "⚠️ Bulk endpoint missing player data, falling back to individual calls");
+              "⚠️ Bulk endpoint missing player data, falling back to individual calls",
+            );
             throw Exception("No player data in bulk endpoint response");
           }
         } else {
           DebugUtils.debugWarning(
-              "⚠️ Bulk endpoint failed with status ${response.statusCode}, falling back to individual calls");
+            "⚠️ Bulk endpoint failed with status ${response.statusCode}, falling back to individual calls",
+          );
           throw Exception(
-              "Bulk endpoint returned status ${response.statusCode}");
+            "Bulk endpoint returned status ${response.statusCode}",
+          );
         }
       } catch (bulkError) {
         DebugUtils.debugWarning(
-            "⚠️ Bulk endpoint failed: $bulkError, falling back to individual calls");
+          "⚠️ Bulk endpoint failed: $bulkError, falling back to individual calls",
+        );
 
         // Fallback to individual API calls
         DebugUtils.debugInfo(
-            "🔄 Using fallback individual API calls for player: $playerTag");
+          "🔄 Using fallback individual API calls for player: $playerTag",
+        );
 
         // Call basic player endpoint
         final basicResponse = await _apiService.postResponse(
           '/players',
           body: {
-            "player_tags": [playerTag]
+            "player_tags": [playerTag],
           },
           requiresAuth: true,
         );
 
         if (basicResponse.statusCode != 200) {
           throw Exception(
-              "Failed to fetch basic player data: ${basicResponse.statusCode}");
+            "Failed to fetch basic player data: ${basicResponse.statusCode}",
+          );
         }
 
         final basicResponseBody = ApiService.decodeResponseBody(basicResponse);
@@ -322,8 +405,9 @@ class PlayerService extends ChangeNotifier {
         );
 
         if (extendedResponse.statusCode == 200) {
-          final extendedResponseBody =
-              ApiService.decodeResponseBody(extendedResponse);
+          final extendedResponseBody = ApiService.decodeResponseBody(
+            extendedResponse,
+          );
           final extendedData = jsonDecode(extendedResponseBody);
 
           if (extendedData.containsKey("items") &&
@@ -344,11 +428,13 @@ class PlayerService extends ChangeNotifier {
 
         // Load war stats for the individual player
         DebugUtils.debugInfo(
-            "🔄 Loading war stats for individual player: $playerTag");
+          "🔄 Loading war stats for individual player: $playerTag",
+        );
         await loadPlayerWarStats([playerTag], notify: false);
 
         DebugUtils.debugSuccess(
-            "Successfully loaded player via fallback: ${player.name} (${player.tag})");
+          "Successfully loaded player via fallback: ${player.name} (${player.tag})",
+        );
         return player;
       }
     } catch (e, st) {
@@ -369,13 +455,17 @@ class PlayerService extends ChangeNotifier {
       if (clan != null) {
         profile.clan = clan;
         DebugUtils.debugInfo(
-            "🔗 Linked ${profile.tag} to ${profile.clan?.name}");
+          "🔗 Linked ${profile.tag} to ${profile.clan?.name}",
+        );
       }
     }
   }
 
-  Future<void> loadPlayerWarStats(List<String> playerTags, // NOSONAR
-      {bool notify = true, bool throwOnError = false}) async {
+  Future<void> loadPlayerWarStats(
+    List<String> playerTags, { // NOSONAR
+    bool notify = true,
+    bool throwOnError = false,
+  }) async {
     DebugUtils.debugApi("🏰 Loading player data for tags: $playerTags");
 
     try {
@@ -390,7 +480,7 @@ class PlayerService extends ChangeNotifier {
 
         if (data.containsKey("items") && data["items"] is List) {
           final profilesByTag = {
-            for (final player in _profiles) player.tag: player
+            for (final player in _profiles) player.tag: player,
           };
           for (final item in data["items"]) {
             final String tag = item["tag"];
@@ -399,22 +489,30 @@ class PlayerService extends ChangeNotifier {
               if (player == null) {
                 continue;
               }
-              player.warStats =
-                  PlayerWarStats.fromJson(item, tag, data["wars"]);
+              player.warStats = PlayerWarStats.fromJson(
+                item,
+                tag,
+                data["wars"],
+              );
             } catch (e) {
               DebugUtils.debugError(" Error loading war stats for $tag: $e");
               continue;
             }
           }
           DebugUtils.debugSuccess(
-              "Loaded & linked war stats for $playerTags players");
+            "Loaded & linked war stats for $playerTags players",
+          );
         } else {
-          Sentry.captureMessage("Error loading war stats: $data",
-              level: SentryLevel.error);
+          Sentry.captureMessage(
+            "Error loading war stats: $data",
+            level: SentryLevel.error,
+          );
         }
       } else {
-        Sentry.captureMessage("Error loading war stats",
-            level: SentryLevel.error);
+        Sentry.captureMessage(
+          "Error loading war stats",
+          level: SentryLevel.error,
+        );
         throw Exception("Error loading war stats");
       }
     } catch (e) {
@@ -445,7 +543,8 @@ class PlayerService extends ChangeNotifier {
 
     // Debug logging to see what's being sent
     DebugUtils.debugInfo(
-        "🔍 War Stats Request Body: ${jsonEncode(requestBody)}");
+      "🔍 War Stats Request Body: ${jsonEncode(requestBody)}",
+    );
 
     try {
       final response = await _apiService.postResponse(
@@ -456,7 +555,8 @@ class PlayerService extends ChangeNotifier {
 
       // Debug logging for response
       DebugUtils.debugInfo(
-          "📡 War Stats Response Status: ${response.statusCode}");
+        "📡 War Stats Response Status: ${response.statusCode}",
+      );
 
       if (response.statusCode == 200) {
         final responseBody = ApiService.decodeResponseBody(response);
@@ -470,25 +570,29 @@ class PlayerService extends ChangeNotifier {
 
             if (tag == playerTag) {
               DebugUtils.debugSuccess(
-                  "✅ Loaded filtered war stats for $playerTag");
+                "✅ Loaded filtered war stats for $playerTag",
+              );
               return PlayerWarStats.fromJson(item, tag, data["wars"]);
             }
           }
         }
 
         DebugUtils.debugWarning(
-            "⚠️ No filtered war stats found for $playerTag");
+          "⚠️ No filtered war stats found for $playerTag",
+        );
         return null;
       } else {
         DebugUtils.debugError(
-            "❌ Failed to load filtered war stats: ${response.statusCode}");
+          "❌ Failed to load filtered war stats: ${response.statusCode}",
+        );
         if (response.statusCode == 422) {
           final errorBody = ApiService.decodeResponseBody(response);
           DebugUtils.debugError("❌ Validation Error Details: $errorBody");
         }
         Sentry.captureMessage(
-            "Error loading filtered war stats: ${response.statusCode}",
-            level: SentryLevel.error);
+          "Error loading filtered war stats: ${response.statusCode}",
+          level: SentryLevel.error,
+        );
         throw Exception("Error loading filtered war stats");
       }
     } catch (e) {
@@ -514,9 +618,10 @@ class PlayerService extends ChangeNotifier {
   }
 
   String getMinimalisticPlayerByTag(String tag) {
-    final player = _profiles
-        .cast<Player?>()
-        .firstWhere((p) => p?.tag == tag, orElse: () => null);
+    final player = _profiles.cast<Player?>().firstWhere(
+      (p) => p?.tag == tag,
+      orElse: () => null,
+    );
     if (player != null) {
       return jsonEncode({
         "player_tag": player.tag,
@@ -529,10 +634,13 @@ class PlayerService extends ChangeNotifier {
 
   /// Process bulk player data from the optimized API endpoint
   void processBulkPlayerData(
-      List<dynamic> playersExtended, List<dynamic> playersBasic,
-      {bool notify = true}) {
+    List<dynamic> playersExtended,
+    List<dynamic> playersBasic, {
+    bool notify = true,
+  }) {
     DebugUtils.debugInfo(
-        "🔄 Processing bulk player data: ${playersExtended.length} extended, ${playersBasic.length} basic");
+      "🔄 Processing bulk player data: ${playersExtended.length} extended, ${playersBasic.length} basic",
+    );
 
     // First, create basic player profiles from basic data
     _profiles = playersBasic.whereType<Map<String, dynamic>>().map((account) {
@@ -546,9 +654,10 @@ class PlayerService extends ChangeNotifier {
     }).toList();
 
     DebugUtils.debugSuccess(
-        "Created ${_profiles.length} basic player profiles");
+      "Created ${_profiles.length} basic player profiles",
+    );
     final profilesByTag = {
-      for (final profile in _profiles) profile.tag: profile
+      for (final profile in _profiles) profile.tag: profile,
     };
 
     // Then enrich with extended data
@@ -559,19 +668,22 @@ class PlayerService extends ChangeNotifier {
         final existing = profilesByTag[tag];
         if (existing == null) {
           DebugUtils.debugWarning(
-              "⚠️ Skipping player $tag - not found in basic data and extended data is incomplete");
+            "⚠️ Skipping player $tag - not found in basic data and extended data is incomplete",
+          );
           continue;
         }
         existing.enrichWithFullStats(extendedData);
         DebugUtils.debugSuccess(
-            "Enriched player: ${existing.name} (${existing.tag})");
+          "Enriched player: ${existing.name} (${existing.tag})",
+        );
       } catch (e) {
         DebugUtils.debugError(" Error enriching player $tag: $e");
       }
     }
 
     DebugUtils.debugSuccess(
-        "Processed all bulk player data: ${_profiles.map((p) => p.tag).toList()}");
+      "Processed all bulk player data: ${_profiles.map((p) => p.tag).toList()}",
+    );
     if (notify) {
       _safeNotify();
     }
@@ -580,7 +692,8 @@ class PlayerService extends ChangeNotifier {
   /// Process bulk war statistics data
   void processBulkWarStats(List<dynamic> warStatsData, {bool notify = true}) {
     DebugUtils.debugInfo(
-        "🔄 Processing bulk war stats for ${warStatsData.length} players");
+      "🔄 Processing bulk war stats for ${warStatsData.length} players",
+    );
     final profilesByTag = {for (final player in _profiles) player.tag: player};
 
     for (final item in warStatsData.whereType<Map<String, dynamic>>()) {

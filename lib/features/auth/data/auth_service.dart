@@ -11,21 +11,33 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class AuthService extends ChangeNotifier {
+  static const String _localModePrefKey = 'auth_local_mode';
+
   AuthService({ApiService? apiService, TokenService? tokenService})
-      : _apiService = apiService ?? ApiService(),
-        _tokenService = tokenService ?? TokenService();
+    : _apiService = apiService ?? ApiService(),
+      _tokenService = tokenService ?? TokenService();
 
   final ApiService _apiService;
   final TokenService _tokenService;
   String? _accessToken;
   bool _isAuthenticated = false;
+  bool _isLocalMode = false;
   User? _currentUser;
   List<dynamic>? _cocAccounts;
 
   String? get accessToken => _accessToken;
   bool get isAuthenticated => _isAuthenticated;
+  bool get isLocalMode => _isLocalMode;
+  bool get canUseApp => _isAuthenticated || _isLocalMode;
   User? get currentUser => _currentUser;
   List<dynamic>? get cocAccounts => _cocAccounts;
+
+  User get _localUser => User(
+    userId: 'local',
+    username: 'Local Mode',
+    avatarUrl: '',
+    authMethods: ['local'],
+  );
 
   String _localized(
     String fallback,
@@ -45,6 +57,15 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> initializeAuth() async {
+    _isLocalMode = await getPrefs(_localModePrefKey) == 'true';
+    if (_isLocalMode) {
+      _accessToken = null;
+      _isAuthenticated = false;
+      _currentUser = _localUser;
+      notifyListeners();
+      return;
+    }
+
     _accessToken = await _tokenService.getAccessToken();
     if (_accessToken != null) {
       try {
@@ -95,9 +116,13 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs(_localModePrefKey);
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
+      _isLocalMode = false;
       _accessToken = response['access_token'];
       DebugUtils.debugSuccess("🔄 Tokens saved successfully.");
       notifyListeners();
@@ -126,9 +151,13 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs(_localModePrefKey);
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
+      _isLocalMode = false;
       _accessToken = response['access_token'];
 
       DebugUtils.debugSuccess("🔄 Email login completed successfully");
@@ -148,7 +177,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> registerWithEmail(
-      String email, String password, String username) async {
+    String email,
+    String password,
+    String username,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Starting email registration process...");
       final deviceId = await _tokenService.getDeviceId();
@@ -165,7 +197,8 @@ class AuthService extends ChangeNotifier {
       // Registration now sends verification email instead of creating account
       // No tokens returned yet - user needs to verify email first
       DebugUtils.debugSuccess(
-          "🔄 Email registration verification sent successfully");
+        "🔄 Email registration verification sent successfully",
+      );
 
       // Don't set authentication state yet - wait for email verification
       notifyListeners();
@@ -188,13 +221,18 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs(_localModePrefKey);
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
+      _isLocalMode = false;
       _accessToken = response['access_token'];
 
       DebugUtils.debugSuccess(
-          "🔄 Email verification with code completed successfully");
+        "🔄 Email verification with code completed successfully",
+      );
       notifyListeners();
     } catch (e) {
       DebugUtils.debugError(" Email verification with code error: $e");
@@ -235,7 +273,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> resetPassword(
-      String email, String resetCode, String newPassword) async {
+    String email,
+    String resetCode,
+    String newPassword,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Resetting password...");
       final deviceId = await _tokenService.getDeviceId();
@@ -250,9 +291,13 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs(_localModePrefKey);
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
+      _isLocalMode = false;
       _accessToken = response['access_token'];
 
       DebugUtils.debugSuccess("🔄 Password reset completed successfully");
@@ -264,7 +309,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> linkDiscordAccount(
-      String discordAccessToken, String? refreshToken, int? expiresIn) async {
+    String discordAccessToken,
+    String? refreshToken,
+    int? expiresIn,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Linking Discord account...");
       final deviceId = await _tokenService.getDeviceId();
@@ -293,7 +341,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> linkEmailAccount(
-      String email, String password, String username) async {
+    String email,
+    String password,
+    String username,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Linking email account...");
       final deviceId = await _tokenService.getDeviceId();
@@ -321,10 +372,24 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  Future<void> continueWithoutLogin() async {
+    await _tokenService.clearTokens();
+    await storePrefs(_localModePrefKey, 'true');
+    _accessToken = null;
+    _isAuthenticated = false;
+    _isLocalMode = true;
+    _currentUser = _localUser;
+    _cocAccounts = null;
+    notifyListeners();
+  }
+
   Future<void> logout() async {
     await _tokenService.clearTokens();
-    try { await clearPrefs(); } catch (_) {}
+    try {
+      await clearPrefs();
+    } catch (_) {}
     _isAuthenticated = false;
+    _isLocalMode = false;
     _currentUser = null;
     _cocAccounts = null;
     _accessToken = null;
@@ -336,8 +401,11 @@ class AuthService extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _tokenService.clearTokens();
-    try { await clearPrefs(); } catch (_) {}
+    try {
+      await clearPrefs();
+    } catch (_) {}
     _isAuthenticated = false;
+    _isLocalMode = false;
     _currentUser = null;
     _cocAccounts = null;
     _accessToken = null;
@@ -348,8 +416,11 @@ class AuthService extends ChangeNotifier {
   /// Call this method and then separately call clearAccountData() on CocAccountService
   Future<void> logoutAndClearAllData() async {
     await _tokenService.clearTokens();
-    try { await clearPrefs(); } catch (_) {}
+    try {
+      await clearPrefs();
+    } catch (_) {}
     _isAuthenticated = false;
+    _isLocalMode = false;
     _currentUser = null;
     _cocAccounts = null;
     _accessToken = null;
@@ -357,6 +428,7 @@ class AuthService extends ChangeNotifier {
 
     // Note: Also call CocAccountService.clearAccountData() after this
     DebugUtils.debugInfo(
-        "🔄 AuthService data cleared. Make sure to also clear CocAccountService data.");
+      "🔄 AuthService data cleared. Make sure to also clear CocAccountService data.",
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -143,6 +144,7 @@ Future<void> main() async {
             ChangeNotifierProvider(create: (_) => PlayerService()),
             ChangeNotifierProvider(create: (_) => ClanService()),
             ChangeNotifierProvider(create: (_) => WarCwlService()),
+            ChangeNotifierProvider(create: (_) => BookmarkService()),
             Provider(create: (_) => ApiService()),
             Provider(create: (_) => UserService()),
             Provider(create: (_) => TokenService()),

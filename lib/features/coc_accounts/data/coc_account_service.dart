@@ -15,9 +15,10 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 class CocAccountService extends ChangeNotifier {
   static const Duration _initializationTimeout = Duration(seconds: 30);
   static const String _msgNotAuthenticated = 'User not authenticated';
+  static const String _localAccountsPrefKey = 'local_coc_accounts_v1';
 
   CocAccountService({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService();
 
   bool _disposed = false;
 
@@ -28,16 +29,22 @@ class CocAccountService extends ChangeNotifier {
   final ApiService _apiService;
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
+  bool _isLocalMode = false;
   String? _selectedTag;
   DateTime? _lastRefresh;
   ValueNotifier<String?> selectedTagNotifier = ValueNotifier(null);
   List<Map<String, dynamic>> get cocAccounts => _cocAccounts;
   bool get isLoading => _isLoading;
+  bool get isLocalMode => _isLocalMode;
   String? get selectedTag => _selectedTag;
   DateTime? get lastRefresh => _lastRefresh;
   List<Player> profiles = [];
   List<String> get accounts =>
       _cocAccounts.map((account) => account["player_tag"].toString()).toList();
+
+  void setLocalMode(bool value) {
+    _isLocalMode = value;
+  }
 
   /// Clears all cached account data (for logout)
   void clearAccountData() {
@@ -52,6 +59,11 @@ class CocAccountService extends ChangeNotifier {
 
   /// Fetches the user's linked Clash of Clans accounts from the backend.
   Future<void> fetchCocAccounts() async {
+    if (_isLocalMode) {
+      await loadLocalAccounts();
+      return;
+    }
+
     _isLoading = true;
     _safeNotify();
 
@@ -89,6 +101,10 @@ class CocAccountService extends ChangeNotifier {
   Future<Map<String, dynamic>> addCocAccount(String playerTag) async {
     DebugUtils.debugInfo("🔄 Adding CoC account with tag: $playerTag");
 
+    if (_isLocalMode) {
+      return _addLocalCocAccount(playerTag);
+    }
+
     try {
       final response = await _apiService.postResponse(
         '/users/coc-accounts',
@@ -104,8 +120,8 @@ class CocAccountService extends ChangeNotifier {
         "account": response.statusCode == 200
             ? data["account"]
             : (data["detail"] is Map && data["detail"]["account"] != null
-                ? data["detail"]["account"]
-                : null)
+                  ? data["detail"]["account"]
+                  : null),
       };
     } on UnauthorizedException {
       return {"code": 401, "message": _msgNotAuthenticated};
@@ -116,12 +132,86 @@ class CocAccountService extends ChangeNotifier {
 
   void addLocalAccount(Map<String, dynamic> account) {
     _cocAccounts.add(account);
+    if (_isLocalMode) {
+      unawaited(_saveLocalAccounts());
+    }
     _safeNotify();
+  }
+
+  Future<void> loadLocalAccounts() async {
+    _isLoading = true;
+    _safeNotify();
+
+    try {
+      final rawAccounts = await getPrefs(_localAccountsPrefKey);
+      if (rawAccounts == null || rawAccounts.isEmpty) {
+        _cocAccounts = [];
+        return;
+      }
+
+      final decoded = jsonDecode(rawAccounts);
+      if (decoded is! List) {
+        throw const FormatException("Invalid local CoC accounts payload");
+      }
+
+      _cocAccounts = decoded
+          .whereType<Map>()
+          .map((account) => Map<String, dynamic>.from(account))
+          .toList();
+    } catch (error, stackTrace) {
+      Sentry.captureException(error, stackTrace: stackTrace);
+      _cocAccounts = [];
+    } finally {
+      _isLoading = false;
+      _safeNotify();
+    }
+  }
+
+  Future<void> _saveLocalAccounts() async {
+    await storePrefs(_localAccountsPrefKey, jsonEncode(_cocAccounts));
+  }
+
+  Future<Map<String, dynamic>> _addLocalCocAccount(String rawPlayerTag) async {
+    final normalizedTag = rawPlayerTag.trim().startsWith('#')
+        ? rawPlayerTag.trim().toUpperCase()
+        : '#${rawPlayerTag.trim().toUpperCase()}';
+
+    try {
+      final response = await _apiService.getResponse(
+        '',
+        url:
+            '${ApiService.proxyUrl}/players/${Uri.encodeComponent(normalizedTag)}',
+      );
+
+      if (response.statusCode == 404) {
+        return {"code": 404, "message": "Account not found"};
+      }
+      if (response.statusCode != 200) {
+        return {"code": response.statusCode, "message": "Failed to add"};
+      }
+
+      final data = jsonDecode(ApiService.decodeResponseBody(response));
+      final account = {
+        "tag": data["tag"] ?? normalizedTag,
+        "player_tag": data["tag"] ?? normalizedTag,
+        "name": data["name"] ?? "Unknown Player",
+        "townHallLevel": data["townHallLevel"] ?? 1,
+        "is_verified": false,
+        "source": "local",
+      };
+
+      return {"code": 200, "message": "Account added", "account": account};
+    } catch (error, stackTrace) {
+      Sentry.captureException(error, stackTrace: stackTrace);
+      return {"code": 500, "message": "Failed to add account locally"};
+    }
   }
 
   /// Adds a Clash of Clans account (with ownership verification).
   Future<Map<String, dynamic>> addCocAccountWithVerification(
-      String playerTag, String playerToken) async {
+    String playerTag,
+    String playerToken,
+  ) async {
     try {
       final response = await _apiService.postResponse(
         '/users/coc-accounts/verified',
@@ -134,7 +224,7 @@ class CocAccountService extends ChangeNotifier {
       return {
         "code": response.statusCode,
         "message": _extractErrorMessage(data),
-        "account": response.statusCode == 200 ? data["account"] : null
+        "account": response.statusCode == 200 ? data["account"] : null,
       };
     } on UnauthorizedException {
       return {"code": 401, "message": _msgNotAuthenticated};
@@ -145,6 +235,20 @@ class CocAccountService extends ChangeNotifier {
 
   /// Removes a Clash of Clans account from the user's linked accounts.
   Future<void> removeCocAccount(String playerTag) async {
+    if (_isLocalMode) {
+      _cocAccounts.removeWhere((account) => account["player_tag"] == playerTag);
+      if (_selectedTag == playerTag) {
+        await setSelectedTag(
+          _cocAccounts.isEmpty
+              ? null
+              : _cocAccounts.first["player_tag"]?.toString(),
+        );
+      }
+      await _saveLocalAccounts();
+      _safeNotify();
+      return;
+    }
+
     try {
       final encodedPlayerTag = Uri.encodeComponent(playerTag);
 
@@ -154,13 +258,15 @@ class CocAccountService extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        _cocAccounts
-            .removeWhere((account) => account["player_tag"] == playerTag);
+        _cocAccounts.removeWhere(
+          (account) => account["player_tag"] == playerTag,
+        );
         _safeNotify();
       } else {
         Sentry.captureMessage(
-            "Error removing CoC account, status code: ${response.statusCode}, body: ${response.body}",
-            level: SentryLevel.error);
+          "Error removing CoC account, status code: ${response.statusCode}, body: ${response.body}",
+          level: SentryLevel.error,
+        );
       }
     } catch (e) {
       Sentry.captureException(e);
@@ -169,6 +275,20 @@ class CocAccountService extends ChangeNotifier {
 
   /// Reorder accounts and send the updated order to the API
   Future<void> updateAccountOrder(List<String> playerTags) async {
+    if (_isLocalMode) {
+      final accountsByTag = {
+        for (final account in _cocAccounts)
+          account["player_tag"].toString(): account,
+      };
+      _cocAccounts = playerTags
+          .map((tag) => accountsByTag[tag])
+          .whereType<Map<String, dynamic>>()
+          .toList();
+      await _saveLocalAccounts();
+      _safeNotify();
+      return;
+    }
+
     final response = await _apiService.putResponse(
       '/users/coc-accounts/order',
       body: {"ordered_tags": playerTags},
@@ -177,9 +297,30 @@ class CocAccountService extends ChangeNotifier {
 
     if (response.statusCode != 200) {
       Sentry.captureMessage(
-          "Failed to update account order, status code: ${response.statusCode}, body: ${response.body}",
-          level: SentryLevel.error);
+        "Failed to update account order, status code: ${response.statusCode}, body: ${response.body}",
+        level: SentryLevel.error,
+      );
     }
+  }
+
+  Future<void> reorderLocalAccounts(int oldIndex, int newIndex) async {
+    if (oldIndex < 0 || oldIndex >= _cocAccounts.length) return;
+    if (newIndex < 0 || newIndex > _cocAccounts.length) return;
+
+    final account = _cocAccounts.removeAt(oldIndex);
+    _cocAccounts.insert(newIndex, account);
+
+    final currentProfiles = profiles;
+    final profilesByTag = {
+      for (final profile in currentProfiles) profile.tag: profile,
+    };
+    profiles = _cocAccounts
+        .map((account) => profilesByTag[account["player_tag"]])
+        .whereType<Player>()
+        .toList();
+
+    _safeNotify();
+    await updateAccountOrder(getAccountTags());
   }
 
   Future<void> setSelectedTag(String? tag) async {
@@ -198,6 +339,8 @@ class CocAccountService extends ChangeNotifier {
         DebugUtils.debugWarning("⚠️ Could not store selected tag: $e");
         // Continue without storing - not critical for app functionality
       }
+    } else {
+      await deletePrefs('selectedTag');
     }
 
     _safeNotify();
@@ -217,11 +360,13 @@ class CocAccountService extends ChangeNotifier {
         _selectedTag = storedTag;
         selectedTagNotifier.value = storedTag;
         DebugUtils.debugInfo(
-            "🔄 Loaded selected tag from preferences: $storedTag");
+          "🔄 Loaded selected tag from preferences: $storedTag",
+        );
       }
     } catch (e) {
       DebugUtils.debugWarning(
-          "⚠️ Could not load selected tag from preferences: $e");
+        "⚠️ Could not load selected tag from preferences: $e",
+      );
       // Continue without stored tag - will use first account as default
     }
   }
@@ -245,12 +390,24 @@ class CocAccountService extends ChangeNotifier {
   ) async {
     if (playerTags.isEmpty) return;
 
+    if (_isLocalMode) {
+      await playerService.loadPublicPlayerData(playerTags, notify: false);
+      _lastRefresh = DateTime.now();
+      _safeNotify();
+      return;
+    }
+
     DebugUtils.debugInfo(
-        "🔄 Refreshing page data using bulk endpoint for ${playerTags.length} players");
+      "🔄 Refreshing page data using bulk endpoint for ${playerTags.length} players",
+    );
 
     try {
       await _loadDataWithBulkEndpoint(
-          playerTags, playerService, clanService, warCwlService);
+        playerTags,
+        playerService,
+        clanService,
+        warCwlService,
+      );
       _lastRefresh = DateTime.now();
       _safeNotify();
       DebugUtils.debugSuccess("Page refresh completed successfully");
@@ -291,13 +448,26 @@ class CocAccountService extends ChangeNotifier {
           .map((account) => account["player_tag"].toString())
           .toList();
 
+      if (_isLocalMode) {
+        await playerService.loadPublicPlayerData(playerTags, notify: false);
+        transaction.finish(status: SpanStatus.ok());
+        _lastRefresh = DateTime.now();
+        await initializeSelectedTag();
+        _safeNotify();
+        return;
+      }
+
       transaction.setTag("playerTags", playerTags.toString());
       transaction.setTag("playerTagsCount", playerTags.length.toString());
 
       // Use the new optimized bulk endpoint
       final spanBulkLoad = transaction.startChild("bulkAccountInitialization");
       await _loadDataWithBulkEndpoint(
-          playerTags, playerService, clanService, warCwlService);
+        playerTags,
+        playerService,
+        clanService,
+        warCwlService,
+      );
       spanBulkLoad.finish();
 
       transaction.finish(status: SpanStatus.ok());
@@ -328,7 +498,8 @@ class CocAccountService extends ChangeNotifier {
     WarCwlService warCwlService,
   ) async {
     DebugUtils.debugInfo(
-        "🚀 Using optimized bulk endpoint for ${playerTags.length} players");
+      "🚀 Using optimized bulk endpoint for ${playerTags.length} players",
+    );
 
     var timer = Stopwatch()..start();
 
@@ -345,7 +516,8 @@ class CocAccountService extends ChangeNotifier {
         final data = jsonDecode(responseBody);
 
         DebugUtils.debugSuccess(
-            "Bulk data loaded successfully in ${timer.elapsedMilliseconds} ms");
+          "Bulk data loaded successfully in ${timer.elapsedMilliseconds} ms",
+        );
 
         // Process player data
         if (data["players"] != null) {
@@ -375,7 +547,8 @@ class CocAccountService extends ChangeNotifier {
         if (data["clans"] != null && data["clans"]["war_data"] != null) {
           final warData = data["clans"]["war_data"] as List<dynamic>;
           DebugUtils.debugInfo(
-              "🔄 Processing ${warData.length} war data items");
+            "🔄 Processing ${warData.length} war data items",
+          );
           warCwlService.processBulkWarData(warData, notify: false);
         }
 
@@ -405,19 +578,31 @@ class CocAccountService extends ChangeNotifier {
         warCwlService.notifyDataChanged();
         DebugUtils.debugSuccess("All data linked successfully");
       } else if (response.statusCode == 503 || response.statusCode == 500) {
-        throw HttpException(response.statusCode.toString(),
-            uri: response.request?.url);
+        throw HttpException(
+          response.statusCode.toString(),
+          uri: response.request?.url,
+        );
       } else {
         DebugUtils.debugError(
-            " Bulk endpoint failed, falling back to individual calls");
+          " Bulk endpoint failed, falling back to individual calls",
+        );
         await _loadDataWithFallback(
-            playerTags, playerService, clanService, warCwlService);
+          playerTags,
+          playerService,
+          clanService,
+          warCwlService,
+        );
       }
     } catch (e) {
       DebugUtils.debugError(
-          " Bulk endpoint error: $e, falling back to individual calls");
+        " Bulk endpoint error: $e, falling back to individual calls",
+      );
       await _loadDataWithFallback(
-          playerTags, playerService, clanService, warCwlService);
+        playerTags,
+        playerService,
+        clanService,
+        warCwlService,
+      );
     }
   }
 
@@ -478,15 +663,9 @@ class CocAccountService extends ChangeNotifier {
           throwOnError: true,
         ),
       if (clanTags.isNotEmpty)
-        clanService.loadWarLogData(
-          clanTags.toList(),
-          throwOnError: true,
-        ),
+        clanService.loadWarLogData(clanTags.toList(), throwOnError: true),
       if (clanTags.isNotEmpty)
-        clanService.loadClanWarStatsData(
-          clanTags.toList(),
-          throwOnError: true,
-        ),
+        clanService.loadClanWarStatsData(clanTags.toList(), throwOnError: true),
     ]);
 
     // Link relationships (same as before)
@@ -514,7 +693,9 @@ class CocAccountService extends ChangeNotifier {
 
   // Check if clan changed and refresh war widget if needed (non-blocking)
   Future<void> _checkAndRefreshWarWidget(
-      String? previousTag, String newTag) async {
+    String? previousTag,
+    String newTag,
+  ) async {
     try {
       // Only refresh widget on mobile platforms
       if (kIsWeb) return;
@@ -527,45 +708,52 @@ class CocAccountService extends ChangeNotifier {
       final newClanTag = await getPrefs('player_${newTag}_clan_tag');
 
       DebugUtils.debugInfo(
-          "🔄 Account switch - Previous: $previousTag (clan: $previousClanTag) → New: $newTag (clan: $newClanTag)");
+        "🔄 Account switch - Previous: $previousTag (clan: $previousClanTag) → New: $newTag (clan: $newClanTag)",
+      );
 
       // If clan tags are different, refresh the war widget in background
       if (previousClanTag != newClanTag) {
         DebugUtils.debugInfo(
-            "🔄 Clan changed! Refreshing war widget in background...");
+          "🔄 Clan changed! Refreshing war widget in background...",
+        );
         // Don't await - let it run in background
-        unawaited(WarWidgetService.handleWidgetRefresh().catchError((error) {
-          DebugUtils.debugError(" Background widget refresh error: $error");
-        }));
+        unawaited(
+          WarWidgetService.handleWidgetRefresh().catchError((error) {
+            DebugUtils.debugError(" Background widget refresh error: $error");
+          }),
+        );
       } else {
         DebugUtils.debugInfo("✅ Same clan, no widget refresh needed");
       }
     } catch (e) {
       DebugUtils.debugWarning("⚠️ Error checking clan change: $e");
       // If there's an error, refresh anyway to be safe (in background)
-      unawaited(WarWidgetService.handleWidgetRefresh().catchError((error) {
-        DebugUtils.debugError(" Background widget refresh error: $error");
-      }));
+      unawaited(
+        WarWidgetService.handleWidgetRefresh().catchError((error) {
+          DebugUtils.debugError(" Background widget refresh error: $error");
+        }),
+      );
     }
   }
 
   /// Adds an account with token verification (used when account is already linked to another user)
-  Future<bool> addAccountWithToken(String playerTag, String apiToken,
-      Function(String) updateErrorMessage) async {
+  Future<bool> addAccountWithToken(
+    String playerTag,
+    String apiToken,
+    Function(String) updateErrorMessage,
+  ) async {
     try {
       final response = await _apiService.postResponse(
         '/users/coc-accounts/verified',
-        body: {
-          "player_tag": playerTag,
-          "player_token": apiToken,
-        },
+        body: {"player_tag": playerTag, "player_token": apiToken},
         requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(ApiService.decodeResponseBody(response));
         DebugUtils.debugSuccess(
-            "✅ Account added with token successfully: $playerTag");
+          "✅ Account added with token successfully: $playerTag",
+        );
 
         // Extract player data from the token response
         final Map<String, dynamic>? accountData = data["account"];
@@ -573,7 +761,8 @@ class CocAccountService extends ChangeNotifier {
         final int? townHallLevel = accountData?["townHallLevel"];
 
         DebugUtils.debugInfo(
-            "🔍 Extracted player data - Name: $playerName, TH: $townHallLevel");
+          "🔍 Extracted player data - Name: $playerName, TH: $townHallLevel",
+        );
 
         // Refresh account list after successful addition
         await fetchCocAccounts();
@@ -582,13 +771,15 @@ class CocAccountService extends ChangeNotifier {
         if (accountData != null &&
             playerName != null &&
             townHallLevel != null) {
-          final accountIndex = _cocAccounts
-              .indexWhere((account) => account["player_tag"] == playerTag);
+          final accountIndex = _cocAccounts.indexWhere(
+            (account) => account["player_tag"] == playerTag,
+          );
           if (accountIndex != -1) {
             _cocAccounts[accountIndex]["name"] = playerName;
             _cocAccounts[accountIndex]["townHallLevel"] = townHallLevel;
             DebugUtils.debugSuccess(
-                "✅ Updated account display data for $playerTag: $playerName (TH$townHallLevel)");
+              "✅ Updated account display data for $playerTag: $playerName (TH$townHallLevel)",
+            );
             _safeNotify();
           }
         }
@@ -613,15 +804,16 @@ class CocAccountService extends ChangeNotifier {
   }
 
   /// Verifies an existing account using API token
-  Future<bool> verifyAccount(String playerTag, String apiToken,
-      Function(String) updateErrorMessage) async {
+  Future<bool> verifyAccount(
+    String playerTag,
+    String apiToken,
+    Function(String) updateErrorMessage,
+  ) async {
     try {
       final encodedPlayerTag = Uri.encodeComponent(playerTag);
       final response = await _apiService.postResponse(
         '/users/coc-accounts/$encodedPlayerTag/verify',
-        body: {
-          "player_token": apiToken,
-        },
+        body: {"player_token": apiToken},
         requiresAuth: true,
       );
 
@@ -652,8 +844,9 @@ class CocAccountService extends ChangeNotifier {
 
   /// Updates the verification status of an account locally
   void updateAccountVerificationStatus(String playerTag, bool isVerified) {
-    final accountIndex = _cocAccounts
-        .indexWhere((account) => account["player_tag"] == playerTag);
+    final accountIndex = _cocAccounts.indexWhere(
+      (account) => account["player_tag"] == playerTag,
+    );
     if (accountIndex != -1) {
       _cocAccounts[accountIndex]["is_verified"] = isVerified;
       _safeNotify();
@@ -702,4 +895,3 @@ class CocAccountService extends ChangeNotifier {
     super.dispose();
   }
 }
-

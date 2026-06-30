@@ -16,6 +16,46 @@ void main() {
       );
     });
 
+    test('uses CWL league icons for war league metadata', () {
+      GameDataService.playerLeagueData.clear();
+      GameDataService.playerLeagueData['leagues'] = {
+        'Crystal League I': {
+          'url':
+              'https://assets.clashk.ing/home-base/league-icons/Icon_HV_League_Crystal_2.png',
+        },
+      };
+      GameDataService.leagueData.clear();
+      GameDataService.warLeagueData.clear();
+      GameDataService.warLeagueData['leagues'] = {
+        'Crystal League I': {
+          'name': 'Crystal League I',
+          'TID': {'name': 'TID_LEAGUE_CRYSTAL1'},
+        },
+      };
+
+      expect(
+        ImageAssets.getWarLeagueImage('Crystal League I'),
+        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Crystal_1.png',
+      );
+    });
+
+    test('does not fall back to player league icons for unknown war leagues', () {
+      GameDataService.warLeagueData.clear();
+      GameDataService.leagueData.clear();
+      GameDataService.playerLeagueData.clear();
+      GameDataService.playerLeagueData['leagues'] = {
+        'Crystal League I': {
+          'url':
+              'https://assets.clashk.ing/home-base/league-icons/Icon_HV_League_Crystal_2.png',
+        },
+      };
+
+      expect(
+        ImageAssets.getWarLeagueImage('Crystal League I'),
+        ImageAssets.defaultImage,
+      );
+    });
+
     test('builds direct spell and equipment asset URLs', () {
       expect(
         ImageAssets.getSpellImage('Lightning Spell'),

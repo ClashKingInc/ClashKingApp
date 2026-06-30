@@ -16,6 +16,7 @@ class GameDataService {
   static Map<String, dynamic> _spellsData = {};
   static Map<String, dynamic> _gearsData = {};
   static Map<String, dynamic> _leagueData = {};
+  static Map<String, dynamic> _warLeagueData = {};
   static Map<String, dynamic> _playerLeagueData = {};
   static Map<String, dynamic> _gameData = {};
   static final Map<String, dynamic> _bundleData = {};
@@ -36,35 +37,40 @@ class GameDataService {
 
     for (int attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        final response = await http.get(
-          Uri.parse(_bundleUrl),
-          headers: {
-            'User-Agent': 'ClashKing-App/1.0',
-          },
-        ).timeout(const Duration(seconds: 10));
+        final response = await http
+            .get(
+              Uri.parse(_bundleUrl),
+              headers: {'User-Agent': 'ClashKing-App/1.0'},
+            )
+            .timeout(const Duration(seconds: 10));
 
         if (response.statusCode == 200) {
           final decoded = jsonDecode(response.body);
           if (decoded is! Map) {
             throw const FormatException(
-                "Static app bundle is not a JSON object");
+              "Static app bundle is not a JSON object",
+            );
           }
           _applyBundle(Map<String, dynamic>.from(decoded));
           DebugUtils.debugSuccess(
-              "Loaded static app bundle (attempt $attempt)");
+            "Loaded static app bundle (attempt $attempt)",
+          );
           break;
         }
 
         DebugUtils.debugError(
-            "HTTP ${response.statusCode} for static app bundle (attempt $attempt/$maxRetries)");
+          "HTTP ${response.statusCode} for static app bundle (attempt $attempt/$maxRetries)",
+        );
       } catch (e) {
         DebugUtils.debugError(
-            "Exception loading static app bundle (attempt $attempt/$maxRetries): ${e.toString()}");
+          "Exception loading static app bundle (attempt $attempt/$maxRetries): ${e.toString()}",
+        );
       }
 
       if (attempt == maxRetries) {
         DebugUtils.debugError(
-            "Final failure for static app bundle after $maxRetries attempts");
+          "Final failure for static app bundle after $maxRetries attempts",
+        );
         break;
       }
 
@@ -73,7 +79,8 @@ class GameDataService {
       );
 
       DebugUtils.debugInfo(
-          "🔄 Retrying static app bundle in ${delay.inSeconds}s...");
+        "🔄 Retrying static app bundle in ${delay.inSeconds}s...",
+      );
       await Future.delayed(delay);
     }
   }
@@ -154,35 +161,40 @@ class GameDataService {
 
     for (int attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        final response = await http.get(
-          Uri.parse("$_translationsUrl?locale=$clashyLocale"),
-          headers: {
-            'User-Agent': 'ClashKing-App/1.0',
-          },
-        ).timeout(const Duration(seconds: 10));
+        final response = await http
+            .get(
+              Uri.parse("$_translationsUrl?locale=$clashyLocale"),
+              headers: {'User-Agent': 'ClashKing-App/1.0'},
+            )
+            .timeout(const Duration(seconds: 10));
 
         if (response.statusCode == 200) {
           final decoded = jsonDecode(response.body);
           if (decoded is! Map) {
             throw const FormatException(
-                "Static app translations are not a JSON object");
+              "Static app translations are not a JSON object",
+            );
           }
           _applyTranslations(Map<String, dynamic>.from(decoded), clashyLocale);
           DebugUtils.debugSuccess(
-              "Loaded static app translations for $clashyLocale (attempt $attempt)");
+            "Loaded static app translations for $clashyLocale (attempt $attempt)",
+          );
           return;
         }
 
         DebugUtils.debugError(
-            "HTTP ${response.statusCode} for static app translations ($clashyLocale, attempt $attempt/$maxRetries)");
+          "HTTP ${response.statusCode} for static app translations ($clashyLocale, attempt $attempt/$maxRetries)",
+        );
       } catch (e) {
         DebugUtils.debugError(
-            "Exception loading static app translations ($clashyLocale, attempt $attempt/$maxRetries): ${e.toString()}");
+          "Exception loading static app translations ($clashyLocale, attempt $attempt/$maxRetries): ${e.toString()}",
+        );
       }
 
       if (attempt == maxRetries) {
         DebugUtils.debugError(
-            "Final failure for static app translations ($clashyLocale)");
+          "Final failure for static app translations ($clashyLocale)",
+        );
         _translationsData.clear();
         _translationLocale = clashyLocale;
         return;
@@ -205,6 +217,7 @@ class GameDataService {
     _replaceSection(_spellsData, bundle['spells_data']);
     _replaceSection(_gearsData, bundle['gears_data']);
     _replaceSection(_leagueData, bundle['league_data']);
+    _replaceSection(_warLeagueData, bundle['war_leagues_data']);
     _replaceSection(_playerLeagueData, bundle['player_league_data']);
     _replaceSection(_gameData, bundle['game_data']);
   }
@@ -217,7 +230,9 @@ class GameDataService {
   }
 
   static void _applyTranslations(
-      Map<String, dynamic> response, String clashyLocale) {
+    Map<String, dynamic> response,
+    String clashyLocale,
+  ) {
     _translationsData.clear();
     final translations = response['translations'];
     if (translations is Map) {
@@ -279,6 +294,7 @@ class GameDataService {
   static Map<String, dynamic> get spellsData => _spellsData;
   static Map<String, dynamic> get gearsData => _gearsData;
   static Map<String, dynamic> get leagueData => _leagueData;
+  static Map<String, dynamic> get warLeagueData => _warLeagueData;
   static Map<String, dynamic> get playerLeagueData => _playerLeagueData;
   static Map<String, dynamic> get gameData => _gameData;
   static Map<String, dynamic> get bundleData => _bundleData;

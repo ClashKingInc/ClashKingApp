@@ -18,6 +18,10 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 
 class AddCocAccountPage extends StatefulWidget {
+  const AddCocAccountPage({super.key, this.refreshOnExit = true});
+
+  final bool refreshOnExit;
+
   @override
   AddCocAccountPageState createState() => AddCocAccountPageState();
 }
@@ -97,9 +101,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     // Navigate to the home page
     if (mounted) {
       Navigator.of(context).pop();
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => const MyHomePage()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const MyHomePage()),
+      );
     }
   }
 
@@ -119,9 +123,13 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     return PopScope(
       // During first-connection this page may be the root route — allow
       // immediate pop so the system back gesture / back arrow always works.
-      canPop: _isFirstConnection,
+      canPop: _isFirstConnection || !widget.refreshOnExit,
       onPopInvokedWithResult: (didPop, _) async {
         if (didPop) {
+          unawaited(_persistAccountOrder(cocService));
+          return;
+        }
+        if (!widget.refreshOnExit) {
           unawaited(_persistAccountOrder(cocService));
           return;
         }
@@ -342,7 +350,38 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 // Verification status with better UX
-                                                if (_tempUserAccounts[index]["isVerified"] ==
+                                                if (cocService.isLocalMode)
+                                                  Container(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 4,
+                                                        ),
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                          .withValues(
+                                                            alpha: 0.1,
+                                                          ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            12,
+                                                          ),
+                                                    ),
+                                                    child: Text(
+                                                      'Local',
+                                                      style: TextStyle(
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.primary,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  )
+                                                else if (_tempUserAccounts[index]["isVerified"] ==
                                                     true)
                                                   Container(
                                                     padding:
@@ -578,8 +617,11 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       _errorMessage = "";
     });
 
-    final playerTag = _playerTagController.text.trim();
-    if (playerTag.isEmpty) {
+    final playerTagInput = _playerTagController.text.trim().toUpperCase();
+    final playerTag = playerTagInput.startsWith('#')
+        ? playerTagInput
+        : '#$playerTagInput';
+    if (playerTagInput.isEmpty) {
       setState(() {
         _errorMessage = AppLocalizations.of(context)!.accountsEnterPlayerTag;
         _isAddingLoading = false;

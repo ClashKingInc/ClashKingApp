@@ -1,208 +1,500 @@
-import 'package:clashkingapp/features/pages/widgets/clan_no_clan_card.dart';
-import 'package:clashkingapp/features/pages/widgets/cwl_card.dart';
-import 'package:clashkingapp/features/pages/widgets/cwl_war_card.dart';
+import 'dart:async';
+
+import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/pages/widgets/war_access_denied_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_card.dart';
-import 'package:clashkingapp/features/pages/widgets/war_history_card.dart';
 import 'package:clashkingapp/features/pages/widgets/war_not_in_war_card.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
-import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/features/clan/data/clan_service.dart';
-import 'package:clashkingapp/features/player/data/player_service.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
-import 'package:clashkingapp/common/widgets/error/error_page.dart';
-import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
-class WarCwlPage extends StatelessWidget {
+class WarCwlPage extends StatefulWidget {
   const WarCwlPage({super.key});
 
   @override
-  Widget build(BuildContext context) { // NOSONAR
+  State<WarCwlPage> createState() => _WarCwlPageState();
+}
+
+class _WarCwlPageState extends State<WarCwlPage> {
+  final Set<String> _requestedBookmarkWarTags = {};
+
+  @override
+  Widget build(BuildContext context) {
     final cocService = context.watch<CocAccountService>();
     final clanService = context.watch<ClanService>();
     final playerService = context.watch<PlayerService>();
     final warCwlService = context.watch<WarCwlService>();
-    final player = playerService.getSelectedProfile(cocService);
-
-    final clan = clanService.getClanByTag(player?.clanTag ?? "");
-    final warCwl = warCwlService.getWarCwlByTag(clan?.tag ?? "");
-    final hasClan = clan != null && clan.tag.isNotEmpty;
-    final isPlayerInWarElsewhere = player?.warData != null;
-
-    final isPlayerWarSameAsClanWar = isPlayerInWarElsewhere &&
-        warCwl != null &&
-        player?.warData?.clan?.tag == warCwl.warInfo.clan?.tag &&
-        player?.warData?.opponent?.tag == warCwl.warInfo.opponent?.tag;
-    final cwlClan =
-        clan == null ? null : warCwl?.leagueInfo?.getClanDetails(clan.tag);
+    final bookmarkService = context.watch<BookmarkService>();
+    final players = playerService.profiles;
+    final linkedClans = {
+      for (final profile in players)
+        if (profile.clan != null && profile.clan!.tag.isNotEmpty)
+          profile.clan!.tag: profile.clan!,
+    };
+    final bookmarkedClanTags = bookmarkService.clans
+        .where((clan) => !linkedClans.containsKey(clan.tag))
+        .map((clan) => clan.tag)
+        .toList(growable: false);
+    final missingBookmarkWarTags = bookmarkedClanTags
+        .where(
+          (tag) =>
+              !_requestedBookmarkWarTags.contains(tag) &&
+              warCwlService.getWarCwlByTag(tag) == null,
+        )
+        .toList(growable: false);
+    if (missingBookmarkWarTags.isNotEmpty) {
+      _requestedBookmarkWarTags.addAll(missingBookmarkWarTags);
+      unawaited(_loadBookmarkedWarData(warCwlService, missingBookmarkWarTags));
+    }
+    final items = [
+      for (final clan in linkedClans.values)
+        _WarListItem.linked(
+          clan: clan,
+          accounts: players
+              .where((player) => player.clanTag == clan.tag)
+              .toList(growable: false),
+          summary: warCwlService.getWarCwlByTag(clan.tag),
+        ),
+      for (final clan in bookmarkService.clans)
+        if (!linkedClans.containsKey(clan.tag))
+          _WarListItem.bookmarked(
+            clan,
+            summary: warCwlService.getWarCwlByTag(clan.tag),
+          ),
+    ]..sort((a, b) => a.sortWeight.compareTo(b.sortWeight));
 
     return Scaffold(
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        onRefresh: () async {
-          try {
-            // Use bulk endpoint for consistent data structure
-            final playerTags = cocService.getAccountTags();
-            if (playerTags.isNotEmpty) {
-              await cocService.refreshPageData(
-                  playerTags, playerService, clanService, warCwlService);
-            }
-          } catch (e) {
-            if (context.mounted) {
-              if (isNetworkError(e)) {
-                // Navigate to error page for network errors
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ErrorPage(
-                      isNetworkError: true,
-                      onRetry: () async {
-                        // Trigger refresh while staying on error page
-                        await cocService.refreshPageData(
-                            cocService.getAccountTags(),
-                            playerService,
-                            clanService,
-                            warCwlService);
-                        // Only pop if refresh succeeds
-                        if (context.mounted) {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    ),
-                  ),
-                );
-              } else {
-                // Show SnackBar for other errors
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(AppLocalizations.of(context)!
-                          .generalRefreshFailed(e.toString()))),
-                );
-              }
-            }
-          }
-        },
+        onRefresh: () => _refresh(
+          context,
+          cocService,
+          playerService,
+          clanService,
+          warCwlService,
+        ),
         child: ListView(
+          padding: EdgeInsets.fromLTRB(
+            16,
+            0,
+            16,
+            MediaQuery.paddingOf(context).bottom + 96,
+          ),
           children: [
             LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-            const SizedBox(height: 4),
-            if (!hasClan)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Card(child: NoClanCard()),
-              )
-            else if (warCwl != null && warCwl.isInWar == true)
-              GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WarScreen(war: warCwl.warInfo),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: WarCard(
-                      currentWarInfo: warCwl.warInfo, clanTag: clan.tag),
-                ),
-              )
-            else if (warCwl != null &&
-                warCwl.isInCwl == true &&
-                cwlClan != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Card(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .surface
-                      .withValues(alpha: 0.2),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      children: [
-                        Text(AppLocalizations.of(context)!.cwlClanWarLeague),
-                        GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CwlScreen(
-                                clanTag: clan.tag,
-                                warCwl: warCwl,
-                                clanInfo: cwlClan,
-                              ),
-                            ),
-                          ),
-                          child: CwlCard(),
-                        ),
-                        if (warCwl.getActiveWarByTag(clan.tag) != null)
-                          GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => WarScreen(
-                                    war: warCwl.getActiveWarByTag(clan.tag)!),
-                              ),
-                            ),
-                            child: CurrentWarInfoCard(),
-                          )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            else if (warCwl != null && warCwl.warInfo.state == "accessDenied")
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: WarAccessDeniedCard(
-                  clanName: clan.name,
-                  clanBadgeUrl: clan.badgeUrls.large,
-                ),
-              )
+            const SizedBox(height: 8),
+            if (items.isEmpty)
+              const _EmptyWarMessage()
             else
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: NotInWarCard(
-                  clanName: clan.name,
-                  clanBadgeUrl: clan.badgeUrls.large,
+              ...items.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _WarListCard(item: item),
                 ),
               ),
-            if (isPlayerInWarElsewhere && !isPlayerWarSameAsClanWar)
-              GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WarScreen(war: player.warData!),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: WarCard(
-                    currentWarInfo: player!.warData!,
-                    clanTag: player.clanTag,
-                  ),
-                ),
-              ),
-            if (hasClan &&
-                warCwl != null &&
-                !warCwl.isInCwl &&
-                warCwl.warInfo.state == "accessDenied" &&
-                clan.isWarLogPublic == true)
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: WarAccessDeniedCard(
-                    clanName: clan.name,
-                    clanBadgeUrl: clan.badgeUrls.large,
-                  )),
-            if (hasClan &&
-                clan.isWarLogPublic == true &&
-                clan.clanWarStats != null)
-              WarHistoryCard(clan: clan),
-            SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> _loadBookmarkedWarData(
+    WarCwlService warCwlService,
+    List<String> clanTags,
+  ) async {
+    await warCwlService.loadAllWarData(clanTags, notify: true);
+  }
+
+  Future<void> _refresh(
+    BuildContext context,
+    CocAccountService cocService,
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) async {
+    try {
+      final playerTags = cocService.getAccountTags();
+      if (playerTags.isNotEmpty) {
+        await cocService.refreshPageData(
+          playerTags,
+          playerService,
+          clanService,
+          warCwlService,
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      if (isNetworkError(e)) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ErrorPage(
+              isNetworkError: true,
+              onRetry: () async {
+                await cocService.refreshPageData(
+                  cocService.getAccountTags(),
+                  playerService,
+                  clanService,
+                  warCwlService,
+                );
+                if (context.mounted) Navigator.of(context).pop();
+              },
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.generalRefreshFailed(e.toString()),
+            ),
+          ),
+        );
+      }
+    }
+  }
+}
+
+class _WarListItem {
+  const _WarListItem({
+    required this.name,
+    required this.tag,
+    required this.badgeUrl,
+    required this.bookmarked,
+    required this.accounts,
+    this.clan,
+    this.summary,
+  });
+
+  final String name;
+  final String tag;
+  final String badgeUrl;
+  final bool bookmarked;
+  final List<Player> accounts;
+  final Clan? clan;
+  final WarCwl? summary;
+
+  factory _WarListItem.linked({
+    required Clan clan,
+    required List<Player> accounts,
+    required WarCwl? summary,
+  }) {
+    return _WarListItem(
+      name: clan.name,
+      tag: clan.tag,
+      badgeUrl: clan.badgeUrls.large,
+      bookmarked: false,
+      accounts: accounts,
+      clan: clan,
+      summary: summary,
+    );
+  }
+
+  factory _WarListItem.bookmarked(BookmarkedClan clan, {WarCwl? summary}) {
+    return _WarListItem(
+      name: clan.name,
+      tag: clan.tag,
+      badgeUrl: clan.badgeUrl,
+      bookmarked: true,
+      accounts: const [],
+      summary: summary,
+    );
+  }
+
+  WarInfo? get displayWar {
+    final warCwl = summary;
+    if (warCwl == null) return null;
+    if (warCwl.isInWar) return warCwl.warInfo;
+    if (warCwl.isInCwl) return warCwl.getActiveWarByTag(tag);
+    return null;
+  }
+
+  int get sortWeight {
+    final war = displayWar;
+    final linked = accounts.isNotEmpty && !bookmarked;
+    final inWarLineup = war != null && hasLineupAccount(war);
+    final warActive =
+        war != null &&
+        war.state != 'notInWar' &&
+        war.state != 'unknown' &&
+        war.state != 'accessDenied';
+
+    if (linked && inWarLineup && war.state == 'inWar') return 0;
+    if (linked && inWarLineup && war.state == 'preparation') return 1;
+    if (linked && warActive) return 2;
+    if (bookmarked && warActive) return 3;
+    if (linked) return 4;
+    if (bookmarked) return 5;
+    return 6;
+  }
+
+  List<_AccountWarStatus> accountStatuses(WarInfo war) {
+    return accounts
+        .map((player) => _AccountWarStatus.fromWar(player, war, tag))
+        .toList(growable: false);
+  }
+
+  bool hasLineupAccount(WarInfo war) {
+    return accountStatuses(war).any((status) => status.inWar);
+  }
+}
+
+class _WarListCard extends StatelessWidget {
+  const _WarListCard({required this.item});
+
+  final _WarListItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final war = item.displayWar;
+    final summary = item.summary;
+    final accountStatuses = war == null
+        ? const <_AccountWarStatus>[]
+        : item.accountStatuses(war);
+    final lineupStatuses = accountStatuses
+        .where((status) => status.inWar)
+        .toList(growable: false);
+    final allSpectators =
+        item.accounts.isNotEmpty &&
+        accountStatuses.isNotEmpty &&
+        lineupStatuses.isEmpty;
+
+    if (war != null && war.state != 'notInWar' && war.state != 'unknown') {
+      return GestureDetector(
+        onTap: () {
+          if (summary?.isInCwl == true &&
+              summary?.leagueInfo?.getClanDetails(item.tag) != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CwlScreen(
+                  clanTag: item.tag,
+                  warCwl: summary!,
+                  clanInfo: summary.leagueInfo!.getClanDetails(item.tag)!,
+                ),
+              ),
+            );
+            return;
+          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WarScreen(war: war)),
+          );
+        },
+        child: WarCard(
+          currentWarInfo: war,
+          clanTag: item.tag,
+          centerHeader: allSpectators ? const _SpectatorPill() : null,
+          footer: lineupStatuses.isEmpty
+              ? null
+              : _WarAttackFooter(
+                  statuses: lineupStatuses,
+                  attacksPerMember: war.attacksPerMember ?? 1,
+                ),
+        ),
+      );
+    }
+
+    if (summary?.warInfo.state == 'accessDenied') {
+      return WarAccessDeniedCard(
+        clanName: item.name,
+        clanBadgeUrl: item.badgeUrl,
+      );
+    }
+
+    if (!item.bookmarked) {
+      return NotInWarCard(clanName: item.name, clanBadgeUrl: item.badgeUrl);
+    }
+
+    return NotInWarCard(
+      clanName: item.name,
+      clanBadgeUrl: item.badgeUrl,
+      bookmarked: true,
+    );
+  }
+}
+
+class _WarAttackFooter extends StatelessWidget {
+  const _WarAttackFooter({
+    required this.statuses,
+    required this.attacksPerMember,
+  });
+
+  final List<_AccountWarStatus> statuses;
+  final int attacksPerMember;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.20),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Your accounts',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: statuses
+                  .map(
+                    (status) => _AttackPlayerChip(
+                      status: status,
+                      total: attacksPerMember,
+                    ),
+                  )
+                  .toList(growable: false),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SpectatorPill extends StatelessWidget {
+  const _SpectatorPill();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.13),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.visibility_outlined,
+              size: 14,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              'Spectator',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AttackPlayerChip extends StatelessWidget {
+  const _AttackPlayerChip({required this.status, required this.total});
+
+  final _AccountWarStatus status;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final foreground = status.left > 0 ? colorScheme.primary : Colors.green;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: foreground.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.local_fire_department_rounded,
+              size: 14,
+              color: foreground,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              '${status.player.name} ${status.done}/$total',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: foreground,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AccountWarStatus {
+  const _AccountWarStatus({
+    required this.player,
+    required this.inWar,
+    required this.done,
+    required this.left,
+  });
+
+  final Player player;
+  final bool inWar;
+  final int done;
+  final int left;
+
+  factory _AccountWarStatus.fromWar(
+    Player player,
+    WarInfo war,
+    String clanTag,
+  ) {
+    final inWar = war.isPlayerInWar(player.tag, clanTag);
+    final done = inWar ? war.getAttacksDoneByPlayer(player.tag, clanTag) : 0;
+    final left = inWar ? ((war.attacksPerMember ?? 1) - done).clamp(0, 99) : 0;
+    return _AccountWarStatus(
+      player: player,
+      inWar: inWar,
+      done: done,
+      left: left,
+    );
+  }
+}
+
+class _EmptyWarMessage extends StatelessWidget {
+  const _EmptyWarMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Text('No linked or bookmarked clan wars to show.'),
       ),
     );
   }

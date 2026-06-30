@@ -44,12 +44,13 @@ class StartupWidgetState extends State<StartupWidget> {
 
     if (!mounted) return;
 
-    if (authService.isAuthenticated) {
+    if (authService.canUseApp) {
       final cocService = context.read<CocAccountService>();
       final playerService = context.read<PlayerService>();
       final clanService = context.read<ClanService>();
       final warService = context.read<WarCwlService>();
       try {
+        cocService.setLocalMode(authService.isLocalMode);
         // Load the selected tag from SharedPreferences first
         await cocService.loadSelectedTag();
         await cocService.loadApiData(playerService, clanService, warService);
@@ -95,7 +96,7 @@ class StartupWidgetState extends State<StartupWidget> {
   void _navigateToNextScreen(AuthService authService) {
     Future.microtask(() {
       Widget nextPage;
-      if (authService.isAuthenticated && mounted) {
+      if (authService.canUseApp && mounted) {
         if (context.read<CocAccountService>().cocAccounts.isNotEmpty) {
           // ✅ User connected and has CoC account → Go to home page
           nextPage = MyHomePage();
@@ -108,9 +109,9 @@ class StartupWidgetState extends State<StartupWidget> {
         nextPage = LoginPage();
       }
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => nextPage),
-        );
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (_) => nextPage));
       }
     });
   }
