@@ -261,6 +261,8 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
     required this.onChanged,
     this.height = 52,
     this.color,
+    // Kept for API compat but no longer used — the built-in glass fallback
+    // is shown on non-iOS instead.
     this.fallbackBuilder,
   }) : assert(values.length == labels.length);
 
@@ -275,12 +277,24 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = values.indexOf(selected);
+    final resolvedColor = color ?? Theme.of(context).colorScheme.primary;
+
     if (_supportsNativeLiquidGlass && selectedIndex >= 0) {
       return glass.LiquidGlassSegmentedControl(
         labels: labels,
         selectedIndex: selectedIndex,
         height: height,
-        color: color ?? Theme.of(context).colorScheme.primary,
+        color: resolvedColor,
+        onValueChanged: (index) => onChanged(values[index]),
+      );
+    }
+
+    if (selectedIndex >= 0) {
+      return _FallbackLiquidGlassSegmentedControl(
+        labels: labels,
+        selectedIndex: selectedIndex,
+        height: height,
+        color: resolvedColor,
         onValueChanged: (index) => onChanged(values[index]),
       );
     }
@@ -391,17 +405,146 @@ class _FallbackLiquidGlassTabBar extends StatelessWidget {
                 top: inset,
                 width: itemWidth - inset * 2,
                 height: height - inset * 2,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest
-                        .withValues(alpha: 0.8),
-                    borderRadius: BorderRadius.circular(selectedCornerRadius),
-                  ),
+                child: Builder(
+                  builder: (context) {
+                    final cs = Theme.of(context).colorScheme;
+                    final isDark =
+                        Theme.of(context).brightness == Brightness.dark;
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: (isDark
+                                ? cs.surfaceContainerHighest
+                                : cs.surfaceContainerHigh)
+                            .withValues(alpha: isDark ? 0.72 : 0.88),
+                        borderRadius: BorderRadius.circular(selectedCornerRadius),
+                        border: Border.all(
+                          color: cs.outlineVariant.withValues(
+                            alpha: isDark ? 0.45 : 0.28,
+                          ),
+                          width: 0.8,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: isDark ? 0.20 : 0.07,
+                            ),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
           ],
         );
       },
+    );
+  }
+}
+
+/// Glass-style segmented control for non-iOS platforms. Mirrors the layout of
+/// [glass.LiquidGlassSegmentedControl]: frosted glass background + animated
+/// bright pill for the selected item + colored label.
+class _FallbackLiquidGlassSegmentedControl extends StatelessWidget {
+  const _FallbackLiquidGlassSegmentedControl({
+    required this.labels,
+    required this.selectedIndex,
+    required this.onValueChanged,
+    required this.height,
+    required this.color,
+  });
+
+  final List<String> labels;
+  final int selectedIndex;
+  final ValueChanged<int> onValueChanged;
+  final double height;
+  final Color color;
+
+  static const double _inset = 5.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final pillRadius = (height - _inset * 2) / 2;
+
+    return SizedBox(
+      height: height,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final itemWidth = constraints.maxWidth / labels.length;
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              // Frosted glass background
+              NativeLiquidGlassBar(
+                height: height,
+                cornerRadius: height / 2,
+                opacity: 1.0,
+              ),
+              // Animated selected pill
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 260),
+                curve: Curves.easeOutCubic,
+                left: itemWidth * selectedIndex + _inset,
+                top: _inset,
+                width: itemWidth - _inset * 2,
+                height: height - _inset * 2,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: (isDark
+                            ? colorScheme.surfaceContainerHighest
+                            : colorScheme.surfaceContainerHigh)
+                        .withValues(alpha: isDark ? 0.72 : 0.90),
+                    borderRadius: BorderRadius.circular(pillRadius),
+                    border: Border.all(
+                      color: color.withValues(alpha: isDark ? 0.40 : 0.28),
+                      width: 0.8,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(
+                          alpha: isDark ? 0.18 : 0.06,
+                        ),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Tap targets + labels
+              Row(
+                children: List.generate(labels.length, (i) {
+                  final isSelected = i == selectedIndex;
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () => onValueChanged(i),
+                      behavior: HitTestBehavior.opaque,
+                      child: Center(
+                        child: Text(
+                          labels[i],
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: isSelected
+                                        ? color
+                                        : colorScheme.onSurfaceVariant,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w700
+                                        : FontWeight.w500,
+                                  ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

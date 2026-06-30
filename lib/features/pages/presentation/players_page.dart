@@ -83,24 +83,6 @@ class _PlayersPageState extends State<PlayersPage> {
                 labels: const ['Linked', 'Bookmarked'],
                 selected: _mode,
                 onChanged: (value) => setState(() => _mode = value),
-                fallbackBuilder: (context) =>
-                    SegmentedButton<_PlayerRosterMode>(
-                      segments: const [
-                        ButtonSegment(
-                          value: _PlayerRosterMode.linked,
-                          label: Text('Linked'),
-                          icon: Icon(Icons.verified_user_outlined),
-                        ),
-                        ButtonSegment(
-                          value: _PlayerRosterMode.bookmarked,
-                          label: Text('Bookmarked'),
-                          icon: Icon(Icons.bookmark_border_rounded),
-                        ),
-                      ],
-                      selected: {_mode},
-                      onSelectionChanged: (values) =>
-                          setState(() => _mode = values.first),
-                    ),
               ),
             ),
           ),
