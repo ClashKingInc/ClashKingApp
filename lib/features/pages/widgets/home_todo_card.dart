@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-const bool _showTodoMockups = true;
+const bool _showTodoMockups = false;
 
 class HomeEventBanner extends StatefulWidget {
   const HomeEventBanner({super.key});
@@ -35,25 +35,35 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
     super.dispose();
   }
 
+  int _index = 0;
+
   @override
   Widget build(BuildContext context) {
-    final items = _BannerItem.build();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final items = _BannerItem.build(isDark: isDark);
 
-    return SizedBox(
-      height: 64,
-      child: PageView.builder(
-        controller: _controller,
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 180),
-            child: _BannerTile(
-              key: ValueKey(items[index].title),
-              item: items[index],
-            ),
-          );
-        },
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 64,
+          child: PageView.builder(
+            controller: _controller,
+            onPageChanged: (index) => setState(() => _index = index),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 180),
+                child: _BannerTile(
+                  key: ValueKey(items[index].title),
+                  item: items[index],
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        _PageDots(count: items.length, index: _index),
+      ],
     );
   }
 }
@@ -101,10 +111,38 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
     final warCwlService = _showTodoMockups
         ? null
         : context.watch<WarCwlService>();
-    final compact = MediaQuery.sizeOf(context).width < 360;
-    final height = compact ? 392.0 : 258.0;
     final mockups = _TodoPreview.mockups;
-    final itemCount = _showTodoMockups ? mockups.length : widget.players.length;
+    // A combined "all accounts" page leads when several accounts are pinned.
+    final hasSummaryPage = !_showTodoMockups && widget.players.length > 1;
+    final itemCount = _showTodoMockups
+        ? mockups.length
+        : widget.players.length + (hasSummaryPage ? 1 : 0);
+
+    // Every page's summary, in page order — reused by the item builder and
+    // to size the card to its content (tallest page wins).
+    final summaries = _showTodoMockups
+        ? mockups.map((mockup) => mockup.summary).toList(growable: false)
+        : <_TodoSummary>[
+            if (hasSummaryPage)
+              _TodoSummary.fromPlayers(
+                widget.players,
+                (player) => _memberPresence(player, warCwlService!),
+              ),
+            ...widget.players.map(
+              (player) => _TodoSummary.fromPlayer(
+                player,
+                _memberPresence(player, warCwlService!),
+              ),
+            ),
+          ];
+    final maxRows = summaries.fold<int>(
+      0,
+      (acc, summary) => math.max(acc, (summary.metrics.length + 1) ~/ 2),
+    );
+    // Panel chrome: padding + border + header row + status row + gaps.
+    final barsHeight =
+        maxRows == 0 ? 64.0 : maxRows * 38.0 + (maxRows - 1) * 7.0;
+    final height = 116.0 + barsHeight;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,21 +155,24 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
             itemCount: itemCount,
             itemBuilder: (context, index) {
               if (_showTodoMockups) {
-                return _TodoPreviewPanel(
-                  preview: mockups[index],
-                  compact: compact,
+                return _TodoPreviewPanel(preview: mockups[index]);
+              }
+
+              if (hasSummaryPage && index == 0) {
+                return _AllAccountsPanel(
+                  accountCount: widget.players.length,
+                  summary: summaries[index],
+                  onTap: () => _openTodo(context, warCwlService!),
                 );
               }
 
-              final player = widget.players[index];
-              final presence = _memberPresence(player, warCwlService!);
-              final summary = _TodoSummary.fromPlayer(player, presence);
+              final player =
+                  widget.players[index - (hasSummaryPage ? 1 : 0)];
 
               return _AccountTodoPanel(
                 player: player,
-                summary: summary,
-                compact: compact,
-                onTap: () => _openTodo(context, warCwlService),
+                summary: summaries[index],
+                onTap: () => _openTodo(context, warCwlService!),
               );
             },
           ),
@@ -189,10 +230,9 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
 }
 
 class _TodoPreviewPanel extends StatelessWidget {
-  const _TodoPreviewPanel({required this.preview, required this.compact});
+  const _TodoPreviewPanel({required this.preview});
 
   final _TodoPreview preview;
-  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -209,62 +249,30 @@ class _TodoPreviewPanel extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(18, compact ? 16 : 18, 18, 18),
-          child: compact
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _PreviewHeader(preview: preview),
-                    const SizedBox(height: 18),
-                    Center(
-                      child: _TodoRing(summary: preview.summary, size: 150),
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(child: _PreviewHeader(preview: preview)),
+                  _TodoRing(summary: preview.summary, size: 46),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                preview.status,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w700,
                     ),
-                    const SizedBox(height: 18),
-                    Expanded(
-                      child: _MetricBars(metrics: preview.summary.metrics),
-                    ),
-                  ],
-                )
-              : Row(
-                  children: [
-                    SizedBox(
-                      width: 144,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _PreviewHeader(preview: preview),
-                          const Spacer(),
-                          _TodoRing(summary: preview.summary, size: 128),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 18),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            preview.status,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          const SizedBox(height: 12),
-                          Expanded(
-                            child: _MetricBars(
-                              metrics: preview.summary.metrics,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              ),
+              const SizedBox(height: 10),
+              _MetricBars(metrics: preview.summary.metrics),
+            ],
+          ),
         ),
       ),
     );
@@ -275,13 +283,11 @@ class _AccountTodoPanel extends StatelessWidget {
   const _AccountTodoPanel({
     required this.player,
     required this.summary,
-    required this.compact,
     required this.onTap,
   });
 
   final Player player;
   final _TodoSummary summary;
-  final bool compact;
   final VoidCallback onTap;
 
   @override
@@ -303,69 +309,155 @@ class _AccountTodoPanel extends StatelessWidget {
                 color: colorScheme.outlineVariant.withValues(alpha: 0.32),
               ),
             ),
-            padding: EdgeInsets.fromLTRB(18, compact ? 16 : 18, 18, 18),
-            child: compact
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _AccountHeader(player: player),
-                      const SizedBox(height: 18),
-                      Center(child: _TodoRing(summary: summary, size: 150)),
-                      const SizedBox(height: 18),
-                      Expanded(child: _MetricBars(metrics: summary.metrics)),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      SizedBox(
-                        width: 144,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _AccountHeader(player: player),
-                            const Spacer(),
-                            _TodoRing(summary: summary, size: 128),
-                            const Spacer(),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 18),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    summary.lastActiveText(context),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(
-                                          color: colorScheme.onSurfaceVariant,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.chevron_right_rounded,
-                                  size: 22,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                              ],
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: _AccountHeader(player: player)),
+                    _TodoRing(summary: summary, size: 46),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        summary.lastActiveText(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w700,
                             ),
-                            const SizedBox(height: 12),
-                            Expanded(
-                              child: _MetricBars(metrics: summary.metrics),
-                            ),
-                          ],
-                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 22,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _MetricBars(metrics: summary.metrics),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Leading page when several accounts are pinned: combined progress and
+/// per-category totals across all of them.
+class _AllAccountsPanel extends StatelessWidget {
+  const _AllAccountsPanel({
+    required this.accountCount,
+    required this.summary,
+    required this.onTap,
+  });
+
+  final int accountCount;
+  final _TodoSummary summary;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final header = Row(
+      children: [
+        SizedBox.square(
+          dimension: 30,
+          child: CachedNetworkImage(
+            imageUrl: ImageAssets.iconBuilderPotion,
+            fit: BoxFit.contain,
+            errorWidget: (context, url, error) => Icon(
+              Icons.checklist_rounded,
+              size: 24,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'All accounts',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              Text(
+                '$accountCount accounts',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 1),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(28),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+              ),
+            ),
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: header),
+                    _TodoRing(summary: summary, size: 46),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Combined to-do across your accounts',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 22,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _MetricBars(metrics: summary.metrics),
+              ],
+            ),
           ),
         ),
       ),
@@ -385,7 +477,7 @@ class _AccountHeader extends StatelessWidget {
     return Row(
       children: [
         SizedBox.square(
-          dimension: 34,
+          dimension: 30,
           child: CachedNetworkImage(
             imageUrl: player.townHallPic,
             fit: BoxFit.contain,
@@ -414,8 +506,7 @@ class _AccountHeader extends StatelessWidget {
                 player.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontSize: 17,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -446,7 +537,7 @@ class _PreviewHeader extends StatelessWidget {
     return Row(
       children: [
         SizedBox.square(
-          dimension: 34,
+          dimension: 30,
           child: CachedNetworkImage(
             imageUrl: preview.avatarUrl,
             fit: BoxFit.contain,
@@ -474,8 +565,7 @@ class _PreviewHeader extends StatelessWidget {
                 preview.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontSize: 17,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -506,6 +596,8 @@ class _TodoRing extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final percent = (summary.ratio * 100).round();
+    // Below this size the done/total line no longer fits inside the ring.
+    final showCounts = size >= 80;
 
     return SizedBox.square(
       dimension: size,
@@ -526,14 +618,16 @@ class _TodoRing extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 2),
-              Text(
-                '${summary.done}/${summary.total}',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w800,
+              if (showCounts) ...[
+                const SizedBox(height: 2),
+                Text(
+                  '${summary.done}/${summary.total}',
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
@@ -550,17 +644,37 @@ class _MetricBars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (metrics.isEmpty) {
-      return const Center(child: _CaughtUp());
+      return const SizedBox(
+        height: 64,
+        child: Center(child: _CaughtUp()),
+      );
     }
 
-    return ListView.separated(
-      padding: EdgeInsets.zero,
-      physics: const BouncingScrollPhysics(),
-      itemCount: metrics.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 9),
-      itemBuilder: (context, index) {
-        return _MetricBar(metric: metrics[index]);
-      },
+    // Two metrics per row; a metric alone on its row spans the full width.
+    final rows = <Widget>[];
+    for (var i = 0; i < metrics.length; i += 2) {
+      if (i + 1 < metrics.length) {
+        rows.add(
+          Row(
+            children: [
+              Expanded(child: _MetricBar(metric: metrics[i])),
+              const SizedBox(width: 7),
+              Expanded(child: _MetricBar(metric: metrics[i + 1])),
+            ],
+          ),
+        );
+      } else {
+        rows.add(_MetricBar(metric: metrics[i]));
+      }
+    }
+
+    return Column(
+      children: [
+        for (var i = 0; i < rows.length; i++) ...[
+          if (i > 0) const SizedBox(height: 7),
+          rows[i],
+        ],
+      ],
     );
   }
 }
@@ -577,14 +691,14 @@ class _MetricBar extends StatelessWidget {
     final fillColor = done ? Colors.green : metric.color;
 
     return SizedBox(
-      height: 46,
+      height: 38,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: fillColor.withValues(alpha: 0.16),
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(14),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(14),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -598,11 +712,11 @@ class _MetricBar extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 11),
+                padding: const EdgeInsets.symmetric(horizontal: 9),
                 child: Row(
                   children: [
                     _MetricIcon(metric: metric),
-                    const SizedBox(width: 9),
+                    const SizedBox(width: 7),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -633,8 +747,7 @@ class _MetricBar extends StatelessWidget {
                     ),
                     Text(
                       '${metric.done}/${metric.total}',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontSize: 18,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: fillColor,
                         fontWeight: FontWeight.w900,
                       ),
@@ -663,9 +776,9 @@ class _MetricIcon extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: SizedBox.square(
-        dimension: 30,
+        dimension: 26,
         child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(4),
           child: CachedNetworkImage(
             imageUrl: metric.imageUrl,
             fit: BoxFit.contain,
@@ -742,45 +855,69 @@ class _BannerTile extends StatelessWidget {
     return Semantics(
       button: true,
       label: '${item.title}, ${item.subtitle}',
-      child: Row(
-        children: [
-          SizedBox.square(
-            dimension: 48,
-            child: CachedNetworkImage(
-              imageUrl: item.imageUrl,
-              fit: BoxFit.contain,
-              errorWidget: (context, url, error) =>
-                  Icon(item.fallbackIcon, color: item.color, size: 30),
-            ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 1),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: item.color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(18),
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
               children: [
-                Text(
-                  item.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w900),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface.withValues(alpha: 0.72),
+                    shape: BoxShape.circle,
+                  ),
+                  child: SizedBox.square(
+                    dimension: 40,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: CachedNetworkImage(
+                        imageUrl: item.imageUrl,
+                        fit: BoxFit.contain,
+                        errorWidget: (context, url, error) =>
+                            Icon(item.fallbackIcon,
+                                color: item.color, size: 22),
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  item.subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(fontWeight: FontWeight.w900),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        item.subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -973,6 +1110,20 @@ class _TodoSummary {
       );
     }
 
+    metrics.add(
+      _TodoMetric(
+        label: 'Season Pass',
+        detail: player.currentSeasonPoints >= requiredSeasonPassPoints
+            ? 'complete'
+            : '${NumberFormat.compact().format(requiredSeasonPassPoints - player.currentSeasonPoints)} points left',
+        done: player.currentSeasonPoints,
+        total: requiredSeasonPassPoints,
+        imageUrl: ImageAssets.iconGoldPass,
+        color: const Color(0xFFE8A524),
+        fallbackIcon: Icons.confirmation_number_rounded,
+      ),
+    );
+
     var done = 0;
     var total = 0;
     for (final metric in metrics) {
@@ -986,6 +1137,58 @@ class _TodoSummary {
       total: total,
       player: player,
     );
+  }
+
+  /// Aggregates every pinned account into one summary: metrics with the
+  /// same label are merged by summing done/total across accounts.
+  factory _TodoSummary.fromPlayers(
+    List<Player> players,
+    WarMemberPresence Function(Player) presenceOf,
+  ) {
+    final merged = <String, _TodoMetric>{};
+    final order = <String>[];
+
+    for (final player in players) {
+      final summary = _TodoSummary.fromPlayer(player, presenceOf(player));
+      for (final metric in summary.metrics) {
+        final existing = merged[metric.label];
+        if (existing == null) {
+          merged[metric.label] = metric;
+          order.add(metric.label);
+        } else {
+          merged[metric.label] = _TodoMetric(
+            label: metric.label,
+            detail: '',
+            done: existing.done + metric.done.clamp(0, metric.total),
+            total: existing.total + metric.total,
+            imageUrl: existing.imageUrl,
+            color: existing.color,
+            fallbackIcon: existing.fallbackIcon,
+          );
+        }
+      }
+    }
+
+    final metrics = order.map((label) {
+      final metric = merged[label]!;
+      final left = math.max(metric.total - metric.done, 0);
+      final detail = left == 0
+          ? 'complete'
+          : metric.total > 50
+              ? '${NumberFormat.compact().format(left)} points left'
+              : '$left left';
+      return _TodoMetric(
+        label: metric.label,
+        detail: detail,
+        done: metric.done,
+        total: metric.total,
+        imageUrl: metric.imageUrl,
+        color: metric.color,
+        fallbackIcon: metric.fallbackIcon,
+      );
+    }).toList(growable: false);
+
+    return _TodoSummary.fromMetrics(metrics);
   }
 
   static bool _isSameWarAsCwl(Player player) {
@@ -1179,6 +1382,7 @@ class _BannerItem {
     required this.imageUrl,
     required this.fallbackIcon,
     required this.color,
+    this.sortKey,
   });
 
   final String title;
@@ -1187,16 +1391,13 @@ class _BannerItem {
   final IconData fallbackIcon;
   final Color color;
 
-  static List<_BannerItem> build() {
+  /// The event's next relevant moment: its end when active, its start
+  /// otherwise. Null for non-event tiles (promo).
+  final DateTime? sortKey;
+
+  static List<_BannerItem> build({required bool isDark}) {
     final now = DateTime.now().toUtc();
-    return [
-      const _BannerItem(
-        title: 'Use code ClashKing',
-        subtitle: 'Support the project in the Supercell Store',
-        imageUrl: ImageAssets.lightModeLogo,
-        fallbackIcon: Icons.local_offer_rounded,
-        color: Color(0xFFD90709),
-      ),
+    final events = [
       _eventItem(
         now: now,
         title: 'Clan Games',
@@ -1237,6 +1438,17 @@ class _BannerItem {
         color: const Color(0xFF2A9FD6),
         window: _raidWindow(now),
       ),
+    ]..sort((a, b) => a.sortKey!.compareTo(b.sortKey!));
+
+    return [
+      _BannerItem(
+        title: 'Use code ClashKing',
+        subtitle: 'Support the project in the Supercell Store',
+        imageUrl: isDark ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo,
+        fallbackIcon: Icons.local_offer_rounded,
+        color: const Color(0xFFD90709),
+      ),
+      ...events,
     ];
   }
 
@@ -1255,6 +1467,7 @@ class _BannerItem {
       imageUrl: imageUrl,
       fallbackIcon: fallbackIcon,
       color: color,
+      sortKey: target,
       subtitle:
           '${active ? 'Ends' : 'Starts'} in ${_formatRemaining(target.difference(now))}',
     );

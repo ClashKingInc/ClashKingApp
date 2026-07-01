@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/features/pages/widgets/home_todo_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,12 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerService = context.watch<PlayerService>();
+    final prefs = context.watch<PlayerCardPreferencesService>();
     final players = playerService.profiles;
+    final pinnedTags = prefs.todoOnHomeTags;
+    final pinnedPlayers = players
+        .where((player) => pinnedTags.contains(_normalizeTag(player.tag)))
+        .toList(growable: false);
 
     return Scaffold(
       body: SafeArea(
@@ -25,18 +31,35 @@ class DashboardPage extends StatelessWidget {
             const HomeEventBanner(),
             const SizedBox(height: 16),
             if (players.isEmpty)
-              const _EmptyDashboard()
+              const _EmptyDashboard(
+                title: 'No linked accounts',
+                message:
+                    'Link a Clash account to see attacks, events, and activity here.',
+              )
+            else if (pinnedPlayers.isEmpty)
+              const _EmptyDashboard(
+                title: 'Nothing pinned yet',
+                message:
+                    'Open the Players tab, expand a card\'s options, and turn on '
+                    '"Show to-do on home" to pin an account here.',
+              )
             else
-              HomeTodoCard(players: players, allPlayers: players),
+              HomeTodoCard(players: pinnedPlayers, allPlayers: players),
           ],
         ),
       ),
     );
   }
+
+  static String _normalizeTag(String tag) =>
+      tag.replaceAll('#', '').trim().toUpperCase();
 }
 
 class _EmptyDashboard extends StatelessWidget {
-  const _EmptyDashboard();
+  const _EmptyDashboard({required this.title, required this.message});
+
+  final String title;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +77,7 @@ class _EmptyDashboard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'No linked accounts',
+            title,
             textAlign: TextAlign.center,
             style: Theme.of(
               context,
@@ -62,7 +85,7 @@ class _EmptyDashboard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Link a Clash account to see attacks, events, and activity here.',
+            message,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
