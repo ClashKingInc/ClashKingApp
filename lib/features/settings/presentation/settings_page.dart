@@ -6,18 +6,21 @@ import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/services/app_icon_service.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/live_activity_debug_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:clashkingapp/features/settings/presentation/notification_settings_page.dart';
 import 'package:clashkingapp/features/settings/presentation/translation_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/l10n/locale.dart';
+import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +44,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   bool _supportsAlternateIcons = false;
   bool _isChangingAppIcon = false;
   String? _selectedAppIconName;
+  String? _cachedWarWidgetClanSignature;
 
   @override
   void initState() {
@@ -58,6 +62,11 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         widget.user.hasDiscordAuth ||
         (!isLocalMode && widget.user.avatarUrl.isNotEmpty);
     final hasEmail = widget.user.hasEmailAuth;
+    final widgetClans = WarWidgetService.clanOptionsFromProfiles(
+      context.watch<PlayerService>().profiles,
+      bookmarkedClans: context.watch<BookmarkService>().clans,
+    );
+    _scheduleWarWidgetClanCache(widgetClans);
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -123,6 +132,14 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                     ),
                   );
                 },
+              ),
+              _SettingsTile(
+                icon: LucideIcons.panelTop,
+                title: 'Add War Widget',
+                subtitle: widgetClans.isEmpty
+                    ? 'Link an account in a clan first'
+                    : '${widgetClans.length} clan${widgetClans.length == 1 ? '' : 's'} available',
+                onTap: () => _showWarWidgetSheet(widgetClans),
               ),
             ],
           ),
@@ -432,6 +449,152 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         setState(() => _isChangingAppIcon = false);
       }
     }
+  }
+
+  void _scheduleWarWidgetClanCache(List<WarWidgetClanOption> clans) {
+    final signature = clans.map((clan) => '${clan.tag}:${clan.name}').join('|');
+    if (signature.isEmpty || signature == _cachedWarWidgetClanSignature) {
+      return;
+    }
+    _cachedWarWidgetClanSignature = signature;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      try {
+        await WarWidgetService.cacheClanOptions(clans);
+      } catch (error) {
+        DebugUtils.debugWarning("Could not cache war widget clans: $error");
+      }
+    });
+  }
+
+  Future<void> _showWarWidgetSheet(List<WarWidgetClanOption> clans) async {
+    await WarWidgetService.cacheClanOptions(clans);
+    if (!mounted) return;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        String? pendingClanTag;
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            final colorScheme = Theme.of(context).colorScheme;
+            final isIOS = defaultTargetPlatform == TargetPlatform.iOS;
+            final isAndroid = defaultTargetPlatform == TargetPlatform.android;
+
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Add War Widget',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      isIOS
+                          ? 'Choose a clan to cache it. After adding the widget, long press it, tap Edit Widget, then choose Clan.'
+                          : 'Choose a clan to cache it, then add the widget from Android.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    if (clans.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Text(
+                          'No linked accounts are currently in a clan.',
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                        ),
+                      )
+                    else
+                      Flexible(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final clan = clans[index];
+                            final isPending = pendingClanTag == clan.tag;
+                            return _WarWidgetClanTile(
+                              clan: clan,
+                              isPending: isPending,
+                              onTap: isPending
+                                  ? null
+                                  : () async {
+                                      setSheetState(
+                                        () => pendingClanTag = clan.tag,
+                                      );
+                                      try {
+                                        await WarWidgetService.prepareClanWidgets(
+                                          clans,
+                                          selectedClanTag: clan.tag,
+                                        );
+                                        if (isAndroid) {
+                                          await WarWidgetService.requestPinnedWarWidget();
+                                        }
+                                        if (!context.mounted) return;
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              isIOS
+                                                  ? '${clan.name} is ready. Edit the widget and choose it under Clan.'
+                                                  : '${clan.name} widget data is ready.',
+                                            ),
+                                          ),
+                                        );
+                                        Navigator.pop(sheetContext);
+                                      } catch (error) {
+                                        if (!context.mounted) return;
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Could not prepare widget: $error',
+                                            ),
+                                          ),
+                                        );
+                                      } finally {
+                                        if (context.mounted) {
+                                          setSheetState(
+                                            () => pendingClanTag = null,
+                                          );
+                                        }
+                                      }
+                                    },
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 1),
+                          itemCount: clans.length,
+                        ),
+                      ),
+                    if (isIOS) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        'You can add more than one War Widget and set a different Clan on each one.',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void _showLicenses() {
@@ -797,6 +960,59 @@ class _AppIconOptionTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _WarWidgetClanTile extends StatelessWidget {
+  const _WarWidgetClanTile({
+    required this.clan,
+    required this.isPending,
+    required this.onTap,
+  });
+
+  final WarWidgetClanOption clan;
+  final bool isPending;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 2),
+      leading: SizedBox(
+        width: 42,
+        height: 42,
+        child: clan.badgeUrl == null || clan.badgeUrl!.isEmpty
+            ? CircleAvatar(
+                backgroundColor: colorScheme.primaryContainer,
+                child: Text(
+                  clan.name.characters.firstOrNull ?? '?',
+                  style: TextStyle(color: colorScheme.onPrimaryContainer),
+                ),
+              )
+            : CachedNetworkImage(
+                imageUrl: clan.badgeUrl!,
+                fit: BoxFit.contain,
+                errorWidget: (context, url, error) => CircleAvatar(
+                  backgroundColor: colorScheme.primaryContainer,
+                  child: Text(
+                    clan.name.characters.firstOrNull ?? '?',
+                    style: TextStyle(color: colorScheme.onPrimaryContainer),
+                  ),
+                ),
+              ),
+      ),
+      title: Text(clan.name, maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: Text(clan.tag),
+      trailing: isPending
+          ? const SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : const Icon(Icons.add_rounded),
+      onTap: onTap,
     );
   }
 }

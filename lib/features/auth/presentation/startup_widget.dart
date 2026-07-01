@@ -1,6 +1,7 @@
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -12,6 +13,8 @@ import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/widgets/war_widget.dart';
 
 class StartupWidget extends StatefulWidget {
   @override
@@ -49,11 +52,16 @@ class StartupWidgetState extends State<StartupWidget> {
       final playerService = context.read<PlayerService>();
       final clanService = context.read<ClanService>();
       final warService = context.read<WarCwlService>();
+      final bookmarkService = context.read<BookmarkService>();
       try {
         cocService.setLocalMode(authService.isLocalMode);
         // Load the selected tag from SharedPreferences first
         await cocService.loadSelectedTag();
+        if (!bookmarkService.loaded) {
+          await bookmarkService.load();
+        }
         await cocService.loadApiData(playerService, clanService, warService);
+        _seedWarWidgetClans(cocService, playerService, bookmarkService);
       } catch (e) {
         if (mounted) {
           _showInitializationFailure(e);
@@ -67,6 +75,21 @@ class StartupWidgetState extends State<StartupWidget> {
     });
 
     _navigateToNextScreen(authService);
+  }
+
+  void _seedWarWidgetClans(
+    CocAccountService cocService,
+    PlayerService playerService,
+    BookmarkService bookmarkService,
+  ) {
+    WarWidgetService.seedClanOptionsFromProfiles(
+      playerService.profiles,
+      bookmarkedClans: bookmarkService.clans,
+      selectedPlayerTag: cocService.selectedTag,
+      refreshWarData: true,
+    ).catchError((error) {
+      DebugUtils.debugWarning("Could not seed war widget clans: $error");
+    });
   }
 
   void _showInitializationFailure(dynamic error) {

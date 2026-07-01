@@ -1,4 +1,5 @@
 import ActivityKit
+import AppIntents
 import SwiftUI
 import UIKit
 import WidgetKit
@@ -39,8 +40,8 @@ struct WarWidgetEntry: TimelineEntry {
   let opponentBadgeData: Data?
 }
 
-struct WarWidgetData: Decodable {
-  struct Side: Decodable {
+struct WarWidgetData: Codable {
+  struct Side: Codable {
     let name: String?
     let badgeUrlMedium: String?
     let percent: String?
@@ -95,9 +96,17 @@ struct WarWidgetData: Decodable {
     cwlLeague: nil
   )
 
-  static func current() -> WarWidgetData {
+  static func current(clanTag: String? = nil) -> WarWidgetData {
+    guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
+      return .empty
+    }
+
+    let selectedClanTag = clanTag ?? defaults.string(forKey: "warWidgetSelectedClan")
+    let clanSpecificKey = selectedClanTag.map { "warInfo_\(Self.normalizedClanTag($0))" }
+    let raw = clanSpecificKey.flatMap { defaults.string(forKey: $0) } ?? defaults.string(forKey: "warInfo")
+
     guard
-      let raw = UserDefaults(suiteName: appGroupIdentifier)?.string(forKey: "warInfo"),
+      let raw,
       let data = raw.data(using: .utf8),
       let decoded = try? JSONDecoder().decode(WarWidgetData.self, from: data)
     else {
@@ -105,21 +114,92 @@ struct WarWidgetData: Decodable {
     }
     return decoded
   }
+
+  private static func normalizedClanTag(_ clanTag: String) -> String {
+    clanTag.replacingOccurrences(of: "#", with: "").uppercased()
+  }
 }
 
-struct WarTimelineProvider: TimelineProvider {
+private struct CachedWarWidgetClan: Decodable {
+  let tag: String
+  let name: String
+  let badgeUrl: String?
+}
+
+struct WarWidgetClanEntity: AppEntity, Identifiable {
+  static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Clan")
+  static var defaultQuery = WarWidgetClanQuery()
+
+  let id: String
+  let name: String
+  let badgeUrl: String?
+
+  var displayRepresentation: DisplayRepresentation {
+    DisplayRepresentation(title: "\(name)", subtitle: "\(id)")
+  }
+}
+
+struct WarWidgetClanQuery: EntityStringQuery {
+  func entities(for identifiers: [WarWidgetClanEntity.ID]) async throws -> [WarWidgetClanEntity] {
+    allEntities().filter { identifiers.contains($0.id) }
+  }
+
+  func entities(matching string: String) async throws -> [WarWidgetClanEntity] {
+    guard !string.isEmpty else { return allEntities() }
+    return allEntities().filter {
+      $0.name.localizedCaseInsensitiveContains(string) ||
+      $0.id.localizedCaseInsensitiveContains(string)
+    }
+  }
+
+  func suggestedEntities() async throws -> [WarWidgetClanEntity] {
+    allEntities()
+  }
+
+  func defaultResult() async -> WarWidgetClanEntity? {
+    allEntities().first
+  }
+
+  private func allEntities() -> [WarWidgetClanEntity] {
+    let defaults = UserDefaults(suiteName: appGroupIdentifier)
+    defaults?.synchronize()
+    guard
+      let raw = defaults?.string(forKey: "warWidgetClans"),
+      let data = raw.data(using: .utf8),
+      let decoded = try? JSONDecoder().decode([CachedWarWidgetClan].self, from: data)
+    else {
+      return []
+    }
+
+    return decoded
+      .filter { !$0.tag.isEmpty && !$0.name.isEmpty }
+      .map { WarWidgetClanEntity(id: $0.tag, name: $0.name, badgeUrl: $0.badgeUrl) }
+  }
+}
+
+struct SelectWarClanIntent: WidgetConfigurationIntent {
+  static var title: LocalizedStringResource = "War Widget"
+  static var description = IntentDescription("Choose the clan this widget tracks.")
+
+  @Parameter(title: "Clan")
+  var clan: WarWidgetClanEntity?
+}
+
+struct WarTimelineProvider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> WarWidgetEntry {
     makeEntry(data: .placeholder)
   }
 
-  func getSnapshot(in context: Context, completion: @escaping (WarWidgetEntry) -> Void) {
-    completion(makeEntry(data: context.isPreview ? .placeholder : .current()))
+  func snapshot(for configuration: SelectWarClanIntent, in context: Context) async -> WarWidgetEntry {
+    makeEntry(data: context.isPreview ? .placeholder : .current(clanTag: configuration.clan?.id))
   }
 
-  func getTimeline(in context: Context, completion: @escaping (Timeline<WarWidgetEntry>) -> Void) {
-    let entry = makeEntry(data: .current())
+  func timeline(for configuration: SelectWarClanIntent, in context: Context) async -> Timeline<WarWidgetEntry> {
+    let clanTag = configuration.clan?.id ?? UserDefaults(suiteName: appGroupIdentifier)?.string(forKey: "warWidgetSelectedClan")
+    let data = await WarWidgetFreshFetcher().fetch(clanTag: clanTag) ?? .current(clanTag: clanTag)
+    let entry = makeEntry(data: data)
     let next = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date().addingTimeInterval(900)
-    completion(Timeline(entries: [entry], policy: .after(next)))
+    return Timeline(entries: [entry], policy: .after(next))
   }
 
   private func makeEntry(data: WarWidgetData) -> WarWidgetEntry {
@@ -159,6 +239,244 @@ struct WarTimelineProvider: TimelineProvider {
   }
 }
 
+private struct WarWidgetFreshFetcher {
+  func fetch(clanTag: String?) async -> WarWidgetData? {
+    guard
+      let clanTag,
+      !clanTag.isEmpty,
+      let defaults = UserDefaults(suiteName: appGroupIdentifier)
+    else {
+      return nil
+    }
+
+    let baseUrl = defaults.string(forKey: "warWidgetProxyUrl") ?? "https://proxy.clashk.ing/v1"
+    let allowed = CharacterSet.alphanumerics
+    guard
+      let encodedTag = clanTag.addingPercentEncoding(withAllowedCharacters: allowed),
+      let url = URL(string: "\(baseUrl)/clans/\(encodedTag)/currentwar")
+    else {
+      return nil
+    }
+
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 10
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    do {
+      let (data, response) = try await URLSession.shared.data(for: request)
+      guard
+        let httpResponse = response as? HTTPURLResponse,
+        httpResponse.statusCode == 200,
+        let raw = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+      else {
+        return nil
+      }
+      let widgetData = buildProxyCurrentWarData(from: raw, clanTag: clanTag, defaults: defaults)
+      cache(widgetData, clanTag: clanTag, defaults: defaults)
+      return widgetData
+    } catch {
+      return nil
+    }
+  }
+
+  private func cache(_ data: WarWidgetData, clanTag: String, defaults: UserDefaults) {
+    guard let encoded = try? JSONEncoder().encode(data), let raw = String(data: encoded, encoding: .utf8) else {
+      return
+    }
+    defaults.set(raw, forKey: "warInfo_\(normalizedClanTag(clanTag))")
+    defaults.set(raw, forKey: "warInfo")
+    defaults.set(clanTag, forKey: "warWidgetSelectedClan")
+  }
+
+  private func buildProxyCurrentWarData(from currentWar: [String: Any], clanTag: String, defaults: UserDefaults) -> WarWidgetData {
+    let state = string(currentWar["state"]) ?? "notInWar"
+    guard ["preparation", "inWar", "warEnded"].contains(state) else {
+      let selectedClan = cachedClanSide(clanTag: clanTag, defaults: defaults)
+      return WarWidgetData(
+        state: state,
+        mode: "war",
+        updatedAt: updatedAt(),
+        timeState: "",
+        score: "",
+        statusIcon: "shield",
+        primaryText: "Not in War",
+        secondaryText: "",
+        colorTheme: "neutral",
+        clan: selectedClan,
+        opponent: nil,
+        cwlRank: nil,
+        cwlLeague: nil
+      )
+    }
+    return buildRegularWarData(currentWar: currentWar, state: state)
+  }
+
+  private func buildRegularWarData(currentWar: [String: Any], state: String) -> WarWidgetData {
+    let clan = dictionary(currentWar["clan"])
+    let opponent = dictionary(currentWar["opponent"])
+    let clanStars = int(clan["stars"])
+    let opponentStars = int(opponent["stars"])
+    let teamSize = int(currentWar["teamSize"])
+    var timeState = ""
+    var score = ""
+    var statusIcon = "sword"
+    var primaryText = ""
+    var secondaryText = ""
+    var colorTheme = "active"
+
+    if state == "preparation" {
+      statusIcon = "shield"
+      primaryText = "War Preparation"
+      colorTheme = "preparation"
+      if let startTime = date(string(currentWar["startTime"])) {
+        let delta = startTime.timeIntervalSince(Date())
+        if delta > 3600 {
+          let minutes = max(0, Int(delta / 60))
+          timeState = "Starts in \(minutes / 60)h \(minutes % 60)m"
+        } else {
+          timeState = "Starts at \(clockTime(startTime))"
+        }
+        primaryText = timeState
+      }
+    } else if state == "inWar" {
+      statusIcon = "sword"
+      secondaryText = "\(clanStars) - \(opponentStars)"
+      colorTheme = clanStars > opponentStars ? "winning" : (clanStars < opponentStars ? "losing" : "tied")
+      if let endTime = date(string(currentWar["endTime"])) {
+        let delta = endTime.timeIntervalSince(Date())
+        if delta > 3600 {
+          let minutes = max(0, Int(delta / 60))
+          timeState = "\(minutes / 60)h \(minutes % 60)m left"
+        } else {
+          timeState = "Ends at \(clockTime(endTime))"
+        }
+        primaryText = timeState
+      }
+      score = "\(clanStars) - \(opponentStars)"
+    } else if state == "warEnded" {
+      let isWin = clanStars > opponentStars
+      statusIcon = isWin ? "trophy" : "heart.slash"
+      primaryText = isWin ? "Victory!" : "Defeat"
+      secondaryText = "\(clanStars) - \(opponentStars)"
+      colorTheme = isWin ? "victory" : "defeat"
+      timeState = "War Ended"
+      score = "\(clanStars) - \(opponentStars)"
+    }
+
+    return WarWidgetData(
+      state: state,
+      mode: "war",
+      updatedAt: updatedAt(),
+      timeState: timeState,
+      score: score,
+      statusIcon: statusIcon,
+      primaryText: primaryText,
+      secondaryText: secondaryText,
+      colorTheme: colorTheme,
+      clan: side(from: clan, stars: clanStars, teamSize: teamSize),
+      opponent: side(from: opponent, stars: opponentStars, teamSize: teamSize),
+      cwlRank: nil,
+      cwlLeague: nil
+    )
+  }
+
+  private func side(from raw: [String: Any], stars: Int, teamSize: Int) -> WarWidgetData.Side {
+    let destruction = double(raw["destructionPercentage"])
+    return WarWidgetData.Side(
+      name: string(raw["name"]) ?? "Unknown",
+      badgeUrlMedium: string(dictionary(raw["badgeUrls"])["medium"]) ?? "https://assets.clashk.ing/clashkinglogo.png",
+      percent: String(format: "%.2f%%", destruction),
+      attacks: "\(int(raw["attacks"]))/\(teamSize * 2)",
+      stars: stars,
+      maxStars: teamSize * 3
+    )
+  }
+
+  private func cachedClanSide(clanTag: String, defaults: UserDefaults) -> WarWidgetData.Side? {
+    guard
+      let raw = defaults.string(forKey: "warWidgetClans"),
+      let data = raw.data(using: .utf8),
+      let decoded = try? JSONDecoder().decode([CachedWarWidgetClan].self, from: data)
+    else {
+      return nil
+    }
+
+    let normalized = normalizedClanTag(clanTag)
+    guard let clan = decoded.first(where: { normalizedClanTag($0.tag) == normalized }) else {
+      return nil
+    }
+
+    return WarWidgetData.Side(
+      name: clan.name,
+      badgeUrlMedium: clan.badgeUrl,
+      percent: nil,
+      attacks: nil,
+      stars: nil,
+      maxStars: nil
+    )
+  }
+
+  private func updatedAt() -> String {
+    "Updated at \(clockTime(Date()))"
+  }
+
+  private func clockTime(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm"
+    return formatter.string(from: date)
+  }
+
+  private func date(_ value: String?) -> Date? {
+    guard let value else { return nil }
+    let fractional = ISO8601DateFormatter()
+    fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    if let parsed = fractional.date(from: value) {
+      return parsed
+    }
+    if let parsed = ISO8601DateFormatter().date(from: value) {
+      return parsed
+    }
+
+    let clashFormatter = DateFormatter()
+    clashFormatter.locale = Locale(identifier: "en_US_POSIX")
+    clashFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    clashFormatter.dateFormat = "yyyyMMdd'T'HHmmss.SSS'Z'"
+    if let parsed = clashFormatter.date(from: value) {
+      return parsed
+    }
+
+    clashFormatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
+    return clashFormatter.date(from: value)
+  }
+
+  private func normalizedClanTag(_ clanTag: String) -> String {
+    clanTag.replacingOccurrences(of: "#", with: "").uppercased()
+  }
+
+  private func dictionary(_ value: Any?) -> [String: Any] {
+    value as? [String: Any] ?? [:]
+  }
+
+  private func string(_ value: Any?) -> String? {
+    value as? String
+  }
+
+  private func int(_ value: Any?) -> Int {
+    if let value = value as? Int { return value }
+    if let value = value as? Double { return Int(value) }
+    if let value = value as? String { return Int(value) ?? 0 }
+    return 0
+  }
+
+  private func double(_ value: Any?) -> Double {
+    if let value = value as? Double { return value }
+    if let value = value as? Int { return Double(value) }
+    if let value = value as? String { return Double(value) ?? 0 }
+    return 0
+  }
+
+}
+
 struct WarWidgetView: View {
   @Environment(\.widgetFamily) private var family
   let entry: WarWidgetEntry
@@ -167,8 +485,6 @@ struct WarWidgetView: View {
     switch family {
     case .systemSmall:
       compactWarView
-    case .systemLarge:
-      largeWarView
     case .accessoryRectangular:
       accessoryView
     default:
@@ -177,18 +493,28 @@ struct WarWidgetView: View {
   }
 
   private var compactWarView: some View {
-    VStack(alignment: .leading, spacing: 10) {
-      Text(entry.data.primaryText ?? entry.data.timeState ?? "War")
-        .font(.caption.weight(.semibold))
-        .lineLimit(2)
-        .minimumScaleFactor(0.72)
-      Text(scoreText)
-        .font(.system(size: 34, weight: .bold, design: .rounded).monospacedDigit())
-        .lineLimit(1)
-      Spacer(minLength: 0)
-      footer
+    VStack(spacing: 6) {
+      if entry.data.opponent == nil {
+        emptyStateView
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+      } else {
+        Text(entry.data.primaryText ?? entry.data.timeState ?? "")
+          .font(.caption2.weight(.semibold))
+          .foregroundStyle(.secondary)
+          .lineLimit(1)
+          .minimumScaleFactor(0.72)
+        HStack(alignment: .top, spacing: 10) {
+          badgeView(entry.data.clan, badgeData: entry.clanBadgeData, size: 42)
+            .frame(maxWidth: .infinity)
+          badgeView(entry.data.opponent, badgeData: entry.opponentBadgeData, size: 42)
+            .frame(maxWidth: .infinity)
+        }
+        compactSplitScoreRow
+        compactNameRow
+        compactPercentRow
+      }
     }
-    .padding()
+    .padding(10)
     .widgetBackground
   }
 
@@ -197,19 +523,21 @@ struct WarWidgetView: View {
       if entry.data.opponent == nil {
         emptyStateView
       } else {
-        HStack(alignment: .center, spacing: 10) {
-          sideView(entry.data.clan, badgeData: entry.clanBadgeData)
+        HStack(alignment: .center, spacing: 8) {
+          sideView(entry.data.clan, badgeData: entry.clanBadgeData, badgeSize: 52)
+            .layoutPriority(1)
           VStack(spacing: 4) {
-            Text(scoreText)
-              .font(.system(size: scoreText == "-" ? 22 : 34, weight: .bold, design: .rounded).monospacedDigit())
+            scoreLabel(size: scoreText == "-" ? 22 : 29, minScale: 0.72)
             Text(entry.data.primaryText ?? entry.data.timeState ?? "")
               .font(.caption.weight(.semibold))
               .foregroundStyle(.secondary)
               .lineLimit(1)
               .minimumScaleFactor(0.75)
           }
-          .frame(minWidth: 72)
-          sideView(entry.data.opponent, badgeData: entry.opponentBadgeData)
+          .frame(minWidth: 112, idealWidth: 124, maxWidth: 136)
+          .layoutPriority(4)
+          sideView(entry.data.opponent, badgeData: entry.opponentBadgeData, badgeSize: 52)
+            .layoutPriority(1)
         }
       }
     }
@@ -257,8 +585,7 @@ struct WarWidgetView: View {
     HStack(spacing: 6) {
       badgeView(entry.data.clan, badgeData: entry.clanBadgeData, size: 18)
       VStack(alignment: .leading, spacing: 1) {
-        Text(scoreText)
-          .font(.headline.monospacedDigit())
+        scoreLabel(size: 17, minScale: 0.72)
         Text(entry.data.primaryText ?? entry.data.timeState ?? "War")
           .font(.caption2)
           .lineLimit(1)
@@ -288,21 +615,45 @@ struct WarWidgetView: View {
       .minimumScaleFactor(0.7)
   }
 
+  private var compactPercentRow: some View {
+    HStack(spacing: 6) {
+      Text(entry.data.clan?.percent ?? "")
+      Spacer(minLength: 4)
+      Text(entry.data.opponent?.percent ?? "")
+    }
+    .font(.caption2.monospacedDigit())
+    .foregroundStyle(.secondary)
+    .lineLimit(1)
+    .minimumScaleFactor(0.72)
+  }
+
+  private var compactNameRow: some View {
+    HStack(spacing: 6) {
+      Text(entry.data.clan?.name ?? "Unknown")
+        .multilineTextAlignment(.leading)
+      Spacer(minLength: 4)
+      Text(entry.data.opponent?.name ?? "Unknown")
+        .multilineTextAlignment(.trailing)
+    }
+    .font(.caption2.weight(.semibold))
+    .lineLimit(1)
+    .minimumScaleFactor(0.58)
+  }
+
   private var emptyStateView: some View {
-    VStack(spacing: 8) {
-      Image(systemName: "shield")
-        .font(.title2.weight(.semibold))
-        .foregroundStyle(.red)
-      Text(entry.data.primaryText ?? "No active war")
-        .font(.headline.weight(.semibold))
+    VStack(spacing: 7) {
+      badgeView(entry.data.clan, badgeData: entry.clanBadgeData, size: family == .systemSmall ? 48 : 56)
+      Text(entry.data.clan?.name ?? "Clan War")
+        .font((family == .systemSmall ? Font.caption : Font.callout).weight(.semibold))
         .multilineTextAlignment(.center)
-        .lineLimit(2)
-        .minimumScaleFactor(0.72)
-      Text(entry.data.timeState?.isEmpty == false ? entry.data.timeState! : "Open ClashKing to refresh")
-        .font(.caption)
+        .lineLimit(1)
+        .minimumScaleFactor(0.6)
+      Text(entry.data.primaryText ?? "Not in War")
+        .font((family == .systemSmall ? Font.caption2 : Font.caption).weight(.bold))
         .foregroundStyle(.secondary)
         .multilineTextAlignment(.center)
-        .lineLimit(2)
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
     }
     .frame(maxWidth: .infinity)
   }
@@ -317,9 +668,55 @@ struct WarWidgetView: View {
     return "-"
   }
 
-  private func sideView(_ side: WarWidgetData.Side?, badgeData: Data?) -> some View {
+  private var compactScoreText: String {
+    scoreText
+      .replacingOccurrences(of: " ", with: "")
+      .replacingOccurrences(of: "–", with: "-")
+      .replacingOccurrences(of: " - ", with: "-")
+      .replacingOccurrences(of: " – ", with: "-")
+  }
+
+  private func scoreLabel(size: CGFloat, minScale: CGFloat) -> some View {
+    Text(compactScoreText)
+      .font(.system(size: size, weight: .bold, design: .rounded).monospacedDigit())
+      .lineLimit(1)
+      .minimumScaleFactor(minScale)
+      .allowsTightening(true)
+      .multilineTextAlignment(.center)
+      .frame(maxWidth: .infinity)
+  }
+
+  private var compactScoreParts: (String, String) {
+    if let clanStars = entry.data.clan?.stars, let opponentStars = entry.data.opponent?.stars {
+      return ("\(clanStars)", "\(opponentStars)")
+    }
+
+    let parts = compactScoreText.split(separator: "-", maxSplits: 1).map(String.init)
+    guard parts.count == 2 else {
+      return (compactScoreText, "")
+    }
+    return (parts[0], parts[1])
+  }
+
+  private var compactSplitScoreRow: some View {
+    let parts = compactScoreParts
+    return HStack(spacing: 6) {
+      Text(parts.0)
+        .frame(maxWidth: .infinity, alignment: .center)
+      Text("-")
+        .frame(width: 16, alignment: .center)
+      Text(parts.1)
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+    .font(.system(size: 25, weight: .bold, design: .rounded).monospacedDigit())
+    .lineLimit(1)
+    .minimumScaleFactor(0.7)
+    .allowsTightening(true)
+  }
+
+  private func sideView(_ side: WarWidgetData.Side?, badgeData: Data?, badgeSize: CGFloat = 54) -> some View {
     VStack(spacing: 5) {
-      badgeView(side, badgeData: badgeData, size: 54)
+      badgeView(side, badgeData: badgeData, size: badgeSize)
       Text(side?.name ?? "Unknown")
         .font(.caption.weight(.semibold))
         .multilineTextAlignment(.center)
@@ -402,12 +799,12 @@ struct WarWidget: Widget {
   let kind = "WarWidget"
 
   var body: some WidgetConfiguration {
-    StaticConfiguration(kind: kind, provider: WarTimelineProvider()) { entry in
+    AppIntentConfiguration(kind: kind, intent: SelectWarClanIntent.self, provider: WarTimelineProvider()) { entry in
       WarWidgetView(entry: entry)
     }
     .configurationDisplayName("Clan War")
     .description("Track selected-clan war and CWL score.")
-    .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular])
+    .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular])
   }
 }
 

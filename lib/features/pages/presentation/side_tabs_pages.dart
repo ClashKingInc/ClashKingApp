@@ -1,0 +1,2242 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+const _pagePadding = EdgeInsets.fromLTRB(16, 12, 16, 28);
+
+class PopularPage extends StatelessWidget {
+  const PopularPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final bookmarks = context.watch<BookmarkService>();
+    final players = context.watch<PlayerService>().profiles;
+    final clans = context.watch<ClanService>().clans.values.toList();
+    final wars = context.watch<WarCwlService>().summaries.values.toList();
+
+    final popularPlayers = _popularPlayers(players, bookmarks.players);
+    final popularClans = _popularClans(clans, bookmarks.clans);
+    final popularWars = _popularWars(wars, bookmarks.clans);
+
+    return _SidePageScaffold(
+      title: 'Popular',
+      subtitle: 'Bookmarks, linked accounts, and active wars.',
+      child: ListView(
+        padding: _pagePadding,
+        children: [
+          _SectionHeader(
+            title: 'Players',
+            trailing: '${popularPlayers.length}',
+          ),
+          ...popularPlayers.map(_PopularRow.player),
+          const SizedBox(height: 22),
+          _SectionHeader(title: 'Clans', trailing: '${popularClans.length}'),
+          ...popularClans.map(_PopularRow.clan),
+          const SizedBox(height: 22),
+          _SectionHeader(
+            title: 'Wars & CWL',
+            trailing: '${popularWars.length}',
+          ),
+          ...popularWars.map(_PopularRow.war),
+          if (popularPlayers.isEmpty &&
+              popularClans.isEmpty &&
+              popularWars.isEmpty)
+            const _EmptyState(
+              icon: Icons.trending_up_rounded,
+              title: 'No popular items yet',
+              body: 'Bookmark players and clans or link accounts to seed this.',
+            ),
+        ],
+      ),
+    );
+  }
+
+  List<_PopularItem> _popularPlayers(
+    List<Player> players,
+    List<BookmarkedPlayer> bookmarks,
+  ) {
+    final byTag = <String, _PopularItem>{};
+    for (final player in players) {
+      byTag[player.tag] = _PopularItem(
+        title: player.name,
+        subtitle: '${player.tag} · TH${player.townHallLevel}',
+        metric: player.trophies,
+        metricLabel: 'trophies',
+        imageUrl: player.leagueUrl.isNotEmpty
+            ? player.leagueUrl
+            : ImageAssets.townHall(player.townHallLevel),
+      );
+    }
+    for (final bookmark in bookmarks) {
+      final existing = byTag[bookmark.tag];
+      byTag[bookmark.tag] = _PopularItem(
+        title: bookmark.name,
+        subtitle: '${bookmark.tag} · bookmarked',
+        metric: (existing?.metric ?? bookmark.trophies) + 500,
+        metricLabel: 'interest',
+        imageUrl: bookmark.leagueUrl.isNotEmpty
+            ? bookmark.leagueUrl
+            : ImageAssets.townHall(bookmark.townHallLevel),
+      );
+    }
+    return byTag.values.toList()..sort((a, b) => b.metric.compareTo(a.metric));
+  }
+
+  List<_PopularItem> _popularClans(
+    List<Clan> clans,
+    List<BookmarkedClan> bookmarks,
+  ) {
+    final byTag = <String, _PopularItem>{};
+    for (final clan in clans) {
+      byTag[clan.tag] = _PopularItem(
+        title: clan.name,
+        subtitle: '${clan.tag} · level ${clan.clanLevel}',
+        metric: clan.clanPoints,
+        metricLabel: 'points',
+        imageUrl: clan.badgeUrls.medium,
+      );
+    }
+    for (final bookmark in bookmarks) {
+      final existing = byTag[bookmark.tag];
+      byTag[bookmark.tag] = _PopularItem(
+        title: bookmark.name,
+        subtitle: '${bookmark.tag} · ${bookmark.memberCount} members',
+        metric: (existing?.metric ?? bookmark.clanLevel * 100) + 500,
+        metricLabel: 'interest',
+        imageUrl: bookmark.badgeUrl,
+      );
+    }
+    return byTag.values.toList()..sort((a, b) => b.metric.compareTo(a.metric));
+  }
+
+  List<_PopularItem> _popularWars(
+    Iterable<WarCwl> wars,
+    List<BookmarkedClan> bookmarks,
+  ) {
+    final bookmarkedTags = bookmarks.map((clan) => clan.tag).toSet();
+    final items = wars.map((war) {
+      final active = war.isInWar || war.isInCwl;
+      final score = (active ? 1000 : 0) + war.teamSize;
+      return _PopularItem(
+        title: war.tag,
+        subtitle: war.isInCwl
+            ? 'CWL · ${war.teamSize}v${war.teamSize}'
+            : active
+            ? 'War · ${war.teamSize}v${war.teamSize}'
+            : 'No active war',
+        metric: bookmarkedTags.contains(war.tag) ? score + 500 : score,
+        metricLabel: active ? 'active' : 'tracked',
+        imageUrl: war.isInCwl ? ImageAssets.cwlSwordsNoBorder : ImageAssets.war,
+      );
+    }).toList();
+    return items..sort((a, b) => b.metric.compareTo(a.metric));
+  }
+}
+
+class RankingsPage extends StatefulWidget {
+  const RankingsPage({super.key});
+
+  @override
+  State<RankingsPage> createState() => _RankingsPageState();
+}
+
+class _RankingsPageState extends State<RankingsPage> {
+  final ApiService _apiService = ApiService();
+  _OfficialRankingType _type = _OfficialRankingType.playerTrophies;
+  _LocationOption _location = _locations.first;
+  int _townHall = 0;
+  late Future<List<_RankingEntry>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _load();
+  }
+
+  Future<List<_RankingEntry>> _load() async {
+    final endpoint =
+        '${ApiService.proxyUrl}/locations/${_location.id}/rankings/'
+        '${_type.path}?limit=200';
+    final response = await _apiService.getResponse('', url: endpoint);
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load rankings (${response.statusCode})');
+    }
+
+    final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+    final items = decoded is Map ? decoded['items'] : null;
+    if (items is! List) return [];
+    final entries = items
+        .whereType<Map<String, dynamic>>()
+        .map((item) => _RankingEntry.fromJson(item, _type))
+        .toList();
+    if (!_type.supportsTownHallFilter || _townHall == 0) {
+      return entries;
+    }
+    return entries.where((entry) => entry.townHallLevel == _townHall).toList();
+  }
+
+  void _reload() {
+    setState(() => _future = _load());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _SidePageScaffold(
+      title: 'Rankings',
+      subtitle: 'Official leaderboards plus ClashKing endpoints.',
+      child: ListView(
+        padding: _pagePadding,
+        children: [
+          _RankingTitle(type: _type),
+          const SizedBox(height: 14),
+          _RankingControlRow(
+            location: _location,
+            townHall: _townHall,
+            townHallEnabled: _type.supportsTownHallFilter,
+            onLocationChanged: (value) {
+              setState(() => _location = value);
+              _reload();
+            },
+            onTownHallChanged: (value) {
+              setState(() => _townHall = value);
+              _reload();
+            },
+          ),
+          const SizedBox(height: 16),
+          _HorizontalSelector<_OfficialRankingType>(
+            values: _OfficialRankingType.values,
+            selected: _type,
+            labelBuilder: (type) => type.label,
+            onSelected: (value) {
+              setState(() {
+                _type = value;
+                if (!value.supportsTownHallFilter) {
+                  _townHall = 0;
+                }
+              });
+              _reload();
+            },
+          ),
+          const SizedBox(height: 18),
+          FutureBuilder<List<_RankingEntry>>(
+            future: _future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const _LoadingRows();
+              }
+              if (snapshot.hasError) {
+                return _ErrorPanel(
+                  message: 'Could not load official rankings.',
+                  detail: snapshot.error.toString(),
+                  onRetry: _reload,
+                );
+              }
+              final entries = snapshot.data ?? [];
+              if (entries.isEmpty) {
+                return const _EmptyState(
+                  icon: Icons.leaderboard_outlined,
+                  title: 'No rankings returned',
+                  body: 'Try another leaderboard or location.',
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _LeaderboardMeta(
+                    count: entries.length,
+                    type: _type,
+                    location: _location,
+                    townHall: _townHall,
+                    onRefresh: _reload,
+                  ),
+                  const SizedBox(height: 14),
+                  ...entries
+                      .take(200)
+                      .map((entry) => _RankingRow(entry: entry)),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 24),
+          const _SectionHeader(title: 'ClashKing endpoints'),
+          ..._clashKingLeaderboardOptions.map(
+            (option) => _EndpointPreview(option: option),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StatsPage extends StatefulWidget {
+  const StatsPage({super.key});
+
+  @override
+  State<StatsPage> createState() => _StatsPageState();
+}
+
+class _StatsPageState extends State<StatsPage> {
+  final ApiService _apiService = ApiService();
+  _OfficialRankingType _type = _OfficialRankingType.playerTrophies;
+  _LocationOption _location = _locations.first;
+  late Future<List<_RankingEntry>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _load();
+  }
+
+  Future<List<_RankingEntry>> _load() async {
+    final response = await _apiService.getResponse(
+      '',
+      url:
+          '${ApiService.proxyUrl}/locations/${_location.id}/rankings/'
+          '${_type.path}?limit=200',
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load official stats (${response.statusCode})');
+    }
+    final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+    final items = decoded is Map ? decoded['items'] : null;
+    if (items is! List) return [];
+    return items
+        .whereType<Map<String, dynamic>>()
+        .map((item) => _RankingEntry.fromJson(item, _type))
+        .toList();
+  }
+
+  void _reload() => setState(() => _future = _load());
+
+  @override
+  Widget build(BuildContext context) {
+    return _SidePageScaffold(
+      title: 'Stats',
+      subtitle: 'Leaderboard stats from official Clash API surfaces.',
+      child: ListView(
+        padding: _pagePadding,
+        children: [
+          _HorizontalSelector<_OfficialRankingType>(
+            values: _OfficialRankingType.values,
+            selected: _type,
+            labelBuilder: (type) => type.label,
+            onSelected: (value) {
+              setState(() => _type = value);
+              _reload();
+            },
+          ),
+          const SizedBox(height: 10),
+          _HorizontalSelector<_LocationOption>(
+            values: _locations,
+            selected: _location,
+            labelBuilder: (location) => location.name,
+            onSelected: (value) {
+              setState(() => _location = value);
+              _reload();
+            },
+          ),
+          const SizedBox(height: 18),
+          FutureBuilder<List<_RankingEntry>>(
+            future: _future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const _LoadingRows();
+              }
+              if (snapshot.hasError) {
+                return _ErrorPanel(
+                  message: 'Could not load leaderboard stats.',
+                  detail: snapshot.error.toString(),
+                  onRetry: _reload,
+                );
+              }
+              final entries = snapshot.data ?? [];
+              final topScore = entries.isEmpty ? 0 : entries.first.score;
+              final average = entries.isEmpty
+                  ? 0
+                  : entries
+                            .map((entry) => entry.score)
+                            .reduce((a, b) => a + b) /
+                        entries.length;
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _MetricPanel(
+                          label: 'Top score',
+                          value: _formatInt(topScore),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _MetricPanel(
+                          label: 'Top 200 avg',
+                          value: _formatInt(average.round()),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  ...entries.take(25).map((entry) => _RankingRow(entry: entry)),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CalculatorsPage extends StatelessWidget {
+  const CalculatorsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: _SidePageScaffold(
+        title: 'Calculators',
+        subtitle: 'Ore, zap quake, and fireball quake.',
+        bottom: const TabBar(
+          tabs: [
+            Tab(text: 'Ore'),
+            Tab(text: 'Zap quake'),
+            Tab(text: 'Fireball'),
+          ],
+        ),
+        child: const TabBarView(
+          children: [
+            _OreCalculator(),
+            _ZapQuakeCalculator(),
+            _FireballQuakeCalculator(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class UpgradeTrackerTeasePage extends StatelessWidget {
+  const UpgradeTrackerTeasePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _SidePageScaffold(
+      title: 'Upgrade Tracker',
+      subtitle: 'Planned account upgrade timeline.',
+      child: ListView(
+        padding: _pagePadding,
+        children: const [
+          _TeasePanel(
+            icon: Icons.construction_rounded,
+            title: 'Upgrade planning is next',
+            body:
+                'This will track builders, lab, pets, equipment, and idle time '
+                'across linked accounts.',
+          ),
+          SizedBox(height: 12),
+          _TodoLine(text: 'Builder and lab queues'),
+          _TodoLine(text: 'Equipment ore targets'),
+          _TodoLine(text: 'Account-level idle warnings'),
+          _TodoLine(text: 'What to upgrade next'),
+        ],
+      ),
+    );
+  }
+}
+
+class BasesArmiesPage extends StatelessWidget {
+  const BasesArmiesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _SidePageScaffold(
+      title: 'Bases & Armies',
+      subtitle: 'Discord-saved layouts and army links.',
+      child: ListView(
+        padding: _pagePadding,
+        children: const [
+          _TeasePanel(
+            icon: Icons.grid_view_rounded,
+            title: 'Bot sync target',
+            body:
+                'The bot already saves bases and armies to the Discord profile. '
+                'This page is ready for that synced payload.',
+          ),
+          SizedBox(height: 18),
+          _SectionHeader(title: 'Saved bases'),
+          _SavedLinkPlaceholder(
+            title: 'War base slots',
+            body: 'Town hall, base type, link, and last updated.',
+          ),
+          _SavedLinkPlaceholder(
+            title: 'Legend base slots',
+            body: 'Quick copy plus account association.',
+          ),
+          SizedBox(height: 18),
+          _SectionHeader(title: 'Saved armies'),
+          _SavedLinkPlaceholder(
+            title: 'Army links',
+            body: 'Composition, spells, siege, notes, and share link.',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GameAssetsPage extends StatefulWidget {
+  const GameAssetsPage({super.key});
+
+  @override
+  State<GameAssetsPage> createState() => _GameAssetsPageState();
+}
+
+class _GameAssetsPageState extends State<GameAssetsPage> {
+  String _folder = 'troops';
+
+  @override
+  Widget build(BuildContext context) {
+    final entries = _assetEntriesFor(_folder);
+    return _SidePageScaffold(
+      title: 'Game Assets',
+      subtitle: 'Hosted ClashKing assets, grouped by folder.',
+      child: ListView(
+        padding: _pagePadding,
+        children: [
+          _HorizontalSelector<String>(
+            values: _assetFolders,
+            selected: _folder,
+            labelBuilder: _assetFolderLabel,
+            onSelected: (value) => setState(() => _folder = value),
+          ),
+          const SizedBox(height: 16),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth;
+              final crossAxisCount = width > 760
+                  ? 4
+                  : width > 480
+                  ? 3
+                  : 2;
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.86,
+                ),
+                itemCount: entries.length,
+                itemBuilder: (context, index) {
+                  return _AssetTile(entry: entries[index]);
+                },
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<_AssetEntry> _assetEntriesFor(String folder) {
+    switch (folder) {
+      case 'troops':
+        return _entriesFromBundle(
+          GameDataService.troopsData['troops'],
+          'troops',
+          (name) => ImageAssets.getTroopImage(name),
+        );
+      case 'spells':
+        return _entriesFromBundle(
+          GameDataService.spellsData['spells'],
+          'spells',
+          (name) => ImageAssets.getSpellImage(name),
+        );
+      case 'heroes':
+        return _entriesFromBundle(
+          GameDataService.heroesData['heroes'],
+          'heroes',
+          (name) => ImageAssets.getHeroImage(name),
+        );
+      case 'equipment':
+        return _entriesFromBundle(
+          GameDataService.gearsData['gears'],
+          'equipment',
+          _equipmentUrl,
+        );
+      case 'leagues':
+        return _leagueEntries();
+      case 'resources':
+        return const [
+          _AssetEntry(
+            name: 'Shiny Ore',
+            folder: 'resources',
+            url: '${ImageAssets.baseUrl}/resources/shiny_ore.webp',
+          ),
+          _AssetEntry(
+            name: 'Glowy Ore',
+            folder: 'resources',
+            url: '${ImageAssets.baseUrl}/resources/glowy_ore.webp',
+          ),
+          _AssetEntry(
+            name: 'Starry Ore',
+            folder: 'resources',
+            url: '${ImageAssets.baseUrl}/resources/starry_ore.webp',
+          ),
+          _AssetEntry(
+            name: 'Capital Gold',
+            folder: 'resources',
+            url: '${ImageAssets.baseUrl}/resources/capital_gold.webp',
+          ),
+          _AssetEntry(
+            name: 'Raid Medals',
+            folder: 'resources',
+            url: '${ImageAssets.baseUrl}/resources/raid_medals.webp',
+          ),
+        ];
+      default:
+        return _staticAssetCatalog
+            .where((entry) => entry.folder == folder)
+            .toList();
+    }
+  }
+
+  List<_AssetEntry> _entriesFromBundle(
+    dynamic raw,
+    String folder,
+    String Function(String name) urlBuilder,
+  ) {
+    if (raw is! Map || raw.isEmpty) {
+      return _staticAssetCatalog
+          .where((entry) => entry.folder == folder)
+          .toList();
+    }
+    return raw.keys
+        .map((key) => key.toString())
+        .where((name) => name.trim().isNotEmpty)
+        .map(
+          (name) =>
+              _AssetEntry(name: name, folder: folder, url: urlBuilder(name)),
+        )
+        .toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
+  }
+
+  List<_AssetEntry> _leagueEntries() {
+    final entries = <_AssetEntry>[];
+    final playerLeagues = GameDataService.playerLeagueData['leagues'];
+    if (playerLeagues is Map) {
+      entries.addAll(
+        playerLeagues.keys.map(
+          (key) => _AssetEntry(
+            name: key.toString(),
+            folder: 'leagues',
+            url: ImageAssets.getLeagueImage(key.toString()),
+          ),
+        ),
+      );
+    }
+    if (entries.isEmpty) {
+      return _staticAssetCatalog
+          .where((entry) => entry.folder == 'leagues')
+          .toList();
+    }
+    return entries..sort((a, b) => a.name.compareTo(b.name));
+  }
+
+  String _equipmentUrl(String name) {
+    final gears = GameDataService.gearsData['gears'];
+    if (gears is Map) {
+      final gear = gears[name];
+      if (gear is Map && gear['url'] is String) {
+        return gear['url'] as String;
+      }
+    }
+    return ImageAssets.defaultImage;
+  }
+}
+
+class _OreCalculator extends StatefulWidget {
+  const _OreCalculator();
+
+  @override
+  State<_OreCalculator> createState() => _OreCalculatorState();
+}
+
+class _OreCalculatorState extends State<_OreCalculator> {
+  String? _selectedTag;
+  int _shinyOwned = 0;
+  int _glowyOwned = 0;
+  int _starryOwned = 0;
+  int _shinyTarget = 5600;
+  int _glowyTarget = 600;
+  int _starryTarget = 60;
+  int _extraDailyShiny = 0;
+  int _extraDailyGlowy = 0;
+  int _extraDailyStarry = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final players = context.watch<PlayerService>().profiles;
+    final selected = _selectedPlayer(players);
+    final bonus = _OreBonus.forLeague(selected?.league ?? 'Crystal League');
+    final dailyShiny = bonus.shiny + _extraDailyShiny;
+    final dailyGlowy = bonus.glowy + _extraDailyGlowy;
+    final dailyStarry = bonus.starry + _extraDailyStarry;
+    final days = [
+      _daysLeft(_shinyTarget - _shinyOwned, dailyShiny),
+      _daysLeft(_glowyTarget - _glowyOwned, dailyGlowy),
+      _daysLeft(_starryTarget - _starryOwned, dailyStarry),
+    ].reduce(math.max);
+
+    return ListView(
+      padding: _pagePadding,
+      children: [
+        if (players.isNotEmpty)
+          DropdownButtonFormField<String>(
+            initialValue: selected?.tag,
+            decoration: const InputDecoration(labelText: 'Linked account'),
+            items: players
+                .map(
+                  (player) => DropdownMenuItem(
+                    value: player.tag,
+                    child: Text('${player.name} · ${player.league}'),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) => setState(() => _selectedTag = value),
+          )
+        else
+          const _EmptyState(
+            icon: Icons.person_outline_rounded,
+            title: 'No linked players loaded',
+            body: 'Add or refresh linked accounts to prefill league data.',
+          ),
+        const SizedBox(height: 16),
+        _CalculatorResult(
+          title: days == 0 ? 'Ready now' : '$days days',
+          subtitle:
+              '${_formatInt(math.max(0, _shinyTarget - _shinyOwned))} shiny, '
+              '${_formatInt(math.max(0, _glowyTarget - _glowyOwned))} glowy, '
+              '${_formatInt(math.max(0, _starryTarget - _starryOwned))} starry left',
+        ),
+        const SizedBox(height: 18),
+        _NumberRow(
+          label: 'Shiny ore',
+          owned: _shinyOwned,
+          target: _shinyTarget,
+          daily: dailyShiny,
+          onOwnedChanged: (value) => setState(() => _shinyOwned = value),
+          onTargetChanged: (value) => setState(() => _shinyTarget = value),
+        ),
+        _NumberRow(
+          label: 'Glowy ore',
+          owned: _glowyOwned,
+          target: _glowyTarget,
+          daily: dailyGlowy,
+          onOwnedChanged: (value) => setState(() => _glowyOwned = value),
+          onTargetChanged: (value) => setState(() => _glowyTarget = value),
+        ),
+        _NumberRow(
+          label: 'Starry ore',
+          owned: _starryOwned,
+          target: _starryTarget,
+          daily: dailyStarry,
+          onOwnedChanged: (value) => setState(() => _starryOwned = value),
+          onTargetChanged: (value) => setState(() => _starryTarget = value),
+        ),
+        const SizedBox(height: 12),
+        _SectionHeader(title: 'Daily bonus adjustment'),
+        _CompactStepper(
+          label: 'Extra shiny',
+          value: _extraDailyShiny,
+          step: 50,
+          onChanged: (value) => setState(() => _extraDailyShiny = value),
+        ),
+        _CompactStepper(
+          label: 'Extra glowy',
+          value: _extraDailyGlowy,
+          step: 5,
+          onChanged: (value) => setState(() => _extraDailyGlowy = value),
+        ),
+        _CompactStepper(
+          label: 'Extra starry',
+          value: _extraDailyStarry,
+          step: 1,
+          onChanged: (value) => setState(() => _extraDailyStarry = value),
+        ),
+      ],
+    );
+  }
+
+  Player? _selectedPlayer(List<Player> players) {
+    if (players.isEmpty) return null;
+    if (_selectedTag == null) return players.first;
+    return players.firstWhere(
+      (player) => player.tag == _selectedTag,
+      orElse: () => players.first,
+    );
+  }
+
+  int _daysLeft(int remaining, int daily) {
+    if (remaining <= 0) return 0;
+    if (daily <= 0) return 999;
+    return (remaining / daily).ceil();
+  }
+}
+
+class _ZapQuakeCalculator extends StatefulWidget {
+  const _ZapQuakeCalculator();
+
+  @override
+  State<_ZapQuakeCalculator> createState() => _ZapQuakeCalculatorState();
+}
+
+class _ZapQuakeCalculatorState extends State<_ZapQuakeCalculator> {
+  int _buildingHp = 4200;
+  int _lightningLevel = 11;
+  int _quakeLevel = 5;
+
+  @override
+  Widget build(BuildContext context) {
+    final lightning = _lightningDamage[_lightningLevel] ?? 600;
+    final quake = (_buildingHp * ((_quakePercent[_quakeLevel] ?? 29) / 100))
+        .floor();
+    final afterQuake = math.max(0, _buildingHp - quake);
+    final zaps = (afterQuake / lightning).ceil();
+    final noQuakeZaps = (_buildingHp / lightning).ceil();
+
+    return ListView(
+      padding: _pagePadding,
+      children: [
+        _CalculatorResult(
+          title: '$zaps lightning + 1 quake',
+          subtitle:
+              '${_formatInt(quake)} quake damage, '
+              '${_formatInt(lightning)} per lightning',
+        ),
+        const SizedBox(height: 16),
+        _CompactStepper(
+          label: 'Building HP',
+          value: _buildingHp,
+          step: 100,
+          min: 100,
+          onChanged: (value) => setState(() => _buildingHp = value),
+        ),
+        _LevelSelector(
+          label: 'Lightning level',
+          value: _lightningLevel,
+          min: 1,
+          max: 12,
+          onChanged: (value) => setState(() => _lightningLevel = value),
+        ),
+        _LevelSelector(
+          label: 'Earthquake level',
+          value: _quakeLevel,
+          min: 1,
+          max: 5,
+          onChanged: (value) => setState(() => _quakeLevel = value),
+        ),
+        const SizedBox(height: 12),
+        _MetricPanel(
+          label: 'Without earthquake',
+          value: '$noQuakeZaps lightning',
+        ),
+      ],
+    );
+  }
+}
+
+class _FireballQuakeCalculator extends StatefulWidget {
+  const _FireballQuakeCalculator();
+
+  @override
+  State<_FireballQuakeCalculator> createState() =>
+      _FireballQuakeCalculatorState();
+}
+
+class _FireballQuakeCalculatorState extends State<_FireballQuakeCalculator> {
+  int _buildingHp = 5200;
+  int _fireballLevel = 18;
+  int _quakeLevel = 5;
+
+  @override
+  Widget build(BuildContext context) {
+    final fireball = _fireballDamage(_fireballLevel);
+    final afterFireball = math.max(0, _buildingHp - fireball);
+    final quakeDamage =
+        (_buildingHp * ((_quakePercent[_quakeLevel] ?? 29) / 100)).floor();
+    final remaining = math.max(0, afterFireball - quakeDamage);
+    final quakesNeeded = remaining == 0
+        ? 1
+        : math.min(4, (remaining / math.max(1, quakeDamage)).ceil() + 1);
+
+    return ListView(
+      padding: _pagePadding,
+      children: [
+        _CalculatorResult(
+          title: remaining == 0 ? 'Fireball + 1 quake' : 'Add support damage',
+          subtitle:
+              '${_formatInt(fireball)} fireball damage, '
+              '${_formatInt(math.max(0, remaining))} HP left after quake',
+        ),
+        const SizedBox(height: 16),
+        _CompactStepper(
+          label: 'Building HP',
+          value: _buildingHp,
+          step: 100,
+          min: 100,
+          onChanged: (value) => setState(() => _buildingHp = value),
+        ),
+        _LevelSelector(
+          label: 'Fireball level',
+          value: _fireballLevel,
+          min: 1,
+          max: 27,
+          onChanged: (value) => setState(() => _fireballLevel = value),
+        ),
+        _LevelSelector(
+          label: 'Earthquake level',
+          value: _quakeLevel,
+          min: 1,
+          max: 5,
+          onChanged: (value) => setState(() => _quakeLevel = value),
+        ),
+        const SizedBox(height: 12),
+        _MetricPanel(
+          label: 'Quake pressure',
+          value: '$quakesNeeded quake spell${quakesNeeded == 1 ? '' : 's'}',
+        ),
+      ],
+    );
+  }
+}
+
+class _SidePageScaffold extends StatelessWidget {
+  const _SidePageScaffold({
+    required this.title,
+    required this.subtitle,
+    required this.child,
+    this.bottom,
+  });
+
+  final String title;
+  final String subtitle;
+  final Widget child;
+  final PreferredSizeWidget? bottom;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title),
+            Text(
+              subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        bottom: bottom,
+      ),
+      body: child,
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, this.trailing});
+
+  final String title;
+  final String? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+          ),
+          if (trailing != null)
+            Text(
+              trailing!,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PopularRow extends StatelessWidget {
+  const _PopularRow({required this.item});
+
+  final _PopularItem item;
+
+  factory _PopularRow.player(_PopularItem item) => _PopularRow(item: item);
+  factory _PopularRow.clan(_PopularItem item) => _PopularRow(item: item);
+  factory _PopularRow.war(_PopularItem item) => _PopularRow(item: item);
+
+  @override
+  Widget build(BuildContext context) {
+    return _ListLine(
+      imageUrl: item.imageUrl,
+      title: item.title,
+      subtitle: item.subtitle,
+      trailing: item.metricLabel,
+    );
+  }
+}
+
+class _RankingRow extends StatelessWidget {
+  const _RankingRow({required this.entry});
+
+  final _RankingEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ListLine(
+      leadingText: '${entry.movement} #${entry.rank}',
+      imageUrl: entry.imageUrl,
+      title: entry.name,
+      subtitle: entry.subtitle,
+      trailing: _formatInt(entry.score),
+    );
+  }
+}
+
+class _RankingTitle extends StatelessWidget {
+  const _RankingTitle({required this.type});
+
+  final _OfficialRankingType type;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: colorScheme.primaryContainer,
+          child: MobileWebImage(imageUrl: type.iconUrl, width: 34, height: 34),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          type.heading,
+          textAlign: TextAlign.center,
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+        ),
+      ],
+    );
+  }
+}
+
+class _RankingControlRow extends StatelessWidget {
+  const _RankingControlRow({
+    required this.location,
+    required this.townHall,
+    required this.townHallEnabled,
+    required this.onLocationChanged,
+    required this.onTownHallChanged,
+  });
+
+  final _LocationOption location;
+  final int townHall;
+  final bool townHallEnabled;
+  final ValueChanged<_LocationOption> onLocationChanged;
+  final ValueChanged<int> onTownHallChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final locationPanel = _DropdownPanel<_LocationOption>(
+      icon: Icons.public_rounded,
+      value: location,
+      values: _locations,
+      labelBuilder: (value) => value.name,
+      onChanged: onLocationChanged,
+    );
+    final townHallPanel = _DropdownPanel<int>(
+      icon: Icons.home_work_outlined,
+      value: townHallEnabled ? townHall : 0,
+      values: townHallEnabled ? _townHallFilters : const [0],
+      labelBuilder: (value) => value == 0 ? 'All town halls' : 'TH$value',
+      onChanged: townHallEnabled ? onTownHallChanged : (_) {},
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 430) {
+          return Column(
+            children: [
+              locationPanel,
+              const SizedBox(height: 10),
+              townHallPanel,
+            ],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(child: locationPanel),
+            const SizedBox(width: 10),
+            Expanded(child: townHallPanel),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _DropdownPanel<T> extends StatelessWidget {
+  const _DropdownPanel({
+    required this.icon,
+    required this.value,
+    required this.values,
+    required this.labelBuilder,
+    required this.onChanged,
+  });
+
+  final IconData icon;
+  final T value;
+  final List<T> values;
+  final String Function(T value) labelBuilder;
+  final ValueChanged<T> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<T>(
+            value: value,
+            isExpanded: true,
+            icon: const Icon(Icons.keyboard_arrow_down_rounded),
+            items: values
+                .map(
+                  (entry) => DropdownMenuItem<T>(
+                    value: entry,
+                    child: Row(
+                      children: [
+                        Icon(icon, size: 20),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            labelBuilder(entry),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
+            onChanged: (next) {
+              if (next != null) onChanged(next);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LeaderboardMeta extends StatelessWidget {
+  const _LeaderboardMeta({
+    required this.count,
+    required this.type,
+    required this.location,
+    required this.townHall,
+    required this.onRefresh,
+  });
+
+  final int count;
+  final _OfficialRankingType type;
+  final _LocationOption location;
+  final int townHall;
+  final VoidCallback onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.34),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${type.label} · ${location.name}',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    townHall > 0
+                        ? 'Filtered to TH$townHall from the official top 200'
+                        : 'Top 200 from the official rankings endpoint',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              '1-${math.min(count, 50)} / $count',
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+            ),
+            IconButton(
+              tooltip: 'Refresh',
+              onPressed: onRefresh,
+              icon: const Icon(Icons.refresh_rounded),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ListLine extends StatelessWidget {
+  const _ListLine({
+    required this.title,
+    required this.subtitle,
+    this.imageUrl,
+    this.leadingText,
+    this.trailing,
+  });
+
+  final String title;
+  final String subtitle;
+  final String? imageUrl;
+  final String? leadingText;
+  final String? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 34,
+            child: leadingText == null
+                ? null
+                : Text(
+                    leadingText!,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+          ),
+          if (imageUrl != null) ...[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: ColoredBox(
+                color: colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.5,
+                ),
+                child: MobileWebImage(
+                  imageUrl: imageUrl!,
+                  width: 40,
+                  height: 40,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: 8),
+            Text(
+              trailing!,
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _HorizontalSelector<T> extends StatelessWidget {
+  const _HorizontalSelector({
+    required this.values,
+    required this.selected,
+    required this.labelBuilder,
+    required this.onSelected,
+  });
+
+  final List<T> values;
+  final T selected;
+  final String Function(T value) labelBuilder;
+  final ValueChanged<T> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      height: 42,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: values.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final value = values[index];
+          final isSelected = value == selected;
+          return ChoiceChip(
+            label: Text(labelBuilder(value)),
+            selected: isSelected,
+            onSelected: (_) => onSelected(value),
+            showCheckmark: false,
+            selectedColor: colorScheme.primaryContainer,
+            labelStyle: TextStyle(
+              color: isSelected
+                  ? colorScheme.onPrimaryContainer
+                  : colorScheme.onSurface,
+              fontWeight: FontWeight.w700,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _EndpointPreview extends StatelessWidget {
+  const _EndpointPreview({required this.option});
+
+  final _EndpointOption option;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ListLine(
+      imageUrl: option.iconUrl,
+      title: option.title,
+      subtitle: option.endpoint,
+      trailing: option.state,
+    );
+  }
+}
+
+class _MetricPanel extends StatelessWidget {
+  const _MetricPanel({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CalculatorResult extends StatelessWidget {
+  const _CalculatorResult({required this.title, required this.subtitle});
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: colorScheme.onPrimaryContainer,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onPrimaryContainer.withValues(alpha: 0.78),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NumberRow extends StatelessWidget {
+  const _NumberRow({
+    required this.label,
+    required this.owned,
+    required this.target,
+    required this.daily,
+    required this.onOwnedChanged,
+    required this.onTargetChanged,
+  });
+
+  final String label;
+  final int owned;
+  final int target;
+  final int daily;
+  final ValueChanged<int> onOwnedChanged;
+  final ValueChanged<int> onTargetChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+              Text('daily ${_formatInt(daily)}'),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: _SmallNumberField(
+                  label: 'Owned',
+                  value: owned,
+                  onChanged: onOwnedChanged,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _SmallNumberField(
+                  label: 'Target',
+                  value: target,
+                  onChanged: onTargetChanged,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SmallNumberField extends StatelessWidget {
+  const _SmallNumberField({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String label;
+  final int value;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      initialValue: value.toString(),
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(labelText: label),
+      onChanged: (raw) => onChanged(int.tryParse(raw) ?? 0),
+    );
+  }
+}
+
+class _CompactStepper extends StatelessWidget {
+  const _CompactStepper({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+    this.step = 1,
+    this.min = 0,
+  });
+
+  final String label;
+  final int value;
+  final int step;
+  final int min;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          IconButton(
+            tooltip: 'Decrease',
+            onPressed: value <= min
+                ? null
+                : () => onChanged(math.max(min, value - step)),
+            icon: const Icon(Icons.remove_circle_outline_rounded),
+          ),
+          SizedBox(
+            width: 72,
+            child: Text(
+              _formatInt(value),
+              textAlign: TextAlign.center,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+          ),
+          IconButton(
+            tooltip: 'Increase',
+            onPressed: () => onChanged(value + step),
+            icon: const Icon(Icons.add_circle_outline_rounded),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LevelSelector extends StatelessWidget {
+  const _LevelSelector({
+    required this.label,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.onChanged,
+  });
+
+  final String label;
+  final int value;
+  final int min;
+  final int max;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          DropdownButton<int>(
+            value: value,
+            items: [
+              for (var level = min; level <= max; level++)
+                DropdownMenuItem(value: level, child: Text('Level $level')),
+            ],
+            onChanged: (next) {
+              if (next != null) onChanged(next);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AssetTile extends StatelessWidget {
+  const _AssetTile({required this.entry});
+
+  final _AssetEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.34),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Center(
+                child: MobileWebImage(imageUrl: entry.url, fit: BoxFit.contain),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              entry.name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            Text(
+              entry.folder,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 36),
+      child: Column(
+        children: [
+          Icon(icon, size: 42, color: colorScheme.onSurfaceVariant),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            body,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ErrorPanel extends StatelessWidget {
+  const _ErrorPanel({
+    required this.message,
+    required this.detail,
+    required this.onRetry,
+  });
+
+  final String message;
+  final String detail;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.errorContainer.withValues(alpha: 0.46),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              message,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: colorScheme.onErrorContainer,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              detail,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: colorScheme.onErrorContainer.withValues(alpha: 0.75),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoadingRows extends StatelessWidget {
+  const _LoadingRows();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(
+        8,
+        (index) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: LinearProgressIndicator(
+            minHeight: 6,
+            borderRadius: BorderRadius.circular(999),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TeasePanel extends StatelessWidget {
+  const _TeasePanel({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.36),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 30),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    body,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TodoLine extends StatelessWidget {
+  const _TodoLine({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ListLine(
+      imageUrl: ImageAssets.iconTick,
+      title: text,
+      subtitle: 'To do',
+    );
+  }
+}
+
+class _SavedLinkPlaceholder extends StatelessWidget {
+  const _SavedLinkPlaceholder({required this.title, required this.body});
+
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ListLine(
+      imageUrl: ImageAssets.clanCastle,
+      title: title,
+      subtitle: body,
+      trailing: 'sync',
+    );
+  }
+}
+
+class _PopularItem {
+  const _PopularItem({
+    required this.title,
+    required this.subtitle,
+    required this.metric,
+    required this.metricLabel,
+    required this.imageUrl,
+  });
+
+  final String title;
+  final String subtitle;
+  final int metric;
+  final String metricLabel;
+  final String imageUrl;
+}
+
+class _RankingEntry {
+  const _RankingEntry({
+    required this.rank,
+    required this.previousRank,
+    required this.name,
+    required this.subtitle,
+    required this.score,
+    required this.imageUrl,
+    required this.townHallLevel,
+  });
+
+  final int rank;
+  final int previousRank;
+  final String name;
+  final String subtitle;
+  final int score;
+  final String imageUrl;
+  final int townHallLevel;
+
+  String get movement {
+    if (previousRank <= 0 || rank <= 0) return '=';
+    final delta = previousRank - rank;
+    if (delta == 0) return '=';
+    return delta > 0 ? '+$delta' : '$delta';
+  }
+
+  factory _RankingEntry.fromJson(
+    Map<String, dynamic> json,
+    _OfficialRankingType type,
+  ) {
+    final isClan = type.isClan;
+    final badgeUrls = json['badgeUrls'];
+    final league = json['league'];
+    final imageUrl = isClan
+        ? _nestedString(badgeUrls, 'medium') ?? ImageAssets.clanCastle
+        : _nestedString(league, 'iconUrls.small') ??
+              _nestedString(league, 'iconUrls.medium') ??
+              ImageAssets.townHall(_asInt(json['townHallLevel'], fallback: 1));
+    final score = type.scoreKey
+        .map((key) => _asInt(json[key]))
+        .firstWhere((value) => value > 0, orElse: () => 0);
+    final tag = json['tag']?.toString() ?? '';
+    final clanName =
+        _nestedString(json['clan'], 'name') ??
+        json['clanName']?.toString() ??
+        '';
+    final subtitle = clanName.isEmpty ? tag : '$clanName · $tag';
+    return _RankingEntry(
+      rank: _asInt(json['rank']),
+      previousRank: _asInt(json['previousRank']),
+      name: json['name']?.toString() ?? tag,
+      subtitle: subtitle,
+      score: score,
+      imageUrl: imageUrl,
+      townHallLevel: _asInt(json['townHallLevel']),
+    );
+  }
+}
+
+class _LocationOption {
+  const _LocationOption(this.id, this.name);
+
+  final int id;
+  final String name;
+}
+
+enum _OfficialRankingType {
+  playerTrophies(
+    label: 'Player trophies',
+    heading: 'Players Trophies Ranking',
+    path: 'players',
+    isClan: false,
+    scoreKey: ['trophies'],
+    iconUrl: ImageAssets.trophies,
+    supportsTownHallFilter: true,
+  ),
+  playerBuilder(
+    label: 'Player builder',
+    heading: 'Players Builder Base Ranking',
+    path: 'players-builder-base',
+    isClan: false,
+    scoreKey: ['builderBaseTrophies', 'trophies'],
+    iconUrl: ImageAssets.builderBaseStar,
+    supportsTownHallFilter: false,
+  ),
+  clanTrophies(
+    label: 'Clan trophies',
+    heading: 'Clans Trophies Ranking',
+    path: 'clans',
+    isClan: true,
+    scoreKey: ['clanPoints', 'clanPoints'],
+    iconUrl: ImageAssets.trophies,
+    supportsTownHallFilter: false,
+  ),
+  clanBuilder(
+    label: 'Clan builder',
+    heading: 'Clans Builder Base Ranking',
+    path: 'clans-builder-base',
+    isClan: true,
+    scoreKey: ['clanBuilderBasePoints', 'clanPoints'],
+    iconUrl: ImageAssets.builderBaseStar,
+    supportsTownHallFilter: false,
+  ),
+  clanCapital(
+    label: 'Clan capital',
+    heading: 'Clan Capital Ranking',
+    path: 'capitals',
+    isClan: true,
+    scoreKey: ['clanCapitalPoints', 'capitalPoints'],
+    iconUrl: ImageAssets.capitalTrophy,
+    supportsTownHallFilter: false,
+  );
+
+  const _OfficialRankingType({
+    required this.label,
+    required this.heading,
+    required this.path,
+    required this.isClan,
+    required this.scoreKey,
+    required this.iconUrl,
+    required this.supportsTownHallFilter,
+  });
+
+  final String label;
+  final String heading;
+  final String path;
+  final bool isClan;
+  final List<String> scoreKey;
+  final String iconUrl;
+  final bool supportsTownHallFilter;
+}
+
+class _EndpointOption {
+  const _EndpointOption({
+    required this.title,
+    required this.endpoint,
+    required this.iconUrl,
+    required this.state,
+  });
+
+  final String title;
+  final String endpoint;
+  final String iconUrl;
+  final String state;
+}
+
+class _OreBonus {
+  const _OreBonus(this.shiny, this.glowy, this.starry);
+
+  final int shiny;
+  final int glowy;
+  final int starry;
+
+  static _OreBonus forLeague(String league) {
+    final normalized = league.toLowerCase();
+    if (normalized.contains('legend')) return const _OreBonus(1000, 54, 6);
+    if (normalized.contains('titan')) return const _OreBonus(925, 50, 5);
+    if (normalized.contains('champion')) return const _OreBonus(810, 46, 4);
+    if (normalized.contains('master')) return const _OreBonus(700, 38, 3);
+    if (normalized.contains('crystal')) return const _OreBonus(560, 30, 2);
+    if (normalized.contains('gold')) return const _OreBonus(420, 24, 1);
+    if (normalized.contains('silver')) return const _OreBonus(320, 14, 0);
+    return const _OreBonus(220, 10, 0);
+  }
+}
+
+class _AssetEntry {
+  const _AssetEntry({
+    required this.name,
+    required this.folder,
+    required this.url,
+  });
+
+  final String name;
+  final String folder;
+  final String url;
+}
+
+const _locations = [
+  _LocationOption(32000000, 'Worldwide'),
+  _LocationOption(32000006, 'United States'),
+  _LocationOption(32000249, 'International'),
+];
+
+const _townHallFilters = [0, 17, 16, 15, 14, 13, 12, 11, 10, 9];
+
+const _clashKingLeaderboardOptions = [
+  _EndpointOption(
+    title: 'League top 200',
+    endpoint: '/v2/leaderboard/league/{league_tier_id}',
+    iconUrl: ImageAssets.legendBlazon,
+    state: 'mock',
+  ),
+  _EndpointOption(
+    title: 'Townhall top 200',
+    endpoint: '/v2/leaderboard/townhalls/{townhall_level}',
+    iconUrl: ImageAssets.clanCastle,
+    state: 'mock',
+  ),
+  _EndpointOption(
+    title: 'Clan donations',
+    endpoint: '/v2/leaderboard/{location_id}/clan/donations',
+    iconUrl: ImageAssets.clanGamesMedals,
+    state: 'mock',
+  ),
+  _EndpointOption(
+    title: 'Clan war wins',
+    endpoint: '/v2/leaderboard/{location_id}/clan/war-wins',
+    iconUrl: ImageAssets.war,
+    state: 'mock',
+  ),
+  _EndpointOption(
+    title: 'Top 200 army usage',
+    endpoint: '/v2/battlelogs/items/top200/usage',
+    iconUrl: ImageAssets.sword,
+    state: 'mock',
+  ),
+];
+
+const _assetFolders = [
+  'troops',
+  'spells',
+  'heroes',
+  'equipment',
+  'leagues',
+  'resources',
+  'stickers',
+];
+
+const _staticAssetCatalog = [
+  _AssetEntry(
+    name: 'Villager',
+    folder: 'stickers',
+    url: '${ImageAssets.baseUrl}/stickers/Villager_HV_Villager_7.png',
+  ),
+  _AssetEntry(
+    name: 'Builder',
+    folder: 'stickers',
+    url: '${ImageAssets.baseUrl}/stickers/Villager_HV_Builder_1.png',
+  ),
+  _AssetEntry(
+    name: 'Goblin',
+    folder: 'stickers',
+    url: '${ImageAssets.baseUrl}/stickers/Troop_HV_Goblin.png',
+  ),
+  _AssetEntry(
+    name: 'Sleeping Apprentice Builder',
+    folder: 'stickers',
+    url: '${ImageAssets.baseUrl}/stickers/Apprentice_Builder_Sleeping.png',
+  ),
+  _AssetEntry(
+    name: 'Legend League',
+    folder: 'leagues',
+    url: ImageAssets.legendBlazon,
+  ),
+  _AssetEntry(name: 'Clan War', folder: 'resources', url: ImageAssets.warClan),
+  _AssetEntry(name: 'Trophy', folder: 'resources', url: ImageAssets.trophies),
+  _AssetEntry(
+    name: 'Capital Trophy',
+    folder: 'resources',
+    url: ImageAssets.capitalTrophy,
+  ),
+];
+
+const _lightningDamage = {
+  1: 150,
+  2: 180,
+  3: 210,
+  4: 240,
+  5: 270,
+  6: 320,
+  7: 400,
+  8: 480,
+  9: 560,
+  10: 600,
+  11: 640,
+  12: 680,
+};
+
+const _quakePercent = {1: 14, 2: 17, 3: 21, 4: 25, 5: 29};
+
+int _fireballDamage(int level) {
+  return 900 + ((level - 1) * 65);
+}
+
+int _asInt(Object? value, {int fallback = 0}) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return int.tryParse(value?.toString() ?? '') ?? fallback;
+}
+
+String? _nestedString(Object? raw, String path) {
+  Object? current = raw;
+  for (final segment in path.split('.')) {
+    if (current is! Map) return null;
+    current = current[segment];
+  }
+  return current?.toString();
+}
+
+String _formatInt(int value) {
+  final raw = value.toString();
+  final buffer = StringBuffer();
+  for (var i = 0; i < raw.length; i++) {
+    final indexFromEnd = raw.length - i;
+    buffer.write(raw[i]);
+    if (indexFromEnd > 1 && indexFromEnd % 3 == 1) {
+      buffer.write(',');
+    }
+  }
+  return buffer.toString();
+}
+
+String _assetFolderLabel(String folder) {
+  return folder
+      .split('-')
+      .map(
+        (word) => word.isEmpty
+            ? word
+            : '${word[0].toUpperCase()}${word.substring(1)}',
+      )
+      .join(' ');
+}

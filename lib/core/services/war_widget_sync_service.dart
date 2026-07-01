@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:clashkingapp/core/services/android_workmanager_service.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
-import 'package:clashkingapp/widgets/widgets_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -38,14 +37,20 @@ class WarWidgetSyncService {
       if (!kIsWeb && Platform.isIOS) {
         await HomeWidget.setAppGroupId(_widgetAppGroup);
       }
-      final clanTag = await WarWidgetService.getCurrentPlayerClanTag();
-      final warInfo = await fetchWarSummary(clanTag);
+      final cachedClans = await WarWidgetService.getCachedClanOptions();
+      if (cachedClans.isNotEmpty) {
+        await WarWidgetService.prepareClanWidgets(cachedClans);
+        DebugUtils.debugSuccess("War widgets updated successfully");
+        return;
+      }
 
-      await HomeWidget.saveWidgetData<String>(
-        'warInfo',
-        warInfo,
-        appGroupId: !kIsWeb && Platform.isIOS ? _widgetAppGroup : null,
-      );
+      final clanTag = await WarWidgetService.getCurrentPlayerClanTag();
+      if (clanTag != null && clanTag.isNotEmpty) {
+        await WarWidgetService.refreshWarInfoForClan(
+          clanTag,
+          makeDefault: true,
+        );
+      }
       await HomeWidget.updateWidget(
         name: 'WarWidget',
         androidName: 'WarAppWidgetProvider',

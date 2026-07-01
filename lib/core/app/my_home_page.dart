@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_mana
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/pages/presentation/players_page.dart';
 import 'package:clashkingapp/features/pages/presentation/search_page.dart';
+import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
 import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
@@ -318,11 +319,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     onTap: () => _pushAndClose(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const _StatsPlaceholderPage(
-                          title: 'Popular',
-                          message:
-                              'Popular will surface accounts and clans getting attention across ClashKing.',
-                        ),
+                        builder: (context) => const PopularPage(),
                       ),
                     ),
                   ),
@@ -332,25 +329,27 @@ class _AccountMenuDrawer extends StatelessWidget {
                     onTap: () => _pushAndClose(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const _StatsPlaceholderPage(
-                          title: 'Rankings',
-                          message:
-                              'Rankings will use linked and bookmarked account data.',
-                        ),
+                        builder: (context) => const RankingsPage(),
                       ),
                     ),
                   ),
                   _DrawerMenuItem(
                     icon: Icons.bar_chart_rounded,
-                    label: 'Statistics',
+                    label: 'Stats',
                     onTap: () => _pushAndClose(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const _StatsPlaceholderPage(
-                          title: 'Statistics',
-                          message:
-                              'Statistics will summarize your linked accounts and bookmarks.',
-                        ),
+                        builder: (context) => const StatsPage(),
+                      ),
+                    ),
+                  ),
+                  _DrawerMenuItem(
+                    icon: Icons.calculate_outlined,
+                    label: 'Calculators',
+                    onTap: () => _pushAndClose(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CalculatorsPage(),
                       ),
                     ),
                   ),
@@ -364,10 +363,15 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const _DrawerMenuItem(
-                    icon: Icons.lock_outline_rounded,
+                  _DrawerMenuItem(
+                    icon: Icons.construction_rounded,
                     label: 'Upgrade Tracker',
-                    onTap: null,
+                    onTap: () => _pushAndClose(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UpgradeTrackerTeasePage(),
+                      ),
+                    ),
                   ),
                   _DrawerMenuItem(
                     icon: Icons.grid_view_rounded,
@@ -375,11 +379,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     onTap: () => _pushAndClose(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const _StatsPlaceholderPage(
-                          title: 'Bases & Armies',
-                          message:
-                              'Bases & Armies will collect saved layouts, base links, and army links for your accounts.',
-                        ),
+                        builder: (context) => const BasesArmiesPage(),
                       ),
                     ),
                   ),
@@ -389,11 +389,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     onTap: () => _pushAndClose(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const _StatsPlaceholderPage(
-                          title: 'Game Assets',
-                          message:
-                              'Game Assets will provide browsable Clash icons, units, spells, equipment, and leagues.',
-                        ),
+                        builder: (context) => const GameAssetsPage(),
                       ),
                     ),
                   ),
@@ -553,35 +549,6 @@ class _DrawerMenuItem extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StatsPlaceholderPage extends StatelessWidget {
-  const _StatsPlaceholderPage({required this.title, required this.message});
-
-  final String title;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Text(message, style: Theme.of(context).textTheme.bodyLarge),
           ),
         ),
       ),
