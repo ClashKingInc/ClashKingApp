@@ -817,7 +817,7 @@ class _TownHallMaxBadge extends StatelessWidget {
               color: isComplete
                   ? gold.withValues(alpha: 0.14)
                   : Theme.of(
-                      context,
+                context,
                     ).colorScheme.surfaceContainerHighest.withValues(
                       alpha: 0.55,
                     ),

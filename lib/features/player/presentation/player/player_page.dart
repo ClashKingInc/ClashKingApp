@@ -201,55 +201,44 @@ class _PlayerProfileTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: colorScheme.outlineVariant.withValues(alpha: 0.42),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 2),
+      child: Row(
+        children: [
+          _ProfileTab(
+            label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
+            icon: Icons.home_rounded,
+            selected: selectedIndex == 0,
+            onTap: () => onTabSelected(0),
           ),
-        ),
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            _ProfileTab(
-              label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
-              icon: Icons.home_rounded,
-              selected: selectedIndex == 0,
-              onTap: () => onTabSelected(0),
-            ),
-            const SizedBox(width: 12),
-            _ProfileTab(
-              label:
-                  AppLocalizations.of(context)?.gameBaseBuilder ??
-                  'Builder Base',
-              icon: Icons.construction_rounded,
-              selected: selectedIndex == 1,
-              onTap: () => onTabSelected(1),
-            ),
-            const SizedBox(width: 12),
-            _ProfileTab(
-              label:
-                  AppLocalizations.of(context)?.gameAchievements ??
-                  'Achievements',
-              icon: Icons.military_tech_rounded,
-              selected: selectedIndex == 2,
-              onTap: () => onTabSelected(2),
-            ),
-            const SizedBox(width: 12),
-            _ProfileTab(
-              label: 'Season History',
-              icon: Icons.bar_chart_rounded,
-              selected: selectedIndex == 3,
-              onTap: () => onTabSelected(3),
-            ),
-          ],
-        ),
+          const SizedBox(width: 8),
+          _ProfileTab(
+            label:
+                AppLocalizations.of(context)?.gameBaseBuilder ??
+                'Builder Base',
+            icon: Icons.construction_rounded,
+            selected: selectedIndex == 1,
+            onTap: () => onTabSelected(1),
+          ),
+          const SizedBox(width: 8),
+          _ProfileTab(
+            label:
+                AppLocalizations.of(context)?.gameAchievements ??
+                'Achievements',
+            icon: Icons.military_tech_rounded,
+            selected: selectedIndex == 2,
+            onTap: () => onTabSelected(2),
+          ),
+          const SizedBox(width: 8),
+          _ProfileTab(
+            label: 'Season History',
+            icon: Icons.bar_chart_rounded,
+            selected: selectedIndex == 3,
+            onTap: () => onTabSelected(3),
+          ),
+        ],
       ),
     );
   }
@@ -271,51 +260,34 @@ class _ProfileTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final foreground = selected
-        ? colorScheme.onSurface
-        : colorScheme.onSurface.withValues(alpha: 0.58);
+    final foreground =
+        selected ? colorScheme.primary : colorScheme.onSurfaceVariant;
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        child: SizedBox(
-          height: 48,
-          child: Stack(
-            alignment: Alignment.center,
+        borderRadius: BorderRadius.circular(999),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          decoration: BoxDecoration(
+            color: selected
+                ? colorScheme.primary.withValues(alpha: 0.14)
+                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: 17, color: foreground),
-                    const SizedBox(width: 6),
-                    Text(
-                      label,
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: foreground,
-                        fontWeight: selected
-                            ? FontWeight.w900
-                            : FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 8,
-                right: 8,
-                bottom: 0,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 160),
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: selected ? colorScheme.primary : Colors.transparent,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
+              Icon(icon, size: 16, color: foreground),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                maxLines: 1,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: foreground,
+                  fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
                 ),
               ),
             ],
@@ -366,7 +338,7 @@ class _AchievementSectionState extends State<_AchievementSection> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color ??
             Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: Theme.of(
             context,
@@ -376,7 +348,7 @@ class _AchievementSectionState extends State<_AchievementSection> {
       child: Column(
         children: [
           InkWell(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(28),
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
