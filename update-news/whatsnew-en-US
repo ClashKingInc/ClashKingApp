@@ -1,5 +1,6 @@
 What’s new
 - Android now renders real liquid glass bars (refraction, specular light) matching the iOS look
+- The to-do page got a redesign: hero header with a liquid glass stats panel, cleaner account cards
 - Player cards now expand with options to enable notifications and pin an account’s to-do card to the home tab
 - The home tab now shows a single to-do card that combines the remaining tasks across all the accounts you pinned
 - The account menu can now be swiped open from further inside the screen, fixing accidental app exits on Samsung devices

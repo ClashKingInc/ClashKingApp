@@ -75,7 +75,7 @@ class PlayerToDoBodyState extends State<PlayerToDoBody> {
   Widget _emptyCard(BuildContext context, String text, String imageUrl) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      margin: const EdgeInsets.only(top: 8),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16),
