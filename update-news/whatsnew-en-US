@@ -1,6 +1,8 @@
 What’s new
 - Android now renders real liquid glass bars (refraction, specular light) matching the iOS look
 - The home to-do card now shows real account data, an all-accounts summary page, and sizes to its content
+- All cards now share the same dark material and hairline border across every tab
+- Player profile: new Season History tab and restyled sections, chips and progress bars
 - Home event banner: correct logo per theme, tinted tiles, page dots, events sorted by next deadline
 - The to-do page got a redesign: hero header with a liquid glass stats panel, cleaner account cards
 - Player cards now expand with options to enable notifications and pin an account’s to-do card to the home tab

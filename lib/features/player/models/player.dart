@@ -74,6 +74,14 @@ class Player {
   PlayerRaids? raids;
   WarInfo? warData;
 
+  // Per-season tracked stats from ClashKing (populated via enrichWithFullStats)
+  Map<String, int> goldBySeason;
+  Map<String, int> darkElixirBySeason;
+  Map<String, int> activityBySeason;
+  Map<String, int> attackWinsBySeason;
+  Map<String, int> seasonTrophiesBySeason;
+  Map<String, Map<String, int>> donationsBySeason;
+
   Player({
     required this.name,
     required this.tag,
@@ -116,7 +124,18 @@ class Player {
     required this.rankings,
     required this.legendRanking,
     this.warData,
-  });
+    Map<String, int>? goldBySeason,
+    Map<String, int>? darkElixirBySeason,
+    Map<String, int>? activityBySeason,
+    Map<String, int>? attackWinsBySeason,
+    Map<String, int>? seasonTrophiesBySeason,
+    Map<String, Map<String, int>>? donationsBySeason,
+  })  : goldBySeason = goldBySeason ?? {},
+        darkElixirBySeason = darkElixirBySeason ?? {},
+        activityBySeason = activityBySeason ?? {},
+        attackWinsBySeason = attackWinsBySeason ?? {},
+        seasonTrophiesBySeason = seasonTrophiesBySeason ?? {},
+        donationsBySeason = donationsBySeason ?? {};
 
   String get donationRatio => donationsReceived == 0
       ? "0.0"
@@ -504,6 +523,36 @@ class Player {
     } else {
       warData = null;
     }
+
+    goldBySeason = _parseSeasonIntMap(json['gold']);
+    darkElixirBySeason = _parseSeasonIntMap(json['dark_elixir']);
+    activityBySeason = _parseSeasonIntMap(json['activity']);
+    attackWinsBySeason = _parseSeasonIntMap(json['attack_wins']);
+    seasonTrophiesBySeason = _parseSeasonIntMap(json['season_trophies']);
+    donationsBySeason = _parseSeasonDonationsMap(json['donations']);
+  }
+
+  static Map<String, int> _parseSeasonIntMap(dynamic raw) {
+    if (raw is! Map) return {};
+    return {
+      for (final e in raw.entries)
+        if (e.value is num) e.key.toString(): (e.value as num).toInt(),
+    };
+  }
+
+  static Map<String, Map<String, int>> _parseSeasonDonationsMap(dynamic raw) {
+    if (raw is! Map) return {};
+    final result = <String, Map<String, int>>{};
+    for (final e in raw.entries) {
+      if (e.value is Map) {
+        final inner = e.value as Map;
+        result[e.key.toString()] = {
+          for (final ie in inner.entries)
+            if (ie.value is num) ie.key.toString(): (ie.value as num).toInt(),
+        };
+      }
+    }
+    return result;
   }
 
   String getLastOnlineText(BuildContext context) {

@@ -73,23 +73,22 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         decoration: BoxDecoration(
-          color: Theme.of(
-            context,
-          ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
-          borderRadius: BorderRadius.circular(8),
+          color: Theme.of(context).cardTheme.color ??
+              Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: Theme.of(
               context,
-            ).colorScheme.outlineVariant.withValues(alpha: 0.42),
+            ).colorScheme.outlineVariant.withValues(alpha: 0.32),
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(14.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(16),
                 onTap: () => setState(() => _expanded = !_expanded),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
@@ -802,32 +801,33 @@ class _TownHallMaxBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isComplete = percentage >= 100;
-    final borderColor = isComplete
-        ? const Color(0xFFFFD75E)
-        : Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.58);
+    const gold = Color(0xFFFFD75E);
 
     return Tooltip(
       message: 'Tap for remaining upgrade cost and time',
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(999),
           onTap: () => _showRemainingSheet(context),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: borderColor),
-              color: Theme.of(
-                context,
-              ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+              borderRadius: BorderRadius.circular(999),
+              color: isComplete
+                  ? gold.withValues(alpha: 0.14)
+                  : Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.55,
+                    ),
             ),
             child: Text(
               '$formattedPercentage%',
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.w900,
                 color: isComplete
-                    ? const Color(0xFFFFD75E)
+                    ? gold
                     : Theme.of(context).colorScheme.onSurface,
               ),
             ),
@@ -1009,12 +1009,7 @@ class _ResourceCostChip extends StatelessWidget {
           color: Theme.of(
             context,
           ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(compact ? 7 : 8),
-          border: Border.all(
-            color: Theme.of(
-              context,
-            ).colorScheme.outlineVariant.withValues(alpha: 0.42),
-          ),
+          borderRadius: BorderRadius.circular(999),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/features/player/presentation/player/player_season_stats_tab.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -57,7 +58,8 @@ class PlayerScreenState extends State<PlayerScreen> {
                   child: switch (selectedTab) {
                     0 => _buildPlayerContent(widget.selectedPlayer),
                     1 => _buildBuilderContent(widget.selectedPlayer),
-                    _ => _buildAchievementContent(widget.selectedPlayer),
+                    2 => _buildAchievementContent(widget.selectedPlayer),
+                    _ => PlayerSeasonStatsTab(player: widget.selectedPlayer),
                   },
                 ),
               ),
@@ -75,7 +77,7 @@ class PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _selectTab(int index) {
-    final clampedIndex = index > 2 ? 2 : index;
+    final clampedIndex = index > 3 ? 3 : index;
     final boundedIndex = index < 0 ? 0 : clampedIndex;
     if (boundedIndex == selectedTab) return;
     setState(() => selectedTab = boundedIndex);
@@ -239,6 +241,13 @@ class _PlayerProfileTabs extends StatelessWidget {
               selected: selectedIndex == 2,
               onTap: () => onTabSelected(2),
             ),
+            const SizedBox(width: 12),
+            _ProfileTab(
+              label: 'Season History',
+              icon: Icons.bar_chart_rounded,
+              selected: selectedIndex == 3,
+              onTap: () => onTabSelected(3),
+            ),
           ],
         ),
       ),
@@ -353,22 +362,21 @@ class _AchievementSectionState extends State<_AchievementSection> {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
-        borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).cardTheme.color ??
+            Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Theme.of(
             context,
-          ).colorScheme.outlineVariant.withValues(alpha: 0.42),
+          ).colorScheme.outlineVariant.withValues(alpha: 0.32),
         ),
       ),
       child: Column(
         children: [
           InkWell(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
@@ -416,9 +424,8 @@ class _AchievementSectionState extends State<_AchievementSection> {
             child: LinearProgressIndicator(
               value: ratio,
               minHeight: 6,
-              backgroundColor: Theme.of(
-                context,
-              ).colorScheme.outlineVariant.withValues(alpha: 0.25),
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerHighest,
             ),
           ),
           if (_expanded) ...[
@@ -459,15 +466,15 @@ class _AchievementTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.42),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: complete
-              ? const Color(0xFFFFD75E).withValues(alpha: 0.68)
-              : Theme.of(
-                  context,
-                ).colorScheme.outlineVariant.withValues(alpha: 0.34),
-        ),
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(12),
+        border: complete
+            ? Border.all(
+                color: const Color(0xFFFFD75E).withValues(alpha: 0.68),
+              )
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -510,9 +517,8 @@ class _AchievementTile extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: ratio,
                     minHeight: 6,
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.outlineVariant.withValues(alpha: 0.24),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                     valueColor: AlwaysStoppedAnimation<Color>(
                       complete
                           ? const Color(0xFFFFD75E)

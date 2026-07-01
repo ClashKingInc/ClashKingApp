@@ -17,16 +17,27 @@ class PlayerSuperTroopSection extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        elevation: 4,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color ??
+              Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(14.0),
           child: Column(
             children: [
               Text(
                 AppLocalizations.of(context)!.gameActiveSuperTroops,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
               ),
               const SizedBox(height: 10),
               Wrap(

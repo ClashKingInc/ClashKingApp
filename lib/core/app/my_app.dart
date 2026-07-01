@@ -32,10 +32,16 @@ class MyApp extends StatelessWidget {
       yearForegroundColor: WidgetStateProperty.all(Colors.white),
       todayForegroundColor: WidgetStateProperty.all(Colors.white),
     ),
-    cardTheme: const CardThemeData(
+    cardTheme: CardThemeData(
       surfaceTintColor: Colors.transparent,
-      color: Color(0xFF151516),
+      // Same shade + hairline border as the home to-do panels so every
+      // card in the app reads as one material.
+      color: const Color(0xFF0B0B0C),
       elevation: 2.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.10)),
+      ),
     ),
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: Color(0xFF151516),
@@ -167,6 +173,10 @@ class MyApp extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       color: const Color(0xFFFFFFFF).withAlpha(255),
       elevation: 2.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.black.withValues(alpha: 0.10)),
+      ),
     ),
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: Colors.white,
