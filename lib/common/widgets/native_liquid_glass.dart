@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_glass_easy/liquid_glass_easy.dart' as lge;
 import 'package:native_liquid_glass/native_liquid_glass.dart' as glass;
 
 class NativeLiquidGlassBar extends StatelessWidget {
@@ -320,10 +319,12 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final surfaceColor = selected
-        ? colorScheme.surfaceContainerHighest
-        : colorScheme.surface;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    // Match the cards' background so the glass bars read as the same
+    // material family as the rest of the UI.
+    final surfaceColor =
+        theme.cardTheme.color ?? theme.colorScheme.surfaceContainer;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -331,28 +332,33 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: shadowOpacity),
-            blurRadius: 24,
-            offset: const Offset(0, 12),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(cornerRadius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: surfaceColor.withValues(alpha: opacity * 0.65),
-              border: Border.all(
-                color: colorScheme.outlineVariant.withValues(
-                  alpha: borderOpacity,
-                ),
-                width: 0.8,
-              ),
+      child: lge.LiquidGlassLens(
+        style: lge.LiquidGlassStyle(
+          shape: lge.LiquidGlassShape.continuousRoundedRectangle(
+            cornerRadius: cornerRadius,
+            lightDirection: 90,
+            lightIntensity: isDark ? 0.08 : 0.22,
+            lightColor: Colors.white.withValues(alpha: isDark ? 0.14 : 0.30),
+            borderType: const lge.OpticalBorder(ambientIntensity: 0.10),
+          ),
+          appearance: lge.LiquidGlassAppearance(
+            color: surfaceColor.withValues(
+              alpha: opacity * (selected ? 0.55 : 0.42),
             ),
-            child: const SizedBox.expand(),
+            blur: const lge.LiquidGlassBlur(sigmaX: 4, sigmaY: 4),
+          ),
+          refraction: const lge.LiquidGlassRefraction(
+            distortion: 0.08,
+            distortionWidth: 32,
+            chromaticAberration: 0.002,
           ),
         ),
+        child: const SizedBox.expand(),
       ),
     );
   }
@@ -412,17 +418,12 @@ class _FallbackLiquidGlassTabBar extends StatelessWidget {
                         Theme.of(context).brightness == Brightness.dark;
                     return DecoratedBox(
                       decoration: BoxDecoration(
-                        color: (isDark
-                                ? cs.surfaceContainerHighest
-                                : cs.surfaceContainerHigh)
-                            .withValues(alpha: isDark ? 0.72 : 0.88),
+                        // Neutral overlay like the iOS glass pill — the
+                        // theme's surfaceContainer tints read too warm here.
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.14)
+                            : cs.surfaceContainerHigh.withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(selectedCornerRadius),
-                        border: Border.all(
-                          color: cs.outlineVariant.withValues(
-                            alpha: isDark ? 0.45 : 0.28,
-                          ),
-                          width: 0.8,
-                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(
@@ -494,15 +495,11 @@ class _FallbackLiquidGlassSegmentedControl extends StatelessWidget {
                 height: height - _inset * 2,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: (isDark
-                            ? colorScheme.surfaceContainerHighest
-                            : colorScheme.surfaceContainerHigh)
-                        .withValues(alpha: isDark ? 0.72 : 0.90),
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.14)
+                        : colorScheme.surfaceContainerHigh
+                            .withValues(alpha: 0.90),
                     borderRadius: BorderRadius.circular(pillRadius),
-                    border: Border.all(
-                      color: color.withValues(alpha: isDark ? 0.40 : 0.28),
-                      width: 0.8,
-                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(

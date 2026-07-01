@@ -121,12 +121,9 @@ class MyHomePageState extends State<MyHomePage> {
         ],
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.fromLTRB(
-          8,
-          0,
-          8,
-          supportsNativeLiquidGlass ? 4 : 6,
-        ),
+        padding: supportsNativeLiquidGlass
+            ? const EdgeInsets.fromLTRB(8, 0, 8, 4)
+            : const EdgeInsets.fromLTRB(24, 0, 24, 18),
         child: SizedBox(
           height: supportsNativeLiquidGlass ? 78 : 62,
           child: LayoutBuilder(
@@ -179,8 +176,8 @@ class MyHomePageState extends State<MyHomePage> {
                     selectedIndex: _selectedIndex,
                     onTabSelected: _onItemTapped,
                     items: tabItems,
-                    cornerRadius: 28,
-                    selectedCornerRadius: 18,
+                    cornerRadius: 31,
+                    selectedCornerRadius: 25,
                     inset: 6,
                     borderOpacity:
                         Theme.of(context).brightness == Brightness.dark
