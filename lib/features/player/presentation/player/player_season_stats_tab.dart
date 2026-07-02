@@ -96,35 +96,62 @@ class _SeasonSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final surfaceColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: cs.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(12),
+          color: surfaceColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: DropdownButton<String>(
-            value: selected,
-            isExpanded: true,
-            underline: const SizedBox.shrink(),
-            borderRadius: BorderRadius.circular(12),
-            items: seasons
-                .map(
-                  (s) => DropdownMenuItem(
-                    value: s,
-                    child: Text(
-                      formatSeason(s),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Row(
+            children: [
+              Icon(
+                Icons.calendar_month_rounded,
+                size: 18,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: DropdownButton<String>(
+                  value: selected,
+                  isExpanded: true,
+                  underline: const SizedBox.shrink(),
+                  borderRadius: BorderRadius.circular(16),
+                  // The theme's canvasColor is transparent (for the glass
+                  // nav bar), which DropdownButton uses for its menu —
+                  // give the menu an explicit opaque background.
+                  dropdownColor: surfaceColor,
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                )
-                .toList(),
-            onChanged: (v) {
-              if (v != null) onChanged(v);
-            },
+                  items: seasons
+                      .map(
+                        (s) => DropdownMenuItem(
+                          value: s,
+                          child: Text(
+                            formatSeason(s),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (v) {
+                    if (v != null) onChanged(v);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -144,40 +171,41 @@ class _SeasonStatsGrid extends StatelessWidget {
     final given = donations?['donated'] ?? 0;
     final received = donations?['received'] ?? 0;
 
+    // Same metric palette as the home to-do card and player header bars.
     final stats = [
       _StatItem(
         icon: Icons.wb_sunny_rounded,
-        color: const Color(0xFFFFD700),
+        color: const Color(0xFFE8A524),
         label: 'Gold Grabbed',
         value: _fmt(player.goldBySeason[season] ?? 0),
       ),
       _StatItem(
         icon: Icons.water_drop_rounded,
-        color: const Color(0xFF9C27B0),
+        color: const Color(0xFF8D63D9),
         label: 'Dark Elixir',
         value: _fmt(player.darkElixirBySeason[season] ?? 0),
       ),
       _StatItem(
         icon: Icons.bolt_rounded,
-        color: const Color(0xFF2196F3),
+        color: const Color(0xFF2A9FD6),
         label: 'Activity',
         value: _fmt(player.activityBySeason[season] ?? 0),
       ),
       _StatItem(
         icon: Icons.military_tech_rounded,
-        color: const Color(0xFFF44336),
+        color: const Color(0xFFE35D4F),
         label: 'Attack Wins',
         value: _fmt(player.attackWinsBySeason[season] ?? 0),
       ),
       _StatItem(
         icon: Icons.emoji_events_rounded,
-        color: const Color(0xFFFF9800),
+        color: const Color(0xFFE07B39),
         label: 'Season Trophies',
         value: _fmt(player.seasonTrophiesBySeason[season] ?? 0),
       ),
       _StatItem(
         icon: Icons.card_giftcard_rounded,
-        color: const Color(0xFF4CAF50),
+        color: const Color(0xFF14A37F),
         label: 'Donated',
         value: _fmt(given),
       ),
@@ -189,19 +217,26 @@ class _SeasonStatsGrid extends StatelessWidget {
       ),
     ];
 
+    // Two columns; an odd trailing item spans the full row, like the
+    // home to-do card metrics.
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 2.4,
-        ),
-        itemCount: stats.length,
-        itemBuilder: (context, index) => _StatCard(stat: stats[index]),
+      child: Column(
+        children: [
+          for (var i = 0; i < stats.length; i += 2)
+            Padding(
+              padding: EdgeInsets.only(top: i == 0 ? 0 : 8),
+              child: Row(
+                children: [
+                  Expanded(child: _StatCard(stat: stats[i])),
+                  if (i + 1 < stats.length) ...[
+                    const SizedBox(width: 8),
+                    Expanded(child: _StatCard(stat: stats[i + 1])),
+                  ],
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -239,52 +274,60 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: cs.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: cs.outlineVariant.withValues(alpha: 0.4),
+
+    // Same tinted metric bar as the player header stats.
+    return SizedBox(
+      height: 46,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: stat.color.withValues(alpha: 0.16),
+          borderRadius: BorderRadius.circular(14),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        child: Row(
-          children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: stat.color.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 9),
+          child: Row(
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: cs.surface.withValues(alpha: 0.72),
+                  shape: BoxShape.circle,
+                ),
+                child: SizedBox.square(
+                  dimension: 30,
+                  child: Icon(stat.icon, color: stat.color, size: 17),
+                ),
               ),
-              child: Icon(stat.icon, color: stat.color, size: 18),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    stat.value,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    stat.label,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: cs.onSurfaceVariant,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ],
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      stat.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: cs.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Text(
+                      stat.value,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: stat.color,
+                        fontWeight: FontWeight.w900,
+                        height: 1.1,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

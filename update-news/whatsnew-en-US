@@ -1,4 +1,9 @@
 What’s new
+- Player profile redesign: hero header with stats panel, in-game style tabs, swipe between tabs following your finger
+- Player profile now shows builder base league, best trophies, capital gold and clearer given/received donations
+- Achievements tab: sub-tabs with completion counts, pending achievements listed first
+- Season History: clearer stat tiles and a fixed dropdown that was invisible on Android
+- Item grids (heroes, troops...) now adapt to any screen size; completion badges show a progress ring
 - Android now renders real liquid glass bars (refraction, specular light) matching the iOS look
 - The home to-do card now shows real account data, an all-accounts summary page, and sizes to its content
 - All cards now share the same dark material and hairline border across every tab

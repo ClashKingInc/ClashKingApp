@@ -520,11 +520,20 @@ class _FallbackLiquidGlassSegmentedControl extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () => onValueChanged(i),
                       behavior: HitTestBehavior.opaque,
-                      child: Center(
-                        child: Text(
-                          labels[i],
-                          style:
-                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Center(
+                          // Scale long labels down instead of overflowing —
+                          // segments can get narrow with 3+ items.
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              labels[i],
+                              maxLines: 1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
                                     color: isSelected
                                         ? color
                                         : colorScheme.onSurfaceVariant,
@@ -532,6 +541,8 @@ class _FallbackLiquidGlassSegmentedControl extends StatelessWidget {
                                         ? FontWeight.w700
                                         : FontWeight.w500,
                                   ),
+                            ),
+                          ),
                         ),
                       ),
                     ),

@@ -55,6 +55,8 @@ class Player {
   String townHallPic;
   String builderHallPic;
   String leagueUrl;
+  String builderBaseLeague;
+  String builderBaseLeagueUrl;
   List<PlayerClanGames> clanGamesPoint;
   List<PlayerSeasonPass> seasonPass;
   DateTime lastOnline;
@@ -108,6 +110,8 @@ class Player {
     required this.townHallPic,
     required this.builderHallPic,
     required this.leagueUrl,
+    this.builderBaseLeague = "",
+    this.builderBaseLeagueUrl = "",
     required this.clanGamesPoint,
     required this.seasonPass,
     required this.lastOnline,
@@ -319,6 +323,9 @@ class Player {
               ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
           leagueUrl:
               ImageAssets.getLeagueImage(json["league"]?['name'] ?? "Unranked"),
+          builderBaseLeague: json["builderBaseLeague"]?['name'] ?? "",
+          builderBaseLeagueUrl: ImageAssets.getBuilderBaseLeagueImage(
+              json["builderBaseLeague"]?['name'] ?? ""),
           clanGamesPoint: [],
           seasonPass: [],
           lastOnline: DateTime.utc(1970, 1, 1),

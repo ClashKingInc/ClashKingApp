@@ -120,6 +120,36 @@ class ImageAssets {
     return '$baseUrl/home-base/league-icons/$fileName';
   }
 
+  /// Builder base league icons, e.g. "Platinum League II" →
+  /// platinum_league_2.png. The CDN naming is inconsistent: the early
+  /// leagues (wood/clay/brass/copper I-II) carry a builder_base_ prefix,
+  /// the later ones don't, and Legend League has no tier suffix.
+  static String getBuilderBaseLeagueImage(String leagueName) {
+    final parts = leagueName.split(' ');
+    if (parts.length < 2) return '';
+    final base = parts[0].toLowerCase();
+    if (base == 'legend') {
+      return '$baseUrl/bot/builder-base-leagues/legend_league.png';
+    }
+    int tier = 1;
+    if (parts.length >= 3) {
+      final numeral = parts[2];
+      if (numeral == 'IV') {
+        tier = 4;
+      } else if (numeral == 'V') {
+        tier = 5;
+      } else {
+        tier = numeral.length;
+      }
+    }
+    final prefixed = base == 'wood' ||
+        base == 'clay' ||
+        base == 'brass' ||
+        (base == 'copper' && tier <= 2);
+    final prefix = prefixed ? 'builder_base_' : '';
+    return '$baseUrl/bot/builder-base-leagues/$prefix${base}_league_$tier.png';
+  }
+
   // 🏆 Wars & CWL & Trophies
   static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
   static const String warPreferenceOut = "$baseUrl/icons/Icon_HV_Out.png";

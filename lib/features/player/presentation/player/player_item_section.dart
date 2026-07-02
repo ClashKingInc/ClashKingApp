@@ -73,7 +73,8 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color ??
+          color:
+              Theme.of(context).cardTheme.color ??
               Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -126,14 +127,29 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
               ),
               if (_expanded) ...[
                 const SizedBox(height: 12),
-                Center(
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: sortedItems
-                        .map((item) => _buildItemTile(context, item))
-                        .toList(),
-                  ),
+                // Fit a whole number of columns to the available width so
+                // the grid fills the card on any screen size.
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    const spacing = 8.0;
+                    const minTileSize = 54.0;
+                    final width = constraints.maxWidth;
+                    final columns =
+                        ((width + spacing) / (minTileSize + spacing))
+                            .floor()
+                            .clamp(3, 12);
+                    final tileSize =
+                        (width - (columns - 1) * spacing) / columns;
+                    return Wrap(
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: sortedItems
+                          .map(
+                            (item) => _buildItemTile(context, item, tileSize),
+                          )
+                          .toList(),
+                    );
+                  },
                 ),
               ],
             ],
@@ -143,7 +159,11 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
     );
   }
 
-  Widget _buildItemTile(BuildContext context, PlayerItem item) {
+  Widget _buildItemTile(
+    BuildContext context,
+    PlayerItem item,
+    double tileSize,
+  ) {
     final isLocked = !item.isUnlocked;
     final thMaxLevel = maxLevelForTH(item.meta, townHallLevel);
     final isTHMax = thMaxLevel > 0 && item.level >= thMaxLevel;
@@ -170,73 +190,78 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
 
     return GestureDetector(
       onTap: () => _showItemDialog(context, item),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOutCubic,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: borderColor,
-            width: isHighlightedMax ? 2.5 : 2,
+      child: SizedBox.square(
+        dimension: tileSize,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOutCubic,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: borderColor,
+              width: isHighlightedMax ? 2.5 : 2,
+            ),
+            borderRadius: BorderRadius.circular(8),
+            color: containerBackground,
+            boxShadow: isHighlightedMax
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFFFFD75E).withValues(alpha: 0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
-          borderRadius: BorderRadius.circular(8),
-          color: containerBackground,
-          boxShadow: isHighlightedMax
-              ? [
-                  BoxShadow(
-                    color: const Color(0xFFFFD75E).withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: ColorFiltered(
+                  colorFilter: isLocked || item.level == 0
+                      ? const ColorFilter.mode(
+                          Colors.grey,
+                          BlendMode.saturation,
+                        )
+                      : const ColorFilter.mode(
+                          Colors.transparent,
+                          BlendMode.multiply,
+                        ),
+                  child: MobileWebImage(
+                    imageUrl: item.imageUrl,
+                    fit: BoxFit.cover,
                   ),
-                ]
-              : null,
-        ),
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: ColorFiltered(
-                colorFilter: isLocked || item.level == 0
-                    ? const ColorFilter.mode(Colors.grey, BlendMode.saturation)
-                    : const ColorFilter.mode(
-                        Colors.transparent,
-                        BlendMode.multiply,
-                      ),
-                child: MobileWebImage(
-                  imageUrl: item.imageUrl,
-                  width: 54,
-                  height: 54,
-                  fit: BoxFit.cover,
                 ),
               ),
-            ),
-            if (item is! PlayerSuperTroop && !isLocked && item.level > 0)
-              Positioned(
-                right: 1,
-                bottom: 1,
-                child: Container(
-                  constraints: const BoxConstraints(minWidth: 24),
-                  height: 18,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: isHighlightedMax
-                        ? const Color(0xFFFFD75E)
-                        : Colors.black.withValues(alpha: 0.86),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      item.level.toString(),
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        fontWeight: FontWeight.w900,
-                        color: isHighlightedMax ? Colors.black : Colors.white,
-                        height: 1,
+              if (item is! PlayerSuperTroop && !isLocked && item.level > 0)
+                Positioned(
+                  right: 1,
+                  bottom: 1,
+                  child: Container(
+                    constraints: const BoxConstraints(minWidth: 24),
+                    height: 18,
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: isHighlightedMax
+                          ? const Color(0xFFFFD75E)
+                          : Colors.black.withValues(alpha: 0.86),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        item.level.toString(),
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                          fontWeight: FontWeight.w900,
+                          color: isHighlightedMax ? Colors.black : Colors.white,
+                          height: 1,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -802,6 +827,7 @@ class _TownHallMaxBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final isComplete = percentage >= 100;
     const gold = Color(0xFFFFD75E);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
       message: 'Tap for remaining upgrade cost and time',
@@ -811,25 +837,46 @@ class _TownHallMaxBadge extends StatelessWidget {
           borderRadius: BorderRadius.circular(999),
           onTap: () => _showRemainingSheet(context),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: const EdgeInsets.fromLTRB(8, 5, 10, 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(999),
               color: isComplete
                   ? gold.withValues(alpha: 0.14)
-                  : Theme.of(
-                context,
-                    ).colorScheme.surfaceContainerHighest.withValues(
-                      alpha: 0.55,
-                    ),
+                  : colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
             ),
-            child: Text(
-              '$formattedPercentage%',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w900,
-                color: isComplete
-                    ? gold
-                    : Theme.of(context).colorScheme.onSurface,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Mini progress ring: completion readable at a glance,
+                // same language as the to-do card rings.
+                SizedBox.square(
+                  dimension: 15,
+                  child: isComplete
+                      ? const Icon(
+                          Icons.check_circle_rounded,
+                          size: 15,
+                          color: gold,
+                        )
+                      : CircularProgressIndicator(
+                          value: (percentage / 100).clamp(0.0, 1.0),
+                          strokeWidth: 2.4,
+                          strokeCap: StrokeCap.round,
+                          backgroundColor: colorScheme.outlineVariant
+                              .withValues(alpha: 0.45),
+                          valueColor: AlwaysStoppedAnimation(
+                            colorScheme.primary,
+                          ),
+                        ),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  '$formattedPercentage%',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: isComplete ? gold : colorScheme.onSurface,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

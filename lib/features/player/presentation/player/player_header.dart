@@ -39,6 +39,7 @@ class PlayerInfoHeader extends StatelessWidget {
     final hallImageUrl = isBuilderTab
         ? player.builderHallPic
         : player.townHallPic;
+    final warAction = _currentWarAction(context, player);
 
     // The backdrop fills the whole header; the glass stats panel straddles
     // its bottom edge, same pattern as the to-do page header.
@@ -48,17 +49,21 @@ class PlayerInfoHeader extends StatelessWidget {
       children: [
         Positioned.fill(
           bottom: panelOverlap,
-          child: ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha: 0.62),
-              BlendMode.darken,
-            ),
-            child: CachedNetworkImage(
-              imageUrl: backgroundImageUrl,
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) =>
-                  ColoredBox(color: Theme.of(context).colorScheme.surface),
-            ),
+          // Plain black overlay instead of ColorFiltered: the filter's
+          // saveLayer leaks past its bounds on Impeller and darkened the
+          // whole page body (painted before the header inside the
+          // NestedScrollView). A srcOver scrim gives the same result.
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CachedNetworkImage(
+                imageUrl: backgroundImageUrl,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    ColoredBox(color: Theme.of(context).colorScheme.surface),
+              ),
+              ColoredBox(color: Colors.black.withValues(alpha: 0.62)),
+            ],
           ),
         ),
         Column(
@@ -70,11 +75,20 @@ class PlayerInfoHeader extends StatelessWidget {
                 children: [
                   _HeaderIconButton(
                     icon: Icons.arrow_back_rounded,
-                    tooltip:
-                        MaterialLocalizations.of(context).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
                     onTap: () => Navigator.of(context).pop(),
                   ),
                   const Spacer(),
+                  if (warAction != null) ...[
+                    _HeaderIconButton(
+                      imageUrl: warAction.imageUrl,
+                      tooltip: warAction.label,
+                      onTap: warAction.onTap,
+                    ),
+                    const SizedBox(width: 8),
+                  ],
                   _HeaderIconButton(
                     icon: Icons.open_in_new_rounded,
                     tooltip: 'Open in game',
@@ -83,8 +97,9 @@ class PlayerInfoHeader extends StatelessWidget {
                   const SizedBox(width: 8),
                   Consumer<BookmarkService>(
                     builder: (context, bookmarks, child) {
-                      final bookmarked =
-                          bookmarks.isPlayerBookmarked(player.tag);
+                      final bookmarked = bookmarks.isPlayerBookmarked(
+                        player.tag,
+                      );
                       return _HeaderIconButton(
                         icon: bookmarked
                             ? Icons.bookmark_rounded
@@ -110,9 +125,7 @@ class PlayerInfoHeader extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: isBuilderTab
-                  ? _BuilderBaseStats(player: player)
-                  : _HomeBaseStats(player: player),
+              child: _BaseStats(player: player, isBuilder: isBuilderTab),
             ),
           ],
         ),
@@ -195,10 +208,13 @@ class _IdentityPanel extends StatelessWidget {
   }
 }
 
-class _HomeBaseStats extends StatelessWidget {
+/// Stats panel shared by the home and builder tabs: only the league row
+/// and the trophy record change, everything else shows on both.
+class _BaseStats extends StatelessWidget {
   final Player player;
+  final bool isBuilder;
 
-  const _HomeBaseStats({required this.player});
+  const _BaseStats({required this.player, required this.isBuilder});
 
   @override
   Widget build(BuildContext context) {
@@ -206,8 +222,22 @@ class _HomeBaseStats extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
 
+    final hasBuilderLeague = player.builderBaseLeague.isNotEmpty;
+    final leagueName = isBuilder
+        ? (hasBuilderLeague ? player.builderBaseLeague : 'Unranked')
+        : player.league;
+    final leagueIconUrl = isBuilder
+        ? (hasBuilderLeague
+              ? player.builderBaseLeagueUrl
+              : ImageAssets.trophies)
+        : player.leagueUrl;
+    final trophies = isBuilder ? player.builderBaseTrophies : player.trophies;
+    final bestTrophies = isBuilder
+        ? player.bestBuilderBaseTrophies
+        : player.bestTrophies;
+
     return _StatsPanel(
-      height: 178,
+      height: 166,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -224,7 +254,7 @@ class _HomeBaseStats extends StatelessWidget {
                   dimension: 36,
                   child: Padding(
                     padding: const EdgeInsets.all(5),
-                    child: MobileWebImage(imageUrl: player.leagueUrl),
+                    child: MobileWebImage(imageUrl: leagueIconUrl),
                   ),
                 ),
               ),
@@ -234,7 +264,7 @@ class _HomeBaseStats extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      player.league,
+                      leagueName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -243,27 +273,80 @@ class _HomeBaseStats extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 1),
-                    Text(
-                      formatter.format(player.trophies),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        height: 1,
-                      ),
+                    Row(
+                      children: [
+                        const MobileWebImage(
+                          imageUrl: ImageAssets.trophies,
+                          width: 12,
+                          height: 12,
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            formatter.format(trophies),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  height: 1,
+                                ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 10),
-              Text(
-                DateFormat('MMMM yyyy').format(DateTime.now()),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w800,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    DateFormat('MMMM yyyy').format(DateTime.now()),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  // Only win counts exist in the CoC API (no losses), so
+                  // keep them as a discreet inline note rather than chips.
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const MobileWebImage(
+                        imageUrl: ImageAssets.sword,
+                        width: 11,
+                        height: 11,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        formatter.format(player.attackWins),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const MobileWebImage(
+                        imageUrl: ImageAssets.shield,
+                        width: 11,
+                        height: 11,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        formatter.format(player.defenseWins),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
@@ -289,10 +372,52 @@ class _HomeBaseStats extends StatelessWidget {
               Expanded(
                 child: _StatBar(
                   label: 'Donations',
-                  value:
-                      '${formatter.format(player.donations)}/${formatter.format(player.donationsReceived)}',
                   icon: Icons.swap_vert_rounded,
                   color: const Color(0xFF14A37F),
+                  // Arrows make given vs received readable at a glance.
+                  valueWidget: Row(
+                    children: [
+                      const Icon(
+                        Icons.arrow_upward_rounded,
+                        size: 11,
+                        color: Color(0xFF14A37F),
+                      ),
+                      const SizedBox(width: 1),
+                      Flexible(
+                        child: Text(
+                          formatter.format(player.donations),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: const Color(0xFF14A37F),
+                                fontWeight: FontWeight.w900,
+                                height: 1.1,
+                              ),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Icon(
+                        Icons.arrow_downward_rounded,
+                        size: 11,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 1),
+                      Flexible(
+                        child: Text(
+                          formatter.format(player.donationsReceived),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w900,
+                                height: 1.1,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -302,19 +427,19 @@ class _HomeBaseStats extends StatelessWidget {
             children: [
               Expanded(
                 child: _StatBar(
-                  label: 'Attacks won',
-                  value: formatter.format(player.attackWins),
-                  imageUrl: ImageAssets.sword,
-                  color: const Color(0xFFE35D4F),
+                  label: 'Best trophies',
+                  value: formatter.format(bestTrophies),
+                  imageUrl: ImageAssets.bestTrophies,
+                  color: const Color(0xFFE07B39),
                 ),
               ),
               const SizedBox(width: 7),
               Expanded(
                 child: _StatBar(
-                  label: 'Defenses won',
-                  value: formatter.format(player.defenseWins),
-                  imageUrl: ImageAssets.shield,
-                  color: const Color(0xFF4E7DF2),
+                  label: 'Capital Gold',
+                  value: formatter.format(player.clanCapitalContributions),
+                  imageUrl: ImageAssets.capitalGold,
+                  color: const Color(0xFF8D63D9),
                 ),
               ),
             ],
@@ -341,9 +466,47 @@ class _StatsPanel extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          NativeLiquidGlassBar(height: height, cornerRadius: 28),
+          _HeaderPanelBackground(height: height, cornerRadius: 28),
           Padding(padding: const EdgeInsets.all(14), child: child),
         ],
+      ),
+    );
+  }
+}
+
+/// Background for the header panels. iOS gets the native glass; Android
+/// gets a near-opaque card fill instead of the shader glass — inside the
+/// NestedScrollView the body slivers paint before the header, so a
+/// backdrop-sampling shader here would wash the page content below with
+/// its own fill (content looked greyed out).
+class _HeaderPanelBackground extends StatelessWidget {
+  final double height;
+  final double cornerRadius;
+
+  const _HeaderPanelBackground({
+    required this.height,
+    required this.cornerRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (supportsNativeLiquidGlass) {
+      return NativeLiquidGlassBar(
+        height: height,
+        cornerRadius: cornerRadius,
+        opacity: 0.95,
+      );
+    }
+
+    final theme = Theme.of(context);
+    final surfaceColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: surfaceColor.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(cornerRadius),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
       ),
     );
   }
@@ -352,7 +515,8 @@ class _StatsPanel extends StatelessWidget {
 /// Tinted metric bar, same language as the home to-do card metrics.
 class _StatBar extends StatelessWidget {
   final String label;
-  final String value;
+  final String? value;
+  final Widget? valueWidget;
   final String? imageUrl;
   final IconData? icon;
   final Color color;
@@ -360,19 +524,20 @@ class _StatBar extends StatelessWidget {
 
   const _StatBar({
     required this.label,
-    required this.value,
+    this.value,
+    this.valueWidget,
     required this.color,
     this.imageUrl,
     this.icon,
     this.onTap,
-  });
+  }) : assert(value != null || valueWidget != null);
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return SizedBox(
-      height: 46,
+      height: 40,
       child: Material(
         color: color.withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(14),
@@ -380,7 +545,7 @@ class _StatBar extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(14),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 9),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               children: [
                 DecoratedBox(
@@ -389,16 +554,16 @@ class _StatBar extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: SizedBox.square(
-                    dimension: 34,
+                    dimension: 29,
                     child: Padding(
-                      padding: const EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(5),
                       child: imageUrl != null
                           ? MobileWebImage(imageUrl: imageUrl!)
-                          : Icon(icon, size: 19, color: color),
+                          : Icon(icon, size: 16, color: color),
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 7),
                 // Stacked label/value so neither fights the other for
                 // horizontal space — labels no longer get truncated.
                 Expanded(
@@ -416,150 +581,31 @@ class _StatBar extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 1),
-                      Text(
-                        value,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: color,
-                          fontWeight: FontWeight.w900,
-                          height: 1.1,
-                        ),
-                      ),
+                      valueWidget ??
+                          Text(
+                            value!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: color,
+                                  fontWeight: FontWeight.w900,
+                                  height: 1.1,
+                                ),
+                          ),
                     ],
                   ),
                 ),
                 if (onTap != null)
                   Icon(
                     Icons.chevron_right_rounded,
-                    size: 18,
+                    size: 16,
                     color: colorScheme.onSurfaceVariant,
                   ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class PlayerProfileFloatingActions extends StatelessWidget {
-  final Player player;
-
-  const PlayerProfileFloatingActions({super.key, required this.player});
-
-  @override
-  Widget build(BuildContext context) {
-    final warAction = _currentWarAction(context, player);
-
-    return SafeArea(
-      minimum: const EdgeInsets.fromLTRB(14, 0, 14, 6),
-      child: SizedBox(
-        height: 62,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (warAction != null) ...[
-                SizedBox(
-                  width: 124,
-                  child: _FloatingProfileAction(
-                    imageUrl: warAction.imageUrl,
-                    label: warAction.label,
-                    emphasized: true,
-                    onTap: warAction.onTap,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FloatingProfileAction extends StatelessWidget {
-  final String? imageUrl;
-  final String label;
-  final bool emphasized;
-  final VoidCallback onTap;
-
-  const _FloatingProfileAction({
-    this.imageUrl,
-    required this.label,
-    this.emphasized = false,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const red = Color(0xFFE0302B);
-    final colorScheme = Theme.of(context).colorScheme;
-    final foreground = emphasized ? Colors.white : colorScheme.onSurface;
-
-    // The Android glass fallback is far more translucent than the iOS
-    // native glass — give it a more solid fill so the button stays
-    // readable over scrolling content.
-    final native = supportsNativeLiquidGlass;
-
-    return SizedBox(
-      height: 62,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          NativeLiquidGlassBar(
-            height: 62,
-            cornerRadius: 31,
-            opacity: native ? (emphasized ? 0.62 : 0.68) : 1.0,
-            borderOpacity: emphasized ? 0.44 : 0.3,
-            shadowOpacity: 0.22,
-            interactive: true,
-          ),
-          if (emphasized)
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: red.withValues(alpha: native ? 0.22 : 0.38),
-                borderRadius: BorderRadius.circular(31),
-                border: Border.all(color: red.withValues(alpha: 0.5)),
-              ),
-            ),
-          Material(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(31),
-            child: InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(31),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (imageUrl != null)
-                      MobileWebImage(
-                        imageUrl: imageUrl!,
-                        width: 24,
-                        height: 24,
-                      ),
-                    const SizedBox(height: 3),
-                    Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: foreground,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -631,54 +677,6 @@ class _WarActionInfo {
   });
 }
 
-class _BuilderBaseStats extends StatelessWidget {
-  final Player player;
-
-  const _BuilderBaseStats({required this.player});
-
-  @override
-  Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
-    final formatter = NumberFormat('#,###', locale);
-
-    return _StatsPanel(
-      height: 128,
-      child: Column(
-        children: [
-          _StatBar(
-            label: 'Builder Trophies',
-            value: formatter.format(player.builderBaseTrophies),
-            imageUrl: ImageAssets.trophies,
-            color: const Color(0xFFE8A524),
-          ),
-          const SizedBox(height: 7),
-          Row(
-            children: [
-              Expanded(
-                child: _StatBar(
-                  label: 'Attacks won',
-                  value: formatter.format(player.attackWins),
-                  imageUrl: ImageAssets.sword,
-                  color: const Color(0xFFE35D4F),
-                ),
-              ),
-              const SizedBox(width: 7),
-              Expanded(
-                child: _StatBar(
-                  label: 'Defenses won',
-                  value: formatter.format(player.defenseWins),
-                  imageUrl: ImageAssets.shield,
-                  color: const Color(0xFF4E7DF2),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _HallBadge extends StatelessWidget {
   final String imageUrl;
   final int xpLevel;
@@ -726,7 +724,10 @@ class _HallBadge extends StatelessWidget {
                 ),
               ),
             ),
-          ],
+          ] else
+            // Reserve the stars row height so the header keeps the same
+            // size on tabs without weapon stars (builder base).
+            const SizedBox(height: 12),
           const SizedBox(height: 5),
           _XpPill(level: xpLevel),
         ],
@@ -749,7 +750,7 @@ class _ClanRoleChip extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          const NativeLiquidGlassBar(height: 46, cornerRadius: 14),
+          const _HeaderPanelBackground(height: 46, cornerRadius: 14),
           Material(
             color: Colors.transparent,
             child: InkWell(
@@ -782,12 +783,9 @@ class _ClanRoleChip extends StatelessWidget {
                             'Clan • $role',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
-                                  color:
-                                      Colors.white.withValues(alpha: 0.72),
+                                  color: Colors.white.withValues(alpha: 0.72),
                                   fontWeight: FontWeight.w600,
                                 ),
                           ),
@@ -795,9 +793,7 @@ class _ClanRoleChip extends StatelessWidget {
                             player.clanOverview.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge
+                            style: Theme.of(context).textTheme.labelLarge
                                 ?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
@@ -834,8 +830,7 @@ class _WarPreferenceChip extends StatelessWidget {
     final label = inWar
         ? AppLocalizations.of(context)!.warStatusReady
         : AppLocalizations.of(context)!.warStatusUnready;
-    final color =
-        inWar ? Colors.green : Theme.of(context).colorScheme.primary;
+    final color = inWar ? Colors.green : Theme.of(context).colorScheme.primary;
 
     return Container(
       constraints: const BoxConstraints(maxWidth: 144),
@@ -860,9 +855,9 @@ class _WarPreferenceChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  ),
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
         ],
@@ -930,12 +925,14 @@ class _XpPill extends StatelessWidget {
 }
 
 class _HeaderIconButton extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final String? imageUrl;
   final String tooltip;
   final VoidCallback onTap;
 
   const _HeaderIconButton({
-    required this.icon,
+    this.icon,
+    this.imageUrl,
     required this.tooltip,
     required this.onTap,
   });
@@ -962,7 +959,12 @@ class _HeaderIconButton extends StatelessWidget {
               child: SizedBox(
                 height: size,
                 width: size,
-                child: Icon(icon, size: 25),
+                child: imageUrl != null
+                    ? Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: MobileWebImage(imageUrl: imageUrl!),
+                      )
+                    : Icon(icon, size: 25),
               ),
             ),
           ),
