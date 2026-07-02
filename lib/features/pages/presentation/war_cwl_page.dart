@@ -38,7 +38,13 @@ class _WarCwlPageState extends State<WarCwlPage> {
     final playerService = context.watch<PlayerService>();
     final warCwlService = context.watch<WarCwlService>();
     final bookmarkService = context.watch<BookmarkService>();
-    final players = playerService.profiles;
+    // playerService.profiles also holds bookmarked players hydrated for
+    // the Players tab — restrict to actually-linked tags so a bookmarked
+    // player's clan isn't mistaken for one of "your" clans.
+    final ownedTags = cocService.getAccountTags().toSet();
+    final players = playerService.profiles
+        .where((player) => ownedTags.contains(player.tag))
+        .toList(growable: false);
     final linkedClans = {
       for (final profile in players)
         if (profile.clan != null && profile.clan!.tag.isNotEmpty)
@@ -296,7 +302,11 @@ class _WarListCard extends StatelessWidget {
         child: WarCard(
           currentWarInfo: war,
           clanTag: item.tag,
-          centerHeader: allSpectators ? const _SpectatorPill() : null,
+          centerHeader: allSpectators
+              ? const _SpectatorPill()
+              : item.bookmarked
+              ? const _BookmarkedPill()
+              : null,
           footer: lineupStatuses.isEmpty
               ? null
               : _WarAttackFooter(
@@ -403,6 +413,42 @@ class _SpectatorPill extends StatelessWidget {
             const SizedBox(width: 5),
             Text(
               'Spectator',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BookmarkedPill extends StatelessWidget {
+  const _BookmarkedPill();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.13),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.bookmark_rounded,
+              size: 14,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              'Bookmarked',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w800,

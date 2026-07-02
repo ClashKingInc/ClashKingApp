@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -134,7 +135,7 @@ class PlayerInfoHeader extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-              child: _HomeBaseStats(player: player),
+              child: _HomeBaseStats(player: player, isBuilderTab: isBuilderTab),
             ),
           ],
         ),
@@ -379,8 +380,9 @@ class _IdentityPanel extends StatelessWidget {
 
 class _HomeBaseStats extends StatelessWidget {
   final Player player;
+  final bool isBuilderTab;
 
-  const _HomeBaseStats({required this.player});
+  const _HomeBaseStats({required this.player, required this.isBuilderTab});
 
   @override
   Widget build(BuildContext context) {
@@ -388,15 +390,24 @@ class _HomeBaseStats extends StatelessWidget {
     final formatter = NumberFormat('#,###', locale);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _LeagueSummaryTile(
-          leagueName: player.league,
-          trophies: formatter.format(player.trophies),
-          leagueUrl: player.leagueUrl,
-          seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
-          attackWins: formatter.format(player.attackWins),
-          defenseWins: formatter.format(player.defenseWins),
-        ),
+        isBuilderTab
+            ? _LeagueSummaryTile(
+                leagueName: player.builderBaseLeague,
+                trophies: formatter.format(player.builderBaseTrophies),
+                leagueUrl: player.builderBaseLeagueUrl,
+                seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
+                bestTrophies: formatter.format(player.bestBuilderBaseTrophies),
+              )
+            : _LeagueSummaryTile(
+                leagueName: player.league,
+                trophies: formatter.format(player.trophies),
+                leagueUrl: player.leagueUrl,
+                seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
+                attackWins: formatter.format(player.attackWins),
+                defenseWins: formatter.format(player.defenseWins),
+              ),
         const SizedBox(height: 6),
         _PlayerQuickStats(player: player),
       ],
@@ -411,219 +422,73 @@ class _PlayerQuickStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
+    final formatter = NumberFormat('#,###', locale);
     final warPreferenceLabel = player.warPreference == 'in'
         ? AppLocalizations.of(context)!.warStatusReady
         : AppLocalizations.of(context)!.warStatusUnready;
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        _HeaderChipRows(
+        Row(
           children: [
-            _HeaderStatChip(
-              description: 'War Stars',
-              imageUrl: ImageAssets.attackStar,
-              label: player.warStars.toString(),
+            Expanded(
+              child: MetricChip(
+                label: 'War stars',
+                value: formatter.format(player.warStars),
+                imageUrl: ImageAssets.attackStar,
+                color: const Color(0xFFE8A524),
+              ),
             ),
-            _HeaderStatChip(
-              description: 'War Preference',
-              imageUrl: player.warPreferenceImage,
-              label: warPreferenceLabel,
+            const SizedBox(width: 6),
+            Expanded(
+              child: MetricChip(
+                label: 'War pref.',
+                value: warPreferenceLabel,
+                imageUrl: player.warPreferenceImage,
+              ),
             ),
-            _HeaderStatChip(
-              description: 'Donated',
-              icon: Icons.arrow_upward_rounded,
-              iconColor: Colors.green,
-              label: player.donations.toString(),
-            ),
-            _HeaderStatChip(
-              description: 'Received',
-              icon: Icons.arrow_downward_rounded,
-              iconColor: Colors.redAccent,
-              label: player.donationsReceived.toString(),
-            ),
-            _HeaderStatChip(
-              description: 'Experience Level',
-              imageUrl: ImageAssets.xp,
-              label: player.expLevel.toString(),
-            ),
-            _HeaderStatChip(
-              description: 'Clan Capital Contribution',
-              imageUrl: ImageAssets.capitalGold,
-              label: NumberFormat(
-                '#,###',
-              ).format(player.clanCapitalContributions),
-            ),
-            _HeaderStatChip(
-              description: player.builderBaseLeague,
-              imageUrl: player.builderBaseLeagueUrl,
-              label: player.builderBaseTrophies.toString(),
+            const SizedBox(width: 6),
+            Expanded(
+              child: MetricChip(
+                label: 'Donated',
+                value: formatter.format(player.donations),
+                icon: Icons.arrow_upward_rounded,
+                color: const Color(0xFF14A37F),
+              ),
             ),
           ],
         ),
-      ],
-    );
-  }
-}
-
-class _HeaderStatChip extends StatelessWidget {
-  const _HeaderStatChip({
-    required this.description,
-    required this.label,
-    this.imageUrl,
-    this.icon,
-    this.iconColor,
-  });
-
-  final String description;
-  final String label;
-  final String? imageUrl;
-  final IconData? icon;
-  final Color? iconColor;
-
-  double estimatedWidth(BuildContext context) {
-    final style =
-        Theme.of(context).textTheme.labelLarge?.copyWith(
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.w700,
-        ) ??
-        const TextStyle(fontSize: 14, fontWeight: FontWeight.w700);
-    final painter = TextPainter(
-      text: TextSpan(text: label, style: style),
-      textDirection: Directionality.of(context),
-      maxLines: 1,
-    )..layout();
-
-    return 18 + 19 + 5 + painter.width;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Tooltip(
-      message: description,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colorScheme.surface.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(
-            color: colorScheme.outlineVariant.withValues(alpha: 0.18),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox.square(
-                dimension: 19,
-                child: imageUrl != null
-                    ? CachedNetworkImage(
-                        imageUrl: imageUrl!,
-                        fit: BoxFit.contain,
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.shield_outlined, size: 16),
-                      )
-                    : Icon(
-                        icon,
-                        size: 19,
-                        color: iconColor ?? colorScheme.onSurfaceVariant,
-                      ),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                label,
-                maxLines: 1,
-                softWrap: false,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurface,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HeaderChipRows extends StatelessWidget {
-  const _HeaderChipRows({required this.children});
-
-  final List<_HeaderStatChip> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final candidates = <List<int>>[
-          if (constraints.maxWidth >= 620) [children.length],
-          [4, 3],
-          [3, 4],
-          [3, 2, 2],
-          [2, 3, 2],
-        ];
-        final rowCounts = candidates.firstWhere(
-          (candidate) => _rowsFit(context, constraints.maxWidth, candidate),
-          orElse: () => const [2, 3, 2],
-        );
-        final rows = _rowsFromCounts(rowCounts);
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
+        const SizedBox(height: 6),
+        Row(
           children: [
-            for (var i = 0; i < rows.length; i++) ...[
-              if (i > 0) const SizedBox(height: 7),
-              _HeaderChipRow(children: rows[i]),
-            ],
+            Expanded(
+              child: MetricChip(
+                label: 'Received',
+                value: formatter.format(player.donationsReceived),
+                icon: Icons.arrow_downward_rounded,
+                color: const Color(0xFFE35D4F),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: MetricChip(
+                label: 'Capital',
+                value: formatter.format(player.clanCapitalContributions),
+                imageUrl: ImageAssets.capitalGold,
+                color: const Color(0xFF8D63D9),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: MetricChip(
+                label: 'Exp. level',
+                value: player.expLevel.toString(),
+                imageUrl: ImageAssets.xp,
+              ),
+            ),
           ],
-        );
-      },
-    );
-  }
-
-  bool _rowsFit(BuildContext context, double maxWidth, List<int> rowCounts) {
-    var offset = 0;
-    for (final count in rowCounts) {
-      if (offset + count > children.length) return false;
-      final row = children.skip(offset).take(count).toList();
-      final spacing = (count - 1) * 6;
-      final width = row.fold<double>(
-        spacing.toDouble(),
-        (sum, child) => sum + child.estimatedWidth(context),
-      );
-      if (width > maxWidth) return false;
-      offset += count;
-    }
-    return offset == children.length;
-  }
-
-  List<List<_HeaderStatChip>> _rowsFromCounts(List<int> rowCounts) {
-    var offset = 0;
-    return rowCounts.map((count) {
-      final row = children.skip(offset).take(count).toList();
-      offset += count;
-      return row;
-    }).toList();
-  }
-}
-
-class _HeaderChipRow extends StatelessWidget {
-  const _HeaderChipRow({required this.children});
-
-  final List<_HeaderStatChip> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        for (var i = 0; i < children.length; i++) ...[
-          if (i > 0) const SizedBox(width: 6),
-          children[i],
-        ],
+        ),
       ],
     );
   }
@@ -688,16 +553,18 @@ class _LeagueSummaryTile extends StatefulWidget {
   final String trophies;
   final String leagueUrl;
   final String seasonName;
-  final String attackWins;
-  final String defenseWins;
+  final String? attackWins;
+  final String? defenseWins;
+  final String? bestTrophies;
 
   const _LeagueSummaryTile({
     required this.leagueName,
     required this.trophies,
     required this.leagueUrl,
     required this.seasonName,
-    required this.attackWins,
-    required this.defenseWins,
+    this.attackWins,
+    this.defenseWins,
+    this.bestTrophies,
   });
 
   @override
@@ -835,24 +702,32 @@ class _LeagueSummaryTileState extends State<_LeagueSummaryTile> {
                 ],
               ),
               const SizedBox(height: 8),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _MiniMetric(
-                    stat: _MetricSubStat(
-                      imageUrl: ImageAssets.sword,
-                      value: widget.attackWins,
+              if (widget.attackWins != null && widget.defenseWins != null)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _MiniMetric(
+                      stat: _MetricSubStat(
+                        imageUrl: ImageAssets.sword,
+                        value: widget.attackWins!,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  _MiniMetric(
-                    stat: _MetricSubStat(
-                      imageUrl: ImageAssets.shield,
-                      value: widget.defenseWins,
+                    const SizedBox(width: 10),
+                    _MiniMetric(
+                      stat: _MetricSubStat(
+                        imageUrl: ImageAssets.shield,
+                        value: widget.defenseWins!,
+                      ),
                     ),
+                  ],
+                )
+              else if (widget.bestTrophies != null)
+                _MiniMetric(
+                  stat: _MetricSubStat(
+                    imageUrl: ImageAssets.bestTrophies,
+                    value: widget.bestTrophies!,
                   ),
-                ],
-              ),
+                ),
             ],
           ),
         ],

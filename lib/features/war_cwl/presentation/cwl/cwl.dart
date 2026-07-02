@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/icons/excel_download_icon.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -8,9 +12,7 @@ import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_rounds_tab.da
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_teams_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
-import 'dart:ui';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 
@@ -34,167 +36,149 @@ class CwlScreenState extends State<CwlScreen> {
   @override
   Widget build(BuildContext context) {
     CwlClan clan = widget.warCwl.leagueInfo!.getClanDetails(widget.clanTag)!;
+    final locale = Localizations.localeOf(context).toString();
+    final formatter = NumberFormat('#,###', locale);
+    final imageHeight = MediaQuery.of(context).padding.top + 280;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 240,
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-                    child: ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        Colors.black.withAlpha(128),
-                        BlendMode.darken,
-                      ),
-                      child: MobileWebImage(
-                        imageUrl: ImageAssets.cwlPageBackground,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+              children: [
                 Positioned(
-                  top: 40,
-                  left: 10,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      size: 32,
-                    ),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-                Positioned(
-                  top: 40,
-                  right: 10,
-                  child: DownloadCwlExcelButton(
-                    url:
-                        "${ApiService.apiUrlV2}/exports/war/cwl-summary?tag=${widget.clanTag.replaceAll('#', '!')}",
-                    fileName:
-                        "cwl_summary_${widget.clanInfo.tag.replaceAll('#', '')}.xlsx",
-                  ),
-                ),
-                Positioned(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: imageHeight,
+                  child: Stack(
+                    fit: StackFit.expand,
                     children: [
-                      SizedBox(height: 36),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 70,
-                            child: MobileWebImage(
-                              imageUrl: widget.clanInfo.badgeUrls.medium,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                widget.clanInfo.name,
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(color: Colors.white),
-                              ),
-                              Text(
-                                widget.clanInfo.tag,
-                                style: Theme.of(context).textTheme.labelLarge
-                                    ?.copyWith(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ],
+                      CachedNetworkImage(
+                        imageUrl: ImageAssets.cwlPageBackground,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => ColoredBox(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
                       ),
-                      SizedBox(height: 16),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        spacing: 7.0,
-                        runSpacing: -7.0,
-                        children: <Widget>[
-                          ImageChip(
-                            context: context,
-                            textColor: Colors.white,
-                            edgeColor: Colors.white,
-                            imageUrl: ImageAssets.podium,
-                            labelPadding: 6,
-                            label: clan.rank.toString(),
-                            description: AppLocalizations.of(
-                              context,
-                            )!.cwlRank(clan.rank),
-                          ),
-                          ImageChip(
-                            context: context,
-                            textColor: Colors.white,
-                            edgeColor: Colors.white,
-                            imageUrl: ImageAssets.builderBaseStar,
-                            labelPadding: 2,
-                            label: clan.stars.toString(),
-                            description: AppLocalizations.of(
-                              context,
-                            )!.cwlStars(clan.stars),
-                          ),
-                          ImageChip(
-                            context: context,
-                            textColor: Colors.white,
-                            edgeColor: Colors.white,
-                            imageUrl: ImageAssets.hitrate,
-                            labelPadding: 6,
-                            label: NumberFormat(
-                              '#,###',
-                              Localizations.localeOf(context).toString(),
-                            ).format(clan.destructionPercentageInflicted),
-                            description: AppLocalizations.of(context)!
-                                .cwlDestructionPercentage(
-                                  clan.destructionPercentageInflicted
-                                      .toStringAsFixed(0),
-                                ),
-                          ),
-                          ImageChip(
-                            context: context,
-                            textColor: Colors.white,
-                            edgeColor: Colors.white,
-                            imageUrl: ImageAssets.war,
-                            labelPadding: 6,
-                            label: clan.warsPlayed.toString(),
-                            description: AppLocalizations.of(
-                              context,
-                            )!.cwlCurrentRound(clan.warsPlayed),
-                          ),
-                          ImageChip(
-                            context: context,
-                            textColor: Colors.white,
-                            edgeColor: Colors.white,
-                            imageUrl: ImageAssets.sword,
-                            labelPadding: 2,
-                            label:
-                                "${clan.attackCount}/${widget.warCwl.teamSize * clan.warsPlayed}",
-                            description: AppLocalizations.of(context)!
-                                .cwlTotalAttacks(
-                                  clan.attackCount,
-                                  widget.warCwl.teamSize * clan.warsPlayed,
-                                ),
-                          ),
-                          ImageChip(
-                            context: context,
-                            textColor: Colors.white,
-                            edgeColor: Colors.white,
-                            imageUrl: ImageAssets.brokenSword,
-                            labelPadding: 6,
-                            label: clan.missedAttacks.toString(),
-                            description: AppLocalizations.of(
-                              context,
-                            )!.warAttacksMissed,
-                          ),
-                        ],
-                      ),
+                      ColoredBox(color: Colors.black.withValues(alpha: 0.62)),
                     ],
                   ),
+                ),
+                Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).padding.top + 6),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        children: [
+                          HeaderIconButton(
+                            icon: Icons.arrow_back_rounded,
+                            tooltip: MaterialLocalizations.of(
+                              context,
+                            ).backButtonTooltip,
+                            onTap: () => Navigator.of(context).pop(),
+                          ),
+                          const Spacer(),
+                          _HeaderCustomButton(
+                            tooltip:
+                                AppLocalizations.of(context)?.downloadTooltip ??
+                                'Download',
+                            child: DownloadCwlExcelButton(
+                              url:
+                                  "${ApiService.apiUrlV2}/exports/war/cwl-summary?tag=${widget.clanTag.replaceAll('#', '!')}",
+                              fileName:
+                                  "cwl_summary_${widget.clanInfo.tag.replaceAll('#', '')}.xlsx",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _Identity(clanInfo: widget.clanInfo),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color:
+                              (Theme.of(context).cardTheme.color ??
+                                      Theme.of(context).colorScheme.surface)
+                                  .withValues(alpha: 0.94),
+                          borderRadius: BorderRadius.circular(28),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.outlineVariant
+                                .withValues(alpha: 0.32),
+                          ),
+                        ),
+                        child: MetricChipGrid(
+                          columns: 3,
+                          chips: [
+                            MetricChip(
+                              label:
+                                  AppLocalizations.of(context)?.cwlRankTitle ??
+                                  'Rank',
+                              value: '#${clan.rank}',
+                              imageUrl: ImageAssets.podium,
+                              color: const Color(0xFFE8A524),
+                            ),
+                            MetricChip(
+                              label:
+                                  AppLocalizations.of(context)?.warStarsTitle ??
+                                  'Stars',
+                              value: formatter.format(clan.stars),
+                              imageUrl: ImageAssets.builderBaseStar,
+                              color: const Color(0xFFE8A524),
+                            ),
+                            MetricChip(
+                              label:
+                                  AppLocalizations.of(
+                                    context,
+                                  )?.warDestructionTitle ??
+                                  'Destruction',
+                              value:
+                                  '${clan.destructionPercentageInflicted.toStringAsFixed(0)}%',
+                              imageUrl: ImageAssets.hitrate,
+                              color: const Color(0xFF14A37F),
+                            ),
+                            MetricChip(
+                              label:
+                                  AppLocalizations.of(
+                                    context,
+                                  )?.cwlWarsPlayedTitle ??
+                                  'Wars played',
+                              value: formatter.format(clan.warsPlayed),
+                              imageUrl: ImageAssets.war,
+                            ),
+                            MetricChip(
+                              label:
+                                  AppLocalizations.of(
+                                    context,
+                                  )?.warAttacksTitle ??
+                                  'Attacks',
+                              value:
+                                  '${clan.attackCount}/${widget.warCwl.teamSize * clan.warsPlayed}',
+                              imageUrl: ImageAssets.sword,
+                              color: const Color(0xFF8D63D9),
+                            ),
+                            MetricChip(
+                              label:
+                                  AppLocalizations.of(
+                                    context,
+                                  )?.warAttacksMissed ??
+                                  'Missed Attacks',
+                              value: formatter.format(clan.missedAttacks),
+                              imageUrl: ImageAssets.brokenSword,
+                              color: const Color(0xFFE35D4F),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -223,6 +207,84 @@ class CwlScreenState extends State<CwlScreen> {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Identity extends StatelessWidget {
+  final CwlClan clanInfo;
+
+  const _Identity({required this.clanInfo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 64,
+          height: 64,
+          child: MobileWebImage(imageUrl: clanInfo.badgeUrls.medium),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                clanInfo.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Text(
+                clanInfo.tag,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.75),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Frosted circular slot for a custom action widget (e.g. a button with its
+/// own internal loading state) — same chrome as [HeaderIconButton].
+class _HeaderCustomButton extends StatelessWidget {
+  final Widget child;
+  final String tooltip;
+
+  const _HeaderCustomButton({required this.child, required this.tooltip});
+
+  @override
+  Widget build(BuildContext context) {
+    const size = 42.0;
+    const radius = 19.0;
+
+    return Tooltip(
+      message: tooltip,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+          child: Container(
+            height: size,
+            width: size,
+            color: Theme.of(
+              context,
+            ).colorScheme.surface.withValues(alpha: 0.55),
+            child: Center(child: child),
+          ),
         ),
       ),
     );

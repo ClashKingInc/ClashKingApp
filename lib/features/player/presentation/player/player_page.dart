@@ -1,5 +1,6 @@
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -153,7 +154,25 @@ class PlayerScreenState extends State<PlayerScreen> {
   }
 
   Widget _buildAchievementContent(Player player) {
-    final achievements = player.achievements
+    return _AchievementsTab(player: player);
+  }
+}
+
+class _AchievementsTab extends StatefulWidget {
+  final Player player;
+
+  const _AchievementsTab({required this.player});
+
+  @override
+  State<_AchievementsTab> createState() => _AchievementsTabState();
+}
+
+class _AchievementsTabState extends State<_AchievementsTab> {
+  int _group = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final achievements = widget.player.achievements
         .where((achievement) => achievement.name != 'Keep Your Account Safe!')
         .toList();
     final home = achievements
@@ -166,20 +185,39 @@ class PlayerScreenState extends State<PlayerScreen> {
               achievement.village == 'clanCapital',
         )
         .toList();
+    final isHome = _group == 0;
+    final homeDone = home.where(_isAchievementComplete).length;
+    final othersDone = others.where(_isAchievementComplete).length;
+    final homeLabel = AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base';
+    final othersLabel = AppLocalizations.of(context)?.generalOthers ?? 'Others';
 
     return Column(
       children: [
         const SizedBox(height: 10),
-        _AchievementSection(
-          title: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
-          imageUrl: ImageAssets.townHall(player.townHallLevel),
-          achievements: home,
-          initiallyExpanded: true,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: NativeLiquidGlassSegmentedControl<int>(
+            values: const [0, 1],
+            labels: [
+              '$homeLabel · $homeDone/${home.length}',
+              '$othersLabel · $othersDone/${others.length}',
+            ],
+            selected: _group,
+            onChanged: (value) => setState(() => _group = value),
+            height: 44,
+          ),
         ),
+        const SizedBox(height: 6),
         _AchievementSection(
-          title: AppLocalizations.of(context)?.generalOthers ?? 'Others',
-          imageUrl: ImageAssets.builderHall(player.builderHallLevel),
-          achievements: others,
+          key: ValueKey(isHome),
+          title: isHome ? homeLabel : othersLabel,
+          imageUrl: isHome
+              ? ImageAssets.townHall(widget.player.townHallLevel)
+              : ImageAssets.builderHall(widget.player.builderHallLevel),
+          achievements: isHome ? home : others,
+          initiallyExpanded: true,
+          collapsible: false,
+          showHeader: false,
         ),
         const SizedBox(height: 10),
       ],
@@ -336,12 +374,17 @@ class _AchievementSection extends StatefulWidget {
   final String imageUrl;
   final List<PlayerAchievement> achievements;
   final bool initiallyExpanded;
+  final bool collapsible;
+  final bool showHeader;
 
   const _AchievementSection({
+    super.key,
     required this.title,
     required this.imageUrl,
     required this.achievements,
     this.initiallyExpanded = false,
+    this.collapsible = true,
+    this.showHeader = true,
   });
 
   @override
@@ -361,99 +404,139 @@ class _AchievementSectionState extends State<_AchievementSection> {
   Widget build(BuildContext context) {
     if (widget.achievements.isEmpty) return const SizedBox.shrink();
 
+    const gold = Color(0xFFFFD75E);
+    final colorScheme = Theme.of(context).colorScheme;
     final completed = widget.achievements.where(_isAchievementComplete).length;
-    final ratio = completed / widget.achievements.length;
+    final total = widget.achievements.length;
+    final ratio = completed / total;
+    final allComplete = completed >= total;
 
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
-        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: Theme.of(
-            context,
-          ).colorScheme.outlineVariant.withValues(alpha: 0.42),
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
         ),
       ),
       child: Column(
         children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => setState(() => _expanded = !_expanded),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Row(
-                children: [
-                  AnimatedRotation(
-                    turns: _expanded ? 0.25 : 0,
-                    duration: const Duration(milliseconds: 160),
-                    child: Icon(
-                      Icons.chevron_right_rounded,
-                      size: 22,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withValues(alpha: 0.72),
+          if (widget.showHeader)
+            InkWell(
+              borderRadius: BorderRadius.circular(28),
+              onTap: widget.collapsible
+                  ? () => setState(() => _expanded = !_expanded)
+                  : null,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  children: [
+                    if (widget.collapsible) ...[
+                      AnimatedRotation(
+                        turns: _expanded ? 0.25 : 0,
+                        duration: const Duration(milliseconds: 160),
+                        child: Icon(
+                          Icons.chevron_right_rounded,
+                          size: 22,
+                          color: colorScheme.onSurface.withValues(alpha: 0.72),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                    MobileWebImage(
+                      imageUrl: widget.imageUrl,
+                      width: 26,
+                      height: 26,
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  MobileWebImage(
-                    imageUrl: widget.imageUrl,
-                    width: 26,
-                    height: 26,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        widget.title,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w800),
                       ),
                     ),
-                  ),
-                  Text(
-                    '$completed/${widget.achievements.length}',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
+                    // Ring badge, same language as the item section % badge.
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(8, 5, 10, 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(999),
+                        color: allComplete
+                            ? gold.withValues(alpha: 0.14)
+                            : colorScheme.surfaceContainerHighest.withValues(
+                                alpha: 0.55,
+                              ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox.square(
+                            dimension: 15,
+                            child: allComplete
+                                ? const Icon(
+                                    Icons.check_circle_rounded,
+                                    size: 15,
+                                    color: gold,
+                                  )
+                                : CircularProgressIndicator(
+                                    value: ratio,
+                                    strokeWidth: 2.4,
+                                    strokeCap: StrokeCap.round,
+                                    backgroundColor: colorScheme.outlineVariant
+                                        .withValues(alpha: 0.45),
+                                    valueColor: AlwaysStoppedAnimation(
+                                      colorScheme.primary,
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '$completed/$total',
+                            style: Theme.of(context).textTheme.labelMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  color: allComplete
+                                      ? gold
+                                      : colorScheme.onSurface,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: LinearProgressIndicator(
-              value: ratio,
-              minHeight: 6,
-              backgroundColor: Theme.of(
-                context,
-              ).colorScheme.outlineVariant.withValues(alpha: 0.25),
-            ),
-          ),
           if (_expanded) ...[
-            const SizedBox(height: 12),
-            ...widget.achievements.map(
-              (achievement) => _AchievementTile(achievement: achievement),
-            ),
+            if (widget.showHeader) const SizedBox(height: 12),
+            // Pending achievements first, completed ones at the bottom.
+            ...widget.achievements
+                .where((a) => !_isAchievementComplete(a))
+                .map(
+                  (achievement) => _AchievementTile(achievement: achievement),
+                ),
+            ...widget.achievements
+                .where(_isAchievementComplete)
+                .map(
+                  (achievement) => _AchievementTile(achievement: achievement),
+                ),
           ],
         ],
       ),
     );
   }
+}
 
-  bool _isAchievementComplete(PlayerAchievement achievement) {
-    if ((achievement.name == 'Dragon Slayer' ||
-            achievement.name == 'Ungrateful Child') &&
-        achievement.value >= 1) {
-      return true;
-    }
-    return achievement.value >= achievement.target && achievement.stars == 3;
+bool _isAchievementComplete(PlayerAchievement achievement) {
+  if ((achievement.name == 'Dragon Slayer' ||
+          achievement.name == 'Ungrateful Child') &&
+      achievement.value >= 1) {
+    return true;
   }
+  return achievement.value >= achievement.target && achievement.stars == 3;
 }
 
 class _AchievementTile extends StatelessWidget {
@@ -469,80 +552,112 @@ class _AchievementTile extends StatelessWidget {
     final complete = ratio >= 1.0;
     final progress = _formatAchievementProgress(context);
 
+    const gold = Color(0xFFFFD75E);
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.42),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: complete
-              ? const Color(0xFFFFD75E).withValues(alpha: 0.68)
-              : Theme.of(
-                  context,
-                ).colorScheme.outlineVariant.withValues(alpha: 0.34),
-        ),
+        color: complete
+            ? gold.withValues(alpha: 0.08)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(14),
+        border: complete
+            ? Border.all(color: gold.withValues(alpha: 0.5))
+            : null,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  achievement.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-              ),
-              const SizedBox(width: 8),
-              _AchievementStars(stars: _effectiveStars),
-            ],
-          ),
-          if (achievement.info.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            Text(
-              achievement.info.replaceAll(RegExp('000000 '), 'M '),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(
-                  context,
-                ).colorScheme.onSurface.withValues(alpha: 0.62),
+          // Leading badge: gold trophy once done, muted star otherwise.
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: complete
+                  ? gold.withValues(alpha: 0.16)
+                  : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+              shape: BoxShape.circle,
+            ),
+            child: SizedBox.square(
+              dimension: 36,
+              child: Icon(
+                complete ? Icons.emoji_events_rounded : Icons.star_rounded,
+                size: 19,
+                color: complete ? gold : colorScheme.onSurfaceVariant,
               ),
             ),
-          ],
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: LinearProgressIndicator(
-                    value: ratio,
-                    minHeight: 6,
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.outlineVariant.withValues(alpha: 0.24),
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      complete
-                          ? const Color(0xFFFFD75E)
-                          : Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        achievement.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    _AchievementStars(stars: _effectiveStars),
+                  ],
+                ),
+                if (achievement.info.isNotEmpty) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    achievement.info.replaceAll(RegExp('000000 '), 'M '),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.62),
                     ),
                   ),
+                ],
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(999),
+                        child: LinearProgressIndicator(
+                          value: ratio,
+                          minHeight: 6,
+                          backgroundColor: colorScheme.surfaceContainerHighest,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            complete ? gold : colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 7,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainerHighest.withValues(
+                          alpha: 0.55,
+                        ),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        progress,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: complete ? gold : colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                progress,
-                style: Theme.of(
-                  context,
-                ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

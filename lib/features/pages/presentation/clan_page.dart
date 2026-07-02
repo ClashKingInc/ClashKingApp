@@ -295,16 +295,49 @@ class _ClanCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        Text(
-                          item.tag,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelLarge
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                item.tag,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.labelLarge
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
                               ),
+                            ),
+                            if (item.countryCode.isNotEmpty &&
+                                item.locationName.isNotEmpty) ...[
+                              const SizedBox(width: 6),
+                              SizedBox.square(
+                                dimension: 13,
+                                child: CachedNetworkImage(
+                                  imageUrl: ImageAssets.flag(item.countryCode),
+                                  fit: BoxFit.contain,
+                                  errorWidget: (context, url, error) =>
+                                      const SizedBox.shrink(),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  item.locationName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.labelMedium
+                                      ?.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                         const SizedBox(height: 10),
                         Wrap(
@@ -322,12 +355,6 @@ class _ClanCard extends StatelessWidget {
                                 imageUrl: ImageAssets.getWarLeagueImage(
                                   item.warLeague,
                                 ),
-                              ),
-                            if (item.countryCode.isNotEmpty &&
-                                item.locationName.isNotEmpty)
-                              _ClanImageChip(
-                                label: item.locationName,
-                                imageUrl: ImageAssets.flag(item.countryCode),
                               ),
                             if (item.type.isNotEmpty)
                               _ClanIconChip(
@@ -434,7 +461,7 @@ class _AccountCountChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
         child: Text(
           '$count ${count == 1 ? 'account' : 'accounts'}',
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.w800,
           ),
@@ -506,7 +533,9 @@ class _ClanChipShell extends StatelessWidget {
             const SizedBox(width: 5),
             Text(
               label,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),

@@ -94,6 +94,134 @@ class HeaderPanelBackground extends StatelessWidget {
   }
 }
 
+/// Compact metric chip: icon in a circle + small label above a bold
+/// colored value — the metric-bar language, sized to its content so
+/// chips flow freely in a wrap. Without [color] the chip is neutral
+/// (plain info rather than a colored stat).
+class MetricChip extends StatelessWidget {
+  final String label;
+  final String value;
+  final String? imageUrl;
+  final IconData? icon;
+  final Color? color;
+
+  const MetricChip({
+    super.key,
+    required this.label,
+    required this.value,
+    this.imageUrl,
+    this.icon,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(6, 5, 10, 5),
+      decoration: BoxDecoration(
+        color: color != null
+            ? color!.withValues(alpha: 0.14)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: colorScheme.surface.withValues(alpha: 0.72),
+              shape: BoxShape.circle,
+            ),
+            child: SizedBox.square(
+              dimension: 26,
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: imageUrl != null
+                    ? MobileWebImage(imageUrl: imageUrl!)
+                    : Icon(
+                        icon,
+                        size: 14,
+                        color: color ?? colorScheme.onSurfaceVariant,
+                      ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: color ?? colorScheme.onSurface,
+                    fontWeight: FontWeight.w900,
+                    height: 1.1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Lays out chips N per row (default 2) at equal width, a short last row
+/// sharing the same width split — keeps a variable-length chip list (e.g.
+/// clan stats, some conditional) from wrapping into a ragged, unpredictable
+/// number of lines. Same grid language as the player header's quick stats.
+class MetricChipGrid extends StatelessWidget {
+  final List<Widget> chips;
+  final double spacing;
+  final int columns;
+
+  const MetricChipGrid({
+    super.key,
+    required this.chips,
+    this.spacing = 6,
+    this.columns = 2,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (chips.isEmpty) return const SizedBox.shrink();
+
+    final rows = <Widget>[];
+    for (var i = 0; i < chips.length; i += columns) {
+      if (i > 0) rows.add(SizedBox(height: spacing));
+      final rowChips = chips.skip(i).take(columns).toList();
+      final rowChildren = <Widget>[];
+      for (var j = 0; j < rowChips.length; j++) {
+        if (j > 0) rowChildren.add(SizedBox(width: spacing));
+        rowChildren.add(Expanded(child: rowChips[j]));
+      }
+      rows.add(Row(children: rowChildren));
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: rows,
+    );
+  }
+}
+
 /// Tinted metric bar, same language as the home to-do card metrics:
 /// colored pill with an icon in a circle, small label above a bold
 /// colored value.

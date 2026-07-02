@@ -127,14 +127,32 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
               ),
               if (_expanded) ...[
                 const SizedBox(height: 12),
-                Center(
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: sortedItems
-                        .map((item) => _buildItemTile(context, item))
-                        .toList(),
-                  ),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Same column math for every section so tiles line up
+                    // edge-to-edge across heroes/troops/equipment instead
+                    // of each section centering its own (possibly
+                    // narrower) block independently.
+                    const spacing = 8.0;
+                    const minTileSize = 54.0;
+                    final columns =
+                        ((constraints.maxWidth + spacing) /
+                                (minTileSize + spacing))
+                            .floor()
+                            .clamp(1, 999);
+                    final tileSize =
+                        (constraints.maxWidth - (columns - 1) * spacing) /
+                        columns;
+                    return Wrap(
+                      spacing: spacing,
+                      runSpacing: spacing,
+                      children: sortedItems
+                          .map(
+                            (item) => _buildItemTile(context, item, tileSize),
+                          )
+                          .toList(),
+                    );
+                  },
                 ),
               ],
             ],
@@ -144,7 +162,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
     );
   }
 
-  Widget _buildItemTile(BuildContext context, PlayerItem item) {
+  Widget _buildItemTile(BuildContext context, PlayerItem item, double size) {
     final isLocked = !item.isUnlocked;
     final thMaxLevel = maxLevelForTH(item.meta, townHallLevel);
     final isTHMax = thMaxLevel > 0 && item.level >= thMaxLevel;
@@ -172,6 +190,8 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
     return GestureDetector(
       onTap: () => _showItemDialog(context, item),
       child: AnimatedContainer(
+        width: size,
+        height: size,
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
@@ -204,8 +224,8 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                       ),
                 child: MobileWebImage(
                   imageUrl: item.imageUrl,
-                  width: 54,
-                  height: 54,
+                  width: size,
+                  height: size,
                   fit: BoxFit.cover,
                 ),
               ),

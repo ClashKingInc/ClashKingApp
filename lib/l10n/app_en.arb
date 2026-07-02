@@ -1222,6 +1222,8 @@
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "Clan War League",
   "cwlOngoing": "Ongoing CWL",
+  "cwlRankTitle": "Rank",
+  "cwlWarsPlayedTitle": "Wars played",
   "cwlRounds": "Rounds",
   "cwlRoundNumber": "Round {number}",
   "@cwlRoundNumber": {

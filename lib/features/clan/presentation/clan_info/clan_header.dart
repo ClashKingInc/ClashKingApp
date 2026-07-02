@@ -418,48 +418,47 @@ class ClanInfoHeaderCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           // Same icon + label + colored value language as the metric
-          // bars, but content-sized chips flowing in a wrap so they
-          // scale without eating vertical space.
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: [
-              _MetricChip(
+          // bars, laid out two per row at equal width so a variable
+          // chip count (some are conditional) doesn't wrap raggedly.
+          MetricChipGrid(
+            columns: 3,
+            chips: [
+              MetricChip(
                 label: 'War wins',
                 value: formatter.format(clanInfo.warWins),
                 imageUrl: ImageAssets.war,
                 color: const Color(0xFFE8A524),
               ),
-              _MetricChip(
+              MetricChip(
                 label: 'Win streak',
                 value: formatter.format(clanInfo.warWinStreak),
                 icon: Icons.local_fire_department_rounded,
                 color: const Color(0xFFE35D4F),
               ),
-              _MetricChip(
+              MetricChip(
                 label: 'Capital',
                 value: formatter.format(clanInfo.clanCapitalPoints),
                 imageUrl: ImageAssets.capitalTrophy,
                 color: const Color(0xFF8D63D9),
               ),
-              _MetricChip(
+              MetricChip(
                 label: 'Builder base',
                 value: formatter.format(clanInfo.clanBuilderBasePoints),
                 imageUrl: ImageAssets.builderBaseStar,
                 color: const Color(0xFF2A9FD6),
               ),
-              _MetricChip(
+              MetricChip(
                 label: 'Type',
                 value: typeLabel,
                 icon: Icons.mail_rounded,
               ),
-              _MetricChip(
+              MetricChip(
                 label: 'Wars',
                 value: warFrequencyLabel,
                 icon: Icons.event_repeat_rounded,
               ),
               if (clanInfo.requiredTownhallLevel > 0)
-                _MetricChip(
+                MetricChip(
                   label: 'Min. TH',
                   value: '${clanInfo.requiredTownhallLevel}+',
                   imageUrl: ImageAssets.townHall(
@@ -467,7 +466,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                   ),
                 ),
               if (clanInfo.requiredTrophies > 0)
-                _MetricChip(
+                MetricChip(
                   label: 'Min. trophies',
                   value: NumberFormat.compact().format(
                     clanInfo.requiredTrophies,
@@ -540,87 +539,5 @@ class ClanInfoHeaderCard extends StatelessWidget {
     );
     final match = discordPattern.firstMatch(cleaned);
     return match?.group(1);
-  }
-}
-
-/// Compact metric chip: icon in a circle + small label above a bold
-/// colored value — the metric-bar language, sized to its content so
-/// chips flow freely in a wrap. Without [color] the chip is neutral
-/// (plain info like clan type or requirements).
-class _MetricChip extends StatelessWidget {
-  final String label;
-  final String value;
-  final String? imageUrl;
-  final IconData? icon;
-  final Color? color;
-
-  const _MetricChip({
-    required this.label,
-    required this.value,
-    this.imageUrl,
-    this.icon,
-    this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(6, 5, 10, 5),
-      decoration: BoxDecoration(
-        color: color != null
-            ? color!.withValues(alpha: 0.14)
-            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: colorScheme.surface.withValues(alpha: 0.72),
-              shape: BoxShape.circle,
-            ),
-            child: SizedBox.square(
-              dimension: 26,
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: imageUrl != null
-                    ? MobileWebImage(imageUrl: imageUrl!)
-                    : Icon(
-                        icon,
-                        size: 14,
-                        color: color ?? colorScheme.onSurfaceVariant,
-                      ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 6),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 1),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: color ?? colorScheme.onSurface,
-                  fontWeight: FontWeight.w900,
-                  height: 1.1,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -35,10 +35,12 @@ class WarCwl {
               .map(_asMap)
               .whereType<Map<String, dynamic>>()
               .map(WarInfo.fromJson)
-              .where((warInfo) =>
-                  warInfo.state != 'unknown' ||
-                  warInfo.clan != null ||
-                  warInfo.opponent != null)
+              .where(
+                (warInfo) =>
+                    warInfo.state != 'unknown' ||
+                    warInfo.clan != null ||
+                    warInfo.opponent != null,
+              )
               .toList();
 
       return WarCwl(
@@ -48,8 +50,9 @@ class WarCwl {
         warInfo: warState != 'notInWar'
             ? WarInfo.fromJson(_asMap(warInfoData?['currentWarInfo']))
             : WarInfo(state: 'notInWar'),
-        leagueInfo:
-            leagueInfoData != null ? CwlLeague.fromJson(leagueInfoData) : null,
+        leagueInfo: leagueInfoData != null
+            ? CwlLeague.fromJson(leagueInfoData)
+            : null,
         warLeagueInfos: warLeagueInfosData,
       );
     } catch (e) {
@@ -104,7 +107,8 @@ class WarCwl {
 
       if (prepWar.state != 'notFound') {
         DebugUtils.debugSuccess(
-            "Found preparation CWL war for clan $normalizedTag");
+          "Found preparation CWL war for clan $normalizedTag",
+        );
         return prepWar.reorderForClan(normalizedTag);
       }
 
@@ -119,11 +123,14 @@ class WarCwl {
 
       if (endedWars.isNotEmpty) {
         // Sort by end time to get most recent
-        endedWars.sort((a, b) => (b.endTime ?? '')
-            .toString()
-            .compareTo((a.endTime ?? '').toString()));
+        endedWars.sort(
+          (a, b) => (b.endTime ?? '').toString().compareTo(
+            (a.endTime ?? '').toString(),
+          ),
+        );
         DebugUtils.debugSuccess(
-            "Found recent ended CWL war for clan $normalizedTag");
+          "Found recent ended CWL war for clan $normalizedTag",
+        );
         return endedWars.first.reorderForClan(normalizedTag);
       }
 
@@ -131,7 +138,8 @@ class WarCwl {
       DebugUtils.debugInfo("🔍 Available wars in warLeagueInfos:");
       for (final war in warLeagueInfos) {
         DebugUtils.debugInfo(
-            "   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}");
+          "   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}",
+        );
       }
       return null;
     } catch (e) {
@@ -168,6 +176,12 @@ class WarCwl {
   WarMemberPresence getMemberPresence(String memberTag, String clanTag) {
     try {
       final warInfo = getActiveWarForClan(clanTag);
+      // Only surface a war day once it's actually live — preparation day
+      // (group formed but no attacks yet) and past ended rounds shouldn't
+      // still show a to-do chip as if the league had started.
+      if (warInfo.state != 'inWar') {
+        return WarMemberPresence(isInWar: false);
+      }
       final member = warInfo.getMemberByTag(memberTag);
 
       if (member != null) {
@@ -186,22 +200,26 @@ class WarCwl {
 
   /// Get active war by player tag and automatically reorder so user's clan is always 'clan'
   /// This is a convenience method that combines finding the war and reordering for the user
-  WarInfo? getActiveWarByPlayerTag(String playerTag) { // NOSONAR
+  WarInfo? getActiveWarByPlayerTag(String playerTag) {
+    // NOSONAR
     try {
       // First find any war containing this player
       for (final warInfo in warLeagueInfos) {
         final playerInClan =
             warInfo.clan?.members.any((member) => member.tag == playerTag) ??
-                false;
-        final playerInOpponent = warInfo.opponent?.members
-                .any((member) => member.tag == playerTag) ??
+            false;
+        final playerInOpponent =
+            warInfo.opponent?.members.any(
+              (member) => member.tag == playerTag,
+            ) ??
             false;
 
         if (playerInClan || playerInOpponent) {
           // Found a war with this player, prioritize by state
           if (warInfo.state == 'inWar') {
             DebugUtils.debugSuccess(
-                "Found active CWL war for player $playerTag");
+              "Found active CWL war for player $playerTag",
+            );
             return warInfo.reorderForUser(playerTag);
           }
         }
@@ -211,15 +229,18 @@ class WarCwl {
       for (final warInfo in warLeagueInfos) {
         final playerInClan =
             warInfo.clan?.members.any((member) => member.tag == playerTag) ??
-                false;
-        final playerInOpponent = warInfo.opponent?.members
-                .any((member) => member.tag == playerTag) ??
+            false;
+        final playerInOpponent =
+            warInfo.opponent?.members.any(
+              (member) => member.tag == playerTag,
+            ) ??
             false;
 
         if (playerInClan || playerInOpponent) {
           if (warInfo.state == 'preparation') {
             DebugUtils.debugSuccess(
-                "Found preparation CWL war for player $playerTag");
+              "Found preparation CWL war for player $playerTag",
+            );
             return warInfo.reorderForUser(playerTag);
           }
         }
@@ -229,9 +250,11 @@ class WarCwl {
       final playerWars = warLeagueInfos.where((warInfo) {
         final playerInClan =
             warInfo.clan?.members.any((member) => member.tag == playerTag) ??
-                false;
-        final playerInOpponent = warInfo.opponent?.members
-                .any((member) => member.tag == playerTag) ??
+            false;
+        final playerInOpponent =
+            warInfo.opponent?.members.any(
+              (member) => member.tag == playerTag,
+            ) ??
             false;
         return (playerInClan || playerInOpponent) &&
             warInfo.state == 'warEnded';
@@ -239,11 +262,14 @@ class WarCwl {
 
       if (playerWars.isNotEmpty) {
         // Sort by end time to get most recent
-        playerWars.sort((a, b) => (b.endTime ?? '')
-            .toString()
-            .compareTo((a.endTime ?? '').toString()));
+        playerWars.sort(
+          (a, b) => (b.endTime ?? '').toString().compareTo(
+            (a.endTime ?? '').toString(),
+          ),
+        );
         DebugUtils.debugSuccess(
-            "Found recent ended CWL war for player $playerTag");
+          "Found recent ended CWL war for player $playerTag",
+        );
         return playerWars.first.reorderForUser(playerTag);
       }
 
