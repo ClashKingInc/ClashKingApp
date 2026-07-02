@@ -157,17 +157,6 @@ class MyHomePageState extends State<MyHomePage> {
                 ),
               ];
 
-              if (supportsNativeLiquidGlass) {
-                return NativeLiquidGlassTabBar(
-                  height: 62,
-                  itemCount: 4,
-                  selectedIndex: _selectedIndex,
-                  onTabSelected: _onItemTapped,
-                  items: tabItems,
-                  iconSize: 22,
-                );
-              }
-
               return Stack(
                 fit: StackFit.expand,
                 children: [
@@ -188,44 +177,69 @@ class MyHomePageState extends State<MyHomePage> {
                         Theme.of(context).brightness == Brightness.dark
                         ? 0.5
                         : 0.18,
+                    iconSize: 22,
                   ),
-                  Row(
-                    children: [
-                      _GlassNavItem(
-                        icon: Icons.home_outlined,
-                        label: 'Home',
-                        selected: _selectedIndex == 0,
-                        selectedColor: colorScheme.primary,
-                        unselectedColor: colorScheme.onSurfaceVariant,
-                        onTap: () => _onItemTapped(0),
-                      ),
-                      _GlassNavItem(
-                        icon: Icons.person_outline_rounded,
-                        label: 'Players',
-                        selected: _selectedIndex == 1,
-                        selectedColor: colorScheme.primary,
-                        unselectedColor: colorScheme.onSurfaceVariant,
-                        onTap: () => _onItemTapped(1),
-                      ),
-                      _GlassNavItem(
-                        icon: Icons.groups_outlined,
-                        label:
-                            AppLocalizations.of(context)?.clanTitle ?? 'Clan',
-                        selected: _selectedIndex == 2,
-                        selectedColor: colorScheme.primary,
-                        unselectedColor: colorScheme.onSurfaceVariant,
-                        onTap: () => _onItemTapped(2),
-                      ),
-                      _GlassNavItem(
-                        icon: CustomIcons.swordCross,
-                        label: 'War',
-                        selected: _selectedIndex == 3,
-                        selectedColor: colorScheme.primary,
-                        unselectedColor: colorScheme.onSurfaceVariant,
-                        onTap: () => _onItemTapped(3),
-                      ),
-                    ],
-                  ),
+                  supportsNativeLiquidGlass
+                      ? Row(
+                          children: [
+                            _NavHitTarget(
+                              label: 'Home',
+                              onTap: () => _onItemTapped(0),
+                            ),
+                            _NavHitTarget(
+                              label: 'Players',
+                              onTap: () => _onItemTapped(1),
+                            ),
+                            _NavHitTarget(
+                              label:
+                                  AppLocalizations.of(context)?.clanTitle ??
+                                  'Clan',
+                              onTap: () => _onItemTapped(2),
+                            ),
+                            _NavHitTarget(
+                              label: 'War',
+                              onTap: () => _onItemTapped(3),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            _GlassNavItem(
+                              icon: Icons.home_outlined,
+                              label: 'Home',
+                              selected: _selectedIndex == 0,
+                              selectedColor: colorScheme.primary,
+                              unselectedColor: colorScheme.onSurfaceVariant,
+                              onTap: () => _onItemTapped(0),
+                            ),
+                            _GlassNavItem(
+                              icon: Icons.person_outline_rounded,
+                              label: 'Players',
+                              selected: _selectedIndex == 1,
+                              selectedColor: colorScheme.primary,
+                              unselectedColor: colorScheme.onSurfaceVariant,
+                              onTap: () => _onItemTapped(1),
+                            ),
+                            _GlassNavItem(
+                              icon: Icons.groups_outlined,
+                              label:
+                                  AppLocalizations.of(context)?.clanTitle ??
+                                  'Clan',
+                              selected: _selectedIndex == 2,
+                              selectedColor: colorScheme.primary,
+                              unselectedColor: colorScheme.onSurfaceVariant,
+                              onTap: () => _onItemTapped(2),
+                            ),
+                            _GlassNavItem(
+                              icon: CustomIcons.swordCross,
+                              label: 'War',
+                              selected: _selectedIndex == 3,
+                              selectedColor: colorScheme.primary,
+                              unselectedColor: colorScheme.onSurfaceVariant,
+                              onTap: () => _onItemTapped(3),
+                            ),
+                          ],
+                        ),
                 ],
               );
             },
@@ -257,154 +271,157 @@ class _AccountMenuDrawer extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(22, 16, 18, 12),
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _DrawerAvatar(imageUrl: user?.avatarUrl ?? ''),
-                      const Spacer(),
-                      IconButton(
-                        tooltip: 'Add account',
-                        onPressed: () => _pushAndClose(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const AddCocAccountPage(refreshOnExit: false),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 16, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _DrawerAvatar(imageUrl: user?.avatarUrl ?? ''),
+                        const Spacer(),
+                        IconButton(
+                          tooltip: 'Add account',
+                          onPressed: () => _pushAndClose(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const AddCocAccountPage(refreshOnExit: false),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.person_add_alt_1_outlined,
+                            size: 22,
                           ),
                         ),
-                        icon: const Icon(
-                          Icons.person_add_alt_1_outlined,
-                          size: 24,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  Text(
-                    displayName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: colorScheme.onSurface,
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      _DrawerCount(value: followerCount, label: 'Followers'),
-                      const SizedBox(width: 2),
-                      Tooltip(
-                        triggerMode: TooltipTriggerMode.tap,
-                        showDuration: const Duration(seconds: 4),
-                        message:
-                            'People who bookmarked one of your verified linked accounts.',
-                        child: Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: Icon(
-                            Icons.help_outline_rounded,
-                            size: 16,
-                            color: colorScheme.onSurfaceVariant,
+                    const SizedBox(height: 10),
+                    Text(
+                      displayName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        _DrawerCount(value: followerCount, label: 'Followers'),
+                        const SizedBox(width: 2),
+                        Tooltip(
+                          triggerMode: TooltipTriggerMode.tap,
+                          showDuration: const Duration(seconds: 4),
+                          message:
+                              'People who bookmarked one of your verified linked accounts.',
+                          child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: Icon(
+                              Icons.help_outline_rounded,
+                              size: 15,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _DrawerMenuItem(
-                    icon: Icons.trending_up_rounded,
-                    label: 'Popular',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PopularPage(),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _DrawerMenuItem(
+                      icon: Icons.trending_up_rounded,
+                      label: 'Popular',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PopularPage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.leaderboard_outlined,
-                    label: 'Rankings',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RankingsPage(),
+                    _DrawerMenuItem(
+                      icon: Icons.leaderboard_outlined,
+                      label: 'Rankings',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RankingsPage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.bar_chart_rounded,
-                    label: 'Stats',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const StatsPage(),
+                    _DrawerMenuItem(
+                      icon: Icons.bar_chart_rounded,
+                      label: 'Stats',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const StatsPage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.calculate_outlined,
-                    label: 'Calculators',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CalculatorsPage(),
+                    _DrawerMenuItem(
+                      icon: Icons.calculate_outlined,
+                      label: 'Calculators',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CalculatorsPage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.workspace_premium_outlined,
-                    label: 'Subscription',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const _SubscriptionPage(),
+                    _DrawerMenuItem(
+                      icon: Icons.workspace_premium_outlined,
+                      label: 'Subscription',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const _SubscriptionPage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.construction_rounded,
-                    label: 'Upgrade Tracker',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const UpgradeTrackerTeasePage(),
+                    _DrawerMenuItem(
+                      icon: Icons.construction_rounded,
+                      label: 'Upgrade Tracker',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UpgradeTrackerTeasePage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.grid_view_rounded,
-                    label: 'Bases & Armies',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BasesArmiesPage(),
+                    _DrawerMenuItem(
+                      icon: Icons.grid_view_rounded,
+                      label: 'Bases & Armies',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BasesArmiesPage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.inventory_2_outlined,
-                    label: 'Game Assets',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const GameAssetsPage(),
+                    _DrawerMenuItem(
+                      icon: Icons.inventory_2_outlined,
+                      label: 'Game Assets',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const GameAssetsPage(),
+                        ),
                       ),
                     ),
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.manage_accounts_outlined,
-                    label: 'Manage Accounts',
-                    onTap: () => _pushAndClose(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const AddCocAccountPage(refreshOnExit: false),
+                    _DrawerMenuItem(
+                      icon: Icons.manage_accounts_outlined,
+                      label: 'Manage Accounts',
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AddCocAccountPage(refreshOnExit: false),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -520,24 +537,24 @@ class _DrawerMenuItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: dense ? 10 : 12),
+          padding: EdgeInsets.symmetric(vertical: dense ? 8 : 9.5),
           child: Row(
             children: [
               Icon(
                 icon,
-                size: dense ? 22 : 24,
+                size: dense ? 18 : 19,
                 color: onTap == null
                     ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
                     : colorScheme.onSurface,
               ),
-              const SizedBox(width: 18),
+              const SizedBox(width: 14),
               Expanded(
                 child: Text(
                   label,
                   style:
                       (dense
-                              ? Theme.of(context).textTheme.titleMedium
-                              : Theme.of(context).textTheme.titleLarge)
+                              ? Theme.of(context).textTheme.bodyLarge
+                              : Theme.of(context).textTheme.titleMedium)
                           ?.copyWith(
                             color: onTap == null
                                 ? colorScheme.onSurfaceVariant.withValues(
@@ -618,6 +635,28 @@ class _SubscriptionPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _NavHitTarget extends StatelessWidget {
+  const _NavHitTarget({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Semantics(
+        button: true,
+        label: label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: const SizedBox.expand(),
+        ),
       ),
     );
   }
