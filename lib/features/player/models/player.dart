@@ -42,6 +42,8 @@ class Player {
   int builderHallLevel;
   int builderBaseTrophies;
   int bestBuilderBaseTrophies;
+  String builderBaseLeague;
+  String builderBaseLeagueUrl;
   List<PlayerAchievement> achievements;
   String clanTag;
   Clan? clan;
@@ -96,6 +98,8 @@ class Player {
     required this.builderHallLevel,
     required this.builderBaseTrophies,
     required this.bestBuilderBaseTrophies,
+    required this.builderBaseLeague,
+    required this.builderBaseLeagueUrl,
     required this.achievements,
     required this.clanTag,
     required this.clanOverview,
@@ -130,12 +134,12 @@ class Player {
     Map<String, int>? attackWinsBySeason,
     Map<String, int>? seasonTrophiesBySeason,
     Map<String, Map<String, int>>? donationsBySeason,
-  })  : goldBySeason = goldBySeason ?? {},
-        darkElixirBySeason = darkElixirBySeason ?? {},
-        activityBySeason = activityBySeason ?? {},
-        attackWinsBySeason = attackWinsBySeason ?? {},
-        seasonTrophiesBySeason = seasonTrophiesBySeason ?? {},
-        donationsBySeason = donationsBySeason ?? {};
+  }) : goldBySeason = goldBySeason ?? {},
+       darkElixirBySeason = darkElixirBySeason ?? {},
+       activityBySeason = activityBySeason ?? {},
+       attackWinsBySeason = attackWinsBySeason ?? {},
+       seasonTrophiesBySeason = seasonTrophiesBySeason ?? {},
+       donationsBySeason = donationsBySeason ?? {};
 
   String get donationRatio => donationsReceived == 0
       ? "0.0"
@@ -204,8 +208,8 @@ class Player {
       double seasonPassDaily = ((daysPassed * 2600) / totalDaysInMonth);
       double seasonPassRatio =
           (currentSeasonPoints.toDouble() / seasonPassDaily) > 1
-              ? 1
-              : (currentSeasonPoints.toDouble() / seasonPassDaily);
+          ? 1
+          : (currentSeasonPoints.toDouble() / seasonPassDaily);
       return seasonPassRatio.toDouble();
     } catch (e) {
       return 0.0;
@@ -234,8 +238,8 @@ class Player {
       double clanGamesDaily = (4000 / 8) * daysPassed;
       double clanGamesRatio =
           (currentClanGamesPoints.toDouble() / clanGamesDaily) > 1
-              ? 1
-              : (currentClanGamesPoints.toDouble() / clanGamesDaily);
+          ? 1
+          : (currentClanGamesPoints.toDouble() / clanGamesDaily);
       return clanGamesRatio.toDouble();
     } catch (e) {
       return 0.0;
@@ -288,223 +292,239 @@ class Player {
       }
 
       Player profile = Player(
-          name: json["name"] ?? "Unknown",
-          tag: json["tag"] ?? "Unknown",
-          townHallLevel: json["townHallLevel"] ?? 0,
-          townHallWeaponLevel: json["townHallWeaponLevel"] ?? 0,
-          expLevel: json["expLevel"] ?? 0,
-          trophies: json["trophies"] ?? 0,
-          bestTrophies: json["bestTrophies"] ?? 0,
-          attackWins: json["attackWins"] is int ? json["attackWins"] : 0,
-          defenseWins: json["defenseWins"] is int ? json["defenseWins"] : 0,
-          warStars: json["warStars"] is int ? json["warStars"] : 0,
-          builderHallLevel: json["builderHallLevel"] ?? 0,
-          builderBaseTrophies: json["builderBaseTrophies"] ?? 0,
-          bestBuilderBaseTrophies: json["bestBuilderBaseTrophies"] ?? 0,
-          clanTag: json["clan"]?["tag"] ?? "",
-          clanOverview: json["clan"] != null
-              ? PlayerClanOverview.fromJson(json["clan"])
-              : PlayerClanOverview.empty(),
-          role: json["role"] ?? "",
-          warPreference: json["warPreference"] ?? "",
-          donations: json["donations"] is int ? json["donations"] : 0,
-          donationsReceived:
-              json["donationsReceived"] is int ? json["donationsReceived"] : 0,
-          clanCapitalContributions: json["clanCapitalContributions"] is int
-              ? json["clanCapitalContributions"]
-              : 0,
-          league: json["league"]?['name'] ?? "Unranked",
-          townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
-          builderHallPic:
-              ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
-          leagueUrl:
-              ImageAssets.getLeagueImage(json["league"]?['name'] ?? "Unranked"),
-          clanGamesPoint: [],
-          seasonPass: [],
-          lastOnline: DateTime.utc(1970, 1, 1),
-          heroes: generateCompleteItemList<PlayerHero>(
-            jsonList: (json['heroes'] as List?)
-                ?.where((x) => x['village'] == 'home')
-                .toList(),
-            gameData: filterGameData(
-              GameDataService.heroesData['heroes'],
-              (k, v) => v['type'] == 'hero',
-            ),
-            factory: PlayerHero.fromRaw,
+        name: json["name"] ?? "Unknown",
+        tag: json["tag"] ?? "Unknown",
+        townHallLevel: json["townHallLevel"] ?? 0,
+        townHallWeaponLevel: json["townHallWeaponLevel"] ?? 0,
+        expLevel: json["expLevel"] ?? 0,
+        trophies: _intFromJson(json["trophies"]),
+        bestTrophies: _intFromJson(json["bestTrophies"]),
+        attackWins: json["attackWins"] is int ? json["attackWins"] : 0,
+        defenseWins: json["defenseWins"] is int ? json["defenseWins"] : 0,
+        warStars: _intFromJson(json["warStars"]),
+        builderHallLevel: json["builderHallLevel"] ?? 0,
+        builderBaseTrophies: _intFromJson(json["builderBaseTrophies"]),
+        bestBuilderBaseTrophies: _intFromJson(json["bestBuilderBaseTrophies"]),
+        builderBaseLeague: _leagueName(json["builderBaseLeague"]),
+        builderBaseLeagueUrl: ImageAssets.getBuilderBaseLeagueImage(
+          json["builderBaseLeague"],
+        ),
+        clanTag: json["clan"]?["tag"] ?? "",
+        clanOverview: json["clan"] != null
+            ? PlayerClanOverview.fromJson(json["clan"])
+            : PlayerClanOverview.empty(),
+        role: json["role"] ?? "",
+        warPreference: json["warPreference"] ?? "",
+        donations: _intFromJson(json["donations"]),
+        donationsReceived: _intFromJson(json["donationsReceived"]),
+        clanCapitalContributions: _intFromJson(
+          json["clanCapitalContributions"],
+        ),
+        league: json["league"]?['name'] ?? "Unranked",
+        townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
+        builderHallPic: ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
+        leagueUrl: ImageAssets.getLeagueImage(
+          json["league"]?['name'] ?? "Unranked",
+        ),
+        clanGamesPoint: [],
+        seasonPass: [],
+        lastOnline: DateTime.utc(1970, 1, 1),
+        heroes: generateCompleteItemList<PlayerHero>(
+          jsonList: (json['heroes'] as List?)
+              ?.where((x) => x['village'] == 'home')
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.heroesData['heroes'],
+            (k, v) => v['type'] == 'hero',
           ),
-          bbHeroes: generateCompleteItemList<PlayerBuilderBaseHero>(
-            jsonList: (json['heroes'] as List?)
-                ?.where((x) => x['village'] == 'builderBase')
-                .toList(),
-            gameData: filterGameData(
-              GameDataService.heroesData['heroes'],
-              (k, v) => v['type'] == 'bb-hero',
-            ),
-            factory: PlayerBuilderBaseHero.fromRaw,
+          factory: PlayerHero.fromRaw,
+        ),
+        bbHeroes: generateCompleteItemList<PlayerBuilderBaseHero>(
+          jsonList: (json['heroes'] as List?)
+              ?.where((x) => x['village'] == 'builderBase')
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.heroesData['heroes'],
+            (k, v) => v['type'] == 'bb-hero',
           ),
-          troops: generateCompleteItemList<PlayerTroop>(
-            jsonList: (json['troops'] as List?)
-                ?.where((x) =>
+          factory: PlayerBuilderBaseHero.fromRaw,
+        ),
+        troops: generateCompleteItemList<PlayerTroop>(
+          jsonList: (json['troops'] as List?)
+              ?.where(
+                (x) =>
                     x['village'] == 'home' &&
                     !GameDataService.isSuperTroop(x['name']) &&
                     !GameDataService.isSiegeMachine(x['name']) &&
-                    !GameDataService.isPet(x['name']))
-                .toList(),
-            gameData: filterGameData(
-              GameDataService.troopsData['troops'],
-              (k, v) =>
-                  v['type'] == 'troop' &&
-                  !GameDataService.isSuperTroop(k) &&
-                  !GameDataService.isSiegeMachine(k) &&
-                  !GameDataService.isPet(k),
-            ),
-            factory: PlayerTroop.fromRaw,
+                    !GameDataService.isPet(x['name']),
+              )
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) =>
+                v['type'] == 'troop' &&
+                !GameDataService.isSuperTroop(k) &&
+                !GameDataService.isSiegeMachine(k) &&
+                !GameDataService.isPet(k),
           ),
-          superTroops: generateCompleteItemList<PlayerSuperTroop>(
-            jsonList: (json['troops'] as List?)
-                ?.where((x) =>
+          factory: PlayerTroop.fromRaw,
+        ),
+        superTroops: generateCompleteItemList<PlayerSuperTroop>(
+          jsonList: (json['troops'] as List?)
+              ?.where(
+                (x) =>
                     x['village'] == 'home' &&
-                    GameDataService.isSuperTroop(x['name']))
-                .toList(),
-            gameData: filterGameData(
-              GameDataService.troopsData['troops'],
-              (k, v) => v['type'] == 'troop' && GameDataService.isSuperTroop(k),
-            ),
-            factory: PlayerSuperTroop.fromRaw,
+                    GameDataService.isSuperTroop(x['name']),
+              )
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) => v['type'] == 'troop' && GameDataService.isSuperTroop(k),
           ),
-          siegeMachines: generateCompleteItemList<PlayerSiegeMachine>(
-            jsonList: (json['troops'] as List?)
-                ?.where((x) =>
+          factory: PlayerSuperTroop.fromRaw,
+        ),
+        siegeMachines: generateCompleteItemList<PlayerSiegeMachine>(
+          jsonList: (json['troops'] as List?)
+              ?.where(
+                (x) =>
                     x['village'] == 'home' &&
-                    GameDataService.isSiegeMachine(x['name']))
-                .toList(),
-            gameData: filterGameData(
-              GameDataService.troopsData['troops'],
-              (k, v) =>
-                  v['type'] == 'siege-machine' &&
-                  GameDataService.isSiegeMachine(k),
-            ),
-            factory: PlayerSiegeMachine.fromRaw,
+                    GameDataService.isSiegeMachine(x['name']),
+              )
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) =>
+                v['type'] == 'siege-machine' &&
+                GameDataService.isSiegeMachine(k),
           ),
-          pets: generateCompleteItemList<PlayerPet>(
-            jsonList: (json['troops'] as List?)
-                ?.where((x) =>
-                    x['village'] == 'home' && GameDataService.isPet(x['name']))
-                .toList(),
-            gameData: GameDataService.petsData['pets'] ?? {},
-            factory: PlayerPet.fromRaw,
+          factory: PlayerSiegeMachine.fromRaw,
+        ),
+        pets: generateCompleteItemList<PlayerPet>(
+          jsonList: (json['troops'] as List?)
+              ?.where(
+                (x) =>
+                    x['village'] == 'home' && GameDataService.isPet(x['name']),
+              )
+              .toList(),
+          gameData: GameDataService.petsData['pets'] ?? {},
+          factory: PlayerPet.fromRaw,
+        ),
+        bbTroops: generateCompleteItemList<PlayerBuilderBaseTroop>(
+          jsonList: (json['troops'] as List?)
+              ?.where((x) => x['village'] == 'builderBase')
+              .toList(),
+          gameData: filterGameData(
+            GameDataService.troopsData['troops'],
+            (k, v) => v['type'] == 'bb-troop',
           ),
-          bbTroops: generateCompleteItemList<PlayerBuilderBaseTroop>(
-            jsonList: (json['troops'] as List?)
-                ?.where((x) => x['village'] == 'builderBase')
-                .toList(),
-            gameData: filterGameData(
-              GameDataService.troopsData['troops'],
-              (k, v) => v['type'] == 'bb-troop',
-            ),
-            factory: PlayerBuilderBaseTroop.fromRaw,
-            nameMatcher: (gameDataName, jsonItem) {
-              if (gameDataName == 'Baby Dragon 2' &&
-                  jsonItem['name'] == 'Baby Dragon') {
-                return true;
-              }
-              return gameDataName == jsonItem['name'];
-            },
-          ),
-          spells: generateCompleteItemList<PlayerSpell>(
-            jsonList: json['spells'] as List?,
-            gameData: filterSpellGameData(
-              GameDataService.spellsData['spells'],
-            ),
-            factory: PlayerSpell.fromRaw,
-          ),
-          equipments: generateCompleteItemList<PlayerEquipment>(
-            jsonList: json['heroEquipment'] as List?,
-            gameData: GameDataService.gearsData['gears'] ?? {},
-            factory: PlayerEquipment.fromRaw,
-          ),
-          achievements: json['achievements'] != null
-              ? List<PlayerAchievement>.from(json['achievements']
-                  .map((x) => PlayerAchievement.fromJson(x ?? {})))
-              : <PlayerAchievement>[],
-          legendsBySeason: null,
-          legendRanking: [],
-          rankings: null);
+          factory: PlayerBuilderBaseTroop.fromRaw,
+          nameMatcher: (gameDataName, jsonItem) {
+            if (gameDataName == 'Baby Dragon 2' &&
+                jsonItem['name'] == 'Baby Dragon') {
+              return true;
+            }
+            return gameDataName == jsonItem['name'];
+          },
+        ),
+        spells: generateCompleteItemList<PlayerSpell>(
+          jsonList: json['spells'] as List?,
+          gameData: filterSpellGameData(GameDataService.spellsData['spells']),
+          factory: PlayerSpell.fromRaw,
+        ),
+        equipments: generateCompleteItemList<PlayerEquipment>(
+          jsonList: json['heroEquipment'] as List?,
+          gameData: GameDataService.gearsData['gears'] ?? {},
+          factory: PlayerEquipment.fromRaw,
+        ),
+        achievements: json['achievements'] != null
+            ? List<PlayerAchievement>.from(
+                json['achievements'].map(
+                  (x) => PlayerAchievement.fromJson(x ?? {}),
+                ),
+              )
+            : <PlayerAchievement>[],
+        legendsBySeason: null,
+        legendRanking: [],
+        rankings: null,
+      );
 
       return profile;
     } catch (e, stacktrace) {
       DebugUtils.debugError(" Exception in Player.fromJson: $e");
       DebugUtils.debugError(stacktrace.toString());
       return Player(
-          name: "Unknown",
-          tag: "Unknown",
-          townHallLevel: 0,
-          townHallWeaponLevel: 0,
-          expLevel: 0,
-          trophies: 0,
-          bestTrophies: 0,
-          warStars: 0,
-          attackWins: 0,
-          defenseWins: 0,
-          builderHallLevel: 0,
-          builderBaseTrophies: 0,
-          bestBuilderBaseTrophies: 0,
-          achievements: [],
-          clanTag: "",
-          clanOverview: PlayerClanOverview.empty(),
-          role: "",
-          warPreference: "",
-          donations: 0,
-          donationsReceived: 0,
-          clanCapitalContributions: 0,
-          league: "",
-          townHallPic: ImageAssets.townHall(1),
-          builderHallPic: ImageAssets.builderHall(1),
-          leagueUrl: "",
-          clanGamesPoint: [],
-          seasonPass: [],
-          lastOnline: DateTime.now(),
-          heroes: [],
-          bbHeroes: [],
-          troops: [],
-          superTroops: [],
-          bbTroops: [],
-          siegeMachines: [],
-          pets: [],
-          spells: [],
-          equipments: [],
-          legendsBySeason: null,
-          legendRanking: [],
-          rankings: null);
+        name: "Unknown",
+        tag: "Unknown",
+        townHallLevel: 0,
+        townHallWeaponLevel: 0,
+        expLevel: 0,
+        trophies: 0,
+        bestTrophies: 0,
+        warStars: 0,
+        attackWins: 0,
+        defenseWins: 0,
+        builderHallLevel: 0,
+        builderBaseTrophies: 0,
+        bestBuilderBaseTrophies: 0,
+        builderBaseLeague: "Unranked",
+        builderBaseLeagueUrl: ImageAssets.builderBaseStar,
+        achievements: [],
+        clanTag: "",
+        clanOverview: PlayerClanOverview.empty(),
+        role: "",
+        warPreference: "",
+        donations: 0,
+        donationsReceived: 0,
+        clanCapitalContributions: 0,
+        league: "",
+        townHallPic: ImageAssets.townHall(1),
+        builderHallPic: ImageAssets.builderHall(1),
+        leagueUrl: "",
+        clanGamesPoint: [],
+        seasonPass: [],
+        lastOnline: DateTime.now(),
+        heroes: [],
+        bbHeroes: [],
+        troops: [],
+        superTroops: [],
+        bbTroops: [],
+        siegeMachines: [],
+        pets: [],
+        spells: [],
+        equipments: [],
+        legendsBySeason: null,
+        legendRanking: [],
+        rankings: null,
+      );
     }
   }
 
   void enrichWithFullStats(Map<String, dynamic> json) {
     clanGamesPoint =
         (json['clan_games'] as Map<String, dynamic>?)?.entries.map((entry) {
-              return PlayerClanGames.fromJson(entry.key, entry.value);
-            }).toList() ??
-            [];
+          return PlayerClanGames.fromJson(entry.key, entry.value);
+        }).toList() ??
+        [];
 
     seasonPass =
         (json['season_pass'] as Map<String, dynamic>?)?.entries.map((entry) {
-              return PlayerSeasonPass(
-                season: entry.key,
-                points: entry.value ?? 0,
-              );
-            }).toList() ??
-            [];
+          return PlayerSeasonPass(season: entry.key, points: entry.value ?? 0);
+        }).toList() ??
+        [];
 
     lastOnline = json['last_online'] != null
-        ? DateTime.fromMillisecondsSinceEpoch(((json['last_online'] as num) * 1000).toInt(),
-            isUtc: true)
+        ? DateTime.fromMillisecondsSinceEpoch(
+            ((json['last_online'] as num) * 1000).toInt(),
+            isUtc: true,
+          )
         : DateTime.utc(1970, 1, 1);
 
     legendsBySeason = json['legends_by_season'] != null
         ? PlayerLegendStats.fromJson(json['legends_by_season'])
         : null;
 
-    legendRanking = (json['legend_eos_ranking'] as List<dynamic>?)
+    legendRanking =
+        (json['legend_eos_ranking'] as List<dynamic>?)
             ?.map((x) => PlayerLegendRanking.fromJson(x))
             .toList() ??
         [];
@@ -532,12 +552,86 @@ class Player {
     donationsBySeason = _parseSeasonDonationsMap(json['donations']);
   }
 
+  void updateFromOfficialProfile(Map<String, dynamic> json) {
+    if (json.containsKey("townHallLevel")) {
+      townHallLevel = _intFromJson(json["townHallLevel"]);
+      townHallPic = ImageAssets.townHall(townHallLevel);
+    }
+    if (json.containsKey("townHallWeaponLevel")) {
+      townHallWeaponLevel = _intFromJson(json["townHallWeaponLevel"]);
+    }
+    if (json.containsKey("builderHallLevel")) {
+      builderHallLevel = _intFromJson(json["builderHallLevel"]);
+      builderHallPic = ImageAssets.builderHall(builderHallLevel);
+    }
+    if (json.containsKey("expLevel")) {
+      expLevel = _intFromJson(json["expLevel"]);
+    }
+    if (json.containsKey("trophies")) {
+      trophies = _intFromJson(json["trophies"]);
+    }
+    if (json.containsKey("bestTrophies")) {
+      bestTrophies = _intFromJson(json["bestTrophies"]);
+    }
+    if (json.containsKey("warStars")) {
+      warStars = _intFromJson(json["warStars"]);
+    }
+    if (json.containsKey("builderBaseTrophies")) {
+      builderBaseTrophies = _intFromJson(json["builderBaseTrophies"]);
+    }
+    if (json.containsKey("bestBuilderBaseTrophies")) {
+      bestBuilderBaseTrophies = _intFromJson(json["bestBuilderBaseTrophies"]);
+    }
+    if (json.containsKey("donations")) {
+      donations = _intFromJson(json["donations"]);
+    }
+    if (json.containsKey("donationsReceived")) {
+      donationsReceived = _intFromJson(json["donationsReceived"]);
+    }
+    if (json.containsKey("clanCapitalContributions")) {
+      clanCapitalContributions = _intFromJson(json["clanCapitalContributions"]);
+    }
+    if (json.containsKey("warPreference")) {
+      warPreference = json["warPreference"]?.toString() ?? "";
+    }
+    if (json["builderBaseLeague"] != null) {
+      builderBaseLeague = _leagueName(json["builderBaseLeague"]);
+      builderBaseLeagueUrl = ImageAssets.getBuilderBaseLeagueImage(
+        json["builderBaseLeague"],
+      );
+    }
+    if (json["league"] != null) {
+      league = _leagueName(json["league"]);
+      leagueUrl = ImageAssets.getLeagueImage(league);
+    }
+    if (json["clan"] is Map<String, dynamic>) {
+      clanOverview = PlayerClanOverview.fromJson(json["clan"]);
+      clanTag = clanOverview.tag;
+    }
+    if (json.containsKey("role")) {
+      role = json["role"]?.toString() ?? "";
+    }
+  }
+
   static Map<String, int> _parseSeasonIntMap(dynamic raw) {
     if (raw is! Map) return {};
     return {
       for (final e in raw.entries)
         if (e.value is num) e.key.toString(): (e.value as num).toInt(),
     };
+  }
+
+  static int _intFromJson(dynamic value) {
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value.replaceAll(',', '')) ?? 0;
+    return 0;
+  }
+
+  static String _leagueName(dynamic value) {
+    if (value is Map && value['name'] is String) {
+      return value['name'] as String;
+    }
+    return 'Unranked';
   }
 
   static Map<String, Map<String, int>> _parseSeasonDonationsMap(dynamic raw) {
@@ -601,8 +695,10 @@ class Player {
       DateTime clanGamesStart = DateTime(now.year, now.month, 22, 8);
       int daysPassed = now.difference(clanGamesStart).inDays + 1;
       double clanGamesDaily = (4000 / 8) * daysPassed;
-      double clanGamesRatio =
-          (currentClanGamesPoints / clanGamesDaily).clamp(0, 1);
+      double clanGamesRatio = (currentClanGamesPoints / clanGamesDaily).clamp(
+        0,
+        1,
+      );
       totalEvent += 2;
       totalDone += clanGamesRatio * 2;
     }
@@ -612,8 +708,10 @@ class Player {
     int totalDaysInMonth = DateTime(now.year, now.month + 1, 0).day;
     int daysPassed = now.day;
     double seasonPassDaily = ((daysPassed * 2600) / totalDaysInMonth);
-    double seasonPassRatio =
-        (currentSeasonPoints / seasonPassDaily).clamp(0, 1);
+    double seasonPassRatio = (currentSeasonPoints / seasonPassDaily).clamp(
+      0,
+      1,
+    );
     totalEvent += 2;
     totalDone += seasonPassRatio * 2;
 
