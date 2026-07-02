@@ -15,8 +15,7 @@ import 'package:provider/provider.dart';
 class ClanMembers extends StatefulWidget {
   final Clan clanInfo;
 
-  const ClanMembers(
-      {required this.clanInfo, super.key});
+  const ClanMembers({required this.clanInfo, super.key});
 
   @override
   ClanMembersState createState() => ClanMembersState();
@@ -38,16 +37,19 @@ class ClanMembersState extends State<ClanMembers> {
       AppLocalizations.of(context)?.gameTownHallLevel ?? 'Town Hall Level':
           'townHallLevel',
       AppLocalizations.of(context)?.gameTrophies ?? 'Trophies': 'trophies',
-      AppLocalizations.of(context)?.gameExpLevel ?? 'Experience Level': 'expLevel',
+      AppLocalizations.of(context)?.gameExpLevel ?? 'Experience Level':
+          'expLevel',
       AppLocalizations.of(context)?.gameBuilderBaseTrophies ??
-          'Builder Base Trophies': 'builderBaseTrophies',
+              'Builder Base Trophies':
+          'builderBaseTrophies',
       AppLocalizations.of(context)?.gameDonations ?? 'Donations': 'donations',
-      AppLocalizations.of(context)?.gameDonationsReceived ?? 'Donations received':
+      AppLocalizations.of(context)?.gameDonationsReceived ??
+              'Donations received':
           'donationsReceived',
       AppLocalizations.of(context)?.gameDonationsRatio ?? 'Donation Ratio':
           'donationsRatio',
     };
-    
+
     final cocService = context.watch<CocAccountService>();
     final activeUserTags = cocService.getAccountTags();
 
@@ -77,9 +79,11 @@ class ClanMembersState extends State<ClanMembers> {
         case 'donationsReceived':
           return b.donationsReceived.compareTo(a.donationsReceived);
         case 'donationsRatio':
-          double ratioA = a.donations /
+          double ratioA =
+              a.donations /
               (a.donationsReceived == 0 ? 1 : a.donationsReceived);
-          double ratioB = b.donations /
+          double ratioB =
+              b.donations /
               (b.donationsReceived == 0 ? 1 : b.donationsReceived);
           return ratioB.compareTo(ratioA);
         default:
@@ -107,8 +111,7 @@ class ClanMembersState extends State<ClanMembers> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
-                AppLocalizations.of(context)
-                        ?.accountsNoneFound ??
+                AppLocalizations.of(context)?.accountsNoneFound ??
                     'No account linked to your profile found',
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
@@ -131,93 +134,110 @@ class ClanMembersState extends State<ClanMembers> {
                 );
 
                 try {
-                  final Player selectedPlayer =
-                      await PlayerService().getPlayerAndClanData(member.tag);
+                  final Player selectedPlayer = await PlayerService()
+                      .getPlayerAndClanData(member.tag);
 
                   navigator.pop();
                   navigator.push(
                     MaterialPageRoute(
-                        builder: (context) => PlayerScreen(
-                            selectedPlayer: selectedPlayer)),
+                      builder: (context) =>
+                          PlayerScreen(selectedPlayer: selectedPlayer),
+                    ),
                   );
                 } catch (e) {
                   // Dismiss loading dialog
                   navigator.pop();
-                  
+
                   // Show error message
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(AppLocalizations.of(context)!
-                            .generalRefreshFailed(e.toString())),
+                        content: Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.generalRefreshFailed(e.toString()),
+                        ),
                         duration: const Duration(seconds: 3),
                       ),
                     );
                   }
                 }
               },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: BorderSide(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color:
+                      Theme.of(context).cardTheme.color ??
+                      Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
                     color: activeUserTags.contains(member.tag)
-                        ? Colors.green
-                        : Colors.transparent,
-                    width: 2,
+                        ? Colors.green.withValues(alpha: 0.7)
+                        : Theme.of(
+                            context,
+                          ).colorScheme.outlineVariant.withValues(alpha: 0.32),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(index.toString(),
-                            style: Theme.of(context).textTheme.bodyMedium),
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: Row(
-                          children: [
-                            CachedNetworkImage(
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                              imageUrl:
-                                  ImageAssets.townHall(member.townHallLevel),
-                              width: 40,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 26,
+                      child: Text(
+                        index.toString(),
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w800,
                             ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(member.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                      overflow: TextOverflow.ellipsis),
-                                  Text(
-                                    _localizedRole(context, member.role),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                        ),
-                                  ),
-                                ],
-                              ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: Row(
+                        children: [
+                          CachedNetworkImage(
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: ImageAssets.townHall(
+                              member.townHallLevel,
                             ),
-                          ],
-                        ),
+                            width: 40,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  member.name,
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.w700),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  _localizedRole(context, member.role),
+                                  style: Theme.of(context).textTheme.labelMedium
+                                      ?.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: _buildStatColumn(member),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Expanded(flex: 3, child: _buildStatColumn(member)),
+                  ],
                 ),
               ),
             );
@@ -232,23 +252,35 @@ class ClanMembersState extends State<ClanMembers> {
         return _iconText(ImageAssets.xp, member.expLevel.toString());
       case 'builderBaseTrophies':
         return _iconText(
-            ImageAssets.trophies, member.builderBaseTrophies.toString());
+          ImageAssets.trophies,
+          member.builderBaseTrophies.toString(),
+        );
       case 'donations':
         return _iconTextWithIcon(
-            LucideIcons.chevronUp, member.donations.toString(), Colors.green);
+          LucideIcons.chevronUp,
+          member.donations.toString(),
+          Colors.green,
+        );
       case 'donationsReceived':
-        return _iconTextWithIcon(LucideIcons.chevronDown,
-            member.donationsReceived.toString(), Colors.red);
+        return _iconTextWithIcon(
+          LucideIcons.chevronDown,
+          member.donationsReceived.toString(),
+          Colors.red,
+        );
       case 'donationsRatio':
-        double ratio = member.donations /
+        double ratio =
+            member.donations /
             (member.donationsReceived == 0 ? 1 : member.donationsReceived);
         String display = ratio > 100
             ? ratio.toInt().toString()
             : ratio > 10
-                ? ratio.toStringAsFixed(1)
-                : ratio.toStringAsFixed(2);
+            ? ratio.toStringAsFixed(1)
+            : ratio.toStringAsFixed(2);
         return _iconTextWithIcon(
-            LucideIcons.chevronsUpDown, display, Colors.blue);
+          LucideIcons.chevronsUpDown,
+          display,
+          Colors.blue,
+        );
       case 'trophies':
         return _iconText(ImageAssets.trophies, member.trophies.toString());
       case 'role':
@@ -256,18 +288,20 @@ class ClanMembersState extends State<ClanMembers> {
           member.role == 'leader'
               ? Icons.star
               : member.role == 'coLeader'
-                  ? Icons.star_half
-                  : Icons.person,
+              ? Icons.star_half
+              : Icons.person,
           _localizedRole(context, member.role),
           member.role == 'leader'
               ? Colors.yellow
               : member.role == 'coLeader'
-                  ? Colors.orange
-                  : Colors.grey,
+              ? Colors.orange
+              : Colors.grey,
         );
       case 'townHallLevel':
         return _iconText(
-            member.league.tinyIconUrl ?? "", member.trophies.toString());
+          member.league.tinyIconUrl ?? "",
+          member.trophies.toString(),
+        );
       default:
         return const SizedBox.shrink();
     }
@@ -278,9 +312,10 @@ class ClanMembersState extends State<ClanMembers> {
       children: [
         const SizedBox(width: 20),
         CachedNetworkImage(
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            imageUrl: imageUrl,
-            width: 24),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+          imageUrl: imageUrl,
+          width: 24,
+        ),
         const SizedBox(width: 8),
         Text(text, style: Theme.of(context).textTheme.bodySmall),
       ],

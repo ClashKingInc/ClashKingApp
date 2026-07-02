@@ -1,13 +1,11 @@
-import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/common/widgets/buttons/chip.dart';
-import 'package:clashkingapp/common/widgets/buttons/war_button.dart';
+import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
@@ -26,257 +24,516 @@ class ClanInfoHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    return Container(
-      color: Theme.of(context).colorScheme.surface,
-      child: Column(
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomCenter,
-            children: <Widget>[
-              _buildBackgroundImage(),
-              _buildBackButton(context),
-              _buildClanBadge(),
-              _buildAction(context),
+    return _buildHero(context);
+  }
+
+  /// Hero header: backdrop image with scrim, floating actions, identity
+  /// row and a content-sized stats card straddling the image edge — same
+  /// pattern as the player page.
+  Widget _buildHero(BuildContext context) {
+    // The stats card height varies (chips + description), so the image
+    // stops at a fixed distance from the top instead of tracking the
+    // column bottom: it ends partway through the card.
+    final imageHeight = MediaQuery.of(context).padding.top + 280;
+
+    return Stack(
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: imageHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CachedNetworkImage(
+                imageUrl: ImageAssets.clanPageBackground,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    ColoredBox(color: Theme.of(context).colorScheme.surface),
+              ),
+              ColoredBox(color: Colors.black.withValues(alpha: 0.62)),
             ],
           ),
-          SizedBox(height: 46),
-          _buildClanTitleSection(context, loc),
-          const SizedBox(height: 12),
-          _buildClanChips(context, loc),
-          const SizedBox(height: 8),
-          _buildDescription(context),
-          const SizedBox(height: 16),
-          _buildWarButtons(context),
-          const SizedBox(height: 16),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackgroundImage() {
-    return SizedBox(
-      height: 190,
-      width: double.infinity,
-      child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-        child: ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withAlpha(160),
-            BlendMode.darken,
-          ),
-          child: CachedNetworkImage(
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            imageUrl: ImageAssets.clanPageBackground,
-            fit: BoxFit.cover,
-          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildBackButton(BuildContext context) {
-    return Positioned(
-      top: 40,
-      left: 10,
-      child: IconButton(
-        icon: Icon(
-          Icons.arrow_back,
-          size: 32,
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
-
-  Widget _buildClanBadge() {
-    return Positioned(
-      bottom: -52,
-      child: CachedNetworkImage(
-        errorWidget: (context, url, error) => Icon(Icons.error),
-        imageUrl: clanInfo.badgeUrls.large,
-        width: 150,
-      ),
-    );
-  }
-
-  Widget _buildClanTitleSection(BuildContext context, AppLocalizations loc) {
-    return Column(
-      children: [
-        Text(clanInfo.name, style: Theme.of(context).textTheme.titleLarge),
-        GestureDetector(
-          onTap: () {
-            FlutterClipboard.copy(clanInfo.tag).then((_) {
-              if (context.mounted) {
-                showClipboardSnackbar(
-                  context,
-                  AppLocalizations.of(context)!.generalCopiedToClipboard,
-                );
-              }
-            });
-          },
-          child: Text(
-            clanInfo.tag,
-            style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildClanChips(BuildContext context, AppLocalizations loc) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 4,
-      alignment: WrapAlignment.center,
-      children: [
-        if (clanInfo.warLeague != null)
-          ImageChip(
-            context: context,
-            imageUrl: ImageAssets.getLeagueImage(
-              clanInfo.warLeague?.name ?? "Unranked",
+        Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top + 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: _buildTopActions(context),
             ),
-            label: clanInfo.warLeague!.name,
-          ),
-        if (clanInfo.location?.name != null &&
-            clanInfo.location!.countryCode != null)
-          ImageChip(
-            context: context,
-            imageUrl: ImageAssets.flag(clanInfo.location!.countryCode!),
-            label: clanInfo.location!.name,
-          ),
-        IconChip(
-          icon: Icons.groups,
-          size: 16,
-          color: Theme.of(context).colorScheme.onSurface,
-          label: "${clanInfo.members}/50",
-        ),
-        ImageChip(
-          context: context,
-          imageUrl: ImageAssets.trophies,
-          label: NumberFormat('#,###').format(clanInfo.clanPoints),
-        ),
-        ImageChip(
-          context: context,
-          imageUrl: ImageAssets.capitalTrophy,
-          label: NumberFormat('#,###').format(clanInfo.clanCapitalPoints),
-        ),
-        if (clanInfo.requiredTownhallLevel > 0)
-          ImageChip(
-            context: context,
-            imageUrl: ImageAssets.townHall(clanInfo.requiredTownhallLevel),
-            label: clanInfo.requiredTownhallLevel.toString(),
-          ),
-        IconChip(
-          icon: Icons.mail,
-          size: 16,
-          color: Theme.of(context).colorScheme.onSurface,
-          label: () {
-            switch (clanInfo.type) {
-              case 'inviteOnly':
-                return loc.clanInviteOnly;
-              case 'open':
-                return loc.clanOpened;
-              case 'closed':
-                return loc.generalClosed;
-              default:
-                return clanInfo.type;
-            }
-          }(),
-        ),
-        ImageChip(
-          context: context,
-          imageUrl: ImageAssets.war,
-          label: () {
-            switch (clanInfo.warFrequency) {
-              case 'always':
-                return loc.clanWarFrequencyAlways;
-              case 'never':
-                return loc.clanWarFrequencyNever;
-              case 'oncePerWeek':
-                return loc.clanWarFrequencyOncePerWeek;
-              case 'moreThanOncePerWeek':
-                return loc.clanWarFrequencyMoreThanOncePerWeek;
-              case 'lessThanOncePerWeek':
-                return loc.clanWarFrequencyRarely;
-              default:
-                return loc.generalUnknown;
-            }
-          }(),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _buildIdentity(context),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: _buildStatsPanel(context),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Text(
-        clanInfo.description,
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyMedium,
-        maxLines: 7,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
+  Widget _buildTopActions(BuildContext context) {
+    final warCwl = clanInfo.warCwl;
+    final hasDiscord =
+        clanInfo.description.contains("discord.gg") ||
+        clanInfo.description.contains("discord.com");
 
-  Widget _buildWarButtons(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        if (clanInfo.warCwl != null && clanInfo.warCwl!.isInWar)
-          _buildWarButton(context),
-        if (clanInfo.warCwl != null && clanInfo.warCwl!.isInCwl) ...[
-          _buildCwlButton(context),
-          const SizedBox(height: 16),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildWarButton(BuildContext context) {
-    return buildWarButton(
-      context,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WarScreen(war: clanInfo.warCwl!.warInfo),
+        HeaderIconButton(
+          icon: Icons.arrow_back_rounded,
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onTap: () => Navigator.of(context).pop(),
+        ),
+        const Spacer(),
+        // One war entry point: CWL wins over regular war since the CWL
+        // screen also exposes the current round's war.
+        if (warCwl != null && warCwl.isInCwl) ...[
+          HeaderIconButton(
+            imageUrl: ImageAssets.cwlSwordsNoBorder,
+            tooltip: AppLocalizations.of(context)!.cwlOngoing,
+            onTap: () => _openCwl(context),
           ),
-        );
-      },
-      label: clanInfo.warCwl!.warInfo.state == "preparation"
-          ? AppLocalizations.of(context)!.warPreparation
-          : clanInfo.warCwl!.warInfo.state == "inWar"
-          ? AppLocalizations.of(context)!.warOngoing
-          : AppLocalizations.of(context)!.warEnded,
-    );
-  }
-
-  Widget _buildCwlButton(BuildContext context) {
-    return buildWarButton(
-      context,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CwlScreen(
-              warCwl: clanInfo.warCwl!,
-              clanTag: clanInfo.tag,
-              clanInfo: clanInfo.warCwl!.leagueInfo!.clans.firstWhere(
-                (clan) => clan.tag == clanInfo.tag,
+          const SizedBox(width: 8),
+        ] else if (warCwl != null && warCwl.isInWar) ...[
+          HeaderIconButton(
+            imageUrl: ImageAssets.war,
+            tooltip: AppLocalizations.of(context)!.warOngoing,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WarScreen(war: warCwl.warInfo),
               ),
             ),
           ),
-        );
-      },
-      label: AppLocalizations.of(context)!.cwlOngoing,
+          const SizedBox(width: 8),
+        ],
+        if (hasDiscord) ...[
+          HeaderIconButton(
+            icon: Icons.discord,
+            tooltip: 'Discord',
+            onTap: () => _openDiscord(context),
+          ),
+          const SizedBox(width: 8),
+        ],
+        HeaderIconButton(
+          icon: Icons.bar_chart_rounded,
+          tooltip: AppLocalizations.of(context)!.generalStats,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ClanWarStatsScreen(clan: clanInfo),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        HeaderIconButton(
+          icon: Icons.open_in_new_rounded,
+          tooltip: 'Open in game',
+          onTap: () {
+            final lang = Localizations.localeOf(context).languageCode;
+            final url = Uri.https('link.clashofclans.com', '/$lang', {
+              'action': 'OpenClanProfile',
+              'tag': clanInfo.tag,
+            });
+            showDialog(
+              context: context,
+              builder: (_) => OpenClashDialog(url: url),
+            );
+          },
+        ),
+        const SizedBox(width: 8),
+        Consumer<BookmarkService>(
+          builder: (context, bookmarks, child) {
+            final bookmarked = bookmarks.isClanBookmarked(clanInfo.tag);
+            return HeaderIconButton(
+              icon: bookmarked
+                  ? Icons.bookmark_rounded
+                  : Icons.bookmark_border_rounded,
+              tooltip: bookmarked ? 'Remove bookmark' : 'Bookmark clan',
+              onTap: () => bookmarks.toggleClan(clanInfo),
+            );
+          },
+        ),
+      ],
     );
   }
 
-  String? extractDiscordCode(String description) {
+  Widget _buildIdentity(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 82,
+          child: Column(
+            children: [
+              CachedNetworkImage(
+                imageUrl: clanInfo.badgeUrls.large,
+                width: 76,
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+              const SizedBox(height: 5),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.surface.withValues(alpha: 0.86),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  'Level ${clanInfo.clanLevel}',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                clanInfo.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                // Always white: sits on the darkened backdrop image.
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () {
+                  FlutterClipboard.copy(clanInfo.tag).then((_) {
+                    if (context.mounted) {
+                      showClipboardSnackbar(
+                        context,
+                        AppLocalizations.of(context)!.generalCopiedToClipboard,
+                      );
+                    }
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Text(
+                    clanInfo.tag,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.75),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+              if (clanInfo.location?.name != null) ...[
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.38),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (clanInfo.location?.countryCode != null) ...[
+                        MobileWebImage(
+                          imageUrl: ImageAssets.flag(
+                            clanInfo.location!.countryCode!,
+                          ),
+                          width: 15,
+                          height: 15,
+                        ),
+                        const SizedBox(width: 4),
+                      ],
+                      Flexible(
+                        child: Text(
+                          clanInfo.location!.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatsPanel(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final loc = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).toString();
+    final formatter = NumberFormat('#,###', locale);
+    final warLeagueName = clanInfo.warLeague?.name ?? 'Unranked';
+    final typeLabel = switch (clanInfo.type) {
+      'inviteOnly' => loc.clanInviteOnly,
+      'open' => loc.clanOpened,
+      'closed' => loc.generalClosed,
+      _ => clanInfo.type,
+    };
+    final warFrequencyLabel = switch (clanInfo.warFrequency) {
+      'always' => loc.clanWarFrequencyAlways,
+      'never' => loc.clanWarFrequencyNever,
+      'oncePerWeek' => loc.clanWarFrequencyOncePerWeek,
+      'moreThanOncePerWeek' => loc.clanWarFrequencyMoreThanOncePerWeek,
+      'lessThanOncePerWeek' => loc.clanWarFrequencyRarely,
+      _ => loc.generalUnknown,
+    };
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: (theme.cardTheme.color ?? colorScheme.surface).withValues(
+          alpha: 0.94,
+        ),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.5,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: SizedBox.square(
+                  dimension: 36,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: MobileWebImage(
+                      imageUrl: ImageAssets.getWarLeagueImage(warLeagueName),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      warLeagueName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Row(
+                      children: [
+                        const MobileWebImage(
+                          imageUrl: ImageAssets.trophies,
+                          width: 12,
+                          height: 12,
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            formatter.format(clanInfo.clanPoints),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  height: 1,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.groups_rounded,
+                        size: 14,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 3),
+                      Text(
+                        '${clanInfo.members}/50',
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
+                    ],
+                  ),
+                  if (clanInfo.isWarLogPublic) ...[
+                    const SizedBox(height: 3),
+                    Text(
+                      '${clanInfo.warWins}W · ${clanInfo.warTies}T · ${clanInfo.warLosses}L',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Same icon + label + colored value language as the metric
+          // bars, but content-sized chips flowing in a wrap so they
+          // scale without eating vertical space.
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              _MetricChip(
+                label: 'War wins',
+                value: formatter.format(clanInfo.warWins),
+                imageUrl: ImageAssets.war,
+                color: const Color(0xFFE8A524),
+              ),
+              _MetricChip(
+                label: 'Win streak',
+                value: formatter.format(clanInfo.warWinStreak),
+                icon: Icons.local_fire_department_rounded,
+                color: const Color(0xFFE35D4F),
+              ),
+              _MetricChip(
+                label: 'Capital',
+                value: formatter.format(clanInfo.clanCapitalPoints),
+                imageUrl: ImageAssets.capitalTrophy,
+                color: const Color(0xFF8D63D9),
+              ),
+              _MetricChip(
+                label: 'Builder base',
+                value: formatter.format(clanInfo.clanBuilderBasePoints),
+                imageUrl: ImageAssets.builderBaseStar,
+                color: const Color(0xFF2A9FD6),
+              ),
+              _MetricChip(
+                label: 'Type',
+                value: typeLabel,
+                icon: Icons.mail_rounded,
+              ),
+              _MetricChip(
+                label: 'Wars',
+                value: warFrequencyLabel,
+                icon: Icons.event_repeat_rounded,
+              ),
+              if (clanInfo.requiredTownhallLevel > 0)
+                _MetricChip(
+                  label: 'Min. TH',
+                  value: '${clanInfo.requiredTownhallLevel}+',
+                  imageUrl: ImageAssets.townHall(
+                    clanInfo.requiredTownhallLevel,
+                  ),
+                ),
+              if (clanInfo.requiredTrophies > 0)
+                _MetricChip(
+                  label: 'Min. trophies',
+                  value: NumberFormat.compact().format(
+                    clanInfo.requiredTrophies,
+                  ),
+                  imageUrl: ImageAssets.trophies,
+                ),
+            ],
+          ),
+          if (clanInfo.description.trim().isNotEmpty) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                clanInfo.description,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+                maxLines: 7,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  void _openCwl(BuildContext context) {
+    final warCwl = clanInfo.warCwl;
+    final leagueInfo = warCwl?.leagueInfo;
+    if (warCwl == null || leagueInfo == null || leagueInfo.clans.isEmpty) {
+      return;
+    }
+    final cwlClanInfo = leagueInfo.clans.firstWhere(
+      (clan) => clan.tag == clanInfo.tag,
+      orElse: () => leagueInfo.clans.first,
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CwlScreen(
+          warCwl: warCwl,
+          clanTag: clanInfo.tag,
+          clanInfo: cwlClanInfo,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openDiscord(BuildContext context) async {
+    try {
+      final code = _extractDiscordCode(clanInfo.description);
+      if (code == null) return;
+      final url = Uri.parse('https://discord.gg/$code');
+      if (!await launchUrl(url) && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.errorCannotOpenLink),
+          ),
+        );
+      }
+    } catch (e, st) {
+      Sentry.captureException(e, stackTrace: st);
+    }
+  }
+
+  String? _extractDiscordCode(String description) {
     final cleaned = description.replaceAll(RegExp(r'[\s\n\r]'), ' ');
     final RegExp discordPattern = RegExp(
       r"(?:https?:\/\/)?(?:discord\.com\/invite\/|discord\.gg\/)([a-zA-Z0-9]+)",
@@ -284,110 +541,83 @@ class ClanInfoHeaderCard extends StatelessWidget {
     final match = discordPattern.firstMatch(cleaned);
     return match?.group(1);
   }
+}
 
-  Widget _buildAction(BuildContext context) {
-    return Positioned(
-      top: 40,
-      right: 10,
+/// Compact metric chip: icon in a circle + small label above a bold
+/// colored value — the metric-bar language, sized to its content so
+/// chips flow freely in a wrap. Without [color] the chip is neutral
+/// (plain info like clan type or requirements).
+class _MetricChip extends StatelessWidget {
+  final String label;
+  final String value;
+  final String? imageUrl;
+  final IconData? icon;
+  final Color? color;
+
+  const _MetricChip({
+    required this.label,
+    required this.value,
+    this.imageUrl,
+    this.icon,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(6, 5, 10, 5),
+      decoration: BoxDecoration(
+        color: color != null
+            ? color!.withValues(alpha: 0.14)
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Consumer<BookmarkService>(
-            builder: (context, bookmarks, child) {
-              final bookmarked = bookmarks.isClanBookmarked(clanInfo.tag);
-              return IconButton(
-                tooltip: bookmarked ? 'Remove bookmark' : 'Bookmark clan',
-                icon: Icon(
-                  bookmarked
-                      ? Icons.bookmark_rounded
-                      : Icons.bookmark_border_rounded,
-                  color: Colors.white,
-                  size: 28,
-                ),
-                onPressed: () => bookmarks.toggleClan(clanInfo),
-              );
-            },
-          ),
-          if (clanInfo.description.contains("discord.gg") ||
-              clanInfo.description.contains("discord.com"))
-            IconButton(
-              icon: const Icon(Icons.discord, color: Colors.white, size: 28),
-              onPressed: () async {
-                try {
-                  final code = extractDiscordCode(clanInfo.description);
-                  if (code != null) {
-                    final url = Uri.parse('https://discord.gg/\$code');
-                    if (!await launchUrl(url) && context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppLocalizations.of(context)!.errorCannotOpenLink,
-                          ),
-                        ),
-                      );
-                    }
-                  }
-                } catch (e, st) {
-                  Sentry.captureException(e, stackTrace: st);
-                }
-              },
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: colorScheme.surface.withValues(alpha: 0.72),
+              shape: BoxShape.circle,
             ),
-          IconButton(
-            icon: const Icon(
-              Icons.sports_esports_rounded,
-              color: Colors.white,
-              size: 28,
-            ),
-            onPressed: () {
-              final lang = Localizations.localeOf(context).languageCode;
-              final url = Uri.https('link.clashofclans.com', '/$lang', {
-                'action': 'OpenClanProfile',
-                'tag': clanInfo.tag,
-              });
-              showDialog(
-                context: context,
-                builder: (_) => OpenClashDialog(url: url),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.more_vert_rounded,
-              color: Theme.of(context).colorScheme.onPrimary,
-              size: 32,
-            ),
-            onPressed: () {
-              showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(100, 100, 0, 0),
-                items: [
-                  PopupMenuItem(
-                    value: 'Stats',
-                    child: Row(
-                      children: [
-                        MobileWebImage(
-                          imageUrl: clanInfo.badgeUrls.small,
-                          width: 20,
-                        ),
-                        SizedBox(width: 8),
-                        Text(AppLocalizations.of(context)!.generalStats),
-                      ],
-                    ),
-                  ),
-                ],
-              ).then((value) {
-                if (value == 'Stats') {
-                  if (context.mounted) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ClanWarStatsScreen(clan: clanInfo),
+            child: SizedBox.square(
+              dimension: 26,
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: imageUrl != null
+                    ? MobileWebImage(imageUrl: imageUrl!)
+                    : Icon(
+                        icon,
+                        size: 14,
+                        color: color ?? colorScheme.onSurfaceVariant,
                       ),
-                    );
-                  }
-                }
-              });
-            },
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 1),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: color ?? colorScheme.onSurface,
+                  fontWeight: FontWeight.w900,
+                  height: 1.1,
+                ),
+              ),
+            ],
           ),
         ],
       ),

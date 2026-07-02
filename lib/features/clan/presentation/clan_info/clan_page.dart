@@ -6,20 +6,19 @@ import 'package:flutter/material.dart';
 class ClanInfoScreen extends StatelessWidget {
   final Clan clanInfo;
 
-  const ClanInfoScreen(
-      {super.key, required this.clanInfo});
+  const ClanInfoScreen({super.key, required this.clanInfo});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: 16 + MediaQuery.of(context).padding.bottom,
+        ),
         child: Column(
           children: [
-            Container(
-              color: Theme.of(context).colorScheme.surface,
-              child: ClanInfoHeaderCard(clanInfo: clanInfo),
-            ),
-            const SizedBox(height: 8),
+            ClanInfoHeaderCard(clanInfo: clanInfo),
+            const SizedBox(height: 10),
             ClanMembers(clanInfo: clanInfo),
           ],
         ),
