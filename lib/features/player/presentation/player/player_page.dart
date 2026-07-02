@@ -1,10 +1,11 @@
-import 'package:clashkingapp/features/player/presentation/player/player_season_stats_tab.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_achievement.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -23,22 +24,24 @@ class PlayerScreenState extends State<PlayerScreen> {
   int selectedTab = 0;
 
   @override
-  Widget build(BuildContext context) {
-    final hasBottomAction = _hasWarAction(widget.selectedPlayer);
-    final bottomActionHeight = hasBottomAction
-        ? 82 + MediaQuery.of(context).padding.bottom
-        : 0.0;
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      await context.read<PlayerService>().refreshOfficialPlayerSummary(
+        widget.selectedPlayer,
+      );
+      if (mounted) setState(() {});
+    });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      bottomNavigationBar: hasBottomAction
-          ? PlayerProfileFloatingActions(player: widget.selectedPlayer)
-          : null,
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragEnd: _handleTabSwipe,
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: bottomActionHeight),
           child: Column(
             children: [
               PlayerInfoHeader(
@@ -46,6 +49,7 @@ class PlayerScreenState extends State<PlayerScreen> {
                 player: widget.selectedPlayer,
               ),
               _PlayerProfileTabs(
+                player: widget.selectedPlayer,
                 selectedIndex: selectedTab,
                 onTabSelected: _selectTab,
               ),
@@ -58,8 +62,7 @@ class PlayerScreenState extends State<PlayerScreen> {
                   child: switch (selectedTab) {
                     0 => _buildPlayerContent(widget.selectedPlayer),
                     1 => _buildBuilderContent(widget.selectedPlayer),
-                    2 => _buildAchievementContent(widget.selectedPlayer),
-                    _ => PlayerSeasonStatsTab(player: widget.selectedPlayer),
+                    _ => _buildAchievementContent(widget.selectedPlayer),
                   },
                 ),
               ),
@@ -70,14 +73,8 @@ class PlayerScreenState extends State<PlayerScreen> {
     );
   }
 
-  bool _hasWarAction(Player player) {
-    final cwl = player.clan?.warCwl;
-    return player.warData != null ||
-        (cwl != null && (cwl.isInWar || cwl.isInCwl));
-  }
-
   void _selectTab(int index) {
-    final clampedIndex = index > 3 ? 3 : index;
+    final clampedIndex = index > 2 ? 2 : index;
     final boundedIndex = index < 0 ? 0 : clampedIndex;
     if (boundedIndex == selectedTab) return;
     setState(() => selectedTab = boundedIndex);
@@ -85,7 +82,7 @@ class PlayerScreenState extends State<PlayerScreen> {
 
   void _handleTabSwipe(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
-    if (velocity.abs() < 250) return;
+    if (velocity.abs() < 240) return;
     if (velocity < 0) {
       _selectTab(selectedTab + 1);
     } else {
@@ -190,55 +187,104 @@ class PlayerScreenState extends State<PlayerScreen> {
   }
 }
 
-class _PlayerProfileTabs extends StatelessWidget {
+class _PlayerProfileTabs extends StatefulWidget {
+  final Player player;
   final int selectedIndex;
   final ValueChanged<int> onTabSelected;
 
   const _PlayerProfileTabs({
+    required this.player,
     required this.selectedIndex,
     required this.onTabSelected,
   });
 
   @override
+  State<_PlayerProfileTabs> createState() => _PlayerProfileTabsState();
+}
+
+class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: widget.selectedIndex,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _PlayerProfileTabs oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedIndex != widget.selectedIndex &&
+        _tabController.index != widget.selectedIndex) {
+      _tabController.animateTo(
+        widget.selectedIndex,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 2),
-      child: Row(
-        children: [
-          _ProfileTab(
-            label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
-            icon: Icons.home_rounded,
-            selected: selectedIndex == 0,
-            onTap: () => onTabSelected(0),
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.42),
           ),
-          const SizedBox(width: 8),
-          _ProfileTab(
-            label:
-                AppLocalizations.of(context)?.gameBaseBuilder ??
-                'Builder Base',
-            icon: Icons.construction_rounded,
-            selected: selectedIndex == 1,
-            onTap: () => onTabSelected(1),
-          ),
-          const SizedBox(width: 8),
-          _ProfileTab(
-            label:
-                AppLocalizations.of(context)?.gameAchievements ??
-                'Achievements',
-            icon: Icons.military_tech_rounded,
-            selected: selectedIndex == 2,
-            onTap: () => onTabSelected(2),
-          ),
-          const SizedBox(width: 8),
-          _ProfileTab(
-            label: 'Season History',
-            icon: Icons.bar_chart_rounded,
-            selected: selectedIndex == 3,
-            onTap: () => onTabSelected(3),
-          ),
-        ],
+        ),
+      ),
+      child: SizedBox(
+        height: 48,
+        child: TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+          indicatorColor: colorScheme.primary,
+          indicatorWeight: 3,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
+          dividerColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          onTap: widget.onTabSelected,
+          tabs: [
+            _ProfileTab(
+              label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
+              imageUrl: ImageAssets.townHall(widget.player.townHallLevel),
+              selected: widget.selectedIndex == 0,
+            ),
+            _ProfileTab(
+              label:
+                  AppLocalizations.of(context)?.gameBaseBuilder ??
+                  'Builder Base',
+              imageUrl: ImageAssets.builderHall(widget.player.builderHallLevel),
+              selected: widget.selectedIndex == 1,
+            ),
+            _ProfileTab(
+              label:
+                  AppLocalizations.of(context)?.gameAchievements ??
+                  'Achievements',
+              imageUrl: ImageAssets.attackStar,
+              selected: widget.selectedIndex == 2,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -246,53 +292,40 @@ class _PlayerProfileTabs extends StatelessWidget {
 
 class _ProfileTab extends StatelessWidget {
   final String label;
-  final IconData icon;
+  final String imageUrl;
   final bool selected;
-  final VoidCallback onTap;
 
   const _ProfileTab({
     required this.label,
-    required this.icon,
+    required this.imageUrl,
     required this.selected,
-    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final foreground =
-        selected ? colorScheme.primary : colorScheme.onSurfaceVariant;
+    final foreground = selected
+        ? colorScheme.onSurface
+        : colorScheme.onSurface.withValues(alpha: 0.58);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-          decoration: BoxDecoration(
-            color: selected
-                ? colorScheme.primary.withValues(alpha: 0.14)
-                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
-            borderRadius: BorderRadius.circular(999),
+    return Tab(
+      height: 48,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MobileWebImage(imageUrl: imageUrl, width: 18, height: 18),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            maxLines: 1,
+            softWrap: false,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: foreground,
+              fontSize: 13,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+            ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 16, color: foreground),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                maxLines: 1,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: foreground,
-                  fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -334,21 +367,22 @@ class _AchievementSectionState extends State<_AchievementSection> {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ??
-            Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(28),
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Theme.of(
             context,
-          ).colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ).colorScheme.outlineVariant.withValues(alpha: 0.42),
         ),
       ),
       child: Column(
         children: [
-          InkWell(
-            borderRadius: BorderRadius.circular(28),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
@@ -376,14 +410,14 @@ class _AchievementSectionState extends State<_AchievementSection> {
                     child: Text(
                       widget.title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                   Text(
                     '$completed/${widget.achievements.length}',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -396,8 +430,9 @@ class _AchievementSectionState extends State<_AchievementSection> {
             child: LinearProgressIndicator(
               value: ratio,
               minHeight: 6,
-              backgroundColor:
-                  Theme.of(context).colorScheme.surfaceContainerHighest,
+              backgroundColor: Theme.of(
+                context,
+              ).colorScheme.outlineVariant.withValues(alpha: 0.25),
             ),
           ),
           if (_expanded) ...[
@@ -438,15 +473,15 @@ class _AchievementTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(12),
-        border: complete
-            ? Border.all(
-                color: const Color(0xFFFFD75E).withValues(alpha: 0.68),
-              )
-            : null,
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.42),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: complete
+              ? const Color(0xFFFFD75E).withValues(alpha: 0.68)
+              : Theme.of(
+                  context,
+                ).colorScheme.outlineVariant.withValues(alpha: 0.34),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -460,7 +495,7 @@ class _AchievementTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(
                     context,
-                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w900),
+                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
               ),
               const SizedBox(width: 8),
@@ -489,8 +524,9 @@ class _AchievementTile extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: ratio,
                     minHeight: 6,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.surfaceContainerHighest,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.outlineVariant.withValues(alpha: 0.24),
                     valueColor: AlwaysStoppedAnimation<Color>(
                       complete
                           ? const Color(0xFFFFD75E)
@@ -504,7 +540,7 @@ class _AchievementTile extends StatelessWidget {
                 progress,
                 style: Theme.of(
                   context,
-                ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w800),
+                ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
           ),

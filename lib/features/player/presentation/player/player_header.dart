@@ -1,4 +1,5 @@
-import 'dart:ui';
+import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
@@ -7,11 +8,12 @@ import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
-import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_page.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
@@ -39,25 +41,37 @@ class PlayerInfoHeader extends StatelessWidget {
     final hallImageUrl = isBuilderTab
         ? player.builderHallPic
         : player.townHallPic;
-
-    // The backdrop fills the whole header; the glass stats panel straddles
-    // its bottom edge, same pattern as the to-do page header.
-    const panelOverlap = 46.0;
+    final warAction = _currentWarAction(context, player);
 
     return Stack(
       children: [
         Positioned.fill(
-          bottom: panelOverlap,
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha: 0.62),
+              Colors.black.withValues(alpha: 0.50),
               BlendMode.darken,
             ),
             child: CachedNetworkImage(
               imageUrl: backgroundImageUrl,
               fit: BoxFit.cover,
+              alignment: Alignment.bottomCenter,
               errorWidget: (context, url, error) =>
                   ColoredBox(color: Theme.of(context).colorScheme.surface),
+            ),
+          ),
+        ),
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.36),
+                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.64),
+                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.92),
+                ],
+              ),
             ),
           ),
         ),
@@ -70,11 +84,21 @@ class PlayerInfoHeader extends StatelessWidget {
                 children: [
                   _HeaderIconButton(
                     icon: Icons.arrow_back_rounded,
-                    tooltip:
-                        MaterialLocalizations.of(context).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
                     onTap: () => Navigator.of(context).pop(),
                   ),
                   const Spacer(),
+                  if (warAction != null) ...[
+                    _HeaderImageButton(
+                      imageUrl: warAction.imageUrl,
+                      tooltip: warAction.label,
+                      backgroundColor: const Color(0xFFE0302B),
+                      onTap: warAction.onTap,
+                    ),
+                    const SizedBox(width: 8),
+                  ],
                   _HeaderIconButton(
                     icon: Icons.open_in_new_rounded,
                     tooltip: 'Open in game',
@@ -83,8 +107,9 @@ class PlayerInfoHeader extends StatelessWidget {
                   const SizedBox(width: 8),
                   Consumer<BookmarkService>(
                     builder: (context, bookmarks, child) {
-                      final bookmarked =
-                          bookmarks.isPlayerBookmarked(player.tag);
+                      final bookmarked = bookmarks.isPlayerBookmarked(
+                        player.tag,
+                      );
                       return _HeaderIconButton(
                         icon: bookmarked
                             ? Icons.bookmark_rounded
@@ -99,9 +124,8 @@ class PlayerInfoHeader extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 6),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: _IdentityPanel(
                 player: player,
                 hallImageUrl: hallImageUrl,
@@ -109,14 +133,176 @@ class PlayerInfoHeader extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: isBuilderTab
-                  ? _BuilderBaseStats(player: player)
-                  : _HomeBaseStats(player: player),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+              child: _HomeBaseStats(player: player),
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class _HeaderImageButton extends StatelessWidget {
+  final String imageUrl;
+  final String tooltip;
+  final Color backgroundColor;
+  final VoidCallback onTap;
+
+  const _HeaderImageButton({
+    required this.imageUrl,
+    required this.tooltip,
+    required this.backgroundColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _HeaderGlassButton(
+      tooltip: tooltip,
+      onTap: onTap,
+      tint: backgroundColor,
+      child: Center(
+        child: MobileWebImage(imageUrl: imageUrl, width: 25, height: 25),
+      ),
+    );
+  }
+}
+
+class _GlassPanel extends StatelessWidget {
+  final Widget child;
+  final double? width;
+  final double height;
+  final double borderRadius;
+  final EdgeInsetsGeometry padding;
+  final VoidCallback? onTap;
+  final Color? tint;
+
+  const _GlassPanel({
+    required this.child,
+    this.width,
+    required this.height,
+    required this.borderRadius,
+    required this.padding,
+    this.onTap,
+    this.tint,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: NativeLiquidGlassBar(
+                height: height,
+                cornerRadius: borderRadius,
+                opacity: 0.72,
+                interactive: onTap != null,
+                borderOpacity: Theme.of(context).brightness == Brightness.dark
+                    ? 0.22
+                    : 0.32,
+                shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                    ? 0.24
+                    : 0.08,
+              ),
+            ),
+            if (tint != null)
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        tint!.withValues(alpha: 0.24),
+                        tint!.withValues(alpha: 0.08),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(borderRadius),
+                splashFactory: NoSplash.splashFactory,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                child: Padding(padding: padding, child: child),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderGlassButton extends StatelessWidget {
+  final Widget child;
+  final String tooltip;
+  final VoidCallback onTap;
+  final Color? tint;
+
+  const _HeaderGlassButton({
+    required this.child,
+    required this.tooltip,
+    required this.onTap,
+    this.tint,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const size = 42.0;
+    const radius = 19.0;
+
+    return Tooltip(
+      message: tooltip,
+      child: SizedBox(
+        height: size,
+        width: size,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(radius),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const NativeLiquidGlassBar(
+                height: size,
+                cornerRadius: radius,
+                opacity: 0.72,
+                interactive: true,
+              ),
+              if (tint != null)
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: tint!.withValues(alpha: 0.58),
+                    borderRadius: BorderRadius.circular(radius),
+                  ),
+                ),
+              Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(radius),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(radius),
+                  splashFactory: NoSplash.splashFactory,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: onTap,
+                  child: child,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -141,39 +327,35 @@ class _IdentityPanel extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _HallBadge(
-            imageUrl: hallImageUrl,
-            xpLevel: player.expLevel,
-            stars: selectedTab == 1 ? 0 : player.townHallWeaponLevel,
-          ),
+          _HallBadge(imageUrl: hallImageUrl, stars: player.townHallWeaponLevel),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  player.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  // Always white: the identity row sits on the darkened
-                  // backdrop image in both themes.
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(child: _CopyablePlayerTag(tag: player.tag)),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: _WarPreferenceChip(player: player),
+                    Expanded(
+                      child: Text(
+                        player.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 27,
+                  child: Row(
+                    children: [
+                      Expanded(child: _CopyablePlayerTag(tag: player.tag)),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 6),
                 if (player.clanTag.isNotEmpty)
@@ -202,277 +384,163 @@ class _HomeBaseStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
 
-    return _StatsPanel(
-      height: 178,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withValues(
-                    alpha: 0.5,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-                child: SizedBox.square(
-                  dimension: 36,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: MobileWebImage(imageUrl: player.leagueUrl),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      player.league,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 1),
-                    Text(
-                      formatter.format(player.trophies),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        height: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                DateFormat('MMMM yyyy').format(DateTime.now()),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _StatBar(
-                  label: 'War Stars',
-                  value: formatter.format(player.warStars),
-                  imageUrl: ImageAssets.attackStar,
-                  color: const Color(0xFFE8A524),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          PlayerWarStatsScreen(player: player),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 7),
-              Expanded(
-                child: _StatBar(
-                  label: 'Donations',
-                  value:
-                      '${formatter.format(player.donations)}/${formatter.format(player.donationsReceived)}',
-                  icon: Icons.swap_vert_rounded,
-                  color: const Color(0xFF14A37F),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 7),
-          Row(
-            children: [
-              Expanded(
-                child: _StatBar(
-                  label: 'Attacks won',
-                  value: formatter.format(player.attackWins),
-                  imageUrl: ImageAssets.sword,
-                  color: const Color(0xFFE35D4F),
-                ),
-              ),
-              const SizedBox(width: 7),
-              Expanded(
-                child: _StatBar(
-                  label: 'Defenses won',
-                  value: formatter.format(player.defenseWins),
-                  imageUrl: ImageAssets.shield,
-                  color: const Color(0xFF4E7DF2),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        _LeagueSummaryTile(
+          leagueName: player.league,
+          trophies: formatter.format(player.trophies),
+          leagueUrl: player.leagueUrl,
+          seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
+          attackWins: formatter.format(player.attackWins),
+          defenseWins: formatter.format(player.defenseWins),
+        ),
+        const SizedBox(height: 6),
+        _PlayerQuickStats(player: player),
+      ],
     );
   }
 }
 
-/// Liquid glass stats panel straddling the header backdrop edge — the
-/// image shows through its top half, same pattern as the to-do header.
-class _StatsPanel extends StatelessWidget {
-  final Widget child;
-  final double height;
+class _PlayerQuickStats extends StatelessWidget {
+  final Player player;
 
-  const _StatsPanel({required this.child, required this.height});
+  const _PlayerQuickStats({required this.player});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          NativeLiquidGlassBar(height: height, cornerRadius: 28),
-          Padding(padding: const EdgeInsets.all(14), child: child),
-        ],
-      ),
+    final warPreferenceLabel = player.warPreference == 'in'
+        ? AppLocalizations.of(context)!.warStatusReady
+        : AppLocalizations.of(context)!.warStatusUnready;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _HeaderChipRows(
+          children: [
+            _HeaderStatChip(
+              description: 'War Stars',
+              imageUrl: ImageAssets.attackStar,
+              label: player.warStars.toString(),
+            ),
+            _HeaderStatChip(
+              description: 'War Preference',
+              imageUrl: player.warPreferenceImage,
+              label: warPreferenceLabel,
+            ),
+            _HeaderStatChip(
+              description: 'Donated',
+              icon: Icons.arrow_upward_rounded,
+              iconColor: Colors.green,
+              label: player.donations.toString(),
+            ),
+            _HeaderStatChip(
+              description: 'Received',
+              icon: Icons.arrow_downward_rounded,
+              iconColor: Colors.redAccent,
+              label: player.donationsReceived.toString(),
+            ),
+            _HeaderStatChip(
+              description: 'Experience Level',
+              imageUrl: ImageAssets.xp,
+              label: player.expLevel.toString(),
+            ),
+            _HeaderStatChip(
+              description: 'Clan Capital Contribution',
+              imageUrl: ImageAssets.capitalGold,
+              label: NumberFormat(
+                '#,###',
+              ).format(player.clanCapitalContributions),
+            ),
+            _HeaderStatChip(
+              description: player.builderBaseLeague,
+              imageUrl: player.builderBaseLeagueUrl,
+              label: player.builderBaseTrophies.toString(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
 
-/// Tinted metric bar, same language as the home to-do card metrics.
-class _StatBar extends StatelessWidget {
-  final String label;
-  final String value;
-  final String? imageUrl;
-  final IconData? icon;
-  final Color color;
-  final VoidCallback? onTap;
-
-  const _StatBar({
+class _HeaderStatChip extends StatelessWidget {
+  const _HeaderStatChip({
+    required this.description,
     required this.label,
-    required this.value,
-    required this.color,
     this.imageUrl,
     this.icon,
-    this.onTap,
+    this.iconColor,
   });
+
+  final String description;
+  final String label;
+  final String? imageUrl;
+  final IconData? icon;
+  final Color? iconColor;
+
+  double estimatedWidth(BuildContext context) {
+    final style =
+        Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: Theme.of(context).colorScheme.onSurface,
+          fontWeight: FontWeight.w700,
+        ) ??
+        const TextStyle(fontSize: 14, fontWeight: FontWeight.w700);
+    final painter = TextPainter(
+      text: TextSpan(text: label, style: style),
+      textDirection: Directionality.of(context),
+      maxLines: 1,
+    )..layout();
+
+    return 18 + 19 + 5 + painter.width;
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SizedBox(
-      height: 46,
-      child: Material(
-        color: color.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(14),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 9),
-            child: Row(
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface.withValues(alpha: 0.72),
-                    shape: BoxShape.circle,
-                  ),
-                  child: SizedBox.square(
-                    dimension: 34,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: imageUrl != null
-                          ? MobileWebImage(imageUrl: imageUrl!)
-                          : Icon(icon, size: 19, color: color),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Stacked label/value so neither fights the other for
-                // horizontal space — labels no longer get truncated.
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 1),
-                      Text(
-                        value,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: color,
-                          fontWeight: FontWeight.w900,
-                          height: 1.1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (onTap != null)
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    size: 18,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-              ],
-            ),
+    return Tooltip(
+      message: description,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colorScheme.surface.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.18),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class PlayerProfileFloatingActions extends StatelessWidget {
-  final Player player;
-
-  const PlayerProfileFloatingActions({super.key, required this.player});
-
-  @override
-  Widget build(BuildContext context) {
-    final warAction = _currentWarAction(context, player);
-
-    return SafeArea(
-      minimum: const EdgeInsets.fromLTRB(14, 0, 14, 6),
-      child: SizedBox(
-        height: 62,
-        child: Align(
-          alignment: Alignment.topCenter,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (warAction != null) ...[
-                SizedBox(
-                  width: 124,
-                  child: _FloatingProfileAction(
-                    imageUrl: warAction.imageUrl,
-                    label: warAction.label,
-                    emphasized: true,
-                    onTap: warAction.onTap,
-                  ),
+              SizedBox.square(
+                dimension: 19,
+                child: imageUrl != null
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl!,
+                        fit: BoxFit.contain,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.shield_outlined, size: 16),
+                      )
+                    : Icon(
+                        icon,
+                        size: 19,
+                        color: iconColor ?? colorScheme.onSurfaceVariant,
+                      ),
+              ),
+              const SizedBox(width: 5),
+              Text(
+                label,
+                maxLines: 1,
+                softWrap: false,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.w700,
                 ),
-              ],
+              ),
             ],
           ),
         ),
@@ -481,86 +549,82 @@ class PlayerProfileFloatingActions extends StatelessWidget {
   }
 }
 
-class _FloatingProfileAction extends StatelessWidget {
-  final String? imageUrl;
-  final String label;
-  final bool emphasized;
-  final VoidCallback onTap;
+class _HeaderChipRows extends StatelessWidget {
+  const _HeaderChipRows({required this.children});
 
-  const _FloatingProfileAction({
-    this.imageUrl,
-    required this.label,
-    this.emphasized = false,
-    required this.onTap,
-  });
+  final List<_HeaderStatChip> children;
 
   @override
   Widget build(BuildContext context) {
-    const red = Color(0xFFE0302B);
-    final colorScheme = Theme.of(context).colorScheme;
-    final foreground = emphasized ? Colors.white : colorScheme.onSurface;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final candidates = <List<int>>[
+          if (constraints.maxWidth >= 620) [children.length],
+          [4, 3],
+          [3, 4],
+          [3, 2, 2],
+          [2, 3, 2],
+        ];
+        final rowCounts = candidates.firstWhere(
+          (candidate) => _rowsFit(context, constraints.maxWidth, candidate),
+          orElse: () => const [2, 3, 2],
+        );
+        final rows = _rowsFromCounts(rowCounts);
 
-    // The Android glass fallback is far more translucent than the iOS
-    // native glass — give it a more solid fill so the button stays
-    // readable over scrolling content.
-    final native = supportsNativeLiquidGlass;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < rows.length; i++) ...[
+              if (i > 0) const SizedBox(height: 7),
+              _HeaderChipRow(children: rows[i]),
+            ],
+          ],
+        );
+      },
+    );
+  }
 
-    return SizedBox(
-      height: 62,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          NativeLiquidGlassBar(
-            height: 62,
-            cornerRadius: 31,
-            opacity: native ? (emphasized ? 0.62 : 0.68) : 1.0,
-            borderOpacity: emphasized ? 0.44 : 0.3,
-            shadowOpacity: 0.22,
-            interactive: true,
-          ),
-          if (emphasized)
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: red.withValues(alpha: native ? 0.22 : 0.38),
-                borderRadius: BorderRadius.circular(31),
-                border: Border.all(color: red.withValues(alpha: 0.5)),
-              ),
-            ),
-          Material(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(31),
-            child: InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(31),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (imageUrl != null)
-                      MobileWebImage(
-                        imageUrl: imageUrl!,
-                        width: 24,
-                        height: 24,
-                      ),
-                    const SizedBox(height: 3),
-                    Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: foreground,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+  bool _rowsFit(BuildContext context, double maxWidth, List<int> rowCounts) {
+    var offset = 0;
+    for (final count in rowCounts) {
+      if (offset + count > children.length) return false;
+      final row = children.skip(offset).take(count).toList();
+      final spacing = (count - 1) * 6;
+      final width = row.fold<double>(
+        spacing.toDouble(),
+        (sum, child) => sum + child.estimatedWidth(context),
+      );
+      if (width > maxWidth) return false;
+      offset += count;
+    }
+    return offset == children.length;
+  }
+
+  List<List<_HeaderStatChip>> _rowsFromCounts(List<int> rowCounts) {
+    var offset = 0;
+    return rowCounts.map((count) {
+      final row = children.skip(offset).take(count).toList();
+      offset += count;
+      return row;
+    }).toList();
+  }
+}
+
+class _HeaderChipRow extends StatelessWidget {
+  const _HeaderChipRow({required this.children});
+
+  final List<_HeaderStatChip> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var i = 0; i < children.length; i++) ...[
+          if (i > 0) const SizedBox(width: 6),
+          children[i],
         ],
-      ),
+      ],
     );
   }
 }
@@ -619,6 +683,237 @@ void _openCwl(BuildContext context, Player player) {
   );
 }
 
+class _LeagueSummaryTile extends StatefulWidget {
+  final String leagueName;
+  final String trophies;
+  final String leagueUrl;
+  final String seasonName;
+  final String attackWins;
+  final String defenseWins;
+
+  const _LeagueSummaryTile({
+    required this.leagueName,
+    required this.trophies,
+    required this.leagueUrl,
+    required this.seasonName,
+    required this.attackWins,
+    required this.defenseWins,
+  });
+
+  @override
+  State<_LeagueSummaryTile> createState() => _LeagueSummaryTileState();
+}
+
+class _LeagueSummaryTileState extends State<_LeagueSummaryTile> {
+  static final Map<String, Color> _tintCache = {};
+  Color? _tint;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTint();
+  }
+
+  @override
+  void didUpdateWidget(covariant _LeagueSummaryTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.leagueUrl != widget.leagueUrl) {
+      _loadTint();
+    }
+  }
+
+  Future<void> _loadTint() async {
+    final leagueUrl = widget.leagueUrl;
+    if (leagueUrl.isEmpty) {
+      if (mounted) setState(() => _tint = null);
+      return;
+    }
+
+    final cachedTint = _tintCache[leagueUrl];
+    if (cachedTint != null) {
+      if (mounted) setState(() => _tint = cachedTint);
+      return;
+    }
+
+    if (mounted) setState(() => _tint = null);
+
+    try {
+      final provider = CachedNetworkImageProvider(leagueUrl);
+      final stream = provider.resolve(ImageConfiguration.empty);
+      late final ImageStreamListener listener;
+      final completer = Completer<ImageInfo>();
+
+      listener = ImageStreamListener(
+        (imageInfo, synchronousCall) {
+          if (!completer.isCompleted) completer.complete(imageInfo);
+          stream.removeListener(listener);
+        },
+        onError: (error, stackTrace) {
+          if (!completer.isCompleted) {
+            completer.completeError(error, stackTrace);
+          }
+          stream.removeListener(listener);
+        },
+      );
+      stream.addListener(listener);
+
+      final imageInfo = await completer.future;
+      final tint = await _dominantTint(imageInfo.image);
+      if (tint == null) return;
+
+      _tintCache[leagueUrl] = tint;
+      if (mounted && widget.leagueUrl == leagueUrl) {
+        setState(() => _tint = tint);
+      }
+    } catch (_) {
+      // Keep the glass neutral if the remote badge cannot be sampled.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return _GlassPanel(
+      width: double.infinity,
+      height: 75,
+      borderRadius: 16,
+      padding: const EdgeInsets.all(12),
+      tint: _tint,
+      child: Row(
+        children: [
+          MobileWebImage(imageUrl: widget.leagueUrl, width: 46, height: 46),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.leagueName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  widget.trophies,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    widget.seasonName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.72),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 18,
+                    color: colorScheme.onSurface.withValues(alpha: 0.58),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _MiniMetric(
+                    stat: _MetricSubStat(
+                      imageUrl: ImageAssets.sword,
+                      value: widget.attackWins,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  _MiniMetric(
+                    stat: _MetricSubStat(
+                      imageUrl: ImageAssets.shield,
+                      value: widget.defenseWins,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Future<Color?> _dominantTint(ui.Image image) async {
+  final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  if (data == null) return null;
+
+  final buckets = <int, _ColorBucket>{};
+  const sampleStride = 4;
+  for (var y = 0; y < image.height; y += sampleStride) {
+    for (var x = 0; x < image.width; x += sampleStride) {
+      final index = (y * image.width + x) * 4;
+      final r = data.getUint8(index);
+      final g = data.getUint8(index + 1);
+      final b = data.getUint8(index + 2);
+      final a = data.getUint8(index + 3);
+      if (a < 96) continue;
+
+      final color = Color.fromARGB(a, r, g, b);
+      final hsl = HSLColor.fromColor(color);
+      if (hsl.lightness < 0.12 || hsl.lightness > 0.92) continue;
+      if (hsl.saturation < 0.24) continue;
+
+      final key = (r ~/ 24) << 16 | (g ~/ 24) << 8 | (b ~/ 24);
+      final bucket = buckets.putIfAbsent(key, _ColorBucket.new);
+      bucket
+        ..count += 1
+        ..red += r
+        ..green += g
+        ..blue += b
+        ..score += hsl.saturation * (1 - (hsl.lightness - 0.55).abs());
+    }
+  }
+
+  if (buckets.isEmpty) return null;
+  final best = buckets.values.reduce(
+    (a, b) => a.weightedScore >= b.weightedScore ? a : b,
+  );
+  return Color.fromARGB(
+    255,
+    best.red ~/ best.count,
+    best.green ~/ best.count,
+    best.blue ~/ best.count,
+  );
+}
+
+class _ColorBucket {
+  int count = 0;
+  int red = 0;
+  int green = 0;
+  int blue = 0;
+  double score = 0;
+
+  double get weightedScore => count * score;
+}
+
 class _WarActionInfo {
   final String imageUrl;
   final String label;
@@ -631,79 +926,60 @@ class _WarActionInfo {
   });
 }
 
-class _BuilderBaseStats extends StatelessWidget {
-  final Player player;
+class _MetricSubStat {
+  final String imageUrl;
+  final String value;
 
-  const _BuilderBaseStats({required this.player});
+  const _MetricSubStat({required this.imageUrl, required this.value});
+}
+
+class _MiniMetric extends StatelessWidget {
+  final _MetricSubStat stat;
+
+  const _MiniMetric({required this.stat});
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
-    final formatter = NumberFormat('#,###', locale);
-
-    return _StatsPanel(
-      height: 128,
-      child: Column(
-        children: [
-          _StatBar(
-            label: 'Builder Trophies',
-            value: formatter.format(player.builderBaseTrophies),
-            imageUrl: ImageAssets.trophies,
-            color: const Color(0xFFE8A524),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MobileWebImage(imageUrl: stat.imageUrl, width: 14, height: 14),
+        const SizedBox(width: 3),
+        Flexible(
+          child: Text(
+            stat.value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 7),
-          Row(
-            children: [
-              Expanded(
-                child: _StatBar(
-                  label: 'Attacks won',
-                  value: formatter.format(player.attackWins),
-                  imageUrl: ImageAssets.sword,
-                  color: const Color(0xFFE35D4F),
-                ),
-              ),
-              const SizedBox(width: 7),
-              Expanded(
-                child: _StatBar(
-                  label: 'Defenses won',
-                  value: formatter.format(player.defenseWins),
-                  imageUrl: ImageAssets.shield,
-                  color: const Color(0xFF4E7DF2),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 class _HallBadge extends StatelessWidget {
   final String imageUrl;
-  final int xpLevel;
   final int stars;
 
-  const _HallBadge({
-    required this.imageUrl,
-    required this.xpLevel,
-    required this.stars,
-  });
+  const _HallBadge({required this.imageUrl, required this.stars});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 82,
+      width: 104,
       child: Column(
         children: [
           SizedBox(
-            height: 76,
+            height: 104,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 CachedNetworkImage(
                   imageUrl: imageUrl,
-                  width: 76,
+                  width: 104,
                   fit: BoxFit.contain,
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
@@ -711,7 +987,7 @@ class _HallBadge extends StatelessWidget {
             ),
           ),
           if (stars > 0) ...[
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 1,
@@ -727,147 +1003,144 @@ class _HallBadge extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: 5),
-          _XpPill(level: xpLevel),
         ],
       ),
     );
   }
 }
 
-class _ClanRoleChip extends StatelessWidget {
+class _ClanRoleChip extends StatefulWidget {
   final Player player;
   final String role;
 
   const _ClanRoleChip({required this.player, required this.role});
 
   @override
+  State<_ClanRoleChip> createState() => _ClanRoleChipState();
+}
+
+class _ClanRoleChipState extends State<_ClanRoleChip> {
+  String? _cachedClanTag;
+
+  Player get player => widget.player;
+  String get role => widget.role;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCachedClanTag();
+  }
+
+  @override
+  void didUpdateWidget(covariant _ClanRoleChip oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.player.tag != widget.player.tag) {
+      _cachedClanTag = null;
+      _loadCachedClanTag();
+    }
+  }
+
+  Future<void> _loadCachedClanTag() async {
+    final cached = await getPrefs('player_${widget.player.tag}_clan_tag');
+    if (!mounted || cached == null || cached.isEmpty) return;
+    setState(() => _cachedClanTag = cached);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Sits on the darkened backdrop image: liquid glass chrome + white text.
-    return SizedBox(
-      height: 46,
-      child: Stack(
-        fit: StackFit.expand,
+    final clanTag = [
+      player.clan?.tag,
+      player.clanOverview.tag,
+      player.clanTag,
+      _cachedClanTag,
+    ].whereType<String>().firstWhere((tag) => tag.isNotEmpty, orElse: () => '');
+    final canOpenClan = clanTag.isNotEmpty;
+
+    return _GlassPanel(
+      width: double.infinity,
+      height: 50,
+      borderRadius: 16,
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+      onTap: canOpenClan ? () => _openClan(context, clanTag) : null,
+      child: Row(
         children: [
-          const NativeLiquidGlassBar(height: 46, cornerRadius: 14),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: player.clan == null
-                  ? null
-                  : () => Navigator.push(
+          MobileWebImage(
+            imageUrl: player.clanOverview.badgeUrls.small,
+            width: 26,
+            height: 26,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  role,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Theme.of(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ClanInfoScreen(clanInfo: player.clan!),
-                      ),
-                    ),
-              borderRadius: BorderRadius.circular(14),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    MobileWebImage(
-                      imageUrl: player.clanOverview.badgeUrls.small,
-                      width: 26,
-                      height: 26,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Clan • $role',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                  color:
-                                      Colors.white.withValues(alpha: 0.72),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                          Text(
-                            player.clanOverview.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (player.clan != null)
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        size: 18,
-                        color: Colors.white.withValues(alpha: 0.65),
-                      ),
-                  ],
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
+                Text(
+                  player.clanOverview.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
+                ),
+              ],
             ),
           ),
+          if (canOpenClan)
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 18,
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.48),
+            ),
         ],
       ),
     );
   }
-}
 
-class _WarPreferenceChip extends StatelessWidget {
-  final Player player;
+  Future<void> _openClan(BuildContext context, String clanTag) async {
+    final navigator = Navigator.of(context);
+    if (player.clan != null) {
+      navigator.push(
+        MaterialPageRoute(
+          builder: (context) => ClanInfoScreen(clanInfo: player.clan!),
+        ),
+      );
+      return;
+    }
 
-  const _WarPreferenceChip({required this.player});
-
-  @override
-  Widget build(BuildContext context) {
-    final inWar = player.warPreference == 'in';
-    final label = inWar
-        ? AppLocalizations.of(context)!.warStatusReady
-        : AppLocalizations.of(context)!.warStatusUnready;
-    final color =
-        inWar ? Colors.green : Theme.of(context).colorScheme.primary;
-
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 144),
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(
-        // Solid enough to stay readable over the backdrop image.
-        color: color.withValues(alpha: 0.62),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MobileWebImage(
-            imageUrl: player.warPreferenceImage,
-            width: 15,
-            height: 15,
-          ),
-          const SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  ),
-            ),
-          ),
-        ],
-      ),
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
     );
+
+    try {
+      final clan = await context.read<ClanService>().getClanAndWarData(clanTag);
+      navigator.pop();
+      if (!context.mounted) return;
+      navigator.push(
+        MaterialPageRoute(builder: (context) => ClanInfoScreen(clanInfo: clan)),
+      );
+    } catch (_) {
+      navigator.pop();
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to load clan.')));
+    }
   }
 }
 
@@ -879,51 +1152,17 @@ class _PlainInfoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return _GlassPanel(
+      height: 34,
+      borderRadius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(999),
-      ),
       child: Text(
         '$label: $value',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(
           context,
-        ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
-      ),
-    );
-  }
-}
-
-class _XpPill extends StatelessWidget {
-  final int level;
-
-  const _XpPill({required this.level});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.86),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const MobileWebImage(imageUrl: ImageAssets.xp, width: 16, height: 16),
-          const SizedBox(width: 4),
-          Text(
-            'Level $level',
-            style: Theme.of(
-              context,
-            ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w800),
-          ),
-        ],
+        ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -942,32 +1181,10 @@ class _HeaderIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const size = 42.0;
-    const radius = 19.0;
-
-    return Tooltip(
-      message: tooltip,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Material(
-            color: Theme.of(
-              context,
-            ).colorScheme.surface.withValues(alpha: 0.55),
-            borderRadius: BorderRadius.circular(radius),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(radius),
-              onTap: onTap,
-              child: SizedBox(
-                height: size,
-                width: size,
-                child: Icon(icon, size: 25),
-              ),
-            ),
-          ),
-        ),
-      ),
+    return _HeaderGlassButton(
+      tooltip: tooltip,
+      onTap: onTap,
+      child: Icon(icon, size: 25),
     );
   }
 }
@@ -996,8 +1213,10 @@ class _CopyablePlayerTag extends StatelessWidget {
         child: Text(
           tag,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Colors.white.withValues(alpha: 0.75),
-            fontWeight: FontWeight.w700,
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.62),
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),

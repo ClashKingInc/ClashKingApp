@@ -73,7 +73,8 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color ??
+          color:
+              Theme.of(context).cardTheme.color ??
               Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -87,8 +88,8 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                borderRadius: BorderRadius.circular(16),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => setState(() => _expanded = !_expanded),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
@@ -110,7 +111,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                         child: Text(
                           title,
                           style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w800),
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                       if (items[0] is! PlayerSuperTroop)
@@ -228,7 +229,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                     child: Text(
                       item.level.toString(),
                       style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w600,
                         color: isHighlightedMax ? Colors.black : Colors.white,
                         height: 1,
                       ),
@@ -521,7 +522,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
             value,
             style: Theme.of(
               context,
-            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -564,7 +565,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
               rarityLabel,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: color,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -800,8 +801,8 @@ class _TownHallMaxBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isComplete = percentage >= 100;
-    const gold = Color(0xFFFFD75E);
+    const progressRed = Color(0xFFE0302B);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
       message: 'Tap for remaining upgrade cost and time',
@@ -810,25 +811,27 @@ class _TownHallMaxBadge extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(999),
           onTap: () => _showRemainingSheet(context),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(999),
-              color: isComplete
-                  ? gold.withValues(alpha: 0.14)
-                  : Theme.of(
-                context,
-                    ).colorScheme.surfaceContainerHighest.withValues(
-                      alpha: 0.55,
-                    ),
+          child: CustomPaint(
+            foregroundPainter: _PercentOutlinePainter(
+              progress: percentage / 100,
+              radius: 999,
+              trackColor: colorScheme.outlineVariant.withValues(alpha: 0.58),
+              progressColor: progressRed,
             ),
-            child: Text(
-              '$formattedPercentage%',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w900,
-                color: isComplete
-                    ? gold
-                    : Theme.of(context).colorScheme.onSurface,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(999),
+                color: colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.55,
+                ),
+              ),
+              child: Text(
+                '$formattedPercentage%',
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface,
+                ),
               ),
             ),
           ),
@@ -870,7 +873,7 @@ class _TownHallMaxBadge extends StatelessWidget {
                             maxLines: 1,
                             softWrap: false,
                             style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w800),
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -929,6 +932,61 @@ class _TownHallMaxBadge extends StatelessWidget {
   }
 }
 
+class _PercentOutlinePainter extends CustomPainter {
+  final double progress;
+  final double radius;
+  final Color trackColor;
+  final Color progressColor;
+
+  const _PercentOutlinePainter({
+    required this.progress,
+    required this.radius,
+    required this.trackColor,
+    required this.progressColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final rrect = RRect.fromRectAndRadius(
+      rect.deflate(1),
+      Radius.circular(radius),
+    );
+    final path = Path()..addRRect(rrect);
+    final trackPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round
+      ..color = trackColor;
+    final progressPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round
+      ..color = progressColor;
+
+    canvas.drawPath(path, trackPaint);
+
+    final clampedProgress = progress.clamp(0.0, 1.0);
+    if (clampedProgress <= 0) return;
+
+    for (final metric in path.computeMetrics()) {
+      final progressPath = metric.extractPath(
+        0,
+        metric.length * clampedProgress,
+      );
+      canvas.drawPath(progressPath, progressPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _PercentOutlinePainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.trackColor != trackColor ||
+        oldDelegate.progressColor != progressColor ||
+        oldDelegate.radius != radius;
+  }
+}
+
 class _RemainingSummary {
   final int seconds;
   final List<_ResourceAmount> resources;
@@ -947,7 +1005,7 @@ class _PopupLabel extends StatelessWidget {
       text,
       style: Theme.of(
         context,
-      ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w900),
+      ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
     );
   }
 }
@@ -981,7 +1039,7 @@ class _RemainingRow extends StatelessWidget {
           value.isEmpty ? 'No time data' : value,
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -1026,7 +1084,7 @@ class _ResourceCostChip extends StatelessWidget {
                   (compact
                           ? Theme.of(context).textTheme.labelMedium
                           : Theme.of(context).textTheme.labelLarge)
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                      ?.copyWith(fontWeight: FontWeight.w600),
             ),
           ],
         ),
