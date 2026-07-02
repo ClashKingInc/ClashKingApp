@@ -23,6 +23,11 @@ class ImageAssets {
 
   // 🏆 League Icons
   static String getLeagueImage(String leagueName) {
+    final legendTierFile = _legendLeagueTierFile(leagueName);
+    if (legendTierFile != null) {
+      return _buildAssetUrl(['home-base', 'league-tier-icons', legendTierFile]);
+    }
+
     final rawPlayerLeagues = GameDataService.playerLeagueData["leagues"];
     if (rawPlayerLeagues is Map && rawPlayerLeagues.containsKey(leagueName)) {
       return _buildAssetUrl([
@@ -45,6 +50,25 @@ class ImageAssets {
     return defaultImage;
   }
 
+  static String? _legendLeagueTierFile(String leagueName) {
+    final normalized = leagueName.trim().toLowerCase();
+    if (normalized == 'legend' || normalized == 'legend league') {
+      return 'Legend_League.png';
+    }
+    if (!normalized.startsWith('legend league ') &&
+        !normalized.startsWith('legend ')) {
+      return null;
+    }
+
+    final tier = normalized
+        .replaceFirst('legend league ', '')
+        .replaceFirst('legend ', '')
+        .trim();
+    final tierNumber = _leagueTierNumber(tier);
+    if (tierNumber < 1 || tierNumber > 3) return null;
+    return 'Legend_League_$tierNumber.webp';
+  }
+
   static String getWarLeagueImage(String leagueName) {
     final warLeague = _findLeague(GameDataService.warLeagueData, leagueName);
     final warLeagueUrl = _cwlLeagueIconUrl(warLeague, leagueName);
@@ -55,6 +79,62 @@ class ImageAssets {
     if (leagueUrl != null) return leagueUrl;
 
     return defaultImage;
+  }
+
+  static String getBuilderBaseLeagueImage(dynamic league) {
+    if (league is Map) {
+      final iconUrls = league['iconUrls'];
+      if (iconUrls is Map && iconUrls['medium'] is String) {
+        return iconUrls['medium'] as String;
+      }
+      if (league['name'] is String) {
+        return getBuilderBaseLeagueImage(league['name']);
+      }
+    }
+
+    final name = league?.toString().trim() ?? '';
+    if (name.isEmpty) return builderBaseStar;
+
+    final parts = name.toLowerCase().split(RegExp(r'\s+'));
+    if (parts.length < 2) return builderBaseStar;
+
+    final material = parts[0];
+    if (material == 'legend') {
+      return '$baseUrl/bot/builder-base-leagues/legend_league.png';
+    }
+
+    if (material == 'diamond') {
+      return '$baseUrl/bot/builder-base-leagues/diamond_league_1.png';
+    }
+
+    if (parts.length < 3) {
+      return '$baseUrl/builder-base/league-icons/Icon_BB_League_${_titleUnderscoreName(material)}.png';
+    }
+
+    final tier = _leagueTierNumber(parts[2]);
+    final prefixedAsset = _builderBaseLeaguePrefixedAsset(material, tier);
+    if (prefixedAsset) {
+      return '$baseUrl/bot/builder-base-leagues/builder_base_${material}_league_$tier.png';
+    }
+
+    return '$baseUrl/bot/builder-base-leagues/${material}_league_$tier.png';
+  }
+
+  static int _leagueTierNumber(String value) {
+    return switch (value) {
+      'i' => 1,
+      'ii' => 2,
+      'iii' => 3,
+      'iv' => 4,
+      'v' => 5,
+      _ => int.tryParse(value) ?? value.length,
+    };
+  }
+
+  static bool _builderBaseLeaguePrefixedAsset(String material, int tier) {
+    return material == 'clay' ||
+        material == 'brass' ||
+        (material == 'copper' && tier <= 2);
   }
 
   static dynamic _findLeague(Map<String, dynamic> source, String leagueName) {

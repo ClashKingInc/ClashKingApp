@@ -16,6 +16,35 @@ void main() {
       );
     });
 
+    test('uses available Legend tier league assets', () {
+      GameDataService.playerLeagueData.clear();
+
+      expect(
+        ImageAssets.getLeagueImage('Legend League'),
+        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League.png',
+      );
+      expect(
+        ImageAssets.getLeagueImage('Legend League I'),
+        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_1.webp',
+      );
+      expect(
+        ImageAssets.getLeagueImage('Legend League 2'),
+        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_2.webp',
+      );
+      expect(
+        ImageAssets.getLeagueImage('Legend League III'),
+        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_3.webp',
+      );
+      expect(
+        ImageAssets.getLeagueImage('Legend III'),
+        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_3.webp',
+      );
+      expect(
+        ImageAssets.getLeagueImage('Legend 3'),
+        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_3.webp',
+      );
+    });
+
     test('uses CWL league icons for war league metadata', () {
       GameDataService.playerLeagueData.clear();
       GameDataService.playerLeagueData['leagues'] = {
