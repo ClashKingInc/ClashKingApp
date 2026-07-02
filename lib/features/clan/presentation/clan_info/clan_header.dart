@@ -424,42 +424,42 @@ class ClanInfoHeaderCard extends StatelessWidget {
             columns: 3,
             chips: [
               MetricChip(
-                label: 'War wins',
+                label: loc.clanWarWinsTitle,
                 value: formatter.format(clanInfo.warWins),
                 imageUrl: ImageAssets.war,
                 color: const Color(0xFFE8A524),
               ),
               MetricChip(
-                label: 'Win streak',
+                label: loc.clanWinStreakTitle,
                 value: formatter.format(clanInfo.warWinStreak),
                 icon: Icons.local_fire_department_rounded,
                 color: const Color(0xFFE35D4F),
               ),
               MetricChip(
-                label: 'Capital',
+                label: loc.playerCapitalTitle,
                 value: formatter.format(clanInfo.clanCapitalPoints),
                 imageUrl: ImageAssets.capitalTrophy,
                 color: const Color(0xFF8D63D9),
               ),
               MetricChip(
-                label: 'Builder base',
+                label: loc.clanBuilderBaseTitle,
                 value: formatter.format(clanInfo.clanBuilderBasePoints),
                 imageUrl: ImageAssets.builderBaseStar,
                 color: const Color(0xFF2A9FD6),
               ),
               MetricChip(
-                label: 'Type',
+                label: loc.clanTypeTitle,
                 value: typeLabel,
                 icon: Icons.mail_rounded,
               ),
               MetricChip(
-                label: 'Wars',
+                label: loc.clanWarFrequencyTitle,
                 value: warFrequencyLabel,
                 icon: Icons.event_repeat_rounded,
               ),
               if (clanInfo.requiredTownhallLevel > 0)
                 MetricChip(
-                  label: 'Min. TH',
+                  label: loc.clanMinTownHallTitle,
                   value: '${clanInfo.requiredTownhallLevel}+',
                   imageUrl: ImageAssets.townHall(
                     clanInfo.requiredTownhallLevel,
@@ -467,7 +467,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 ),
               if (clanInfo.requiredTrophies > 0)
                 MetricChip(
-                  label: 'Min. trophies',
+                  label: loc.clanMinTrophiesTitle,
                   value: NumberFormat.compact().format(
                     clanInfo.requiredTrophies,
                   ),

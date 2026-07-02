@@ -354,13 +354,17 @@ class _StatsPanel extends StatelessWidget {
             chips: [
               if (hasCountry)
                 MetricChip(
-                  label: 'Country',
+                  label:
+                      AppLocalizations.of(context)?.legendsCountryTitle ??
+                      'Country',
                   value: rankings.countryName ?? '',
                   imageUrl: ImageAssets.flag(rankings.countryCode!),
                 ),
               if (hasCountry)
                 MetricChip(
-                  label: 'Local rank',
+                  label:
+                      AppLocalizations.of(context)?.legendsLocalRankTitle ??
+                      'Local rank',
                   value: (rankings.localRank ?? 0) != 0
                       ? '#${rankings.localRank}'
                       : AppLocalizations.of(context)?.legendsNoRank ??
@@ -368,7 +372,9 @@ class _StatsPanel extends StatelessWidget {
                   imageUrl: ImageAssets.flag(rankings.countryCode!),
                 ),
               MetricChip(
-                label: 'Global rank',
+                label:
+                    AppLocalizations.of(context)?.legendsGlobalRankTitle ??
+                    'Global rank',
                 value: (rankings?.globalRank ?? 0) != 0
                     ? '#${formatter.format(rankings!.globalRank)}'
                     : AppLocalizations.of(context)?.legendsNoRank ?? 'No rank',

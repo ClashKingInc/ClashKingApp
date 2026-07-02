@@ -428,13 +428,15 @@ class _PlayerQuickStats extends StatelessWidget {
         ? AppLocalizations.of(context)!.warStatusReady
         : AppLocalizations.of(context)!.warStatusUnready;
 
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: MetricChip(
-                label: 'War stars',
+                label: loc.playerWarStarsTitle,
                 value: formatter.format(player.warStars),
                 imageUrl: ImageAssets.attackStar,
                 color: const Color(0xFFE8A524),
@@ -443,7 +445,7 @@ class _PlayerQuickStats extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: MetricChip(
-                label: 'War pref.',
+                label: loc.playerWarPreferenceTitle,
                 value: warPreferenceLabel,
                 imageUrl: player.warPreferenceImage,
               ),
@@ -451,7 +453,7 @@ class _PlayerQuickStats extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: MetricChip(
-                label: 'Donated',
+                label: loc.playerDonatedTitle,
                 value: formatter.format(player.donations),
                 icon: Icons.arrow_upward_rounded,
                 color: const Color(0xFF14A37F),
@@ -464,7 +466,7 @@ class _PlayerQuickStats extends StatelessWidget {
           children: [
             Expanded(
               child: MetricChip(
-                label: 'Received',
+                label: loc.playerReceivedTitle,
                 value: formatter.format(player.donationsReceived),
                 icon: Icons.arrow_downward_rounded,
                 color: const Color(0xFFE35D4F),
@@ -473,7 +475,7 @@ class _PlayerQuickStats extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: MetricChip(
-                label: 'Capital',
+                label: loc.playerCapitalTitle,
                 value: formatter.format(player.clanCapitalContributions),
                 imageUrl: ImageAssets.capitalGold,
                 color: const Color(0xFF8D63D9),
@@ -482,7 +484,7 @@ class _PlayerQuickStats extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: MetricChip(
-                label: 'Exp. level',
+                label: loc.playerExpLevelTitle,
                 value: player.expLevel.toString(),
                 imageUrl: ImageAssets.xp,
               ),

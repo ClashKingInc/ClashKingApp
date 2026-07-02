@@ -80,7 +80,9 @@ class PlayerWarStatsHeader extends StatelessWidget {
                   const Spacer(),
                   HeaderIconButton(
                     icon: Icons.filter_list_rounded,
-                    tooltip: 'Filter',
+                    tooltip:
+                        AppLocalizations.of(context)?.generalFilters ??
+                        'Filter',
                     onTap: onFilter,
                   ),
                   const SizedBox(width: 8),

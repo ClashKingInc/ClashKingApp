@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class WarHistoryHeader extends StatelessWidget {
@@ -113,24 +114,31 @@ class WarHistoryHeader extends StatelessWidget {
                   columns: 3,
                   chips: [
                     MetricChip(
-                      label: 'Wars',
+                      label:
+                          AppLocalizations.of(context)?.cwlWarsPlayedTitle ??
+                          'Wars',
                       value: warLogStats.totalWars.toString(),
                       imageUrl: ImageAssets.warClan,
                     ),
                     MetricChip(
-                      label: 'Wins',
+                      label:
+                          AppLocalizations.of(context)?.warWinsTitle ?? 'Wins',
                       value: warLogStats.totalWins.toString(),
                       icon: Icons.check_circle_rounded,
                       color: Colors.green,
                     ),
                     MetricChip(
-                      label: 'Losses',
+                      label:
+                          AppLocalizations.of(context)?.warLossesTitle ??
+                          'Losses',
                       value: warLogStats.totalLosses.toString(),
                       icon: Icons.cancel_rounded,
                       color: Colors.red,
                     ),
                     MetricChip(
-                      label: 'Draws',
+                      label:
+                          AppLocalizations.of(context)?.warDrawsTitle ??
+                          'Draws',
                       value: warLogStats.totalTies.toString(),
                       icon: Icons.remove_circle_rounded,
                       color: const Color(0xFF4E7DF2),

@@ -3,6 +3,7 @@ import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -121,18 +122,24 @@ class ClanCapitalHeader extends StatelessWidget {
                   columns: 3,
                   chips: [
                     MetricChip(
-                      label: 'Capital',
+                      label:
+                          AppLocalizations.of(context)?.playerCapitalTitle ??
+                          'Capital',
                       value: formatter.format(clanInfo?.clanCapitalPoints ?? 0),
                       imageUrl: ImageAssets.capitalTrophy,
                       color: const Color(0xFF8D63D9),
                     ),
                     MetricChip(
-                      label: 'Capital Hall',
+                      label:
+                          AppLocalizations.of(context)?.clanCapitalHallTitle ??
+                          'Capital Hall',
                       value: capitalHallLevel.toString(),
                       imageUrl: ImageAssets.capitalHall(capitalHallLevel),
                     ),
                     MetricChip(
-                      label: 'Districts',
+                      label:
+                          AppLocalizations.of(context)?.clanDistrictsTitle ??
+                          'Districts',
                       value: districtCount.toString(),
                       icon: Icons.location_city_rounded,
                     ),
