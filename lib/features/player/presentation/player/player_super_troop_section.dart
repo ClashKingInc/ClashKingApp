@@ -10,8 +10,9 @@ class PlayerSuperTroopSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeTroops =
-        superTroops.where((t) => t.superTroopIsActive).toList();
+    final activeTroops = superTroops
+        .where((t) => t.superTroopIsActive)
+        .toList();
 
     if (activeTroops.isEmpty) return const SizedBox.shrink();
 
@@ -20,7 +21,8 @@ class PlayerSuperTroopSection extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color ??
+          color:
+              Theme.of(context).cardTheme.color ??
               Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
@@ -35,28 +37,30 @@ class PlayerSuperTroopSection extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context)!.gameActiveSuperTroops,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: activeTroops
-                    .map((troop) => ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                            imageUrl: troop.imageUrl,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                          ),
-                        ))
+                    .map(
+                      (troop) => ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageUrl: troop.imageUrl,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
             ],

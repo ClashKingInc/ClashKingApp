@@ -314,6 +314,7 @@ class PlayerService extends ChangeNotifier {
             if (extendedEntry.isNotEmpty) {
               requestedPlayer.enrichWithFullStats(extendedEntry);
             }
+            await refreshOfficialPlayerSummary(requestedPlayer);
 
             // Merge into _profiles — update existing slot or append
             final existingIndex = _profiles.indexWhere(
@@ -417,6 +418,7 @@ class PlayerService extends ChangeNotifier {
             player.enrichWithFullStats(extendedPlayerJson);
           }
         }
+        await refreshOfficialPlayerSummary(player);
 
         // Add the player to _profiles temporarily so loadPlayerWarStats can find it
         final existingIndex = _profiles.indexWhere((p) => p.tag == playerTag);
@@ -630,6 +632,31 @@ class PlayerService extends ChangeNotifier {
       });
     }
     return "{}";
+  }
+
+  Future<void> refreshOfficialPlayerSummary(Player player) async {
+    try {
+      final encodedTag = Uri.encodeComponent(player.tag);
+      final response = await _apiService.getResponse(
+        '',
+        url: '${ApiService.proxyUrl}/players/$encodedTag',
+      );
+      if (response.statusCode != 200) {
+        DebugUtils.debugWarning(
+          "⚠️ Official player summary refresh failed for ${player.tag}: ${response.statusCode}",
+        );
+        return;
+      }
+
+      final data = jsonDecode(ApiService.decodeResponseBody(response));
+      if (data is Map<String, dynamic>) {
+        player.updateFromOfficialProfile(data);
+      }
+    } catch (e) {
+      DebugUtils.debugWarning(
+        "⚠️ Official player summary refresh failed for ${player.tag}: $e",
+      );
+    }
   }
 
   /// Process bulk player data from the optimized API endpoint

@@ -88,8 +88,8 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                borderRadius: BorderRadius.circular(16),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => setState(() => _expanded = !_expanded),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
@@ -111,7 +111,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                         child: Text(
                           title,
                           style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w800),
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                       if (items[0] is! PlayerSuperTroop)
@@ -127,29 +127,14 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
               ),
               if (_expanded) ...[
                 const SizedBox(height: 12),
-                // Fit a whole number of columns to the available width so
-                // the grid fills the card on any screen size.
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    const spacing = 8.0;
-                    const minTileSize = 54.0;
-                    final width = constraints.maxWidth;
-                    final columns =
-                        ((width + spacing) / (minTileSize + spacing))
-                            .floor()
-                            .clamp(3, 12);
-                    final tileSize =
-                        (width - (columns - 1) * spacing) / columns;
-                    return Wrap(
-                      spacing: spacing,
-                      runSpacing: spacing,
-                      children: sortedItems
-                          .map(
-                            (item) => _buildItemTile(context, item, tileSize),
-                          )
-                          .toList(),
-                    );
-                  },
+                Center(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: sortedItems
+                        .map((item) => _buildItemTile(context, item))
+                        .toList(),
+                  ),
                 ),
               ],
             ],
@@ -159,11 +144,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
     );
   }
 
-  Widget _buildItemTile(
-    BuildContext context,
-    PlayerItem item,
-    double tileSize,
-  ) {
+  Widget _buildItemTile(BuildContext context, PlayerItem item) {
     final isLocked = !item.isUnlocked;
     final thMaxLevel = maxLevelForTH(item.meta, townHallLevel);
     final isTHMax = thMaxLevel > 0 && item.level >= thMaxLevel;
@@ -190,78 +171,73 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
 
     return GestureDetector(
       onTap: () => _showItemDialog(context, item),
-      child: SizedBox.square(
-        dimension: tileSize,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOutCubic,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: borderColor,
-              width: isHighlightedMax ? 2.5 : 2,
-            ),
-            borderRadius: BorderRadius.circular(8),
-            color: containerBackground,
-            boxShadow: isHighlightedMax
-                ? [
-                    BoxShadow(
-                      color: const Color(0xFFFFD75E).withValues(alpha: 0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : null,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: borderColor,
+            width: isHighlightedMax ? 2.5 : 2,
           ),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: ColorFiltered(
-                  colorFilter: isLocked || item.level == 0
-                      ? const ColorFilter.mode(
-                          Colors.grey,
-                          BlendMode.saturation,
-                        )
-                      : const ColorFilter.mode(
-                          Colors.transparent,
-                          BlendMode.multiply,
-                        ),
-                  child: MobileWebImage(
-                    imageUrl: item.imageUrl,
-                    fit: BoxFit.cover,
+          borderRadius: BorderRadius.circular(8),
+          color: containerBackground,
+          boxShadow: isHighlightedMax
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD75E).withValues(alpha: 0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
+                ]
+              : null,
+        ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: ColorFiltered(
+                colorFilter: isLocked || item.level == 0
+                    ? const ColorFilter.mode(Colors.grey, BlendMode.saturation)
+                    : const ColorFilter.mode(
+                        Colors.transparent,
+                        BlendMode.multiply,
+                      ),
+                child: MobileWebImage(
+                  imageUrl: item.imageUrl,
+                  width: 54,
+                  height: 54,
+                  fit: BoxFit.cover,
                 ),
               ),
-              if (item is! PlayerSuperTroop && !isLocked && item.level > 0)
-                Positioned(
-                  right: 1,
-                  bottom: 1,
-                  child: Container(
-                    constraints: const BoxConstraints(minWidth: 24),
-                    height: 18,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: isHighlightedMax
-                          ? const Color(0xFFFFD75E)
-                          : Colors.black.withValues(alpha: 0.86),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        item.level.toString(),
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          fontWeight: FontWeight.w900,
-                          color: isHighlightedMax ? Colors.black : Colors.white,
-                          height: 1,
-                        ),
+            ),
+            if (item is! PlayerSuperTroop && !isLocked && item.level > 0)
+              Positioned(
+                right: 1,
+                bottom: 1,
+                child: Container(
+                  constraints: const BoxConstraints(minWidth: 24),
+                  height: 18,
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    color: isHighlightedMax
+                        ? const Color(0xFFFFD75E)
+                        : Colors.black.withValues(alpha: 0.86),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      item.level.toString(),
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: isHighlightedMax ? Colors.black : Colors.white,
+                        height: 1,
                       ),
                     ),
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
@@ -546,7 +522,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
             value,
             style: Theme.of(
               context,
-            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -589,7 +565,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
               rarityLabel,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: color,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -825,8 +801,7 @@ class _TownHallMaxBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isComplete = percentage >= 100;
-    const gold = Color(0xFFFFD75E);
+    const progressRed = Color(0xFFE0302B);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
@@ -836,47 +811,28 @@ class _TownHallMaxBadge extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(999),
           onTap: () => _showRemainingSheet(context),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(8, 5, 10, 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(999),
-              color: isComplete
-                  ? gold.withValues(alpha: 0.14)
-                  : colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+          child: CustomPaint(
+            foregroundPainter: _PercentOutlinePainter(
+              progress: percentage / 100,
+              radius: 999,
+              trackColor: colorScheme.outlineVariant.withValues(alpha: 0.58),
+              progressColor: progressRed,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Mini progress ring: completion readable at a glance,
-                // same language as the to-do card rings.
-                SizedBox.square(
-                  dimension: 15,
-                  child: isComplete
-                      ? const Icon(
-                          Icons.check_circle_rounded,
-                          size: 15,
-                          color: gold,
-                        )
-                      : CircularProgressIndicator(
-                          value: (percentage / 100).clamp(0.0, 1.0),
-                          strokeWidth: 2.4,
-                          strokeCap: StrokeCap.round,
-                          backgroundColor: colorScheme.outlineVariant
-                              .withValues(alpha: 0.45),
-                          valueColor: AlwaysStoppedAnimation(
-                            colorScheme.primary,
-                          ),
-                        ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(999),
+                color: colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.55,
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  '$formattedPercentage%',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: isComplete ? gold : colorScheme.onSurface,
-                  ),
+              ),
+              child: Text(
+                '$formattedPercentage%',
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface,
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -917,7 +873,7 @@ class _TownHallMaxBadge extends StatelessWidget {
                             maxLines: 1,
                             softWrap: false,
                             style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w800),
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -976,6 +932,61 @@ class _TownHallMaxBadge extends StatelessWidget {
   }
 }
 
+class _PercentOutlinePainter extends CustomPainter {
+  final double progress;
+  final double radius;
+  final Color trackColor;
+  final Color progressColor;
+
+  const _PercentOutlinePainter({
+    required this.progress,
+    required this.radius,
+    required this.trackColor,
+    required this.progressColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final rrect = RRect.fromRectAndRadius(
+      rect.deflate(1),
+      Radius.circular(radius),
+    );
+    final path = Path()..addRRect(rrect);
+    final trackPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round
+      ..color = trackColor;
+    final progressPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round
+      ..color = progressColor;
+
+    canvas.drawPath(path, trackPaint);
+
+    final clampedProgress = progress.clamp(0.0, 1.0);
+    if (clampedProgress <= 0) return;
+
+    for (final metric in path.computeMetrics()) {
+      final progressPath = metric.extractPath(
+        0,
+        metric.length * clampedProgress,
+      );
+      canvas.drawPath(progressPath, progressPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _PercentOutlinePainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.trackColor != trackColor ||
+        oldDelegate.progressColor != progressColor ||
+        oldDelegate.radius != radius;
+  }
+}
+
 class _RemainingSummary {
   final int seconds;
   final List<_ResourceAmount> resources;
@@ -994,7 +1005,7 @@ class _PopupLabel extends StatelessWidget {
       text,
       style: Theme.of(
         context,
-      ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w900),
+      ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
     );
   }
 }
@@ -1028,7 +1039,7 @@ class _RemainingRow extends StatelessWidget {
           value.isEmpty ? 'No time data' : value,
           style: Theme.of(
             context,
-          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -1073,7 +1084,7 @@ class _ResourceCostChip extends StatelessWidget {
                   (compact
                           ? Theme.of(context).textTheme.labelMedium
                           : Theme.of(context).textTheme.labelLarge)
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                      ?.copyWith(fontWeight: FontWeight.w600),
             ),
           ],
         ),
