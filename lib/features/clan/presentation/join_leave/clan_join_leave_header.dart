@@ -1,99 +1,125 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clipboard/clipboard.dart';
 
-class ClanJoinLeaveHeader extends StatefulWidget {
+class ClanJoinLeaveHeader extends StatelessWidget {
   final Clan clanInfo;
 
-  ClanJoinLeaveHeader({super.key, required this.clanInfo});
+  const ClanJoinLeaveHeader({super.key, required this.clanInfo});
 
-  @override
-  ClanJoinLeaveHeaderState createState() => ClanJoinLeaveHeaderState();
-}
-
-class ClanJoinLeaveHeaderState extends State<ClanJoinLeaveHeader>
-    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    String backgroundImageUrl =
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final imageHeight = MediaQuery.of(context).padding.top + 200;
+    const backgroundImageUrl =
         "https://assets.clashk.ing/landscape/join-leave-landscape.png";
-    return Column(children: [
-      Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          SizedBox(
-            height: 210,
-            width: double.infinity,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-              child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withValues(alpha: 0.6),
-                  BlendMode.darken,
-                ),
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: backgroundImageUrl,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 10,
-            child: Column(children: [
+
+    return Stack(
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: imageHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
               CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: widget.clanInfo.badgeUrls.large,
-                width: 100,
+                imageUrl: backgroundImageUrl,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    ColoredBox(color: colorScheme.surface),
               ),
-              Center(
-                child: Text(
-                  widget.clanInfo.name,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: Colors.white),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  FlutterClipboard.copy(widget.clanInfo.tag).then((_) {
-                    if (context.mounted) {
-                      showClipboardSnackbar(
-                        context,
-                        AppLocalizations.of(context)!.generalCopiedToClipboard,
-                      );
-                    }
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.only(top: 2.0, bottom: 4.0),
-                  child: Text(
-                    widget.clanInfo.tag,
-                    style: TextStyle(color: Colors.white),
+              ColoredBox(color: Colors.black.withValues(alpha: 0.55)),
+            ],
+          ),
+        ),
+        Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top + 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  HeaderIconButton(
+                    icon: Icons.arrow_back_rounded,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
+                    onTap: () => Navigator.of(context).pop(),
                   ),
-                ),
+                ],
               ),
-            ]),
-          ),
-          Positioned(
-            top: 40,
-            left: 10,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onPrimary, size: 32),
-              onPressed: () => Navigator.of(context).pop(),
             ),
-          ),
-        ],
-      ),
-    ]);
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: CachedNetworkImage(
+                      imageUrl: clanInfo.badgeUrls.large,
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          clanInfo.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(6),
+                          onTap: () {
+                            FlutterClipboard.copy(clanInfo.tag).then((_) {
+                              if (context.mounted) {
+                                showClipboardSnackbar(
+                                  context,
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.generalCopiedToClipboard,
+                                );
+                              }
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 3),
+                            child: Text(
+                              clanInfo.tag,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.75),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

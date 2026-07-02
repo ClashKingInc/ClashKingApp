@@ -1,5 +1,5 @@
-import 'dart:ui';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class PlayerWarStatsHeader extends StatelessWidget {
   final VoidCallback onExport;
   final bool hasActiveFilters;
 
-  PlayerWarStatsHeader({
+  const PlayerWarStatsHeader({
     super.key,
     required this.name,
     required this.tag,
@@ -39,142 +39,153 @@ class PlayerWarStatsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final imageHeight = MediaQuery.of(context).padding.top + 220;
+
     return Stack(
-      clipBehavior: Clip.none,
-      children: <Widget>[
-        SizedBox(
-          height: 280,
-          width: double.infinity,
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-            child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withValues(alpha: 0.7),
-                  BlendMode.darken,
-                ),
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.playerWarStatsPageBackground,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                )),
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: imageHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CachedNetworkImage(
+                imageUrl: ImageAssets.playerWarStatsPageBackground,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    ColoredBox(color: colorScheme.surface),
+              ),
+              ColoredBox(color: Colors.black.withValues(alpha: 0.6)),
+            ],
           ),
         ),
-        Positioned(
-          top: 26,
-          bottom: 0,
-          left: 10,
-          right: 10,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.warStats,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    SizedBox(height: 8),
-                    MobileWebImage(
-                      imageUrl: picture,
-                      width: 50,
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    Text(
-                      tag,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge
-                          ?.copyWith(color: Colors.grey),
-                    ),
-                    SizedBox(height: 8),
-                    Wrap(
-                      spacing: 0,
-                      runSpacing: 0,
+        Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top + 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  HeaderIconButton(
+                    icon: Icons.arrow_back_rounded,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
+                    onTap: onBack,
+                  ),
+                  const Spacer(),
+                  HeaderIconButton(
+                    icon: Icons.filter_list_rounded,
+                    tooltip: 'Filter',
+                    onTap: onFilter,
+                  ),
+                  const SizedBox(width: 8),
+                  HeaderIconButton(
+                    icon: Icons.download_outlined,
+                    tooltip:
+                        AppLocalizations.of(context)?.generalExport ?? 'Export',
+                    onTap: onExport,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: MobileWebImage(imageUrl: picture),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        FilterChip(
-                          visualDensity: VisualDensity.compact,
-                          selectedColor: Theme.of(context).colorScheme.primary,
-                          checkmarkColor: Colors.white,
-                          label: Text(AppLocalizations.of(context)!.cwlTitle,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(color: Colors.white)),
-                          selected: isCWLChecked,
-                          onSelected: (bool selected) => onCWLChanged(),
+                        Text(
+                          AppLocalizations.of(context)!.warStats,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.75),
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                        SizedBox(width: 8),
-                        FilterChip(
-                          visualDensity: VisualDensity.compact,
-                          selectedColor: Theme.of(context).colorScheme.primary,
-                          checkmarkColor: Colors.white,
-                          label: Text(
-                              AppLocalizations.of(context)!.warFiltersRandom,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(color: Colors.white)),
-                          selected: isRandomChecked,
-                          onSelected: (bool selected) => onRandomChanged(),
+                        Text(
+                          name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
-                        SizedBox(width: 8),
-                        FilterChip(
-                          visualDensity: VisualDensity.compact,
-                          selectedColor: Theme.of(context).colorScheme.primary,
-                          checkmarkColor: Colors.white,
-                          label: Text(
-                              AppLocalizations.of(context)!.warFiltersFriendly,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(color: Colors.white)),
-                          selected: isFriendlyChecked,
-                          onSelected: (bool selected) => onFriendlyChanged(),
+                        Text(
+                          tag,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.75),
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: (theme.cardTheme.color ?? colorScheme.surface)
+                      .withValues(alpha: 0.94),
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+                  ),
+                ),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    FilterChip(
+                      visualDensity: VisualDensity.compact,
+                      label: Text(AppLocalizations.of(context)!.cwlTitle),
+                      selected: isCWLChecked,
+                      onSelected: (selected) => onCWLChanged(),
+                    ),
+                    FilterChip(
+                      visualDensity: VisualDensity.compact,
+                      label: Text(
+                        AppLocalizations.of(context)!.warFiltersRandom,
+                      ),
+                      selected: isRandomChecked,
+                      onSelected: (selected) => onRandomChanged(),
+                    ),
+                    FilterChip(
+                      visualDensity: VisualDensity.compact,
+                      label: Text(
+                        AppLocalizations.of(context)!.warFiltersFriendly,
+                      ),
+                      selected: isFriendlyChecked,
+                      onSelected: (selected) => onFriendlyChanged(),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: 40,
-          left: 10,
-          child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
-            onPressed: onBack,
-          ),
-        ),
-        Positioned(
-          top: 40,
-          right: 10,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Export button
-              IconButton(
-                icon: Icon(Icons.download_outlined, color: Colors.white),
-                onPressed: onExport,
-                tooltip:
-                    AppLocalizations.of(context)?.generalExport ?? 'Export',
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );

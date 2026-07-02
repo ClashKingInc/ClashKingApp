@@ -1,135 +1,145 @@
-import 'dart:ui';
-import 'package:clashkingapp/common/widgets/buttons/chip.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class WarHistoryHeader extends StatelessWidget {
-  const WarHistoryHeader({
-    super.key,
-    required this.clan,
-  });
+  const WarHistoryHeader({super.key, required this.clan});
 
   final Clan clan;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final warLogStats = clan.clanWarLog!.warLogStats;
+    final imageHeight = MediaQuery.of(context).padding.top + 200;
+
     return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.bottomCenter,
-      children: <Widget>[
-        SizedBox(
-          height: 200,
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-            child: ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                Colors.black.withValues(alpha: 0.5),
-                BlendMode.darken,
-              ),
-              child: CachedNetworkImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: imageHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CachedNetworkImage(
                 imageUrl: ImageAssets.warPageBackground,
-                width: double.infinity,
                 fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    ColoredBox(color: colorScheme.surface),
               ),
-            ),
+              ColoredBox(color: Colors.black.withValues(alpha: 0.55)),
+            ],
           ),
         ),
         Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 60,
-                  width: 60,
-                  child: CachedNetworkImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: clan.badgeUrls.medium),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      clan.name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(color: Colors.white),
+            SizedBox(height: MediaQuery.of(context).padding.top + 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  HeaderIconButton(
+                    icon: Icons.arrow_back_rounded,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
+                    onTap: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: CachedNetworkImage(
+                      imageUrl: clan.badgeUrls.medium,
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
-                    Text(
-                      clan.tag,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge
-                          ?.copyWith(color: Colors.white),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          clan.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Text(
+                          clan.tag,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.75),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: (theme.cardTheme.color ?? colorScheme.surface)
+                      .withValues(alpha: 0.94),
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+                  ),
+                ),
+                child: MetricChipGrid(
+                  columns: 3,
+                  chips: [
+                    MetricChip(
+                      label: 'Wars',
+                      value: warLogStats.totalWars.toString(),
+                      imageUrl: ImageAssets.warClan,
+                    ),
+                    MetricChip(
+                      label: 'Wins',
+                      value: warLogStats.totalWins.toString(),
+                      icon: Icons.check_circle_rounded,
+                      color: Colors.green,
+                    ),
+                    MetricChip(
+                      label: 'Losses',
+                      value: warLogStats.totalLosses.toString(),
+                      icon: Icons.cancel_rounded,
+                      color: Colors.red,
+                    ),
+                    MetricChip(
+                      label: 'Draws',
+                      value: warLogStats.totalTies.toString(),
+                      icon: Icons.remove_circle_rounded,
+                      color: const Color(0xFF4E7DF2),
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 16),
-            Wrap(
-              alignment: WrapAlignment.start,
-              spacing: 7.0,
-              runSpacing: -7.0,
-              children: <Widget>[
-                ImageChip(
-                    context: context,
-                    textColor: Colors.white,
-                    edgeColor: Colors.white,
-                    imageUrl: ImageAssets.warClan,
-                    label: warLogStats.totalWars.toString()),
-                IconChip(
-                    icon: Icons.circle,
-                    color: Colors.green,
-                    textColor: Colors.white,
-                    edgeColor: Colors.white,
-                    size: 16,
-                    labelPadding: 2,
-                    label: warLogStats.totalWins.toString(),
-                    description: AppLocalizations.of(context)!
-                        .warHistoryWinsDescription(
-                            warLogStats.totalWins, warLogStats.winPercentage)),
-                IconChip(
-                    icon: Icons.circle,
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    edgeColor: Colors.white,
-                    size: 16,
-                    labelPadding: 2,
-                    label: warLogStats.totalLosses.toString(),
-                    description: AppLocalizations.of(context)!
-                        .warHistoryLossesDescription(warLogStats.totalLosses,
-                            warLogStats.lossPercentage)),
-                IconChip(
-                    icon: Icons.circle,
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    edgeColor: Colors.white,
-                    size: 16,
-                    labelPadding: 2,
-                    label: warLogStats.totalTies.toString(),
-                    description: AppLocalizations.of(context)!
-                        .warHistoryDrawsDescription(
-                            warLogStats.totalTies, warLogStats.tiePercentage)),
-              ],
-            ),
-            SizedBox(height: 24),
           ],
-        ),
-        Positioned(
-          top: 40,
-          left: 10,
-          child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
         ),
       ],
     );
