@@ -302,11 +302,7 @@ class _WarListCard extends StatelessWidget {
         child: WarCard(
           currentWarInfo: war,
           clanTag: item.tag,
-          centerHeader: allSpectators
-              ? const _SpectatorPill()
-              : item.bookmarked
-              ? const _BookmarkedPill()
-              : null,
+          centerHeader: allSpectators ? const _SpectatorPill() : null,
           footer: lineupStatuses.isEmpty
               ? null
               : _WarAttackFooter(
@@ -413,42 +409,6 @@ class _SpectatorPill extends StatelessWidget {
             const SizedBox(width: 5),
             Text(
               'Spectator',
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BookmarkedPill extends StatelessWidget {
-  const _BookmarkedPill();
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.13),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.bookmark_rounded,
-              size: 14,
-              color: colorScheme.onSurfaceVariant,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              'Bookmarked',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w800,

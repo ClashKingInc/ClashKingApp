@@ -2,7 +2,6 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:intl/intl.dart';
 
 class WarCard extends StatelessWidget {
   const WarCard({
@@ -21,6 +20,7 @@ class WarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -128,14 +128,12 @@ class WarCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-              Text(
-                '${currentWarInfo.clan!.stars.toString().padLeft(2, ' ')} - ${currentWarInfo.opponent!.stars.toString().padRight(2, ' ')} ',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '${currentWarInfo.clan!.destructionPercentage % 1 == 0 ? currentWarInfo.clan!.destructionPercentage.toInt().toString().padLeft(6, ' ') : currentWarInfo.clan!.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent!.destructionPercentage % 1 == 0 ? ('${currentWarInfo.opponent!.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${currentWarInfo.opponent!.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}',
+              _WarScoreBlock(
+                leftStars: currentWarInfo.clan!.stars,
+                rightStars: currentWarInfo.opponent!.stars,
+                leftDestruction: currentWarInfo.clan!.destructionPercentage,
+                rightDestruction:
+                    currentWarInfo.opponent!.destructionPercentage,
               ),
             ],
           ),
@@ -167,7 +165,7 @@ class WarCard extends StatelessWidget {
 
   Widget _preparationState(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 3,
@@ -192,24 +190,34 @@ class WarCard extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: Column(
-            children: [
-              if (centerHeader != null) ...[
-                centerHeader!,
-                const SizedBox(height: 6),
-              ],
-              Text(
-                '${AppLocalizations.of(context)?.timeStartsAt(DateFormat('HH:mm').format(currentWarInfo.startTime!.toLocal()))}',
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
+          child: SizedBox(
+            height: 100,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (centerHeader != null) ...[
+                    centerHeader!,
+                    const SizedBox(height: 6),
+                  ],
+                  Text(
+                    _relativeWarTime(
+                      prefix: 'Starts',
+                      time: currentWarInfo.startTime!,
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 7),
+                  Text(
+                    AppLocalizations.of(context)?.warPreparation ??
+                        'Preparation',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ],
               ),
-              SizedBox(height: 10),
-              Text(
-                AppLocalizations.of(context)?.warPreparation ?? 'Preparation',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ],
+            ),
           ),
         ),
         Expanded(
@@ -241,6 +249,7 @@ class WarCard extends StatelessWidget {
   Widget _inWarState(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 3,
@@ -266,31 +275,35 @@ class WarCard extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: Column(
-            children: <Widget>[
-              if (centerHeader != null) ...[
-                centerHeader!,
-                const SizedBox(height: 6),
-              ],
-              Text(
-                "${AppLocalizations.of(context)?.timeEndsAt(DateFormat('HH:mm').format(currentWarInfo.endTime!.toLocal()))}",
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
+          child: SizedBox(
+            height: 100,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  if (centerHeader != null) ...[
+                    centerHeader!,
+                    const SizedBox(height: 6),
+                  ],
+                  Text(
+                    _relativeWarTime(
+                      prefix: 'Ends',
+                      time: currentWarInfo.endTime!,
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 6),
+                  _WarScoreBlock(
+                    leftStars: currentWarInfo.clan!.stars,
+                    rightStars: currentWarInfo.opponent!.stars,
+                    leftDestruction: currentWarInfo.clan!.destructionPercentage,
+                    rightDestruction:
+                        currentWarInfo.opponent!.destructionPercentage,
+                  ),
+                ],
               ),
-              Center(
-                child: Text(
-                  '${currentWarInfo.clan!.stars.toString().padLeft(2, ' ')} - ${currentWarInfo.opponent!.stars.toString().padRight(2, ' ')} ',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              Center(
-                child: Text(
-                  '${currentWarInfo.clan!.destructionPercentage % 1 == 0 ? currentWarInfo.clan!.destructionPercentage.toInt().toString().padLeft(6, ' ') : currentWarInfo.clan!.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent!.destructionPercentage % 1 == 0 ? ('${currentWarInfo.opponent!.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${currentWarInfo.opponent!.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-              SizedBox(height: 10),
-            ],
+            ),
           ),
         ),
         Expanded(
@@ -318,4 +331,87 @@ class WarCard extends StatelessWidget {
       ],
     );
   }
+}
+
+class _WarScoreBlock extends StatelessWidget {
+  const _WarScoreBlock({
+    required this.leftStars,
+    required this.rightStars,
+    required this.leftDestruction,
+    required this.rightDestruction,
+  });
+
+  final int leftStars;
+  final int rightStars;
+  final double leftDestruction;
+  final double rightDestruction;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final percentStyle = theme.textTheme.labelSmall?.copyWith(
+      fontWeight: FontWeight.w700,
+      fontFeatures: const [FontFeature.tabularFigures()],
+      height: 1,
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '$leftStars - $rightStars',
+          maxLines: 1,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w600,
+            fontFeatures: const [FontFeature.tabularFigures()],
+            height: 1,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                _formatPercent(leftDestruction),
+                maxLines: 1,
+                textAlign: TextAlign.right,
+                style: percentStyle,
+              ),
+            ),
+            const SizedBox(width: 18),
+            Expanded(
+              child: Text(
+                _formatPercent(rightDestruction),
+                maxLines: 1,
+                textAlign: TextAlign.left,
+                style: percentStyle,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+String _relativeWarTime({required String prefix, required DateTime time}) {
+  final now = DateTime.now();
+  final target = time.toLocal();
+  final difference = target.difference(now);
+  if (difference.isNegative) {
+    return '$prefix now';
+  }
+
+  final hours = difference.inHours;
+  final minutes = difference.inMinutes.remainder(60);
+  if (hours > 0) {
+    return '$prefix in ${hours}h ${minutes}m';
+  }
+  final safeMinutes = minutes <= 0 ? 1 : minutes;
+  return '$prefix in ${safeMinutes}m';
+}
+
+String _formatPercent(double value) {
+  return '${value.toStringAsFixed(2)}%';
 }

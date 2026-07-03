@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -12,10 +13,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 class WarLogHistoryTab extends StatefulWidget {
   final Clan clan;
 
-  const WarLogHistoryTab({
-    super.key,
-    required this.clan,
-  });
+  const WarLogHistoryTab({super.key, required this.clan});
 
   @override
   WarLogHistoryTabState createState() => WarLogHistoryTabState();
@@ -23,10 +21,30 @@ class WarLogHistoryTab extends StatefulWidget {
 
 class WarLogHistoryTabState extends State<WarLogHistoryTab> {
   String? selectedFilter;
-  String formatDate(DateTime date, BuildContext context) {
-    final locale = Localizations.localeOf(context).languageCode;
-    final format = locale == 'jp' ? 'yyyy/MM/dd' : 'dd/MM/yyyy';
-    return DateFormat(format).format(date);
+
+  String formatWarTime(DateTime date, BuildContext context) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+    if (!difference.isNegative) {
+      if (difference.inHours < 1) {
+        final minutes = difference.inMinutes.clamp(1, 59);
+        return '${minutes}m ago';
+      }
+      if (difference.inDays < 1) {
+        return '${difference.inHours}h ago';
+      }
+      if (difference.inDays < 30) {
+        return difference.inDays == 1
+            ? '1 day ago'
+            : '${difference.inDays} days ago';
+      }
+      if (difference.inDays < 60) {
+        return '1 month ago';
+      }
+    }
+
+    final locale = Localizations.localeOf(context).toString();
+    return DateFormat.yMMMd(locale).format(date);
   }
 
   List<WarLogDetails> getFilteredWarLogData() {
@@ -52,9 +70,11 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
             .toList();
       case 'perfectWar':
         return filteredData
-            .where((warLogDetail) =>
-                (warLogDetail.clan.destructionPercentage == 100 ||
-                    warLogDetail.opponent.destructionPercentage == 100))
+            .where(
+              (warLogDetail) =>
+                  (warLogDetail.clan.destructionPercentage == 100 ||
+                  warLogDetail.opponent.destructionPercentage == 100),
+            )
             .toList();
       case 'newest':
         return filteredData;
@@ -83,42 +103,46 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
 
     return Column(
       children: [
-        FilterDropdown(
-          sortBy: selectedFilter ?? 'newest',
-          updateSortBy: (String newValue) {
-            setState(() {
-              selectedFilter = newValue;
-            });
-          },
-          sortByOptions: {
-            AppLocalizations.of(context)?.warEventsNewest ?? 'Newest': 'newest',
-            AppLocalizations.of(context)?.warEventsOldest ?? 'Oldest': 'oldest',
-            AppLocalizations.of(context)?.warVictory ?? 'Victory': 'victory',
-            AppLocalizations.of(context)?.warDefeat ?? 'Defeat': 'defeat',
-            AppLocalizations.of(context)?.warDraw ?? 'Draw': 'draw',
-            AppLocalizations.of(context)?.warPerfectWar ?? 'Perfect War':
-                'perfectWar',
-            '5v5': '5',
-            '10v10': '10',
-            '15v15': '15',
-            '20v20': '20',
-            '25v25': '25',
-            '30v30': '30',
-            '40v40': '40',
-            '50v50': '50',
-          },
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: FilterDropdown(
+            sortBy: selectedFilter ?? 'newest',
+            updateSortBy: (String newValue) {
+              setState(() {
+                selectedFilter = newValue;
+              });
+            },
+            sortByOptions: {
+              AppLocalizations.of(context)?.warEventsNewest ?? 'Newest':
+                  'newest',
+              AppLocalizations.of(context)?.warEventsOldest ?? 'Oldest':
+                  'oldest',
+              AppLocalizations.of(context)?.warVictory ?? 'Victory': 'victory',
+              AppLocalizations.of(context)?.warDefeat ?? 'Defeat': 'defeat',
+              AppLocalizations.of(context)?.warDraw ?? 'Draw': 'draw',
+              AppLocalizations.of(context)?.warPerfectWar ?? 'Perfect War':
+                  'perfectWar',
+              '5v5': '5',
+              '10v10': '10',
+              '15v15': '15',
+              '20v20': '20',
+              '25v25': '25',
+              '30v30': '30',
+              '40v40': '40',
+              '50v50': '50',
+            },
+          ),
         ),
-        SizedBox(height: 2),
         filteredWarLogData.isEmpty
             ? Column(
                 children: [
-                  SizedBox(height: 16),
                   Card(
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Text(
-                          AppLocalizations.of(context)?.generalNoDataAvailable ??
-                              'No data available'),
+                        AppLocalizations.of(context)?.generalNoDataAvailable ??
+                            'No data available',
+                      ),
                     ),
                   ),
                   SizedBox(height: 32),
@@ -141,193 +165,318 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 2),
           Center(
             child: Column(
               children: List<Widget>.generate(warLogData.length, (index) {
                 final warLogDetail = warLogData[index];
                 final navigator = Navigator.of(context);
 
-                return GestureDetector(
+                return _WarLogCard(
+                  detail: warLogDetail,
+                  timeLabel: formatWarTime(warLogDetail.endTime, context),
                   onTap: () {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return Center(child: CircularProgressIndicator());
                       },
                     );
                     WarCwlService.fetchWarDataFromTime(
-                            widget.clan.tag, warLogDetail.endTime)
+                          widget.clan.tag,
+                          warLogDetail.endTime,
+                        )
                         .then((currentWarInfo) {
-                      navigator.pop();
-                      if (currentWarInfo == null) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Center(
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                          ?.warNoDataAvailableForThisWar ??
-                                      'No data available for this war',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface),
+                          navigator.pop();
+                          if (currentWarInfo == null) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Center(
+                                    child: Text(
+                                      AppLocalizations.of(
+                                            context,
+                                          )?.warNoDataAvailableForThisWar ??
+                                          'No data available for this war',
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                  duration: Duration(seconds: 1),
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.surface,
                                 ),
+                              );
+                            }
+                          } else {
+                            navigator.push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    WarScreen(war: currentWarInfo),
                               ),
-                              duration: Duration(seconds: 1),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
-                            ),
+                            );
+                          }
+                        })
+                        .catchError((error, stackTrace) {
+                          Sentry.captureException(
+                            error,
+                            stackTrace: stackTrace,
                           );
-                        }
-                      } else {
-                        navigator.push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                WarScreen(war: currentWarInfo),
-                          ),
-                        );
-                      }
-                    }).catchError((error, stackTrace) {
-                      Sentry.captureException(error, stackTrace: stackTrace);
-                      return null;
-                    });
+                          return null;
+                        });
                   },
-                  child: Card(
-                    margin:
-                        EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 70,
-                                      height: 70,
-                                      child: CachedNetworkImage(
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                          imageUrl:
-                                              warLogDetail.clan.badgeUrls.large,
-                                          fit: BoxFit.cover),
-                                    ),
-                                    Text(warLogDetail.clan.name,
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                        formatDate(
-                                            warLogDetail.endTime, context),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold)),
-                                    Text(
-                                      warLogDetail.result == 'win'
-                                          ? AppLocalizations.of(context)
-                                                  ?.warVictory ??
-                                              'Victory'
-                                          : warLogDetail.result == 'lose'
-                                              ? AppLocalizations.of(context)
-                                                      ?.warDefeat ??
-                                                  'Defeat'
-                                              : AppLocalizations.of(context)
-                                                      ?.warDraw ??
-                                                  'Draw',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  warLogDetail.result == 'win'
-                                                      ? Colors.green
-                                                      : warLogDetail.result ==
-                                                              'lose'
-                                                          ? Colors.red
-                                                          : Colors.blue),
-                                    ),
-                                    Text(
-                                        '${warLogDetail.clan.stars.toString().padRight(2, ' ')} - ${warLogDetail.opponent.stars.toString().padRight(2, ' ')} ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold)),
-                                    Text(
-                                        '${warLogDetail.clan.destructionPercentage % 1 == 0 ? warLogDetail.clan.destructionPercentage.toInt().toString().padLeft(6, ' ') : warLogDetail.clan.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${warLogDetail.opponent.destructionPercentage % 1 == 0 ? ('${warLogDetail.opponent.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${warLogDetail.opponent.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}'),
-                                    SizedBox(height: 2),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CachedNetworkImage(
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Icon(Icons.error),
-                                            imageUrl:
-                                                'https://assets.clashk.ing/icons/Icon_HV_XP.png',
-                                            width: 20,
-                                            height: 20),
-                                        Text(
-                                            ' +${warLogDetail.clan.expEarned}'),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 70,
-                                      height: 70,
-                                      child: CachedNetworkImage(
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                          imageUrl: warLogDetail
-                                              .opponent.badgeUrls.large,
-                                          fit: BoxFit.cover),
-                                    ),
-                                    Text(warLogDetail.opponent.name,
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 );
               }),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _WarLogCard extends StatelessWidget {
+  final WarLogDetails detail;
+  final String timeLabel;
+  final VoidCallback onTap;
+
+  const _WarLogCard({
+    required this.detail,
+    required this.timeLabel,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: theme.cardTheme.color ?? colorScheme.surface,
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: _WarClanSide(
+                  badgeUrl: detail.clan.badgeUrls.large,
+                  name: detail.clan.name,
+                ),
+              ),
+              SizedBox(
+                width: 132,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _WarMiniPill(
+                      value: '${detail.teamSize}v${detail.teamSize}',
+                    ),
+                    const SizedBox(height: 5),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        timeLabel,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: _WarScoreText(
+                        ownStars: detail.clan.stars,
+                        opponentStars: detail.opponent.stars,
+                        result: detail.result,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '${_formatPercent(detail.clan.destructionPercentage)} - ${_formatPercent(detail.opponent.destructionPercentage)}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    _WarMiniPill(
+                      value: '+${detail.clan.expEarned}',
+                      imageUrl: ImageAssets.xp,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: _WarClanSide(
+                  badgeUrl: detail.opponent.badgeUrls.large,
+                  name: detail.opponent.name,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatPercent(double value) {
+    return value % 1 == 0
+        ? '${value.toInt()}%'
+        : '${value.toStringAsFixed(2)}%';
+  }
+}
+
+class _WarScoreText extends StatelessWidget {
+  final int ownStars;
+  final int opponentStars;
+  final String result;
+
+  const _WarScoreText({
+    required this.ownStars,
+    required this.opponentStars,
+    required this.result,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    const winColor = Color(0xFF58C76A);
+    const loseColor = Color(0xFFFF5656);
+    const tieColor = Color(0xFF4EA6FF);
+    final baseStyle = theme.textTheme.titleLarge?.copyWith(
+      fontSize: (theme.textTheme.titleLarge?.fontSize ?? 22) * 1.05,
+      color: colorScheme.onSurface,
+      fontWeight: FontWeight.w900,
+      height: 1,
+    );
+    final ownColor = switch (result) {
+      'win' => winColor,
+      'tie' => tieColor,
+      _ => colorScheme.onSurface,
+    };
+    final opponentColor = switch (result) {
+      'lose' => loseColor,
+      'tie' => tieColor,
+      _ => colorScheme.onSurface,
+    };
+    final separatorColor = result == 'tie' ? tieColor : colorScheme.onSurface;
+
+    return RichText(
+      text: TextSpan(
+        style: baseStyle,
+        children: [
+          TextSpan(
+            text: '$ownStars',
+            style: TextStyle(color: ownColor),
+          ),
+          TextSpan(
+            text: ' - ',
+            style: TextStyle(color: separatorColor),
+          ),
+          TextSpan(
+            text: '$opponentStars',
+            style: TextStyle(color: opponentColor),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WarClanSide extends StatelessWidget {
+  final String badgeUrl;
+  final String name;
+
+  const _WarClanSide({required this.badgeUrl, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CachedNetworkImage(
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+          imageUrl: badgeUrl,
+          width: 48,
+          height: 48,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          name,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
+      ],
+    );
+  }
+}
+
+class _WarMiniPill extends StatelessWidget {
+  final String value;
+  final String? imageUrl;
+
+  const _WarMiniPill({required this.value, this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SizedBox(
+      width: 76,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.32),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (imageUrl != null)
+              CachedNetworkImage(
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                imageUrl: imageUrl!,
+                width: 15,
+                height: 15,
+              ),
+            if (imageUrl != null) const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
