@@ -277,52 +277,56 @@ class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: colorScheme.outlineVariant.withValues(alpha: 0.42),
+    return SizedBox(
+      height: 48,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          const NativeLiquidGlassBar(
+            height: 48,
+            cornerRadius: 0,
+            opacity: 0.85,
           ),
-        ),
-      ),
-      child: SizedBox(
-        height: 48,
-        child: TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-          indicatorColor: colorScheme.primary,
-          indicatorWeight: 3,
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
-          dividerColor: Colors.transparent,
-          splashFactory: NoSplash.splashFactory,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          onTap: widget.onTabSelected,
-          tabs: [
-            _ProfileTab(
-              label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
-              imageUrl: ImageAssets.townHall(widget.player.townHallLevel),
-              selected: widget.selectedIndex == 0,
-            ),
-            _ProfileTab(
-              label:
-                  AppLocalizations.of(context)?.gameBaseBuilder ??
-                  'Builder Base',
-              imageUrl: ImageAssets.builderHall(widget.player.builderHallLevel),
-              selected: widget.selectedIndex == 1,
-            ),
-            _ProfileTab(
-              label:
-                  AppLocalizations.of(context)?.gameAchievements ??
-                  'Achievements',
-              imageUrl: ImageAssets.attackStar,
-              selected: widget.selectedIndex == 2,
-            ),
-          ],
-        ),
+          TabBar(
+            controller: _tabController,
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+            indicatorColor: colorScheme.primary,
+            indicatorWeight: 3,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
+            dividerColor: Colors.transparent,
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            onTap: widget.onTabSelected,
+            tabs: [
+              _ProfileTab(
+                label:
+                    AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
+                imageUrl: ImageAssets.townHall(widget.player.townHallLevel),
+                selected: widget.selectedIndex == 0,
+              ),
+              _ProfileTab(
+                label:
+                    AppLocalizations.of(context)?.gameBaseBuilder ??
+                    'Builder Base',
+                imageUrl: ImageAssets.builderHall(
+                  widget.player.builderHallLevel,
+                ),
+                selected: widget.selectedIndex == 1,
+              ),
+              _ProfileTab(
+                label:
+                    AppLocalizations.of(context)?.gameAchievements ??
+                    'Achievements',
+                imageUrl: ImageAssets.attackStar,
+                selected: widget.selectedIndex == 2,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

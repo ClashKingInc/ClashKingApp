@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
@@ -401,30 +402,63 @@ class _StatsPageState extends State<StatsPage> {
   }
 }
 
-class CalculatorsPage extends StatelessWidget {
+class CalculatorsPage extends StatefulWidget {
   const CalculatorsPage({super.key});
 
   @override
+  State<CalculatorsPage> createState() => _CalculatorsPageState();
+}
+
+class _CalculatorsPageState extends State<CalculatorsPage>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+  int _selectedTab = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      if (mounted && _selectedTab != _tabController.index) {
+        setState(() => _selectedTab = _tabController.index);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: _SidePageScaffold(
-        title: 'Calculators',
-        subtitle: 'Ore, zap quake, and fireball quake.',
-        bottom: const TabBar(
-          tabs: [
-            Tab(text: 'Ore'),
-            Tab(text: 'Zap quake'),
-            Tab(text: 'Fireball'),
-          ],
+    return _SidePageScaffold(
+      title: 'Calculators',
+      subtitle: 'Ore, zap quake, and fireball quake.',
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+          child: NativeLiquidGlassSegmentedControl<int>(
+            values: const [0, 1, 2],
+            labels: const ['Ore', 'Zap quake', 'Fireball'],
+            selected: _selectedTab,
+            height: 44,
+            onChanged: (index) {
+              setState(() => _selectedTab = index);
+              _tabController.animateTo(index);
+            },
+          ),
         ),
-        child: const TabBarView(
-          children: [
-            _OreCalculator(),
-            _ZapQuakeCalculator(),
-            _FireballQuakeCalculator(),
-          ],
-        ),
+      ),
+      child: TabBarView(
+        controller: _tabController,
+        children: const [
+          _OreCalculator(),
+          _ZapQuakeCalculator(),
+          _FireballQuakeCalculator(),
+        ],
       ),
     );
   }

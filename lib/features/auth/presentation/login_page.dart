@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -32,6 +33,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late TabController _tabController;
+  int _selectedAuthTab = 0;
   bool _isLoading = false;
 
   // Email form controllers
@@ -44,6 +46,11 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (mounted && _selectedAuthTab != _tabController.index) {
+        setState(() => _selectedAuthTab = _tabController.index);
+      }
+    });
 
     // Pre-fill email if provided
     if (widget.prefillEmail != null) {
@@ -326,45 +333,21 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       child: Column(
                         children: [
                           // Tab Bar
-                          TabBar(
-                            controller: _tabController,
-                            labelColor: Theme.of(context).colorScheme.primary,
-                            unselectedLabelColor: Theme.of(
-                              context,
-                            ).colorScheme.onSurface,
-                            indicator: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.primary.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: NativeLiquidGlassSegmentedControl<int>(
+                              values: const [0, 1],
+                              labels: [
+                                AppLocalizations.of(context)!.authDiscordTitle,
+                                AppLocalizations.of(context)!.authEmail,
+                              ],
+                              selected: _selectedAuthTab,
+                              height: 44,
+                              onChanged: (index) {
+                                setState(() => _selectedAuthTab = index);
+                                _tabController.animateTo(index);
+                              },
                             ),
-                            indicatorPadding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 8,
-                            ),
-                            dividerColor: Colors.transparent,
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                            unselectedLabelStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                            ),
-                            tabs: [
-                              Tab(
-                                icon: Icon(Icons.discord, size: 20),
-                                text: AppLocalizations.of(
-                                  context,
-                                )!.authDiscordTitle,
-                                height: 50,
-                              ),
-                              Tab(
-                                icon: Icon(Icons.email_outlined, size: 20),
-                                text: AppLocalizations.of(context)!.authEmail,
-                                height: 50,
-                              ),
-                            ],
                           ),
 
                           // Tab Content
