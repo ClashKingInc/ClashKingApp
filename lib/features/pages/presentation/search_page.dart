@@ -33,7 +33,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  static const int _recentLimit = 5;
+  static const int _recentLimit = 10;
   static const String _recentKey = 'clashking_recent_search_results';
   static final RegExp _tagRegExp = RegExp(r'^[PYLQGRJCUV0289]{3,9}$');
 
