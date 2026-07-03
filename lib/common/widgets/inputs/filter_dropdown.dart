@@ -49,24 +49,63 @@ class _FilterDropdownState extends State<FilterDropdown> {
     return DropdownButton2<String>(
       valueListenable: _valueNotifier,
       items: widget.sortByOptions.entries.map((entry) {
+        final isSelected = entry.value == widget.sortBy;
+        final colorScheme = Theme.of(context).colorScheme;
+
         return DropdownItem<String>(
           value: entry.value,
           height: 40,
-          child: entry.key is String
-              ? Center(
-                  child: Text(
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.6)
+                  : null,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: entry.key is String
+                      ? Text(
+                          entry.key,
+                          maxLines: 1,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w400,
+                          ),
+                        )
+                      : Row(children: entry.key as List<Widget>),
+                ),
+                if (isSelected)
+                  Icon(
+                    LucideIcons.check,
+                    size: 16,
+                    color: colorScheme.onSurface,
+                  ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+      selectedItemBuilder: (context) =>
+          widget.sortByOptions.entries.map((entry) {
+            return entry.key is String
+                ? Text(
                     entry.key,
                     maxLines: 1,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: entry.key as List<Widget>,
-                ),
-        );
-      }).toList(),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: entry.key as List<Widget>,
+                  );
+          }).toList(),
       alignment: Alignment.center,
       onChanged: (String? newValue) {
         if (newValue != null) {
@@ -101,10 +140,15 @@ class _FilterDropdownState extends State<FilterDropdown> {
         iconDisabledColor: Theme.of(context).colorScheme.tertiary,
       ),
       dropdownStyleData: DropdownStyleData(
-        elevation: 16,
+        elevation: 4,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(AppRadius.chip),
+          border: Border.all(
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ),
         ),
         scrollbarTheme: ScrollbarThemeData(
           radius: const Radius.circular(40),
@@ -113,7 +157,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
         ),
       ),
       menuItemStyleData: const MenuItemStyleData(
-        padding: EdgeInsets.only(left: 14, right: 14),
+        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       ),
     );
   }
