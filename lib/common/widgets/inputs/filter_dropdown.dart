@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -70,10 +71,16 @@ class _FilterDropdownState extends State<FilterDropdown> {
         height: 40,
         padding: const EdgeInsets.only(left: 14, right: 14),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          color: Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+          border: Border.all(
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ),
         ),
-        elevation: 2,
       ),
       iconStyleData: IconStyleData(
         icon: const Icon(LucideIcons.arrowDown),
@@ -85,7 +92,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
         elevation: 16,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
         ),
         scrollbarTheme: ScrollbarThemeData(
           radius: const Radius.circular(40),
