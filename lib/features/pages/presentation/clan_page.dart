@@ -115,7 +115,7 @@ class _ClanPageState extends State<ClanPage> {
     ClanService clanService,
     _ClanListItem item,
   ) async {
-    if (item.clan != null) {
+    if (item.clan != null && item.clan!.clanWarLog?.items.isNotEmpty == true) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -125,14 +125,24 @@ class _ClanPageState extends State<ClanPage> {
       return;
     }
 
-    final loadedClan = await clanService.loadClanData(item.tag);
-    if (!context.mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ClanInfoScreen(clanInfo: loadedClan),
-      ),
-    );
+    try {
+      final loadedClan = await clanService.getClanAndWarData(item.tag);
+      if (!context.mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ClanInfoScreen(clanInfo: loadedClan),
+        ),
+      );
+    } catch (_) {
+      if (!context.mounted || item.clan == null) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ClanInfoScreen(clanInfo: item.clan!),
+        ),
+      );
+    }
   }
 
   Future<void> _refresh(
