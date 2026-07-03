@@ -60,9 +60,11 @@ class _PlayersPageState extends State<PlayersPage> {
       _requestedBookmarkPlayerTags.addAll(
         missingBookmarkPlayerTags.map(_normalizeTag),
       );
-      unawaited(
-        _hydrateBookmarkedPlayers(playerService, missingBookmarkPlayerTags),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(
+          _hydrateBookmarkedPlayers(playerService, missingBookmarkPlayerTags),
+        );
+      });
     }
     final showingLinked = _mode == _PlayerRosterMode.linked;
     final itemCount = showingLinked
@@ -339,105 +341,108 @@ class _PlayerCardShell extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 66,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 66,
+                    child: Stack(
+                      clipBehavior: Clip.none,
                       children: [
-                        SizedBox.square(
-                          dimension: 62,
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.shield_outlined),
-                          ),
+                        Column(
+                          children: [
+                            SizedBox.square(
+                              dimension: 62,
+                              child: CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.shield_outlined),
+                              ),
+                            ),
+                            if (imageCaption != null &&
+                                imageCaption!.isNotEmpty) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                _wrapActivityCaption(imageCaption!),
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.labelSmall
+                                    ?.copyWith(
+                                      color: colorScheme.onSurfaceVariant,
+                                      fontSize: 10,
+                                      height: 1.05,
+                                    ),
+                              ),
+                            ],
+                          ],
                         ),
-                        if (imageCaption != null &&
-                            imageCaption!.isNotEmpty) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            _wrapActivityCaption(imageCaption!),
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.labelSmall
-                                ?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontSize: 10,
-                                  height: 1.05,
+                        Positioned(
+                          right: -1,
+                          top: 42,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardTheme.color,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: colorScheme.outlineVariant.withValues(
+                                  alpha: 0.4,
                                 ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    Positioned(
-                      right: -1,
-                      top: 42,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardTheme.color,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.outlineVariant.withValues(
-                              alpha: 0.4,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: Icon(
+                                statusIcon,
+                                size: 14,
+                                color: statusColor,
+                              ),
                             ),
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(3),
-                          child: Icon(statusIcon, size: 14, color: statusColor),
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 17,
-                                ),
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 17,
+                                    ),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          color: colorScheme.onSurfaceVariant,
+                        Text(
+                          tag,
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                        ),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 7,
+                          runSpacing: 7,
+                          children: chips
+                              .map((chip) => _InfoChip(data: chip))
+                              .toList(growable: false),
                         ),
                       ],
                     ),
-                    Text(
-                      tag,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 7,
-                      runSpacing: 7,
-                      children: chips
-                          .map((chip) => _InfoChip(data: chip))
-                          .toList(growable: false),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                ],
               ),
             ),
           ),
