@@ -18,13 +18,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ClanInfoHeaderCard extends StatelessWidget {
   final Clan clanInfo;
-  final VoidCallback onOpenStats;
 
-  const ClanInfoHeaderCard({
-    super.key,
-    required this.clanInfo,
-    required this.onOpenStats,
-  });
+  const ClanInfoHeaderCard({super.key, required this.clanInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -150,12 +145,6 @@ class ClanInfoHeaderCard extends StatelessWidget {
           ),
           const SizedBox(width: 8),
         ],
-        HeaderIconButton(
-          icon: Icons.bar_chart_rounded,
-          tooltip: AppLocalizations.of(context)!.generalStats,
-          onTap: onOpenStats,
-        ),
-        const SizedBox(width: 8),
         HeaderIconButton(
           icon: Icons.open_in_new_rounded,
           tooltip: 'Open in game',

@@ -94,10 +94,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
           ),
           child: Column(
             children: [
-              ClanInfoHeaderCard(
-                clanInfo: widget.clanInfo,
-                onOpenStats: () => _selectTab(1),
-              ),
+              ClanInfoHeaderCard(clanInfo: widget.clanInfo),
               const SizedBox(height: 10),
               _ClanProfileTabs(
                 selectedIndex: selectedTab,
@@ -311,30 +308,136 @@ class _ClanTab extends StatelessWidget {
 /// fixed trailing control (sort dropdown, optionally + overflow menu)
 /// stays pinned on the right — replaces two stacked rows with
 /// different alignment/density.
-class _FilterBar extends StatelessWidget {
+/// Filter bar: a toggle button reveals the war-type chips on demand
+/// instead of always taking row space, leaving room for the trailing
+/// controls (sort, plus per-tab actions) to stay as visible icons
+/// instead of hiding behind an overflow menu.
+class _FilterBar extends StatefulWidget {
   final List<Widget> chips;
   final Widget trailing;
 
   const _FilterBar({required this.chips, required this.trailing});
 
   @override
+  State<_FilterBar> createState() => _FilterBarState();
+}
+
+class _FilterBarState extends State<_FilterBar> {
+  bool _expanded = false;
+
+  @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  for (final chip in chips) ...[chip, const SizedBox(width: 8)],
-                ],
+          Row(
+            children: [
+              Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(AppRadius.chip),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(AppRadius.chip),
+                  onTap: () => setState(() => _expanded = !_expanded),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: _expanded
+                          ? colorScheme.primary.withValues(alpha: 0.14)
+                          : colorScheme.surfaceContainerHighest.withValues(
+                              alpha: 0.45,
+                            ),
+                      borderRadius: BorderRadius.circular(AppRadius.chip),
+                      border: Border.all(
+                        color: _expanded
+                            ? colorScheme.primary.withValues(alpha: 0.4)
+                            : colorScheme.outlineVariant.withValues(
+                                alpha: 0.32,
+                              ),
+                      ),
+                    ),
+                    // Always onSurface, never the tint, for the same
+                    // contrast reason as the chip labels below.
+                    child: Icon(
+                      LucideIcons.listFilter,
+                      size: 18,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              widget.trailing,
+            ],
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topLeft,
+            child: _expanded
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: widget.chips,
+                    ),
+                  )
+                : const SizedBox(width: double.infinity),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Small bordered icon pill matching the filter bar's visual language,
+/// for secondary per-tab actions (TH visibility, reset) that now have
+/// room to stay visible instead of hiding in an overflow menu.
+class _IconPillButton extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  const _IconPillButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          onTap: onTap,
+          child: Container(
+            height: 40,
+            width: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.45,
+              ),
+              borderRadius: BorderRadius.circular(AppRadius.chip),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
               ),
             ),
+            child: Icon(icon, size: 18, color: colorScheme.onSurface),
           ),
-          trailing,
-        ],
+        ),
       ),
     );
   }
@@ -682,10 +785,16 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
                 },
               ),
               const SizedBox(width: 8),
-              _OverflowMenu(
-                showUppedTownHall: showUppedTownHall,
-                onToggleTownHall: _toggleTownHallVisibility,
-                onReset: _resetFilters,
+              _IconPillButton(
+                icon: showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
+                tooltip: loc.warVisibilityToggleTownHall,
+                onTap: _toggleTownHallVisibility,
+              ),
+              const SizedBox(width: 8),
+              _IconPillButton(
+                icon: LucideIcons.listRestart,
+                tooltip: loc.generalReset,
+                onTap: _resetFilters,
               ),
             ],
           ),
@@ -721,70 +830,6 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
 /// Compact overflow menu for the two secondary Statistics-tab actions
 /// (TH visibility toggle, reset) so the filter bar's trailing slot
 /// stays to one control (sort) instead of three floating icon pills.
-class _OverflowMenu extends StatelessWidget {
-  final bool showUppedTownHall;
-  final VoidCallback onToggleTownHall;
-  final VoidCallback onReset;
-
-  const _OverflowMenu({
-    required this.showUppedTownHall,
-    required this.onToggleTownHall,
-    required this.onReset,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return PopupMenuButton<String>(
-      tooltip: loc.generalFilters,
-      child: Container(
-        height: 40,
-        width: 40,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-          borderRadius: BorderRadius.circular(AppRadius.chip),
-          border: Border.all(
-            color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-          ),
-        ),
-        child: Icon(LucideIcons.moreVertical, color: colorScheme.onSurface),
-      ),
-      onSelected: (value) {
-        if (value == 'toggleTh') onToggleTownHall();
-        if (value == 'reset') onReset();
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'toggleTh',
-          child: Row(
-            children: [
-              Icon(
-                showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
-                size: 18,
-              ),
-              const SizedBox(width: 10),
-              Text(loc.warVisibilityToggleTownHall),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'reset',
-          child: Row(
-            children: [
-              const Icon(LucideIcons.listRestart, size: 18),
-              const SizedBox(width: 10),
-              Text(loc.generalReset),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _ClanCwlHistoryTab extends StatefulWidget {
   final Clan clan;
 
