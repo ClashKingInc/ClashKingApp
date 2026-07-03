@@ -1,7 +1,7 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,8 @@ class WarStatsCardState extends State<WarStatsCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ClanWarStatsScreen(clan: widget.clan),
+            builder: (context) =>
+                ClanInfoScreen(clanInfo: widget.clan, initialTab: 2),
           ),
         );
       },
@@ -34,16 +35,16 @@ class WarStatsCardState extends State<WarStatsCard> {
               SizedBox(
                 height: 70,
                 width: 70,
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.warClan,
-                ),
+                child: MobileWebImage(imageUrl: ImageAssets.warClan),
               ),
               SizedBox(width: 24),
               Expanded(
                 child: Column(
                   children: [
-                    Text(AppLocalizations.of(context)!.warStats,
-                        style: Theme.of(context).textTheme.labelLarge),
+                    Text(
+                      AppLocalizations.of(context)!.warStats,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
                   ],
                 ),
               ),

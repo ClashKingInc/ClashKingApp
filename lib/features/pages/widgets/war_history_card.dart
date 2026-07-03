@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -26,7 +26,7 @@ class WarHistoryCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ClanWarStatsScreen(clan: clan),
+            builder: (context) => ClanInfoScreen(clanInfo: clan, initialTab: 1),
           ),
         );
       },

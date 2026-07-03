@@ -8,7 +8,6 @@ import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
-import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -19,8 +18,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ClanInfoHeaderCard extends StatelessWidget {
   final Clan clanInfo;
+  final VoidCallback onOpenStats;
 
-  const ClanInfoHeaderCard({super.key, required this.clanInfo});
+  const ClanInfoHeaderCard({
+    super.key,
+    required this.clanInfo,
+    required this.onOpenStats,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -149,12 +153,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
         HeaderIconButton(
           icon: Icons.bar_chart_rounded,
           tooltip: AppLocalizations.of(context)!.generalStats,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ClanWarStatsScreen(clan: clanInfo),
-            ),
-          ),
+          onTap: onOpenStats,
         ),
         const SizedBox(width: 8),
         HeaderIconButton(
