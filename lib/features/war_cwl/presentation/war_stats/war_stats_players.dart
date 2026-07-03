@@ -46,41 +46,49 @@ class ClanWarStatsPlayers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _ToolbarPillButton(
-              icon: showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
-              tooltip: AppLocalizations.of(
-                context,
-              )!.warVisibilityToggleTownHall,
-              onPressed: toggleTownHallVisibility,
-            ),
-            FilterDropdown(
-              sortBy: sortBy,
-              updateSortBy: updateSortBy,
-              sortByOptions: {
-                AppLocalizations.of(context)!.warStarsThree:
-                    "Three Stars Attacks",
-                AppLocalizations.of(context)!.warStarsTwo: "Two Stars Attacks",
-                AppLocalizations.of(context)!.warStarsOne: "One Star Attacks",
-                AppLocalizations.of(context)!.warStarsZero: "No Star Attacks",
-                AppLocalizations.of(context)!.warDestructionAverage:
-                    "Average Destruction",
-                AppLocalizations.of(context)!.warStarsAverage: "Average Stars",
-                AppLocalizations.of(context)!.warParticipation:
-                    "War Participation",
-                AppLocalizations.of(context)!.warAttacksMissed:
-                    "Missed Attacks",
-              },
-            ),
-            _ToolbarPillButton(
-              icon: LucideIcons.listRestart,
-              tooltip: AppLocalizations.of(context)!.generalReset,
-              onPressed: resetFilters,
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _ToolbarPillButton(
+                icon: showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
+                tooltip: AppLocalizations.of(
+                  context,
+                )!.warVisibilityToggleTownHall,
+                onPressed: toggleTownHallVisibility,
+              ),
+              const SizedBox(width: 8),
+              FilterDropdown(
+                sortBy: sortBy,
+                updateSortBy: updateSortBy,
+                sortByOptions: {
+                  AppLocalizations.of(context)!.warStarsThree:
+                      "Three Stars Attacks",
+                  AppLocalizations.of(context)!.warStarsTwo:
+                      "Two Stars Attacks",
+                  AppLocalizations.of(context)!.warStarsOne: "One Star Attacks",
+                  AppLocalizations.of(context)!.warStarsZero: "No Star Attacks",
+                  AppLocalizations.of(context)!.warDestructionAverage:
+                      "Average Destruction",
+                  AppLocalizations.of(context)!.warStarsAverage:
+                      "Average Stars",
+                  AppLocalizations.of(context)!.warParticipation:
+                      "War Participation",
+                  AppLocalizations.of(context)!.warAttacksMissed:
+                      "Missed Attacks",
+                },
+              ),
+              const SizedBox(width: 8),
+              _ToolbarPillButton(
+                icon: LucideIcons.listRestart,
+                tooltip: AppLocalizations.of(context)!.generalReset,
+                onPressed: resetFilters,
+              ),
+            ],
+          ),
         ),
+        const SizedBox(height: 8),
         if (filteredPlayers.isNotEmpty)
           ...filteredPlayers.map((member) {
             final memberWarStats = member.getStatsForTypes(
