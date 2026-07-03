@@ -109,6 +109,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "Bookmark",
+  "generalRemoveBookmark": "Remove bookmark",
   "generalClearFilters": "Clear Filters",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -493,6 +495,7 @@
   "clanNone": "No clan",
   "clanJoinToUnlock": "Join a clan to unlock new features.",
   "clanMembers": "Members",
+  "clanMembersSearchPlaceholder": "Search members",
   "clanMinimumMembers": "Minimum members",
   "clanMaximumMembers": "Maximum members",
   "clanLocation": "Location",
