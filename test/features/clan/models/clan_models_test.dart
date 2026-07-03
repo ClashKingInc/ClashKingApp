@@ -148,6 +148,25 @@ void main() {
       expect(member.league.id, 29000022);
     });
 
+    test('fromJson prefers leagueTier over deprecated league', () {
+      final member = ClanMember.fromJson({
+        'tag': '#ABC123',
+        'name': 'Player One',
+        'role': 'member',
+        'townHallLevel': 16,
+        'expLevel': 210,
+        'trophies': 5300,
+        'donations': 10,
+        'donationsReceived': 5,
+        'builderBaseTrophies': 3000,
+        'league': {'id': 0, 'name': 'Unranked'},
+        'leagueTier': {'id': 29000022, 'name': 'Legend League'},
+      });
+
+      expect(member.league.id, 29000022);
+      expect(member.league.name, 'Legend League');
+    });
+
     test('fromJson uses ClanLeague.unranked when league field is absent', () {
       final member = ClanMember.fromJson({
         'tag': '#AAA',

@@ -145,15 +145,11 @@ class ImageAssets {
 
   static String? _cwlLeagueIconUrl(dynamic league, String leagueName) {
     if (league is String) return league;
-    if (league is Map && league['url'] is String) {
-      return league['url'] as String;
-    }
-    if (league is! Map) return null;
 
-    final tid = league['TID'] is Map
+    final tid = league is Map && league['TID'] is Map
         ? (league['TID'] as Map)['name']?.toString()
         : null;
-    final resolvedName = league['name'] is String
+    final resolvedName = league is Map && league['name'] is String
         ? league['name'] as String
         : leagueName.trim();
     const cwlFiles = {
@@ -175,6 +171,13 @@ class ImageAssets {
       'TID_LEAGUE_CHAMPION1': 'Icon_HV_CWL_Champion_1.png',
       'TID_LEAGUE_CHAMPION2': 'Icon_HV_CWL_Champion_2.png',
       'TID_LEAGUE_CHAMPION3': 'Icon_HV_CWL_Champion_3.png',
+      'TID_LEAGUE_HERO1': 'Icon_HV_CWL_Titan_1.png',
+      'TID_LEAGUE_HERO2': 'Icon_HV_CWL_Titan_2.png',
+      'TID_LEAGUE_HERO3': 'Icon_HV_CWL_Titan_3.png',
+      'TID_LEAGUE_TITANIUM1': 'Icon_HV_CWL_Titan_1.png',
+      'TID_LEAGUE_TITANIUM2': 'Icon_HV_CWL_Titan_2.png',
+      'TID_LEAGUE_TITANIUM3': 'Icon_HV_CWL_Titan_3.png',
+      'TID_LEAGUE_LEGENDARY': 'Icon_HV_CWL_Legend.png',
       'Bronze League I': 'Icon_HV_CWL_Bronze_1.png',
       'Bronze League II': 'Icon_HV_CWL_Bronze_2.png',
       'Bronze League III': 'Icon_HV_CWL_Bronze_3.png',
@@ -193,11 +196,20 @@ class ImageAssets {
       'Champion League I': 'Icon_HV_CWL_Champion_1.png',
       'Champion League II': 'Icon_HV_CWL_Champion_2.png',
       'Champion League III': 'Icon_HV_CWL_Champion_3.png',
+      'Titan League I': 'Icon_HV_CWL_Titan_1.png',
+      'Titan League II': 'Icon_HV_CWL_Titan_2.png',
+      'Titan League III': 'Icon_HV_CWL_Titan_3.png',
+      'Legend League': 'Icon_HV_CWL_Legend.png',
       'Unranked': 'Icon_HV_CWL_Unranked.png',
     };
     final fileName = cwlFiles[tid] ?? cwlFiles[resolvedName];
-    if (fileName == null) return null;
-    return '$baseUrl/home-base/league-icons/$fileName';
+    if (fileName != null) {
+      return '$baseUrl/home-base/league-icons/$fileName';
+    }
+    if (league is Map && league['url'] is String) {
+      return league['url'] as String;
+    }
+    return null;
   }
 
   // 🏆 Wars & CWL & Trophies
@@ -207,6 +219,8 @@ class ImageAssets {
   static const String war = "$baseUrl/icons/Icon_DC_War.png";
   static const String warClan = "$baseUrl/icons/Icon_HV_Clan_War.png";
   static const String builderBaseStar = "$baseUrl/icons/Icon_BB_Star.png";
+  static const String builderBaseTrophy =
+      "$baseUrl/bot/icons/versus_trophy.png";
   static const String sword = "$baseUrl/icons/Icon_HV_Sword.png";
   static const String swordGif = "$baseUrl/bot/icons/animated_clash_swords.gif";
   static const String brokenSword = "$baseUrl/bot/icons/broken_sword.png";

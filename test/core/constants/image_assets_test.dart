@@ -68,19 +68,55 @@ void main() {
       );
     });
 
+    test('uses Titan and Legend CWL league icons', () {
+      GameDataService.playerLeagueData.clear();
+      GameDataService.leagueData.clear();
+      GameDataService.warLeagueData.clear();
+      GameDataService.warLeagueData['leagues'] = {
+        'Titan League II': {
+          'name': 'Titan League II',
+          'TID': {'name': 'TID_LEAGUE_HERO2'},
+        },
+        'Legend League': {
+          'name': 'Legend League',
+          'TID': {'name': 'TID_LEAGUE_LEGENDARY'},
+        },
+      };
+
+      expect(
+        ImageAssets.getWarLeagueImage('Titan League II'),
+        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Titan_2.png',
+      );
+      expect(
+        ImageAssets.getWarLeagueImage('Legend League'),
+        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Legend.png',
+      );
+    });
+
+    test('uses direct Titan CWL icon from display name without static data', () {
+      GameDataService.playerLeagueData.clear();
+      GameDataService.leagueData.clear();
+      GameDataService.warLeagueData.clear();
+
+      expect(
+        ImageAssets.getWarLeagueImage('Titan League II'),
+        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Titan_2.png',
+      );
+    });
+
     test('does not fall back to player league icons for unknown war leagues', () {
       GameDataService.warLeagueData.clear();
       GameDataService.leagueData.clear();
       GameDataService.playerLeagueData.clear();
       GameDataService.playerLeagueData['leagues'] = {
-        'Crystal League I': {
+        'Goblin League I': {
           'url':
-              'https://assets.clashk.ing/home-base/league-icons/Icon_HV_League_Crystal_2.png',
+              'https://assets.clashk.ing/home-base/league-icons/Icon_HV_League_Goblin_1.png',
         },
       };
 
       expect(
-        ImageAssets.getWarLeagueImage('Crystal League I'),
+        ImageAssets.getWarLeagueImage('Goblin League I'),
         ImageAssets.defaultImage,
       );
     });
