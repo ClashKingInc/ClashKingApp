@@ -1,10 +1,10 @@
-import 'dart:ui';
-
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:flutter/material.dart';
 
-/// Frosted round icon button floating over a hero header image.
+/// Frosted round icon button floating over a hero header image — same
+/// native Liquid Glass recipe as the player header's button, so every
+/// hero-header screen shares one real glass button implementation.
 class HeaderIconButton extends StatelessWidget {
   final IconData? icon;
   final String? imageUrl;
@@ -26,29 +26,42 @@ class HeaderIconButton extends StatelessWidget {
 
     return Tooltip(
       message: tooltip,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Material(
-            color: Theme.of(
-              context,
-            ).colorScheme.surface.withValues(alpha: 0.55),
-            borderRadius: BorderRadius.circular(radius),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(radius),
-              onTap: onTap,
-              child: SizedBox(
+      child: SizedBox(
+        height: size,
+        width: size,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(radius),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const NativeLiquidGlassBar(
                 height: size,
-                width: size,
-                child: imageUrl != null
-                    ? Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: MobileWebImage(imageUrl: imageUrl!),
-                      )
-                    : Icon(icon, size: 25),
+                cornerRadius: radius,
+                opacity: 0.72,
+                interactive: true,
               ),
-            ),
+              Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(radius),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(radius),
+                  splashFactory: NoSplash.splashFactory,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: onTap,
+                  child: SizedBox(
+                    height: size,
+                    width: size,
+                    child: imageUrl != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: MobileWebImage(imageUrl: imageUrl!),
+                          )
+                        : Icon(icon, size: 25),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

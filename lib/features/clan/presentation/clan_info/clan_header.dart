@@ -46,13 +46,37 @@ class ClanInfoHeaderCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              CachedNetworkImage(
-                imageUrl: ImageAssets.clanPageBackground,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) =>
-                    ColoredBox(color: Theme.of(context).colorScheme.surface),
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withValues(alpha: 0.50),
+                  BlendMode.darken,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: ImageAssets.clanPageBackground,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) =>
+                      ColoredBox(color: Theme.of(context).colorScheme.surface),
+                ),
               ),
-              ColoredBox(color: Colors.black.withValues(alpha: 0.62)),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(
+                        context,
+                      ).colorScheme.surface.withValues(alpha: 0.36),
+                      Theme.of(
+                        context,
+                      ).colorScheme.surface.withValues(alpha: 0.64),
+                      Theme.of(
+                        context,
+                      ).colorScheme.surface.withValues(alpha: 0.92),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -188,11 +212,9 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 clanInfo.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                // Always white: sits on the darkened backdrop image.
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
               ),
               Row(
                 children: [
@@ -215,7 +237,9 @@ class ClanInfoHeaderCard extends StatelessWidget {
                       child: Text(
                         clanInfo.tag,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.white.withValues(alpha: 0.75),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.62),
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -296,184 +320,186 @@ class ClanInfoHeaderCard extends StatelessWidget {
       _ => loc.generalUnknown,
     };
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: (theme.cardTheme.color ?? colorScheme.surface).withValues(
-          alpha: 0.94,
+    return Stack(
+      children: [
+        const Positioned.fill(
+          child: HeaderPanelBackground(height: 300, cornerRadius: 28),
         ),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+        Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withValues(
-                    alpha: 0.5,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-                child: SizedBox.square(
-                  dimension: 36,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: MobileWebImage(
-                      imageUrl: ImageAssets.getWarLeagueImage(warLeagueName),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      warLeagueName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 1),
-                    Text(
-                      formatter.format(clanInfo.clanPoints),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        height: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              Row(
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerHighest.withValues(
+                        alpha: 0.5,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: SizedBox.square(
+                      dimension: 36,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: MobileWebImage(
+                          imageUrl: ImageAssets.getWarLeagueImage(
+                            warLeagueName,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          warLeagueName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          formatter.format(clanInfo.clanPoints),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                height: 1,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Icon(
-                        Icons.groups_rounded,
-                        size: 14,
-                        color: colorScheme.onSurfaceVariant,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.groups_rounded,
+                            size: 14,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            '${clanInfo.members}/50',
+                            style: Theme.of(context).textTheme.labelMedium
+                                ?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 3),
-                      Text(
-                        '${clanInfo.members}/50',
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
+                      if (clanInfo.isWarLogPublic) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                          '${clanInfo.warWins}W · ${clanInfo.warTies}T · ${clanInfo.warLosses}L',
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                      ],
                     ],
                   ),
-                  if (clanInfo.isWarLogPublic) ...[
-                    const SizedBox(height: 3),
-                    Text(
-                      '${clanInfo.warWins}W · ${clanInfo.warTies}T · ${clanInfo.warLosses}L',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
                 ],
               ),
+              const SizedBox(height: 12),
+              // Same icon + label + colored value language as the metric
+              // bars, laid out two per row at equal width so a variable
+              // chip count (some are conditional) doesn't wrap raggedly.
+              MetricChipGrid(
+                columns: 3,
+                chips: [
+                  // Already covered by the W·T·L summary above when the war
+                  // log is public — only show it here as a standalone stat
+                  // when that fuller summary isn't available.
+                  if (!clanInfo.isWarLogPublic)
+                    MetricChip(
+                      label: loc.clanWarWinsTitle,
+                      value: formatter.format(clanInfo.warWins),
+                      imageUrl: ImageAssets.war,
+                      color: const Color(0xFFE8A524),
+                    ),
+                  MetricChip(
+                    label: loc.clanWinStreakTitle,
+                    value: formatter.format(clanInfo.warWinStreak),
+                    icon: Icons.local_fire_department_rounded,
+                    color: const Color(0xFFE35D4F),
+                  ),
+                  MetricChip(
+                    label: loc.playerCapitalTitle,
+                    value: formatter.format(clanInfo.clanCapitalPoints),
+                    imageUrl: ImageAssets.capitalTrophy,
+                    color: const Color(0xFF8D63D9),
+                  ),
+                  MetricChip(
+                    label: loc.clanBuilderBaseTitle,
+                    value: formatter.format(clanInfo.clanBuilderBasePoints),
+                    imageUrl: ImageAssets.builderBaseStar,
+                    color: const Color(0xFF2A9FD6),
+                  ),
+                  if (clanInfo.requiredTrophies > 0)
+                    MetricChip(
+                      label: loc.clanMinTrophiesTitle,
+                      value: NumberFormat.compact().format(
+                        clanInfo.requiredTrophies,
+                      ),
+                      imageUrl: ImageAssets.trophies,
+                    ),
+                  MetricChip(
+                    label: loc.clanWarFrequencyTitle,
+                    value: warFrequencyLabel,
+                    icon: Icons.event_repeat_rounded,
+                  ),
+                  if (clanInfo.requiredTownhallLevel > 0)
+                    MetricChip(
+                      label: loc.clanMinTownHallTitle,
+                      value: '${clanInfo.requiredTownhallLevel}+',
+                      imageUrl: ImageAssets.townHall(
+                        clanInfo.requiredTownhallLevel,
+                      ),
+                    ),
+                  MetricChip(
+                    label: loc.clanTypeTitle,
+                    value: typeLabel,
+                    icon: Icons.mail_rounded,
+                  ),
+                ],
+              ),
+              if (clanInfo.description.trim().isNotEmpty) ...[
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    clanInfo.description,
+                    textAlign: TextAlign.start,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ],
           ),
-          const SizedBox(height: 12),
-          // Same icon + label + colored value language as the metric
-          // bars, laid out two per row at equal width so a variable
-          // chip count (some are conditional) doesn't wrap raggedly.
-          MetricChipGrid(
-            columns: 3,
-            chips: [
-              // Already covered by the W·T·L summary above when the war
-              // log is public — only show it here as a standalone stat
-              // when that fuller summary isn't available.
-              if (!clanInfo.isWarLogPublic)
-                MetricChip(
-                  label: loc.clanWarWinsTitle,
-                  value: formatter.format(clanInfo.warWins),
-                  imageUrl: ImageAssets.war,
-                  color: const Color(0xFFE8A524),
-                ),
-              MetricChip(
-                label: loc.clanWinStreakTitle,
-                value: formatter.format(clanInfo.warWinStreak),
-                icon: Icons.local_fire_department_rounded,
-                color: const Color(0xFFE35D4F),
-              ),
-              MetricChip(
-                label: loc.playerCapitalTitle,
-                value: formatter.format(clanInfo.clanCapitalPoints),
-                imageUrl: ImageAssets.capitalTrophy,
-                color: const Color(0xFF8D63D9),
-              ),
-              MetricChip(
-                label: loc.clanBuilderBaseTitle,
-                value: formatter.format(clanInfo.clanBuilderBasePoints),
-                imageUrl: ImageAssets.builderBaseStar,
-                color: const Color(0xFF2A9FD6),
-              ),
-              if (clanInfo.requiredTrophies > 0)
-                MetricChip(
-                  label: loc.clanMinTrophiesTitle,
-                  value: NumberFormat.compact().format(
-                    clanInfo.requiredTrophies,
-                  ),
-                  imageUrl: ImageAssets.trophies,
-                ),
-              MetricChip(
-                label: loc.clanWarFrequencyTitle,
-                value: warFrequencyLabel,
-                icon: Icons.event_repeat_rounded,
-              ),
-              if (clanInfo.requiredTownhallLevel > 0)
-                MetricChip(
-                  label: loc.clanMinTownHallTitle,
-                  value: '${clanInfo.requiredTownhallLevel}+',
-                  imageUrl: ImageAssets.townHall(
-                    clanInfo.requiredTownhallLevel,
-                  ),
-                ),
-              MetricChip(
-                label: loc.clanTypeTitle,
-                value: typeLabel,
-                icon: Icons.mail_rounded,
-              ),
-            ],
-          ),
-          if (clanInfo.description.trim().isNotEmpty) ...[
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                clanInfo.description,
-                textAlign: TextAlign.start,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 
