@@ -170,31 +170,12 @@ class ClanInfoHeaderCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          width: 82,
-          child: Column(
-            children: [
-              CachedNetworkImage(
-                imageUrl: clanInfo.badgeUrls.large,
-                width: 76,
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-              const SizedBox(height: 5),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.surface.withValues(alpha: 0.86),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  'Level ${clanInfo.clanLevel}',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w800),
-                ),
-              ),
-            ],
+          width: 56,
+          height: 56,
+          child: CachedNetworkImage(
+            imageUrl: clanInfo.badgeUrls.large,
+            width: 56,
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
         ),
         const SizedBox(width: 12),
@@ -213,69 +194,79 @@ class ClanInfoHeaderCard extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              InkWell(
-                borderRadius: BorderRadius.circular(6),
-                onTap: () {
-                  FlutterClipboard.copy(clanInfo.tag).then((_) {
-                    if (context.mounted) {
-                      showClipboardSnackbar(
-                        context,
-                        AppLocalizations.of(context)!.generalCopiedToClipboard,
-                      );
-                    }
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Text(
-                    clanInfo.tag,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.75),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-              if (clanInfo.location?.name != null) ...[
-                const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 9,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.38),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (clanInfo.location?.countryCode != null) ...[
-                        MobileWebImage(
-                          imageUrl: ImageAssets.flag(
-                            clanInfo.location!.countryCode!,
-                          ),
-                          width: 15,
-                          height: 15,
-                        ),
-                        const SizedBox(width: 4),
-                      ],
-                      Flexible(
-                        child: Text(
-                          clanInfo.location!.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelSmall
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                              ),
+              Row(
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(6),
+                    onTap: () {
+                      FlutterClipboard.copy(clanInfo.tag).then((_) {
+                        if (context.mounted) {
+                          showClipboardSnackbar(
+                            context,
+                            AppLocalizations.of(
+                              context,
+                            )!.generalCopiedToClipboard,
+                          );
+                        }
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3),
+                      child: Text(
+                        clanInfo.tag,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.75),
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  if (clanInfo.location?.name != null) ...[
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.32),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (clanInfo.location?.countryCode != null) ...[
+                              MobileWebImage(
+                                imageUrl: ImageAssets.flag(
+                                  clanInfo.location!.countryCode!,
+                                ),
+                                width: 13,
+                                height: 13,
+                              ),
+                              const SizedBox(width: 4),
+                            ],
+                            Flexible(
+                              child: Text(
+                                clanInfo.location!.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.labelSmall
+                                    ?.copyWith(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.85,
+                                      ),
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ],
           ),
         ),
@@ -354,27 +345,14 @@ class ClanInfoHeaderCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 1),
-                    Row(
-                      children: [
-                        const MobileWebImage(
-                          imageUrl: ImageAssets.trophies,
-                          width: 12,
-                          height: 12,
-                        ),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            formatter.format(clanInfo.clanPoints),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  height: 1,
-                                ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      formatter.format(clanInfo.clanPoints),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                        height: 1,
+                      ),
                     ),
                   ],
                 ),
@@ -423,12 +401,16 @@ class ClanInfoHeaderCard extends StatelessWidget {
           MetricChipGrid(
             columns: 3,
             chips: [
-              MetricChip(
-                label: loc.clanWarWinsTitle,
-                value: formatter.format(clanInfo.warWins),
-                imageUrl: ImageAssets.war,
-                color: const Color(0xFFE8A524),
-              ),
+              // Already covered by the W·T·L summary above when the war
+              // log is public — only show it here as a standalone stat
+              // when that fuller summary isn't available.
+              if (!clanInfo.isWarLogPublic)
+                MetricChip(
+                  label: loc.clanWarWinsTitle,
+                  value: formatter.format(clanInfo.warWins),
+                  imageUrl: ImageAssets.war,
+                  color: const Color(0xFFE8A524),
+                ),
               MetricChip(
                 label: loc.clanWinStreakTitle,
                 value: formatter.format(clanInfo.warWinStreak),
@@ -447,11 +429,14 @@ class ClanInfoHeaderCard extends StatelessWidget {
                 imageUrl: ImageAssets.builderBaseStar,
                 color: const Color(0xFF2A9FD6),
               ),
-              MetricChip(
-                label: loc.clanTypeTitle,
-                value: typeLabel,
-                icon: Icons.mail_rounded,
-              ),
+              if (clanInfo.requiredTrophies > 0)
+                MetricChip(
+                  label: loc.clanMinTrophiesTitle,
+                  value: NumberFormat.compact().format(
+                    clanInfo.requiredTrophies,
+                  ),
+                  imageUrl: ImageAssets.trophies,
+                ),
               MetricChip(
                 label: loc.clanWarFrequencyTitle,
                 value: warFrequencyLabel,
@@ -465,14 +450,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
                     clanInfo.requiredTownhallLevel,
                   ),
                 ),
-              if (clanInfo.requiredTrophies > 0)
-                MetricChip(
-                  label: loc.clanMinTrophiesTitle,
-                  value: NumberFormat.compact().format(
-                    clanInfo.requiredTrophies,
-                  ),
-                  imageUrl: ImageAssets.trophies,
-                ),
+              MetricChip(
+                label: loc.clanTypeTitle,
+                value: typeLabel,
+                icon: Icons.mail_rounded,
+              ),
             ],
           ),
           if (clanInfo.description.trim().isNotEmpty) ...[
@@ -481,9 +463,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
               width: double.infinity,
               child: Text(
                 clanInfo.description,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-                maxLines: 7,
+                textAlign: TextAlign.start,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+                maxLines: 4,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
