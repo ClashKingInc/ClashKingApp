@@ -7,12 +7,14 @@ class FilterDropdown extends StatefulWidget {
   final String sortBy;
   final Function(String) updateSortBy;
   final Map<dynamic, String> sortByOptions;
+  final double? maxWidth;
 
   const FilterDropdown({
     super.key,
     required this.sortBy,
     required this.updateSortBy,
     required this.sortByOptions,
+    this.maxWidth,
   });
 
   @override
@@ -51,7 +53,14 @@ class _FilterDropdownState extends State<FilterDropdown> {
           value: entry.value,
           height: 40,
           child: entry.key is String
-              ? Center(child: Text(entry.key))
+              ? Center(
+                  child: Text(
+                    entry.key,
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: entry.key as List<Widget>,
@@ -69,6 +78,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
       underline: Container(),
       buttonStyleData: ButtonStyleData(
         height: 40,
+        width: widget.maxWidth,
         padding: const EdgeInsets.only(left: 14, right: 14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppRadius.chip),
@@ -85,7 +95,9 @@ class _FilterDropdownState extends State<FilterDropdown> {
       iconStyleData: IconStyleData(
         icon: const Icon(LucideIcons.arrowDown),
         iconSize: 16,
-        iconEnabledColor: Theme.of(context).colorScheme.primary,
+        // Not colorScheme.primary: this app's brand red doesn't clear
+        // 4.5:1 contrast against a dark surface — onSurface always does.
+        iconEnabledColor: Theme.of(context).colorScheme.onSurface,
         iconDisabledColor: Theme.of(context).colorScheme.tertiary,
       ),
       dropdownStyleData: DropdownStyleData(

@@ -110,7 +110,10 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                 child: KeyedSubtree(
                   key: ValueKey(selectedTab),
                   child: switch (selectedTab) {
-                    0 => ClanMembers(clanInfo: widget.clanInfo),
+                    0 => Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: ClanMembers(clanInfo: widget.clanInfo),
+                    ),
                     1 => _ClanWarLogTab(
                       clan: widget.clanInfo,
                       isCWLChecked: isCWLChecked,
@@ -385,7 +388,11 @@ class _FilterPill extends StatelessWidget {
             children: [
               DecoratedBox(
                 decoration: BoxDecoration(
-                  color: colorScheme.surface.withValues(alpha: 0.72),
+                  // Solid tint fill (not translucent) so a white icon on
+                  // top always clears contrast — unlike coloring small
+                  // text/icons with the tint directly, which this app's
+                  // dark-red primary fails against a dark surface.
+                  color: tint ?? colorScheme.surface.withValues(alpha: 0.72),
                   shape: BoxShape.circle,
                 ),
                 child: SizedBox.square(
@@ -397,7 +404,9 @@ class _FilterPill extends StatelessWidget {
                         : Icon(
                             icon,
                             size: 14,
-                            color: tint ?? colorScheme.onSurfaceVariant,
+                            color: tint != null
+                                ? Colors.white
+                                : colorScheme.onSurfaceVariant,
                           ),
                   ),
                 ),
@@ -406,7 +415,9 @@ class _FilterPill extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: tint ?? colorScheme.onSurface,
+                  // Always onSurface — never the tint — so selected
+                  // labels stay readable regardless of theme contrast.
+                  color: colorScheme.onSurface,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
                 ),
               ),
@@ -475,6 +486,7 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
           trailing: FilterDropdown(
             sortBy: _selectedFilter ?? 'newest',
             updateSortBy: (value) => setState(() => _selectedFilter = value),
+            maxWidth: 130,
             sortByOptions: {
               loc.warEventsNewest: 'newest',
               loc.warEventsOldest: 'oldest',
@@ -657,6 +669,7 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
               FilterDropdown(
                 sortBy: _sortBy,
                 updateSortBy: _updateSortBy,
+                maxWidth: 130,
                 sortByOptions: {
                   loc.warStarsThree: "Three Stars Attacks",
                   loc.warStarsTwo: "Two Stars Attacks",
