@@ -1,4 +1,5 @@
 // Fichier : war_stats_page.dart
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -312,9 +313,9 @@ class _ToolbarPillButton extends StatelessWidget {
       child: Material(
         color: colorScheme.surface,
         elevation: 2,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
           onTap: onPressed,
           child: SizedBox(
             height: 40,

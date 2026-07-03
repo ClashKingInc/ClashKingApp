@@ -1,7 +1,9 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/cwl_ranking_history.dart';
@@ -327,25 +329,105 @@ class _WarTypeFilterRow extends StatelessWidget {
         spacing: 8,
         runSpacing: 8,
         children: [
-          FilterChip(
-            visualDensity: VisualDensity.compact,
-            label: Text(loc.cwlTitle),
+          _FilterPill(
+            label: loc.cwlTitle,
+            imageUrl: ImageAssets.cwlSwordsNoBorder,
             selected: isCWLChecked,
-            onSelected: (_) => onCWLChanged(),
+            onTap: onCWLChanged,
           ),
-          FilterChip(
-            visualDensity: VisualDensity.compact,
-            label: Text(loc.warFiltersRandom),
+          _FilterPill(
+            label: loc.warFiltersRandom,
+            icon: LucideIcons.shuffle,
             selected: isRandomChecked,
-            onSelected: (_) => onRandomChanged(),
+            onTap: onRandomChanged,
           ),
-          FilterChip(
-            visualDensity: VisualDensity.compact,
-            label: Text(loc.warFiltersFriendly),
+          _FilterPill(
+            label: loc.warFiltersFriendly,
+            icon: LucideIcons.handshake,
             selected: isFriendlyChecked,
-            onSelected: (_) => onFriendlyChanged(),
+            onTap: onFriendlyChanged,
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Small glass toggle pill — icon-in-circle + label, same visual family
+/// as MetricChip/the reskinned chip.dart, tinted with the theme primary
+/// when selected instead of Material's default checkmark FilterChip.
+class _FilterPill extends StatelessWidget {
+  final String label;
+  final IconData? icon;
+  final String? imageUrl;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _FilterPill({
+    required this.label,
+    this.icon,
+    this.imageUrl,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final tint = selected ? colorScheme.primary : null;
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(AppRadius.chip),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(6, 5, 12, 5),
+          decoration: BoxDecoration(
+            color: tint != null
+                ? tint.withValues(alpha: 0.14)
+                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: Border.all(
+              color:
+                  tint?.withValues(alpha: 0.4) ??
+                  colorScheme.outlineVariant.withValues(alpha: 0.32),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colorScheme.surface.withValues(alpha: 0.72),
+                  shape: BoxShape.circle,
+                ),
+                child: SizedBox.square(
+                  dimension: 22,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: imageUrl != null
+                        ? MobileWebImage(imageUrl: imageUrl!)
+                        : Icon(
+                            icon,
+                            size: 14,
+                            color: tint ?? colorScheme.onSurfaceVariant,
+                          ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: tint ?? colorScheme.onSurface,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
