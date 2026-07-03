@@ -71,6 +71,14 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
     }
   }
 
+  void _resetWarTypeFilters() {
+    setState(() {
+      isCWLChecked = true;
+      isRandomChecked = true;
+      isFriendlyChecked = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,6 +135,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                       onFriendlyChanged: () => setState(
                         () => isFriendlyChecked = !isFriendlyChecked,
                       ),
+                      onResetWarTypes: _resetWarTypeFilters,
                     ),
                     _ => _ClanCwlHistoryTab(clan: widget.clanInfo),
                   },
@@ -393,6 +402,7 @@ class _ClanStatisticsTab extends StatefulWidget {
   final VoidCallback onCWLChanged;
   final VoidCallback onRandomChanged;
   final VoidCallback onFriendlyChanged;
+  final VoidCallback onResetWarTypes;
 
   const _ClanStatisticsTab({
     required this.clan,
@@ -403,6 +413,7 @@ class _ClanStatisticsTab extends StatefulWidget {
     required this.onCWLChanged,
     required this.onRandomChanged,
     required this.onFriendlyChanged,
+    required this.onResetWarTypes,
   });
 
   @override
@@ -465,6 +476,7 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
   }
 
   void _resetFilters() {
+    widget.onResetWarTypes();
     setState(() {
       showUppedTownHall = true;
       filteredPlayers = widget.clan.clanWarStats?.players ?? [];
