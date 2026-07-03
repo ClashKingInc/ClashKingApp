@@ -1,6 +1,4 @@
 // Fichier : war_stats_page.dart
-import 'package:clashkingapp/common/theme/app_tokens.dart';
-import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/war_functions.dart';
@@ -21,8 +19,6 @@ class ClanWarStatsPlayers extends StatelessWidget {
   final List<String> selectedTypes;
   final List<PlayerWarStats> filteredPlayers;
   final List<String> allPlayers;
-  final VoidCallback toggleTownHallVisibility;
-  final Function(String) updateSortBy;
   final Function() resetFilters;
   final bool equalThSelected;
 
@@ -33,8 +29,6 @@ class ClanWarStatsPlayers extends StatelessWidget {
     required this.sortBy,
     required this.selectedTypes,
     required this.filteredPlayers,
-    required this.toggleTownHallVisibility,
-    required this.updateSortBy,
     required this.resetFilters,
     required this.attackerThFilter,
     required this.defenderThFilter,
@@ -46,49 +40,6 @@ class ClanWarStatsPlayers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _ToolbarPillButton(
-                icon: showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
-                tooltip: AppLocalizations.of(
-                  context,
-                )!.warVisibilityToggleTownHall,
-                onPressed: toggleTownHallVisibility,
-              ),
-              const SizedBox(width: 8),
-              FilterDropdown(
-                sortBy: sortBy,
-                updateSortBy: updateSortBy,
-                sortByOptions: {
-                  AppLocalizations.of(context)!.warStarsThree:
-                      "Three Stars Attacks",
-                  AppLocalizations.of(context)!.warStarsTwo:
-                      "Two Stars Attacks",
-                  AppLocalizations.of(context)!.warStarsOne: "One Star Attacks",
-                  AppLocalizations.of(context)!.warStarsZero: "No Star Attacks",
-                  AppLocalizations.of(context)!.warDestructionAverage:
-                      "Average Destruction",
-                  AppLocalizations.of(context)!.warStarsAverage:
-                      "Average Stars",
-                  AppLocalizations.of(context)!.warParticipation:
-                      "War Participation",
-                  AppLocalizations.of(context)!.warAttacksMissed:
-                      "Missed Attacks",
-                },
-              ),
-              const SizedBox(width: 8),
-              _ToolbarPillButton(
-                icon: LucideIcons.listRestart,
-                tooltip: AppLocalizations.of(context)!.generalReset,
-                onPressed: resetFilters,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
         if (filteredPlayers.isNotEmpty)
           ...filteredPlayers.map((member) {
             final memberWarStats = member.getStatsForTypes(
@@ -293,45 +244,6 @@ class ClanWarStatsPlayers extends StatelessWidget {
             ),
           ),
       ],
-    );
-  }
-}
-
-/// Rounded pill button matching FilterDropdown's shape (radius 14,
-/// surface fill, 40px tall) so the eye-toggle/reset actions read as
-/// the same filter-control family as the sort dropdown next to them,
-/// instead of bare icon buttons.
-class _ToolbarPillButton extends StatelessWidget {
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback onPressed;
-
-  const _ToolbarPillButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Tooltip(
-      message: tooltip,
-      child: Material(
-        color: colorScheme.surface,
-        elevation: 2,
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(AppRadius.chip),
-          onTap: onPressed,
-          child: SizedBox(
-            height: 40,
-            width: 40,
-            child: Icon(icon, size: 20, color: colorScheme.onSurface),
-          ),
-        ),
-      ),
     );
   }
 }

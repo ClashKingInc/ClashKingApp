@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:flutter/foundation.dart';
@@ -303,50 +304,33 @@ class _ClanTab extends StatelessWidget {
 /// Compact CWL/Random/Friendly war-type filter, shared visual recipe
 /// used by both the War Log and Statistics tabs (each owns its own
 /// copy of this small state independently).
-class _WarTypeFilterRow extends StatelessWidget {
-  final bool isCWLChecked;
-  final bool isRandomChecked;
-  final bool isFriendlyChecked;
-  final VoidCallback onCWLChanged;
-  final VoidCallback onRandomChanged;
-  final VoidCallback onFriendlyChanged;
+/// Single-row filter bar: chips scroll horizontally on the left, a
+/// fixed trailing control (sort dropdown, optionally + overflow menu)
+/// stays pinned on the right — replaces two stacked rows with
+/// different alignment/density.
+class _FilterBar extends StatelessWidget {
+  final List<Widget> chips;
+  final Widget trailing;
 
-  const _WarTypeFilterRow({
-    required this.isCWLChecked,
-    required this.isRandomChecked,
-    required this.isFriendlyChecked,
-    required this.onCWLChanged,
-    required this.onRandomChanged,
-    required this.onFriendlyChanged,
-  });
+  const _FilterBar({required this.chips, required this.trailing});
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-      child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
+      child: Row(
         children: [
-          _FilterPill(
-            label: loc.cwlTitle,
-            imageUrl: ImageAssets.cwlSwordsNoBorder,
-            selected: isCWLChecked,
-            onTap: onCWLChanged,
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (final chip in chips) ...[chip, const SizedBox(width: 8)],
+                ],
+              ),
+            ),
           ),
-          _FilterPill(
-            label: loc.warFiltersRandom,
-            icon: LucideIcons.shuffle,
-            selected: isRandomChecked,
-            onTap: onRandomChanged,
-          ),
-          _FilterPill(
-            label: loc.warFiltersFriendly,
-            icon: LucideIcons.handshake,
-            selected: isFriendlyChecked,
-            onTap: onFriendlyChanged,
-          ),
+          trailing,
         ],
       ),
     );
@@ -433,7 +417,7 @@ class _FilterPill extends StatelessWidget {
   }
 }
 
-class _ClanWarLogTab extends StatelessWidget {
+class _ClanWarLogTab extends StatefulWidget {
   final Clan clan;
   final bool isCWLChecked;
   final bool isRandomChecked;
@@ -455,20 +439,66 @@ class _ClanWarLogTab extends StatelessWidget {
   });
 
   @override
+  State<_ClanWarLogTab> createState() => _ClanWarLogTabState();
+}
+
+class _ClanWarLogTabState extends State<_ClanWarLogTab> {
+  String? _selectedFilter;
+
+  @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
-        _WarTypeFilterRow(
-          isCWLChecked: isCWLChecked,
-          isRandomChecked: isRandomChecked,
-          isFriendlyChecked: isFriendlyChecked,
-          onCWLChanged: onCWLChanged,
-          onRandomChanged: onRandomChanged,
-          onFriendlyChanged: onFriendlyChanged,
+        _FilterBar(
+          chips: [
+            _FilterPill(
+              label: loc.cwlTitle,
+              imageUrl: ImageAssets.cwlSwordsNoBorder,
+              selected: widget.isCWLChecked,
+              onTap: widget.onCWLChanged,
+            ),
+            _FilterPill(
+              label: loc.warFiltersRandom,
+              icon: LucideIcons.shuffle,
+              selected: widget.isRandomChecked,
+              onTap: widget.onRandomChanged,
+            ),
+            _FilterPill(
+              label: loc.warFiltersFriendly,
+              icon: LucideIcons.handshake,
+              selected: widget.isFriendlyChecked,
+              onTap: widget.onFriendlyChanged,
+            ),
+          ],
+          trailing: FilterDropdown(
+            sortBy: _selectedFilter ?? 'newest',
+            updateSortBy: (value) => setState(() => _selectedFilter = value),
+            sortByOptions: {
+              loc.warEventsNewest: 'newest',
+              loc.warEventsOldest: 'oldest',
+              loc.warVictory: 'victory',
+              loc.warDefeat: 'defeat',
+              loc.warDraw: 'draw',
+              loc.warPerfectWar: 'perfectWar',
+              '5v5': '5',
+              '10v10': '10',
+              '15v15': '15',
+              '20v20': '20',
+              '25v25': '25',
+              '30v30': '30',
+              '40v40': '40',
+              '50v50': '50',
+            },
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: ClanWarLog(clan: clan, selectedTypes: selectedTypes),
+          child: ClanWarLog(
+            clan: widget.clan,
+            selectedTypes: widget.selectedTypes,
+            selectedFilter: _selectedFilter,
+          ),
         ),
       ],
     );
@@ -596,15 +626,55 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
-        _WarTypeFilterRow(
-          isCWLChecked: widget.isCWLChecked,
-          isRandomChecked: widget.isRandomChecked,
-          isFriendlyChecked: widget.isFriendlyChecked,
-          onCWLChanged: widget.onCWLChanged,
-          onRandomChanged: widget.onRandomChanged,
-          onFriendlyChanged: widget.onFriendlyChanged,
+        _FilterBar(
+          chips: [
+            _FilterPill(
+              label: loc.cwlTitle,
+              imageUrl: ImageAssets.cwlSwordsNoBorder,
+              selected: widget.isCWLChecked,
+              onTap: widget.onCWLChanged,
+            ),
+            _FilterPill(
+              label: loc.warFiltersRandom,
+              icon: LucideIcons.shuffle,
+              selected: widget.isRandomChecked,
+              onTap: widget.onRandomChanged,
+            ),
+            _FilterPill(
+              label: loc.warFiltersFriendly,
+              icon: LucideIcons.handshake,
+              selected: widget.isFriendlyChecked,
+              onTap: widget.onFriendlyChanged,
+            ),
+          ],
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FilterDropdown(
+                sortBy: _sortBy,
+                updateSortBy: _updateSortBy,
+                sortByOptions: {
+                  loc.warStarsThree: "Three Stars Attacks",
+                  loc.warStarsTwo: "Two Stars Attacks",
+                  loc.warStarsOne: "One Star Attacks",
+                  loc.warStarsZero: "No Star Attacks",
+                  loc.warDestructionAverage: "Average Destruction",
+                  loc.warStarsAverage: "Average Stars",
+                  loc.warParticipation: "War Participation",
+                  loc.warAttacksMissed: "Missed Attacks",
+                },
+              ),
+              const SizedBox(width: 8),
+              _OverflowMenu(
+                showUppedTownHall: showUppedTownHall,
+                onToggleTownHall: _toggleTownHallVisibility,
+                onReset: _resetFilters,
+              ),
+            ],
+          ),
         ),
         if (_isLoadingStats)
           const Padding(
@@ -623,14 +693,67 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
               allPlayers: (widget.clan.clanWarStats?.players ?? [])
                   .map((player) => player.tag)
                   .toList(),
-              toggleTownHallVisibility: _toggleTownHallVisibility,
-              updateSortBy: _updateSortBy,
               resetFilters: _resetFilters,
               attackerThFilter: const [],
               defenderThFilter: const [],
               equalThSelected: false,
             ),
           ),
+      ],
+    );
+  }
+}
+
+/// Compact overflow menu for the two secondary Statistics-tab actions
+/// (TH visibility toggle, reset) so the filter bar's trailing slot
+/// stays to one control (sort) instead of three floating icon pills.
+class _OverflowMenu extends StatelessWidget {
+  final bool showUppedTownHall;
+  final VoidCallback onToggleTownHall;
+  final VoidCallback onReset;
+
+  const _OverflowMenu({
+    required this.showUppedTownHall,
+    required this.onToggleTownHall,
+    required this.onReset,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return PopupMenuButton<String>(
+      tooltip: loc.generalFilters,
+      icon: Icon(LucideIcons.moreVertical, color: colorScheme.onSurface),
+      onSelected: (value) {
+        if (value == 'toggleTh') onToggleTownHall();
+        if (value == 'reset') onReset();
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 'toggleTh',
+          child: Row(
+            children: [
+              Icon(
+                showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
+                size: 18,
+              ),
+              const SizedBox(width: 10),
+              Text(loc.warVisibilityToggleTownHall),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'reset',
+          child: Row(
+            children: [
+              const Icon(LucideIcons.listRestart, size: 18),
+              const SizedBox(width: 10),
+              Text(loc.generalReset),
+            ],
+          ),
+        ),
       ],
     );
   }

@@ -1,4 +1,3 @@
-import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -11,22 +10,18 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-class ClanWarLog extends StatefulWidget {
+class ClanWarLog extends StatelessWidget {
   final Clan clan;
   final List<String> selectedTypes;
+  final String? selectedFilter;
 
   const ClanWarLog({
     super.key,
     required this.clan,
     required this.selectedTypes,
+    required this.selectedFilter,
   });
 
-  @override
-  ClanWarLogState createState() => ClanWarLogState();
-}
-
-class ClanWarLogState extends State<ClanWarLog> {
-  String? selectedFilter;
   String formatDate(DateTime date, BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
     final format = locale == 'jp' ? 'yyyy/MM/dd' : 'dd/MM/yyyy';
@@ -34,11 +29,13 @@ class ClanWarLogState extends State<ClanWarLog> {
   }
 
   List<WarInfo> getFilteredWarLogData() {
-    List<WarInfo> filteredData = widget.clan.clanWarStats?.wars
-            .where((war) =>
-                war.warDetails.warType != null &&
-                widget.selectedTypes
-                    .contains(war.warDetails.warType!.toLowerCase()))
+    List<WarInfo> filteredData =
+        clan.clanWarStats?.wars
+            .where(
+              (war) =>
+                  war.warDetails.warType != null &&
+                  selectedTypes.contains(war.warDetails.warType!.toLowerCase()),
+            )
             .map((war) => war.warDetails)
             .toList() ??
         [];
@@ -50,19 +47,19 @@ class ClanWarLogState extends State<ClanWarLog> {
     switch (selectedFilter) {
       case 'victory':
         return filteredData
-            .where((war) => war.getWarResult(widget.clan.tag) == 'won')
+            .where((war) => war.getWarResult(clan.tag) == 'won')
             .toList();
       case 'defeat':
         return filteredData
-            .where((war) => war.getWarResult(widget.clan.tag) == 'lost')
+            .where((war) => war.getWarResult(clan.tag) == 'lost')
             .toList();
       case 'draw':
         return filteredData
-            .where((war) => war.getWarResult(widget.clan.tag) == 'tie')
+            .where((war) => war.getWarResult(clan.tag) == 'tie')
             .toList();
       case 'perfectWar':
         return filteredData
-            .where((war) => war.getWarResult(widget.clan.tag) == 'perfectWar')
+            .where((war) => war.getWarResult(clan.tag) == 'perfectWar')
             .toList();
       case 'newest':
         return filteredData;
@@ -89,32 +86,6 @@ class ClanWarLogState extends State<ClanWarLog> {
 
     return Column(
       children: [
-        FilterDropdown(
-          sortBy: selectedFilter ?? 'newest',
-          updateSortBy: (String newValue) {
-            setState(() {
-              selectedFilter = newValue;
-            });
-          },
-          sortByOptions: {
-            AppLocalizations.of(context)?.warEventsNewest ?? 'Newest': 'newest',
-            AppLocalizations.of(context)?.warEventsOldest ?? 'Oldest': 'oldest',
-            AppLocalizations.of(context)?.warVictory ?? 'Victory': 'victory',
-            AppLocalizations.of(context)?.warDefeat ?? 'Defeat': 'defeat',
-            AppLocalizations.of(context)?.warDraw ?? 'Draw': 'draw',
-            AppLocalizations.of(context)?.warPerfectWar ?? 'Perfect War':
-                'perfectWar',
-            '5v5': '5',
-            '10v10': '10',
-            '15v15': '15',
-            '20v20': '20',
-            '25v25': '25',
-            '30v30': '30',
-            '40v40': '40',
-            '50v50': '50',
-          },
-        ),
-        SizedBox(height: 2),
         filteredWarLogData.isEmpty
             ? Column(
                 children: [
@@ -123,8 +94,9 @@ class ClanWarLogState extends State<ClanWarLog> {
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Text(
-                          AppLocalizations.of(context)?.generalNoDataAvailable ??
-                              'No data available'),
+                        AppLocalizations.of(context)?.generalNoDataAvailable ??
+                            'No data available',
+                      ),
                     ),
                   ),
                   SizedBox(height: 32),
@@ -135,13 +107,16 @@ class ClanWarLogState extends State<ClanWarLog> {
                   ),
                 ],
               )
-            : buildAllLog(context, filteredWarLogData, widget.clan.tag),
+            : buildAllLog(context, filteredWarLogData, clan.tag),
       ],
     );
   }
 
   Widget buildAllLog(
-      BuildContext context, List<WarInfo> warLogData, String clanTag) {
+    BuildContext context,
+    List<WarInfo> warLogData,
+    String clanTag,
+  ) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,53 +134,57 @@ class ClanWarLogState extends State<ClanWarLog> {
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return Center(child: CircularProgressIndicator());
                       },
                     );
                     WarCwlService.fetchWarDataFromTime(
-                            widget.clan.tag, war.endTime ?? DateTime.now())
+                          clan.tag,
+                          war.endTime ?? DateTime.now(),
+                        )
                         .then((currentWarInfo) {
-                      navigator.pop();
-                      if (currentWarInfo == null) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Center(
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                          ?.warNoDataAvailableForThisWar ??
-                                      'No data available for this war',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface),
+                          navigator.pop();
+                          if (currentWarInfo == null) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Center(
+                                    child: Text(
+                                      AppLocalizations.of(
+                                            context,
+                                          )?.warNoDataAvailableForThisWar ??
+                                          'No data available for this war',
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                  duration: Duration(seconds: 1),
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.surface,
                                 ),
+                              );
+                            }
+                          } else {
+                            navigator.push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    WarScreen(war: currentWarInfo),
                               ),
-                              duration: Duration(seconds: 1),
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
-                            ),
+                            );
+                          }
+                        })
+                        .catchError((error, stackTrace) {
+                          Sentry.captureException(
+                            error,
+                            stackTrace: stackTrace,
                           );
-                        }
-                      } else {
-                        navigator.push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                WarScreen(war: currentWarInfo),
-                          ),
-                        );
-                      }
-                    }).catchError((error, stackTrace) {
-                      Sentry.captureException(error, stackTrace: stackTrace);
-                      return null;
-                    });
+                          return null;
+                        });
                   },
-                  child: WarCard(
-                    clanTag: clanTag,
-                    currentWarInfo: war,
-                  ),
+                  child: WarCard(clanTag: clanTag, currentWarInfo: war),
                 );
               }),
             ),
