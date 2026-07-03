@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
   );
 
   static final ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
     scaffoldBackgroundColor: const Color(0xFF030304),
     datePickerTheme: DatePickerThemeData(
       backgroundColor: const Color(0xFF0B0B0C),
