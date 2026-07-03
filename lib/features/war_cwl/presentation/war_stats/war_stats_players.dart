@@ -25,20 +25,21 @@ class ClanWarStatsPlayers extends StatelessWidget {
   final Function() resetFilters;
   final bool equalThSelected;
 
-  const ClanWarStatsPlayers(
-      {super.key,
-      required this.clan,
-      required this.showUppedTownHall,
-      required this.sortBy,
-      required this.selectedTypes,
-      required this.filteredPlayers,
-      required this.toggleTownHallVisibility,
-      required this.updateSortBy,
-      required this.resetFilters,
-      required this.attackerThFilter,
-      required this.defenderThFilter,
-      required this.equalThSelected,
-      required this.allPlayers});
+  const ClanWarStatsPlayers({
+    super.key,
+    required this.clan,
+    required this.showUppedTownHall,
+    required this.sortBy,
+    required this.selectedTypes,
+    required this.filteredPlayers,
+    required this.toggleTownHallVisibility,
+    required this.updateSortBy,
+    required this.resetFilters,
+    required this.attackerThFilter,
+    required this.defenderThFilter,
+    required this.equalThSelected,
+    required this.allPlayers,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +48,11 @@ class ClanWarStatsPlayers extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(
-              icon: Icon(
-                showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
-                size: 20,
-              ),
-              tooltip:
-                  AppLocalizations.of(context)!.warVisibilityToggleTownHall,
+            _ToolbarPillButton(
+              icon: showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
+              tooltip: AppLocalizations.of(
+                context,
+              )!.warVisibilityToggleTownHall,
               onPressed: toggleTownHallVisibility,
             ),
             FilterDropdown(
@@ -74,191 +73,256 @@ class ClanWarStatsPlayers extends StatelessWidget {
                     "Missed Attacks",
               },
             ),
-            IconButton(
-              icon: Icon(LucideIcons.listRestart),
-              onPressed: () {
-                resetFilters();
-              },
+            _ToolbarPillButton(
+              icon: LucideIcons.listRestart,
               tooltip: AppLocalizations.of(context)!.generalReset,
+              onPressed: resetFilters,
             ),
           ],
         ),
         if (filteredPlayers.isNotEmpty)
-          ...filteredPlayers.map(
-            (member) {
-              final memberWarStats = member.getStatsForTypes(
-                selectedTypes,
-                attackerThFilter: attackerThFilter,
-                defenderThFilter: defenderThFilter,
-                equalThSelected: equalThSelected,
-              );
+          ...filteredPlayers.map((member) {
+            final memberWarStats = member.getStatsForTypes(
+              selectedTypes,
+              attackerThFilter: attackerThFilter,
+              defenderThFilter: defenderThFilter,
+              equalThSelected: equalThSelected,
+            );
 
-              final starsCount = showUppedTownHall
-                  ? memberWarStats.starsCount
-                  : (memberWarStats
-                      .getStarsCountAgainstTh(member.townhallLevel));
+            final starsCount = showUppedTownHall
+                ? memberWarStats.starsCount
+                : (memberWarStats.getStarsCountAgainstTh(member.townhallLevel));
 
-              final totalAttacks = starsCount.values.fold<int>(
-                0,
-                (previousValue, element) => previousValue + element,
-              );
+            final totalAttacks = starsCount.values.fold<int>(
+              0,
+              (previousValue, element) => previousValue + element,
+            );
 
-              if (totalAttacks == 0) {
-                return SizedBox.shrink();
-              }
+            if (totalAttacks == 0) {
+              return SizedBox.shrink();
+            }
 
-              return GestureDetector(
-                onTap: () async {
-                  final navigator = Navigator.of(context);
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) =>
-                        const Center(child: CircularProgressIndicator()),
+            return GestureDetector(
+              onTap: () async {
+                final navigator = Navigator.of(context);
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) =>
+                      const Center(child: CircularProgressIndicator()),
+                );
+                try {
+                  final player = await PlayerService().getPlayerAndClanData(
+                    member.tag,
                   );
-                  try {
-                    final player =
-                        await PlayerService().getPlayerAndClanData(member.tag);
-                    navigator.pop();
-                    navigator.push(
-                      MaterialPageRoute(
-                        builder: (_) => PlayerScreen(selectedPlayer: player),
-                      ),
-                    );
-                  } catch (e) {
-                    if (context.mounted) {
-                      navigator.pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to load player data')),
-                      );
-                    }
-                  }
-                },
-                child: Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                MobileWebImage(
-                                  imageUrl: ImageAssets.townHall(
-                                      member.townhallLevel),
-                                  height: 50,
-                                ),
-                                SizedBox(width: 16),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(member.name),
-                                    Text(member.tag),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(totalAttacks.toString()),
-                                    SizedBox(width: 8),
-                                    MobileWebImage(
-                                        imageUrl: ImageAssets.warClan,
-                                        height: 16,
-                                        width: 16),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(memberWarStats.missedAttacks
-                                        .toString()),
-                                    SizedBox(width: 8),
-                                    MobileWebImage(
-                                        imageUrl: ImageAssets.brokenSword,
-                                        height: 16,
-                                        width: 16),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.percent, size: 16),
-                                    Icon(Icons.star, size: 16),
-                                  ],
-                                ),
-                                Text(memberWarStats.averageDestruction
-                                    .toStringAsFixed(2)),
-                                Text(memberWarStats.averageStars
-                                    .toStringAsFixed(2)),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(0, 16)],
-                                ),
-                                Text(
-                                  "${((starsCount["0"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                                ),
-                                Text("${starsCount["0"]}/$totalAttacks"),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(1, 16)],
-                                ),
-                                Text(
-                                  "${((starsCount["1"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                                ),
-                                Text("${starsCount["1"]}/$totalAttacks"),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(2, 16)],
-                                ),
-                                Text(
-                                  "${((starsCount["2"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                                ),
-                                Text("${starsCount["2"]}/$totalAttacks"),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [...generateStars(3, 16)],
-                                ),
-                                Text(
-                                  "${((starsCount["3"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
-                                ),
-                                Text("${starsCount["3"]}/$totalAttacks"),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                  navigator.pop();
+                  navigator.push(
+                    MaterialPageRoute(
+                      builder: (_) => PlayerScreen(selectedPlayer: player),
                     ),
+                  );
+                } catch (e) {
+                  if (context.mounted) {
+                    navigator.pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to load player data')),
+                    );
+                  }
+                }
+              },
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              MobileWebImage(
+                                imageUrl: ImageAssets.townHall(
+                                  member.townhallLevel,
+                                ),
+                                height: 50,
+                              ),
+                              SizedBox(width: 16),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [Text(member.name), Text(member.tag)],
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(totalAttacks.toString()),
+                                  SizedBox(width: 8),
+                                  MobileWebImage(
+                                    imageUrl: ImageAssets.warClan,
+                                    height: 16,
+                                    width: 16,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(memberWarStats.missedAttacks.toString()),
+                                  SizedBox(width: 8),
+                                  MobileWebImage(
+                                    imageUrl: ImageAssets.brokenSword,
+                                    height: 16,
+                                    width: 16,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.percent, size: 16),
+                                  Icon(Icons.star, size: 16),
+                                ],
+                              ),
+                              Text(
+                                memberWarStats.averageDestruction
+                                    .toStringAsFixed(2),
+                              ),
+                              Text(
+                                memberWarStats.averageStars.toStringAsFixed(2),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(children: [...generateStars(0, 16)]),
+                              Text(
+                                "${((starsCount["0"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                              ),
+                              Text("${starsCount["0"]}/$totalAttacks"),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(children: [...generateStars(1, 16)]),
+                              Text(
+                                "${((starsCount["1"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                              ),
+                              Text("${starsCount["1"]}/$totalAttacks"),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(children: [...generateStars(2, 16)]),
+                              Text(
+                                "${((starsCount["2"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                              ),
+                              Text("${starsCount["2"]}/$totalAttacks"),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(children: [...generateStars(3, 16)]),
+                              Text(
+                                "${((starsCount["3"] ?? 0) / totalAttacks * 100).toStringAsFixed(2)}%",
+                              ),
+                              Text("${starsCount["3"]}/$totalAttacks"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
+              ),
+            );
+          })
+        else
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            child: Column(
+              children: [
+                Icon(
+                  LucideIcons.searchX,
+                  size: 32,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalizations.of(context)!.generalNoFilteredResults,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  AppLocalizations.of(context)!.generalAdjustFilters,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: resetFilters,
+                  child: Text(
+                    AppLocalizations.of(context)!.generalClearFilters,
+                  ),
+                ),
+              ],
+            ),
           ),
       ],
+    );
+  }
+}
+
+/// Rounded pill button matching FilterDropdown's shape (radius 14,
+/// surface fill, 40px tall) so the eye-toggle/reset actions read as
+/// the same filter-control family as the sort dropdown next to them,
+/// instead of bare icon buttons.
+class _ToolbarPillButton extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onPressed;
+
+  const _ToolbarPillButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: colorScheme.surface,
+        elevation: 2,
+        borderRadius: BorderRadius.circular(14),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onPressed,
+          child: SizedBox(
+            height: 40,
+            width: 40,
+            child: Icon(icon, size: 20, color: colorScheme.onSurface),
+          ),
+        ),
+      ),
     );
   }
 }
