@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_page.dart';
@@ -34,8 +35,10 @@ class WarHistoryCard extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -51,8 +54,10 @@ class WarHistoryCard extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(AppLocalizations.of(context)!.warHistory,
-                          style: Theme.of(context).textTheme.labelLarge),
+                      Text(
+                        AppLocalizations.of(context)!.warHistory,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
                       Wrap(
                         alignment: WrapAlignment.start,
                         spacing: 7.0,
@@ -63,51 +68,54 @@ class WarHistoryCard extends StatelessWidget {
                               width: 16,
                               height: 16,
                               decoration: BoxDecoration(
-                                color: Colors.green,
+                                color: StatColors.win,
                                 shape: BoxShape.circle,
                               ),
                             ),
-                            edgeColor: Colors.white.withValues(alpha: 0.2),
+                            color: StatColors.win,
                             labelPadding: 8,
                             label: warLogStats.totalWins.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryWinsDescription(
-                                    warLogStats.totalWins,
-                                    warLogStats.winPercentage),
+                                  warLogStats.totalWins,
+                                  warLogStats.winPercentage,
+                                ),
                           ),
                           CustomChip(
                             icon: Container(
                               width: 16,
                               height: 16,
                               decoration: BoxDecoration(
-                                color: Colors.red,
+                                color: StatColors.loss,
                                 shape: BoxShape.circle,
                               ),
                             ),
-                            edgeColor: Colors.white.withValues(alpha: 0.2),
+                            color: StatColors.loss,
                             labelPadding: 8,
                             label: warLogStats.totalLosses.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryLossesDescription(
-                                    warLogStats.totalLosses,
-                                    warLogStats.lossPercentage),
+                                  warLogStats.totalLosses,
+                                  warLogStats.lossPercentage,
+                                ),
                           ),
                           CustomChip(
                             icon: Container(
                               width: 16,
                               height: 16,
                               decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: StatColors.tie,
                                 shape: BoxShape.circle,
                               ),
                             ),
-                            edgeColor: Colors.white.withValues(alpha: 0.2),
+                            color: StatColors.tie,
                             labelPadding: 8,
                             label: warLogStats.totalTies.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryDrawsDescription(
-                                    warLogStats.totalTies,
-                                    warLogStats.tiePercentage),
+                                  warLogStats.totalTies,
+                                  warLogStats.tiePercentage,
+                                ),
                           ),
                           ImageChip(
                             context: context,
@@ -116,9 +124,10 @@ class WarHistoryCard extends StatelessWidget {
                                 .toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryAverageWarStarsDescription(
-                                    warLogStats.averageClanStarsPerMember,
-                                    warLogStats.averageClanStarsPercentage
-                                        .toStringAsFixed(2)),
+                                  warLogStats.averageClanStarsPerMember,
+                                  warLogStats.averageClanStarsPercentage
+                                      .toStringAsFixed(2),
+                                ),
                           ),
                           IconChip(
                             icon: LucideIcons.users,
@@ -126,17 +135,19 @@ class WarHistoryCard extends StatelessWidget {
                             label: warLogStats.averageMembers.toString(),
                             description: AppLocalizations.of(context)!
                                 .warHistoryAverageMembersDescription(
-                                    warLogStats.averageMembers),
+                                  warLogStats.averageMembers,
+                                ),
                           ),
                           IconChip(
                             icon: LucideIcons.percent,
                             size: 16,
-                            label:
-                                warLogStats.averageClanDestruction.toString(),
+                            label: warLogStats.averageClanDestruction
+                                .toString(),
                             description: AppLocalizations.of(context)!
-                                .warHistoryAverageHitRateDescription(warLogStats
-                                    .averageClanDestruction
-                                    .toStringAsFixed(2)),
+                                .warHistoryAverageHitRateDescription(
+                                  warLogStats.averageClanDestruction
+                                      .toStringAsFixed(2),
+                                ),
                           ),
                         ],
                       ),
