@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -34,6 +35,19 @@ class ClanInfoScreen extends StatefulWidget {
 class _ClanInfoScreenState extends State<ClanInfoScreen> {
   static const int _tabCount = 4;
   late int selectedTab;
+
+  // Shared between the War Log and Statistics tabs so toggling a war
+  // type in one is reflected in the other instead of each tab keeping
+  // its own independent copy.
+  bool isCWLChecked = true;
+  bool isRandomChecked = true;
+  bool isFriendlyChecked = true;
+
+  List<String> get _selectedWarTypes => [
+    if (isCWLChecked) 'cwl',
+    if (isRandomChecked) 'random',
+    if (isFriendlyChecked) 'friendly',
+  ];
 
   @override
   void initState() {
@@ -86,8 +100,34 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                   key: ValueKey(selectedTab),
                   child: switch (selectedTab) {
                     0 => ClanMembers(clanInfo: widget.clanInfo),
-                    1 => _ClanWarLogTab(clan: widget.clanInfo),
-                    2 => _ClanStatisticsTab(clan: widget.clanInfo),
+                    1 => _ClanWarLogTab(
+                      clan: widget.clanInfo,
+                      isCWLChecked: isCWLChecked,
+                      isRandomChecked: isRandomChecked,
+                      isFriendlyChecked: isFriendlyChecked,
+                      selectedTypes: _selectedWarTypes,
+                      onCWLChanged: () =>
+                          setState(() => isCWLChecked = !isCWLChecked),
+                      onRandomChanged: () =>
+                          setState(() => isRandomChecked = !isRandomChecked),
+                      onFriendlyChanged: () => setState(
+                        () => isFriendlyChecked = !isFriendlyChecked,
+                      ),
+                    ),
+                    2 => _ClanStatisticsTab(
+                      clan: widget.clanInfo,
+                      isCWLChecked: isCWLChecked,
+                      isRandomChecked: isRandomChecked,
+                      isFriendlyChecked: isFriendlyChecked,
+                      selectedTypes: _selectedWarTypes,
+                      onCWLChanged: () =>
+                          setState(() => isCWLChecked = !isCWLChecked),
+                      onRandomChanged: () =>
+                          setState(() => isRandomChecked = !isRandomChecked),
+                      onFriendlyChanged: () => setState(
+                        () => isFriendlyChecked = !isFriendlyChecked,
+                      ),
+                    ),
                     _ => _ClanCwlHistoryTab(clan: widget.clanInfo),
                   },
                 ),
@@ -302,25 +342,26 @@ class _WarTypeFilterRow extends StatelessWidget {
   }
 }
 
-class _ClanWarLogTab extends StatefulWidget {
+class _ClanWarLogTab extends StatelessWidget {
   final Clan clan;
+  final bool isCWLChecked;
+  final bool isRandomChecked;
+  final bool isFriendlyChecked;
+  final List<String> selectedTypes;
+  final VoidCallback onCWLChanged;
+  final VoidCallback onRandomChanged;
+  final VoidCallback onFriendlyChanged;
 
-  const _ClanWarLogTab({required this.clan});
-
-  @override
-  State<_ClanWarLogTab> createState() => _ClanWarLogTabState();
-}
-
-class _ClanWarLogTabState extends State<_ClanWarLogTab> {
-  bool isCWLChecked = true;
-  bool isRandomChecked = true;
-  bool isFriendlyChecked = true;
-
-  List<String> get _selectedTypes => [
-    if (isCWLChecked) 'cwl',
-    if (isRandomChecked) 'random',
-    if (isFriendlyChecked) 'friendly',
-  ];
+  const _ClanWarLogTab({
+    required this.clan,
+    required this.isCWLChecked,
+    required this.isRandomChecked,
+    required this.isFriendlyChecked,
+    required this.selectedTypes,
+    required this.onCWLChanged,
+    required this.onRandomChanged,
+    required this.onFriendlyChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -330,15 +371,13 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
           isCWLChecked: isCWLChecked,
           isRandomChecked: isRandomChecked,
           isFriendlyChecked: isFriendlyChecked,
-          onCWLChanged: () => setState(() => isCWLChecked = !isCWLChecked),
-          onRandomChanged: () =>
-              setState(() => isRandomChecked = !isRandomChecked),
-          onFriendlyChanged: () =>
-              setState(() => isFriendlyChecked = !isFriendlyChecked),
+          onCWLChanged: onCWLChanged,
+          onRandomChanged: onRandomChanged,
+          onFriendlyChanged: onFriendlyChanged,
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: ClanWarLog(clan: widget.clan, selectedTypes: _selectedTypes),
+          child: ClanWarLog(clan: clan, selectedTypes: selectedTypes),
         ),
       ],
     );
@@ -347,38 +386,71 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
 
 class _ClanStatisticsTab extends StatefulWidget {
   final Clan clan;
+  final bool isCWLChecked;
+  final bool isRandomChecked;
+  final bool isFriendlyChecked;
+  final List<String> selectedTypes;
+  final VoidCallback onCWLChanged;
+  final VoidCallback onRandomChanged;
+  final VoidCallback onFriendlyChanged;
 
-  const _ClanStatisticsTab({required this.clan});
+  const _ClanStatisticsTab({
+    required this.clan,
+    required this.isCWLChecked,
+    required this.isRandomChecked,
+    required this.isFriendlyChecked,
+    required this.selectedTypes,
+    required this.onCWLChanged,
+    required this.onRandomChanged,
+    required this.onFriendlyChanged,
+  });
 
   @override
   State<_ClanStatisticsTab> createState() => _ClanStatisticsTabState();
 }
 
 class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
-  bool isCWLChecked = true;
-  bool isRandomChecked = true;
-  bool isFriendlyChecked = true;
   String _sortBy = 'Three Stars Attacks';
   bool showUppedTownHall = true;
+  bool _isLoadingStats = false;
   late List<PlayerWarStats> filteredPlayers;
 
   @override
   void initState() {
     super.initState();
     filteredPlayers = widget.clan.clanWarStats?.players ?? [];
+    if (widget.clan.clanWarStats == null) {
+      _loadStats();
+    }
   }
 
-  List<String> get _selectedTypes => [
-    if (isCWLChecked) 'cwl',
-    if (isRandomChecked) 'random',
-    if (isFriendlyChecked) 'friendly',
-  ];
+  @override
+  void didUpdateWidget(covariant _ClanStatisticsTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The war-type filter lives in the parent (shared with the War Log
+    // tab); react to it changing instead of assuming setState above
+    // synchronously updates our own widget.selectedTypes.
+    if (!listEquals(oldWidget.selectedTypes, widget.selectedTypes)) {
+      setState(_sortMembers);
+    }
+  }
 
-  void _toggleWarType(void Function() toggle) {
-    setState(() {
-      toggle();
-      _sortMembers();
-    });
+  Future<void> _loadStats() async {
+    setState(() => _isLoadingStats = true);
+    try {
+      final clanService = context.read<ClanService>();
+      await clanService.loadClanWarStatsData([widget.clan.tag]);
+      clanService.linkWarStatsToClans();
+    } catch (_) {
+      // Keep showing the (possibly empty) stats we already have.
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingStats = false;
+          filteredPlayers = widget.clan.clanWarStats?.players ?? [];
+        });
+      }
+    }
   }
 
   void _toggleTownHallVisibility() {
@@ -394,16 +466,13 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
 
   void _resetFilters() {
     setState(() {
-      isCWLChecked = true;
-      isRandomChecked = true;
-      isFriendlyChecked = true;
       showUppedTownHall = true;
       filteredPlayers = widget.clan.clanWarStats?.players ?? [];
     });
   }
 
   void _sortMembers() {
-    final selectedTypes = _selectedTypes;
+    final selectedTypes = widget.selectedTypes;
     final allPlayers = widget.clan.clanWarStats?.players ?? [];
     final playersByTag = {
       for (var player in filteredPlayers) player.tag: player,
@@ -436,35 +505,38 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
     return Column(
       children: [
         _WarTypeFilterRow(
-          isCWLChecked: isCWLChecked,
-          isRandomChecked: isRandomChecked,
-          isFriendlyChecked: isFriendlyChecked,
-          onCWLChanged: () =>
-              _toggleWarType(() => isCWLChecked = !isCWLChecked),
-          onRandomChanged: () =>
-              _toggleWarType(() => isRandomChecked = !isRandomChecked),
-          onFriendlyChanged: () =>
-              _toggleWarType(() => isFriendlyChecked = !isFriendlyChecked),
+          isCWLChecked: widget.isCWLChecked,
+          isRandomChecked: widget.isRandomChecked,
+          isFriendlyChecked: widget.isFriendlyChecked,
+          onCWLChanged: widget.onCWLChanged,
+          onRandomChanged: widget.onRandomChanged,
+          onFriendlyChanged: widget.onFriendlyChanged,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: ClanWarStatsPlayers(
-            clan: widget.clan,
-            showUppedTownHall: showUppedTownHall,
-            sortBy: _sortBy,
-            selectedTypes: _selectedTypes,
-            filteredPlayers: filteredPlayers,
-            allPlayers: (widget.clan.clanWarStats?.players ?? [])
-                .map((player) => player.tag)
-                .toList(),
-            toggleTownHallVisibility: _toggleTownHallVisibility,
-            updateSortBy: _updateSortBy,
-            resetFilters: _resetFilters,
-            attackerThFilter: const [],
-            defenderThFilter: const [],
-            equalThSelected: false,
+        if (_isLoadingStats)
+          const Padding(
+            padding: EdgeInsets.all(32),
+            child: Center(child: CircularProgressIndicator()),
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: ClanWarStatsPlayers(
+              clan: widget.clan,
+              showUppedTownHall: showUppedTownHall,
+              sortBy: _sortBy,
+              selectedTypes: widget.selectedTypes,
+              filteredPlayers: filteredPlayers,
+              allPlayers: (widget.clan.clanWarStats?.players ?? [])
+                  .map((player) => player.tag)
+                  .toList(),
+              toggleTownHallVisibility: _toggleTownHallVisibility,
+              updateSortBy: _updateSortBy,
+              resetFilters: _resetFilters,
+              attackerThFilter: const [],
+              defenderThFilter: const [],
+              equalThSelected: false,
+            ),
           ),
-        ),
       ],
     );
   }
