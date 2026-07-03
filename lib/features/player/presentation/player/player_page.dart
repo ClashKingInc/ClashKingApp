@@ -38,11 +38,14 @@ class PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = 16 + MediaQuery.paddingOf(context).bottom;
+
     return Scaffold(
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragEnd: _handleTabSwipe,
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: bottomPadding),
           child: Column(
             children: [
               PlayerInfoHeader(
