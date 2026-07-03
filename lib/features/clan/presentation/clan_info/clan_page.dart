@@ -367,7 +367,8 @@ class _FilterPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.chip),
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.fromLTRB(6, 5, 12, 5),
+          height: 40,
+          padding: const EdgeInsets.fromLTRB(6, 0, 12, 0),
           decoration: BoxDecoration(
             color: tint != null
                 ? tint.withValues(alpha: 0.14)
@@ -388,9 +389,9 @@ class _FilterPill extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: SizedBox.square(
-                  dimension: 22,
+                  dimension: 24,
                   child: Padding(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(5),
                     child: imageUrl != null
                         ? MobileWebImage(imageUrl: imageUrl!)
                         : Icon(
@@ -725,7 +726,19 @@ class _OverflowMenu extends StatelessWidget {
 
     return PopupMenuButton<String>(
       tooltip: loc.generalFilters,
-      icon: Icon(LucideIcons.moreVertical, color: colorScheme.onSurface),
+      child: Container(
+        height: 40,
+        width: 40,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ),
+        ),
+        child: Icon(LucideIcons.moreVertical, color: colorScheme.onSurface),
+      ),
       onSelected: (value) {
         if (value == 'toggleTh') onToggleTownHall();
         if (value == 'reset') onReset();
