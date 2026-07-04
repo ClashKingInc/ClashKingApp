@@ -455,6 +455,7 @@
     }
   },
   "gameExpLevel": "Niveau d'expérience",
+  "gameLeague": "Ligue",
   "gameTrophies": "Trophées",
   "gameBuilderBaseTrophies": "Trophées MDO",
   "gameDonations": "Dons",

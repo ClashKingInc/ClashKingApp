@@ -457,6 +457,7 @@
     }
   },
   "gameExpLevel": "Experience Level",
+  "gameLeague": "League",
   "gameTrophies": "Trophies",
   "gameBuilderBaseTrophies": "BB Trophies",
   "gameDonations": "Donations",

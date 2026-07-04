@@ -39,6 +39,7 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
   bool _isLoadingFiltered = false;
   bool _hasAppliedFilters = false;
   int _section = 0;
+  bool _warTypesExpanded = false;
 
   List<String> _getSelectedTypes() {
     final List<String> selected = [];
@@ -103,32 +104,6 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              _WarTypeChip(
-                label: 'CWL',
-                selected: isCWLChecked,
-                onTap: () => setState(() => isCWLChecked = !isCWLChecked),
-              ),
-              const SizedBox(width: 8),
-              _WarTypeChip(
-                label: loc.warFiltersRandom,
-                selected: isRandomChecked,
-                onTap: () => setState(() => isRandomChecked = !isRandomChecked),
-              ),
-              const SizedBox(width: 8),
-              _WarTypeChip(
-                label: loc.warFiltersFriendly,
-                selected: isFriendlyChecked,
-                onTap: () =>
-                    setState(() => isFriendlyChecked = !isFriendlyChecked),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: _buildFilterBanner(),
         ),
         const SizedBox(height: 8),
@@ -175,6 +150,7 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
   }
 
   Widget _buildFilterBanner() {
+    final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -187,47 +163,108 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
           color: colorScheme.outlineVariant.withValues(alpha: 0.32),
         ),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Icon(
-            _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
-            size: 16,
-            color: colorScheme.onSurfaceVariant,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              _hasAppliedFilters
-                  ? _getFilterSummary()
-                  : AppLocalizations.of(
-                          context,
-                        )?.filtersShowingDefaultData(_currentFilter.limit) ??
-                        'Showing last ${_currentFilter.limit} wars (default)',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: colorScheme.onSurface),
-            ),
-          ),
-          if (_hasAppliedFilters)
-            IconButton(
-              icon: Icon(
-                Icons.close,
+          Row(
+            children: [
+              Icon(
+                _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
                 size: 16,
                 color: colorScheme.onSurfaceVariant,
               ),
-              onPressed: _clearFilters,
-            ),
-          IconButton(
-            icon: Icon(Icons.tune, size: 16, color: colorScheme.onSurface),
-            onPressed: _showFilterDialog,
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  _hasAppliedFilters
+                      ? _getFilterSummary()
+                      : AppLocalizations.of(context)?.filtersShowingDefaultData(
+                              _currentFilter.limit,
+                            ) ??
+                            'Showing last ${_currentFilter.limit} wars (default)',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: colorScheme.onSurface),
+                ),
+              ),
+              if (_hasAppliedFilters)
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    size: 16,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  onPressed: _clearFilters,
+                ),
+              IconButton(
+                icon: Icon(Icons.tune, size: 16, color: colorScheme.onSurface),
+                onPressed: _showFilterDialog,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.download_outlined,
+                  size: 16,
+                  color: colorScheme.onSurface,
+                ),
+                onPressed: _showExportDialog,
+              ),
+              InkWell(
+                borderRadius: BorderRadius.circular(AppRadius.chip),
+                onTap: () =>
+                    setState(() => _warTypesExpanded = !_warTypesExpanded),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: AnimatedRotation(
+                    turns: _warTypesExpanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 180),
+                    curve: Curves.easeOutCubic,
+                    child: Icon(
+                      Icons.expand_more_rounded,
+                      size: 18,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          IconButton(
-            icon: Icon(
-              Icons.download_outlined,
-              size: 16,
-              color: colorScheme.onSurface,
+          ClipRect(
+            child: AnimatedSize(
+              alignment: Alignment.topCenter,
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOutCubic,
+              child: _warTypesExpanded
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        children: [
+                          _WarTypeChip(
+                            label: 'CWL',
+                            selected: isCWLChecked,
+                            onTap: () =>
+                                setState(() => isCWLChecked = !isCWLChecked),
+                          ),
+                          const SizedBox(width: 8),
+                          _WarTypeChip(
+                            label: loc.warFiltersRandom,
+                            selected: isRandomChecked,
+                            onTap: () => setState(
+                              () => isRandomChecked = !isRandomChecked,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          _WarTypeChip(
+                            label: loc.warFiltersFriendly,
+                            selected: isFriendlyChecked,
+                            onTap: () => setState(
+                              () => isFriendlyChecked = !isFriendlyChecked,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(width: double.infinity, height: 0),
             ),
-            onPressed: _showExportDialog,
           ),
         ],
       ),

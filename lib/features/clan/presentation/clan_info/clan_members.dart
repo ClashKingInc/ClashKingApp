@@ -24,7 +24,7 @@ class ClanMembers extends StatefulWidget {
 }
 
 class ClanMembersState extends State<ClanMembers> {
-  String currentFilter = 'trophies';
+  String currentFilter = 'league';
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -71,6 +71,7 @@ class ClanMembersState extends State<ClanMembers> {
     Map<String, String> filterOptions = {
       loc?.generalRole ?? 'Role': 'role',
       loc?.gameTownHallLevel ?? 'Town Hall Level': 'townHallLevel',
+      loc?.gameLeague ?? 'League': 'league',
       loc?.gameTrophies ?? 'Trophies': 'trophies',
       loc?.gameExpLevel ?? 'Experience Level': 'expLevel',
       loc?.gameBuilderBaseTrophies ?? 'Builder Base Trophies':
@@ -105,6 +106,11 @@ class ClanMembersState extends State<ClanMembers> {
           return (roleWeights[b.role] ?? 0).compareTo(roleWeights[a.role] ?? 0);
         case 'townHallLevel':
           return b.townHallLevel.compareTo(a.townHallLevel);
+        case 'league':
+          final leagueCompare = b.league.id.compareTo(a.league.id);
+          return leagueCompare != 0
+              ? leagueCompare
+              : b.trophies.compareTo(a.trophies);
         case 'trophies':
           return b.trophies.compareTo(a.trophies);
         case 'expLevel':
@@ -128,10 +134,12 @@ class ClanMembersState extends State<ClanMembers> {
       }
     });
 
-    // The dynamic stat column already shows trophies+league for these two
-    // sorts, so the persistent trophy row would just repeat it.
+    // The persistent trophy row already shows trophies+league, so the
+    // dynamic stat column would just repeat it for these sorts.
     final dynamicStatDuplicatesTrophyRow =
-        currentFilter == 'trophies' || currentFilter == 'townHallLevel';
+        currentFilter == 'trophies' ||
+        currentFilter == 'townHallLevel' ||
+        currentFilter == 'league';
 
     return Column(
       mainAxisSize: MainAxisSize.max,
