@@ -40,7 +40,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
     // rather than exactly measuring its (0-3 line) height.
     final hasDescription = clanInfo.description.trim().isNotEmpty;
     final imageHeight =
-        MediaQuery.of(context).padding.top + 280 + (hasDescription ? 50 : 0);
+        MediaQuery.of(context).padding.top + 280 + (hasDescription ? 70 : 0);
 
     return Stack(
       children: [
@@ -307,17 +307,27 @@ class ClanInfoHeaderCard extends StatelessWidget {
   /// Sits directly on the scrimmed hero image (like the identity name/tag
   /// above it) instead of inside the stats card below — the description
   /// is clan-specific content the player header has no equivalent of, so
-  /// keeping it off the card leaves that card just the metric grid.
+  /// keeping it off the card leaves that card just the metric grid. Wrapped
+  /// in the same translucent black pill as the location chip above it
+  /// (rather than bare text) since that's the treatment already proven to
+  /// read well directly on this image, in both themes.
   Widget _buildDescription(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Text(
-      clanInfo.description,
-      textAlign: TextAlign.start,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-        color: colorScheme.onSurface.withValues(alpha: 0.85),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.32),
+        borderRadius: BorderRadius.circular(14),
       ),
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
+      child: Text(
+        clanInfo.description,
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: Colors.white.withValues(alpha: 0.92),
+        ),
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 
