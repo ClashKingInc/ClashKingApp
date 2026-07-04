@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
@@ -34,8 +35,12 @@ class ClanInfoHeaderCard extends StatelessWidget {
   Widget _buildHero(BuildContext context) {
     // The stats card height varies (chips + description), so the image
     // stops at a fixed distance from the top instead of tracking the
-    // column bottom: it ends partway through the card.
-    final imageHeight = MediaQuery.of(context).padding.top + 280;
+    // column bottom: it ends partway through the card. A description
+    // pushes everything below it further down, so it gets a flat bonus
+    // rather than exactly measuring its (0-3 line) height.
+    final hasDescription = clanInfo.description.trim().isNotEmpty;
+    final imageHeight =
+        MediaQuery.of(context).padding.top + 280 + (hasDescription ? 50 : 0);
 
     return Stack(
       children: [
@@ -93,6 +98,11 @@ class ClanInfoHeaderCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: _buildIdentity(context),
             ),
+            if (clanInfo.description.trim().isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: _buildDescription(context),
+              ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Column(
@@ -294,9 +304,24 @@ class ClanInfoHeaderCard extends StatelessWidget {
     );
   }
 
+  /// Sits directly on the scrimmed hero image (like the identity name/tag
+  /// above it) instead of inside the stats card below — the description
+  /// is clan-specific content the player header has no equivalent of, so
+  /// keeping it off the card leaves that card just the metric grid.
+  Widget _buildDescription(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Text(
+      clanInfo.description,
+      textAlign: TextAlign.start,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        color: colorScheme.onSurface.withValues(alpha: 0.85),
+      ),
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
   Widget _buildStatsPanel(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final loc = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
@@ -387,21 +412,6 @@ class ClanInfoHeaderCard extends StatelessWidget {
                   ),
                 ],
               ),
-              if (clanInfo.description.trim().isNotEmpty) ...[
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    clanInfo.description,
-                    textAlign: TextAlign.start,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
             ],
           ),
         ),
@@ -605,21 +615,66 @@ class _ClanLeagueSummaryTileState extends State<_ClanLeagueSummaryTile> {
                 ],
               ),
               if (clanInfo.isWarLogPublic) ...[
-                const SizedBox(height: 4),
-                Text(
-                  '${clanInfo.warWins}W · ${clanInfo.warTies}T · ${clanInfo.warLosses}L',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: colorScheme.onSurface.withValues(alpha: 0.58),
-                    fontWeight: FontWeight.w600,
-                  ),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _WltStat(
+                      icon: Icons.trending_up_rounded,
+                      value: clanInfo.warWins,
+                      color: StatColors.win,
+                    ),
+                    const SizedBox(width: 6),
+                    _WltStat(
+                      icon: Icons.remove_rounded,
+                      value: clanInfo.warTies,
+                      color: colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(width: 6),
+                    _WltStat(
+                      icon: Icons.trending_down_rounded,
+                      value: clanInfo.warLosses,
+                      color: StatColors.loss,
+                    ),
+                  ],
                 ),
               ],
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+/// One W/T/L figure as an icon + number instead of packing all three
+/// into a single plain "12W · 3T · 5L" string.
+class _WltStat extends StatelessWidget {
+  final IconData icon;
+  final int value;
+  final Color color;
+
+  const _WltStat({
+    required this.icon,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 13, color: color),
+        const SizedBox(width: 2),
+        Text(
+          value.toString(),
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -14,6 +14,7 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
@@ -329,6 +330,12 @@ class _HomeBaseStats extends StatelessWidget {
                 seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
                 attackWins: formatter.format(player.attackWins),
                 defenseWins: formatter.format(player.defenseWins),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PlayerLegendScreen(player: player),
+                  ),
+                ),
               ),
         const SizedBox(height: 6),
         _PlayerQuickStats(player: player),
@@ -480,6 +487,7 @@ class _LeagueSummaryTile extends StatefulWidget {
   final String? attackWins;
   final String? defenseWins;
   final String? bestTrophies;
+  final VoidCallback? onTap;
 
   const _LeagueSummaryTile({
     required this.leagueName,
@@ -489,6 +497,7 @@ class _LeagueSummaryTile extends StatefulWidget {
     this.attackWins,
     this.defenseWins,
     this.bestTrophies,
+    this.onTap,
   });
 
   @override
@@ -571,6 +580,7 @@ class _LeagueSummaryTileState extends State<_LeagueSummaryTile> {
       borderRadius: 16,
       padding: const EdgeInsets.all(12),
       tint: _tint,
+      onTap: widget.onTap,
       child: Row(
         children: [
           MobileWebImage(imageUrl: widget.leagueUrl, width: 46, height: 46),
@@ -617,12 +627,14 @@ class _LeagueSummaryTileState extends State<_LeagueSummaryTile> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(width: 2),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    size: 18,
-                    color: colorScheme.onSurface.withValues(alpha: 0.58),
-                  ),
+                  if (widget.onTap != null) ...[
+                    const SizedBox(width: 2),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 18,
+                      color: colorScheme.onSurface.withValues(alpha: 0.58),
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(height: 8),
