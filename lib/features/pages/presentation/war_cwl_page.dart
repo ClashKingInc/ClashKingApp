@@ -244,6 +244,13 @@ class _WarListItem {
     return null;
   }
 
+  /// Current CWL standing for this clan, shown alongside the round
+  /// number in the banner.
+  int? get cwlRank {
+    if (cwlRoundNumber == null) return null;
+    return summary?.leagueInfo?.getClanDetails(tag)?.rank;
+  }
+
   int get sortWeight {
     final war = displayWar;
     final linked = accounts.isNotEmpty && !bookmarked;
@@ -339,7 +346,10 @@ class _WarListCard extends StatelessWidget {
               ),
         cwlBanner: item.cwlRoundNumber == null
             ? null
-            : _CwlRoundBanner(roundNumber: item.cwlRoundNumber!),
+            : _CwlRoundBanner(
+                roundNumber: item.cwlRoundNumber!,
+                rank: item.cwlRank,
+              ),
         onTapBanner: canOpenCwl ? openCwl : null,
         onTap: openWar,
       );
@@ -495,14 +505,18 @@ class _BookmarkedPill extends StatelessWidget {
 /// Flat top-rounded strip (not its own fully-rounded pill) so it reads
 /// as fused with the war card below it, matching the card's own radius.
 class _CwlRoundBanner extends StatelessWidget {
-  const _CwlRoundBanner({required this.roundNumber});
+  const _CwlRoundBanner({required this.roundNumber, this.rank});
 
   final int roundNumber;
+  final int? rank;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     const tint = Color(0xFF8D63D9);
+    final roundLabel =
+        AppLocalizations.of(context)?.cwlRoundNumber(roundNumber) ??
+        'Round $roundNumber';
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -524,7 +538,7 @@ class _CwlRoundBanner extends StatelessWidget {
             ),
             const SizedBox(width: 6),
             Text(
-              'CWL — ${AppLocalizations.of(context)?.cwlRoundNumber(roundNumber) ?? 'Round $roundNumber'}',
+              rank == null ? 'CWL — $roundLabel' : 'CWL — $roundLabel — #$rank',
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: colorScheme.onSurface,
