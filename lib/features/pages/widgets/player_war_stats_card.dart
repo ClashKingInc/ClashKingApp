@@ -1,7 +1,7 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
-import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_page.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:provider/provider.dart';
@@ -26,9 +26,8 @@ class PlayerWarStatsCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PlayerWarStatsScreen(
-                player: player!,
-              ),
+              builder: (context) =>
+                  PlayerScreen(selectedPlayer: player!, initialTab: 3),
             ),
           );
         },
@@ -66,8 +65,9 @@ class PlayerWarStatsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            AppLocalizations.of(context)!
-                                .warFiltersLastXwars(allStats?.warsCounts ?? 0),
+                            AppLocalizations.of(
+                              context,
+                            )!.warFiltersLastXwars(allStats?.warsCounts ?? 0),
                             style: Theme.of(context).textTheme.labelLarge,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.visible,
@@ -86,18 +86,25 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label: "${allStats?.totalAttacks}",
                                   description: AppLocalizations.of(context)!
                                       .warAttacksNumber(
-                                          allStats?.totalAttacks ?? 0, allStats?.warsCounts ?? 0),
+                                        allStats?.totalAttacks ?? 0,
+                                        allStats?.warsCounts ?? 0,
+                                      ),
                                 ),
                                 ImageChip(
                                   context: context,
                                   imageUrl: ImageAssets.attackStar,
-                                  label: allStats?.averageStars
-                                          .toStringAsFixed(2) ??
+                                  label:
+                                      allStats?.averageStars.toStringAsFixed(
+                                        2,
+                                      ) ??
                                       "",
                                   description: AppLocalizations.of(context)!
-                                      .warAttacksAverageStars(allStats?.averageStars
-                                              .toStringAsFixed(2) ??
-                                          "?"),
+                                      .warAttacksAverageStars(
+                                        allStats?.averageStars.toStringAsFixed(
+                                              2,
+                                            ) ??
+                                            "?",
+                                      ),
                                 ),
                                 ImageChip(
                                   context: context,
@@ -105,10 +112,11 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label:
                                       "${allStats?.averageDestruction.toStringAsFixed(1)}%",
                                   description: AppLocalizations.of(context)!
-                                      .warAttacksAverageDestruction(allStats
-                                              ?.averageDestruction
-                                              .toStringAsFixed(1) ??
-                                          "?"),
+                                      .warAttacksAverageDestruction(
+                                        allStats?.averageDestruction
+                                                .toStringAsFixed(1) ??
+                                            "?",
+                                      ),
                                 ),
                                 ImageChip(
                                   context: context,
@@ -116,17 +124,24 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label: "${allStats?.totalDefenses}",
                                   description: AppLocalizations.of(context)!
                                       .warDefensesNumber(
-                                          allStats?.totalDefenses ?? 0, allStats?.warsCounts ?? 0),
+                                        allStats?.totalDefenses ?? 0,
+                                        allStats?.warsCounts ?? 0,
+                                      ),
                                 ),
                                 ImageChip(
                                   context: context,
                                   imageUrl: ImageAssets.attackStar,
-                                  label: allStats?.averageStarsDef
-                                          .toStringAsFixed(2) ??
+                                  label:
+                                      allStats?.averageStarsDef.toStringAsFixed(
+                                        2,
+                                      ) ??
                                       "",
                                   description: AppLocalizations.of(context)!
                                       .warDefensesAverageStars(
-                                          allStats?.averageStarsDef.toStringAsFixed(2) ?? "0.00"),
+                                        allStats?.averageStarsDef
+                                                .toStringAsFixed(2) ??
+                                            "0.00",
+                                      ),
                                 ),
                                 ImageChip(
                                   context: context,
@@ -134,12 +149,13 @@ class PlayerWarStatsCard extends StatelessWidget {
                                   label:
                                       "${allStats?.averageDestructionDef.toStringAsFixed(1)}%",
                                   description: AppLocalizations.of(context)!
-                                      .warDefensesAverageDestruction(allStats
-                                              ?.averageDestructionDef
-                                              .toStringAsFixed(1) ??
-                                          "?"),
+                                      .warDefensesAverageDestruction(
+                                        allStats?.averageDestructionDef
+                                                .toStringAsFixed(1) ??
+                                            "?",
+                                      ),
                                 ),
-                              ]
+                              ],
                             ],
                           ),
                         ],

@@ -9,20 +9,26 @@ import 'package:clashkingapp/features/player/models/player_achievement.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
+import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_profile_tab.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 class PlayerScreen extends StatefulWidget {
   final Player selectedPlayer;
+  final int initialTab;
 
-  const PlayerScreen({super.key, required this.selectedPlayer});
+  const PlayerScreen({
+    super.key,
+    required this.selectedPlayer,
+    this.initialTab = 0,
+  });
 
   @override
   PlayerScreenState createState() => PlayerScreenState();
 }
 
 class PlayerScreenState extends State<PlayerScreen> {
-  int selectedTab = 0;
+  late int selectedTab = widget.initialTab;
 
   @override
   void initState() {
@@ -63,7 +69,10 @@ class PlayerScreenState extends State<PlayerScreen> {
                   child: switch (selectedTab) {
                     0 => _buildPlayerContent(widget.selectedPlayer),
                     1 => _buildBuilderContent(widget.selectedPlayer),
-                    _ => _buildAchievementContent(widget.selectedPlayer),
+                    2 => _buildAchievementContent(widget.selectedPlayer),
+                    _ => PlayerWarStatsProfileTab(
+                      player: widget.selectedPlayer,
+                    ),
                   },
                 ),
               ),
@@ -75,7 +84,7 @@ class PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _selectTab(int index) {
-    final clampedIndex = index > 2 ? 2 : index;
+    final clampedIndex = index > 3 ? 3 : index;
     final boundedIndex = index < 0 ? 0 : clampedIndex;
     if (boundedIndex == selectedTab) return;
     setState(() => selectedTab = boundedIndex);
@@ -248,7 +257,7 @@ class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 3,
+      length: 4,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
@@ -323,6 +332,11 @@ class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
                     'Achievements',
                 imageUrl: ImageAssets.attackStar,
                 selected: widget.selectedIndex == 2,
+              ),
+              _ProfileTab(
+                label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
+                imageUrl: ImageAssets.war,
+                selected: widget.selectedIndex == 3,
               ),
             ],
           ),
