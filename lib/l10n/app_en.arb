@@ -992,6 +992,8 @@
   "warCalculatorNeededOverall": "% Needed overall",
   "warCalculatorCalculate": "Calculate",
   "warAttacksTitle": "Attacks",
+  "warAttacksSuccessful": "Successful attacks",
+  "warAttacksFailed": "Failed attacks",
   "warAttacksNone": "No attack yet",
   "@warAttacksNone": {
     "description": "No attack yet in war"

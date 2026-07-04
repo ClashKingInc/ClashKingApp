@@ -40,6 +40,12 @@ class CwlScreenState extends State<CwlScreen> {
   @override
   Widget build(BuildContext context) {
     CwlClan clan = widget.warCwl.leagueInfo!.getClanDetails(widget.clanTag)!;
+    final avgStars = clan.attackCount == 0
+        ? 0.0
+        : clan.stars / clan.attackCount;
+    final avgDestruction = clan.attackCount == 0
+        ? 0.0
+        : clan.destructionPercentageInflicted / clan.attackCount;
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
     final imageHeight = MediaQuery.of(context).padding.top + 280;
@@ -199,10 +205,11 @@ class CwlScreenState extends State<CwlScreen> {
                                       label:
                                           AppLocalizations.of(
                                             context,
-                                          )?.warStarsThree ??
-                                          '3 stars',
+                                          )?.warAttacksSuccessful ??
+                                          'Successful attacks',
                                       value: formatter.format(
-                                        clan.totalThreeStars,
+                                        clan.totalThreeStars +
+                                            clan.totalTwoStars,
                                       ),
                                       imageUrl: ImageAssets.attackStar,
                                       color: StatColors.win,
@@ -211,11 +218,21 @@ class CwlScreenState extends State<CwlScreen> {
                                       label:
                                           AppLocalizations.of(
                                             context,
-                                          )?.warStarsTwo ??
-                                          '2 stars',
+                                          )?.warAttacksFailed ??
+                                          'Failed attacks',
                                       value: formatter.format(
-                                        clan.totalTwoStars,
+                                        clan.totalOneStar + clan.totalZeroStar,
                                       ),
+                                      imageUrl: ImageAssets.brokenSword,
+                                      color: StatColors.loss,
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warStarsAverage ??
+                                          'Average stars',
+                                      value: avgStars.toStringAsFixed(1),
                                       imageUrl: ImageAssets.attackStar,
                                       color: StatColors.warStarGold,
                                     ),
@@ -223,25 +240,12 @@ class CwlScreenState extends State<CwlScreen> {
                                       label:
                                           AppLocalizations.of(
                                             context,
-                                          )?.warStarsOne ??
-                                          '1 star',
-                                      value: formatter.format(
-                                        clan.totalOneStar,
-                                      ),
-                                      imageUrl: ImageAssets.attackStar,
-                                      color: const Color(0xFFE8963D),
-                                    ),
-                                    MetricChip(
-                                      label:
-                                          AppLocalizations.of(
-                                            context,
-                                          )?.warStarsZero ??
-                                          '0 Star',
-                                      value: formatter.format(
-                                        clan.totalZeroStar,
-                                      ),
-                                      imageUrl: ImageAssets.attackStar,
-                                      color: StatColors.loss,
+                                          )?.warDestructionAverage ??
+                                          'Average destruction',
+                                      value:
+                                          '${avgDestruction.toStringAsFixed(0)}%',
+                                      imageUrl: ImageAssets.hitrate,
+                                      color: const Color(0xFF14A37F),
                                     ),
                                   ],
                                 ),
