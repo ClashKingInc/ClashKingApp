@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/utils/file_opener.dart';
@@ -104,23 +105,23 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              FilterChip(
-                label: Text('CWL'),
+              _WarTypeChip(
+                label: 'CWL',
                 selected: isCWLChecked,
-                onSelected: (value) => setState(() => isCWLChecked = value),
+                onTap: () => setState(() => isCWLChecked = !isCWLChecked),
               ),
-              const SizedBox(width: 6),
-              FilterChip(
-                label: Text(loc.warFiltersRandom),
+              const SizedBox(width: 8),
+              _WarTypeChip(
+                label: loc.warFiltersRandom,
                 selected: isRandomChecked,
-                onSelected: (value) => setState(() => isRandomChecked = value),
+                onTap: () => setState(() => isRandomChecked = !isRandomChecked),
               ),
-              const SizedBox(width: 6),
-              FilterChip(
-                label: Text(loc.warFiltersFriendly),
+              const SizedBox(width: 8),
+              _WarTypeChip(
+                label: loc.warFiltersFriendly,
                 selected: isFriendlyChecked,
-                onSelected: (value) =>
-                    setState(() => isFriendlyChecked = value),
+                onTap: () =>
+                    setState(() => isFriendlyChecked = !isFriendlyChecked),
               ),
             ],
           ),
@@ -174,14 +175,16 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
   }
 
   Widget _buildFilterBanner() {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8.0),
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
         border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
         ),
       ),
       child: Row(
@@ -189,7 +192,7 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
           Icon(
             _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
             size: 16,
-            color: Theme.of(context).colorScheme.primary,
+            color: colorScheme.onSurfaceVariant,
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -200,9 +203,9 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
                           context,
                         )?.filtersShowingDefaultData(_currentFilter.limit) ??
                         'Showing last ${_currentFilter.limit} wars (default)',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colorScheme.onSurface),
             ),
           ),
           if (_hasAppliedFilters)
@@ -210,23 +213,19 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
               icon: Icon(
                 Icons.close,
                 size: 16,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: colorScheme.onSurfaceVariant,
               ),
               onPressed: _clearFilters,
             ),
           IconButton(
-            icon: Icon(
-              Icons.tune,
-              size: 16,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            icon: Icon(Icons.tune, size: 16, color: colorScheme.onSurface),
             onPressed: _showFilterDialog,
           ),
           IconButton(
             icon: Icon(
               Icons.download_outlined,
               size: 16,
-              color: Theme.of(context).colorScheme.primary,
+              color: colorScheme.onSurface,
             ),
             onPressed: _showExportDialog,
           ),
@@ -629,6 +628,58 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
               'Export failed: $error',
         ),
         backgroundColor: Theme.of(context).colorScheme.error,
+      ),
+    );
+  }
+}
+
+/// Small selectable glass pill matching the MetricChip/StatTile/
+/// FilterDropdown family - tinted when selected instead of the stock
+/// Material FilterChip look, which clashed with the rest of the app.
+class _WarTypeChip extends StatelessWidget {
+  const _WarTypeChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final tint = colorScheme.primary;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: selected
+                ? tint.withValues(alpha: 0.16)
+                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: Border.all(
+              color: selected
+                  ? tint.withValues(alpha: 0.5)
+                  : colorScheme.outlineVariant.withValues(alpha: 0.32),
+            ),
+          ),
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: selected
+                  ? colorScheme.onSurface
+                  : colorScheme.onSurfaceVariant,
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            ),
+          ),
+        ),
       ),
     );
   }
