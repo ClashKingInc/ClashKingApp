@@ -423,6 +423,7 @@ class ClanInfoHeaderCard extends StatelessWidget {
           warCwl: warCwl,
           clanTag: clanInfo.tag,
           clanInfo: cwlClanInfo,
+          warLeagueName: clanInfo.warLeague?.name,
         ),
       ),
     );

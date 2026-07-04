@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/icons/excel_download_icon.dart';
@@ -19,12 +21,14 @@ class CwlScreen extends StatefulWidget {
   final WarCwl warCwl;
   final String clanTag;
   final CwlClan clanInfo;
+  final String? warLeagueName;
 
   CwlScreen({
     super.key,
     required this.warCwl,
     required this.clanTag,
     required this.clanInfo,
+    this.warLeagueName,
   });
 
   @override
@@ -133,69 +137,64 @@ class CwlScreenState extends State<CwlScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(14),
-                            child: MetricChipGrid(
-                              columns: 3,
-                              chips: [
-                                MetricChip(
-                                  label:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.cwlRankTitle ??
-                                      'Rank',
-                                  value: '#${clan.rank}',
-                                  imageUrl: ImageAssets.podium,
-                                  color: const Color(0xFFE8A524),
-                                ),
-                                MetricChip(
-                                  label:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.warStarsTitle ??
-                                      'Stars',
-                                  value: formatter.format(clan.stars),
-                                  imageUrl: ImageAssets.builderBaseStar,
-                                  color: const Color(0xFFE8A524),
-                                ),
-                                MetricChip(
-                                  label:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.warDestructionTitle ??
-                                      'Destruction',
-                                  value:
-                                      '${clan.destructionPercentageInflicted.toStringAsFixed(0)}%',
-                                  imageUrl: ImageAssets.hitrate,
-                                  color: const Color(0xFF14A37F),
-                                ),
-                                MetricChip(
-                                  label:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.cwlWarsPlayedTitle ??
-                                      'Wars played',
-                                  value: formatter.format(clan.warsPlayed),
-                                  imageUrl: ImageAssets.war,
-                                ),
-                                MetricChip(
-                                  label:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.warAttacksTitle ??
-                                      'Attacks',
-                                  value:
-                                      '${clan.attackCount}/${widget.warCwl.teamSize * clan.warsPlayed}',
-                                  imageUrl: ImageAssets.sword,
-                                  color: const Color(0xFF8D63D9),
-                                ),
-                                MetricChip(
-                                  label:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.warAttacksMissed ??
-                                      'Missed Attacks',
-                                  value: formatter.format(clan.missedAttacks),
-                                  imageUrl: ImageAssets.brokenSword,
-                                  color: const Color(0xFFE35D4F),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (widget.warLeagueName != null) ...[
+                                  _CwlLeagueSummaryTile(
+                                    warLeagueName: widget.warLeagueName!,
+                                    rank: clan.rank,
+                                    stars: clan.stars,
+                                  ),
+                                  const SizedBox(height: 12),
+                                ],
+                                MetricChipGrid(
+                                  columns: 3,
+                                  chips: [
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warDestructionTitle ??
+                                          'Destruction',
+                                      value:
+                                          '${clan.destructionPercentageInflicted.toStringAsFixed(0)}%',
+                                      imageUrl: ImageAssets.hitrate,
+                                      color: const Color(0xFF14A37F),
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.cwlWarsPlayedTitle ??
+                                          'Wars played',
+                                      value: formatter.format(clan.warsPlayed),
+                                      imageUrl: ImageAssets.war,
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warAttacksTitle ??
+                                          'Attacks',
+                                      value:
+                                          '${clan.attackCount}/${widget.warCwl.teamSize * clan.warsPlayed}',
+                                      imageUrl: ImageAssets.sword,
+                                      color: const Color(0xFF8D63D9),
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warAttacksMissed ??
+                                          'Missed Attacks',
+                                      value: formatter.format(
+                                        clan.missedAttacks,
+                                      ),
+                                      imageUrl: ImageAssets.brokenSword,
+                                      color: const Color(0xFFE35D4F),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -317,6 +316,169 @@ class _HeaderCustomButton extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Featured war-league tile — same recipe as the clan/player headers'
+/// league tile: a floating glass card tinted with the dominant color
+/// sampled from the war league badge, rank as the headline number,
+/// stars as the secondary metric.
+class _CwlLeagueSummaryTile extends StatefulWidget {
+  final String warLeagueName;
+  final int rank;
+  final int stars;
+
+  const _CwlLeagueSummaryTile({
+    required this.warLeagueName,
+    required this.rank,
+    required this.stars,
+  });
+
+  @override
+  State<_CwlLeagueSummaryTile> createState() => _CwlLeagueSummaryTileState();
+}
+
+class _CwlLeagueSummaryTileState extends State<_CwlLeagueSummaryTile> {
+  static final Map<String, Color> _tintCache = {};
+  Color? _tint;
+
+  String get _leagueUrl => ImageAssets.getWarLeagueImage(widget.warLeagueName);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTint();
+  }
+
+  @override
+  void didUpdateWidget(covariant _CwlLeagueSummaryTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.warLeagueName != widget.warLeagueName) {
+      _loadTint();
+    }
+  }
+
+  Future<void> _loadTint() async {
+    final leagueUrl = _leagueUrl;
+
+    final cachedTint = _tintCache[leagueUrl];
+    if (cachedTint != null) {
+      if (mounted) setState(() => _tint = cachedTint);
+      return;
+    }
+
+    if (mounted) setState(() => _tint = null);
+
+    try {
+      final provider = CachedNetworkImageProvider(leagueUrl);
+      final stream = provider.resolve(ImageConfiguration.empty);
+      late final ImageStreamListener listener;
+      final completer = Completer<ImageInfo>();
+
+      listener = ImageStreamListener(
+        (imageInfo, synchronousCall) {
+          if (!completer.isCompleted) completer.complete(imageInfo);
+          stream.removeListener(listener);
+        },
+        onError: (error, stackTrace) {
+          if (!completer.isCompleted) {
+            completer.completeError(error, stackTrace);
+          }
+          stream.removeListener(listener);
+        },
+      );
+      stream.addListener(listener);
+
+      final imageInfo = await completer.future;
+      final tint = await dominantTintFromImage(imageInfo.image);
+      if (tint == null) return;
+
+      _tintCache[leagueUrl] = tint;
+      if (mounted && _leagueUrl == leagueUrl) {
+        setState(() => _tint = tint);
+      }
+    } catch (_) {
+      // Keep the glass neutral if the remote badge cannot be sampled.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final loc = AppLocalizations.of(context);
+
+    return GlassPanel(
+      width: double.infinity,
+      height: 75,
+      borderRadius: 16,
+      padding: const EdgeInsets.all(12),
+      tint: _tint,
+      child: Row(
+        children: [
+          MobileWebImage(imageUrl: _leagueUrl, width: 46, height: 46),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.warLeagueName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '#${widget.rank}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MobileWebImage(
+                    imageUrl: ImageAssets.builderBaseStar,
+                    width: 14,
+                    height: 14,
+                  ),
+                  const SizedBox(width: 3),
+                  Text(
+                    widget.stars.toString(),
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.72),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(
+                loc?.warStarsTitle ?? 'Stars',
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.58),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

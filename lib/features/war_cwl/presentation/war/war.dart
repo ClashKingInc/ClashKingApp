@@ -19,8 +19,9 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarScreen extends StatefulWidget {
   final WarInfo war;
+  final int? cwlRoundNumber;
 
-  const WarScreen({super.key, required this.war});
+  const WarScreen({super.key, required this.war, this.cwlRoundNumber});
 
   @override
   State<WarScreen> createState() => _WarScreenState();
@@ -257,7 +258,10 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            WarHeader(warInfo: widget.war),
+            WarHeader(
+              warInfo: widget.war,
+              cwlRoundNumber: widget.cwlRoundNumber,
+            ),
             ScrollableTab(
               tabBarDecoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,

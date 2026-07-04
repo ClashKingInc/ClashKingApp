@@ -6,10 +6,7 @@ import 'package:flutter/material.dart';
 class CwlRoundsTab extends StatefulWidget {
   final WarCwl warCwl;
 
-  CwlRoundsTab({
-    super.key,
-    required this.warCwl,
-  });
+  CwlRoundsTab({super.key, required this.warCwl});
 
   @override
   CwlRoundsTabState createState() => CwlRoundsTabState();
@@ -31,41 +28,53 @@ class CwlRoundsTabState extends State<CwlRoundsTab> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            AppLocalizations.of(context)!
-                .cwlRoundNumber(currentRound.roundNumber),
+            AppLocalizations.of(
+              context,
+            )!.cwlRoundNumber(currentRound.roundNumber),
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
         ...currentRound.warTags.map((tag) {
           final war = widget.warCwl.getWarInfoFromTag(tag);
           return war != null
-              ? RoundClanCard(warInfo: war)
+              ? RoundClanCard(
+                  warInfo: war,
+                  roundNumber: currentRound.roundNumber,
+                )
               : const SizedBox.shrink();
         }),
         const SizedBox(height: 16),
         ...rounds
-            .where((r) =>
-                r.warTags.any((tag) => tag != "#0") &&
-                r.roundNumber != currentRound.roundNumber)
-            .map((round) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        AppLocalizations.of(context)!
-                            .cwlRoundNumber(round.roundNumber),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
+            .where(
+              (r) =>
+                  r.warTags.any((tag) => tag != "#0") &&
+                  r.roundNumber != currentRound.roundNumber,
+            )
+            .map(
+              (round) => Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.cwlRoundNumber(round.roundNumber),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    ...round.warTags.map((tag) {
-                      final war = widget.warCwl.getWarInfoFromTag(tag);
-                      return war != null
-                          ? RoundClanCard(warInfo: war)
-                          : const SizedBox.shrink();
-                    }),
-                  ],
-                ))
+                  ),
+                  ...round.warTags.map((tag) {
+                    final war = widget.warCwl.getWarInfoFromTag(tag);
+                    return war != null
+                        ? RoundClanCard(
+                            warInfo: war,
+                            roundNumber: round.roundNumber,
+                          )
+                        : const SizedBox.shrink();
+                  }),
+                ],
+              ),
+            )
             .toList()
             .reversed,
       ],

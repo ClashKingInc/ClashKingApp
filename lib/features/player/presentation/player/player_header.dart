@@ -490,8 +490,12 @@ void _openCwl(BuildContext context, Player player) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) =>
-          CwlScreen(warCwl: warCwl, clanTag: clanTag, clanInfo: clanInfo),
+      builder: (context) => CwlScreen(
+        warCwl: warCwl,
+        clanTag: clanTag,
+        clanInfo: clanInfo,
+        warLeagueName: player.clan!.warLeague?.name,
+      ),
     ),
   );
 }

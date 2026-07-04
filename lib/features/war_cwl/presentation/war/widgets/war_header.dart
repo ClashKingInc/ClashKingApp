@@ -11,12 +11,14 @@ import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
     show timeLeft;
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class WarHeader extends StatefulWidget {
   final WarInfo warInfo;
+  final int? cwlRoundNumber;
 
-  const WarHeader({super.key, required this.warInfo});
+  const WarHeader({super.key, required this.warInfo, this.cwlRoundNumber});
 
   @override
   State<WarHeader> createState() => _WarHeaderState();
@@ -83,6 +85,35 @@ class _WarHeaderState extends State<WarHeader> {
               ),
             ),
             const SizedBox(height: 8),
+            if (widget.cwlRoundNumber != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                child: GlassPanel(
+                  width: double.infinity,
+                  height: 36,
+                  borderRadius: 14,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  tint: const Color(0xFF8D63D9),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      MobileWebImage(
+                        imageUrl: ImageAssets.cwlSwordsNoBorder,
+                        width: 16,
+                        height: 16,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'CWL — ${AppLocalizations.of(context)?.cwlRoundNumber(widget.cwlRoundNumber!) ?? 'Round ${widget.cwlRoundNumber}'}',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
