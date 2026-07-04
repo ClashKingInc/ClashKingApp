@@ -189,8 +189,9 @@ class CwlScreenState extends State<CwlScreen> {
                                               context,
                                             )?.warDestructionTitle ??
                                             'Destruction',
-                                        value:
-                                            '${clan.destructionPercentageInflicted.toStringAsFixed(0)}%',
+                                        value: formatter.format(
+                                          clan.destructionPercentageInflicted,
+                                        ),
                                         imageUrl: ImageAssets.hitrate,
                                         color: const Color(0xFF14A37F),
                                       ),

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
@@ -131,7 +132,7 @@ class RoundClanCard extends StatelessWidget {
                                                 warInfo
                                                     .opponent!
                                                     .destructionPercentage)
-                                    ? Colors.green
+                                    ? StatColors.win
                                     : null,
                               ),
                         ),
@@ -151,7 +152,7 @@ class RoundClanCard extends StatelessWidget {
                                                 warInfo
                                                     .clan!
                                                     .destructionPercentage)
-                                    ? Colors.green
+                                    ? StatColors.win
                                     : null,
                               ),
                         ),

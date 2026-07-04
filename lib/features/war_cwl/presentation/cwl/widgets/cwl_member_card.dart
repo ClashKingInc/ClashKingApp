@@ -28,31 +28,6 @@ class MembersCard extends StatelessWidget {
     required this.attacksPerWar,
   });
 
-  Widget formatStatWithAverage(
-    BuildContext context,
-    String value,
-    String? average,
-  ) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(text: value, style: Theme.of(context).textTheme.bodyMedium),
-          if (average != null)
-            WidgetSpan(
-              child: Transform.translate(
-                offset: const Offset(2, -8),
-                child: Text(
-                  "($average)",
-                  textScaler: TextScaler.linear(0.8),
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
   Widget? getStatFromSortKey(BuildContext context) {
     final attack = member.attackStats;
     final defense = member.defenseStats;
