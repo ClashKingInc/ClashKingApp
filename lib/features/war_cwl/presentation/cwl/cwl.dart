@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/icons/excel_download_icon.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
@@ -54,14 +53,38 @@ class CwlScreenState extends State<CwlScreen> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      CachedNetworkImage(
-                        imageUrl: ImageAssets.cwlPageBackground,
-                        fit: BoxFit.cover,
-                        errorWidget: (context, url, error) => ColoredBox(
-                          color: Theme.of(context).colorScheme.surface,
+                      ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withValues(alpha: 0.50),
+                          BlendMode.darken,
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: ImageAssets.cwlPageBackground,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => ColoredBox(
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
                         ),
                       ),
-                      ColoredBox(color: Colors.black.withValues(alpha: 0.62)),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Theme.of(
+                                context,
+                              ).colorScheme.surface.withValues(alpha: 0.36),
+                              Theme.of(
+                                context,
+                              ).colorScheme.surface.withValues(alpha: 0.64),
+                              Theme.of(
+                                context,
+                              ).colorScheme.surface.withValues(alpha: 0.92),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -100,82 +123,84 @@ class CwlScreenState extends State<CwlScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color:
-                              (Theme.of(context).cardTheme.color ??
-                                      Theme.of(context).colorScheme.surface)
-                                  .withValues(alpha: 0.94),
-                          borderRadius: BorderRadius.circular(28),
-                          border: Border.all(
-                            color: Theme.of(context).colorScheme.outlineVariant
-                                .withValues(alpha: 0.32),
+                      child: Stack(
+                        children: [
+                          const Positioned.fill(
+                            child: HeaderPanelBackground(
+                              height: 200,
+                              cornerRadius: 28,
+                            ),
                           ),
-                        ),
-                        child: MetricChipGrid(
-                          columns: 3,
-                          chips: [
-                            MetricChip(
-                              label:
-                                  AppLocalizations.of(context)?.cwlRankTitle ??
-                                  'Rank',
-                              value: '#${clan.rank}',
-                              imageUrl: ImageAssets.podium,
-                              color: const Color(0xFFE8A524),
+                          Padding(
+                            padding: const EdgeInsets.all(14),
+                            child: MetricChipGrid(
+                              columns: 3,
+                              chips: [
+                                MetricChip(
+                                  label:
+                                      AppLocalizations.of(
+                                        context,
+                                      )?.cwlRankTitle ??
+                                      'Rank',
+                                  value: '#${clan.rank}',
+                                  imageUrl: ImageAssets.podium,
+                                  color: const Color(0xFFE8A524),
+                                ),
+                                MetricChip(
+                                  label:
+                                      AppLocalizations.of(
+                                        context,
+                                      )?.warStarsTitle ??
+                                      'Stars',
+                                  value: formatter.format(clan.stars),
+                                  imageUrl: ImageAssets.builderBaseStar,
+                                  color: const Color(0xFFE8A524),
+                                ),
+                                MetricChip(
+                                  label:
+                                      AppLocalizations.of(
+                                        context,
+                                      )?.warDestructionTitle ??
+                                      'Destruction',
+                                  value:
+                                      '${clan.destructionPercentageInflicted.toStringAsFixed(0)}%',
+                                  imageUrl: ImageAssets.hitrate,
+                                  color: const Color(0xFF14A37F),
+                                ),
+                                MetricChip(
+                                  label:
+                                      AppLocalizations.of(
+                                        context,
+                                      )?.cwlWarsPlayedTitle ??
+                                      'Wars played',
+                                  value: formatter.format(clan.warsPlayed),
+                                  imageUrl: ImageAssets.war,
+                                ),
+                                MetricChip(
+                                  label:
+                                      AppLocalizations.of(
+                                        context,
+                                      )?.warAttacksTitle ??
+                                      'Attacks',
+                                  value:
+                                      '${clan.attackCount}/${widget.warCwl.teamSize * clan.warsPlayed}',
+                                  imageUrl: ImageAssets.sword,
+                                  color: const Color(0xFF8D63D9),
+                                ),
+                                MetricChip(
+                                  label:
+                                      AppLocalizations.of(
+                                        context,
+                                      )?.warAttacksMissed ??
+                                      'Missed Attacks',
+                                  value: formatter.format(clan.missedAttacks),
+                                  imageUrl: ImageAssets.brokenSword,
+                                  color: const Color(0xFFE35D4F),
+                                ),
+                              ],
                             ),
-                            MetricChip(
-                              label:
-                                  AppLocalizations.of(context)?.warStarsTitle ??
-                                  'Stars',
-                              value: formatter.format(clan.stars),
-                              imageUrl: ImageAssets.builderBaseStar,
-                              color: const Color(0xFFE8A524),
-                            ),
-                            MetricChip(
-                              label:
-                                  AppLocalizations.of(
-                                    context,
-                                  )?.warDestructionTitle ??
-                                  'Destruction',
-                              value:
-                                  '${clan.destructionPercentageInflicted.toStringAsFixed(0)}%',
-                              imageUrl: ImageAssets.hitrate,
-                              color: const Color(0xFF14A37F),
-                            ),
-                            MetricChip(
-                              label:
-                                  AppLocalizations.of(
-                                    context,
-                                  )?.cwlWarsPlayedTitle ??
-                                  'Wars played',
-                              value: formatter.format(clan.warsPlayed),
-                              imageUrl: ImageAssets.war,
-                            ),
-                            MetricChip(
-                              label:
-                                  AppLocalizations.of(
-                                    context,
-                                  )?.warAttacksTitle ??
-                                  'Attacks',
-                              value:
-                                  '${clan.attackCount}/${widget.warCwl.teamSize * clan.warsPlayed}',
-                              imageUrl: ImageAssets.sword,
-                              color: const Color(0xFF8D63D9),
-                            ),
-                            MetricChip(
-                              label:
-                                  AppLocalizations.of(
-                                    context,
-                                  )?.warAttacksMissed ??
-                                  'Missed Attacks',
-                              value: formatter.format(clan.missedAttacks),
-                              imageUrl: ImageAssets.brokenSword,
-                              color: const Color(0xFFE35D4F),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -238,15 +263,16 @@ class _Identity extends StatelessWidget {
                 clanInfo.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
               ),
               Text(
                 clanInfo.tag,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.75),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.62),
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -259,7 +285,8 @@ class _Identity extends StatelessWidget {
 }
 
 /// Frosted circular slot for a custom action widget (e.g. a button with its
-/// own internal loading state) — same chrome as [HeaderIconButton].
+/// own internal loading state) — same real Liquid Glass recipe as
+/// [HeaderIconButton] instead of a hand-rolled BackdropFilter blur.
 class _HeaderCustomButton extends StatelessWidget {
   final Widget child;
   final String tooltip;
@@ -273,17 +300,21 @@ class _HeaderCustomButton extends StatelessWidget {
 
     return Tooltip(
       message: tooltip,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Container(
-            height: size,
-            width: size,
-            color: Theme.of(
-              context,
-            ).colorScheme.surface.withValues(alpha: 0.55),
-            child: Center(child: child),
+      child: SizedBox(
+        height: size,
+        width: size,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(radius),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const NativeLiquidGlassBar(
+                height: size,
+                cornerRadius: radius,
+                opacity: 0.72,
+              ),
+              Center(child: child),
+            ],
           ),
         ),
       ),
