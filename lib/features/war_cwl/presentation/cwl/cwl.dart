@@ -202,27 +202,16 @@ class CwlScreenState extends State<CwlScreen> {
                                       color: const Color(0xFFE35D4F),
                                     ),
                                     MetricChip(
-                                      label:
-                                          AppLocalizations.of(
-                                            context,
-                                          )?.warAttacksSuccessful ??
-                                          'Successful attacks',
-                                      value: formatter.format(
-                                        clan.totalThreeStars +
-                                            clan.totalTwoStars,
-                                      ),
+                                      label: '2/3 ★',
+                                      value:
+                                          '${formatter.format(clan.totalThreeStars)}/${formatter.format(clan.totalTwoStars)}',
                                       imageUrl: ImageAssets.attackStar,
                                       color: StatColors.win,
                                     ),
                                     MetricChip(
-                                      label:
-                                          AppLocalizations.of(
-                                            context,
-                                          )?.warAttacksFailed ??
-                                          'Failed attacks',
-                                      value: formatter.format(
-                                        clan.totalOneStar + clan.totalZeroStar,
-                                      ),
+                                      label: '0/1 ★',
+                                      value:
+                                          '${formatter.format(clan.totalZeroStar)}/${formatter.format(clan.totalOneStar)}',
                                       imageUrl: ImageAssets.brokenSword,
                                       color: StatColors.loss,
                                     ),
