@@ -323,18 +323,6 @@ class ClanInfoHeaderCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (hasDescription) ...[
-                Text(
-                  clanInfo.description,
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 12),
-              ],
               _ClanLeagueSummaryTile(clanInfo: clanInfo),
               const SizedBox(height: 12),
               // Same icon + label + colored value language as the metric
@@ -399,6 +387,18 @@ class ClanInfoHeaderCard extends StatelessWidget {
                   ),
                 ],
               ),
+              if (hasDescription) ...[
+                const SizedBox(height: 12),
+                Text(
+                  clanInfo.description,
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ],
           ),
         ),
