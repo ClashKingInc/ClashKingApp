@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:flutter/material.dart';
@@ -233,6 +235,145 @@ class MetricChipGrid extends StatelessWidget {
       children: rows,
     );
   }
+}
+
+/// Small glass card — the same floating-tile recipe used for the
+/// player header's league summary and clan-role chip, now shared so
+/// other hero headers (e.g. the clan header) can build their own
+/// featured tiles instead of hand-rolling the glass/tint/tap chrome.
+class GlassPanel extends StatelessWidget {
+  final Widget child;
+  final double? width;
+  final double height;
+  final double borderRadius;
+  final EdgeInsetsGeometry padding;
+  final VoidCallback? onTap;
+  final Color? tint;
+
+  const GlassPanel({
+    super.key,
+    required this.child,
+    this.width,
+    required this.height,
+    required this.borderRadius,
+    required this.padding,
+    this.onTap,
+    this.tint,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: NativeLiquidGlassBar(
+                height: height,
+                cornerRadius: borderRadius,
+                opacity: 0.72,
+                interactive: onTap != null,
+                borderOpacity: Theme.of(context).brightness == Brightness.dark
+                    ? 0.22
+                    : 0.32,
+                shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                    ? 0.24
+                    : 0.08,
+              ),
+            ),
+            if (tint != null)
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        tint!.withValues(alpha: 0.24),
+                        tint!.withValues(alpha: 0.08),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(borderRadius),
+                splashFactory: NoSplash.splashFactory,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                child: Padding(padding: padding, child: child),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Samples a remote badge/icon image and picks a dominant, reasonably
+/// saturated color from it — used to tint a [GlassPanel] so a featured
+/// tile (league badge, war league badge, ...) picks up that badge's
+/// color instead of staying neutral.
+Future<Color?> dominantTintFromImage(ui.Image image) async {
+  final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  if (data == null) return null;
+
+  final buckets = <int, _ColorBucket>{};
+  const sampleStride = 4;
+  for (var y = 0; y < image.height; y += sampleStride) {
+    for (var x = 0; x < image.width; x += sampleStride) {
+      final index = (y * image.width + x) * 4;
+      final r = data.getUint8(index);
+      final g = data.getUint8(index + 1);
+      final b = data.getUint8(index + 2);
+      final a = data.getUint8(index + 3);
+      if (a < 96) continue;
+
+      final color = Color.fromARGB(a, r, g, b);
+      final hsl = HSLColor.fromColor(color);
+      if (hsl.lightness < 0.12 || hsl.lightness > 0.92) continue;
+      if (hsl.saturation < 0.24) continue;
+
+      final key = (r ~/ 24) << 16 | (g ~/ 24) << 8 | (b ~/ 24);
+      final bucket = buckets.putIfAbsent(key, _ColorBucket.new);
+      bucket
+        ..count += 1
+        ..red += r
+        ..green += g
+        ..blue += b
+        ..score += hsl.saturation * (1 - (hsl.lightness - 0.55).abs());
+    }
+  }
+
+  if (buckets.isEmpty) return null;
+  final best = buckets.values.reduce(
+    (a, b) => a.weightedScore >= b.weightedScore ? a : b,
+  );
+  return Color.fromARGB(
+    255,
+    best.red ~/ best.count,
+    best.green ~/ best.count,
+    best.blue ~/ best.count,
+  );
+}
+
+class _ColorBucket {
+  int count = 0;
+  int red = 0;
+  int green = 0;
+  int blue = 0;
+  double score = 0;
+
+  double get weightedScore => count * score;
 }
 
 /// Tinted metric bar, same language as the home to-do card metrics:

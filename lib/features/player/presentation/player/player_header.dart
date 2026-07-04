@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
@@ -165,83 +164,6 @@ class _HeaderImageButton extends StatelessWidget {
       tint: backgroundColor,
       child: Center(
         child: MobileWebImage(imageUrl: imageUrl, width: 25, height: 25),
-      ),
-    );
-  }
-}
-
-class _GlassPanel extends StatelessWidget {
-  final Widget child;
-  final double? width;
-  final double height;
-  final double borderRadius;
-  final EdgeInsetsGeometry padding;
-  final VoidCallback? onTap;
-  final Color? tint;
-
-  const _GlassPanel({
-    required this.child,
-    this.width,
-    required this.height,
-    required this.borderRadius,
-    required this.padding,
-    this.onTap,
-    this.tint,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: NativeLiquidGlassBar(
-                height: height,
-                cornerRadius: borderRadius,
-                opacity: 0.72,
-                interactive: onTap != null,
-                borderOpacity: Theme.of(context).brightness == Brightness.dark
-                    ? 0.22
-                    : 0.32,
-                shadowOpacity: Theme.of(context).brightness == Brightness.dark
-                    ? 0.24
-                    : 0.08,
-              ),
-            ),
-            if (tint != null)
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(borderRadius),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        tint!.withValues(alpha: 0.24),
-                        tint!.withValues(alpha: 0.08),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            Material(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(borderRadius),
-                splashFactory: NoSplash.splashFactory,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                child: Padding(padding: padding, child: child),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -627,7 +549,7 @@ class _LeagueSummaryTileState extends State<_LeagueSummaryTile> {
       stream.addListener(listener);
 
       final imageInfo = await completer.future;
-      final tint = await _dominantTint(imageInfo.image);
+      final tint = await dominantTintFromImage(imageInfo.image);
       if (tint == null) return;
 
       _tintCache[leagueUrl] = tint;
@@ -643,7 +565,7 @@ class _LeagueSummaryTileState extends State<_LeagueSummaryTile> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return _GlassPanel(
+    return GlassPanel(
       width: double.infinity,
       height: 75,
       borderRadius: 16,
@@ -736,59 +658,6 @@ class _LeagueSummaryTileState extends State<_LeagueSummaryTile> {
       ),
     );
   }
-}
-
-Future<Color?> _dominantTint(ui.Image image) async {
-  final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
-  if (data == null) return null;
-
-  final buckets = <int, _ColorBucket>{};
-  const sampleStride = 4;
-  for (var y = 0; y < image.height; y += sampleStride) {
-    for (var x = 0; x < image.width; x += sampleStride) {
-      final index = (y * image.width + x) * 4;
-      final r = data.getUint8(index);
-      final g = data.getUint8(index + 1);
-      final b = data.getUint8(index + 2);
-      final a = data.getUint8(index + 3);
-      if (a < 96) continue;
-
-      final color = Color.fromARGB(a, r, g, b);
-      final hsl = HSLColor.fromColor(color);
-      if (hsl.lightness < 0.12 || hsl.lightness > 0.92) continue;
-      if (hsl.saturation < 0.24) continue;
-
-      final key = (r ~/ 24) << 16 | (g ~/ 24) << 8 | (b ~/ 24);
-      final bucket = buckets.putIfAbsent(key, _ColorBucket.new);
-      bucket
-        ..count += 1
-        ..red += r
-        ..green += g
-        ..blue += b
-        ..score += hsl.saturation * (1 - (hsl.lightness - 0.55).abs());
-    }
-  }
-
-  if (buckets.isEmpty) return null;
-  final best = buckets.values.reduce(
-    (a, b) => a.weightedScore >= b.weightedScore ? a : b,
-  );
-  return Color.fromARGB(
-    255,
-    best.red ~/ best.count,
-    best.green ~/ best.count,
-    best.blue ~/ best.count,
-  );
-}
-
-class _ColorBucket {
-  int count = 0;
-  int red = 0;
-  int green = 0;
-  int blue = 0;
-  double score = 0;
-
-  double get weightedScore => count * score;
 }
 
 class _WarActionInfo {
@@ -933,7 +802,7 @@ class _ClanRoleChipState extends State<_ClanRoleChip> {
     ].whereType<String>().firstWhere((tag) => tag.isNotEmpty, orElse: () => '');
     final canOpenClan = clanTag.isNotEmpty;
 
-    return _GlassPanel(
+    return GlassPanel(
       width: double.infinity,
       height: 50,
       borderRadius: 16,
@@ -1029,7 +898,7 @@ class _PlainInfoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _GlassPanel(
+    return GlassPanel(
       height: 34,
       borderRadius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),

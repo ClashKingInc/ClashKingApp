@@ -138,74 +138,79 @@ class ClanMembersState extends State<ClanMembers> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            height: 44,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                NativeLiquidGlassBar(
-                  height: 44,
-                  cornerRadius: 22,
-                  borderOpacity: Theme.of(context).brightness == Brightness.dark
-                      ? 0.22
-                      : 0.30,
-                  shadowOpacity: Theme.of(context).brightness == Brightness.dark
-                      ? 0.22
-                      : 0.08,
-                ),
-                TextField(
-                  controller: _searchController,
-                  textInputAction: TextInputAction.search,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurface,
-                  ),
-                  decoration: InputDecoration(
-                    hintText:
-                        loc?.clanMembersSearchPlaceholder ?? 'Search members',
-                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                    isDense: true,
-                    prefixIcon: Icon(
-                      Icons.search_rounded,
-                      size: 20,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                    prefixIconConstraints: const BoxConstraints(
-                      minWidth: 40,
-                      minHeight: 44,
-                    ),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.close_rounded,
-                              size: 18,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                            onPressed: () => _searchController.clear(),
-                          )
-                        : null,
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Center(
-          child: Column(
+          child: Row(
             children: [
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      NativeLiquidGlassBar(
+                        height: 44,
+                        cornerRadius: 22,
+                        borderOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.30,
+                        shadowOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.08,
+                      ),
+                      TextField(
+                        controller: _searchController,
+                        textInputAction: TextInputAction.search,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface,
+                        ),
+                        decoration: InputDecoration(
+                          hintText:
+                              loc?.clanMembersSearchPlaceholder ??
+                              'Search members',
+                          hintStyle: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                          isDense: true,
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            size: 20,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          prefixIconConstraints: const BoxConstraints(
+                            minWidth: 40,
+                            minHeight: 44,
+                          ),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.close_rounded,
+                                    size: 18,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                  onPressed: () => _searchController.clear(),
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
               FilterDropdown(
                 sortBy: currentFilter,
                 updateSortBy: updateFilter,
+                maxWidth: 130,
                 sortByOptions: filterOptions,
               ),
-              const SizedBox(height: 6),
             ],
           ),
         ),
+        const SizedBox(height: 10),
         if (members.isEmpty)
           Card(
             child: Padding(

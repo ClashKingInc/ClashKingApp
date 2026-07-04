@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
@@ -93,7 +95,13 @@ class ClanInfoHeaderCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: _buildStatsPanel(context),
+              child: Column(
+                children: [
+                  _ClanLeagueSummaryTile(clanInfo: clanInfo),
+                  const SizedBox(height: 8),
+                  _buildStatsPanel(context),
+                ],
+              ),
             ),
           ],
         ),
@@ -292,7 +300,6 @@ class ClanInfoHeaderCard extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
-    final warLeagueName = clanInfo.warLeague?.name ?? 'Unranked';
     final typeLabel = switch (clanInfo.type) {
       'inviteOnly' => loc.clanInviteOnly,
       'open' => loc.clanOpened,
@@ -311,102 +318,13 @@ class ClanInfoHeaderCard extends StatelessWidget {
     return Stack(
       children: [
         const Positioned.fill(
-          child: HeaderPanelBackground(height: 300, cornerRadius: 28),
+          child: HeaderPanelBackground(height: 240, cornerRadius: 28),
         ),
         Padding(
           padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainerHighest.withValues(
-                        alpha: 0.5,
-                      ),
-                      shape: BoxShape.circle,
-                    ),
-                    child: SizedBox.square(
-                      dimension: 36,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: MobileWebImage(
-                          imageUrl: ImageAssets.getWarLeagueImage(
-                            warLeagueName,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          warLeagueName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.w800,
-                              ),
-                        ),
-                        const SizedBox(height: 1),
-                        Text(
-                          formatter.format(clanInfo.clanPoints),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.w900,
-                                height: 1,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.groups_rounded,
-                            size: 14,
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 3),
-                          Text(
-                            '${clanInfo.members}/50',
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                          ),
-                        ],
-                      ),
-                      if (clanInfo.isWarLogPublic) ...[
-                        const SizedBox(height: 3),
-                        Text(
-                          '${clanInfo.warWins}W · ${clanInfo.warTies}T · ${clanInfo.warLosses}L',
-                          style: Theme.of(context).textTheme.labelSmall
-                              ?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.w800,
-                              ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
               // Same icon + label + colored value language as the metric
               // bars, laid out two per row at equal width so a variable
               // chip count (some are conditional) doesn't wrap raggedly.
@@ -537,5 +455,171 @@ class ClanInfoHeaderCard extends StatelessWidget {
     );
     final match = discordPattern.firstMatch(cleaned);
     return match?.group(1);
+  }
+}
+
+/// Featured league tile — same recipe as the player header's
+/// `_LeagueSummaryTile`: a floating glass card tinted with the dominant
+/// color sampled from the war league badge, war points as the headline
+/// number, members/W-T-L as the secondary metric.
+class _ClanLeagueSummaryTile extends StatefulWidget {
+  final Clan clanInfo;
+
+  const _ClanLeagueSummaryTile({required this.clanInfo});
+
+  @override
+  State<_ClanLeagueSummaryTile> createState() => _ClanLeagueSummaryTileState();
+}
+
+class _ClanLeagueSummaryTileState extends State<_ClanLeagueSummaryTile> {
+  static final Map<String, Color> _tintCache = {};
+  Color? _tint;
+
+  String get _leagueUrl => ImageAssets.getWarLeagueImage(
+    widget.clanInfo.warLeague?.name ?? 'Unranked',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTint();
+  }
+
+  @override
+  void didUpdateWidget(covariant _ClanLeagueSummaryTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.clanInfo.warLeague?.name != widget.clanInfo.warLeague?.name) {
+      _loadTint();
+    }
+  }
+
+  Future<void> _loadTint() async {
+    final leagueUrl = _leagueUrl;
+
+    final cachedTint = _tintCache[leagueUrl];
+    if (cachedTint != null) {
+      if (mounted) setState(() => _tint = cachedTint);
+      return;
+    }
+
+    if (mounted) setState(() => _tint = null);
+
+    try {
+      final provider = CachedNetworkImageProvider(leagueUrl);
+      final stream = provider.resolve(ImageConfiguration.empty);
+      late final ImageStreamListener listener;
+      final completer = Completer<ImageInfo>();
+
+      listener = ImageStreamListener(
+        (imageInfo, synchronousCall) {
+          if (!completer.isCompleted) completer.complete(imageInfo);
+          stream.removeListener(listener);
+        },
+        onError: (error, stackTrace) {
+          if (!completer.isCompleted) {
+            completer.completeError(error, stackTrace);
+          }
+          stream.removeListener(listener);
+        },
+      );
+      stream.addListener(listener);
+
+      final imageInfo = await completer.future;
+      final tint = await dominantTintFromImage(imageInfo.image);
+      if (tint == null) return;
+
+      _tintCache[leagueUrl] = tint;
+      if (mounted && _leagueUrl == leagueUrl) {
+        setState(() => _tint = tint);
+      }
+    } catch (_) {
+      // Keep the glass neutral if the remote badge cannot be sampled.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).toString();
+    final formatter = NumberFormat('#,###', locale);
+    final clanInfo = widget.clanInfo;
+    final warLeagueName = clanInfo.warLeague?.name ?? 'Unranked';
+
+    return GlassPanel(
+      width: double.infinity,
+      height: 75,
+      borderRadius: 16,
+      padding: const EdgeInsets.all(12),
+      tint: _tint,
+      child: Row(
+        children: [
+          MobileWebImage(imageUrl: _leagueUrl, width: 46, height: 46),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  warLeagueName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  formatter.format(clanInfo.clanPoints),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.groups_rounded,
+                    size: 14,
+                    color: colorScheme.onSurface.withValues(alpha: 0.72),
+                  ),
+                  const SizedBox(width: 3),
+                  Text(
+                    '${clanInfo.members}/50',
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.72),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              if (clanInfo.isWarLogPublic) ...[
+                const SizedBox(height: 4),
+                Text(
+                  '${clanInfo.warWins}W · ${clanInfo.warTies}T · ${clanInfo.warLosses}L',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.58),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
