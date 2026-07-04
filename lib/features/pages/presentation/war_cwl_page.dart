@@ -5,6 +5,7 @@ import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.da
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -40,12 +41,21 @@ class _WarCwlPageState extends State<WarCwlPage> {
     final playerService = context.watch<PlayerService>();
     final warCwlService = context.watch<WarCwlService>();
     final bookmarkService = context.watch<BookmarkService>();
+    final playerCardPrefs = context.watch<PlayerCardPreferencesService>();
     // playerService.profiles also holds bookmarked players hydrated for
     // the Players tab — restrict to actually-linked tags so a bookmarked
     // player's clan isn't mistaken for one of "your" clans.
     final ownedTags = cocService.getAccountTags().toSet();
+    // Accounts opted out of the War tab (per-player "Show in War tab"
+    // toggle on the Players page) don't contribute to a clan card here -
+    // if that leaves a clan with no visible accounts, it simply won't
+    // appear below.
     final players = playerService.profiles
-        .where((player) => ownedTags.contains(player.tag))
+        .where(
+          (player) =>
+              ownedTags.contains(player.tag) &&
+              playerCardPrefs.isShownInWarTab(player.tag),
+        )
         .toList(growable: false);
     final linkedClans = {
       for (final profile in players)

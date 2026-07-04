@@ -7,37 +7,45 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Per-player card options stored locally on the device.
 ///
 /// These are the toggles revealed under each player card (notifications,
-/// show the to-do card on the home dashboard).
+/// show the to-do card on the home dashboard, show this account's clan
+/// in the War tab).
 class PlayerCardOptions {
   const PlayerCardOptions({
     this.notificationsEnabled = false,
     this.showTodoOnHome = false,
+    this.showInWarTab = true,
   });
 
   final bool notificationsEnabled;
   final bool showTodoOnHome;
+  final bool showInWarTab;
 
-  bool get isDefault => !notificationsEnabled && !showTodoOnHome;
+  bool get isDefault =>
+      !notificationsEnabled && !showTodoOnHome && showInWarTab;
 
   PlayerCardOptions copyWith({
     bool? notificationsEnabled,
     bool? showTodoOnHome,
+    bool? showInWarTab,
   }) {
     return PlayerCardOptions(
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       showTodoOnHome: showTodoOnHome ?? this.showTodoOnHome,
+      showInWarTab: showInWarTab ?? this.showInWarTab,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'notifications': notificationsEnabled,
-        'todoHome': showTodoOnHome,
-      };
+    'notifications': notificationsEnabled,
+    'todoHome': showTodoOnHome,
+    'warTab': showInWarTab,
+  };
 
   factory PlayerCardOptions.fromJson(Map<String, dynamic> json) {
     return PlayerCardOptions(
       notificationsEnabled: json['notifications'] == true,
       showTodoOnHome: json['todoHome'] == true,
+      showInWarTab: json['warTab'] != false,
     );
   }
 }
@@ -64,6 +72,8 @@ class PlayerCardPreferencesService extends ChangeNotifier {
       _optionsByTag[_normalizeTag(tag)] ?? const PlayerCardOptions();
 
   bool isTodoOnHomeEnabled(String tag) => optionsFor(tag).showTodoOnHome;
+
+  bool isShownInWarTab(String tag) => optionsFor(tag).showInWarTab;
 
   /// Normalized tags whose to-do card should be shown on the home dashboard.
   Set<String> get todoOnHomeTags => _optionsByTag.entries
@@ -102,6 +112,10 @@ class PlayerCardPreferencesService extends ChangeNotifier {
 
   Future<void> setShowTodoOnHome(String tag, bool value) {
     return _update(tag, (options) => options.copyWith(showTodoOnHome: value));
+  }
+
+  Future<void> setShowInWarTab(String tag, bool value) {
+    return _update(tag, (options) => options.copyWith(showInWarTab: value));
   }
 
   Future<void> _update(

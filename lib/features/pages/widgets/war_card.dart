@@ -66,11 +66,9 @@ class WarCard extends StatelessWidget {
   Widget _clanBadge(String imageUrl, String name, BuildContext context) {
     return Column(
       children: <Widget>[
-        GlassPanel(
-          width: 78,
-          height: 78,
-          borderRadius: 20,
-          padding: const EdgeInsets.all(4),
+        SizedBox(
+          width: 70,
+          height: 70,
           child: CachedNetworkImage(
             errorWidget: (context, url, error) => const Icon(Icons.error),
             imageUrl: imageUrl,

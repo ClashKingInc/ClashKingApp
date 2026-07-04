@@ -540,6 +540,15 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                           onChanged: (value) =>
                               prefs.setShowTodoOnHome(tag, value),
                         ),
+                        _PlayerOptionSwitch(
+                          icon: Icons.shield_moon_outlined,
+                          title: 'Show in War tab',
+                          subtitle:
+                              "Include this account's clan in the War tab.",
+                          value: options.showInWarTab,
+                          onChanged: (value) =>
+                              prefs.setShowInWarTab(tag, value),
+                        ),
                       ],
                     ),
                   )
