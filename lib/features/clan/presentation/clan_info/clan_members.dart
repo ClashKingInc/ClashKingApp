@@ -60,7 +60,7 @@ class ClanMembersState extends State<ClanMembers> {
       clanName: widget.clanInfo.name,
       trophies: member.trophies,
       league: member.league.name,
-      leagueUrl: member.league.mediumIconUrl ?? member.league.tinyIconUrl ?? '',
+      leagueUrl: ImageAssets.getLeagueImage(_leagueName(member)),
     );
   }
 
@@ -423,7 +423,7 @@ class ClanMembersState extends State<ClanMembers> {
       children: [
         CachedNetworkImage(
           errorWidget: (context, url, error) => Icon(Icons.error),
-          imageUrl: member.league.tinyIconUrl ?? ImageAssets.trophies,
+          imageUrl: ImageAssets.getLeagueImage(_leagueName(member)),
           width: 16,
           height: 16,
         ),
@@ -524,6 +524,14 @@ class ClanMembersState extends State<ClanMembers> {
       ],
     );
   }
+
+  // The clan member list's own league.iconUrls come straight from the CoC
+  // API and don't distinguish Legend League tiers the way the game
+  // currently does. ImageAssets.getLeagueImage resolves badges by league
+  // name against GameDataService instead, same as the player page — so
+  // member badges here need to go through it too rather than the raw URL.
+  String _leagueName(ClanMember member) =>
+      member.league.name.isEmpty ? 'Unranked' : member.league.name;
 
   String _localizedRole(BuildContext context, String role) {
     final loc = AppLocalizations.of(context)!;
