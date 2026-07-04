@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 
 class CwlScreen extends StatefulWidget {
   final WarCwl warCwl;
@@ -37,6 +36,13 @@ class CwlScreen extends StatefulWidget {
 }
 
 class CwlScreenState extends State<CwlScreen> {
+  int selectedTab = 0;
+
+  void _selectTab(int index) {
+    if (index == selectedTab) return;
+    setState(() => selectedTab = index);
+  }
+
   @override
   Widget build(BuildContext context) {
     CwlClan clan = widget.warCwl.leagueInfo!.getClanDetails(widget.clanTag)!;
@@ -248,29 +254,25 @@ class CwlScreenState extends State<CwlScreen> {
                 ),
               ],
             ),
-            ScrollableTab(
-              labelColor: Theme.of(context).colorScheme.onSurface,
-              labelPadding: EdgeInsets.zero,
-              labelStyle: Theme.of(context).textTheme.bodyLarge,
-              tabBarDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+            _CwlProfileTabs(
+              selectedIndex: selectedTab,
+              onTabSelected: _selectTab,
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 180),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeOutCubic,
+              child: KeyedSubtree(
+                key: ValueKey(selectedTab),
+                child: switch (selectedTab) {
+                  0 => CwlRoundsTab(warCwl: widget.warCwl),
+                  1 => CwlTeamsTab(warCwl: widget.warCwl),
+                  _ => CwlMembersTab(
+                    warCwl: widget.warCwl,
+                    clanTag: widget.clanTag,
+                  ),
+                },
               ),
-              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
-              onTap: (value) {},
-              tabs: [
-                Tab(text: AppLocalizations.of(context)?.cwlRounds ?? 'Rounds'),
-                Tab(
-                  text: AppLocalizations.of(context)?.navigationTeam ?? 'Teams',
-                ),
-                Tab(
-                  text: AppLocalizations.of(context)?.clanMembers ?? "Members",
-                ),
-              ],
-              children: [
-                CwlRoundsTab(warCwl: widget.warCwl),
-                CwlTeamsTab(warCwl: widget.warCwl),
-                CwlMembersTab(warCwl: widget.warCwl, clanTag: widget.clanTag),
-              ],
             ),
           ],
         ),
@@ -290,8 +292,8 @@ class _Identity extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          width: 64,
-          height: 64,
+          width: 56,
+          height: 56,
           child: MobileWebImage(imageUrl: clanInfo.badgeUrls.medium),
         ),
         const SizedBox(width: 12),
@@ -519,6 +521,150 @@ class _CwlLeagueSummaryTileState extends State<_CwlLeagueSummaryTile> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Same tab strip recipe as the clan detail page's _ClanProfileTabs:
+/// glass background, icon+label tabs, external TabController driven by
+/// the parent's selectedTab so content can crossfade via AnimatedSwitcher
+/// instead of TabBarView.
+class _CwlProfileTabs extends StatefulWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onTabSelected;
+
+  const _CwlProfileTabs({
+    required this.selectedIndex,
+    required this.onTabSelected,
+  });
+
+  @override
+  State<_CwlProfileTabs> createState() => _CwlProfileTabsState();
+}
+
+class _CwlProfileTabsState extends State<_CwlProfileTabs>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: widget.selectedIndex,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _CwlProfileTabs oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedIndex != widget.selectedIndex &&
+        _tabController.index != widget.selectedIndex) {
+      _tabController.animateTo(
+        widget.selectedIndex,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final loc = AppLocalizations.of(context)!;
+
+    return SizedBox(
+      height: 48,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          const NativeLiquidGlassBar(
+            height: 48,
+            cornerRadius: 0,
+            opacity: 0.85,
+          ),
+          TabBar(
+            controller: _tabController,
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+            indicatorColor: colorScheme.primary,
+            indicatorWeight: 3,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
+            dividerColor: Colors.transparent,
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            onTap: widget.onTabSelected,
+            tabs: [
+              _CwlTab(
+                label: loc.cwlRounds,
+                icon: Icons.calendar_month_rounded,
+                selected: widget.selectedIndex == 0,
+              ),
+              _CwlTab(
+                label: loc.navigationTeam,
+                icon: Icons.leaderboard_rounded,
+                selected: widget.selectedIndex == 1,
+              ),
+              _CwlTab(
+                label: loc.clanMembers,
+                icon: Icons.groups_rounded,
+                selected: widget.selectedIndex == 2,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CwlTab extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool selected;
+
+  const _CwlTab({
+    required this.label,
+    required this.icon,
+    required this.selected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final foreground = selected
+        ? colorScheme.onSurface
+        : colorScheme.onSurface.withValues(alpha: 0.58);
+
+    return Tab(
+      height: 48,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 18, color: foreground),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            maxLines: 1,
+            softWrap: false,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: foreground,
+              fontSize: 13,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+            ),
           ),
         ],
       ),
