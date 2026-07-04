@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -227,6 +230,21 @@ class _WarListItem {
     return null;
   }
 
+  /// Round number for the currently displayed war, when it's a CWL round
+  /// war (i.e. displayWar came from the isInCwl branch above, not a
+  /// regular war) — used to show a "CWL — Round N" banner on the card.
+  int? get cwlRoundNumber {
+    final warCwl = summary;
+    final war = displayWar;
+    if (warCwl == null || war == null || !warCwl.isInCwl || warCwl.isInWar) {
+      return null;
+    }
+    for (final round in warCwl.leagueInfo?.rounds ?? const []) {
+      if (round.containsWar(war.tag)) return round.roundNumber;
+    }
+    return null;
+  }
+
   int get sortWeight {
     final war = displayWar;
     final linked = accounts.isNotEmpty && !bookmarked;
@@ -313,6 +331,9 @@ class _WarListCard extends StatelessWidget {
                   statuses: lineupStatuses,
                   attacksPerMember: war.attacksPerMember ?? 1,
                 ),
+          topBanner: item.cwlRoundNumber == null
+              ? null
+              : _CwlRoundBanner(roundNumber: item.cwlRoundNumber!),
         ),
       );
     }
@@ -456,6 +477,45 @@ class _BookmarkedPill extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Small tinted-glass banner attached above a war card, same recipe as
+/// the war detail screen's CWL round banner — flags a listed war as a
+/// CWL round instead of a regular war before the user even taps in.
+class _CwlRoundBanner extends StatelessWidget {
+  const _CwlRoundBanner({required this.roundNumber});
+
+  final int roundNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return GlassPanel(
+      width: double.infinity,
+      height: 32,
+      borderRadius: 14,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      tint: const Color(0xFF8D63D9),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MobileWebImage(
+            imageUrl: ImageAssets.cwlSwordsNoBorder,
+            width: 14,
+            height: 14,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            'CWL — ${AppLocalizations.of(context)?.cwlRoundNumber(roundNumber) ?? 'Round $roundNumber'}',
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurface,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -11,16 +11,18 @@ class WarCard extends StatelessWidget {
     required this.clanTag,
     this.footer,
     this.centerHeader,
+    this.topBanner,
   });
 
   final WarInfo currentWarInfo;
   final String clanTag;
   final Widget? footer;
   final Widget? centerHeader;
+  final Widget? topBanner;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    final card = Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -42,6 +44,9 @@ class WarCard extends StatelessWidget {
         ),
       ),
     );
+
+    if (topBanner == null) return card;
+    return Column(children: [topBanner!, const SizedBox(height: 6), card]);
   }
 
   Widget _warEnded(BuildContext context, String clanTag) {
