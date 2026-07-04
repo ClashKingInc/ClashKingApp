@@ -104,7 +104,7 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Align(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.centerRight,
             child: FilterDropdown(
               sortBy: sortBy,
               updateSortBy: (newValue) {

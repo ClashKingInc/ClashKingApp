@@ -51,33 +51,50 @@ class CwlRoundsTabState extends State<CwlRoundsTab> {
                   r.roundNumber != currentRound.roundNumber,
             )
             .map(
-              (round) => Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.cwlRoundNumber(round.roundNumber),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                  ...round.warTags.map((tag) {
-                    final war = widget.warCwl.getWarInfoFromTag(tag);
-                    return war != null
-                        ? RoundClanCard(
-                            warInfo: war,
-                            roundNumber: round.roundNumber,
-                          )
-                        : const SizedBox.shrink();
-                  }),
-                ],
+              (round) => _PastRoundSection(
+                roundNumber: round.roundNumber,
+                children: round.warTags.map((tag) {
+                  final war = widget.warCwl.getWarInfoFromTag(tag);
+                  return war != null
+                      ? RoundClanCard(
+                          warInfo: war,
+                          roundNumber: round.roundNumber,
+                        )
+                      : const SizedBox.shrink();
+                }).toList(),
               ),
             )
             .toList()
             .reversed,
       ],
+    );
+  }
+}
+
+/// A past round collapsed by default — only the current round (rendered
+/// above, outside this widget) needs to stay open; folding the rest
+/// keeps a full CWL season's rounds from turning into one long scroll.
+class _PastRoundSection extends StatelessWidget {
+  final int roundNumber;
+  final List<Widget> children;
+
+  const _PastRoundSection({required this.roundNumber, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+        childrenPadding: EdgeInsets.zero,
+        title: Text(
+          loc.cwlRoundNumber(roundNumber),
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        children: children,
+      ),
     );
   }
 }

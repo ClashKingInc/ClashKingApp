@@ -29,8 +29,9 @@ class CwlTeamCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sortedTownHalls = clan.townHallLevels.entries.toList();
-    sortedTownHalls
-        .sort((a, b) => int.parse(b.key).compareTo(int.parse(a.key)));
+    sortedTownHalls.sort(
+      (a, b) => int.parse(b.key).compareTo(int.parse(a.key)),
+    );
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -47,22 +48,33 @@ class CwlTeamCard extends StatelessWidget {
                   builder: (_) =>
                       const Center(child: CircularProgressIndicator()),
                 );
-                final Clan clanInfo =
-                    await ClanService().loadClanData(clan.tag);
+                final Clan clanInfo = await ClanService().loadClanData(
+                  clan.tag,
+                );
                 if (context.mounted) {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ClanInfoScreen(
-                        clanInfo: clanInfo,
-                      ),
+                      builder: (context) => ClanInfoScreen(clanInfo: clanInfo),
                     ),
                   );
                 }
               },
               child: Row(
                 children: [
+                  SizedBox(
+                    width: 24,
+                    child: Text(
+                      '#${clan.rank}',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
                   CachedNetworkImage(
                     imageUrl: clan.badgeUrls.medium,
                     width: 40,
@@ -74,12 +86,16 @@ class CwlTeamCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(clan.name,
-                            style: Theme.of(context).textTheme.titleMedium,
-                            overflow: TextOverflow.ellipsis),
-                        Text(clan.tag,
-                            style: Theme.of(context).textTheme.bodySmall,
-                            overflow: TextOverflow.ellipsis),
+                        Text(
+                          clan.name,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          clan.tag,
+                          style: Theme.of(context).textTheme.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     ),
                   ),
@@ -103,7 +119,8 @@ class CwlTeamCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                              "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(clan.destructionPercentageInflicted)}  "),
+                            "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(clan.destructionPercentageInflicted)}  ",
+                          ),
                           SizedBox(
                             child: MobileWebImage(
                               imageUrl: ImageAssets.hitrate,
@@ -149,19 +166,22 @@ class CwlTeamCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(showFullStats ? Icons.expand_less : Icons.expand_more,
-                        size: 16,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.7)),
+                    Icon(
+                      showFullStats ? Icons.expand_less : Icons.expand_more,
+                      size: 16,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
                     const SizedBox(width: 4),
-                    Text(AppLocalizations.of(context)!.generalFullStats,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.7))),
+                    Text(
+                      AppLocalizations.of(context)!.generalFullStats,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -173,8 +193,10 @@ class CwlTeamCard extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        Text(AppLocalizations.of(context)!.warAttacksTitle,
-                            style: Theme.of(context).textTheme.titleSmall),
+                        Text(
+                          AppLocalizations.of(context)!.warAttacksTitle,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                         const SizedBox(height: 12),
                         Wrap(
                           spacing: 16,
@@ -182,67 +204,92 @@ class CwlTeamCard extends StatelessWidget {
                           runSpacing: 16,
                           children: [
                             StatTile(
-                                label: AppLocalizations.of(context)!.warAttacksTitle,
-                                value: '${clan.attackCount}',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.sword,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warAttacksTitle,
+                              value: '${clan.attackCount}',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.sword,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStatusMissed,
-                                value: '${clan.missedAttacks}',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.brokenSword,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warStatusMissed,
+                              value: '${clan.missedAttacks}',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.brokenSword,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.generalTotal,
-                                value: '${clan.stars}',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.attackStar,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(context)!.generalTotal,
+                              value: '${clan.stars}',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.attackStar,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warAbbreviationAvg,
-                                value: clan.averageStars.toStringAsFixed(1),
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.attackStar,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warAbbreviationAvg,
+                              value: clan.averageStars.toStringAsFixed(1),
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.attackStar,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsThree,
-                                value: '${clan.threeStars}',
-                                icon: buildStarsIcon(3)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warStarsThree,
+                              value: '${clan.threeStars}',
+                              icon: buildStarsIcon(3),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsTwo,
-                                value: '${clan.twoStars}',
-                                icon: buildStarsIcon(2)),
+                              label: AppLocalizations.of(context)!.warStarsTwo,
+                              value: '${clan.twoStars}',
+                              icon: buildStarsIcon(2),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsOne,
-                                value: '${clan.oneStar}',
-                                icon: buildStarsIcon(1)),
+                              label: AppLocalizations.of(context)!.warStarsOne,
+                              value: '${clan.oneStar}',
+                              icon: buildStarsIcon(1),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsZero,
-                                value: '${clan.zeroStar}',
-                                icon: buildStarsIcon(0)),
+                              label: AppLocalizations.of(context)!.warStarsZero,
+                              value: '${clan.zeroStar}',
+                              icon: buildStarsIcon(0),
+                            ),
                             StatTile(
-                                label:
-                                    AppLocalizations.of(context)!.warDestructionTitle,
-                                value:
-                                    '${clan.destructionPercentageInflicted.toStringAsFixed(1)}%',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.hitrate,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warDestructionTitle,
+                              value:
+                                  '${clan.destructionPercentageInflicted.toStringAsFixed(1)}%',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.hitrate,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label:
-                                    AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
-                                value:
-                                    clan.averageDestruction.toStringAsFixed(1),
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.hitrate,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warAbbreviationAvgPercentage,
+                              value: clan.averageDestruction.toStringAsFixed(1),
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.hitrate,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -250,8 +297,10 @@ class CwlTeamCard extends StatelessWidget {
                     Column(
                       children: [
                         const SizedBox(height: 18),
-                        Text(AppLocalizations.of(context)!.warDefensesTitle,
-                            style: Theme.of(context).textTheme.titleSmall),
+                        Text(
+                          AppLocalizations.of(context)!.warDefensesTitle,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                         const SizedBox(height: 12),
                         Wrap(
                           spacing: 16,
@@ -259,66 +308,94 @@ class CwlTeamCard extends StatelessWidget {
                           runSpacing: 16,
                           children: [
                             StatTile(
-                                label: AppLocalizations.of(context)!.warDefensesTitle,
-                                value: '${clan.defenseCount}',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.shieldWithArrow,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warDefensesTitle,
+                              value: '${clan.defenseCount}',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.shieldWithArrow,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStatusMissed,
-                                value: '${clan.missedDefenses}',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.shield,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warStatusMissed,
+                              value: '${clan.missedDefenses}',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.shield,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.generalTotal,
-                                value: '${clan.defStars}',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.attackStar,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(context)!.generalTotal,
+                              value: '${clan.defStars}',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.attackStar,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warAbbreviationAvg,
-                                value: clan.defAverageStars.toStringAsFixed(1),
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.attackStar,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warAbbreviationAvg,
+                              value: clan.defAverageStars.toStringAsFixed(1),
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.attackStar,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsThree,
-                                value: '${clan.threeStarsDef}',
-                                icon: buildStarsIcon(3)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warStarsThree,
+                              value: '${clan.threeStarsDef}',
+                              icon: buildStarsIcon(3),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsTwo,
-                                value: '${clan.twoStarsDef}',
-                                icon: buildStarsIcon(2)),
+                              label: AppLocalizations.of(context)!.warStarsTwo,
+                              value: '${clan.twoStarsDef}',
+                              icon: buildStarsIcon(2),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsOne,
-                                value: '${clan.oneStarDef}',
-                                icon: buildStarsIcon(1)),
+                              label: AppLocalizations.of(context)!.warStarsOne,
+                              value: '${clan.oneStarDef}',
+                              icon: buildStarsIcon(1),
+                            ),
                             StatTile(
-                                label: AppLocalizations.of(context)!.warStarsZero,
-                                value: '${clan.zeroStarDef}',
-                                icon: buildStarsIcon(0)),
+                              label: AppLocalizations.of(context)!.warStarsZero,
+                              value: '${clan.zeroStarDef}',
+                              icon: buildStarsIcon(0),
+                            ),
                             StatTile(
-                                label:
-                                    AppLocalizations.of(context)!.warDestructionTitle,
-                                value:
-                                    '${clan.destructionPercentage.toStringAsFixed(1)}%',
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.hitrate,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warDestructionTitle,
+                              value:
+                                  '${clan.destructionPercentage.toStringAsFixed(1)}%',
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.hitrate,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                             StatTile(
-                                label:
-                                    AppLocalizations.of(context)!.warAbbreviationAvgPercentage,
-                                value: clan.defAverageDestruction.toStringAsFixed(1),
-                                icon: MobileWebImage(
-                                    imageUrl: ImageAssets.hitrate,
-                                    width: 16,
-                                    height: 16)),
+                              label: AppLocalizations.of(
+                                context,
+                              )!.warAbbreviationAvgPercentage,
+                              value: clan.defAverageDestruction.toStringAsFixed(
+                                1,
+                              ),
+                              icon: MobileWebImage(
+                                imageUrl: ImageAssets.hitrate,
+                                width: 16,
+                                height: 16,
+                              ),
+                            ),
                           ],
                         ),
                       ],

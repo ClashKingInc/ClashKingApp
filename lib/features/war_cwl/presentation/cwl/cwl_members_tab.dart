@@ -157,7 +157,6 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
               FilterDropdown(
                 sortBy: sortBy,
                 updateSortBy: updateSortBy,
-                maxWidth: 130,
                 sortByOptions: {
                   generateDoubleIcons(
                     16,
