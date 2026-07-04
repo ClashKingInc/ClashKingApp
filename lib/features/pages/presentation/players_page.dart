@@ -167,14 +167,8 @@ class _PlayersPageState extends State<PlayersPage> {
   Future<void> _hydrateBookmarkedPlayers(
     PlayerService playerService,
     List<String> tags,
-  ) async {
-    for (final tag in tags) {
-      try {
-        await playerService.getPlayerAndClanData(tag);
-      } catch (_) {
-        // Keep the local bookmark snapshot visible if the full profile cannot load.
-      }
-    }
+  ) {
+    return playerService.hydrateBookmarkedPlayers(tags);
   }
 
   Future<void> _openBookmarkedPlayer(

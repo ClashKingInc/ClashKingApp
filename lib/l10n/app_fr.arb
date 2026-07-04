@@ -94,6 +94,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "Filtres",
+  "generalExpand": "Déplier",
+  "generalCollapse": "Replier",
   "generalNotSet": "Non défini",
   "@generalNotSet": {
     "description": "Filter value is not set"

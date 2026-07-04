@@ -449,6 +449,22 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
+  /// Hydrates full profiles for bookmarked player tags in parallel (each
+  /// failure is swallowed independently so one bad tag doesn't block the
+  /// rest - the local bookmark snapshot stays visible for it instead).
+  Future<void> hydrateBookmarkedPlayers(List<String> tags) async {
+    await Future.wait(
+      tags.map((tag) async {
+        try {
+          await getPlayerAndClanData(tag);
+        } catch (_) {
+          // Keep the local bookmark snapshot visible if the full profile
+          // cannot load.
+        }
+      }),
+    );
+  }
+
   void linkClansToPlayer(List<Player> players, List<Clan> clans) {
     final clansByTag = {for (final clan in clans) clan.tag: clan};
     for (var profile in players) {

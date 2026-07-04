@@ -182,6 +182,8 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
                               _currentFilter.limit,
                             ) ??
                             'Showing last ${_currentFilter.limit} wars (default)',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(
                     context,
                   ).textTheme.bodySmall?.copyWith(color: colorScheme.onSurface),
@@ -189,6 +191,7 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
               ),
               if (_hasAppliedFilters)
                 IconButton(
+                  tooltip: loc.generalClearFilters,
                   icon: Icon(
                     Icons.close,
                     size: 16,
@@ -197,10 +200,12 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
                   onPressed: _clearFilters,
                 ),
               IconButton(
+                tooltip: loc.generalFilters,
                 icon: Icon(Icons.tune, size: 16, color: colorScheme.onSurface),
                 onPressed: _showFilterDialog,
               ),
               IconButton(
+                tooltip: loc.generalExport,
                 icon: Icon(
                   Icons.download_outlined,
                   size: 16,
@@ -208,21 +213,20 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
                 ),
                 onPressed: _showExportDialog,
               ),
-              InkWell(
-                borderRadius: BorderRadius.circular(AppRadius.chip),
-                onTap: () =>
+              IconButton(
+                tooltip: _warTypesExpanded
+                    ? loc.generalCollapse
+                    : loc.generalExpand,
+                onPressed: () =>
                     setState(() => _warTypesExpanded = !_warTypesExpanded),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: AnimatedRotation(
-                    turns: _warTypesExpanded ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 180),
-                    curve: Curves.easeOutCubic,
-                    child: Icon(
-                      Icons.expand_more_rounded,
-                      size: 18,
-                      color: colorScheme.onSurface,
-                    ),
+                icon: AnimatedRotation(
+                  turns: _warTypesExpanded ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 180),
+                  curve: Curves.easeOutCubic,
+                  child: Icon(
+                    Icons.expand_more_rounded,
+                    size: 18,
+                    color: colorScheme.onSurface,
                   ),
                 ),
               ),

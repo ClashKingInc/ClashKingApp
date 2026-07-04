@@ -60,7 +60,14 @@ class StartupWidgetState extends State<StartupWidget> {
         if (!bookmarkService.loaded) {
           await bookmarkService.load();
         }
-        await cocService.loadApiData(playerService, clanService, warService);
+        final bookmarkedPlayerTags = bookmarkService.players
+            .map((player) => player.tag)
+            .toList(growable: false);
+        await Future.wait([
+          cocService.loadApiData(playerService, clanService, warService),
+          if (bookmarkedPlayerTags.isNotEmpty)
+            playerService.hydrateBookmarkedPlayers(bookmarkedPlayerTags),
+        ]);
         _seedWarWidgetClans(cocService, playerService, bookmarkService);
       } catch (e) {
         if (mounted) {
