@@ -193,8 +193,8 @@ class CwlScreenState extends State<CwlScreen> {
                                       label:
                                           AppLocalizations.of(
                                             context,
-                                          )?.warAttacksMissed ??
-                                          'Missed Attacks',
+                                          )?.warAttacksMissedShort ??
+                                          'Missed',
                                       value: formatter.format(
                                         clan.missedAttacks,
                                       ),
@@ -202,14 +202,14 @@ class CwlScreenState extends State<CwlScreen> {
                                       color: const Color(0xFFE35D4F),
                                     ),
                                     MetricChip(
-                                      label: '2/3 ★',
+                                      label: '2/3 étoiles',
                                       value:
                                           '${formatter.format(clan.totalThreeStars)}/${formatter.format(clan.totalTwoStars)}',
                                       imageUrl: ImageAssets.attackStar,
                                       color: StatColors.win,
                                     ),
                                     MetricChip(
-                                      label: '0/1 ★',
+                                      label: '0/1 étoile',
                                       value:
                                           '${formatter.format(clan.totalZeroStar)}/${formatter.format(clan.totalOneStar)}',
                                       imageUrl: ImageAssets.brokenSword,

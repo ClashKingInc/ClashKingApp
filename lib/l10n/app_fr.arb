@@ -996,6 +996,7 @@
   "warAttacksBest": "Meilleures attaques",
   "warAttacksCount": "Nombre d'attaques",
   "warAttacksMissed": "Attaques manquées",
+  "warAttacksMissedShort": "Manqué",
   "warAttacksNumber": "Nombre d'attaques",
   "@warAttacksNumber": {
     "placeholders": {

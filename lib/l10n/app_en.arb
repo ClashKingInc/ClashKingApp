@@ -1001,6 +1001,7 @@
   "warAttacksBest": "Best attacks",
   "warAttacksCount": "Attack Count",
   "warAttacksMissed": "Missed Attacks",
+  "warAttacksMissedShort": "Missed",
   "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
   "@warAttacksNumber": {
     "placeholders": {
