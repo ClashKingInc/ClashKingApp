@@ -11,42 +11,54 @@ class WarCard extends StatelessWidget {
     required this.clanTag,
     this.footer,
     this.centerHeader,
-    this.topBanner,
+    this.cwlBanner,
+    this.onTapBanner,
+    this.onTap,
   });
 
   final WarInfo currentWarInfo;
   final String clanTag;
   final Widget? footer;
   final Widget? centerHeader;
-  final Widget? topBanner;
+  final Widget? cwlBanner;
+  final VoidCallback? onTapBanner;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final card = Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            () {
-              switch (currentWarInfo.state) {
-                case 'preparation':
-                  return _preparationState(context);
-                case 'inWar':
-                  return _inWarState(context);
-                case 'warEnded':
-                  return _warEnded(context, clanTag);
-                default:
-                  return Text('Clan state unknown');
-              }
-            }(),
-            if (footer != null) ...[const SizedBox(height: 8), footer!],
-          ],
-        ),
+    final body = Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          () {
+            switch (currentWarInfo.state) {
+              case 'preparation':
+                return _preparationState(context);
+              case 'inWar':
+                return _inWarState(context);
+              case 'warEnded':
+                return _warEnded(context, clanTag);
+              default:
+                return Text('Clan state unknown');
+            }
+          }(),
+          if (footer != null) ...[const SizedBox(height: 8), footer!],
+        ],
       ),
     );
 
-    if (topBanner == null) return card;
-    return Column(children: [topBanner!, const SizedBox(height: 6), card]);
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: cwlBanner == null
+          ? (onTap == null ? body : InkWell(onTap: onTap, child: body))
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(onTap: onTapBanner, child: cwlBanner),
+                InkWell(onTap: onTap, child: body),
+              ],
+            ),
+    );
   }
 
   Widget _warEnded(BuildContext context, String clanTag) {
