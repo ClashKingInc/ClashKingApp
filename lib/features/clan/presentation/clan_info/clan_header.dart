@@ -33,14 +33,10 @@ class ClanInfoHeaderCard extends StatelessWidget {
   /// row and a content-sized stats card straddling the image edge — same
   /// pattern as the player page.
   Widget _buildHero(BuildContext context) {
-    // The stats card height varies (chips + description), so the image
-    // stops at a fixed distance from the top instead of tracking the
-    // column bottom: it ends partway through the card. A description
-    // pushes everything below it further down, so it gets a flat bonus
-    // rather than exactly measuring its (0-3 line) height.
-    final hasDescription = clanInfo.description.trim().isNotEmpty;
-    final imageHeight =
-        MediaQuery.of(context).padding.top + 280 + (hasDescription ? 70 : 0);
+    // The stats card height varies (description + league tile + chips), so
+    // the image stops at a fixed distance from the top instead of tracking
+    // the column bottom: it ends partway through the card.
+    final imageHeight = MediaQuery.of(context).padding.top + 280;
 
     return Stack(
       children: [
@@ -98,20 +94,9 @@ class ClanInfoHeaderCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: _buildIdentity(context),
             ),
-            if (clanInfo.description.trim().isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                child: _buildDescription(context),
-              ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Column(
-                children: [
-                  _ClanLeagueSummaryTile(clanInfo: clanInfo),
-                  const SizedBox(height: 8),
-                  _buildStatsPanel(context),
-                ],
-              ),
+              child: _buildStatsPanel(context),
             ),
           ],
         ),
@@ -304,37 +289,15 @@ class ClanInfoHeaderCard extends StatelessWidget {
     );
   }
 
-  /// Sits directly on the scrimmed hero image (like the identity name/tag
-  /// above it) instead of inside the stats card below — the description
-  /// is clan-specific content the player header has no equivalent of, so
-  /// keeping it off the card leaves that card just the metric grid. Wrapped
-  /// in the same translucent black pill as the location chip above it
-  /// (rather than bare text) since that's the treatment already proven to
-  /// read well directly on this image, in both themes.
-  Widget _buildDescription(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.32),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Text(
-        clanInfo.description,
-        textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: Colors.white.withValues(alpha: 0.92),
-        ),
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
-
+  /// Single card holding everything: description on top, the league tile
+  /// in the middle, chip grid at the bottom — instead of description and
+  /// league tile floating as separate elements above the card.
   Widget _buildStatsPanel(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final loc = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
+    final hasDescription = clanInfo.description.trim().isNotEmpty;
     final typeLabel = switch (clanInfo.type) {
       'inviteOnly' => loc.clanInviteOnly,
       'open' => loc.clanOpened,
@@ -353,13 +316,27 @@ class ClanInfoHeaderCard extends StatelessWidget {
     return Stack(
       children: [
         const Positioned.fill(
-          child: HeaderPanelBackground(height: 240, cornerRadius: 28),
+          child: HeaderPanelBackground(height: 340, cornerRadius: 28),
         ),
         Padding(
           padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (hasDescription) ...[
+                Text(
+                  clanInfo.description,
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 12),
+              ],
+              _ClanLeagueSummaryTile(clanInfo: clanInfo),
+              const SizedBox(height: 12),
               // Same icon + label + colored value language as the metric
               // bars, laid out two per row at equal width so a variable
               // chip count (some are conditional) doesn't wrap raggedly.
