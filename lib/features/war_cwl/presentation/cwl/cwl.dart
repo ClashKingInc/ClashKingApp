@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/icons/excel_download_icon.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -193,6 +194,54 @@ class CwlScreenState extends State<CwlScreen> {
                                       ),
                                       imageUrl: ImageAssets.brokenSword,
                                       color: const Color(0xFFE35D4F),
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warStarsThree ??
+                                          '3 stars',
+                                      value: formatter.format(
+                                        clan.totalThreeStars,
+                                      ),
+                                      imageUrl: ImageAssets.attackStar,
+                                      color: StatColors.win,
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warStarsTwo ??
+                                          '2 stars',
+                                      value: formatter.format(
+                                        clan.totalTwoStars,
+                                      ),
+                                      imageUrl: ImageAssets.attackStar,
+                                      color: StatColors.warStarGold,
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warStarsOne ??
+                                          '1 star',
+                                      value: formatter.format(
+                                        clan.totalOneStar,
+                                      ),
+                                      imageUrl: ImageAssets.attackStar,
+                                      color: const Color(0xFFE8963D),
+                                    ),
+                                    MetricChip(
+                                      label:
+                                          AppLocalizations.of(
+                                            context,
+                                          )?.warStarsZero ??
+                                          '0 Star',
+                                      value: formatter.format(
+                                        clan.totalZeroStar,
+                                      ),
+                                      imageUrl: ImageAssets.attackStar,
+                                      color: StatColors.loss,
                                     ),
                                   ],
                                 ),
