@@ -26,33 +26,38 @@ class ClanMember {
   });
 
   factory ClanMember.fromJson(Map<String, dynamic> json) {
+    // The clan member list's league object was renamed server-side from
+    // "league" to "leagueTier" (the standalone player endpoint kept
+    // "league") — try the new key first, falling back to the old one.
+    final rawLeague = json["leagueTier"] ?? json["league"];
     return ClanMember(
-        tag: json["tag"]?.toString() ?? "",
-        name: json["name"]?.toString() ?? "",
-        role: json["role"]?.toString() ?? "",
-        townHallLevel: (json["townHallLevel"] as num?)?.toInt() ?? 0,
-        expLevel: (json["expLevel"] as num?)?.toInt() ?? 0,
-        trophies: (json["trophies"] as num?)?.toInt() ?? 0,
-        donations: (json["donations"] as num?)?.toInt() ?? 0,
-        donationsReceived: (json["donationsReceived"] as num?)?.toInt() ?? 0,
-        builderBaseTrophies:
-            (json["builderBaseTrophies"] as num?)?.toInt() ?? 0,
-        league: json["league"] != null
-            ? ClanLeague.fromJson(json["league"] as Map<String, dynamic>)
-            : ClanLeague.unranked());
+      tag: json["tag"]?.toString() ?? "",
+      name: json["name"]?.toString() ?? "",
+      role: json["role"]?.toString() ?? "",
+      townHallLevel: (json["townHallLevel"] as num?)?.toInt() ?? 0,
+      expLevel: (json["expLevel"] as num?)?.toInt() ?? 0,
+      trophies: (json["trophies"] as num?)?.toInt() ?? 0,
+      donations: (json["donations"] as num?)?.toInt() ?? 0,
+      donationsReceived: (json["donationsReceived"] as num?)?.toInt() ?? 0,
+      builderBaseTrophies: (json["builderBaseTrophies"] as num?)?.toInt() ?? 0,
+      league: rawLeague != null
+          ? ClanLeague.fromJson(rawLeague as Map<String, dynamic>)
+          : ClanLeague.unranked(),
+    );
   }
 
   factory ClanMember.empty() {
     return ClanMember(
-        tag: "",
-        name: "",
-        role: "",
-        townHallLevel: 0,
-        expLevel: 0,
-        trophies: 0,
-        donations: 0,
-        donationsReceived: 0,
-        builderBaseTrophies: 0,
-        league: ClanLeague.unranked());
+      tag: "",
+      name: "",
+      role: "",
+      townHallLevel: 0,
+      expLevel: 0,
+      trophies: 0,
+      donations: 0,
+      donationsReceived: 0,
+      builderBaseTrophies: 0,
+      league: ClanLeague.unranked(),
+    );
   }
 }

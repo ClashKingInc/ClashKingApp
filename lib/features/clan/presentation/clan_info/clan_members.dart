@@ -424,15 +424,15 @@ class ClanMembersState extends State<ClanMembers> {
         CachedNetworkImage(
           errorWidget: (context, url, error) => Icon(Icons.error),
           imageUrl: ImageAssets.getLeagueImage(_leagueName(member)),
-          width: 16,
-          height: 16,
+          width: 24,
+          height: 24,
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 5),
         Text(
           member.trophies.toString(),
           style: Theme.of(
             context,
-          ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700),
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
         ),
       ],
     );

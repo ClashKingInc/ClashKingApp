@@ -291,6 +291,10 @@ class Player {
         }
       }
 
+      // The player league object was renamed server-side from "league" to
+      // "leagueTier" — try the new key first, falling back to the old one.
+      final leagueJson = json["leagueTier"] ?? json["league"];
+
       Player profile = Player(
         name: json["name"] ?? "Unknown",
         tag: json["tag"] ?? "Unknown",
@@ -320,11 +324,11 @@ class Player {
         clanCapitalContributions: _intFromJson(
           json["clanCapitalContributions"],
         ),
-        league: json["league"]?['name'] ?? "Unranked",
+        league: leagueJson?['name'] ?? "Unranked",
         townHallPic: ImageAssets.townHall(json["townHallLevel"] ?? 0),
         builderHallPic: ImageAssets.builderHall(json["builderHallLevel"] ?? 0),
         leagueUrl: ImageAssets.getLeagueImage(
-          json["league"]?['name'] ?? "Unranked",
+          leagueJson?['name'] ?? "Unranked",
         ),
         clanGamesPoint: [],
         seasonPass: [],
@@ -600,8 +604,9 @@ class Player {
         json["builderBaseLeague"],
       );
     }
-    if (json["league"] != null) {
-      league = _leagueName(json["league"]);
+    final leagueJson = json["leagueTier"] ?? json["league"];
+    if (leagueJson != null) {
+      league = _leagueName(leagueJson);
       leagueUrl = ImageAssets.getLeagueImage(league);
     }
     if (json["clan"] is Map<String, dynamic>) {
