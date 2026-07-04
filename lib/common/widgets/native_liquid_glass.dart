@@ -38,7 +38,7 @@ class NativeLiquidGlassBar extends StatelessWidget {
 
         if (_supportsNativeLiquidGlass) {
           return glass.LiquidGlassContainer(
-            height: height,
+            height: resolvedHeight,
             config: glass.LiquidGlassConfig(
               effect: selected
                   ? glass.LiquidGlassEffect.regular
@@ -423,7 +423,9 @@ class _FallbackLiquidGlassTabBar extends StatelessWidget {
                         color: isDark
                             ? Colors.white.withValues(alpha: 0.14)
                             : cs.surfaceContainerHigh.withValues(alpha: 0.92),
-                        borderRadius: BorderRadius.circular(selectedCornerRadius),
+                        borderRadius: BorderRadius.circular(
+                          selectedCornerRadius,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(
@@ -497,8 +499,9 @@ class _FallbackLiquidGlassSegmentedControl extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isDark
                         ? Colors.white.withValues(alpha: 0.14)
-                        : colorScheme.surfaceContainerHigh
-                            .withValues(alpha: 0.90),
+                        : colorScheme.surfaceContainerHigh.withValues(
+                            alpha: 0.90,
+                          ),
                     borderRadius: BorderRadius.circular(pillRadius),
                     boxShadow: [
                       BoxShadow(
@@ -530,9 +533,7 @@ class _FallbackLiquidGlassSegmentedControl extends StatelessWidget {
                             child: Text(
                               labels[i],
                               maxLines: 1,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
+                              style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(
                                     color: isSelected
                                         ? color
