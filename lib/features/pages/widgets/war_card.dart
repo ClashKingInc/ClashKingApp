@@ -1,3 +1,5 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -61,276 +63,292 @@ class WarCard extends StatelessWidget {
     );
   }
 
+  Widget _clanBadge(String imageUrl, String name, BuildContext context) {
+    return Column(
+      children: <Widget>[
+        GlassPanel(
+          width: 78,
+          height: 78,
+          borderRadius: 20,
+          padding: const EdgeInsets.all(4),
+          child: CachedNetworkImage(
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            imageUrl: imageUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          name,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    );
+  }
+
+  /// Fixed-width columns either side of the separator so the two
+  /// scores land on the same baseline regardless of digit count -
+  /// replaces the old space-padded-string trick, which doesn't
+  /// actually align in a proportional font.
+  Widget _starsRow(
+    int clanStars,
+    int opponentStars, {
+    Color? clanColor,
+    Color? opponentColor,
+    FontWeight? clanWeight,
+    FontWeight? opponentWeight,
+    required TextStyle? style,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 28,
+          child: Text(
+            '$clanStars',
+            textAlign: TextAlign.right,
+            style: style?.copyWith(color: clanColor, fontWeight: clanWeight),
+          ),
+        ),
+        Text(' - ', style: style),
+        SizedBox(
+          width: 28,
+          child: Text(
+            '$opponentStars',
+            textAlign: TextAlign.left,
+            style: style?.copyWith(
+              color: opponentColor,
+              fontWeight: opponentWeight,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _destructionRow(
+    double clanPercentage,
+    double opponentPercentage,
+    TextStyle? style,
+  ) {
+    String format(double value) {
+      final rounded = value % 1 == 0
+          ? value.toInt().toString()
+          : value.toStringAsFixed(2);
+      return '$rounded%';
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 56,
+          child: Text(
+            format(clanPercentage),
+            textAlign: TextAlign.right,
+            style: style,
+          ),
+        ),
+        const SizedBox(width: 12),
+        SizedBox(
+          width: 56,
+          child: Text(
+            format(opponentPercentage),
+            textAlign: TextAlign.left,
+            style: style,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _warEnded(BuildContext context, String clanTag) {
+    final clan = currentWarInfo.clan!;
+    final opponent = currentWarInfo.opponent!;
+    final theme = Theme.of(context);
+
+    final clanIsUs = clan.tag == clanTag;
+    final usStars = clanIsUs ? clan.stars : opponent.stars;
+    final themStars = clanIsUs ? opponent.stars : clan.stars;
+    final usDestruction = clanIsUs
+        ? clan.destructionPercentage
+        : opponent.destructionPercentage;
+    final themDestruction = clanIsUs
+        ? opponent.destructionPercentage
+        : clan.destructionPercentage;
+
+    final weWon =
+        usStars > themStars ||
+        (usStars == themStars && usDestruction > themDestruction);
+    final weLost =
+        usStars < themStars ||
+        (usStars == themStars && usDestruction < themDestruction);
+
+    final resultLabel = weWon
+        ? (AppLocalizations.of(context)?.warVictory ?? 'Victory')
+        : weLost
+        ? (AppLocalizations.of(context)?.warDefeat ?? 'Defeat')
+        : (AppLocalizations.of(context)?.warDraw ?? 'Draw');
+    final resultTint = weWon
+        ? StatColors.win
+        : weLost
+        ? StatColors.loss
+        : null;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 3,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                width: 70,
-                height: 70,
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: currentWarInfo.clan!.badgeUrls.large,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                currentWarInfo.clan!.name,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+          child: _clanBadge(clan.badgeUrls.large, clan.name, context),
         ),
         Expanded(
           flex: 4,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                AppLocalizations.of(context)?.warEnded ?? 'War ended',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              ((currentWarInfo.clan!.tag == clanTag &&
-                          currentWarInfo.clan!.stars >
-                              currentWarInfo.opponent!.stars) ||
-                      (currentWarInfo.opponent!.tag == clanTag &&
-                          currentWarInfo.clan!.stars <
-                              currentWarInfo.opponent!.stars) ||
-                      (currentWarInfo.clan!.tag == clanTag &&
-                          currentWarInfo.clan!.destructionPercentage >
-                              currentWarInfo.opponent!.destructionPercentage) ||
-                      (currentWarInfo.opponent!.tag == clanTag &&
-                          currentWarInfo.clan!.destructionPercentage <
-                              currentWarInfo.opponent!.destructionPercentage))
-                  ? Text(
-                      AppLocalizations.of(context)?.warVictory ?? 'Victory',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    )
-                  : ((currentWarInfo.clan!.tag == clanTag &&
-                            currentWarInfo.clan!.stars <
-                                currentWarInfo.opponent!.stars) ||
-                        (currentWarInfo.opponent!.tag == clanTag &&
-                            currentWarInfo.clan!.stars >
-                                currentWarInfo.opponent!.stars) ||
-                        (currentWarInfo.clan!.tag == clanTag &&
-                            currentWarInfo.clan!.destructionPercentage <
-                                currentWarInfo
-                                    .opponent!
-                                    .destructionPercentage) ||
-                        (currentWarInfo.opponent!.tag == clanTag &&
-                            currentWarInfo.clan!.destructionPercentage >
-                                currentWarInfo.opponent!.destructionPercentage))
-                  ? Text(
-                      AppLocalizations.of(context)?.warDefeat ?? 'Defeat',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    )
-                  : Text(
-                      AppLocalizations.of(context)?.warDraw ?? 'Draw',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-              Text(
-                '${currentWarInfo.clan!.stars.toString().padLeft(2, ' ')} - ${currentWarInfo.opponent!.stars.toString().padRight(2, ' ')} ',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '${currentWarInfo.clan!.destructionPercentage % 1 == 0 ? currentWarInfo.clan!.destructionPercentage.toInt().toString().padLeft(6, ' ') : currentWarInfo.clan!.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent!.destructionPercentage % 1 == 0 ? ('${currentWarInfo.opponent!.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${currentWarInfo.opponent!.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}',
-              ),
-            ],
+          child: GlassPanel(
+            width: double.infinity,
+            height: 108,
+            borderRadius: 16,
+            tint: resultTint,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  AppLocalizations.of(context)?.warEnded ?? 'War ended',
+                  style: theme.textTheme.bodySmall,
+                ),
+                Text(
+                  resultLabel,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: resultTint,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                _starsRow(
+                  clan.stars,
+                  opponent.stars,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                _destructionRow(
+                  clan.destructionPercentage,
+                  opponent.destructionPercentage,
+                  theme.textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
         ),
         Expanded(
           flex: 3,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                width: 70,
-                height: 70,
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: currentWarInfo.opponent!.badgeUrls.large,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                currentWarInfo.opponent!.name,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+          child: _clanBadge(opponent.badgeUrls.large, opponent.name, context),
         ),
       ],
     );
   }
 
   Widget _preparationState(BuildContext context) {
+    final clan = currentWarInfo.clan!;
+    final opponent = currentWarInfo.opponent!;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
           flex: 3,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                width: 70,
-                height: 70,
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: currentWarInfo.clan!.badgeUrls.large,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                currentWarInfo.clan!.name,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+          child: _clanBadge(clan.badgeUrls.large, clan.name, context),
         ),
         Expanded(
           flex: 4,
-          child: Column(
-            children: [
-              if (centerHeader != null) ...[
-                centerHeader!,
+          child: GlassPanel(
+            width: double.infinity,
+            height: centerHeader == null ? 96 : 124,
+            borderRadius: 16,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (centerHeader != null) ...[
+                  centerHeader!,
+                  const SizedBox(height: 6),
+                ],
+                Text(
+                  '${AppLocalizations.of(context)?.timeStartsAt(DateFormat('HH:mm').format(currentWarInfo.startTime!.toLocal()))}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 6),
+                Text(
+                  AppLocalizations.of(context)?.warPreparation ?? 'Preparation',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
               ],
-              Text(
-                '${AppLocalizations.of(context)?.timeStartsAt(DateFormat('HH:mm').format(currentWarInfo.startTime!.toLocal()))}',
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 10),
-              Text(
-                AppLocalizations.of(context)?.warPreparation ?? 'Preparation',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ],
+            ),
           ),
         ),
         Expanded(
           flex: 3,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                width: 70,
-                height: 70,
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: currentWarInfo.opponent!.badgeUrls.large,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                currentWarInfo.opponent!.name,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+          child: _clanBadge(opponent.badgeUrls.large, opponent.name, context),
         ),
       ],
     );
   }
 
   Widget _inWarState(BuildContext context) {
+    final clan = currentWarInfo.clan!;
+    final opponent = currentWarInfo.opponent!;
+    final theme = Theme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Expanded(
           flex: 3,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                width: 70,
-                height: 70,
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: currentWarInfo.clan!.badgeUrls.large,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                currentWarInfo.clan!.name,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+          child: _clanBadge(clan.badgeUrls.large, clan.name, context),
         ),
         Expanded(
           flex: 4,
-          child: Column(
-            children: <Widget>[
-              if (centerHeader != null) ...[
-                centerHeader!,
-                const SizedBox(height: 6),
+          child: GlassPanel(
+            width: double.infinity,
+            height: centerHeader == null ? 108 : 136,
+            borderRadius: 16,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                if (centerHeader != null) ...[
+                  centerHeader!,
+                  const SizedBox(height: 6),
+                ],
+                Text(
+                  "${AppLocalizations.of(context)?.timeEndsAt(DateFormat('HH:mm').format(currentWarInfo.endTime!.toLocal()))}",
+                  style: theme.textTheme.bodySmall,
+                  textAlign: TextAlign.center,
+                ),
+                _starsRow(
+                  clan.stars,
+                  opponent.stars,
+                  style: theme.textTheme.titleMedium,
+                ),
+                _destructionRow(
+                  clan.destructionPercentage,
+                  opponent.destructionPercentage,
+                  theme.textTheme.bodySmall,
+                ),
               ],
-              Text(
-                "${AppLocalizations.of(context)?.timeEndsAt(DateFormat('HH:mm').format(currentWarInfo.endTime!.toLocal()))}",
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
-              ),
-              Center(
-                child: Text(
-                  '${currentWarInfo.clan!.stars.toString().padLeft(2, ' ')} - ${currentWarInfo.opponent!.stars.toString().padRight(2, ' ')} ',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              Center(
-                child: Text(
-                  '${currentWarInfo.clan!.destructionPercentage % 1 == 0 ? currentWarInfo.clan!.destructionPercentage.toInt().toString().padLeft(6, ' ') : currentWarInfo.clan!.destructionPercentage.toStringAsFixed(2).padLeft(5, '0')}%    ${currentWarInfo.opponent!.destructionPercentage % 1 == 0 ? ('${currentWarInfo.opponent!.destructionPercentage.toInt()}%').padRight(7, ' ') : ('${currentWarInfo.opponent!.destructionPercentage.toStringAsFixed(2)}%').padLeft(5, ' ')}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-              SizedBox(height: 10),
-            ],
+            ),
           ),
         ),
         Expanded(
           flex: 3,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                width: 70,
-                height: 70,
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: currentWarInfo.opponent!.badgeUrls.large,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                currentWarInfo.opponent!.name,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+          child: _clanBadge(opponent.badgeUrls.large, opponent.name, context),
         ),
       ],
     );
