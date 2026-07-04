@@ -595,10 +595,11 @@ class _CwlProfileTabsState extends State<_CwlProfileTabs>
           ),
           TabBar(
             controller: _tabController,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+            // 3 short tabs always fit — unlike the clan page's 4, which
+            // need isScrollable+start to avoid cramming. Filling here
+            // keeps them evenly spread instead of clumped on the left.
+            isScrollable: false,
+            labelPadding: const EdgeInsets.symmetric(horizontal: 8),
             indicatorColor: colorScheme.primary,
             indicatorWeight: 3,
             indicatorSize: TabBarIndicatorSize.tab,
