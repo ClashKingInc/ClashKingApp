@@ -270,21 +270,33 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
           ),
         ),
         const SizedBox(height: 12),
-        ...members.asMap().entries.map((entry) {
-          final index = entry.key;
-          final member = entry.value;
-          final key = _cardKeys.putIfAbsent(member.tag, () => GlobalKey());
-          return MembersCard(
-            key: key,
-            sortBy: sortBy,
-            showFullStats: showFullStats,
-            onToggleFullStats: () => toggleShowStats(key),
-            member: member,
-            index: index,
-            warsPlayed: warsPlayed,
-            attacksPerWar: attacksPerWar,
-          );
-        }),
+        if (members.isEmpty && _searchQuery.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              loc?.generalNoFilteredResults ?? 'No results match your filters',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          )
+        else
+          ...members.asMap().entries.map((entry) {
+            final index = entry.key;
+            final member = entry.value;
+            final key = _cardKeys.putIfAbsent(member.tag, () => GlobalKey());
+            return MembersCard(
+              key: key,
+              sortBy: sortBy,
+              showFullStats: showFullStats,
+              onToggleFullStats: () => toggleShowStats(key),
+              member: member,
+              index: index,
+              warsPlayed: warsPlayed,
+              attacksPerWar: attacksPerWar,
+            );
+          }),
       ],
     );
   }

@@ -114,49 +114,48 @@ class RoundClanCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${warInfo.clan!.stars}",
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(
-                                color:
-                                    warInfo.clan!.stars >
-                                            warInfo.opponent!.stars ||
-                                        (warInfo.clan!.stars ==
-                                                warInfo.opponent!.stars &&
-                                            warInfo
-                                                    .clan!
-                                                    .destructionPercentage >
-                                                warInfo
-                                                    .opponent!
-                                                    .destructionPercentage)
-                                    ? StatColors.win
-                                    : null,
-                              ),
-                        ),
-                        Text(" - "),
-                        Text(
-                          "${warInfo.opponent!.stars}",
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(
-                                color:
-                                    warInfo.opponent!.stars >
-                                            warInfo.clan!.stars ||
-                                        (warInfo.opponent!.stars ==
-                                                warInfo.clan!.stars &&
-                                            warInfo
-                                                    .opponent!
-                                                    .destructionPercentage >
-                                                warInfo
-                                                    .clan!
-                                                    .destructionPercentage)
-                                    ? StatColors.win
-                                    : null,
-                              ),
-                        ),
-                      ],
+                    Builder(
+                      builder: (context) {
+                        final clanWon =
+                            warInfo.clan!.stars > warInfo.opponent!.stars ||
+                            (warInfo.clan!.stars == warInfo.opponent!.stars &&
+                                warInfo.clan!.destructionPercentage >
+                                    warInfo.opponent!.destructionPercentage);
+                        final opponentWon =
+                            warInfo.opponent!.stars > warInfo.clan!.stars ||
+                            (warInfo.opponent!.stars == warInfo.clan!.stars &&
+                                warInfo.opponent!.destructionPercentage >
+                                    warInfo.clan!.destructionPercentage);
+
+                        // Bold, not just tinted green - a colorblind user
+                        // shouldn't need to tell winner from loser by hue.
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${warInfo.clan!.stars}",
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(
+                                    color: clanWon ? StatColors.win : null,
+                                    fontWeight: clanWon
+                                        ? FontWeight.bold
+                                        : null,
+                                  ),
+                            ),
+                            const Text(" - "),
+                            Text(
+                              "${warInfo.opponent!.stars}",
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(
+                                    color: opponentWon ? StatColors.win : null,
+                                    fontWeight: opponentWon
+                                        ? FontWeight.bold
+                                        : null,
+                                  ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -161,28 +161,31 @@ class CwlTeamCard extends StatelessWidget {
             ),
             GestureDetector(
               onTap: onToggleFullStats,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      showFullStats ? Icons.expand_less : Icons.expand_more,
-                      size: 16,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      AppLocalizations.of(context)!.generalFullStats,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              behavior: HitTestBehavior.opaque,
+              child: SizedBox(
+                height: 44,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        showFullStats ? Icons.expand_less : Icons.expand_more,
+                        size: 16,
                         color: Theme.of(
                           context,
                         ).colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 4),
+                      Text(
+                        AppLocalizations.of(context)!.generalFullStats,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
