@@ -312,33 +312,50 @@ class _HomeBaseStats extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Stack(
       children: [
-        isBuilderTab
-            ? _LeagueSummaryTile(
-                leagueName: player.builderBaseLeague,
-                trophies: formatter.format(player.builderBaseTrophies),
-                leagueUrl: player.builderBaseLeagueUrl,
-                seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
-                bestTrophies: formatter.format(player.bestBuilderBaseTrophies),
-              )
-            : _LeagueSummaryTile(
-                leagueName: player.league,
-                trophies: formatter.format(player.trophies),
-                leagueUrl: player.leagueUrl,
-                seasonName: DateFormat('MMMM yyyy').format(DateTime.now()),
-                attackWins: formatter.format(player.attackWins),
-                defenseWins: formatter.format(player.defenseWins),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PlayerLegendScreen(player: player),
-                  ),
-                ),
-              ),
-        const SizedBox(height: 6),
-        _PlayerQuickStats(player: player),
+        const Positioned.fill(
+          child: HeaderPanelBackground(height: 260, cornerRadius: 28),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              isBuilderTab
+                  ? _LeagueSummaryTile(
+                      leagueName: player.builderBaseLeague,
+                      trophies: formatter.format(player.builderBaseTrophies),
+                      leagueUrl: player.builderBaseLeagueUrl,
+                      seasonName: DateFormat(
+                        'MMMM yyyy',
+                      ).format(DateTime.now()),
+                      bestTrophies: formatter.format(
+                        player.bestBuilderBaseTrophies,
+                      ),
+                    )
+                  : _LeagueSummaryTile(
+                      leagueName: player.league,
+                      trophies: formatter.format(player.trophies),
+                      leagueUrl: player.leagueUrl,
+                      seasonName: DateFormat(
+                        'MMMM yyyy',
+                      ).format(DateTime.now()),
+                      attackWins: formatter.format(player.attackWins),
+                      defenseWins: formatter.format(player.defenseWins),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PlayerLegendScreen(player: player),
+                        ),
+                      ),
+                    ),
+              const SizedBox(height: 12),
+              _PlayerQuickStats(player: player),
+            ],
+          ),
+        ),
       ],
     );
   }
