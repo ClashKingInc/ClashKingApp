@@ -11,6 +11,7 @@ class ClanMember {
   final int donationsReceived;
   final int builderBaseTrophies;
   final ClanLeague league;
+  final ClanLeague? builderBaseLeague;
 
   ClanMember({
     required this.tag,
@@ -23,6 +24,7 @@ class ClanMember {
     required this.donationsReceived,
     required this.builderBaseTrophies,
     required this.league,
+    this.builderBaseLeague,
   });
 
   factory ClanMember.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class ClanMember {
     // "league" to "leagueTier" (the standalone player endpoint kept
     // "league") — try the new key first, falling back to the old one.
     final rawLeague = json["leagueTier"] ?? json["league"];
+    final rawBuilderBaseLeague = json["builderBaseLeague"];
     return ClanMember(
       tag: json["tag"]?.toString() ?? "",
       name: json["name"]?.toString() ?? "",
@@ -40,9 +43,12 @@ class ClanMember {
       donations: (json["donations"] as num?)?.toInt() ?? 0,
       donationsReceived: (json["donationsReceived"] as num?)?.toInt() ?? 0,
       builderBaseTrophies: (json["builderBaseTrophies"] as num?)?.toInt() ?? 0,
-      league: rawLeague != null
-          ? ClanLeague.fromJson(rawLeague as Map<String, dynamic>)
+      league: rawLeague is Map
+          ? ClanLeague.fromJson(Map<String, dynamic>.from(rawLeague))
           : ClanLeague.unranked(),
+      builderBaseLeague: rawBuilderBaseLeague is Map
+          ? ClanLeague.fromJson(Map<String, dynamic>.from(rawBuilderBaseLeague))
+          : null,
     );
   }
 
@@ -58,6 +64,7 @@ class ClanMember {
       donationsReceived: 0,
       builderBaseTrophies: 0,
       league: ClanLeague.unranked(),
+      builderBaseLeague: null,
     );
   }
 }

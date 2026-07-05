@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/clan/models/cwl_ranking_history.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
@@ -18,9 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /// Clan detail screen: hero header + tabs for Members / War Log /
-/// Statistics / CWL History — content that used to live behind a
-/// separate pushed screen (`ClanWarStatsScreen`) is now embedded here,
-/// mirroring the player profile's tab pattern.
+/// Join-Leave / Statistics / CWL History — content that used to live
+/// behind a separate pushed screen (`ClanWarStatsScreen`) is now
+/// embedded here, mirroring the player profile's tab pattern.
 class ClanInfoScreen extends StatefulWidget {
   final Clan clanInfo;
   final int initialTab;
@@ -36,7 +37,7 @@ class ClanInfoScreen extends StatefulWidget {
 }
 
 class _ClanInfoScreenState extends State<ClanInfoScreen> {
-  static const int _tabCount = 4;
+  static const int _tabCount = 5;
   late int selectedTab;
 
   // Shared between the War Log and Statistics tabs so toggling a war
@@ -125,7 +126,10 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                         () => isFriendlyChecked = !isFriendlyChecked,
                       ),
                     ),
-                    2 => _ClanStatisticsTab(
+                    2 => _ClanJoinLeaveTab(
+                      joinLeave: widget.clanInfo.joinLeave,
+                    ),
+                    3 => _ClanStatisticsTab(
                       clan: widget.clanInfo,
                       isCWLChecked: isCWLChecked,
                       isRandomChecked: isRandomChecked,
@@ -173,7 +177,7 @@ class _ClanProfileTabsState extends State<_ClanProfileTabs>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 4,
+      length: 5,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
@@ -239,14 +243,19 @@ class _ClanProfileTabsState extends State<_ClanProfileTabs>
                 selected: widget.selectedIndex == 1,
               ),
               _ClanTab(
+                label: loc.clanJoinLeaveTab,
+                icon: Icons.swap_horiz_rounded,
+                selected: widget.selectedIndex == 2,
+              ),
+              _ClanTab(
                 label: loc.navigationStatistics,
                 icon: Icons.bar_chart_rounded,
-                selected: widget.selectedIndex == 2,
+                selected: widget.selectedIndex == 3,
               ),
               _ClanTab(
                 label: loc.cwlHistoryTitle,
                 icon: Icons.emoji_events_rounded,
-                selected: widget.selectedIndex == 3,
+                selected: widget.selectedIndex == 4,
               ),
             ],
           ),
@@ -301,6 +310,302 @@ class _ClanTab extends StatelessWidget {
   }
 }
 
+class _ClanJoinLeaveTab extends StatelessWidget {
+  final ClanJoinLeave? joinLeave;
+
+  const _ClanJoinLeaveTab({required this.joinLeave});
+
+  @override
+  Widget build(BuildContext context) {
+    final data = joinLeave;
+    if (data == null || data.stats.totalEvents == 0) {
+      return const _ClanEmptyTab(
+        title: 'No join/leave data',
+        body:
+            'Recent roster movement appears here when tracking data is loaded.',
+        icon: Icons.swap_horiz_rounded,
+      );
+    }
+
+    final stats = data.stats;
+    final events = data.joinLeaveList.take(30).toList(growable: false);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      child: Column(
+        children: [
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _MiniMetricChip(
+                icon: Icons.login_rounded,
+                value: stats.totalJoins.toString(),
+                label: 'Joined',
+                color: Colors.green,
+              ),
+              _MiniMetricChip(
+                icon: Icons.logout_rounded,
+                value: stats.totalLeaves.toString(),
+                label: 'Left',
+                color: Colors.redAccent,
+              ),
+              _MiniMetricChip(
+                icon: Icons.person_search_rounded,
+                value: stats.uniquePlayers.toString(),
+                label: 'Unique',
+              ),
+              _MiniMetricChip(
+                icon: Icons.repeat_rounded,
+                value: stats.rejoinedPlayers.toString(),
+                label: 'Rejoined',
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (events.isEmpty)
+            const _ClanEmptyTab(
+              title: 'No recent movement',
+              body: 'The summary is loaded, but the event list is empty.',
+              icon: Icons.history_toggle_off_rounded,
+            )
+          else
+            ...events.map((event) => _JoinLeaveEventCard(event: event)),
+        ],
+      ),
+    );
+  }
+}
+
+class _JoinLeaveEventCard extends StatelessWidget {
+  final JoinLeaveEvent event;
+
+  const _JoinLeaveEventCard({required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final joined = event.type.toLowerCase().contains('join');
+    final accent = joined ? Colors.green : Colors.redAccent;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+        ),
+      ),
+      child: Row(
+        children: [
+          if (event.th > 0)
+            MobileWebImage(
+              imageUrl: ImageAssets.townHall(event.th),
+              width: 42,
+              height: 42,
+            )
+          else
+            Icon(Icons.person_rounded, size: 34, color: colorScheme.onSurface),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  event.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  event.tag,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    joined ? Icons.login_rounded : Icons.logout_rounded,
+                    color: accent,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    joined ? 'Joined' : 'Left',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: accent,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                _relativeTime(event.time),
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MiniMetricChip extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color? color;
+
+  const _MiniMetricChip({
+    required this.icon,
+    required this.value,
+    required this.label,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final accent = color ?? colorScheme.onSurface;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 18, color: accent),
+          const SizedBox(width: 5),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w900,
+              height: 1,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+              height: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ClanEmptyTab extends StatelessWidget {
+  final String title;
+  final String body;
+  final IconData icon;
+
+  const _ClanEmptyTab({
+    required this.title,
+    required this.body,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.45,
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    body,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _relativeTime(DateTime dateTime) {
+  final now = DateTime.now();
+  final difference = now.difference(dateTime.toLocal());
+  if (difference.inDays >= 30) return '${difference.inDays ~/ 30}mo ago';
+  if (difference.inDays >= 1) return '${difference.inDays}d ago';
+  if (difference.inHours >= 1) return '${difference.inHours}h ago';
+  if (difference.inMinutes >= 1) return '${difference.inMinutes}m ago';
+  return 'now';
+}
+
 /// Compact CWL/Random/Friendly war-type filter, shared visual recipe
 /// used by both the War Log and Statistics tabs (each owns its own
 /// copy of this small state independently).
@@ -315,8 +620,9 @@ class _ClanTab extends StatelessWidget {
 class _FilterBar extends StatefulWidget {
   final List<Widget> chips;
   final Widget trailing;
+  final Widget? middle;
 
-  const _FilterBar({required this.chips, required this.trailing});
+  const _FilterBar({required this.chips, required this.trailing, this.middle});
 
   @override
   State<_FilterBar> createState() => _FilterBarState();
@@ -371,7 +677,14 @@ class _FilterBarState extends State<_FilterBar> {
                   ),
                 ),
               ),
-              const Spacer(),
+              Expanded(
+                child: widget.middle == null
+                    ? const SizedBox.shrink()
+                    : Align(
+                        alignment: Alignment.center,
+                        child: widget.middle,
+                      ),
+              ),
               widget.trailing,
             ],
           ),
@@ -607,6 +920,7 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
               '50v50': '50',
             },
           ),
+          middle: WarLogSummary(clan: widget.clan),
         ),
         Padding(
           padding: const EdgeInsets.all(8),

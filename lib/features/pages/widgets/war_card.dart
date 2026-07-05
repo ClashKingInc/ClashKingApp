@@ -1,5 +1,4 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
-import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -206,40 +205,38 @@ class WarCard extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: GlassPanel(
-            width: double.infinity,
+          child: SizedBox(
             height: 108,
-            borderRadius: 16,
-            tint: resultTint,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  AppLocalizations.of(context)?.warEnded ?? 'War ended',
-                  style: theme.textTheme.bodySmall,
-                ),
-                Text(
-                  resultLabel,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: resultTint,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    AppLocalizations.of(context)?.warEnded ?? 'War ended',
+                    style: theme.textTheme.bodySmall,
                   ),
-                ),
-                const SizedBox(height: 2),
-                _starsRow(
-                  clan.stars,
-                  opponent.stars,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    resultLabel,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: resultTint,
+                    ),
                   ),
-                ),
-                _destructionRow(
-                  clan.destructionPercentage,
-                  opponent.destructionPercentage,
-                  theme.textTheme.bodySmall,
-                ),
-              ],
+                  const SizedBox(height: 2),
+                  _starsRow(
+                    clan.stars,
+                    opponent.stars,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  _destructionRow(
+                    clan.destructionPercentage,
+                    opponent.destructionPercentage,
+                    theme.textTheme.bodySmall,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -256,7 +253,7 @@ class WarCard extends StatelessWidget {
     final opponent = currentWarInfo.opponent!;
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 3,
@@ -264,30 +261,30 @@ class WarCard extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: GlassPanel(
-            width: double.infinity,
+          child: SizedBox(
             height: centerHeader == null ? 96 : 124,
-            borderRadius: 16,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (centerHeader != null) ...[
-                  centerHeader!,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (centerHeader != null) ...[
+                    centerHeader!,
+                    const SizedBox(height: 6),
+                  ],
+                  Text(
+                    '${AppLocalizations.of(context)?.timeStartsAt(DateFormat('HH:mm').format(currentWarInfo.startTime!.toLocal()))}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
                   const SizedBox(height: 6),
+                  Text(
+                    AppLocalizations.of(context)?.warPreparation ??
+                        'Preparation',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ],
-                Text(
-                  '${AppLocalizations.of(context)?.timeStartsAt(DateFormat('HH:mm').format(currentWarInfo.startTime!.toLocal()))}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  AppLocalizations.of(context)?.warPreparation ?? 'Preparation',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -306,6 +303,7 @@ class WarCard extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 3,
@@ -313,34 +311,33 @@ class WarCard extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: GlassPanel(
-            width: double.infinity,
+          child: SizedBox(
             height: centerHeader == null ? 108 : 136,
-            borderRadius: 16,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                if (centerHeader != null) ...[
-                  centerHeader!,
-                  const SizedBox(height: 6),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  if (centerHeader != null) ...[
+                    centerHeader!,
+                    const SizedBox(height: 6),
+                  ],
+                  Text(
+                    "${AppLocalizations.of(context)?.timeEndsAt(DateFormat('HH:mm').format(currentWarInfo.endTime!.toLocal()))}",
+                    style: theme.textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  _starsRow(
+                    clan.stars,
+                    opponent.stars,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  _destructionRow(
+                    clan.destructionPercentage,
+                    opponent.destructionPercentage,
+                    theme.textTheme.bodySmall,
+                  ),
                 ],
-                Text(
-                  "${AppLocalizations.of(context)?.timeEndsAt(DateFormat('HH:mm').format(currentWarInfo.endTime!.toLocal()))}",
-                  style: theme.textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
-                _starsRow(
-                  clan.stars,
-                  opponent.stars,
-                  style: theme.textTheme.titleMedium,
-                ),
-                _destructionRow(
-                  clan.destructionPercentage,
-                  opponent.destructionPercentage,
-                  theme.textTheme.bodySmall,
-                ),
-              ],
+              ),
             ),
           ),
         ),

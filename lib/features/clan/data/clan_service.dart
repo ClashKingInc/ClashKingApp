@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
+import 'package:clashkingapp/features/clan/models/clan_member.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
@@ -159,6 +160,17 @@ class ClanService extends ChangeNotifier {
   Future<Clan> getClanAndWarData(String clanTag) async {
     // First load basic clan data
     final clan = await loadClanData(clanTag);
+    await _enrichMissingMemberData(clan);
+
+    try {
+      await loadWarLogData([clan.tag]);
+      linkWarLogToClans();
+      DebugUtils.debugSuccess("Loaded war log for searched clan: ${clan.tag}");
+    } catch (warLogError) {
+      DebugUtils.debugWarning(
+        "Failed to load war log for searched clan ${clan.tag}: $warLogError",
+      );
+    }
 
     // Then load war statistics data
     try {
@@ -176,6 +188,8 @@ class ClanService extends ChangeNotifier {
       // Don't fail the entire operation if war stats loading fails
     }
 
+    await loadJoinLeaveForClan(clan);
+
     return _clans[clan.tag]!; // Return the updated clan with war stats
   }
 
@@ -184,7 +198,7 @@ class ClanService extends ChangeNotifier {
   ) async {
     try {
       final response = await _apiService.getResponse(
-        '/cwl/${clanTag.replaceAll('#', '%23')}/ranking-history',
+        '/cwl/${clanTag.replaceAll("#", "%23")}/ranking-history',
       );
 
       if (response.statusCode == 200) {
@@ -204,6 +218,88 @@ class ClanService extends ChangeNotifier {
       Sentry.captureException(e);
       DebugUtils.debugError("Error loading CWL ranking history: $e");
       return [];
+    }
+  }
+
+  Future<void> loadJoinLeaveForClan(Clan clan) async {
+    if (clan.joinLeave?.stats.totalEvents != null &&
+        clan.joinLeave!.stats.totalEvents > 0) {
+      return;
+    }
+
+    try {
+      final results = await loadClanJoinLeaveData([clan.tag], notify: false);
+      ClanJoinLeave? joinLeave;
+      for (final item in results) {
+        if (item.clanTag == clan.tag) {
+          joinLeave = item;
+          break;
+        }
+      }
+      if (joinLeave != null) {
+        clan.linkJoinLeave(joinLeave);
+        DebugUtils.debugSuccess("Loaded join/leave for clan: ${clan.tag}");
+      }
+    } catch (joinLeaveError) {
+      DebugUtils.debugWarning(
+        "Failed to load join/leave for clan ${clan.tag}: $joinLeaveError",
+      );
+    }
+  }
+
+  Future<void> _enrichMissingMemberData(Clan clan) async {
+    final missingMembers = clan.memberList
+        .where((member) => member.townHallLevel <= 0 || member.league.id == 0)
+        .toList(growable: false);
+    if (missingMembers.isEmpty) return;
+
+    DebugUtils.debugInfo(
+      "🔄 Enriching ${missingMembers.length} clan members for ${clan.tag}",
+    );
+
+    final enriched = await Future.wait(
+      missingMembers.map(_fetchPublicMemberData),
+    );
+    final enrichedByTag = {
+      for (final member in enriched.whereType<ClanMember>()) member.tag: member,
+    };
+    if (enrichedByTag.isEmpty) return;
+
+    for (var i = 0; i < clan.memberList.length; i++) {
+      final enrichedMember = enrichedByTag[clan.memberList[i].tag];
+      if (enrichedMember != null) {
+        clan.memberList[i] = enrichedMember;
+      }
+    }
+  }
+
+  Future<ClanMember?> _fetchPublicMemberData(ClanMember member) async {
+    try {
+      final encodedTag = Uri.encodeComponent(member.tag);
+      final response = await _apiService.getResponse(
+        '',
+        url: '${ApiService.proxyUrl}/players/$encodedTag',
+      );
+      if (response.statusCode != 200) return null;
+
+      final data =
+          jsonDecode(ApiService.decodeResponseBody(response))
+              as Map<String, dynamic>;
+      return ClanMember.fromJson({
+        ...data,
+        'tag': member.tag,
+        'name': data['name'] ?? member.name,
+        'role': member.role,
+        'donations': data['donations'] ?? member.donations,
+        'donationsReceived':
+            data['donationsReceived'] ?? member.donationsReceived,
+        'leagueTier': data['leagueTier'] ?? data['league'],
+        'league': data['leagueTier'] ?? data['league'],
+        'builderBaseLeague': data['builderBaseLeague'],
+      });
+    } catch (e) {
+      DebugUtils.debugWarning("Failed to enrich clan member ${member.tag}: $e");
+      return null;
     }
   }
 

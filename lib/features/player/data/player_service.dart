@@ -91,7 +91,14 @@ class PlayerService extends ChangeNotifier {
         loadedProfiles.add(player);
       }
 
-      _profiles = loadedProfiles;
+      // Can run concurrently with hydrateBookmarkedPlayers() at startup —
+      // see the matching note in processBulkPlayerData — so merge rather
+      // than replace to avoid dropping a bookmarked player mid-flight.
+      final loadedTags = loadedProfiles.map((player) => player.tag).toSet();
+      final preserved = _profiles.where(
+        (player) => !loadedTags.contains(player.tag),
+      );
+      _profiles = [...loadedProfiles, ...preserved];
       DebugUtils.debugSuccess(
         "Loaded public player profiles: ${_profiles.map((p) => p.tag).toList()}",
       );
@@ -133,7 +140,7 @@ class PlayerService extends ChangeNotifier {
         final data = jsonDecode(responseBody);
 
         if (data.containsKey("items") && data["items"] is List) {
-          _profiles = (data["items"] as List)
+          final loadedProfiles = (data["items"] as List)
               .whereType<Map<String, dynamic>>()
               .map((account) {
                 final player = Player.fromJson(account);
@@ -150,6 +157,15 @@ class PlayerService extends ChangeNotifier {
                 return player;
               })
               .toList();
+          // Can run concurrently with hydrateBookmarkedPlayers() at startup
+          // — see the matching note in processBulkPlayerData — so merge
+          // rather than replace to avoid dropping a bookmarked player
+          // mid-flight.
+          final loadedTags = loadedProfiles.map((player) => player.tag).toSet();
+          final preserved = _profiles.where(
+            (player) => !loadedTags.contains(player.tag),
+          );
+          _profiles = [...loadedProfiles, ...preserved];
           DebugUtils.debugSuccess(
             "✅ Initialized profiles: ${profiles.map((p) => p.tag).toList()}",
           );
@@ -686,15 +702,34 @@ class PlayerService extends ChangeNotifier {
     );
 
     // First, create basic player profiles from basic data
-    _profiles = playersBasic.whereType<Map<String, dynamic>>().map((account) {
-      DebugUtils.debugInfo("🔄 Processing basic player: ${account['tag']}");
-      final player = Player.fromJson(account);
-      if (player.clanOverview.tag.isNotEmpty) {
-        // Cache clan tag for widget use
-        storePrefs('player_${player.tag}_clan_tag', player.clanOverview.tag);
-      }
-      return player;
-    }).toList();
+    final linkedProfiles = playersBasic
+        .whereType<Map<String, dynamic>>()
+        .map((account) {
+          DebugUtils.debugInfo(
+            "🔄 Processing basic player: ${account['tag']}",
+          );
+          final player = Player.fromJson(account);
+          if (player.clanOverview.tag.isNotEmpty) {
+            // Cache clan tag for widget use
+            storePrefs(
+              'player_${player.tag}_clan_tag',
+              player.clanOverview.tag,
+            );
+          }
+          return player;
+        })
+        .toList();
+
+    // This can run concurrently with hydrateBookmarkedPlayers() at startup
+    // (both are kicked off via Future.wait). Replacing _profiles outright
+    // would silently drop a bookmarked player added while this was in
+    // flight, depending on which finishes last — so keep anything already
+    // present that isn't one of this batch's linked accounts.
+    final linkedTags = linkedProfiles.map((player) => player.tag).toSet();
+    final preserved = _profiles.where(
+      (player) => !linkedTags.contains(player.tag),
+    );
+    _profiles = [...linkedProfiles, ...preserved];
 
     DebugUtils.debugSuccess(
       "Created ${_profiles.length} basic player profiles",

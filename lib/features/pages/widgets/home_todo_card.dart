@@ -997,13 +997,24 @@ class _TodoSummary {
   }
 
   factory _TodoSummary.fromMetrics(List<_TodoMetric> metrics) {
-    var done = 0;
-    var total = 0;
-    for (final metric in metrics) {
-      done += metric.done.clamp(0, metric.total);
-      total += metric.total;
-    }
+    final (done, total) = _averagedProgress(metrics);
     return _TodoSummary(metrics: metrics, done: done, total: total);
+  }
+
+  /// Metrics mix wildly different scales (a couple of war/CWL attacks vs.
+  /// tens of thousands of season-pass points) — summing raw done/total
+  /// would let one huge-denominator metric swamp the rest, making the
+  /// overall percentage look stuck near 0% even when every attack-based
+  /// metric is fully done. Average each metric's own ratio instead, and
+  /// store it as done/(count*100) so the existing int-based ratio/isDone
+  /// getters keep working unchanged.
+  static (int, int) _averagedProgress(List<_TodoMetric> metrics) {
+    if (metrics.isEmpty) return (0, 0);
+    final totalRatio = metrics.fold<double>(
+      0,
+      (sum, metric) => sum + metric.ratio,
+    );
+    return ((totalRatio * 100).round(), metrics.length * 100);
   }
 
   factory _TodoSummary.fromPlayer(Player player, WarMemberPresence memberCwl) {
@@ -1124,12 +1135,7 @@ class _TodoSummary {
       ),
     );
 
-    var done = 0;
-    var total = 0;
-    for (final metric in metrics) {
-      done += metric.done.clamp(0, metric.total);
-      total += metric.total;
-    }
+    final (done, total) = _averagedProgress(metrics);
 
     return _TodoSummary(
       metrics: metrics,

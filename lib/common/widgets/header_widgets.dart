@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 
 /// Frosted round icon button floating over a hero header image — same
@@ -10,61 +13,62 @@ import 'package:flutter/material.dart';
 class HeaderIconButton extends StatelessWidget {
   final IconData? icon;
   final String? imageUrl;
+  final Color? iconColor;
   final String tooltip;
   final VoidCallback onTap;
+  final bool showBackground;
 
   const HeaderIconButton({
     super.key,
     this.icon,
     this.imageUrl,
+    this.iconColor,
     required this.tooltip,
     required this.onTap,
+    this.showBackground = true,
   });
 
   @override
   Widget build(BuildContext context) {
     const size = 42.0;
     const radius = 19.0;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
       message: tooltip,
-      child: SizedBox(
-        height: size,
-        width: size,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(radius),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
+      child: SizedBox.square(
+        dimension: size,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (showBackground)
               const NativeLiquidGlassBar(
                 height: size,
                 cornerRadius: radius,
-                opacity: 0.72,
+                opacity: 0.70,
                 interactive: true,
               ),
-              Material(
-                color: Colors.transparent,
+            Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(radius),
+              child: InkWell(
                 borderRadius: BorderRadius.circular(radius),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(radius),
-                  splashFactory: NoSplash.splashFactory,
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: onTap,
-                  child: SizedBox(
-                    height: size,
-                    width: size,
-                    child: imageUrl != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: MobileWebImage(imageUrl: imageUrl!),
-                          )
-                        : Icon(icon, size: 25),
-                  ),
-                ),
+                onTap: onTap,
+                splashFactory: NoSplash.splashFactory,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                child: imageUrl != null
+                    ? Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: MobileWebImage(imageUrl: imageUrl!),
+                      )
+                    : Icon(
+                        icon,
+                        size: 25,
+                        color: iconColor ?? colorScheme.onSurface,
+                      ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -249,6 +253,8 @@ class GlassPanel extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
   final Color? tint;
+  final double? borderOpacity;
+  final double? shadowOpacity;
 
   const GlassPanel({
     super.key,
@@ -259,6 +265,8 @@ class GlassPanel extends StatelessWidget {
     required this.padding,
     this.onTap,
     this.tint,
+    this.borderOpacity,
+    this.shadowOpacity,
   });
 
   @override
@@ -275,12 +283,16 @@ class GlassPanel extends StatelessWidget {
                 cornerRadius: borderRadius,
                 opacity: 0.72,
                 interactive: onTap != null,
-                borderOpacity: Theme.of(context).brightness == Brightness.dark
-                    ? 0.22
-                    : 0.32,
-                shadowOpacity: Theme.of(context).brightness == Brightness.dark
-                    ? 0.24
-                    : 0.08,
+                borderOpacity:
+                    borderOpacity ??
+                    (Theme.of(context).brightness == Brightness.dark
+                        ? 0.22
+                        : 0.32),
+                shadowOpacity:
+                    shadowOpacity ??
+                    (Theme.of(context).brightness == Brightness.dark
+                        ? 0.24
+                        : 0.08),
               ),
             ),
             if (tint != null)
@@ -474,6 +486,356 @@ class MetricBar extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Full-width league summary card — icon, league name, big trophy count,
+/// season label and a secondary attack/defense or best-trophies row.
+/// Tint is sampled from the league badge image so the glass panel picks
+/// up that league's color. Originally the player header's hero league
+/// tile; shared so other headers (e.g. the clan header) can reuse it.
+/// Samples a dominant tint color from a league badge image and hands it
+/// to [builder] once resolved (null until then/on failure). Shared by
+/// [LeagueSummaryTile] and [CompactLeagueTile] so both stay in sync with
+/// a single cache instead of duplicating the async image-sampling logic.
+class LeagueTint extends StatefulWidget {
+  final String leagueUrl;
+  final Widget Function(BuildContext context, Color? tint) builder;
+
+  const LeagueTint({super.key, required this.leagueUrl, required this.builder});
+
+  @override
+  State<LeagueTint> createState() => _LeagueTintState();
+}
+
+class _LeagueTintState extends State<LeagueTint> {
+  static final Map<String, Color> _tintCache = {};
+  Color? _tint;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTint();
+  }
+
+  @override
+  void didUpdateWidget(covariant LeagueTint oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.leagueUrl != widget.leagueUrl) {
+      _loadTint();
+    }
+  }
+
+  Future<void> _loadTint() async {
+    final leagueUrl = widget.leagueUrl;
+    if (leagueUrl.isEmpty) {
+      if (mounted) setState(() => _tint = null);
+      return;
+    }
+
+    final cachedTint = _tintCache[leagueUrl];
+    if (cachedTint != null) {
+      if (mounted) setState(() => _tint = cachedTint);
+      return;
+    }
+
+    if (mounted) setState(() => _tint = null);
+
+    try {
+      final provider = CachedNetworkImageProvider(leagueUrl);
+      final stream = provider.resolve(ImageConfiguration.empty);
+      late final ImageStreamListener listener;
+      final completer = Completer<ImageInfo>();
+
+      listener = ImageStreamListener(
+        (imageInfo, synchronousCall) {
+          if (!completer.isCompleted) completer.complete(imageInfo);
+          stream.removeListener(listener);
+        },
+        onError: (error, stackTrace) {
+          if (!completer.isCompleted) {
+            completer.completeError(error, stackTrace);
+          }
+          stream.removeListener(listener);
+        },
+      );
+      stream.addListener(listener);
+
+      final imageInfo = await completer.future;
+      final tint = await dominantTintFromImage(imageInfo.image);
+      if (tint == null) return;
+
+      _tintCache[leagueUrl] = tint;
+      if (mounted && widget.leagueUrl == leagueUrl) {
+        setState(() => _tint = tint);
+      }
+    } catch (_) {
+      // Keep the glass neutral if the remote badge cannot be sampled.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.builder(context, _tint);
+}
+
+class LeagueSummaryTile extends StatelessWidget {
+  final String leagueName;
+  final String trophies;
+  final String leagueUrl;
+  final String seasonName;
+  final String? attackWins;
+  final String? defenseWins;
+  final String? bestTrophies;
+  final VoidCallback? onTap;
+
+  const LeagueSummaryTile({
+    super.key,
+    required this.leagueName,
+    required this.trophies,
+    required this.leagueUrl,
+    required this.seasonName,
+    this.attackWins,
+    this.defenseWins,
+    this.bestTrophies,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return LeagueTint(
+      leagueUrl: leagueUrl,
+      builder: (context, tint) => GlassPanel(
+        width: double.infinity,
+        height: 75,
+        borderRadius: 16,
+        padding: const EdgeInsets.all(12),
+        tint: tint,
+        onTap: onTap,
+        child: Row(
+          children: [
+            MobileWebImage(imageUrl: leagueUrl, width: 46, height: 46),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    leagueName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    trophies,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      seasonName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: colorScheme.onSurface.withValues(alpha: 0.72),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (onTap != null) ...[
+                      const SizedBox(width: 2),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        size: 18,
+                        color: colorScheme.onSurface.withValues(alpha: 0.58),
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 8),
+                if (attackWins != null && defenseWins != null)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _MiniMetric(
+                        stat: _MetricSubStat(
+                          imageUrl: ImageAssets.sword,
+                          value: attackWins!,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      _MiniMetric(
+                        stat: _MetricSubStat(
+                          imageUrl: ImageAssets.shield,
+                          value: defenseWins!,
+                        ),
+                      ),
+                    ],
+                  )
+                else if (bestTrophies != null)
+                  _MiniMetric(
+                    stat: _MetricSubStat(
+                      imageUrl: ImageAssets.bestTrophies,
+                      value: bestTrophies!,
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Compact league chip — icon, league name, and a short subtitle (e.g.
+/// "CWL" or a point count), with an optional chevron. Two of these sit
+/// side by side in headers (e.g. clan) that don't have room for the
+/// full-size [LeagueSummaryTile].
+class CompactLeagueTile extends StatelessWidget {
+  final String leagueName;
+  final String subtitle;
+  final String? subtitleIconUrl;
+  final String leagueUrl;
+  final VoidCallback? onTap;
+
+  const CompactLeagueTile({
+    super.key,
+    required this.leagueName,
+    required this.subtitle,
+    this.subtitleIconUrl,
+    required this.leagueUrl,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final content = Container(
+      width: double.infinity,
+      height: 64,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.58),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          MobileWebImage(imageUrl: leagueUrl, width: 34, height: 34),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  leagueName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (subtitleIconUrl != null) ...[
+                      MobileWebImage(
+                        imageUrl: subtitleIconUrl!,
+                        width: 14,
+                        height: 14,
+                      ),
+                      const SizedBox(width: 3),
+                    ],
+                    Flexible(
+                      child: Text(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelSmall
+                            ?.copyWith(color: colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          if (onTap != null) ...[
+            const SizedBox(width: 4),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 20,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ],
+      ),
+    );
+
+    if (onTap == null) return content;
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: content,
+      ),
+    );
+  }
+}
+
+class _MetricSubStat {
+  final String imageUrl;
+  final String value;
+
+  const _MetricSubStat({required this.imageUrl, required this.value});
+}
+
+class _MiniMetric extends StatelessWidget {
+  final _MetricSubStat stat;
+
+  const _MiniMetric({required this.stat});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MobileWebImage(imageUrl: stat.imageUrl, width: 14, height: 14),
+        const SizedBox(width: 3),
+        Flexible(
+          child: Text(
+            stat.value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
     );
   }
 }
