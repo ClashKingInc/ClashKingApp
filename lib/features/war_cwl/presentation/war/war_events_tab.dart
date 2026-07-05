@@ -1,15 +1,15 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
-import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
-import 'package:flutter/material.dart';
-import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:clashkingapp/common/widgets/shapes/left_pointing_triangle.dart';
-import 'package:clashkingapp/common/widgets/shapes/right_pointing_triangle.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
     show generateStars;
+import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:provider/provider.dart';
 
 class WarEventsTab extends StatefulWidget {
@@ -30,297 +30,401 @@ class _WarEventsTabState extends State<WarEventsTab> {
     });
   }
 
-  List<Map<String, dynamic>> getAttacks() {
-    List<Map<String, dynamic>> attacks = [];
+  List<_WarEventItem> getAttacks() {
+    final clan = widget.warInfo.clan;
+    final opponent = widget.warInfo.opponent;
+    if (clan == null || opponent == null) return const [];
 
-    void add(List members, String clanTag, {int? starFilter}) {
-      for (var member in members) {
-        final filteredAttacks = (member.attacks ?? [])
-            .where((a) => starFilter == null || a.stars == starFilter)
-            .toList();
+    final attacks = <_WarEventItem>[];
 
-        for (var attack in filteredAttacks) {
-          attacks.add({
-            'attacker': member,
-            'attack': attack,
-            'clanTag': clanTag,
-          });
+    void add(List<WarMember> members, String clanTag) {
+      for (final member in members) {
+        for (final attack in member.attacks ?? const <WarAttack>[]) {
+          attacks.add(
+            _WarEventItem(
+              attacker: member,
+              defender: widget.warInfo.getMemberByTag(attack.defenderTag),
+              attack: attack,
+              clanTag: clanTag,
+            ),
+          );
         }
       }
     }
 
-    // Always collect all attacks first
-    add(widget.warInfo.clan!.members, widget.warInfo.clan!.tag);
-    add(widget.warInfo.opponent!.members, widget.warInfo.opponent!.tag);
+    add(clan.members, clan.tag);
+    add(opponent.members, opponent.tag);
 
-    // Then filter based on the selected option
-    if (filterOption == '5') {
-      // Show only attacks BY clan members
-      attacks = attacks.where((attack) {
-        final attackerClanTag = attack['clanTag'];
-        return attackerClanTag == widget.warInfo.clan!.tag;
-      }).toList();
-    } else if (filterOption == '4') {
-      // Show only attacks BY opponent members
-      attacks = attacks.where((attack) {
-        final attackerClanTag = attack['clanTag'];
-        return attackerClanTag == widget.warInfo.opponent!.tag;
-      }).toList();
-    } else if (filterOption != 'All') {
-      // Filter by star count
+    final filtered = attacks.where((item) {
+      if (filterOption == '5') return item.clanTag == clan.tag;
+      if (filterOption == '4') return item.clanTag == opponent.tag;
+      if (filterOption == 'All') return true;
       final starFilter = int.tryParse(filterOption);
-      if (starFilter != null) {
-        attacks = attacks.where((attack) => attack['attack'].stars == starFilter).toList();
-      }
-    }
+      return starFilter == null || item.attack.stars == starFilter;
+    }).toList();
 
-    attacks.sort((a, b) => b['attack'].order.compareTo(a['attack'].order));
-    return attacks;
+    filtered.sort((a, b) => b.attack.order.compareTo(a.attack.order));
+    return filtered;
   }
 
-  Widget buildPlayerInfo(
-      String tag, bool color, bool rightAlign) {
-    final member = widget.warInfo.getMemberByTag(tag);
-    return Row(
-      mainAxisAlignment:
-          rightAlign ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
-        if (!rightAlign) const SizedBox(width: 4),
-        if (!rightAlign)
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: MobileWebImage(
-              imageUrl: ImageAssets.townHall(member?.townhallLevel ?? 1),
-            ),
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final clan = widget.warInfo.clan;
+    final opponent = widget.warInfo.opponent;
+
+    if (clan == null || opponent == null) {
+      return Padding(
+        padding: const EdgeInsets.all(8),
+        child: _EmptyEvents(message: loc.generalNoDataAvailable),
+      );
+    }
+
+    final attacks = getAttacks();
+
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          FilterDropdown(
+            sortBy: filterOption,
+            updateSortBy: updateFilterOption,
+            sortByOptions: {
+              loc.generalAll: 'All',
+              clan.name: '5',
+              opponent.name: '4',
+              generateStars(3, 20): '3',
+              generateStars(2, 20): '2',
+              generateStars(1, 20): '1',
+              generateStars(0, 20): '0',
+            },
           ),
-        const SizedBox(width: 4),
-        Expanded(
-          child: Column(
-            crossAxisAlignment:
-                rightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          const SizedBox(height: 10),
+          if (attacks.isEmpty)
+            _EmptyEvents(message: loc.generalNoDataAvailable)
+          else
+            Column(
+              children: [
+                for (var index = 0; index < attacks.length; index++) ...[
+                  _AttackEventRow(
+                    item: attacks[index],
+                    isFromClan: attacks[index].clanTag == clan.tag,
+                  ),
+                  if (index < attacks.length - 1) const SizedBox(height: 6),
+                ],
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AttackEventRow extends StatelessWidget {
+  final _WarEventItem item;
+  final bool isFromClan;
+
+  const _AttackEventRow({required this.item, required this.isFromClan});
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final activeUserTags = context.watch<CocAccountService>().getAccountTags();
+    final isActiveUser =
+        activeUserTags.contains(item.attacker.tag) ||
+        activeUserTags.contains(item.attack.defenderTag);
+
+    return _WarEventItemCard(
+      child: Column(
+        children: [
+          Row(
             children: [
-              Text("N°${member!.mapPosition}",
-                  style: color
-                      ? Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: Colors.white)
-                      : Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.tertiary)),
-              Text(member.name,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  overflow: TextOverflow.ellipsis),
+              _SourcePill(
+                label: isFromClan ? loc.warMyTeam : loc.warEnemiesTeam,
+                imageUrl: isFromClan ? ImageAssets.sword : ImageAssets.shield,
+                selected: isActiveUser,
+              ),
+              if (isActiveUser) ...[
+                const SizedBox(width: 6),
+                _SourcePill(
+                  label: loc.authAccountConnectedStatus,
+                  imageUrl: ImageAssets.iconTick,
+                  selected: true,
+                  color: StatColors.win,
+                ),
+              ],
+              const Spacer(),
+              _OrderBadge(order: item.attack.order),
             ],
           ),
-        ),
-        if (rightAlign)
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: MobileWebImage(
-              imageUrl: ImageAssets.townHall(member.townhallLevel),
-            ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: _EventMember(member: item.attacker)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: _AttackResult(attack: item.attack),
+              ),
+              Expanded(
+                child: _EventMember(
+                  member: item.defender,
+                  fallbackTag: item.attack.defenderTag,
+                  alignRight: true,
+                ),
+              ),
+            ],
           ),
-        if (rightAlign) const SizedBox(width: 4),
+        ],
+      ),
+    );
+  }
+}
+
+class _WarEventItemCard extends StatelessWidget {
+  final Widget child;
+
+  const _WarEventItemCard({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.34),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+        child: child,
+      ),
+    );
+  }
+}
+
+class _EventMember extends StatelessWidget {
+  final WarMember? member;
+  final String? fallbackTag;
+  final bool alignRight;
+
+  const _EventMember({
+    required this.member,
+    this.fallbackTag,
+    this.alignRight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final name = member?.name ?? fallbackTag ?? '-';
+    final mapPosition = member?.mapPosition;
+    final townHall = member?.townhallLevel ?? 1;
+
+    final info = Column(
+      crossAxisAlignment: alignRight
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
+      children: [
+        Text(
+          mapPosition == null ? '-' : 'N°$mapPosition',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: alignRight ? TextAlign.end : TextAlign.start,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700),
+        ),
+      ],
+    );
+
+    final townHallImage = MobileWebImage(
+      imageUrl: ImageAssets.townHall(townHall),
+      width: 36,
+      height: 36,
+    );
+
+    return Row(
+      mainAxisAlignment: alignRight
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start,
+      children: [
+        if (!alignRight) ...[townHallImage, const SizedBox(width: 8)],
+        Expanded(child: info),
+        if (alignRight) ...[const SizedBox(width: 8), townHallImage],
       ],
     );
   }
+}
 
-  Widget buildEventRow(Map<String, dynamic> item) {
-    final attacker = item['attacker'];
-    final attack = item['attack'];
-    final attackerClanTag = item['clanTag'];
-    final cocService = context.watch<CocAccountService>();
-    final activeUserTags = cocService.getAccountTags();
+class _AttackResult extends StatelessWidget {
+  final WarAttack attack;
 
-    final isAttackerFromClan = attackerClanTag == widget.warInfo.clan!.tag;
-    final isActiveUser = activeUserTags.contains(attacker.tag) ||
-        activeUserTags.contains(attack.defenderTag);
+  const _AttackResult({required this.attack});
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+  @override
+  Widget build(BuildContext context) {
+    final color = _attackColor(attack.stars);
+    return Column(
+      children: [
+        MobileWebImage(imageUrl: ImageAssets.sword, width: 24, height: 24),
+        const SizedBox(height: 3),
+        Text(
+          '${attack.destructionPercentage}%',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w900,
+            height: 1,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: generateStars(attack.stars, 13),
+        ),
+      ],
+    );
+  }
+}
+
+class _SourcePill extends StatelessWidget {
+  final String label;
+  final String imageUrl;
+  final bool selected;
+  final Color? color;
+
+  const _SourcePill({
+    required this.label,
+    required this.imageUrl,
+    required this.selected,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final accent = color ?? (selected ? StatColors.warStarGold : null);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox.square(
+          dimension: 22,
+          child: Padding(
+            padding: const EdgeInsets.all(3),
+            child: MobileWebImage(imageUrl: imageUrl),
+          ),
+        ),
+        const SizedBox(width: 5),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: accent ?? colorScheme.onSurfaceVariant,
+            fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
+            height: 1,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _OrderBadge extends StatelessWidget {
+  final int order;
+
+  const _OrderBadge({required this.order});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MobileWebImage(imageUrl: ImageAssets.war, width: 18, height: 18),
+        const SizedBox(width: 4),
+        Text(
+          '#$order',
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _EmptyEvents extends StatelessWidget {
+  final String message;
+
+  const _EmptyEvents({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.45),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+        child: Column(
           children: [
-            // Attacker
-            Expanded(
-              flex: 4,
-              child: Container(
-                color: isAttackerFromClan
-                    ? isActiveUser
-                        ? Colors.green.shade500
-                        : Theme.of(context)
-                            .colorScheme
-                            .tertiary
-                            .withValues(alpha: 0.3)
-                    : Colors.transparent,
-                child: buildPlayerInfo(
-                    isAttackerFromClan ? attacker.tag : attack.defenderTag,
-                    isActiveUser && isAttackerFromClan,
-                    false),
+            MobileWebImage(
+              imageUrl: ImageAssets.villager,
+              height: 148,
+              width: 118,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
               ),
-            ),
-            SizedBox(
-              width: 10,
-              height: 40,
-              child: !isAttackerFromClan
-                  ? Center(
-                      child: LeftPointingTriangle(
-                        width: 10,
-                        color: isActiveUser
-                            ? Colors.green.shade500
-                            : Theme.of(context)
-                                .colorScheme
-                                .tertiary
-                                .withValues(alpha: 0.3),
-                      ),
-                    )
-                  : Container(
-                      width: 10,
-                      color: isActiveUser
-                          ? Colors.green.shade500
-                          : Theme.of(context)
-                              .colorScheme
-                              .tertiary
-                              .withValues(alpha: 0.3),
-                    ),
-            ),
-
-            // Stats
-            Expanded(
-              flex: 2,
-              child: Container(
-                color: isActiveUser
-                    ? Colors.green.shade500
-                    : Theme.of(context)
-                        .colorScheme
-                        .tertiary
-                        .withValues(alpha: 0.3),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('${attack.destructionPercentage}%',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: attack.destructionPercentage != 100
-                                ? isActiveUser
-                                    ? Colors.white
-                                    : Theme.of(context).colorScheme.tertiary
-                                : Theme.of(context).colorScheme.primary)),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: generateStars(attack.stars, 13),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-              child: isAttackerFromClan
-                  ? // Triangle direction
-                  SizedBox(
-                      width: 14,
-                      height: 40,
-                      child: isAttackerFromClan
-                          ? Center(
-                              child: RightPointingTriangle(
-                                width: 10,
-                                color: isActiveUser
-                                    ? Colors.green.shade500
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .tertiary
-                                        .withValues(alpha: 0.3),
-                              ),
-                            )
-                          : const SizedBox(),
-                    )
-                  : Container(
-                      width: 10,
-                      color: isActiveUser
-                          ? Colors.green.shade500
-                          : Theme.of(context)
-                              .colorScheme
-                              .tertiary
-                              .withValues(alpha: 0.3),
-                    ),
-            ),
-            // Defender
-            Expanded(
-              flex: 4,
-              child: Container(
-                  color: !isAttackerFromClan
-                      ? isActiveUser
-                          ? Colors.green.shade500
-                          : Theme.of(context)
-                              .colorScheme
-                              .tertiary
-                              .withValues(alpha: 0.3)
-                      : Colors.transparent,
-                  child: buildPlayerInfo(
-                      isAttackerFromClan ? attack.defenderTag : attacker.tag,
-                      isActiveUser && !isAttackerFromClan,
-                      true)),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    final attacks = getAttacks();
+class _WarEventItem {
+  final WarMember attacker;
+  final WarMember? defender;
+  final WarAttack attack;
+  final String clanTag;
 
-    return Column(
-      children: [
-        const SizedBox(height: 8),
-        FilterDropdown(
-          sortBy: filterOption,
-          updateSortBy: updateFilterOption,
-          sortByOptions: {
-            AppLocalizations.of(context)!.generalAll: 'All',
-            widget.warInfo.clan!.name: '5',
-            widget.warInfo.opponent!.name: '4',
-            generateStars(3, 20): '3',
-            generateStars(2, 20): '2',
-            generateStars(1, 20): '1',
-            generateStars(0, 20): '0',
-          },
-        ),
-        const SizedBox(height: 8),
-        attacks.isEmpty
-            ? Column(
-                children: [
-                  const SizedBox(height: 16),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                          AppLocalizations.of(context)!.generalNoDataAvailable),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  CachedNetworkImage(
-                    imageUrl:
-                        'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
-                    height: 250,
-                    width: 200,
-                    errorWidget: (c, u, e) => const Icon(Icons.error),
-                  ),
-                ],
-              )
-            : Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: attacks.map(buildEventRow).toList(),
-                  ),
-                ),
-              ),
-      ],
-    );
-  }
+  const _WarEventItem({
+    required this.attacker,
+    required this.defender,
+    required this.attack,
+    required this.clanTag,
+  });
+}
+
+Color _attackColor(int stars) {
+  if (stars == 3) return StatColors.win;
+  if (stars == 0) return StatColors.loss;
+  return StatColors.warStarGold;
 }
