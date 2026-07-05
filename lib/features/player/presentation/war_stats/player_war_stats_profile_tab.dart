@@ -378,11 +378,22 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
 
     final selectedTypes = _getSelectedTypes();
     final stats = _displayedWarStats!.getStatsForTypes(selectedTypes);
+    final loc = AppLocalizations.of(context)!;
 
     return Column(
       children: [
+        _WarChartsGuide(
+          hints: [
+            _WarChartHint(
+              icon: Icons.grid_on_rounded,
+              label: loc.chartsRowsYourTh,
+            ),
+            _WarChartHint(icon: Icons.star_rounded, label: loc.warStarsAverage),
+          ],
+        ),
         _WarChartSection(
-          title: AppLocalizations.of(context)!.warAttacksTitle,
+          title: loc.warAttacksTitle,
+          subtitle: loc.chartsAttackPerformance,
           child: THHeatmapChart(
             attackStats: stats.byEnemyTownhall,
             defenseStats: stats.byEnemyTownhallDef,
@@ -391,7 +402,8 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
           ),
         ),
         _WarChartSection(
-          title: AppLocalizations.of(context)!.warDefensesTitle,
+          title: loc.warDefensesTitle,
+          subtitle: loc.chartsDefensePerformance,
           child: THHeatmapChart(
             attackStats: stats.byEnemyTownhall,
             defenseStats: stats.byEnemyTownhallDef,
@@ -625,9 +637,14 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
 
 class _WarChartSection extends StatelessWidget {
   final String title;
+  final String subtitle;
   final Widget child;
 
-  const _WarChartSection({required this.title, required this.child});
+  const _WarChartSection({
+    required this.title,
+    required this.subtitle,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -656,10 +673,312 @@ class _WarChartSection extends StatelessWidget {
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 10),
             child,
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _WarChartsGuide extends StatelessWidget {
+  final List<_WarChartHint> hints;
+
+  const _WarChartsGuide({required this.hints});
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: hints
+                .map((hint) => _WarChartHintChip(hint: hint))
+                .toList(),
+          ),
+          const SizedBox(height: 8),
+          _WarChartLegend(
+            items: [
+              _WarChartLegendItem(
+                label: loc.generalPoor,
+                color: Colors.red[600]!,
+              ),
+              _WarChartLegendItem(
+                label: loc.generalAverage,
+                color: Colors.orange[600]!,
+              ),
+              _WarChartLegendItem(
+                label: loc.chartsGood,
+                color: Colors.amber[600]!,
+              ),
+              _WarChartLegendItem(
+                label: loc.chartsExcellent,
+                color: Colors.green[600]!,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WarChartHint {
+  final IconData icon;
+  final String label;
+
+  const _WarChartHint({required this.icon, required this.label});
+}
+
+class _WarChartHintChip extends StatelessWidget {
+  final _WarChartHint hint;
+
+  const _WarChartHintChip({required this.hint});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      height: 30,
+      padding: const EdgeInsets.symmetric(horizontal: 9),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(hint.icon, size: 14, color: colorScheme.onSurfaceVariant),
+          const SizedBox(width: 5),
+          Text(
+            hint.label,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w700,
+              height: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WarChartLegend extends StatelessWidget {
+  final List<_WarChartLegendItem> items;
+
+  const _WarChartLegend({required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final loc = AppLocalizations.of(context)!;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.28),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _WarChartScaleRow(
+            icon: Icons.trending_up_rounded,
+            title: loc.warAttacksTitle,
+            startStars: 0,
+            startLabel: loc.generalPoor,
+            endStars: 3,
+            endLabel: loc.chartsExcellent,
+            items: items,
+          ),
+          const SizedBox(height: 10),
+          _WarChartScaleRow(
+            icon: Icons.trending_down_rounded,
+            title: loc.warDefensesTitle,
+            startStars: 3,
+            startLabel: loc.generalPoor,
+            endStars: 0,
+            endLabel: loc.chartsExcellent,
+            items: items,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WarChartLegendItem {
+  final String label;
+  final Color color;
+
+  const _WarChartLegendItem({required this.label, required this.color});
+}
+
+class _WarChartScaleRow extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final int startStars;
+  final String startLabel;
+  final int endStars;
+  final String endLabel;
+  final List<_WarChartLegendItem> items;
+
+  const _WarChartScaleRow({
+    required this.icon,
+    required this.title,
+    required this.startStars,
+    required this.startLabel,
+    required this.endStars,
+    required this.endLabel,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              height: 26,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: colorScheme.surface.withValues(alpha: 0.45),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.24),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 13, color: colorScheme.onSurfaceVariant),
+                  const SizedBox(width: 5),
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: colorScheme.onSurface,
+                      fontWeight: FontWeight.w800,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                '${AppLocalizations.of(context)!.warStarsAverage}: $startStars-$endStars',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: Row(
+            children: items
+                .map(
+                  (item) =>
+                      Expanded(child: Container(height: 8, color: item.color)),
+                )
+                .toList(),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Row(
+          children: [
+            _WarChartScaleEndpoint(stars: startStars, label: startLabel),
+            _WarChartScaleEndpoint(
+              stars: endStars,
+              label: endLabel,
+              alignEnd: true,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _WarChartScaleEndpoint extends StatelessWidget {
+  final int stars;
+  final String label;
+  final bool alignEnd;
+
+  const _WarChartScaleEndpoint({
+    required this.stars,
+    required this.label,
+    this.alignEnd = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: alignEnd
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            stars.toString(),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.w900,
+              height: 1,
+            ),
+          ),
+          const SizedBox(width: 2),
+          Icon(Icons.star_rounded, size: 11, color: colorScheme.primary),
+          const SizedBox(width: 4),
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
+                height: 1,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
