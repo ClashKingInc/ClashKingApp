@@ -187,7 +187,35 @@ class ClanService extends ChangeNotifier {
       // Don't fail the entire operation if war stats loading fails
     }
 
+    await loadJoinLeaveForClan(clan);
+
     return _clans[clan.tag]!; // Return the updated clan with war stats
+  }
+
+  Future<void> loadJoinLeaveForClan(Clan clan) async {
+    if (clan.joinLeave?.stats.totalEvents != null &&
+        clan.joinLeave!.stats.totalEvents > 0) {
+      return;
+    }
+
+    try {
+      final results = await loadClanJoinLeaveData([clan.tag], notify: false);
+      ClanJoinLeave? joinLeave;
+      for (final item in results) {
+        if (item.clanTag == clan.tag) {
+          joinLeave = item;
+          break;
+        }
+      }
+      if (joinLeave != null) {
+        clan.linkJoinLeave(joinLeave);
+        DebugUtils.debugSuccess("Loaded join/leave for clan: ${clan.tag}");
+      }
+    } catch (joinLeaveError) {
+      DebugUtils.debugWarning(
+        "Failed to load join/leave for clan ${clan.tag}: $joinLeaveError",
+      );
+    }
   }
 
   Future<void> _enrichMissingMemberData(Clan clan) async {

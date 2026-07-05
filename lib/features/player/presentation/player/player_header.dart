@@ -144,6 +144,7 @@ class PlayerInfoHeaderActions extends StatelessWidget {
               icon: bookmarked
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
+              iconColor: bookmarked ? const Color(0xFF2F8CFF) : null,
               tooltip: bookmarked
                   ? 'Remove player bookmark'
                   : 'Bookmark player',
@@ -1203,11 +1204,13 @@ class _PlainInfoChip extends StatelessWidget {
 
 class _HeaderIconButton extends StatelessWidget {
   final IconData icon;
+  final Color? iconColor;
   final String tooltip;
   final VoidCallback onTap;
 
   const _HeaderIconButton({
     required this.icon,
+    this.iconColor,
     required this.tooltip,
     required this.onTap,
   });
@@ -1217,7 +1220,7 @@ class _HeaderIconButton extends StatelessWidget {
     return _HeaderGlassButton(
       tooltip: tooltip,
       onTap: onTap,
-      child: Icon(icon, size: 25),
+      child: Icon(icon, size: 25, color: iconColor),
     );
   }
 }

@@ -81,6 +81,32 @@ class ImageAssets {
     return defaultImage;
   }
 
+  static String getCapitalLeagueImage(String leagueName) {
+    final normalized = leagueName.trim().toLowerCase();
+    if (normalized.isEmpty || normalized == 'unranked') {
+      return capitalTrophy;
+    }
+
+    const filesByFamily = {
+      'bronze': 'Icon_HV_League_Bronze_2.png',
+      'silver': 'Icon_HV_League_Silver_2.png',
+      'gold': 'Icon_HV_League_Gold_2.png',
+      'crystal': 'Icon_HV_League_Crystal_2.png',
+      'master': 'Icon_HV_League_Master_2.png',
+      'champion': 'Icon_HV_League_Champion.png',
+      'titan': 'Icon_HV_League_Titan_1.png',
+      'legend': 'Icon_HV_League_Legend_4.png',
+    };
+
+    for (final entry in filesByFamily.entries) {
+      if (normalized.contains(entry.key)) {
+        return _buildAssetUrl(['home-base', 'league-icons', entry.value]);
+      }
+    }
+
+    return getLeagueImage(leagueName);
+  }
+
   static String getBuilderBaseLeagueImage(dynamic league) {
     if (league is Map) {
       final iconUrls = league['iconUrls'];

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:flutter/material.dart';
@@ -8,48 +6,62 @@ import 'package:flutter/material.dart';
 class HeaderIconButton extends StatelessWidget {
   final IconData? icon;
   final String? imageUrl;
+  final Color? iconColor;
   final String tooltip;
   final VoidCallback onTap;
+  final bool showBackground;
 
   const HeaderIconButton({
     super.key,
     this.icon,
     this.imageUrl,
+    this.iconColor,
     required this.tooltip,
     required this.onTap,
+    this.showBackground = true,
   });
 
   @override
   Widget build(BuildContext context) {
     const size = 42.0;
     const radius = 19.0;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
       message: tooltip,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Material(
-            color: Theme.of(
-              context,
-            ).colorScheme.surface.withValues(alpha: 0.55),
-            borderRadius: BorderRadius.circular(radius),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(radius),
-              onTap: onTap,
-              child: SizedBox(
+      child: SizedBox.square(
+        dimension: size,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (showBackground)
+              const NativeLiquidGlassBar(
                 height: size,
-                width: size,
+                cornerRadius: radius,
+                opacity: 0.70,
+                interactive: true,
+              ),
+            Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(radius),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(radius),
+                onTap: onTap,
+                splashFactory: NoSplash.splashFactory,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
                 child: imageUrl != null
                     ? Padding(
                         padding: const EdgeInsets.all(8),
                         child: MobileWebImage(imageUrl: imageUrl!),
                       )
-                    : Icon(icon, size: 25),
+                    : Icon(
+                        icon,
+                        size: 25,
+                        color: iconColor ?? colorScheme.onSurface,
+                      ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

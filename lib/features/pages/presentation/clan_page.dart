@@ -58,9 +58,12 @@ class _ClanPageState extends State<ClanPage> {
         .toList(growable: false);
     if (missingBookmarkClanTags.isNotEmpty) {
       _requestedBookmarkClanTags.addAll(missingBookmarkClanTags);
-      unawaited(
-        clanService.loadAllClanData(missingBookmarkClanTags, notify: true),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        unawaited(
+          clanService.loadAllClanData(missingBookmarkClanTags, notify: true),
+        );
+      });
     }
     final bookmarkCards = bookmarkService.clans
         .where((bookmark) => !linkedClans.containsKey(bookmark.tag))
@@ -100,7 +103,8 @@ class _ClanPageState extends State<ClanPage> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: _ClanCard(
                     item: item,
-                    onOpen: () => _openClan(context, clanService, item),
+                    onOpen: () =>
+                        _openClan(context, clanService, warCwlService, item),
                   ),
                 ),
               ),
@@ -113,9 +117,14 @@ class _ClanPageState extends State<ClanPage> {
   Future<void> _openClan(
     BuildContext context,
     ClanService clanService,
+    WarCwlService warCwlService,
     _ClanListItem item,
   ) async {
     if (item.clan != null && item.clan!.clanWarLog?.items.isNotEmpty == true) {
+      await _attachWarSummary(warCwlService, item.clan!);
+      await _attachCapitalRaid(clanService, item.clan!);
+      await clanService.loadJoinLeaveForClan(item.clan!);
+      if (!context.mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -127,6 +136,9 @@ class _ClanPageState extends State<ClanPage> {
 
     try {
       final loadedClan = await clanService.getClanAndWarData(item.tag);
+      await _attachWarSummary(warCwlService, loadedClan);
+      await _attachCapitalRaid(clanService, loadedClan);
+      await clanService.loadJoinLeaveForClan(loadedClan);
       if (!context.mounted) return;
       Navigator.push(
         context,
@@ -136,12 +148,35 @@ class _ClanPageState extends State<ClanPage> {
       );
     } catch (_) {
       if (!context.mounted || item.clan == null) return;
+      await clanService.loadJoinLeaveForClan(item.clan!);
+      if (!context.mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ClanInfoScreen(clanInfo: item.clan!),
         ),
       );
+    }
+  }
+
+  Future<void> _attachWarSummary(WarCwlService warCwlService, Clan clan) async {
+    var summary = warCwlService.getWarCwlByTag(clan.tag);
+    if (summary == null) {
+      await warCwlService.loadAllWarData([clan.tag], notify: false);
+      summary = warCwlService.getWarCwlByTag(clan.tag);
+    }
+    if (summary != null) {
+      clan.linkWar(summary);
+    }
+  }
+
+  Future<void> _attachCapitalRaid(ClanService clanService, Clan clan) async {
+    if (clan.clanCapitalRaid?.items.isNotEmpty == true) return;
+    try {
+      await clanService.loadCapitalData([clan.tag], 10, notify: false);
+      clanService.linkCapitalToClans();
+    } catch (_) {
+      // Keep the clan profile usable even if raid history is unavailable.
     }
   }
 

@@ -6,12 +6,14 @@ class FilterDropdown extends StatefulWidget {
   final String sortBy;
   final Function(String) updateSortBy;
   final Map<dynamic, String> sortByOptions;
+  final double? maxWidth;
 
   const FilterDropdown({
     super.key,
     required this.sortBy,
     required this.updateSortBy,
     required this.sortByOptions,
+    this.maxWidth,
   });
 
   @override
@@ -43,58 +45,81 @@ class _FilterDropdownState extends State<FilterDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton2<String>(
-      valueListenable: _valueNotifier,
-      items: widget.sortByOptions.entries.map((entry) {
-        return DropdownItem<String>(
-          value: entry.value,
-          height: 40,
-          child: entry.key is String
-              ? Center(child: Text(entry.key))
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: entry.key as List<Widget>,
-                ),
-        );
-      }).toList(),
-      alignment: Alignment.center,
-      onChanged: (String? newValue) {
-        if (newValue != null) {
-          _valueNotifier.value = newValue;
-          widget.updateSortBy(newValue);
-        }
-      },
-      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-      underline: Container(),
-      buttonStyleData: ButtonStyleData(
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final width = widget.maxWidth ?? 240;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: width),
+      child: SizedBox(
         height: 40,
-        padding: const EdgeInsets.only(left: 14, right: 14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Theme.of(context).colorScheme.surface,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: colorScheme.primary, width: 3),
+            ),
+          ),
+          child: DropdownButton2<String>(
+            isExpanded: true,
+            barrierColor: Colors.transparent,
+            barrierCoversButton: false,
+            barrierBlocksInteraction: false,
+            valueListenable: _valueNotifier,
+            items: widget.sortByOptions.entries.map((entry) {
+              return DropdownItem<String>(
+                value: entry.value,
+                height: 40,
+                child: entry.key is String
+                    ? Center(child: Text(entry.key))
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: entry.key as List<Widget>,
+                      ),
+              );
+            }).toList(),
+            alignment: Alignment.center,
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                _valueNotifier.value = newValue;
+                widget.updateSortBy(newValue);
+              }
+            },
+            style: TextStyle(color: colorScheme.onSurface),
+            underline: Container(),
+            buttonStyleData: ButtonStyleData(
+              height: 40,
+              padding: const EdgeInsets.only(left: 14, right: 14),
+              decoration: BoxDecoration(color: Colors.transparent),
+              elevation: 0,
+            ),
+            iconStyleData: IconStyleData(
+              icon: const Icon(LucideIcons.arrowDown),
+              iconSize: 16,
+              iconEnabledColor: colorScheme.primary,
+              iconDisabledColor: colorScheme.tertiary,
+            ),
+            dropdownStyleData: DropdownStyleData(
+              width: width,
+              maxHeight: 320,
+              offset: const Offset(0, -3),
+              elevation: 16,
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.18),
+                ),
+              ),
+              scrollbarTheme: ScrollbarThemeData(
+                thickness: WidgetStateProperty.all(0),
+                thumbVisibility: WidgetStateProperty.all(false),
+              ),
+            ),
+            menuItemStyleData: const MenuItemStyleData(
+              padding: EdgeInsets.only(left: 14, right: 14),
+            ),
+          ),
         ),
-        elevation: 2,
-      ),
-      iconStyleData: IconStyleData(
-        icon: const Icon(LucideIcons.arrowDown),
-        iconSize: 16,
-        iconEnabledColor: Theme.of(context).colorScheme.primary,
-        iconDisabledColor: Theme.of(context).colorScheme.tertiary,
-      ),
-      dropdownStyleData: DropdownStyleData(
-        elevation: 16,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        scrollbarTheme: ScrollbarThemeData(
-          radius: const Radius.circular(40),
-          thickness: WidgetStateProperty.all(6),
-          thumbVisibility: WidgetStateProperty.all(true),
-        ),
-      ),
-      menuItemStyleData: const MenuItemStyleData(
-        padding: EdgeInsets.only(left: 14, right: 14),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/clan/models/clan_league.dart';
 import 'package:clashkingapp/features/clan/models/clan_member.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -23,6 +24,7 @@ class ClanMembers extends StatefulWidget {
 
 class ClanMembersState extends State<ClanMembers> {
   String currentFilter = 'trophies';
+  bool isMemberListExpanded = true;
 
   void updateFilter(String newFilter) {
     setState(() {
@@ -45,6 +47,31 @@ class ClanMembersState extends State<ClanMembers> {
     };
 
     List<ClanMember> members = widget.clanInfo.memberList.toList();
+    final townHallCounts = <int, int>{};
+    for (final member in members) {
+      townHallCounts.update(
+        member.townHallLevel,
+        (count) => count + 1,
+        ifAbsent: () => 1,
+      );
+    }
+    final townHallBreakdown = townHallCounts.entries.toList()
+      ..sort((a, b) => b.key.compareTo(a.key));
+    final leagueCounts = <int, int>{};
+    final leaguesById = <int, ClanLeague>{};
+    for (final member in members) {
+      leagueCounts.update(
+        member.league.id,
+        (count) => count + 1,
+        ifAbsent: () => 1,
+      );
+      leaguesById[member.league.id] = member.league;
+    }
+    final leagueBreakdown =
+        leagueCounts.entries
+            .map((entry) => MapEntry(leaguesById[entry.key]!, entry.value))
+            .toList()
+          ..sort((a, b) => b.key.id.compareTo(a.key.id));
 
     members.sort((a, b) {
       switch (currentFilter) {
@@ -82,12 +109,57 @@ class ClanMembersState extends State<ClanMembers> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          child: Center(
-            child: FilterDropdown(
-              sortBy: currentFilter,
-              updateSortBy: updateFilter,
-              sortByOptions: filterOptions,
-            ),
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  onTap: () => setState(
+                    () => isMemberListExpanded = !isMemberListExpanded,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 8,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          isMemberListExpanded
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded,
+                          size: 22,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 4),
+                        if (!isMemberListExpanded)
+                          Flexible(
+                            child: Text(
+                              'Clan Totals',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              if (isMemberListExpanded) ...[
+                const SizedBox(width: 10),
+                FilterDropdown(
+                  sortBy: currentFilter,
+                  updateSortBy: updateFilter,
+                  sortByOptions: filterOptions,
+                  maxWidth: 176,
+                ),
+              ],
+            ],
           ),
         ),
         if (members.isEmpty)
@@ -102,146 +174,156 @@ class ClanMembersState extends State<ClanMembers> {
               ),
             ),
           )
-        else
-          ...members.asMap().entries.map((entry) {
-            int index = entry.key + 1;
-            ClanMember member = entry.value;
+        else ...[
+          if (isMemberListExpanded)
+            ...members.asMap().entries.map((entry) {
+              int index = entry.key + 1;
+              ClanMember member = entry.value;
 
-            return GestureDetector(
-              onTap: () async {
-                final navigator = Navigator.of(context);
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) =>
-                      const Center(child: CircularProgressIndicator()),
-                );
-
-                try {
-                  final Player selectedPlayer = await PlayerService()
-                      .getPlayerAndClanData(member.tag);
-
-                  navigator.pop();
-                  navigator.push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          PlayerScreen(selectedPlayer: selectedPlayer),
-                    ),
+              return GestureDetector(
+                onTap: () async {
+                  final navigator = Navigator.of(context);
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) =>
+                        const Center(child: CircularProgressIndicator()),
                   );
-                } catch (e) {
-                  // Dismiss loading dialog
-                  navigator.pop();
 
-                  // Show error message
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.generalRefreshFailed(e.toString()),
-                        ),
-                        duration: const Duration(seconds: 3),
+                  try {
+                    final Player selectedPlayer = await PlayerService()
+                        .getPlayerAndClanData(member.tag);
+
+                    navigator.pop();
+                    navigator.push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PlayerScreen(selectedPlayer: selectedPlayer),
                       ),
                     );
+                  } catch (e) {
+                    // Dismiss loading dialog
+                    navigator.pop();
+
+                    // Show error message
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.generalRefreshFailed(e.toString()),
+                          ),
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    }
                   }
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).cardTheme.color ??
-                      Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: activeUserTags.contains(member.tag)
-                        ? Colors.green.withValues(alpha: 0.7)
-                        : Theme.of(
-                            context,
-                          ).colorScheme.outlineVariant.withValues(alpha: 0.32),
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 3,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 7,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).cardTheme.color ??
+                        Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: activeUserTags.contains(member.tag)
+                          ? Colors.green.withValues(alpha: 0.7)
+                          : Theme.of(context).colorScheme.outlineVariant
+                                .withValues(alpha: 0.32),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 19,
+                        child: Text(
+                          index.toString(),
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                      ),
+                      const SizedBox(width: 7),
+                      CachedNetworkImage(
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        imageUrl: ImageAssets.townHall(member.townHallLevel),
+                        width: 38,
+                      ),
+                      const SizedBox(width: 9),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        member.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 1),
+                                      Text(
+                                        _localizedRole(context, member.role),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurfaceVariant,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                _SortValueChip(
+                                  member: member,
+                                  sortBy: currentFilter,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 19,
-                      child: Text(
-                        index.toString(),
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
-                    ),
-                    const SizedBox(width: 7),
-                    CachedNetworkImage(
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      imageUrl: ImageAssets.townHall(member.townHallLevel),
-                      width: 38,
-                    ),
-                    const SizedBox(width: 9),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      member.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 1),
-                                    Text(
-                                      _localizedRole(context, member.role),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium
-                                          ?.copyWith(
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.onSurfaceVariant,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              _SortValueChip(
-                                member: member,
-                                sortBy: currentFilter,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
+              );
+            }),
+          if (!isMemberListExpanded)
+            _MemberBreakdown(
+              townHalls: townHallBreakdown,
+              leagues: leagueBreakdown,
+            ),
+        ],
       ],
     );
   }
@@ -272,6 +354,102 @@ class ClanMembersState extends State<ClanMembers> {
       default:
         return loc.clanRoleMember;
     }
+  }
+}
+
+class _MemberBreakdown extends StatelessWidget {
+  final List<MapEntry<int, int>> townHalls;
+  final List<MapEntry<ClanLeague, int>> leagues;
+
+  const _MemberBreakdown({required this.townHalls, required this.leagues});
+
+  @override
+  Widget build(BuildContext context) {
+    if (townHalls.isEmpty && leagues.isEmpty) return const SizedBox.shrink();
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.16),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.18),
+          ),
+        ),
+        child: Column(
+          children: [
+            Wrap(
+              alignment: WrapAlignment.center,
+              runAlignment: WrapAlignment.center,
+              spacing: 12,
+              runSpacing: 10,
+              children: [
+                for (final entry in leagues)
+                  _BreakdownCount(
+                    imageUrl: ImageAssets.getLeagueImage(entry.key.name),
+                    count: entry.value,
+                  ),
+              ],
+            ),
+            if (townHalls.isNotEmpty && leagues.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Divider(
+                height: 1,
+                color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+              ),
+              const SizedBox(height: 10),
+            ],
+            Wrap(
+              alignment: WrapAlignment.center,
+              runAlignment: WrapAlignment.center,
+              spacing: 12,
+              runSpacing: 10,
+              children: [
+                for (final entry in townHalls)
+                  _BreakdownCount(
+                    imageUrl: ImageAssets.townHall(entry.key),
+                    count: entry.value,
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BreakdownCount extends StatelessWidget {
+  final String imageUrl;
+  final int count;
+
+  const _BreakdownCount({required this.imageUrl, required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CachedNetworkImage(
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+          imageUrl: imageUrl,
+          width: 24,
+          height: 24,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          count.toString(),
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w900,
+            height: 1,
+          ),
+        ),
+      ],
+    );
   }
 }
 

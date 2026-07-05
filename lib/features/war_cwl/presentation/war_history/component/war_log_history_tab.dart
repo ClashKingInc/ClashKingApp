@@ -10,6 +10,10 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+const _warWinColor = Color(0xFF58C76A);
+const _warLossColor = Color(0xFFFF5656);
+const _warTieColor = Color(0xFF4EA6FF);
+
 class WarLogHistoryTab extends StatefulWidget {
   final Clan clan;
 
@@ -105,34 +109,44 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: FilterDropdown(
-            sortBy: selectedFilter ?? 'newest',
-            updateSortBy: (String newValue) {
-              setState(() {
-                selectedFilter = newValue;
-              });
-            },
-            sortByOptions: {
-              AppLocalizations.of(context)?.warEventsNewest ?? 'Newest':
-                  'newest',
-              AppLocalizations.of(context)?.warEventsOldest ?? 'Oldest':
-                  'oldest',
-              AppLocalizations.of(context)?.warVictory ?? 'Victory': 'victory',
-              AppLocalizations.of(context)?.warDefeat ?? 'Defeat': 'defeat',
-              AppLocalizations.of(context)?.warDraw ?? 'Draw': 'draw',
-              AppLocalizations.of(context)?.warPerfectWar ?? 'Perfect War':
-                  'perfectWar',
-              '5v5': '5',
-              '10v10': '10',
-              '15v15': '15',
-              '20v20': '20',
-              '25v25': '25',
-              '30v30': '30',
-              '40v40': '40',
-              '50v50': '50',
-            },
+          child: Center(
+            child: FilterDropdown(
+              sortBy: selectedFilter ?? 'newest',
+              updateSortBy: (String newValue) {
+                setState(() {
+                  selectedFilter = newValue;
+                });
+              },
+              sortByOptions: {
+                AppLocalizations.of(context)?.warEventsNewest ?? 'Newest':
+                    'newest',
+                AppLocalizations.of(context)?.warEventsOldest ?? 'Oldest':
+                    'oldest',
+                AppLocalizations.of(context)?.warVictory ?? 'Victory':
+                    'victory',
+                AppLocalizations.of(context)?.warDefeat ?? 'Defeat': 'defeat',
+                AppLocalizations.of(context)?.warDraw ?? 'Draw': 'draw',
+                AppLocalizations.of(context)?.warPerfectWar ?? 'Perfect War':
+                    'perfectWar',
+                '5v5': '5',
+                '10v10': '10',
+                '15v15': '15',
+                '20v20': '20',
+                '25v25': '25',
+                '30v30': '30',
+                '40v40': '40',
+                '50v50': '50',
+              },
+              maxWidth: 150,
+            ),
           ),
         ),
+        if (filteredWarLogData.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Center(child: _WarLogSummary(clan: widget.clan)),
+          ),
+        ],
         filteredWarLogData.isEmpty
             ? Column(
                 children: [
@@ -235,6 +249,70 @@ class WarLogHistoryTabState extends State<WarLogHistoryTab> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _WarLogSummary extends StatelessWidget {
+  final Clan clan;
+
+  const _WarLogSummary({required this.clan});
+
+  @override
+  Widget build(BuildContext context) {
+    final publicRecord = clan.isWarLogPublic;
+    final stats = <Widget>[
+      _WarSummaryText(value: '${clan.warWins} wins', color: _warWinColor),
+      if (publicRecord)
+        _WarSummaryText(value: '${clan.warTies} ties', color: _warTieColor),
+      if (publicRecord)
+        _WarSummaryText(
+          value: '${clan.warLosses} losses',
+          color: _warLossColor,
+        ),
+      if (clan.warWinStreak > 0)
+        _WarSummaryText(
+          value: '${clan.warWinStreak} streak',
+          color: const Color(0xFFE35D4F),
+          icon: Icons.local_fire_department_rounded,
+        ),
+    ];
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 10,
+      runSpacing: 4,
+      children: stats,
+    );
+  }
+}
+
+class _WarSummaryText extends StatelessWidget {
+  final String value;
+  final Color color;
+  final IconData? icon;
+
+  const _WarSummaryText({required this.value, required this.color, this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (icon != null) ...[
+          Icon(icon, size: 17, color: color),
+          const SizedBox(width: 3),
+        ],
+        Text(
+          value,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w900,
+            height: 1,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -360,9 +438,6 @@ class _WarScoreText extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    const winColor = Color(0xFF58C76A);
-    const loseColor = Color(0xFFFF5656);
-    const tieColor = Color(0xFF4EA6FF);
     final baseStyle = theme.textTheme.titleLarge?.copyWith(
       fontSize: (theme.textTheme.titleLarge?.fontSize ?? 22) * 1.05,
       color: colorScheme.onSurface,
@@ -370,16 +445,18 @@ class _WarScoreText extends StatelessWidget {
       height: 1,
     );
     final ownColor = switch (result) {
-      'win' => winColor,
-      'tie' => tieColor,
+      'win' => _warWinColor,
+      'tie' => _warTieColor,
       _ => colorScheme.onSurface,
     };
     final opponentColor = switch (result) {
-      'lose' => loseColor,
-      'tie' => tieColor,
+      'lose' => _warLossColor,
+      'tie' => _warTieColor,
       _ => colorScheme.onSurface,
     };
-    final separatorColor = result == 'tie' ? tieColor : colorScheme.onSurface;
+    final separatorColor = result == 'tie'
+        ? _warTieColor
+        : colorScheme.onSurface;
 
     return RichText(
       text: TextSpan(

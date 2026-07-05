@@ -313,7 +313,9 @@ class _SearchPageState extends State<SearchPage> {
       if (data is! Map<String, dynamic>) {
         throw const FormatException('Invalid clan response');
       }
-      return Clan.fromJson(data);
+      final loadedClan = Clan.fromJson(data);
+      await clanService.loadJoinLeaveForClan(loadedClan);
+      return loadedClan;
     }
   }
 
