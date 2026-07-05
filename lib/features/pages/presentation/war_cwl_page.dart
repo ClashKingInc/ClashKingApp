@@ -689,33 +689,39 @@ class _CwlRoundBanner extends StatelessWidget {
         AppLocalizations.of(context)?.cwlRoundNumber(roundNumber) ??
         'Round $roundNumber';
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: tint.withValues(alpha: 0.16),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(28),
-          topRight: Radius.circular(28),
+    return SizedBox(
+      width: double.infinity,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: tint.withValues(alpha: 0.16),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            MobileWebImage(
-              imageUrl: ImageAssets.cwlSwordsNoBorder,
-              width: 14,
-              height: 14,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              rank == null ? 'CWL — $roundLabel' : 'CWL — $roundLabel — #$rank',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onSurface,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MobileWebImage(
+                imageUrl: ImageAssets.cwlSwordsNoBorder,
+                width: 14,
+                height: 14,
               ),
-            ),
-          ],
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  rank == null
+                      ? 'CWL — $roundLabel'
+                      : 'CWL — $roundLabel — #$rank',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
