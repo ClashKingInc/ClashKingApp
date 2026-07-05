@@ -2,7 +2,9 @@ import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_tab_common.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +16,14 @@ class ClanWarLog extends StatelessWidget {
   final Clan clan;
   final List<String> selectedTypes;
   final String? selectedFilter;
+  final String searchQuery;
 
   const ClanWarLog({
     super.key,
     required this.clan,
     required this.selectedTypes,
     required this.selectedFilter,
+    required this.searchQuery,
   });
 
   String formatWarTime(DateTime date, BuildContext context) {
@@ -59,6 +63,14 @@ class ClanWarLog extends StatelessWidget {
             .toList() ??
         [];
 
+    final normalizedSearch = searchQuery.trim().toLowerCase();
+    if (normalizedSearch.isNotEmpty) {
+      filteredData = filteredData.where((war) {
+        return _matchesWarSide(war.clan, normalizedSearch) ||
+            _matchesWarSide(war.opponent, normalizedSearch);
+      }).toList();
+    }
+
     if (selectedFilter == null) {
       return filteredData;
     }
@@ -97,6 +109,13 @@ class ClanWarLog extends StatelessWidget {
       default:
         return filteredData;
     }
+  }
+
+  bool _matchesWarSide(WarClan? side, String query) {
+    if (side == null) return false;
+    final name = side.name.toLowerCase();
+    final tag = side.tag.toLowerCase();
+    return name.contains(query) || tag.contains(query);
   }
 
   @override
@@ -155,7 +174,7 @@ class ClanWarLog extends StatelessWidget {
                     context,
                   ),
                   expEarned: _findExpEarned(clan, war, clanTag),
-                  onTap: () {
+                  onTap: () async {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -163,52 +182,61 @@ class ClanWarLog extends StatelessWidget {
                         return Center(child: CircularProgressIndicator());
                       },
                     );
-                    WarCwlService.fetchWarDataFromTime(
-                          clan.tag,
-                          war.endTime ?? DateTime.now(),
-                        )
-                        .then((currentWarInfo) {
-                          navigator.pop();
-                          if (currentWarInfo == null) {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Center(
-                                    child: Text(
-                                      AppLocalizations.of(
-                                            context,
-                                          )?.warNoDataAvailableForThisWar ??
-                                          'No data available for this war',
-                                      style: TextStyle(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onSurface,
-                                      ),
-                                    ),
-                                  ),
-                                  duration: Duration(seconds: 1),
-                                  backgroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.surface,
-                                ),
-                              );
-                            }
-                          } else {
-                            navigator.push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    WarScreen(war: currentWarInfo),
-                              ),
-                            );
-                          }
-                        })
-                        .catchError((error, stackTrace) {
-                          Sentry.captureException(
-                            error,
-                            stackTrace: stackTrace,
+                    try {
+                      final currentWarInfo =
+                          await WarCwlService.fetchWarDataFromTime(
+                            clan.tag,
+                            war.endTime ?? DateTime.now(),
                           );
-                          return null;
-                        });
+                      if (!context.mounted) return;
+                      navigator.pop();
+                      if (currentWarInfo == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Center(
+                              child: Text(
+                                AppLocalizations.of(
+                                      context,
+                                    )?.warNoDataAvailableForThisWar ??
+                                    'No data available for this war',
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                              ),
+                            ),
+                            duration: Duration(seconds: 1),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.surface,
+                          ),
+                        );
+                        return;
+                      }
+                      navigator.push(
+                        MaterialPageRoute(
+                          builder: (context) => WarScreen(war: currentWarInfo),
+                        ),
+                      );
+                    } catch (error, stackTrace) {
+                      Sentry.captureException(error, stackTrace: stackTrace);
+                      if (!context.mounted) return;
+                      navigator.pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Center(
+                            child: Text(
+                              AppLocalizations.of(
+                                    context,
+                                  )?.warNoDataAvailableForThisWar ??
+                                  'No data available for this war',
+                            ),
+                          ),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
                   },
                 );
               }),
@@ -251,65 +279,33 @@ class WarLogSummary extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final publicRecord = clan.isWarLogPublic;
     final stats = <Widget>[
-      _WarSummaryText(
-        value: '${clan.warWins} ${loc.warWinsTitle.toLowerCase()}',
+      ClanSummaryChip(
+        label: loc.warWinsTitle,
+        value: clan.warWins.toString(),
         color: StatColors.win,
       ),
       if (publicRecord)
-        _WarSummaryText(
-          value: '${clan.warTies} ${loc.warDrawsTitle.toLowerCase()}',
+        ClanSummaryChip(
+          label: loc.warDrawsTitle,
+          value: clan.warTies.toString(),
           color: StatColors.tie,
         ),
       if (publicRecord)
-        _WarSummaryText(
-          value: '${clan.warLosses} ${loc.warLossesTitle.toLowerCase()}',
+        ClanSummaryChip(
+          label: loc.warLossesTitle,
+          value: clan.warLosses.toString(),
           color: StatColors.loss,
         ),
       if (clan.warWinStreak > 0)
-        _WarSummaryText(
-          value:
-              '${clan.warWinStreak} ${loc.clanWinStreakTitle.toLowerCase()}',
+        ClanSummaryChip(
+          label: loc.clanWinStreakTitle,
+          value: clan.warWinStreak.toString(),
           color: const Color(0xFFE35D4F),
           icon: Icons.local_fire_department_rounded,
         ),
     ];
 
-    return Wrap(
-      alignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 10,
-      runSpacing: 4,
-      children: stats,
-    );
-  }
-}
-
-class _WarSummaryText extends StatelessWidget {
-  final String value;
-  final Color color;
-  final IconData? icon;
-
-  const _WarSummaryText({required this.value, required this.color, this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (icon != null) ...[
-          Icon(icon, size: 15, color: color),
-          const SizedBox(width: 3),
-        ],
-        Text(
-          value,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: color,
-            fontWeight: FontWeight.w800,
-            height: 1,
-          ),
-        ),
-      ],
-    );
+    return ClanSummaryChips(padding: EdgeInsets.zero, children: stats);
   }
 }
 
@@ -347,6 +343,17 @@ class _WarLogEntryCard extends StatelessWidget {
         (own.stars == enemy.stars &&
             own.destructionPercentage < enemy.destructionPercentage);
     final result = weWon ? 'win' : (weLost ? 'lose' : 'tie');
+    final loc = AppLocalizations.of(context);
+    final resultLabel = switch (result) {
+      'win' => loc?.warVictory ?? 'Victory',
+      'lose' => loc?.warDefeat ?? 'Defeat',
+      _ => loc?.warDraw ?? 'Draw',
+    };
+    final resultColor = switch (result) {
+      'win' => StatColors.win,
+      'lose' => StatColors.loss,
+      _ => StatColors.tie,
+    };
 
     return Material(
       color: theme.cardTheme.color ?? colorScheme.surface,
@@ -390,7 +397,9 @@ class _WarLogEntryCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
+                    _WarResultPill(label: resultLabel, color: resultColor),
+                    const SizedBox(height: 4),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: _WarScoreText(
@@ -439,6 +448,33 @@ class _WarLogEntryCard extends StatelessWidget {
   }
 }
 
+class _WarResultPill extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _WarResultPill({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: color.withValues(alpha: 0.24)),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          color: color,
+          fontWeight: FontWeight.w900,
+          height: 1,
+        ),
+      ),
+    );
+  }
+}
+
 class _WarScoreText extends StatelessWidget {
   final int ownStars;
   final int opponentStars;
@@ -470,14 +506,22 @@ class _WarScoreText extends StatelessWidget {
       'tie' => StatColors.tie,
       _ => colorScheme.onSurface,
     };
-    final separatorColor = result == 'tie' ? StatColors.tie : colorScheme.onSurface;
+    final separatorColor = result == 'tie'
+        ? StatColors.tie
+        : colorScheme.onSurface;
 
     return RichText(
       text: TextSpan(
         style: baseStyle,
         children: [
-          TextSpan(text: '$ownStars', style: TextStyle(color: ownColor)),
-          TextSpan(text: ' - ', style: TextStyle(color: separatorColor)),
+          TextSpan(
+            text: '$ownStars',
+            style: TextStyle(color: ownColor),
+          ),
+          TextSpan(
+            text: ' - ',
+            style: TextStyle(color: separatorColor),
+          ),
           TextSpan(
             text: '$opponentStars',
             style: TextStyle(color: opponentColor),

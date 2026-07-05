@@ -28,6 +28,7 @@ What’s new
 - War stats now use clan-style filter chips, top-level attack/defense tabs, simplified grouped war details, smoother scrolling, and improved missed-count styling
 - Fixed War Stats default loading so it shows the latest 50 wars instead of a season/date-limited view
 - War detail now shows clearer win-path guidance with remaining attacks, lock conditions, and opponent threat
+- CWL war details now correctly count one attack per member and show win-path effort per remaining attack
 - The War tab now presents account attack status without nested cards and includes opted-in bookmarked player accounts
 - Fixed the CWL round banner shape on War tab cards
 - Player item icons now resolve directly from ClashKing assets instead of app-data image URLs

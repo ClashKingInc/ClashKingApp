@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart'
@@ -13,7 +14,6 @@ import 'package:clashkingapp/features/war_cwl/presentation/war/war_team_tab.dart
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
@@ -278,7 +278,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
               ],
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
                   child: Column(
                     children: [
                       WarStatisticsTab(warInfo: widget.war),
@@ -289,7 +289,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                 ),
                 WarEventsTab(warInfo: widget.war),
                 Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
                   child: Column(
                     children: [
                       FilterDropdown(
@@ -346,33 +346,16 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                         },
                       ),
                       const SizedBox(height: 8),
-                      CustomSlidingSegmentedControl<int>(
-                        initialValue: _currentSegment,
-                        children: {
-                          1: Text(AppLocalizations.of(context)!.warMyTeam),
-                          2: Text(AppLocalizations.of(context)!.warEnemiesTeam),
-                        },
-                        decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.tertiary.withAlpha(50),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        thumbDecoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.3),
-                              blurRadius: 4,
-                              spreadRadius: 1,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        onValueChanged: (v) {
+                      NativeLiquidGlassSegmentedControl<int>(
+                        values: const [1, 2],
+                        labels: [
+                          AppLocalizations.of(context)!.warMyTeam,
+                          AppLocalizations.of(context)!.warEnemiesTeam,
+                        ],
+                        selected: _currentSegment,
+                        height: 44,
+                        color: Theme.of(context).colorScheme.primary,
+                        onChanged: (v) {
                           setState(() {
                             _currentSegment = v;
                           });
@@ -382,7 +365,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                       WarTeamTab(
                         members: filteredMembers,
                         warInfo: widget.war,
-                        attacksPerMember: widget.war.attacksPerMember ?? 1,
+                        attacksPerMember: widget.war.effectiveAttacksPerMember,
                       ),
                     ],
                   ),

@@ -189,7 +189,7 @@ class WarCwl {
         return WarMemberPresence(
           isInWar: true,
           attacksDone: attacksDone,
-          attacksAvailable: warInfo.attacksPerMember ?? 1,
+          attacksAvailable: warInfo.effectiveAttacksPerMember,
         );
       }
     } catch (e) {
