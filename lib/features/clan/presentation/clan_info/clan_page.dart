@@ -16,6 +16,7 @@ import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_lo
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Clan detail screen: hero header + tabs for Members / War Log /
@@ -37,7 +38,7 @@ class ClanInfoScreen extends StatefulWidget {
 }
 
 class _ClanInfoScreenState extends State<ClanInfoScreen> {
-  static const int _tabCount = 5;
+  static const int _tabCount = 6;
   late int selectedTab;
 
   // Shared between the War Log and Statistics tabs so toggling a war
@@ -144,6 +145,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                       ),
                       onResetWarTypes: _resetWarTypeFilters,
                     ),
+                    4 => _ClanRankingsTab(clanInfo: widget.clanInfo),
                     _ => _ClanCwlHistoryTab(clan: widget.clanInfo),
                   },
                 ),
@@ -177,7 +179,7 @@ class _ClanProfileTabsState extends State<_ClanProfileTabs>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 5,
+      length: 6,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
@@ -253,9 +255,14 @@ class _ClanProfileTabsState extends State<_ClanProfileTabs>
                 selected: widget.selectedIndex == 3,
               ),
               _ClanTab(
+                label: loc.clanRankingsTab,
+                icon: Icons.leaderboard_rounded,
+                selected: widget.selectedIndex == 4,
+              ),
+              _ClanTab(
                 label: loc.cwlHistoryTitle,
                 icon: Icons.emoji_events_rounded,
-                selected: widget.selectedIndex == 4,
+                selected: widget.selectedIndex == 5,
               ),
             ],
           ),
@@ -603,6 +610,241 @@ class _JoinLeaveEventCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ClanRankingsTab extends StatelessWidget {
+  final Clan clanInfo;
+
+  const _ClanRankingsTab({required this.clanInfo});
+
+  @override
+  Widget build(BuildContext context) {
+    final totalDonated = clanInfo.memberList.fold<int>(
+      0,
+      (total, member) => total + member.donations,
+    );
+    final totalReceived = clanInfo.memberList.fold<int>(
+      0,
+      (total, member) => total + member.donationsReceived,
+    );
+    final rankings = [
+      _RankingPreview(
+        title: 'Donations',
+        value: totalDonated,
+        icon: Icons.arrow_upward_rounded,
+        color: Colors.green,
+        globalRank: 42,
+        localRank: 3,
+      ),
+      _RankingPreview(
+        title: 'Received',
+        value: totalReceived,
+        icon: Icons.arrow_downward_rounded,
+        color: Colors.redAccent,
+        globalRank: 98,
+        localRank: 8,
+      ),
+      _RankingPreview(
+        title: 'War wins',
+        value: clanInfo.warWins,
+        imageUrl: ImageAssets.sword,
+        globalRank: 118,
+        localRank: 7,
+      ),
+      _RankingPreview(
+        title: 'Win streak',
+        value: clanInfo.warWinStreak,
+        icon: Icons.local_fire_department_rounded,
+        color: const Color(0xFFE35D4F),
+        globalRank: 210,
+        localRank: 12,
+      ),
+      _RankingPreview(
+        title: 'Clan points',
+        value: clanInfo.clanPoints,
+        imageUrl: ImageAssets.trophies,
+        plainValue: true,
+        globalRank: 164,
+        localRank: 16,
+      ),
+      _RankingPreview(
+        title: 'Builder points',
+        value: clanInfo.clanBuilderBasePoints,
+        imageUrl: ImageAssets.builderBaseTrophy,
+        plainValue: true,
+        globalRank: 187,
+        localRank: 18,
+      ),
+      _RankingPreview(
+        title: 'Capital points',
+        value: clanInfo.clanCapitalPoints,
+        imageUrl: ImageAssets.capitalTrophy,
+        plainValue: true,
+        globalRank: 73,
+        localRank: 6,
+      ),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      child: Column(
+        children: [
+          ...rankings.map(
+            (ranking) => _RankingPreviewCard(
+              ranking: ranking,
+              countryCode: clanInfo.location?.countryCode,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RankingPreview {
+  final String title;
+  final int value;
+  final IconData? icon;
+  final String? imageUrl;
+  final Color? color;
+  final int globalRank;
+  final int localRank;
+  final bool plainValue;
+
+  const _RankingPreview({
+    required this.title,
+    required this.value,
+    this.icon,
+    this.imageUrl,
+    this.color,
+    required this.globalRank,
+    required this.localRank,
+    this.plainValue = false,
+  });
+}
+
+class _RankingPreviewCard extends StatelessWidget {
+  final _RankingPreview ranking;
+  final String? countryCode;
+
+  const _RankingPreviewCard({
+    required this.ranking,
+    required this.countryCode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final localeName = Localizations.localeOf(context).toString();
+    final decimalFormat = NumberFormat.decimalPattern(localeName);
+    final value = ranking.plainValue
+        ? ranking.value.toString()
+        : decimalFormat.format(ranking.value);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+        ),
+      ),
+      child: Row(
+        children: [
+          _RankingIcon(ranking: ranking, size: 28),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  ranking.title,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _RankMetric(icon: Icons.public_rounded, rank: ranking.globalRank),
+          const SizedBox(width: 12),
+          _RankMetric(countryCode: countryCode, rank: ranking.localRank),
+        ],
+      ),
+    );
+  }
+}
+
+class _RankingIcon extends StatelessWidget {
+  final _RankingPreview ranking;
+  final double size;
+
+  const _RankingIcon({required this.ranking, required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    if (ranking.imageUrl != null) {
+      return MobileWebImage(
+        imageUrl: ranking.imageUrl!,
+        width: size,
+        height: size,
+      );
+    }
+    return Icon(
+      ranking.icon ?? Icons.leaderboard_rounded,
+      size: size,
+      color: ranking.color ?? Theme.of(context).colorScheme.onSurface,
+    );
+  }
+}
+
+class _RankMetric extends StatelessWidget {
+  final IconData? icon;
+  final String? countryCode;
+  final int rank;
+
+  const _RankMetric({this.icon, this.countryCode, required this.rank});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final flagUrl = countryCode == null
+        ? null
+        : ImageAssets.flag(countryCode!);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (flagUrl != null)
+          MobileWebImage(imageUrl: flagUrl, width: 17, height: 17)
+        else
+          Icon(
+            icon ?? Icons.flag_rounded,
+            size: 17,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        const SizedBox(width: 4),
+        Text(
+          '#$rank',
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w900,
+            height: 1,
+          ),
+        ),
+      ],
     );
   }
 }
