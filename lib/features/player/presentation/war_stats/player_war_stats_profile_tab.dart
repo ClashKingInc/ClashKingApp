@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/file_opener.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
@@ -15,11 +17,12 @@ import 'package:clashkingapp/features/player/presentation/war_stats/widgets/th_h
 import 'package:clashkingapp/features/player/services/player_war_export_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 
 /// War stats as a profile tab — content only, no hero header (the outer
-/// [PlayerScreen] already shows name/tag/back button) and a segmented
-/// control instead of a nested tab bar for Stats/Details/Charts.
+/// [PlayerScreen] already shows name/tag/back button) and a single segmented
+/// control for Stats/Attacks/Defenses/Charts.
 class PlayerWarStatsProfileTab extends StatefulWidget {
   final Player player;
 
@@ -39,7 +42,6 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
   bool _isLoadingFiltered = false;
   bool _hasAppliedFilters = false;
   int _section = 0;
-  bool _warTypesExpanded = false;
 
   List<String> _getSelectedTypes() {
     final List<String> selected = [];
@@ -94,8 +96,13 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: NativeLiquidGlassSegmentedControl<int>(
-            values: const [0, 1, 2],
-            labels: [loc.generalStats, loc.generalDetails, loc.generalCharts],
+            values: const [0, 1, 2, 3],
+            labels: [
+              loc.generalStats,
+              loc.warAttacksTitle,
+              loc.warDefensesTitle,
+              loc.generalCharts,
+            ],
             selected: _section,
             onChanged: (value) => setState(() => _section = value),
             height: 44,
@@ -138,7 +145,20 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
                       currentSeasonDate: DateTime.now(),
                       warDataLimit: 0,
                     ),
-                    1 => PlayerWarAttacksTab(wars: _filteredWars),
+                    1 => PlayerWarAttacksTab(
+                      wars: _filteredWars,
+                      stats: _displayedWarStats!.getStatsForTypes(
+                        _getSelectedTypes(),
+                      ),
+                      type: "attacks",
+                    ),
+                    2 => PlayerWarAttacksTab(
+                      wars: _filteredWars,
+                      stats: _displayedWarStats!.getStatsForTypes(
+                        _getSelectedTypes(),
+                      ),
+                      type: "defenses",
+                    ),
                     _ => _buildPerformanceChartsTab(),
                   },
                 ),
@@ -151,124 +171,58 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
 
   Widget _buildFilterBanner() {
     final loc = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+    return _WarStatsFilterBar(
+      chips: [
+        _WarTypeChip(
+          label: loc.cwlTitle,
+          imageUrl: ImageAssets.cwlSwordsNoBorder,
+          selected: isCWLChecked,
+          onTap: () => setState(() => isCWLChecked = !isCWLChecked),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Icon(
-                _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
-                size: 16,
-                color: colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  _hasAppliedFilters
-                      ? _getFilterSummary()
-                      : AppLocalizations.of(context)?.filtersShowingDefaultData(
-                              _currentFilter.limit,
-                            ) ??
-                            'Showing last ${_currentFilter.limit} wars (default)',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
+        _WarTypeChip(
+          label: loc.warFiltersRandom,
+          icon: LucideIcons.shuffle,
+          selected: isRandomChecked,
+          onTap: () => setState(() => isRandomChecked = !isRandomChecked),
+        ),
+        _WarTypeChip(
+          label: loc.warFiltersFriendly,
+          icon: LucideIcons.handshake,
+          selected: isFriendlyChecked,
+          onTap: () => setState(() => isFriendlyChecked = !isFriendlyChecked),
+        ),
+      ],
+      middle: _FilterSummaryText(
+        icon: _hasAppliedFilters ? Icons.filter_alt : Icons.info_outline,
+        text: _hasAppliedFilters
+            ? _getFilterSummary()
+            : AppLocalizations.of(
                     context,
-                  ).textTheme.bodySmall?.copyWith(color: colorScheme.onSurface),
-                ),
-              ),
-              if (_hasAppliedFilters)
-                IconButton(
-                  tooltip: loc.generalClearFilters,
-                  icon: Icon(
-                    Icons.close,
-                    size: 16,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                  onPressed: _clearFilters,
-                ),
-              IconButton(
-                tooltip: loc.generalFilters,
-                icon: Icon(Icons.tune, size: 16, color: colorScheme.onSurface),
-                onPressed: _showFilterDialog,
-              ),
-              IconButton(
-                tooltip: loc.generalExport,
-                icon: Icon(
-                  Icons.download_outlined,
-                  size: 16,
-                  color: colorScheme.onSurface,
-                ),
-                onPressed: _showExportDialog,
-              ),
-              IconButton(
-                tooltip: _warTypesExpanded
-                    ? loc.generalCollapse
-                    : loc.generalExpand,
-                onPressed: () =>
-                    setState(() => _warTypesExpanded = !_warTypesExpanded),
-                icon: AnimatedRotation(
-                  turns: _warTypesExpanded ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 180),
-                  curve: Curves.easeOutCubic,
-                  child: Icon(
-                    Icons.expand_more_rounded,
-                    size: 18,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          ClipRect(
-            child: AnimatedSize(
-              alignment: Alignment.topCenter,
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOutCubic,
-              child: _warTypesExpanded
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Row(
-                        children: [
-                          _WarTypeChip(
-                            label: 'CWL',
-                            selected: isCWLChecked,
-                            onTap: () =>
-                                setState(() => isCWLChecked = !isCWLChecked),
-                          ),
-                          const SizedBox(width: 8),
-                          _WarTypeChip(
-                            label: loc.warFiltersRandom,
-                            selected: isRandomChecked,
-                            onTap: () => setState(
-                              () => isRandomChecked = !isRandomChecked,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          _WarTypeChip(
-                            label: loc.warFiltersFriendly,
-                            selected: isFriendlyChecked,
-                            onTap: () => setState(
-                              () => isFriendlyChecked = !isFriendlyChecked,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : const SizedBox(width: double.infinity, height: 0),
+                  )?.filtersShowingDefaultData(_currentFilter.limit) ??
+                  'Showing last ${_currentFilter.limit} wars (default)',
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (_hasAppliedFilters) ...[
+            _IconPillButton(
+              icon: Icons.close,
+              tooltip: loc.generalClearFilters,
+              onTap: _clearFilters,
             ),
+            const SizedBox(width: 8),
+          ],
+          _IconPillButton(
+            icon: Icons.tune,
+            tooltip: loc.generalFilters,
+            onTap: _showFilterDialog,
+          ),
+          const SizedBox(width: 8),
+          _IconPillButton(
+            icon: Icons.download_outlined,
+            tooltip: loc.generalExport,
+            onTap: _showExportDialog,
           ),
         ],
       ),
@@ -427,27 +381,22 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
 
     return Column(
       children: [
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: THHeatmapChart(
-              attackStats: stats.byEnemyTownhall,
-              defenseStats: stats.byEnemyTownhallDef,
-              playerThLevel: widget.player.townHallLevel,
-              showDefense: false,
-            ),
+        _WarChartSection(
+          title: AppLocalizations.of(context)!.warAttacksTitle,
+          child: THHeatmapChart(
+            attackStats: stats.byEnemyTownhall,
+            defenseStats: stats.byEnemyTownhallDef,
+            playerThLevel: widget.player.townHallLevel,
+            showDefense: false,
           ),
         ),
-        const SizedBox(height: 16),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: THHeatmapChart(
-              attackStats: stats.byEnemyTownhall,
-              defenseStats: stats.byEnemyTownhallDef,
-              playerThLevel: widget.player.townHallLevel,
-              showDefense: true,
-            ),
+        _WarChartSection(
+          title: AppLocalizations.of(context)!.warDefensesTitle,
+          child: THHeatmapChart(
+            attackStats: stats.byEnemyTownhall,
+            defenseStats: stats.byEnemyTownhallDef,
+            playerThLevel: widget.player.townHallLevel,
+            showDefense: true,
           ),
         ),
       ],
@@ -674,51 +623,279 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
   }
 }
 
-/// Small selectable glass pill matching the MetricChip/StatTile/
-/// FilterDropdown family - tinted when selected instead of the stock
-/// Material FilterChip look, which clashed with the rest of the app.
+class _WarChartSection extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  const _WarChartSection({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: BoxDecoration(
+        color:
+            Theme.of(context).cardTheme.color ??
+            Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _WarStatsFilterBar extends StatefulWidget {
+  final List<Widget> chips;
+  final Widget middle;
+  final Widget trailing;
+
+  const _WarStatsFilterBar({
+    required this.chips,
+    required this.middle,
+    required this.trailing,
+  });
+
+  @override
+  State<_WarStatsFilterBar> createState() => _WarStatsFilterBarState();
+}
+
+class _WarStatsFilterBarState extends State<_WarStatsFilterBar> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(AppRadius.chip),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(AppRadius.chip),
+                  onTap: () => setState(() => _expanded = !_expanded),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: _expanded
+                          ? colorScheme.primary.withValues(alpha: 0.14)
+                          : colorScheme.surfaceContainerHighest.withValues(
+                              alpha: 0.45,
+                            ),
+                      borderRadius: BorderRadius.circular(AppRadius.chip),
+                      border: Border.all(
+                        color: _expanded
+                            ? colorScheme.primary.withValues(alpha: 0.4)
+                            : colorScheme.outlineVariant.withValues(
+                                alpha: 0.32,
+                              ),
+                      ),
+                    ),
+                    child: Icon(
+                      LucideIcons.listFilter,
+                      size: 18,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Align(alignment: Alignment.center, child: widget.middle),
+              ),
+              widget.trailing,
+            ],
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topLeft,
+            child: _expanded
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: widget.chips,
+                    ),
+                  )
+                : const SizedBox(width: double.infinity),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterSummaryText extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const _FilterSummaryText({required this.icon, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: colorScheme.onSurfaceVariant),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colorScheme.onSurface),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _IconPillButton extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  const _IconPillButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          onTap: onTap,
+          child: Container(
+            height: 40,
+            width: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.45,
+              ),
+              borderRadius: BorderRadius.circular(AppRadius.chip),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+              ),
+            ),
+            child: Icon(icon, size: 18, color: colorScheme.onSurface),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Same compact war-type chip visual recipe as the clan War Log filters.
 class _WarTypeChip extends StatelessWidget {
   const _WarTypeChip({
     required this.label,
+    this.icon,
+    this.imageUrl,
     required this.selected,
     required this.onTap,
   });
 
   final String label;
+  final IconData? icon;
+  final String? imageUrl;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final tint = colorScheme.primary;
+    final accent = colorScheme.primary;
 
     return Material(
       color: Colors.transparent,
+      borderRadius: BorderRadius.circular(999),
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.chip),
+        borderRadius: BorderRadius.circular(999),
+        splashFactory: NoSplash.splashFactory,
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          height: 36,
+          padding: const EdgeInsets.symmetric(horizontal: 11),
           decoration: BoxDecoration(
             color: selected
-                ? tint.withValues(alpha: 0.16)
-                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(AppRadius.chip),
+                ? accent.withValues(alpha: 0.16)
+                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
+            borderRadius: BorderRadius.circular(999),
             border: Border.all(
               color: selected
-                  ? tint.withValues(alpha: 0.5)
-                  : colorScheme.outlineVariant.withValues(alpha: 0.32),
+                  ? accent.withValues(alpha: 0.42)
+                  : colorScheme.outlineVariant.withValues(alpha: 0.28),
             ),
           ),
-          child: Text(
-            label,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: selected
-                  ? colorScheme.onSurface
-                  : colorScheme.onSurfaceVariant,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (imageUrl != null) ...[
+                MobileWebImage(imageUrl: imageUrl!, height: 15, width: 15),
+                const SizedBox(width: 5),
+              ] else if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 15,
+                  color: selected ? accent : colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 5),
+              ],
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
+                  height: 1,
+                ),
+              ),
+            ],
           ),
         ),
       ),

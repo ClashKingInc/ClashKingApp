@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -10,84 +12,183 @@ import 'package:clashkingapp/features/player/presentation/player/player_page.dar
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class PlayerWarAttacksCard extends StatelessWidget {
+class PlayerWarAttacksCard extends StatefulWidget {
   final List<PlayerWarStatsData> wars;
   final String type;
 
-  const PlayerWarAttacksCard(
-      {super.key, required this.wars, required this.type});
+  const PlayerWarAttacksCard({
+    super.key,
+    required this.wars,
+    required this.type,
+  });
+
+  @override
+  State<PlayerWarAttacksCard> createState() => _PlayerWarAttacksCardState();
+}
+
+class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
+  static const int _initialVisibleEntries = 25;
+  static const int _entriesPerFrame = 12;
+  static const Duration _progressiveRenderDelay = Duration(milliseconds: 80);
+
+  final List<_WarAttackEntry> _entries = [];
+  Timer? _progressiveRenderTimer;
+  int _visibleEntryCount = 0;
+  int _dataSignature = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshEntries();
+  }
+
+  @override
+  void didUpdateWidget(covariant PlayerWarAttacksCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final nextSignature = _buildDataSignature();
+    if (nextSignature != _dataSignature) {
+      _refreshEntries(signature: nextSignature);
+    }
+  }
+
+  @override
+  void dispose() {
+    _progressiveRenderTimer?.cancel();
+    super.dispose();
+  }
+
+  void _refreshEntries({int? signature}) {
+    _progressiveRenderTimer?.cancel();
+    _dataSignature = signature ?? _buildDataSignature();
+    _entries
+      ..clear()
+      ..addAll(_buildEntries());
+    _visibleEntryCount = _entries.length < _initialVisibleEntries
+        ? _entries.length
+        : _initialVisibleEntries;
+    _startProgressiveRender();
+  }
+
+  List<_WarAttackEntry> _buildEntries() {
+    final entries = <_WarAttackEntry>[];
+    for (final war in widget.wars) {
+      final attacks = widget.type == "attacks"
+          ? war.memberData.attacks
+          : war.memberData.defenses;
+      for (final attack in attacks) {
+        entries.add(_WarAttackEntry(war: war, attack: attack));
+      }
+    }
+    return entries;
+  }
+
+  int _buildDataSignature() {
+    return Object.hash(
+      widget.type,
+      Object.hashAll(
+        widget.wars.map((war) {
+          final entries = widget.type == "attacks"
+              ? war.memberData.attacks
+              : war.memberData.defenses;
+          return Object.hash(
+            war.warDetails.startTime?.millisecondsSinceEpoch,
+            war.warDetails.warType,
+            war.warDetails.state,
+            entries.length,
+          );
+        }),
+      ),
+    );
+  }
+
+  void _startProgressiveRender() {
+    if (_visibleEntryCount >= _entries.length) return;
+
+    _progressiveRenderTimer = Timer.periodic(_progressiveRenderDelay, (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      if (_visibleEntryCount >= _entries.length) {
+        timer.cancel();
+        return;
+      }
+
+      setState(() {
+        final nextCount = _visibleEntryCount + _entriesPerFrame;
+        _visibleEntryCount = nextCount > _entries.length
+            ? _entries.length
+            : nextCount;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (wars.isEmpty) {
+    if (widget.wars.isEmpty) {
       return _buildEmpty(context);
     }
 
-    List<Map<String, dynamic>> allAttacks = [];
-
-    if (type == "attacks") {
-      allAttacks = wars
-          .expand(
-              (w) => w.memberData.attacks.map((d) => {"defense": d, "war": w}))
-          .toList();
-    } else {
-      allAttacks = wars
-          .expand(
-              (w) => w.memberData.defenses.map((d) => {"defense": d, "war": w}))
-          .toList();
-    }
-
-    if (allAttacks.isEmpty) {
+    if (_entries.isEmpty) {
       return _buildEmpty(context);
     }
 
     return Column(
-      children: allAttacks.map((defenseData) {
-        final defense = defenseData["defense"] as WarAttack;
-        final war = defenseData["war"] as PlayerWarStatsData;
-        final formattedDate =
-            DateFormat.yMd(Localizations.localeOf(context).toString())
-                .format(war.warDetails.startTime ?? DateTime.now());
-
-        return _buildEnhancedAttackCard(context, defense, war, formattedDate);
-      }).toList(),
+      children: _entries
+          .take(_visibleEntryCount)
+          .map(
+            (entry) =>
+                _buildEnhancedAttackCard(context, entry.attack, entry.war),
+          )
+          .toList(),
     );
   }
 
-  Widget _buildEnhancedAttackCard(BuildContext context, WarAttack attack,
-      PlayerWarStatsData war, String formattedDate) {
-    final isAttackCard = type == "attacks";
+  Widget _buildEnhancedAttackCard(
+    BuildContext context,
+    WarAttack attack,
+    PlayerWarStatsData war,
+  ) {
+    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isAttackCard = widget.type == "attacks";
     final targetPlayer = isAttackCard ? attack.defender : attack.attacker;
-    final targetPlayerTag = targetPlayer?.tag;
-
-    // Get background colors based on stars only
-    final starPerformance = type == "defenses" ? 3.0 - attack.stars : attack.stars;
-
-    Color cardColor;
-    Color borderColor;
-    Color badgeColor;
-    if (starPerformance == 3.0) {
-      cardColor = Colors.green.withValues(alpha: 0.1);
-      borderColor = Colors.green.withValues(alpha: 0.3);
-      badgeColor = Colors.green[600]!;
-    } else if (starPerformance == 2.0) {
-      cardColor = Colors.orange.withValues(alpha: 0.1);
-      borderColor = Colors.orange.withValues(alpha: 0.3);
-      badgeColor = Colors.orange[600]!;
-    } else if (starPerformance == 1.0) {
-      cardColor = Colors.amber.withValues(alpha: 0.1);
-      borderColor = Colors.amber.withValues(alpha: 0.3);
-      badgeColor = Colors.amber[700]!;
-    } else {
-      cardColor = Colors.red.withValues(alpha: 0.1);
-      borderColor = Colors.red.withValues(alpha: 0.3);
-      badgeColor = Colors.red[600]!;
-    }
+    final targetPlayerTag =
+        targetPlayer?.tag ??
+        (isAttackCard ? attack.defenderTag : attack.attackerTag);
+    final targetName = targetPlayer?.name ?? loc.generalUnknown;
+    final targetPosition = targetPlayer?.mapPosition;
+    final targetTownHall = targetPlayer?.townhallLevel;
+    final formattedDate = DateFormat.yMd(
+      Localizations.localeOf(context).toString(),
+    ).format(war.warDetails.startTime ?? DateTime.now());
+    final starPerformance = widget.type == "defenses"
+        ? 3.0 - attack.stars
+        : attack.stars.toDouble();
+    final accentColor = _performanceColor(starPerformance);
+    final targetLabel = targetPosition != null && targetPosition > 0
+        ? '$targetPosition. $targetName'
+        : targetName;
+    final detailParts = [
+      if (targetTownHall != null && targetTownHall > 0) 'TH$targetTownHall',
+      formattedDate,
+      if (attack.order > 0) '#${attack.order}',
+    ];
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+          ),
+        ),
+      ),
       child: Dismissible(
-        key: Key('${attack.order}-${war.warDetails.startTime}'),
+        key: Key(
+          '${widget.type}-${attack.order}-${attack.attacker?.tag}-${attack.defender?.tag}-${war.warDetails.startTime}',
+        ),
         background: Container(
           decoration: BoxDecoration(
             color: Colors.blue,
@@ -95,11 +196,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
           ),
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.only(left: 20),
-          child: const Icon(
-            Icons.person,
-            color: Colors.white,
-            size: 24,
-          ),
+          child: const Icon(Icons.person, color: Colors.white, size: 24),
         ),
         secondaryBackground: Container(
           decoration: BoxDecoration(
@@ -108,11 +205,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 20),
-          child: const Icon(
-            Icons.info,
-            color: Colors.white,
-            size: 24,
-          ),
+          child: const Icon(Icons.info, color: Colors.white, size: 24),
         ),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.startToEnd) {
@@ -124,115 +217,100 @@ class PlayerWarAttacksCard extends StatelessWidget {
           }
           return false; // Don't actually dismiss
         },
-        child: Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: borderColor, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: () => _viewPlayerProfile(context, targetPlayerTag),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  // Player avatar
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      imageUrl: ImageAssets.townHall(
-                          targetPlayer?.townhallLevel ?? 1),
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Container(
-                        width: 50,
-                        height: 50,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.castle),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _viewPlayerProfile(context, targetPlayerTag),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+            child: Row(
+              children: [
+                Container(
+                  width: 3,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: accentColor,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: ImageAssets.townHall(
+                      targetTownHall != null && targetTownHall > 0
+                          ? targetTownHall
+                          : 1,
+                    ),
+                    width: 34,
+                    height: 34,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) => Container(
+                      width: 34,
+                      height: 34,
+                      color: colorScheme.surfaceContainerHighest,
+                      alignment: Alignment.center,
+                      child: Text(
+                        targetTownHall != null && targetTownHall > 0
+                            ? 'TH$targetTownHall'
+                            : '?',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-
-                  // Main content
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Player name and position
-                        Text(
-                          "${targetPlayer?.mapPosition}. ${targetPlayer?.name ?? AppLocalizations.of(context)!.generalUnknown}",
-                          style:
-                              Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-
-                        // War date
-                        Text(
-                          formattedDate,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Performance indicator
-                  Column(
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: badgeColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            buildStarsIcon(attack.stars.round()),
-                            const SizedBox(width: 4),
-                            Text(
-                              "-"
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${attack.destructionPercentage}%',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                          ],
+                      Text(
+                        targetLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Icon(
-                        Icons.swipe,
-                        size: 16,
-                        color: Colors.grey[500],
+                      const SizedBox(height: 2),
+                      Text(
+                        detailParts.join(' • '),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                buildStarsIcon(attack.stars),
+                const SizedBox(width: 8),
+                Text(
+                  '${attack.destructionPercentage}%',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: accentColor,
+                    fontWeight: FontWeight.w900,
+                    height: 1,
+                  ),
+                ),
+                SizedBox.square(
+                  dimension: 40,
+                  child: IconButton(
+                    tooltip: loc.warAttacksDetailsTitle,
+                    padding: EdgeInsets.zero,
+                    iconSize: 18,
+                    color: colorScheme.onSurfaceVariant,
+                    onPressed: () => _showAttackDetails(context, attack, war),
+                    icon: const Icon(Icons.info_outline_rounded),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -240,8 +318,17 @@ class PlayerWarAttacksCard extends StatelessWidget {
     );
   }
 
+  Color _performanceColor(double starPerformance) {
+    if (starPerformance >= 3.0) return Colors.green[600]!;
+    if (starPerformance >= 2.0) return Colors.orange[600]!;
+    if (starPerformance >= 1.0) return Colors.amber[700]!;
+    return Colors.red[600]!;
+  }
+
   Future<void> _viewPlayerProfile(
-      BuildContext context, String? playerTag) async {
+    BuildContext context,
+    String? playerTag,
+  ) async {
     if (playerTag == null) return;
 
     final navigator = Navigator.of(context);
@@ -256,22 +343,27 @@ class PlayerWarAttacksCard extends StatelessWidget {
       final player = await PlayerService().getPlayerAndClanData(playerTag);
       navigator.pop();
       navigator.push(
-        MaterialPageRoute(
-          builder: (_) => PlayerScreen(selectedPlayer: player),
-        ),
+        MaterialPageRoute(builder: (_) => PlayerScreen(selectedPlayer: player)),
       );
     } catch (e) {
       navigator.pop();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.warAttacksFailedToLoadPlayer)),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.warAttacksFailedToLoadPlayer,
+            ),
+          ),
         );
       }
     }
   }
 
   void _showAttackDetails(
-      BuildContext context, WarAttack attack, PlayerWarStatsData war) {
+    BuildContext context,
+    WarAttack attack,
+    PlayerWarStatsData war,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -318,13 +410,38 @@ class PlayerWarAttacksCard extends StatelessWidget {
                       // Attack Performance Card
                       _buildInfoCard(
                         context,
-                        title: AppLocalizations.of(context)!.warAttacksDetailsTitle,
+                        title: AppLocalizations.of(
+                          context,
+                        )!.warAttacksDetailsTitle,
                         icon: Icons.military_tech,
                         children: [
-                          _buildIconValueRow(context, Icons.star, AppLocalizations.of(context)!.warStarsTitle, attack.stars.toString()),
-                          _buildIconValueRow(context, Icons.percent, AppLocalizations.of(context)!.warDestructionTitle, '${attack.destructionPercentage}%'),
-                          _buildIconValueRow(context, Icons.format_list_numbered, AppLocalizations.of(context)!.warAttacksDetailsAttackOrder, attack.order.toString()),
-                          _buildIconValueRow(context, Icons.sports_esports, AppLocalizations.of(context)!.filtersWarType, war.warDetails.warType ?? AppLocalizations.of(context)!.generalUnknown),
+                          _buildIconValueRow(
+                            context,
+                            Icons.star,
+                            AppLocalizations.of(context)!.warStarsTitle,
+                            attack.stars.toString(),
+                          ),
+                          _buildIconValueRow(
+                            context,
+                            Icons.percent,
+                            AppLocalizations.of(context)!.warDestructionTitle,
+                            '${attack.destructionPercentage}%',
+                          ),
+                          _buildIconValueRow(
+                            context,
+                            Icons.format_list_numbered,
+                            AppLocalizations.of(
+                              context,
+                            )!.warAttacksDetailsAttackOrder,
+                            attack.order.toString(),
+                          ),
+                          _buildIconValueRow(
+                            context,
+                            Icons.sports_esports,
+                            AppLocalizations.of(context)!.filtersWarType,
+                            war.warDetails.warType ??
+                                AppLocalizations.of(context)!.generalUnknown,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -332,23 +449,63 @@ class PlayerWarAttacksCard extends StatelessWidget {
                       // War Information Card
                       _buildInfoCard(
                         context,
-                        title: AppLocalizations.of(context)!.warInformationTitle,
+                        title: AppLocalizations.of(
+                          context,
+                        )!.warInformationTitle,
                         icon: Icons.info,
                         children: [
-                          _buildIconValueRow(context, _getWarStateIcon(war.warDetails.state), AppLocalizations.of(context)!.warDataState, _getWarStateDisplay(context, war.warDetails.state)),
-                          _buildIconValueRow(context, Icons.group, AppLocalizations.of(context)!.warTeamSize, war.warDetails.teamSize?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
-                          _buildIconValueRow(context, Icons.local_fire_department, AppLocalizations.of(context)!.warDataAttacksPerMember, war.warDetails.attacksPerMember?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+                          _buildIconValueRow(
+                            context,
+                            _getWarStateIcon(war.warDetails.state),
+                            AppLocalizations.of(context)!.warDataState,
+                            _getWarStateDisplay(context, war.warDetails.state),
+                          ),
+                          _buildIconValueRow(
+                            context,
+                            Icons.group,
+                            AppLocalizations.of(context)!.warTeamSize,
+                            war.warDetails.teamSize?.toString() ??
+                                AppLocalizations.of(context)!.generalUnknown,
+                          ),
+                          _buildIconValueRow(
+                            context,
+                            Icons.local_fire_department,
+                            AppLocalizations.of(
+                              context,
+                            )!.warDataAttacksPerMember,
+                            war.warDetails.attacksPerMember?.toString() ??
+                                AppLocalizations.of(context)!.generalUnknown,
+                          ),
                           if (war.warDetails.startTime != null)
-                            _buildIconValueRow(context, Icons.schedule, AppLocalizations.of(context)!.warDataStartTime, DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm().format(war.warDetails.startTime!)),
+                            _buildIconValueRow(
+                              context,
+                              Icons.schedule,
+                              AppLocalizations.of(context)!.warDataStartTime,
+                              DateFormat.yMd(
+                                Localizations.localeOf(context).toString(),
+                              ).add_Hm().format(war.warDetails.startTime!),
+                            ),
                           if (war.warDetails.endTime != null)
-                            _buildIconValueRow(context, Icons.flag, AppLocalizations.of(context)!.warDataEndTime, DateFormat.yMd(Localizations.localeOf(context).toString()).add_Hm().format(war.warDetails.endTime!)),
+                            _buildIconValueRow(
+                              context,
+                              Icons.flag,
+                              AppLocalizations.of(context)!.warDataEndTime,
+                              DateFormat.yMd(
+                                Localizations.localeOf(context).toString(),
+                              ).add_Hm().format(war.warDetails.endTime!),
+                            ),
                         ],
                       ),
                       const SizedBox(height: 16),
 
                       // Clan vs Opponent Section
-                      if (war.warDetails.clan != null && war.warDetails.opponent != null) ...[
-                        _buildClanVsOpponentCard(context, war.warDetails.clan!, war.warDetails.opponent!),
+                      if (war.warDetails.clan != null &&
+                          war.warDetails.opponent != null) ...[
+                        _buildClanVsOpponentCard(
+                          context,
+                          war.warDetails.clan!,
+                          war.warDetails.opponent!,
+                        ),
                         const SizedBox(height: 16),
                       ],
 
@@ -370,15 +527,16 @@ class PlayerWarAttacksCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
-              'No data'),
+          Text(
+            AppLocalizations.of(context)?.generalNoDataAvailable ?? 'No data',
+          ),
           const SizedBox(height: 16),
           CachedNetworkImage(
             imageUrl:
                 'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
             height: 150,
             width: 120,
-          )
+          ),
         ],
       ),
     );
@@ -412,7 +570,8 @@ class PlayerWarAttacksCard extends StatelessWidget {
   }
 
   // New user-friendly card builder
-  Widget _buildInfoCard(BuildContext context, {
+  Widget _buildInfoCard(
+    BuildContext context, {
     required String title,
     required IconData icon,
     required List<Widget> children,
@@ -439,7 +598,9 @@ class PlayerWarAttacksCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -466,9 +627,7 @@ class PlayerWarAttacksCard extends StatelessWidget {
           // Card content
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              children: children,
-            ),
+            child: Column(children: children),
           ),
         ],
       ),
@@ -476,7 +635,12 @@ class PlayerWarAttacksCard extends StatelessWidget {
   }
 
   // Icon-value row builder
-  Widget _buildIconValueRow(BuildContext context, IconData icon, String label, String value) {
+  Widget _buildIconValueRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -508,7 +672,11 @@ class PlayerWarAttacksCard extends StatelessWidget {
   }
 
   // Enhanced clan vs opponent card
-  Widget _buildClanVsOpponentCard(BuildContext context, WarClan clan, WarClan opponent) {
+  Widget _buildClanVsOpponentCard(
+    BuildContext context,
+    WarClan clan,
+    WarClan opponent,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
@@ -530,7 +698,9 @@ class PlayerWarAttacksCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -572,9 +742,14 @@ class PlayerWarAttacksCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -597,17 +772,39 @@ class PlayerWarAttacksCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Stats comparison
                 Row(
                   children: [
                     Expanded(
                       child: Column(
                         children: [
-                          _buildClanStatItem(context, Icons.emoji_events, AppLocalizations.of(context)!.warDataClanLevel, clan.clanLevel.toString()),
-                          _buildClanStatItem(context, Icons.star, AppLocalizations.of(context)!.warDataTotalStars, clan.stars.toString()),
-                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warAttacksTitle, clan.attacks.toString()),
-                          _buildClanStatItem(context, Icons.percent, AppLocalizations.of(context)!.warDataDestructionPercentage, '${clan.destructionPercentage.toStringAsFixed(1)}%'),
+                          _buildClanStatItem(
+                            context,
+                            Icons.emoji_events,
+                            AppLocalizations.of(context)!.warDataClanLevel,
+                            clan.clanLevel.toString(),
+                          ),
+                          _buildClanStatItem(
+                            context,
+                            Icons.star,
+                            AppLocalizations.of(context)!.warDataTotalStars,
+                            clan.stars.toString(),
+                          ),
+                          _buildClanStatItem(
+                            context,
+                            Icons.local_fire_department,
+                            AppLocalizations.of(context)!.warAttacksTitle,
+                            clan.attacks.toString(),
+                          ),
+                          _buildClanStatItem(
+                            context,
+                            Icons.percent,
+                            AppLocalizations.of(
+                              context,
+                            )!.warDataDestructionPercentage,
+                            '${clan.destructionPercentage.toStringAsFixed(1)}%',
+                          ),
                         ],
                       ),
                     ),
@@ -619,9 +816,15 @@ class PlayerWarAttacksCard extends StatelessWidget {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-                            Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
-                            Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                            Theme.of(
+                              context,
+                            ).colorScheme.outline.withValues(alpha: 0.1),
+                            Theme.of(
+                              context,
+                            ).colorScheme.outline.withValues(alpha: 0.3),
+                            Theme.of(
+                              context,
+                            ).colorScheme.outline.withValues(alpha: 0.1),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(1),
@@ -631,10 +834,32 @@ class PlayerWarAttacksCard extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
-                          _buildClanStatItem(context, Icons.emoji_events, AppLocalizations.of(context)!.warDataClanLevel, opponent.clanLevel.toString()),
-                          _buildClanStatItem(context, Icons.star, AppLocalizations.of(context)!.warDataTotalStars, opponent.stars.toString()),
-                          _buildClanStatItem(context, Icons.local_fire_department, AppLocalizations.of(context)!.warAttacksTitle, opponent.attacks.toString()),
-                          _buildClanStatItem(context, Icons.percent, AppLocalizations.of(context)!.warDataDestructionPercentage, '${opponent.destructionPercentage.toStringAsFixed(1)}%'),
+                          _buildClanStatItem(
+                            context,
+                            Icons.emoji_events,
+                            AppLocalizations.of(context)!.warDataClanLevel,
+                            opponent.clanLevel.toString(),
+                          ),
+                          _buildClanStatItem(
+                            context,
+                            Icons.star,
+                            AppLocalizations.of(context)!.warDataTotalStars,
+                            opponent.stars.toString(),
+                          ),
+                          _buildClanStatItem(
+                            context,
+                            Icons.local_fire_department,
+                            AppLocalizations.of(context)!.warAttacksTitle,
+                            opponent.attacks.toString(),
+                          ),
+                          _buildClanStatItem(
+                            context,
+                            Icons.percent,
+                            AppLocalizations.of(
+                              context,
+                            )!.warDataDestructionPercentage,
+                            '${opponent.destructionPercentage.toStringAsFixed(1)}%',
+                          ),
                         ],
                       ),
                     ),
@@ -648,7 +873,12 @@ class PlayerWarAttacksCard extends StatelessWidget {
     );
   }
 
-  Widget _buildClanStatItem(BuildContext context, IconData icon, String label, String value) {
+  Widget _buildClanStatItem(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
@@ -696,20 +926,14 @@ class PlayerWarAttacksCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.blue.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.blue.withValues(alpha: 0.2),
-            ),
+            border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.person,
-                    size: 18,
-                    color: Colors.blue[700],
-                  ),
+                  Icon(Icons.person, size: 18, color: Colors.blue[700]),
                   const SizedBox(width: 8),
                   Text(
                     AppLocalizations.of(context)!.warAttacksDetailsAttacker,
@@ -732,20 +956,14 @@ class PlayerWarAttacksCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.red.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: Colors.red.withValues(alpha: 0.2),
-            ),
+            border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.shield,
-                    size: 18,
-                    color: Colors.red[700],
-                  ),
+                  Icon(Icons.shield, size: 18, color: Colors.red[700]),
                   const SizedBox(width: 8),
                   Text(
                     AppLocalizations.of(context)!.warAttacksDetailsDefender,
@@ -768,14 +986,36 @@ class PlayerWarAttacksCard extends StatelessWidget {
   Widget _buildPlayerInfo(BuildContext context, dynamic player) {
     return Column(
       children: [
-        _buildPlayerInfoRow(context, Icons.person, AppLocalizations.of(context)!.warAttacksDetailsName, player?.name ?? AppLocalizations.of(context)!.generalUnknown),
-        _buildPlayerInfoRow(context, Icons.home, AppLocalizations.of(context)!.gameTownHallLevel, player?.townhallLevel?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
-        _buildPlayerInfoRow(context, Icons.location_on, AppLocalizations.of(context)!.warPositionMap, player?.mapPosition?.toString() ?? AppLocalizations.of(context)!.generalUnknown),
+        _buildPlayerInfoRow(
+          context,
+          Icons.person,
+          AppLocalizations.of(context)!.warAttacksDetailsName,
+          player?.name ?? AppLocalizations.of(context)!.generalUnknown,
+        ),
+        _buildPlayerInfoRow(
+          context,
+          Icons.home,
+          AppLocalizations.of(context)!.gameTownHallLevel,
+          player?.townhallLevel?.toString() ??
+              AppLocalizations.of(context)!.generalUnknown,
+        ),
+        _buildPlayerInfoRow(
+          context,
+          Icons.location_on,
+          AppLocalizations.of(context)!.warPositionMap,
+          player?.mapPosition?.toString() ??
+              AppLocalizations.of(context)!.generalUnknown,
+        ),
       ],
     );
   }
 
-  Widget _buildPlayerInfoRow(BuildContext context, IconData icon, String label, String value) {
+  Widget _buildPlayerInfoRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -796,12 +1036,19 @@ class PlayerWarAttacksCard extends StatelessWidget {
           ),
           Text(
             value,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
     );
   }
+}
+
+class _WarAttackEntry {
+  final PlayerWarStatsData war;
+  final WarAttack attack;
+
+  const _WarAttackEntry({required this.war, required this.attack});
 }

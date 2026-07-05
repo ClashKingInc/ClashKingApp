@@ -28,7 +28,7 @@ class EnhancedStatCard extends StatelessWidget {
     this.starsBreakdown,
   });
 
-  Color _getCardColor() {
+  Color _getPerformanceColor() {
     final starPerformance = (stars / 3.0).clamp(0.0, 1.0);
     final destructionPerformance = (destruction / 100.0).clamp(0.0, 1.0);
 
@@ -37,41 +37,55 @@ class EnhancedStatCard extends StatelessWidget {
         ? (starPerformance + destructionPerformance) / 2
         : 1.0 - (starPerformance + destructionPerformance) / 2;
 
-    if (avgPerformance >= 0.8) return Colors.green.withValues(alpha: 0.1);
-    if (avgPerformance >= 0.6) return Colors.orange.withValues(alpha: 0.1);
-    if (avgPerformance >= 0.4) return Colors.amber.withValues(alpha: 0.1);
-    return Colors.red.withValues(alpha: 0.1);
+    if (avgPerformance >= 0.8) return Colors.green;
+    if (avgPerformance >= 0.6) return Colors.orange;
+    if (avgPerformance >= 0.4) return Colors.amber;
+    return Colors.red;
   }
 
-  Color _getBorderColor() {
-    final starPerformance = (stars / 3.0).clamp(0.0, 1.0);
-    final destructionPerformance = (destruction / 100.0).clamp(0.0, 1.0);
+  Color _getCardColor(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Color.alphaBlend(
+      _getPerformanceColor().withValues(alpha: 0.06),
+      colorScheme.surfaceContainerHighest.withValues(alpha: 0.18),
+    );
+  }
 
-    // For defense, invert the performance logic (lower is better)
-    final avgPerformance = isAttack
-        ? (starPerformance + destructionPerformance) / 2
-        : 1.0 - (starPerformance + destructionPerformance) / 2;
-
-    if (avgPerformance >= 0.8) return Colors.green.withValues(alpha: 0.3);
-    if (avgPerformance >= 0.6) return Colors.orange.withValues(alpha: 0.3);
-    if (avgPerformance >= 0.4) return Colors.amber.withValues(alpha: 0.3);
-    return Colors.red.withValues(alpha: 0.3);
+  Color _getBorderColor(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Color.alphaBlend(
+      _getPerformanceColor().withValues(alpha: 0.22),
+      colorScheme.outlineVariant.withValues(alpha: 0.40),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final missedCount = missed ?? 0;
+    final hasMissed = missedCount > 0;
+    final missedForeground = hasMissed
+        ? colorScheme.error
+        : colorScheme.onSurfaceVariant;
+    final missedBackground = hasMissed
+        ? colorScheme.errorContainer.withValues(alpha: 0.28)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.34);
+    final missedBorder = hasMissed
+        ? colorScheme.error.withValues(alpha: 0.42)
+        : colorScheme.outlineVariant.withValues(alpha: 0.32);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: _getCardColor(),
+          color: _getCardColor(context),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: _getBorderColor(), width: 2),
+          border: Border.all(color: _getBorderColor(context)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 3,
+              offset: const Offset(0, 1),
             ),
           ],
         ),
@@ -85,9 +99,9 @@ class EnhancedStatCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -108,10 +122,8 @@ class EnhancedStatCard extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             stars.toStringAsFixed(2),
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -132,10 +144,8 @@ class EnhancedStatCard extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             count.toString(),
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -160,13 +170,25 @@ class EnhancedStatCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _buildStarBreakdownItem(
-                            context, '0', starsBreakdown!['0'] ?? 0),
+                          context,
+                          '0',
+                          starsBreakdown!['0'] ?? 0,
+                        ),
                         _buildStarBreakdownItem(
-                            context, '1', starsBreakdown!['1'] ?? 0),
+                          context,
+                          '1',
+                          starsBreakdown!['1'] ?? 0,
+                        ),
                         _buildStarBreakdownItem(
-                            context, '2', starsBreakdown!['2'] ?? 0),
+                          context,
+                          '2',
+                          starsBreakdown!['2'] ?? 0,
+                        ),
                         _buildStarBreakdownItem(
-                            context, '3', starsBreakdown!['3'] ?? 0),
+                          context,
+                          '3',
+                          starsBreakdown!['3'] ?? 0,
+                        ),
                       ],
                     ),
                   ),
@@ -177,26 +199,29 @@ class EnhancedStatCard extends StatelessWidget {
             // Missed attacks/defenses
             const SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
               decoration: BoxDecoration(
-                border:
-                    Border.all(color: Theme.of(context).colorScheme.primary),
-                borderRadius: BorderRadius.circular(12),
+                color: missedBackground,
+                border: Border.all(color: missedBorder),
+                borderRadius: BorderRadius.circular(999),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   MobileWebImage(
-                      imageUrl: ImageAssets.brokenSword, width: 16, height: 16),
+                    imageUrl: ImageAssets.brokenSword,
+                    width: 16,
+                    height: 16,
+                  ),
                   const SizedBox(width: 4),
                   Text(
-                    AppLocalizations.of(context)!.warStatusMissedInfo(
-                      missed ?? 0,
-                    ),
+                    AppLocalizations.of(
+                      context,
+                    )!.warStatusMissedInfo(missedCount),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: missedForeground,
+                      fontWeight: hasMissed ? FontWeight.w800 : FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -208,11 +233,14 @@ class EnhancedStatCard extends StatelessWidget {
   }
 
   Widget _buildStarBreakdownItem(
-      BuildContext context, String starCount, int count) {
+    BuildContext context,
+    String starCount,
+    int count,
+  ) {
     // Calculate percentage
     final totalAttacks = this.count; // Total attacks/defenses
     final percentage = totalAttacks > 0 ? (count / totalAttacks * 100) : 0.0;
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -220,9 +248,7 @@ class EnhancedStatCard extends StatelessWidget {
         // Fixed width for stars - ensures consistent alignment
         SizedBox(
           width: 50,
-          child: Center(
-            child: buildStarsIcon(int.parse(starCount)),
-          ),
+          child: Center(child: buildStarsIcon(int.parse(starCount))),
         ),
         // Count and percentage
         SizedBox(
@@ -231,10 +257,10 @@ class EnhancedStatCard extends StatelessWidget {
             child: Text(
               '$count (${percentage.toStringAsFixed(0)}%)',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: _getStarCountColor(starCount),
-                    fontSize: 11,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: _getStarCountColor(starCount),
+                fontSize: 11,
+              ),
             ),
           ),
         ),
