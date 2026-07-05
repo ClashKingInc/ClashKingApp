@@ -535,6 +535,15 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                               prefs.setShowTodoOnHome(tag, value),
                         ),
                         _PlayerOptionSwitch(
+                          icon: Icons.fact_check_outlined,
+                          title: 'Show on to-do page',
+                          subtitle:
+                              'Include this account in the full to-do list.',
+                          value: options.showInTodoPage,
+                          onChanged: (value) =>
+                              prefs.setShowInTodoPage(tag, value),
+                        ),
+                        _PlayerOptionSwitch(
                           icon: Icons.shield_moon_outlined,
                           title: 'Show in War tab',
                           subtitle:

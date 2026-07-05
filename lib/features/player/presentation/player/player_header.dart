@@ -702,9 +702,17 @@ class _PlayerClanIdentityLineState extends State<_PlayerClanIdentityLine> {
       player.clanTag,
       _cachedClanTag,
     ].whereType<String>().firstWhere((tag) => tag.isNotEmpty, orElse: () => '');
-    final clanName = player.clanOverview.name;
+    final clanName = [player.clan?.name, player.clanOverview.name]
+        .whereType<String>()
+        .firstWhere((name) => name.isNotEmpty, orElse: () => '');
+    final clanBadgeUrl = [
+      player.clan?.badgeUrls.small,
+      player.clanOverview.badgeUrls.small,
+    ].whereType<String>().firstWhere((url) => url.isNotEmpty, orElse: () => '');
+    final hasRole = player.role.isNotEmpty;
     final hasClan = clanName.isNotEmpty || clanTag.isNotEmpty;
     final canOpenClan = clanTag.isNotEmpty;
+    final displayClanName = clanName.isNotEmpty ? clanName : clanTag;
     final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
       color: Colors.white,
       fontSize: 15,
@@ -726,22 +734,38 @@ class _PlayerClanIdentityLineState extends State<_PlayerClanIdentityLine> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (player.clanOverview.badgeUrls.small.isNotEmpty) ...[
-          MobileWebImage(
-            imageUrl: player.clanOverview.badgeUrls.small,
-            width: 16,
-            height: 16,
-          ),
+        if (clanBadgeUrl.isNotEmpty) ...[
+          MobileWebImage(imageUrl: clanBadgeUrl, width: 16, height: 16),
           const SizedBox(width: 4),
         ],
-        Flexible(
-          child: Text(
-            [if (clanName.isNotEmpty) clanName, role].join(' | '),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: textStyle,
+        if (displayClanName.isNotEmpty)
+          Flexible(
+            child: Text(
+              displayClanName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: textStyle,
+            ),
           ),
-        ),
+        if (displayClanName.isNotEmpty && hasRole)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 7),
+            child: Text(
+              '|',
+              style: textStyle?.copyWith(
+                color: Colors.white.withValues(alpha: 0.30),
+              ),
+            ),
+          ),
+        if (hasRole)
+          Flexible(
+            child: Text(
+              role,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: textStyle,
+            ),
+          ),
         if (canOpenClan)
           Icon(
             Icons.chevron_right_rounded,
@@ -752,7 +776,7 @@ class _PlayerClanIdentityLineState extends State<_PlayerClanIdentityLine> {
     );
 
     return Padding(
-      padding: const EdgeInsets.only(top: 1),
+      padding: const EdgeInsets.only(top: 4),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 320),
         child: canOpenClan

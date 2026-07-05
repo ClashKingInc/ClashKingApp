@@ -47,20 +47,19 @@ dependencies:
   workmanager_platform_interface: ^0.9.1+1
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
-  sentry_flutter: 9.20.0
+  sentry_flutter: ^9.23.0
   retry: ^3.1.2
   flutter_secure_storage: ^10.0.0
   collection: ^1.19.1
   flutter_gif: ^0.0.4
-  package_info_plus: ^10.1.0
-  device_info_plus: ^13.1.0
+  package_info_plus: ^10.2.0
+  device_info_plus: ^13.2.0
   mailto: ^2.0.0
   timeago: ^3.7.1
   dio: ^5.8.0
   universal_html: ^2.3.0
   cupertino_icons: ^1.0.8
   native_liquid_glass: ^0.2.10
-  liquid_glass_easy: ^3.2.0
   intl: ^0.20.2
   url_launcher: ^6.3.2
   open_filex: ^4.6.0

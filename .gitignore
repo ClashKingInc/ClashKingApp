@@ -132,3 +132,7 @@ coverage/
 # Claude
 .claude/
 CLAUDE.md
+
+# Codex
+AGENTS.md
+.agents/*

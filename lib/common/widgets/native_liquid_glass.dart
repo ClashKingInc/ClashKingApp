@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_glass_easy/liquid_glass_easy.dart' as lge;
 import 'package:native_liquid_glass/native_liquid_glass.dart' as glass;
 
 class NativeLiquidGlassBar extends StatelessWidget {
@@ -337,28 +338,36 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
           ),
         ],
       ),
-      child: lge.LiquidGlassLens(
-        style: lge.LiquidGlassStyle(
-          shape: lge.LiquidGlassShape.continuousRoundedRectangle(
-            cornerRadius: cornerRadius,
-            lightDirection: 90,
-            lightIntensity: isDark ? 0.08 : 0.22,
-            lightColor: Colors.white.withValues(alpha: isDark ? 0.14 : 0.30),
-            borderType: const lge.OpticalBorder(ambientIntensity: 0.10),
-          ),
-          appearance: lge.LiquidGlassAppearance(
-            color: surfaceColor.withValues(
-              alpha: opacity * (selected ? 0.55 : 0.42),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(cornerRadius),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: surfaceColor.withValues(
+                alpha: opacity * (selected ? 0.55 : 0.42),
+              ),
+              borderRadius: BorderRadius.circular(cornerRadius),
+              border: Border.all(
+                color: Colors.white.withValues(
+                  alpha: isDark
+                      ? borderOpacity * 0.45
+                      : borderOpacity.clamp(0.12, 0.36),
+                ),
+                width: 0.8,
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withValues(alpha: isDark ? 0.08 : 0.28),
+                  Colors.white.withValues(alpha: isDark ? 0.02 : 0.08),
+                ],
+              ),
             ),
-            blur: const lge.LiquidGlassBlur(sigmaX: 4, sigmaY: 4),
-          ),
-          refraction: const lge.LiquidGlassRefraction(
-            distortion: 0.08,
-            distortionWidth: 32,
-            chromaticAberration: 0.002,
+            child: const SizedBox.expand(),
           ),
         ),
-        child: const SizedBox.expand(),
       ),
     );
   }

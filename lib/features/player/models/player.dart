@@ -678,55 +678,138 @@ class Player {
 
   /// Returns a progress ratio between 0.0 and 1.0 based on player's to-do completion
   double getTodoProgressRatio({required WarMemberPresence memberCwl}) {
-    double totalDone = 0;
-    double totalEvent = 0;
+    final metrics = getTodoProgressMetrics(memberCwl: memberCwl);
+    if (metrics.isEmpty) return 1.0;
 
-    // Legend League
-    if (league == 'Legend League') {
-      totalEvent += 8;
-      totalDone +=
-          currentLegendSeason?.currentDay?.totalAttacks.toDouble() ?? 0.0;
-    }
-
-    // CWL (guerres de ligue)
-    if (memberCwl.attacksAvailable != 0) {
-      totalEvent += memberCwl.attacksAvailable.toDouble();
-      totalDone += memberCwl.attacksDone.toDouble();
-    }
-
-    // Clan Games
-    if (isInTimeFrameForClanGames()) {
-      DateTime now = DateTime.now();
-      DateTime clanGamesStart = DateTime(now.year, now.month, 22, 8);
-      int daysPassed = now.difference(clanGamesStart).inDays + 1;
-      double clanGamesDaily = (4000 / 8) * daysPassed;
-      double clanGamesRatio = (currentClanGamesPoints / clanGamesDaily).clamp(
-        0,
-        1,
-      );
-      totalEvent += 2;
-      totalDone += clanGamesRatio * 2;
-    }
-
-    // Season Pass
-    DateTime now = DateTime.now();
-    int totalDaysInMonth = DateTime(now.year, now.month + 1, 0).day;
-    int daysPassed = now.day;
-    double seasonPassDaily = ((daysPassed * 2600) / totalDaysInMonth);
-    double seasonPassRatio = (currentSeasonPoints / seasonPassDaily).clamp(
+    final done = metrics.fold<double>(
       0,
-      1,
+      (sum, metric) => sum + metric.progressDone.clamp(0, metric.progressTotal),
     );
-    totalEvent += 2;
-    totalDone += seasonPassRatio * 2;
+    final total = metrics.fold<double>(
+      0,
+      (sum, metric) => sum + metric.progressTotal,
+    );
+    if (total == 0) return 1.0;
+    return (done / total).clamp(0.0, 1.0);
+  }
 
-    // Raids
-    if (isInTimeFrameForRaid()) {
-      totalEvent += raids?.attackLimit ?? 0.0;
-      totalDone += raids?.attackDone ?? 0.0;
+  List<TodoProgressMetric> getTodoProgressMetrics({
+    required WarMemberPresence memberCwl,
+  }) {
+    final metrics = <TodoProgressMetric>[];
+
+    if (league == 'Legend League' && currentLegendSeason?.currentDay != null) {
+      metrics.add(
+        TodoProgressMetric(
+          label: 'Legend attacks',
+          done: currentLegendSeason?.currentDay?.totalAttacks ?? 0,
+          total: 8,
+        ),
+      );
     }
 
-    if (totalEvent == 0) return 0.0;
-    return (totalDone / totalEvent).clamp(0.0, 1.0);
+    final regularWar = warData;
+    final cwlWar = clan?.warCwl?.warInfo;
+    final sameWarAsCwl =
+        regularWar != null &&
+        cwlWar != null &&
+        ((regularWar.clan?.tag == cwlWar.clan?.tag &&
+                regularWar.opponent?.tag == cwlWar.opponent?.tag) ||
+            (regularWar.clan?.tag == cwlWar.opponent?.tag &&
+                regularWar.opponent?.tag == cwlWar.clan?.tag));
+
+    if (regularWar != null && regularWar.state == 'inWar' && !sameWarAsCwl) {
+      metrics.add(
+        TodoProgressMetric(
+          label: 'War attacks',
+          done: regularWar.getAttacksDoneByPlayer(tag, clanTag),
+          total: regularWar.attacksPerMember ?? 2,
+        ),
+      );
+    }
+
+    if (cwlWar != null &&
+        cwlWar.state == 'inWar' &&
+        cwlWar.isPlayerInWar(tag, clanTag)) {
+      metrics.add(
+        TodoProgressMetric(
+          label: 'CWL attacks',
+          done: cwlWar.getAttacksDoneByPlayer(tag, clanTag),
+          total: cwlWar.attacksPerMember ?? 1,
+        ),
+      );
+    } else if (isInTimeFrameForCwl() && memberCwl.attacksAvailable > 0) {
+      metrics.add(
+        TodoProgressMetric(
+          label: 'CWL attacks',
+          done: memberCwl.attacksDone,
+          total: memberCwl.attacksAvailable,
+        ),
+      );
+    }
+
+    if (isInTimeFrameForClanGames()) {
+      final required = requiredClanGamesPoints;
+      final ratio = required <= 0
+          ? 1.0
+          : (currentClanGamesPoints / required).clamp(0.0, 1.0);
+      metrics.add(
+        TodoProgressMetric(
+          label: 'Clan Games',
+          done: currentClanGamesPoints,
+          total: required,
+          progressDone: ratio * 2,
+          progressTotal: 2,
+        ),
+      );
+    }
+
+    if (isInTimeFrameForRaid()) {
+      metrics.add(
+        TodoProgressMetric(
+          label: 'Raid attacks',
+          done: raids?.attackDone ?? 0,
+          total: raids?.attackLimit ?? 5,
+        ),
+      );
+    }
+
+    final requiredSeasonPoints = requiredSeasonPassPoints;
+    final seasonRatio = requiredSeasonPoints <= 0
+        ? 1.0
+        : (currentSeasonPoints / requiredSeasonPoints).clamp(0.0, 1.0);
+    metrics.add(
+      TodoProgressMetric(
+        label: 'Season Pass',
+        done: currentSeasonPoints,
+        total: requiredSeasonPoints,
+        progressDone: seasonRatio * 2,
+        progressTotal: 2,
+      ),
+    );
+
+    return metrics;
+  }
+}
+
+class TodoProgressMetric {
+  final String label;
+  final int done;
+  final int total;
+  final num progressDone;
+  final num progressTotal;
+
+  const TodoProgressMetric({
+    required this.label,
+    required this.done,
+    required this.total,
+    num? progressDone,
+    num? progressTotal,
+  }) : progressDone = progressDone ?? done,
+       progressTotal = progressTotal ?? total;
+
+  double get progressRatio {
+    if (progressTotal == 0) return 1.0;
+    return (progressDone / progressTotal).clamp(0.0, 1.0);
   }
 }

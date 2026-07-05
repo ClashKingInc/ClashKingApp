@@ -140,8 +140,9 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       (acc, summary) => math.max(acc, (summary.metrics.length + 1) ~/ 2),
     );
     // Panel chrome: padding + border + header row + status row + gaps.
-    final barsHeight =
-        maxRows == 0 ? 64.0 : maxRows * 38.0 + (maxRows - 1) * 7.0;
+    final barsHeight = maxRows == 0
+        ? 64.0
+        : maxRows * 38.0 + (maxRows - 1) * 7.0;
     final height = 116.0 + barsHeight;
 
     return Column(
@@ -166,8 +167,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
                 );
               }
 
-              final player =
-                  widget.players[index - (hasSummaryPage ? 1 : 0)];
+              final player = widget.players[index - (hasSummaryPage ? 1 : 0)];
 
               return _AccountTodoPanel(
                 player: player,
@@ -265,9 +265,9 @@ class _TodoPreviewPanel extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 10),
               _MetricBars(metrics: preview.summary.metrics),
@@ -328,9 +328,9 @@ class _AccountTodoPanel extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     Icon(
@@ -391,9 +391,9 @@ class _AllAccountsPanel extends StatelessWidget {
                 'All accounts',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               Text(
                 '$accountCount accounts',
@@ -442,9 +442,9 @@ class _AllAccountsPanel extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     Icon(
@@ -506,9 +506,9 @@ class _AccountHeader extends StatelessWidget {
                 player.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               Text(
                 'TH${player.townHallLevel}',
@@ -565,9 +565,9 @@ class _PreviewHeader extends StatelessWidget {
                 preview.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               Text(
                 preview.subtitle,
@@ -644,10 +644,7 @@ class _MetricBars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (metrics.isEmpty) {
-      return const SizedBox(
-        height: 64,
-        child: Center(child: _CaughtUp()),
-      );
+      return const SizedBox(height: 64, child: Center(child: _CaughtUp()));
     }
 
     // Two metrics per row; a metric alone on its row spans the full width.
@@ -878,9 +875,11 @@ class _BannerTile extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl: item.imageUrl,
                         fit: BoxFit.contain,
-                        errorWidget: (context, url, error) =>
-                            Icon(item.fallbackIcon,
-                                color: item.color, size: 22),
+                        errorWidget: (context, url, error) => Icon(
+                          item.fallbackIcon,
+                          color: item.color,
+                          size: 22,
+                        ),
                       ),
                     ),
                   ),
@@ -895,21 +894,20 @@ class _BannerTile extends StatelessWidget {
                         item.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge
-                            ?.copyWith(fontWeight: FontWeight.w900),
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         item.subtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
                     ],
                   ),
@@ -1010,130 +1008,22 @@ class _TodoSummary {
   /// getters keep working unchanged.
   static (int, int) _averagedProgress(List<_TodoMetric> metrics) {
     if (metrics.isEmpty) return (0, 0);
-    final totalRatio = metrics.fold<double>(
+    final totalDone = metrics.fold<double>(
       0,
-      (sum, metric) => sum + metric.ratio,
+      (sum, metric) => sum + metric.progressDone.clamp(0, metric.progressTotal),
     );
-    return ((totalRatio * 100).round(), metrics.length * 100);
+    final total = metrics.fold<double>(
+      0,
+      (sum, metric) => sum + metric.progressTotal,
+    );
+    return ((totalDone * 100).round(), (total * 100).round());
   }
 
   factory _TodoSummary.fromPlayer(Player player, WarMemberPresence memberCwl) {
-    final metrics = <_TodoMetric>[];
-
-    if (player.league == 'Legend League' &&
-        player.currentLegendSeason?.currentDay != null) {
-      final done = player.currentLegendSeason?.currentDay?.totalAttacks ?? 0;
-      metrics.add(
-        _TodoMetric(
-          label: 'Legend attacks',
-          detail: '${math.max(8 - done, 0)} left today',
-          done: done,
-          total: 8,
-          imageUrl: ImageAssets.legendBlazonNoPadding,
-          color: const Color(0xFF4E7DF2),
-          fallbackIcon: Icons.shield_rounded,
-        ),
-      );
-    }
-
-    final warData = player.warData;
-    if (warData != null &&
-        warData.state == 'inWar' &&
-        !_isSameWarAsCwl(player)) {
-      final total = warData.attacksPerMember ?? 1;
-      final done = warData.getAttacksDoneByPlayer(player.tag, player.clanTag);
-      metrics.add(
-        _TodoMetric(
-          label: 'War attacks',
-          detail: '${math.max(total - done, 0)} left',
-          done: done,
-          total: total,
-          imageUrl: ImageAssets.war,
-          color: const Color(0xFFE35D4F),
-          fallbackIcon: Icons.local_fire_department_rounded,
-        ),
-      );
-    }
-
-    final cwlWarInfo = player.clan?.warCwl?.warInfo;
-    if (cwlWarInfo != null &&
-        cwlWarInfo.state == 'inWar' &&
-        cwlWarInfo.isPlayerInWar(player.tag, player.clanTag)) {
-      final total = cwlWarInfo.attacksPerMember ?? 1;
-      final done = cwlWarInfo.getAttacksDoneByPlayer(
-        player.tag,
-        player.clanTag,
-      );
-      metrics.add(
-        _TodoMetric(
-          label: 'CWL attacks',
-          detail: '${math.max(total - done, 0)} left this round',
-          done: done,
-          total: total,
-          imageUrl: ImageAssets.cwlSwordsNoBorder,
-          color: const Color(0xFF8D63D9),
-          fallbackIcon: Icons.military_tech_rounded,
-        ),
-      );
-    } else if (isInTimeFrameForCwl() && memberCwl.attacksAvailable > 0) {
-      metrics.add(
-        _TodoMetric(
-          label: 'CWL attacks',
-          detail:
-              '${math.max(memberCwl.attacksAvailable - memberCwl.attacksDone, 0)} left this week',
-          done: memberCwl.attacksDone,
-          total: memberCwl.attacksAvailable,
-          imageUrl: ImageAssets.cwlSwordsNoBorder,
-          color: const Color(0xFF8D63D9),
-          fallbackIcon: Icons.military_tech_rounded,
-        ),
-      );
-    }
-
-    if (isInTimeFrameForClanGames()) {
-      metrics.add(
-        _TodoMetric(
-          label: 'Clan Games',
-          detail:
-              '${NumberFormat.compact().format(player.clanGamesPointLeft)} points left',
-          done: player.currentClanGamesPoints,
-          total: 4000,
-          imageUrl: ImageAssets.clanGamesMedals,
-          color: const Color(0xFF14A37F),
-          fallbackIcon: Icons.emoji_events_rounded,
-        ),
-      );
-    }
-
-    if (isInTimeFrameForRaid()) {
-      final raids = player.raids;
-      metrics.add(
-        _TodoMetric(
-          label: 'Raid attacks',
-          detail:
-              '${math.max((raids?.attackLimit ?? 5) - (raids?.attackDone ?? 0), 0)} left',
-          done: raids?.attackDone ?? 0,
-          total: raids?.attackLimit ?? 5,
-          imageUrl: ImageAssets.raidAttacks,
-          color: const Color(0xFF2A9FD6),
-          fallbackIcon: Icons.fort_rounded,
-        ),
-      );
-    }
-
-    metrics.add(
-      _TodoMetric(
-        label: 'Season Pass',
-        detail: player.currentSeasonPoints >= requiredSeasonPassPoints
-            ? 'complete'
-            : '${NumberFormat.compact().format(requiredSeasonPassPoints - player.currentSeasonPoints)} points left',
-        done: player.currentSeasonPoints,
-        total: requiredSeasonPassPoints,
-        imageUrl: ImageAssets.iconGoldPass,
-        color: const Color(0xFFE8A524),
-        fallbackIcon: Icons.confirmation_number_rounded,
-      ),
-    );
+    final metrics = player
+        .getTodoProgressMetrics(memberCwl: memberCwl)
+        .map(_TodoMetric.fromProgressMetric)
+        .toList(growable: false);
 
     final (done, total) = _averagedProgress(metrics);
 
@@ -1153,8 +1043,11 @@ class _TodoSummary {
   ) {
     final merged = <String, _TodoMetric>{};
     final order = <String>[];
+    final activeThreshold = DateTime.now().subtract(const Duration(days: 14));
 
     for (final player in players) {
+      if (!player.lastOnline.isAfter(activeThreshold)) continue;
+
       final summary = _TodoSummary.fromPlayer(player, presenceOf(player));
       for (final metric in summary.metrics) {
         final existing = merged[metric.label];
@@ -1167,6 +1060,10 @@ class _TodoSummary {
             detail: '',
             done: existing.done + metric.done.clamp(0, metric.total),
             total: existing.total + metric.total,
+            progressDone:
+                existing.progressDone +
+                metric.progressDone.clamp(0, metric.progressTotal),
+            progressTotal: existing.progressTotal + metric.progressTotal,
             imageUrl: existing.imageUrl,
             color: existing.color,
             fallbackIcon: existing.fallbackIcon,
@@ -1175,38 +1072,28 @@ class _TodoSummary {
       }
     }
 
-    final metrics = order.map((label) {
-      final metric = merged[label]!;
-      final left = math.max(metric.total - metric.done, 0);
-      final detail = left == 0
-          ? 'complete'
-          : metric.total > 50
+    final metrics = order
+        .map((label) {
+          final metric = merged[label]!;
+          final left = math.max(metric.total - metric.done, 0);
+          final detail = left == 0
+              ? 'complete'
+              : metric.total > 50
               ? '${NumberFormat.compact().format(left)} points left'
               : '$left left';
-      return _TodoMetric(
-        label: metric.label,
-        detail: detail,
-        done: metric.done,
-        total: metric.total,
-        imageUrl: metric.imageUrl,
-        color: metric.color,
-        fallbackIcon: metric.fallbackIcon,
-      );
-    }).toList(growable: false);
+          return _TodoMetric(
+            label: _todoMetricDisplayLabel(metric.label),
+            detail: detail,
+            done: metric.done,
+            total: metric.total,
+            imageUrl: metric.imageUrl,
+            color: metric.color,
+            fallbackIcon: metric.fallbackIcon,
+          );
+        })
+        .toList(growable: false);
 
     return _TodoSummary.fromMetrics(metrics);
-  }
-
-  static bool _isSameWarAsCwl(Player player) {
-    if (player.warData == null || player.clan?.warCwl?.warInfo == null) {
-      return false;
-    }
-    final regularWar = player.warData!;
-    final cwlWar = player.clan!.warCwl!.warInfo;
-    return (regularWar.clan?.tag == cwlWar.clan?.tag &&
-            regularWar.opponent?.tag == cwlWar.opponent?.tag) ||
-        (regularWar.clan?.tag == cwlWar.opponent?.tag &&
-            regularWar.opponent?.tag == cwlWar.clan?.tag);
   }
 }
 
@@ -1219,17 +1106,69 @@ class _TodoMetric {
     required this.imageUrl,
     required this.color,
     required this.fallbackIcon,
-  });
+    num? progressDone,
+    num? progressTotal,
+  }) : progressDone = progressDone ?? done,
+       progressTotal = progressTotal ?? total;
 
   final String label;
   final String detail;
   final int done;
   final int total;
+  final num progressDone;
+  final num progressTotal;
   final String imageUrl;
   final Color color;
   final IconData fallbackIcon;
 
-  double get ratio => total == 0 ? 1 : (done / total).clamp(0.0, 1.0);
+  factory _TodoMetric.fromProgressMetric(TodoProgressMetric metric) {
+    final left = math.max(metric.total - metric.done, 0);
+    return _TodoMetric(
+      label: _todoMetricDisplayLabel(metric.label),
+      detail: metric.label == 'Season Pass' || metric.label == 'Clan Games'
+          ? (left == 0
+                ? 'complete'
+                : '${NumberFormat.compact().format(left)} points left')
+          : left == 0
+          ? 'complete'
+          : '$left left',
+      done: metric.done,
+      total: metric.total,
+      progressDone: metric.progressDone.toDouble(),
+      progressTotal: metric.progressTotal.toDouble(),
+      imageUrl: switch (metric.label) {
+        'Legend attacks' => ImageAssets.legendBlazonNoPadding,
+        'War attacks' => ImageAssets.war,
+        'CWL attacks' => ImageAssets.cwlSwordsNoBorder,
+        'Clan Games' => ImageAssets.clanGamesMedals,
+        'Raid attacks' => ImageAssets.raidAttacks,
+        _ => ImageAssets.iconGoldPass,
+      },
+      color: switch (metric.label) {
+        'Legend attacks' => const Color(0xFF4E7DF2),
+        'War attacks' => const Color(0xFFE35D4F),
+        'CWL attacks' => const Color(0xFF8D63D9),
+        'Clan Games' => const Color(0xFF14A37F),
+        'Raid attacks' => const Color(0xFF2A9FD6),
+        _ => const Color(0xFFE8A524),
+      },
+      fallbackIcon: switch (metric.label) {
+        'Legend attacks' => Icons.shield_rounded,
+        'War attacks' => Icons.local_fire_department_rounded,
+        'CWL attacks' => Icons.military_tech_rounded,
+        'Clan Games' => Icons.emoji_events_rounded,
+        'Raid attacks' => Icons.fort_rounded,
+        _ => Icons.confirmation_number_rounded,
+      },
+    );
+  }
+
+  double get ratio =>
+      progressTotal == 0 ? 1 : (progressDone / progressTotal).clamp(0.0, 1.0);
+}
+
+String _todoMetricDisplayLabel(String label) {
+  return label == 'Season Pass' ? 'Pass' : label;
 }
 
 class _TodoPreview {
@@ -1300,7 +1239,7 @@ class _TodoPreview {
           fallbackIcon: Icons.fort_rounded,
         ),
         _TodoMetric(
-          label: 'Season Pass',
+          label: 'Pass',
           detail: '850 points left',
           done: 1750,
           total: 2600,
@@ -1361,7 +1300,7 @@ class _TodoPreview {
           fallbackIcon: Icons.shield_rounded,
         ),
         _TodoMetric(
-          label: 'Season Pass',
+          label: 'Pass',
           detail: 'on pace',
           done: 2200,
           total: 2600,
