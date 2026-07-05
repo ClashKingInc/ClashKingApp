@@ -27,7 +27,7 @@ class PlayerWarStatsCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  PlayerScreen(selectedPlayer: player!, initialTab: 3),
+                  PlayerScreen(selectedPlayer: player!, initialTab: 2),
             ),
           );
         },

@@ -72,10 +72,10 @@ class PlayerScreenState extends State<PlayerScreen> {
                   child: switch (selectedTab) {
                     0 => _buildPlayerContent(widget.selectedPlayer),
                     1 => _buildBuilderContent(widget.selectedPlayer),
-                    2 => _buildAchievementContent(widget.selectedPlayer),
-                    _ => PlayerWarStatsProfileTab(
+                    2 => PlayerWarStatsProfileTab(
                       player: widget.selectedPlayer,
                     ),
+                    _ => _buildAchievementContent(widget.selectedPlayer),
                   },
                 ),
               ),
@@ -330,15 +330,15 @@ class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
                 selected: widget.selectedIndex == 1,
               ),
               _ProfileTab(
+                label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
+                imageUrl: ImageAssets.war,
+                selected: widget.selectedIndex == 2,
+              ),
+              _ProfileTab(
                 label:
                     AppLocalizations.of(context)?.gameAchievements ??
                     'Achievements',
                 imageUrl: ImageAssets.attackStar,
-                selected: widget.selectedIndex == 2,
-              ),
-              _ProfileTab(
-                label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
-                imageUrl: ImageAssets.war,
                 selected: widget.selectedIndex == 3,
               ),
             ],
