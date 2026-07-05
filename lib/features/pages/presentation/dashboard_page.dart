@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/pages/widgets/home_todo_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,27 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final playerService = context.watch<PlayerService>();
     final prefs = context.watch<PlayerCardPreferencesService>();
+    final cocService = context.watch<CocAccountService>();
     final players = playerService.profiles;
+    final linkedTags = cocService
+        .getAccountTags()
+        .map(_normalizeTag)
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
     final pinnedTags = prefs.todoOnHomeTags;
     final pinnedPlayers = players
         .where((player) => pinnedTags.contains(_normalizeTag(player.tag)))
         .toList(growable: false);
+    final linkedPlayers = players
+        .where((player) => linkedTags.contains(_normalizeTag(player.tag)))
+        .toList(growable: false);
+    final pinnedBookmarkedPlayers = players
+        .where((player) {
+          final tag = _normalizeTag(player.tag);
+          return !linkedTags.contains(tag) && pinnedTags.contains(tag);
+        })
+        .toList(growable: false);
+    final todoPlayers = [...linkedPlayers, ...pinnedBookmarkedPlayers];
 
     return Scaffold(
       body: SafeArea(
@@ -44,7 +61,7 @@ class DashboardPage extends StatelessWidget {
                     '"Show to-do on home" to pin an account here.',
               )
             else
-              HomeTodoCard(players: pinnedPlayers, allPlayers: players),
+              HomeTodoCard(players: pinnedPlayers, allPlayers: todoPlayers),
           ],
         ),
       ),

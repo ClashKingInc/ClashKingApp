@@ -11,6 +11,7 @@ What’s new
 - Home event banner: correct logo per theme, tinted tiles, page dots, events sorted by next deadline
 - The to-do page got a redesign: hero header with a liquid glass stats panel, cleaner account cards
 - Player cards now expand with options to enable notifications and pin an account’s to-do card to the home tab
+- Bookmarked players pinned from player card options are now included in the detailed to-do view
 - The home tab now shows a single to-do card that combines the remaining tasks across all the accounts you pinned
 - The account menu can now be swiped open from further inside the screen, fixing accidental app exits on Samsung devices
 - Tapping a troop, spell, hero, equipment or pet now shows a detailed popup with description and stats (housing space, attack speed, range, movement speed, upgrade resource, hero and rarity for equipment)
