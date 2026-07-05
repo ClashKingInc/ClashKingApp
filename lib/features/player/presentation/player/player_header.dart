@@ -6,7 +6,6 @@ import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
@@ -44,42 +43,56 @@ class PlayerInfoHeader extends StatelessWidget {
     final hallImageUrl = isBuilderTab
         ? player.builderHallPic
         : player.townHallPic;
+    final imageHeight = MediaQuery.of(context).padding.top + 500;
 
     return Stack(
       children: [
-        Positioned.fill(
-          child: ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha: 0.50),
-              BlendMode.darken,
-            ),
-            child: CachedNetworkImage(
-              imageUrl: backgroundImageUrl,
-              fit: BoxFit.cover,
-              alignment: Alignment.bottomCenter,
-              errorWidget: (context, url, error) =>
-                  ColoredBox(color: Theme.of(context).colorScheme.surface),
-            ),
-          ),
-        ),
-        Positioned.fill(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.36),
-                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.64),
-                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.92),
-                ],
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: imageHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withValues(alpha: 0.50),
+                  BlendMode.darken,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: backgroundImageUrl,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.bottomCenter,
+                  errorWidget: (context, url, error) =>
+                      ColoredBox(color: Theme.of(context).colorScheme.surface),
+                ),
               ),
-            ),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(
+                        context,
+                      ).colorScheme.surface.withValues(alpha: 0.36),
+                      Theme.of(
+                        context,
+                      ).colorScheme.surface.withValues(alpha: 0.64),
+                      Theme.of(
+                        context,
+                      ).colorScheme.surface.withValues(alpha: 0.92),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).padding.top + 6),
+            SizedBox(height: MediaQuery.of(context).padding.top),
             if (showTopActions)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -87,17 +100,21 @@ class PlayerInfoHeader extends StatelessWidget {
               )
             else
               const SizedBox(height: 42),
+            const SizedBox(height: 6),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               child: _IdentityPanel(
                 player: player,
                 hallImageUrl: hallImageUrl,
-                selectedTab: selectedTab,
+                hallWeaponStars: isBuilderTab ? 0 : player.townHallWeaponLevel,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-              child: _HomeBaseStats(player: player, isBuilderTab: isBuilderTab),
+              padding: const EdgeInsets.only(top: 11, bottom: 8),
+              child: _PlayerHeaderStats(
+                player: player,
+                selectedTab: selectedTab,
+              ),
             ),
           ],
         ),
@@ -117,31 +134,33 @@ class PlayerInfoHeaderActions extends StatelessWidget {
 
     return Row(
       children: [
-        _HeaderIconButton(
+        HeaderIconButton(
           icon: Icons.arrow_back_rounded,
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onTap: () => Navigator.of(context).pop(),
+          showBackground: false,
         ),
         const Spacer(),
         if (warAction != null) ...[
-          _HeaderImageButton(
+          HeaderIconButton(
             imageUrl: warAction.imageUrl,
             tooltip: warAction.label,
-            backgroundColor: const Color(0xFFE0302B),
             onTap: warAction.onTap,
+            showBackground: false,
           ),
           const SizedBox(width: 8),
         ],
-        _HeaderIconButton(
+        HeaderIconButton(
           icon: Icons.open_in_new_rounded,
           tooltip: 'Open in game',
           onTap: () => _showOpenPlayerDialog(context, player),
+          showBackground: false,
         ),
         const SizedBox(width: 8),
         Consumer<BookmarkService>(
           builder: (context, bookmarks, child) {
             final bookmarked = bookmarks.isPlayerBookmarked(player.tag);
-            return _HeaderIconButton(
+            return HeaderIconButton(
               icon: bookmarked
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
@@ -150,6 +169,7 @@ class PlayerInfoHeaderActions extends StatelessWidget {
                   ? 'Remove player bookmark'
                   : 'Bookmark player',
               onTap: () => bookmarks.togglePlayer(player),
+              showBackground: false,
             );
           },
         ),
@@ -158,282 +178,366 @@ class PlayerInfoHeaderActions extends StatelessWidget {
   }
 }
 
-class _HeaderImageButton extends StatelessWidget {
-  final String imageUrl;
-  final String tooltip;
-  final Color backgroundColor;
-  final VoidCallback onTap;
-
-  const _HeaderImageButton({
-    required this.imageUrl,
-    required this.tooltip,
-    required this.backgroundColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return _HeaderGlassButton(
-      tooltip: tooltip,
-      onTap: onTap,
-      tint: backgroundColor,
-      child: Center(
-        child: MobileWebImage(imageUrl: imageUrl, width: 25, height: 25),
-      ),
-    );
-  }
-}
-
-class _HeaderGlassButton extends StatelessWidget {
-  final Widget child;
-  final String tooltip;
-  final VoidCallback onTap;
-  final Color? tint;
-
-  const _HeaderGlassButton({
-    required this.child,
-    required this.tooltip,
-    required this.onTap,
-    this.tint,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 42.0;
-    const radius = 19.0;
-
-    return Tooltip(
-      message: tooltip,
-      child: SizedBox(
-        height: size,
-        width: size,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(radius),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              const NativeLiquidGlassBar(
-                height: size,
-                cornerRadius: radius,
-                opacity: 0.72,
-                interactive: true,
-              ),
-              if (tint != null)
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: tint!.withValues(alpha: 0.58),
-                    borderRadius: BorderRadius.circular(radius),
-                  ),
-                ),
-              Material(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(radius),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(radius),
-                  splashFactory: NoSplash.splashFactory,
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: onTap,
-                  child: child,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _IdentityPanel extends StatelessWidget {
   final Player player;
   final String hallImageUrl;
-  final int selectedTab;
+  final int hallWeaponStars;
 
   const _IdentityPanel({
     required this.player,
     required this.hallImageUrl,
-    required this.selectedTab,
+    required this.hallWeaponStars,
   });
 
   @override
   Widget build(BuildContext context) {
     final role = PlayerService().getRoleText(player.role, context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _HallBadge(imageUrl: hallImageUrl, stars: player.townHallWeaponLevel),
-          const SizedBox(width: 12),
-          Expanded(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: constraints.maxWidth),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        player.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 27,
-                  child: Row(
-                    children: [
-                      Expanded(child: _CopyablePlayerTag(tag: player.tag)),
-                    ],
+                _HallBadge(imageUrl: hallImageUrl, stars: hallWeaponStars),
+                const SizedBox(height: 2),
+                Text(
+                  player.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    height: 1.02,
                   ),
                 ),
-                const SizedBox(height: 6),
-                if (player.clanTag.isNotEmpty)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _ClanRoleChip(player: player, role: role),
-                      ),
-                    ],
-                  )
-                else
-                  _PlainInfoChip(label: 'Role', value: role),
+                const SizedBox(height: 2),
+                _CopyablePlayerTag(tag: player.tag),
+                _PlayerClanIdentityLine(player: player, role: role),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-class _HomeBaseStats extends StatelessWidget {
+class _PlayerHeaderStats extends StatelessWidget {
   final Player player;
-  final bool isBuilderTab;
+  final int selectedTab;
 
-  const _HomeBaseStats({required this.player, required this.isBuilderTab});
+  const _PlayerHeaderStats({required this.player, required this.selectedTab});
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
-    final formatter = NumberFormat('#,###', locale);
+    final loc = AppLocalizations.of(context)!;
+    final formatter = NumberFormat(
+      '#,###',
+      Localizations.localeOf(context).toString(),
+    );
+    final warPreferenceLabel = player.warPreference == 'in'
+        ? loc.warStatusReady
+        : loc.warStatusUnready;
+    final isBuilderTab = selectedTab == 1;
 
-    return Stack(
+    return Column(
       children: [
-        const Positioned.fill(
-          child: HeaderPanelBackground(height: 260, cornerRadius: 28),
-        ),
         Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              isBuilderTab
-                  ? LeagueSummaryTile(
-                      leagueName: player.builderBaseLeague,
-                      trophies: formatter.format(player.builderBaseTrophies),
-                      leagueUrl: player.builderBaseLeagueUrl,
-                      seasonName: DateFormat(
-                        'MMMM yyyy',
-                      ).format(DateTime.now()),
-                      bestTrophies: formatter.format(
-                        player.bestBuilderBaseTrophies,
-                      ),
-                    )
-                  : LeagueSummaryTile(
-                      leagueName: player.league,
-                      trophies: formatter.format(player.trophies),
-                      leagueUrl: player.leagueUrl,
-                      seasonName: DateFormat(
-                        'MMMM yyyy',
-                      ).format(DateTime.now()),
-                      attackWins: formatter.format(player.attackWins),
-                      defenseWins: formatter.format(player.defenseWins),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              PlayerLegendScreen(player: player),
-                        ),
-                      ),
-                    ),
-              const SizedBox(height: 12),
-              _PlayerQuickStats(player: player),
+              Expanded(
+                child: CompactLeagueTile(
+                  leagueName: isBuilderTab
+                      ? _compactLeagueName(player.builderBaseLeague)
+                      : _compactLeagueName(player.league),
+                  subtitle: formatter.format(
+                    isBuilderTab ? player.builderBaseTrophies : player.trophies,
+                  ),
+                  subtitleIconUrl: isBuilderTab
+                      ? ImageAssets.builderBaseTrophy
+                      : ImageAssets.trophies,
+                  leagueUrl: isBuilderTab
+                      ? _leagueIcon(player.builderBaseLeagueUrl)
+                      : _leagueIcon(player.leagueUrl),
+                  onTap: isBuilderTab ? null : () => _openLegend(context),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: CompactLeagueTile(
+                  leagueName: isBuilderTab
+                      ? _compactLeagueName(player.league)
+                      : _compactLeagueName(player.builderBaseLeague),
+                  subtitle: formatter.format(
+                    isBuilderTab ? player.trophies : player.builderBaseTrophies,
+                  ),
+                  subtitleIconUrl: isBuilderTab
+                      ? ImageAssets.trophies
+                      : ImageAssets.builderBaseTrophy,
+                  leagueUrl: isBuilderTab
+                      ? _leagueIcon(player.leagueUrl)
+                      : _leagueIcon(player.builderBaseLeagueUrl),
+                  onTap: isBuilderTab ? () => _openLegend(context) : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _PlayerChipRows(
+            children: [
+              _PlayerQuickChip(
+                value: formatter.format(player.warStars),
+                imageUrl: ImageAssets.attackStar,
+                tooltip: loc.playerWarStarsTitle,
+              ),
+              _PlayerQuickChip(
+                value: warPreferenceLabel,
+                imageUrl: player.warPreferenceImage,
+                tooltip: loc.playerWarPreferenceTitle,
+              ),
+              _PlayerQuickChip(
+                value: formatter.format(player.donations),
+                icon: Icons.arrow_upward_rounded,
+                tooltip: loc.playerDonatedTitle,
+              ),
+              _PlayerQuickChip(
+                value: formatter.format(player.donationsReceived),
+                icon: Icons.arrow_downward_rounded,
+                tooltip: loc.playerReceivedTitle,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _PlayerChipRows(
+            children: [
+              _PlayerQuickChip(
+                value: formatter.format(player.clanCapitalContributions),
+                imageUrl: ImageAssets.capitalGold,
+                tooltip: loc.playerCapitalTitle,
+              ),
+              _PlayerQuickChip(
+                value: player.expLevel.toString(),
+                imageUrl: ImageAssets.xp,
+                tooltip: loc.playerExpLevelTitle,
+              ),
+              _PlayerQuickChip(
+                value: formatter.format(player.bestTrophies),
+                imageUrl: ImageAssets.bestTrophies,
+                tooltip: 'Best trophies',
+              ),
             ],
           ),
         ),
       ],
     );
   }
+
+  void _openLegend(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PlayerLegendScreen(player: player),
+      ),
+    );
+  }
+
+  String _compactLeagueName(String leagueName) {
+    final compact = leagueName.replaceAll(' League', '').trim();
+    return compact.isEmpty ? 'Unranked' : compact;
+  }
+
+  String _leagueIcon(String url) => url.isEmpty ? ImageAssets.trophies : url;
 }
 
-class _PlayerQuickStats extends StatelessWidget {
-  final Player player;
+class _PlayerChipRows extends StatelessWidget {
+  final List<_PlayerQuickChip> children;
 
-  const _PlayerQuickStats({required this.player});
+  const _PlayerChipRows({required this.children});
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
-    final formatter = NumberFormat('#,###', locale);
-    final warPreferenceLabel = player.warPreference == 'in'
-        ? AppLocalizations.of(context)!.warStatusReady
-        : AppLocalizations.of(context)!.warStatusUnready;
+    if (children.isEmpty) return const SizedBox.shrink();
 
-    final loc = AppLocalizations.of(context)!;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final spacing = 7.0;
+        final widths = children
+            .map((child) => child.estimatedWidth(context))
+            .toList(growable: false);
+        final rowPlans = _candidatePlans(children.length);
 
-    return MetricChipGrid(
-      columns: 3,
-      chips: [
-        MetricChip(
-          label: loc.playerWarStarsTitle,
-          value: formatter.format(player.warStars),
-          imageUrl: ImageAssets.attackStar,
-          color: const Color(0xFFE8A524),
-        ),
-        MetricChip(
-          label: loc.playerWarPreferenceTitle,
-          value: warPreferenceLabel,
-          imageUrl: player.warPreferenceImage,
-        ),
-        MetricChip(
-          label: loc.playerDonatedTitle,
-          value: formatter.format(player.donations),
-          icon: Icons.arrow_upward_rounded,
-          color: const Color(0xFF14A37F),
-        ),
-        MetricChip(
-          label: loc.playerReceivedTitle,
-          value: formatter.format(player.donationsReceived),
-          icon: Icons.arrow_downward_rounded,
-          color: const Color(0xFFE35D4F),
-        ),
-        MetricChip(
-          label: loc.playerCapitalTitle,
-          value: formatter.format(player.clanCapitalContributions),
-          imageUrl: ImageAssets.capitalGold,
-          color: const Color(0xFF8D63D9),
-        ),
-        MetricChip(
-          label: loc.playerExpLevelTitle,
-          value: player.expLevel.toString(),
-          imageUrl: ImageAssets.xp,
-        ),
-        MetricChip(
-          label: loc.gameBuilderBaseTrophies,
-          value: formatter.format(player.builderBaseTrophies),
-          imageUrl: player.builderBaseLeagueUrl,
-        ),
-      ],
+        for (final plan in rowPlans) {
+          if (_planFits(plan, widths, spacing, constraints.maxWidth)) {
+            return Column(children: _buildRows(plan, spacing));
+          }
+        }
+
+        return Wrap(
+          alignment: WrapAlignment.center,
+          spacing: spacing,
+          runSpacing: 7,
+          children: children,
+        );
+      },
     );
+  }
+
+  List<List<int>> _candidatePlans(int count) {
+    return switch (count) {
+      7 => const [
+        [4, 3],
+        [3, 4],
+        [3, 2, 2],
+        [2, 3, 2],
+      ],
+      6 => const [
+        [4, 2],
+        [3, 3],
+        [2, 2, 2],
+      ],
+      5 => const [
+        [3, 2],
+        [2, 3],
+      ],
+      4 => const [
+        [4],
+        [2, 2],
+      ],
+      3 => const [
+        [3],
+      ],
+      2 => const [
+        [2],
+      ],
+      _ => [
+        [count],
+      ],
+    };
+  }
+
+  bool _planFits(
+    List<int> plan,
+    List<double> widths,
+    double spacing,
+    double maxWidth,
+  ) {
+    var start = 0;
+    for (final rowLength in plan) {
+      final rowWidth =
+          widths.skip(start).take(rowLength).fold<double>(0, (a, b) => a + b) +
+          spacing * (rowLength - 1);
+      if (rowWidth > maxWidth) return false;
+      start += rowLength;
+    }
+    return start == widths.length;
+  }
+
+  List<Widget> _buildRows(List<int> plan, double spacing) {
+    final rows = <Widget>[];
+    var start = 0;
+
+    for (var i = 0; i < plan.length; i++) {
+      final rowLength = plan[i];
+      rows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: children.skip(start).take(rowLength).expand((child) sync* {
+            if (child != children[start]) {
+              yield SizedBox(width: spacing);
+            }
+            yield child;
+          }).toList(),
+        ),
+      );
+      if (i != plan.length - 1) {
+        rows.add(const SizedBox(height: 7));
+      }
+      start += rowLength;
+    }
+
+    return rows;
+  }
+}
+
+class _PlayerQuickChip extends StatelessWidget {
+  final String value;
+  final String? imageUrl;
+  final IconData? icon;
+  final String? tooltip;
+
+  const _PlayerQuickChip({
+    required this.value,
+    this.imageUrl,
+    this.icon,
+    this.tooltip,
+  });
+
+  double estimatedWidth(BuildContext context) {
+    final textStyle = Theme.of(
+      context,
+    ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700, height: 1);
+    final painter = TextPainter(
+      text: TextSpan(text: value, style: textStyle),
+      maxLines: 1,
+      textDirection: Directionality.of(context),
+    )..layout();
+    return 20 + 19 + 5 + painter.width;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final foreground = colorScheme.onSurface;
+
+    final chipBody = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.58),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (imageUrl != null && imageUrl!.isNotEmpty)
+            MobileWebImage(imageUrl: imageUrl!, width: 19, height: 19)
+          else
+            Icon(icon ?? Icons.info_rounded, size: 19, color: foreground),
+          const SizedBox(width: 5),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 132),
+            child: Text(
+              value,
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: foreground,
+                fontWeight: FontWeight.w700,
+                height: 1,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (tooltip == null || tooltip!.isEmpty) return chipBody;
+    return Tooltip(message: tooltip!, child: chipBody);
   }
 }
 
@@ -520,17 +624,13 @@ class _HallBadge extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 104,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  width: 104,
-                  fit: BoxFit.contain,
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ],
+            height: 94,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              width: 94,
+              height: 94,
+              fit: BoxFit.contain,
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
           if (stars > 0) ...[
@@ -556,17 +656,18 @@ class _HallBadge extends StatelessWidget {
   }
 }
 
-class _ClanRoleChip extends StatefulWidget {
+class _PlayerClanIdentityLine extends StatefulWidget {
   final Player player;
   final String role;
 
-  const _ClanRoleChip({required this.player, required this.role});
+  const _PlayerClanIdentityLine({required this.player, required this.role});
 
   @override
-  State<_ClanRoleChip> createState() => _ClanRoleChipState();
+  State<_PlayerClanIdentityLine> createState() =>
+      _PlayerClanIdentityLineState();
 }
 
-class _ClanRoleChipState extends State<_ClanRoleChip> {
+class _PlayerClanIdentityLineState extends State<_PlayerClanIdentityLine> {
   String? _cachedClanTag;
 
   Player get player => widget.player;
@@ -579,7 +680,7 @@ class _ClanRoleChipState extends State<_ClanRoleChip> {
   }
 
   @override
-  void didUpdateWidget(covariant _ClanRoleChip oldWidget) {
+  void didUpdateWidget(covariant _PlayerClanIdentityLine oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.player.tag != widget.player.tag) {
       _cachedClanTag = null;
@@ -601,58 +702,71 @@ class _ClanRoleChipState extends State<_ClanRoleChip> {
       player.clanTag,
       _cachedClanTag,
     ].whereType<String>().firstWhere((tag) => tag.isNotEmpty, orElse: () => '');
+    final clanName = player.clanOverview.name;
+    final hasClan = clanName.isNotEmpty || clanTag.isNotEmpty;
     final canOpenClan = clanTag.isNotEmpty;
+    final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+      color: Colors.white,
+      fontSize: 15,
+      fontWeight: FontWeight.w500,
+      height: 1.05,
+    );
 
-    return GlassPanel(
-      width: double.infinity,
-      height: 50,
-      borderRadius: 16,
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
-      onTap: canOpenClan ? () => _openClan(context, clanTag) : null,
-      child: Row(
-        children: [
+    if (!hasClan) {
+      return Text(
+        role,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+        style: textStyle,
+      );
+    }
+
+    final line = Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (player.clanOverview.badgeUrls.small.isNotEmpty) ...[
           MobileWebImage(
             imageUrl: player.clanOverview.badgeUrls.small,
-            width: 26,
-            height: 26,
+            width: 16,
+            height: 16,
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  role,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withValues(alpha: 0.6),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  player.clanOverview.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
-          if (canOpenClan)
-            Icon(
-              Icons.chevron_right_rounded,
-              size: 18,
-              color: Theme.of(
-                context,
-              ).colorScheme.onSurface.withValues(alpha: 0.48),
-            ),
+          const SizedBox(width: 4),
         ],
+        Flexible(
+          child: Text(
+            [if (clanName.isNotEmpty) clanName, role].join(' | '),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: textStyle,
+          ),
+        ),
+        if (canOpenClan)
+          Icon(
+            Icons.chevron_right_rounded,
+            size: 18,
+            color: Colors.white.withValues(alpha: 0.68),
+          ),
+      ],
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 1),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 320),
+        child: canOpenClan
+            ? InkWell(
+                borderRadius: BorderRadius.circular(999),
+                onTap: () => _openClan(context, clanTag),
+                splashFactory: NoSplash.splashFactory,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: line,
+                ),
+              )
+            : line,
       ),
     );
   }
@@ -691,53 +805,6 @@ class _ClanRoleChipState extends State<_ClanRoleChip> {
   }
 }
 
-class _PlainInfoChip extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _PlainInfoChip({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassPanel(
-      height: 34,
-      borderRadius: 16,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      child: Text(
-        '$label: $value',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(
-          context,
-        ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-}
-
-class _HeaderIconButton extends StatelessWidget {
-  final IconData icon;
-  final Color? iconColor;
-  final String tooltip;
-  final VoidCallback onTap;
-
-  const _HeaderIconButton({
-    required this.icon,
-    this.iconColor,
-    required this.tooltip,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return _HeaderGlassButton(
-      tooltip: tooltip,
-      onTap: onTap,
-      child: Icon(icon, size: 25, color: iconColor),
-    );
-  }
-}
-
 class _CopyablePlayerTag extends StatelessWidget {
   final String tag;
 
@@ -758,14 +825,16 @@ class _CopyablePlayerTag extends StatelessWidget {
         });
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3),
+        padding: const EdgeInsets.symmetric(vertical: 1),
         child: Text(
           tag,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(
-              context,
-            ).colorScheme.onSurface.withValues(alpha: 0.62),
+            color: Colors.white.withValues(alpha: 0.62),
+            fontSize: 15,
             fontWeight: FontWeight.w500,
+            height: 1.05,
           ),
         ),
       ),
