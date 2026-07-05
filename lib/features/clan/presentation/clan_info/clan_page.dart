@@ -248,7 +248,7 @@ class _ClanProfileTabsState extends State<_ClanProfileTabs>
                 selected: widget.selectedIndex == 2,
               ),
               _ClanTab(
-                label: loc.navigationStatistics,
+                label: loc.warStats,
                 icon: Icons.bar_chart_rounded,
                 selected: widget.selectedIndex == 3,
               ),
@@ -310,14 +310,64 @@ class _ClanTab extends StatelessWidget {
   }
 }
 
-class _ClanJoinLeaveTab extends StatelessWidget {
+class _ClanJoinLeaveTab extends StatefulWidget {
   final ClanJoinLeave? joinLeave;
 
   const _ClanJoinLeaveTab({required this.joinLeave});
 
   @override
+  State<_ClanJoinLeaveTab> createState() => _ClanJoinLeaveTabState();
+}
+
+class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  String _selectedFilter = 'newest';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(
+        () => _searchQuery = _searchController.text.trim().toLowerCase(),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<JoinLeaveEvent> _filteredEvents(List<JoinLeaveEvent> events) {
+    var filtered = _searchQuery.isEmpty
+        ? events
+        : events
+              .where((event) => event.name.toLowerCase().contains(_searchQuery))
+              .toList(growable: false);
+
+    switch (_selectedFilter) {
+      case 'joined':
+        return filtered
+            .where((event) => event.type.toLowerCase().contains('join'))
+            .toList(growable: false);
+      case 'left':
+        return filtered
+            .where((event) => !event.type.toLowerCase().contains('join'))
+            .toList(growable: false);
+      case 'oldest':
+        return filtered.reversed.toList(growable: false);
+      default:
+        return filtered;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final data = joinLeave;
+    final loc = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final data = widget.joinLeave;
     if (data == null || data.stats.totalEvents == 0) {
       return const _ClanEmptyTab(
         title: 'No join/leave data',
@@ -328,7 +378,9 @@ class _ClanJoinLeaveTab extends StatelessWidget {
     }
 
     final stats = data.stats;
-    final events = data.joinLeaveList.take(30).toList(growable: false);
+    final events = _filteredEvents(
+      data.joinLeaveList.take(30).toList(growable: false),
+    );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -364,10 +416,92 @@ class _ClanJoinLeaveTab extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      NativeLiquidGlassBar(
+                        height: 44,
+                        cornerRadius: 22,
+                        borderOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.30,
+                        shadowOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.08,
+                      ),
+                      TextField(
+                        controller: _searchController,
+                        textInputAction: TextInputAction.search,
+                        style: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(color: colorScheme.onSurface),
+                        decoration: InputDecoration(
+                          hintText:
+                              loc?.clanMembersSearchPlaceholder ??
+                              'Search members',
+                          hintStyle: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                          isDense: true,
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            size: 20,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          prefixIconConstraints: const BoxConstraints(
+                            minWidth: 40,
+                            minHeight: 44,
+                          ),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: Icon(
+                                    Icons.close_rounded,
+                                    size: 18,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                  onPressed: () => _searchController.clear(),
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              FilterDropdown(
+                sortBy: _selectedFilter,
+                updateSortBy: (value) =>
+                    setState(() => _selectedFilter = value),
+                maxWidth: 130,
+                sortByOptions: {
+                  loc?.warEventsNewest ?? 'Newest': 'newest',
+                  loc?.warEventsOldest ?? 'Oldest': 'oldest',
+                  'Joined': 'joined',
+                  'Left': 'left',
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
           if (events.isEmpty)
-            const _ClanEmptyTab(
-              title: 'No recent movement',
-              body: 'The summary is loaded, but the event list is empty.',
+            _ClanEmptyTab(
+              title: _searchQuery.isNotEmpty
+                  ? (loc?.generalNoFilteredResults ??
+                        'No results match your filters')
+                  : 'No recent movement',
+              body: _searchQuery.isNotEmpty
+                  ? ''
+                  : 'The summary is loaded, but the event list is empty.',
               icon: Icons.history_toggle_off_rounded,
             )
           else
