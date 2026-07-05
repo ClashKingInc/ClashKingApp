@@ -33,6 +33,7 @@ class WarCwlPage extends StatefulWidget {
 
 class _WarCwlPageState extends State<WarCwlPage> {
   final Set<String> _requestedBookmarkWarTags = {};
+  final Set<String> _requestedBookmarkPlayerTags = {};
 
   @override
   Widget build(BuildContext context) {
@@ -46,27 +47,104 @@ class _WarCwlPageState extends State<WarCwlPage> {
     // the Players tab — restrict to actually-linked tags so a bookmarked
     // player's clan isn't mistaken for one of "your" clans.
     final ownedTags = cocService.getAccountTags().toSet();
+    final ownedTagKeys = ownedTags.map(_tagKey).toSet();
+    final profilesByTag = {
+      for (final profile in playerService.profiles)
+        _tagKey(profile.tag): profile,
+    };
     // Accounts opted out of the War tab (per-player "Show in War tab"
     // toggle on the Players page) don't contribute to a clan card here -
     // if that leaves a clan with no visible accounts, it simply won't
     // appear below.
-    final players = playerService.profiles
+    final players = profilesByTag.values
         .where(
           (player) =>
-              ownedTags.contains(player.tag) &&
+              ownedTagKeys.contains(_tagKey(player.tag)) &&
               playerCardPrefs.isShownInWarTab(player.tag),
         )
         .toList(growable: false);
+    final bookmarkedPlayers = bookmarkService.players
+        .where(
+          (player) =>
+              !ownedTagKeys.contains(_tagKey(player.tag)) &&
+              player.clanTag.isNotEmpty &&
+              playerCardPrefs.isShownInWarTab(player.tag),
+        )
+        .toList(growable: false);
+    final missingBookmarkPlayerTags = bookmarkedPlayers
+        .where(
+          (player) =>
+              !profilesByTag.containsKey(_tagKey(player.tag)) &&
+              !_requestedBookmarkPlayerTags.contains(_tagKey(player.tag)),
+        )
+        .map((player) => player.tag)
+        .toList(growable: false);
+    if (missingBookmarkPlayerTags.isNotEmpty) {
+      _requestedBookmarkPlayerTags.addAll(
+        missingBookmarkPlayerTags.map(_tagKey),
+      );
+      unawaited(
+        playerService.hydrateBookmarkedPlayers(missingBookmarkPlayerTags),
+      );
+    }
     final linkedClans = {
       for (final profile in players)
         if (profile.clan != null && profile.clan!.tag.isNotEmpty)
           profile.clan!.tag: profile.clan!,
     };
-    final bookmarkedClanTags = bookmarkService.clans
-        .where((clan) => !linkedClans.containsKey(clan.tag))
-        .map((clan) => clan.tag)
+    final accountsByClan = <String, List<_WarAccount>>{};
+    for (final player in players) {
+      if (player.clanTag.isEmpty) continue;
+      accountsByClan
+          .putIfAbsent(player.clanTag, () => [])
+          .add(_WarAccount.fromPlayer(player, bookmarked: false));
+    }
+    for (final bookmark in bookmarkedPlayers) {
+      final hydrated = profilesByTag[_tagKey(bookmark.tag)];
+      final clanTag = hydrated?.clanTag.isNotEmpty == true
+          ? hydrated!.clanTag
+          : bookmark.clanTag;
+      if (clanTag.isEmpty) continue;
+      accountsByClan
+          .putIfAbsent(clanTag, () => [])
+          .add(
+            hydrated == null
+                ? _WarAccount.fromBookmark(bookmark)
+                : _WarAccount.fromPlayer(hydrated, bookmarked: true),
+          );
+    }
+    final bookmarkedPlayerClanTags = bookmarkedPlayers
+        .map((player) {
+          final hydrated = profilesByTag[_tagKey(player.tag)];
+          return hydrated?.clanTag.isNotEmpty == true
+              ? hydrated!.clanTag
+              : player.clanTag;
+        })
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
+    final bookmarkedClanTags = {
+      ...bookmarkService.clans
+          .where((clan) => !linkedClans.containsKey(clan.tag))
+          .map((clan) => clan.tag),
+      ...bookmarkedPlayerClanTags.where((tag) => !linkedClans.containsKey(tag)),
+    }.toList(growable: false);
+    final bookmarkedClanSnapshots = {
+      for (final clan in bookmarkService.clans) clan.tag: clan,
+    };
+    final bookmarkedPlayerClanNames = {
+      for (final player in bookmarkedPlayers)
+        if (player.clanTag.isNotEmpty) player.clanTag: player.clanName,
+    };
+    final hydratedBookmarkedClans = {
+      for (final player in bookmarkedPlayers)
+        if (profilesByTag[_tagKey(player.tag)]?.clan != null)
+          profilesByTag[_tagKey(player.tag)]!.clan!.tag:
+              profilesByTag[_tagKey(player.tag)]!.clan!,
+    };
+    final extraWarClanTags = bookmarkedClanTags
+        .where((tag) => !linkedClans.containsKey(tag))
         .toList(growable: false);
-    final missingBookmarkWarTags = bookmarkedClanTags
+    final missingBookmarkWarTags = extraWarClanTags
         .where(
           (tag) =>
               !_requestedBookmarkWarTags.contains(tag) &&
@@ -81,16 +159,18 @@ class _WarCwlPageState extends State<WarCwlPage> {
       for (final clan in linkedClans.values)
         _WarListItem.linked(
           clan: clan,
-          accounts: players
-              .where((player) => player.clanTag == clan.tag)
-              .toList(growable: false),
+          accounts: accountsByClan[clan.tag] ?? const [],
           summary: warCwlService.getWarCwlByTag(clan.tag),
         ),
-      for (final clan in bookmarkService.clans)
-        if (!linkedClans.containsKey(clan.tag))
+      for (final tag in bookmarkedClanTags)
+        if (!linkedClans.containsKey(tag))
           _WarListItem.bookmarked(
-            clan,
-            summary: warCwlService.getWarCwlByTag(clan.tag),
+            tag: tag,
+            clan: hydratedBookmarkedClans[tag],
+            snapshot: bookmarkedClanSnapshots[tag],
+            fallbackName: bookmarkedPlayerClanNames[tag],
+            accounts: accountsByClan[tag] ?? const [],
+            summary: warCwlService.getWarCwlByTag(tag),
           ),
     ]..sort((a, b) => a.sortWeight.compareTo(b.sortWeight));
 
@@ -103,6 +183,7 @@ class _WarCwlPageState extends State<WarCwlPage> {
           playerService,
           clanService,
           warCwlService,
+          extraWarClanTags,
         ),
         child: ListView(
           padding: EdgeInsets.fromLTRB(
@@ -142,6 +223,7 @@ class _WarCwlPageState extends State<WarCwlPage> {
     PlayerService playerService,
     ClanService clanService,
     WarCwlService warCwlService,
+    List<String> extraWarClanTags,
   ) async {
     try {
       final playerTags = cocService.getAccountTags();
@@ -152,6 +234,9 @@ class _WarCwlPageState extends State<WarCwlPage> {
           clanService,
           warCwlService,
         );
+      }
+      if (extraWarClanTags.isNotEmpty) {
+        await warCwlService.loadAllWarData(extraWarClanTags, notify: true);
       }
     } catch (e) {
       if (!context.mounted) return;
@@ -167,6 +252,12 @@ class _WarCwlPageState extends State<WarCwlPage> {
                   clanService,
                   warCwlService,
                 );
+                if (extraWarClanTags.isNotEmpty) {
+                  await warCwlService.loadAllWarData(
+                    extraWarClanTags,
+                    notify: true,
+                  );
+                }
                 if (context.mounted) Navigator.of(context).pop();
               },
             ),
@@ -185,6 +276,32 @@ class _WarCwlPageState extends State<WarCwlPage> {
   }
 }
 
+String _tagKey(String tag) => tag.replaceAll('#', '').trim().toUpperCase();
+
+class _WarAccount {
+  const _WarAccount({
+    required this.tag,
+    required this.name,
+    required this.bookmarked,
+  });
+
+  final String tag;
+  final String name;
+  final bool bookmarked;
+
+  factory _WarAccount.fromPlayer(Player player, {required bool bookmarked}) {
+    return _WarAccount(
+      tag: player.tag,
+      name: player.name,
+      bookmarked: bookmarked,
+    );
+  }
+
+  factory _WarAccount.fromBookmark(BookmarkedPlayer player) {
+    return _WarAccount(tag: player.tag, name: player.name, bookmarked: true);
+  }
+}
+
 class _WarListItem {
   const _WarListItem({
     required this.name,
@@ -200,13 +317,13 @@ class _WarListItem {
   final String tag;
   final String badgeUrl;
   final bool bookmarked;
-  final List<Player> accounts;
+  final List<_WarAccount> accounts;
   final Clan? clan;
   final WarCwl? summary;
 
   factory _WarListItem.linked({
     required Clan clan,
-    required List<Player> accounts,
+    required List<_WarAccount> accounts,
     required WarCwl? summary,
   }) {
     return _WarListItem(
@@ -220,13 +337,28 @@ class _WarListItem {
     );
   }
 
-  factory _WarListItem.bookmarked(BookmarkedClan clan, {WarCwl? summary}) {
+  factory _WarListItem.bookmarked({
+    required String tag,
+    required Clan? clan,
+    required BookmarkedClan? snapshot,
+    required String? fallbackName,
+    required List<_WarAccount> accounts,
+    required WarCwl? summary,
+  }) {
+    final name =
+        clan?.name ??
+        snapshot?.name ??
+        (fallbackName?.isNotEmpty == true ? fallbackName! : tag);
+    final badgeUrl =
+        clan?.badgeUrls.large ?? snapshot?.badgeUrl ?? ImageAssets.clanCastle;
+
     return _WarListItem(
-      name: clan.name,
-      tag: clan.tag,
-      badgeUrl: clan.badgeUrl,
+      name: name,
+      tag: tag,
+      badgeUrl: badgeUrl,
       bookmarked: true,
-      accounts: const [],
+      accounts: accounts,
+      clan: clan,
       summary: summary,
     );
   }
@@ -282,7 +414,7 @@ class _WarListItem {
 
   List<_AccountWarStatus> accountStatuses(WarInfo war) {
     return accounts
-        .map((player) => _AccountWarStatus.fromWar(player, war, tag))
+        .map((account) => _AccountWarStatus.fromWar(account, war, tag))
         .toList(growable: false);
   }
 
@@ -395,40 +527,69 @@ class _WarAttackFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final sortedStatuses = [...statuses]
+      ..sort((a, b) {
+        final leftCompare = b.left.compareTo(a.left);
+        if (leftCompare != 0) return leftCompare;
+        return a.account.name.compareTo(b.account.name);
+      });
 
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            runAlignment: WrapAlignment.center,
+            spacing: 6,
+            runSpacing: 6,
+            children: sortedStatuses
+                .map(
+                  (status) => _AttackPlayerChip(
+                    status: status,
+                    total: attacksPerMember,
+                  ),
+                )
+                .toList(growable: false),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AttackPlayerChip extends StatelessWidget {
+  const _AttackPlayerChip({required this.status, required this.total});
+
+  final _AccountWarStatus status;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final foreground = status.left > 0 ? colorScheme.primary : Colors.green;
+    final icon = status.account.bookmarked
+        ? Icons.bookmark_rounded
+        : Icons.link_rounded;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colorScheme.surface.withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.20),
-        ),
+        color: foreground.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
+            Icon(icon, size: 14, color: foreground),
+            const SizedBox(width: 5),
             Text(
-              'Your accounts',
+              '${status.account.name} ${status.done}/$total',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+                color: foreground,
                 fontWeight: FontWeight.w800,
               ),
-            ),
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: statuses
-                  .map(
-                    (status) => _AttackPlayerChip(
-                      status: status,
-                      total: attacksPerMember,
-                    ),
-                  )
-                  .toList(growable: false),
             ),
           ],
         ),
@@ -561,69 +722,29 @@ class _CwlRoundBanner extends StatelessWidget {
   }
 }
 
-class _AttackPlayerChip extends StatelessWidget {
-  const _AttackPlayerChip({required this.status, required this.total});
-
-  final _AccountWarStatus status;
-  final int total;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final foreground = status.left > 0 ? colorScheme.primary : Colors.green;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: foreground.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.local_fire_department_rounded,
-              size: 14,
-              color: foreground,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              '${status.player.name} ${status.done}/$total',
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: foreground,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _AccountWarStatus {
   const _AccountWarStatus({
-    required this.player,
+    required this.account,
     required this.inWar,
     required this.done,
     required this.left,
   });
 
-  final Player player;
+  final _WarAccount account;
   final bool inWar;
   final int done;
   final int left;
 
   factory _AccountWarStatus.fromWar(
-    Player player,
+    _WarAccount account,
     WarInfo war,
     String clanTag,
   ) {
-    final inWar = war.isPlayerInWar(player.tag, clanTag);
-    final done = inWar ? war.getAttacksDoneByPlayer(player.tag, clanTag) : 0;
+    final inWar = war.isPlayerInWar(account.tag, clanTag);
+    final done = inWar ? war.getAttacksDoneByPlayer(account.tag, clanTag) : 0;
     final left = inWar ? ((war.attacksPerMember ?? 1) - done).clamp(0, 99) : 0;
     return _AccountWarStatus(
-      player: player,
+      account: account,
       inWar: inWar,
       done: done,
       left: left,

@@ -145,7 +145,7 @@ class WarCard extends StatelessWidget {
           width: 56,
           child: Text(
             format(clanPercentage),
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.center,
             style: style,
           ),
         ),
@@ -154,7 +154,7 @@ class WarCard extends StatelessWidget {
           width: 56,
           child: Text(
             format(opponentPercentage),
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.center,
             style: style,
           ),
         ),

@@ -19,6 +19,7 @@ What’s new
 - Player item sections now show two progress percentages: current TH max-level completion and overall max-level completion
 - Town-hall-maxed items now have a bronze border indicator
 - Player league chips now show the league name instead of raw trophy counts
+- The War tab now presents account attack status without nested cards and includes opted-in bookmarked player accounts
 - Player item icons now resolve directly from ClashKing assets instead of app-data image URLs
 - Seasonal event troops and spells are now hidden consistently in player progression lists
 - Fixed missing player profile images for heroes, troops, spells, pets, and equipment
