@@ -10,7 +10,10 @@ What’s new
 - Player profile: new Season History tab and restyled sections, chips and progress bars
 - Home event banner: correct logo per theme, tinted tiles, page dots, events sorted by next deadline
 - The to-do page got a redesign: hero header with a liquid glass stats panel, cleaner account cards
+- The to-do page now matches the clan detail header style and highlights the accounts that need action first
 - Player cards now expand with options to enable notifications and pin an account’s to-do card to the home tab
+- Player card options can now include or hide each account from the full to-do page
+- The to-do page now has account search, status filters, and sorts accounts by recent activity
 - Bookmarked players pinned from player card options are now included in the detailed to-do view
 - The home tab now shows a single to-do card that combines the remaining tasks across all the accounts you pinned
 - The account menu can now be swiped open from further inside the screen, fixing accidental app exits on Samsung devices
@@ -19,6 +22,12 @@ What’s new
 - Player item sections now show two progress percentages: current TH max-level completion and overall max-level completion
 - Town-hall-maxed items now have a bronze border indicator
 - Player league chips now show the league name instead of raw trophy counts
+- Player profile header now shows clan identity more consistently with clan detail headers
+- Player profile now shows War Stats before Achievements
+- War detail now has a cleaer hero header plus redesigned statistics, events, and team sections
+- War stats now use clan-style filter chips, top-level attack/defense tabs, simplified grouped war details, smoother scrolling, and improved missed-count styling
+- Fixed War Stats default loading so it shows the latest 50 wars instead of a season/date-limited view
+- War detail now shows clearer win-path guidance with remaining attacks, lock conditions, and opponent threat
 - The War tab now presents account attack status without nested cards and includes opted-in bookmarked player accounts
 - Player item icons now resolve directly from ClashKing assets instead of app-data image URLs
 - Seasonal event troops and spells are now hidden consistently in player progression lists
@@ -29,3 +38,6 @@ What’s new
 - Some minor library updates
 - Fixed bulk account loading timeouts during startup
 - Improved war and clan parsing for incomplete API payloads
+- Improved clan detail tabs with CWL history previews and safer loading states
+- Improved clan detail filters, ranking season previews, and member donation stats
+- Fixed Windows builds by avoiding incompatible fallback liquid glass shaders

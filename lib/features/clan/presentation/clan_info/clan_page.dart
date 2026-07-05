@@ -1,5 +1,5 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
-import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:flutter/foundation.dart';
@@ -8,9 +8,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
+import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/clan/models/cwl_ranking_history.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_tab_common.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
@@ -329,7 +331,8 @@ class _ClanJoinLeaveTab extends StatefulWidget {
 class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  String _selectedFilter = 'newest';
+  String _selectedSort = 'newest';
+  String _selectedMovement = 'all';
 
   @override
   void initState() {
@@ -354,15 +357,20 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
               .where((event) => event.name.toLowerCase().contains(_searchQuery))
               .toList(growable: false);
 
-    switch (_selectedFilter) {
+    switch (_selectedMovement) {
       case 'joined':
-        return filtered
+        filtered = filtered
             .where((event) => event.type.toLowerCase().contains('join'))
             .toList(growable: false);
+        break;
       case 'left':
-        return filtered
+        filtered = filtered
             .where((event) => !event.type.toLowerCase().contains('join'))
             .toList(growable: false);
+        break;
+    }
+
+    switch (_selectedSort) {
       case 'oldest':
         return filtered.reversed.toList(growable: false);
       default:
@@ -373,7 +381,6 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final data = widget.joinLeave;
     if (data == null || data.stats.totalEvents == 0) {
       return const _ClanEmptyTab(
@@ -393,109 +400,70 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       child: Column(
         children: [
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _MiniMetricChip(
-                icon: Icons.login_rounded,
-                value: stats.totalJoins.toString(),
-                label: 'Joined',
-                color: Colors.green,
-              ),
-              _MiniMetricChip(
-                icon: Icons.logout_rounded,
-                value: stats.totalLeaves.toString(),
-                label: 'Left',
-                color: Colors.redAccent,
-              ),
-              _MiniMetricChip(
-                icon: Icons.person_search_rounded,
-                value: stats.uniquePlayers.toString(),
-                label: 'Unique',
-              ),
-              _MiniMetricChip(
-                icon: Icons.repeat_rounded,
-                value: stats.rejoinedPlayers.toString(),
-                label: 'Rejoined',
-              ),
-            ],
+          ClanTabSearchSortBar(
+            controller: _searchController,
+            query: _searchQuery,
+            hintText: loc?.clanMembersSearchPlaceholder ?? 'Search members',
+            sortBy: _selectedSort,
+            updateSortBy: (value) => setState(() => _selectedSort = value),
+            maxSortWidth: 130,
+            padding: EdgeInsets.zero,
+            sortByOptions: {
+              loc?.warEventsNewest ?? 'Newest': 'newest',
+              loc?.warEventsOldest ?? 'Oldest': 'oldest',
+            },
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 44,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      NativeLiquidGlassBar(
-                        height: 44,
-                        cornerRadius: 22,
-                        borderOpacity:
-                            Theme.of(context).brightness == Brightness.dark
-                            ? 0.22
-                            : 0.30,
-                        shadowOpacity:
-                            Theme.of(context).brightness == Brightness.dark
-                            ? 0.22
-                            : 0.08,
-                      ),
-                      TextField(
-                        controller: _searchController,
-                        textInputAction: TextInputAction.search,
-                        style: Theme.of(context).textTheme.bodyMedium
-                            ?.copyWith(color: colorScheme.onSurface),
-                        decoration: InputDecoration(
-                          hintText:
-                              loc?.clanMembersSearchPlaceholder ??
-                              'Search members',
-                          hintStyle: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: colorScheme.onSurfaceVariant),
-                          isDense: true,
-                          prefixIcon: Icon(
-                            Icons.search_rounded,
-                            size: 20,
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                          prefixIconConstraints: const BoxConstraints(
-                            minWidth: 40,
-                            minHeight: 44,
-                          ),
-                          suffixIcon: _searchQuery.isNotEmpty
-                              ? IconButton(
-                                  icon: Icon(
-                                    Icons.close_rounded,
-                                    size: 18,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                  onPressed: () => _searchController.clear(),
-                                )
-                              : null,
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          const SizedBox(height: 8),
+          _FilterBar(
+            trailing: const SizedBox.shrink(),
+            padding: EdgeInsets.zero,
+            middle: ClanSummaryChips(
+              padding: EdgeInsets.zero,
+              children: [
+                ClanSummaryChip(
+                  icon: Icons.login_rounded,
+                  value: stats.totalJoins.toString(),
+                  label: loc?.joinLeaveJoins ?? 'Joins',
+                  color: Colors.green,
                 ),
+                ClanSummaryChip(
+                  icon: Icons.logout_rounded,
+                  value: stats.totalLeaves.toString(),
+                  label: loc?.joinLeaveLeaves ?? 'Leaves',
+                  color: Colors.redAccent,
+                ),
+                ClanSummaryChip(
+                  icon: Icons.person_search_rounded,
+                  value: stats.uniquePlayers.toString(),
+                  label: loc?.joinLeaveUniquePlayers ?? 'Unique Players',
+                ),
+                ClanSummaryChip(
+                  icon: Icons.repeat_rounded,
+                  value: stats.rejoinedPlayers.toString(),
+                  label: loc?.joinLeaveRejoinedPlayers ?? 'Rejoined Players',
+                ),
+              ],
+            ),
+            chips: [
+              _FilterPill(
+                icon: Icons.all_inclusive_rounded,
+                label: loc?.generalAll ?? 'All',
+                selected: _selectedMovement == 'all',
+                onTap: () => setState(() => _selectedMovement = 'all'),
               ),
-              const SizedBox(width: 10),
-              FilterDropdown(
-                sortBy: _selectedFilter,
-                updateSortBy: (value) =>
-                    setState(() => _selectedFilter = value),
-                maxWidth: 130,
-                sortByOptions: {
-                  loc?.warEventsNewest ?? 'Newest': 'newest',
-                  loc?.warEventsOldest ?? 'Oldest': 'oldest',
-                  'Joined': 'joined',
-                  'Left': 'left',
-                },
+              _FilterPill(
+                icon: Icons.login_rounded,
+                label: loc?.joinLeaveJoin ?? 'Join',
+                selected: _selectedMovement == 'joined',
+                color: Colors.green,
+                onTap: () => setState(() => _selectedMovement = 'joined'),
+              ),
+              _FilterPill(
+                icon: Icons.logout_rounded,
+                label: loc?.joinLeaveLeave ?? 'Leave',
+                selected: _selectedMovement == 'left',
+                color: Colors.redAccent,
+                onTap: () => setState(() => _selectedMovement = 'left'),
               ),
             ],
           ),
@@ -590,7 +558,11 @@ class _JoinLeaveEventCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    joined ? 'Joined' : 'Left',
+                    joined
+                        ? (AppLocalizations.of(context)?.joinLeaveJoin ??
+                              'Join')
+                        : (AppLocalizations.of(context)?.joinLeaveLeave ??
+                              'Leave'),
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: accent,
                       fontWeight: FontWeight.w800,
@@ -614,87 +586,205 @@ class _JoinLeaveEventCard extends StatelessWidget {
   }
 }
 
-class _ClanRankingsTab extends StatelessWidget {
+class _ClanRankingsTab extends StatefulWidget {
   final Clan clanInfo;
 
   const _ClanRankingsTab({required this.clanInfo});
 
   @override
+  State<_ClanRankingsTab> createState() => _ClanRankingsTabState();
+}
+
+class _ClanRankingsTabState extends State<_ClanRankingsTab> {
+  static final DateTime _mockCurrentSeason = DateTime(2026, 7);
+
+  DateTime _selectedSeason = _mockCurrentSeason;
+  String _selectedRankingFilter = 'all';
+
+  Future<void> _pickSeason() async {
+    final now = DateTime.now();
+    final latestDate = DateTime(now.year, now.month, now.day);
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedSeason.isAfter(latestDate)
+          ? latestDate
+          : _selectedSeason,
+      firstDate: DateTime(2020),
+      lastDate: latestDate,
+      initialDatePickerMode: DatePickerMode.year,
+      helpText:
+          AppLocalizations.of(context)?.clanRankingsSelectSeason ??
+          'Select ranking season',
+    );
+
+    if (picked == null) return;
+    setState(() => _selectedSeason = DateTime(picked.year, picked.month));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final totalDonated = clanInfo.memberList.fold<int>(
+    final localeName = Localizations.localeOf(context).toString();
+    final seasonLabel = DateFormat.yMMMM(localeName).format(_selectedSeason);
+    final totalDonated = widget.clanInfo.memberList.fold<int>(
       0,
       (total, member) => total + member.donations,
     );
-    final totalReceived = clanInfo.memberList.fold<int>(
+    final totalReceived = widget.clanInfo.memberList.fold<int>(
       0,
       (total, member) => total + member.donationsReceived,
     );
+    final rawSeasonOffset =
+        (_mockCurrentSeason.year - _selectedSeason.year) * 12 +
+        _mockCurrentSeason.month -
+        _selectedSeason.month;
+    final seasonOffset = rawSeasonOffset < 0
+        ? 0
+        : rawSeasonOffset > 24
+        ? 24
+        : rawSeasonOffset;
+    final rankShift = seasonOffset * 7;
+
+    // TODO: Replace these preview ranks with real ranking data when the
+    // backend exposes clan ranking endpoints for the app.
+    // TODO: Replace the mock calendar month with API-backed ranking seasons.
     final rankings = [
       _RankingPreview(
         title: 'Donations',
         value: totalDonated,
         icon: Icons.arrow_upward_rounded,
         color: Colors.green,
-        globalRank: 42,
-        localRank: 3,
+        category: 'activity',
+        globalRank: 42 + rankShift,
+        localRank: 3 + seasonOffset,
       ),
       _RankingPreview(
         title: 'Received',
         value: totalReceived,
         icon: Icons.arrow_downward_rounded,
         color: Colors.redAccent,
-        globalRank: 98,
-        localRank: 8,
+        category: 'activity',
+        globalRank: 98 + rankShift,
+        localRank: 8 + seasonOffset,
       ),
       _RankingPreview(
         title: 'War wins',
-        value: clanInfo.warWins,
+        value: widget.clanInfo.warWins,
         imageUrl: ImageAssets.sword,
-        globalRank: 118,
-        localRank: 7,
+        category: 'war',
+        globalRank: 118 + rankShift,
+        localRank: 7 + seasonOffset,
       ),
       _RankingPreview(
         title: 'Win streak',
-        value: clanInfo.warWinStreak,
+        value: widget.clanInfo.warWinStreak,
         icon: Icons.local_fire_department_rounded,
         color: const Color(0xFFE35D4F),
-        globalRank: 210,
-        localRank: 12,
+        category: 'war',
+        globalRank: 210 + rankShift,
+        localRank: 12 + seasonOffset,
       ),
       _RankingPreview(
         title: 'Clan points',
-        value: clanInfo.clanPoints,
+        value: widget.clanInfo.clanPoints,
         imageUrl: ImageAssets.trophies,
         plainValue: true,
-        globalRank: 164,
-        localRank: 16,
+        category: 'points',
+        globalRank: 164 + rankShift,
+        localRank: 16 + seasonOffset,
       ),
       _RankingPreview(
         title: 'Builder points',
-        value: clanInfo.clanBuilderBasePoints,
+        value: widget.clanInfo.clanBuilderBasePoints,
         imageUrl: ImageAssets.builderBaseTrophy,
         plainValue: true,
-        globalRank: 187,
-        localRank: 18,
+        category: 'points',
+        globalRank: 187 + rankShift,
+        localRank: 18 + seasonOffset,
       ),
       _RankingPreview(
         title: 'Capital points',
-        value: clanInfo.clanCapitalPoints,
+        value: widget.clanInfo.clanCapitalPoints,
         imageUrl: ImageAssets.capitalTrophy,
         plainValue: true,
-        globalRank: 73,
-        localRank: 6,
+        category: 'points',
+        globalRank: 73 + rankShift,
+        localRank: 6 + seasonOffset,
       ),
     ];
+    final visibleRankings = _selectedRankingFilter == 'all'
+        ? rankings
+        : rankings
+              .where((ranking) => ranking.category == _selectedRankingFilter)
+              .toList(growable: false);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       child: Column(
         children: [
-          ...rankings.map(
+          _FilterBar(
+            padding: EdgeInsets.zero,
+            trailing: const SizedBox.shrink(),
+            actions: [
+              _FilterActionButton(
+                tooltip:
+                    AppLocalizations.of(context)?.clanRankingsSelectSeason ??
+                    'Select ranking season',
+                icon: Icons.calendar_month_rounded,
+                onTap: _pickSeason,
+              ),
+            ],
+            middle: ClanSummaryChips(
+              padding: EdgeInsets.zero,
+              children: [
+                ClanSummaryChip(
+                  icon: Icons.calendar_month_rounded,
+                  value: seasonLabel,
+                  label:
+                      AppLocalizations.of(context)?.clanRankingsSeason ??
+                      'Season',
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ],
+            ),
+            chips: [
+              _FilterPill(
+                label: AppLocalizations.of(context)?.generalAll ?? 'All',
+                icon: Icons.all_inclusive_rounded,
+                selected: _selectedRankingFilter == 'all',
+                onTap: () => setState(() => _selectedRankingFilter = 'all'),
+              ),
+              _FilterPill(
+                label:
+                    AppLocalizations.of(context)?.clanRankingsFilterActivity ??
+                    'Activity',
+                icon: Icons.swap_vert_rounded,
+                selected: _selectedRankingFilter == 'activity',
+                onTap: () =>
+                    setState(() => _selectedRankingFilter = 'activity'),
+              ),
+              _FilterPill(
+                label:
+                    AppLocalizations.of(context)?.clanRankingsFilterWar ??
+                    'War',
+                imageUrl: ImageAssets.sword,
+                selected: _selectedRankingFilter == 'war',
+                onTap: () => setState(() => _selectedRankingFilter = 'war'),
+              ),
+              _FilterPill(
+                label:
+                    AppLocalizations.of(context)?.clanRankingsFilterPoints ??
+                    'Points',
+                imageUrl: ImageAssets.trophies,
+                selected: _selectedRankingFilter == 'points',
+                onTap: () => setState(() => _selectedRankingFilter = 'points'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...visibleRankings.map(
             (ranking) => _RankingPreviewCard(
               ranking: ranking,
-              countryCode: clanInfo.location?.countryCode,
+              countryCode: widget.clanInfo.location?.countryCode,
             ),
           ),
         ],
@@ -709,6 +799,7 @@ class _RankingPreview {
   final IconData? icon;
   final String? imageUrl;
   final Color? color;
+  final String category;
   final int globalRank;
   final int localRank;
   final bool plainValue;
@@ -719,6 +810,7 @@ class _RankingPreview {
     this.icon,
     this.imageUrl,
     this.color,
+    required this.category,
     required this.globalRank,
     required this.localRank,
     this.plainValue = false,
@@ -729,10 +821,7 @@ class _RankingPreviewCard extends StatelessWidget {
   final _RankingPreview ranking;
   final String? countryCode;
 
-  const _RankingPreviewCard({
-    required this.ranking,
-    required this.countryCode,
-  });
+  const _RankingPreviewCard({required this.ranking, required this.countryCode});
 
   @override
   Widget build(BuildContext context) {
@@ -763,9 +852,9 @@ class _RankingPreviewCard extends StatelessWidget {
               children: [
                 Text(
                   ranking.title,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -820,9 +909,7 @@ class _RankMetric extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final flagUrl = countryCode == null
-        ? null
-        : ImageAssets.flag(countryCode!);
+    final flagUrl = countryCode == null ? null : ImageAssets.flag(countryCode!);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -845,60 +932,6 @@ class _RankMetric extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _MiniMetricChip extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String label;
-  final Color? color;
-
-  const _MiniMetricChip({
-    required this.icon,
-    required this.value,
-    required this.label,
-    this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final accent = color ?? colorScheme.onSurface;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: colorScheme.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.18),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 18, color: accent),
-          const SizedBox(width: 5),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.w900,
-              height: 1,
-            ),
-          ),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w700,
-              height: 1,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -997,8 +1030,16 @@ class _FilterBar extends StatefulWidget {
   final List<Widget> chips;
   final Widget trailing;
   final Widget? middle;
+  final List<Widget> actions;
+  final EdgeInsetsGeometry padding;
 
-  const _FilterBar({required this.chips, required this.trailing, this.middle});
+  const _FilterBar({
+    required this.chips,
+    required this.trailing,
+    this.middle,
+    this.actions = const [],
+    this.padding = const EdgeInsets.fromLTRB(16, 8, 16, 0),
+  });
 
   @override
   State<_FilterBar> createState() => _FilterBarState();
@@ -1012,7 +1053,7 @@ class _FilterBarState extends State<_FilterBar> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1053,11 +1094,16 @@ class _FilterBarState extends State<_FilterBar> {
                   ),
                 ),
               ),
+              for (final action in widget.actions) ...[
+                const SizedBox(width: 8),
+                action,
+              ],
+              const SizedBox(width: 8),
               Expanded(
                 child: widget.middle == null
                     ? const SizedBox.shrink()
                     : Align(
-                        alignment: Alignment.center,
+                        alignment: Alignment.centerLeft,
                         child: widget.middle,
                       ),
               ),
@@ -1085,17 +1131,14 @@ class _FilterBarState extends State<_FilterBar> {
   }
 }
 
-/// Small bordered icon pill matching the filter bar's visual language,
-/// for secondary per-tab actions (TH visibility, reset) that now have
-/// room to stay visible instead of hiding in an overflow menu.
-class _IconPillButton extends StatelessWidget {
-  final IconData icon;
+class _FilterActionButton extends StatelessWidget {
   final String tooltip;
+  final IconData icon;
   final VoidCallback onTap;
 
-  const _IconPillButton({
-    required this.icon,
+  const _FilterActionButton({
     required this.tooltip,
+    required this.icon,
     required this.onTap,
   });
 
@@ -1141,6 +1184,7 @@ class _FilterPill extends StatelessWidget {
   final String? imageUrl;
   final bool selected;
   final VoidCallback onTap;
+  final Color? color;
 
   const _FilterPill({
     required this.label,
@@ -1148,69 +1192,55 @@ class _FilterPill extends StatelessWidget {
     this.imageUrl,
     required this.selected,
     required this.onTap,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final tint = selected ? colorScheme.primary : null;
+    final accent = color ?? colorScheme.primary;
 
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(AppRadius.chip),
+      borderRadius: BorderRadius.circular(999),
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.chip),
+        borderRadius: BorderRadius.circular(999),
+        splashFactory: NoSplash.splashFactory,
         onTap: onTap,
         child: Container(
-          height: 40,
-          padding: const EdgeInsets.fromLTRB(6, 0, 12, 0),
+          height: 36,
+          padding: const EdgeInsets.symmetric(horizontal: 11),
           decoration: BoxDecoration(
-            color: tint != null
-                ? tint.withValues(alpha: 0.14)
-                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-            borderRadius: BorderRadius.circular(AppRadius.chip),
+            color: selected
+                ? accent.withValues(alpha: 0.16)
+                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
+            borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color:
-                  tint?.withValues(alpha: 0.4) ??
-                  colorScheme.outlineVariant.withValues(alpha: 0.32),
+              color: selected
+                  ? accent.withValues(alpha: 0.42)
+                  : colorScheme.outlineVariant.withValues(alpha: 0.28),
             ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  // Solid tint fill (not translucent) so a white icon on
-                  // top always clears contrast — unlike coloring small
-                  // text/icons with the tint directly, which this app's
-                  // dark-red primary fails against a dark surface.
-                  color: tint ?? colorScheme.surface.withValues(alpha: 0.72),
-                  shape: BoxShape.circle,
+              if (imageUrl != null) ...[
+                MobileWebImage(imageUrl: imageUrl!, height: 15, width: 15),
+                const SizedBox(width: 5),
+              ] else if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 15,
+                  color: selected ? accent : colorScheme.onSurfaceVariant,
                 ),
-                child: SizedBox.square(
-                  dimension: 24,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: imageUrl != null
-                        ? MobileWebImage(imageUrl: imageUrl!)
-                        : Icon(
-                            icon,
-                            size: 14,
-                            color: tint != null
-                                ? Colors.white
-                                : colorScheme.onSurfaceVariant,
-                          ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 6),
+                const SizedBox(width: 5),
+              ],
               Text(
                 label,
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  // Always onSurface — never the tint — so selected
-                  // labels stay readable regardless of theme contrast.
                   color: colorScheme.onSurface,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                  fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
+                  height: 1,
                 ),
               ),
             ],
@@ -1248,12 +1278,55 @@ class _ClanWarLogTab extends StatefulWidget {
 
 class _ClanWarLogTabState extends State<_ClanWarLogTab> {
   String? _selectedFilter;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(
+        () => _searchQuery = _searchController.text.trim().toLowerCase(),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
+        ClanTabSearchSortBar(
+          controller: _searchController,
+          query: _searchQuery,
+          hintText: loc.warLogSearchPlaceholder,
+          sortBy: _selectedFilter ?? 'newest',
+          updateSortBy: (value) => setState(() => _selectedFilter = value),
+          maxSortWidth: 130,
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+          sortByOptions: {
+            loc.warEventsNewest: 'newest',
+            loc.warEventsOldest: 'oldest',
+            loc.warVictory: 'victory',
+            loc.warDefeat: 'defeat',
+            loc.warDraw: 'draw',
+            loc.warPerfectWar: 'perfectWar',
+            '5v5': '5',
+            '10v10': '10',
+            '15v15': '15',
+            '20v20': '20',
+            '25v25': '25',
+            '30v30': '30',
+            '40v40': '40',
+            '50v50': '50',
+          },
+        ),
         _FilterBar(
           chips: [
             _FilterPill(
@@ -1275,35 +1348,16 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
               onTap: widget.onFriendlyChanged,
             ),
           ],
-          trailing: FilterDropdown(
-            sortBy: _selectedFilter ?? 'newest',
-            updateSortBy: (value) => setState(() => _selectedFilter = value),
-            maxWidth: 130,
-            sortByOptions: {
-              loc.warEventsNewest: 'newest',
-              loc.warEventsOldest: 'oldest',
-              loc.warVictory: 'victory',
-              loc.warDefeat: 'defeat',
-              loc.warDraw: 'draw',
-              loc.warPerfectWar: 'perfectWar',
-              '5v5': '5',
-              '10v10': '10',
-              '15v15': '15',
-              '20v20': '20',
-              '25v25': '25',
-              '30v30': '30',
-              '40v40': '40',
-              '50v50': '50',
-            },
-          ),
+          trailing: const SizedBox.shrink(),
           middle: WarLogSummary(clan: widget.clan),
         ),
         Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: ClanWarLog(
             clan: widget.clan,
             selectedTypes: widget.selectedTypes,
             selectedFilter: _selectedFilter,
+            searchQuery: _searchQuery,
           ),
         ),
       ],
@@ -1342,15 +1396,31 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
   String _sortBy = 'Three Stars Attacks';
   bool showUppedTownHall = true;
   bool _isLoadingStats = false;
+  DateTime? _selectedStatsSeason;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  late List<PlayerWarStats> _periodPlayers;
   late List<PlayerWarStats> filteredPlayers;
 
   @override
   void initState() {
     super.initState();
-    filteredPlayers = widget.clan.clanWarStats?.players ?? [];
+    _periodPlayers = widget.clan.clanWarStats?.players ?? [];
+    filteredPlayers = _periodPlayers;
+    _searchController.addListener(() {
+      setState(
+        () => _searchQuery = _searchController.text.trim().toLowerCase(),
+      );
+    });
     if (widget.clan.clanWarStats == null) {
-      _loadStats();
+      _loadDefaultStats();
     }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -1364,22 +1434,101 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
     }
   }
 
-  Future<void> _loadStats() async {
+  Future<void> _loadDefaultStats() async {
     setState(() => _isLoadingStats = true);
+    List<PlayerWarStats>? loadedPlayers;
     try {
       final clanService = context.read<ClanService>();
-      await clanService.loadClanWarStatsData([widget.clan.tag]);
-      clanService.linkWarStatsToClans();
+      final statsList = await clanService.loadClanWarStatsData([
+        widget.clan.tag,
+      ]);
+      for (final stats in statsList) {
+        if (stats.clanTag == widget.clan.tag) {
+          widget.clan.clanWarStats = stats;
+          loadedPlayers = stats.players;
+          break;
+        }
+      }
+      loadedPlayers ??= widget.clan.clanWarStats?.players ?? [];
     } catch (_) {
       // Keep showing the (possibly empty) stats we already have.
     } finally {
       if (mounted) {
         setState(() {
+          if (loadedPlayers != null) {
+            _periodPlayers = loadedPlayers;
+            filteredPlayers = _periodPlayers;
+            _sortMembers();
+          }
           _isLoadingStats = false;
-          filteredPlayers = widget.clan.clanWarStats?.players ?? [];
         });
       }
     }
+  }
+
+  Future<void> _loadStatsForSelectedSeason() async {
+    setState(() => _isLoadingStats = true);
+    List<PlayerWarStats>? loadedPlayers;
+    try {
+      final clanService = context.read<ClanService>();
+      final stats = await clanService.loadClanWarStatsWithFilter(
+        widget.clan.tag,
+        ClanWarStatsFilter(
+          startDate: _statsSeasonStart,
+          endDate: _statsSeasonEnd,
+          limit: 200,
+        ),
+      );
+      loadedPlayers = stats?.players ?? [];
+    } catch (_) {
+      // Keep showing the (possibly empty) stats we already have.
+    } finally {
+      if (mounted) {
+        setState(() {
+          if (loadedPlayers != null) {
+            _periodPlayers = loadedPlayers;
+            filteredPlayers = _periodPlayers;
+            _sortMembers();
+          }
+          _isLoadingStats = false;
+        });
+      }
+    }
+  }
+
+  DateTime get _statsSeasonStart =>
+      DateTime(_selectedStatsSeason!.year, _selectedStatsSeason!.month);
+
+  DateTime get _statsSeasonEnd => DateTime(
+    _selectedStatsSeason!.year,
+    _selectedStatsSeason!.month + 1,
+    1,
+  ).subtract(const Duration(seconds: 1));
+
+  Future<void> _pickStatsSeason() async {
+    final now = DateTime.now();
+    final latestDate = DateTime(now.year, now.month, now.day);
+    final initialSeason = _selectedStatsSeason ?? DateTime(now.year, now.month);
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initialSeason.isAfter(latestDate)
+          ? latestDate
+          : initialSeason,
+      firstDate: DateTime(2020),
+      lastDate: latestDate,
+      initialDatePickerMode: DatePickerMode.year,
+      helpText:
+          AppLocalizations.of(context)?.warStatsSelectSeason ??
+          'Select war stats season',
+    );
+
+    if (!mounted || picked == null) return;
+
+    final selectedMonth = DateTime(picked.year, picked.month);
+    if (selectedMonth == _selectedStatsSeason) return;
+
+    setState(() => _selectedStatsSeason = selectedMonth);
+    await _loadStatsForSelectedSeason();
   }
 
   void _toggleTownHallVisibility() {
@@ -1395,15 +1544,18 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
 
   void _resetFilters() {
     widget.onResetWarTypes();
+    _searchController.clear();
     setState(() {
+      _selectedStatsSeason = null;
       showUppedTownHall = true;
-      filteredPlayers = widget.clan.clanWarStats?.players ?? [];
+      _periodPlayers = widget.clan.clanWarStats?.players ?? _periodPlayers;
+      filteredPlayers = _periodPlayers;
     });
   }
 
   void _sortMembers() {
     final selectedTypes = widget.selectedTypes;
-    final allPlayers = widget.clan.clanWarStats?.players ?? [];
+    final allPlayers = _periodPlayers;
     final playersByTag = {
       for (var player in filteredPlayers) player.tag: player,
     };
@@ -1430,17 +1582,145 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
     filteredPlayers.sort((a, b) => statFor(b).compareTo(statFor(a)));
   }
 
+  List<PlayerWarStats> _displayedPlayers() {
+    if (_searchQuery.isEmpty) return filteredPlayers;
+    return filteredPlayers
+        .where(
+          (player) =>
+              player.name.toLowerCase().contains(_searchQuery) ||
+              player.tag.toLowerCase().contains(_searchQuery),
+        )
+        .toList(growable: false);
+  }
+
+  _WarStatsOverview _overviewFor(List<PlayerWarStats> players) {
+    var activePlayers = 0;
+    var totalAttacks = 0;
+    var totalStars = 0;
+    var missedAttacks = 0;
+    var weightedDestruction = 0.0;
+
+    for (final player in players) {
+      final stats = player.getStatsForTypes(widget.selectedTypes);
+      final starsCount = showUppedTownHall
+          ? stats.starsCount
+          : stats.getStarsCountAgainstTh(player.townhallLevel);
+      final attacks = starsCount.values.fold<int>(
+        0,
+        (total, count) => total + count,
+      );
+      if (attacks == 0) continue;
+
+      activePlayers += 1;
+      totalAttacks += attacks;
+      missedAttacks += stats.missedAttacks;
+      weightedDestruction += stats.averageDestruction * attacks;
+      for (final entry in starsCount.entries) {
+        totalStars += (int.tryParse(entry.key) ?? 0) * entry.value;
+      }
+    }
+
+    return _WarStatsOverview(
+      activePlayers: activePlayers,
+      totalAttacks: totalAttacks,
+      missedAttacks: missedAttacks,
+      averageStars: totalAttacks == 0 ? 0 : totalStars / totalAttacks,
+      averageDestruction: totalAttacks == 0
+          ? 0
+          : weightedDestruction / totalAttacks,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final localeName = Localizations.localeOf(context).toString();
+    final statsPeriodValue = _selectedStatsSeason == null
+        ? loc.warStatsLast50
+        : DateFormat.yMMM(localeName).format(_selectedStatsSeason!);
+    final statsPeriodLabel = _selectedStatsSeason == null
+        ? loc.warStatsWars
+        : loc.clanRankingsSeason;
+    final displayedPlayers = _displayedPlayers();
+    final overview = _overviewFor(displayedPlayers);
+
     return Column(
       children: [
+        ClanTabSearchSortBar(
+          controller: _searchController,
+          query: _searchQuery,
+          hintText: loc.warStatsSearchPlaceholder,
+          sortBy: _sortBy,
+          updateSortBy: _updateSortBy,
+          maxSortWidth: 150,
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+          sortByOptions: {
+            loc.warStarsThree: "Three Stars Attacks",
+            loc.warStarsTwo: "Two Stars Attacks",
+            loc.warStarsOne: "One Star Attacks",
+            loc.warStarsZero: "No Star Attacks",
+            loc.warDestructionAverage: "Average Destruction",
+            loc.warStarsAverage: "Average Stars",
+            loc.warParticipation: "War Participation",
+            loc.warAttacksMissed: "Missed Attacks",
+          },
+        ),
+        const SizedBox(height: 8),
         _FilterBar(
+          trailing: const SizedBox.shrink(),
+          actions: [
+            _FilterActionButton(
+              tooltip: loc.warStatsSelectSeason,
+              icon: Icons.calendar_month_rounded,
+              onTap: _pickStatsSeason,
+            ),
+          ],
+          middle: ClanSummaryChips(
+            padding: EdgeInsets.zero,
+            children: [
+              ClanSummaryChip(
+                icon: Icons.calendar_month_rounded,
+                value: statsPeriodValue,
+                label: statsPeriodLabel,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              ClanSummaryChip(
+                icon: Icons.groups_rounded,
+                value: overview.activePlayers.toString(),
+                label: loc.clanMembers,
+              ),
+              ClanSummaryChip(
+                icon: LucideIcons.swords,
+                value: overview.totalAttacks.toString(),
+                label: loc.warAttacksTitle,
+                color: Colors.blueAccent,
+              ),
+              ClanSummaryChip(
+                icon: Icons.star_rounded,
+                value: overview.averageStars.toStringAsFixed(2),
+                label: loc.warStarsAverage,
+                color: Colors.amber.shade700,
+              ),
+              ClanSummaryChip(
+                icon: Icons.percent_rounded,
+                value: '${overview.averageDestruction.toStringAsFixed(1)}%',
+                label: loc.warDestructionAverage,
+                color: Colors.teal,
+              ),
+              ClanSummaryChip(
+                icon: LucideIcons.sword,
+                value: overview.missedAttacks.toString(),
+                label: loc.warAttacksMissedShort,
+                color: Colors.redAccent,
+              ),
+            ],
+          ),
           chips: [
             _FilterPill(
               label: loc.cwlTitle,
-              imageUrl: ImageAssets.cwlSwordsNoBorder,
+              icon: LucideIcons.swords,
               selected: widget.isCWLChecked,
+              color: Theme.of(context).colorScheme.primary,
               onTap: widget.onCWLChanged,
             ),
             _FilterPill(
@@ -1455,40 +1735,16 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
               selected: widget.isFriendlyChecked,
               onTap: widget.onFriendlyChanged,
             ),
+            _FilterPill(
+              label: loc.warStatsCurrentTownHall,
+              icon: Icons.home_work_rounded,
+              selected: !showUppedTownHall,
+              color: Theme.of(context).colorScheme.tertiary,
+              onTap: _toggleTownHallVisibility,
+            ),
           ],
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FilterDropdown(
-                sortBy: _sortBy,
-                updateSortBy: _updateSortBy,
-                maxWidth: 130,
-                sortByOptions: {
-                  loc.warStarsThree: "Three Stars Attacks",
-                  loc.warStarsTwo: "Two Stars Attacks",
-                  loc.warStarsOne: "One Star Attacks",
-                  loc.warStarsZero: "No Star Attacks",
-                  loc.warDestructionAverage: "Average Destruction",
-                  loc.warStarsAverage: "Average Stars",
-                  loc.warParticipation: "War Participation",
-                  loc.warAttacksMissed: "Missed Attacks",
-                },
-              ),
-              const SizedBox(width: 8),
-              _IconPillButton(
-                icon: showUppedTownHall ? LucideIcons.eyeOff : LucideIcons.eye,
-                tooltip: loc.warVisibilityToggleTownHall,
-                onTap: _toggleTownHallVisibility,
-              ),
-              const SizedBox(width: 8),
-              _IconPillButton(
-                icon: LucideIcons.listRestart,
-                tooltip: loc.generalReset,
-                onTap: _resetFilters,
-              ),
-            ],
-          ),
         ),
+        const SizedBox(height: 8),
         if (_isLoadingStats)
           const Padding(
             padding: EdgeInsets.all(32),
@@ -1496,16 +1752,14 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
           )
         else
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: ClanWarStatsPlayers(
               clan: widget.clan,
               showUppedTownHall: showUppedTownHall,
               sortBy: _sortBy,
               selectedTypes: widget.selectedTypes,
-              filteredPlayers: filteredPlayers,
-              allPlayers: (widget.clan.clanWarStats?.players ?? [])
-                  .map((player) => player.tag)
-                  .toList(),
+              filteredPlayers: displayedPlayers,
+              allPlayers: _periodPlayers.map((player) => player.tag).toList(),
               resetFilters: _resetFilters,
               attackerThFilter: const [],
               defenderThFilter: const [],
@@ -1517,9 +1771,22 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
   }
 }
 
-/// Compact overflow menu for the two secondary Statistics-tab actions
-/// (TH visibility toggle, reset) so the filter bar's trailing slot
-/// stays to one control (sort) instead of three floating icon pills.
+class _WarStatsOverview {
+  final int activePlayers;
+  final int totalAttacks;
+  final int missedAttacks;
+  final double averageStars;
+  final double averageDestruction;
+
+  const _WarStatsOverview({
+    required this.activePlayers,
+    required this.totalAttacks,
+    required this.missedAttacks,
+    required this.averageStars,
+    required this.averageDestruction,
+  });
+}
+
 class _ClanCwlHistoryTab extends StatefulWidget {
   final Clan clan;
 
@@ -1530,179 +1797,461 @@ class _ClanCwlHistoryTab extends StatefulWidget {
 }
 
 class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
-  late final Future<List<CwlRankingHistoryEntry>> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = context.read<ClanService>().getCwlRankingHistory(widget.clan.tag);
-  }
+  static const _mockEntries = [
+    CwlRankingHistoryEntry(
+      season: 'July 2026',
+      league: 'Legend League',
+      rank: 3,
+      stars: 287,
+      destruction: 93.4,
+      roundsWon: 5,
+      roundsTied: 0,
+      roundsLost: 2,
+    ),
+    CwlRankingHistoryEntry(
+      season: 'June 2026',
+      league: 'Champion League I',
+      rank: 1,
+      stars: 301,
+      destruction: 95.1,
+      roundsWon: 7,
+      roundsTied: 0,
+      roundsLost: 0,
+    ),
+    CwlRankingHistoryEntry(
+      season: 'May 2026',
+      league: 'Master League I',
+      rank: 2,
+      stars: 276,
+      destruction: 91.8,
+      roundsWon: 5,
+      roundsTied: 1,
+      roundsLost: 1,
+    ),
+    CwlRankingHistoryEntry(
+      season: 'April 2026',
+      league: 'Crystal League I',
+      rank: 1,
+      stars: 244,
+      destruction: 89.6,
+      roundsWon: 6,
+      roundsTied: 0,
+      roundsLost: 1,
+    ),
+    CwlRankingHistoryEntry(
+      season: 'March 2026',
+      league: 'Gold League I',
+      rank: 2,
+      stars: 218,
+      destruction: 86.2,
+      roundsWon: 5,
+      roundsTied: 0,
+      roundsLost: 2,
+    ),
+    CwlRankingHistoryEntry(
+      season: 'February 2026',
+      league: 'Silver League I',
+      rank: 4,
+      stars: 182,
+      destruction: 81.9,
+      roundsWon: 3,
+      roundsTied: 1,
+      roundsLost: 3,
+    ),
+    CwlRankingHistoryEntry(
+      season: 'January 2026',
+      league: 'Bronze League I',
+      rank: 1,
+      stars: 156,
+      destruction: 78.4,
+      roundsWon: 6,
+      roundsTied: 0,
+      roundsLost: 1,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Replace this mockup with getCwlRankingHistory(widget.clan.tag)
+    // once the CWL history endpoint is fixed.
     return Padding(
-      padding: const EdgeInsets.all(12),
-      child: FutureBuilder<List<CwlRankingHistoryEntry>>(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Padding(
-              padding: EdgeInsets.all(32),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-
-          final entries = snapshot.data ?? [];
-          if (entries.isEmpty) {
-            return _EmptyCwlHistory();
-          }
-
-          return Column(
-            children: entries
-                .map((entry) => _CwlHistoryCard(entry: entry))
-                .toList(),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _EmptyCwlHistory extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final loc = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
       child: Column(
         children: [
-          Icon(
-            Icons.emoji_events_outlined,
-            size: 40,
-            color: colorScheme.onSurfaceVariant,
-          ),
+          _CwlHistoryPreviewNotice(clan: widget.clan),
           const SizedBox(height: 10),
-          Text(
-            loc.cwlHistoryEmptyTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            loc.cwlHistoryEmptyBody,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
+          ..._mockEntries.map((entry) => _CwlSeasonMockupCard(entry: entry)),
         ],
       ),
     );
   }
 }
 
-class _CwlHistoryCard extends StatelessWidget {
-  final CwlRankingHistoryEntry entry;
+class _CwlHistoryPreviewNotice extends StatelessWidget {
+  final Clan clan;
 
-  const _CwlHistoryCard({required this.entry});
+  const _CwlHistoryPreviewNotice({required this.clan});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha: 0.14),
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              '#${entry.rank}',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: colorScheme.primary,
-                fontWeight: FontWeight.w800,
-              ),
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.30),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(alpha: 0.24),
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  entry.season,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                if (entry.league != null && entry.league!.isNotEmpty) ...[
-                  const SizedBox(height: 1),
-                  Text(
-                    entry.league!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                '${entry.roundsWon}W · ${entry.roundsTied}T · ${entry.roundsLost}L',
-                style: Theme.of(
-                  context,
-                ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700),
+              Icon(
+                Icons.visibility_outlined,
+                size: 15,
+                color: colorScheme.onSurfaceVariant,
               ),
-              const SizedBox(height: 3),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.star_rounded,
-                    size: 13,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 2),
-                  Text(
-                    '${entry.stars}',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '${entry.destruction.toStringAsFixed(1)}%',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+              const SizedBox(width: 6),
+              Text(
+                AppLocalizations.of(context)?.cwlHistoryPreviewBadge ??
+                    'Preview',
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ],
           ),
-        ],
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            AppLocalizations.of(
+                  context,
+                )?.cwlHistoryPreviewSubtitle(clan.name) ??
+                '${clan.name} mockup until CWL endpoint is fixed',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CwlSeasonMockupCard extends StatelessWidget {
+  final CwlRankingHistoryEntry entry;
+
+  const _CwlSeasonMockupCard({required this.entry});
+
+  @override
+  Widget build(BuildContext context) {
+    final leagueName = entry.league ?? 'Unranked';
+    final leagueIcon = ImageAssets.getWarLeagueImage(leagueName);
+    final accent = _CwlLeagueAccent.forLeague(leagueName);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GlassPanel(
+        width: double.infinity,
+        height: 74,
+        borderRadius: 16,
+        padding: const EdgeInsets.fromLTRB(10, 8, 12, 8),
+        tint: accent,
+        borderOpacity: 0.22,
+        shadowOpacity: 0.16,
+        child: Builder(
+          builder: (context) {
+            final colorScheme = Theme.of(context).colorScheme;
+
+            return Row(
+              children: [
+                SizedBox.square(
+                  dimension: 52,
+                  child: MobileWebImage(
+                    imageUrl: leagueIcon,
+                    width: 52,
+                    height: 52,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _CwlSeasonMainInfo(
+                    leagueName: leagueName,
+                    rank: entry.rank,
+                    roundsWon: entry.roundsWon,
+                    roundsTied: entry.roundsTied,
+                    roundsLost: entry.roundsLost,
+                    accent: accent,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                _CwlSeasonSideInfo(
+                  season: entry.season,
+                  stars: entry.stars,
+                  destruction: entry.destruction,
+                  color: colorScheme.onSurface.withValues(alpha: 0.74),
+                ),
+              ],
+            );
+          },
+        ),
       ),
+    );
+  }
+}
+
+class _CwlLeagueAccent {
+  static Color forLeague(String leagueName) {
+    final name = leagueName.toLowerCase();
+    if (name.contains('legend')) return const Color(0xFF8C63FF);
+    if (name.contains('champion')) return const Color(0xFFFF8A2B);
+    if (name.contains('master')) {
+      return const Color(0xFF1B1D23);
+    }
+    if (name.contains('crystal')) {
+      return const Color(0xFF8C63FF);
+    }
+    if (name.contains('gold')) {
+      return const Color(0xFFFFC83D);
+    }
+    if (name.contains('silver')) {
+      return const Color(0xFFC9D1DA);
+    }
+    if (name.contains('bronze')) {
+      return const Color(0xFFC9793E);
+    }
+    return const Color(0xFF8C63FF);
+  }
+}
+
+class _CwlSeasonMainInfo extends StatelessWidget {
+  final String leagueName;
+  final int rank;
+  final int roundsWon;
+  final int roundsTied;
+  final int roundsLost;
+  final Color accent;
+
+  const _CwlSeasonMainInfo({
+    required this.leagueName,
+    required this.rank,
+    required this.roundsWon,
+    required this.roundsTied,
+    required this.roundsLost,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          leagueName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: colorScheme.onSurface.withValues(alpha: 0.70),
+            fontWeight: FontWeight.w700,
+            height: 1,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Flexible(
+              child: Text(
+                '#$rank',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.w900,
+                  height: 0.95,
+                ),
+              ),
+            ),
+            const SizedBox(width: 7),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: _CwlRecordPill(
+                won: roundsWon,
+                tied: roundsTied,
+                lost: roundsLost,
+                color: accent,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CwlSeasonSideInfo extends StatelessWidget {
+  final String season;
+  final int stars;
+  final double destruction;
+  final Color color;
+
+  const _CwlSeasonSideInfo({
+    required this.season,
+    required this.stars,
+    required this.destruction,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              season,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(width: 2),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 16,
+              color: colorScheme.onSurface.withValues(alpha: 0.50),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _CwlImageStat(
+              imageUrl: ImageAssets.builderBaseStar,
+              value: '$stars',
+            ),
+            const SizedBox(width: 9),
+            _CwlIconStat(
+              icon: Icons.percent_rounded,
+              value: destruction.toStringAsFixed(1),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CwlRecordPill extends StatelessWidget {
+  final int won;
+  final int tied;
+  final int lost;
+  final Color color;
+
+  const _CwlRecordPill({
+    required this.won,
+    required this.tied,
+    required this.lost,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final readableColor = color.computeLuminance() < 0.18
+        ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.86)
+        : color;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: readableColor.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: readableColor.withValues(alpha: 0.38)),
+      ),
+      child: Text(
+        '${won}W ${tied}D ${lost}L',
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          color: readableColor,
+          fontWeight: FontWeight.w900,
+          height: 1,
+        ),
+      ),
+    );
+  }
+}
+
+class _CwlIconStat extends StatelessWidget {
+  final IconData icon;
+  final String value;
+
+  const _CwlIconStat({required this.icon, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          size: 14,
+          color: colorScheme.onSurface.withValues(alpha: 0.64),
+        ),
+        const SizedBox(width: 3),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: colorScheme.onSurface.withValues(alpha: 0.78),
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CwlImageStat extends StatelessWidget {
+  final String imageUrl;
+  final String value;
+
+  const _CwlImageStat({required this.imageUrl, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MobileWebImage(imageUrl: imageUrl, width: 14, height: 14),
+        const SizedBox(width: 3),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: colorScheme.onSurface.withValues(alpha: 0.78),
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ],
     );
   }
 }

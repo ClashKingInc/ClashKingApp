@@ -501,6 +501,8 @@
   "clanMembersSearchPlaceholder": "Search members",
   "clanMembersShowTotals": "Show clan totals",
   "clanMembersHideTotals": "Hide clan totals",
+  "clanMembersReceivedShort": "Received",
+  "clanMembersAverageTh": "Avg TH",
   "clanMinimumMembers": "Minimum members",
   "clanMaximumMembers": "Maximum members",
   "clanLocation": "Location",
@@ -858,6 +860,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
+  "warLogSearchPlaceholder": "Search wars",
   "warLogClosed": "{clan}'s war log is closed.",
   "@warLogClosed": {
     "placeholders": {
@@ -867,6 +870,11 @@
     }
   },
   "warStats": "War Stats",
+  "warStatsSearchPlaceholder": "Search players",
+  "warStatsCurrentTownHall": "My TH",
+  "warStatsLast50": "Last 50",
+  "warStatsWars": "Wars",
+  "warStatsSelectSeason": "Select war stats season",
   "warOngoing": "Ongoing war",
   "warIsNotInWar": "{clan} is not in war.",
   "@warIsNotInWar": {
@@ -1236,6 +1244,19 @@
   "cwlHistoryTitle": "CWL History",
   "clanJoinLeaveTab": "Join/Leave",
   "clanRankingsTab": "Rankings",
+  "clanRankingsSeason": "Season",
+  "clanRankingsSelectSeason": "Select ranking season",
+  "clanRankingsFilterActivity": "Activity",
+  "clanRankingsFilterWar": "War",
+  "clanRankingsFilterPoints": "Points",
+  "cwlHistoryPreviewBadge": "Preview",
+  "cwlHistoryPreviewSubtitle": "{clan} mockup until CWL endpoint is fixed",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": { "type": "String" }
+    }
+  },
   "cwlHistoryEmptyTitle": "No CWL history yet",
   "cwlHistoryEmptyBody": "This clan hasn't taken part in a Clan War League season yet.",
   "cwlRankTitle": "Rank",
