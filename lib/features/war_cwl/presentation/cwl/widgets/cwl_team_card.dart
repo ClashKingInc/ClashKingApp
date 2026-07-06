@@ -1,6 +1,6 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/shapes/stat_tile.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -159,249 +159,152 @@ class CwlTeamCard extends StatelessWidget {
                 );
               }).toList(),
             ),
-            GestureDetector(
-              onTap: onToggleFullStats,
-              behavior: HitTestBehavior.opaque,
-              child: SizedBox(
-                height: 44,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        showFullStats ? Icons.expand_less : Icons.expand_more,
-                        size: 16,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        AppLocalizations.of(context)!.generalFullStats,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withValues(alpha: 0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+            const SizedBox(height: 2),
+            Center(
+              child: _FullStatsToggle(
+                expanded: showFullStats,
+                onTap: onToggleFullStats,
               ),
             ),
             if (showFullStats)
               Padding(
-                padding: const EdgeInsets.only(top: 12.0),
+                padding: const EdgeInsets.only(top: 10.0),
                 child: Column(
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)!.warAttacksTitle,
-                          style: Theme.of(context).textTheme.titleSmall,
+                    _CwlStatsSection(
+                      title: AppLocalizations.of(context)!.warAttacksTitle,
+                      iconUrl: ImageAssets.sword,
+                      accent: StatColors.win,
+                      totalIconUrl: ImageAssets.attackStar,
+                      totalValue: '${clan.stars}',
+                      tiles: [
+                        _MetricTile(
+                          label: AppLocalizations.of(context)!.warAttacksTitle,
+                          value: '${clan.attackCount}',
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.sword,
+                            width: 16,
+                            height: 16,
+                          ),
                         ),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 16,
-                          runAlignment: WrapAlignment.center,
-                          runSpacing: 16,
-                          children: [
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warAttacksTitle,
-                              value: '${clan.attackCount}',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.sword,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warStatusMissed,
-                              value: '${clan.missedAttacks}',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.brokenSword,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.generalTotal,
-                              value: '${clan.stars}',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.attackStar,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warAbbreviationAvg,
-                              value: clan.averageStars.toStringAsFixed(1),
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.attackStar,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warStarsThree,
-                              value: '${clan.threeStars}',
-                              icon: buildStarsIcon(3),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.warStarsTwo,
-                              value: '${clan.twoStars}',
-                              icon: buildStarsIcon(2),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.warStarsOne,
-                              value: '${clan.oneStar}',
-                              icon: buildStarsIcon(1),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.warStarsZero,
-                              value: '${clan.zeroStar}',
-                              icon: buildStarsIcon(0),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warDestructionTitle,
-                              value:
-                                  '${clan.destructionPercentageInflicted.toStringAsFixed(1)}%',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.hitrate,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warAbbreviationAvgPercentage,
-                              value: clan.averageDestruction.toStringAsFixed(1),
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.hitrate,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                          ],
+                        _MetricTile(
+                          label: AppLocalizations.of(context)!.warStatusMissed,
+                          value: '${clan.missedAttacks}',
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.brokenSword,
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                        _MetricTile(
+                          label: AppLocalizations.of(
+                            context,
+                          )!.warAbbreviationAvg,
+                          value: clan.averageStars.toStringAsFixed(1),
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.attackStar,
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                        _MetricTile(
+                          label: AppLocalizations.of(
+                            context,
+                          )!.warDestructionTitle,
+                          value:
+                              '${clan.destructionPercentageInflicted.toStringAsFixed(1)}%',
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.hitrate,
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                        _MetricTile(
+                          label: AppLocalizations.of(
+                            context,
+                          )!.warAbbreviationAvgPercentage,
+                          value: clan.averageDestruction.toStringAsFixed(1),
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.hitrate,
+                            width: 16,
+                            height: 16,
+                          ),
                         ),
                       ],
+                      breakdown: _StarBreakdownStrip(
+                        three: clan.threeStars,
+                        two: clan.twoStars,
+                        one: clan.oneStar,
+                        zero: clan.zeroStar,
+                      ),
                     ),
-                    Column(
-                      children: [
-                        const SizedBox(height: 18),
-                        Text(
-                          AppLocalizations.of(context)!.warDefensesTitle,
-                          style: Theme.of(context).textTheme.titleSmall,
+                    const SizedBox(height: 10),
+                    _CwlStatsSection(
+                      title: AppLocalizations.of(context)!.warDefensesTitle,
+                      iconUrl: ImageAssets.shieldWithArrow,
+                      accent: StatColors.loss,
+                      totalIconUrl: ImageAssets.attackStar,
+                      totalValue: '${clan.defStars}',
+                      tiles: [
+                        _MetricTile(
+                          label: AppLocalizations.of(context)!.warDefensesTitle,
+                          value: '${clan.defenseCount}',
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.shieldWithArrow,
+                            width: 16,
+                            height: 16,
+                          ),
                         ),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 16,
-                          runAlignment: WrapAlignment.center,
-                          runSpacing: 16,
-                          children: [
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warDefensesTitle,
-                              value: '${clan.defenseCount}',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.shieldWithArrow,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warStatusMissed,
-                              value: '${clan.missedDefenses}',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.shield,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.generalTotal,
-                              value: '${clan.defStars}',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.attackStar,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warAbbreviationAvg,
-                              value: clan.defAverageStars.toStringAsFixed(1),
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.attackStar,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warStarsThree,
-                              value: '${clan.threeStarsDef}',
-                              icon: buildStarsIcon(3),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.warStarsTwo,
-                              value: '${clan.twoStarsDef}',
-                              icon: buildStarsIcon(2),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.warStarsOne,
-                              value: '${clan.oneStarDef}',
-                              icon: buildStarsIcon(1),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(context)!.warStarsZero,
-                              value: '${clan.zeroStarDef}',
-                              icon: buildStarsIcon(0),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warDestructionTitle,
-                              value:
-                                  '${clan.destructionPercentage.toStringAsFixed(1)}%',
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.hitrate,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                            StatTile(
-                              label: AppLocalizations.of(
-                                context,
-                              )!.warAbbreviationAvgPercentage,
-                              value: clan.defAverageDestruction.toStringAsFixed(
-                                1,
-                              ),
-                              icon: MobileWebImage(
-                                imageUrl: ImageAssets.hitrate,
-                                width: 16,
-                                height: 16,
-                              ),
-                            ),
-                          ],
+                        _MetricTile(
+                          label: AppLocalizations.of(context)!.warStatusMissed,
+                          value: '${clan.missedDefenses}',
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.shield,
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                        _MetricTile(
+                          label: AppLocalizations.of(
+                            context,
+                          )!.warAbbreviationAvg,
+                          value: clan.defAverageStars.toStringAsFixed(1),
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.attackStar,
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                        _MetricTile(
+                          label: AppLocalizations.of(
+                            context,
+                          )!.warDestructionTitle,
+                          value:
+                              '${clan.destructionPercentage.toStringAsFixed(1)}%',
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.hitrate,
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                        _MetricTile(
+                          label: AppLocalizations.of(
+                            context,
+                          )!.warAbbreviationAvgPercentage,
+                          value: clan.defAverageDestruction.toStringAsFixed(1),
+                          icon: MobileWebImage(
+                            imageUrl: ImageAssets.hitrate,
+                            width: 16,
+                            height: 16,
+                          ),
                         ),
                       ],
+                      breakdown: _StarBreakdownStrip(
+                        three: clan.threeStarsDef,
+                        two: clan.twoStarsDef,
+                        one: clan.oneStarDef,
+                        zero: clan.zeroStarDef,
+                      ),
                     ),
                   ],
                 ),
@@ -409,6 +312,277 @@ class CwlTeamCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Pill toggle for the expandable full-stats block — a rounded, bordered
+/// affordance (sibling of the war tab's `_CalculatorActionButton`) so the
+/// tap target reads as a button rather than plain centered text.
+class _FullStatsToggle extends StatelessWidget {
+  final bool expanded;
+  final VoidCallback onTap;
+
+  const _FullStatsToggle({required this.expanded, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(999),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: Container(
+          height: 36,
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
+            color: expanded
+                ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(alpha: 0.45),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.generalFullStats,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.85),
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(width: 6),
+              AnimatedRotation(
+                turns: expanded ? 0.5 : 0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                child: Icon(
+                  Icons.expand_more_rounded,
+                  size: 18,
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Bordered attack/defense stat block: an accent header (icon, title, running
+/// total) over the metric tiles and star breakdown, so the previously flat
+/// 10-tile wrap reads as two distinct, scannable groups.
+class _CwlStatsSection extends StatelessWidget {
+  final String title;
+  final String iconUrl;
+  final Color accent;
+  final String totalIconUrl;
+  final String totalValue;
+  final List<Widget> tiles;
+  final Widget breakdown;
+
+  const _CwlStatsSection({
+    required this.title,
+    required this.iconUrl,
+    required this.accent,
+    required this.totalIconUrl,
+    required this.totalValue,
+    required this.tiles,
+    required this.breakdown,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.22),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 4,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: accent,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              const SizedBox(width: 8),
+              MobileWebImage(imageUrl: iconUrl, width: 16, height: 16),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+              const SizedBox(width: 6),
+              MobileWebImage(imageUrl: totalIconUrl, width: 15, height: 15),
+              const SizedBox(width: 4),
+              Text(
+                totalValue,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                  color: accent,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (int i = 0; i < tiles.length; i++) ...[
+                if (i > 0) const SizedBox(width: 6),
+                Expanded(child: tiles[i]),
+              ],
+            ],
+          ),
+          const SizedBox(height: 12),
+          breakdown,
+        ],
+      ),
+    );
+  }
+}
+
+/// Single-clan 3/2/1/0-star tally shown as one compact row instead of four
+/// separate square tiles competing for space in the stat wrap.
+class _StarBreakdownStrip extends StatelessWidget {
+  final int three;
+  final int two;
+  final int one;
+  final int zero;
+
+  const _StarBreakdownStrip({
+    required this.three,
+    required this.two,
+    required this.one,
+    required this.zero,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _StarCount(stars: 3, count: three),
+          _StarCount(stars: 2, count: two),
+          _StarCount(stars: 1, count: one),
+          _StarCount(stars: 0, count: zero),
+        ],
+      ),
+    );
+  }
+}
+
+/// Flexible-width sibling of the shared `StatTile` — `StatTile` is a fixed
+/// 56px chip meant for a `Wrap`, which left an orphaned tile on its own row
+/// once 5 didn't fit a card's width. This one stretches to fill an
+/// `Expanded` slot in a fixed-column `Row` so every row of tiles lines up.
+class _MetricTile extends StatelessWidget {
+  final String label;
+  final String value;
+  final Widget icon;
+
+  const _MetricTile({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(child: icon),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              fontSize: 9.5,
+            ),
+          ),
+          const SizedBox(height: 2),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              maxLines: 1,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w800),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StarCount extends StatelessWidget {
+  final int stars;
+  final int count;
+
+  const _StarCount({required this.stars, required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        buildStarsIcon(stars),
+        const SizedBox(height: 4),
+        Text(
+          '$count',
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w900),
+        ),
+      ],
     );
   }
 }

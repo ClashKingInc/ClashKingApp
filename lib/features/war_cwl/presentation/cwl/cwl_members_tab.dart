@@ -21,10 +21,9 @@ class CwlMembersTab extends StatefulWidget {
 class _CwlMembersTabState extends State<CwlMembersTab> {
   String sortBy = 'stars';
   final Map<String, GlobalKey> _cardKeys = {};
+  final Set<String> _expandedFullStats = {};
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-
-  bool showFullStats = false;
 
   @override
   void initState() {
@@ -48,9 +47,13 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
     });
   }
 
-  void toggleShowStats(GlobalKey<State<StatefulWidget>> key) {
+  void toggleShowStats(String memberTag, GlobalKey<State<StatefulWidget>> key) {
     setState(() {
-      showFullStats = !showFullStats;
+      if (_expandedFullStats.contains(memberTag)) {
+        _expandedFullStats.remove(memberTag);
+      } else {
+        _expandedFullStats.add(memberTag);
+      }
       Future.delayed(Duration(milliseconds: 200), () {
         final context = key.currentContext;
         if (context != null && context.mounted) {
@@ -290,8 +293,8 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
             return MembersCard(
               key: key,
               sortBy: sortBy,
-              showFullStats: showFullStats,
-              onToggleFullStats: () => toggleShowStats(key),
+              showFullStats: _expandedFullStats.contains(member.tag),
+              onToggleFullStats: () => toggleShowStats(member.tag, key),
               member: member,
               index: index,
               warsPlayed: warsPlayed,

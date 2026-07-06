@@ -19,12 +19,15 @@ class CwlTeamsTab extends StatefulWidget {
 class CwlTeamsTabState extends State<CwlTeamsTab> {
   late String sortBy = 'stars';
   final Map<String, GlobalKey> _cardKeys = {};
+  final Set<String> _expandedFullStats = {};
 
-  bool showFullStats = false;
-
-  void toggleShowStats(GlobalKey<State<StatefulWidget>> key) {
+  void toggleShowStats(String clanTag, GlobalKey<State<StatefulWidget>> key) {
     setState(() {
-      showFullStats = !showFullStats;
+      if (_expandedFullStats.contains(clanTag)) {
+        _expandedFullStats.remove(clanTag);
+      } else {
+        _expandedFullStats.add(clanTag);
+      }
       Future.delayed(Duration(milliseconds: 200), () {
         final context = key.currentContext;
         if (context != null && context.mounted) {
@@ -112,6 +115,7 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
                   sortBy = newValue;
                 });
               },
+              maxWidth: 130,
               sortByOptions: {
                 generateDoubleIcons(
                   16,
@@ -181,9 +185,9 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
           return CwlTeamCard(
             clan: clan,
             warCwl: widget.warCwl,
-            showFullStats: showFullStats,
+            showFullStats: _expandedFullStats.contains(clan.tag),
             onToggleFullStats: () {
-              toggleShowStats(key);
+              toggleShowStats(clan.tag, key);
             },
           );
         }),

@@ -463,11 +463,23 @@ class _WarListCard extends StatelessWidget {
       }
 
       void openWar() {
+        final cwlScreenBuilder = canOpenCwl
+            ? (BuildContext context) => CwlScreen(
+                clanTag: item.tag,
+                warCwl: summary!,
+                clanInfo: summary.leagueInfo!.getClanDetails(item.tag)!,
+                warLeagueName: item.clan?.warLeague?.name,
+              )
+            : null;
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                WarScreen(war: war, cwlRoundNumber: item.cwlRoundNumber),
+            builder: (context) => WarScreen(
+              war: war,
+              cwlRoundNumber: item.cwlRoundNumber,
+              cwlScreenBuilder: cwlScreenBuilder,
+            ),
           ),
         );
       }

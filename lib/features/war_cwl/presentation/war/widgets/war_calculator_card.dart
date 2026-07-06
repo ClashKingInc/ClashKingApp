@@ -3,16 +3,21 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 
 class WarCalculatorCard extends StatefulWidget {
-  const WarCalculatorCard({super.key, required this.warInfo});
+  const WarCalculatorCard({
+    super.key,
+    required this.warInfo,
+    this.initiallyExpanded = false,
+  });
 
   final WarInfo warInfo;
+  final bool initiallyExpanded;
 
   @override
   WarCalculatorCardState createState() => WarCalculatorCardState();
 }
 
 class WarCalculatorCardState extends State<WarCalculatorCard> {
-  bool _isExpanded = false;
+  late bool _isExpanded;
   final _teamSizeController = TextEditingController();
   final _percentNeededController = TextEditingController();
   double _result = 0;
@@ -28,6 +33,7 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
   @override
   void initState() {
     super.initState();
+    _isExpanded = widget.initiallyExpanded;
     final clan = widget.warInfo.clan;
     final opponent = widget.warInfo.opponent;
 
@@ -53,6 +59,7 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final loc = AppLocalizations.of(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -77,18 +84,26 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
-                  vertical: 14,
+                  vertical: 12,
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.calculate_rounded, color: colorScheme.primary),
-                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(context)?.warCalculatorFast ??
-                            'Fast calculator',
+                        loc?.warCalculatorFast ?? 'Fast calculator',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          height: 1.1,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.calculate_rounded,
+                      size: 20,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 4),
                     Icon(
                       _isExpanded
                           ? Icons.keyboard_arrow_up_rounded
@@ -106,60 +121,96 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Column(
                 children: [
-                  TextField(
-                    controller: _teamSizeController,
-                    decoration: InputDecoration(
-                      labelText:
-                          AppLocalizations.of(context)?.warTeamSize ??
-                          'Team size',
-                      hintText: widget.warInfo.teamSize?.toString() ?? '15',
-                      prefixIcon: const Icon(Icons.groups_rounded),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _percentNeededController,
-                    decoration: InputDecoration(
-                      labelText:
-                          AppLocalizations.of(
-                            context,
-                          )?.warCalculatorNeededOverall ??
-                          '% Needed overall',
-                      hintText:
-                          AppLocalizations.of(
-                            context,
-                          )?.warCalculatorHintPercent ??
-                          '50.00',
-                      prefixIcon: const Icon(Icons.percent_rounded),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 14),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          _result =
-                              parseDouble(_percentNeededController.text) *
-                              parseDouble(_teamSizeController.text);
-                        });
-                      },
-                      icon: const Icon(Icons.functions_rounded),
-                      label: Text(
-                        AppLocalizations.of(context)?.warCalculatorCalculate ??
-                            'Calculate',
-                      ),
-                    ),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final teamSizeInput = _CalculatorInput(
+                        controller: _teamSizeController,
+                        label: loc?.warTeamSize ?? 'Team size',
+                        hint: widget.warInfo.teamSize?.toString() ?? '15',
+                        icon: Icons.groups_rounded,
+                      );
+                      final percentInput = _CalculatorInput(
+                        controller: _percentNeededController,
+                        label:
+                            loc?.warCalculatorNeededOverall ??
+                            '% Needed overall',
+                        hint: loc?.warCalculatorHintPercent ?? '50.00',
+                        icon: Icons.percent_rounded,
+                      );
+
+                      if (constraints.maxWidth < 430) {
+                        return Column(
+                          children: [
+                            teamSizeInput,
+                            const SizedBox(height: 10),
+                            percentInput,
+                          ],
+                        );
+                      }
+
+                      return Row(
+                        children: [
+                          Expanded(child: teamSizeInput),
+                          const SizedBox(width: 10),
+                          Expanded(child: percentInput),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              _result =
+                                  parseDouble(_percentNeededController.text) *
+                                  parseDouble(_teamSizeController.text);
+                            });
+                          },
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(44),
+                            foregroundColor: colorScheme.onSurface,
+                            side: BorderSide(
+                              color: colorScheme.outlineVariant.withValues(
+                                alpha: 0.72,
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Text(
+                            loc?.warCalculatorCalculate ?? 'Calculate',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerHighest.withValues(
+                        alpha: 0.45,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: colorScheme.outlineVariant.withValues(
+                          alpha: 0.30,
+                        ),
+                      ),
+                    ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                       child: Text(
-                        AppLocalizations.of(context)?.warCalculatorAnswer(
+                        loc?.warCalculatorAnswer(
                               _percentNeededController.text,
                               _result.ceil().toString(),
                             ) ??
@@ -181,6 +232,87 @@ class WarCalculatorCardState extends State<WarCalculatorCard> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _CalculatorInput extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final IconData icon;
+
+  const _CalculatorInput({
+    required this.controller,
+    required this.label,
+    required this.hint,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 15, color: colorScheme.onSurfaceVariant),
+            const SizedBox(width: 5),
+            Expanded(
+              child: Text(
+                label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w800,
+                  height: 1.1,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          textInputAction: TextInputAction.next,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w800,
+          ),
+          decoration: InputDecoration(
+            hintText: hint,
+            isDense: true,
+            filled: true,
+            fillColor: colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.38,
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 14,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.30),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.72),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

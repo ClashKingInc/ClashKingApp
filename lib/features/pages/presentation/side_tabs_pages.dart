@@ -1268,12 +1268,96 @@ class _RankingRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ListLine(
-      leadingText: '${entry.movement} #${entry.rank}',
-      imageUrl: entry.imageUrl,
-      title: entry.name,
-      subtitle: entry.subtitle,
-      trailing: _formatInt(entry.score),
+    final colorScheme = Theme.of(context).colorScheme;
+    final cardColor = Theme.of(context).cardTheme.color ?? colorScheme.surface;
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 38,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '#${entry.rank}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w900,
+                    height: 1,
+                  ),
+                ),
+                if (entry.movement != '=') ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    entry.movement,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: entry.movement.startsWith('+')
+                          ? StatColors.win
+                          : StatColors.loss,
+                      fontWeight: FontWeight.w800,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          SizedBox.square(
+            dimension: 40,
+            child: MobileWebImage(
+              imageUrl: entry.imageUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  entry.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  entry.subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          _PopularMiniStat(
+            imageUrl: entry.metricImageUrl,
+            value: _formatInt(entry.score),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1286,20 +1370,50 @@ class _RankingTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Column(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CircleAvatar(
-          radius: 28,
-          backgroundColor: colorScheme.primaryContainer,
-          child: MobileWebImage(imageUrl: type.iconUrl, width: 34, height: 34),
+        SizedBox.square(
+          dimension: 48,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.32,
+              ),
+              shape: BoxShape.circle,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: MobileWebImage(
+                imageUrl: type.iconUrl,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
         ),
-        const SizedBox(height: 10),
-        Text(
-          type.heading,
-          textAlign: TextAlign.center,
-          style: Theme.of(
-            context,
-          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                type.heading,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                'Official Clash leaderboard',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -1439,52 +1553,38 @@ class _LeaderboardMeta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.34),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${type.label} · ${location.name}',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    townHall > 0
-                        ? 'Filtered to TH$townHall from the official top 200'
-                        : 'Top 200 from the official rankings endpoint',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+    return Row(
+      children: [
+        Expanded(
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              MetricChip(
+                label: type.label,
+                value: 'Top ${math.min(count, 200)}',
+                imageUrl: type.iconUrl,
               ),
-            ),
-            Text(
-              '1-${math.min(count, 50)} / $count',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
-            ),
-            IconButton(
-              tooltip: 'Refresh',
-              onPressed: onRefresh,
-              icon: const Icon(Icons.refresh_rounded),
-            ),
-          ],
+              MetricChip(
+                label: 'Location',
+                value: location.name,
+                icon: Icons.public_rounded,
+              ),
+              MetricChip(
+                label: 'Filter',
+                value: townHall > 0 ? 'TH$townHall' : 'All TH',
+                icon: Icons.home_work_outlined,
+              ),
+            ],
+          ),
         ),
-      ),
+        const SizedBox(width: 8),
+        IconButton(
+          tooltip: 'Refresh',
+          onPressed: onRefresh,
+          icon: const Icon(Icons.refresh_rounded),
+        ),
+      ],
     );
   }
 }
@@ -1494,14 +1594,12 @@ class _ListLine extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.imageUrl,
-    this.leadingText,
     this.trailing,
   });
 
   final String title;
   final String subtitle;
   final String? imageUrl;
-  final String? leadingText;
   final String? trailing;
 
   @override
@@ -1511,18 +1609,6 @@ class _ListLine extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         children: [
-          SizedBox(
-            width: 34,
-            child: leadingText == null
-                ? null
-                : Text(
-                    leadingText!,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-          ),
           if (imageUrl != null) ...[
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
@@ -1629,11 +1715,58 @@ class _EndpointPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ListLine(
-      imageUrl: option.iconUrl,
-      title: option.title,
-      subtitle: option.endpoint,
-      trailing: option.state,
+    final colorScheme = Theme.of(context).colorScheme;
+    final cardColor = Theme.of(context).cardTheme.color ?? colorScheme.surface;
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Row(
+        children: [
+          SizedBox.square(
+            dimension: 40,
+            child: MobileWebImage(
+              imageUrl: option.iconUrl,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  option.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  option.endpoint,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          _PopularMiniStat(icon: Icons.sync_rounded, value: option.state),
+        ],
+      ),
     );
   }
 }
@@ -2167,6 +2300,7 @@ class _RankingEntry {
     required this.subtitle,
     required this.score,
     required this.imageUrl,
+    required this.metricImageUrl,
     required this.townHallLevel,
   });
 
@@ -2176,6 +2310,7 @@ class _RankingEntry {
   final String subtitle;
   final int score;
   final String imageUrl;
+  final String metricImageUrl;
   final int townHallLevel;
 
   String get movement {
@@ -2192,11 +2327,13 @@ class _RankingEntry {
     final isClan = type.isClan;
     final badgeUrls = json['badgeUrls'];
     final league = json['league'];
+    final leagueUrl =
+        _nestedString(league, 'iconUrls.small') ??
+        _nestedString(league, 'iconUrls.medium');
     final imageUrl = isClan
         ? _nestedString(badgeUrls, 'medium') ?? ImageAssets.clanCastle
-        : _nestedString(league, 'iconUrls.small') ??
-              _nestedString(league, 'iconUrls.medium') ??
-              ImageAssets.townHall(_asInt(json['townHallLevel'], fallback: 1));
+        : ImageAssets.townHall(_asInt(json['townHallLevel'], fallback: 1));
+    final metricImageUrl = isClan ? type.iconUrl : leagueUrl ?? type.iconUrl;
     final score = type.scoreKey
         .map((key) => _asInt(json[key]))
         .firstWhere((value) => value > 0, orElse: () => 0);
@@ -2213,6 +2350,7 @@ class _RankingEntry {
       subtitle: subtitle,
       score: score,
       imageUrl: imageUrl,
+      metricImageUrl: metricImageUrl,
       townHallLevel: _asInt(json['townHallLevel']),
     );
   }

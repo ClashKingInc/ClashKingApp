@@ -333,34 +333,70 @@ class _ActionRow extends StatelessWidget {
 }
 
 class _EmptyActionRow extends StatelessWidget {
-  final String label;
+  final String semanticLabel;
   final String imageUrl;
 
-  const _EmptyActionRow({required this.label, required this.imageUrl});
+  const _EmptyActionRow({required String label, required this.imageUrl})
+    : semanticLabel = label;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final muted = colorScheme.onSurfaceVariant.withValues(alpha: 0.56);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 7),
-      child: Row(
-        children: [
-          Opacity(
-            opacity: 0.55,
-            child: MobileWebImage(imageUrl: imageUrl, width: 24, height: 24),
-          ),
-          const SizedBox(width: 7),
-          Expanded(
-            child: Text(
-              label,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
+      child: Semantics(
+        label: semanticLabel,
+        child: Row(
+          children: [
+            Opacity(
+              opacity: 0.42,
+              child: MobileWebImage(imageUrl: imageUrl, width: 28, height: 28),
+            ),
+            const SizedBox(width: 7),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '-',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: muted,
+                      fontWeight: FontWeight.w700,
+                      height: 1.1,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Row(
+                    children: [
+                      Opacity(
+                        opacity: 0.45,
+                        child: Row(children: generateStars(0, 13)),
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          '-%',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: muted,
+                                fontWeight: FontWeight.w900,
+                                height: 1,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

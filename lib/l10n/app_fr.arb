@@ -972,6 +972,37 @@
       }
     }
   },
+  "warAnalysisToWin": "Pour gagner",
+  "warAnalysisToLose": "Risque de perdre",
+  "warAnalysisNoAttacksLeft": "Plus d'attaques restantes",
+  "warAnalysisScenario": "{attacks} attaques restantes -> {stars} étoiles / {percent}% par attaque",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} attaques restantes -> impossible ({stars} étoiles / {percent}% par attaque)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warCalculatorHintPercent": "50,00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
