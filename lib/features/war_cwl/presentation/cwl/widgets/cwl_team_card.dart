@@ -1,4 +1,3 @@
-import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -160,7 +159,8 @@ class CwlTeamCard extends StatelessWidget {
               }).toList(),
             ),
             const SizedBox(height: 2),
-            Center(
+            Align(
+              alignment: Alignment.centerRight,
               child: _FullStatsToggle(
                 expanded: showFullStats,
                 onTap: onToggleFullStats,
@@ -173,10 +173,6 @@ class CwlTeamCard extends StatelessWidget {
                   children: [
                     _CwlStatsSection(
                       title: AppLocalizations.of(context)!.warAttacksTitle,
-                      iconUrl: ImageAssets.sword,
-                      accent: StatColors.win,
-                      totalIconUrl: ImageAssets.attackStar,
-                      totalValue: '${clan.stars}',
                       tiles: [
                         _MetricTile(
                           label: AppLocalizations.of(context)!.warAttacksTitle,
@@ -241,10 +237,6 @@ class CwlTeamCard extends StatelessWidget {
                     const SizedBox(height: 10),
                     _CwlStatsSection(
                       title: AppLocalizations.of(context)!.warDefensesTitle,
-                      iconUrl: ImageAssets.shieldWithArrow,
-                      accent: StatColors.loss,
-                      totalIconUrl: ImageAssets.attackStar,
-                      totalValue: '${clan.defStars}',
                       tiles: [
                         _MetricTile(
                           label: AppLocalizations.of(context)!.warDefensesTitle,
@@ -316,9 +308,6 @@ class CwlTeamCard extends StatelessWidget {
   }
 }
 
-/// Pill toggle for the expandable full-stats block — a rounded, bordered
-/// affordance (sibling of the war tab's `_CalculatorActionButton`) so the
-/// tap target reads as a button rather than plain centered text.
 class _FullStatsToggle extends StatelessWidget {
   final bool expanded;
   final VoidCallback onTap;
@@ -329,46 +318,42 @@ class _FullStatsToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(999),
-      child: InkWell(
-        onTap: onTap,
+    return Semantics(
+      button: true,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(999),
-        child: Container(
-          height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            color: expanded
-                ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: colorScheme.outlineVariant.withValues(alpha: 0.45),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(999),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 40),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.generalFullStats,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.85),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  AnimatedRotation(
+                    turns: expanded ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    child: Icon(
+                      Icons.expand_more_rounded,
+                      size: 18,
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.generalFullStats,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurface.withValues(alpha: 0.85),
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(width: 6),
-              AnimatedRotation(
-                turns: expanded ? 0.5 : 0,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
-                child: Icon(
-                  Icons.expand_more_rounded,
-                  size: 18,
-                  color: colorScheme.onSurface.withValues(alpha: 0.7),
-                ),
-              ),
-            ],
           ),
         ),
       ),
@@ -376,82 +361,27 @@ class _FullStatsToggle extends StatelessWidget {
   }
 }
 
-/// Bordered attack/defense stat block: an accent header (icon, title, running
-/// total) over the metric tiles and star breakdown, so the previously flat
-/// 10-tile wrap reads as two distinct, scannable groups.
+/// Attack/defense stat block — plain centered title over the metric tiles
+/// and star breakdown, matching the members full-stats title style exactly.
 class _CwlStatsSection extends StatelessWidget {
   final String title;
-  final String iconUrl;
-  final Color accent;
-  final String totalIconUrl;
-  final String totalValue;
   final List<Widget> tiles;
   final Widget breakdown;
 
   const _CwlStatsSection({
     required this.title,
-    required this.iconUrl,
-    required this.accent,
-    required this.totalIconUrl,
-    required this.totalValue,
     required this.tiles,
     required this.breakdown,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.22),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 4,
-                height: 18,
-                decoration: BoxDecoration(
-                  color: accent,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-              const SizedBox(width: 8),
-              MobileWebImage(imageUrl: iconUrl, width: 16, height: 16),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
-                ),
-              ),
-              const SizedBox(width: 6),
-              MobileWebImage(imageUrl: totalIconUrl, width: 15, height: 15),
-              const SizedBox(width: 4),
-              Text(
-                totalValue,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: accent,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
+    return Column(
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 12),
+        IntrinsicHeight(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               for (int i = 0; i < tiles.length; i++) ...[
@@ -460,10 +390,10 @@ class _CwlStatsSection extends StatelessWidget {
               ],
             ],
           ),
-          const SizedBox(height: 12),
-          breakdown,
-        ],
-      ),
+        ),
+        const SizedBox(height: 12),
+        breakdown,
+      ],
     );
   }
 }
@@ -485,31 +415,21 @@ class _StarBreakdownStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      decoration: BoxDecoration(
-        color: colorScheme.surface.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _StarCount(stars: 3, count: three),
-          _StarCount(stars: 2, count: two),
-          _StarCount(stars: 1, count: one),
-          _StarCount(stars: 0, count: zero),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _StarCount(stars: 3, count: three),
+        _StarCount(stars: 2, count: two),
+        _StarCount(stars: 1, count: one),
+        _StarCount(stars: 0, count: zero),
+      ],
     );
   }
 }
 
-/// Flexible-width sibling of the shared `StatTile` — `StatTile` is a fixed
-/// 56px chip meant for a `Wrap`, which left an orphaned tile on its own row
-/// once 5 didn't fit a card's width. This one stretches to fill an
-/// `Expanded` slot in a fixed-column `Row` so every row of tiles lines up.
+/// Flexible-width, card-less sibling of the shared `StatTile` — no
+/// background/border, just icon/label/value, so it stretches to fill an
+/// `Expanded` slot in a fixed-column `Row` without reading as a boxed chip.
 class _MetricTile extends StatelessWidget {
   final String label;
   final String value;
@@ -525,40 +445,33 @@ class _MetricTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
-      decoration: BoxDecoration(
-        color: colorScheme.surface.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Center(child: icon),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            textAlign: TextAlign.center,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Center(child: icon),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+            fontSize: 9.5,
+          ),
+        ),
+        const SizedBox(height: 2),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            value,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              fontSize: 9.5,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w800),
           ),
-          const SizedBox(height: 2),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              value,
-              maxLines: 1,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w800),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
