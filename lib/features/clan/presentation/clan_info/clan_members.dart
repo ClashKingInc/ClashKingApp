@@ -166,8 +166,8 @@ class ClanMembersState extends State<ClanMembers> {
           sortBy: currentFilter,
           updateSortBy: updateFilter,
           sortByOptions: filterOptions,
-          maxSortWidth: 140,
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          maxSortWidth: 130,
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

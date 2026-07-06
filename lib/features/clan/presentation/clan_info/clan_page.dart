@@ -111,10 +111,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                 child: KeyedSubtree(
                   key: ValueKey(selectedTab),
                   child: switch (selectedTab) {
-                    0 => Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: ClanMembers(clanInfo: widget.clanInfo),
-                    ),
+                    0 => ClanMembers(clanInfo: widget.clanInfo),
                     1 => _ClanWarLogTab(
                       clan: widget.clanInfo,
                       isCWLChecked: isCWLChecked,
@@ -1652,7 +1649,7 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
           hintText: loc.warStatsSearchPlaceholder,
           sortBy: _sortBy,
           updateSortBy: _updateSortBy,
-          maxSortWidth: 150,
+          maxSortWidth: 130,
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
           sortByOptions: {
             loc.warStarsThree: "Three Stars Attacks",
@@ -1668,6 +1665,7 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
         const SizedBox(height: 8),
         _FilterBar(
           trailing: const SizedBox.shrink(),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           actions: [
             _FilterActionButton(
               tooltip: loc.warStatsSelectSeason,
