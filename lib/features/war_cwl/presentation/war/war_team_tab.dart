@@ -119,7 +119,11 @@ class _TeamMemberRow extends StatelessWidget {
                     final attack = attacks.length > index
                         ? attacks[index]
                         : null;
-                    return _AttackSummaryRow(attack: attack, warInfo: warInfo);
+                    return _AttackSummaryRow(
+                      attack: attack,
+                      warInfo: warInfo,
+                      placeholderTownHallLevel: member.townhallLevel,
+                    );
                   }),
                 ),
               ),
@@ -214,8 +218,13 @@ class _InlineWarColumn extends StatelessWidget {
 class _AttackSummaryRow extends StatelessWidget {
   final WarAttack? attack;
   final WarInfo warInfo;
+  final int placeholderTownHallLevel;
 
-  const _AttackSummaryRow({required this.attack, required this.warInfo});
+  const _AttackSummaryRow({
+    required this.attack,
+    required this.warInfo,
+    required this.placeholderTownHallLevel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +232,7 @@ class _AttackSummaryRow extends StatelessWidget {
     if (attack == null) {
       return _EmptyActionRow(
         label: AppLocalizations.of(context)!.warAttacksNone,
-        imageUrl: ImageAssets.brokenSword,
+        townHallLevel: placeholderTownHallLevel,
       );
     }
 
@@ -250,7 +259,7 @@ class _DefenseSummaryRow extends StatelessWidget {
     if (attack == null) {
       return _EmptyActionRow(
         label: AppLocalizations.of(context)!.warDefensesNone,
-        imageUrl: ImageAssets.shield,
+        townHallLevel: member.townhallLevel,
       );
     }
 
@@ -334,9 +343,9 @@ class _ActionRow extends StatelessWidget {
 
 class _EmptyActionRow extends StatelessWidget {
   final String semanticLabel;
-  final String imageUrl;
+  final int townHallLevel;
 
-  const _EmptyActionRow({required String label, required this.imageUrl})
+  const _EmptyActionRow({required String label, required this.townHallLevel})
     : semanticLabel = label;
 
   @override
@@ -350,9 +359,19 @@ class _EmptyActionRow extends StatelessWidget {
         label: semanticLabel,
         child: Row(
           children: [
-            Opacity(
-              opacity: 0.42,
-              child: MobileWebImage(imageUrl: imageUrl, width: 28, height: 28),
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                colorScheme.onSurfaceVariant.withValues(alpha: 0.68),
+                BlendMode.srcATop,
+              ),
+              child: Opacity(
+                opacity: 0.42,
+                child: MobileWebImage(
+                  imageUrl: ImageAssets.townHall(townHallLevel),
+                  width: 28,
+                  height: 28,
+                ),
+              ),
             ),
             const SizedBox(width: 7),
             Expanded(

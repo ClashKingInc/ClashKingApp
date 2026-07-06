@@ -167,11 +167,7 @@ class _CwlHeaderCard extends StatelessWidget {
             SizedBox(height: MediaQuery.of(context).padding.top),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: _CwlHeaderActions(
-                warCwl: warCwl,
-                clanTag: clanTag,
-                clanInfo: clanInfo,
-              ),
+              child: _CwlHeaderActions(clanTag: clanTag, clanInfo: clanInfo),
             ),
             const SizedBox(height: 6),
             Padding(
@@ -194,23 +190,14 @@ class _CwlHeaderCard extends StatelessWidget {
 }
 
 class _CwlHeaderActions extends StatelessWidget {
-  final WarCwl warCwl;
   final String clanTag;
   final CwlClan clanInfo;
 
-  const _CwlHeaderActions({
-    required this.warCwl,
-    required this.clanTag,
-    required this.clanInfo,
-  });
+  const _CwlHeaderActions({required this.clanTag, required this.clanInfo});
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    final totalRounds = warCwl.leagueInfo?.rounds.length ?? 0;
-    final currentRoundNumber = totalRounds > 0
-        ? warCwl.leagueInfo!.getCurrentRounds().roundNumber
-        : 0;
 
     return SizedBox(
       height: 42,
@@ -225,15 +212,6 @@ class _CwlHeaderActions extends StatelessWidget {
             showBackground: false,
           ),
           const Spacer(),
-          if (loc != null && totalRounds > 0) ...[
-            Flexible(
-              child: _CwlHeaderRoundChip(
-                label: loc.cwlRoundNumber(currentRoundNumber),
-                tooltip: '${loc.cwlRounds}: $currentRoundNumber/$totalRounds',
-              ),
-            ),
-            const SizedBox(width: 8),
-          ],
           _HeaderCustomButton(
             tooltip: loc?.downloadTooltip ?? 'Download',
             child: DownloadCwlExcelButton(
@@ -279,6 +257,10 @@ class _CwlStatsPanel extends StatelessWidget {
         '${formatter.format(clanInfo.destructionPercentageInflicted.round())}%';
     final rankSubtitle =
         '${formatter.format(clanInfo.stars)}  •  $destructionValue';
+    final totalRounds = leagueInfo?.rounds.length ?? 0;
+    final currentRoundNumber = totalRounds > 0
+        ? leagueInfo!.getCurrentRounds().roundNumber
+        : clanInfo.warsPlayed;
     final seasonSubtitle = _seasonSubtitle(loc, leagueInfo?.season, locale);
 
     return Column(
@@ -322,6 +304,12 @@ class _CwlStatsPanel extends StatelessWidget {
                 value: formatter.format(clanInfo.missedAttacks),
                 imageUrl: ImageAssets.brokenSword,
               ),
+              if (totalRounds > 0)
+                _CwlQuickChip(
+                  label: loc.cwlRounds,
+                  value: loc.cwlRoundNumber(currentRoundNumber),
+                  imageUrl: ImageAssets.war,
+                ),
             ],
           ),
         ),
@@ -612,58 +600,6 @@ class _Identity extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _CwlHeaderRoundChip extends StatelessWidget {
-  final String label;
-  final String tooltip;
-
-  const _CwlHeaderRoundChip({required this.label, required this.tooltip});
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: Semantics(
-        label: tooltip,
-        child: Container(
-          height: 42,
-          constraints: const BoxConstraints(maxWidth: 132),
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.24),
-            borderRadius: BorderRadius.circular(19),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MobileWebImage(
-                imageUrl: ImageAssets.war,
-                width: 18,
-                height: 18,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    height: 1,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
