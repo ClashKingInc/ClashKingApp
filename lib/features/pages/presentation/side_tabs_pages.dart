@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -31,6 +33,34 @@ class PopularPage extends StatelessWidget {
     final popularPlayers = _popularPlayers(players, bookmarks.players);
     final popularClans = _popularClans(clans, bookmarks.clans);
     final popularWars = _popularWars(wars, bookmarks.clans);
+    final hasPopular =
+        popularPlayers.isNotEmpty ||
+        popularClans.isNotEmpty ||
+        popularWars.isNotEmpty;
+
+    final sections = <Widget>[
+      if (popularPlayers.isNotEmpty)
+        _PopularSection(
+          icon: Icons.person_rounded,
+          title: 'Players',
+          count: popularPlayers.length,
+          children: popularPlayers.map(_PopularRow.player).toList(),
+        ),
+      if (popularClans.isNotEmpty)
+        _PopularSection(
+          icon: Icons.shield_rounded,
+          title: 'Clans',
+          count: popularClans.length,
+          children: popularClans.map(_PopularRow.clan).toList(),
+        ),
+      if (popularWars.isNotEmpty)
+        _PopularSection(
+          icon: Icons.sports_martial_arts_rounded,
+          title: 'Wars & CWL',
+          count: popularWars.length,
+          children: popularWars.map(_PopularRow.war).toList(),
+        ),
+    ];
 
     return _SidePageScaffold(
       title: 'Popular',
@@ -38,23 +68,18 @@ class PopularPage extends StatelessWidget {
       child: ListView(
         padding: _pagePadding,
         children: [
-          _SectionHeader(
-            title: 'Players',
-            trailing: '${popularPlayers.length}',
+          _PopularSummaryChips(
+            playerCount: popularPlayers.length,
+            clanCount: popularClans.length,
+            warCount: popularWars.length,
           ),
-          ...popularPlayers.map(_PopularRow.player),
-          const SizedBox(height: 22),
-          _SectionHeader(title: 'Clans', trailing: '${popularClans.length}'),
-          ...popularClans.map(_PopularRow.clan),
-          const SizedBox(height: 22),
-          _SectionHeader(
-            title: 'Wars & CWL',
-            trailing: '${popularWars.length}',
-          ),
-          ...popularWars.map(_PopularRow.war),
-          if (popularPlayers.isEmpty &&
-              popularClans.isEmpty &&
-              popularWars.isEmpty)
+          const SizedBox(height: 16),
+          if (hasPopular)
+            for (var index = 0; index < sections.length; index++) ...[
+              sections[index],
+              if (index < sections.length - 1) const SizedBox(height: 14),
+            ]
+          else
             const _EmptyState(
               icon: Icons.trending_up_rounded,
               title: 'No popular items yet',
@@ -75,10 +100,12 @@ class PopularPage extends StatelessWidget {
         title: player.name,
         subtitle: '${player.tag} · TH${player.townHallLevel}',
         metric: player.trophies,
+        displayMetric: player.trophies,
         metricLabel: 'trophies',
-        imageUrl: player.leagueUrl.isNotEmpty
+        metricImageUrl: player.leagueUrl.isNotEmpty
             ? player.leagueUrl
-            : ImageAssets.townHall(player.townHallLevel),
+            : ImageAssets.trophies,
+        imageUrl: ImageAssets.townHall(player.townHallLevel),
       );
     }
     for (final bookmark in bookmarks) {
@@ -87,10 +114,12 @@ class PopularPage extends StatelessWidget {
         title: bookmark.name,
         subtitle: '${bookmark.tag} · bookmarked',
         metric: (existing?.metric ?? bookmark.trophies) + 500,
-        metricLabel: 'interest',
-        imageUrl: bookmark.leagueUrl.isNotEmpty
+        displayMetric: existing?.displayMetric ?? bookmark.trophies,
+        metricLabel: 'trophies',
+        metricImageUrl: bookmark.leagueUrl.isNotEmpty
             ? bookmark.leagueUrl
-            : ImageAssets.townHall(bookmark.townHallLevel),
+            : ImageAssets.trophies,
+        imageUrl: ImageAssets.townHall(bookmark.townHallLevel),
       );
     }
     return byTag.values.toList()..sort((a, b) => b.metric.compareTo(a.metric));
@@ -107,6 +136,7 @@ class PopularPage extends StatelessWidget {
         subtitle: '${clan.tag} · level ${clan.clanLevel}',
         metric: clan.clanPoints,
         metricLabel: 'points',
+        metricImageUrl: ImageAssets.trophies,
         imageUrl: clan.badgeUrls.medium,
       );
     }
@@ -117,6 +147,7 @@ class PopularPage extends StatelessWidget {
         subtitle: '${bookmark.tag} · ${bookmark.memberCount} members',
         metric: (existing?.metric ?? bookmark.clanLevel * 100) + 500,
         metricLabel: 'interest',
+        metricIcon: Icons.bookmark_rounded,
         imageUrl: bookmark.badgeUrl,
       );
     }
@@ -140,6 +171,9 @@ class PopularPage extends StatelessWidget {
             : 'No active war',
         metric: bookmarkedTags.contains(war.tag) ? score + 500 : score,
         metricLabel: active ? 'active' : 'tracked',
+        metricIcon: active
+            ? Icons.local_fire_department_rounded
+            : Icons.visibility_rounded,
         imageUrl: war.isInCwl ? ImageAssets.cwlSwordsNoBorder : ImageAssets.war,
       );
     }).toList();
@@ -1005,14 +1039,12 @@ class _SidePageScaffold extends StatelessWidget {
 }
 
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title, this.trailing});
+  const _SectionHeader({required this.title});
 
   final String title;
-  final String? trailing;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -1025,16 +1057,98 @@ class _SectionHeader extends StatelessWidget {
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
             ),
           ),
-          if (trailing != null)
-            Text(
-              trailing!,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
         ],
       ),
+    );
+  }
+}
+
+class _PopularSummaryChips extends StatelessWidget {
+  const _PopularSummaryChips({
+    required this.playerCount,
+    required this.clanCount,
+    required this.warCount,
+  });
+
+  final int playerCount;
+  final int clanCount;
+  final int warCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        MetricChip(
+          label: 'Players',
+          value: '$playerCount',
+          icon: Icons.person_rounded,
+          color: colorScheme.primary,
+        ),
+        MetricChip(
+          label: 'Clans',
+          value: '$clanCount',
+          icon: Icons.shield_rounded,
+          color: colorScheme.secondary,
+        ),
+        MetricChip(
+          label: 'Wars & CWL',
+          value: '$warCount',
+          icon: Icons.sports_martial_arts_rounded,
+          color: StatColors.warStarGold,
+        ),
+      ],
+    );
+  }
+}
+
+class _PopularSection extends StatelessWidget {
+  const _PopularSection({
+    required this.icon,
+    required this.title,
+    required this.count,
+    required this.children,
+  });
+
+  final IconData icon;
+  final String title;
+  final int count;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(2, 0, 2, 6),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: colorScheme.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              Text(
+                '$count',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
+        ...children,
+      ],
     );
   }
 }
@@ -1050,11 +1164,99 @@ class _PopularRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ListLine(
-      imageUrl: item.imageUrl,
-      title: item.title,
-      subtitle: item.subtitle,
-      trailing: item.metricLabel,
+    final colorScheme = Theme.of(context).colorScheme;
+    final cardColor = Theme.of(context).cardTheme.color ?? colorScheme.surface;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Row(
+        children: [
+          SizedBox.square(
+            dimension: 40,
+            child: MobileWebImage(imageUrl: item.imageUrl, fit: BoxFit.contain),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  item.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  item.subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          _PopularMiniStat(
+            imageUrl: item.metricImageUrl,
+            icon: item.metricIcon,
+            value: item.metricLabel == 'active' || item.metricLabel == 'tracked'
+                ? item.metricLabel
+                : _formatInt(item.displayMetric ?? item.metric),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PopularMiniStat extends StatelessWidget {
+  const _PopularMiniStat({this.imageUrl, this.icon, required this.value});
+
+  final String? imageUrl;
+  final IconData? icon;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (imageUrl != null)
+            MobileWebImage(imageUrl: imageUrl!, width: 18, height: 18)
+          else
+            Icon(icon ?? Icons.trending_up_rounded, size: 18),
+          const SizedBox(width: 5),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 74),
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                height: 1,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1942,6 +2144,9 @@ class _PopularItem {
     required this.metric,
     required this.metricLabel,
     required this.imageUrl,
+    this.displayMetric,
+    this.metricImageUrl,
+    this.metricIcon,
   });
 
   final String title;
@@ -1949,6 +2154,9 @@ class _PopularItem {
   final int metric;
   final String metricLabel;
   final String imageUrl;
+  final int? displayMetric;
+  final String? metricImageUrl;
+  final IconData? metricIcon;
 }
 
 class _RankingEntry {
