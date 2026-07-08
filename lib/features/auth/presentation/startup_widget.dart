@@ -54,7 +54,8 @@ class StartupWidgetState extends State<StartupWidget> {
       final warService = context.read<WarCwlService>();
       final bookmarkService = context.read<BookmarkService>();
       try {
-        cocService.setLocalMode(authService.isLocalMode);
+        cocService.setCurrentUserId(authService.currentUser?.userId);
+        bookmarkService.setCurrentUserId(authService.currentUser?.userId);
         // Load the selected tag from SharedPreferences first
         await cocService.loadSelectedTag();
         if (!bookmarkService.loaded) {
@@ -63,13 +64,23 @@ class StartupWidgetState extends State<StartupWidget> {
         final bookmarkedPlayerTags = bookmarkService.players
             .map((player) => player.tag)
             .toList(growable: false);
+        final bookmarkedClanTags = bookmarkService.clans
+            .map((clan) => clan.tag)
+            .toList(growable: false);
         await Future.wait([
-          cocService.loadApiData(playerService, clanService, warService),
+          cocService.loadApiData(
+            playerService,
+            clanService,
+            warService,
+            bookmarkedClanTags: bookmarkedClanTags,
+          ),
           if (bookmarkedPlayerTags.isNotEmpty)
             playerService.hydrateBookmarkedPlayers(bookmarkedPlayerTags),
         ]);
         _seedWarWidgetClans(cocService, playerService, bookmarkService);
-      } catch (e) {
+      } catch (e, stackTrace) {
+        DebugUtils.debugError(" Startup data initialization failed: $e");
+        DebugUtils.debugError(stackTrace.toString());
         if (mounted) {
           _showInitializationFailure(e);
         }

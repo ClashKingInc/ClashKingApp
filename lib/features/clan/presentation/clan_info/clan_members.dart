@@ -171,42 +171,41 @@ class ClanMembersState extends State<ClanMembers> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
+          child: Stack(
+            alignment: Alignment.centerLeft,
             children: [
+              ClanSummaryChips(
+                padding: EdgeInsets.zero,
+                children: [
+                  const SizedBox(width: 44),
+                  ClanSummaryChip(
+                    icon: LucideIcons.chevronUp,
+                    value: numberFormat.format(totalDonations),
+                    label: loc?.gameDonations ?? 'Donated',
+                    color: Colors.green,
+                  ),
+                  ClanSummaryChip(
+                    icon: LucideIcons.chevronDown,
+                    value: numberFormat.format(totalReceived),
+                    label: loc?.clanMembersReceivedShort ?? 'Received',
+                    color: Colors.redAccent,
+                  ),
+                  ClanSummaryChip(
+                    icon: Icons.home_work_rounded,
+                    value: averageTownHall == 0
+                        ? '-'
+                        : averageTownHall.toStringAsFixed(1),
+                    label: loc?.clanMembersAverageTh ?? 'Avg TH',
+                    color: Colors.amber.shade700,
+                  ),
+                ],
+              ),
               _StatsToggleButton(
                 selected: _showTotals,
                 tooltip: _showTotals
                     ? (loc?.clanMembersHideTotals ?? 'Hide clan totals')
                     : (loc?.clanMembersShowTotals ?? 'Show clan totals'),
                 onTap: () => setState(() => _showTotals = !_showTotals),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: ClanSummaryChips(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    ClanSummaryChip(
-                      icon: LucideIcons.chevronUp,
-                      value: numberFormat.format(totalDonations),
-                      label: loc?.gameDonations ?? 'Donated',
-                      color: Colors.green,
-                    ),
-                    ClanSummaryChip(
-                      icon: LucideIcons.chevronDown,
-                      value: numberFormat.format(totalReceived),
-                      label: loc?.clanMembersReceivedShort ?? 'Received',
-                      color: Colors.redAccent,
-                    ),
-                    ClanSummaryChip(
-                      icon: Icons.home_work_rounded,
-                      value: averageTownHall == 0
-                          ? '-'
-                          : averageTownHall.toStringAsFixed(1),
-                      label: loc?.clanMembersAverageTh ?? 'Avg TH',
-                      color: Colors.amber.shade700,
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -499,6 +498,12 @@ class _StatsToggleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final buttonColor = selected
+        ? Color.alphaBlend(
+            colorScheme.primary.withValues(alpha: 0.16),
+            colorScheme.surfaceContainerHighest,
+          )
+        : colorScheme.surfaceContainerHighest;
 
     return Tooltip(
       message: tooltip,
@@ -514,19 +519,17 @@ class _StatsToggleButton extends StatelessWidget {
             height: 40,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: selected
-                  ? colorScheme.primary.withValues(alpha: 0.16)
-                  : colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
+              color: buttonColor,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: selected
                     ? colorScheme.primary.withValues(alpha: 0.42)
-                    : colorScheme.outlineVariant.withValues(alpha: 0.28),
+                    : colorScheme.outlineVariant.withValues(alpha: 0.32),
               ),
             ),
             child: Icon(
               Icons.query_stats_rounded,
-              size: 19,
+              size: 23,
               color: selected
                   ? colorScheme.primary
                   : colorScheme.onSurfaceVariant,

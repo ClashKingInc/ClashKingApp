@@ -71,7 +71,6 @@ class CwlScreenState extends State<CwlScreen> {
                 clanInfo: clan,
                 warLeagueName: widget.warLeagueName,
               ),
-              const SizedBox(height: 10),
               _CwlProfileTabs(
                 selectedIndex: selectedTab,
                 onTabSelected: _selectTab,
@@ -695,6 +694,7 @@ class _CwlProfileTabsState extends State<_CwlProfileTabs>
             height: 48,
             cornerRadius: 0,
             opacity: 0.85,
+            horizontalEdgesOnly: true,
           ),
           TabBar(
             controller: _tabController,

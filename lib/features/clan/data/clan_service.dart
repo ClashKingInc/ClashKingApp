@@ -62,48 +62,16 @@ class ClanService extends ChangeNotifier {
 
     try {
       DebugUtils.debugApi("Loading clan data for tags: $clanTags");
-      final response = await _apiService.postResponse(
-        '/clans/details',
-        body: {"clan_tags": clanTags},
-        requiresAuth: true,
+      final results = await Future.wait(
+        clanTags.map((tag) => _fetchOfficialClan(tag, throwOnError)),
       );
 
-      if (response.statusCode == 200) {
-        final responseBody = ApiService.decodeResponseBody(response);
-        final data = jsonDecode(responseBody);
-        if (data.containsKey("items") && data["items"] is List) {
-          fetchedClans = [];
-          for (final clan
-              in (data["items"] as List).whereType<Map<String, dynamic>>()) {
-            try {
-              fetchedClans.add(Clan.fromJson(clan));
-            } catch (e) {
-              DebugUtils.debugError(
-                "Error parsing clan ${clan["tag"] ?? "unknown"}: $e",
-              );
-            }
-          }
-        } else {
-          Sentry.captureMessage(
-            "$_errLoadingClanData: $data",
-            level: SentryLevel.error,
-          );
-        }
-
-        for (var clan in fetchedClans) {
-          _clans[clan.tag] = clan;
-        }
-
-        DebugUtils.debugSuccess("Loaded clans: ${_clans.keys.toList()}");
-      } else {
-        Sentry.captureMessage(_errLoadingClanData, level: SentryLevel.error);
-        if (throwOnError) {
-          throw HttpException(
-            "Failed to load clan data (${response.statusCode})",
-            uri: response.request?.url,
-          );
-        }
+      fetchedClans = results.whereType<Clan>().toList();
+      for (var clan in fetchedClans) {
+        _clans[clan.tag] = clan;
       }
+
+      DebugUtils.debugSuccess("Loaded clans: ${_clans.keys.toList()}");
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("$_errLoadingClanData: $e");
@@ -118,6 +86,36 @@ class ClanService extends ChangeNotifier {
     }
   }
 
+  Future<Clan?> _fetchOfficialClan(String clanTag, bool throwOnError) async {
+    try {
+      final normalizedTag = clanTag.startsWith('#') ? clanTag : '#$clanTag';
+      final encodedTag = Uri.encodeComponent(normalizedTag);
+      final response = await _apiService.proxyGet('/clans/$encodedTag');
+
+      if (response.statusCode != 200) {
+        Sentry.captureMessage(_errLoadingClanData, level: SentryLevel.error);
+        if (throwOnError) {
+          throw HttpException(
+            "Failed to load clan data (${response.statusCode})",
+            uri: response.request?.url,
+          );
+        }
+        return null;
+      }
+
+      final data =
+          jsonDecode(ApiService.decodeResponseBody(response))
+              as Map<String, dynamic>;
+      return Clan.fromJson(data);
+    } catch (e) {
+      DebugUtils.debugError("Error parsing clan $clanTag: $e");
+      if (throwOnError) {
+        rethrow;
+      }
+      return null;
+    }
+  }
+
   Future<Clan> loadClanData(String clanTag) async {
     if (_clans.containsKey(clanTag)) {
       return _clans[clanTag]!;
@@ -128,24 +126,14 @@ class ClanService extends ChangeNotifier {
 
     try {
       DebugUtils.debugApi("Loading clan data for tag: $clanTag");
-      clanTag = clanTag.replaceAll("#", "%23");
-      final response = await _apiService.getResponse(
-        '/clan/$clanTag/details',
-        requiresAuth: true,
-      );
-
-      if (response.statusCode == 200) {
-        final responseBody = ApiService.decodeResponseBody(response);
-        final data = jsonDecode(responseBody);
-        final clan = Clan.fromJson(data);
-
-        _clans[clan.tag] = clan;
-        DebugUtils.debugSuccess("Loaded clan: ${clan.tag}");
-        return clan;
-      } else {
-        Sentry.captureMessage(_errLoadingClanData, level: SentryLevel.error);
+      final clan = await _fetchOfficialClan(clanTag, true);
+      if (clan == null) {
         throw Exception("Failed to load clan data");
       }
+
+      _clans[clan.tag] = clan;
+      DebugUtils.debugSuccess("Loaded clan: ${clan.tag}");
+      return clan;
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("$_errLoadingClanData: $e");
@@ -156,40 +144,11 @@ class ClanService extends ChangeNotifier {
     }
   }
 
-  /// Loads clan data including war statistics for clan search functionality
+  /// Loads the official clan profile. Heavy tab data is fetched by the clan
+  /// detail page after navigation.
   Future<Clan> getClanAndWarData(String clanTag) async {
-    // First load basic clan data
     final clan = await loadClanData(clanTag);
     await _enrichMissingMemberData(clan);
-
-    try {
-      await loadWarLogData([clan.tag]);
-      linkWarLogToClans();
-      DebugUtils.debugSuccess("Loaded war log for searched clan: ${clan.tag}");
-    } catch (warLogError) {
-      DebugUtils.debugWarning(
-        "Failed to load war log for searched clan ${clan.tag}: $warLogError",
-      );
-    }
-
-    // Then load war statistics data
-    try {
-      final warStats = await loadClanWarStatsData([clan.tag]);
-      if (warStats.isNotEmpty) {
-        linkWarStatsToClans();
-        DebugUtils.debugSuccess(
-          "Loaded war stats for searched clan: ${clan.tag}",
-        );
-      }
-    } catch (warStatsError) {
-      DebugUtils.debugWarning(
-        "Failed to load war stats for searched clan ${clan.tag}: $warStatsError",
-      );
-      // Don't fail the entire operation if war stats loading fails
-    }
-
-    await loadJoinLeaveForClan(clan);
-
     return _clans[clan.tag]!; // Return the updated clan with war stats
   }
 
@@ -276,10 +235,7 @@ class ClanService extends ChangeNotifier {
   Future<ClanMember?> _fetchPublicMemberData(ClanMember member) async {
     try {
       final encodedTag = Uri.encodeComponent(member.tag);
-      final response = await _apiService.getResponse(
-        '',
-        url: '${ApiService.proxyUrl}/players/$encodedTag',
-      );
+      final response = await _apiService.proxyGet('/players/$encodedTag');
       if (response.statusCode != 200) return null;
 
       final data =
@@ -450,10 +406,9 @@ class ClanService extends ChangeNotifier {
       DebugUtils.debugApi("Loading capital data for tags: $clanTags");
       final historyResults = await Future.wait(
         clanTags.map((tag) async {
-          final response = await _apiService.getResponse(
-            '',
-            url:
-                '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/capitalraidseasons?limit=$limit',
+          final encodedTag = Uri.encodeComponent(tag);
+          final response = await _apiService.proxyGet(
+            '/clans/$encodedTag/capitalraidseasons?limit=$limit',
           );
 
           if (response.statusCode == 200) {
@@ -525,10 +480,9 @@ class ClanService extends ChangeNotifier {
     try {
       final warLogs = await Future.wait(
         clanTags.map((tag) async {
-          final response = await _apiService.getResponse(
-            '',
-            url:
-                '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog',
+          final encodedTag = Uri.encodeComponent(tag);
+          final response = await _apiService.proxyGet(
+            '/clans/$encodedTag/warlog',
           );
 
           if (response.statusCode == 200) {

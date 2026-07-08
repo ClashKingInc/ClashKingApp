@@ -157,9 +157,9 @@ class _FilterDropdownState extends State<FilterDropdown> {
               ),
             ),
             scrollbarTheme: ScrollbarThemeData(
-              radius: const Radius.circular(40),
-              thickness: WidgetStateProperty.all(6),
-              thumbVisibility: WidgetStateProperty.all(true),
+              thickness: WidgetStateProperty.all(0),
+              thumbVisibility: WidgetStateProperty.all(false),
+              trackVisibility: WidgetStateProperty.all(false),
             ),
           ),
           menuItemStyleData: const MenuItemStyleData(

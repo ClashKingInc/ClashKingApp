@@ -57,33 +57,29 @@ class CwlMember {
 
   factory CwlMember.fromJson(Map<String, dynamic> json) {
     try {
-      DebugUtils.debugInfo("🔍 Parsing CwlMember JSON: $json");
-      DebugUtils.debugInfo("🔍 Stats structure: ${json['stats']}");
-      
       return CwlMember(
-          tag: json['tag']?.toString() ?? '',
-          name: json['name']?.toString() ?? '',
-          townhallLevel: (json['townHallLevel'] as num?)?.toInt() ?? 0,
-          avgMapPosition: json['avgMapPosition']?.toDouble(),
-          avgOpponentPosition: json['avgOpponentPosition']?.toDouble(),
-          avgAttackOrder: json['avgAttackOrder']?.toDouble(),
-          avgTownHallLevel: json['avgTownHallLevel']?.toDouble(),
-          avgOpponentTownHallLevel:
-              json['avgOpponentTownHallLevel']?.toDouble(),
-          avgAttackerPosition: json['avgAttackerPosition']?.toDouble(),
-          avgDefenseOrder: json['avgDefenseOrder']?.toDouble(),
-          avgAttackerTownHallLevel:
-              json['avgAttackerTownHallLevel']?.toDouble(),
-          attackLowerTHLevel: json['attackLowerTHLevel']?.toDouble(),
-          defenseLowerTHLevel: json['defenseLowerTHLevel']?.toDouble(),
-          attackUpperTHLevel: json['attackUpperTHLevel']?.toDouble(),
-          defenseUpperTHLevel: json['defenseUpperTHLevel']?.toDouble(),
-          attackStats: json['attacks'] != null
-              ? CwlAttackStats.fromJson(json['attacks'])
-              : null,
-          defenseStats: json['defense'] != null
-              ? CwlDefenseStats.fromJson(json['defense'])
-              : null);
+        tag: json['tag']?.toString() ?? '',
+        name: json['name']?.toString() ?? '',
+        townhallLevel: (json['townHallLevel'] as num?)?.toInt() ?? 0,
+        avgMapPosition: json['avgMapPosition']?.toDouble(),
+        avgOpponentPosition: json['avgOpponentPosition']?.toDouble(),
+        avgAttackOrder: json['avgAttackOrder']?.toDouble(),
+        avgTownHallLevel: json['avgTownHallLevel']?.toDouble(),
+        avgOpponentTownHallLevel: json['avgOpponentTownHallLevel']?.toDouble(),
+        avgAttackerPosition: json['avgAttackerPosition']?.toDouble(),
+        avgDefenseOrder: json['avgDefenseOrder']?.toDouble(),
+        avgAttackerTownHallLevel: json['avgAttackerTownHallLevel']?.toDouble(),
+        attackLowerTHLevel: json['attackLowerTHLevel']?.toDouble(),
+        defenseLowerTHLevel: json['defenseLowerTHLevel']?.toDouble(),
+        attackUpperTHLevel: json['attackUpperTHLevel']?.toDouble(),
+        defenseUpperTHLevel: json['defenseUpperTHLevel']?.toDouble(),
+        attackStats: json['attacks'] != null
+            ? CwlAttackStats.fromJson(json['attacks'])
+            : null,
+        defenseStats: json['defense'] != null
+            ? CwlDefenseStats.fromJson(json['defense'])
+            : null,
+      );
     } catch (e) {
       DebugUtils.debugError(" Error parsing CwlMember: $e");
       DebugUtils.debugError(" JSON was: $json");

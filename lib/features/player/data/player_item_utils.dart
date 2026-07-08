@@ -1,13 +1,14 @@
 import 'package:clashkingapp/features/player/models/player_item.dart';
 
-typedef PlayerItemFactory<T extends PlayerItem> = T Function({
-  required String name,
-  required int level,
-  required int maxLevel,
-  required bool isUnlocked,
-  Map<String, dynamic>? meta,
-  Map<String, dynamic>? rawJson,
-});
+typedef PlayerItemFactory<T extends PlayerItem> =
+    T Function({
+      required String name,
+      required int level,
+      required int maxLevel,
+      required bool isUnlocked,
+      Map<String, dynamic>? meta,
+      Map<String, dynamic>? rawJson,
+    });
 
 List<T> generateCompleteItemList<T extends PlayerItem>({
   required List<dynamic>? jsonList,
@@ -16,15 +17,17 @@ List<T> generateCompleteItemList<T extends PlayerItem>({
   bool Function(String itemName, dynamic jsonItem)? nameMatcher,
 }) {
   final Map<String, Map<String, dynamic>> allItems = Map.fromEntries(
-    gameData.entries
-        .map((e) => MapEntry(e.key, e.value as Map<String, dynamic>)),
+    gameData.entries.map(
+      (e) => MapEntry(e.key, e.value as Map<String, dynamic>),
+    ),
   );
 
   return allItems.entries.map((entry) {
-    final name = entry.key;
+    final key = entry.key;
     final meta = entry.value;
+    final name = meta['name']?.toString() ?? key;
     final owned = jsonList?.firstWhere(
-      (x) => nameMatcher?.call(name, x) ?? x['name'] == name,
+      (x) => nameMatcher?.call(key, x) ?? x['name'] == name,
       orElse: () => null,
     );
 

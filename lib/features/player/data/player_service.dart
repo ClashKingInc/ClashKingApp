@@ -57,62 +57,11 @@ class PlayerService extends ChangeNotifier {
     List<String> playerTags, {
     bool notify = true,
   }) async {
-    _isLoading = true;
-    if (notify) {
-      _safeNotify();
-    }
-
-    try {
-      final loadedProfiles = <Player>[];
-
-      for (final rawTag in playerTags) {
-        final playerTag = rawTag.startsWith('#') ? rawTag : '#$rawTag';
-        final encodedTag = Uri.encodeComponent(playerTag);
-        final response = await _apiService.getResponse(
-          '',
-          url: '${ApiService.proxyUrl}/players/$encodedTag',
-        );
-
-        if (response.statusCode != 200) {
-          throw Exception(
-            "Failed to fetch player data: ${response.statusCode}",
-          );
-        }
-
-        final player = Player.fromJson(
-          jsonDecode(ApiService.decodeResponseBody(response)),
-        );
-        if (player.clanOverview.tag.isNotEmpty) {
-          await storePrefs(
-            'player_${player.tag}_clan_tag',
-            player.clanOverview.tag,
-          );
-        }
-        loadedProfiles.add(player);
-      }
-
-      // Can run concurrently with hydrateBookmarkedPlayers() at startup —
-      // see the matching note in processBulkPlayerData — so merge rather
-      // than replace to avoid dropping a bookmarked player mid-flight.
-      final loadedTags = loadedProfiles.map((player) => player.tag).toSet();
-      final preserved = _profiles.where(
-        (player) => !loadedTags.contains(player.tag),
-      );
-      _profiles = [...loadedProfiles, ...preserved];
-      DebugUtils.debugSuccess(
-        "Loaded public player profiles: ${_profiles.map((p) => p.tag).toList()}",
-      );
-    } finally {
-      _isLoading = false;
-      if (notify) {
-        _safeNotify();
-      }
-    }
+    await loadOfficialPlayerData(playerTags, notify: notify);
   }
 
-  /// Init basic stats for the saved accounts.
-  Future<Map<String, String>> initPlayerData(
-    List<String> playerTags, { // NOSONAR
+  Future<Map<String, String>> loadOfficialPlayerData(
+    List<String> playerTags, {
     bool notify = true,
     bool throwOnError = false,
   }) async {
@@ -121,84 +70,94 @@ class PlayerService extends ChangeNotifier {
       _safeNotify();
     }
 
-    final Map<String, String> clanTagsByPlayer = {};
+    final clanTagsByPlayer = <String, String>{};
 
     try {
-      DebugUtils.debugApi("🔄 Calling players API with tags: $playerTags");
-      final response = await _apiService.postResponse(
-        '/players',
-        body: {"player_tags": playerTags},
-        requiresAuth: true,
+      final loadedProfiles = await Future.wait(
+        playerTags.map((rawTag) async {
+          final playerTag = _canonicalTag(rawTag);
+          if (playerTag.isEmpty) return null;
+          try {
+            final player = await _fetchOfficialPlayer(playerTag);
+            final clanTag = player.clanOverview.tag;
+            if (clanTag.isNotEmpty) {
+              clanTagsByPlayer[player.tag] = clanTag;
+              await storePrefs('player_${player.tag}_clan_tag', clanTag);
+            }
+            return player;
+          } catch (e) {
+            DebugUtils.debugWarning(
+              "⚠️ Failed to load official player profile for $playerTag: $e",
+            );
+            if (throwOnError) {
+              rethrow;
+            }
+            return null;
+          }
+        }),
       );
 
-      DebugUtils.debugApi(
-        "🔄 Players API response status: ${response.statusCode}",
+      final profiles = loadedProfiles.whereType<Player>().toList();
+      final loadedTags = profiles.map((player) => player.tag).toSet();
+      final preserved = _profiles.where(
+        (player) => !loadedTags.contains(player.tag),
       );
-
-      if (response.statusCode == 200) {
-        final responseBody = ApiService.decodeResponseBody(response);
-        final data = jsonDecode(responseBody);
-
-        if (data.containsKey("items") && data["items"] is List) {
-          final loadedProfiles = (data["items"] as List)
-              .whereType<Map<String, dynamic>>()
-              .map((account) {
-                final player = Player.fromJson(account);
-                DebugUtils.debugInfo(
-                  "🔄 Created player: ${player.name} (${player.tag})",
-                );
-                if (player.clanOverview.tag.isNotEmpty) {
-                  clanTagsByPlayer[player.tag] = player.clanOverview.tag;
-                  storePrefs(
-                    'player_${player.tag}_clan_tag',
-                    player.clanOverview.tag,
-                  );
-                }
-                return player;
-              })
-              .toList();
-          // Can run concurrently with hydrateBookmarkedPlayers() at startup
-          // — see the matching note in processBulkPlayerData — so merge
-          // rather than replace to avoid dropping a bookmarked player
-          // mid-flight.
-          final loadedTags = loadedProfiles.map((player) => player.tag).toSet();
-          final preserved = _profiles.where(
-            (player) => !loadedTags.contains(player.tag),
-          );
-          _profiles = [...loadedProfiles, ...preserved];
-          DebugUtils.debugSuccess(
-            "✅ Initialized profiles: ${profiles.map((p) => p.tag).toList()}",
-          );
-        } else {
-          Sentry.captureMessage(
-            "Error initializing player data: $data",
-            level: SentryLevel.error,
-          );
-        }
-      } else if (response.statusCode == 503) {
-        throw HttpException("503", uri: response.request?.url);
-      } else if (response.statusCode == 500) {
-        throw HttpException("500", uri: response.request?.url);
-      } else {
-        Sentry.captureMessage(
-          "Error initializing accounts data",
-          level: SentryLevel.error,
-        );
-        throw Exception("Error initializing accounts data");
-      }
+      _profiles = [...profiles, ...preserved];
+      DebugUtils.debugSuccess(
+        "Loaded public player profiles: ${_profiles.map((p) => p.tag).toList()}",
+      );
+      return clanTagsByPlayer;
     } catch (e) {
       Sentry.captureException(e);
-      DebugUtils.debugError(" Error initializing accounts data: $e");
+      DebugUtils.debugError(" Error loading official player data: $e");
       if (throwOnError) {
         rethrow;
       }
+      return clanTagsByPlayer;
     } finally {
       _isLoading = false;
       if (notify) {
         _safeNotify();
       }
     }
-    return clanTagsByPlayer;
+  }
+
+  Future<Player> _fetchOfficialPlayer(String playerTag) async {
+    final encodedTag = Uri.encodeComponent(playerTag);
+    final response = await _apiService.proxyGet('/players/$encodedTag');
+
+    if (response.statusCode != 200) {
+      throw HttpException(
+        "Failed to fetch player data (${response.statusCode})",
+        uri: response.request?.url,
+      );
+    }
+
+    final data =
+        jsonDecode(ApiService.decodeResponseBody(response))
+            as Map<String, dynamic>;
+    return Player.fromJson(data);
+  }
+
+  static String _canonicalTag(String tag) {
+    final normalized = tag.trim().toUpperCase();
+    if (normalized.isEmpty || normalized.startsWith('#')) {
+      return normalized;
+    }
+    return '#$normalized';
+  }
+
+  /// Init basic stats for the saved accounts.
+  Future<Map<String, String>> initPlayerData(
+    List<String> playerTags, { // NOSONAR
+    bool notify = true,
+    bool throwOnError = false,
+  }) async {
+    return loadOfficialPlayerData(
+      playerTags,
+      notify: notify,
+      throwOnError: throwOnError,
+    );
   }
 
   /// Loads all stats for the saved accounts.
@@ -209,66 +168,11 @@ class PlayerService extends ChangeNotifier {
     bool notify = true,
     bool throwOnError = false,
   }) async {
-    _isLoading = true;
-    if (notify) {
-      _safeNotify();
-    }
-
-    try {
-      final response = await _apiService.postResponse(
-        '/players/extended',
-        body: {"player_tags": playerTags, "clan_tags": clanTagsByPlayer},
-        requiresAuth: true,
-      );
-
-      if (response.statusCode == 200) {
-        final responseBody = ApiService.decodeResponseBody(response);
-        final data = jsonDecode(responseBody);
-
-        if (data.containsKey("items") && data["items"] is List) {
-          final items = (data["items"] as List)
-              .whereType<Map<String, dynamic>>();
-          final profilesByTag = {
-            for (final player in _profiles) player.tag: player,
-          };
-
-          for (final item in items) {
-            final tag = item["tag"];
-            final existing = profilesByTag[tag];
-            if (existing == null) {
-              continue;
-            }
-            existing.enrichWithFullStats(item);
-          }
-
-          DebugUtils.debugSuccess(
-            "Enriched profiles: ${_profiles.map((p) => p.tag).toList()}",
-          );
-        } else {
-          Sentry.captureMessage(
-            "Error loading player data: $data",
-            level: SentryLevel.error,
-          );
-        }
-      } else {
-        Sentry.captureMessage(
-          "Error loading accounts data",
-          level: SentryLevel.error,
-        );
-        throw Exception("Error loading accounts data");
-      }
-    } catch (e) {
-      Sentry.captureException(e);
-      DebugUtils.debugError(" Error loading accounts data: $e");
-      if (throwOnError) {
-        rethrow;
-      }
-    } finally {
-      _isLoading = false;
-      if (notify) {
-        _safeNotify();
-      }
-    }
+    await loadOfficialPlayerData(
+      playerTags,
+      notify: notify,
+      throwOnError: throwOnError,
+    );
   }
 
   Future<Player> getPlayerAndClanData(String playerTag) async {
@@ -277,184 +181,18 @@ class PlayerService extends ChangeNotifier {
     _safeNotify();
 
     try {
-      // Try bulk endpoint first
-      DebugUtils.debugApi(
-        "🔄 Calling bulk initialization API for tag: $playerTag",
+      final normalizedTag = _canonicalTag(playerTag);
+      await loadOfficialPlayerData(
+        [normalizedTag],
+        notify: false,
+        throwOnError: true,
       );
-      try {
-        final response = await _apiService.postResponse(
-          '/initialization',
-          body: {
-            "player_tags": [playerTag],
-          },
-          requiresAuth: true,
-        );
+      final player = _profiles.firstWhere((p) => p.tag == normalizedTag);
 
-        DebugUtils.debugApi(
-          "🔄 Bulk API response status: ${response.statusCode}",
-        );
-
-        if (response.statusCode == 200) {
-          final responseBody = ApiService.decodeResponseBody(response);
-          final data = jsonDecode(responseBody);
-
-          DebugUtils.debugApi(
-            "🔄 Bulk response data keys: ${data.keys.toList()}",
-          );
-
-          // Process player data — merge into _profiles without replacing it.
-          // Calling processBulkPlayerData would reassign _profiles entirely,
-          // losing all other linked accounts. We parse the single player here
-          // and merge it in the same way the fallback path does.
-          if (data["players"] != null && data["players_basic"] != null) {
-            final basicEntry = (data["players_basic"] as List)
-                .whereType<Map<String, dynamic>>()
-                .firstWhere(
-                  (m) => m["tag"] == playerTag,
-                  orElse: () =>
-                      throw Exception("Player not found in bulk response"),
-                );
-
-            final requestedPlayer = Player.fromJson(basicEntry);
-            if (requestedPlayer.clanOverview.tag.isNotEmpty) {
-              storePrefs(
-                'player_${requestedPlayer.tag}_clan_tag',
-                requestedPlayer.clanOverview.tag,
-              );
-            }
-
-            // Enrich with extended data if present
-            final extendedEntry = (data["players"] as List)
-                .whereType<Map<String, dynamic>>()
-                .firstWhere((m) => m["tag"] == playerTag, orElse: () => {});
-            if (extendedEntry.isNotEmpty) {
-              requestedPlayer.enrichWithFullStats(extendedEntry);
-            }
-            await refreshOfficialPlayerSummary(requestedPlayer);
-
-            // Merge into _profiles — update existing slot or append
-            final existingIndex = _profiles.indexWhere(
-              (p) => p.tag == playerTag,
-            );
-            if (existingIndex != -1) {
-              _profiles[existingIndex] = requestedPlayer;
-            } else {
-              _profiles.add(requestedPlayer);
-            }
-
-            // Load war stats if available in bulk response
-            if (data["war_stats"] != null) {
-              processBulkWarStats(data["war_stats"], notify: false);
-            } else {
-              DebugUtils.debugInfo(
-                "🔄 Loading war stats separately for player: $playerTag",
-              );
-              await loadPlayerWarStats([playerTag], notify: false);
-            }
-
-            DebugUtils.debugSuccess(
-              "Successfully loaded player via bulk: ${requestedPlayer.name} (${requestedPlayer.tag})",
-            );
-            return requestedPlayer;
-          } else {
-            DebugUtils.debugWarning(
-              "⚠️ Bulk endpoint missing player data, falling back to individual calls",
-            );
-            throw Exception("No player data in bulk endpoint response");
-          }
-        } else {
-          DebugUtils.debugWarning(
-            "⚠️ Bulk endpoint failed with status ${response.statusCode}, falling back to individual calls",
-          );
-          throw Exception(
-            "Bulk endpoint returned status ${response.statusCode}",
-          );
-        }
-      } catch (bulkError) {
-        DebugUtils.debugWarning(
-          "⚠️ Bulk endpoint failed: $bulkError, falling back to individual calls",
-        );
-
-        // Fallback to individual API calls
-        DebugUtils.debugInfo(
-          "🔄 Using fallback individual API calls for player: $playerTag",
-        );
-
-        // Call basic player endpoint
-        final basicResponse = await _apiService.postResponse(
-          '/players',
-          body: {
-            "player_tags": [playerTag],
-          },
-          requiresAuth: true,
-        );
-
-        if (basicResponse.statusCode != 200) {
-          throw Exception(
-            "Failed to fetch basic player data: ${basicResponse.statusCode}",
-          );
-        }
-
-        final basicResponseBody = ApiService.decodeResponseBody(basicResponse);
-        final basicData = jsonDecode(basicResponseBody);
-
-        if (!basicData.containsKey("items") ||
-            (basicData["items"] as List).isEmpty) {
-          throw Exception("No player data found for tag: $playerTag");
-        }
-
-        final playerJson =
-            (basicData["items"] as List).first as Map<String, dynamic>;
-        final player = Player.fromJson(playerJson);
-
-        // Get clan tag for extended call
-        final clanTag = player.clanOverview.tag;
-        final clanTagsByPlayer = {playerTag: clanTag};
-
-        // Call extended player endpoint
-        final extendedResponse = await _apiService.postResponse(
-          '/players/extended',
-          body: {
-            "player_tags": [playerTag],
-            "clan_tags": clanTagsByPlayer,
-          },
-          requiresAuth: true,
-        );
-
-        if (extendedResponse.statusCode == 200) {
-          final extendedResponseBody = ApiService.decodeResponseBody(
-            extendedResponse,
-          );
-          final extendedData = jsonDecode(extendedResponseBody);
-
-          if (extendedData.containsKey("items") &&
-              (extendedData["items"] as List).isNotEmpty) {
-            final extendedPlayerJson =
-                (extendedData["items"] as List).first as Map<String, dynamic>;
-            player.enrichWithFullStats(extendedPlayerJson);
-          }
-        }
-        await refreshOfficialPlayerSummary(player);
-
-        // Add the player to _profiles temporarily so loadPlayerWarStats can find it
-        final existingIndex = _profiles.indexWhere((p) => p.tag == playerTag);
-        if (existingIndex != -1) {
-          _profiles[existingIndex] = player;
-        } else {
-          _profiles.add(player);
-        }
-
-        // Load war stats for the individual player
-        DebugUtils.debugInfo(
-          "🔄 Loading war stats for individual player: $playerTag",
-        );
-        await loadPlayerWarStats([playerTag], notify: false);
-
-        DebugUtils.debugSuccess(
-          "Successfully loaded player via fallback: ${player.name} (${player.tag})",
-        );
-        return player;
-      }
+      DebugUtils.debugSuccess(
+        "Successfully loaded player: ${player.name} (${player.tag})",
+      );
+      return player;
     } catch (e, st) {
       Sentry.captureException(e, stackTrace: st);
       DebugUtils.debugError(" Error in getPlayerAndClanData: $e");
@@ -669,10 +407,7 @@ class PlayerService extends ChangeNotifier {
   Future<void> refreshOfficialPlayerSummary(Player player) async {
     try {
       final encodedTag = Uri.encodeComponent(player.tag);
-      final response = await _apiService.getResponse(
-        '',
-        url: '${ApiService.proxyUrl}/players/$encodedTag',
-      );
+      final response = await _apiService.proxyGet('/players/$encodedTag');
       if (response.statusCode != 200) {
         DebugUtils.debugWarning(
           "⚠️ Official player summary refresh failed for ${player.tag}: ${response.statusCode}",
@@ -702,23 +437,17 @@ class PlayerService extends ChangeNotifier {
     );
 
     // First, create basic player profiles from basic data
-    final linkedProfiles = playersBasic
-        .whereType<Map<String, dynamic>>()
-        .map((account) {
-          DebugUtils.debugInfo(
-            "🔄 Processing basic player: ${account['tag']}",
-          );
-          final player = Player.fromJson(account);
-          if (player.clanOverview.tag.isNotEmpty) {
-            // Cache clan tag for widget use
-            storePrefs(
-              'player_${player.tag}_clan_tag',
-              player.clanOverview.tag,
-            );
-          }
-          return player;
-        })
-        .toList();
+    final linkedProfiles = playersBasic.whereType<Map<String, dynamic>>().map((
+      account,
+    ) {
+      DebugUtils.debugInfo("🔄 Processing basic player: ${account['tag']}");
+      final player = Player.fromJson(account);
+      if (player.clanOverview.tag.isNotEmpty) {
+        // Cache clan tag for widget use
+        storePrefs('player_${player.tag}_clan_tag', player.clanOverview.tag);
+      }
+      return player;
+    }).toList();
 
     // This can run concurrently with hydrateBookmarkedPlayers() at startup
     // (both are kicked off via Future.wait). Replacing _profiles outright

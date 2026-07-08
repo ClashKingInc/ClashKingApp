@@ -5,6 +5,7 @@ import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_mana
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dart';
@@ -87,103 +88,6 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         MaterialPageRoute(builder: (context) => _PostAuthLoadingScreen()),
       );
     }
-  }
-
-  Future<void> _continueWithoutLogin() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Continue without login?'),
-        content: const Text(
-          'You can use ClashKing with local storage on this device. Your linked accounts, bookmarks, and order will not sync across devices, Discord, or the ClashKing bot until you connect an account.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Use local storage'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed != true || !mounted) return;
-
-    setState(() => _isLoading = true);
-    try {
-      final authService = context.read<AuthService>();
-      final cocService = context.read<CocAccountService>();
-      final playerService = context.read<PlayerService>();
-      final clanService = context.read<ClanService>();
-      final warCwlService = context.read<WarCwlService>();
-
-      await authService.continueWithoutLogin();
-      cocService.setLocalMode(true);
-      await cocService.loadSelectedTag();
-      await cocService.loadApiData(playerService, clanService, warCwlService);
-
-      if (!mounted) return;
-      final nextPage = cocService.cocAccounts.isEmpty
-          ? AddCocAccountPage()
-          : MyHomePage();
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => nextPage));
-    } catch (e) {
-      if (mounted) {
-        _handleAuthError(e);
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
-
-  void _showDiscordBenefits() {
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Why log in with Discord?',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 12),
-              const _AuthBenefitRow(
-                icon: Icons.sync,
-                title: 'Sync across devices',
-                subtitle:
-                    'Keep linked accounts, bookmarks, and preferences available wherever you use ClashKing.',
-              ),
-              const _AuthBenefitRow(
-                icon: Icons.discord,
-                title: 'Connect with the bot',
-                subtitle:
-                    'Use accounts already linked through ClashKing Discord bot and keep app data aligned.',
-              ),
-              const _AuthBenefitRow(
-                icon: Icons.cloud_done_outlined,
-                title: 'Better recovery',
-                subtitle:
-                    'Local mode stays on this device only. A login makes your setup easier to recover later.',
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Future<void> _signInWithDiscord() async {
@@ -367,65 +271,6 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-
-                  SizedBox(height: 16),
-
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 700),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.outlineVariant,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                              ),
-                              child: Text(
-                                'or',
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.outlineVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        TextButton(
-                          onPressed: _isLoading ? null : _continueWithoutLogin,
-                          child: const Text('Continue without login'),
-                        ),
-                        TextButton.icon(
-                          onPressed: _showDiscordBenefits,
-                          icon: const Icon(Icons.help_outline, size: 16),
-                          label: const Text('Why should I log in?'),
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            textStyle: const TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
 
@@ -777,63 +622,6 @@ class _PostAuthLoadingScreen extends StatefulWidget {
   _PostAuthLoadingScreenState createState() => _PostAuthLoadingScreenState();
 }
 
-class _AuthBenefitRow extends StatelessWidget {
-  const _AuthBenefitRow({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 34,
-            height: 34,
-            decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, size: 19, color: colorScheme.primary),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    height: 1.25,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
   bool _isInitializing = true;
 
@@ -850,10 +638,15 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
       final playerService = context.read<PlayerService>();
       final clanService = context.read<ClanService>();
       final warCwlService = context.read<WarCwlService>();
+      final authService = context.read<AuthService>();
+      final bookmarkService = context.read<BookmarkService>();
 
       try {
+        cocService.setCurrentUserId(authService.currentUser?.userId);
+        bookmarkService.setCurrentUserId(authService.currentUser?.userId);
         // Load the selected tag from SharedPreferences first
         await cocService.loadSelectedTag();
+        await bookmarkService.load();
         await cocService.loadApiData(playerService, clanService, warCwlService);
       } catch (e) {
         if (mounted) {

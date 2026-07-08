@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
@@ -35,8 +37,12 @@ class PlayerScreenState extends State<PlayerScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
-      await context.read<PlayerService>().refreshOfficialPlayerSummary(
-        widget.selectedPlayer,
+      final playerService = context.read<PlayerService>();
+      await playerService.refreshOfficialPlayerSummary(widget.selectedPlayer);
+      unawaited(
+        playerService
+            .loadPlayerWarStats([widget.selectedPlayer.tag], notify: true)
+            .catchError((e) {}),
       );
       if (mounted) setState(() {});
     });
@@ -298,6 +304,7 @@ class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
             height: 48,
             cornerRadius: 0,
             opacity: 0.85,
+            horizontalEdgesOnly: true,
           ),
           TabBar(
             controller: _tabController,

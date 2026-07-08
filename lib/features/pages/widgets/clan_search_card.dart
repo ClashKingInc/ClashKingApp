@@ -3,7 +3,6 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_filters_dialog.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_result_tiles.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
@@ -70,8 +69,9 @@ class ClanSearchCardState extends State<ClanSearchCard> {
       isSearching = false;
       return [];
     }
-    final response = await http.get(Uri.parse(
-        '${ApiService.proxyUrl}/clans?$query&limit=20&memberList=false'));
+    final response = await ApiService().proxyGet(
+      '/clans?$query&limit=20&memberList=false',
+    );
 
     if (response.statusCode == 200) {
       final body = utf8.decode(response.bodyBytes);
@@ -79,7 +79,8 @@ class ClanSearchCardState extends State<ClanSearchCard> {
       return data['items'];
     } else {
       throw Exception(
-          'Failed to load clans with status code: ${response.statusCode}');
+        'Failed to load clans with status code: ${response.statusCode}',
+      );
     }
   }
 
@@ -106,35 +107,35 @@ class ClanSearchCardState extends State<ClanSearchCard> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                          icon: const Icon(Icons.filter_list),
-                          onPressed: () {
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return ClanSearchFilters();
-                              },
-                            ).then((String? filters) {
-                              if (filters != null) {
-                                setState(() {
-                                  String query = '';
-                                  if (_controller.text != '') {
-                                    if (_controller.text.startsWith('#')) {
-                                      query =
-                                          "name=${_controller.text.replaceFirst("#", "%23")}$filters";
-                                    } else {
-                                      query =
-                                          "name=${_controller.text}$filters";
-                                    }
+                        icon: const Icon(Icons.filter_list),
+                        onPressed: () {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ClanSearchFilters();
+                            },
+                          ).then((String? filters) {
+                            if (filters != null) {
+                              setState(() {
+                                String query = '';
+                                if (_controller.text != '') {
+                                  if (_controller.text.startsWith('#')) {
+                                    query =
+                                        "name=${_controller.text.replaceFirst("#", "%23")}$filters";
                                   } else {
-                                    query = filters.replaceFirst('&', '');
+                                    query = "name=${_controller.text}$filters";
                                   }
-                                  searchFilters = filters;
-                                  _searchResults = _searchClans(query);
-                                });
-                              }
-                            });
-                          },
-                          color: Theme.of(context).colorScheme.onSurface),
+                                } else {
+                                  query = filters.replaceFirst('&', '');
+                                }
+                                searchFilters = filters;
+                                _searchResults = _searchClans(query);
+                              });
+                            }
+                          });
+                        },
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                       isSearching
                           ? const SizedBox(
                               width: 20.0,
@@ -142,24 +143,23 @@ class ClanSearchCardState extends State<ClanSearchCard> {
                               child: CircularProgressIndicator(),
                             )
                           : !isEmpty
-                              ? IconButton(
-                                  icon: Icon(Icons.clear,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface),
-                                  onPressed: () {
-                                    searchFilters = '';
-                                    _controller.clear();
-                                    setState(() {
-                                      isSearching = false;
-                                    });
-                                  },
-                                )
-                              : Icon(
-                                  Icons.search,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.clear,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              onPressed: () {
+                                searchFilters = '';
+                                _controller.clear();
+                                setState(() {
+                                  isSearching = false;
+                                });
+                              },
+                            )
+                          : Icon(
+                              Icons.search,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                       const SizedBox(width: 8.0),
                     ],
                   ),
@@ -188,12 +188,16 @@ class ClanSearchCardState extends State<ClanSearchCard> {
                 );
               } else {
                 if (_controller.text.length >= 2) {
-                  return Column(children: [
-                    Center(
-                        child:
-                            Text(AppLocalizations.of(context)!.searchNoResult)),
-                    const SizedBox(height: 8)
-                  ]);
+                  return Column(
+                    children: [
+                      Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.searchNoResult,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  );
                 } else {
                   return const SizedBox.shrink();
                 }

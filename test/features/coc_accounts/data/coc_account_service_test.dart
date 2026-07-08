@@ -10,6 +10,23 @@ import 'package:http/http.dart' as http;
 
 import '../../../helpers/fake_services.dart';
 
+const testUserId = 'user-123';
+const testLinksEndpoint = '/links/user-123';
+
+Future<CocAccountService> serviceWithAccounts(
+  List<Map<String, dynamic>> accounts, {
+  FakeApiService? fakeApi,
+}) async {
+  final api = fakeApi ?? FakeApiService();
+  api.getStubs[testLinksEndpoint] = http.Response(
+    jsonEncode({'items': accounts}),
+    200,
+  );
+  final service = CocAccountService(apiService: api, currentUserId: testUserId);
+  await service.fetchCocAccounts();
+  return service;
+}
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -33,58 +50,36 @@ void main() {
     });
   });
 
-  group('CocAccountService — addLocalAccount', () {
-    test('adds account to cocAccounts', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#ABC123', 'name': 'Test'});
-      expect(service.cocAccounts, hasLength(1));
-      expect(service.cocAccounts.first['player_tag'], '#ABC123');
-    });
-
-    test('notifies listeners on add', () {
-      final service = CocAccountService();
-      var notified = false;
-      service.addListener(() => notified = true);
-      service.addLocalAccount({'player_tag': '#ABC123'});
-      expect(notified, isTrue);
-    });
-
-    test('accounts getter returns player_tag values', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#AAA'});
-      service.addLocalAccount({'player_tag': '#BBB'});
-      expect(service.accounts, containsAll(['#AAA', '#BBB']));
-      expect(service.accounts, hasLength(2));
-    });
-  });
-
   group('CocAccountService — getAccountTags', () {
     test('returns empty list when no accounts', () {
       final service = CocAccountService();
       expect(service.getAccountTags(), isEmpty);
     });
 
-    test('returns all player tags', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#P1'});
-      service.addLocalAccount({'player_tag': '#P2'});
+    test('returns all player tags', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#P1'},
+        {'player_tag': '#P2'},
+      ]);
       expect(service.getAccountTags(), containsAll(['#P1', '#P2']));
     });
   });
 
   group('CocAccountService — clearAccountData', () {
-    test('resets all fields to defaults', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#ABC'});
+    test('resets all fields to defaults', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC'},
+      ]);
       service.clearAccountData();
       expect(service.cocAccounts, isEmpty);
       expect(service.selectedTag, isNull);
       expect(service.isLoading, isFalse);
     });
 
-    test('notifies listeners on clear', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#ABC'});
+    test('notifies listeners on clear', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC'},
+      ]);
       var notified = false;
       service.addListener(() => notified = true);
       service.clearAccountData();
@@ -107,9 +102,10 @@ void main() {
     });
 
     test('sets first account tag when none selected', () async {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#FIRST'});
-      service.addLocalAccount({'player_tag': '#SECOND'});
+      final service = await serviceWithAccounts([
+        {'player_tag': '#FIRST'},
+        {'player_tag': '#SECOND'},
+      ]);
       service.initializeSelectedTag();
       // _selectedTag is set synchronously at start of setSelectedTag
       expect(service.selectedTag, '#FIRST');
@@ -117,10 +113,11 @@ void main() {
     });
 
     test('does not override existing selection', () async {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#FIRST'});
+      final service = await serviceWithAccounts([
+        {'player_tag': '#FIRST'},
+        {'player_tag': '#SECOND'},
+      ]);
       service.initializeSelectedTag(); // sets to #FIRST
-      service.addLocalAccount({'player_tag': '#SECOND'});
       service.initializeSelectedTag(); // should be no-op
       expect(service.selectedTag, '#FIRST');
     });
@@ -155,16 +152,19 @@ void main() {
   group('CocAccountService — fetchCocAccounts', () {
     test('populates cocAccounts on 200 response', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
-          'coc_accounts': [
+          'items': [
             {'player_tag': '#ABC123', 'name': 'TestPlayer'},
             {'player_tag': '#DEF456', 'name': 'Other'},
-          ]
+          ],
         }),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await service.fetchCocAccounts();
       expect(service.cocAccounts, hasLength(2));
       expect(service.cocAccounts.first['player_tag'], '#ABC123');
@@ -172,51 +172,58 @@ void main() {
 
     test('sets isLoading to false after success', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'coc_accounts': []}),
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({'items': []}),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC', 'is_verified': false},
+      ], fakeApi: fakeApi);
       await service.fetchCocAccounts();
       expect(service.isLoading, isFalse);
     });
 
     test('throws on non-200 and sets isLoading to false', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] =
-          http.Response('error', 401);
-      final service = CocAccountService(apiService: fakeApi);
-      await expectLater(
-        () => service.fetchCocAccounts(),
-        throwsA(anything),
+      fakeApi.getStubs[testLinksEndpoint] = http.Response('error', 401);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
       );
+      await expectLater(() => service.fetchCocAccounts(), throwsA(anything));
       expect(service.isLoading, isFalse);
     });
 
     test('throws FormatException on invalid payload', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'coc_accounts': 'not-a-list'}),
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({'items': 'not-a-list'}),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
-      await expectLater(
-        () => service.fetchCocAccounts(),
-        throwsA(anything),
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
       );
+      await expectLater(() => service.fetchCocAccounts(), throwsA(anything));
     });
 
     test('notifies listeners on success', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'coc_accounts': []}),
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({'items': []}),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       var notifyCount = 0;
       service.addListener(() => notifyCount++);
       await service.fetchCocAccounts();
-      expect(notifyCount, greaterThanOrEqualTo(2)); // loading=true + loading=false
+      expect(
+        notifyCount,
+        greaterThanOrEqualTo(2),
+      ); // loading=true + loading=false
     });
   });
 
@@ -227,41 +234,56 @@ void main() {
   group('CocAccountService — addCocAccount', () {
     test('returns code 200 and account on success', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'account': {'player_tag': '#ABC', 'name': 'Test'}}),
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({
+          'account': {'player_tag': '#ABC', 'name': 'Test'},
+        }),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       final result = await service.addCocAccount('#ABC');
       expect(result['code'], 200);
       expect(result['account'], isNotNull);
+      expect(fakeApi.lastPostBodies[testLinksEndpoint], {'player_tag': '#ABC'});
     });
 
     test('returns code 401 on UnauthorizedException', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/users/coc-accounts'] =
-          UnauthorizedException('not auth');
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.throwOnPost[testLinksEndpoint] = UnauthorizedException(
+        'not auth',
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       final result = await service.addCocAccount('#ABC');
       expect(result['code'], 401);
     });
 
     test('returns code 500 on other errors', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/users/coc-accounts'] =
-          Exception('server error');
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.throwOnPost[testLinksEndpoint] = Exception('server error');
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       final result = await service.addCocAccount('#ABC');
       expect(result['code'], 500);
     });
 
     test('returns code from response for non-200 status', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
         jsonEncode({'detail': 'player not found'}),
         404,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       final result = await service.addCocAccount('#NOTFOUND');
       expect(result['code'], 404);
     });
@@ -274,33 +296,45 @@ void main() {
   group('CocAccountService — addCocAccountWithVerification', () {
     test('returns code 200 on success', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/verified'] = http.Response(
-        jsonEncode({'account': {'player_tag': '#ABC'}}),
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({
+          'account': {'player_tag': '#ABC'},
+        }),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
-      final result =
-          await service.addCocAccountWithVerification('#ABC', 'tok');
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
+      final result = await service.addCocAccountWithVerification('#ABC', 'tok');
       expect(result['code'], 200);
+      expect(fakeApi.lastPostBodies[testLinksEndpoint], {
+        'player_tag': '#ABC',
+        'api_token': 'tok',
+      });
     });
 
     test('returns code 401 on UnauthorizedException', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
-          UnauthorizedException('not auth');
-      final service = CocAccountService(apiService: fakeApi);
-      final result =
-          await service.addCocAccountWithVerification('#ABC', 'tok');
+      fakeApi.throwOnPost[testLinksEndpoint] = UnauthorizedException(
+        'not auth',
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
+      final result = await service.addCocAccountWithVerification('#ABC', 'tok');
       expect(result['code'], 401);
     });
 
     test('returns code 500 on generic error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
-          Exception('oops');
-      final service = CocAccountService(apiService: fakeApi);
-      final result =
-          await service.addCocAccountWithVerification('#ABC', 'tok');
+      fakeApi.throwOnPost[testLinksEndpoint] = Exception('oops');
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
+      final result = await service.addCocAccountWithVerification('#ABC', 'tok');
       expect(result['code'], 500);
     });
   });
@@ -313,10 +347,13 @@ void main() {
     test('removes account from list on 200', () async {
       final fakeApi = FakeApiService();
       final encodedTag = Uri.encodeComponent('#ABC123');
-      fakeApi.deleteStubs['/users/coc-accounts/$encodedTag'] =
-          http.Response('{}', 200);
-      final service = CocAccountService(apiService: fakeApi);
-      service.addLocalAccount({'player_tag': '#ABC123'});
+      fakeApi.deleteStubs['$testLinksEndpoint/$encodedTag'] = http.Response(
+        '{}',
+        200,
+      );
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC123'},
+      ], fakeApi: fakeApi);
       await service.removeCocAccount('#ABC123');
       expect(service.cocAccounts, isEmpty);
     });
@@ -324,18 +361,22 @@ void main() {
     test('does not remove account on non-200 response', () async {
       final fakeApi = FakeApiService();
       final encodedTag = Uri.encodeComponent('#ABC123');
-      fakeApi.deleteStubs['/users/coc-accounts/$encodedTag'] =
-          http.Response('error', 500);
-      final service = CocAccountService(apiService: fakeApi);
-      service.addLocalAccount({'player_tag': '#ABC123'});
+      fakeApi.deleteStubs['$testLinksEndpoint/$encodedTag'] = http.Response(
+        'error',
+        500,
+      );
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC123'},
+      ], fakeApi: fakeApi);
       await service.removeCocAccount('#ABC123');
       expect(service.cocAccounts, hasLength(1));
     });
 
     test('does not throw on network error', () async {
-      final service =
-          CocAccountService(apiService: NetworkErrorApiService());
-      service.addLocalAccount({'player_tag': '#ERR'});
+      final service = CocAccountService(
+        apiService: NetworkErrorApiService(),
+        currentUserId: testUserId,
+      );
       await expectLater(
         () => service.removeCocAccount('#ERR'),
         returnsNormally,
@@ -345,10 +386,13 @@ void main() {
     test('notifies listeners on successful removal', () async {
       final fakeApi = FakeApiService();
       final encodedTag = Uri.encodeComponent('#X');
-      fakeApi.deleteStubs['/users/coc-accounts/$encodedTag'] =
-          http.Response('{}', 200);
-      final service = CocAccountService(apiService: fakeApi);
-      service.addLocalAccount({'player_tag': '#X'});
+      fakeApi.deleteStubs['$testLinksEndpoint/$encodedTag'] = http.Response(
+        '{}',
+        200,
+      );
+      final service = await serviceWithAccounts([
+        {'player_tag': '#X'},
+      ], fakeApi: fakeApi);
       var notified = false;
       service.addListener(() => notified = true);
       await service.removeCocAccount('#X');
@@ -363,9 +407,11 @@ void main() {
   group('CocAccountService — updateAccountOrder', () {
     test('completes without throwing on 200', () async {
       final fakeApi = FakeApiService();
-      fakeApi.putStubs['/users/coc-accounts/order'] =
-          http.Response('{}', 200);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.putStubs['$testLinksEndpoint/order'] = http.Response('{}', 200);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await expectLater(
         () => service.updateAccountOrder(['#A', '#B']),
         returnsNormally,
@@ -374,9 +420,14 @@ void main() {
 
     test('completes without throwing on non-200', () async {
       final fakeApi = FakeApiService();
-      fakeApi.putStubs['/users/coc-accounts/order'] =
-          http.Response('error', 500);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.putStubs['$testLinksEndpoint/order'] = http.Response(
+        'error',
+        500,
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await expectLater(
         () => service.updateAccountOrder(['#A']),
         returnsNormally,
@@ -415,105 +466,137 @@ void main() {
     WarCwlService makeWar() => WarCwlService(apiService: FakeApiService());
 
     test('returns immediately when playerTags is empty', () async {
-      final service = CocAccountService(apiService: FakeApiService());
+      final service = CocAccountService(
+        apiService: FakeApiService(),
+        currentUserId: testUserId,
+      );
       await service.refreshPageData([], makePlayer(), makeClan(), makeWar());
       expect(service.lastRefresh, isNull);
     });
 
-    test('sets lastRefresh on 200 bulk response', () async {
+    test('sets lastRefresh after direct refresh', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/initialization'] =
-          http.Response(jsonEncode({}), 200);
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await service.refreshPageData(
-        ['#P1'], makePlayer(), makeClan(), makeWar(),
+        ['#P1'],
+        makePlayer(),
+        makeClan(),
+        makeWar(),
       );
       expect(service.lastRefresh, isNotNull);
     });
 
     test('notifies listeners on success', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/initialization'] =
-          http.Response(jsonEncode({}), 200);
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       var notified = false;
       service.addListener(() => notified = true);
       await service.refreshPageData(
-        ['#P1'], makePlayer(), makeClan(), makeWar(),
+        ['#P1'],
+        makePlayer(),
+        makeClan(),
+        makeWar(),
       );
       expect(notified, isTrue);
     });
 
-    test('falls back silently on non-200 bulk response', () async {
+    test('returns normally when optional initial data is absent', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/initialization'] =
-          http.Response('error', 503);
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await expectLater(
         () => service.refreshPageData(
-          ['#P1'], makePlayer(), makeClan(), makeWar(),
+          ['#P1'],
+          makePlayer(),
+          makeClan(),
+          makeWar(),
         ),
         returnsNormally,
       );
     });
 
-    test('processes players data from bulk response', () async {
+    test('sets lastRefresh after player refresh', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/initialization'] = http.Response(
-        jsonEncode({
-          'players': [{'tag': '#P1', 'name': 'Test', 'townHallLevel': 15}],
-          'players_basic': [],
-          'clans': null,
-          'clan_tags': null,
-          'war_stats': null,
-        }),
-        200,
-      );
       final playerService = PlayerService(apiService: FakeApiService());
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await service.refreshPageData(
-        ['#P1'], playerService, makeClan(), makeWar(),
+        ['#P1'],
+        playerService,
+        makeClan(),
+        makeWar(),
       );
       expect(service.lastRefresh, isNotNull);
     });
 
     test('links clan data when clan_tags is populated', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/initialization'] = http.Response(
+      final playerFakeApi = FakeApiService();
+      playerFakeApi.postStubs['/players'] = http.Response(
         jsonEncode({
-          'players': [{'tag': '#P1', 'name': 'Test', 'townHallLevel': 15}],
-          'players_basic': [],
-          'clans': {
-            'clan_details': {
-              '#CLAN1': {'tag': '#CLAN1', 'name': 'Alpha'}
-            }
-          },
-          'clan_tags': ['#CLAN1'],
-          'war_stats': null,
+          'items': [
+            {
+              'tag': '#P1',
+              'name': 'Test',
+              'townHallLevel': 15,
+              'clan': {'tag': '#CLAN1', 'name': 'Alpha'},
+            },
+          ],
         }),
         200,
       );
-      final playerService = PlayerService(apiService: FakeApiService());
-      final clanService = ClanService(apiService: FakeApiService());
-      final service = CocAccountService(apiService: fakeApi);
+      final clanFakeApi = FakeApiService();
+      clanFakeApi.postStubs['/clans/details'] = http.Response(
+        jsonEncode({
+          'items': [
+            {'tag': '#CLAN1', 'name': 'Alpha'},
+          ],
+        }),
+        200,
+      );
+      final playerService = PlayerService(apiService: playerFakeApi);
+      final clanService = ClanService(apiService: clanFakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await service.refreshPageData(
-        ['#P1'], playerService, clanService, makeWar(),
+        ['#P1'],
+        playerService,
+        clanService,
+        makeWar(),
       );
       expect(clanService.clans.containsKey('#CLAN1'), isTrue);
       expect(service.lastRefresh, isNotNull);
     });
 
-    test('fallback path still sets lastRefresh on 503', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/initialization'] =
-          http.Response('error', 503);
-      // Fallback endpoints default to 200 {} in FakeApiService
-      final service = CocAccountService(apiService: fakeApi);
-      await service.refreshPageData(
-        ['#P1'], makePlayer(), makeClan(), makeWar(),
-      );
-      expect(service.lastRefresh, isNotNull);
-    });
+    test(
+      'direct refresh still sets lastRefresh when optional data is empty',
+      () async {
+        final fakeApi = FakeApiService();
+        final service = CocAccountService(
+          apiService: fakeApi,
+          currentUserId: testUserId,
+        );
+        await service.refreshPageData(
+          ['#P1'],
+          makePlayer(),
+          makeClan(),
+          makeWar(),
+        );
+        expect(service.lastRefresh, isNotNull);
+      },
+    );
   });
 
   // ---------------------------------------------------------------------------
@@ -521,16 +604,18 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('CocAccountService — updateAccountVerificationStatus', () {
-    test('sets is_verified to true on matching account', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#ABC', 'is_verified': false});
+    test('sets is_verified to true on matching account', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC', 'is_verified': false},
+      ]);
       service.updateAccountVerificationStatus('#ABC', true);
       expect(service.cocAccounts.first['is_verified'], isTrue);
     });
 
-    test('does nothing for unknown tag', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#ABC', 'is_verified': false});
+    test('does nothing for unknown tag', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC', 'is_verified': false},
+      ]);
       expect(
         () => service.updateAccountVerificationStatus('#UNKNOWN', true),
         returnsNormally,
@@ -544,9 +629,10 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('CocAccountService — getAccountVerificationStatus', () {
-    test('returns true after setting verification status', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#ABC', 'is_verified': false});
+    test('returns true after setting verification status', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC', 'is_verified': false},
+      ]);
       service.updateAccountVerificationStatus('#ABC', true);
       expect(service.getAccountVerificationStatus('#ABC'), isTrue);
     });
@@ -562,9 +648,10 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('CocAccountService — clearAccounts', () {
-    test('clears all accounts and resets state', () {
-      final service = CocAccountService();
-      service.addLocalAccount({'player_tag': '#X'});
+    test('clears all accounts and resets state', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#X'},
+      ]);
       service.clearAccounts();
       expect(service.cocAccounts, isEmpty);
       expect(service.selectedTag, isNull);
@@ -587,29 +674,44 @@ void main() {
   group('CocAccountService — addAccountWithToken', () {
     test('returns true on 200 response', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/verified'] = http.Response(
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
         jsonEncode({'account': null}),
         200,
       );
-      fakeApi.getStubs['/users/coc-accounts'] =
-          http.Response(jsonEncode({'coc_accounts': []}), 200);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({'items': []}),
+        200,
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.addAccountWithToken(
-        '#ABC', 'token123', (msg) => errorMsg = msg,
+        '#ABC',
+        'token123',
+        (msg) => errorMsg = msg,
       );
       expect(result, isTrue);
       expect(errorMsg, isNull);
+      expect(fakeApi.lastPostBodies[testLinksEndpoint], {
+        'player_tag': '#ABC',
+        'api_token': 'token123',
+      });
     });
 
     test('returns false and sets error message on 403', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/verified'] =
-          http.Response('Forbidden', 403);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.postStubs[testLinksEndpoint] = http.Response('Forbidden', 403);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.addAccountWithToken(
-        '#ABC', 'bad_token', (msg) => errorMsg = msg,
+        '#ABC',
+        'bad_token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isFalse);
       expect(errorMsg, contains('Invalid API token'));
@@ -617,12 +719,18 @@ void main() {
 
     test('returns false on UnauthorizedException', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
-          UnauthorizedException('unauthorized');
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.throwOnPost[testLinksEndpoint] = UnauthorizedException(
+        'unauthorized',
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.addAccountWithToken(
-        '#ABC', 'token', (msg) => errorMsg = msg,
+        '#ABC',
+        'token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isFalse);
       expect(errorMsg, isNotNull);
@@ -630,12 +738,16 @@ void main() {
 
     test('returns false on generic exception', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/users/coc-accounts/verified'] =
-          Exception('boom');
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.throwOnPost[testLinksEndpoint] = Exception('boom');
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.addAccountWithToken(
-        '#ABC', 'token', (msg) => errorMsg = msg,
+        '#ABC',
+        'token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isFalse);
       expect(errorMsg, contains('Failed to add account'));
@@ -647,46 +759,44 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('CocAccountService — verifyAccount', () {
-    test('returns true when response is 200 and verified = true', () async {
+    test('returns true on 200 and sends api_token payload', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] = http.Response(
-        jsonEncode({'verified': true}),
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({
+          'account': {'player_tag': '#ABC'},
+        }),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
-      service.addLocalAccount({'player_tag': '#ABC'});
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC', 'is_verified': false},
+      ], fakeApi: fakeApi);
       String? errorMsg;
       final result = await service.verifyAccount(
-        '#ABC', 'token', (msg) => errorMsg = msg,
+        '#ABC',
+        'token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isTrue);
       expect(errorMsg, isNull);
       expect(service.getAccountVerificationStatus('#ABC'), isTrue);
-    });
-
-    test('returns false when response is 200 but verified = false', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] = http.Response(
-        jsonEncode({'verified': false}),
-        200,
-      );
-      final service = CocAccountService(apiService: fakeApi);
-      String? errorMsg;
-      final result = await service.verifyAccount(
-        '#ABC', 'token', (msg) => errorMsg = msg,
-      );
-      expect(result, isFalse);
-      expect(errorMsg, isNull);
+      expect(fakeApi.lastPostBodies[testLinksEndpoint], {
+        'player_tag': '#ABC',
+        'api_token': 'token',
+      });
     });
 
     test('returns false and sets error message on 403', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] =
-          http.Response('Forbidden', 403);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.postStubs[testLinksEndpoint] = http.Response('Forbidden', 403);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.verifyAccount(
-        '#ABC', 'bad_token', (msg) => errorMsg = msg,
+        '#ABC',
+        'bad_token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isFalse);
       expect(errorMsg, contains('Invalid API token'));
@@ -694,12 +804,16 @@ void main() {
 
     test('returns false and sets error message on 404', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] =
-          http.Response('Not Found', 404);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.postStubs[testLinksEndpoint] = http.Response('Not Found', 404);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.verifyAccount(
-        '#ABC', 'token', (msg) => errorMsg = msg,
+        '#ABC',
+        'token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isFalse);
       expect(errorMsg, contains('not found'));
@@ -707,12 +821,16 @@ void main() {
 
     test('returns false and sets error message on generic error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/%23ABC/verify'] =
-          http.Response('Server Error', 500);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.postStubs[testLinksEndpoint] = http.Response('Server Error', 500);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.verifyAccount(
-        '#ABC', 'token', (msg) => errorMsg = msg,
+        '#ABC',
+        'token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isFalse);
       expect(errorMsg, isNotNull);
@@ -720,12 +838,18 @@ void main() {
 
     test('returns false on UnauthorizedException', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/users/coc-accounts/%23ABC/verify'] =
-          UnauthorizedException('unauthorized');
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.throwOnPost[testLinksEndpoint] = UnauthorizedException(
+        'unauthorized',
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.verifyAccount(
-        '#ABC', 'token', (msg) => errorMsg = msg,
+        '#ABC',
+        'token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isFalse);
       expect(errorMsg, isNotNull);
@@ -739,24 +863,29 @@ void main() {
   group('CocAccountService — addAccountWithToken account data update', () {
     test('updates account name and TH when account data is present', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts/verified'] = http.Response(
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
           'account': {'name': 'Hero', 'townHallLevel': 14},
         }),
         200,
       );
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
-          'coc_accounts': [
-            {'player_tag': '#ABC', 'name': 'Old Name', 'townHallLevel': 10}
-          ]
+          'items': [
+            {'player_tag': '#ABC', 'name': 'Old Name', 'townHallLevel': 10},
+          ],
         }),
         200,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       String? errorMsg;
       final result = await service.addAccountWithToken(
-        '#ABC', 'token', (msg) => errorMsg = msg,
+        '#ABC',
+        'token',
+        (msg) => errorMsg = msg,
       );
       expect(result, isTrue);
       expect(errorMsg, isNull);
@@ -772,22 +901,30 @@ void main() {
   group('CocAccountService — _extractErrorMessage', () {
     test('returns message field when present', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
         jsonEncode({'message': 'Custom error message'}),
         400,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       final result = await service.addCocAccount('#TAG');
       expect(result['message'], 'Custom error message');
     });
 
     test('returns nested detail.message when present', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'detail': {'message': 'Nested error'}}),
+      fakeApi.postStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({
+          'detail': {'message': 'Nested error'},
+        }),
         400,
       );
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       final result = await service.addCocAccount('#TAG');
       expect(result['message'], 'Nested error');
     });
@@ -802,37 +939,48 @@ void main() {
     ClanService makeClan() => ClanService(apiService: FakeApiService());
     WarCwlService makeWar() => WarCwlService(apiService: FakeApiService());
 
-    test('returns early and does not set lastRefresh when cocAccounts is empty',
-        () async {
-      final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] =
-          http.Response(jsonEncode({'coc_accounts': []}), 200);
-      final service = CocAccountService(apiService: fakeApi);
-      await service.loadApiData(makePlayer(), makeClan(), makeWar());
-      expect(service.lastRefresh, isNull);
-    });
+    test(
+      'returns early and does not set lastRefresh when cocAccounts is empty',
+      () async {
+        final fakeApi = FakeApiService();
+        fakeApi.getStubs[testLinksEndpoint] = http.Response(
+          jsonEncode({'items': []}),
+          200,
+        );
+        final service = CocAccountService(
+          apiService: fakeApi,
+          currentUserId: testUserId,
+        );
+        await service.loadApiData(makePlayer(), makeClan(), makeWar());
+        expect(service.lastRefresh, isNull);
+      },
+    );
 
-    test('sets lastRefresh after successful bulk load', () async {
+    test('sets lastRefresh after successful parallel load', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
-          'coc_accounts': [
-            {'player_tag': '#P1'}
-          ]
+          'items': [
+            {'player_tag': '#P1'},
+          ],
         }),
         200,
       );
-      fakeApi.postStubs['/initialization'] =
-          http.Response(jsonEncode({}), 200);
-      final service = CocAccountService(apiService: fakeApi);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await service.loadApiData(makePlayer(), makeClan(), makeWar());
       expect(service.lastRefresh, isNotNull);
     });
 
     test('throws when fetchCocAccounts returns 503', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response('error', 503);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.getStubs[testLinksEndpoint] = http.Response('error', 503);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await expectLater(
         () => service.loadApiData(makePlayer(), makeClan(), makeWar()),
         throwsA(anything),
@@ -841,8 +989,11 @@ void main() {
 
     test('throws when fetchCocAccounts returns 500', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response('error', 500);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.getStubs[testLinksEndpoint] = http.Response('error', 500);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await expectLater(
         () => service.loadApiData(makePlayer(), makeClan(), makeWar()),
         throwsA(anything),
@@ -851,8 +1002,11 @@ void main() {
 
     test('rethrows non-503/500 HttpException from fetchCocAccounts', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response('error', 401);
-      final service = CocAccountService(apiService: fakeApi);
+      fakeApi.getStubs[testLinksEndpoint] = http.Response('error', 401);
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
       await expectLater(
         () => service.loadApiData(makePlayer(), makeClan(), makeWar()),
         throwsA(anything),
@@ -861,10 +1015,10 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
-  // _loadDataWithFallback with non-empty clan tags
+  // Initial clan loading with non-empty clan tags
   // ---------------------------------------------------------------------------
 
-  group('CocAccountService — fallback with clan tags', () {
+  group('CocAccountService — initial clan loading', () {
     test('executes clan loading path when player has a clan tag', () async {
       final playerJson = <String, dynamic>{
         'tag': '#P1',
@@ -879,27 +1033,36 @@ void main() {
         },
       };
       final playerFakeApi = FakeApiService();
-      playerFakeApi.postStubs['/players'] =
-          http.Response(jsonEncode({'items': [playerJson]}), 200);
-      playerFakeApi.postStubs['/war/players/warhits'] =
-          http.Response(jsonEncode({'items': []}), 200);
+      playerFakeApi.postStubs['/players'] = http.Response(
+        jsonEncode({
+          'items': [playerJson],
+        }),
+        200,
+      );
+      playerFakeApi.postStubs['/war/players/warhits'] = http.Response(
+        jsonEncode({'items': []}),
+        200,
+      );
 
       final warCwlFakeApi = FakeApiService();
-      warCwlFakeApi.postStubs['/war/war-summary'] =
-          http.Response(jsonEncode({'items': []}), 200);
+      warCwlFakeApi.postStubs['/war/war-summary'] = http.Response(
+        jsonEncode({'items': []}),
+        200,
+      );
 
-      // 503 → NullPointerException on response.request!.url → caught → fallback
-      final bulkFakeApi = FakeApiService();
-      bulkFakeApi.postStubs['/initialization'] =
-          http.Response('error', 503);
-
-      final service = CocAccountService(apiService: bulkFakeApi);
+      final service = CocAccountService(
+        apiService: FakeApiService(),
+        currentUserId: testUserId,
+      );
       final playerService = PlayerService(apiService: playerFakeApi);
       final clanService = ClanService(apiService: FakeApiService());
       final warCwlService = WarCwlService(apiService: warCwlFakeApi);
 
       await service.refreshPageData(
-        ['#P1'], playerService, clanService, warCwlService,
+        ['#P1'],
+        playerService,
+        clanService,
+        warCwlService,
       );
       expect(service.lastRefresh, isNotNull);
       expect(playerService.profiles, isNotEmpty);

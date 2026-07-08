@@ -13,22 +13,22 @@ class _TestItem extends PlayerItem {
   }) : super(type: 'troop', imageUrl: '');
 }
 
-PlayerItemFactory<_TestItem> get _factory => ({
+PlayerItemFactory<_TestItem> get _factory =>
+    ({
       required name,
       required level,
       required maxLevel,
       required isUnlocked,
       meta,
       rawJson,
-    }) =>
-        _TestItem(
-          name: name,
-          level: level,
-          maxLevel: maxLevel,
-          isUnlocked: isUnlocked,
-          meta: meta,
-          rawJson: rawJson,
-        );
+    }) => _TestItem(
+      name: name,
+      level: level,
+      maxLevel: maxLevel,
+      isUnlocked: isUnlocked,
+      meta: meta,
+      rawJson: rawJson,
+    );
 
 void main() {
   group('generateCompleteItemList', () {
@@ -97,13 +97,27 @@ void main() {
     test('maxLevel falls back to 0 when absent from both json and meta', () {
       final result = generateCompleteItemList<_TestItem>(
         jsonList: [],
-        gameData: {
-          'Goblin': <String, dynamic>{},
-        },
+        gameData: {'Goblin': <String, dynamic>{}},
         factory: _factory,
       );
 
       expect(result.first.maxLevel, 0);
+    });
+
+    test('uses metadata name for duplicate static-data keys', () {
+      final result = generateCompleteItemList<_TestItem>(
+        jsonList: [
+          {'name': 'Meteor Golem', 'level': 1, 'maxLevel': 1},
+        ],
+        gameData: {
+          'Meteor Golem 2': {'name': 'Meteor Golem', 'maxLevel': 1},
+        },
+        factory: _factory,
+      );
+
+      expect(result.first.name, 'Meteor Golem');
+      expect(result.first.isUnlocked, isTrue);
+      expect(result.first.level, 1);
     });
   });
 
@@ -113,7 +127,7 @@ void main() {
         {'required_townhall': 1, 'level': 1},
         {'required_townhall': 5, 'level': 5},
         {'required_townhall': 10, 'level': 10},
-      ]
+      ],
     };
 
     test('returns highest level unlockable at given TH', () {
@@ -153,7 +167,7 @@ void main() {
           {'required_townhall': 5},
           {'level': 3},
           {'required_townhall': 2, 'level': 2},
-        ]
+        ],
       };
       expect(maxLevelForTH(incompleteMeta, 10), 2);
     });
@@ -162,17 +176,9 @@ void main() {
   group('filterGameData', () {
     test('excludes seasonal static-data entries from player lists', () {
       final result = filterGameData({
-        'Barbarian': {
-          'type': 'troop',
-        },
-        'Ice Minion': {
-          'type': 'troop',
-          'is_seasonal': true,
-        },
-        'Santa\'s Surprise': {
-          'type': 'spell',
-          'is_seasonal': true,
-        },
+        'Barbarian': {'type': 'troop'},
+        'Ice Minion': {'type': 'troop', 'is_seasonal': true},
+        'Santa\'s Surprise': {'type': 'spell', 'is_seasonal': true},
       }, (key, value) => value['type'] == 'troop');
 
       expect(result.keys, ['Barbarian']);
@@ -180,9 +186,7 @@ void main() {
 
     test('keeps regular items that match the predicate', () {
       final result = filterGameData({
-        'Lightning Spell': {
-          'type': 'spell',
-        },
+        'Lightning Spell': {'type': 'spell'},
       }, (key, value) => value['type'] == 'spell');
 
       expect(result.keys, ['Lightning Spell']);
@@ -215,13 +219,8 @@ void main() {
   group('filterSpellGameData', () {
     test('excludes seasonal spell entries from player spell lists', () {
       final result = filterSpellGameData({
-        'Lightning Spell': {
-          'type': 'spell',
-        },
-        'Santa\'s Surprise': {
-          'type': 'spell',
-          'is_seasonal': true,
-        },
+        'Lightning Spell': {'type': 'spell'},
+        'Santa\'s Surprise': {'type': 'spell', 'is_seasonal': true},
       });
 
       expect(result.keys, ['Lightning Spell']);

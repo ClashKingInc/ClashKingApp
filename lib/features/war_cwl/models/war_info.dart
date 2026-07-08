@@ -222,21 +222,13 @@ class WarInfo {
     final isUserInOpponent =
         opponent?.members.any((member) => member.tag == userPlayerTag) ?? false;
 
-    DebugUtils.debugInfo(
-      "Reordering war for user $userPlayerTag: inClan=$isUserInClan, inOpponent=$isUserInOpponent",
-    );
-
     // If user is in clan position, no reordering needed
     if (isUserInClan && !isUserInOpponent) {
-      DebugUtils.debugInfo("User is in clan position, no reordering needed");
       return this;
     }
 
     // If user is in opponent position, swap clan and opponent
     if (isUserInOpponent && !isUserInClan) {
-      DebugUtils.debugInfo(
-        "User is in opponent position, swapping clan and opponent",
-      );
       return WarInfo(
         tag: tag,
         state: state,
@@ -282,23 +274,13 @@ class WarInfo {
         ? normalizeClanTag(opponent!.tag)
         : null;
 
-    DebugUtils.debugInfo(
-      "Reordering war for clan $normalizedTargetTag: clanTag=$normalizedClanTag, opponentTag=$normalizedOpponentTag",
-    );
-
     // If target clan is already in clan position, no reordering needed
     if (normalizedClanTag == normalizedTargetTag) {
-      DebugUtils.debugInfo(
-        "Target clan is already in clan position, no reordering needed",
-      );
       return this;
     }
 
     // If target clan is in opponent position, swap clan and opponent
     if (normalizedOpponentTag == normalizedTargetTag) {
-      DebugUtils.debugInfo(
-        "Target clan is in opponent position, swapping clan and opponent",
-      );
       return WarInfo(
         tag: tag,
         state: state,

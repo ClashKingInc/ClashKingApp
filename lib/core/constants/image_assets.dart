@@ -332,31 +332,17 @@ class ImageAssets {
   static const String playerAchievementPageBackground =
       "$baseUrl/landscape/achievement-landscape.png";
 
-  static const Map<String, String> _assetSlugOverrides = {
-    'Baby Dragon 2': 'baby_dragon',
-  };
-
   // 🎭 Heroes & Troops & Others
   static String getHeroImage(String heroName) {
-    if (heroName.isEmpty) {
+    final slug = _assetSlug(heroName);
+    if (slug.isEmpty) {
       return defaultImage;
     }
-    return _buildAssetUrl([
-      'home-base',
-      'hero-pics',
-      'Icon_HV_Hero_${_titleUnderscoreName(heroName)}.png',
-    ]);
+    return _buildAssetUrl(['heroes', slug, 'icon.webp']);
   }
 
   static String getBuilderBaseHeroImage(String heroName) {
-    if (heroName.isEmpty) {
-      return defaultImage;
-    }
-    return _buildAssetUrl([
-      'builder-base',
-      'hero-pics',
-      'Icon_BB_Hero_${_titleUnderscoreName(heroName)}.png',
-    ]);
+    return getHeroImage(heroName);
   }
 
   static String getTroopImage(String troopName) {
@@ -400,42 +386,7 @@ class ImageAssets {
   }
 
   static String _assetSlug(String name) {
-    final override = _assetSlugOverrides[name];
-    if (override != null) {
-      return override;
-    }
-
-    final lower = name.trim().toLowerCase();
-    if (lower.isEmpty) {
-      return '';
-    }
-
-    final buffer = StringBuffer();
-    var previousWasSeparator = false;
-
-    for (final rune in lower.runes) {
-      final char = String.fromCharCode(rune);
-      final isAlphaNumeric =
-          (rune >= 48 && rune <= 57) || (rune >= 97 && rune <= 122);
-
-      if (isAlphaNumeric || char == '\'') {
-        buffer.write(char);
-        previousWasSeparator = false;
-        continue;
-      }
-
-      if (char == '.' || char == ',') {
-        continue;
-      }
-
-      if (!previousWasSeparator) {
-        buffer.write('_');
-        previousWasSeparator = true;
-      }
-    }
-
-    final slug = buffer.toString().replaceAll(RegExp(r'_+'), '_');
-    return slug.replaceAll(RegExp(r'^_+|_+$'), '');
+    return name.trim().toLowerCase().replaceAll(' ', '_').replaceAll('.', '');
   }
 
   static String _titleUnderscoreName(String name) {

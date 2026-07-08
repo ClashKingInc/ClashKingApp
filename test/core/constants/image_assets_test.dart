@@ -143,18 +143,26 @@ void main() {
       );
       expect(
         ImageAssets.getBuilderBaseTroopImage('Baby Dragon 2'),
-        'https://assets.clashk.ing/troops/baby_dragon/icon.webp',
+        'https://assets.clashk.ing/troops/baby_dragon_2/icon.webp',
+      );
+      expect(
+        ImageAssets.getTroopImage('Meteor Golem'),
+        'https://assets.clashk.ing/troops/meteor_golem/icon.webp',
+      );
+      expect(
+        ImageAssets.getTroopImage('M.E.T.E.O.R Golem'),
+        'https://assets.clashk.ing/troops/meteor_golem/icon.webp',
       );
     });
 
     test('builds direct hero icon URLs from API names', () {
       expect(
         ImageAssets.getHeroImage('Barbarian King'),
-        'https://assets.clashk.ing/home-base/hero-pics/Icon_HV_Hero_Barbarian_King.png',
+        'https://assets.clashk.ing/heroes/barbarian_king/icon.webp',
       );
       expect(
         ImageAssets.getBuilderBaseHeroImage('Battle Machine'),
-        'https://assets.clashk.ing/builder-base/hero-pics/Icon_BB_Hero_Battle_Machine.png',
+        'https://assets.clashk.ing/heroes/battle_machine/icon.webp',
       );
     });
   });

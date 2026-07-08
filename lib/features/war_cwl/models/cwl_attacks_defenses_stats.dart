@@ -47,16 +47,12 @@ class CwlAttackStats {
 
   factory CwlAttackStats.fromJson(Map<String, dynamic> json) {
     try {
-      DebugUtils.debugInfo("🔍 Parsing CwlAttackStats JSON: $json");
-      
       // API returns: {"stars": 6, "3_stars": {"13": 1, "14": 1}, "2_stars": {"15": 1}, ...}
       final threeStarsMap = Map<String, int>.from(json['3_stars'] ?? {});
       final twoStarsMap = Map<String, int>.from(json['2_stars'] ?? {});
       final oneStarMap = Map<String, int>.from(json['1_star'] ?? {});
       final zeroStarMap = Map<String, int>.from(json['0_star'] ?? {});
-      
-      DebugUtils.debugInfo("🔍 Attack Stats - 3★: $threeStarsMap, 2★: $twoStarsMap, 1★: $oneStarMap, 0★: $zeroStarMap");
-      
+
       return CwlAttackStats(
         stars: json['stars'] ?? 0,
         threeStars: threeStarsMap,
@@ -88,15 +84,15 @@ class CwlAttackStats {
   }
 
   Map<String, dynamic> toJson() => {
-        'stars': stars,
-        '3_stars': threeStars,
-        '2_stars': twoStars,
-        '1_star': oneStar,
-        '0_star': zeroStar,
-        'total_destruction': totalDestruction,
-        'attack_count': attackCount,
-        'missed_attacks': missedAttacks,
-      };
+    'stars': stars,
+    '3_stars': threeStars,
+    '2_stars': twoStars,
+    '1_star': oneStar,
+    '0_star': zeroStar,
+    'total_destruction': totalDestruction,
+    'attack_count': attackCount,
+    'missed_attacks': missedAttacks,
+  };
 }
 
 class CwlDefenseStats {
@@ -132,16 +128,12 @@ class CwlDefenseStats {
 
   factory CwlDefenseStats.fromJson(Map<String, dynamic> json) {
     try {
-      DebugUtils.debugInfo("🔍 Parsing CwlDefenseStats JSON: $json");
-      
       // API returns: {"stars": 4, "3_stars": {"14": 1}, "2_stars": {}, "1_star": {"15": 1}, ...}
       final threeStarsMap = Map<String, int>.from(json['3_stars'] ?? {});
       final twoStarsMap = Map<String, int>.from(json['2_stars'] ?? {});
       final oneStarMap = Map<String, int>.from(json['1_star'] ?? {});
       final zeroStarMap = Map<String, int>.from(json['0_star'] ?? {});
-      
-      DebugUtils.debugInfo("🔍 Defense Stats - 3★: $threeStarsMap, 2★: $twoStarsMap, 1★: $oneStarMap, 0★: $zeroStarMap");
-      
+
       return CwlDefenseStats(
         stars: json['stars'] ?? 0,
         threeStars: threeStarsMap,
@@ -169,12 +161,12 @@ class CwlDefenseStats {
   }
 
   Map<String, dynamic> toJson() => {
-        'stars': stars,
-        '3_stars': threeStars,
-        '2_stars': twoStars,
-        '1_star': oneStar,
-        '0_star': zeroStar,
-        'total_destruction': totalDestruction,
-        'defense_count': defenseCount,
-      };
+    'stars': stars,
+    '3_stars': threeStars,
+    '2_stars': twoStars,
+    '1_star': oneStar,
+    '0_star': zeroStar,
+    'total_destruction': totalDestruction,
+    'defense_count': defenseCount,
+  };
 }

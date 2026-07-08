@@ -11,8 +11,6 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class AuthService extends ChangeNotifier {
-  static const String _localModePrefKey = 'auth_local_mode';
-
   AuthService({ApiService? apiService, TokenService? tokenService})
     : _apiService = apiService ?? ApiService(),
       _tokenService = tokenService ?? TokenService();
@@ -21,23 +19,14 @@ class AuthService extends ChangeNotifier {
   final TokenService _tokenService;
   String? _accessToken;
   bool _isAuthenticated = false;
-  bool _isLocalMode = false;
   User? _currentUser;
   List<dynamic>? _cocAccounts;
 
   String? get accessToken => _accessToken;
   bool get isAuthenticated => _isAuthenticated;
-  bool get isLocalMode => _isLocalMode;
-  bool get canUseApp => _isAuthenticated || _isLocalMode;
+  bool get canUseApp => _isAuthenticated;
   User? get currentUser => _currentUser;
   List<dynamic>? get cocAccounts => _cocAccounts;
-
-  User get _localUser => User(
-    userId: 'local',
-    username: 'Local Mode',
-    avatarUrl: '',
-    authMethods: ['local'],
-  );
 
   String _localized(
     String fallback,
@@ -57,14 +46,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> initializeAuth() async {
-    _isLocalMode = await getPrefs(_localModePrefKey) == 'true';
-    if (_isLocalMode) {
-      _accessToken = null;
-      _isAuthenticated = false;
-      _currentUser = _localUser;
-      notifyListeners();
-      return;
-    }
+    await deletePrefs('auth_local_mode');
 
     _accessToken = await _tokenService.getAccessToken();
     if (_accessToken != null) {
@@ -119,10 +101,9 @@ class AuthService extends ChangeNotifier {
         response['access_token'],
         response['refresh_token'],
       );
-      await deletePrefs(_localModePrefKey);
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
-      _isLocalMode = false;
       _accessToken = response['access_token'];
       DebugUtils.debugSuccess("🔄 Tokens saved successfully.");
       notifyListeners();
@@ -154,10 +135,9 @@ class AuthService extends ChangeNotifier {
         response['access_token'],
         response['refresh_token'],
       );
-      await deletePrefs(_localModePrefKey);
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
-      _isLocalMode = false;
       _accessToken = response['access_token'];
 
       DebugUtils.debugSuccess("🔄 Email login completed successfully");
@@ -224,10 +204,9 @@ class AuthService extends ChangeNotifier {
         response['access_token'],
         response['refresh_token'],
       );
-      await deletePrefs(_localModePrefKey);
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
-      _isLocalMode = false;
       _accessToken = response['access_token'];
 
       DebugUtils.debugSuccess(
@@ -294,10 +273,9 @@ class AuthService extends ChangeNotifier {
         response['access_token'],
         response['refresh_token'],
       );
-      await deletePrefs(_localModePrefKey);
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       _isAuthenticated = true;
-      _isLocalMode = false;
       _accessToken = response['access_token'];
 
       DebugUtils.debugSuccess("🔄 Password reset completed successfully");
@@ -372,24 +350,12 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> continueWithoutLogin() async {
-    await _tokenService.clearTokens();
-    await storePrefs(_localModePrefKey, 'true');
-    _accessToken = null;
-    _isAuthenticated = false;
-    _isLocalMode = true;
-    _currentUser = _localUser;
-    _cocAccounts = null;
-    notifyListeners();
-  }
-
   Future<void> logout() async {
     await _tokenService.clearTokens();
     try {
       await clearPrefs();
     } catch (_) {}
     _isAuthenticated = false;
-    _isLocalMode = false;
     _currentUser = null;
     _cocAccounts = null;
     _accessToken = null;
@@ -405,7 +371,6 @@ class AuthService extends ChangeNotifier {
       await clearPrefs();
     } catch (_) {}
     _isAuthenticated = false;
-    _isLocalMode = false;
     _currentUser = null;
     _cocAccounts = null;
     _accessToken = null;
@@ -420,7 +385,6 @@ class AuthService extends ChangeNotifier {
       await clearPrefs();
     } catch (_) {}
     _isAuthenticated = false;
-    _isLocalMode = false;
     _currentUser = null;
     _cocAccounts = null;
     _accessToken = null;

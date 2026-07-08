@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -14,6 +16,7 @@ import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.da
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_tab_common.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -60,6 +63,81 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
   void initState() {
     super.initState();
     selectedTab = widget.initialTab.clamp(0, _tabCount - 1);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(_prefetchPageData());
+    });
+  }
+
+  Future<void> _prefetchPageData() async {
+    final clanService = context.read<ClanService>();
+    final warCwlService = context.read<WarCwlService>();
+    final clan = widget.clanInfo;
+
+    await Future.wait([
+      _prefetchWarSummary(warCwlService, clan),
+      _prefetchJoinLeave(clanService, clan),
+      _prefetchCapital(clanService, clan),
+      _prefetchWarLog(clanService, clan),
+      _prefetchWarStats(clanService, clan),
+    ]);
+
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _prefetchWarSummary(
+    WarCwlService warCwlService,
+    Clan clan,
+  ) async {
+    if (clan.warCwl != null) return;
+    try {
+      await warCwlService.loadAllWarData([clan.tag], notify: false);
+      final summary = warCwlService.getWarCwlByTag(clan.tag);
+      if (summary != null) {
+        clan.linkWar(summary);
+      }
+    } catch (_) {
+      // Keep the profile usable while tab-specific data loads opportunistically.
+    }
+  }
+
+  Future<void> _prefetchJoinLeave(ClanService clanService, Clan clan) async {
+    if ((clan.joinLeave?.stats.totalEvents ?? 0) > 0) return;
+    try {
+      await clanService.loadJoinLeaveForClan(clan);
+    } catch (_) {
+      // Optional page data.
+    }
+  }
+
+  Future<void> _prefetchCapital(ClanService clanService, Clan clan) async {
+    if (clan.clanCapitalRaid?.items.isNotEmpty == true) return;
+    try {
+      await clanService.loadCapitalData([clan.tag], 10, notify: false);
+      clanService.linkCapitalToClans();
+    } catch (_) {
+      // Optional page data.
+    }
+  }
+
+  Future<void> _prefetchWarLog(ClanService clanService, Clan clan) async {
+    if (clan.clanWarLog?.items.isNotEmpty == true) return;
+    try {
+      await clanService.loadWarLogData([clan.tag]);
+      clanService.linkWarLogToClans();
+    } catch (_) {
+      // Optional page data.
+    }
+  }
+
+  Future<void> _prefetchWarStats(ClanService clanService, Clan clan) async {
+    if (clan.clanWarStats != null) return;
+    try {
+      await clanService.loadClanWarStatsData([clan.tag]);
+      clanService.linkWarStatsToClans();
+    } catch (_) {
+      // Optional page data.
+    }
   }
 
   void _selectTab(int index) {
@@ -99,7 +177,6 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
           child: Column(
             children: [
               ClanInfoHeaderCard(clanInfo: widget.clanInfo),
-              const SizedBox(height: 10),
               _ClanProfileTabs(
                 selectedIndex: selectedTab,
                 onTabSelected: _selectTab,
@@ -217,6 +294,7 @@ class _ClanProfileTabsState extends State<_ClanProfileTabs>
             height: 48,
             cornerRadius: 0,
             opacity: 0.85,
+            horizontalEdgesOnly: true,
           ),
           TabBar(
             controller: _tabController,
@@ -593,35 +671,8 @@ class _ClanRankingsTab extends StatefulWidget {
 }
 
 class _ClanRankingsTabState extends State<_ClanRankingsTab> {
-  static final DateTime _mockCurrentSeason = DateTime(2026, 7);
-
-  DateTime _selectedSeason = _mockCurrentSeason;
-  String _selectedRankingFilter = 'all';
-
-  Future<void> _pickSeason() async {
-    final now = DateTime.now();
-    final latestDate = DateTime(now.year, now.month, now.day);
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedSeason.isAfter(latestDate)
-          ? latestDate
-          : _selectedSeason,
-      firstDate: DateTime(2020),
-      lastDate: latestDate,
-      initialDatePickerMode: DatePickerMode.year,
-      helpText:
-          AppLocalizations.of(context)?.clanRankingsSelectSeason ??
-          'Select ranking season',
-    );
-
-    if (picked == null) return;
-    setState(() => _selectedSeason = DateTime(picked.year, picked.month));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final localeName = Localizations.localeOf(context).toString();
-    final seasonLabel = DateFormat.yMMMM(localeName).format(_selectedSeason);
     final totalDonated = widget.clanInfo.memberList.fold<int>(
       0,
       (total, member) => total + member.donations,
@@ -630,155 +681,72 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
       0,
       (total, member) => total + member.donationsReceived,
     );
-    final rawSeasonOffset =
-        (_mockCurrentSeason.year - _selectedSeason.year) * 12 +
-        _mockCurrentSeason.month -
-        _selectedSeason.month;
-    final seasonOffset = rawSeasonOffset < 0
-        ? 0
-        : rawSeasonOffset > 24
-        ? 24
-        : rawSeasonOffset;
-    final rankShift = seasonOffset * 7;
 
     // TODO: Replace these preview ranks with real ranking data when the
     // backend exposes clan ranking endpoints for the app.
-    // TODO: Replace the mock calendar month with API-backed ranking seasons.
     final rankings = [
       _RankingPreview(
         title: 'Donations',
         value: totalDonated,
         icon: Icons.arrow_upward_rounded,
         color: Colors.green,
-        category: 'activity',
-        globalRank: 42 + rankShift,
-        localRank: 3 + seasonOffset,
+        globalRank: 42,
+        localRank: 3,
       ),
       _RankingPreview(
         title: 'Received',
         value: totalReceived,
         icon: Icons.arrow_downward_rounded,
         color: Colors.redAccent,
-        category: 'activity',
-        globalRank: 98 + rankShift,
-        localRank: 8 + seasonOffset,
+        globalRank: 98,
+        localRank: 8,
       ),
       _RankingPreview(
         title: 'War wins',
         value: widget.clanInfo.warWins,
         imageUrl: ImageAssets.sword,
-        category: 'war',
-        globalRank: 118 + rankShift,
-        localRank: 7 + seasonOffset,
+        globalRank: 118,
+        localRank: 7,
       ),
       _RankingPreview(
         title: 'Win streak',
         value: widget.clanInfo.warWinStreak,
         icon: Icons.local_fire_department_rounded,
         color: const Color(0xFFE35D4F),
-        category: 'war',
-        globalRank: 210 + rankShift,
-        localRank: 12 + seasonOffset,
+        globalRank: 210,
+        localRank: 12,
       ),
       _RankingPreview(
         title: 'Clan points',
         value: widget.clanInfo.clanPoints,
         imageUrl: ImageAssets.trophies,
         plainValue: true,
-        category: 'points',
-        globalRank: 164 + rankShift,
-        localRank: 16 + seasonOffset,
+        globalRank: 164,
+        localRank: 16,
       ),
       _RankingPreview(
         title: 'Builder points',
         value: widget.clanInfo.clanBuilderBasePoints,
         imageUrl: ImageAssets.builderBaseTrophy,
         plainValue: true,
-        category: 'points',
-        globalRank: 187 + rankShift,
-        localRank: 18 + seasonOffset,
+        globalRank: 187,
+        localRank: 18,
       ),
       _RankingPreview(
         title: 'Capital points',
         value: widget.clanInfo.clanCapitalPoints,
         imageUrl: ImageAssets.capitalTrophy,
         plainValue: true,
-        category: 'points',
-        globalRank: 73 + rankShift,
-        localRank: 6 + seasonOffset,
+        globalRank: 73,
+        localRank: 6,
       ),
     ];
-    final visibleRankings = _selectedRankingFilter == 'all'
-        ? rankings
-        : rankings
-              .where((ranking) => ranking.category == _selectedRankingFilter)
-              .toList(growable: false);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       child: Column(
         children: [
-          _FilterBar(
-            padding: EdgeInsets.zero,
-            trailing: const SizedBox.shrink(),
-            actions: [
-              _FilterActionButton(
-                tooltip:
-                    AppLocalizations.of(context)?.clanRankingsSelectSeason ??
-                    'Select ranking season',
-                icon: Icons.calendar_month_rounded,
-                onTap: _pickSeason,
-              ),
-            ],
-            middle: ClanSummaryChips(
-              padding: EdgeInsets.zero,
-              children: [
-                ClanSummaryChip(
-                  icon: Icons.calendar_month_rounded,
-                  value: seasonLabel,
-                  label:
-                      AppLocalizations.of(context)?.clanRankingsSeason ??
-                      'Season',
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ],
-            ),
-            chips: [
-              _FilterPill(
-                label: AppLocalizations.of(context)?.generalAll ?? 'All',
-                icon: Icons.all_inclusive_rounded,
-                selected: _selectedRankingFilter == 'all',
-                onTap: () => setState(() => _selectedRankingFilter = 'all'),
-              ),
-              _FilterPill(
-                label:
-                    AppLocalizations.of(context)?.clanRankingsFilterActivity ??
-                    'Activity',
-                icon: Icons.swap_vert_rounded,
-                selected: _selectedRankingFilter == 'activity',
-                onTap: () =>
-                    setState(() => _selectedRankingFilter = 'activity'),
-              ),
-              _FilterPill(
-                label:
-                    AppLocalizations.of(context)?.clanRankingsFilterWar ??
-                    'War',
-                imageUrl: ImageAssets.sword,
-                selected: _selectedRankingFilter == 'war',
-                onTap: () => setState(() => _selectedRankingFilter = 'war'),
-              ),
-              _FilterPill(
-                label:
-                    AppLocalizations.of(context)?.clanRankingsFilterPoints ??
-                    'Points',
-                imageUrl: ImageAssets.trophies,
-                selected: _selectedRankingFilter == 'points',
-                onTap: () => setState(() => _selectedRankingFilter = 'points'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          ...visibleRankings.map(
+          ...rankings.map(
             (ranking) => _RankingPreviewCard(
               ranking: ranking,
               countryCode: widget.clanInfo.location?.countryCode,
@@ -796,7 +764,6 @@ class _RankingPreview {
   final IconData? icon;
   final String? imageUrl;
   final Color? color;
-  final String category;
   final int globalRank;
   final int localRank;
   final bool plainValue;
@@ -807,7 +774,6 @@ class _RankingPreview {
     this.icon,
     this.imageUrl,
     this.color,
-    required this.category,
     required this.globalRank,
     required this.localRank,
     this.plainValue = false,

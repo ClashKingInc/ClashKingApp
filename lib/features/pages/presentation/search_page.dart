@@ -6,6 +6,7 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
@@ -16,7 +17,6 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum _SearchMode { players, clans }
 
@@ -34,9 +34,9 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   static const int _recentLimit = 10;
-  static const String _recentKey = 'clashking_recent_search_results';
   static final RegExp _tagRegExp = RegExp(r'^[PYLQGRJCUV0289]{3,9}$');
 
+  final ApiService _apiService = ApiService();
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   Timer? _debounce;
@@ -77,30 +77,65 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _loadRecents() async {
-    final prefs = await SharedPreferences.getInstance();
-    final items =
-        prefs
-            .getStringList(_recentKey)
-            ?.map((value) => _RecentSearchItem.tryDecode(value))
-            .whereType<_RecentSearchItem>()
-            .toList() ??
-        [];
+    final userId = _currentSearchUserId();
+    if (userId == null) {
+      if (!mounted) return;
+      setState(() => _recentItems = []);
+      return;
+    }
+
+    final items = <_RecentSearchItem>[];
+    try {
+      final encodedUserId = Uri.encodeComponent(userId);
+      final response = await _apiService.getResponse(
+        '/links/$encodedUserId/searches',
+        requiresAuth: true,
+      );
+
+      items.addAll(_decodeRecentItems(response));
+      items.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    } catch (_) {
+      items.clear();
+    }
+
     if (!mounted) return;
-    setState(() => _recentItems = items);
+    setState(() => _recentItems = items.take(_recentLimit).toList());
   }
 
-  Future<void> _saveRecent(_RecentSearchItem item) async {
-    final prefs = await SharedPreferences.getInstance();
-    final next = [
-      item,
-      ..._recentItems.where((recent) => recent.tag != item.tag),
-    ].take(_recentLimit).toList();
-    await prefs.setStringList(
-      _recentKey,
-      next.map((item) => jsonEncode(item.toJson())).toList(),
-    );
-    if (!mounted) return;
-    setState(() => _recentItems = next);
+  List<_RecentSearchItem> _decodeRecentItems(http.Response response) {
+    if (response.statusCode != 200) return [];
+    final data = jsonDecode(utf8.decode(response.bodyBytes));
+    if (data is! Map<String, dynamic>) return [];
+
+    final items = <_RecentSearchItem>[];
+    items.addAll(_decodeRecentGroup(data['players'], _RecentSearchType.player));
+    items.addAll(_decodeRecentGroup(data['clans'], _RecentSearchType.clan));
+    return items;
+  }
+
+  List<_RecentSearchItem> _decodeRecentGroup(
+    Object? rawItems,
+    _RecentSearchType type,
+  ) {
+    if (rawItems is! List) return [];
+    return rawItems
+        .whereType<Map<String, dynamic>>()
+        .map((item) => _RecentSearchItem.fromApiJson(item, type))
+        .whereType<_RecentSearchItem>()
+        .toList();
+  }
+
+  String? _currentSearchUserId() {
+    final authService = context.read<AuthService>();
+    final userId = authService.currentUser?.userId.trim();
+    if (userId == null || userId.isEmpty) return null;
+    return userId;
+  }
+
+  Map<String, String>? _searchTrackingHeaders() {
+    final userId = _currentSearchUserId();
+    if (userId == null) return null;
+    return {'x-ck-user-id': userId};
   }
 
   void _queueSearch() {
@@ -164,18 +199,24 @@ class _SearchPageState extends State<SearchPage> {
     const timeout = Duration(seconds: 10);
     final normalizedTag = query.replaceFirst('#', '').toUpperCase();
     final isTag = _tagRegExp.hasMatch(normalizedTag);
-    final Uri uri;
-
     if (isTag) {
-      uri = Uri.parse(
-        '${ApiService.proxyUrl}/players/${Uri.encodeComponent('#$normalizedTag')}',
+      final response = await _apiService.proxyGet(
+        '/players/${Uri.encodeComponent('#$normalizedTag')}',
+        timeout: timeout,
+        extraHeaders: _searchTrackingHeaders(),
       );
-    } else {
-      uri = Uri.parse(
-        '${ApiService.apiUrlV1}/player/full-search/${Uri.encodeComponent(query)}',
-      );
+      if (response.statusCode != 200) return [];
+
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      if (data is Map<String, dynamic> && data['items'] is List) {
+        return data['items'] as List<dynamic>;
+      }
+      return [data];
     }
 
+    final uri = Uri.parse(
+      '${ApiService.apiUrlV1}/player/full-search/${Uri.encodeComponent(query)}',
+    );
     final response = await http.get(uri).timeout(timeout);
     if (response.statusCode != 200) return [];
 
@@ -188,16 +229,14 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<List<dynamic>> _searchClans(String query) async {
     final searchQuery = 'name=${Uri.encodeQueryComponent(query)}';
-    final response = await http
-        .get(
-          Uri.parse(
-            '${ApiService.proxyUrl}/clans?$searchQuery$_clanFilters&limit=20&memberList=false',
-          ),
-        )
-        .timeout(const Duration(seconds: 10));
+    final response = await _apiService.proxyGet(
+      '/clans?$searchQuery$_clanFilters&limit=20&memberList=false',
+      timeout: const Duration(seconds: 10),
+    );
+    final body = utf8.decode(response.bodyBytes, allowMalformed: true);
     if (response.statusCode != 200) return [];
 
-    final data = jsonDecode(utf8.decode(response.bodyBytes));
+    final data = jsonDecode(body);
     if (data is Map<String, dynamic> && data['items'] is List) {
       return data['items'] as List<dynamic>;
     }
@@ -233,7 +272,8 @@ class _SearchPageState extends State<SearchPage> {
       final selectedPlayer = await playerService.getPlayerAndClanData(
         player['tag'],
       );
-      await _saveRecent(_RecentSearchItem.fromPlayer(player));
+      await _recordPlayerRecent(player['tag']?.toString() ?? '');
+      unawaited(_loadRecents());
       navigator.pop();
       if (!mounted) return;
       navigator.push(
@@ -266,8 +306,9 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     try {
+      await _recordClanRecent(clan['tag']?.toString() ?? '');
       final clanInfo = await _loadClanForResult(clan, clanService);
-      await _saveRecent(_RecentSearchItem.fromClan(clan));
+      unawaited(_loadRecents());
       navigator.pop();
       if (!mounted) return;
       navigator.push(
@@ -297,13 +338,10 @@ class _SearchPageState extends State<SearchPage> {
     try {
       return await clanService.getClanAndWarData(tag);
     } catch (_) {
-      final response = await http
-          .get(
-            Uri.parse(
-              '${ApiService.proxyUrl}/clans/${Uri.encodeComponent(tag)}',
-            ),
-          )
-          .timeout(const Duration(seconds: 10));
+      final response = await _apiService.proxyGet(
+        '/clans/${Uri.encodeComponent(tag)}',
+        timeout: const Duration(seconds: 10),
+      );
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load clan data');
@@ -317,6 +355,26 @@ class _SearchPageState extends State<SearchPage> {
       await clanService.loadJoinLeaveForClan(loadedClan);
       return loadedClan;
     }
+  }
+
+  Future<void> _recordPlayerRecent(String tag) async {
+    if (tag.isEmpty || _currentSearchUserId() == null) return;
+    try {
+      await _apiService.proxyGet(
+        '/players/${Uri.encodeComponent(tag)}',
+        extraHeaders: _searchTrackingHeaders(),
+      );
+    } catch (_) {}
+  }
+
+  Future<void> _recordClanRecent(String tag) async {
+    if (tag.isEmpty || _currentSearchUserId() == null) return;
+    try {
+      await _apiService.proxyGet(
+        '/clans/${Uri.encodeComponent(tag)}',
+        extraHeaders: _searchTrackingHeaders(),
+      );
+    } catch (_) {}
   }
 
   Future<void> _openRecent(_RecentSearchItem item) async {
@@ -963,6 +1021,7 @@ class _RecentSearchItem {
     required this.name,
     required this.tag,
     required this.subtitle,
+    required this.createdAt,
     this.imageUrl,
   });
 
@@ -970,62 +1029,54 @@ class _RecentSearchItem {
   final String name;
   final String tag;
   final String subtitle;
+  final DateTime createdAt;
   final String? imageUrl;
 
-  factory _RecentSearchItem.fromPlayer(Map<String, dynamic> player) {
-    final clanData = player['clan'];
-    final clan = clanData is Map ? clanData['name'] : player['clan_name'];
-    return _RecentSearchItem(
-      type: _RecentSearchType.player,
-      name: player['name']?.toString() ?? 'Player',
-      tag: player['tag']?.toString() ?? '',
-      subtitle: clan?.toString() ?? 'Player',
-      imageUrl: ImageAssets.townHall(
-        player['townHallLevel'] ?? player['townhall'] ?? 1,
-      ),
-    );
-  }
+  static _RecentSearchItem? fromApiJson(
+    Map<String, dynamic> json,
+    _RecentSearchType fallbackType,
+  ) {
+    final type = fallbackType;
+    final source = json;
+    final tag = source['tag']?.toString() ?? '';
+    if (tag.isEmpty) return null;
 
-  factory _RecentSearchItem.fromClan(Map<String, dynamic> clan) {
-    final badgeUrls = clan['badgeUrls'];
-    final badgeUrl = badgeUrls is Map<String, dynamic>
-        ? badgeUrls['medium'] ?? badgeUrls['small']
+    final createdAt =
+        DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0);
+
+    if (type == _RecentSearchType.clan) {
+      final badgeUrls = source['badgeUrls'];
+      final badgeUrl = badgeUrls is Map<String, dynamic>
+          ? badgeUrls['large']?.toString()
+          : null;
+      return _RecentSearchItem(
+        type: type,
+        name: source['name']?.toString() ?? tag,
+        tag: tag,
+        subtitle: '${source['members'] ?? 0} members',
+        createdAt: createdAt,
+        imageUrl: badgeUrl,
+      );
+    }
+
+    final clanData = source['clan'];
+    final leagueData = source['league'];
+    final clan = clanData is Map<String, dynamic> ? clanData['name'] : null;
+    final league = leagueData is Map<String, dynamic>
+        ? leagueData['name']
         : null;
     return _RecentSearchItem(
-      type: _RecentSearchType.clan,
-      name: clan['name']?.toString() ?? 'Clan',
-      tag: clan['tag']?.toString() ?? '',
-      subtitle: '${clan['members'] ?? 0} members',
-      imageUrl: badgeUrl?.toString(),
+      type: type,
+      name: source['name']?.toString() ?? tag,
+      tag: tag,
+      subtitle: [
+        if (clan != null) clan.toString(),
+        if (league != null) league.toString(),
+      ].join(' • '),
+      createdAt: createdAt,
+      imageUrl: ImageAssets.townHall(source['townHallLevel'] ?? 1),
     );
-  }
-
-  static _RecentSearchItem? tryDecode(String value) {
-    try {
-      final json = jsonDecode(value);
-      if (json is! Map<String, dynamic>) return null;
-      return _RecentSearchItem(
-        type: json['type'] == 'clan'
-            ? _RecentSearchType.clan
-            : _RecentSearchType.player,
-        name: json['name']?.toString() ?? '',
-        tag: json['tag']?.toString() ?? '',
-        subtitle: json['subtitle']?.toString() ?? '',
-        imageUrl: json['imageUrl']?.toString(),
-      );
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'type': type == _RecentSearchType.clan ? 'clan' : 'player',
-      'name': name,
-      'tag': tag,
-      'subtitle': subtitle,
-      'imageUrl': imageUrl,
-    };
   }
 
   Map<String, dynamic> toPlayerResult() {

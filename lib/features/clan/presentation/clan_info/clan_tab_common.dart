@@ -235,7 +235,7 @@ class ClanSummaryChip extends StatelessWidget {
   }
 }
 
-class ClanTabSearchSortBar extends StatelessWidget {
+class ClanTabSearchSortBar extends StatefulWidget {
   final TextEditingController controller;
   final String query;
   final String hintText;
@@ -262,40 +262,76 @@ class ClanTabSearchSortBar extends StatelessWidget {
   });
 
   @override
+  State<ClanTabSearchSortBar> createState() => _ClanTabSearchSortBarState();
+}
+
+class _ClanTabSearchSortBarState extends State<ClanTabSearchSortBar> {
+  late final FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode()..addListener(_handleFocusChanged);
+  }
+
+  @override
+  void dispose() {
+    _focusNode
+      ..removeListener(_handleFocusChanged)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleFocusChanged() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isFocused = _focusNode.hasFocus;
 
     return Padding(
-      padding: padding,
+      padding: widget.padding,
       child: Row(
         children: [
-          if (leading != null) ...[leading!, const SizedBox(width: 10)],
+          if (widget.leading != null) ...[
+            widget.leading!,
+            const SizedBox(width: 10),
+          ],
           Expanded(
             child: SizedBox(
               height: 44,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  NativeLiquidGlassBar(
-                    height: 44,
-                    cornerRadius: 22,
-                    borderOpacity:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? 0.22
-                        : 0.30,
-                    shadowOpacity:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? 0.22
-                        : 0.08,
+                  IgnorePointer(
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 140),
+                      opacity: isFocused ? 1 : 0,
+                      child: NativeLiquidGlassBar(
+                        height: 44,
+                        cornerRadius: 22,
+                        borderOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.30,
+                        shadowOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.08,
+                      ),
+                    ),
                   ),
                   TextField(
-                    controller: controller,
+                    controller: widget.controller,
+                    focusNode: _focusNode,
                     textInputAction: TextInputAction.search,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurface,
                     ),
                     decoration: InputDecoration(
-                      hintText: hintText,
+                      hintText: widget.hintText,
                       hintStyle: Theme.of(context).textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurfaceVariant),
                       isDense: true,
@@ -308,14 +344,14 @@ class ClanTabSearchSortBar extends StatelessWidget {
                         minWidth: 40,
                         minHeight: 44,
                       ),
-                      suffixIcon: query.isNotEmpty
+                      suffixIcon: widget.query.isNotEmpty
                           ? IconButton(
                               icon: Icon(
                                 Icons.close_rounded,
                                 size: 18,
                                 color: colorScheme.onSurfaceVariant,
                               ),
-                              onPressed: controller.clear,
+                              onPressed: widget.controller.clear,
                             )
                           : null,
                       border: InputBorder.none,
@@ -328,12 +364,15 @@ class ClanTabSearchSortBar extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           FilterDropdown(
-            sortBy: sortBy,
-            updateSortBy: updateSortBy,
-            sortByOptions: sortByOptions,
-            maxWidth: maxSortWidth,
+            sortBy: widget.sortBy,
+            updateSortBy: widget.updateSortBy,
+            sortByOptions: widget.sortByOptions,
+            maxWidth: widget.maxSortWidth,
           ),
-          if (trailing != null) ...[const SizedBox(width: 10), trailing!],
+          if (widget.trailing != null) ...[
+            const SizedBox(width: 10),
+            widget.trailing!,
+          ],
         ],
       ),
     );

@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 
 import '../../../helpers/fake_services.dart';
 
+const testUserId = 'user-123';
+const testLinksEndpoint = '/links/user-123';
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -49,20 +52,14 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.getStubs['/auth/me'] = http.Response('Unauthorized', 401);
       final service = UserService(apiService: fakeApi);
-      await expectLater(
-        () => service.getClashKingUser(),
-        throwsA(anything),
-      );
+      await expectLater(() => service.getClashKingUser(), throwsA(anything));
     });
 
     test('throws on network error', () async {
       final fakeApi = FakeApiService();
       fakeApi.throwOnGet['/auth/me'] = Exception('Network error');
       final service = UserService(apiService: fakeApi);
-      await expectLater(
-        () => service.getClashKingUser(),
-        throwsA(anything),
-      );
+      await expectLater(() => service.getClashKingUser(), throwsA(anything));
     });
   });
 
@@ -71,91 +68,97 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('UserService — getClashAccounts', () {
-    test('returns list from accounts key on 200', () async {
+    test('returns player tags from items key on 200', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
-          'accounts': ['#ABC123', '#DEF456', '#GHI789'],
+          'items': [
+            {'player_tag': '#ABC123'},
+            {'player_tag': '#DEF456'},
+            {'player_tag': '#GHI789'},
+          ],
         }),
         200,
       );
       final service = UserService(apiService: fakeApi);
-      final result = await service.getClashAccounts();
+      final result = await service.getClashAccounts(testUserId);
       expect(result, hasLength(3));
       expect(result, containsAll(['#ABC123', '#DEF456', '#GHI789']));
     });
 
     test('returns single-element list', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'accounts': ['#ONLY1']}),
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({
+          'items': [
+            {'player_tag': '#ONLY1'},
+          ],
+        }),
         200,
       );
       final service = UserService(apiService: fakeApi);
-      final result = await service.getClashAccounts();
+      final result = await service.getClashAccounts(testUserId);
       expect(result, hasLength(1));
       expect(result.first, '#ONLY1');
     });
 
-    test('returns empty list when accounts key is missing', () async {
+    test('returns empty list when items key is missing', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({'other_key': 'value'}),
         200,
       );
       final service = UserService(apiService: fakeApi);
-      final result = await service.getClashAccounts();
+      final result = await service.getClashAccounts(testUserId);
       expect(result, isEmpty);
     });
 
-    test('returns empty list when accounts value is not a List', () async {
+    test('returns empty list when items value is not a List', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'accounts': 'not-a-list'}),
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({'items': 'not-a-list'}),
         200,
       );
       final service = UserService(apiService: fakeApi);
-      final result = await service.getClashAccounts();
+      final result = await service.getClashAccounts(testUserId);
       expect(result, isEmpty);
     });
 
-    test('returns empty list when accounts is an empty list', () async {
+    test('returns empty list when items is an empty list', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] = http.Response(
-        jsonEncode({'accounts': []}),
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({'items': []}),
         200,
       );
       final service = UserService(apiService: fakeApi);
-      final result = await service.getClashAccounts();
+      final result = await service.getClashAccounts(testUserId);
       expect(result, isEmpty);
     });
 
     test('returns empty list when response body is empty object', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] =
-          http.Response(jsonEncode({}), 200);
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(jsonEncode({}), 200);
       final service = UserService(apiService: fakeApi);
-      final result = await service.getClashAccounts();
+      final result = await service.getClashAccounts(testUserId);
       expect(result, isEmpty);
     });
 
     test('throws on 401 response', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/users/coc-accounts'] =
-          http.Response('Unauthorized', 401);
+      fakeApi.getStubs[testLinksEndpoint] = http.Response('Unauthorized', 401);
       final service = UserService(apiService: fakeApi);
       await expectLater(
-        () => service.getClashAccounts(),
+        () => service.getClashAccounts(testUserId),
         throwsA(anything),
       );
     });
 
     test('throws on network error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.throwOnGet['/users/coc-accounts'] = Exception('Network error');
+      fakeApi.throwOnGet[testLinksEndpoint] = Exception('Network error');
       final service = UserService(apiService: fakeApi);
       await expectLater(
-        () => service.getClashAccounts(),
+        () => service.getClashAccounts(testUserId),
         throwsA(anything),
       );
     });

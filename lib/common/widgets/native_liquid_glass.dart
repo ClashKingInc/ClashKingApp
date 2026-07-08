@@ -14,6 +14,7 @@ class NativeLiquidGlassBar extends StatelessWidget {
     this.shadowOpacity,
     this.interactive = false,
     this.selected = false,
+    this.horizontalEdgesOnly = false,
   });
 
   final double height;
@@ -23,6 +24,7 @@ class NativeLiquidGlassBar extends StatelessWidget {
   final double? shadowOpacity;
   final bool interactive;
   final bool selected;
+  final bool horizontalEdgesOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,17 @@ class NativeLiquidGlassBar extends StatelessWidget {
             : height;
 
         if (_supportsNativeLiquidGlass) {
+          if (horizontalEdgesOnly) {
+            return _FallbackLiquidGlassBar(
+              cornerRadius: cornerRadius,
+              opacity: opacity,
+              borderOpacity: effectiveBorderOpacity,
+              shadowOpacity: effectiveShadowOpacity,
+              selected: selected,
+              horizontalEdgesOnly: true,
+            );
+          }
+
           return glass.LiquidGlassContainer(
             height: resolvedHeight,
             config: glass.LiquidGlassConfig(
@@ -72,6 +85,7 @@ class NativeLiquidGlassBar extends StatelessWidget {
           borderOpacity: effectiveBorderOpacity,
           shadowOpacity: effectiveShadowOpacity,
           selected: selected,
+          horizontalEdgesOnly: horizontalEdgesOnly,
         );
       },
     );
@@ -310,6 +324,7 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
     required this.borderOpacity,
     required this.shadowOpacity,
     required this.selected,
+    required this.horizontalEdgesOnly,
   });
 
   final double cornerRadius;
@@ -317,6 +332,7 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
   final double borderOpacity;
   final double shadowOpacity;
   final bool selected;
+  final bool horizontalEdgesOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -348,13 +364,12 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
                 alpha: opacity * (selected ? 0.55 : 0.42),
               ),
               borderRadius: BorderRadius.circular(cornerRadius),
-              border: Border.all(
-                color: Colors.white.withValues(
+              border: _glassBorder(
+                Colors.white.withValues(
                   alpha: isDark
                       ? borderOpacity * 0.45
                       : borderOpacity.clamp(0.12, 0.36),
                 ),
-                width: 0.8,
               ),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -370,6 +385,17 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  BoxBorder _glassBorder(Color color) {
+    if (horizontalEdgesOnly) {
+      return Border(
+        top: BorderSide(color: color, width: 0.8),
+        bottom: BorderSide(color: color, width: 0.8),
+      );
+    }
+
+    return Border.all(color: color, width: 0.8);
   }
 }
 

@@ -1,20 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class BookmarkService extends ChangeNotifier {
-  static const String _playerBookmarksKey = 'bookmarked_players_v1';
-  static const String _clanBookmarksKey = 'bookmarked_clans_v1';
-
-  BookmarkService() {
+  BookmarkService({ApiService? apiService})
+    : _apiService = apiService ?? ApiService() {
     unawaited(load());
   }
 
+  final ApiService _apiService;
   bool _loaded = false;
+  int _loadGeneration = 0;
+  String? _currentUserId;
   List<BookmarkedPlayer> _players = [];
   List<BookmarkedClan> _clans = [];
 
@@ -22,24 +25,75 @@ class BookmarkService extends ChangeNotifier {
   List<BookmarkedPlayer> get players => List.unmodifiable(_players);
   List<BookmarkedClan> get clans => List.unmodifiable(_clans);
 
+  void setCurrentUserId(String? userId) {
+    final normalizedUserId = userId?.trim();
+    final nextUserId = normalizedUserId == null || normalizedUserId.isEmpty
+        ? null
+        : normalizedUserId;
+    if (_currentUserId == nextUserId) return;
+    _currentUserId = nextUserId;
+    _invalidateLoadedState();
+  }
+
+  void _invalidateLoadedState() {
+    _loadGeneration++;
+    _loaded = false;
+  }
+
   Future<void> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    _players =
-        prefs
-            .getStringList(_playerBookmarksKey)
-            ?.map((value) => BookmarkedPlayer.tryDecode(value))
-            .whereType<BookmarkedPlayer>()
-            .toList() ??
-        [];
-    _clans =
-        prefs
-            .getStringList(_clanBookmarksKey)
-            ?.map((value) => BookmarkedClan.tryDecode(value))
-            .whereType<BookmarkedClan>()
-            .toList() ??
-        [];
+    final loadGeneration = ++_loadGeneration;
+    if (!_hasCurrentUser) {
+      if (loadGeneration != _loadGeneration) return;
+      _players = [];
+      _clans = [];
+      _loaded = false;
+      return;
+    }
+
+    final userId = Uri.encodeComponent(_currentUserId!);
+    final responses = await Future.wait([
+      _apiService.getResponse(
+        '/links/$userId/bookmarks?type=player',
+        requiresAuth: true,
+      ),
+      _apiService.getResponse(
+        '/links/$userId/bookmarks?type=clan',
+        requiresAuth: true,
+      ),
+    ]);
+
+    final players = _decodeBookmarkItems(
+      responses[0],
+    ).map(BookmarkedPlayer.fromApiJson).toList();
+    final clans = _decodeBookmarkItems(
+      responses[1],
+    ).map(BookmarkedClan.fromApiJson).toList();
+    if (loadGeneration != _loadGeneration) return;
+    _players = players;
+    _clans = clans;
     _loaded = true;
     notifyListeners();
+  }
+
+  bool get _hasCurrentUser {
+    final userId = _currentUserId;
+    return userId != null && userId.isNotEmpty;
+  }
+
+  List<Map<String, dynamic>> _decodeBookmarkItems(http.Response response) {
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw HttpException(
+        'Failed to load bookmarks (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+
+    final data = jsonDecode(ApiService.decodeResponseBody(response));
+    if (data is! Map<String, dynamic> || data['items'] is! List) {
+      throw const FormatException('Invalid bookmarks payload');
+    }
+
+    return (data['items'] as List).whereType<Map<String, dynamic>>().toList();
   }
 
   bool isPlayerBookmarked(String tag) {
@@ -59,22 +113,64 @@ class BookmarkService extends ChangeNotifier {
   }
 
   Future<void> addPlayer(BookmarkedPlayer player) async {
+    final previous = List<BookmarkedPlayer>.from(_players);
     _players.removeWhere((existing) => existing.tag == player.tag);
     _players.insert(0, player);
-    await _savePlayers();
+    notifyListeners();
+
+    try {
+      if (_hasCurrentUser) {
+        await _createBookmark('player', player.tag);
+      } else {
+        throw UnauthorizedException('User not authenticated');
+      }
+    } catch (_) {
+      _players = previous;
+      notifyListeners();
+      rethrow;
+    }
   }
 
   Future<void> removePlayer(String tag) async {
+    final previous = List<BookmarkedPlayer>.from(_players);
     _players.removeWhere((player) => player.tag == tag);
-    await _savePlayers();
+    notifyListeners();
+
+    try {
+      if (_hasCurrentUser) {
+        await _deleteBookmark('player', tag);
+      } else {
+        throw UnauthorizedException('User not authenticated');
+      }
+    } catch (_) {
+      _players = previous;
+      notifyListeners();
+      rethrow;
+    }
   }
 
   Future<void> reorderPlayer(int oldIndex, int newIndex) async {
     if (oldIndex < 0 || oldIndex >= _players.length) return;
     if (newIndex < 0 || newIndex > _players.length) return;
+    final previous = List<BookmarkedPlayer>.from(_players);
     final player = _players.removeAt(oldIndex);
     _players.insert(newIndex, player);
-    await _savePlayers();
+    notifyListeners();
+
+    try {
+      if (_hasCurrentUser) {
+        await _saveBookmarkOrder(
+          'player',
+          _players.map((player) => player.tag).toList(growable: false),
+        );
+      } else {
+        throw UnauthorizedException('User not authenticated');
+      }
+    } catch (_) {
+      _players = previous;
+      notifyListeners();
+      rethrow;
+    }
   }
 
   Future<void> toggleClan(Clan clan) async {
@@ -86,40 +182,108 @@ class BookmarkService extends ChangeNotifier {
   }
 
   Future<void> addClan(BookmarkedClan clan) async {
+    final previous = List<BookmarkedClan>.from(_clans);
     _clans.removeWhere((existing) => existing.tag == clan.tag);
     _clans.insert(0, clan);
-    await _saveClans();
+    notifyListeners();
+
+    try {
+      if (_hasCurrentUser) {
+        await _createBookmark('clan', clan.tag);
+      } else {
+        throw UnauthorizedException('User not authenticated');
+      }
+    } catch (_) {
+      _clans = previous;
+      notifyListeners();
+      rethrow;
+    }
   }
 
   Future<void> removeClan(String tag) async {
+    final previous = List<BookmarkedClan>.from(_clans);
     _clans.removeWhere((clan) => clan.tag == tag);
-    await _saveClans();
+    notifyListeners();
+
+    try {
+      if (_hasCurrentUser) {
+        await _deleteBookmark('clan', tag);
+      } else {
+        throw UnauthorizedException('User not authenticated');
+      }
+    } catch (_) {
+      _clans = previous;
+      notifyListeners();
+      rethrow;
+    }
   }
 
   Future<void> reorderClan(int oldIndex, int newIndex) async {
     if (oldIndex < 0 || oldIndex >= _clans.length) return;
     if (newIndex < 0 || newIndex > _clans.length) return;
+    final previous = List<BookmarkedClan>.from(_clans);
     final clan = _clans.removeAt(oldIndex);
     _clans.insert(newIndex, clan);
-    await _saveClans();
+    notifyListeners();
+
+    try {
+      if (_hasCurrentUser) {
+        await _saveBookmarkOrder(
+          'clan',
+          _clans.map((clan) => clan.tag).toList(growable: false),
+        );
+      } else {
+        throw UnauthorizedException('User not authenticated');
+      }
+    } catch (_) {
+      _clans = previous;
+      notifyListeners();
+      rethrow;
+    }
   }
 
-  Future<void> _savePlayers() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      _playerBookmarksKey,
-      _players.map((player) => jsonEncode(player.toJson())).toList(),
+  Future<void> _createBookmark(String type, String tag) async {
+    final response = await _apiService.postResponse(
+      _bookmarksEndpoint(),
+      body: {'type': type, 'tag': tag},
+      requiresAuth: true,
     );
-    notifyListeners();
+    _throwOnBookmarkFailure(response, 'create');
   }
 
-  Future<void> _saveClans() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      _clanBookmarksKey,
-      _clans.map((clan) => jsonEncode(clan.toJson())).toList(),
+  Future<void> _deleteBookmark(String type, String tag) async {
+    final response = await _apiService.deleteResponse(
+      _bookmarkItemEndpoint(type, tag),
+      requiresAuth: true,
     );
-    notifyListeners();
+    _throwOnBookmarkFailure(response, 'delete');
+  }
+
+  Future<void> _saveBookmarkOrder(String type, List<String> tags) async {
+    final response = await _apiService.putResponse(
+      '${_bookmarksEndpoint()}/order',
+      body: {'type': type, 'ordered_tags': tags},
+      requiresAuth: true,
+    );
+    _throwOnBookmarkFailure(response, 'reorder');
+  }
+
+  String _bookmarksEndpoint() {
+    final userId = Uri.encodeComponent(_currentUserId ?? '');
+    return '/links/$userId/bookmarks';
+  }
+
+  String _bookmarkItemEndpoint(String type, String tag) {
+    return '${_bookmarksEndpoint()}/$type/${Uri.encodeComponent(tag)}';
+  }
+
+  void _throwOnBookmarkFailure(http.Response response, String action) {
+    if (response.statusCode >= 200 && response.statusCode < 300) return;
+
+    throw HttpException(
+      'Failed to $action bookmark (${response.statusCode})',
+      uri: response.request?.url,
+    );
   }
 }
 
@@ -160,46 +324,19 @@ class BookmarkedPlayer {
     );
   }
 
-  static BookmarkedPlayer? tryDecode(String value) {
-    try {
-      final data = jsonDecode(value);
-      if (data is! Map<String, dynamic>) return null;
-      return BookmarkedPlayer.fromJson(data);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  factory BookmarkedPlayer.fromJson(Map<String, dynamic> json) {
+  factory BookmarkedPlayer.fromApiJson(Map<String, dynamic> json) {
+    final tag = json['player_tag']?.toString() ?? json['tag']?.toString() ?? '';
     return BookmarkedPlayer(
-      tag: json['tag']?.toString() ?? '',
-      name: json['name']?.toString() ?? 'Unknown Player',
-      townHallLevel: json['townHallLevel'] is int
-          ? json['townHallLevel'] as int
-          : int.tryParse(json['townHallLevel']?.toString() ?? '') ?? 0,
-      townHallPic: json['townHallPic']?.toString() ?? '',
-      clanTag: json['clanTag']?.toString() ?? '',
-      clanName: json['clanName']?.toString() ?? '',
-      trophies: json['trophies'] is int
-          ? json['trophies'] as int
-          : int.tryParse(json['trophies']?.toString() ?? '') ?? 0,
-      league: json['league']?.toString() ?? '',
-      leagueUrl: json['leagueUrl']?.toString() ?? '',
+      tag: tag,
+      name: tag.isEmpty ? 'Unknown Player' : tag,
+      townHallLevel: 0,
+      townHallPic: '',
+      clanTag: '',
+      clanName: '',
+      trophies: 0,
+      league: '',
+      leagueUrl: '',
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'tag': tag,
-      'name': name,
-      'townHallLevel': townHallLevel,
-      'townHallPic': townHallPic,
-      'clanTag': clanTag,
-      'clanName': clanName,
-      'trophies': trophies,
-      'league': league,
-      'leagueUrl': leagueUrl,
-    };
   }
 }
 
@@ -228,37 +365,14 @@ class BookmarkedClan {
     );
   }
 
-  static BookmarkedClan? tryDecode(String value) {
-    try {
-      final data = jsonDecode(value);
-      if (data is! Map<String, dynamic>) return null;
-      return BookmarkedClan.fromJson(data);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  factory BookmarkedClan.fromJson(Map<String, dynamic> json) {
+  factory BookmarkedClan.fromApiJson(Map<String, dynamic> json) {
+    final tag = json['clan_tag']?.toString() ?? json['tag']?.toString() ?? '';
     return BookmarkedClan(
-      tag: json['tag']?.toString() ?? '',
-      name: json['name']?.toString() ?? 'Unknown Clan',
-      badgeUrl: json['badgeUrl']?.toString() ?? '',
-      clanLevel: json['clanLevel'] is int
-          ? json['clanLevel'] as int
-          : int.tryParse(json['clanLevel']?.toString() ?? '') ?? 0,
-      memberCount: json['memberCount'] is int
-          ? json['memberCount'] as int
-          : int.tryParse(json['memberCount']?.toString() ?? '') ?? 0,
+      tag: tag,
+      name: tag.isEmpty ? 'Unknown Clan' : tag,
+      badgeUrl: '',
+      clanLevel: 0,
+      memberCount: 0,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'tag': tag,
-      'name': name,
-      'badgeUrl': badgeUrl,
-      'clanLevel': clanLevel,
-      'memberCount': memberCount,
-    };
   }
 }
