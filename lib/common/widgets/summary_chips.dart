@@ -1,7 +1,12 @@
-import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:flutter/material.dart';
 
+/// Shared "chip family" for clan-family detail screens (clan, CWL,
+/// capital, war stats): a horizontal rail of stat pills (read-only,
+/// [ClanSummaryChip]) and a horizontal rail of toggleable filter pills
+/// ([ClanFilterChip]) — the two recurring chip shapes across every
+/// screen built with the flat-card design system (see the "Design
+/// System" section in the project's CLAUDE.md).
 class ClanSummaryChips extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsetsGeometry padding;
@@ -52,6 +57,9 @@ class ClanSummaryChips extends StatelessWidget {
   }
 }
 
+/// Horizontal-scroll rail for [ClanFilterChip]s (or any pill-shaped
+/// toggle), same recipe as [ClanSummaryChips] but with wider chip
+/// spacing to suit tappable filters rather than read-only stats.
 class ClanFilterRail extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsetsGeometry padding;
@@ -85,6 +93,9 @@ class ClanFilterRail extends StatelessWidget {
   }
 }
 
+/// Tappable filter pill: icon-in-circle-free flat pill, tinted with
+/// [color] (falls back to the theme primary) when [selected]. The
+/// default toggle control for filter rows across clan-style screens.
 class ClanFilterChip extends StatelessWidget {
   final String label;
   final IconData? icon;
@@ -108,9 +119,9 @@ class ClanFilterChip extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(999),
+      borderRadius: BorderRadius.circular(AppRadius.pill),
       child: InkWell(
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         splashFactory: NoSplash.splashFactory,
         onTap: onTap,
         child: Container(
@@ -120,7 +131,7 @@ class ClanFilterChip extends StatelessWidget {
             color: selected
                 ? accent.withValues(alpha: 0.16)
                 : colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
-            borderRadius: BorderRadius.circular(999),
+            borderRadius: BorderRadius.circular(AppRadius.pill),
             border: Border.all(
               color: selected
                   ? accent.withValues(alpha: 0.42)
@@ -154,6 +165,9 @@ class ClanFilterChip extends StatelessWidget {
   }
 }
 
+/// Read-only stat pill: dot-or-icon, bold value, muted label — the
+/// default way to surface a single number (attacks, loot, rank...) in a
+/// horizontal summary row. Optionally tappable via [onTap].
 class ClanSummaryChip extends StatelessWidget {
   final String label;
   final String value;
@@ -184,7 +198,7 @@ class ClanSummaryChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: accent.withValues(alpha: backgroundAlpha),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         border: Border.all(color: accent.withValues(alpha: borderAlpha)),
       ),
       child: Row(
@@ -223,118 +237,13 @@ class ClanSummaryChip extends StatelessWidget {
       message: label,
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         child: InkWell(
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(AppRadius.pill),
           splashFactory: NoSplash.splashFactory,
           onTap: onTap,
           child: child,
         ),
-      ),
-    );
-  }
-}
-
-class ClanTabSearchSortBar extends StatelessWidget {
-  final TextEditingController controller;
-  final String query;
-  final String hintText;
-  final String sortBy;
-  final ValueChanged<String> updateSortBy;
-  final Map<String, String> sortByOptions;
-  final double maxSortWidth;
-  final EdgeInsetsGeometry padding;
-  final Widget? leading;
-  final Widget? trailing;
-
-  const ClanTabSearchSortBar({
-    super.key,
-    required this.controller,
-    required this.query,
-    required this.hintText,
-    required this.sortBy,
-    required this.updateSortBy,
-    required this.sortByOptions,
-    this.maxSortWidth = 140,
-    this.padding = const EdgeInsets.fromLTRB(16, 0, 16, 8),
-    this.leading,
-    this.trailing,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: padding,
-      child: Row(
-        children: [
-          if (leading != null) ...[leading!, const SizedBox(width: 10)],
-          Expanded(
-            child: SizedBox(
-              height: 44,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  NativeLiquidGlassBar(
-                    height: 44,
-                    cornerRadius: 22,
-                    borderOpacity:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? 0.22
-                        : 0.30,
-                    shadowOpacity:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? 0.22
-                        : 0.08,
-                  ),
-                  TextField(
-                    controller: controller,
-                    textInputAction: TextInputAction.search,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: hintText,
-                      hintStyle: Theme.of(context).textTheme.bodyMedium
-                          ?.copyWith(color: colorScheme.onSurfaceVariant),
-                      isDense: true,
-                      prefixIcon: Icon(
-                        Icons.search_rounded,
-                        size: 20,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 40,
-                        minHeight: 44,
-                      ),
-                      suffixIcon: query.isNotEmpty
-                          ? IconButton(
-                              icon: Icon(
-                                Icons.close_rounded,
-                                size: 18,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                              onPressed: controller.clear,
-                            )
-                          : null,
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          FilterDropdown(
-            sortBy: sortBy,
-            updateSortBy: updateSortBy,
-            sortByOptions: sortByOptions,
-            maxWidth: maxSortWidth,
-          ),
-          if (trailing != null) ...[const SizedBox(width: 10), trailing!],
-        ],
       ),
     );
   }

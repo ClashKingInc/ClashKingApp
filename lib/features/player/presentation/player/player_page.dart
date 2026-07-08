@@ -289,61 +289,52 @@ class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SizedBox(
-      height: 48,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          const NativeLiquidGlassBar(
-            height: 48,
-            cornerRadius: 0,
-            opacity: 0.85,
-          ),
-          TabBar(
-            controller: _tabController,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-            indicatorColor: colorScheme.primary,
-            indicatorWeight: 3,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
-            dividerColor: Colors.transparent,
-            splashFactory: NoSplash.splashFactory,
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
-            onTap: widget.onTabSelected,
-            tabs: [
-              _ProfileTab(
-                label:
-                    AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
-                imageUrl: ImageAssets.townHall(widget.player.townHallLevel),
-                selected: widget.selectedIndex == 0,
-              ),
-              _ProfileTab(
-                label:
-                    AppLocalizations.of(context)?.gameBaseBuilder ??
-                    'Builder Base',
-                imageUrl: ImageAssets.builderHall(
-                  widget.player.builderHallLevel,
-                ),
-                selected: widget.selectedIndex == 1,
-              ),
-              _ProfileTab(
-                label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
-                imageUrl: ImageAssets.war,
-                selected: widget.selectedIndex == 2,
-              ),
-              _ProfileTab(
-                label:
-                    AppLocalizations.of(context)?.gameAchievements ??
-                    'Achievements',
-                imageUrl: ImageAssets.attackStar,
-                selected: widget.selectedIndex == 3,
-              ),
-            ],
-          ),
-        ],
+    return DecoratedBox(
+      decoration: BoxDecoration(color: colorScheme.surface),
+      child: SizedBox(
+        height: 50,
+        child: TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+          labelColor: colorScheme.onSurface,
+          unselectedLabelColor: colorScheme.onSurface,
+          indicatorColor: colorScheme.primary,
+          indicatorWeight: 2.5,
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          onTap: widget.onTabSelected,
+          tabs: [
+            _ProfileTab(
+              label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
+              imageUrl: ImageAssets.townHall(widget.player.townHallLevel),
+              selected: widget.selectedIndex == 0,
+            ),
+            _ProfileTab(
+              label:
+                  AppLocalizations.of(context)?.gameBaseBuilder ??
+                  'Builder Base',
+              imageUrl: ImageAssets.builderHall(widget.player.builderHallLevel),
+              selected: widget.selectedIndex == 1,
+            ),
+            _ProfileTab(
+              label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
+              imageUrl: ImageAssets.war,
+              selected: widget.selectedIndex == 2,
+            ),
+            _ProfileTab(
+              label:
+                  AppLocalizations.of(context)?.gameAchievements ??
+                  'Achievements',
+              imageUrl: ImageAssets.attackStar,
+              selected: widget.selectedIndex == 3,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -365,7 +356,7 @@ class _ProfileTab extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final foreground = selected
         ? colorScheme.onSurface
-        : colorScheme.onSurface.withValues(alpha: 0.58);
+        : colorScheme.onSurface.withValues(alpha: 0.68);
 
     return Tab(
       height: 48,

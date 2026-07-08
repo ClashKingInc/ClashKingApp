@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/icons/excel_download_icon.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
@@ -140,22 +139,27 @@ class _CwlHeaderCard extends StatelessWidget {
                       ColoredBox(color: Theme.of(context).colorScheme.surface),
                 ),
               ),
+              // Fixed black, not colorScheme.surface: keeps darkening the
+              // photo toward the bottom in both themes — surface flips to
+              // near-white in light mode, which un-darkens the image.
+              // Lower peak alpha in light mode: still dark enough for
+              // white text, but not dark mode's near-black wash.
               DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.36),
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.64),
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.92),
-                    ],
+                    colors: Theme.of(context).brightness == Brightness.dark
+                        ? const [
+                            Color.fromRGBO(0, 0, 0, 0.36),
+                            Color.fromRGBO(0, 0, 0, 0.64),
+                            Color.fromRGBO(0, 0, 0, 0.92),
+                          ]
+                        : const [
+                            Color.fromRGBO(0, 0, 0, 0.20),
+                            Color.fromRGBO(0, 0, 0, 0.40),
+                            Color.fromRGBO(0, 0, 0, 0.65),
+                          ],
                   ),
                 ),
               ),
@@ -686,50 +690,44 @@ class _CwlProfileTabsState extends State<_CwlProfileTabs>
     final colorScheme = Theme.of(context).colorScheme;
     final loc = AppLocalizations.of(context)!;
 
-    return SizedBox(
-      height: 48,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          const NativeLiquidGlassBar(
-            height: 48,
-            cornerRadius: 0,
-            opacity: 0.85,
-          ),
-          TabBar(
-            controller: _tabController,
-            // 3 short tabs always fit — unlike the clan page's 4, which
-            // need isScrollable+start to avoid cramming. Filling here
-            // keeps them evenly spread instead of clumped on the left.
-            isScrollable: false,
-            labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-            indicatorColor: colorScheme.primary,
-            indicatorWeight: 3,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
-            dividerColor: Colors.transparent,
-            splashFactory: NoSplash.splashFactory,
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
-            onTap: widget.onTabSelected,
-            tabs: [
-              _CwlTab(
-                label: loc.cwlRounds,
-                icon: Icons.calendar_month_rounded,
-                selected: widget.selectedIndex == 0,
-              ),
-              _CwlTab(
-                label: loc.navigationTeam,
-                icon: Icons.leaderboard_rounded,
-                selected: widget.selectedIndex == 1,
-              ),
-              _CwlTab(
-                label: loc.clanMembers,
-                icon: Icons.groups_rounded,
-                selected: widget.selectedIndex == 2,
-              ),
-            ],
-          ),
-        ],
+    return DecoratedBox(
+      decoration: BoxDecoration(color: colorScheme.surface),
+      child: SizedBox(
+        height: 50,
+        child: TabBar(
+          controller: _tabController,
+          // 3 short tabs always fit — unlike the clan page's 6, which
+          // need isScrollable+start to avoid cramming. Filling here
+          // keeps them evenly spread instead of clumped on the left.
+          isScrollable: false,
+          labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+          labelColor: colorScheme.onSurface,
+          unselectedLabelColor: colorScheme.onSurface,
+          indicatorColor: colorScheme.primary,
+          indicatorWeight: 2.5,
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          onTap: widget.onTabSelected,
+          tabs: [
+            _CwlTab(
+              label: loc.cwlRounds,
+              icon: Icons.calendar_month_rounded,
+              selected: widget.selectedIndex == 0,
+            ),
+            _CwlTab(
+              label: loc.navigationTeam,
+              icon: Icons.leaderboard_rounded,
+              selected: widget.selectedIndex == 1,
+            ),
+            _CwlTab(
+              label: loc.clanMembers,
+              icon: Icons.groups_rounded,
+              selected: widget.selectedIndex == 2,
+            ),
+          ],
+        ),
       ),
     );
   }

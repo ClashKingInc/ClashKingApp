@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_attack_details_sheet.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_search_field.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -147,6 +148,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
                   _AttackEventRow(
                     item: attacks[index],
                     isFromClan: attacks[index].clanTag == clan.tag,
+                    warInfo: widget.warInfo,
                   ),
                   if (index < attacks.length - 1) const SizedBox(height: 6),
                 ],
@@ -161,8 +163,13 @@ class _WarEventsTabState extends State<WarEventsTab> {
 class _AttackEventRow extends StatelessWidget {
   final _WarEventItem item;
   final bool isFromClan;
+  final WarInfo warInfo;
 
-  const _AttackEventRow({required this.item, required this.isFromClan});
+  const _AttackEventRow({
+    required this.item,
+    required this.isFromClan,
+    required this.warInfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -180,6 +187,11 @@ class _AttackEventRow extends StatelessWidget {
 
     return _WarEventItemCard(
       highlighted: isActiveUser,
+      onTap: () => showWarAttackDetailsSheet(
+        context,
+        attack: item.attack,
+        warInfo: warInfo,
+      ),
       child: SizedBox(
         height: 58,
         child: Row(
@@ -295,8 +307,13 @@ class _ArrowSegment extends StatelessWidget {
 class _WarEventItemCard extends StatelessWidget {
   final Widget child;
   final bool highlighted;
+  final VoidCallback? onTap;
 
-  const _WarEventItemCard({required this.child, this.highlighted = false});
+  const _WarEventItemCard({
+    required this.child,
+    this.highlighted = false,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -305,16 +322,20 @@ class _WarEventItemCard extends StatelessWidget {
         ? StatColors.warStarGold.withValues(alpha: 0.48)
         : colorScheme.outlineVariant.withValues(alpha: 0.34);
 
-    return Container(
+    return Material(
+      color: highlighted
+          ? StatColors.warStarGold.withValues(alpha: 0.07)
+          : colorScheme.surface,
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: highlighted
-            ? StatColors.warStarGold.withValues(alpha: 0.07)
-            : colorScheme.surface,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: borderColor),
+        side: BorderSide(color: borderColor),
       ),
-      child: child,
+      child: InkWell(
+        onTap: onTap,
+        splashFactory: NoSplash.splashFactory,
+        child: child,
+      ),
     );
   }
 }

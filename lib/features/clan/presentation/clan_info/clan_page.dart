@@ -1,10 +1,10 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
+import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
@@ -12,7 +12,6 @@ import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/clan/models/cwl_ranking_history.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
-import 'package:clashkingapp/features/clan/presentation/clan_info/clan_tab_common.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
@@ -208,64 +207,58 @@ class _ClanProfileTabsState extends State<_ClanProfileTabs>
     final colorScheme = Theme.of(context).colorScheme;
     final loc = AppLocalizations.of(context)!;
 
-    return SizedBox(
-      height: 48,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          const NativeLiquidGlassBar(
-            height: 48,
-            cornerRadius: 0,
-            opacity: 0.85,
-          ),
-          TabBar(
-            controller: _tabController,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-            indicatorColor: colorScheme.primary,
-            indicatorWeight: 3,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
-            dividerColor: Colors.transparent,
-            splashFactory: NoSplash.splashFactory,
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
-            onTap: widget.onTabSelected,
-            tabs: [
-              _ClanTab(
-                label: loc.clanMembers,
-                icon: Icons.groups_rounded,
-                selected: widget.selectedIndex == 0,
-              ),
-              _ClanTab(
-                label: loc.warLog,
-                imageUrl: ImageAssets.war,
-                selected: widget.selectedIndex == 1,
-              ),
-              _ClanTab(
-                label: loc.clanJoinLeaveTab,
-                icon: Icons.swap_horiz_rounded,
-                selected: widget.selectedIndex == 2,
-              ),
-              _ClanTab(
-                label: loc.warStats,
-                icon: Icons.bar_chart_rounded,
-                selected: widget.selectedIndex == 3,
-              ),
-              _ClanTab(
-                label: loc.clanRankingsTab,
-                icon: Icons.leaderboard_rounded,
-                selected: widget.selectedIndex == 4,
-              ),
-              _ClanTab(
-                label: loc.cwlHistoryTitle,
-                icon: Icons.emoji_events_rounded,
-                selected: widget.selectedIndex == 5,
-              ),
-            ],
-          ),
-        ],
+    return DecoratedBox(
+      decoration: BoxDecoration(color: colorScheme.surface),
+      child: SizedBox(
+        height: 50,
+        child: TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 12),
+          labelColor: colorScheme.onSurface,
+          unselectedLabelColor: colorScheme.onSurface,
+          indicatorColor: colorScheme.primary,
+          indicatorWeight: 2.5,
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          onTap: widget.onTabSelected,
+          tabs: [
+            _ClanTab(
+              label: loc.clanMembers,
+              icon: Icons.groups_rounded,
+              selected: widget.selectedIndex == 0,
+            ),
+            _ClanTab(
+              label: loc.warLog,
+              imageUrl: ImageAssets.war,
+              selected: widget.selectedIndex == 1,
+            ),
+            _ClanTab(
+              label: loc.clanJoinLeaveTab,
+              icon: Icons.swap_horiz_rounded,
+              selected: widget.selectedIndex == 2,
+            ),
+            _ClanTab(
+              label: loc.warStats,
+              icon: Icons.bar_chart_rounded,
+              selected: widget.selectedIndex == 3,
+            ),
+            _ClanTab(
+              label: loc.clanRankingsTab,
+              icon: Icons.leaderboard_rounded,
+              selected: widget.selectedIndex == 4,
+            ),
+            _ClanTab(
+              label: loc.cwlHistoryTitle,
+              icon: Icons.emoji_events_rounded,
+              selected: widget.selectedIndex == 5,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1084,7 +1077,7 @@ class _FilterBarState extends State<_FilterBar> {
                     // Always onSurface, never the tint, for the same
                     // contrast reason as the chip labels below.
                     child: Icon(
-                      LucideIcons.listFilter,
+                      Icons.filter_list_rounded,
                       size: 18,
                       color: colorScheme.onSurface,
                     ),
@@ -1334,13 +1327,13 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
             ),
             _FilterPill(
               label: loc.warFiltersRandom,
-              icon: LucideIcons.shuffle,
+              icon: Icons.shuffle_rounded,
               selected: widget.isRandomChecked,
               onTap: widget.onRandomChanged,
             ),
             _FilterPill(
               label: loc.warFiltersFriendly,
-              icon: LucideIcons.handshake,
+              icon: Icons.handshake_rounded,
               selected: widget.isFriendlyChecked,
               onTap: widget.onFriendlyChanged,
             ),
@@ -1688,7 +1681,7 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
                 label: loc.clanMembers,
               ),
               ClanSummaryChip(
-                icon: LucideIcons.swords,
+                icon: Icons.bolt_rounded,
                 value: overview.totalAttacks.toString(),
                 label: loc.warAttacksTitle,
                 color: Colors.blueAccent,
@@ -1706,7 +1699,7 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
                 color: Colors.teal,
               ),
               ClanSummaryChip(
-                icon: LucideIcons.sword,
+                icon: Icons.warning_amber_rounded,
                 value: overview.missedAttacks.toString(),
                 label: loc.warAttacksMissedShort,
                 color: Colors.redAccent,
@@ -1716,20 +1709,20 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
           chips: [
             _FilterPill(
               label: loc.cwlTitle,
-              icon: LucideIcons.swords,
+              imageUrl: ImageAssets.cwlSwordsNoBorder,
               selected: widget.isCWLChecked,
               color: Theme.of(context).colorScheme.primary,
               onTap: widget.onCWLChanged,
             ),
             _FilterPill(
               label: loc.warFiltersRandom,
-              icon: LucideIcons.shuffle,
+              icon: Icons.shuffle_rounded,
               selected: widget.isRandomChecked,
               onTap: widget.onRandomChanged,
             ),
             _FilterPill(
               label: loc.warFiltersFriendly,
-              icon: LucideIcons.handshake,
+              icon: Icons.handshake_rounded,
               selected: widget.isFriendlyChecked,
               onTap: widget.onFriendlyChanged,
             ),

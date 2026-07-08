@@ -41,6 +41,7 @@ class CapitalHistoryItem {
   int defensiveReward;
   List<RaidMember>? members;
   List<RaidAttackLog>? attackLog;
+  List<RaidAttackLog>? defenseLog;
 
   CapitalHistoryItem({
     required this.state,
@@ -54,6 +55,7 @@ class CapitalHistoryItem {
     required this.defensiveReward,
     required this.members,
     required this.attackLog,
+    this.defenseLog,
   });
 
   factory CapitalHistoryItem.fromJson(Map<String, dynamic> json) {
@@ -74,6 +76,10 @@ class CapitalHistoryItem {
       attackLog: json['attackLog'] != null
           ? List<RaidAttackLog>.from(
               json['attackLog'].map((x) => RaidAttackLog.fromJson(x)))
+          : [],
+      defenseLog: json['defenseLog'] != null
+          ? List<RaidAttackLog>.from(
+              json['defenseLog'].map((x) => RaidAttackLog.fromJson(x)))
           : [],
     );
   }
@@ -125,7 +131,11 @@ class RaidAttackLog {
 
   factory RaidAttackLog.fromJson(Map<String, dynamic> json) {
     return RaidAttackLog(
-      defender: RaidDefender.fromJson(json['defender'] ?? {}),
+      // attackLog entries key the opponent as "defender"; defenseLog
+      // entries (same shape, reused for this class) key it as "attacker".
+      defender: RaidDefender.fromJson(
+        json['defender'] ?? json['attacker'] ?? {},
+      ),
       attackCount: (json['attackCount'] as num?)?.toInt() ?? 0,
       districtCount: (json['districtCount'] as num?)?.toInt() ?? 0,
       districtsDestroyed: (json['districtsDestroyed'] as num?)?.toInt() ?? 0,

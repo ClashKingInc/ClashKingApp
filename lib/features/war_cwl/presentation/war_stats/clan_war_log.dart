@@ -1,8 +1,8 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/features/clan/presentation/clan_info/clan_tab_common.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';

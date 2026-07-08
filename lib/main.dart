@@ -15,6 +15,7 @@ import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/app/my_app.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
@@ -97,6 +98,9 @@ Future<void> main() async {
   // Initialize Flutter binding BEFORE Sentry
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Pre-warm liquid glass shaders (prototype: bottom nav bar only for now)
+  await LiquidGlassWidgets.initialize();
+
   // Load config from backend first
   await ApiService.loadConfig();
 
@@ -136,24 +140,26 @@ Future<void> main() async {
       _initializeDeepLinks();
 
       runApp(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-            ChangeNotifierProvider(create: (_) => MyAppState()),
-            ChangeNotifierProvider(create: (_) => AuthService()),
-            ChangeNotifierProvider(create: (_) => CocAccountService()),
-            ChangeNotifierProvider(create: (_) => PlayerService()),
-            ChangeNotifierProvider(create: (_) => ClanService()),
-            ChangeNotifierProvider(create: (_) => WarCwlService()),
-            ChangeNotifierProvider(create: (_) => BookmarkService()),
-            ChangeNotifierProvider(
-              create: (_) => PlayerCardPreferencesService(),
-            ),
-            Provider(create: (_) => ApiService()),
-            Provider(create: (_) => UserService()),
-            Provider(create: (_) => TokenService()),
-          ],
-          child: MyApp(),
+        LiquidGlassWidgets.wrap(
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+              ChangeNotifierProvider(create: (_) => MyAppState()),
+              ChangeNotifierProvider(create: (_) => AuthService()),
+              ChangeNotifierProvider(create: (_) => CocAccountService()),
+              ChangeNotifierProvider(create: (_) => PlayerService()),
+              ChangeNotifierProvider(create: (_) => ClanService()),
+              ChangeNotifierProvider(create: (_) => WarCwlService()),
+              ChangeNotifierProvider(create: (_) => BookmarkService()),
+              ChangeNotifierProvider(
+                create: (_) => PlayerCardPreferencesService(),
+              ),
+              Provider(create: (_) => ApiService()),
+              Provider(create: (_) => UserService()),
+              Provider(create: (_) => TokenService()),
+            ],
+            child: MyApp(),
+          ),
         ),
       );
     },

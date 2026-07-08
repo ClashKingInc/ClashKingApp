@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
+import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/models/clan_league.dart';
 import 'package:clashkingapp/features/clan/models/clan_member.dart';
-import 'package:clashkingapp/features/clan/presentation/clan_info/clan_tab_common.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';

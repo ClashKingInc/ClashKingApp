@@ -290,7 +290,7 @@ class _TodoControls extends StatelessWidget {
             'Bookmarked (${counts.bookmarked})':
                 _TodoAccountFilter.bookmarked.value,
           },
-          maxWidth: 182,
+          maxWidth: 140,
         ),
       ],
     );

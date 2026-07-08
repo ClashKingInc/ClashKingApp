@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
@@ -10,7 +11,6 @@ import 'package:clashkingapp/features/pages/presentation/players_page.dart';
 import 'package:clashkingapp/features/pages/presentation/search_page.dart';
 import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
 import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -121,129 +121,275 @@ class MyHomePageState extends State<MyHomePage> {
           WarCwlPage(),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: supportsNativeLiquidGlass
-            ? const EdgeInsets.fromLTRB(8, 0, 8, 4)
-            : const EdgeInsets.fromLTRB(24, 0, 24, 18),
-        child: SizedBox(
-          height: supportsNativeLiquidGlass ? 78 : 62,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final colorScheme = Theme.of(context).colorScheme;
-              final tabItems = [
-                NativeLiquidGlassTabItem(
-                  icon: Icons.home_outlined,
-                  selectedIcon: Icons.home_rounded,
-                  label: 'Home',
-                  selectedItemColor: colorScheme.primary,
-                ),
-                NativeLiquidGlassTabItem(
-                  icon: Icons.person_outline_rounded,
-                  selectedIcon: Icons.person_rounded,
-                  label: 'Players',
-                  selectedItemColor: colorScheme.primary,
-                ),
-                NativeLiquidGlassTabItem(
-                  icon: Icons.groups_outlined,
-                  selectedIcon: Icons.groups,
-                  label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
-                  selectedItemColor: colorScheme.primary,
-                ),
-                NativeLiquidGlassTabItem(
-                  icon: CustomIcons.swordCross,
-                  selectedIcon: CustomIcons.swordCross,
-                  label: 'War',
-                  selectedItemColor: colorScheme.primary,
-                ),
-              ];
+      bottomNavigationBar: usesNativeGlassPlatform
+          ? _NativeIOSTabBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            )
+          : _AndroidFloatingTabBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            ),
+    );
+  }
+}
 
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  NativeLiquidGlassTabBar(
-                    height: 62,
-                    itemCount: 4,
-                    selectedIndex: _selectedIndex,
-                    onTabSelected: _onItemTapped,
-                    items: tabItems,
-                    cornerRadius: 31,
-                    selectedCornerRadius: 25,
-                    inset: 6,
-                    borderOpacity:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? 0.22
-                        : 0.34,
-                    shadowOpacity:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? 0.5
-                        : 0.18,
-                    iconSize: 22,
-                  ),
-                  supportsNativeLiquidGlass
-                      ? Row(
-                          children: [
-                            _NavHitTarget(
-                              label: 'Home',
-                              onTap: () => _onItemTapped(0),
-                            ),
-                            _NavHitTarget(
-                              label: 'Players',
-                              onTap: () => _onItemTapped(1),
-                            ),
-                            _NavHitTarget(
-                              label:
-                                  AppLocalizations.of(context)?.clanTitle ??
-                                  'Clan',
-                              onTap: () => _onItemTapped(2),
-                            ),
-                            _NavHitTarget(
-                              label: 'War',
-                              onTap: () => _onItemTapped(3),
-                            ),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            _GlassNavItem(
-                              icon: Icons.home_outlined,
-                              label: 'Home',
-                              selected: _selectedIndex == 0,
-                              selectedColor: colorScheme.primary,
-                              unselectedColor: colorScheme.onSurfaceVariant,
-                              onTap: () => _onItemTapped(0),
-                            ),
-                            _GlassNavItem(
-                              icon: Icons.person_outline_rounded,
-                              label: 'Players',
-                              selected: _selectedIndex == 1,
-                              selectedColor: colorScheme.primary,
-                              unselectedColor: colorScheme.onSurfaceVariant,
-                              onTap: () => _onItemTapped(1),
-                            ),
-                            _GlassNavItem(
-                              icon: Icons.groups_outlined,
-                              label:
-                                  AppLocalizations.of(context)?.clanTitle ??
-                                  'Clan',
-                              selected: _selectedIndex == 2,
-                              selectedColor: colorScheme.primary,
-                              unselectedColor: colorScheme.onSurfaceVariant,
-                              onTap: () => _onItemTapped(2),
-                            ),
-                            _GlassNavItem(
-                              icon: CustomIcons.swordCross,
-                              label: 'War',
-                              selected: _selectedIndex == 3,
-                              selectedColor: colorScheme.primary,
-                              unselectedColor: colorScheme.onSurfaceVariant,
-                              onTap: () => _onItemTapped(3),
-                            ),
-                          ],
-                        ),
-                ],
-              );
-            },
+/// Android fallback for the app-level floating tab bar.
+///
+/// Keep this custom instead of using the liquid glass background on Android:
+/// the native/glass border reads too bright on black gesture-bar backgrounds.
+class _AndroidFloatingTabBar extends StatelessWidget {
+  const _AndroidFloatingTabBar({
+    required this.selectedIndex,
+    required this.onItemTapped,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onItemTapped;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bottomPadding = MediaQuery.paddingOf(context).bottom;
+    final tabs = [
+      _AndroidTabItem(
+        icon: Icons.home_outlined,
+        selectedIcon: Icons.home_rounded,
+        label: 'Home',
+      ),
+      _AndroidTabItem(
+        icon: Icons.person_outline_rounded,
+        selectedIcon: Icons.person_rounded,
+        label: 'Players',
+      ),
+      _AndroidTabItem(
+        icon: Icons.groups_outlined,
+        selectedIcon: Icons.groups,
+        label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
+      ),
+      const _AndroidTabItem(
+        icon: CustomIcons.swordCross,
+        selectedIcon: CustomIcons.swordCross,
+        label: 'War',
+      ),
+    ];
+
+    return SafeArea(
+      top: false,
+      minimum: EdgeInsets.fromLTRB(14, 0, 14, bottomPadding > 0 ? 2 : 10),
+      child: SizedBox(
+        height: 68,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.90)
+                : colorScheme.surface.withValues(alpha: 0.94),
+            borderRadius: BorderRadius.circular(34),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.30 : 0.14),
+                blurRadius: 18,
+                offset: const Offset(0, 8),
+              ),
+            ],
           ),
+          child: Row(
+            children: [
+              for (var index = 0; index < tabs.length; index++)
+                Expanded(
+                  child: _AndroidTabButton(
+                    item: tabs[index],
+                    selected: selectedIndex == index,
+                    onTap: () => onItemTapped(index),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AndroidTabItem {
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+
+  const _AndroidTabItem({
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+  });
+}
+
+class _AndroidTabButton extends StatelessWidget {
+  const _AndroidTabButton({
+    required this.item,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _AndroidTabItem item;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final selectedColor = colorScheme.primary;
+    final unselectedColor = colorScheme.onSurface.withValues(alpha: 0.92);
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: item.label,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+        child: Material(
+          color: selected
+              ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.58)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(29),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(29),
+            onTap: onTap,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  selected ? item.selectedIcon : item.icon,
+                  size: 25,
+                  color: selected ? selectedColor : unselectedColor,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: selected ? selectedColor : unselectedColor,
+                    fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Apple's real native Liquid Glass bottom tab bar, sized/positioned by the
+/// caller (unlike liquid_glass_widgets' `GlassTabBar.bottom`, which wants to
+/// own the whole `bottomNavigationBar` slot directly).
+class _NativeIOSTabBar extends StatelessWidget {
+  const _NativeIOSTabBar({
+    required this.selectedIndex,
+    required this.onItemTapped,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onItemTapped;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
+      child: SizedBox(
+        height: 78,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final colorScheme = Theme.of(context).colorScheme;
+            final tabItems = [
+              NativeLiquidGlassTabItem(
+                icon: Icons.home_outlined,
+                selectedIcon: Icons.home_rounded,
+                label: 'Home',
+                selectedItemColor: colorScheme.primary,
+              ),
+              NativeLiquidGlassTabItem(
+                icon: Icons.person_outline_rounded,
+                selectedIcon: Icons.person_rounded,
+                label: 'Players',
+                selectedItemColor: colorScheme.primary,
+              ),
+              NativeLiquidGlassTabItem(
+                icon: Icons.groups_outlined,
+                selectedIcon: Icons.groups,
+                label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
+                selectedItemColor: colorScheme.primary,
+              ),
+              NativeLiquidGlassTabItem(
+                icon: CustomIcons.swordCross,
+                selectedIcon: CustomIcons.swordCross,
+                label: 'War',
+                selectedItemColor: colorScheme.primary,
+              ),
+            ];
+
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                NativeLiquidGlassTabBar(
+                  height: 62,
+                  itemCount: 4,
+                  selectedIndex: selectedIndex,
+                  onTabSelected: onItemTapped,
+                  items: tabItems,
+                  cornerRadius: 31,
+                  selectedCornerRadius: 25,
+                  inset: 6,
+                  borderOpacity: Theme.of(context).brightness == Brightness.dark
+                      ? 0.22
+                      : 0.34,
+                  shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                      ? 0.5
+                      : 0.18,
+                  iconSize: 22,
+                ),
+                Row(
+                  children: [
+                    _NavHitTarget(label: 'Home', onTap: () => onItemTapped(0)),
+                    _NavHitTarget(
+                      label: 'Players',
+                      onTap: () => onItemTapped(1),
+                    ),
+                    _NavHitTarget(
+                      label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
+                      onTap: () => onItemTapped(2),
+                    ),
+                    _NavHitTarget(label: 'War', onTap: () => onItemTapped(3)),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _NavHitTarget extends StatelessWidget {
+  const _NavHitTarget({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Semantics(
+        button: true,
+        label: label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: const SizedBox.expand(),
         ),
       ),
     );
@@ -635,87 +781,6 @@ class _SubscriptionPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _NavHitTarget extends StatelessWidget {
-  const _NavHitTarget({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Semantics(
-        button: true,
-        label: label,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onTap,
-          child: const SizedBox.expand(),
-        ),
-      ),
-    );
-  }
-}
-
-class _GlassNavItem extends StatelessWidget {
-  const _GlassNavItem({
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.selectedColor,
-    required this.unselectedColor,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final Color selectedColor;
-  final Color unselectedColor;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = selected ? selectedColor : unselectedColor;
-
-    return Expanded(
-      child: Material(
-        color: Colors.transparent,
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashFactory: NoSplash.splashFactory,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: onTap,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icon, color: color, size: 22),
-                  const SizedBox(height: 2),
-                  Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: color,
-                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                      height: 1.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

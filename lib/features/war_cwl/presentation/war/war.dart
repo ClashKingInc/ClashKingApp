@@ -298,13 +298,6 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                     ),
             ),
             ScrollableTab(
-              tabBarDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              labelColor: Theme.of(context).colorScheme.onSurface,
-              labelPadding: EdgeInsets.zero,
-              labelStyle: Theme.of(context).textTheme.bodyLarge,
-              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
               onTap: (value) {},
               tabs: [
                 Tab(text: AppLocalizations.of(context)!.navigationStatistics),

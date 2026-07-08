@@ -1,9 +1,17 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' as lgw;
 import 'package:native_liquid_glass/native_liquid_glass.dart' as glass;
 
+/// iOS keeps Apple's real system Liquid Glass (`native_liquid_glass`, a true
+/// `UIVisualEffectView`-backed platform view). Every other platform renders
+/// via `liquid_glass_widgets` (shader-based — Impeller/Vulkan on Android,
+/// lightweight shader on web/desktop) since there is no equivalent system
+/// material to call into there.
+bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
+/// Shared floating glass surface — used as a background for buttons, search
+/// fields, header panels and tab bars.
 class NativeLiquidGlassBar extends StatelessWidget {
   const NativeLiquidGlassBar({
     super.key,
@@ -36,20 +44,34 @@ class NativeLiquidGlassBar extends StatelessWidget {
             constraints.hasBoundedHeight && constraints.maxHeight.isFinite
             ? constraints.maxHeight
             : height;
+        final resolvedWidth =
+            constraints.hasBoundedWidth && constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : null;
 
-        if (_supportsNativeLiquidGlass) {
+        // In light mode, colorScheme.surface is near-white — tinting the
+        // glass with it against typically-light page content leaves no
+        // visible glass definition (reads as flat gray/blurry instead).
+        // surfaceContainerHighest carries enough tone to stay visible
+        // while dark mode keeps the original near-black surface tint.
+        final glassTint = isDark
+            ? colorScheme.surface
+            : colorScheme.surfaceContainerHighest;
+
+        if (_isIOS) {
           return glass.LiquidGlassContainer(
             height: resolvedHeight,
             config: glass.LiquidGlassConfig(
-              effect: selected
-                  ? glass.LiquidGlassEffect.regular
-                  : glass.LiquidGlassEffect.clear,
+              // Always .clear ("less visual weight" per the plugin docs),
+              // even when selected — selected state is already conveyed
+              // by the stronger tint/border below.
+              effect: glass.LiquidGlassEffect.clear,
               shape: cornerRadius >= resolvedHeight / 2
                   ? glass.LiquidGlassEffectShape.capsule
                   : glass.LiquidGlassEffectShape.rect,
               cornerRadius: cornerRadius,
-              tint: colorScheme.surface.withValues(alpha: opacity * 0.7),
-              backgroundColor: colorScheme.surface.withValues(
+              tint: glassTint.withValues(alpha: opacity * 0.7),
+              backgroundColor: glassTint.withValues(
                 alpha: selected ? 0.34 : 0.22,
               ),
               interactive: interactive,
@@ -66,12 +88,54 @@ class NativeLiquidGlassBar extends StatelessWidget {
           );
         }
 
-        return _FallbackLiquidGlassBar(
-          cornerRadius: cornerRadius,
-          opacity: opacity,
-          borderOpacity: effectiveBorderOpacity,
-          shadowOpacity: effectiveShadowOpacity,
-          selected: selected,
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(cornerRadius),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: effectiveShadowOpacity),
+                blurRadius: 12,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: SizedBox(
+            width: resolvedWidth,
+            height: resolvedHeight,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                lgw.GlassContainer(
+                  useOwnLayer: true,
+                  shape: lgw.LiquidRoundedSuperellipse(
+                    borderRadius: cornerRadius,
+                  ),
+                  settings: lgw.LiquidGlassSettings(
+                    glassColor: glassTint.withValues(
+                      alpha: opacity * (selected ? 0.6 : 0.46),
+                    ),
+                    blur: 6,
+                    thickness: 16,
+                  ),
+                ),
+                IgnorePointer(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(cornerRadius),
+                      border: Border.all(
+                        color: colorScheme.outlineVariant.withValues(
+                          alpha: selected
+                              ? effectiveBorderOpacity.clamp(0.42, 1.0)
+                              : effectiveBorderOpacity,
+                        ),
+                        width: 0.8,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -92,6 +156,12 @@ class NativeLiquidGlassTabItem {
   final Color? selectedItemColor;
 }
 
+/// Floating bottom tab bar. iOS uses Apple's real native tab bar; other
+/// platforms use `liquid_glass_widgets`' `GlassTabBar.bottom` — note that
+/// widget wants to sit directly as `Scaffold.bottomNavigationBar` for
+/// correct safe-area/floating-margin behavior, so most call sites (e.g. the
+/// app's bottom navigation in `my_home_page.dart`) call `GlassTabBar.bottom`
+/// directly for non-iOS rather than through this wrapper.
 class NativeLiquidGlassTabBar extends StatelessWidget {
   const NativeLiquidGlassTabBar({
     super.key,
@@ -127,16 +197,16 @@ class NativeLiquidGlassTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveBorderOpacity = borderOpacity ?? (isDark ? 0.22 : 0.34);
-    final effectiveShadowOpacity = shadowOpacity ?? (isDark ? 0.5 : 0.18);
 
-    if (_supportsNativeLiquidGlass &&
-        items != null &&
-        items!.length == itemCount &&
-        selectedIndex >= 0 &&
-        selectedIndex < itemCount &&
-        onTabSelected != null) {
+    if (items == null ||
+        items!.length != itemCount ||
+        selectedIndex < 0 ||
+        selectedIndex >= itemCount ||
+        onTabSelected == null) {
+      return const SizedBox.shrink();
+    }
+
+    if (_isIOS) {
       return glass.LiquidGlassTabBar(
         height: height,
         currentIndex: selectedIndex,
@@ -176,19 +246,27 @@ class NativeLiquidGlassTabBar extends StatelessWidget {
       );
     }
 
-    return _FallbackLiquidGlassTabBar(
-      height: height,
-      itemCount: itemCount,
+    return lgw.GlassTabBar.bottom(
+      tabs: items!
+          .map(
+            (item) => lgw.GlassTab(
+              icon: Icon(item.icon),
+              activeIcon: Icon(item.selectedIcon ?? item.icon),
+              label: item.label,
+            ),
+          )
+          .toList(growable: false),
       selectedIndex: selectedIndex,
-      cornerRadius: cornerRadius,
-      selectedCornerRadius: selectedCornerRadius,
-      inset: inset,
-      borderOpacity: effectiveBorderOpacity,
-      shadowOpacity: effectiveShadowOpacity,
+      onTabSelected: onTabSelected!,
+      barHeight: height,
+      selectedIconColor: items![selectedIndex].selectedItemColor,
+      selectedLabelColor: items![selectedIndex].selectedItemColor,
+      iconSize: iconSize,
     );
   }
 }
 
+/// Frosted round/pill icon button.
 class NativeLiquidGlassIconButton extends StatelessWidget {
   const NativeLiquidGlassIconButton({
     super.key,
@@ -208,10 +286,11 @@ class NativeLiquidGlassIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final iconColor =
         tint ?? (selected ? colorScheme.primary : colorScheme.onSurface);
 
-    if (_supportsNativeLiquidGlass) {
+    if (_isIOS) {
       return glass.LiquidGlassButton.icon(
         size: size,
         iconSize: 30,
@@ -222,36 +301,26 @@ class NativeLiquidGlassIconButton extends StatelessWidget {
       );
     }
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        NativeLiquidGlassBar(
-          height: size,
-          cornerRadius: size / 2,
-          interactive: true,
-          selected: selected,
-          borderOpacity: selected ? 0.44 : null,
-        ),
-        Material(
-          color: Colors.transparent,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              splashFactory: NoSplash.splashFactory,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-            ),
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: onPressed,
-              child: Icon(icon, size: 30, color: iconColor),
-            ),
-          ),
-        ),
-      ],
+    final glassTint = isDark
+        ? colorScheme.surface
+        : colorScheme.surfaceContainerHighest;
+
+    return lgw.GlassIconButton(
+      icon: Icon(icon, color: iconColor),
+      onPressed: onPressed,
+      size: size,
+      iconSize: size * 0.48,
+      useOwnLayer: true,
+      settings: lgw.LiquidGlassSettings(
+        glassColor: glassTint.withValues(alpha: selected ? 0.5 : 0.38),
+        blur: 6,
+        thickness: 16,
+      ),
     );
   }
 }
 
+/// Glass-style segmented control — filter/mode toggles throughout the app.
 class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
   const NativeLiquidGlassSegmentedControl({
     super.key,
@@ -261,8 +330,8 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
     required this.onChanged,
     this.height = 52,
     this.color,
-    // Kept for API compat but no longer used — the built-in glass fallback
-    // is shown on non-iOS instead.
+    // Kept for API compat — used only when fewer than 2 valid segments are
+    // resolved (both backends require at least 2).
     this.fallbackBuilder,
   }) : assert(values.length == labels.length);
 
@@ -277,9 +346,13 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = values.indexOf(selected);
+    if (selectedIndex < 0 || labels.length < 2) {
+      return fallbackBuilder?.call(context) ?? const SizedBox.shrink();
+    }
+
     final resolvedColor = color ?? Theme.of(context).colorScheme.primary;
 
-    if (_supportsNativeLiquidGlass && selectedIndex >= 0) {
+    if (_isIOS) {
       return glass.LiquidGlassSegmentedControl(
         labels: labels,
         selectedIndex: selectedIndex,
@@ -289,83 +362,160 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
       );
     }
 
-    if (selectedIndex >= 0) {
-      return _FallbackLiquidGlassSegmentedControl(
-        labels: labels,
-        selectedIndex: selectedIndex,
-        height: height,
-        color: resolvedColor,
-        onValueChanged: (index) => onChanged(values[index]),
-      );
-    }
-
-    return fallbackBuilder?.call(context) ?? const SizedBox.shrink();
+    return _AndroidSegmentedControl<T>(
+      values: values,
+      labels: labels,
+      selectedIndex: selectedIndex,
+      onChanged: onChanged,
+      height: height,
+      selectedColor: resolvedColor,
+    );
   }
 }
 
-class _FallbackLiquidGlassBar extends StatelessWidget {
-  const _FallbackLiquidGlassBar({
-    required this.cornerRadius,
-    required this.opacity,
-    required this.borderOpacity,
-    required this.shadowOpacity,
-    required this.selected,
+class _AndroidSegmentedControl<T> extends StatelessWidget {
+  const _AndroidSegmentedControl({
+    required this.values,
+    required this.labels,
+    required this.selectedIndex,
+    required this.onChanged,
+    required this.height,
+    required this.selectedColor,
   });
 
-  final double cornerRadius;
-  final double opacity;
-  final double borderOpacity;
-  final double shadowOpacity;
-  final bool selected;
+  final List<T> values;
+  final List<String> labels;
+  final int selectedIndex;
+  final ValueChanged<T> onChanged;
+  final double height;
+  final Color selectedColor;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    // Match the cards' background so the glass bars read as the same
-    // material family as the rest of the UI.
-    final surfaceColor =
-        theme.cardTheme.color ?? theme.colorScheme.surfaceContainer;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final radius = BorderRadius.circular(height / 2);
+    final disableAnimations = MediaQuery.disableAnimationsOf(context);
+    final indicatorDuration = disableAnimations
+        ? Duration.zero
+        : const Duration(milliseconds: 220);
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(cornerRadius),
+        color: isDark
+            ? Colors.black.withValues(alpha: 0.90)
+            : colorScheme.surface.withValues(alpha: 0.94),
+        borderRadius: radius,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: shadowOpacity),
+            color: Colors.black.withValues(alpha: isDark ? 0.22 : 0.08),
             blurRadius: 12,
-            offset: const Offset(0, 3),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(cornerRadius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: surfaceColor.withValues(
-                alpha: opacity * (selected ? 0.55 : 0.42),
-              ),
-              borderRadius: BorderRadius.circular(cornerRadius),
-              border: Border.all(
-                color: Colors.white.withValues(
-                  alpha: isDark
-                      ? borderOpacity * 0.45
-                      : borderOpacity.clamp(0.12, 0.36),
+      child: SizedBox(
+        height: height,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final segmentWidth = constraints.maxWidth / labels.length;
+            final inset = 5.0;
+            return Stack(
+              children: [
+                AnimatedPositioned(
+                  duration: indicatorDuration,
+                  curve: Curves.easeOutCubic,
+                  left: selectedIndex * segmentWidth + inset,
+                  top: inset,
+                  bottom: inset,
+                  width: segmentWidth - inset * 2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerHighest.withValues(
+                        alpha: 0.58,
+                      ),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
                 ),
-                width: 0.8,
-              ),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.white.withValues(alpha: isDark ? 0.08 : 0.28),
-                  Colors.white.withValues(alpha: isDark ? 0.02 : 0.08),
-                ],
+                Row(
+                  children: [
+                    for (var index = 0; index < labels.length; index++)
+                      Expanded(
+                        child: _AndroidSegmentButton(
+                          label: labels[index],
+                          selected: index == selectedIndex,
+                          selectedColor: selectedColor,
+                          onTap: () => onChanged(values[index]),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _AndroidSegmentButton extends StatelessWidget {
+  const _AndroidSegmentButton({
+    required this.label,
+    required this.selected,
+    required this.selectedColor,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final Color selectedColor;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(999),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(999),
+            onTap: onTap,
+            child: Center(
+              child: AnimatedDefaultTextStyle(
+                duration: MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : const Duration(milliseconds: 160),
+                curve: Curves.easeOutCubic,
+                style:
+                    Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: selected
+                          ? selectedColor
+                          : colorScheme.onSurface.withValues(alpha: 0.76),
+                      fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                      height: 1,
+                    ) ??
+                    TextStyle(
+                      color: selected
+                          ? selectedColor
+                          : colorScheme.onSurface.withValues(alpha: 0.76),
+                      fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                      height: 1,
+                    ),
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-            child: const SizedBox.expand(),
           ),
         ),
       ),
@@ -373,201 +523,14 @@ class _FallbackLiquidGlassBar extends StatelessWidget {
   }
 }
 
-class _FallbackLiquidGlassTabBar extends StatelessWidget {
-  const _FallbackLiquidGlassTabBar({
-    required this.height,
-    required this.itemCount,
-    required this.selectedIndex,
-    required this.cornerRadius,
-    required this.selectedCornerRadius,
-    required this.inset,
-    required this.borderOpacity,
-    required this.shadowOpacity,
-  });
+/// Whether glass surfaces should render at all. Header panels inside slivers
+/// rely on this flag to fall back to an opaque fill — see
+/// [HeaderPanelBackground] in header_widgets.dart for the
+/// backdrop-sampling-in-slivers rationale.
+bool get supportsNativeLiquidGlass => !kIsWeb;
 
-  final double height;
-  final int itemCount;
-  final int selectedIndex;
-  final double cornerRadius;
-  final double selectedCornerRadius;
-  final double inset;
-  final double borderOpacity;
-  final double shadowOpacity;
-
-  @override
-  Widget build(BuildContext context) {
-    final selectedVisible = selectedIndex >= 0 && selectedIndex < itemCount;
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final itemWidth = constraints.maxWidth / itemCount;
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            NativeLiquidGlassBar(
-              height: height,
-              cornerRadius: cornerRadius,
-              opacity: 1,
-              borderOpacity: borderOpacity,
-              shadowOpacity: shadowOpacity,
-              selected: false,
-            ),
-            if (selectedVisible)
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 260),
-                curve: Curves.easeOutCubic,
-                left: itemWidth * selectedIndex + inset,
-                top: inset,
-                width: itemWidth - inset * 2,
-                height: height - inset * 2,
-                child: Builder(
-                  builder: (context) {
-                    final cs = Theme.of(context).colorScheme;
-                    final isDark =
-                        Theme.of(context).brightness == Brightness.dark;
-                    return DecoratedBox(
-                      decoration: BoxDecoration(
-                        // Neutral overlay like the iOS glass pill — the
-                        // theme's surfaceContainer tints read too warm here.
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.14)
-                            : cs.surfaceContainerHigh.withValues(alpha: 0.92),
-                        borderRadius: BorderRadius.circular(
-                          selectedCornerRadius,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(
-                              alpha: isDark ? 0.20 : 0.07,
-                            ),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-/// Glass-style segmented control for non-iOS platforms. Mirrors the layout of
-/// [glass.LiquidGlassSegmentedControl]: frosted glass background + animated
-/// bright pill for the selected item + colored label.
-class _FallbackLiquidGlassSegmentedControl extends StatelessWidget {
-  const _FallbackLiquidGlassSegmentedControl({
-    required this.labels,
-    required this.selectedIndex,
-    required this.onValueChanged,
-    required this.height,
-    required this.color,
-  });
-
-  final List<String> labels;
-  final int selectedIndex;
-  final ValueChanged<int> onValueChanged;
-  final double height;
-  final Color color;
-
-  static const double _inset = 5.0;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final pillRadius = (height - _inset * 2) / 2;
-
-    return SizedBox(
-      height: height,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final itemWidth = constraints.maxWidth / labels.length;
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              // Frosted glass background
-              NativeLiquidGlassBar(
-                height: height,
-                cornerRadius: height / 2,
-                opacity: 1.0,
-              ),
-              // Animated selected pill
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 260),
-                curve: Curves.easeOutCubic,
-                left: itemWidth * selectedIndex + _inset,
-                top: _inset,
-                width: itemWidth - _inset * 2,
-                height: height - _inset * 2,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? Colors.white.withValues(alpha: 0.14)
-                        : colorScheme.surfaceContainerHigh.withValues(
-                            alpha: 0.90,
-                          ),
-                    borderRadius: BorderRadius.circular(pillRadius),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(
-                          alpha: isDark ? 0.18 : 0.06,
-                        ),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // Tap targets + labels
-              Row(
-                children: List.generate(labels.length, (i) {
-                  final isSelected = i == selectedIndex;
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () => onValueChanged(i),
-                      behavior: HitTestBehavior.opaque,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Center(
-                          // Scale long labels down instead of overflowing —
-                          // segments can get narrow with 3+ items.
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              labels[i],
-                              maxLines: 1,
-                              style: Theme.of(context).textTheme.labelLarge
-                                  ?.copyWith(
-                                    color: isSelected
-                                        ? color
-                                        : colorScheme.onSurfaceVariant,
-                                    fontWeight: isSelected
-                                        ? FontWeight.w700
-                                        : FontWeight.w500,
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-bool get supportsNativeLiquidGlass =>
-    !kIsWeb && glass.NativeLiquidGlassUtils.supportsLiquidGlass;
-
-bool get _supportsNativeLiquidGlass => supportsNativeLiquidGlass;
+/// Whether the current platform renders Apple's real native Liquid Glass
+/// (vs. the shader-based `liquid_glass_widgets` used elsewhere). Exposed so
+/// call sites with platform-specific layout needs (e.g. the app's bottom
+/// navigation bar) can branch without duplicating the platform check.
+bool get usesNativeGlassPlatform => _isIOS;

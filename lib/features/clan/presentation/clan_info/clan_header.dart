@@ -77,22 +77,30 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                       ColoredBox(color: Theme.of(context).colorScheme.surface),
                 ),
               ),
+              // Fixed black, not colorScheme.surface: this scrim's job is
+              // to keep darkening the photo toward the bottom so the
+              // white-on-photo identity text stays legible. surface flips
+              // to near-white in light mode, which un-darkens the image
+              // instead — the opposite of what this gradient is for. The
+              // peak alpha is lower in light mode: still dark enough for
+              // white text, but not the near-black wash dark mode uses.
               DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.36),
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.64),
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.92),
-                    ],
+                    colors:
+                        Theme.of(context).brightness == Brightness.dark
+                        ? const [
+                            Color.fromRGBO(0, 0, 0, 0.36),
+                            Color.fromRGBO(0, 0, 0, 0.64),
+                            Color.fromRGBO(0, 0, 0, 0.92),
+                          ]
+                        : const [
+                            Color.fromRGBO(0, 0, 0, 0.20),
+                            Color.fromRGBO(0, 0, 0, 0.40),
+                            Color.fromRGBO(0, 0, 0, 0.65),
+                          ],
                   ),
                 ),
               ),
@@ -157,7 +165,9 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  // Always white: sits on the darkened backdrop image.
+                  // Always white: the gradient scrim now fades to a fixed
+                  // black in both themes, so this always sits on a
+                  // darkened photo.
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontSize: 26,
@@ -369,6 +379,7 @@ class ClanInfoHeaderActions extends StatelessWidget {
       children: [
         HeaderIconButton(
           icon: Icons.arrow_back_rounded,
+          iconColor: Colors.white,
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onTap: () => Navigator.of(context).pop(),
           showBackground: false,
@@ -399,6 +410,7 @@ class ClanInfoHeaderActions extends StatelessWidget {
         if (hasDiscord) ...[
           HeaderIconButton(
             icon: Icons.discord,
+            iconColor: Colors.white,
             tooltip: 'Discord',
             onTap: () => _openDiscord(context),
             showBackground: false,
@@ -407,6 +419,7 @@ class ClanInfoHeaderActions extends StatelessWidget {
         ],
         HeaderIconButton(
           icon: Icons.open_in_new_rounded,
+          iconColor: Colors.white,
           tooltip: 'Open in game',
           onTap: () {
             final lang = Localizations.localeOf(context).languageCode;
@@ -429,7 +442,7 @@ class ClanInfoHeaderActions extends StatelessWidget {
               icon: bookmarked
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
-              iconColor: bookmarked ? const Color(0xFF2F8CFF) : null,
+              iconColor: bookmarked ? const Color(0xFF2F8CFF) : Colors.white,
               tooltip: bookmarked ? 'Remove bookmark' : 'Bookmark clan',
               onTap: () => bookmarks.toggleClan(clanInfo),
               showBackground: false,

@@ -43,6 +43,8 @@ class _ScrollableTabState extends State<ScrollableTab> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return DefaultTabController(
       key: ValueKey(_selectedIndex),
       length: widget.tabs.length,
@@ -52,16 +54,31 @@ class _ScrollableTabState extends State<ScrollableTab> {
         mainAxisSize: MainAxisSize.min,
         children: [
           DecoratedBox(
-            decoration: widget.tabBarDecoration ?? const BoxDecoration(),
+            decoration:
+                widget.tabBarDecoration ??
+                BoxDecoration(color: colorScheme.surface),
             child: TabBar(
               isScrollable: widget.scrollable,
               tabAlignment:
                   widget.tabAlignment ??
                   (widget.scrollable ? TabAlignment.start : TabAlignment.fill),
-              labelColor: widget.labelColor,
-              labelPadding: widget.labelPadding,
-              labelStyle: widget.labelStyle,
-              unselectedLabelColor: widget.unselectedLabelColor,
+              labelColor: widget.labelColor ?? colorScheme.onSurface,
+              labelPadding:
+                  widget.labelPadding ??
+                  const EdgeInsets.symmetric(horizontal: 10),
+              labelStyle:
+                  widget.labelStyle ??
+                  Theme.of(
+                    context,
+                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+              unselectedLabelColor:
+                  widget.unselectedLabelColor ?? colorScheme.onSurface,
+              indicatorColor: colorScheme.primary,
+              indicatorWeight: 2.5,
+              indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
+              splashFactory: NoSplash.splashFactory,
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
               tabs: widget.tabs,
               onTap: (index) {
                 _selectIndex(index);

@@ -285,6 +285,7 @@ class ImageAssets {
       url.isNotEmpty ? url : defaultImage;
   static const String clanGamesMedals =
       "$baseUrl/icons/Icon_HV_Clan_Games_Medal.png";
+  static const String raidMedal = "$baseUrl/bot/icons/raid_medal.png";
 
   // Icons
   static const String iconTick = "$baseUrl/icons/Icon_DC_Tick.png";

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/common/widgets/shapes/stat_tile.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -324,8 +325,18 @@ class MembersCard extends StatelessWidget {
     final attack = member.attackStats;
     final defense = member.defenseStats;
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color ??
+            Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        border: Border.all(
+          color: Theme.of(
+            context,
+          ).colorScheme.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(

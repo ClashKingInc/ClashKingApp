@@ -90,13 +90,6 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
             children: [
               LegendHeaderCard(player: widget.player),
               ScrollableTab(
-                tabBarDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                labelColor: Theme.of(context).colorScheme.onSurface,
-                labelPadding: EdgeInsets.zero,
-                labelStyle: Theme.of(context).textTheme.bodyLarge,
-                unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
                 onTap: (_) => setState(() {}),
                 tabs: [
                   Tab(

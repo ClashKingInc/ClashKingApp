@@ -8,7 +8,6 @@ import 'package:clashkingapp/features/player/presentation/player/player_page.dar
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 
 class ClanWarStatsPlayers extends StatelessWidget {
@@ -236,7 +235,7 @@ class ClanWarStatsPlayers extends StatelessWidget {
             child: Column(
               children: [
                 Icon(
-                  LucideIcons.searchX,
+                  Icons.search_off_rounded,
                   size: 32,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),

@@ -17,7 +17,6 @@ import 'package:clashkingapp/features/player/presentation/war_stats/widgets/th_h
 import 'package:clashkingapp/features/player/services/player_war_export_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 
 /// War stats as a profile tab — content only, no hero header (the outer
@@ -182,13 +181,13 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
         ),
         _WarTypeChip(
           label: loc.warFiltersRandom,
-          icon: LucideIcons.shuffle,
+          icon: Icons.shuffle_rounded,
           selected: isRandomChecked,
           onTap: () => setState(() => isRandomChecked = !isRandomChecked),
         ),
         _WarTypeChip(
           label: loc.warFiltersFriendly,
-          icon: LucideIcons.handshake,
+          icon: Icons.handshake_rounded,
           selected: isFriendlyChecked,
           onTap: () => setState(() => isFriendlyChecked = !isFriendlyChecked),
         ),
@@ -1039,7 +1038,7 @@ class _WarStatsFilterBarState extends State<_WarStatsFilterBar> {
                       ),
                     ),
                     child: Icon(
-                      LucideIcons.listFilter,
+                      Icons.filter_list_rounded,
                       size: 18,
                       color: colorScheme.onSurface,
                     ),

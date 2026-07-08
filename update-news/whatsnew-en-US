@@ -1,4 +1,30 @@
+- Clan Capital Members now clearly explains older raid weekends when the API omits player-level member and attack data
+- Clan Capital Members now has a History mode aggregating member loot and attacks across loaded raid weekends
+- Clan Capital Summary now uses raid medal imagery and CWL-style flat full-stat tiles instead of summary chips
+- Clan Capital Breakdown now focuses on district and opponent analysis without repeating member rows
+- Clan Capital page is reorganized into Summary, Members, Breakdown, and History tabs for clearer raid analysis
+- Clan Capital player stats now show Town Hall context when raid participants still match current clan members
+- Clan Capital history now includes multi-raid overview stats, top attackers, and defense-over-time district rows
+- Clan Capital breakdown now adds player attack quality stats and district defense performance stats from raid logs
+- Android segmented controls now animate the selected pill with a smooth sliding transition
+- Page tab titles now share the same clean Player-style underline treatment across Player, Clan, Capital, CWL, War, and Legend screens
+- Android segmented controls such as Linked and Bookmarked now use the same softer custom pill style as the bottom navigation
+- Clan Capital UI now better matches the app design system with cleaner tabs, shared stat colors, and a calmer expandable history section
 What’s new
+- Player profile tabs now match the cleaner War tab styling while keeping player icons readable
+- To Do page filter dropdown now matches the compact width used by clan-style dropdowns
+- Android bottom navigation keeps the liquid glass effect with a softer border and no bright white outline
+- Reworked liquid glass rendering across the app (bottom nav, search bars, headers, filters) for a sharper, less washed-out look in both light and dark mode
+- Player item upgrade popup now removes the colored side accent and uses flatter CWL-style upgrade stats with ClashKing resource assets
+- Capital history chart now uses ClashKing asset icons, removes the colored side accent, and can show estimated Capital trophy trends
+- Capital page now shows a weekly loot/medals bar chart alongside its multi-week trend stats
+- Capital page now shows multi-week trends (best/worst raid, weekly averages) computed from already-loaded raid history
+- Capital page opponent rows now expand to show which member attacked which district and for how much destruction
+- Capital page district breakdown now shows a hit-rate histogram (districts destroyed in 1/2/3+ attacks)
+- Capital page raid overview now includes the offense/defense district and opponent breakdown directly, plus one-shot/fail counts
+- Capital page now projects total loot and predicts Capital League trophy change during an ongoing raid weekend
+- Capital page now estimates raid medals for the ongoing raid weekend from this week's attack/defense logs, flagged as an estimate until Supercell publishes the real reward
+- Capital page now matches the clan detail hero header/tabs style with Raids and Members tabs and no nested cards
 - Rankings page now uses clan-style chips and leaderboard rows
 - ClashKing leaderboard endpoints now show mockup previews instead of unloaded rows
 - Popular page now matches the clan-style chips and entity rows
@@ -10,6 +36,7 @@ What’s new
 - CWL Teams sort dropdown now matches the compact width used by Members and Clan tabs
 - CWL Teams and Members full stats toggles now appear as right-aligned inline actions instead of nested pills
 - War events now restore the previous directional arrow ribbons while keeping allies/enemies readable
+- War attack details now use a clan-style bottom sheet with a cleaner result header and inline attacker/defender stats
 - War event attack numbers now sit at the start of each row and arrows fill the event row
 - War event 100% attacks now turn green only when they come from your clan
 - War event empty states now sit inline instead of inside a card
@@ -43,6 +70,11 @@ What’s new
 - The account menu can now be swiped open from further inside the screen, fixing accidental app exits on Samsung devices
 - Tapping a troop, spell, hero, equipment or pet now shows a detailed popup with description and stats (housing space, attack speed, range, movement speed, upgrade resource, hero and rarity for equipment)
 - Item popup now shows DPS, HP/Heal at current level, targeting type (Ground/Air/Flying), and next-level upgrade cost & time
+- Player item popups now match the clan-style glass panels, chips, and rounded stat rows
+- Player item popups now show remaining levels, cost, and time to TH/global max
+- Player item popups now prioritize upgrade info first and keep detailed stats collapsed by default
+- Upgrade Tracker now summarizes remaining upgrade levels, resources, and time per linked account
+- Current Town Hall max detection now uses the global max at the latest Town Hall, fixing TH18 hero max indicators
 - Player item sections now show two progress percentages: current TH max-level completion and overall max-level completion
 - Town-hall-maxed items now have a bronze border indicator
 - Player league chips now show the league name instead of raw trophy counts

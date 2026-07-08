@@ -25,8 +25,18 @@ class RoundClanCard extends StatelessWidget {
           ),
         );
       },
-      child: Card(
+      child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color ??
+              Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          border: Border.all(
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: AppOpacity.border),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 8.0),
           child: Row(

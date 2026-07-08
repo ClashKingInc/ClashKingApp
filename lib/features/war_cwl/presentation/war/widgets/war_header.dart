@@ -78,22 +78,28 @@ class _WarHeaderState extends State<WarHeader> {
                       ColoredBox(color: Theme.of(context).colorScheme.surface),
                 ),
               ),
+              // Fixed black, not colorScheme.surface: keeps darkening the
+              // photo toward the bottom in both themes — surface flips to
+              // near-white in light mode, which un-darkens the image.
+              // Lower peak alpha in light mode: still dark enough for
+              // white text, but not dark mode's near-black wash.
               DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.36),
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.64),
-                      Theme.of(
-                        context,
-                      ).colorScheme.surface.withValues(alpha: 0.92),
-                    ],
+                    colors:
+                        Theme.of(context).brightness == Brightness.dark
+                        ? const [
+                            Color.fromRGBO(0, 0, 0, 0.36),
+                            Color.fromRGBO(0, 0, 0, 0.64),
+                            Color.fromRGBO(0, 0, 0, 0.92),
+                          ]
+                        : const [
+                            Color.fromRGBO(0, 0, 0, 0.20),
+                            Color.fromRGBO(0, 0, 0, 0.40),
+                            Color.fromRGBO(0, 0, 0, 0.65),
+                          ],
                   ),
                 ),
               ),

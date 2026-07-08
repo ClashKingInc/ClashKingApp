@@ -1472,6 +1472,37 @@
   "raidsOngoing": "Ongoing raids",
   "raidsDistrictsDestroyed": "Districts destroyed",
   "raidsCompleted": "Raids completed",
+  "capitalRaidStatusOngoing": "Ongoing",
+  "capitalRaidStatusEnded": "Ended",
+  "capitalRaidLoot": "Loot",
+  "capitalRaidRewards": "Rewards",
+  "capitalRaidPreviousWeek": "Previous week",
+  "capitalRaidNextWeek": "Next week",
+  "capitalRaidFilterAttacked": "Attacked",
+  "capitalRaidFilterNotAttacked": "Not attacked",
+  "capitalRaidFilterLinked": "Linked accounts",
+  "capitalRaidEmptyTitle": "No capital raid data",
+  "capitalRaidEmptyBody": "Raid history will appear here once this clan's capital raid weekends are tracked.",
+  "capitalRaidEstimated": "Estimated",
+  "capitalRaidEstimatedTooltip": "Not official yet: estimated from this week's attack and defense logs. Supercell publishes the real medal count once the raid ends.",
+  "capitalRaidTrophyPrediction": "Predicted trophies",
+  "capitalRaidTrophyPredictionTooltip": "Estimated Capital League trophies after this raid, based on this week's performance so far. Not official.",
+  "capitalRaidProjectedLoot": "Projected loot",
+  "capitalRaidOneshots": "One-shots",
+  "capitalRaidFails": "Fails",
+  "capitalDetailsOffense": "Offense",
+  "capitalDetailsDefense": "Defense",
+  "capitalDistrictsSection": "Districts",
+  "capitalOpponentsSection": "Opponents",
+  "capitalAvgAttacksPerDistrict": "Avg attacks/district",
+  "capitalAvgLootPerAttack": "Avg loot/attack",
+  "capitalHistorySection": "Raid history",
+  "capitalHistoryWeeksTracked": "Weeks tracked",
+  "capitalAvgLootPerWeek": "Avg loot/week",
+  "capitalAvgAttacksPerWeek": "Avg attacks/week",
+  "capitalBestRaid": "Best raid",
+  "capitalWorstRaid": "Worst raid",
+  "capitalHistoryChartTitle": "Weekly trend",
   "searchNoResult": "No result.",
   "maintenanceTitle": "Maintenance",
   "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
@@ -1796,6 +1827,10 @@
   "warAttacksDetailsAttackOrder": "Attack Order",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Duration",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "Attacker",
   "@warAttacksDetailsAttacker": {
@@ -2225,6 +2260,43 @@
   "gameItemFlying": "Flying",
   "gameItemUpgradeCost": "Upgrade cost",
   "gameItemUpgradeTime": "Upgrade time",
+  "gameItemRemainingToTownHallMax": "To TH max",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
+  "gameItemRemainingToGlobalMax": "To global max",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
+  "gameItemLevelsLeft": "{count} level(s) left",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemOverview": "Overview",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
+  "gameItemStats": "Stats",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
+  "gameItemNextUpgrade": "Next upgrade",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
+  "gameItemUpgradePlan": "Upgrade plan",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
+  "gameItemUpgradeDataUnavailable": "Upgrade data unavailable",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeAllAccounts": "All accounts",
   "@notifScopeAllAccounts": { "description": "Notification scope: all linked accounts" },
   "notifScopeSelected": "Selected",

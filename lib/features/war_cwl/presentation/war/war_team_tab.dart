@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart'
     show WarInfo;
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
+import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_attack_details_sheet.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -237,6 +238,8 @@ class _AttackSummaryRow extends StatelessWidget {
     }
 
     return _ActionRow(
+      attack: attack,
+      warInfo: warInfo,
       townHallLevel: warInfo.getTownhallLevelByTag(attack.defenderTag) ?? 1,
       title:
           '${warInfo.getMapPositionByTag(attack.defenderTag) ?? '-'}'
@@ -264,6 +267,8 @@ class _DefenseSummaryRow extends StatelessWidget {
     }
 
     return _ActionRow(
+      attack: attack,
+      warInfo: warInfo,
       townHallLevel: warInfo.getTownhallLevelByTag(attack.attackerTag) ?? 1,
       title:
           '${warInfo.getMapPositionByTag(attack.attackerTag) ?? '-'}'
@@ -275,12 +280,16 @@ class _DefenseSummaryRow extends StatelessWidget {
 }
 
 class _ActionRow extends StatelessWidget {
+  final WarAttack attack;
+  final WarInfo warInfo;
   final int townHallLevel;
   final String title;
   final int stars;
   final int destructionPercentage;
 
   const _ActionRow({
+    required this.attack,
+    required this.warInfo,
     required this.townHallLevel,
     required this.title,
     required this.stars,
@@ -292,50 +301,76 @@ class _ActionRow extends StatelessWidget {
     final color = _attackColor(stars);
     return Padding(
       padding: const EdgeInsets.only(bottom: 7),
-      child: Row(
-        children: [
-          MobileWebImage(
-            imageUrl: ImageAssets.townHall(townHallLevel),
-            width: 28,
-            height: 28,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          splashFactory: NoSplash.splashFactory,
+          onTap: () => showWarAttackDetailsSheet(
+            context,
+            attack: attack,
+            warInfo: warInfo,
           ),
-          const SizedBox(width: 7),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: Row(
               children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    height: 1.1,
-                  ),
+                MobileWebImage(
+                  imageUrl: ImageAssets.townHall(townHallLevel),
+                  width: 28,
+                  height: 28,
                 ),
-                const SizedBox(height: 3),
-                Row(
-                  children: [
-                    ...generateStars(stars, 13),
-                    const SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
-                        '$destructionPercentage%',
+                const SizedBox(width: 7),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: color,
-                          fontWeight: FontWeight.w900,
-                          height: 1,
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              height: 1.1,
+                            ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 3),
+                      Row(
+                        children: [
+                          ...generateStars(stars, 13),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              '$destructionPercentage%',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.labelSmall
+                                  ?.copyWith(
+                                    color: color,
+                                    fontWeight: FontWeight.w900,
+                                    height: 1,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.info_outline_rounded,
+                  size: 15,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.58),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

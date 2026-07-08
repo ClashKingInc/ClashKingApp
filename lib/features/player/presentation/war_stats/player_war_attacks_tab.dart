@@ -1,4 +1,4 @@
-import 'package:clashkingapp/features/clan/presentation/clan_info/clan_tab_common.dart';
+import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_attacks_card.dart';
 import 'package:flutter/material.dart';
