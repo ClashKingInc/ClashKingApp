@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -30,7 +30,8 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               content: Text(
-                AppLocalizations.of(context)!.gameCreatorCodeDialogDescription),
+                AppLocalizations.of(context)!.gameCreatorCodeDialogDescription,
+              ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -39,23 +40,26 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
                 ElevatedButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
-                    
-                    final languageCode =
-                        Localizations.localeOf(context).languageCode.toLowerCase();
+
+                    final languageCode = Localizations.localeOf(
+                      context,
+                    ).languageCode.toLowerCase();
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        final url = Uri.https('link.clashofclans.com', '/$languageCode', {
-                          'action': 'SupportCreator',
-                          'id': 'Clashking',
-                        });
+                        final url = Uri.https(
+                          'link.clashofclans.com',
+                          '/$languageCode',
+                          {'action': 'SupportCreator', 'id': 'Clashking'},
+                        );
 
                         return OpenClashDialog(url: url);
                       },
                     );
                   },
                   child: Text(
-                    AppLocalizations.of(context)?.gameCreatorCodeDialogButton ?? 'Use Creator Code',
+                    AppLocalizations.of(context)?.gameCreatorCodeDialogButton ??
+                        'Use Creator Code',
                   ),
                 ),
               ],
@@ -69,9 +73,11 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: logoUrl, height: 80),
+              MobileWebImage(
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageUrl: logoUrl,
+                height: 80,
+              ),
               SizedBox(width: 16),
               Expanded(
                 child: Column(
@@ -89,12 +95,16 @@ class CreatorCodeCardState extends State<CreatorCodeCard> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      AppLocalizations.of(context)?.gameCreatorCodeDescription ??
+                      AppLocalizations.of(
+                            context,
+                          )?.gameCreatorCodeDescription ??
                           'Tap for info • Support us for free!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                   ],

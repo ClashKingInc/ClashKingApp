@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
@@ -372,7 +372,7 @@ class _AllAccountsPanel extends StatelessWidget {
       children: [
         SizedBox.square(
           dimension: 30,
-          child: CachedNetworkImage(
+          child: MobileWebImage(
             imageUrl: ImageAssets.iconBuilderPotion,
             fit: BoxFit.contain,
             errorWidget: (context, url, error) => Icon(
@@ -478,7 +478,7 @@ class _AccountHeader extends StatelessWidget {
       children: [
         SizedBox.square(
           dimension: 30,
-          child: CachedNetworkImage(
+          child: MobileWebImage(
             imageUrl: player.townHallPic,
             fit: BoxFit.contain,
             errorWidget: (context, url, error) => DecoratedBox(
@@ -538,7 +538,7 @@ class _PreviewHeader extends StatelessWidget {
       children: [
         SizedBox.square(
           dimension: 30,
-          child: CachedNetworkImage(
+          child: MobileWebImage(
             imageUrl: preview.avatarUrl,
             fit: BoxFit.contain,
             errorWidget: (context, url, error) => DecoratedBox(
@@ -644,7 +644,10 @@ class _MetricBars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (metrics.isEmpty) {
-      return const SizedBox(height: 64, child: Center(child: _CaughtUp()));
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 6),
+        child: Center(child: _CaughtUp()),
+      );
     }
 
     // Two metrics per row; a metric alone on its row spans the full width.
@@ -776,7 +779,7 @@ class _MetricIcon extends StatelessWidget {
         dimension: 26,
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: CachedNetworkImage(
+          child: MobileWebImage(
             imageUrl: metric.imageUrl,
             fit: BoxFit.contain,
             errorWidget: (context, url, error) =>
@@ -793,18 +796,17 @@ class _CaughtUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(Icons.check_circle_rounded, color: Colors.green, size: 30),
-        const SizedBox(height: 8),
-        Text(
-          'Caught up',
-          style: Theme.of(
-            context,
-          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900),
-        ),
-      ],
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Text(
+      'All caught up for now',
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+        color: colorScheme.onSurfaceVariant,
+        fontWeight: FontWeight.w800,
+      ),
     );
   }
 }
@@ -872,7 +874,7 @@ class _BannerTile extends StatelessWidget {
                     dimension: 40,
                     child: Padding(
                       padding: const EdgeInsets.all(6),
-                      child: CachedNetworkImage(
+                      child: MobileWebImage(
                         imageUrl: item.imageUrl,
                         fit: BoxFit.contain,
                         errorWidget: (context, url, error) => Icon(
@@ -1043,20 +1045,30 @@ class _TodoSummary {
   ) {
     final merged = <String, _TodoMetric>{};
     final order = <String>[];
-    final activeThreshold = DateTime.now().subtract(const Duration(days: 14));
 
     for (final player in players) {
-      if (!player.lastOnline.isAfter(activeThreshold)) continue;
-
-      final summary = _TodoSummary.fromPlayer(player, presenceOf(player));
-      for (final metric in summary.metrics) {
-        final existing = merged[metric.label];
+      final playerMetrics = player
+          .getTodoProgressMetrics(memberCwl: presenceOf(player))
+          .map(_TodoMetric.fromProgressMetric);
+      for (final metric in playerMetrics) {
+        final label = _todoMetricDisplayLabel(metric.label);
+        final existing = merged[label];
         if (existing == null) {
-          merged[metric.label] = metric;
-          order.add(metric.label);
+          merged[label] = _TodoMetric(
+            label: label,
+            detail: metric.detail,
+            done: metric.done,
+            total: metric.total,
+            progressDone: metric.progressDone,
+            progressTotal: metric.progressTotal,
+            imageUrl: metric.imageUrl,
+            color: metric.color,
+            fallbackIcon: metric.fallbackIcon,
+          );
+          order.add(label);
         } else {
-          merged[metric.label] = _TodoMetric(
-            label: metric.label,
+          merged[label] = _TodoMetric(
+            label: label,
             detail: '',
             done: existing.done + metric.done.clamp(0, metric.total),
             total: existing.total + metric.total,
@@ -1082,10 +1094,12 @@ class _TodoSummary {
               ? '${NumberFormat.compact().format(left)} points left'
               : '$left left';
           return _TodoMetric(
-            label: _todoMetricDisplayLabel(metric.label),
+            label: metric.label,
             detail: detail,
             done: metric.done,
             total: metric.total,
+            progressDone: metric.progressDone,
+            progressTotal: metric.progressTotal,
             imageUrl: metric.imageUrl,
             color: metric.color,
             fallbackIcon: metric.fallbackIcon,

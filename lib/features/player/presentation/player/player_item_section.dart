@@ -2,7 +2,6 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/features/player/models/player_item.dart';
 import 'package:clashkingapp/features/player/models/player_super_troop.dart';
 import 'package:clashkingapp/features/player/models/player_equipment.dart';
@@ -403,6 +402,25 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (!isSuperTroop &&
+                                  description != null &&
+                                  description.isNotEmpty) ...[
+                                _buildDialogSection(
+                                  context,
+                                  title: l10n.gameItemOverview,
+                                  icon: Icons.notes_rounded,
+                                  child: Text(
+                                    description,
+                                    style: Theme.of(context).textTheme.bodySmall
+                                        ?.copyWith(
+                                          color: colorScheme.onSurfaceVariant,
+                                          height: 1.35,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                              if (!isSuperTroop &&
                                   (nextUpgradeStats != null ||
                                       thRemainingSummary.levelsRemaining > 0 ||
                                       globalRemainingSummary.levelsRemaining >
@@ -424,7 +442,8 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                                   ),
                                 ),
                               ],
-                              if (description != null &&
+                              if (isSuperTroop &&
+                                  description != null &&
                                   description.isNotEmpty) ...[
                                 _buildDialogSection(
                                   context,
@@ -596,7 +615,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                 height: 88,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(22),
                   color: colorScheme.surface.withValues(alpha: 0.70),
                   border: Border.all(
                     color: accentColor.withValues(alpha: 0.42),
@@ -610,10 +629,12 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                     ),
                   ],
                 ),
-                child: CachedNetworkImage(
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                  imageUrl: item.imageUrl,
-                  fit: BoxFit.contain,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: MobileWebImage(
+                    imageUrl: item.imageUrl,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               const SizedBox(width: 14),

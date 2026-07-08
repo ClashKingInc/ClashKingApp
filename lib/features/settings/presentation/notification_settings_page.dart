@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/notification_debug_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -54,7 +54,11 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     _NotifGroup.monthlySupport,
   };
   final Set<String> _warAttackModes = {'defenses'};
-  final Set<String> _eventTypes = {_NotifGroup.clanGames, _NotifGroup.cwl, _NotifGroup.raidWeekend};
+  final Set<String> _eventTypes = {
+    _NotifGroup.clanGames,
+    _NotifGroup.cwl,
+    _NotifGroup.raidWeekend,
+  };
   final Set<String> _warReminderTimings = {'1h', '30m', '15m'};
   final Set<String> _expandedNotificationOptions = {};
   final Set<String> _selectedAccounts = {};
@@ -76,36 +80,42 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     setState(() {
       final enabledList = prefs.getStringList('${_kPrefsPrefix}enabled_types');
       if (enabledList != null) {
-        _enabledTypes..clear()..addAll(enabledList);
+        _enabledTypes
+          ..clear()
+          ..addAll(enabledList);
       }
       final attackModes = prefs.getStringList(
         '${_kPrefsPrefix}war_attack_modes',
       );
       if (attackModes != null) {
-        _warAttackModes..clear()..addAll(attackModes);
+        _warAttackModes
+          ..clear()
+          ..addAll(attackModes);
       }
-      final eventTypesList = prefs.getStringList(
-        '${_kPrefsPrefix}event_types',
-      );
+      final eventTypesList = prefs.getStringList('${_kPrefsPrefix}event_types');
       if (eventTypesList != null) {
-        _eventTypes..clear()..addAll(eventTypesList);
+        _eventTypes
+          ..clear()
+          ..addAll(eventTypesList);
       }
       final reminderTimings = prefs.getStringList(
         '${_kPrefsPrefix}reminder_timings',
       );
       if (reminderTimings != null) {
-        _warReminderTimings..clear()..addAll(reminderTimings);
+        _warReminderTimings
+          ..clear()
+          ..addAll(reminderTimings);
       }
       final scopeIndex = prefs.getInt('${_kPrefsPrefix}account_scope');
       if (scopeIndex != null &&
           scopeIndex < _NotificationAccountScope.values.length) {
         _accountScope = _NotificationAccountScope.values[scopeIndex];
       }
-      final accounts = prefs.getStringList(
-        '${_kPrefsPrefix}selected_accounts',
-      );
+      final accounts = prefs.getStringList('${_kPrefsPrefix}selected_accounts');
       if (accounts != null) {
-        _selectedAccounts..clear()..addAll(accounts);
+        _selectedAccounts
+          ..clear()
+          ..addAll(accounts);
       }
     });
   }
@@ -121,10 +131,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         '${_kPrefsPrefix}war_attack_modes',
         _warAttackModes.toList(),
       ),
-      prefs.setStringList(
-        '${_kPrefsPrefix}event_types',
-        _eventTypes.toList(),
-      ),
+      prefs.setStringList('${_kPrefsPrefix}event_types', _eventTypes.toList()),
       prefs.setStringList(
         '${_kPrefsPrefix}reminder_timings',
         _warReminderTimings.toList(),
@@ -156,7 +163,10 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)?.settingsNotificationsTitle ?? 'Notifications'),
+        title: Text(
+          AppLocalizations.of(context)?.settingsNotificationsTitle ??
+              'Notifications',
+        ),
         centerTitle: false,
         backgroundColor: colorScheme.surface,
         surfaceTintColor: Colors.transparent,
@@ -174,7 +184,8 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 subtitle:
                     'Defense results with attacker, stars, percentage, and league context.',
                 enabled: _enabledTypes.contains(_NotifGroup.leagueBattles),
-                onChanged: (value) => _toggleType(_NotifGroup.leagueBattles, value),
+                onChanged: (value) =>
+                    _toggleType(_NotifGroup.leagueBattles, value),
               ),
               _NotificationDisclosureRow(
                 icon: LucideIcons.swords,
@@ -182,8 +193,11 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 subtitle:
                     'War attack results, defense alerts, and 5v5 attack feed options.',
                 enabled: _enabledTypes.contains(_NotifGroup.warAttacks),
-                expanded: _expandedNotificationOptions.contains(_NotifGroup.warAttacks),
-                onChanged: (value) => _toggleType(_NotifGroup.warAttacks, value),
+                expanded: _expandedNotificationOptions.contains(
+                  _NotifGroup.warAttacks,
+                ),
+                onChanged: (value) =>
+                    _toggleType(_NotifGroup.warAttacks, value),
                 onExpandChanged: (expanded) =>
                     _toggleExpanded(_NotifGroup.warAttacks, expanded),
                 options: _WarAttackModePicker(
@@ -215,7 +229,8 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 expanded: _expandedNotificationOptions.contains(
                   _NotifGroup.warReminders,
                 ),
-                onChanged: (value) => _toggleType(_NotifGroup.warReminders, value),
+                onChanged: (value) =>
+                    _toggleType(_NotifGroup.warReminders, value),
                 onExpandChanged: (expanded) =>
                     _toggleExpanded(_NotifGroup.warReminders, expanded),
                 options: _WarReminderTimingPicker(
@@ -235,7 +250,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 title: _NotifGroup.events,
                 subtitle: 'Clan Games, CWL, Raid Weekend, and season events.',
                 enabled: _enabledTypes.contains(_NotifGroup.events),
-                expanded: _expandedNotificationOptions.contains(_NotifGroup.events),
+                expanded: _expandedNotificationOptions.contains(
+                  _NotifGroup.events,
+                ),
                 onChanged: (value) => _toggleType(_NotifGroup.events, value),
                 onExpandChanged: (expanded) =>
                     _toggleExpanded(_NotifGroup.events, expanded),
@@ -259,14 +276,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 subtitle:
                     'Troops, heroes, pets, spells, equipment, and buildings.',
                 enabled: _enabledTypes.contains(_NotifGroup.upgradeFinishes),
-                onChanged: (value) => _toggleType(_NotifGroup.upgradeFinishes, value),
+                onChanged: (value) =>
+                    _toggleType(_NotifGroup.upgradeFinishes, value),
               ),
               _NotificationToggleRow(
                 icon: LucideIcons.heartHandshake,
                 title: _NotifGroup.monthlySupport,
                 subtitle: 'Monthly reminder to support ClashKing.',
                 enabled: _enabledTypes.contains(_NotifGroup.monthlySupport),
-                onChanged: (value) => _toggleType(_NotifGroup.monthlySupport, value),
+                onChanged: (value) =>
+                    _toggleType(_NotifGroup.monthlySupport, value),
               ),
             ],
           ),
@@ -943,8 +962,8 @@ class _HourPickerSheetState extends State<_HourPickerSheet> {
             child: CupertinoPicker(
               itemExtent: 38,
               scrollController: _ctrl,
-              onSelectedItemChanged:
-                  (index) => setState(() => _selectedHour = index + 1),
+              onSelectedItemChanged: (index) =>
+                  setState(() => _selectedHour = index + 1),
               children: [
                 for (var hour = 1; hour <= 47; hour++)
                   Center(
@@ -1102,7 +1121,7 @@ class _ImageSwitchTile extends StatelessWidget {
     return _SettingsSwitchTile(
       leading: SizedBox.square(
         dimension: 28,
-        child: CachedNetworkImage(
+        child: MobileWebImage(
           imageUrl: imageUrl,
           fit: BoxFit.contain,
           errorWidget: (_, _, _) => const Icon(LucideIcons.bell),
@@ -1251,7 +1270,9 @@ class _AccountPicker extends StatelessWidget {
       final tag = account['player_tag']?.toString() ?? '';
       final profile = profilesByTag[_normalizeTag(tag)];
       final accountName = account['name']?.toString();
-      final String nameFromAccount = accountName?.isNotEmpty == true ? accountName! : tag;
+      final String nameFromAccount = accountName?.isNotEmpty == true
+          ? accountName!
+          : tag;
       final name = profile != null && profile.name != 'Unknown'
           ? profile.name
           : nameFromAccount;
@@ -1274,7 +1295,9 @@ class _AccountPicker extends StatelessWidget {
           .firstWhere((account) => selectedAccounts.contains(account.tag))
           .name;
     } else {
-      summary = l10n?.notifAccountsSelected(selectedCount) ?? '$selectedCount accounts selected';
+      summary =
+          l10n?.notifAccountsSelected(selectedCount) ??
+          '$selectedCount accounts selected';
     }
 
     return Padding(
@@ -1430,7 +1453,7 @@ class _AccountAvatarStack extends StatelessWidget {
               left: index * 10,
               child: SizedBox.square(
                 dimension: 38,
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   imageUrl: ImageAssets.townHall(
                     visibleAccounts[index].townHallLevel,
                   ),
@@ -1463,7 +1486,7 @@ class _AccountSheetTile extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
       leading: SizedBox.square(
         dimension: 42,
-        child: CachedNetworkImage(
+        child: MobileWebImage(
           imageUrl: ImageAssets.townHall(account.townHallLevel),
           fit: BoxFit.contain,
         ),
@@ -1595,7 +1618,7 @@ class _SamplePicker extends StatelessWidget {
                     leading: SizedBox(
                       width: 34,
                       height: 34,
-                      child: CachedNetworkImage(
+                      child: MobileWebImage(
                         imageUrl: sample.assetUrl,
                         fit: BoxFit.contain,
                         errorWidget: (_, _, _) => const Icon(LucideIcons.bell),
@@ -1658,7 +1681,7 @@ class _PreviewCard extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Positioned.fill(
-                      child: CachedNetworkImage(
+                      child: MobileWebImage(
                         imageUrl: sample.assetUrl,
                         fit: BoxFit.contain,
                         errorWidget: (_, _, _) => Icon(
@@ -1749,7 +1772,9 @@ class _NotificationContext {
     required List<Player> profiles,
     required Set<String> selectedAccounts,
   }) {
-    final String? fallbackTag = service.accounts.isNotEmpty ? service.accounts.first : null;
+    final String? fallbackTag = service.accounts.isNotEmpty
+        ? service.accounts.first
+        : null;
     final preferredTag = selectedAccounts.isNotEmpty
         ? selectedAccounts.first
         : service.selectedTag ?? fallbackTag;
@@ -1768,12 +1793,15 @@ class _NotificationContext {
     );
 
     final accountName = account['name']?.toString();
-    final String playerNameFallback = accountName?.isNotEmpty == true ? accountName! : 'Magic Jr.';
+    final String playerNameFallback = accountName?.isNotEmpty == true
+        ? accountName!
+        : 'Magic Jr.';
     final playerName = profile != null && profile.name != 'Unknown'
         ? profile.name
         : playerNameFallback;
     final playerTag = preferredTag ?? profile?.tag ?? '#2J8V28GV0';
-    final String clanNameFallback = account['clan_name']?.toString().isNotEmpty == true
+    final String clanNameFallback =
+        account['clan_name']?.toString().isNotEmpty == true
         ? account['clan_name'].toString()
         : 'your clan';
     final clanName = profile?.clanOverview.name.isNotEmpty == true

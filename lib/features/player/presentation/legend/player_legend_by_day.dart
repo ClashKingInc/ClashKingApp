@@ -5,7 +5,7 @@ import 'package:clashkingapp/features/player/presentation/legend/widgets/player_
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_day_used_gear_card.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:intl/intl.dart';
 
 class LegendByDayTab extends StatefulWidget {
@@ -18,19 +18,22 @@ class LegendByDayTab extends StatefulWidget {
 }
 
 class _LegendByDayTabState extends State<LegendByDayTab> {
-  DateTime selectedDate =
-      DateTime.now().toUtc().subtract(const Duration(hours: 5));
+  DateTime selectedDate = DateTime.now().toUtc().subtract(
+    const Duration(hours: 5),
+  );
 
   void incrementDate() =>
       setState(() => selectedDate = selectedDate.add(const Duration(days: 1)));
   void decrementDate() => setState(
-      () => selectedDate = selectedDate.subtract(const Duration(days: 1)));
+    () => selectedDate = selectedDate.subtract(const Duration(days: 1)),
+  );
 
   @override
   Widget build(BuildContext context) {
     final dateKey = DateFormat('yyyy-MM-dd').format(selectedDate);
-    final legendDay =
-        widget.player.legendsBySeason?.getSpecificSeason(DateTime.parse(dateKey))?.days[dateKey];
+    final legendDay = widget.player.legendsBySeason
+        ?.getSpecificSeason(DateTime.parse(dateKey))
+        ?.days[dateKey];
 
     return Column(
       children: [
@@ -39,8 +42,11 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
           children: [
             const SizedBox(width: 16),
             IconButton(
-              icon: Icon(Icons.calendar_today,
-                  color: Theme.of(context).colorScheme.onSurface, size: 24),
+              icon: Icon(
+                Icons.calendar_today,
+                color: Theme.of(context).colorScheme.onSurface,
+                size: 24,
+              ),
               onPressed: () async {
                 final picked = await showDatePicker(
                   context: context,
@@ -58,23 +64,30 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
               width: 30,
               height: 30,
               child: IconButton(
-                icon: Icon(Icons.arrow_back,
-                    color: Theme.of(context).colorScheme.onSurface, size: 16),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  size: 16,
+                ),
                 onPressed: decrementDate,
               ),
             ),
             Text(
-              DateFormat('dd MMMM yyyy',
-                      Localizations.localeOf(context).languageCode)
-                  .format(selectedDate),
+              DateFormat(
+                'dd MMMM yyyy',
+                Localizations.localeOf(context).languageCode,
+              ).format(selectedDate),
               style: Theme.of(context).textTheme.labelLarge,
             ),
             SizedBox(
               width: 30,
               height: 30,
               child: IconButton(
-                icon: Icon(Icons.arrow_forward,
-                    color: Theme.of(context).colorScheme.onSurface, size: 16),
+                icon: Icon(
+                  Icons.arrow_forward,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  size: 16,
+                ),
                 onPressed: incrementDate,
               ),
             ),
@@ -98,7 +111,8 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                     Expanded(
                       child: LegendOffenseDefenseCard(
                         title:
-                            AppLocalizations.of(context)?.warAttacksTitle ?? "Attacks",
+                            AppLocalizations.of(context)?.warAttacksTitle ??
+                            "Attacks",
                         list: legendDay.attacks,
                         context: context,
                         totalCount: legendDay.totalAttacks,
@@ -109,7 +123,8 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                     ),
                     Expanded(
                       child: LegendOffenseDefenseCard(
-                        title: AppLocalizations.of(context)?.warDefensesTitle ??
+                        title:
+                            AppLocalizations.of(context)?.warDefensesTitle ??
                             "Defenses",
                         list: legendDay.defenses,
                         context: context,
@@ -124,7 +139,10 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                 if (legendDay.attacks.isNotEmpty)
                   LegendUsedGearCard(
                     context: context,
-                    gears: legendDay.gearCountsFlatFromProfile(widget.player.equipments).values.toList(),
+                    gears: legendDay
+                        .gearCountsFlatFromProfile(widget.player.equipments)
+                        .values
+                        .toList(),
                     usageCount: legendDay.usageCount,
                   ),
               ],
@@ -137,17 +155,18 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(AppLocalizations.of(context)?.generalNoDataAvailable ??
-                      'No data available'),
+                  child: Text(
+                    AppLocalizations.of(context)?.generalNoDataAvailable ??
+                        'No data available',
+                  ),
                 ),
               ),
-              CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+              MobileWebImage(
+                errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: ImageAssets.villager,
                 height: 350,
                 width: 200,
-              )
+              ),
             ],
           ),
       ],

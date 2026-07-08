@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
 
 class PlayerCard extends StatelessWidget {
@@ -57,17 +57,18 @@ class PlayerCard extends StatelessWidget {
                         SizedBox(
                           height: 100,
                           width: 100,
-                          child: CachedNetworkImage(
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                              imageUrl: player.townHallPic),
+                          child: MobileWebImage(
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            imageUrl: player.townHallPic,
+                          ),
                         ),
                         Text(
                           player.name,
-                          style: (Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold)) ??
+                          style:
+                              (Theme.of(context).textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              )) ??
                               TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
@@ -94,65 +95,80 @@ class PlayerCard extends StatelessWidget {
                                   label: player.clan!.name,
                                   description: AppLocalizations.of(context)!
                                       .playerClanDescription(
-                                          player.clan!.name, player.clan!.tag),
+                                        player.clan!.name,
+                                        player.clan!.tag,
+                                      ),
                                 ),
                               IconChip(
-                                  icon: LucideIcons.chevronsUpDown,
-                                  label: player.donationRatio,
-                                  color: Color.fromARGB(255, 0, 136, 255),
-                                  size: 20,
-                                  description: AppLocalizations.of(context)!
-                                      .playerRatioDescription(
-                                          player.donationRatio,
-                                          player.donations.toStringAsFixed(0),
-                                          player.donationsReceived
-                                              .toStringAsFixed(0))),
+                                icon: LucideIcons.chevronsUpDown,
+                                label: player.donationRatio,
+                                color: Color.fromARGB(255, 0, 136, 255),
+                                size: 20,
+                                description: AppLocalizations.of(context)!
+                                    .playerRatioDescription(
+                                      player.donationRatio,
+                                      player.donations.toStringAsFixed(0),
+                                      player.donationsReceived.toStringAsFixed(
+                                        0,
+                                      ),
+                                    ),
+                              ),
                               ImageChip(
                                 context: context,
                                 imageUrl: player.warPreferenceImage,
                                 label: warPreference,
                                 description: AppLocalizations.of(context)!
                                     .playerWarPreferenceDescription(
-                                        warPreference),
+                                      warPreference,
+                                    ),
                               ),
                               ImageChip(
-                                  context: context,
-                                  imageUrl: ImageAssets.attackStar,
-                                  label: NumberFormat(
-                                          '#,###',
-                                          Localizations.localeOf(context)
-                                              .toString())
-                                      .format(int.parse(
-                                          player.warStars.toString())),
-                                  description: AppLocalizations.of(context)!
-                                      .playerWarStarsDescription(
-                                          player.warStars)),
+                                context: context,
+                                imageUrl: ImageAssets.attackStar,
+                                label: NumberFormat(
+                                  '#,###',
+                                  Localizations.localeOf(context).toString(),
+                                ).format(int.parse(player.warStars.toString())),
+                                description: AppLocalizations.of(
+                                  context,
+                                )!.playerWarStarsDescription(player.warStars),
+                              ),
                               ImageChip(
-                                  context: context,
-                                  imageUrl: player.townHallPic,
-                                  label: player.townHallLevel.toString(),
-                                  description: AppLocalizations.of(context)!
-                                      .playerTownHallLevelDescription(
-                                          player.townHallLevel)),
+                                context: context,
+                                imageUrl: player.townHallPic,
+                                label: player.townHallLevel.toString(),
+                                description: AppLocalizations.of(context)!
+                                    .playerTownHallLevelDescription(
+                                      player.townHallLevel,
+                                    ),
+                              ),
                               ImageChip(
-                                  context: context,
-                                  imageUrl: player.leagueUrl,
-                                  label: player.league,
-                                  description: player.league == "Unranked"
-                                      ? AppLocalizations.of(context)!
-                                          .playerTrophiesUnrankedDescription(
-                                              player.trophies)
-                                      : AppLocalizations.of(context)!
-                                          .playerTrophiesDescription(
-                                              player.trophies, player.league)),
+                                context: context,
+                                imageUrl: player.leagueUrl,
+                                label: player.league,
+                                description: player.league == "Unranked"
+                                    ? AppLocalizations.of(
+                                        context,
+                                      )!.playerTrophiesUnrankedDescription(
+                                        player.trophies,
+                                      )
+                                    : AppLocalizations.of(
+                                        context,
+                                      )!.playerTrophiesDescription(
+                                        player.trophies,
+                                        player.league,
+                                      ),
+                              ),
                               ImageChip(
-                                  context: context,
-                                  imageUrl: player.builderHallPic,
-                                  label: player.builderHallLevel.toString(),
-                                  description: AppLocalizations.of(context)!
-                                      .playerBuilderBaseDescription(
-                                          player.builderHallLevel,
-                                          player.builderBaseTrophies)),
+                                context: context,
+                                imageUrl: player.builderHallPic,
+                                label: player.builderHallLevel.toString(),
+                                description: AppLocalizations.of(context)!
+                                    .playerBuilderBaseDescription(
+                                      player.builderHallLevel,
+                                      player.builderBaseTrophies,
+                                    ),
+                              ),
                             ],
                           ),
                         ],

@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -313,7 +313,7 @@ class ClanMembersState extends State<ClanMembers> {
                       ),
                     ),
                     const SizedBox(width: 7),
-                    CachedNetworkImage(
+                    MobileWebImage(
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
                       imageUrl: ImageAssets.townHall(member.townHallLevel),
@@ -466,7 +466,7 @@ class _BreakdownCount extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CachedNetworkImage(
+        MobileWebImage(
           errorWidget: (context, url, error) => const Icon(Icons.error),
           imageUrl: imageUrl,
           width: 24,
@@ -637,7 +637,7 @@ class _MemberMiniStat extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (imageUrl != null)
-            CachedNetworkImage(
+            MobileWebImage(
               errorWidget: (context, url, error) =>
                   Icon(Icons.error, size: 14, color: colorScheme.onSurface),
               imageUrl: imageUrl!,

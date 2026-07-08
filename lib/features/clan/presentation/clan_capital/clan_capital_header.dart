@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -35,7 +34,7 @@ class ClanCapitalHeaderCard extends StatelessWidget {
                   Colors.black.withValues(alpha: 0.50),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   imageUrl: ImageAssets.clanCapitalPageBackground,
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
@@ -53,8 +52,7 @@ class ClanCapitalHeaderCard extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors:
-                        Theme.of(context).brightness == Brightness.dark
+                    colors: Theme.of(context).brightness == Brightness.dark
                         ? const [
                             Color.fromRGBO(0, 0, 0, 0.36),
                             Color.fromRGBO(0, 0, 0, 0.64),

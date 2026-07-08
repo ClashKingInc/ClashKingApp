@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
@@ -346,7 +346,7 @@ class _PlayerCardShell extends StatelessWidget {
                           children: [
                             SizedBox.square(
                               dimension: 62,
-                              child: CachedNetworkImage(
+                              child: MobileWebImage(
                                 imageUrl: imageUrl,
                                 errorWidget: (context, url, error) =>
                                     const Icon(Icons.shield_outlined),
@@ -665,7 +665,7 @@ class _InfoChip extends StatelessWidget {
           children: [
             SizedBox.square(
               dimension: 18,
-              child: CachedNetworkImage(
+              child: MobileWebImage(
                 imageUrl: data.imageUrl,
                 fit: BoxFit.contain,
                 errorWidget: (context, url, error) =>
@@ -698,18 +698,24 @@ class _EmptyRosterMessage extends StatelessWidget {
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               title,
+              textAlign: TextAlign.center,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 4),
-            Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ],
         ),
       ),

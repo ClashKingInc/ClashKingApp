@@ -4,7 +4,7 @@ import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +51,10 @@ class CurrentWarInfoCard extends StatelessWidget {
   }
 
   Widget _warEnded(
-      BuildContext context, WarInfo currentWarInfo, String clanTag) {
+    BuildContext context,
+    WarInfo currentWarInfo,
+    String clanTag,
+  ) {
     final isVictory = _isVictory(currentWarInfo, clanTag);
     final isDefeat = _isDefeat(currentWarInfo, clanTag);
 
@@ -76,8 +79,9 @@ class CurrentWarInfoCard extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context)?.timeStartsAt(
-                      DateFormat('HH:mm')
-                          .format(currentWarInfo.startTime!.toLocal()),
+                      DateFormat(
+                        'HH:mm',
+                      ).format(currentWarInfo.startTime!.toLocal()),
                     ) ??
                     '',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -107,8 +111,9 @@ class CurrentWarInfoCard extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context)?.timeEndsAt(
-                      DateFormat('HH:mm')
-                          .format(currentWarInfo.endTime!.toLocal()),
+                      DateFormat(
+                        'HH:mm',
+                      ).format(currentWarInfo.endTime!.toLocal()),
                     ) ??
                     '',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -138,63 +143,66 @@ class CurrentWarInfoCard extends StatelessWidget {
           SizedBox(
             width: 70,
             height: 70,
-            child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+            child: MobileWebImage(
+              errorWidget: (context, url, error) => Icon(Icons.error),
               imageUrl: clan.badgeUrls.large,
               fit: BoxFit.cover,
             ),
           ),
-          Text(clan.name,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            clan.name,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildCenterColumn(BuildContext context, WarInfo currentWarInfo,
-      bool isVictory, bool isDefeat) {
+  Widget _buildCenterColumn(
+    BuildContext context,
+    WarInfo currentWarInfo,
+    bool isVictory,
+    bool isDefeat,
+  ) {
     return Expanded(
       flex: 4,
       child: Column(
         children: [
           Text(
             AppLocalizations.of(context)?.warEnded ?? 'War ended',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           if (isVictory)
             Text(
               AppLocalizations.of(context)?.warVictory ?? 'Victory',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
             )
           else if (isDefeat)
             Text(
               AppLocalizations.of(context)?.warDefeat ?? 'Defeat',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
             )
           else
             Text(
               AppLocalizations.of(context)?.warDraw ?? 'Draw',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
           Text(
             '${currentWarInfo.clan!.stars} - ${currentWarInfo.opponent!.stars}',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           Text(
             '${currentWarInfo.clan!.destructionPercentage.toStringAsFixed(1)}%    ${currentWarInfo.opponent!.destructionPercentage.toStringAsFixed(1)}%',

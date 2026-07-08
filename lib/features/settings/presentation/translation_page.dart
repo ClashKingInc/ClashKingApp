@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
@@ -19,8 +19,9 @@ class TranslationScreen extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.translationThankYou,
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 16),
               Text(
@@ -31,7 +32,7 @@ class TranslationScreen extends StatelessWidget {
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16.0),
-                  child: CachedNetworkImage(
+                  child: MobileWebImage(
                     errorWidget: (context, url, error) => Icon(Icons.error),
                     imageUrl:
                         "https://www.icegif.com/wp-content/uploads/2023/06/icegif-202.gif", // remplacez par votre URL d'image
@@ -45,32 +46,36 @@ class TranslationScreen extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.translationHelpUsTranslate,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
               SizedBox(height: 16),
               Text(
-                  AppLocalizations.of(context)!.translationHelpTranslateContent,
-                  style: Theme.of(context).textTheme.bodyMedium),
+                AppLocalizations.of(context)!.translationHelpTranslateContent,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
               SizedBox(height: 16),
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    await launchUrl(Uri.parse(
-                        "https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842"));
+                    await launchUrl(
+                      Uri.parse(
+                        "https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842",
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
                   icon: Icon(Icons.language),
                   label: Text(
-                    AppLocalizations.of(context)!
-                        .translationHelpTranslateButton,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Colors.white),
+                    AppLocalizations.of(
+                      context,
+                    )!.translationHelpTranslateButton,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -86,10 +91,9 @@ class TranslationScreen extends StatelessWidget {
                   icon: Icon(Icons.discord),
                   label: Text(
                     AppLocalizations.of(context)!.faqJoinDiscord,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Colors.white),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -97,13 +101,12 @@ class TranslationScreen extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.translationCurrentTranslators,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
               SizedBox(height: 16),
-              Text(
-                '''
+              Text('''
   • AlejandroMoc
   • athype
   • bhatzuhaib
@@ -127,9 +130,7 @@ class TranslationScreen extends StatelessWidget {
   • SudetiZ
   • Wraxu
   • zombie23304
-                ''',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+                ''', style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
         ),

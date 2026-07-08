@@ -2,7 +2,7 @@ import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:intl/intl.dart';
 
 class WarCard extends StatelessWidget {
@@ -68,7 +68,7 @@ class WarCard extends StatelessWidget {
         SizedBox(
           width: 70,
           height: 70,
-          child: CachedNetworkImage(
+          child: MobileWebImage(
             errorWidget: (context, url, error) => const Icon(Icons.error),
             imageUrl: imageUrl,
             fit: BoxFit.cover,

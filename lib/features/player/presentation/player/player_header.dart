@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
@@ -60,7 +59,7 @@ class PlayerInfoHeader extends StatelessWidget {
                   Colors.black.withValues(alpha: 0.50),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   imageUrl: backgroundImageUrl,
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
@@ -78,8 +77,7 @@ class PlayerInfoHeader extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors:
-                        Theme.of(context).brightness == Brightness.dark
+                    colors: Theme.of(context).brightness == Brightness.dark
                         ? const [
                             Color.fromRGBO(0, 0, 0, 0.36),
                             Color.fromRGBO(0, 0, 0, 0.64),
@@ -633,7 +631,7 @@ class _HallBadge extends StatelessWidget {
         children: [
           SizedBox(
             height: 94,
-            child: CachedNetworkImage(
+            child: MobileWebImage(
               imageUrl: imageUrl,
               width: 94,
               height: 94,
@@ -648,7 +646,7 @@ class _HallBadge extends StatelessWidget {
               spacing: 1,
               children: List.generate(
                 stars,
-                (_) => CachedNetworkImage(
+                (_) => MobileWebImage(
                   imageUrl: ImageAssets.builderBaseStar,
                   width: 9,
                   height: 9,

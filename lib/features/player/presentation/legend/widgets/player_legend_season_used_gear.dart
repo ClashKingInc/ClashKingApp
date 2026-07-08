@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/models/player_equipment.dart';
@@ -24,8 +24,10 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(localizations?.gameHeroesEquipments ?? "Heroes Equipments",
-              style: Theme.of(context).textTheme.bodyMedium),
+          Text(
+            localizations?.gameHeroesEquipments ?? "Heroes Equipments",
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           SizedBox(height: 16),
           Wrap(
             spacing: 12,
@@ -39,9 +41,8 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                      MobileWebImage(
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl: gear.imageUrl,
                         width: 35,
                         height: 35,
@@ -55,14 +56,12 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: isMaxLevel
                                 ? const Color(0xFFD4AF37)
-                                : Colors.black.withValues(alpha : 0.7),
+                                : Colors.black.withValues(alpha: 0.7),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
                             gear.level.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -73,8 +72,10 @@ class PlayerLegendSeasonUsedGear extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Text("x$count",
-                      style: Theme.of(context).textTheme.labelSmall),
+                  Text(
+                    "x$count",
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
                 ],
               );
             }).toList(),

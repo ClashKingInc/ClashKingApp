@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -1006,7 +1005,7 @@ class _ClanBadge extends StatelessWidget {
       return const Icon(Icons.shield_outlined, size: 40);
     }
 
-    return CachedNetworkImage(
+    return MobileWebImage(
       imageUrl: imageUrl!,
       fit: BoxFit.contain,
       errorWidget: (context, url, error) =>

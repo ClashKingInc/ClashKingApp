@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clipboard/clipboard.dart';
+import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -70,7 +71,7 @@ class _WarHeaderState extends State<WarHeader> {
                   Colors.black.withValues(alpha: 0.50),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   imageUrl: ImageAssets.warPageBackground,
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
@@ -88,8 +89,7 @@ class _WarHeaderState extends State<WarHeader> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors:
-                        Theme.of(context).brightness == Brightness.dark
+                    colors: Theme.of(context).brightness == Brightness.dark
                         ? const [
                             Color.fromRGBO(0, 0, 0, 0.36),
                             Color.fromRGBO(0, 0, 0, 0.64),
@@ -325,6 +325,10 @@ class _WarBattleSide extends StatelessWidget {
             height: 1.02,
           ),
         ),
+        if ((clan?.tag ?? '').isNotEmpty) ...[
+          const SizedBox(height: 2),
+          _CopyableWarClanTag(tag: clan!.tag),
+        ],
       ],
     );
 
@@ -338,6 +342,45 @@ class _WarBattleSide extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
         child: content,
+      ),
+    );
+  }
+}
+
+class _CopyableWarClanTag extends StatelessWidget {
+  final String tag;
+
+  const _CopyableWarClanTag({required this.tag});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tag,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FlutterClipboard.copy(tag).then((_) {
+            if (!context.mounted) return;
+            showClipboardSnackbar(
+              context,
+              AppLocalizations.of(context)!.generalCopiedToClipboard,
+            );
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+          child: Text(
+            tag,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Colors.white.withValues(alpha: 0.62),
+              fontWeight: FontWeight.w600,
+              height: 1.05,
+            ),
+          ),
+        ),
       ),
     );
   }

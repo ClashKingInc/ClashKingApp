@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -161,7 +161,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         SizedBox(
                           height: 70,
                           width: 70,
-                          child: CachedNetworkImage(
+                          child: MobileWebImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                             imageUrl: logoUrl,
@@ -170,7 +170,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         const SizedBox(height: 16),
                         SizedBox(
                           width: 150,
-                          child: CachedNetworkImage(
+                          child: MobileWebImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                             imageUrl: textLogoUrl,
@@ -216,6 +216,12 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                               children: [
                                 TextField(
                                   controller: _playerTagController,
+                                  textInputAction: TextInputAction.done,
+                                  onSubmitted: (_) {
+                                    if (!_isAddingLoading) {
+                                      _addAccount();
+                                    }
+                                  },
                                   decoration: InputDecoration(
                                     labelText: AppLocalizations.of(
                                       context,
@@ -328,7 +334,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                             leading: CircleAvatar(
                                               backgroundColor:
                                                   Colors.transparent,
-                                              child: CachedNetworkImage(
+                                              child: MobileWebImage(
                                                 errorWidget:
                                                     (context, url, error) =>
                                                         Icon(Icons.error),
@@ -581,6 +587,8 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   }
 
   Future<void> _addAccount() async {
+    if (_isAddingLoading) return;
+
     setState(() {
       _isAddingLoading = true;
       _errorMessage = "";

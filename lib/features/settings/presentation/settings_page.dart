@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
@@ -321,7 +321,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             itemBuilder: (context, index) {
               final locale = supportedLocales[index];
               return ListTile(
-                leading: CachedNetworkImage(
+                leading: MobileWebImage(
                   imageUrl: locale.flagUrl,
                   width: 32,
                   height: 32,
@@ -602,7 +602,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       applicationIcon: SizedBox(
         width: 48,
         height: 48,
-        child: CachedNetworkImage(
+        child: MobileWebImage(
           imageUrl: Theme.of(context).brightness == Brightness.dark
               ? 'https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png'
               : 'https://assets.clashk.ing/logos/crown-arrow-white-bg/ClashKing-2.png',
@@ -693,7 +693,7 @@ class _ProfileHeader extends StatelessWidget {
         SizedBox.square(
           dimension: 68,
           child: ClipOval(
-            child: CachedNetworkImage(
+            child: MobileWebImage(
               imageUrl: user.avatarUrl,
               fit: BoxFit.cover,
               errorWidget: (context, url, error) => ColoredBox(
@@ -989,7 +989,7 @@ class _WarWidgetClanTile extends StatelessWidget {
                   style: TextStyle(color: colorScheme.onPrimaryContainer),
                 ),
               )
-            : CachedNetworkImage(
+            : MobileWebImage(
                 imageUrl: clan.badgeUrl!,
                 fit: BoxFit.contain,
                 errorWidget: (context, url, error) => CircleAvatar(

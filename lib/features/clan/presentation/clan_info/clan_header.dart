@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
@@ -69,7 +68,7 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   Colors.black.withValues(alpha: 0.50),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   imageUrl: ImageAssets.homeBaseBackground,
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
@@ -89,8 +88,7 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors:
-                        Theme.of(context).brightness == Brightness.dark
+                    colors: Theme.of(context).brightness == Brightness.dark
                         ? const [
                             Color.fromRGBO(0, 0, 0, 0.36),
                             Color.fromRGBO(0, 0, 0, 0.64),
@@ -152,7 +150,7 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CachedNetworkImage(
+                MobileWebImage(
                   imageUrl: clanInfo.badgeUrls.large,
                   width: 94,
                   height: 94,
@@ -282,8 +280,7 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                   leagueName: compactWarLeague,
                   subtitle: loc.cwlTitle,
                   leagueUrl: warLeagueUrl,
-                  onTap:
-                      clanInfo.warCwl?.leagueInfo?.clans.isNotEmpty == true
+                  onTap: clanInfo.warCwl?.leagueInfo?.clans.isNotEmpty == true
                       ? () => openClanCwl(context, clanInfo)
                       : null,
                 ),

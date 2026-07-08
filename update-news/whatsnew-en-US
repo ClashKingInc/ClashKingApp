@@ -98,3 +98,4 @@ What’s new
 - Improved clan detail tabs with CWL history previews and safer loading states
 - Improved clan detail filters, ranking season previews, and member donation stats
 - Fixed Windows builds by avoiding incompatible fallback liquid glass shaders
+- Improved player item details, To Do summaries, clan Join/Leave empty states, and image loading consistency

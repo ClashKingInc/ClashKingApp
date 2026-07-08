@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
@@ -235,7 +235,7 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
                 const SizedBox(width: 10),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
+                  child: MobileWebImage(
                     imageUrl: ImageAssets.townHall(
                       targetTownHall != null && targetTownHall > 0
                           ? targetTownHall
@@ -531,7 +531,7 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
             AppLocalizations.of(context)?.generalNoDataAvailable ?? 'No data',
           ),
           const SizedBox(height: 16),
-          CachedNetworkImage(
+          MobileWebImage(
             imageUrl:
                 'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
             height: 150,

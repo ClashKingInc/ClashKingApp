@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 
 class NotInWarCard extends StatefulWidget {
   final String clanName;
@@ -43,7 +43,7 @@ class NotInWarCardState extends State<NotInWarCard> {
                     width: 70,
                     height: 70,
                     child: Center(
-                      child: CachedNetworkImage(
+                      child: MobileWebImage(
                         errorWidget: (context, url, error) => Icon(Icons.error),
                         imageUrl: widget.clanBadgeUrl,
                         fit: BoxFit.cover,

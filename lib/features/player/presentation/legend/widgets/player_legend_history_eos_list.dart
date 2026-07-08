@@ -1,15 +1,12 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
 
 class PlayerLegendHistoryEosList extends StatelessWidget {
-  const PlayerLegendHistoryEosList({
-    super.key,
-    required this.rankings,
-  });
+  const PlayerLegendHistoryEosList({super.key, required this.rankings});
 
   final List<PlayerLegendRanking> rankings;
 
@@ -25,7 +22,12 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
         ),
         ...rankings.map((legendSeason) {
           return Card(
-            margin: const EdgeInsets.only(top: 4, bottom: 4, left: 16, right: 16),
+            margin: const EdgeInsets.only(
+              top: 4,
+              bottom: 4,
+              left: 16,
+              right: 16,
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -41,10 +43,11 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                             child: Stack(
                               children: <Widget>[
                                 Center(
-                                  child: CachedNetworkImage(
-
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                    imageUrl: ImageAssets.legendBlazonBordersNoPadding,
+                                  child: MobileWebImage(
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                    imageUrl: ImageAssets
+                                        .legendBlazonBordersNoPadding,
                                     height: 80,
                                   ),
                                 ),
@@ -53,13 +56,20 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                   child: Text(
                                     capitalize(
                                       DateFormat(
-                                              'MMMM\nyyyy',
-                                              Localizations.localeOf(context).languageCode)
-                                          .format(DateTime.parse(
-                                            legendSeason.season.split('-').length == 2
+                                        'MMMM\nyyyy',
+                                        Localizations.localeOf(
+                                          context,
+                                        ).languageCode,
+                                      ).format(
+                                        DateTime.parse(
+                                          legendSeason.season
+                                                      .split('-')
+                                                      .length ==
+                                                  2
                                               ? "${legendSeason.season}-01"
-                                              : legendSeason.season
-                                          )),
+                                              : legendSeason.season,
+                                        ),
+                                      ),
                                     ),
                                     style: Theme.of(context)
                                         .textTheme
@@ -93,68 +103,85 @@ class PlayerLegendHistoryEosList extends StatelessWidget {
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                    child: MobileWebImage(
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
                                       imageUrl: ImageAssets.bestTrophies,
                                     ),
                                   ),
                                   label: Text(
                                     NumberFormat(
-                                            '#,###',
-                                            Localizations.localeOf(context).toString())
-                                        .format(legendSeason.trophies),
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                      '#,###',
+                                      Localizations.localeOf(
+                                        context,
+                                      ).toString(),
+                                    ).format(legendSeason.trophies),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge,
                                   ),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
-                                        imageUrl: ImageAssets.planet),
+                                    child: MobileWebImage(
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                      imageUrl: ImageAssets.planet,
+                                    ),
                                   ),
                                   label: Text(
                                     NumberFormat(
-                                            '#,###',
-                                            Localizations.localeOf(context).toString())
-                                        .format(legendSeason.rank),
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                      '#,###',
+                                      Localizations.localeOf(
+                                        context,
+                                      ).toString(),
+                                    ).format(legendSeason.rank),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge,
                                   ),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                    child: MobileWebImage(
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
                                       imageUrl: ImageAssets.sword,
                                     ),
                                   ),
                                   label: Text(
                                     NumberFormat(
-                                            '#,###',
-                                            Localizations.localeOf(context).toString())
-                                        .format(legendSeason.attackWins),
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                      '#,###',
+                                      Localizations.localeOf(
+                                        context,
+                                      ).toString(),
+                                    ).format(legendSeason.attackWins),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge,
                                   ),
                                 ),
                                 Chip(
                                   avatar: CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                                    child: MobileWebImage(
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
                                       imageUrl: ImageAssets.shieldWithArrow,
                                     ),
                                   ),
                                   label: Text(
                                     NumberFormat(
-                                            '#,###',
-                                            Localizations.localeOf(context).toString())
-                                        .format(legendSeason.defenseWins),
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                      '#,###',
+                                      Localizations.localeOf(
+                                        context,
+                                      ).toString(),
+                                    ).format(legendSeason.defenseWins),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge,
                                   ),
                                 ),
                               ],

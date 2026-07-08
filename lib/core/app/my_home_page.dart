@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
@@ -616,7 +616,7 @@ class _DrawerAvatar extends StatelessWidget {
     return ClipOval(
       child: SizedBox.square(
         dimension: 48,
-        child: CachedNetworkImage(
+        child: MobileWebImage(
           imageUrl: imageUrl,
           fit: BoxFit.cover,
           errorWidget: (context, url, error) => DecoratedBox(

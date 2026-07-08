@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -330,7 +330,7 @@ class _ClanCard extends StatelessWidget {
                               const SizedBox(width: 6),
                               SizedBox.square(
                                 dimension: 13,
-                                child: CachedNetworkImage(
+                                child: MobileWebImage(
                                   imageUrl: ImageAssets.flag(item.countryCode),
                                   fit: BoxFit.contain,
                                   errorWidget: (context, url, error) =>
@@ -419,7 +419,7 @@ class _ClanBadgeWithMembers extends StatelessWidget {
       children: [
         SizedBox.square(
           dimension: 64,
-          child: CachedNetworkImage(
+          child: MobileWebImage(
             imageUrl: item.badgeUrl,
             errorWidget: (context, url, error) =>
                 const Icon(Icons.groups_rounded),
@@ -496,7 +496,7 @@ class _ClanImageChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return _ClanChipShell(
       label: label,
-      leading: CachedNetworkImage(
+      leading: MobileWebImage(
         imageUrl: imageUrl,
         fit: BoxFit.contain,
         errorWidget: (context, url, error) =>

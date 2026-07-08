@@ -3,7 +3,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 
 class ClanSearchFilters extends StatefulWidget {
   @override
@@ -235,7 +235,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       item["isCountry"] == true
-                                          ? CachedNetworkImage(
+                                          ? MobileWebImage(
                                               imageUrl:
                                                   "https://assets.clashk.ing/country-flags/${item['countryCode'].toLowerCase()}.png",
                                               width: 16,

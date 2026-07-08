@@ -17,7 +17,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -187,7 +187,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       SizedBox(
                         height: 80,
                         width: 80,
-                        child: CachedNetworkImage(
+                        child: MobileWebImage(
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                           imageUrl: logoUrl,
@@ -196,7 +196,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       SizedBox(height: 12),
                       SizedBox(
                         width: 160,
-                        child: CachedNetworkImage(
+                        child: MobileWebImage(
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                           imageUrl: textLogoUrl,

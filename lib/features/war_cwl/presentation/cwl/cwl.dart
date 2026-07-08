@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/icons/excel_download_icon.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -131,7 +130,7 @@ class _CwlHeaderCard extends StatelessWidget {
                   Colors.black.withValues(alpha: 0.50),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   imageUrl: ImageAssets.cwlPageBackground,
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,

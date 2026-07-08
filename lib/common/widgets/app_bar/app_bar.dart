@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
@@ -122,7 +122,7 @@ class _HeaderProfileButton extends StatelessWidget {
                 child: ClipOval(
                   child: SizedBox.square(
                     dimension: 36,
-                    child: CachedNetworkImage(
+                    child: MobileWebImage(
                       imageUrl: authService.currentUser?.avatarUrl ?? '',
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) =>

@@ -371,16 +371,7 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    final data = widget.joinLeave;
-    if (data == null || data.stats.totalEvents == 0) {
-      return const _ClanEmptyTab(
-        title: 'No join/leave data',
-        body:
-            'Recent roster movement appears here when tracking data is loaded.',
-        icon: Icons.swap_horiz_rounded,
-      );
-    }
-
+    final data = widget.joinLeave ?? ClanJoinLeave.empty();
     final stats = data.stats;
     final events = _filteredEvents(
       data.joinLeaveList.take(30).toList(growable: false),
@@ -460,12 +451,16 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
           const SizedBox(height: 12),
           if (events.isEmpty)
             _ClanEmptyTab(
-              title: _searchQuery.isNotEmpty
+              title: _searchQuery.isNotEmpty || _selectedMovement != 'all'
                   ? (loc?.generalNoFilteredResults ??
                         'No results match your filters')
+                  : stats.totalEvents == 0
+                  ? 'No join/leave data'
                   : 'No recent movement',
-              body: _searchQuery.isNotEmpty
+              body: _searchQuery.isNotEmpty || _selectedMovement != 'all'
                   ? ''
+                  : stats.totalEvents == 0
+                  ? 'Recent roster movement appears here when tracking data is loaded.'
                   : 'The summary is loaded, but the event list is empty.',
               icon: Icons.history_toggle_off_rounded,
             )

@@ -5,7 +5,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class CwlCardState extends State<CwlCard> {
             SizedBox(
               height: 70,
               width: 70,
-              child: CachedNetworkImage(
+              child: MobileWebImage(
                 errorWidget: (context, url, error) => Icon(Icons.error),
                 imageUrl: ImageAssets.getLeagueImage(clanWarLeague),
               ),
@@ -68,24 +68,27 @@ class CwlCardState extends State<CwlCard> {
                             "https://assets.clashk.ing/icons/Icon_HV_Podium.png",
                         labelPadding: 4,
                         label: "Rank ${clan.rank.toString()}",
-                        description:
-                            AppLocalizations.of(context)!.cwlRank(clan.rank),
+                        description: AppLocalizations.of(
+                          context,
+                        )!.cwlRank(clan.rank),
                       ),
                       ImageChip(
                         context: context,
                         imageUrl: ImageAssets.war,
                         labelPadding: 2,
                         label: " Round ${clan.warsPlayed.toString()}",
-                        description: AppLocalizations.of(context)!
-                            .cwlCurrentRound(clan.warsPlayed),
+                        description: AppLocalizations.of(
+                          context,
+                        )!.cwlCurrentRound(clan.warsPlayed),
                       ),
                       ImageChip(
                         context: context,
                         imageUrl: ImageAssets.builderBaseStar,
                         labelPadding: 2,
                         label: clan.stars.toString(),
-                        description:
-                            AppLocalizations.of(context)!.cwlStars(clan.stars),
+                        description: AppLocalizations.of(
+                          context,
+                        )!.cwlStars(clan.stars),
                       ),
                       ImageChip(
                         context: context,
@@ -95,9 +98,9 @@ class CwlCardState extends State<CwlCard> {
                             .toStringAsFixed(0),
                         description: AppLocalizations.of(context)!
                             .cwlDestructionPercentage(
-                          clan.destructionPercentageInflicted
-                              .toStringAsFixed(0),
-                        ),
+                              clan.destructionPercentageInflicted
+                                  .toStringAsFixed(0),
+                            ),
                       ),
                       ImageChip(
                         context: context,
@@ -106,8 +109,10 @@ class CwlCardState extends State<CwlCard> {
                         label:
                             "${clan.attackCount.toString()}/${(warCwl?.teamSize ?? 0) * clan.warsPlayed}",
                         description: AppLocalizations.of(context)!
-                            .cwlTotalAttacks(clan.attackCount,
-                                (warCwl?.teamSize ?? 0) * clan.warsPlayed),
+                            .cwlTotalAttacks(
+                              clan.attackCount,
+                              (warCwl?.teamSize ?? 0) * clan.warsPlayed,
+                            ),
                       ),
                     ],
                   ),

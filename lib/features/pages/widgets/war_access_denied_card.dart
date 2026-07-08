@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 
 class WarAccessDeniedCard extends StatefulWidget {
   final String clanName;
@@ -9,7 +9,7 @@ class WarAccessDeniedCard extends StatefulWidget {
   WarAccessDeniedCard({
     super.key,
     required this.clanName,
-    required this.clanBadgeUrl
+    required this.clanBadgeUrl,
   });
 
   @override
@@ -37,21 +37,26 @@ class WarAccessDeniedCardState extends State<WarAccessDeniedCard> {
                     width: 70,
                     height: 70,
                     child: Center(
-                      child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: 
-                        widget.clanBadgeUrl,
-                        fit: BoxFit.cover),
+                      child: MobileWebImage(
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        imageUrl: widget.clanBadgeUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(AppLocalizations.of(context)?.warLogClosed(widget.clanName) ?? "'s war log is closed.",
+                      Text(
+                        AppLocalizations.of(
+                              context,
+                            )?.warLogClosed(widget.clanName) ??
+                            "'s war log is closed.",
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        AppLocalizations.of(context)?.warAskForWarLogOpening ?? 'Contact a leader or a co-leader to open the war log.',
+                        AppLocalizations.of(context)?.warAskForWarLogOpening ??
+                            'Contact a leader or a co-leader to open the war log.',
                         textAlign: TextAlign.center,
                       ),
                     ],

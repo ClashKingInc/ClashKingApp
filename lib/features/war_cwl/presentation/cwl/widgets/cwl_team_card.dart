@@ -9,7 +9,6 @@ import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 class CwlTeamCard extends StatelessWidget {
@@ -36,7 +35,8 @@ class CwlTeamCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ??
+        color:
+            Theme.of(context).cardTheme.color ??
             Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(AppRadius.chip),
         border: Border.all(
@@ -85,7 +85,7 @@ class CwlTeamCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 6),
-                  CachedNetworkImage(
+                  MobileWebImage(
                     imageUrl: clan.badgeUrls.medium,
                     width: 40,
                     height: 40,

@@ -68,12 +68,19 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen> {
         .map(_normalizeTag)
         .where((tag) => tag.isNotEmpty)
         .toSet();
+    final bookmarkedTags = bookmarks.players
+        .map((bookmark) => _normalizeTag(bookmark.tag))
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
     final todoPagePlayers = widget.players
-        .where(
-          (player) =>
+        .where((player) {
+          final tag = _normalizeTag(player.tag);
+          final isCurrentAccount =
+              myAccountTags.contains(tag) || bookmarkedTags.contains(tag);
+          return isCurrentAccount &&
               playerPrefs.isShownInTodoPage(player.tag) &&
-              _isRecentlyActive(player),
-        )
+              _isRecentlyActive(player);
+        })
         .toList(growable: false);
     final searchedPlayers = todoPagePlayers
         .where(_matchesSearch)
@@ -104,7 +111,7 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen> {
         ),
         children: [
           PlayerToDoHeader(
-            players: filteredPlayers,
+            players: searchedPlayers,
             memberPresenceMap: widget.memberPresenceMap,
           ),
           Padding(

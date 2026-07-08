@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -42,7 +41,7 @@ class PlayerToDoHeader extends StatelessWidget {
                   Colors.black.withValues(alpha: 0.50),
                   BlendMode.darken,
                 ),
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   imageUrl: ImageAssets.homeBaseBackground,
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
@@ -60,8 +59,7 @@ class PlayerToDoHeader extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors:
-                        Theme.of(context).brightness == Brightness.dark
+                    colors: Theme.of(context).brightness == Brightness.dark
                         ? const [
                             Color.fromRGBO(0, 0, 0, 0.36),
                             Color.fromRGBO(0, 0, 0, 0.64),

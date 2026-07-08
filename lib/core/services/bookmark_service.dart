@@ -81,6 +81,13 @@ class BookmarkService extends ChangeNotifier {
   }
 
   List<Map<String, dynamic>> _decodeBookmarkItems(http.Response response) {
+    // The remote bookmarks endpoint is optional/newer API surface. A 404 means
+    // the user has no server-side bookmark resource yet, or the deployed API
+    // does not expose this typed route. Bookmarks should not block app startup.
+    if (response.statusCode == 404) {
+      return const [];
+    }
+
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw HttpException(
         'Failed to load bookmarks (${response.statusCode})',

@@ -1,7 +1,7 @@
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -42,7 +42,7 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
               backgroundColor: Colors.transparent,
               child: ClipOval(
                 child: user != null
-                    ? CachedNetworkImage(
+                    ? MobileWebImage(
                         imageUrl: user.avatarUrl,
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>

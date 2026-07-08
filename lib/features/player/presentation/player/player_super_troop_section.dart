@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/features/player/models/player_super_troop.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
@@ -49,7 +49,7 @@ class PlayerSuperTroopSection extends StatelessWidget {
                     .map(
                       (troop) => ClipRRect(
                         borderRadius: BorderRadius.circular(6),
-                        child: CachedNetworkImage(
+                        child: MobileWebImage(
                           placeholder: (context, url) =>
                               CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>

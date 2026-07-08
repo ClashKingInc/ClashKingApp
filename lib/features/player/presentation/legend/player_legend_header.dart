@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
@@ -34,7 +33,7 @@ class LegendHeaderCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              CachedNetworkImage(
+              MobileWebImage(
                 imageUrl: ImageAssets.legendPageBackground,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) =>

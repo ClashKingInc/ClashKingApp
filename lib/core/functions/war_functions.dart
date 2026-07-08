@@ -6,7 +6,6 @@ import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -33,7 +32,7 @@ Map<int, int> countStars(List<WarMember> members) {
 
 List<Widget> generateStars(int numberOfStars, double size) {
   return List<Widget>.generate(3, (index) {
-    return CachedNetworkImage(
+    return MobileWebImage(
       errorWidget: (context, url, error) => Icon(Icons.error),
       imageUrl: index < numberOfStars
           ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
@@ -50,7 +49,7 @@ List<Widget> generateStarsWithIconBefore(
   String iconUrl,
 ) {
   return [
-    CachedNetworkImage(
+    MobileWebImage(
       imageUrl: iconUrl,
       width: size,
       height: size,
@@ -59,7 +58,7 @@ List<Widget> generateStarsWithIconBefore(
     const SizedBox(width: 4),
     ...List.generate(
       3,
-      (index) => CachedNetworkImage(
+      (index) => MobileWebImage(
         imageUrl: index < numberOfStars
             ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
             : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",

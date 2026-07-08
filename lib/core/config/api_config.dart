@@ -48,7 +48,10 @@ class ApiConfig {
       return _withoutTrailingSlash(_apiV2BaseOverride);
     }
 
-    return '$apiBaseUrl/v2';
+    return switch (environment) {
+      ApiEnvironment.local => '$apiBaseUrl/v2',
+      ApiEnvironment.production => 'https://local-api.clashk.ing/v2',
+    };
   }
 
   static String get proxyUrl {
@@ -58,7 +61,7 @@ class ApiConfig {
 
     return switch (environment) {
       ApiEnvironment.local => 'https://local-api.clashk.ing/proxy/v1',
-      ApiEnvironment.production => 'https://api.clashk.ing/proxy/v1',
+      ApiEnvironment.production => 'https://proxy.clashk.ing/v1',
     };
   }
 
