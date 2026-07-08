@@ -24,10 +24,14 @@ List<T> generateCompleteItemList<T extends PlayerItem>({
   );
 
   return allItems.entries.map((entry) {
-    final name = entry.key;
+    final key = entry.key;
     final meta = entry.value;
+    final name = meta['name']?.toString() ?? key;
     final owned = jsonList?.firstWhere(
-      (x) => nameMatcher?.call(name, x) ?? x['name'] == name,
+      (x) =>
+          nameMatcher?.call(key, x) ??
+          nameMatcher?.call(name, x) ??
+          x['name'] == name,
       orElse: () => null,
     );
 

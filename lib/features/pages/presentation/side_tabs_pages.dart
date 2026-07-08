@@ -204,10 +204,9 @@ class _RankingsPageState extends State<RankingsPage> {
   }
 
   Future<List<_RankingEntry>> _load() async {
-    final endpoint =
-        '${ApiService.proxyUrl}/locations/${_location.id}/rankings/'
-        '${_type.path}?limit=200';
-    final response = await _apiService.getResponse('', url: endpoint);
+    final response = await _apiService.proxyGet(
+      '/locations/${_location.id}/rankings/${_type.path}?limit=200',
+    );
     if (response.statusCode != 200) {
       throw Exception('Failed to load rankings (${response.statusCode})');
     }
@@ -340,11 +339,8 @@ class _StatsPageState extends State<StatsPage> {
   }
 
   Future<List<_RankingEntry>> _load() async {
-    final response = await _apiService.getResponse(
-      '',
-      url:
-          '${ApiService.proxyUrl}/locations/${_location.id}/rankings/'
-          '${_type.path}?limit=200',
+    final response = await _apiService.proxyGet(
+      '/locations/${_location.id}/rankings/${_type.path}?limit=200',
     );
     if (response.statusCode != 200) {
       throw Exception('Failed to load official stats (${response.statusCode})');

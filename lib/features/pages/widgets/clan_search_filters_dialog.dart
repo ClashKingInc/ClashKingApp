@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -20,12 +19,15 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
   String minimumClanLevel = '0'; // Initial minimum clan level
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _controllerMin = TextEditingController(text: "2");
-  final TextEditingController _controllerMax =
-      TextEditingController(text: "50");
-  final TextEditingController _controllerPoints =
-      TextEditingController(text: "1");
-  final TextEditingController _controllerLevel =
-      TextEditingController(text: "2");
+  final TextEditingController _controllerMax = TextEditingController(
+    text: "50",
+  );
+  final TextEditingController _controllerPoints = TextEditingController(
+    text: "1",
+  );
+  final TextEditingController _controllerLevel = TextEditingController(
+    text: "2",
+  );
   List _countries = [];
   int? _selectedCountry;
 
@@ -36,8 +38,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
   }
 
   Future<void> _fetchCountries() async {
-    final response =
-        await http.get(Uri.parse('${ApiService.proxyUrl}/locations'));
+    final response = await ApiService().proxyGet('/locations');
     if (response.statusCode == 200) {
       final List items = json.decode(utf8.decode(response.bodyBytes))['items'];
       final countries = items.where((item) => item["name"] != "").toList();
@@ -49,7 +50,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
       });
     } else {
       throw Exception(
-          'Failed to load countries with status code: ${response.statusCode}');
+        'Failed to load countries with status code: ${response.statusCode}',
+      );
     }
   }
 
@@ -115,39 +117,47 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
   Widget build(BuildContext context) {
     List<DropdownMenuItem<String>> warFrequencyItems = [
       DropdownMenuItem(
-          value: 'whatever',
-          alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.generalNotSet)),
+        value: 'whatever',
+        alignment: Alignment.center,
+        child: Text(AppLocalizations.of(context)!.generalNotSet),
+      ),
       DropdownMenuItem(
-          value: 'always',
-          alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.clanWarFrequencyAlways)),
+        value: 'always',
+        alignment: Alignment.center,
+        child: Text(AppLocalizations.of(context)!.clanWarFrequencyAlways),
+      ),
       DropdownMenuItem(
-          value: 'never',
-          alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.clanWarFrequencyNever)),
+        value: 'never',
+        alignment: Alignment.center,
+        child: Text(AppLocalizations.of(context)!.clanWarFrequencyNever),
+      ),
       DropdownMenuItem(
-          value: 'oncePerWeek',
-          alignment: Alignment.center,
-          child:
-              Text(AppLocalizations.of(context)!.clanWarFrequencyOncePerWeek)),
+        value: 'oncePerWeek',
+        alignment: Alignment.center,
+        child: Text(AppLocalizations.of(context)!.clanWarFrequencyOncePerWeek),
+      ),
       DropdownMenuItem(
-          value: 'moreThanOncePerWeek',
-          alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!
-              .clanWarFrequencyMoreThanOncePerWeek)),
+        value: 'moreThanOncePerWeek',
+        alignment: Alignment.center,
+        child: Text(
+          AppLocalizations.of(context)!.clanWarFrequencyMoreThanOncePerWeek,
+        ),
+      ),
       DropdownMenuItem(
-          value: 'lessThanOncePerWeek',
-          alignment: Alignment.center,
-          child: Text(AppLocalizations.of(context)!.clanWarFrequencyRarely)),
+        value: 'lessThanOncePerWeek',
+        alignment: Alignment.center,
+        child: Text(AppLocalizations.of(context)!.clanWarFrequencyRarely),
+      ),
     ];
 
     return AlertDialog(
       insetPadding: EdgeInsets.all(16),
       backgroundColor: Theme.of(context).colorScheme.surface,
       surfaceTintColor: Colors.transparent,
-      title: Text(AppLocalizations.of(context)!.generalFilters,
-          textAlign: TextAlign.center),
+      title: Text(
+        AppLocalizations.of(context)!.generalFilters,
+        textAlign: TextAlign.center,
+      ),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -158,8 +168,10 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.warFrequency,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      AppLocalizations.of(context)!.warFrequency,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     DropdownButton<String>(
                       value: warfrequency,
                       elevation: 16,
@@ -167,7 +179,8 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                       isExpanded: true,
                       dropdownColor: Theme.of(context).colorScheme.surface,
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                       underline: Container(),
                       onChanged: (String? newValue) {
                         setState(() {
@@ -184,8 +197,10 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.clanLocation,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      AppLocalizations.of(context)!.clanLocation,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
@@ -196,53 +211,60 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             value: _selectedCountry?.toString() ?? '0',
                             elevation: 16,
                             alignment: Alignment.center,
-                            dropdownColor:
-                                Theme.of(context).colorScheme.surface,
+                            dropdownColor: Theme.of(
+                              context,
+                            ).colorScheme.surface,
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface),
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                             underline: Container(),
                             items: [
                               DropdownMenuItem<String>(
                                 value: '0',
                                 alignment: Alignment.center,
-                                child: Text(AppLocalizations.of(context)!
-                                    .generalNotSet),
+                                child: Text(
+                                  AppLocalizations.of(context)!.generalNotSet,
+                                ),
                               ),
-                              ..._countries.map<DropdownMenuItem<String>>(
-                                (item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item['id'].toString(),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        item["isCountry"] == true
-                                            ? CachedNetworkImage(
-                                                imageUrl:
-                                                    "https://assets.clashk.ing/country-flags/${item['countryCode'].toLowerCase()}.png",
-                                                width: 16,
-                                                height: 20,
-                                                errorWidget: (context, url,
-                                                        error) =>
-                                                    Icon(Icons.flag,
-                                                        size: 16,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurface),
-                                              )
-                                            : Icon(Icons.flag,
-                                                size: 16,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface),
-                                        SizedBox(width: 8.0),
-                                        Text(item['name'],
-                                            overflow: TextOverflow.ellipsis),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                              ..._countries.map<DropdownMenuItem<String>>((
+                                item,
+                              ) {
+                                return DropdownMenuItem<String>(
+                                  value: item['id'].toString(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      item["isCountry"] == true
+                                          ? CachedNetworkImage(
+                                              imageUrl:
+                                                  "https://assets.clashk.ing/country-flags/${item['countryCode'].toLowerCase()}.png",
+                                              width: 16,
+                                              height: 20,
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                    Icons.flag,
+                                                    size: 16,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.onSurface,
+                                                  ),
+                                            )
+                                          : Icon(
+                                              Icons.flag,
+                                              size: 16,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurface,
+                                            ),
+                                      SizedBox(width: 8.0),
+                                      Text(
+                                        item['name'],
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
                             ],
                             onChanged: (String? newValue) {
                               setState(() {
@@ -264,8 +286,10 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.clanMembers,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      AppLocalizations.of(context)!.clanMembers,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     Row(
                       children: [
                         SizedBox(width: 8),
@@ -273,9 +297,11 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                           flex: 1,
                           child: IconButton(
                             padding: EdgeInsets.only(right: 8),
-                            icon: Icon(Icons.remove,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 16),
+                            icon: Icon(
+                              Icons.remove,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
+                            ),
                             onPressed: _decrementMin,
                           ),
                         ),
@@ -286,8 +312,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerMin,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!
-                                  .clanMinimumMembers,
+                              hintText: AppLocalizations.of(
+                                context,
+                              )!.clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -307,17 +334,21 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
-                            icon: Icon(Icons.add,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 16),
+                            icon: Icon(
+                              Icons.add,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
+                            ),
                             onPressed: _incrementMin,
                           ),
                         ),
                         SizedBox(width: 8),
                         IconButton(
-                          icon: Icon(Icons.remove,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16),
+                          icon: Icon(
+                            Icons.remove,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            size: 16,
+                          ),
                           onPressed: _decrementMax,
                         ),
                         Expanded(
@@ -327,8 +358,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerMax,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!
-                                  .clanMaximumMembers,
+                              hintText: AppLocalizations.of(
+                                context,
+                              )!.clanMaximumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -348,9 +380,11 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
-                            icon: Icon(Icons.add,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 16),
+                            icon: Icon(
+                              Icons.add,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
+                            ),
                             onPressed: _incrementMax,
                           ),
                         ),
@@ -366,8 +400,10 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.clanMinimumPoints,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      AppLocalizations.of(context)!.clanMinimumPoints,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     SizedBox(height: 8),
                     Row(
                       children: [
@@ -375,9 +411,11 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                           flex: 1,
                           child: IconButton(
                             padding: EdgeInsets.only(right: 8),
-                            icon: Icon(Icons.remove,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 16),
+                            icon: Icon(
+                              Icons.remove,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
+                            ),
                             onPressed: _decrementPoints,
                           ),
                         ),
@@ -388,8 +426,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerPoints,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!
-                                  .clanMinimumMembers,
+                              hintText: AppLocalizations.of(
+                                context,
+                              )!.clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -411,9 +450,11 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
-                            icon: Icon(Icons.add,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 16),
+                            icon: Icon(
+                              Icons.add,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
+                            ),
                             onPressed: _incrementPoints,
                           ),
                         ),
@@ -428,8 +469,10 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                 child: Column(
                   children: [
                     SizedBox(height: 8),
-                    Text(AppLocalizations.of(context)!.clanMinimumLevel,
-                        style: Theme.of(context).textTheme.bodyMedium),
+                    Text(
+                      AppLocalizations.of(context)!.clanMinimumLevel,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     SizedBox(height: 8),
                     Row(
                       children: [
@@ -437,9 +480,11 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                           flex: 1,
                           child: IconButton(
                             padding: EdgeInsets.only(right: 8),
-                            icon: Icon(Icons.remove,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 16),
+                            icon: Icon(
+                              Icons.remove,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
+                            ),
                             onPressed: _decrementLevel,
                           ),
                         ),
@@ -450,8 +495,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                             controller: _controllerLevel,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!
-                                  .clanMinimumMembers,
+                              hintText: AppLocalizations.of(
+                                context,
+                              )!.clanMinimumMembers,
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -473,9 +519,11 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
-                            icon: Icon(Icons.add,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: 16),
+                            icon: Icon(
+                              Icons.add,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
+                            ),
                             onPressed: _incrementLevel,
                           ),
                         ),

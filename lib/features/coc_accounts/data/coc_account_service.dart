@@ -13,12 +13,13 @@ import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class CocAccountService extends ChangeNotifier {
-  static const Duration _initializationTimeout = Duration(seconds: 30);
   static const String _msgNotAuthenticated = 'User not authenticated';
-  static const String _localAccountsPrefKey = 'local_coc_accounts_v1';
 
-  CocAccountService({ApiService? apiService})
-    : _apiService = apiService ?? ApiService();
+  CocAccountService({ApiService? apiService, String? currentUserId})
+    : _apiService = apiService ?? ApiService(),
+      _currentUserId = currentUserId?.trim().isEmpty == true
+          ? null
+          : currentUserId?.trim();
 
   bool _disposed = false;
 
@@ -29,21 +30,33 @@ class CocAccountService extends ChangeNotifier {
   final ApiService _apiService;
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
-  bool _isLocalMode = false;
+  String? _currentUserId;
   String? _selectedTag;
   DateTime? _lastRefresh;
   ValueNotifier<String?> selectedTagNotifier = ValueNotifier(null);
   List<Map<String, dynamic>> get cocAccounts => _cocAccounts;
   bool get isLoading => _isLoading;
-  bool get isLocalMode => _isLocalMode;
   String? get selectedTag => _selectedTag;
   DateTime? get lastRefresh => _lastRefresh;
   List<Player> profiles = [];
   List<String> get accounts =>
       _cocAccounts.map((account) => account["player_tag"].toString()).toList();
 
-  void setLocalMode(bool value) {
-    _isLocalMode = value;
+  void setCurrentUserId(String? userId) {
+    final normalizedUserId = userId?.trim();
+    _currentUserId = normalizedUserId == null || normalizedUserId.isEmpty
+        ? null
+        : normalizedUserId;
+  }
+
+  String _linksEndpoint([String? path]) {
+    final currentUserId = _currentUserId;
+    if (currentUserId == null || currentUserId.isEmpty) {
+      throw UnauthorizedException(_msgNotAuthenticated);
+    }
+
+    final endpoint = '/links/${Uri.encodeComponent(currentUserId)}';
+    return path == null ? endpoint : '$endpoint/$path';
   }
 
   /// Clears all cached account data (for logout)
@@ -59,23 +72,18 @@ class CocAccountService extends ChangeNotifier {
 
   /// Fetches the user's linked Clash of Clans accounts from the backend.
   Future<void> fetchCocAccounts() async {
-    if (_isLocalMode) {
-      await loadLocalAccounts();
-      return;
-    }
-
     _isLoading = true;
     _safeNotify();
 
     try {
       final response = await _apiService.getResponse(
-        '/users/coc-accounts',
+        _linksEndpoint(),
         requiresAuth: true,
       );
 
       if (response.statusCode == 200) {
         final data = json.decode(ApiService.decodeResponseBody(response));
-        final cocAccounts = data["coc_accounts"];
+        final cocAccounts = data["items"];
         if (cocAccounts is! List) {
           throw const FormatException("Invalid CoC accounts payload");
         }
@@ -101,163 +109,126 @@ class CocAccountService extends ChangeNotifier {
   Future<Map<String, dynamic>> addCocAccount(String playerTag) async {
     DebugUtils.debugInfo("🔄 Adding CoC account with tag: $playerTag");
 
-    if (_isLocalMode) {
-      return _addLocalCocAccount(playerTag);
-    }
-
     try {
       final response = await _apiService.postResponse(
-        '/users/coc-accounts',
+        _linksEndpoint(),
         body: {"player_tag": playerTag},
         requiresAuth: true,
       );
 
-      final data = jsonDecode(ApiService.decodeResponseBody(response));
+      final responseBody = ApiService.decodeResponseBody(response);
+      final data = _decodeResponseMap(responseBody);
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        _reportAddAccountFailure(
+          playerTag: playerTag,
+          statusCode: response.statusCode,
+          responseBody: responseBody,
+          responseData: data,
+        );
+      }
+
+      final account = response.statusCode == 200
+          ? _normalizeAccount(data["account"])
+          : (data["detail"] is Map && data["detail"]["account"] != null
+                ? _normalizeAccount(data["detail"]["account"])
+                : null);
+      if (response.statusCode == 200 && account != null) {
+        _upsertAccount(account);
+      }
 
       return {
         "code": response.statusCode,
         "message": _extractErrorMessage(data),
-        "account": response.statusCode == 200
-            ? data["account"]
-            : (data["detail"] is Map && data["detail"]["account"] != null
-                  ? data["detail"]["account"]
-                  : null),
+        "account": account,
       };
     } on UnauthorizedException {
       return {"code": 401, "message": _msgNotAuthenticated};
-    } catch (e) {
+    } catch (error, stackTrace) {
+      _reportAddAccountException(playerTag, error, stackTrace);
       return {"code": 500, "message": "Internal server error"};
     }
   }
 
-  void addLocalAccount(Map<String, dynamic> account) {
-    _cocAccounts.add(account);
-    if (_isLocalMode) {
-      unawaited(_saveLocalAccounts());
-    }
-    _safeNotify();
-  }
-
-  Future<void> loadLocalAccounts() async {
-    _isLoading = true;
-    _safeNotify();
-
-    try {
-      final rawAccounts = await getPrefs(_localAccountsPrefKey);
-      if (rawAccounts == null || rawAccounts.isEmpty) {
-        _cocAccounts = [];
-        return;
-      }
-
-      final decoded = jsonDecode(rawAccounts);
-      if (decoded is! List) {
-        throw const FormatException("Invalid local CoC accounts payload");
-      }
-
-      _cocAccounts = decoded
-          .whereType<Map>()
-          .map((account) => Map<String, dynamic>.from(account))
-          .toList();
-    } catch (error, stackTrace) {
-      Sentry.captureException(error, stackTrace: stackTrace);
-      _cocAccounts = [];
-    } finally {
-      _isLoading = false;
-      _safeNotify();
-    }
-  }
-
-  Future<void> _saveLocalAccounts() async {
-    await storePrefs(_localAccountsPrefKey, jsonEncode(_cocAccounts));
-  }
-
-  Future<Map<String, dynamic>> _addLocalCocAccount(String rawPlayerTag) async {
-    final normalizedTag = rawPlayerTag.trim().startsWith('#')
-        ? rawPlayerTag.trim().toUpperCase()
-        : '#${rawPlayerTag.trim().toUpperCase()}';
-
-    try {
-      final response = await _apiService.getResponse(
-        '',
-        url:
-            '${ApiService.proxyUrl}/players/${Uri.encodeComponent(normalizedTag)}',
-      );
-
-      if (response.statusCode == 404) {
-        return {"code": 404, "message": "Account not found"};
-      }
-      if (response.statusCode != 200) {
-        return {"code": response.statusCode, "message": "Failed to add"};
-      }
-
-      final data = jsonDecode(ApiService.decodeResponseBody(response));
-      final account = {
-        "tag": data["tag"] ?? normalizedTag,
-        "player_tag": data["tag"] ?? normalizedTag,
-        "name": data["name"] ?? "Unknown Player",
-        "townHallLevel": data["townHallLevel"] ?? 1,
-        "is_verified": false,
-        "source": "local",
-      };
-
-      return {"code": 200, "message": "Account added", "account": account};
-    } catch (error, stackTrace) {
-      Sentry.captureException(error, stackTrace: stackTrace);
-      return {"code": 500, "message": "Failed to add account locally"};
-    }
-  }
-
-  /// Adds a Clash of Clans account (with ownership verification).
+  /// Adds a Clash of Clans account with an API token through the links API.
   Future<Map<String, dynamic>> addCocAccountWithVerification(
     String playerTag,
-    String playerToken,
+    String apiToken,
   ) async {
     try {
       final response = await _apiService.postResponse(
-        '/users/coc-accounts/verified',
-        body: {"player_tag": playerTag, "player_token": playerToken},
+        _linksEndpoint(),
+        body: {"player_tag": playerTag, "api_token": apiToken},
         requiresAuth: true,
       );
 
-      final data = jsonDecode(ApiService.decodeResponseBody(response));
+      final responseBody = ApiService.decodeResponseBody(response);
+      final data = _decodeResponseMap(responseBody);
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        _reportAddAccountFailure(
+          playerTag: playerTag,
+          statusCode: response.statusCode,
+          responseBody: responseBody,
+          responseData: data,
+        );
+      }
+
+      final account = response.statusCode == 200
+          ? _normalizeAccount(data["account"])
+          : null;
+      if (response.statusCode == 200 && account != null) {
+        _upsertAccount(account);
+      }
 
       return {
         "code": response.statusCode,
         "message": _extractErrorMessage(data),
-        "account": response.statusCode == 200 ? data["account"] : null,
+        "account": account,
       };
     } on UnauthorizedException {
       return {"code": 401, "message": _msgNotAuthenticated};
-    } catch (e) {
+    } catch (error, stackTrace) {
+      _reportAddAccountException(playerTag, error, stackTrace);
       return {"code": 500, "message": "Internal server error"};
     }
+  }
+
+  Map<String, dynamic>? _normalizeAccount(dynamic rawAccount) {
+    if (rawAccount is! Map) return null;
+    final account = Map<String, dynamic>.from(rawAccount);
+    final playerTag =
+        account["player_tag"]?.toString() ?? account["tag"]?.toString() ?? "";
+    if (playerTag.isEmpty) return null;
+    account["player_tag"] = playerTag;
+    account["tag"] ??= playerTag;
+    account["name"] ??= "Unknown Player";
+    account["townHallLevel"] ??= 1;
+    account["is_verified"] ??= false;
+    return account;
+  }
+
+  void _upsertAccount(Map<String, dynamic> account) {
+    final playerTag = account["player_tag"]?.toString();
+    if (playerTag == null || playerTag.isEmpty) return;
+    _cocAccounts.removeWhere(
+      (existing) => existing["player_tag"]?.toString() == playerTag,
+    );
+    _cocAccounts.add(account);
+    _safeNotify();
   }
 
   /// Removes a Clash of Clans account from the user's linked accounts.
   Future<void> removeCocAccount(String playerTag) async {
-    if (_isLocalMode) {
-      _cocAccounts.removeWhere((account) => account["player_tag"] == playerTag);
-      if (_selectedTag == playerTag) {
-        await setSelectedTag(
-          _cocAccounts.isEmpty
-              ? null
-              : _cocAccounts.first["player_tag"]?.toString(),
-        );
-      }
-      await _saveLocalAccounts();
-      _safeNotify();
-      return;
-    }
-
     try {
       final encodedPlayerTag = Uri.encodeComponent(playerTag);
 
       final response = await _apiService.deleteResponse(
-        '/users/coc-accounts/$encodedPlayerTag',
+        _linksEndpoint(encodedPlayerTag),
         requiresAuth: true,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         _cocAccounts.removeWhere(
           (account) => account["player_tag"] == playerTag,
         );
@@ -275,27 +246,13 @@ class CocAccountService extends ChangeNotifier {
 
   /// Reorder accounts and send the updated order to the API
   Future<void> updateAccountOrder(List<String> playerTags) async {
-    if (_isLocalMode) {
-      final accountsByTag = {
-        for (final account in _cocAccounts)
-          account["player_tag"].toString(): account,
-      };
-      _cocAccounts = playerTags
-          .map((tag) => accountsByTag[tag])
-          .whereType<Map<String, dynamic>>()
-          .toList();
-      await _saveLocalAccounts();
-      _safeNotify();
-      return;
-    }
-
     final response = await _apiService.putResponse(
-      '/users/coc-accounts/order',
+      _linksEndpoint('order'),
       body: {"ordered_tags": playerTags},
       requiresAuth: true,
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode < 200 || response.statusCode >= 300) {
       Sentry.captureMessage(
         "Failed to update account order, status code: ${response.statusCode}, body: ${response.body}",
         level: SentryLevel.error,
@@ -381,32 +338,27 @@ class CocAccountService extends ChangeNotifier {
     _safeNotify();
   }
 
-  /// Refresh data for specific page using bulk endpoint for consistency
+  /// Refresh data for a specific page with direct parallel requests.
   Future<void> refreshPageData(
     List<String> playerTags,
     PlayerService playerService,
     ClanService clanService,
-    WarCwlService warCwlService,
-  ) async {
+    WarCwlService warCwlService, {
+    List<String> bookmarkedClanTags = const [],
+  }) async {
     if (playerTags.isEmpty) return;
 
-    if (_isLocalMode) {
-      await playerService.loadPublicPlayerData(playerTags, notify: false);
-      _lastRefresh = DateTime.now();
-      _safeNotify();
-      return;
-    }
-
     DebugUtils.debugInfo(
-      "🔄 Refreshing page data using bulk endpoint for ${playerTags.length} players",
+      "🔄 Refreshing page data for ${playerTags.length} players",
     );
 
     try {
-      await _loadDataWithBulkEndpoint(
+      await _loadDataWithParallelRequests(
         playerTags,
         playerService,
         clanService,
         warCwlService,
+        bookmarkedClanTags: bookmarkedClanTags,
       );
       _lastRefresh = DateTime.now();
       _safeNotify();
@@ -426,8 +378,9 @@ class CocAccountService extends ChangeNotifier {
   Future<void> loadApiData(
     PlayerService playerService,
     ClanService clanService,
-    WarCwlService warCwlService,
-  ) async {
+    WarCwlService warCwlService, {
+    List<String> bookmarkedClanTags = const [],
+  }) async {
     final transaction = Sentry.startTransaction(
       "CocAccountService.loadApiData",
       "task",
@@ -436,6 +389,7 @@ class CocAccountService extends ChangeNotifier {
 
     try {
       final spanFetchAccounts = transaction.startChild("fetchCocAccounts");
+      DebugUtils.debugApi("Startup phase: fetch CoC accounts");
       await fetchCocAccounts();
       spanFetchAccounts.finish();
 
@@ -448,27 +402,19 @@ class CocAccountService extends ChangeNotifier {
           .map((account) => account["player_tag"].toString())
           .toList();
 
-      if (_isLocalMode) {
-        await playerService.loadPublicPlayerData(playerTags, notify: false);
-        transaction.finish(status: SpanStatus.ok());
-        _lastRefresh = DateTime.now();
-        await initializeSelectedTag();
-        _safeNotify();
-        return;
-      }
-
       transaction.setTag("playerTags", playerTags.toString());
       transaction.setTag("playerTagsCount", playerTags.length.toString());
 
-      // Use the new optimized bulk endpoint
-      final spanBulkLoad = transaction.startChild("bulkAccountInitialization");
-      await _loadDataWithBulkEndpoint(
+      final spanDataLoad = transaction.startChild("parallelAccountHydration");
+      DebugUtils.debugApi("Startup phase: hydrate linked account data");
+      await _loadDataWithParallelRequests(
         playerTags,
         playerService,
         clanService,
         warCwlService,
+        bookmarkedClanTags: bookmarkedClanTags,
       );
-      spanBulkLoad.finish();
+      spanDataLoad.finish();
 
       transaction.finish(status: SpanStatus.ok());
       _lastRefresh = DateTime.now();
@@ -490,185 +436,120 @@ class CocAccountService extends ChangeNotifier {
     }
   }
 
-  /// Optimized bulk data loading using the new API endpoint
-  Future<void> _loadDataWithBulkEndpoint(
+  Future<void> _loadDataWithParallelRequests(
     List<String> playerTags,
     PlayerService playerService,
     ClanService clanService,
-    WarCwlService warCwlService,
-  ) async {
+    WarCwlService warCwlService, {
+    List<String> bookmarkedClanTags = const [],
+  }) async {
     DebugUtils.debugInfo(
-      "🚀 Using optimized bulk endpoint for ${playerTags.length} players",
+      "🚀 Hydrating ${playerTags.length} players with parallel requests",
     );
 
-    var timer = Stopwatch()..start();
+    final timer = Stopwatch()..start();
+    final cachedClanTagsByPlayer = await _cachedClanTagsByPlayer(playerTags);
+    final optimisticClanTags = {
+      ...cachedClanTagsByPlayer.values,
+      ...bookmarkedClanTags,
+    }.where((tag) => tag.isNotEmpty).toSet();
 
-    try {
-      final response = await _apiService.postResponse(
-        '/initialization',
-        body: {"player_tags": playerTags},
-        requiresAuth: true,
-        timeout: _initializationTimeout,
-      );
-
-      if (response.statusCode == 200) {
-        final responseBody = ApiService.decodeResponseBody(response);
-        final data = jsonDecode(responseBody);
-
-        DebugUtils.debugSuccess(
-          "Bulk data loaded successfully in ${timer.elapsedMilliseconds} ms",
-        );
-
-        // Process player data
-        if (data["players"] != null) {
-          playerService.processBulkPlayerData(
-            data["players"],
-            data["players_basic"],
-            notify: false,
-          );
-        }
-
-        // Process clan data
-        if (data["clans"] != null && data["clan_tags"] != null) {
-          final clanTags = List<String>.from(data["clan_tags"]);
-          await clanService.processBulkClanData(
-            data["clans"],
-            clanTags,
-            notify: false,
-          );
-        }
-
-        // Process war stats
-        if (data["war_stats"] != null) {
-          playerService.processBulkWarStats(data["war_stats"], notify: false);
-        }
-
-        // Process war/CWL data
-        if (data["clans"] != null && data["clans"]["war_data"] != null) {
-          final warData = data["clans"]["war_data"] as List<dynamic>;
-          DebugUtils.debugInfo(
-            "🔄 Processing ${warData.length} war data items",
-          );
-          warCwlService.processBulkWarData(warData, notify: false);
-        }
-
-        DebugUtils.debugInfo("🔗 Linking data relationships...");
-
-        // Link relationships
-        final clanTags = List<String>.from(data["clan_tags"] ?? []);
-        if (clanTags.isNotEmpty) {
-          playerService.linkClansToPlayer(
-            playerService.profiles,
-            clanService.clans.values.toList(),
+    final optimisticClanLoad = optimisticClanTags.isEmpty
+        ? Future<void>.value()
+        : _loadInitialClanData(
+            optimisticClanTags,
+            playerService,
+            clanService,
+            warCwlService,
           );
 
-          clanService.linkWarsToClans(
-            clanService.clans.values.toList(),
-            warCwlService.summaries.values.toList(),
-          );
-
-          clanService.linkJoinLeaveToClans();
-          clanService.linkCapitalToClans();
-          clanService.linkWarLogToClans();
-          clanService.linkWarStatsToClans();
-        }
-
-        playerService.notifyDataChanged();
-        clanService.notifyDataChanged();
-        warCwlService.notifyDataChanged();
-        DebugUtils.debugSuccess("All data linked successfully");
-      } else if (response.statusCode == 503 || response.statusCode == 500) {
-        throw HttpException(
-          response.statusCode.toString(),
-          uri: response.request?.url,
-        );
-      } else {
-        DebugUtils.debugError(
-          " Bulk endpoint failed, falling back to individual calls",
-        );
-        await _loadDataWithFallback(
-          playerTags,
-          playerService,
-          clanService,
-          warCwlService,
-        );
-      }
-    } catch (e) {
-      DebugUtils.debugError(
-        " Bulk endpoint error: $e, falling back to individual calls",
-      );
-      await _loadDataWithFallback(
-        playerTags,
-        playerService,
-        clanService,
-        warCwlService,
-      );
-    }
-  }
-
-  /// Fallback to the original individual API calls if bulk endpoint fails
-  Future<void> _loadDataWithFallback(
-    List<String> playerTags,
-    PlayerService playerService,
-    ClanService clanService,
-    WarCwlService warCwlService,
-  ) async {
-    DebugUtils.debugInfo("🔄 Using fallback individual API calls");
-
-    final clanTagsByPlayer = await playerService.initPlayerData(
+    DebugUtils.debugApi("Parallel phase: load official player data");
+    final clanTagsByPlayer = await playerService.loadOfficialPlayerData(
       playerTags,
       notify: false,
+      throwOnError: true,
     );
 
-    final Set<String> clanTags = playerService.profiles
+    final discoveredClanTags = playerService.profiles
         .map((profile) => profile.clanTag)
         .where((tag) => tag.isNotEmpty)
         .toSet();
+    discoveredClanTags.addAll(
+      clanTagsByPlayer.values.where((tag) => tag.isNotEmpty),
+    );
 
+    final missingClanTags = discoveredClanTags
+        .difference(optimisticClanTags)
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
+
+    DebugUtils.debugApi("Parallel phase: load initial clan and war data");
     await Future.wait([
-      playerService.loadPlayerData(
-        playerTags,
-        clanTagsByPlayer,
-        notify: false,
-        throwOnError: true,
-      ),
-      playerService.loadPlayerWarStats(
-        playerTags,
-        notify: false,
-        throwOnError: true,
-      ),
-      if (clanTags.isNotEmpty)
-        clanService.loadAllClanData(
-          clanTags.toList(),
-          notify: false,
-          throwOnError: true,
+      optimisticClanLoad,
+      if (missingClanTags.isNotEmpty)
+        _loadInitialClanData(
+          missingClanTags,
+          playerService,
+          clanService,
+          warCwlService,
         ),
-      if (clanTags.isNotEmpty)
-        clanService.loadClanJoinLeaveData(
-          clanTags.toList(),
-          notify: false,
-          throwOnError: true,
-        ),
-      if (clanTags.isNotEmpty)
-        warCwlService.loadAllWarData(
-          clanTags.toList(),
-          notify: false,
-          throwOnError: true,
-        ),
-      if (clanTags.isNotEmpty)
-        clanService.loadCapitalData(
-          clanTags.toList(),
-          10,
-          notify: false,
-          throwOnError: true,
-        ),
-      if (clanTags.isNotEmpty)
-        clanService.loadWarLogData(clanTags.toList(), throwOnError: true),
-      if (clanTags.isNotEmpty)
-        clanService.loadClanWarStatsData(clanTags.toList(), throwOnError: true),
     ]);
 
-    // Link relationships (same as before)
+    final allClanTags = {
+      ...optimisticClanTags,
+      ...discoveredClanTags,
+    }.where((tag) => tag.isNotEmpty).toSet();
+
+    _linkHydratedData(allClanTags, playerService, clanService, warCwlService);
+
+    playerService.notifyDataChanged();
+    clanService.notifyDataChanged();
+    warCwlService.notifyDataChanged();
+    DebugUtils.debugSuccess(
+      "All data linked successfully in ${timer.elapsedMilliseconds} ms",
+    );
+  }
+
+  Future<Map<String, String>> _cachedClanTagsByPlayer(
+    List<String> playerTags,
+  ) async {
+    final cached = <String, String>{};
+    for (final rawTag in playerTags) {
+      final tag = rawTag.trim().toUpperCase();
+      if (tag.isEmpty) continue;
+      final normalizedTag = tag.startsWith('#') ? tag : '#$tag';
+      final cachedClanTag = await getPrefs('player_${normalizedTag}_clan_tag');
+      if (cachedClanTag != null && cachedClanTag.isNotEmpty) {
+        cached[normalizedTag] = cachedClanTag;
+      }
+    }
+    return cached;
+  }
+
+  Future<void> _loadInitialClanData(
+    Set<String> clanTags,
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) async {
+    if (clanTags.isEmpty) return;
+    final tags = clanTags.toList(growable: false);
+
+    await clanService.loadAllClanData(tags, notify: false, throwOnError: false);
+
+    await warCwlService.loadAllWarData(
+      tags,
+      notify: false,
+      throwOnError: false,
+    );
+  }
+
+  void _linkHydratedData(
+    Set<String> clanTags,
+    PlayerService playerService,
+    ClanService clanService,
+    WarCwlService warCwlService,
+  ) {
     if (clanTags.isNotEmpty) {
       playerService.linkClansToPlayer(
         playerService.profiles,
@@ -679,16 +560,7 @@ class CocAccountService extends ChangeNotifier {
         clanService.clans.values.toList(),
         warCwlService.summaries.values.toList(),
       );
-
-      clanService.linkJoinLeaveToClans();
-      clanService.linkCapitalToClans();
-      clanService.linkWarLogToClans();
-      clanService.linkWarStatsToClans();
     }
-
-    playerService.notifyDataChanged();
-    clanService.notifyDataChanged();
-    warCwlService.notifyDataChanged();
   }
 
   // Check if clan changed and refresh war widget if needed (non-blocking)
@@ -744,12 +616,12 @@ class CocAccountService extends ChangeNotifier {
   ) async {
     try {
       final response = await _apiService.postResponse(
-        '/users/coc-accounts/verified',
-        body: {"player_tag": playerTag, "player_token": apiToken},
+        _linksEndpoint(),
+        body: {"player_tag": playerTag, "api_token": apiToken},
         requiresAuth: true,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         final data = jsonDecode(ApiService.decodeResponseBody(response));
         DebugUtils.debugSuccess(
           "✅ Account added with token successfully: $playerTag",
@@ -803,27 +675,22 @@ class CocAccountService extends ChangeNotifier {
     }
   }
 
-  /// Verifies an existing account using API token
+  /// Applies an API token to an existing account through the links API.
   Future<bool> verifyAccount(
     String playerTag,
     String apiToken,
     Function(String) updateErrorMessage,
   ) async {
     try {
-      final encodedPlayerTag = Uri.encodeComponent(playerTag);
       final response = await _apiService.postResponse(
-        '/users/coc-accounts/$encodedPlayerTag/verify',
-        body: {"player_token": apiToken},
+        _linksEndpoint(),
+        body: {"player_tag": playerTag, "api_token": apiToken},
         requiresAuth: true,
       );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(ApiService.decodeResponseBody(response));
-        if (data["verified"] == true) {
-          // Update local verification status
-          updateAccountVerificationStatus(playerTag, true);
-          return true;
-        }
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        updateAccountVerificationStatus(playerTag, true);
+        return true;
       } else if (response.statusCode == 403) {
         updateErrorMessage("Invalid API token for this account");
       } else if (response.statusCode == 404) {
@@ -869,6 +736,74 @@ class CocAccountService extends ChangeNotifier {
     selectedTagNotifier.value = null;
     profiles.clear();
     _safeNotify();
+  }
+
+  Map<String, dynamic> _decodeResponseMap(String responseBody) {
+    final trimmedBody = responseBody.trim();
+    if (trimmedBody.isEmpty) {
+      return <String, dynamic>{};
+    }
+
+    try {
+      final decoded = jsonDecode(trimmedBody);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+
+      return <String, dynamic>{
+        "message": "Unexpected response payload: ${decoded.runtimeType}",
+      };
+    } on FormatException {
+      return <String, dynamic>{"message": trimmedBody};
+    }
+  }
+
+  void _reportAddAccountFailure({
+    required String playerTag,
+    required int statusCode,
+    required String responseBody,
+    required Map<String, dynamic> responseData,
+  }) {
+    final message = _extractErrorMessage(responseData);
+    Sentry.captureException(
+      HttpException("Failed to add CoC account: $statusCode $message"),
+      stackTrace: StackTrace.current,
+      withScope: (scope) {
+        scope.setTag("operation", "coc_account.add");
+        scope.setTag("status_code", statusCode.toString());
+        scope.setContexts("CoC account add response", {
+          "player_tag": playerTag,
+          "status_code": statusCode,
+          "message": message,
+          "response_body": _truncateForDiagnostics(responseBody),
+        });
+      },
+    );
+  }
+
+  void _reportAddAccountException(
+    String playerTag,
+    Object error,
+    StackTrace stackTrace,
+  ) {
+    Sentry.captureException(
+      error,
+      stackTrace: stackTrace,
+      withScope: (scope) {
+        scope.setTag("operation", "coc_account.add");
+        scope.setContexts("CoC account add exception", {
+          "player_tag": playerTag,
+        });
+      },
+    );
+  }
+
+  String _truncateForDiagnostics(String value) {
+    const maxLength = 2000;
+    if (value.length <= maxLength) {
+      return value;
+    }
+    return "${value.substring(0, maxLength)}...";
   }
 
   String _extractErrorMessage(Map<String, dynamic> data) {

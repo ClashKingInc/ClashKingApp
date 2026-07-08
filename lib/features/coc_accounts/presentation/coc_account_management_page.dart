@@ -350,38 +350,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 // Verification status with better UX
-                                                if (cocService.isLocalMode)
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 4,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
-                                                          .withValues(
-                                                            alpha: 0.1,
-                                                          ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                    ),
-                                                    child: Text(
-                                                      'Local',
-                                                      style: TextStyle(
-                                                        color: Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  )
-                                                else if (_tempUserAccounts[index]["isVerified"] ==
+                                                if (_tempUserAccounts[index]["isVerified"] ==
                                                     true)
                                                   Container(
                                                     padding:
@@ -693,21 +662,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
     if (response["account"] == null) return;
 
-    // Get the new account data
-    final newAccount = {
-      "player_tag": response["account"]["tag"],
-      "name": response["account"]["name"],
-      "townHallLevel": response["account"]["townHallLevel"] ?? 1,
-      "is_verified":
-          response["account"]["is_verified"] ??
-          false, // Default false for security
-    };
-
-    // Add the account to the local list
     setState(() {
       _isAddingLoading = false;
       _errorMessage = "";
-      context.read<CocAccountService>().addLocalAccount(newAccount);
       _syncTempAccountsWithPlayerService();
     });
 

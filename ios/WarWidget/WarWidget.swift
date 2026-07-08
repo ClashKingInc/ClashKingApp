@@ -261,6 +261,9 @@ private struct WarWidgetFreshFetcher {
     var request = URLRequest(url: url)
     request.timeoutInterval = 10
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    if let token = defaults.string(forKey: "warWidgetAuthToken"), !token.isEmpty {
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    }
 
     do {
       let (data, response) = try await URLSession.shared.data(for: request)

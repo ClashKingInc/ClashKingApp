@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -11,18 +12,19 @@ import 'package:clashkingapp/core/constants/global_keys.dart';
 class ApiService {
   ApiService({http.Client? client}) : _client = client ?? http.Client();
 
-  static const String apiUrlV1 = "https://api.clashk.ing";
-  static const String apiUrlV2 = "https://go.api.clashk.ing/v2";
+  static const String betterStackSentryDsn =
+      'https://6wB3LFzRuW4wyEj1MJVx3SvG@s2574992.eu-fsn-3.betterstackdata.com/2574992';
+
+  static String get apiUrlV1 => ApiConfig.apiUrlV1;
+  static String get apiUrlV2 => ApiConfig.apiUrlV2;
   static const String assetUrl = "https://assets.clashk.ing";
-  static const String proxyUrl = "https://proxy.clashk.ing/v1";
+  static String get proxyUrl => ApiConfig.proxyUrl;
   static const String cocAssetsUrl = "https://coc-assets.clashk.ing";
   static const String bunnyUrl = "https://cdn.clashk.ing";
   static const String discordUrl = "https://discord.gg/clashking";
   static const Duration _defaultTimeout = Duration(seconds: 15);
 
-  // Config storage
-  static String? _sentryDsn;
-  static String? get sentryDsn => _sentryDsn;
+  static String get sentryDsn => betterStackSentryDsn;
   final http.Client _client;
 
   static AppLocalizations? _currentL10n() {
@@ -52,10 +54,7 @@ class ApiService {
     String endpoint, {
     bool requiresAuth = true,
   }) async {
-    final response = await getResponse(
-      endpoint,
-      requiresAuth: requiresAuth,
-    );
+    final response = await getResponse(endpoint, requiresAuth: requiresAuth);
     return _expectMapResponse(response, endpoint);
   }
 
@@ -77,6 +76,7 @@ class ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
   }) async {
     return _requestResponse(
       'GET',
@@ -84,6 +84,7 @@ class ApiService {
       url: url,
       requiresAuth: requiresAuth,
       timeout: timeout,
+      extraHeaders: extraHeaders,
     );
   }
 
@@ -93,6 +94,7 @@ class ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
   }) async {
     return _requestResponse(
       'POST',
@@ -101,6 +103,7 @@ class ApiService {
       body: body,
       requiresAuth: requiresAuth,
       timeout: timeout,
+      extraHeaders: extraHeaders,
     );
   }
 
@@ -110,6 +113,7 @@ class ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
   }) async {
     return _requestResponse(
       'PUT',
@@ -118,6 +122,7 @@ class ApiService {
       body: body,
       requiresAuth: requiresAuth,
       timeout: timeout,
+      extraHeaders: extraHeaders,
     );
   }
 
@@ -127,6 +132,7 @@ class ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
   }) async {
     return _requestResponse(
       'DELETE',
@@ -135,6 +141,24 @@ class ApiService {
       body: body,
       requiresAuth: requiresAuth,
       timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+
+  Future<http.Response> proxyGet(
+    String pathAndQuery, {
+    Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
+  }) {
+    final proxyPath = pathAndQuery.startsWith('/')
+        ? pathAndQuery
+        : '/$pathAndQuery';
+    return getResponse(
+      proxyPath,
+      url: '$proxyUrl$proxyPath',
+      requiresAuth: true,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
     );
   }
 
@@ -242,19 +266,23 @@ class ApiService {
     Object? body,
     required bool requiresAuth,
     required Duration timeout,
+    Map<String, String>? extraHeaders,
   }) async {
     final operationTarget = url ?? endpoint;
 
     try {
       final resolvedUri = Uri.parse(url ?? '$apiUrlV2$endpoint');
-      final headers = await _buildHeaders(requiresAuth: requiresAuth);
+      final headers = await _buildHeaders(
+        requiresAuth: requiresAuth,
+        extraHeaders: extraHeaders,
+      );
       final requestBody = _encodeBody(body);
 
       switch (method) {
         case 'GET':
-          return await _client.get(resolvedUri, headers: headers).timeout(
-                timeout,
-              );
+          return await _client
+              .get(resolvedUri, headers: headers)
+              .timeout(timeout);
         case 'POST':
           return await _client
               .post(resolvedUri, headers: headers, body: requestBody)
@@ -278,10 +306,9 @@ class ApiService {
 
   Future<Map<String, String>> _buildHeaders({
     required bool requiresAuth,
+    Map<String, String>? extraHeaders,
   }) async {
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
+    final headers = <String, String>{'Content-Type': 'application/json'};
 
     if (requiresAuth) {
       final token = await TokenService().getAccessToken();
@@ -294,6 +321,10 @@ class ApiService {
         );
       }
       headers['Authorization'] = 'Bearer $token';
+    }
+
+    if (extraHeaders != null) {
+      headers.addAll(extraHeaders);
     }
 
     return headers;
@@ -354,15 +385,14 @@ class ApiService {
 
   static Future<void> loadConfig() async {
     try {
-      final response = await http.get(
-        Uri.parse('$apiUrlV2/public-config'),
-        headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(
+            Uri.parse('$apiUrlV2/public-config'),
+            headers: {'Content-Type': 'application/json'},
+          )
+          .timeout(const Duration(seconds: 10));
 
-      if (response.statusCode == 200) {
-        final config = json.decode(response.body);
-        _sentryDsn = config['sentry_dsn'];
-      } else {
+      if (response.statusCode != 200) {
         DebugUtils.debugError('Failed to load config: ${response.statusCode}');
       }
     } catch (e) {
@@ -393,10 +423,7 @@ class ApiService {
         (l10n) => l10n.apiErrorNetworkConnection,
       );
     } else if (error is TimeoutException) {
-      return _localized(
-        'Request timeout.',
-        (l10n) => l10n.apiErrorTimeout,
-      );
+      return _localized('Request timeout.', (l10n) => l10n.apiErrorTimeout);
     } else if (error is FormatException) {
       return _localized(
         'Invalid response format.',

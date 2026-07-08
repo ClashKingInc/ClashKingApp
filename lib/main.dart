@@ -106,7 +106,7 @@ Future<void> main() async {
 
   await SentryFlutter.init(
     (options) {
-      options.dsn = ApiService.sentryDsn ?? '';
+      options.dsn = ApiService.sentryDsn;
       options.tracesSampleRate = 1.0;
       options.debug = false;
       options.replay.sessionSampleRate = 1.0;

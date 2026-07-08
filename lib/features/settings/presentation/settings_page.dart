@@ -56,11 +56,8 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
-    final authService = context.watch<AuthService>();
-    final isLocalMode = authService.isLocalMode;
     final hasDiscord =
-        widget.user.hasDiscordAuth ||
-        (!isLocalMode && widget.user.avatarUrl.isNotEmpty);
+        widget.user.hasDiscordAuth || widget.user.avatarUrl.isNotEmpty;
     final hasEmail = widget.user.hasEmailAuth;
     final widgetClans = WarWidgetService.clanOptionsFromProfiles(
       context.watch<PlayerService>().profiles,

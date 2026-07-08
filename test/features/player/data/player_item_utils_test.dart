@@ -103,6 +103,22 @@ void main() {
 
       expect(result.first.maxLevel, 0);
     });
+
+    test('uses metadata name for duplicate static-data keys', () {
+      final result = generateCompleteItemList<_TestItem>(
+        jsonList: [
+          {'name': 'Meteor Golem', 'level': 1, 'maxLevel': 1},
+        ],
+        gameData: {
+          'Meteor Golem 2': {'name': 'Meteor Golem', 'maxLevel': 1},
+        },
+        factory: _factory,
+      );
+
+      expect(result.first.name, 'Meteor Golem');
+      expect(result.first.isUnlocked, isTrue);
+      expect(result.first.level, 1);
+    });
   });
 
   group('maxLevelForTH', () {

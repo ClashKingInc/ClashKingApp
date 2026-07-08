@@ -77,7 +77,6 @@ class WarCwl {
       }
 
       final normalizedTag = normalizeClanTag(tag);
-      DebugUtils.debugInfo("🔍 Looking for CWL war for clan: $normalizedTag");
 
       bool matchesTag(WarInfo warInfo, String tag) =>
           (warInfo.clan != null &&
@@ -93,7 +92,6 @@ class WarCwl {
       );
 
       if (activeWar.state != 'notFound') {
-        DebugUtils.debugSuccess("Found active CWL war for clan $tag");
         return activeWar.reorderForClan(normalizedTag);
       }
 
@@ -106,9 +104,6 @@ class WarCwl {
       );
 
       if (prepWar.state != 'notFound') {
-        DebugUtils.debugSuccess(
-          "Found preparation CWL war for clan $normalizedTag",
-        );
         return prepWar.reorderForClan(normalizedTag);
       }
 
@@ -128,19 +123,9 @@ class WarCwl {
             (a.endTime ?? '').toString(),
           ),
         );
-        DebugUtils.debugSuccess(
-          "Found recent ended CWL war for clan $normalizedTag",
-        );
         return endedWars.first.reorderForClan(normalizedTag);
       }
 
-      DebugUtils.debugError("No CWL wars found for clan $normalizedTag");
-      DebugUtils.debugInfo("🔍 Available wars in warLeagueInfos:");
-      for (final war in warLeagueInfos) {
-        DebugUtils.debugInfo(
-          "   War: ${war.state}, Clan: ${war.clan?.tag}, Opponent: ${war.opponent?.tag}",
-        );
-      }
       return null;
     } catch (e) {
       DebugUtils.debugError("Error finding CWL war for clan $tag: $e");
@@ -217,9 +202,6 @@ class WarCwl {
         if (playerInClan || playerInOpponent) {
           // Found a war with this player, prioritize by state
           if (warInfo.state == 'inWar') {
-            DebugUtils.debugSuccess(
-              "Found active CWL war for player $playerTag",
-            );
             return warInfo.reorderForUser(playerTag);
           }
         }
@@ -238,9 +220,6 @@ class WarCwl {
 
         if (playerInClan || playerInOpponent) {
           if (warInfo.state == 'preparation') {
-            DebugUtils.debugSuccess(
-              "Found preparation CWL war for player $playerTag",
-            );
             return warInfo.reorderForUser(playerTag);
           }
         }
@@ -267,13 +246,9 @@ class WarCwl {
             (a.endTime ?? '').toString(),
           ),
         );
-        DebugUtils.debugSuccess(
-          "Found recent ended CWL war for player $playerTag",
-        );
         return playerWars.first.reorderForUser(playerTag);
       }
 
-      DebugUtils.debugWarning("No CWL wars found for player $playerTag");
       return null;
     } catch (e) {
       DebugUtils.debugError("Error finding CWL war for player $playerTag: $e");

@@ -250,9 +250,35 @@ class WarWidgetService {
         return null;
       }
 
+      final userResponse = await http
+          .get(
+            Uri.parse("${ApiService.apiUrlV2}/auth/me"),
+            headers: {
+              "Authorization": "Bearer $token",
+              "Content-Type": "application/json",
+            },
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (userResponse.statusCode != 200) {
+        DebugUtils.debugWarning(
+          "⚠️ Failed to get current user: ${userResponse.statusCode}",
+        );
+        return null;
+      }
+
+      final userData = jsonDecode(userResponse.body);
+      final userId = userData['user_id']?.toString();
+      if (userId == null || userId.isEmpty) {
+        DebugUtils.debugWarning("⚠️ Current user id missing");
+        return null;
+      }
+
       final response = await http
           .get(
-            Uri.parse("${ApiService.apiUrlV2}/users/coc-accounts"),
+            Uri.parse(
+              "${ApiService.apiUrlV2}/links/${Uri.encodeComponent(userId)}",
+            ),
             headers: {
               "Authorization": "Bearer $token",
               "Content-Type": "application/json",
@@ -262,7 +288,7 @@ class WarWidgetService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final accounts = data['coc_accounts'] as List?;
+        final accounts = data['items'] as List?;
 
         if (accounts != null && accounts.isNotEmpty) {
           final firstAccount = accounts.first;
@@ -476,6 +502,15 @@ class WarWidgetService {
       ApiService.proxyUrl,
       appGroupId: _appGroupForPlatform(),
     );
+
+    final token = await TokenService().getAccessToken();
+    if (token != null && token.isNotEmpty) {
+      await HomeWidget.saveWidgetData<String>(
+        'warWidgetAuthToken',
+        token,
+        appGroupId: _appGroupForPlatform(),
+      );
+    }
   }
 
   static Future<void> _updateWidget() {
