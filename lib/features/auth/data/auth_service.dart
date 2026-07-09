@@ -2,6 +2,7 @@ import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/utils/discord_auth_helper.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/observability_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
@@ -50,6 +51,7 @@ class AuthService extends ChangeNotifier {
       try {
         final response = await _apiService.get('/auth/me');
         _currentUser = User.fromJson(response);
+        await ObservabilityService.setAuthenticatedUser(_currentUser);
         _isAuthenticated = true;
       } catch (e) {
         if (isNetworkError(e)) {
@@ -62,6 +64,7 @@ class AuthService extends ChangeNotifier {
           _isAuthenticated = false;
           _accessToken = null;
           await _tokenService.clearTokens();
+          await ObservabilityService.clearUser();
           DebugUtils.debugWarning("⚠️ Authentication error: $e");
         }
         // Rethrow the error so startup can handle it appropriately
@@ -100,6 +103,7 @@ class AuthService extends ChangeNotifier {
       );
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
       DebugUtils.debugSuccess("🔄 Tokens saved successfully.");
@@ -134,6 +138,7 @@ class AuthService extends ChangeNotifier {
       );
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
 
@@ -203,6 +208,7 @@ class AuthService extends ChangeNotifier {
       );
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
 
@@ -272,6 +278,7 @@ class AuthService extends ChangeNotifier {
       );
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
 
@@ -359,6 +366,7 @@ class AuthService extends ChangeNotifier {
     _isAuthenticated = false;
     _currentUser = null;
     _accessToken = null;
+    await ObservabilityService.clearUser();
     notifyListeners();
   }
 
@@ -372,6 +380,7 @@ class AuthService extends ChangeNotifier {
     _isAuthenticated = false;
     _currentUser = null;
     _accessToken = null;
+    await ObservabilityService.clearUser();
     notifyListeners();
 
     // Note: Also call CocAccountService.clearAccountData() after this

@@ -2,6 +2,7 @@ import 'dart:async' show unawaited;
 import 'dart:convert';
 import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/observability_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -63,6 +64,7 @@ class CocAccountService extends ChangeNotifier {
     _cocAccounts = [];
     _selectedTag = null;
     selectedTagNotifier.value = null;
+    unawaited(ObservabilityService.setSelectedPlayerTag(null));
     _isLoading = false;
     _lastRefresh = null;
     _safeNotify();
@@ -277,6 +279,7 @@ class CocAccountService extends ChangeNotifier {
     final previousTag = _selectedTag;
     _selectedTag = tag;
     selectedTagNotifier.value = tag;
+    unawaited(ObservabilityService.setSelectedPlayerTag(tag));
 
     // Persist to SharedPreferences for widget access
     if (tag != null) {
@@ -309,6 +312,7 @@ class CocAccountService extends ChangeNotifier {
       if (storedTag != null && storedTag.isNotEmpty) {
         _selectedTag = storedTag;
         selectedTagNotifier.value = storedTag;
+        unawaited(ObservabilityService.setSelectedPlayerTag(storedTag));
         DebugUtils.debugInfo(
           "🔄 Loaded selected tag from preferences: $storedTag",
         );

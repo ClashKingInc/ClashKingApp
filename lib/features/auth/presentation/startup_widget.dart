@@ -15,6 +15,7 @@ import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 
 class StartupWidget extends StatefulWidget {
@@ -68,6 +69,11 @@ class StartupWidgetState extends State<StartupWidget> {
           wars: warService,
         );
       } catch (e, stackTrace) {
+        ErrorReporter.captureException(
+          e,
+          stackTrace: stackTrace,
+          operation: 'startup.bootstrap',
+        );
         DebugUtils.debugError(" Startup data initialization failed: $e");
         DebugUtils.debugError(stackTrace.toString());
         if (mounted) {

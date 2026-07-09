@@ -241,3 +241,159 @@ For legacy routes, Flutter calls `apiUrlV1 = "https://api.clashk.ing"` directly 
 | Low | `GET /v2/user/clash-accounts` is a stale path | Update to `/users/coc-accounts` or delete the method in `UserService` |
 | Info | `GET /v2/war/:clan_tag/previous` exists in Go but Flutter still uses legacy `api.clashk.ing` host | Migrate to v2 path when convenient |
 | Info | Join-leave data for the primary flow comes through `/initialization` bulk endpoint correctly | No action needed for primary flow |
+
+---
+
+## 8. Future Product Ideas From Newly Available Local API Endpoints
+
+**Note added:** 2026-07-09  
+**Context:** `https://local-api.clashk.ing/openapi.json` exposes many v2 endpoints that are not yet used by the Flutter app. The goal is not necessarily to remove every v1 call immediately, but to use the new API surface to build new screens or enrich existing ones.
+
+### Recommended first wave: enrich existing screens
+
+#### Player detail screen
+
+Potential endpoints:
+
+| Method | Path | Possible UI use |
+|--------|------|-----------------|
+| GET | `/v2/player/{player_tag}/rankings` | Add a player rankings card or tab. |
+| GET | `/v2/player/{player_tag}/changes` | Add a recent changes timeline: clan, league, trophies, name, town hall, etc. |
+| GET | `/v2/player/{player_tag}/war/stats` | Improve the player war performance section. |
+| GET | `/v2/player/{player_tag}/war/attacks` | Add detailed recent war attacks. |
+| GET | `/v2/player/{player_tag}/battlelog/history` | Add battlelog history if the payload is useful for mobile. |
+| GET | `/v2/player/{player_tag}/legends/{season}/season` | Enrich Legend League seasonal stats. |
+| GET | `/v2/player/{player_tag}/legends/{day}/day` | Enrich Legend League day detail. |
+
+Highest-priority candidates:
+
+1. `/v2/player/{player_tag}/rankings`
+2. `/v2/player/{player_tag}/changes`
+3. `/v2/player/{player_tag}/war/stats`
+
+#### Clan detail screen
+
+Potential endpoints:
+
+| Method | Path | Possible UI use |
+|--------|------|-----------------|
+| GET | `/v2/clan/{clan_tag}/rankings` | Add a clan rankings card or tab. |
+| GET | `/v2/clan/{clan_tag}/changes` | Add a clan changes timeline. |
+| GET | `/v2/clan/{clan_tag}/wars` | Improve clan war history and summaries. |
+| GET | `/v2/clan/{clan_tag}/badge` | Use if richer badge metadata is needed. |
+| GET | `/v2/clan/{clan_tag}/join-leave` | Existing join/leave screen can be expanded. |
+| GET | `/v2/clan/{clan_tag}/join-leave/stats` | Add summary stats for member movement. |
+
+Highest-priority candidates:
+
+1. `/v2/clan/{clan_tag}/rankings`
+2. `/v2/clan/{clan_tag}/changes`
+3. `/v2/clan/{clan_tag}/wars`
+
+#### War and CWL screens
+
+Potential endpoints:
+
+| Method | Path | Possible UI use |
+|--------|------|-----------------|
+| GET | `/v2/cwl/league-thresholds` | Add CWL league threshold reference cards. |
+| GET | `/v2/cwl/{clan_tag}/ranking-history` | Expand CWL ranking history visuals. |
+| GET | `/v2/war/{clan_tag}/war-summary` | Per-clan war summary detail. |
+| GET | `/v2/war/{clan_tag}/previous` | Replace or complement legacy previous-war calls. |
+| GET | `/v2/war/stats` | Add global war analytics. |
+| GET | `/v2/war/clan/stats` | Add clan war analytics. |
+| GET | `/v2/global/war/completed/daily` | Add global completed-war trend chart. |
+| GET | `/v2/global/war/townhall/{townhall_level}/hitrate/weekly` | Add weekly hitrate chart by town hall. |
+
+### Recommended new screens
+
+#### 1. Meta / Battlelogs screen
+
+This is probably the strongest new-screen candidate because it is player-facing, visual, and not too dependent on the authenticated account flow.
+
+Potential endpoints:
+
+| Method | Path | Possible UI use |
+|--------|------|-----------------|
+| GET | `/v2/battlelogs/ranked/armies` | Ranked army meta list. |
+| GET | `/v2/battlelogs/farming/armies` | Farming army meta list. |
+| GET | `/v2/battlelogs/items/top200/usage` | Top-200 item usage. |
+| GET | `/v2/battlelogs/items/top200/hitrate` | Top-200 item hitrate. |
+| GET | `/v2/battlelogs/items/townhall/{townhall_level}/usage` | Usage filtered by town hall. |
+| GET | `/v2/battlelogs/items/townhall/{townhall_level}/hitrate` | Hitrate filtered by town hall. |
+| GET | `/v2/battlelogs/items/league/{league_id}/usage` | Usage filtered by league. |
+| GET | `/v2/battlelogs/items/league/{league_id}/hitrate` | Hitrate filtered by league. |
+
+Possible UX structure:
+
+- Add an Explore/Meta entry point.
+- Use tabs or segmented controls for `Ranked`, `Farming`, `Items`, and `Hitrate`.
+- Add filters for Town Hall and League.
+- Use compact cards with usage rate, hitrate, sample size, and army/item icons.
+- Prefer one outer surface per logical section; avoid nested cards.
+
+#### 2. Leaderboards screen
+
+Potential endpoints:
+
+| Method | Path | Possible UI use |
+|--------|------|-----------------|
+| GET | `/v2/leaderboard/clan/win-streak` | Clan win streak leaderboard. |
+| GET | `/v2/leaderboard/league/{league_tier_id}` | Player leaderboard by league. |
+| GET | `/v2/leaderboard/league/{league_tier_id}/history/{date}` | Historical league leaderboard. |
+| GET | `/v2/leaderboard/townhalls/{townhall_level}` | Player leaderboard by town hall. |
+| GET | `/v2/leaderboard/townhalls/{townhall_level}/history/{date}` | Historical town hall leaderboard. |
+| GET | `/v2/leaderboard/{location_id}/clan/donations` | Clan donations leaderboard. |
+| GET | `/v2/leaderboard/{location_id}/clan/war-wins` | Clan war wins leaderboard. |
+
+Possible UX structure:
+
+- Tabs: Players, Clans, Town Hall, League, War Wins.
+- Filters: location, town hall, league, date.
+- Compact rank rows with clear numeric hierarchy and accessible labels.
+
+#### 3. Global Stats screen
+
+Potential endpoints:
+
+| Method | Path | Possible UI use |
+|--------|------|-----------------|
+| GET | `/v2/global/townhalls` | Global town hall distribution. |
+| GET | `/v2/global/builderhalls` | Global builder hall distribution. |
+| GET | `/v2/global/leaguetiers` | League distribution. |
+| GET | `/v2/global/cwl-leagues` | CWL league distribution. |
+| GET | `/v2/global/capital-leagues` | Capital league distribution. |
+| GET | `/v2/global/clan/locations` | Clan location data and filters. |
+| GET | `/v2/global/war/completed/daily` | Daily completed-war volume chart. |
+| GET | `/v2/global/war/townhall/{townhall_level}/hitrate/weekly` | Weekly hitrate by town hall. |
+
+Possible UX structure:
+
+- Overview cards for global counts/distributions.
+- Chart sections for war volume and hitrate trends.
+- Keep charts simple and readable on mobile; avoid relying on color alone.
+
+### Later-phase ideas
+
+The local API also exposes many Discord/server-management and roster endpoints:
+
+- `/v2/server/{server_id}/settings`
+- `/v2/server/{server_id}/clans`
+- `/v2/server/{server_id}/links`
+- `/v2/server/{server_id}/leaderboards/*`
+- `/v2/server/{server_id}/roles/*`
+- `/v2/server/{server_id}/tickets/*`
+- `/v2/server/{server_id}/reminders/*`
+- `/v2/server/{server_id}/strikes/*`
+- `/v2/roster/*`
+
+These could eventually turn the mobile app into a lightweight ClashKing Discord dashboard, but they should probably be treated as a separate phase because they require clearer permissions, navigation, and account/server context.
+
+### Suggested priority order
+
+1. Build a new **Meta / Battlelogs** screen.
+2. Add **Player Rankings + Player Changes** to the player detail screen.
+3. Add **Clan Rankings + Clan Changes + Clan Wars** to the clan detail screen.
+4. Build a dedicated **Leaderboards** screen.
+5. Build a dedicated **Global Stats** screen.
+6. Consider roster/server-management screens only after the mobile IA and permissions model are clear.

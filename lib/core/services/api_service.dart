@@ -18,9 +18,6 @@ class ApiService {
     tokenService: TokenService.shared,
   );
 
-  static const String betterStackSentryDsn =
-      'https://6wB3LFzRuW4wyEj1MJVx3SvG@s2574992.eu-fsn-3.betterstackdata.com/2574992';
-
   static String get apiUrlV1 => ApiConfig.apiUrlV1;
   static String get apiUrlV2 => ApiConfig.apiUrlV2;
   static const String assetUrl = "https://assets.clashk.ing";
@@ -30,7 +27,6 @@ class ApiService {
   static const String discordUrl = "https://discord.gg/clashking";
   static const Duration _defaultTimeout = Duration(seconds: 15);
 
-  static String get sentryDsn => betterStackSentryDsn;
   final http.Client _client;
   final TokenService _tokenService;
 
@@ -284,24 +280,57 @@ class ApiService {
         extraHeaders: extraHeaders,
       );
       final requestBody = _encodeBody(body);
+      final stopwatch = Stopwatch()..start();
 
       switch (method) {
         case 'GET':
-          return await _client
+          final response = await _client
               .get(resolvedUri, headers: headers)
               .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
         case 'POST':
-          return await _client
+          final response = await _client
               .post(resolvedUri, headers: headers, body: requestBody)
               .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
         case 'PUT':
-          return await _client
+          final response = await _client
               .put(resolvedUri, headers: headers, body: requestBody)
               .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
         case 'DELETE':
-          return await _client
+          final response = await _client
               .delete(resolvedUri, headers: headers, body: requestBody)
               .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
         default:
           throw UnsupportedError('Unsupported HTTP method: $method');
       }
@@ -335,6 +364,44 @@ class ApiService {
     }
 
     return headers;
+  }
+
+  void _recordHttpBreadcrumb(
+    String method,
+    Uri resolvedUri,
+    http.Response response,
+    Duration requestDuration,
+  ) {
+    Sentry.addBreadcrumb(
+      Breadcrumb.http(
+        url: _sanitizedBreadcrumbUri(resolvedUri),
+        method: method,
+        statusCode: response.statusCode,
+        requestDuration: requestDuration,
+        responseBodySize: response.bodyBytes.length,
+        level: response.statusCode >= 400
+            ? SentryLevel.warning
+            : SentryLevel.info,
+      ),
+    );
+  }
+
+  Uri _sanitizedBreadcrumbUri(Uri uri) {
+    final sanitizedSegments = <String>[];
+    for (var index = 0; index < uri.pathSegments.length; index++) {
+      final segment = uri.pathSegments[index];
+      sanitizedSegments.add(segment);
+      if (segment == 'links' && index + 1 < uri.pathSegments.length) {
+        sanitizedSegments.add(':user_id');
+        index++;
+      }
+    }
+
+    return uri.replace(
+      pathSegments: sanitizedSegments,
+      query: null,
+      fragment: null,
+    );
   }
 
   Object? _encodeBody(Object? body) {
