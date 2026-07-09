@@ -144,8 +144,7 @@ class LegendSeason extends StatelessWidget {
                 ),
                 MobileWebImage(
                   errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl:
-                      'https://assets.clashk.ing/stickers/Villager_HV_Villager_12.png',
+                  imageUrl: ImageAssets.villager,
                   height: 300,
                 ),
               ],

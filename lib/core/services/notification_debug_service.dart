@@ -13,7 +13,7 @@ class NotificationDebugService {
 
   static bool get isSupportedPlatform => !kIsWeb && Platform.isIOS;
 
-  static List<NotificationSample> get fallbackSamples => const [
+  static List<NotificationSample> get fallbackSamples => [
     NotificationSample(
       id: 'leagueDefense',
       label: 'League defense',
@@ -117,8 +117,7 @@ class NotificationDebugService {
       group: 'Progress',
       title: 'Archer Queen is ready',
       body: 'Level 106 finished. Upgrade complete.',
-      assetUrl:
-          'https://assets.clashk.ing/home-base/hero-pics/Icon_HV_Hero_Archer_Queen.png',
+      assetUrl: ImageAssets.getHeroImage('Archer Queen'),
     ),
   ];
 

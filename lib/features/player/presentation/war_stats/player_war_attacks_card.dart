@@ -532,8 +532,7 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
           ),
           const SizedBox(height: 16),
           MobileWebImage(
-            imageUrl:
-                'https://assets.clashk.ing/stickers/Villager_HV_Villager_7.png',
+            imageUrl: ImageAssets.villager,
             height: 150,
             width: 120,
           ),

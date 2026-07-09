@@ -2983,25 +2983,17 @@ const _assetFolders = [
 ];
 
 const _staticAssetCatalog = [
-  _AssetEntry(
-    name: 'Villager',
-    folder: 'stickers',
-    url: '${ImageAssets.baseUrl}/stickers/Villager_HV_Villager_7.png',
-  ),
+  _AssetEntry(name: 'Villager', folder: 'stickers', url: ImageAssets.villager),
   _AssetEntry(
     name: 'Builder',
     folder: 'stickers',
-    url: '${ImageAssets.baseUrl}/stickers/Villager_HV_Builder_1.png',
+    url: ImageAssets.builderWave,
   ),
+  _AssetEntry(name: 'Goblin', folder: 'stickers', url: ImageAssets.goblin),
   _AssetEntry(
-    name: 'Goblin',
+    name: 'Thinking Barbarian King',
     folder: 'stickers',
-    url: '${ImageAssets.baseUrl}/stickers/Troop_HV_Goblin.png',
-  ),
-  _AssetEntry(
-    name: 'Sleeping Apprentice Builder',
-    folder: 'stickers',
-    url: '${ImageAssets.baseUrl}/stickers/Apprentice_Builder_Sleeping.png',
+    url: ImageAssets.thinkingBarbarianKing,
   ),
   _AssetEntry(
     name: 'Legend League',
