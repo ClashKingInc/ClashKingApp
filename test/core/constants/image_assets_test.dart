@@ -12,7 +12,7 @@ void main() {
 
       expect(
         ImageAssets.getLeagueImage('Dragon League 29'),
-        'https://assets.clashk.ing/home-base/league-tier-icons/Dragon_League_29.png',
+        'https://assets.clashk.ing/leagues/league-tier/dragon_league_29.png',
       );
     });
 
@@ -20,28 +20,32 @@ void main() {
       GameDataService.playerLeagueData.clear();
 
       expect(
+        ImageAssets.getLeagueImage('Unranked'),
+        'https://assets.clashk.ing/leagues/league-tier/unranked.png',
+      );
+      expect(
         ImageAssets.getLeagueImage('Legend League'),
-        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League.png',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league.png',
       );
       expect(
         ImageAssets.getLeagueImage('Legend League I'),
-        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_1.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_1.webp',
       );
       expect(
         ImageAssets.getLeagueImage('Legend League 2'),
-        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_2.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_2.webp',
       );
       expect(
         ImageAssets.getLeagueImage('Legend League III'),
-        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_3.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.webp',
       );
       expect(
         ImageAssets.getLeagueImage('Legend III'),
-        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_3.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.webp',
       );
       expect(
         ImageAssets.getLeagueImage('Legend 3'),
-        'https://assets.clashk.ing/home-base/league-tier-icons/Legend_League_3.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.webp',
       );
     });
 
@@ -50,7 +54,7 @@ void main() {
       GameDataService.playerLeagueData['leagues'] = {
         'Crystal League I': {
           'url':
-              'https://assets.clashk.ing/home-base/league-icons/Icon_HV_League_Crystal_2.png',
+              'https://assets.clashk.ing/leagues/league-tier/crystal_league_1.png',
         },
       };
       GameDataService.leagueData.clear();
@@ -64,7 +68,7 @@ void main() {
 
       expect(
         ImageAssets.getWarLeagueImage('Crystal League I'),
-        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Crystal_1.png',
+        'https://assets.clashk.ing/leagues/cwl/crystal_league_1.png',
       );
     });
 
@@ -85,24 +89,27 @@ void main() {
 
       expect(
         ImageAssets.getWarLeagueImage('Titan League II'),
-        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Titan_2.png',
+        'https://assets.clashk.ing/leagues/cwl/titan_league_2.png',
       );
       expect(
         ImageAssets.getWarLeagueImage('Legend League'),
-        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Legend.png',
+        'https://assets.clashk.ing/leagues/cwl/legend_league.png',
       );
     });
 
-    test('uses direct Titan CWL icon from display name without static data', () {
-      GameDataService.playerLeagueData.clear();
-      GameDataService.leagueData.clear();
-      GameDataService.warLeagueData.clear();
+    test(
+      'uses direct Titan CWL icon from display name without static data',
+      () {
+        GameDataService.playerLeagueData.clear();
+        GameDataService.leagueData.clear();
+        GameDataService.warLeagueData.clear();
 
-      expect(
-        ImageAssets.getWarLeagueImage('Titan League II'),
-        'https://assets.clashk.ing/home-base/league-icons/Icon_HV_CWL_Titan_2.png',
-      );
-    });
+        expect(
+          ImageAssets.getWarLeagueImage('Titan League II'),
+          'https://assets.clashk.ing/leagues/cwl/titan_league_2.png',
+        );
+      },
+    );
 
     test('does not fall back to player league icons for unknown war leagues', () {
       GameDataService.warLeagueData.clear();
@@ -111,7 +118,7 @@ void main() {
       GameDataService.playerLeagueData['leagues'] = {
         'Goblin League I': {
           'url':
-              'https://assets.clashk.ing/home-base/league-icons/Icon_HV_League_Goblin_1.png',
+              'https://assets.clashk.ing/leagues/league-tier/goblin_league_1.png',
         },
       };
 
@@ -163,6 +170,52 @@ void main() {
       expect(
         ImageAssets.getBuilderBaseHeroImage('Battle Machine'),
         'https://assets.clashk.ing/heroes/battle_machine/icon.webp',
+      );
+    });
+
+    test('builds v2.1.0 building and trap still-frame URLs', () {
+      expect(
+        ImageAssets.getHomeVillageBuildingImage('Wall', 9),
+        'https://assets.clashk.ing/buildings/home-village/wall/level_9.webp',
+      );
+      expect(
+        ImageAssets.getBuilderBaseBuildingImage('Double Cannon', 10),
+        'https://assets.clashk.ing/buildings/builder-base/double_cannon/level_10.webp',
+      );
+      expect(
+        ImageAssets.getSeasonalDefenseImage('Roaster', 10),
+        'https://assets.clashk.ing/buildings/seasonal-defense/roaster/level_10.webp',
+      );
+      expect(
+        ImageAssets.getBuilderBaseTrapImage('Push Trap', 10),
+        'https://assets.clashk.ing/traps/builder-base/push_trap/level_10.webp',
+      );
+    });
+
+    test('builds v2.1.0 decoration, league, and sticker URLs', () {
+      expect(
+        ImageAssets.getHomeVillageDecorationImage('Card Collector'),
+        'https://assets.clashk.ing/decorations/home-village/card_collector.webp',
+      );
+      expect(
+        ImageAssets.getBuilderBaseDecorationImage('Ancient Barbarian Statue'),
+        'https://assets.clashk.ing/decorations/builder-base/ancient_barbarian_statue.webp',
+      );
+      expect(
+        ImageAssets.getWarLeagueImage('Bronze League III'),
+        'https://assets.clashk.ing/leagues/cwl/bronze_league_3.png',
+      );
+      expect(
+        ImageAssets.getCapitalLeagueImage('Bronze League III'),
+        'https://assets.clashk.ing/leagues/capital-leagues/bronze_league_3.png',
+      );
+      expect(
+        ImageAssets.getBuilderBaseLeagueImage('Copper League III'),
+        'https://assets.clashk.ing/leagues/builder-base/copper_league_3.png',
+      );
+      expect(
+        ImageAssets.builderWave,
+        'https://assets.clashk.ing/stickers/builder_wave.webp',
       );
     });
   });

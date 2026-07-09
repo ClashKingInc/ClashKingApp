@@ -2,8 +2,7 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 
 class ImageAssets {
   static const String baseUrl = "https://assets.clashk.ing";
-  static const String defaultImage =
-      "$baseUrl/default-pics/Icon_Unknown_Troop.png";
+  static const String defaultImage = "$baseUrl/icons/Icon_Unknown_Troop.png";
 
   // 👑 Logos
   static const String darkModeLogo =
@@ -17,23 +16,28 @@ class ImageAssets {
 
   // 🏰 Town Hall & Builder Hall
   static String townHall(int level) =>
-      "$baseUrl/home-base/town-hall-pics/town-hall-$level.png";
+      getHomeVillageBuildingImage('Town Hall', level);
   static String builderHall(int level) =>
-      "$baseUrl/builder-base/builder-hall-pics/Building_BB_Builder_Hall_level_$level.png";
+      getBuilderBaseBuildingImage('Builder Hall', level);
 
   // 🏆 League Icons
   static String getLeagueImage(String leagueName) {
+    final normalized = leagueName.trim().toLowerCase();
+    if (normalized == 'unranked') {
+      return _buildAssetUrl(['leagues', 'league-tier', 'unranked.png']);
+    }
+
     final legendTierFile = _legendLeagueTierFile(leagueName);
     if (legendTierFile != null) {
-      return _buildAssetUrl(['home-base', 'league-tier-icons', legendTierFile]);
+      return _buildAssetUrl(['leagues', 'league-tier', legendTierFile]);
     }
 
     final rawPlayerLeagues = GameDataService.playerLeagueData["leagues"];
     if (rawPlayerLeagues is Map && rawPlayerLeagues.containsKey(leagueName)) {
       return _buildAssetUrl([
-        'home-base',
-        'league-tier-icons',
-        '${_titleUnderscoreName(leagueName)}.png',
+        'leagues',
+        'league-tier',
+        '${_leagueFileSlug(leagueName)}.png',
       ]);
     }
 
@@ -53,7 +57,7 @@ class ImageAssets {
   static String? _legendLeagueTierFile(String leagueName) {
     final normalized = leagueName.trim().toLowerCase();
     if (normalized == 'legend' || normalized == 'legend league') {
-      return 'Legend_League.png';
+      return 'legend_league.png';
     }
     if (!normalized.startsWith('legend league ') &&
         !normalized.startsWith('legend ')) {
@@ -66,7 +70,7 @@ class ImageAssets {
         .trim();
     final tierNumber = _leagueTierNumber(tier);
     if (tierNumber < 1 || tierNumber > 3) return null;
-    return 'Legend_League_$tierNumber.webp';
+    return 'legend_league_$tierNumber.webp';
   }
 
   static String getWarLeagueImage(String leagueName) {
@@ -87,21 +91,9 @@ class ImageAssets {
       return capitalTrophy;
     }
 
-    const filesByFamily = {
-      'bronze': 'Icon_HV_League_Bronze_2.png',
-      'silver': 'Icon_HV_League_Silver_2.png',
-      'gold': 'Icon_HV_League_Gold_2.png',
-      'crystal': 'Icon_HV_League_Crystal_2.png',
-      'master': 'Icon_HV_League_Master_2.png',
-      'champion': 'Icon_HV_League_Champion.png',
-      'titan': 'Icon_HV_League_Titan_1.png',
-      'legend': 'Icon_HV_League_Legend_4.png',
-    };
-
-    for (final entry in filesByFamily.entries) {
-      if (normalized.contains(entry.key)) {
-        return _buildAssetUrl(['home-base', 'league-icons', entry.value]);
-      }
+    final capitalLeagueFile = _numberedLeagueFileName(leagueName);
+    if (capitalLeagueFile != null) {
+      return _buildAssetUrl(['leagues', 'capital-leagues', capitalLeagueFile]);
     }
 
     return getLeagueImage(leagueName);
@@ -109,41 +101,22 @@ class ImageAssets {
 
   static String getBuilderBaseLeagueImage(dynamic league) {
     if (league is Map) {
+      if (league['name'] is String) {
+        return getBuilderBaseLeagueImage(league['name']);
+      }
       final iconUrls = league['iconUrls'];
       if (iconUrls is Map && iconUrls['medium'] is String) {
         return iconUrls['medium'] as String;
-      }
-      if (league['name'] is String) {
-        return getBuilderBaseLeagueImage(league['name']);
       }
     }
 
     final name = league?.toString().trim() ?? '';
     if (name.isEmpty) return builderBaseStar;
-
-    final parts = name.toLowerCase().split(RegExp(r'\s+'));
-    if (parts.length < 2) return builderBaseStar;
-
-    final material = parts[0];
-    if (material == 'legend') {
-      return '$baseUrl/bot/builder-base-leagues/legend_league.png';
-    }
-
-    if (material == 'diamond') {
-      return '$baseUrl/bot/builder-base-leagues/diamond_league_1.png';
-    }
-
-    if (parts.length < 3) {
-      return '$baseUrl/builder-base/league-icons/Icon_BB_League_${_titleUnderscoreName(material)}.png';
-    }
-
-    final tier = _leagueTierNumber(parts[2]);
-    final prefixedAsset = _builderBaseLeaguePrefixedAsset(material, tier);
-    if (prefixedAsset) {
-      return '$baseUrl/bot/builder-base-leagues/builder_base_${material}_league_$tier.png';
-    }
-
-    return '$baseUrl/bot/builder-base-leagues/${material}_league_$tier.png';
+    return _buildAssetUrl([
+      'leagues',
+      'builder-base',
+      '${_leagueFileSlug(name)}.png',
+    ]);
   }
 
   static int _leagueTierNumber(String value) {
@@ -155,12 +128,6 @@ class ImageAssets {
       'v' => 5,
       _ => int.tryParse(value) ?? value.length,
     };
-  }
-
-  static bool _builderBaseLeaguePrefixedAsset(String material, int tier) {
-    return material == 'clay' ||
-        material == 'brass' ||
-        (material == 'copper' && tier <= 2);
   }
 
   static dynamic _findLeague(Map<String, dynamic> source, String leagueName) {
@@ -178,59 +145,10 @@ class ImageAssets {
     final resolvedName = league is Map && league['name'] is String
         ? league['name'] as String
         : leagueName.trim();
-    const cwlFiles = {
-      'TID_LEAGUE_BRONZE1': 'Icon_HV_CWL_Bronze_1.png',
-      'TID_LEAGUE_BRONZE2': 'Icon_HV_CWL_Bronze_2.png',
-      'TID_LEAGUE_BRONZE3': 'Icon_HV_CWL_Bronze_3.png',
-      'TID_LEAGUE_SILVER1': 'Icon_HV_CWL_Silver_1.png',
-      'TID_LEAGUE_SILVER2': 'Icon_HV_CWL_Silver_12.png',
-      'TID_LEAGUE_SILVER3': 'Icon_HV_CWL_Silver_13.png',
-      'TID_LEAGUE_GOLD1': 'Icon_HV_CWL_Gold_1.png',
-      'TID_LEAGUE_GOLD2': 'Icon_HV_CWL_Gold_2.png',
-      'TID_LEAGUE_GOLD3': 'Icon_HV_CWL_Gold_3.png',
-      'TID_LEAGUE_CRYSTAL1': 'Icon_HV_CWL_Crystal_1.png',
-      'TID_LEAGUE_CRYSTAL2': 'Icon_HV_CWL_Crystal_2.png',
-      'TID_LEAGUE_CRYSTAL3': 'Icon_HV_CWL_Crystal_3.png',
-      'TID_LEAGUE_MASTER1': 'Icon_HV_CWL_Master_1.png',
-      'TID_LEAGUE_MASTER2': 'Icon_HV_CWL_Master_2.png',
-      'TID_LEAGUE_MASTER3': 'Icon_HV_CWL_Master_3.png',
-      'TID_LEAGUE_CHAMPION1': 'Icon_HV_CWL_Champion_1.png',
-      'TID_LEAGUE_CHAMPION2': 'Icon_HV_CWL_Champion_2.png',
-      'TID_LEAGUE_CHAMPION3': 'Icon_HV_CWL_Champion_3.png',
-      'TID_LEAGUE_HERO1': 'Icon_HV_CWL_Titan_1.png',
-      'TID_LEAGUE_HERO2': 'Icon_HV_CWL_Titan_2.png',
-      'TID_LEAGUE_HERO3': 'Icon_HV_CWL_Titan_3.png',
-      'TID_LEAGUE_TITANIUM1': 'Icon_HV_CWL_Titan_1.png',
-      'TID_LEAGUE_TITANIUM2': 'Icon_HV_CWL_Titan_2.png',
-      'TID_LEAGUE_TITANIUM3': 'Icon_HV_CWL_Titan_3.png',
-      'TID_LEAGUE_LEGENDARY': 'Icon_HV_CWL_Legend.png',
-      'Bronze League I': 'Icon_HV_CWL_Bronze_1.png',
-      'Bronze League II': 'Icon_HV_CWL_Bronze_2.png',
-      'Bronze League III': 'Icon_HV_CWL_Bronze_3.png',
-      'Silver League I': 'Icon_HV_CWL_Silver_1.png',
-      'Silver League II': 'Icon_HV_CWL_Silver_12.png',
-      'Silver League III': 'Icon_HV_CWL_Silver_13.png',
-      'Gold League I': 'Icon_HV_CWL_Gold_1.png',
-      'Gold League II': 'Icon_HV_CWL_Gold_2.png',
-      'Gold League III': 'Icon_HV_CWL_Gold_3.png',
-      'Crystal League I': 'Icon_HV_CWL_Crystal_1.png',
-      'Crystal League II': 'Icon_HV_CWL_Crystal_2.png',
-      'Crystal League III': 'Icon_HV_CWL_Crystal_3.png',
-      'Master League I': 'Icon_HV_CWL_Master_1.png',
-      'Master League II': 'Icon_HV_CWL_Master_2.png',
-      'Master League III': 'Icon_HV_CWL_Master_3.png',
-      'Champion League I': 'Icon_HV_CWL_Champion_1.png',
-      'Champion League II': 'Icon_HV_CWL_Champion_2.png',
-      'Champion League III': 'Icon_HV_CWL_Champion_3.png',
-      'Titan League I': 'Icon_HV_CWL_Titan_1.png',
-      'Titan League II': 'Icon_HV_CWL_Titan_2.png',
-      'Titan League III': 'Icon_HV_CWL_Titan_3.png',
-      'Legend League': 'Icon_HV_CWL_Legend.png',
-      'Unranked': 'Icon_HV_CWL_Unranked.png',
-    };
-    final fileName = cwlFiles[tid] ?? cwlFiles[resolvedName];
+    final fileName =
+        _cwlLeagueFileName(tid) ?? _numberedLeagueFileName(resolvedName);
     if (fileName != null) {
-      return '$baseUrl/home-base/league-icons/$fileName';
+      return _buildAssetUrl(['leagues', 'cwl', fileName]);
     }
     if (league is Map && league['url'] is String) {
       return league['url'] as String;
@@ -260,7 +178,7 @@ class ImageAssets {
   static const String hitrate = "$baseUrl/icons/Icon_DC_Hitrate.png";
   static const String podium = "$baseUrl/icons/Icon_HV_Podium.png";
   static const String clanCastle =
-      "$baseUrl/builder-base/building-pics/Building_HV_Clan_Castle_level_2_3.png";
+      "$baseUrl/buildings/home-village/clan_castle/level_1.webp";
   static const String cwlSwordsNoBorder =
       "$baseUrl/icons/Icon_DC_CWL_No_Border.png";
 
@@ -386,26 +304,105 @@ class ImageAssets {
     return _buildAssetUrl(['equipment', '$slug.webp']);
   }
 
+  static String getHomeVillageBuildingImage(String buildingName, int level) {
+    return _leveledAssetUrl(['buildings', 'home-village'], buildingName, level);
+  }
+
+  static String getBuilderBaseBuildingImage(String buildingName, int level) {
+    return _leveledAssetUrl(['buildings', 'builder-base'], buildingName, level);
+  }
+
+  static String getSeasonalDefenseImage(String defenseName, int level) {
+    return _leveledAssetUrl(
+      ['buildings', 'seasonal-defense'],
+      defenseName,
+      level,
+    );
+  }
+
+  static String getHomeVillageTrapImage(String trapName, int level) {
+    return _leveledAssetUrl(['traps', 'home-village'], trapName, level);
+  }
+
+  static String getBuilderBaseTrapImage(String trapName, int level) {
+    return _leveledAssetUrl(['traps', 'builder-base'], trapName, level);
+  }
+
+  static String getHomeVillageDecorationImage(String decorationName) {
+    return _namedAssetUrl(['decorations', 'home-village'], decorationName);
+  }
+
+  static String getBuilderBaseDecorationImage(String decorationName) {
+    return _namedAssetUrl(['decorations', 'builder-base'], decorationName);
+  }
+
   static String _assetSlug(String name) {
     return name.trim().toLowerCase().replaceAll(' ', '_').replaceAll('.', '');
   }
 
-  static String _titleUnderscoreName(String name) {
-    final parts = name
-        .trim()
-        .replaceAll('.', '')
-        .split(RegExp(r'[\s_-]+'))
-        .where((part) => part.isNotEmpty)
-        .toList();
+  static String _leagueFileSlug(String name) {
+    final normalized = name.trim().toLowerCase();
+    final romanSuffix = RegExp(r'\s+(i|ii|iii|iv|v)$').firstMatch(normalized);
+    if (romanSuffix != null) {
+      final suffix = romanSuffix.group(1)!;
+      final prefix = normalized.substring(0, romanSuffix.start);
+      return '${_assetSlug(prefix)}_${_leagueTierNumber(suffix)}';
+    }
+    return _assetSlug(name);
+  }
 
-    return parts
-        .map((part) {
-          if (part.length == 1) {
-            return part.toUpperCase();
-          }
-          return '${part[0].toUpperCase()}${part.substring(1)}';
-        })
-        .join('_');
+  static String? _numberedLeagueFileName(String leagueName) {
+    final slug = _leagueFileSlug(leagueName);
+    if (slug.isEmpty) return null;
+    if (slug == 'unranked') return 'unranked.png';
+    if (slug == 'legend_league') return 'legend_league.png';
+    final match = RegExp(r'^([a-z]+)_league(?:_\d+)?$').firstMatch(slug);
+    if (match == null) {
+      return null;
+    }
+    const knownFamilies = {
+      'bronze',
+      'silver',
+      'gold',
+      'crystal',
+      'master',
+      'champion',
+      'titan',
+    };
+    if (!knownFamilies.contains(match.group(1))) return null;
+    return '$slug.png';
+  }
+
+  static String? _cwlLeagueFileName(String? tid) {
+    if (tid == null || tid.isEmpty) return null;
+    if (tid == 'TID_LEAGUE_LEGENDARY') return 'legend_league.png';
+    if (tid == 'TID_LEAGUE_UNRANKED') return 'unranked.png';
+
+    final match = RegExp(r'^TID_LEAGUE_([A-Z]+)(\d)$').firstMatch(tid);
+    if (match == null) return null;
+
+    final rawFamily = match.group(1)!.toLowerCase();
+    final family = switch (rawFamily) {
+      'hero' || 'titanium' => 'titan',
+      _ => rawFamily,
+    };
+    return '${family}_league_${match.group(2)}.png';
+  }
+
+  static String _leveledAssetUrl(List<String> prefix, String name, int level) {
+    final slug = _assetSlug(name);
+    if (slug.isEmpty || level <= 0) {
+      return defaultImage;
+    }
+    return _buildAssetUrl([...prefix, slug, 'level_$level.webp']);
+  }
+
+  static String _namedAssetUrl(List<String> prefix, String name) {
+    final slug = _assetSlug(name);
+    if (slug.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl([...prefix, '$slug.webp']);
   }
 
   static String _buildAssetUrl(List<String> segments) {
@@ -417,8 +414,11 @@ class ImageAssets {
   }
 
   // Stickers
-  static const String villager = "$baseUrl/stickers/Villager_HV_Villager_7.png";
-  static const String goblin = "$baseUrl/stickers/Troop_HV_Goblin.png";
+  static const String villager = "$baseUrl/stickers/villager_clapping.webp";
+  static const String goblin = "$baseUrl/stickers/crying_goblin.webp";
+  static const String builderWave = "$baseUrl/stickers/builder_wave.webp";
+  static const String thinkingBarbarianKing =
+      "$baseUrl/stickers/thinking_bk.webp";
   static const String sleepingApprenticeBuilder =
-      "$baseUrl/stickers/Apprentice_Builder_Sleeping.png";
+      "$baseUrl/stickers/builder_wave.webp";
 }
