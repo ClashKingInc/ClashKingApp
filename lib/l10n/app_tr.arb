@@ -296,9 +296,9 @@
   "authAccountLinkEmail": "E-posta Hesabını Bağla",
   "authAccountAddEmailAuth": "Ek güvenlik için hesabına e-posta ve şifre kimlik doğrulaması ekle.",
   "authAccountEmailLinkedSuccess": "E-posta hesabı başarıyla bağlandı!",
-  "authAccountLinkDiscord": "Link Discord Account",
-  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
-  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
+  "authAccountLinkDiscord": "Discord Hesabı Bağla",
+  "authAccountAddDiscordAuth": "Platformlar arası senkronizasyon ve ClashKing Bot erişimi için hesabınıza Discord kimlik doğrulamasını ekleyin.",
+  "authAccountDiscordLinkedSuccess": "Discord hesabı başarıyla bağlandı!",
   "authEmailVerificationTitle": "E-postayı Doğrula",
   "authEmailVerificationCheckEmail": "E-postanızı Kontrol Edin",
   "authEmailVerificationSentTo": "Şu adrese doğrulama e-postası gönderdik:",
@@ -2153,87 +2153,87 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Choose alerts and send local test previews.",
+  "settingsNotificationsSubtitle": "Uyarıları seçin ve yerel test önizlemeleri gönderin.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
-  "settingsLiveActivityTest": "Live Activity Test",
+  "settingsLiveActivityTest": "Canlı Aktivite Testi",
   "@settingsLiveActivityTest": {
     "description": "Settings section: live activity test (debug only)"
   },
-  "settingsLiveActivityStart": "Start test activity",
+  "settingsLiveActivityStart": "Test etkinliğine başla",
   "@settingsLiveActivityStart": {
     "description": "Settings tile: start live activity test"
   },
-  "settingsLiveActivityStartSubtitle": "Shows a local clan-war preview.",
+  "settingsLiveActivityStartSubtitle": "Yerel bir klan savaşının ön izlemesini gösteriyor.",
   "@settingsLiveActivityStartSubtitle": {
     "description": "Settings tile: start live activity subtitle"
   },
-  "settingsLiveActivityUpdate": "Update score",
+  "settingsLiveActivityUpdate": "Skoru güncelle",
   "@settingsLiveActivityUpdate": {
     "description": "Settings tile: update live activity score"
   },
-  "settingsLiveActivityUpdateSubtitle": "Advances the fake war score.",
+  "settingsLiveActivityUpdateSubtitle": "Sahte savaş skorunu ilerletir.",
   "@settingsLiveActivityUpdateSubtitle": {
     "description": "Settings tile: update live activity subtitle"
   },
-  "settingsLiveActivityEnd": "End test activity",
+  "settingsLiveActivityEnd": "Test etkinliğini sonlandır",
   "@settingsLiveActivityEnd": {
     "description": "Settings tile: end live activity test"
   },
-  "settingsLiveActivityEndSubtitle": "Removes the local preview.",
+  "settingsLiveActivityEndSubtitle": "Yerel önizlemeyi kaldırır.",
   "@settingsLiveActivityEndSubtitle": {
     "description": "Settings tile: end live activity subtitle"
   },
-  "settingsSupport": "Support",
+  "settingsSupport": "Destek",
   "@settingsSupport": {
     "description": "Settings section: support"
   },
-  "settingsAbout": "About",
+  "settingsAbout": "Hakkında",
   "@settingsAbout": {
     "description": "Settings section: about"
   },
-  "settingsAccount": "Account",
+  "settingsAccount": "Hesap",
   "@settingsAccount": {
     "description": "Settings section: account"
   },
-  "settingsSignedIn": "Signed in",
+  "settingsSignedIn": "Giriş yapıldı",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
   },
-  "settingsAppearance": "Appearance",
+  "settingsAppearance": "Görünüm",
   "@settingsAppearance": {
     "description": "Theme mode selection bottom sheet title"
   },
-  "settingsThemeSystem": "System",
+  "settingsThemeSystem": "Sistem",
   "@settingsThemeSystem": {
     "description": "Theme mode: system default"
   },
-  "settingsThemeMatchDevice": "Match this device",
+  "settingsThemeMatchDevice": "Bu cihazla eşleştirin",
   "@settingsThemeMatchDevice": {
     "description": "Theme mode system subtitle"
   },
-  "settingsThemeLight": "Light",
+  "settingsThemeLight": "Açık",
   "@settingsThemeLight": {
     "description": "Theme mode: light"
   },
-  "settingsThemeDark": "Dark",
+  "settingsThemeDark": "Koyu",
   "@settingsThemeDark": {
     "description": "Theme mode: dark"
   },
-  "settingsThemeSelected": "Selected",
+  "settingsThemeSelected": "Seçili",
   "@settingsThemeSelected": {
     "description": "Trailing text shown on the currently selected theme mode tile"
   },
-  "notifNoAccountsLoadedYet": "No linked accounts loaded yet.",
+  "notifNoAccountsLoadedYet": "Henüz hiçbir bağlantılı hesap yüklenmedi.",
   "@notifNoAccountsLoadedYet": {
     "description": "Message shown when no CoC accounts are loaded in notification settings"
   },
-  "notifNoAccountsSelected": "No accounts selected",
+  "notifNoAccountsSelected": "Hiçbir hesap seçilmedi.",
   "@notifNoAccountsSelected": {
     "description": "Summary when no accounts are selected for notifications"
   },
-  "notifAccountsSelected": "{count} accounts selected",
+  "notifAccountsSelected": "{count} hesap seçildi",
   "@notifAccountsSelected": {
     "description": "Summary of how many accounts are selected for notifications",
     "placeholders": {
@@ -2242,35 +2242,35 @@
       }
     }
   },
-  "notifSelectedAccounts": "Selected accounts",
+  "notifSelectedAccounts": "Seçili hesaplar",
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchRecent": "Recent",
+  "searchRecent": "Son",
   "@searchRecent": {
     "description": "Section heading for recent search results"
   },
-  "searchTabPlayers": "Players",
+  "searchTabPlayers": "Oyuncular",
   "@searchTabPlayers": {
     "description": "Search mode tab: players"
   },
-  "searchTabClans": "Clans",
+  "searchTabClans": "Klanlar",
   "@searchTabClans": {
     "description": "Search mode tab: clans"
   },
-  "searchFilters": "Filters",
+  "searchFilters": "Filtreler",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "searchClear": "Clear",
+  "searchClear": "Temizle",
   "@searchClear": {
     "description": "Tooltip for the clear icon button in search"
   },
-  "warStatsRefreshSuccess": "Data refreshed successfully",
+  "warStatsRefreshSuccess": "Veriler başarıyla yenilendi.",
   "@warStatsRefreshSuccess": {
     "description": "SnackBar message when war stats data is refreshed successfully"
   },
-  "warStatsRefreshFailed": "Failed to refresh data: {error}",
+  "warStatsRefreshFailed": "Veri yenileme başarısız oldu: {error}",
   "@warStatsRefreshFailed": {
     "description": "SnackBar message when war stats data refresh fails",
     "placeholders": {
@@ -2279,7 +2279,7 @@
       }
     }
   },
-  "warStatsFilterFailed": "Failed to load filtered data: {error}",
+  "warStatsFilterFailed": "Filtrelenmiş veriler yüklenemedi: {error}",
   "@warStatsFilterFailed": {
     "description": "SnackBar message when filtered war stats data fails to load",
     "placeholders": {
@@ -2288,7 +2288,7 @@
       }
     }
   },
-  "warStatsExportFailed": "Export failed: {error}",
+  "warStatsExportFailed": "Dışa aktarma başarısız oldu: {error}",
   "@warStatsExportFailed": {
     "description": "SnackBar message when war stats export fails",
     "placeholders": {
@@ -2297,11 +2297,11 @@
       }
     }
   },
-  "exportLabelPlayer": "Player",
+  "exportLabelPlayer": "Oyuncu",
   "@exportLabelPlayer": {
     "description": "Export dialog info row label: player name"
   },
-  "exportLabelFormat": "Format",
+  "exportLabelFormat": "Biçim",
   "@exportLabelFormat": {
     "description": "Export dialog info row label: file format"
   },
@@ -2309,27 +2309,27 @@
   "@exportLabelExcel": {
     "description": "Export dialog info row value: Excel format"
   },
-  "exportLabelIncludes": "Includes",
+  "exportLabelIncludes": "İçerdikleri",
   "@exportLabelIncludes": {
     "description": "Export dialog info row label: what is included"
   },
-  "exportLabelContent": "Stats, attacks, TH analysis",
+  "exportLabelContent": "İstatistikler, saldırılar, BB analizi",
   "@exportLabelContent": {
     "description": "Export dialog info row value: content description"
   },
-  "accountNoUserData": "No user data available",
+  "accountNoUserData": "Mevcut kullanıcı verisi yok",
   "@accountNoUserData": {
     "description": "Message shown when authenticated user data is null"
   },
-  "accountsMenuTitle": "Accounts",
+  "accountsMenuTitle": "Hesaplar",
   "@accountsMenuTitle": {
     "description": "Header label in the account dropdown menu in the app bar"
   },
-  "searchErrorPlayerLoadFailed": "Failed to load player data.",
+  "searchErrorPlayerLoadFailed": "Oyuncu verileri yüklenemedi.",
   "@searchErrorPlayerLoadFailed": {
     "description": "Error when player data fails to load from search"
   },
-  "searchErrorClanLoadFailed": "Failed to load clan data.",
+  "searchErrorClanLoadFailed": "Klan verileri yüklenemedi.",
   "@searchErrorClanLoadFailed": {
     "description": "Error when clan data fails to load from search"
   }
