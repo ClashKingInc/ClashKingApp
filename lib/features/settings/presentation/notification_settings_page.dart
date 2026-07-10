@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clashkingapp/features/pages/data/announcement_presentation_service.dart';
 
 class _NotifGroup {
   static const leagueBattles = 'League battles';
@@ -22,6 +23,8 @@ class _NotifGroup {
   static const warState = 'War state';
   static const warReminders = 'War reminders';
   static const events = 'Events';
+  static const announcements =
+      AnnouncementPresentationService.notificationPreferenceLabel;
   static const upgradeFinishes = 'Upgrade finishes';
   static const monthlySupport = 'Monthly support';
   static const clanGames = 'Clan Games';
@@ -50,6 +53,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     _NotifGroup.warState,
     _NotifGroup.warReminders,
     _NotifGroup.events,
+    _NotifGroup.announcements,
     _NotifGroup.upgradeFinishes,
     _NotifGroup.monthlySupport,
   };
@@ -269,6 +273,15 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     unawaited(_savePreferences());
                   },
                 ),
+              ),
+              _NotificationToggleRow(
+                icon: LucideIcons.megaphone,
+                title: _NotifGroup.announcements,
+                subtitle:
+                    'In-app banners and future push alerts for ClashKing updates.',
+                enabled: _enabledTypes.contains(_NotifGroup.announcements),
+                onChanged: (value) =>
+                    _toggleType(_NotifGroup.announcements, value),
               ),
               _NotificationToggleRow(
                 icon: LucideIcons.hammer,

@@ -7,6 +7,11 @@ import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
+import 'package:clashkingapp/features/pages/data/announcement_presentation_service.dart';
+import 'package:clashkingapp/features/pages/data/announcement_service.dart';
+import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
+import 'package:clashkingapp/features/pages/models/app_announcement.dart';
+import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/pages/presentation/players_page.dart';
 import 'package:clashkingapp/features/pages/presentation/search_page.dart';
 import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
@@ -29,15 +34,52 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   late PageController _pageController;
+  late final AnnouncementService _announcementService;
+  late final AnnouncementPresentationService _announcementPresentationService;
+  late final AppAnnouncement _openingAnnouncement;
+  late final Future<String?> _openingStoryFile;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+    _announcementService = AnnouncementService();
+    _announcementPresentationService = AnnouncementPresentationService();
+    _openingAnnouncement = _announcementService.getOpeningAnnouncement();
+    _openingStoryFile = AnnouncementStoryCacheService().prepare(
+      _openingAnnouncement,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await DeepLinkHandler.tryHandlePendingDeepLink(context);
+      await _showOpeningAnnouncement();
     });
+  }
+
+  Future<void> _showOpeningAnnouncement() async {
+    if (!mounted || ModalRoute.of(context)?.isCurrent != true) {
+      return;
+    }
+
+    if (!await _announcementPresentationService.shouldPresent(
+      _openingAnnouncement,
+    )) {
+      return;
+    }
+    final storyFilePath = await _openingStoryFile;
+    if (storyFilePath == null) {
+      return;
+    }
+    if (!mounted || ModalRoute.of(context)?.isCurrent != true) {
+      return;
+    }
+
+    await showAnnouncementStoryDialog(
+      context,
+      announcement: _openingAnnouncement,
+      preparedFilePath: storyFilePath,
+    );
+    await _announcementPresentationService.markDismissed(_openingAnnouncement);
   }
 
   @override

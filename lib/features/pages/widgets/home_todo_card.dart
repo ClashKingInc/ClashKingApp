@@ -3,6 +3,11 @@ import 'dart:math' as math;
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
+import 'package:clashkingapp/features/pages/data/announcement_service.dart';
+import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
+import 'package:clashkingapp/features/pages/models/app_announcement.dart';
+import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
+import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/to_do/player_to_do_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -22,11 +27,15 @@ class HomeEventBanner extends StatefulWidget {
 
 class _HomeEventBannerState extends State<HomeEventBanner> {
   late final PageController _controller;
+  late final AnnouncementService _announcementService;
+  late final Future<AppAnnouncement?> _announcementFuture;
 
   @override
   void initState() {
     super.initState();
     _controller = PageController();
+    _announcementService = AnnouncementService();
+    _announcementFuture = _announcementService.getActiveAnnouncement();
   }
 
   @override
@@ -40,30 +49,39 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final items = _BannerItem.build(isDark: isDark);
 
-    return Column(
-      children: [
-        SizedBox(
-          height: 64,
-          child: PageView.builder(
-            controller: _controller,
-            onPageChanged: (index) => setState(() => _index = index),
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 180),
-                child: _BannerTile(
-                  key: ValueKey(items[index].title),
-                  item: items[index],
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        _PageDots(count: items.length, index: _index),
-      ],
+    return FutureBuilder<AppAnnouncement?>(
+      future: _announcementFuture,
+      builder: (context, snapshot) {
+        final items = _BannerItem.build(
+          isDark: isDark,
+          announcement: snapshot.data,
+        );
+
+        return Column(
+          children: [
+            SizedBox(
+              height: 64,
+              child: PageView.builder(
+                controller: _controller,
+                onPageChanged: (index) => setState(() => _index = index),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 180),
+                    child: _BannerTile(
+                      key: ValueKey(items[index].title),
+                      item: items[index],
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+            _PageDots(count: items.length, index: _index),
+          ],
+        );
+      },
     );
   }
 }
@@ -850,71 +868,112 @@ class _BannerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final hasStory = item.announcement?.storyUrl?.isNotEmpty ?? false;
+    final hasArticle =
+        hasStory ||
+        item.html != null ||
+        (item.htmlUrl != null && item.htmlUrl!.trim().isNotEmpty);
+    final onTap = !hasArticle
+        ? null
+        : () async {
+            if (hasStory) {
+              final announcement = item.announcement!;
+              final storyFilePath = await AnnouncementStoryCacheService()
+                  .prepare(announcement);
+              if (!context.mounted || storyFilePath == null) {
+                return;
+              }
+              await showAnnouncementStoryDialog(
+                context,
+                announcement: announcement,
+                preparedFilePath: storyFilePath,
+              );
+              return;
+            }
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => AnnouncementWebViewPage(
+                  title: item.title,
+                  html: item.html,
+                  url: item.htmlUrl,
+                ),
+              ),
+            );
+          };
 
     return Semantics(
-      button: true,
+      button: onTap != null,
       label: '${item.title}, ${item.subtitle}',
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 1),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: item.color.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface.withValues(alpha: 0.72),
-                    shape: BoxShape.circle,
-                  ),
-                  child: SizedBox.square(
-                    dimension: 40,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: MobileWebImage(
-                        imageUrl: item.imageUrl,
-                        fit: BoxFit.contain,
-                        errorWidget: (context, url, error) => Icon(
-                          item.fallbackIcon,
-                          color: item.color,
-                          size: 22,
+        child: Material(
+          color: item.color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(18),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface.withValues(alpha: 0.72),
+                      shape: BoxShape.circle,
+                    ),
+                    child: SizedBox.square(
+                      dimension: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: MobileWebImage(
+                          imageUrl: item.imageUrl,
+                          fit: BoxFit.contain,
+                          errorWidget: (context, url, error) => Icon(
+                            item.fallbackIcon,
+                            color: item.color,
+                            size: 22,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(fontWeight: FontWeight.w900),
                         ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        item.subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                    ],
+                        const SizedBox(height: 2),
+                        Text(
+                          item.subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  if (onTap != null) ...[
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         ),
@@ -1342,6 +1401,9 @@ class _BannerItem {
     required this.fallbackIcon,
     required this.color,
     this.sortKey,
+    this.announcement,
+    this.html,
+    this.htmlUrl,
   });
 
   final String title;
@@ -1349,12 +1411,18 @@ class _BannerItem {
   final String imageUrl;
   final IconData fallbackIcon;
   final Color color;
+  final AppAnnouncement? announcement;
+  final String? html;
+  final String? htmlUrl;
 
   /// The event's next relevant moment: its end when active, its start
   /// otherwise. Null for non-event tiles (promo).
   final DateTime? sortKey;
 
-  static List<_BannerItem> build({required bool isDark}) {
+  static List<_BannerItem> build({
+    required bool isDark,
+    AppAnnouncement? announcement,
+  }) {
     final now = DateTime.now().toUtc();
     final events = [
       _eventItem(
@@ -1399,7 +1467,21 @@ class _BannerItem {
       ),
     ]..sort((a, b) => a.sortKey!.compareTo(b.sortKey!));
 
+    final featuredStory = AppAnnouncement.animeFury;
+
     return [
+      if (announcement != null) _announcementItem(announcement),
+      if (announcement?.id != featuredStory.id)
+        _announcementItem(featuredStory),
+      if (announcement == null)
+        _BannerItem(
+          title: 'Magic Dispatch',
+          subtitle: 'Tap for the latest ClashKing update',
+          imageUrl: ImageAssets.builderWave,
+          fallbackIcon: Icons.auto_awesome_rounded,
+          color: const Color(0xFFD90709),
+          html: _mockAnnouncementHtml,
+        ),
       _BannerItem(
         title: 'Use code ClashKing',
         subtitle: 'Support the project in the Supercell Store',
@@ -1409,6 +1491,20 @@ class _BannerItem {
       ),
       ...events,
     ];
+  }
+
+  static _BannerItem _announcementItem(AppAnnouncement announcement) {
+    return _BannerItem(
+      title: announcement.title,
+      subtitle: announcement.subtitle,
+      imageUrl: announcement.bannerImageUrl ?? ImageAssets.builderWave,
+      fallbackIcon: Icons.auto_awesome_rounded,
+      color: const Color(0xFFD90709),
+      announcement: announcement,
+      html: announcement.body,
+      htmlUrl: announcement.htmlUrl,
+      sortKey: announcement.startsAt,
+    );
   }
 
   static _BannerItem _eventItem({
@@ -1489,3 +1585,85 @@ class _BannerItem {
     return '${positive.inMinutes}m';
   }
 }
+
+const _mockAnnouncementHtml = '''
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      color-scheme: dark;
+      background: #050506;
+      color: #f8f8f8;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 80% 0%, rgba(217, 7, 9, .34), transparent 34%),
+        linear-gradient(180deg, #151517 0%, #050506 48%);
+    }
+    main {
+      box-sizing: border-box;
+      min-height: 100vh;
+      padding: 28px 22px 40px;
+    }
+    .eyebrow {
+      color: #ff6b6d;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 10px 0 10px;
+      font-size: 36px;
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+    p {
+      color: rgba(255, 255, 255, .78);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+    .panel {
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .06);
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      color: rgba(255, 255, 255, .78);
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">ClashKing update</div>
+    <h1>Fresh tools are landing in the app.</h1>
+    <p>
+      This is a mock announcement rendered through the same WebView surface that
+      can later load published HTML from the ClashKing content bucket.
+    </p>
+    <section class="panel">
+      <h2>Planned flow</h2>
+      <ul>
+        <li>The API returns the active banner and article URL.</li>
+        <li>The app shows the banner on Home for the scheduled window.</li>
+        <li>Tapping opens the published HTML article in-app.</li>
+        <li>Push notifications can deep link to the same article ID.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
+''';
