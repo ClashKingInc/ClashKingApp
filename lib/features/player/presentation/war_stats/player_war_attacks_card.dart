@@ -9,6 +9,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -523,21 +524,12 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
   }
 
   Widget _buildEmpty(BuildContext context) {
-    return Padding(
+    return AppEmptyState(
+      title: AppLocalizations.of(context)!.generalNoDataAvailable,
+      icon: Icons.history_toggle_off_rounded,
       padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text(
-            AppLocalizations.of(context)?.generalNoDataAvailable ?? 'No data',
-          ),
-          const SizedBox(height: 16),
-          MobileWebImage(
-            imageUrl: ImageAssets.villager,
-            height: 150,
-            width: 120,
-          ),
-        ],
-      ),
+      stickerHeight: 150,
+      stickerWidth: 120,
     );
   }
 

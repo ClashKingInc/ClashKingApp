@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
@@ -12,6 +13,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/to_do/player_to_do_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -49,11 +51,13 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context)!;
 
     return FutureBuilder<AppAnnouncement?>(
       future: _announcementFuture,
       builder: (context, snapshot) {
         final items = _BannerItem.build(
+          loc: loc,
           isDark: isDark,
           announcement: snapshot.data,
         );
@@ -126,10 +130,11 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final warCwlService = _showTodoMockups
         ? null
         : context.watch<WarCwlService>();
-    final mockups = _TodoPreview.mockups;
+    final mockups = _TodoPreview.mockups(loc);
     // A combined "all accounts" page leads when several accounts are pinned.
     final hasSummaryPage = !_showTodoMockups && widget.players.length > 1;
     final itemCount = _showTodoMockups
@@ -145,11 +150,13 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
               _TodoSummary.fromPlayers(
                 widget.players,
                 (player) => _memberPresence(player, warCwlService!),
+                loc,
               ),
             ...widget.players.map(
               (player) => _TodoSummary.fromPlayer(
                 player,
                 _memberPresence(player, warCwlService!),
+                loc,
               ),
             ),
           ];
@@ -255,7 +262,6 @@ class _TodoPreviewPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1),
       child: DecoratedBox(
@@ -312,60 +318,55 @@ class _AccountTodoPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Semantics(
-      button: true,
-      label: 'Open to-do list for ${player.name}',
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(28),
-            child: Ink(
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-                ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 1),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(28),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
               ),
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(child: _AccountHeader(player: player)),
-                      _TodoRing(summary: summary, size: 46),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          summary.lastActiveText(context),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelLarge
-                              ?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.w700,
-                              ),
+            ),
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: _AccountHeader(player: player)),
+                    _TodoRing(summary: summary, size: 46),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        summary.lastActiveText(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        size: 22,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  _MetricBars(metrics: summary.metrics),
-                ],
-              ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 22,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _MetricBars(metrics: summary.metrics),
+              ],
             ),
           ),
         ),
@@ -411,7 +412,7 @@ class _AllAccountsPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'All accounts',
+                AppLocalizations.of(context)!.todoAllAccounts,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(
@@ -419,7 +420,7 @@ class _AllAccountsPanel extends StatelessWidget {
                 ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               Text(
-                '$accountCount accounts',
+                AppLocalizations.of(context)!.todoAccountsNumber(accountCount),
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w700,
@@ -431,60 +432,57 @@ class _AllAccountsPanel extends StatelessWidget {
       ],
     );
 
-    return Semantics(
-      button: true,
-      label: 'Open to-do list for all accounts',
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(28),
-            child: Ink(
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-                ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 1),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(28),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
               ),
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(child: header),
-                      _TodoRing(summary: summary, size: 46),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Combined to-do across your accounts',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelLarge
-                              ?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.w700,
-                              ),
+            ),
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: header),
+                    _TodoRing(summary: summary, size: 46),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.todoCombinedAcrossAccounts,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        size: 22,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  _MetricBars(metrics: summary.metrics),
-                ],
-              ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 22,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _MetricBars(metrics: summary.metrics),
+              ],
             ),
           ),
         ),
@@ -715,6 +713,7 @@ class _MetricBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final done = metric.done >= metric.total;
     final fillColor = done ? Colors.green : metric.color;
 
@@ -722,7 +721,7 @@ class _MetricBar extends StatelessWidget {
       height: 38,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: fillColor.withValues(alpha: 0.16),
+          color: fillColor.withValues(alpha: isDark ? 0.28 : 0.34),
           borderRadius: BorderRadius.circular(14),
         ),
         child: ClipRRect(
@@ -735,7 +734,7 @@ class _MetricBar extends StatelessWidget {
                 widthFactor: metric.ratio,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: fillColor.withValues(alpha: 0.24),
+                    color: fillColor.withValues(alpha: isDark ? 0.38 : 0.48),
                   ),
                 ),
               ),
@@ -827,7 +826,7 @@ class _CaughtUp extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Text(
-      'All caught up for now',
+      AppLocalizations.of(context)!.todoAllCaughtUpForNow,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.center,
@@ -878,6 +877,14 @@ class _BannerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final sourceHsl = HSLColor.fromColor(item.color);
+    final accentColor = isDark
+        ? sourceHsl
+              .withSaturation(math.max(sourceHsl.saturation, 0.78))
+              .withLightness(math.max(sourceHsl.lightness, 0.56))
+              .toColor()
+        : item.color;
     final hasStory = item.announcement?.storyUrl?.isNotEmpty ?? false;
     final hasArticle =
         hasStory ||
@@ -917,8 +924,13 @@ class _BannerTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 1),
         child: Material(
-          color: item.color.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(18),
+          color: accentColor.withValues(alpha: isDark ? 0.22 : 0.12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(
+              color: accentColor.withValues(alpha: isDark ? 0.42 : 0.24),
+            ),
+          ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: onTap,
@@ -940,7 +952,7 @@ class _BannerTile extends StatelessWidget {
                           fit: BoxFit.contain,
                           errorWidget: (context, url, error) => Icon(
                             item.fallbackIcon,
-                            color: item.color,
+                            color: accentColor,
                             size: 22,
                           ),
                         ),
@@ -1055,14 +1067,15 @@ class _TodoSummary {
   double get ratio => total == 0 ? 1 : (done / total).clamp(0.0, 1.0);
 
   String lastActiveText(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final player = this.player;
     if (player == null) {
-      return 'Preview account';
+      return loc.todoPreviewAccount;
     }
     if (player.lastOnline == DateTime.utc(1970, 1, 1)) {
-      return 'Last active unavailable';
+      return loc.todoLastActiveUnavailable;
     }
-    return 'Active ${player.getLastOnlineText(context)}';
+    return loc.todoActiveRelative(player.getLastOnlineText(context));
   }
 
   factory _TodoSummary.fromMetrics(List<_TodoMetric> metrics) {
@@ -1090,10 +1103,14 @@ class _TodoSummary {
     return ((totalDone * 100).round(), (total * 100).round());
   }
 
-  factory _TodoSummary.fromPlayer(Player player, WarMemberPresence memberCwl) {
+  factory _TodoSummary.fromPlayer(
+    Player player,
+    WarMemberPresence memberCwl,
+    AppLocalizations loc,
+  ) {
     final metrics = player
         .getTodoProgressMetrics(memberCwl: memberCwl)
-        .map(_TodoMetric.fromProgressMetric)
+        .map((metric) => _TodoMetric.fromProgressMetric(metric, loc))
         .toList(growable: false);
 
     final (done, total) = _averagedProgress(metrics);
@@ -1111,6 +1128,7 @@ class _TodoSummary {
   factory _TodoSummary.fromPlayers(
     List<Player> players,
     WarMemberPresence Function(Player) presenceOf,
+    AppLocalizations loc,
   ) {
     final merged = <String, _TodoMetric>{};
     final order = <String>[];
@@ -1118,9 +1136,9 @@ class _TodoSummary {
     for (final player in players) {
       final playerMetrics = player
           .getTodoProgressMetrics(memberCwl: presenceOf(player))
-          .map(_TodoMetric.fromProgressMetric);
+          .map((metric) => _TodoMetric.fromProgressMetric(metric, loc));
       for (final metric in playerMetrics) {
-        final label = _todoMetricDisplayLabel(metric.label);
+        final label = metric.label;
         final existing = merged[label];
         if (existing == null) {
           merged[label] = _TodoMetric(
@@ -1158,10 +1176,10 @@ class _TodoSummary {
           final metric = merged[label]!;
           final left = math.max(metric.total - metric.done, 0);
           final detail = left == 0
-              ? 'complete'
+              ? loc.todoCompleteLower
               : metric.total > 50
-              ? '${NumberFormat.compact().format(left)} points left'
-              : '$left left';
+              ? loc.todoPointsLeftShort(NumberFormat.compact().format(left))
+              : loc.todoItemsLeftShort(left);
           return _TodoMetric(
             label: metric.label,
             detail: detail,
@@ -1204,43 +1222,46 @@ class _TodoMetric {
   final Color color;
   final IconData fallbackIcon;
 
-  factory _TodoMetric.fromProgressMetric(TodoProgressMetric metric) {
+  factory _TodoMetric.fromProgressMetric(
+    TodoProgressMetric metric,
+    AppLocalizations loc,
+  ) {
     final left = math.max(metric.total - metric.done, 0);
     return _TodoMetric(
-      label: _todoMetricDisplayLabel(metric.label),
-      detail: metric.label == 'Season Pass' || metric.label == 'Clan Games'
+      label: _todoMetricDisplayLabel(metric.label, loc),
+      detail: metric.label == 'season_pass' || metric.label == 'clan_games'
           ? (left == 0
-                ? 'complete'
-                : '${NumberFormat.compact().format(left)} points left')
+                ? loc.todoCompleteLower
+                : loc.todoPointsLeftShort(NumberFormat.compact().format(left)))
           : left == 0
-          ? 'complete'
-          : '$left left',
+          ? loc.todoCompleteLower
+          : loc.todoItemsLeftShort(left),
       done: metric.done,
       total: metric.total,
       progressDone: metric.progressDone.toDouble(),
       progressTotal: metric.progressTotal.toDouble(),
       imageUrl: switch (metric.label) {
-        'Legend attacks' => ImageAssets.legendBlazonNoPadding,
-        'War attacks' => ImageAssets.war,
-        'CWL attacks' => ImageAssets.cwlSwordsNoBorder,
-        'Clan Games' => ImageAssets.clanGamesMedals,
-        'Raid attacks' => ImageAssets.raidAttacks,
+        'legend_attacks' => ImageAssets.legendBlazonNoPadding,
+        'war_attacks' => ImageAssets.war,
+        'cwl_attacks' => ImageAssets.cwlSwordsNoBorder,
+        'clan_games' => ImageAssets.clanGamesMedals,
+        'raid_attacks' => ImageAssets.raidAttacks,
         _ => ImageAssets.iconGoldPass,
       },
       color: switch (metric.label) {
-        'Legend attacks' => const Color(0xFF4E7DF2),
-        'War attacks' => const Color(0xFFE35D4F),
-        'CWL attacks' => const Color(0xFF8D63D9),
-        'Clan Games' => const Color(0xFF14A37F),
-        'Raid attacks' => const Color(0xFF2A9FD6),
-        _ => const Color(0xFFE8A524),
+        'legend_attacks' => CKColors.legendBlue,
+        'war_attacks' => CKColors.lossRed,
+        'cwl_attacks' => CKColors.capitalPurple,
+        'clan_games' => CKColors.donationGreen,
+        'raid_attacks' => CKColors.builderBlue,
+        _ => CKColors.warGold,
       },
       fallbackIcon: switch (metric.label) {
-        'Legend attacks' => Icons.shield_rounded,
-        'War attacks' => Icons.local_fire_department_rounded,
-        'CWL attacks' => Icons.military_tech_rounded,
-        'Clan Games' => Icons.emoji_events_rounded,
-        'Raid attacks' => Icons.fort_rounded,
+        'legend_attacks' => Icons.shield_rounded,
+        'war_attacks' => Icons.local_fire_department_rounded,
+        'cwl_attacks' => Icons.military_tech_rounded,
+        'clan_games' => Icons.emoji_events_rounded,
+        'raid_attacks' => Icons.fort_rounded,
         _ => Icons.confirmation_number_rounded,
       },
     );
@@ -1250,8 +1271,16 @@ class _TodoMetric {
       progressTotal == 0 ? 1 : (progressDone / progressTotal).clamp(0.0, 1.0);
 }
 
-String _todoMetricDisplayLabel(String label) {
-  return label == 'Season Pass' ? 'Pass' : label;
+String _todoMetricDisplayLabel(String label, AppLocalizations loc) {
+  return switch (label) {
+    'legend_attacks' => loc.todoLegendAttacks,
+    'war_attacks' => loc.todoWarAttacks,
+    'cwl_attacks' => loc.todoCwlAttacks,
+    'clan_games' => loc.gameClanGames,
+    'raid_attacks' => loc.todoRaidAttacks,
+    'season_pass' => loc.gameSeasonPassShort,
+    _ => label,
+  };
 }
 
 class _TodoPreview {
@@ -1269,134 +1298,134 @@ class _TodoPreview {
   final String avatarUrl;
   final _TodoSummary summary;
 
-  static List<_TodoPreview> get mockups => [
+  static List<_TodoPreview> mockups(AppLocalizations loc) => [
     _TodoPreview(
-      name: 'Maxed Main',
-      subtitle: 'TH17 · everything active',
-      status: 'Active now · full daily checklist',
+      name: loc.todoMockMaxedMainName,
+      subtitle: loc.todoMockMaxedMainSubtitle,
+      status: loc.todoMockMaxedMainStatus,
       avatarUrl: ImageAssets.townHall(17),
       summary: _TodoSummary.fromMetrics([
         _TodoMetric(
-          label: 'Legend attacks',
-          detail: '5 left today',
+          label: loc.todoLegendAttacks,
+          detail: loc.todoMockLegend5Left,
           done: 3,
           total: 8,
           imageUrl: ImageAssets.legendBlazonNoPadding,
-          color: const Color(0xFF4E7DF2),
+          color: CKColors.legendBlue,
           fallbackIcon: Icons.shield_rounded,
         ),
         _TodoMetric(
-          label: 'War attacks',
-          detail: '1 left',
+          label: loc.todoWarAttacks,
+          detail: loc.todoMockRaid1Left,
           done: 1,
           total: 2,
           imageUrl: ImageAssets.war,
-          color: const Color(0xFFE35D4F),
+          color: CKColors.lossRed,
           fallbackIcon: Icons.local_fire_department_rounded,
         ),
         _TodoMetric(
-          label: 'CWL attacks',
-          detail: '1 left this round',
+          label: loc.todoCwlAttacks,
+          detail: loc.todoMockCwl1LeftRound,
           done: 0,
           total: 1,
           imageUrl: ImageAssets.cwlSwordsNoBorder,
-          color: const Color(0xFF8D63D9),
+          color: CKColors.capitalPurple,
           fallbackIcon: Icons.military_tech_rounded,
         ),
         _TodoMetric(
-          label: 'Clan Games',
-          detail: '2.7K points left',
+          label: loc.gameClanGames,
+          detail: loc.todoMockClanGames2700Left,
           done: 1300,
           total: 4000,
           imageUrl: ImageAssets.clanGamesMedals,
-          color: const Color(0xFF14A37F),
+          color: CKColors.donationGreen,
           fallbackIcon: Icons.emoji_events_rounded,
         ),
         _TodoMetric(
-          label: 'Raid attacks',
-          detail: '4 left',
+          label: loc.todoRaidAttacks,
+          detail: loc.todoMockRaid4Left,
           done: 2,
           total: 6,
           imageUrl: ImageAssets.raidAttacks,
-          color: const Color(0xFF2A9FD6),
+          color: CKColors.builderBlue,
           fallbackIcon: Icons.fort_rounded,
         ),
         _TodoMetric(
-          label: 'Pass',
-          detail: '850 points left',
+          label: loc.gameSeasonPassShort,
+          detail: loc.todoMockPass850Left,
           done: 1750,
           total: 2600,
           imageUrl: ImageAssets.iconGoldPass,
-          color: const Color(0xFFE8A524),
+          color: CKColors.warGold,
           fallbackIcon: Icons.confirmation_number_rounded,
         ),
       ]),
     ),
     _TodoPreview(
-      name: 'War Alt',
-      subtitle: 'TH15 · war focused',
-      status: 'Active 18m ago · war and raids need attention',
+      name: loc.todoMockWarAltName,
+      subtitle: loc.todoMockWarAltSubtitle,
+      status: loc.todoMockWarAltStatus,
       avatarUrl: ImageAssets.townHall(15),
       summary: _TodoSummary.fromMetrics([
         _TodoMetric(
-          label: 'War attacks',
-          detail: '2 left',
+          label: loc.todoWarAttacks,
+          detail: loc.todoMockWar2Left,
           done: 0,
           total: 2,
           imageUrl: ImageAssets.warClan,
-          color: const Color(0xFFE35D4F),
+          color: CKColors.lossRed,
           fallbackIcon: Icons.local_fire_department_rounded,
         ),
         _TodoMetric(
-          label: 'Clan Games',
-          detail: '900 points left',
+          label: loc.gameClanGames,
+          detail: loc.todoMockClanGames900Left,
           done: 3100,
           total: 4000,
           imageUrl: ImageAssets.clanGamesMedals,
-          color: const Color(0xFF14A37F),
+          color: CKColors.donationGreen,
           fallbackIcon: Icons.emoji_events_rounded,
         ),
         _TodoMetric(
-          label: 'Raid attacks',
-          detail: '1 left',
+          label: loc.todoRaidAttacks,
+          detail: loc.todoMockRaid1Left,
           done: 5,
           total: 6,
           imageUrl: ImageAssets.raidAttacks,
-          color: const Color(0xFF2A9FD6),
+          color: CKColors.builderBlue,
           fallbackIcon: Icons.fort_rounded,
         ),
       ]),
     ),
     _TodoPreview(
-      name: 'Legend Push',
-      subtitle: 'TH16 · daily attacks',
-      status: 'Active 1h ago · legends and pass progress',
+      name: loc.todoMockLegendPushName,
+      subtitle: loc.todoMockLegendPushSubtitle,
+      status: loc.todoMockLegendPushStatus,
       avatarUrl: ImageAssets.townHall(16),
       summary: _TodoSummary.fromMetrics([
         _TodoMetric(
-          label: 'Legend attacks',
-          detail: '2 left today',
+          label: loc.todoLegendAttacks,
+          detail: loc.todoMockLegend2Left,
           done: 6,
           total: 8,
           imageUrl: ImageAssets.legendBlazonNoPadding,
-          color: const Color(0xFF4E7DF2),
+          color: CKColors.legendBlue,
           fallbackIcon: Icons.shield_rounded,
         ),
         _TodoMetric(
-          label: 'Pass',
-          detail: 'on pace',
+          label: loc.gameSeasonPassShort,
+          detail: loc.todoMockOnPace,
           done: 2200,
           total: 2600,
           imageUrl: ImageAssets.iconGoldPass,
-          color: const Color(0xFFE8A524),
+          color: CKColors.warGold,
           fallbackIcon: Icons.confirmation_number_rounded,
         ),
       ]),
     ),
     _TodoPreview(
-      name: 'Caught Up',
-      subtitle: 'TH14 · no open tasks',
-      status: 'Active today · no action needed',
+      name: loc.todoMockCaughtUpName,
+      subtitle: loc.todoMockCaughtUpSubtitle,
+      status: loc.todoMockCaughtUpStatus,
       avatarUrl: ImageAssets.townHall(14),
       summary: _TodoSummary.fromMetrics([]),
     ),
@@ -1430,6 +1459,7 @@ class _BannerItem {
   final DateTime? sortKey;
 
   static List<_BannerItem> build({
+    required AppLocalizations loc,
     required bool isDark,
     AppAnnouncement? announcement,
   }) {
@@ -1437,79 +1467,89 @@ class _BannerItem {
     final events = [
       _eventItem(
         now: now,
-        title: 'Clan Games',
+        title: loc.todoEventClanGames,
         imageUrl: ImageAssets.clanGamesMedals,
         fallbackIcon: Icons.emoji_events_rounded,
-        color: const Color(0xFF14A37F),
+        color: CKColors.donationGreen,
         window: _monthlyWindow(now, 22, 8, 28, 8),
+        loc: loc,
       ),
       _eventItem(
         now: now,
-        title: 'CWL',
+        title: loc.todoEventCwl,
         imageUrl: ImageAssets.cwlSwordsNoBorder,
         fallbackIcon: Icons.military_tech_rounded,
-        color: const Color(0xFF8D63D9),
+        color: CKColors.capitalPurple,
         window: _monthlyWindow(now, 1, 0, 13, 0),
+        loc: loc,
       ),
       _eventItem(
         now: now,
-        title: 'Season ends',
+        title: loc.todoEventSeasonEnds,
         imageUrl: ImageAssets.iconGoldPass,
         fallbackIcon: Icons.hourglass_bottom_rounded,
-        color: const Color(0xFFE8A524),
+        color: CKColors.warGold,
         window: _seasonWindow(now),
+        loc: loc,
       ),
       _eventItem(
         now: now,
-        title: 'League reset',
+        title: loc.todoEventLeagueReset,
         imageUrl: ImageAssets.legendBlazonNoPadding,
         fallbackIcon: Icons.leaderboard_rounded,
-        color: const Color(0xFF4E7DF2),
+        color: CKColors.legendBlue,
         window: _seasonWindow(now),
+        loc: loc,
       ),
       _eventItem(
         now: now,
-        title: 'Raid Weekend',
+        title: loc.todoEventRaidWeekend,
         imageUrl: ImageAssets.raidAttacks,
         fallbackIcon: Icons.fort_rounded,
-        color: const Color(0xFF2A9FD6),
+        color: CKColors.builderBlue,
         window: _raidWindow(now),
+        loc: loc,
       ),
     ]..sort((a, b) => a.sortKey!.compareTo(b.sortKey!));
 
     final featuredStory = AppAnnouncement.animeFury;
 
     return [
-      if (announcement != null) _announcementItem(announcement),
+      if (announcement != null) _announcementItem(announcement, loc),
       if (announcement?.id != featuredStory.id)
-        _announcementItem(featuredStory),
+        _announcementItem(featuredStory, loc),
       if (announcement == null)
         _BannerItem(
-          title: 'Magic Dispatch',
-          subtitle: 'Tap for the latest ClashKing update',
+          title: loc.todoMagicDispatch,
+          subtitle: loc.todoMagicDispatchDescription,
           imageUrl: ImageAssets.builderWave,
           fallbackIcon: Icons.auto_awesome_rounded,
-          color: const Color(0xFFD90709),
-          html: _mockAnnouncementHtml,
+          color: CKColors.primaryRed,
         ),
       _BannerItem(
-        title: 'Use code ClashKing',
-        subtitle: 'Support the project in the Supercell Store',
+        title: loc.todoUseCodeClashKing,
+        subtitle: loc.todoUseCodeClashKingDescription,
         imageUrl: isDark ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo,
         fallbackIcon: Icons.local_offer_rounded,
-        color: const Color(0xFFD90709),
+        color: CKColors.primaryRed,
       ),
       ...events,
     ];
   }
 
-  static _BannerItem _announcementItem(AppAnnouncement announcement) {
+  static _BannerItem _announcementItem(
+    AppAnnouncement announcement,
+    AppLocalizations loc,
+  ) {
+    final isAnimeFury = announcement.id == AppAnnouncement.animeFury.id;
     return _BannerItem(
-      title: announcement.title,
-      subtitle: announcement.subtitle,
+      title: isAnimeFury ? loc.announcementAnimeFuryTitle : announcement.title,
+      subtitle: isAnimeFury
+          ? loc.announcementAnimeFurySubtitle
+          : announcement.subtitle,
       imageUrl: announcement.bannerImageUrl ?? ImageAssets.builderWave,
       fallbackIcon: Icons.auto_awesome_rounded,
-      color: const Color(0xFFD90709),
+      color: CKColors.primaryRed,
       announcement: announcement,
       html: announcement.body,
       htmlUrl: announcement.htmlUrl,
@@ -1524,6 +1564,7 @@ class _BannerItem {
     required IconData fallbackIcon,
     required Color color,
     required ({DateTime start, DateTime end}) window,
+    required AppLocalizations loc,
   }) {
     final active = !now.isBefore(window.start) && now.isBefore(window.end);
     final target = active ? window.end : window.start;
@@ -1533,8 +1574,9 @@ class _BannerItem {
       fallbackIcon: fallbackIcon,
       color: color,
       sortKey: target,
-      subtitle:
-          '${active ? 'Ends' : 'Starts'} in ${_formatRemaining(target.difference(now))}',
+      subtitle: active
+          ? loc.todoEventEndsIn(_formatRemaining(target.difference(now)))
+          : loc.todoEventStartsIn(_formatRemaining(target.difference(now))),
     );
   }
 
@@ -1595,85 +1637,3 @@ class _BannerItem {
     return '${positive.inMinutes}m';
   }
 }
-
-const _mockAnnouncementHtml = '''
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      color-scheme: dark;
-      background: #050506;
-      color: #f8f8f8;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-    }
-    body {
-      margin: 0;
-      background: radial-gradient(circle at 80% 0%, rgba(217, 7, 9, .34), transparent 34%),
-        linear-gradient(180deg, #151517 0%, #050506 48%);
-    }
-    main {
-      box-sizing: border-box;
-      min-height: 100vh;
-      padding: 28px 22px 40px;
-    }
-    .eyebrow {
-      color: #ff6b6d;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    h1 {
-      margin: 10px 0 10px;
-      font-size: 36px;
-      line-height: 1.02;
-      letter-spacing: 0;
-    }
-    p {
-      color: rgba(255, 255, 255, .78);
-      font-size: 17px;
-      line-height: 1.55;
-    }
-    .panel {
-      margin-top: 22px;
-      padding: 18px;
-      border: 1px solid rgba(255, 255, 255, .12);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, .06);
-    }
-    h2 {
-      margin: 0 0 10px;
-      font-size: 20px;
-    }
-    ul {
-      margin: 0;
-      padding-left: 20px;
-      color: rgba(255, 255, 255, .78);
-      line-height: 1.55;
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <div class="eyebrow">ClashKing update</div>
-    <h1>Fresh tools are landing in the app.</h1>
-    <p>
-      This is a mock announcement rendered through the same WebView surface that
-      can later load published HTML from the ClashKing content bucket.
-    </p>
-    <section class="panel">
-      <h2>Planned flow</h2>
-      <ul>
-        <li>The API returns the active banner and article URL.</li>
-        <li>The app shows the banner on Home for the scheduled window.</li>
-        <li>Tapping opens the published HTML article in-app.</li>
-        <li>Push notifications can deep link to the same article ID.</li>
-      </ul>
-    </section>
-  </main>
-</body>
-</html>
-''';

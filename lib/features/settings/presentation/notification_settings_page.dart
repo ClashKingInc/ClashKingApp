@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/notification_debug_service.dart';
+import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/features/pages/data/announcement_presentation_service.dart';
@@ -66,8 +68,11 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   final Set<String> _expandedNotificationOptions = {};
   final Set<String> _selectedAccounts = {};
   var _accountScope = _NotificationAccountScope.all;
-  var _selectedSampleId = NotificationDebugService.fallbackSamples.first.id;
+  var _selectedSampleId = 'leagueDefense';
   var _isSending = false;
+  var _isConfiguringPush = false;
+  PushNotificationSetupResult? _pushSetupResult;
+  String? _pushTokenPreview;
 
   static const _kPrefsPrefix = 'notif_settings_';
 
@@ -75,6 +80,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   void initState() {
     super.initState();
     unawaited(_loadPreferences());
+    unawaited(_loadPushState());
   }
 
   Future<void> _loadPreferences() async {
@@ -147,6 +153,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     ]);
   }
 
+  Future<void> _loadPushState() async {
+    final result = await PushNotificationService.instance.initialize();
+    final tokenPreview = await PushNotificationService.instance.tokenPreview();
+    if (!mounted) return;
+    setState(() {
+      _pushSetupResult = result;
+      _pushTokenPreview = tokenPreview;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -179,22 +195,24 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         padding: const EdgeInsets.fromLTRB(16, 6, 16, 28),
         children: [
           _Section(
-            title: 'Choose alerts',
+            title: AppLocalizations.of(context)!.notifChooseAlerts,
             children: [
               _NotificationToggleRow(
-                icon: Icons.shield_outlined,
+                icon: LucideIcons.shield,
                 title: _NotifGroup.leagueBattles,
-                subtitle:
-                    'Defense results with attacker, stars, percentage, and league context.',
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.notifLeagueDefenseDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.leagueBattles),
                 onChanged: (value) =>
                     _toggleType(_NotifGroup.leagueBattles, value),
               ),
               _NotificationDisclosureRow(
-                icon: Icons.sports_martial_arts_rounded,
+                icon: LucideIcons.swords,
                 title: _NotifGroup.warAttacks,
-                subtitle:
-                    'War attack results, defense alerts, and 5v5 attack feed options.',
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.notifWarAttackOptionsDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.warAttacks),
                 expanded: _expandedNotificationOptions.contains(
                   _NotifGroup.warAttacks,
@@ -218,16 +236,20 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
               ),
               _NotificationToggleRow(
-                icon: Icons.flag_outlined,
+                icon: LucideIcons.flag,
                 title: _NotifGroup.warState,
-                subtitle: 'War matched, battle day started, and war ended.',
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.notifWarAlertsDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.warState),
                 onChanged: (value) => _toggleType(_NotifGroup.warState, value),
               ),
               _NotificationDisclosureRow(
-                icon: Icons.alarm_rounded,
+                icon: LucideIcons.alarmClock,
                 title: _NotifGroup.warReminders,
-                subtitle: 'Custom reminders before war ends.',
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.notifWarRemindersDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.warReminders),
                 expanded: _expandedNotificationOptions.contains(
                   _NotifGroup.warReminders,
@@ -249,9 +271,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
               ),
               _NotificationDisclosureRow(
-                icon: Icons.calendar_month_outlined,
+                icon: LucideIcons.calendarDays,
                 title: _NotifGroup.events,
-                subtitle: 'Clan Games, CWL, Raid Weekend, and season events.',
+                subtitle: AppLocalizations.of(context)!.notifEventsDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.events),
                 expanded: _expandedNotificationOptions.contains(
                   _NotifGroup.events,
@@ -274,27 +296,31 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
               ),
               _NotificationToggleRow(
-                icon: Icons.campaign_outlined,
+                icon: LucideIcons.megaphone,
                 title: _NotifGroup.announcements,
-                subtitle:
-                    'In-app banners and future push alerts for ClashKing updates.',
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.notifAnnouncementsDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.announcements),
                 onChanged: (value) =>
                     _toggleType(_NotifGroup.announcements, value),
               ),
               _NotificationToggleRow(
-                icon: Icons.handyman_outlined,
+                icon: LucideIcons.hammer,
                 title: _NotifGroup.upgradeFinishes,
-                subtitle:
-                    'Troops, heroes, pets, spells, equipment, and buildings.',
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.notifUpgradeFinishesDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.upgradeFinishes),
                 onChanged: (value) =>
                     _toggleType(_NotifGroup.upgradeFinishes, value),
               ),
               _NotificationToggleRow(
-                icon: Icons.volunteer_activism_outlined,
+                icon: LucideIcons.heartHandshake,
                 title: _NotifGroup.monthlySupport,
-                subtitle: 'Monthly reminder to support ClashKing.',
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.notifSupportReminderDescription,
                 enabled: _enabledTypes.contains(_NotifGroup.monthlySupport),
                 onChanged: (value) =>
                     _toggleType(_NotifGroup.monthlySupport, value),
@@ -302,7 +328,18 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             ],
           ),
           _Section(
-            title: 'Account scope',
+            title: AppLocalizations.of(context)!.notifDevicePushSetup,
+            children: [
+              _PushSetupCard(
+                result: _pushSetupResult,
+                tokenPreview: _pushTokenPreview,
+                isConfiguring: _isConfiguringPush,
+                onConfigure: _configurePushNotifications,
+              ),
+            ],
+          ),
+          _Section(
+            title: AppLocalizations.of(context)!.notifAccountScope,
             children: [
               _ScopeSelector(
                 value: _accountScope,
@@ -331,7 +368,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
           ),
           if (kDebugMode && NotificationDebugService.isSupportedPlatform)
             _Section(
-              title: 'Test notification',
+              title: AppLocalizations.of(context)!.notifTestNotification,
               children: [
                 _SamplePicker(
                   samples: samples,
@@ -356,8 +393,10 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                             dimension: 18,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(Icons.notifications_active_outlined),
-                    label: const Text('Send test notification'),
+                        : const Icon(LucideIcons.bellRing),
+                    label: Text(
+                      AppLocalizations.of(context)!.notifSendTestNotification,
+                    ),
                   ),
                 ),
               ],
@@ -396,23 +435,27 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
     try {
       final cocService = context.read<CocAccountService>();
-      final sample =
-          _samplesForContext(
-            _NotificationContext.fromService(
-              cocService,
-              profiles: context.read<PlayerService>().profiles,
-              selectedAccounts: _selectedAccounts,
-            ),
-          ).firstWhere(
-            (sample) => sample.id == _selectedSampleId,
-            orElse: () => NotificationDebugService.fallbackSamples.first,
-          );
+      final samples = _samplesForContext(
+        _NotificationContext.fromService(
+          cocService,
+          profiles: context.read<PlayerService>().profiles,
+          selectedAccounts: _selectedAccounts,
+        ),
+      );
+      final sample = samples.firstWhere(
+        (sample) => sample.id == _selectedSampleId,
+        orElse: () => samples.first,
+      );
       final result = await NotificationDebugService().showSample(sample);
       if (!mounted) return;
       final title = result['title']?.toString() ?? sample.title;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Scheduled: $title')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.notifScheduledMessage(title),
+          ),
+        ),
+      );
     } on PlatformException catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -422,6 +465,49 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       if (mounted) {
         setState(() {
           _isSending = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _configurePushNotifications() async {
+    setState(() {
+      _isConfiguringPush = true;
+    });
+
+    try {
+      final result = await PushNotificationService.instance
+          .requestPermissionAndRegister();
+      final tokenPreview = await PushNotificationService.instance
+          .tokenPreview();
+      if (!mounted) return;
+      setState(() {
+        _pushSetupResult = result;
+        _pushTokenPreview = tokenPreview;
+      });
+
+      final message = switch (result.state) {
+        PushNotificationSetupState.ready =>
+          'Push notifications are ready on this device.',
+        PushNotificationSetupState.permissionDenied =>
+          'Notification permission was denied.',
+        PushNotificationSetupState.notConfigured =>
+          'Firebase is not configured yet for this build.',
+        PushNotificationSetupState.tokenUnavailable =>
+          'FCM token is not available yet. Try again in a moment.',
+        PushNotificationSetupState.unsupported =>
+          'Push notifications are not supported on this platform.',
+        PushNotificationSetupState.initializing =>
+          'Configuring push notifications…',
+      };
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result.message ?? message)));
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isConfiguringPush = false;
         });
       }
     }
@@ -438,142 +524,148 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     final upgradeLevel = context.upgradeLevel;
     final upgradeImage = context.upgradeImageUrl;
 
+    final loc = AppLocalizations.of(this.context)!;
+    final battlesGroup = loc.notifGroupBattles;
+    final remindersGroup = loc.notifGroupReminders;
+    final oneHourLeft = loc.notifOneHourLeft;
+    final thirtyMin = loc.notifThirtyMinutesLeft;
+    final fifteenMin = loc.notifFifteenMinutesLeft;
+
     return [
       NotificationSample(
         id: 'leagueDefense',
-        label: 'League defense',
-        group: 'Battles',
-        title: 'League defense result',
-        body: 'Lord Clasher attacked $player • 90% • 2 stars • $league',
+        label: loc.notifLeagueDefense,
+        group: battlesGroup,
+        title: loc.notifLeagueDefenseResult,
+        body: loc.notifLeagueAttackBody(player, 90, 2, league),
         assetUrl: context.leagueIconUrl,
       ),
       NotificationSample(
         id: 'leagueTripled',
-        label: 'League triple',
-        group: 'Battles',
-        title: 'League defense result',
-        body: 'Lord Clasher attacked $player • 100% • 3 stars • $league',
+        label: loc.notifLeagueTriple,
+        group: battlesGroup,
+        title: loc.notifLeagueDefenseResult,
+        body: loc.notifLeagueAttackBody(player, 100, 3, league),
         assetUrl: context.leagueIconUrl,
       ),
       NotificationSample(
         id: 'warDefense',
-        label: 'War defense',
-        group: 'Battles',
-        title: 'War attack on TH$th',
-        body: '$opponentClan attacked $player • 78% • 2 stars • $clan defense',
+        label: loc.notifWarDefense,
+        group: battlesGroup,
+        title: loc.notifWarAttackOnTh(th),
+        body: loc.notifWarDefenseBody(opponentClan, player, 78, 2, clan),
         assetUrl: townHallImage,
       ),
       NotificationSample(
         id: 'warAllAttacks',
-        label: '5v5 war feed',
-        group: 'Battles',
-        title: 'War attack result',
-        body: '$clan attacked Pine Riders TH$th • 100% • 3 stars',
+        label: loc.notifWarFeed5v5,
+        group: battlesGroup,
+        title: loc.notifWarAttackResult,
+        body: loc.notifWarAttackResultBody(clan, th),
         assetUrl: townHallImage,
       ),
       NotificationSample(
         id: 'warMatched',
-        label: 'War matched',
+        label: loc.notifWarMatched,
         group: _NotifGroup.warState,
-        title: 'War matched',
-        body: '$clan matched with Pine Riders. Preparation day started.',
+        title: loc.notifWarMatched,
+        body: loc.notifWarMatchedBody(clan),
         assetUrl: context.clanBadgeUrl,
       ),
       NotificationSample(
         id: 'warStarted',
-        label: 'War started',
+        label: loc.notifWarStarted,
         group: _NotifGroup.warState,
-        title: 'Battle day started',
-        body: '$clan vs Pine Riders is live. Good luck.',
+        title: loc.notifBattleDayStarted,
+        body: loc.notifWarStartedBody(clan),
         assetUrl: ImageAssets.sword,
       ),
       NotificationSample(
         id: 'warEnded',
-        label: 'War ended',
+        label: loc.notifWarEnded,
         group: _NotifGroup.warState,
-        title: 'War ended',
-        body: '$clan 86 - 82 Pine Riders. Final results are available.',
+        title: loc.notifWarEnded,
+        body: loc.notifWarEndedBody(clan),
         assetUrl: ImageAssets.warClan,
       ),
       NotificationSample(
         id: 'warReminder60',
-        label: 'War reminder: 1h',
-        group: 'Reminders',
-        title: _Timing.oneHourLeft,
-        body: '$player has remaining war attacks. ${_Timing.oneHourLeft}.',
+        label: loc.notifWarReminder1h,
+        group: remindersGroup,
+        title: oneHourLeft,
+        body: loc.notifRemainingWarAttacksBody(player, oneHourLeft),
         assetUrl: ImageAssets.iconClock,
       ),
       NotificationSample(
         id: 'warReminder30',
-        label: 'War reminder: 30m',
-        group: 'Reminders',
-        title: _Timing.thirtyMin,
-        body: '$player has remaining war attacks. ${_Timing.thirtyMin}.',
+        label: loc.notifWarReminder30m,
+        group: remindersGroup,
+        title: thirtyMin,
+        body: loc.notifRemainingWarAttacksBody(player, thirtyMin),
         assetUrl: ImageAssets.iconClock,
       ),
       NotificationSample(
         id: 'warReminder15',
-        label: 'War reminder: 15m',
-        group: 'Reminders',
-        title: _Timing.fifteenMin,
-        body: '$player has remaining war attacks. ${_Timing.fifteenMin}.',
+        label: loc.notifWarReminder15m,
+        group: remindersGroup,
+        title: fifteenMin,
+        body: loc.notifRemainingWarAttacksBody(player, fifteenMin),
         assetUrl: ImageAssets.iconClock,
       ),
       NotificationSample(
         id: 'clanGamesStarted',
         label: _NotifGroup.clanGames,
         group: _NotifGroup.events,
-        title: '${_NotifGroup.clanGames} started',
-        body: '$clan can start earning ${_NotifGroup.clanGames} points.',
+        title: loc.notifStarted(_NotifGroup.clanGames),
+        body: loc.notifClanGamesPointsBody(clan, _NotifGroup.clanGames),
         assetUrl: ImageAssets.clanGamesMedals,
       ),
       NotificationSample(
         id: 'cwlStarted',
-        label: '${_NotifGroup.cwl} started',
+        label: loc.notifStarted(_NotifGroup.cwl),
         group: _NotifGroup.events,
-        title: '${_NotifGroup.cwl} started',
-        body: '$clan can begin Clan War League preparation.',
+        title: loc.notifStarted(_NotifGroup.cwl),
+        body: loc.notifCwlPreparationBody(clan),
         assetUrl: ImageAssets.cwlSwordsNoBorder,
       ),
       NotificationSample(
         id: 'raidWeekendStarted',
         label: _NotifGroup.raidWeekend,
         group: _NotifGroup.events,
-        title: '${_NotifGroup.raidWeekend} started',
-        body: '$clan can start Capital Raid attacks.',
+        title: loc.notifStarted(_NotifGroup.raidWeekend),
+        body: loc.notifRaidWeekendBody(clan),
         assetUrl: ImageAssets.raidAttacks,
       ),
       NotificationSample(
         id: 'seasonStarted',
-        label: 'Season start',
+        label: loc.notifSeasonStart,
         group: _NotifGroup.events,
-        title: 'New season started',
-        body: '$league season has started for $player.',
+        title: loc.notifNewSeasonStarted,
+        body: loc.notifSeasonStartedBody(league, player),
         assetUrl: context.leagueIconUrl,
       ),
-      const NotificationSample(
+      NotificationSample(
         id: 'specialEventStarted',
-        label: 'Special event',
+        label: loc.notifSpecialEvent,
         group: _NotifGroup.events,
-        title: 'A new event is live',
-        body: 'A new Clash event is available.',
+        title: loc.notifNewEventLive,
+        body: loc.notifNewClashEventBody,
         assetUrl: ImageAssets.darkModeLogo,
       ),
-      const NotificationSample(
+      NotificationSample(
         id: 'monthlySupport',
         label: _NotifGroup.monthlySupport,
-        group: 'Support',
-        title: 'Support ClashKing',
-        body:
-            'Monthly support helps keep ClashKing available and improving. Thank you.',
+        group: loc.notifGroupSupport,
+        title: loc.notifSupportClashKing,
+        body: loc.notifMonthlySupportBody,
         assetUrl: ImageAssets.darkModeLogo,
       ),
       NotificationSample(
         id: 'upgradeComplete',
-        label: 'Upgrade finished',
-        group: 'Progress',
-        title: '$upgradeName is ready',
-        body: 'Level $upgradeLevel finished for $player. Upgrade complete.',
+        label: loc.notifUpgradeFinished,
+        group: loc.notifGroupProgress,
+        title: loc.notifUpgradeReadyTitle(upgradeName),
+        body: loc.notifUpgradeCompleteBody(upgradeLevel, player),
         assetUrl: upgradeImage,
       ),
     ];
@@ -635,6 +727,117 @@ class _Section extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PushSetupCard extends StatelessWidget {
+  const _PushSetupCard({
+    required this.result,
+    required this.tokenPreview,
+    required this.isConfiguring,
+    required this.onConfigure,
+  });
+
+  final PushNotificationSetupResult? result;
+  final String? tokenPreview;
+  final bool isConfiguring;
+  final VoidCallback onConfigure;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final setupState = result?.state;
+    final isReady = result?.canReceivePush == true;
+    final title = switch (setupState) {
+      PushNotificationSetupState.ready => 'Push enabled',
+      PushNotificationSetupState.permissionDenied => 'Permission denied',
+      PushNotificationSetupState.notConfigured => 'Firebase config missing',
+      PushNotificationSetupState.tokenUnavailable => 'Token unavailable',
+      PushNotificationSetupState.unsupported => 'Unsupported platform',
+      PushNotificationSetupState.initializing => 'Checking push setup',
+      null => 'Checking push setup',
+    };
+    final subtitle = switch (setupState) {
+      PushNotificationSetupState.ready =>
+        tokenPreview == null
+            ? 'This device has an FCM token and can receive push alerts.'
+            : 'Token: $tokenPreview',
+      PushNotificationSetupState.permissionDenied =>
+        'Enable notifications in system settings to receive ClashKing alerts.',
+      PushNotificationSetupState.notConfigured =>
+        'Add Firebase app config files to enable real push delivery.',
+      PushNotificationSetupState.tokenUnavailable =>
+        'Firebase is initialized, but no token has been issued yet.',
+      PushNotificationSetupState.unsupported =>
+        'Push notifications are only available on Android and iOS.',
+      PushNotificationSetupState.initializing =>
+        'Checking Firebase and notification permissions…',
+      null => 'Checking Firebase and notification permissions…',
+    };
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: colorScheme.outlineVariant),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: (isReady ? Colors.green : colorScheme.primary)
+                    .withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                isReady ? LucideIcons.badgeCheck : LucideIcons.bell,
+                color: isReady ? Colors.green : colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    result?.message ?? subtitle,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    onPressed: isConfiguring ? null : onConfigure,
+                    icon: isConfiguring
+                        ? const SizedBox.square(
+                            dimension: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(LucideIcons.radioTower, size: 18),
+                    label: Text(
+                      isReady ? 'Refresh registration' : 'Enable push alerts',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -766,7 +969,7 @@ class _NotificationDisclosureRow extends StatelessWidget {
                   duration: const Duration(milliseconds: 180),
                   curve: Curves.easeOutCubic,
                   child: Icon(
-                    Icons.keyboard_arrow_down_rounded,
+                    LucideIcons.chevronDown,
                     size: 20,
                     color: enabled
                         ? colorScheme.onSurfaceVariant
@@ -808,16 +1011,18 @@ class _WarAttackModePicker extends StatelessWidget {
     return _InlineOptions(
       children: [
         _IconSwitchTile(
-          icon: Icons.verified_user_outlined,
-          title: 'Defenses against your base',
-          subtitle: 'Only hits where this account is defending.',
+          icon: LucideIcons.shieldCheck,
+          title: AppLocalizations.of(context)!.notifDefensesAgainstYourBase,
+          subtitle: AppLocalizations.of(
+            context,
+          )!.notifDefensesAgainstYourBaseDescription,
           selected: selectedModes.contains('defenses'),
           onChanged: (value) => onChanged('defenses', value),
         ),
         _IconSwitchTile(
-          icon: Icons.sports_martial_arts_rounded,
-          title: 'All attacks',
-          subtitle: 'Every hit in 5v5 wars only.',
+          icon: LucideIcons.swords,
+          title: AppLocalizations.of(context)!.notifAllAttacks,
+          subtitle: AppLocalizations.of(context)!.notifAllAttacksDescription,
           selected: selectedModes.contains('all5v5'),
           onChanged: (value) => onChanged('all5v5', value),
         ),
@@ -854,7 +1059,7 @@ class _WarReminderTimingPicker extends StatelessWidget {
                   children: [
                     for (final timing in sorted)
                       InputChip(
-                        avatar: const Icon(Icons.schedule_rounded, size: 16),
+                        avatar: const Icon(LucideIcons.clock, size: 16),
                         label: Text(_timingLabel(timing)),
                         onDeleted: () {
                           final next = {...selectedTimings}..remove(timing);
@@ -871,8 +1076,8 @@ class _WarReminderTimingPicker extends StatelessWidget {
                     : () => _showTimingSheet(context),
                 icon: Icon(
                   selectedTimings.length >= 3
-                      ? Icons.check_circle_outline_rounded
-                      : Icons.add_rounded,
+                      ? LucideIcons.circleCheck
+                      : LucideIcons.plus,
                 ),
                 label: Text(
                   selectedTimings.length >= 3
@@ -1005,7 +1210,7 @@ class _HourPickerSheetState extends State<_HourPickerSheet> {
                   onPressed: widget.selectedTimings.contains('30m')
                       ? null
                       : () => Navigator.of(context).pop('30m'),
-                  child: const Text('30 minutes'),
+                  child: Text(AppLocalizations.of(context)!.notifThirtyMinutes),
                 ),
               ),
               const SizedBox(width: 10),
@@ -1014,7 +1219,9 @@ class _HourPickerSheetState extends State<_HourPickerSheet> {
                   onPressed: widget.selectedTimings.contains('15m')
                       ? null
                       : () => Navigator.of(context).pop('15m'),
-                  child: const Text('15 minutes'),
+                  child: Text(
+                    AppLocalizations.of(context)!.notifFifteenMinutes,
+                  ),
                 ),
               ),
             ],
@@ -1136,8 +1343,7 @@ class _ImageSwitchTile extends StatelessWidget {
         child: MobileWebImage(
           imageUrl: imageUrl,
           fit: BoxFit.contain,
-          errorWidget: (_, _, _) =>
-              const Icon(Icons.notifications_none_rounded),
+          errorWidget: (_, _, _) => const Icon(LucideIcons.bell),
         ),
       ),
       title: title,
@@ -1228,12 +1434,12 @@ class _ScopeSelector extends StatelessWidget {
           segments: [
             ButtonSegment(
               value: _NotificationAccountScope.all,
-              icon: const Icon(Icons.group_outlined),
+              icon: const Icon(LucideIcons.users),
               label: Text(l10n?.notifScopeAllAccounts ?? 'All accounts'),
             ),
             ButtonSegment(
               value: _NotificationAccountScope.selected,
-              icon: const Icon(Icons.how_to_reg_rounded),
+              icon: const Icon(LucideIcons.userCheck),
               label: Text(l10n?.notifScopeSelected ?? 'Selected'),
             ),
           ],
@@ -1358,7 +1564,7 @@ class _AccountPicker extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Icon(
-                Icons.chevron_right_rounded,
+                LucideIcons.chevronRight,
                 size: 20,
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -1450,7 +1656,7 @@ class _AccountAvatarStack extends StatelessWidget {
         height: 42,
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Icon(Icons.group_outlined),
+          child: Icon(LucideIcons.users),
         ),
       );
     }
@@ -1556,10 +1762,7 @@ class _SamplePicker extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.notifications_active_outlined,
-                color: colorScheme.onSurfaceVariant,
-              ),
+              Icon(LucideIcons.bellRing, color: colorScheme.onSurfaceVariant),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -1586,7 +1789,7 @@ class _SamplePicker extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Icon(
-                Icons.keyboard_arrow_down_rounded,
+                LucideIcons.chevronDown,
                 color: colorScheme.onSurfaceVariant,
               ),
             ],
@@ -1637,15 +1840,14 @@ class _SamplePicker extends StatelessWidget {
                       child: MobileWebImage(
                         imageUrl: sample.assetUrl,
                         fit: BoxFit.contain,
-                        errorWidget: (_, _, _) =>
-                            const Icon(Icons.notifications_none_rounded),
+                        errorWidget: (_, _, _) => const Icon(LucideIcons.bell),
                       ),
                     ),
                     title: Text(sample.label),
                     subtitle: Text(sample.title),
                     trailing: sample.id == selected.id
                         ? Icon(
-                            Icons.check_rounded,
+                            LucideIcons.check,
                             color: Theme.of(context).colorScheme.primary,
                           )
                         : null,
@@ -1702,7 +1904,7 @@ class _PreviewCard extends StatelessWidget {
                         imageUrl: sample.assetUrl,
                         fit: BoxFit.contain,
                         errorWidget: (_, _, _) => Icon(
-                          Icons.notifications_none_rounded,
+                          LucideIcons.bell,
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),

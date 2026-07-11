@@ -336,6 +336,13 @@ class RegisterPageState extends State<RegisterPage> {
                               )!.authPasswordLabel,
                               prefixIcon: Icon(Icons.lock),
                               suffixIcon: IconButton(
+                                tooltip: _obscurePassword
+                                    ? AppLocalizations.of(
+                                        context,
+                                      )!.tooltipShowPassword
+                                    : AppLocalizations.of(
+                                        context,
+                                      )!.tooltipHidePassword,
                                 icon: Icon(
                                   _obscurePassword
                                       ? Icons.visibility
@@ -464,6 +471,13 @@ class RegisterPageState extends State<RegisterPage> {
                               )!.authPasswordConfirm,
                               prefixIcon: Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
+                                tooltip: _obscureConfirmPassword
+                                    ? AppLocalizations.of(
+                                        context,
+                                      )!.tooltipShowPassword
+                                    : AppLocalizations.of(
+                                        context,
+                                      )!.tooltipHidePassword,
                                 icon: Icon(
                                   _obscureConfirmPassword
                                       ? Icons.visibility

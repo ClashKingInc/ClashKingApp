@@ -83,7 +83,7 @@ class _TopActions extends StatelessWidget {
         const Spacer(),
         HeaderIconButton(
           icon: Icons.open_in_new_rounded,
-          tooltip: 'Open in game',
+          tooltip: AppLocalizations.of(context)!.playerOpenInGame,
           onTap: () => _openInGame(context, player),
         ),
         const SizedBox(width: 8),
@@ -95,8 +95,8 @@ class _TopActions extends StatelessWidget {
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
               tooltip: bookmarked
-                  ? 'Remove player bookmark'
-                  : 'Bookmark player',
+                  ? AppLocalizations.of(context)!.playerBookmarkRemove
+                  : AppLocalizations.of(context)!.playerBookmarkAdd,
               onTap: () => bookmarks.togglePlayer(player),
             );
           },

@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -125,25 +126,16 @@ class ClanWarLog extends StatelessWidget {
     return Column(
       children: [
         filteredWarLogData.isEmpty
-            ? Column(
-                children: [
-                  SizedBox(height: 16),
-                  Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        AppLocalizations.of(context)?.generalNoDataAvailable ??
-                            'No data available',
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 32),
-                  MobileWebImage(
-                    imageUrl: ImageAssets.villager,
-                    height: 250,
-                    width: 200,
-                  ),
-                ],
+            ? AppEmptyState(
+                title: AppLocalizations.of(context)!.generalNoDataAvailable,
+                body: searchQuery.trim().isNotEmpty
+                    ? AppLocalizations.of(context)!.generalAdjustFilters
+                    : null,
+                icon: searchQuery.trim().isNotEmpty
+                    ? Icons.search_off_rounded
+                    : Icons.history_toggle_off_rounded,
+                stickerHeight: 250,
+                stickerWidth: 200,
               )
             : buildAllLog(context, filteredWarLogData, clan.tag),
       ],

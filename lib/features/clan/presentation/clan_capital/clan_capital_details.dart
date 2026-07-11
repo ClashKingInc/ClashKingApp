@@ -735,7 +735,7 @@ class _CapitalHistorySummaryState extends State<CapitalHistorySummary> {
                       ClanSummaryChip(
                         icon: Icons.emoji_events_rounded,
                         value: formatter.format(avgRewards),
-                        label: 'Avg rewards',
+                        label: loc.clanCapitalAvgRewards,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       ClanSummaryChip(
@@ -747,7 +747,7 @@ class _CapitalHistorySummaryState extends State<CapitalHistorySummary> {
                       ClanSummaryChip(
                         icon: Icons.domain_rounded,
                         value: avgDistrictsPerWeek.toStringAsFixed(1),
-                        label: 'Avg districts/week',
+                        label: loc.clanCapitalAvgDistrictsPerWeek,
                         color: StatColors.capitalDistrict,
                       ),
                       ClanSummaryChip(
@@ -760,8 +760,10 @@ class _CapitalHistorySummaryState extends State<CapitalHistorySummary> {
                   if (memberTrends.isNotEmpty) ...[
                     const SizedBox(height: 14),
                     _HistorySubsectionTitle(
-                      title: 'Top attackers',
-                      subtitle: '${memberTrends.length} players tracked',
+                      title: loc.clanCapitalTopAttackers,
+                      subtitle: loc.clanCapitalPlayersTracked(
+                        memberTrends.length,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     ...memberTrends
@@ -771,8 +773,10 @@ class _CapitalHistorySummaryState extends State<CapitalHistorySummary> {
                   if (defenseTrends.isNotEmpty) ...[
                     const SizedBox(height: 14),
                     _HistorySubsectionTitle(
-                      title: 'Defense over time',
-                      subtitle: '${defenseTrends.length} districts tracked',
+                      title: loc.clanCapitalDefenseOverTime,
+                      subtitle: loc.clanCapitalDistrictsTracked(
+                        defenseTrends.length,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     ...defenseTrends.map(

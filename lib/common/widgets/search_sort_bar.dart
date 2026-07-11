@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Standard search field + sort dropdown row for list-style tabs (clan
@@ -47,7 +48,7 @@ class ClanTabSearchSortBar extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  LiquidGlassBar(
+                  NativeLiquidGlassBar(
                     height: 44,
                     cornerRadius: 22,
                     borderOpacity:
@@ -61,7 +62,6 @@ class ClanTabSearchSortBar extends StatelessWidget {
                   ),
                   TextField(
                     controller: controller,
-                    scrollPadding: EdgeInsets.zero,
                     textInputAction: TextInputAction.search,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurface,
@@ -82,6 +82,9 @@ class ClanTabSearchSortBar extends StatelessWidget {
                       ),
                       suffixIcon: query.isNotEmpty
                           ? IconButton(
+                              tooltip: AppLocalizations.of(
+                                context,
+                              )!.searchClear,
                               icon: Icon(
                                 Icons.close_rounded,
                                 size: 18,

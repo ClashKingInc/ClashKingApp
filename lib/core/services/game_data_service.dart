@@ -19,13 +19,13 @@ class GameDataService {
   static const _cacheDirName = 'game_data';
   static const _cacheRefreshInterval = Duration(hours: 6);
   static const _staticDataCache = _CachedJsonAsset(
-    label: 'static data',
+    label: 'static_data',
     fileName: 'static_data.json',
     lastModifiedKey: 'game_data_static_last_modified',
     cachedAtKey: 'game_data_static_cached_at',
   );
   static const _translationsCache = _CachedJsonAsset(
-    label: 'translations',
+    label: 'translations_data',
     fileName: 'translations.json',
     lastModifiedKey: 'game_data_translations_last_modified',
     cachedAtKey: 'game_data_translations_cached_at',

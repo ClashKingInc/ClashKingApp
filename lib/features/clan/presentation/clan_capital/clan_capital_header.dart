@@ -75,7 +75,7 @@ class ClanCapitalHeaderCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: SizedBox(
-                height: 42,
+                height: 48,
                 child: Row(
                   children: [
                     HeaderIconButton(

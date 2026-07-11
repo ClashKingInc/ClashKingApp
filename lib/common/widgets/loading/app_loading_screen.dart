@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:math' as math;
-
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -15,10 +12,10 @@ class AppLoadingScreen extends StatefulWidget {
 
 class _AppLoadingScreenState extends State<AppLoadingScreen>
     with TickerProviderStateMixin {
+  late AnimationController _rotationController;
   late AnimationController _pulseController;
   late AnimationController _textController;
   late Animation<double> _textOpacityAnimation;
-  Timer? _textTimer;
 
   List<String> get _loadingTexts => [
     AppLocalizations.of(context)!.loadingVillages,
@@ -30,10 +27,18 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
   ];
 
   int _currentTextIndex = 0;
+  bool _reduceMotion = false;
+  bool _animationsStarted = false;
 
   @override
   void initState() {
     super.initState();
+
+    // Rotation animation for the logo (disabled)
+    _rotationController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
 
     // Pulse animation for the progress indicator
     _pulseController = AnimationController(
@@ -49,23 +54,43 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
     _textOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _textController, curve: Curves.easeInOut),
     );
-
-    _pulseController.repeat(reverse: true);
-    _textController.forward();
-    _scheduleNextText();
   }
 
-  void _scheduleNextText() {
-    _textTimer?.cancel();
-    _textTimer = Timer(const Duration(milliseconds: 800), () {
-      if (mounted) {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    if (_reduceMotion == reduceMotion && _animationsStarted) return;
+    _reduceMotion = reduceMotion;
+
+    if (reduceMotion) {
+      _animationsStarted = false;
+      _pulseController.stop();
+      _textController
+        ..stop()
+        ..value = 1;
+      return;
+    }
+
+    _pulseController.repeat(reverse: true);
+    if (!_animationsStarted) {
+      _animationsStarted = true;
+      _startTextCycle();
+    }
+  }
+
+  void _startTextCycle() {
+    // Start with the first text immediately visible
+    _textController.forward();
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted && !_reduceMotion) {
         _cycleText();
       }
     });
   }
 
   void _cycleText() {
-    if (!mounted) return;
+    if (!mounted || _reduceMotion) return;
 
     _textController.reverse().then((_) {
       if (mounted) {
@@ -74,8 +99,12 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
         });
         _textController.forward().then((_) {
           // Only continue cycling if we haven't reached the last text
-          if (_currentTextIndex < _loadingTexts.length - 1) {
-            _scheduleNextText();
+          if (!_reduceMotion && _currentTextIndex < _loadingTexts.length - 1) {
+            Future.delayed(const Duration(milliseconds: 800), () {
+              if (mounted) {
+                _cycleText();
+              }
+            });
           }
         });
       }
@@ -84,7 +113,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
   @override
   void dispose() {
-    _textTimer?.cancel();
+    _rotationController.dispose();
     _pulseController.dispose();
     _textController.dispose();
     super.dispose();
@@ -92,6 +121,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
@@ -100,7 +130,6 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
           children: [
             // Static Logo
             SizedBox(
-              key: const Key('startup-mark'),
               width: 80,
               height: 80,
               child: ClipRRect(
@@ -109,7 +138,6 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
                   imageUrl: Theme.of(context).brightness == Brightness.dark
                       ? ImageAssets.darkModeLogo
                       : ImageAssets.lightModeLogo,
-                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -118,17 +146,12 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
             // App Text Logo
             SizedBox(
-              key: const Key('startup-wordmark'),
-              width: math.min(MediaQuery.sizeOf(context).width * 0.82, 320),
-              child: AspectRatio(
-                // Intrinsic dimensions of both CK wordmark variants.
-                aspectRatio: 3806 / 558,
-                child: MobileWebImage(
-                  imageUrl: Theme.of(context).brightness == Brightness.dark
-                      ? ImageAssets.darkModeTextLogo
-                      : ImageAssets.lightModeTextLogo,
-                  fit: BoxFit.contain,
-                ),
+              height: 35,
+              child: MobileWebImage(
+                imageUrl: Theme.of(context).brightness == Brightness.dark
+                    ? ImageAssets.darkModeTextLogo
+                    : ImageAssets.lightModeTextLogo,
+                fit: BoxFit.contain,
               ),
             ),
 
@@ -161,7 +184,9 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
               children: List.generate(6, (index) {
                 final isActive = index <= _currentTextIndex;
                 return AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
+                  duration: reduceMotion
+                      ? Duration.zero
+                      : const Duration(milliseconds: 200),
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   width: isActive ? 20 : 8,
                   height: 8,

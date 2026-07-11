@@ -492,6 +492,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       )!.authPasswordLabel,
                       prefixIcon: Icon(Icons.lock_outline, size: 20),
                       suffixIcon: IconButton(
+                        tooltip: _obscurePassword
+                            ? AppLocalizations.of(context)!.tooltipShowPassword
+                            : AppLocalizations.of(context)!.tooltipHidePassword,
                         icon: Icon(
                           _obscurePassword
                               ? Icons.visibility_outlined

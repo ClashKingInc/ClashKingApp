@@ -9,6 +9,7 @@ import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_member.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -228,13 +229,13 @@ class _CapitalMembersTabState extends State<CapitalMembersTab> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           children: [
             ClanFilterChip(
-              label: 'Selected raid',
+              label: loc.clanCapitalSelectedRaid,
               icon: Icons.calendar_today_rounded,
               selected: !_historyMode,
               onTap: () => setState(() => _historyMode = false),
             ),
             ClanFilterChip(
-              label: 'History',
+              label: loc.generalHistory,
               icon: Icons.history_rounded,
               selected: _historyMode,
               onTap: () => setState(() => _historyMode = true),
@@ -282,8 +283,8 @@ class _CapitalMembersTabState extends State<CapitalMembersTab> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: _InfoPanel(
               title: canReconstructSelectedRaid
-                  ? 'Member list is not returned for this raid weekend. Showing attack-log stats instead.'
-                  : 'No player-level data is returned for this raid weekend. The API only includes district and opponent totals.',
+                  ? loc.capitalRaidMembersAttackLogFallback
+                  : loc.capitalRaidMembersNoPlayerData,
             ),
           ),
         if (isEmpty)
@@ -294,7 +295,7 @@ class _CapitalMembersTabState extends State<CapitalMembersTab> {
                   !_historyMode &&
                       !selectedRaidHasMembers &&
                       selectedRaidAttackLogMembers.isEmpty
-                  ? 'No player list or individual attacks available for this raid.'
+                  ? loc.capitalRaidMembersNoIndividualData
                   : _searchQuery.isNotEmpty
                   ? (loc.generalNoFilteredResults)
                   : (loc.generalNoDataAvailable),
@@ -704,28 +705,12 @@ class _EmptyPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(
-            alpha: AppOpacity.borderStrong,
-          ),
-        ),
-      ),
-      child: Text(
-        title,
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: colorScheme.onSurfaceVariant,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
+    return AppEmptyState(
+      title: title,
+      icon: Icons.history_toggle_off_rounded,
+      padding: EdgeInsets.zero,
+      stickerHeight: 140,
+      stickerWidth: 112,
     );
   }
 }

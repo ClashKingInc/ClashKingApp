@@ -446,7 +446,9 @@ class _ClanBadgeWithMembers extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         _ClanIconChip(
-          label: '${item.members}/50',
+          label: AppLocalizations.of(
+            context,
+          )!.generalMembersCount(item.members),
           icon: Icons.people_alt_rounded,
         ),
       ],

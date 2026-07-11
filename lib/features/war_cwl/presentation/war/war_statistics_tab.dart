@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_calculator_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 
 class WarStatisticsTab extends StatefulWidget {
@@ -30,9 +31,10 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
 
     if (clan == null || opponent == null) {
       return _WarSectionPanel(
-        child: Padding(
+        child: AppEmptyState(
+          title: loc.generalNoDataAvailable,
+          icon: Icons.history_toggle_off_rounded,
           padding: const EdgeInsets.all(16),
-          child: Center(child: Text(loc.generalNoDataAvailable)),
         ),
       );
     }

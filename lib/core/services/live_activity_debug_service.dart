@@ -20,10 +20,7 @@ class LiveActivityDebugService {
 
   Future<Map<String, dynamic>> _invoke(String method) async {
     if (!isSupportedPlatform) {
-      throw PlatformException(
-        code: 'unsupported',
-        message: 'Live Activities are only available on iOS.',
-      );
+      throw PlatformException(code: 'unsupported', message: null);
     }
 
     final result = await _channel.invokeMapMethod<String, dynamic>(method);

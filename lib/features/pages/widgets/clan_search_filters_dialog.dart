@@ -298,6 +298,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            tooltip: AppLocalizations.of(
+                              context,
+                            )!.tooltipDecreaseMinimumMembers,
                             padding: EdgeInsets.only(right: 8),
                             icon: Icon(
                               Icons.remove,
@@ -336,6 +339,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            tooltip: AppLocalizations.of(
+                              context,
+                            )!.tooltipIncreaseMinimumMembers,
                             icon: Icon(
                               Icons.add,
                               color: Theme.of(context).colorScheme.onSurface,
@@ -346,6 +352,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         ),
                         SizedBox(width: 8),
                         IconButton(
+                          tooltip: AppLocalizations.of(
+                            context,
+                          )!.tooltipDecreaseMaximumMembers,
                           icon: Icon(
                             Icons.remove,
                             color: Theme.of(context).colorScheme.onSurface,
@@ -382,6 +391,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            tooltip: AppLocalizations.of(
+                              context,
+                            )!.tooltipIncreaseMaximumMembers,
                             icon: Icon(
                               Icons.add,
                               color: Theme.of(context).colorScheme.onSurface,
@@ -412,6 +424,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            tooltip: AppLocalizations.of(
+                              context,
+                            )!.tooltipDecreaseMinimumClanPoints,
                             padding: EdgeInsets.only(right: 8),
                             icon: Icon(
                               Icons.remove,
@@ -452,6 +467,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            tooltip: AppLocalizations.of(
+                              context,
+                            )!.tooltipIncreaseMinimumClanPoints,
                             icon: Icon(
                               Icons.add,
                               color: Theme.of(context).colorScheme.onSurface,
@@ -481,6 +499,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            tooltip: AppLocalizations.of(
+                              context,
+                            )!.tooltipDecreaseMinimumClanLevel,
                             padding: EdgeInsets.only(right: 8),
                             icon: Icon(
                               Icons.remove,
@@ -521,6 +542,9 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
                         Expanded(
                           flex: 1,
                           child: IconButton(
+                            tooltip: AppLocalizations.of(
+                              context,
+                            )!.tooltipIncreaseMinimumClanLevel,
                             icon: Icon(
                               Icons.add,
                               color: Theme.of(context).colorScheme.onSurface,

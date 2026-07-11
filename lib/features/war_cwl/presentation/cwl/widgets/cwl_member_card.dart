@@ -300,7 +300,10 @@ class MembersCard extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: color),
         const SizedBox(width: 4),
-        Text("$label: $value", style: Theme.of(context).textTheme.bodyMedium),
+        Text(
+          [label, value].join(': '),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       ],
     );
   }
@@ -315,7 +318,10 @@ class MembersCard extends StatelessWidget {
       children: [
         MobileWebImage(imageUrl: imageUrl, width: 16, height: 16),
         const SizedBox(width: 4),
-        Text("$label: $value", style: Theme.of(context).textTheme.bodyMedium),
+        Text(
+          [label, value].join(': '),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       ],
     );
   }

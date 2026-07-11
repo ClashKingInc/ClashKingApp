@@ -12,22 +12,22 @@ class AppIconService {
 
   static const List<AppIconOption> options = [
     AppIconOption(
-      label: 'Default',
+      labelKey: 'default',
       iconName: null,
       previewAsset: 'assets/icons/app_icon_ios_default.png',
     ),
     AppIconOption(
-      label: 'Christmas',
+      labelKey: 'christmas',
       iconName: christmasIconName,
       previewAsset: 'assets/icons/app_icon_christmas.png',
     ),
     AppIconOption(
-      label: 'Black & White',
+      labelKey: 'black_white',
       iconName: blackWhiteIconName,
       previewAsset: 'assets/icons/app_icon_black_white.png',
     ),
     AppIconOption(
-      label: 'Dark Mode',
+      labelKey: 'dark_mode',
       iconName: darkLogoIconName,
       previewAsset: 'assets/icons/app_icon_dark_logo.png',
     ),
@@ -58,10 +58,7 @@ class AppIconService {
 
   Future<void> setAlternateIconName(String? iconName) async {
     if (!isSupportedPlatform) {
-      throw PlatformException(
-        code: 'unsupported',
-        message: 'Alternate app icons are only available on iOS.',
-      );
+      throw PlatformException(code: 'unsupported', message: null);
     }
 
     await _channel.invokeMethod<void>('setAlternateIconName', iconName);
@@ -77,12 +74,12 @@ class AppIconService {
 
 class AppIconOption {
   const AppIconOption({
-    required this.label,
+    required this.labelKey,
     required this.iconName,
     required this.previewAsset,
   });
 
-  final String label;
+  final String labelKey;
   final String? iconName;
   final String previewAsset;
 }

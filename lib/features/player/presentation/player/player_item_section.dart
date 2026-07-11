@@ -1020,7 +1020,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
         else
           for (final resource in resources.take(2))
             _UpgradeFlatStat(
-              label: _ResourceVisual.forKey(resource.key).label,
+              label: _ResourceVisual.forKey(resource.key).localizedLabel(l10n),
               value: _formatLargeNumber(resource.amount),
               icon: MobileWebImage(
                 imageUrl: _ResourceVisual.forKey(resource.key).imageUrl,
@@ -1042,7 +1042,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
     return _UpgradeFlatStatWrap(
       children: [
         _UpgradeFlatStat(
-          label: 'Levels',
+          label: l10n.gameItemLevels,
           value: summary.levelsRemaining.toString(),
           icon: const MobileWebImage(
             imageUrl: ImageAssets.xp,
@@ -1059,7 +1059,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
             ),
           for (final resource in summary.resources.take(2))
             _UpgradeFlatStat(
-              label: _ResourceVisual.forKey(resource.key).label,
+              label: _ResourceVisual.forKey(resource.key).localizedLabel(l10n),
               value: _formatLargeNumber(resource.amount),
               icon: MobileWebImage(
                 imageUrl: _ResourceVisual.forKey(resource.key).imageUrl,
@@ -1285,7 +1285,7 @@ class _TownHallMaxBadge extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
-      message: 'Tap for remaining upgrade cost and time',
+      message: AppLocalizations.of(context)!.todoRemainingUpgradeTooltip,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -1634,7 +1634,7 @@ class _ResourceCostChip extends StatelessWidget {
     final visual = _ResourceVisual.forKey(resource.key);
 
     return Tooltip(
-      message: visual.label,
+      message: visual.localizedLabel(AppLocalizations.of(context)!),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
         decoration: BoxDecoration(
@@ -1662,56 +1662,82 @@ class _ResourceCostChip extends StatelessWidget {
 }
 
 class _ResourceVisual {
-  final String label;
+  final String labelKey;
   final String imageUrl;
 
-  const _ResourceVisual({required this.label, required this.imageUrl});
+  const _ResourceVisual({required this.labelKey, required this.imageUrl});
+
+  String localizedLabel(AppLocalizations l10n) {
+    switch (labelKey) {
+      case 'darkElixir':
+        return l10n.resourceDarkElixir;
+      case 'builderElixir':
+        return l10n.resourceBuilderElixir;
+      case 'builderGold':
+        return l10n.resourceBuilderGold;
+      case 'elixir':
+        return l10n.resourceElixir;
+      case 'gold':
+        return l10n.resourceGold;
+      case 'glowyOre':
+        return l10n.resourceGlowyOre;
+      case 'starryOre':
+        return l10n.resourceStarryOre;
+      case 'shinyOre':
+        return l10n.resourceShinyOre;
+      default:
+        return l10n.resourceGeneric;
+    }
+  }
 
   factory _ResourceVisual.forKey(String key) {
     if (key.contains('dark')) {
       return const _ResourceVisual(
-        label: 'Dark Elixir',
+        labelKey: 'darkElixir',
         imageUrl: _resourceDarkElixir,
       );
     }
     if (key.contains('builder') && key.contains('elixir')) {
       return const _ResourceVisual(
-        label: 'Builder Elixir',
+        labelKey: 'builderElixir',
         imageUrl: _resourceBuilderElixir,
       );
     }
     if (key.contains('builder') && key.contains('gold')) {
       return const _ResourceVisual(
-        label: 'Builder Gold',
+        labelKey: 'builderGold',
         imageUrl: _resourceBuilderGold,
       );
     }
     if (key.contains('elixir')) {
-      return const _ResourceVisual(label: 'Elixir', imageUrl: _resourceElixir);
+      return const _ResourceVisual(
+        labelKey: 'elixir',
+        imageUrl: _resourceElixir,
+      );
     }
     if (key.contains('gold')) {
-      return const _ResourceVisual(label: 'Gold', imageUrl: _resourceGold);
+      return const _ResourceVisual(labelKey: 'gold', imageUrl: _resourceGold);
     }
     if (key.contains('glowy')) {
       return const _ResourceVisual(
-        label: 'Glowy Ore',
+        labelKey: 'glowyOre',
         imageUrl: _resourceGlowyOre,
       );
     }
     if (key.contains('starry')) {
       return const _ResourceVisual(
-        label: 'Starry Ore',
+        labelKey: 'starryOre',
         imageUrl: _resourceStarryOre,
       );
     }
     if (key.contains('shiny')) {
       return const _ResourceVisual(
-        label: 'Shiny Ore',
+        labelKey: 'shinyOre',
         imageUrl: _resourceShinyOre,
       );
     }
     return const _ResourceVisual(
-      label: 'Resource',
+      labelKey: 'generic',
       imageUrl: ImageAssets.defaultImage,
     );
   }

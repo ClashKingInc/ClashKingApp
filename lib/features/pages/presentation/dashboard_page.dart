@@ -1,8 +1,10 @@
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/pages/widgets/home_todo_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
-import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,24 +13,16 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final players = context.select<PlayerService, List<Player>>(
-      (service) => service.profiles,
-    );
-    final pinnedTagKey = context.select<PlayerCardPreferencesService, String>(
-      (service) => (service.todoOnHomeTags.toList()..sort()).join('|'),
-    );
-    final linkedTagKey = context.select<CocAccountService, String>(
-      (service) => service.getAccountTags().join('|'),
-    );
-    final linkedTags = linkedTagKey
-        .split('|')
+    final playerService = context.watch<PlayerService>();
+    final prefs = context.watch<PlayerCardPreferencesService>();
+    final cocService = context.watch<CocAccountService>();
+    final players = playerService.profiles;
+    final linkedTags = cocService
+        .getAccountTags()
         .map(_normalizeTag)
         .where((tag) => tag.isNotEmpty)
         .toSet();
-    final pinnedTags = pinnedTagKey
-        .split('|')
-        .where((tag) => tag.isNotEmpty)
-        .toSet();
+    final pinnedTags = prefs.todoOnHomeTags;
     final pinnedPlayers = players
         .where((player) => pinnedTags.contains(_normalizeTag(player.tag)))
         .toList(growable: false);
@@ -42,33 +36,49 @@ class DashboardPage extends StatelessWidget {
         })
         .toList(growable: false);
     final todoPlayers = [...linkedPlayers, ...pinnedBookmarkedPlayers];
+    final horizontalPadding = ((MediaQuery.sizeOf(context).width - 840) / 2)
+        .clamp(16.0, double.infinity)
+        .toDouble();
 
     return Scaffold(
       body: SafeArea(
-        top: false,
         bottom: false,
         child: ListView(
           padding: EdgeInsets.fromLTRB(
-            16,
+            horizontalPadding,
             12,
-            16,
+            horizontalPadding,
             MediaQuery.paddingOf(context).bottom + 96,
           ),
           children: [
             const HomeEventBanner(),
             const SizedBox(height: 16),
             if (players.isEmpty)
-              const _EmptyDashboard(
-                title: 'No linked accounts',
-                message:
-                    'Link a Clash account to see attacks, events, and activity here.',
+              _EmptyDashboard(
+                title: AppLocalizations.of(
+                  context,
+                )!.dashboardNoLinkedAccountsTitle,
+                message: AppLocalizations.of(
+                  context,
+                )!.dashboardNoLinkedAccountsBody,
+                icon: Icons.account_circle_outlined,
+                actionLabel: AppLocalizations.of(context)!.drawerManageAccounts,
+                onAction: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        const AddCocAccountPage(refreshOnExit: false),
+                  ),
+                ),
               )
             else if (pinnedPlayers.isEmpty)
-              const _EmptyDashboard(
-                title: 'Nothing pinned yet',
-                message:
-                    'Open the Players tab, expand a card\'s options, and turn on '
-                    '"Show to-do on home" to pin an account here.',
+              _EmptyDashboard(
+                title: AppLocalizations.of(
+                  context,
+                )!.dashboardNothingPinnedTitle,
+                message: AppLocalizations.of(
+                  context,
+                )!.dashboardNothingPinnedBody,
+                icon: Icons.push_pin_outlined,
               )
             else
               HomeTodoCard(players: pinnedPlayers, allPlayers: todoPlayers),
@@ -83,43 +93,29 @@ class DashboardPage extends StatelessWidget {
 }
 
 class _EmptyDashboard extends StatelessWidget {
-  const _EmptyDashboard({required this.title, required this.message});
+  const _EmptyDashboard({
+    required this.title,
+    required this.message,
+    required this.icon,
+    this.actionLabel,
+    this.onAction,
+  });
 
   final String title;
   final String message;
+  final IconData icon;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
+    return AppEmptyState(
+      title: title,
+      body: message,
+      icon: icon,
+      actionLabel: actionLabel,
+      onAction: onAction,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 52),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.checklist_rounded,
-            size: 44,
-            color: colorScheme.onSurfaceVariant,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

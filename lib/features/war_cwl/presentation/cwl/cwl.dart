@@ -210,7 +210,7 @@ class _CwlHeaderActions extends StatelessWidget {
     final loc = AppLocalizations.of(context);
 
     return SizedBox(
-      height: 42,
+      height: 48,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -492,7 +492,7 @@ class _CwlQuickChip extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
-      message: '$label: $value',
+      message: [label, value].join(': '),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(

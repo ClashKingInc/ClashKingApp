@@ -1,6 +1,9 @@
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -29,6 +32,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     _animationController.forward();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _animationController.value = 1;
+    }
   }
 
   @override
@@ -64,6 +75,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   ),
                   suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
+                          tooltip: AppLocalizations.of(context)!.searchClear,
                           icon: Icon(
                             Icons.clear,
                             color: Theme.of(
@@ -132,7 +144,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                     _buildActionButton(
                       context: context,
                       label: AppLocalizations.of(context)!.faqViewOnGitHub,
-                      icon: Icons.open_in_new_rounded,
+                      icon: LucideIcons.externalLink,
                       color: Theme.of(context).colorScheme.onSurface,
                       onPressed: () async {
                         launchUrl(Uri.parse('https://github.com/ClashKingInc'));
@@ -294,8 +306,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                     _buildActionButton(
                       context: context,
                       label: AppLocalizations.of(context)!.faqInviteBotToServer,
-                      icon: Icons.smart_toy_outlined,
-                      color: Color(0xFF5865F2),
+                      icon: LucideIcons.bot,
+                      color: CKColors.discordBlurple,
                       onPressed: () async {
                         launchUrl(
                           Uri.parse(
@@ -330,9 +342,11 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   children: [
                     _buildActionButton(
                       context: context,
-                      label: "Supercell Fan Content Policy",
+                      label: AppLocalizations.of(
+                        context,
+                      )!.faqSupercellFanContentPolicyLink,
                       icon: Icons.policy,
-                      color: Color(0xFF4CAF50),
+                      color: CKColors.donationGreen,
                       onPressed: () async {
                         launchUrl(
                           Uri.parse(
@@ -429,7 +443,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                           context: context,
                           label: AppLocalizations.of(context)!.faqJoinDiscord,
                           icon: Icons.discord,
-                          color: Color(0xFF5865F2),
+                          color: CKColors.discordBlurple,
                           onPressed: () async {
                             launchUrl(
                               Uri.parse('https://discord.gg/clashking'),
@@ -524,7 +538,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                               },
                             );
 
-                            copyTextToClipboard('devs@clashk.ing').then((_) {
+                            FlutterClipboard.copy('devs@clashk.ing').then((_) {
                               if (mounted) {
                                 showClipboardSnackbar(
                                   context,
@@ -542,7 +556,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       context: context,
                       label: AppLocalizations.of(context)!.faqJoinDiscord,
                       icon: Icons.discord,
-                      color: Color(0xFF5865F2),
+                      color: CKColors.discordBlurple,
                       onPressed: () async {
                         launchUrl(Uri.parse('https://discord.gg/clashking'));
                       },
@@ -630,7 +644,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         context,
                       )!.translationHelpUsTranslate,
                       icon: Icons.language,
-                      color: Color(0xFF2196F3),
+                      color: CKColors.secondaryBlue,
                       onPressed: () async {
                         launchUrl(
                           Uri.parse('https://crowdin.com/project/clashkingapp'),

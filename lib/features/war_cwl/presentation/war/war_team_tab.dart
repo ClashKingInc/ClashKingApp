@@ -9,6 +9,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart'
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_attack_details_sheet.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 
 class WarTeamTab extends StatelessWidget {
@@ -494,20 +495,12 @@ class _TeamEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: Theme.of(
-            context,
-          ).colorScheme.outlineVariant.withValues(alpha: 0.45),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Center(child: Text(message)),
-      ),
+    return AppEmptyState(
+      title: message,
+      icon: Icons.groups_2_rounded,
+      padding: EdgeInsets.zero,
+      stickerHeight: 132,
+      stickerWidth: 106,
     );
   }
 }

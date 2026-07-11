@@ -1,8 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
-import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
@@ -98,10 +99,14 @@ class MyHomePageState extends State<MyHomePage> {
     }
 
     if (_pageController.hasClients) {
+      if (CKMotion.animationsDisabled(context)) {
+        _pageController.jumpToPage(index);
+        return;
+      }
       _pageController.animateToPage(
         index,
-        duration: const Duration(milliseconds: 260),
-        curve: Curves.easeOutCubic,
+        duration: CKMotion.standard,
+        curve: CKMotion.standardCurve,
       );
     }
   }
@@ -110,16 +115,16 @@ class MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(
       PageRouteBuilder<void>(
         opaque: true,
-        allowSnapshotting: false,
-        transitionDuration: const Duration(milliseconds: 240),
-        reverseTransitionDuration: const Duration(milliseconds: 180),
+        transitionDuration: CKMotion.durationOf(context, CKMotion.standard),
+        reverseTransitionDuration: CKMotion.durationOf(context, CKMotion.fast),
         pageBuilder: (context, animation, secondaryAnimation) {
           return const SearchPage(overlay: true, autofocus: true);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          if (CKMotion.animationsDisabled(context)) return child;
           final curved = CurvedAnimation(
             parent: animation,
-            curve: Curves.easeOutCubic,
+            curve: CKMotion.standardCurve,
             reverseCurve: Curves.easeInCubic,
           );
           return FadeTransition(
@@ -148,44 +153,41 @@ class MyHomePageState extends State<MyHomePage> {
       // the Android/Samsung system "back" gesture edge, which made the swipe
       // close the app instead of opening the menu.
       drawerEdgeDragWidth: MediaQuery.of(context).padding.left + 80,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildFixedHeader(),
-          ),
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: _onPageChanged,
-              children: const [
-                DashboardPage(),
-                PlayersPage(),
-                ClanPage(),
-                WarCwlPage(),
-              ],
-            ),
-          ),
+      appBar: CustomAppBar(
+        title: 'ClashKing',
+        searchHint: AppLocalizations.of(context)!.searchGlobalHint,
+        onSearchTap: _openSearchOverlay,
+        onProfileTap: () => _scaffoldKey.currentState?.openDrawer(),
+      ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: const [
+          DashboardPage(),
+          PlayersPage(),
+          ClanPage(),
+          WarCwlPage(),
         ],
       ),
-      bottomNavigationBar: _AppLiquidGlassTabBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-      ),
+      bottomNavigationBar: usesNativeGlassPlatform
+          ? _NativeIOSTabBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            )
+          : _AndroidFloatingTabBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            ),
     );
   }
-
-  Widget _buildFixedHeader() => MainPageHeader(
-    title: 'ClashKing',
-    searchHint: 'Search players or clans',
-    onSearchTap: _openSearchOverlay,
-    onProfileTap: () => _scaffoldKey.currentState?.openDrawer(),
-  );
 }
 
-/// Flutter-composited Liquid Glass tab bar used on every platform.
-class _AppLiquidGlassTabBar extends StatelessWidget {
-  const _AppLiquidGlassTabBar({
+/// Android fallback for the app-level floating tab bar.
+///
+/// Keep this custom instead of using the liquid glass background on Android:
+/// the native/glass border reads too bright on black gesture-bar backgrounds.
+class _AndroidFloatingTabBar extends StatelessWidget {
+  const _AndroidFloatingTabBar({
     required this.selectedIndex,
     required this.onItemTapped,
   });
@@ -196,59 +198,258 @@ class _AppLiquidGlassTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bottomPadding = MediaQuery.paddingOf(context).bottom;
+    final l10n = AppLocalizations.of(context)!;
     final tabs = [
-      _AppTabItem(
+      _AndroidTabItem(
         icon: Icons.home_outlined,
         selectedIcon: Icons.home_rounded,
-        label: 'Home',
+        label: l10n.navigationHome,
       ),
-      _AppTabItem(
+      _AndroidTabItem(
         icon: Icons.person_outline_rounded,
         selectedIcon: Icons.person_rounded,
-        label: 'Players',
+        label: l10n.searchTabPlayers,
       ),
-      _AppTabItem(
+      _AndroidTabItem(
         icon: Icons.groups_outlined,
         selectedIcon: Icons.groups,
-        label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
+        label: l10n.clanTitle,
       ),
-      const _AppTabItem(
+      _AndroidTabItem(
         icon: CustomIcons.swordCross,
         selectedIcon: CustomIcons.swordCross,
-        label: 'War',
+        label: l10n.warTitle,
       ),
     ];
 
-    return LiquidGlassTabBar(
-      height: 64,
-      itemCount: tabs.length,
-      selectedIndex: selectedIndex,
-      onTabSelected: onItemTapped,
-      items: tabs
-          .map(
-            (item) => LiquidGlassTabItem(
-              icon: item.icon,
-              selectedIcon: item.selectedIcon,
-              label: item.label,
-              selectedItemColor: colorScheme.primary,
-            ),
-          )
-          .toList(growable: false),
-      iconSize: 23,
+    return SafeArea(
+      top: false,
+      minimum: EdgeInsets.fromLTRB(14, 0, 14, bottomPadding > 0 ? 2 : 10),
+      child: SizedBox(
+        height: 68,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.90)
+                : colorScheme.surface.withValues(alpha: 0.94),
+            borderRadius: BorderRadius.circular(34),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.30 : 0.14),
+                blurRadius: 18,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              for (var index = 0; index < tabs.length; index++)
+                Expanded(
+                  child: _AndroidTabButton(
+                    item: tabs[index],
+                    selected: selectedIndex == index,
+                    onTap: () => onItemTapped(index),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
-class _AppTabItem {
+class _AndroidTabItem {
   final IconData icon;
   final IconData selectedIcon;
   final String label;
 
-  const _AppTabItem({
+  const _AndroidTabItem({
     required this.icon,
     required this.selectedIcon,
     required this.label,
   });
+}
+
+class _AndroidTabButton extends StatelessWidget {
+  const _AndroidTabButton({
+    required this.item,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _AndroidTabItem item;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final selectedColor = colorScheme.primary;
+    final unselectedColor = colorScheme.onSurface.withValues(alpha: 0.92);
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: item.label,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+        child: Material(
+          color: selected
+              ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.58)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(29),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(29),
+            onTap: onTap,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  selected ? item.selectedIcon : item.icon,
+                  size: 25,
+                  color: selected ? selectedColor : unselectedColor,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: selected ? selectedColor : unselectedColor,
+                    fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Apple's real native Liquid Glass bottom tab bar, sized/positioned by the
+/// caller (unlike liquid_glass_widgets' `GlassTabBar.bottom`, which wants to
+/// own the whole `bottomNavigationBar` slot directly).
+class _NativeIOSTabBar extends StatelessWidget {
+  const _NativeIOSTabBar({
+    required this.selectedIndex,
+    required this.onItemTapped,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onItemTapped;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
+      child: SizedBox(
+        height: 78,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final colorScheme = Theme.of(context).colorScheme;
+            final l10n = AppLocalizations.of(context)!;
+            final tabItems = [
+              NativeLiquidGlassTabItem(
+                icon: Icons.home_outlined,
+                selectedIcon: Icons.home_rounded,
+                label: l10n.navigationHome,
+                selectedItemColor: colorScheme.primary,
+              ),
+              NativeLiquidGlassTabItem(
+                icon: Icons.person_outline_rounded,
+                selectedIcon: Icons.person_rounded,
+                label: l10n.searchTabPlayers,
+                selectedItemColor: colorScheme.primary,
+              ),
+              NativeLiquidGlassTabItem(
+                icon: Icons.groups_outlined,
+                selectedIcon: Icons.groups,
+                label: l10n.clanTitle,
+                selectedItemColor: colorScheme.primary,
+              ),
+              NativeLiquidGlassTabItem(
+                icon: CustomIcons.swordCross,
+                selectedIcon: CustomIcons.swordCross,
+                label: l10n.warTitle,
+                selectedItemColor: colorScheme.primary,
+              ),
+            ];
+
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                NativeLiquidGlassTabBar(
+                  height: 62,
+                  itemCount: 4,
+                  selectedIndex: selectedIndex,
+                  onTabSelected: onItemTapped,
+                  items: tabItems,
+                  cornerRadius: 31,
+                  selectedCornerRadius: 25,
+                  inset: 6,
+                  borderOpacity: Theme.of(context).brightness == Brightness.dark
+                      ? 0.22
+                      : 0.34,
+                  shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                      ? 0.5
+                      : 0.18,
+                  iconSize: 22,
+                ),
+                Row(
+                  children: [
+                    _NavHitTarget(
+                      label: l10n.navigationHome,
+                      onTap: () => onItemTapped(0),
+                    ),
+                    _NavHitTarget(
+                      label: l10n.searchTabPlayers,
+                      onTap: () => onItemTapped(1),
+                    ),
+                    _NavHitTarget(
+                      label: l10n.clanTitle,
+                      onTap: () => onItemTapped(2),
+                    ),
+                    _NavHitTarget(
+                      label: l10n.warTitle,
+                      onTap: () => onItemTapped(3),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _NavHitTarget extends StatelessWidget {
+  const _NavHitTarget({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Semantics(
+        button: true,
+        label: label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: const SizedBox.expand(),
+        ),
+      ),
+    );
+  }
 }
 
 class _AccountMenuDrawer extends StatelessWidget {
@@ -258,6 +459,7 @@ class _AccountMenuDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final authService = context.watch<AuthService>();
+    final l10n = AppLocalizations.of(context)!;
     final user = authService.currentUser;
     final displayName = user?.username ?? 'ClashKing';
     final followerCount = user == null ? 0 : 49;
@@ -283,7 +485,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                         _DrawerAvatar(imageUrl: user?.avatarUrl ?? ''),
                         const Spacer(),
                         IconButton(
-                          tooltip: 'Add account',
+                          tooltip: l10n.accountsAdd,
                           onPressed: () => _pushAndClose(
                             context,
                             MaterialPageRoute(
@@ -311,13 +513,15 @@ class _AccountMenuDrawer extends StatelessWidget {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        _DrawerCount(value: followerCount, label: 'Followers'),
+                        _DrawerCount(
+                          value: followerCount,
+                          label: l10n.drawerFollowers,
+                        ),
                         const SizedBox(width: 2),
                         Tooltip(
                           triggerMode: TooltipTriggerMode.tap,
                           showDuration: const Duration(seconds: 4),
-                          message:
-                              'People who bookmarked one of your verified linked accounts.',
+                          message: l10n.drawerFollowersHelp,
                           child: Padding(
                             padding: const EdgeInsets.all(6),
                             child: Icon(
@@ -332,7 +536,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     const SizedBox(height: 16),
                     _DrawerMenuItem(
                       icon: Icons.trending_up_rounded,
-                      label: 'Popular',
+                      label: l10n.drawerPopular,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -342,7 +546,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.leaderboard_outlined,
-                      label: 'Rankings',
+                      label: l10n.clanRankingsTab,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -352,7 +556,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.bar_chart_rounded,
-                      label: 'Stats',
+                      label: l10n.generalStats,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -362,7 +566,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.calculate_outlined,
-                      label: 'Calculators',
+                      label: l10n.drawerCalculators,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -372,7 +576,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.workspace_premium_outlined,
-                      label: 'Subscription',
+                      label: l10n.drawerSubscription,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -382,7 +586,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.construction_rounded,
-                      label: 'Upgrade Tracker',
+                      label: l10n.drawerUpgradeTracker,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -392,7 +596,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.grid_view_rounded,
-                      label: 'Bases & Armies',
+                      label: l10n.drawerBasesArmies,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -402,7 +606,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.inventory_2_outlined,
-                      label: 'Game Assets',
+                      label: l10n.drawerGameAssets,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -412,7 +616,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ),
                     _DrawerMenuItem(
                       icon: Icons.manage_accounts_outlined,
-                      label: 'Manage Accounts',
+                      label: l10n.drawerManageAccounts,
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
@@ -434,7 +638,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                   ),
                   _DrawerMenuItem(
                     icon: Icons.settings_outlined,
-                    label: 'Settings',
+                    label: l10n.generalSettings,
                     dense: true,
                     onTap: user == null
                         ? null
@@ -532,46 +736,41 @@ class _DrawerMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Semantics(
-      button: onTap != null,
-      enabled: onTap != null,
-      label: label,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(14),
-          onTap: onTap,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: dense ? 8 : 9.5),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: dense ? 18 : 19,
-                  color: onTap == null
-                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
-                      : colorScheme.onSurface,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: dense ? 8 : 9.5),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: dense ? 18 : 19,
+                color: onTap == null
+                    ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
+                    : colorScheme.onSurface,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  label,
+                  style:
+                      (dense
+                              ? Theme.of(context).textTheme.bodyLarge
+                              : Theme.of(context).textTheme.titleMedium)
+                          ?.copyWith(
+                            color: onTap == null
+                                ? colorScheme.onSurfaceVariant.withValues(
+                                    alpha: 0.45,
+                                  )
+                                : colorScheme.onSurface,
+                            fontWeight: FontWeight.w700,
+                          ),
                 ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    label,
-                    style:
-                        (dense
-                                ? Theme.of(context).textTheme.bodyLarge
-                                : Theme.of(context).textTheme.titleMedium)
-                            ?.copyWith(
-                              color: onTap == null
-                                  ? colorScheme.onSurfaceVariant.withValues(
-                                      alpha: 0.45,
-                                    )
-                                  : colorScheme.onSurface,
-                              fontWeight: FontWeight.w700,
-                            ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -585,9 +784,10 @@ class _SubscriptionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Subscription'),
+        title: Text(l10n.drawerSubscription),
         backgroundColor: colorScheme.surface,
         surfaceTintColor: Colors.transparent,
       ),

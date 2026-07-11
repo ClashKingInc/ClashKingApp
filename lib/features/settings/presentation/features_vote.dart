@@ -1,3 +1,4 @@
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -26,7 +27,9 @@ class FeatureRequests extends StatelessWidget {
       );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Feature Requests')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.settingsFeatureRequestsTitle),
+      ),
       body: WebViewWidget(controller: controller),
     );
   }

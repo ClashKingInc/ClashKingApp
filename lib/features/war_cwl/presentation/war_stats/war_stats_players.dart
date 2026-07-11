@@ -6,6 +6,7 @@ import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:provider/provider.dart';
@@ -107,7 +108,13 @@ class ClanWarStatsPlayers extends StatelessWidget {
                   if (context.mounted) {
                     navigator.pop();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to load player data')),
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.warAttacksFailedToLoadPlayer,
+                        ),
+                      ),
                     );
                   }
                 }
@@ -230,40 +237,13 @@ class ClanWarStatsPlayers extends StatelessWidget {
             );
           })
         else
-          Padding(
+          AppEmptyState(
+            title: AppLocalizations.of(context)!.generalNoFilteredResults,
+            body: AppLocalizations.of(context)!.generalAdjustFilters,
+            icon: Icons.search_off_rounded,
+            actionLabel: AppLocalizations.of(context)!.generalClearFilters,
+            onAction: resetFilters,
             padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-            child: Column(
-              children: [
-                Icon(
-                  Icons.search_off_rounded,
-                  size: 32,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  AppLocalizations.of(context)!.generalNoFilteredResults,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  AppLocalizations.of(context)!.generalAdjustFilters,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextButton(
-                  onPressed: resetFilters,
-                  child: Text(
-                    AppLocalizations.of(context)!.generalClearFilters,
-                  ),
-                ),
-              ],
-            ),
           ),
       ],
     );

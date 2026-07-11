@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -107,6 +108,7 @@ void _initializeDeepLinks() {
 Future<void> main() async {
   // Initialize Flutter binding BEFORE Sentry
   WidgetsFlutterBinding.ensureInitialized();
+  PushNotificationService.registerBackgroundHandler();
 
   if (!ObservabilityConfig.isEnabled) {
     await _startClashKingApp();
@@ -149,6 +151,7 @@ void _configureObservabilityOptions(
 Future<void> _startClashKingApp() async {
   // Pre-warm the shared Flutter glass shader before first use.
   await LiquidGlassWidgets.initialize();
+  unawaited(PushNotificationService.instance.initialize());
 
   if (!kIsWeb) {
     if (defaultTargetPlatform == TargetPlatform.iOS) {

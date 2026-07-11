@@ -701,7 +701,7 @@ class Player {
     if (league == 'Legend League' && currentLegendSeason?.currentDay != null) {
       metrics.add(
         TodoProgressMetric(
-          label: 'Legend attacks',
+          label: 'legend_attacks',
           done: currentLegendSeason?.currentDay?.totalAttacks ?? 0,
           total: 8,
         ),
@@ -721,7 +721,7 @@ class Player {
     if (regularWar != null && regularWar.state == 'inWar' && !sameWarAsCwl) {
       metrics.add(
         TodoProgressMetric(
-          label: 'War attacks',
+          label: 'war_attacks',
           done: regularWar.getAttacksDoneByPlayer(tag, clanTag),
           total: regularWar.attacksPerMember ?? 2,
         ),
@@ -733,7 +733,7 @@ class Player {
         cwlWar.isPlayerInWar(tag, clanTag)) {
       metrics.add(
         TodoProgressMetric(
-          label: 'CWL attacks',
+          label: 'cwl_attacks',
           done: cwlWar.getAttacksDoneByPlayer(tag, clanTag),
           total: cwlWar.attacksPerMember ?? 1,
         ),
@@ -741,7 +741,7 @@ class Player {
     } else if (isInTimeFrameForCwl() && memberCwl.attacksAvailable > 0) {
       metrics.add(
         TodoProgressMetric(
-          label: 'CWL attacks',
+          label: 'cwl_attacks',
           done: memberCwl.attacksDone,
           total: memberCwl.attacksAvailable,
         ),
@@ -755,7 +755,7 @@ class Player {
           : (currentClanGamesPoints / required).clamp(0.0, 1.0);
       metrics.add(
         TodoProgressMetric(
-          label: 'Clan Games',
+          label: 'clan_games',
           done: currentClanGamesPoints,
           total: required,
           progressDone: ratio * 2,
@@ -767,7 +767,7 @@ class Player {
     if (isInTimeFrameForRaid()) {
       metrics.add(
         TodoProgressMetric(
-          label: 'Raid attacks',
+          label: 'raid_attacks',
           done: raids?.attackDone ?? 0,
           total: raids?.attackLimit ?? 5,
         ),
@@ -780,7 +780,7 @@ class Player {
         : (currentSeasonPoints / requiredSeasonPoints).clamp(0.0, 1.0);
     metrics.add(
       TodoProgressMetric(
-        label: 'Season Pass',
+        label: 'season_pass',
         done: currentSeasonPoints,
         total: requiredSeasonPoints,
         progressDone: seasonRatio * 2,

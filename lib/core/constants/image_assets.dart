@@ -3,6 +3,7 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 class ImageAssets {
   static const String baseUrl = "https://assets.clashk.ing";
   static const String defaultImage = "$baseUrl/icons/Icon_Unknown_Troop.png";
+  static const String thinkingBuilder = "$baseUrl/stickers/thinking_bk.webp";
 
   // 👑 Logos
   static const String darkModeLogo =

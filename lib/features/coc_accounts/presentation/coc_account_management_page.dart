@@ -489,6 +489,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                 ),
                                                 // Delete button with confirmation
                                                 IconButton(
+                                                  tooltip: AppLocalizations.of(
+                                                    context,
+                                                  )!.tooltipRemoveAccount,
                                                   icon:
                                                       _deletingPlayerTag == // NOSONAR
                                                           _tempUserAccounts[index]["player_tag"]

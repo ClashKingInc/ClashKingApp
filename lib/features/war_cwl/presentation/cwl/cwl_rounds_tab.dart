@@ -272,15 +272,18 @@ class _RoundBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Semantics(
       label: label,
       child: Container(
         constraints: const BoxConstraints(minHeight: 28),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.14),
+          color: color.withValues(alpha: isDark ? 0.26 : 0.32),
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: color.withValues(alpha: 0.28)),
+          border: Border.all(
+            color: color.withValues(alpha: isDark ? 0.46 : 0.52),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

@@ -150,8 +150,11 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
               setState(() => _selectedDay = isSelected ? null : dayKey),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 12,
+              runSpacing: 8,
               children: [
                 Row(
                   children: [
@@ -172,7 +175,6 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                           offset: const Offset(2, -6),
                           child: Text(
                             "(${day.totalAttacks})",
-                            textScaler: TextScaler.linear(0.7),
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ),
@@ -190,7 +192,6 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                           offset: const Offset(2, -6),
                           child: Text(
                             "(${day.totalDefenses})",
-                            textScaler: TextScaler.linear(0.7),
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ),
@@ -215,7 +216,6 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                             day.trophiesTotal > 0
                                 ? "(+${day.trophiesTotal})"
                                 : "(${day.trophiesTotal})",
-                            textScaler: TextScaler.linear(0.7),
                             style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
                                   color: day.trophiesTotal > 0

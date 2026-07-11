@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to
 import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_header.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 enum _TodoAccountFilter { all, mine, needsAction, done, bookmarked }
@@ -78,8 +79,7 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen> {
           final isCurrentAccount =
               myAccountTags.contains(tag) || bookmarkedTags.contains(tag);
           return isCurrentAccount &&
-              playerPrefs.isShownInTodoPage(player.tag) &&
-              _isRecentlyActive(player);
+              playerPrefs.isTodoOnHomeEnabled(player.tag);
         })
         .toList(growable: false);
     final searchedPlayers = todoPagePlayers
@@ -145,11 +145,6 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen> {
     );
   }
 
-  bool _isRecentlyActive(Player player) {
-    final threshold = DateTime.now().subtract(const Duration(days: 14));
-    return player.lastOnline.isAfter(threshold);
-  }
-
   bool _matchesSearch(Player player) {
     final normalizedQuery = _query.trim().toLowerCase();
     if (normalizedQuery.isEmpty) return true;
@@ -186,15 +181,16 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen> {
   }
 
   String _emptyText() {
+    final loc = AppLocalizations.of(context)!;
     if (_query.trim().isNotEmpty) {
-      return 'No matching accounts';
+      return loc.todoNoMatchingAccounts;
     }
     return switch (_filter) {
-      _TodoAccountFilter.all => 'No active accounts',
-      _TodoAccountFilter.mine => 'No linked accounts',
-      _TodoAccountFilter.needsAction => 'No accounts need action',
-      _TodoAccountFilter.done => 'No completed accounts',
-      _TodoAccountFilter.bookmarked => 'No bookmarked accounts',
+      _TodoAccountFilter.all => loc.todoNoConfiguredAccounts,
+      _TodoAccountFilter.mine => loc.todoNoLinkedAccounts,
+      _TodoAccountFilter.needsAction => loc.todoNoAccountsNeedAction,
+      _TodoAccountFilter.done => loc.todoNoCompletedAccounts,
+      _TodoAccountFilter.bookmarked => loc.todoNoBookmarkedAccounts,
     };
   }
 }
@@ -347,7 +343,7 @@ class _TodoSearchField extends StatelessWidget {
               context,
             ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
             decoration: InputDecoration(
-              hintText: 'Search accounts',
+              hintText: AppLocalizations.of(context)!.todoSearchAccountsHint,
               hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -363,7 +359,7 @@ class _TodoSearchField extends StatelessWidget {
               ),
               suffixIcon: query.isNotEmpty
                   ? IconButton(
-                      tooltip: 'Clear search',
+                      tooltip: AppLocalizations.of(context)!.generalClearSearch,
                       icon: Icon(
                         Icons.close_rounded,
                         size: 18,

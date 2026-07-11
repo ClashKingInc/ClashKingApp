@@ -1,11 +1,12 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/widgets/cwl_member_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 
 class CwlMembersTab extends StatefulWidget {
@@ -89,246 +90,219 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
     final warsPlayed = clanDetails?.warsPlayed ?? 0;
     final attacksPerWar = 1; // Standard CWL attacks per war
 
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: Column(
+    return Column(
+      children: [
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
             children: [
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      NativeLiquidGlassBar(
                         height: 44,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            LiquidGlassBar(
-                              height: 44,
-                              cornerRadius: 22,
-                              borderOpacity:
-                                  Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? 0.22
-                                  : 0.30,
-                              shadowOpacity:
-                                  Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? 0.22
-                                  : 0.08,
-                            ),
-                            TextField(
-                              controller: _searchController,
-                              textInputAction: TextInputAction.search,
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(color: colorScheme.onSurface),
-                              decoration: InputDecoration(
-                                hintText:
-                                    loc?.clanMembersSearchPlaceholder ??
-                                    'Search members',
-                                hintStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: colorScheme.onSurfaceVariant,
-                                    ),
-                                isDense: true,
-                                prefixIcon: Icon(
-                                  Icons.search_rounded,
-                                  size: 20,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                                prefixIconConstraints: const BoxConstraints(
-                                  minWidth: 40,
-                                  minHeight: 44,
-                                ),
-                                suffixIcon: _searchQuery.isNotEmpty
-                                    ? IconButton(
-                                        icon: Icon(
-                                          Icons.close_rounded,
-                                          size: 18,
-                                          color: colorScheme.onSurfaceVariant,
-                                        ),
-                                        onPressed: () =>
-                                            _searchController.clear(),
-                                      )
-                                    : null,
-                                border: InputBorder.none,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                ),
-                              ),
-                            ),
-                          ],
+                        cornerRadius: 22,
+                        borderOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.30,
+                        shadowOpacity:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? 0.22
+                            : 0.08,
+                      ),
+                      TextField(
+                        controller: _searchController,
+                        textInputAction: TextInputAction.search,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface,
+                        ),
+                        decoration: InputDecoration(
+                          hintText:
+                              loc?.clanMembersSearchPlaceholder ??
+                              'Search members',
+                          hintStyle: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                          isDense: true,
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            size: 20,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          prefixIconConstraints: const BoxConstraints(
+                            minWidth: 40,
+                            minHeight: 44,
+                          ),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                                  tooltip: AppLocalizations.of(
+                                    context,
+                                  )!.searchClear,
+                                  icon: Icon(
+                                    Icons.close_rounded,
+                                    size: 18,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                  onPressed: () => _searchController.clear(),
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    FilterDropdown(
-                      sortBy: sortBy,
-                      updateSortBy: updateSortBy,
-                      maxWidth: 130,
-                      sortByOptions: {
-                        generateDoubleIcons(
-                          16,
-                          ImageAssets.sword,
-                          ImageAssets.builderBaseStar,
-                        ): 'stars',
-                        generateDoubleIcons(
-                          16,
-                          ImageAssets.sword,
-                          ImageAssets.hitrate,
-                        ): 'percentage',
-                        generateDoubleImageIconsWithText(
-                          16,
-                          ImageAssets.sword,
-                          ImageAssets.builderBaseStar,
-                          "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
-                        ): 'averageStars',
-                        generateDoubleImageIconsWithText(
-                          16,
-                          ImageAssets.sword,
-                          ImageAssets.hitrate,
-                          "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
-                        ): 'averagePercentage',
-                        generateImageIconWithText(
-                          16,
-                          ImageAssets.sword,
-                          AppLocalizations.of(context)!.warAttacksCount,
-                        ): 'attackCount',
-                        generateImageIconWithText(
-                          16,
-                          ImageAssets.sword,
-                          AppLocalizations.of(context)!.warAttacksMissed,
-                        ): 'missedAttacks',
-                        generateStarsWithIconBefore(3, 16, ImageAssets.sword):
-                            '3stars',
-                        generateStarsWithIconBefore(2, 16, ImageAssets.sword):
-                            '2stars',
-                        generateStarsWithIconBefore(1, 16, ImageAssets.sword):
-                            '1stars',
-                        generateStarsWithIconBefore(0, 16, ImageAssets.sword):
-                            '0stars',
-                        generateDoubleIconsWithText(
-                          16,
-                          ImageAssets.sword,
-                          Icons.keyboard_double_arrow_down,
-                          AppLocalizations.of(
-                            context,
-                          )!.warOpponentLowerTownhall,
-                        ): 'attackLowerTH',
-                        generateDoubleIconsWithText(
-                          16,
-                          ImageAssets.sword,
-                          Icons.keyboard_double_arrow_up,
-                          AppLocalizations.of(
-                            context,
-                          )!.warOpponentUpperTownhall,
-                        ): 'attackUpperTH',
-                        generateDoubleIcons(
-                          16,
-                          ImageAssets.shieldWithArrow,
-                          ImageAssets.builderBaseStar,
-                        ): 'defStars',
-                        generateDoubleIcons(
-                          16,
-                          ImageAssets.shieldWithArrow,
-                          ImageAssets.hitrate,
-                        ): 'defDestruction',
-                        generateDoubleImageIconsWithText(
-                          16,
-                          ImageAssets.shieldWithArrow,
-                          ImageAssets.builderBaseStar,
-                          "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
-                        ): 'defAverageStars',
-                        generateDoubleImageIconsWithText(
-                          16,
-                          ImageAssets.shieldWithArrow,
-                          ImageAssets.hitrate,
-                          "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
-                        ): 'defAverageDestruction',
-                        generateStarsWithIconBefore(
-                          3,
-                          16,
-                          ImageAssets.shieldWithArrow,
-                        ): 'def3stars',
-                        generateStarsWithIconBefore(
-                          2,
-                          16,
-                          ImageAssets.shieldWithArrow,
-                        ): 'def2stars',
-                        generateStarsWithIconBefore(
-                          1,
-                          16,
-                          ImageAssets.shieldWithArrow,
-                        ): 'def1stars',
-                        generateStarsWithIconBefore(
-                          0,
-                          16,
-                          ImageAssets.shieldWithArrow,
-                        ): 'def0stars',
-                        generateDoubleIconsWithText(
-                          16,
-                          ImageAssets.shieldWithArrow,
-                          Icons.keyboard_double_arrow_down,
-                          AppLocalizations.of(
-                            context,
-                          )!.warOpponentLowerTownhall,
-                        ): 'defenseLowerTH',
-                        generateDoubleIconsWithText(
-                          16,
-                          ImageAssets.shieldWithArrow,
-                          Icons.keyboard_double_arrow_up,
-                          AppLocalizations.of(
-                            context,
-                          )!.warOpponentUpperTownhall,
-                        ): 'defenseUpperTH',
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(width: 8),
+              FilterDropdown(
+                sortBy: sortBy,
+                updateSortBy: updateSortBy,
+                maxWidth: 130,
+                sortByOptions: {
+                  generateDoubleIcons(
+                    16,
+                    ImageAssets.sword,
+                    ImageAssets.builderBaseStar,
+                  ): 'stars',
+                  generateDoubleIcons(
+                    16,
+                    ImageAssets.sword,
+                    ImageAssets.hitrate,
+                  ): 'percentage',
+                  generateDoubleImageIconsWithText(
+                    16,
+                    ImageAssets.sword,
+                    ImageAssets.builderBaseStar,
+                    "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
+                  ): 'averageStars',
+                  generateDoubleImageIconsWithText(
+                    16,
+                    ImageAssets.sword,
+                    ImageAssets.hitrate,
+                    "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
+                  ): 'averagePercentage',
+                  generateImageIconWithText(
+                    16,
+                    ImageAssets.sword,
+                    AppLocalizations.of(context)!.warAttacksCount,
+                  ): 'attackCount',
+                  generateImageIconWithText(
+                    16,
+                    ImageAssets.sword,
+                    AppLocalizations.of(context)!.warAttacksMissed,
+                  ): 'missedAttacks',
+                  generateStarsWithIconBefore(3, 16, ImageAssets.sword):
+                      '3stars',
+                  generateStarsWithIconBefore(2, 16, ImageAssets.sword):
+                      '2stars',
+                  generateStarsWithIconBefore(1, 16, ImageAssets.sword):
+                      '1stars',
+                  generateStarsWithIconBefore(0, 16, ImageAssets.sword):
+                      '0stars',
+                  generateDoubleIconsWithText(
+                    16,
+                    ImageAssets.sword,
+                    Icons.keyboard_double_arrow_down,
+                    AppLocalizations.of(context)!.warOpponentLowerTownhall,
+                  ): 'attackLowerTH',
+                  generateDoubleIconsWithText(
+                    16,
+                    ImageAssets.sword,
+                    Icons.keyboard_double_arrow_up,
+                    AppLocalizations.of(context)!.warOpponentUpperTownhall,
+                  ): 'attackUpperTH',
+                  generateDoubleIcons(
+                    16,
+                    ImageAssets.shieldWithArrow,
+                    ImageAssets.builderBaseStar,
+                  ): 'defStars',
+                  generateDoubleIcons(
+                    16,
+                    ImageAssets.shieldWithArrow,
+                    ImageAssets.hitrate,
+                  ): 'defDestruction',
+                  generateDoubleImageIconsWithText(
+                    16,
+                    ImageAssets.shieldWithArrow,
+                    ImageAssets.builderBaseStar,
+                    "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
+                  ): 'defAverageStars',
+                  generateDoubleImageIconsWithText(
+                    16,
+                    ImageAssets.shieldWithArrow,
+                    ImageAssets.hitrate,
+                    "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
+                  ): 'defAverageDestruction',
+                  generateStarsWithIconBefore(
+                    3,
+                    16,
+                    ImageAssets.shieldWithArrow,
+                  ): 'def3stars',
+                  generateStarsWithIconBefore(
+                    2,
+                    16,
+                    ImageAssets.shieldWithArrow,
+                  ): 'def2stars',
+                  generateStarsWithIconBefore(
+                    1,
+                    16,
+                    ImageAssets.shieldWithArrow,
+                  ): 'def1stars',
+                  generateStarsWithIconBefore(
+                    0,
+                    16,
+                    ImageAssets.shieldWithArrow,
+                  ): 'def0stars',
+                  generateDoubleIconsWithText(
+                    16,
+                    ImageAssets.shieldWithArrow,
+                    Icons.keyboard_double_arrow_down,
+                    AppLocalizations.of(context)!.warOpponentLowerTownhall,
+                  ): 'defenseLowerTH',
+                  generateDoubleIconsWithText(
+                    16,
+                    ImageAssets.shieldWithArrow,
+                    Icons.keyboard_double_arrow_up,
+                    AppLocalizations.of(context)!.warOpponentUpperTownhall,
+                  ): 'defenseUpperTH',
+                },
+              ),
             ],
           ),
         ),
+        const SizedBox(height: 12),
         if (members.isEmpty && _searchQuery.isNotEmpty)
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(
-              child: Text(
+          AppEmptyState(
+            title:
                 loc?.generalNoFilteredResults ??
-                    'No results match your filters',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
+                'No results match your filters',
+            body: loc?.generalAdjustFilters,
+            icon: Icons.search_off_rounded,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
           )
         else
-          SliverList.builder(
-            itemCount: members.length,
-            itemBuilder: (context, index) {
-              final member = members[index];
-              final key = _cardKeys.putIfAbsent(member.tag, () => GlobalKey());
-              return MembersCard(
-                key: key,
-                sortBy: sortBy,
-                showFullStats: _expandedFullStats.contains(member.tag),
-                onToggleFullStats: () => toggleShowStats(member.tag, key),
-                member: member,
-                index: index,
-                warsPlayed: warsPlayed,
-                attacksPerWar: attacksPerWar,
-              );
-            },
-          ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: 16 + MediaQuery.paddingOf(context).bottom),
-        ),
+          ...members.asMap().entries.map((entry) {
+            final index = entry.key;
+            final member = entry.value;
+            final key = _cardKeys.putIfAbsent(member.tag, () => GlobalKey());
+            return MembersCard(
+              key: key,
+              sortBy: sortBy,
+              showFullStats: _expandedFullStats.contains(member.tag),
+              onToggleFullStats: () => toggleShowStats(member.tag, key),
+              member: member,
+              index: index,
+              warsPlayed: warsPlayed,
+              attacksPerWar: attacksPerWar,
+            );
+          }),
       ],
     );
   }

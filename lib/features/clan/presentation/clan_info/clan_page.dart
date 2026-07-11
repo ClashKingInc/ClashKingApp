@@ -16,6 +16,7 @@ import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/war_stats_players.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -477,13 +478,13 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
                   ? (loc?.generalNoFilteredResults ??
                         'No results match your filters')
                   : stats.totalEvents == 0
-                  ? 'No join/leave data'
-                  : 'No recent movement',
+                  ? loc!.clanJoinLeaveNoDataTitle
+                  : loc!.clanJoinLeaveNoRecentMovementTitle,
               body: _searchQuery.isNotEmpty || _selectedMovement != 'all'
                   ? ''
                   : stats.totalEvents == 0
-                  ? 'Recent roster movement appears here when tracking data is loaded.'
-                  : 'The summary is loaded, but the event list is empty.',
+                  ? loc!.clanJoinLeaveNoDataBody
+                  : loc!.clanJoinLeaveNoRecentMovementBody,
               icon: Icons.history_toggle_off_rounded,
             )
           else
@@ -630,6 +631,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final localeName = Localizations.localeOf(context).toString();
     final seasonLabel = DateFormat.yMMMM(localeName).format(_selectedSeason);
     final totalDonated = widget.clanInfo.memberList.fold<int>(
@@ -656,7 +658,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
     // TODO: Replace the mock calendar month with API-backed ranking seasons.
     final rankings = [
       _RankingPreview(
-        title: 'Donations',
+        title: loc.gameDonations,
         value: totalDonated,
         icon: Icons.arrow_upward_rounded,
         color: Colors.green,
@@ -665,7 +667,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
         localRank: 3 + seasonOffset,
       ),
       _RankingPreview(
-        title: 'Received',
+        title: loc.gameDonationsReceived,
         value: totalReceived,
         icon: Icons.arrow_downward_rounded,
         color: Colors.redAccent,
@@ -674,7 +676,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
         localRank: 8 + seasonOffset,
       ),
       _RankingPreview(
-        title: 'War wins',
+        title: loc.warWinsTitle,
         value: widget.clanInfo.warWins,
         imageUrl: ImageAssets.sword,
         category: 'war',
@@ -682,7 +684,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
         localRank: 7 + seasonOffset,
       ),
       _RankingPreview(
-        title: 'Win streak',
+        title: loc.clanWinStreakTitle,
         value: widget.clanInfo.warWinStreak,
         icon: Icons.local_fire_department_rounded,
         color: const Color(0xFFE35D4F),
@@ -691,7 +693,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
         localRank: 12 + seasonOffset,
       ),
       _RankingPreview(
-        title: 'Clan points',
+        title: loc.clanPointsTitle,
         value: widget.clanInfo.clanPoints,
         imageUrl: ImageAssets.trophies,
         plainValue: true,
@@ -700,7 +702,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
         localRank: 16 + seasonOffset,
       ),
       _RankingPreview(
-        title: 'Builder points',
+        title: loc.clanBuilderBasePoints,
         value: widget.clanInfo.clanBuilderBasePoints,
         imageUrl: ImageAssets.builderBaseTrophy,
         plainValue: true,
@@ -709,7 +711,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
         localRank: 18 + seasonOffset,
       ),
       _RankingPreview(
-        title: 'Capital points',
+        title: loc.clanCapitalPoints,
         value: widget.clanInfo.clanCapitalPoints,
         imageUrl: ImageAssets.capitalTrophy,
         plainValue: true,
@@ -956,58 +958,11 @@ class _ClanEmptyTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
+    return AppEmptyState(
+      title: title,
+      body: body,
+      icon: icon,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest.withValues(
-                  alpha: 0.45,
-                ),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: colorScheme.onSurfaceVariant),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    body,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
@@ -638,17 +639,19 @@ class WarDisplayWidgetState extends State<WarDisplayWidget> {
                 IconButton(
                   onPressed: _refreshWarData,
                   icon: const Icon(Icons.refresh),
-                  tooltip: 'Refresh War Data',
+                  tooltip: AppLocalizations.of(context)!.warWidgetRefreshData,
                 ),
               ],
             ),
             const SizedBox(height: 8),
             if (warData != null)
               Text(
-                'Last updated: ${DateTime.now().toString().substring(11, 16)}',
+                AppLocalizations.of(context)!.warWidgetLastUpdated(
+                  DateTime.now().toString().substring(11, 16),
+                ),
               )
             else
-              const Text('No war data available'),
+              Text(AppLocalizations.of(context)!.warWidgetNoData),
           ],
         ),
       ),

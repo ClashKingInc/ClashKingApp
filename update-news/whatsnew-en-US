@@ -1,3 +1,6 @@
+- Improved accessibility with reduced-motion support, larger header actions, localized navigation, and clearer empty-state actions
+- Shared stat chips, tiles, and segmented controls now provide more consistent styling and screen-reader support
+- Added push notification setup for device permissions, FCM token registration, and foreground alerts
 - Clan Capital Members now clearly explains older raid weekends when the API omits player-level member and attack data
 - Clan Capital Members now has a History mode aggregating member loot and attacks across loaded raid weekends
 - Clan Capital Summary now uses raid medal imagery and CWL-style flat full-stat tiles instead of summary chips

@@ -784,11 +784,11 @@ class _EmptyWarMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
+    return Card(
       margin: EdgeInsets.zero,
       child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Text('No linked or bookmarked clan wars to show.'),
+        padding: const EdgeInsets.all(16),
+        child: Text(AppLocalizations.of(context)!.warNoLinkedOrBookmarked),
       ),
     );
   }

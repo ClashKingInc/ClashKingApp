@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/clan/presentation/clan_capital/clan_capita
 import 'package:clashkingapp/features/clan/presentation/clan_capital/clan_capital_members.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_capital/clan_capital_raid.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -202,7 +203,7 @@ class _CapitalProfileTabsState extends State<_CapitalProfileTabs>
           onTap: widget.onTabSelected,
           tabs: [
             _CapitalTab(
-              label: 'Summary',
+              label: loc.generalSummary,
               icon: Icons.dashboard_rounded,
               selected: widget.selectedIndex == 0,
             ),
@@ -212,7 +213,7 @@ class _CapitalProfileTabsState extends State<_CapitalProfileTabs>
               selected: widget.selectedIndex == 1,
             ),
             _CapitalTab(
-              label: 'Breakdown',
+              label: loc.generalBreakdown,
               imageUrl: ImageAssets.raidAttacks,
               selected: widget.selectedIndex == 2,
             ),
@@ -426,73 +427,14 @@ class _CapitalEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
+    return AppEmptyState(
+      title: loc.capitalRaidEmptyTitle,
+      body: loc.capitalRaidEmptyBody,
+      icon: Icons.location_city_rounded,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
-              borderRadius: BorderRadius.circular(AppRadius.card),
-              border: Border.all(
-                color: colorScheme.outlineVariant.withValues(
-                  alpha: AppOpacity.borderStrong,
-                ),
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 38,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest.withValues(
-                      alpha: 0.45,
-                    ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.location_city_rounded,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        loc.capitalRaidEmptyTitle,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        loc.capitalRaidEmptyBody,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          MobileWebImage(
-            imageUrl: ImageAssets.villager,
-            height: 200,
-            width: 160,
-          ),
-        ],
-      ),
+      stickerHeight: 200,
+      stickerWidth: 160,
     );
   }
 }

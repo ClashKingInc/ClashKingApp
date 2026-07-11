@@ -1,6 +1,7 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_legend_season.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -123,34 +124,12 @@ class LegendSeason extends StatelessWidget {
         ),
       );
     } else {
-      return SizedBox(
-        width: double.infinity,
-        height: 500,
-        child: Card(
-          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.of(context)?.generalNoDataAvailable ??
-                      'No data available',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                MobileWebImage(
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageUrl: ImageAssets.villager,
-                  height: 300,
-                ),
-              ],
-            ),
-          ),
-        ),
+      return AppEmptyState(
+        title: AppLocalizations.of(context)!.generalNoDataAvailable,
+        icon: Icons.history_toggle_off_rounded,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        stickerHeight: 300,
+        stickerWidth: 180,
       );
     }
   }

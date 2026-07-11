@@ -1,22 +1,25 @@
+import 'dart:async';
+
+import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
+import 'package:clashkingapp/core/app/my_home_page.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/core/services/push_notification_service.dart';
+import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/account_bootstrap_service.dart';
-import 'package:clashkingapp/core/services/bookmark_service.dart';
-import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/features/auth/presentation/login_page.dart';
-import 'package:clashkingapp/core/app/my_home_page.dart';
-import 'package:clashkingapp/features/auth/data/auth_service.dart';
-import 'package:clashkingapp/core/utils/network_error_utils.dart';
-import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
-import 'package:clashkingapp/common/widgets/error/error_page.dart';
-import 'package:clashkingapp/core/utils/debug_utils.dart';
-import 'package:clashkingapp/core/services/error_reporter.dart';
-import 'package:clashkingapp/core/services/game_data_service.dart';
 
 class StartupWidget extends StatefulWidget {
   const StartupWidget({super.key});
@@ -47,7 +50,7 @@ class StartupWidgetState extends State<StartupWidget> {
         return;
       }
       // Auth failure (expired/revoked session): initializeAuth() already cleared
-      // tokens and set isAuthenticated=false — fall through so _navigateToNextScreen
+      // tokens and set isAuthenticated=false; fall through so _navigateToNextScreen
       // redirects to LoginPage instead of looping on ErrorPage.
     }
 
@@ -67,6 +70,9 @@ class StartupWidgetState extends State<StartupWidget> {
           players: playerService,
           clans: clanService,
           wars: warService,
+        );
+        unawaited(
+          PushNotificationService.instance.registerCurrentDeviceToken(),
         );
       } catch (e, stackTrace) {
         ErrorReporter.captureException(
@@ -119,14 +125,11 @@ class StartupWidgetState extends State<StartupWidget> {
       Widget nextPage;
       if (authService.canUseApp && mounted) {
         if (context.read<CocAccountService>().cocAccounts.isNotEmpty) {
-          // ✅ User connected and has CoC account → Go to home page
           nextPage = MyHomePage();
         } else {
-          // ❌ No account → Go to add account page
           nextPage = AddCocAccountPage();
         }
       } else {
-        // ❌ User not connected → Go to login page
         nextPage = LoginPage();
       }
       if (mounted) {

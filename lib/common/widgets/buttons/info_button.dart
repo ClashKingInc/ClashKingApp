@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class InfoButton extends StatefulWidget {
   final TextSpan textSpan;
@@ -43,7 +44,7 @@ void showInfoPopup(BuildContext context, TextSpan textSpan, String title) {
         content: SingleChildScrollView(child: RichText(text: textSpan)),
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: Text(AppLocalizations.of(context)!.generalOk),
             onPressed: () {
               Navigator.of(context).pop();
             },

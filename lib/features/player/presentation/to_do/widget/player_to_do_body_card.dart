@@ -296,9 +296,10 @@ class _QuietState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withValues(alpha: isDark ? 0.24 : 0.30),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
@@ -336,10 +337,11 @@ class _TaskPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = task.done ? StatColors.win : task.color;
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.14),
+        color: color.withValues(alpha: isDark ? 0.26 : 0.32),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
@@ -510,7 +512,7 @@ class _TodoTask {
 
     tasks.add(
       _TodoTask(
-        label: 'Pass',
+        label: AppLocalizations.of(context)!.gameSeasonPassShort,
         value: compact.format(player.currentSeasonPoints),
         imageUrl: ImageAssets.iconGoldPass,
         color: StatColors.warStarGold,

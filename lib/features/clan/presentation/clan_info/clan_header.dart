@@ -113,7 +113,7 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
                 child: _buildTopActions(context),
               )
             else
-              const SizedBox(height: 42),
+              const SizedBox(height: 48),
             const SizedBox(height: 6),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -305,17 +305,17 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               _ClanQuickChip(
                 value: _plainNumber(clanInfo.clanPoints),
                 imageUrl: ImageAssets.trophies,
-                tooltip: 'Clan points',
+                tooltip: loc.clanPointsTitle,
               ),
               _ClanQuickChip(
                 value: '${clanInfo.members}/50',
                 icon: Icons.groups_rounded,
-                tooltip: 'Members',
+                tooltip: loc.clanMembers,
               ),
               _ClanQuickChip(
                 value: _plainNumber(clanInfo.clanBuilderBasePoints),
                 imageUrl: ImageAssets.builderBaseTrophy,
-                tooltip: 'Builder base points',
+                tooltip: loc.clanBuilderBasePoints,
               ),
             ],
           ),
@@ -328,15 +328,17 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               _ClanQuickChip(
                 value: typeLabel,
                 icon: Icons.mail_rounded,
-                tooltip: 'Clan type',
+                tooltip: loc.clanType,
               ),
               if (clanInfo.requiredTownhallLevel > 0)
                 _ClanQuickChip(
-                  value: '${clanInfo.requiredTownhallLevel}+ only',
+                  value: loc.clanRequiredTownHallOnly(
+                    clanInfo.requiredTownhallLevel,
+                  ),
                   imageUrl: ImageAssets.townHall(
                     clanInfo.requiredTownhallLevel,
                   ),
-                  tooltip: 'Required Town Hall',
+                  tooltip: loc.clanRequiredTownHall,
                 ),
               if (clanInfo.isFamilyFriendly)
                 const _ClanQuickChip(
@@ -407,7 +409,7 @@ class ClanInfoHeaderActions extends StatelessWidget {
           HeaderIconButton(
             icon: Icons.discord,
             iconColor: Colors.white,
-            tooltip: 'Discord',
+            tooltip: AppLocalizations.of(context)!.generalDiscord,
             onTap: () => _openDiscord(context),
             showBackground: false,
           ),
@@ -416,7 +418,7 @@ class ClanInfoHeaderActions extends StatelessWidget {
         HeaderIconButton(
           icon: Icons.open_in_new_rounded,
           iconColor: Colors.white,
-          tooltip: 'Open in game',
+          tooltip: AppLocalizations.of(context)!.playerOpenInGame,
           onTap: () {
             final lang = Localizations.localeOf(context).languageCode;
             final url = Uri.https('link.clashofclans.com', '/$lang', {

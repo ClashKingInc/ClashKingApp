@@ -77,6 +77,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _loadRecents() async {
+    final loc = AppLocalizations.of(context)!;
     final userId = _currentSearchUserId();
     if (userId == null) {
       if (!mounted) return;
@@ -92,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
         requiresAuth: true,
       );
 
-      items.addAll(_decodeRecentItems(response));
+      items.addAll(_decodeRecentItems(response, loc));
       items.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     } catch (_) {
       items.clear();
@@ -102,25 +103,33 @@ class _SearchPageState extends State<SearchPage> {
     setState(() => _recentItems = items.take(_recentLimit).toList());
   }
 
-  List<_RecentSearchItem> _decodeRecentItems(http.Response response) {
+  List<_RecentSearchItem> _decodeRecentItems(
+    http.Response response,
+    AppLocalizations loc,
+  ) {
     if (response.statusCode != 200) return [];
     final data = jsonDecode(utf8.decode(response.bodyBytes));
     if (data is! Map<String, dynamic>) return [];
 
     final items = <_RecentSearchItem>[];
-    items.addAll(_decodeRecentGroup(data['players'], _RecentSearchType.player));
-    items.addAll(_decodeRecentGroup(data['clans'], _RecentSearchType.clan));
+    items.addAll(
+      _decodeRecentGroup(data['players'], _RecentSearchType.player, loc),
+    );
+    items.addAll(
+      _decodeRecentGroup(data['clans'], _RecentSearchType.clan, loc),
+    );
     return items;
   }
 
   List<_RecentSearchItem> _decodeRecentGroup(
     Object? rawItems,
     _RecentSearchType type,
+    AppLocalizations loc,
   ) {
     if (rawItems is! List) return [];
     return rawItems
         .whereType<Map<String, dynamic>>()
-        .map((item) => _RecentSearchItem.fromApiJson(item, type))
+        .map((item) => _RecentSearchItem.fromApiJson(item, type, loc))
         .whereType<_RecentSearchItem>()
         .toList();
   }
@@ -553,7 +562,7 @@ class _SearchPageState extends State<SearchPage> {
                         textStyle: Theme.of(context).textTheme.bodyMedium
                             ?.copyWith(fontWeight: FontWeight.w600),
                       ),
-                      child: const Text('Cancel'),
+                      child: Text(AppLocalizations.of(context)!.searchCancel),
                     ),
                   ],
                 ),
@@ -730,12 +739,12 @@ class _ModeSegmentChrome extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: selected
-            ? colorScheme.surface.withValues(alpha: 0.92)
-            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.72),
+            ? colorScheme.surface.withValues(alpha: 0.98)
+            : colorScheme.surface.withValues(alpha: 0.94),
         borderRadius: BorderRadius.circular(cornerRadius),
         border: Border.all(
           color: colorScheme.outlineVariant.withValues(
-            alpha: selected ? 0.34 : 0.22,
+            alpha: selected ? 0.38 : 0.30,
           ),
         ),
       ),
@@ -1022,6 +1031,7 @@ class _RecentSearchItem {
   static _RecentSearchItem? fromApiJson(
     Map<String, dynamic> json,
     _RecentSearchType fallbackType,
+    AppLocalizations loc,
   ) {
     final type = fallbackType;
     final source = json;
@@ -1041,7 +1051,9 @@ class _RecentSearchItem {
         type: type,
         name: source['name']?.toString() ?? tag,
         tag: tag,
-        subtitle: '${source['members'] ?? 0} members',
+        subtitle: loc.generalMembersCount(
+          (source['members'] as num?)?.toInt() ?? 0,
+        ),
         createdAt: createdAt,
         imageUrl: badgeUrl,
       );

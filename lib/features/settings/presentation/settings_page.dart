@@ -21,9 +21,11 @@ import 'package:clashkingapp/features/settings/presentation/translation_page.dar
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -94,7 +96,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               Consumer<ThemeNotifier>(
                 builder: (context, themeNotifier, child) {
                   return _SettingsTile(
-                    icon: Icons.brightness_6_outlined,
+                    icon: LucideIcons.sunMoon,
                     title: l10n.settingsToggleTheme,
                     trailingText: _themeModeLabel(
                       context,
@@ -107,17 +109,17 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               ),
               if (_supportsAlternateIcons)
                 _SettingsTile(
-                  icon: Icons.image_outlined,
-                  title: 'App Icon',
+                  icon: LucideIcons.image,
+                  title: l10n.settingsAppIcon,
                   trailingText: _isChangingAppIcon
-                      ? 'Changing...'
+                      ? l10n.settingsChanging
                       : _appIconService
                             .optionForName(_selectedAppIconName)
-                            .label,
+                            .labelFor(context),
                   onTap: _isChangingAppIcon ? null : _showAppIconSelection,
                 ),
               _SettingsTile(
-                icon: Icons.notifications_active_outlined,
+                icon: LucideIcons.bellRing,
                 title: l10n.settingsNotificationsTitle,
                 subtitle: l10n.settingsNotificationsSubtitle,
                 onTap: () {
@@ -129,11 +131,11 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                 },
               ),
               _SettingsTile(
-                icon: Icons.web_asset_outlined,
-                title: 'Add War Widget',
+                icon: LucideIcons.panelTop,
+                title: l10n.settingsAddWarWidget,
                 subtitle: widgetClans.isEmpty
-                    ? 'Link an account in a clan first'
-                    : '${widgetClans.length} clan${widgetClans.length == 1 ? '' : 's'} available',
+                    ? l10n.settingsWarWidgetLinkClanFirst
+                    : l10n.settingsWarWidgetClanCount(widgetClans.length),
                 onTap: () => _showWarWidgetSheet(widgetClans),
               ),
             ],
@@ -143,19 +145,19 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               title: l10n.settingsLiveActivityTest,
               children: [
                 _SettingsTile(
-                  icon: Icons.radio_outlined,
+                  icon: LucideIcons.radio,
                   title: l10n.settingsLiveActivityStart,
                   subtitle: l10n.settingsLiveActivityStartSubtitle,
                   onTap: () => _runLiveActivityAction('start'),
                 ),
                 _SettingsTile(
-                  icon: Icons.refresh_rounded,
+                  icon: LucideIcons.refreshCw,
                   title: l10n.settingsLiveActivityUpdate,
                   subtitle: l10n.settingsLiveActivityUpdateSubtitle,
                   onTap: () => _runLiveActivityAction('update'),
                 ),
                 _SettingsTile(
-                  icon: Icons.stop_circle_outlined,
+                  icon: LucideIcons.circleStop,
                   title: l10n.settingsLiveActivityEnd,
                   subtitle: l10n.settingsLiveActivityEndSubtitle,
                   onTap: () => _runLiveActivityAction('end'),
@@ -232,22 +234,22 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             children: [
               _SettingsTile(
                 icon: Icons.discord,
-                title: 'Discord',
+                title: l10n.generalDiscord,
                 subtitle: hasDiscord
-                    ? 'Bot-linked accounts and Discord data'
-                    : 'Sync bot-linked accounts and Discord data',
-                trailingText: hasDiscord ? 'Connected' : null,
+                    ? l10n.settingsDiscordConnectedSubtitle
+                    : l10n.settingsDiscordSyncSubtitle,
+                trailingText: hasDiscord ? l10n.settingsConnected : null,
                 onTap: hasDiscord
                     ? () => _showConnectionPlaceholder('Disconnect Discord')
                     : () => _showConnectionPlaceholder('Connect Discord'),
               ),
               _SettingsTile(
                 icon: Icons.alternate_email,
-                title: 'ClashKing account',
+                title: l10n.settingsClashKingAccount,
                 subtitle: hasEmail
-                    ? 'Email login is connected'
-                    : 'Add email login for account recovery',
-                trailingText: hasEmail ? 'Connected' : null,
+                    ? l10n.settingsEmailConnectedSubtitle
+                    : l10n.settingsEmailRecoverySubtitle,
+                trailingText: hasEmail ? l10n.settingsConnected : null,
                 onTap: hasEmail
                     ? () => _showConnectionPlaceholder(
                         'Disconnect ClashKing account',
@@ -413,7 +415,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
             child: _SettingsSection(
-              title: 'App Icon',
+              title: AppLocalizations.of(context)!.settingsAppIcon,
               children: [
                 for (final option in AppIconService.options)
                   _AppIconOptionTile(
@@ -804,70 +806,64 @@ class _SettingsTile extends StatelessWidget {
 
     final rowHeight = subtitle == null ? 50.0 : 62.0;
 
-    return Semantics(
-      button: onTap != null,
-      enabled: onTap != null,
-      label: [title, if (trailingText != null) trailingText].join(', '),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: SizedBox(
-            height: rowHeight,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 28,
-                    child: Icon(icon, color: foreground, size: 22),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          height: rowHeight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 28,
+                  child: Icon(icon, color: foreground, size: 22),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: foreground,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 1),
                         Text(
-                          title,
+                          subtitle!,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(
-                                color: foreground,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 17,
-                              ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: secondary, fontSize: 13),
                         ),
-                        if (subtitle != null) ...[
-                          const SizedBox(height: 1),
-                          Text(
-                            subtitle!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(color: secondary, fontSize: 13),
-                          ),
-                        ],
                       ],
+                    ],
+                  ),
+                ),
+                if (trailingText != null) ...[
+                  const SizedBox(width: 10),
+                  Text(
+                    trailingText!,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: secondary,
+                      fontSize: 16,
                     ),
                   ),
-                  if (trailingText != null) ...[
-                    const SizedBox(width: 10),
-                    Text(
-                      trailingText!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: secondary,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                  if (showChevron && onTap != null) ...[
-                    const SizedBox(width: 5),
-                    Icon(Icons.chevron_right, color: secondary, size: 22),
-                  ],
                 ],
-              ),
+                if (showChevron && onTap != null) ...[
+                  const SizedBox(width: 5),
+                  Icon(Icons.chevron_right, color: secondary, size: 22),
+                ],
+              ],
             ),
           ),
         ),
@@ -938,7 +934,7 @@ class _AppIconOptionTile extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    option.label,
+                    option.labelFor(context),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -950,7 +946,7 @@ class _AppIconOptionTile extends StatelessWidget {
                 ),
                 if (selected)
                   Text(
-                    'Selected',
+                    AppLocalizations.of(context)!.settingsThemeSelected,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: secondary,
                       fontSize: 16,
@@ -1038,7 +1034,7 @@ class _VersionSettingsTile extends StatelessWidget {
           showChevron: false,
           onTap: snapshot.hasData
               ? () {
-                  copyTextToClipboard(snapshot.data ?? '').then((_) {
+                  FlutterClipboard.copy(snapshot.data ?? '').then((_) {
                     if (context.mounted) {
                       showClipboardSnackbar(
                         context,
@@ -1051,5 +1047,18 @@ class _VersionSettingsTile extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+extension AppIconOptionL10n on AppIconOption {
+  String labelFor(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return switch (labelKey) {
+      'default' => loc.appIconDefault,
+      'christmas' => loc.appIconChristmas,
+      'black_white' => loc.appIconBlackWhite,
+      'dark_mode' => loc.appIconDarkMode,
+      _ => labelKey,
+    };
   }
 }

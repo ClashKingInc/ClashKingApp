@@ -8,6 +8,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ApiService {
   ApiService({http.Client? client, TokenService? tokenService})

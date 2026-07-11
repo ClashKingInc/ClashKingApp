@@ -10,6 +10,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_attack_details_sheet.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_search_field.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/shapes/left_pointing_triangle.dart';
@@ -526,33 +527,12 @@ class _EmptyEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
+    return AppEmptyState(
+      title: message,
+      icon: Icons.history_toggle_off_rounded,
       padding: const EdgeInsets.fromLTRB(16, 28, 16, 32),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Opacity(
-              opacity: 0.82,
-              child: MobileWebImage(
-                imageUrl: ImageAssets.villager,
-                height: 132,
-                width: 106,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-      ),
+      stickerHeight: 132,
+      stickerWidth: 106,
     );
   }
 }

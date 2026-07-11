@@ -15,8 +15,8 @@ class AppAnnouncement {
   static const animeFury = AppAnnouncement(
     id: 'anime-fury-june-2026',
     version: '2',
-    title: 'Anime Fury',
-    subtitle: 'Tap through the June 2026 update',
+    title: '',
+    subtitle: '',
     storyUrl:
         'https://pub-b12e7ef181d94b7199105ec0e0c2ee83.r2.dev/anime-fury-story.html',
   );

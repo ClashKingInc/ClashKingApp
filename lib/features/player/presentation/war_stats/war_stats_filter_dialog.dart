@@ -377,6 +377,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   ),
                   const Spacer(),
                   IconButton(
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).closeButtonTooltip,
                     icon: Icon(
                       Icons.close,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -449,6 +452,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                               ),
                             ),
                             IconButton(
+                              tooltip: AppLocalizations.of(
+                                context,
+                              )!.tooltipDismissMessage,
                               onPressed: _clearInlineMessage,
                               icon: Icon(
                                 Icons.close,
@@ -3392,6 +3398,9 @@ class _RenamePresetDialogState extends State<_RenamePresetDialog> {
                     ),
                   ),
                   IconButton(
+                    tooltip: AppLocalizations.of(
+                      context,
+                    )!.tooltipDismissMessage,
                     onPressed: _clearInlineMessage,
                     icon: Icon(
                       Icons.close,

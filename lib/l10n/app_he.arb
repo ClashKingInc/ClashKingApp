@@ -850,7 +850,7 @@
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warLogClosed": "יומן המלחמה של {clan} סגור.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2133,5 +2133,825 @@
   "gameItemTargetsAir": "Air",
   "gameItemFlying": "Flying",
   "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time"
+  "gameItemUpgradeTime": "Upgrade time",
+  "generalExpand": "לְהַרְחִיב",
+  "generalCollapse": "הִתמוֹטְטוּת",
+  "generalBookmark": "סימניה",
+  "generalRemoveBookmark": "הסר את הסימניה",
+  "gameLeague": "לִיגָה",
+  "clanMembersSearchPlaceholder": "חפש חברים",
+  "clanMembersShowTotals": "הצג סיכומים של שבט",
+  "clanMembersHideTotals": "הסתר סיכומי שבט",
+  "clanMembersReceivedShort": "התקבל",
+  "clanMembersAverageTh": "ממוצע TH",
+  "warLogSearchPlaceholder": "חיפוש מלחמות",
+  "warStatsSearchPlaceholder": "חפש שחקנים",
+  "warStatsCurrentTownHall": "ה-TH שלי",
+  "warStatsLast50": "50 אחרונות",
+  "warStatsWars": "מלחמות",
+  "warStatsSelectSeason": "בחר עונת סטטיסטיקות מלחמה",
+  "warAnalysisToWin": "כדי לנצח",
+  "warAnalysisToLose": "להפסיד",
+  "warAnalysisNoAttacksLeft": "לא נותרו פיגועים",
+  "warAnalysisScenario": "נותרו התקפות {attacks} -> צריך כוכבי {stars} / {percent}% לכל התקפה",
+  "warAnalysisImpossibleScenario": "נותרו התקפות {attacks} -> בלתי אפשרי (כוכבי {stars} / {percent}% לכל התקפה)",
+  "warAttacksSuccessful": "התקפות מוצלחות",
+  "warAttacksFailed": "התקפות כושלות",
+  "warAttacksMissedShort": "החמצה",
+  "cwlHistoryTitle": "היסטוריית CWL",
+  "clanJoinLeaveTab": "הצטרף/עזוב",
+  "clanRankingsTab": "דירוגים",
+  "clanRankingsSeason": "עוֹנָה",
+  "clanRankingsSelectSeason": "בחר עונת דירוג",
+  "clanRankingsFilterActivity": "פְּעִילוּת",
+  "clanRankingsFilterWar": "מִלחָמָה",
+  "clanRankingsFilterPoints": "נקודות",
+  "cwlHistoryPreviewBadge": "תצוגה מקדימה",
+  "cwlHistoryPreviewSubtitle": "דגם {clan} עד לתיקון נקודת הקצה של CWL",
+  "cwlHistoryEmptyTitle": "אין עדיין היסטוריית CWL",
+  "cwlHistoryEmptyBody": "השבט הזה עדיין לא השתתף בעונת ליגת מלחמת שבט.",
+  "cwlRankTitle": "דַרגָה",
+  "cwlWarsPlayedTitle": "שיחקו מלחמות",
+  "playerWarStarsTitle": "כוכבי מלחמה",
+  "playerWarPreferenceTitle": "מועדף מלחמה",
+  "playerDonatedTitle": "תרם",
+  "playerReceivedTitle": "התקבל",
+  "playerCapitalTitle": "הוֹן",
+  "playerExpLevelTitle": "Exp. רָמָה",
+  "clanWarWinsTitle": "מלחמה מנצחת",
+  "clanWinStreakTitle": "רצף ניצחונות",
+  "clanBuilderBaseTitle": "בסיס בונה",
+  "clanTypeTitle": "סוּג",
+  "clanWarFrequencyTitle": "מלחמות",
+  "clanMinTownHallTitle": "מינימום ה'",
+  "clanMinTrophiesTitle": "מינימום גביעים",
+  "clanCapitalHallTitle": "אולם הבירה",
+  "clanDistrictsTitle": "מחוזות",
+  "legendsCountryTitle": "מְדִינָה",
+  "legendsLocalRankTitle": "דרגה מקומית",
+  "legendsGlobalRankTitle": "דרגה עולמית",
+  "warWinsTitle": "מנצח",
+  "warLossesTitle": "אֲבֵדוֹת",
+  "warDrawsTitle": "ציור",
+  "capitalRaidStatusOngoing": "מתמשך",
+  "capitalRaidStatusEnded": "הסתיים",
+  "capitalRaidLoot": "לִבזוֹז",
+  "capitalRaidRewards": "תגמולים",
+  "capitalRaidPreviousWeek": "שבוע קודם",
+  "capitalRaidNextWeek": "שבוע הבא",
+  "capitalRaidFilterAttacked": "הותקף",
+  "capitalRaidFilterNotAttacked": "לא הותקף",
+  "capitalRaidFilterLinked": "חשבונות מקושרים",
+  "capitalRaidEmptyTitle": "אין נתונים על פשיטות הון",
+  "capitalRaidEmptyBody": "היסטוריית הפשיטה תופיע כאן לאחר מעקב אחר סופי השבוע של פשיטות ההון של השבט הזה.",
+  "capitalRaidEstimated": "מְשׁוֹעָר",
+  "capitalRaidEstimatedTooltip": "עדיין לא רשמי: מוערך לפי יומני ההתקפה וההגנה של השבוע. Supercell מפרסם את ספירת המדליות האמיתית ברגע שהפשיטה מסתיימת.",
+  "capitalRaidTrophyPrediction": "גביעים חזויים",
+  "capitalRaidTrophyPredictionTooltip": "אומדן גביעי ליגת הבירה לאחר הפשיטה הזו, על סמך ביצועי השבוע עד כה. לא רשמי.",
+  "capitalRaidProjectedLoot": "שלל מוקרן",
+  "capitalRaidOneshots": "חד-שוט",
+  "capitalRaidFails": "נכשל",
+  "capitalDetailsOffense": "הַתקָפָה",
+  "capitalDetailsDefense": "הֲגָנָה",
+  "capitalDistrictsSection": "מחוזות",
+  "capitalOpponentsSection": "מתנגדים",
+  "capitalAvgAttacksPerDistrict": "ממוצע התקפות/מחוז",
+  "capitalAvgLootPerAttack": "ממוצע שלל/התקפה",
+  "capitalHistorySection": "היסטוריית פשיטה",
+  "capitalHistoryWeeksTracked": "שבועות במעקב",
+  "capitalAvgLootPerWeek": "שלל ממוצע לשבוע",
+  "capitalAvgAttacksPerWeek": "ממוצע התקפות/שבוע",
+  "capitalBestRaid": "הפשיטה הטובה ביותר",
+  "capitalWorstRaid": "הפשיטה הגרועה ביותר",
+  "capitalHistoryChartTitle": "מגמה שבועית",
+  "warAttacksDetailsDuration": "מֶשֶׁך",
+  "gameItemRemainingToTownHallMax": "עד TH מקסימום",
+  "gameItemRemainingToGlobalMax": "למקסימום גלובלי",
+  "gameItemLevelsLeft": "נותרו רמות {count}",
+  "gameItemOverview": "סקירה כללית",
+  "gameItemStats": "סטטיסטיקות",
+  "gameItemNextUpgrade": "השדרוג הבא",
+  "gameItemUpgradePlan": "תוכנית שדרוג",
+  "gameItemUpgradeDataUnavailable": "נתוני השדרוג אינם זמינים",
+  "notifScopeAllAccounts": "כל החשבונות",
+  "notifScopeSelected": "נִבחָר",
+  "settingsPreferences": "העדפות",
+  "settingsNotificationsTitle": "התראות",
+  "settingsNotificationsSubtitle": "בחר התראות ושלח תצוגה מקדימה של בדיקה מקומית.",
+  "settingsLiveActivityTest": "מבחן פעילות חי",
+  "settingsLiveActivityStart": "התחל פעילות מבחן",
+  "settingsLiveActivityStartSubtitle": "מציג תצוגה מקדימה של מלחמת שבט מקומית.",
+  "settingsLiveActivityUpdate": "עדכון ציון",
+  "settingsLiveActivityUpdateSubtitle": "מקדם את ציון המלחמה המזויף.",
+  "settingsLiveActivityEnd": "סיום פעילות המבחן",
+  "settingsLiveActivityEndSubtitle": "מסיר את התצוגה המקדימה המקומית.",
+  "settingsSupport": "תְמִיכָה",
+  "settingsAbout": "אוֹדוֹת",
+  "settingsAccount": "חֶשְׁבּוֹן",
+  "settingsSignedIn": "מחובר",
+  "settingsAppearance": "הוֹפָעָה",
+  "settingsThemeSystem": "מַעֲרֶכֶת",
+  "settingsThemeMatchDevice": "התאם את המכשיר הזה",
+  "settingsThemeLight": "אוֹר",
+  "settingsThemeDark": "כֵּהֶה",
+  "settingsThemeSelected": "נִבחָר",
+  "notifNoAccountsLoadedYet": "עדיין לא נטענו חשבונות מקושרים.",
+  "notifNoAccountsSelected": "לא נבחרו חשבונות",
+  "notifAccountsSelected": "נבחרו חשבונות {count}",
+  "notifSelectedAccounts": "חשבונות נבחרים",
+  "searchRecent": "לאחרונה",
+  "searchTabPlayers": "שחקנים",
+  "searchTabClans": "שבטים",
+  "searchFilters": "מסננים",
+  "searchClear": "בָּרוּר",
+  "warStatsRefreshSuccess": "הנתונים עברו רענון בהצלחה",
+  "warStatsRefreshFailed": "רענון הנתונים נכשל: {error}",
+  "warStatsFilterFailed": "טעינת הנתונים המסוננים נכשלה: {error}",
+  "warStatsExportFailed": "הייצוא נכשל: {error}",
+  "exportLabelPlayer": "נַגָן",
+  "exportLabelFormat": "פוּרמָט",
+  "exportLabelExcel": "Excel (.xlsx)",
+  "exportLabelIncludes": "כולל",
+  "exportLabelContent": "סטטיסטיקות, התקפות, ניתוח TH",
+  "accountNoUserData": "אין נתוני משתמש זמינים",
+  "accountsMenuTitle": "חשבונות",
+  "searchErrorPlayerLoadFailed": "טעינת נתוני הנגן נכשלה.",
+  "searchErrorClanLoadFailed": "טעינת נתוני השבט נכשלה.",
+  "todoNoMatchingAccounts": "אין חשבונות תואמים",
+  "todoNoConfiguredAccounts": "לא הוגדרו חשבונות מטלות",
+  "todoNoLinkedAccounts": "אין חשבונות מקושרים",
+  "todoNoAccountsNeedAction": "שום חשבונות לא צריכים פעולה",
+  "todoNoCompletedAccounts": "אין חשבונות שהושלמו",
+  "todoNoBookmarkedAccounts": "אין חשבונות מסומנים",
+  "todoTryAnotherSearchOrFilter": "נסה חיפוש אחר או מסנן.",
+  "clanJoinLeaveNoDataTitle": "אין נתוני הצטרפות/עזיבה",
+  "clanJoinLeaveNoDataBody": "תנועת סגל אחרונה מופיעה כאן כאשר נתוני מעקב נטענים.",
+  "clanJoinLeaveNoRecentMovementTitle": "אין תנועה אחרונה",
+  "clanJoinLeaveNoRecentMovementBody": "הסיכום נטען, אך רשימת האירועים ריקה.",
+  "capitalRaidMembersAttackLogFallback": "רשימת החברים לא מוחזרת לסוף שבוע הפשיטה הזה. מציג נתונים סטטיסטיים של יומן התקפה במקום זאת.",
+  "capitalRaidMembersNoPlayerData": "לא מוחזרים נתונים ברמת השחקן עבור סוף שבוע הפשיטה הזה. ה-API כולל רק סיכומי מחוז ויריב.",
+  "capitalRaidMembersNoIndividualData": "אין רשימת שחקנים או התקפות בודדות זמינות עבור הפשיטה הזו.",
+  "dashboardNoLinkedAccountsTitle": "אין חשבונות מקושרים",
+  "dashboardNoLinkedAccountsBody": "קשר חשבון Clash כדי לראות התקפות, אירועים ופעילות כאן.",
+  "dashboardNothingPinnedTitle": "שום דבר עדיין לא הוצמד",
+  "dashboardNothingPinnedBody": "פתח את לשונית השחקנים, הרחב את אפשרויות הכרטיס והפעל את \"הצג מטלות בבית\" כדי להצמיד חשבון לכאן.",
+  "playersNoBookmarkedTitle": "עדיין אין שחקנים מסומנים",
+  "playersNoBookmarkedBody": "פתח פרופיל שחקן ושמור אותו למועד מאוחר יותר.",
+  "playersNoLinkedBody": "נהל חשבונות ממסך הגדרת החשבון.",
+  "navigationHome": "בַּיִת",
+  "drawerFollowers": "עוקבים",
+  "drawerFollowersHelp": "אנשים שסימנו אחד מהחשבונות המאומתים המקושרים שלך.",
+  "drawerPopular": "פּוֹפּוּלָרִי",
+  "drawerCalculators": "מחשבונים",
+  "drawerSubscription": "מִנוּי",
+  "drawerUpgradeTracker": "שדרוג Tracker",
+  "drawerBasesArmies": "בסיסים וצבאות",
+  "drawerGameAssets": "נכסי משחק",
+  "drawerManageAccounts": "נהל חשבונות",
+  "playersLinked": "צָמוּד",
+  "playersBookmarked": "סימניה",
+  "searchGlobalHint": "חפש שחקנים או שבטים",
+  "tooltipDecreaseMinimumMembers": "הקטנת מספר החברים",
+  "tooltipIncreaseMinimumMembers": "הגדל את מינימום החברים",
+  "tooltipDecreaseMaximumMembers": "צמצם את מקסימום החברים",
+  "tooltipIncreaseMaximumMembers": "הגדל את מקסימום החברים",
+  "tooltipDecreaseMinimumClanPoints": "הפחת מינימום נקודות שבט",
+  "tooltipIncreaseMinimumClanPoints": "הגדל מינימום נקודות שבט",
+  "tooltipDecreaseMinimumClanLevel": "הורד את רמת השבט המינימלית",
+  "tooltipIncreaseMinimumClanLevel": "הגדל את רמת השבט המינימלית",
+  "tooltipShowChart": "הצג תרשים",
+  "tooltipShowTable": "הצג שולחן",
+  "tooltipDismissMessage": "סגור הודעה",
+  "tooltipShowPassword": "הצג סיסמה",
+  "tooltipHidePassword": "הסתר את הסיסמה",
+  "tooltipRemoveAccount": "הסר חשבון",
+  "popularPlayersTitle": "שחקנים",
+  "popularClansTitle": "שבטים",
+  "popularWarsCwlTitle": "מלחמות ו-CWL",
+  "popularTitle": "פּוֹפּוּלָרִי",
+  "popularSubtitle": "סימניות, חשבונות מקושרים ומלחמות פעילות.",
+  "popularEmptyTitle": "עדיין אין פריטים פופולריים",
+  "popularEmptyBody": "סמן שחקנים ושבטים או קשר חשבונות כדי לראות זאת.",
+  "calculatorsTitle": "מחשבונים",
+  "calculatorsSubtitle": "עפרה, רעידת זאפ ורעידת כדור אש.",
+  "calculatorOre": "בֶּצֶר",
+  "calculatorZapQuake": "רעידת זאפ",
+  "calculatorFireball": "כדור אש",
+  "upgradeTrackerTitle": "שדרוג Tracker",
+  "upgradeTrackerSubtitle": "עלות וזמן השדרוג שנותרו.",
+  "linkedAccountLabel": "חשבון מקושר",
+  "noLinkedPlayersLoadedTitle": "לא נטענו שחקנים מקושרים",
+  "noLinkedPlayersLoadedBody": "הוסף או רענן חשבונות מקושרים כדי לראות סכומי שדרוג.",
+  "playerOptionNotificationsTitle": "התראות",
+  "playerOptionNotificationsSubtitle": "קבל התראות עבור חשבון זה.",
+  "playerOptionShowTodoHomeTitle": "הצג מטלות בבית",
+  "playerOptionShowTodoHomeSubtitle": "הצמד את כרטיס המשימות של חשבון זה לכרטיסיית הבית.",
+  "playerOptionShowTodoPageTitle": "הצג בדף המטלות",
+  "playerOptionShowTodoPageSubtitle": "כלול חשבון זה ברשימת המטלות המלאה.",
+  "playerOptionShowWarTabTitle": "הצג בכרטיסייה מלחמה",
+  "playerOptionShowWarTabSubtitle": "כלול את השבט של חשבון זה בלשונית מלחמה.",
+  "searchCancel": "לְבַטֵל",
+  "bookmarkPlayerLoadFailed": "נכשלה טעינת נגן מסומן.",
+  "warNoLinkedOrBookmarked": "אין מלחמות שבט מקושרות או סימניות להצגה.",
+  "warWidgetRefreshData": "רענן נתוני מלחמה",
+  "warWidgetNoData": "אין נתוני מלחמה זמינים",
+  "warWidgetLastUpdated": "עודכן לאחרונה: {time}",
+  "todoEventClanGames": "משחקי שבט",
+  "todoEventCwl": "CWL",
+  "todoEventSeasonEnds": "עונה מסתיימת",
+  "todoEventLeagueReset": "איפוס ליגה",
+  "todoEventRaidWeekend": "סוף שבוע פשיטה",
+  "todoMagicDispatch": "שיגור קסם",
+  "todoMagicDispatchDescription": "הקש לעדכון האחרון של ClashKing",
+  "todoUseCodeClashKing": "השתמש בקוד ClashKing",
+  "todoUseCodeClashKingDescription": "תמכו בפרויקט בחנות Supercell",
+  "todoLegendAttacks": "התקפות אגדה",
+  "todoWarAttacks": "התקפות מלחמה",
+  "todoCwlAttacks": "התקפות CWL",
+  "todoRaidAttacks": "התקפות פשיטה",
+  "gameSeasonPassShort": "לַעֲבוֹר",
+  "todoMockMaxedMainName": "Maxed Main",
+  "todoMockMaxedMainSubtitle": "TH17 · הכל פעיל",
+  "todoMockMaxedMainStatus": "פעיל עכשיו · רשימת בדיקה יומית מלאה",
+  "todoMockLegend5Left": "נותרו 5 היום",
+  "todoMockWar1Left": "נשאר 1",
+  "todoMockCwl1LeftRound": "1 עזב את הסיבוב הזה",
+  "todoMockClanGames2700Left": "נותרו 2.7 אלף נקודות",
+  "todoMockRaid4Left": "נותרו 4",
+  "todoMockPass850Left": "נותרו 850 נקודות",
+  "todoMockWarAltName": "מלחמה Alt",
+  "todoMockWarAltSubtitle": "TH15 · ממוקד מלחמה",
+  "todoMockWarAltStatus": "פעיל לפני 18 מ' · מלחמה ופשיטות דורשות תשומת לב",
+  "todoMockWar2Left": "נותרו 2",
+  "todoMockClanGames900Left": "נותרו 900 נקודות",
+  "todoMockRaid1Left": "נשאר 1",
+  "todoMockLegendPushName": "אגדה פוש",
+  "todoMockLegendPushSubtitle": "TH16 · התקפות יומיות",
+  "todoMockLegendPushStatus": "פעיל לפני שעה · אגדות והעברת התקדמות",
+  "todoMockLegend2Left": "נותרו 2 היום",
+  "todoMockOnPace": "בקצב",
+  "todoMockCaughtUpName": "נתפס",
+  "todoMockCaughtUpSubtitle": "TH14 · אין משימות פתוחות",
+  "todoMockCaughtUpStatus": "פעיל היום · אין צורך בפעולה",
+  "notifChooseAlerts": "בחר התראות",
+  "notifLeagueDefenseDescription": "תוצאות הגנה עם תוקף, כוכבים, אחוזים והקשר של ליגה.",
+  "notifWarAttackOptionsDescription": "תוצאות התקפות מלחמה, התראות הגנה ואפשרויות הזנת התקפה 5v5.",
+  "notifWarAlertsDescription": "המלחמה התאימה, יום הקרב התחיל והמלחמה הסתיימה.",
+  "notifWarRemindersDescription": "תזכורות מותאמות אישית לפני סיום המלחמה.",
+  "notifDefensesAgainstYourBase": "הגנות נגד הבסיס שלך",
+  "notifDefensesAgainstYourBaseDescription": "כניסות רק היכן שהחשבון הזה מגן.",
+  "notifAllAttacks": "כל ההתקפות",
+  "notifAllAttacksDescription": "כל מכה במלחמות 5v5 בלבד.",
+  "notifThirtyMinutes": "30 דקות",
+  "notifFifteenMinutes": "15 דקות",
+  "notifSendTestNotification": "שלח הודעת בדיקה",
+  "notifScheduledMessage": "מתוכנן: {title}",
+  "generalStartDate": "תאריך התחלה",
+  "generalEndDate": "תאריך סיום",
+  "warFiltersAllWars": "כל המלחמות",
+  "warFiltersRandomWars": "מלחמות אקראיות",
+  "warFiltersCwlWars": "מלחמות CWL",
+  "warFiltersFriendlyWars": "מלחמות ידידותיות",
+  "warType": "סוג מלחמה",
+  "warFiltersAnyTownHall": "כל TH",
+  "gameTownHallLevelShort": "TH{level}",
+  "warAttackerTownHall": "התוקף ת'",
+  "warDefenderTownHall": "המגן TH",
+  "warStatsFilterSameTownHallOnly": "אותו בית עירייה בלבד",
+  "warStatsFilterSameTownHallDescription": "הצג רק התקפות שבהן לתוקף ולמגן יש אותה רמת TH",
+  "generalAny": "כֹּל",
+  "warStarsWithIcon": "{stars} ⭐",
+  "warStatsFilterMinStars": "מינימום כוכבים",
+  "warStatsFilterMaxStars": "מקס סטארס",
+  "warStatsFilterMinDestructionPercent": "מינימום הרס",
+  "warStatsFilterMaxDestructionPercent": "מקסימום אחוז הרס",
+  "warStatsFilterMinPosition": "מיקום מינימלי",
+  "warStatsFilterMaxPosition": "מיקום מקסימלי",
+  "warStatsFilterFreshAttacksOnly": "רק התקפות טריות",
+  "warStatsFilterFreshAttacksDescription": "הצג רק התקפות ראשונות על כל בסיס",
+  "warStatsFilterResultLimit": "מגבלת תוצאות",
+  "generalResultsCount": "תוצאות {count}",
+  "notifEventsDescription": "Clan Games, CWL, Raid Weekend, and season events.",
+  "notifAnnouncementsDescription": "In-app banners and future push alerts for ClashKing updates.",
+  "notifUpgradeFinishesDescription": "Troops, heroes, pets, spells, equipment, and buildings.",
+  "notifSupportReminderDescription": "Monthly reminder to support ClashKing.",
+  "notifDevicePushSetup": "Device push setup",
+  "notifAccountScope": "Account scope",
+  "notifTestNotification": "Test notification",
+  "settingsAppIcon": "App Icon",
+  "settingsChanging": "Changing...",
+  "settingsAddWarWidget": "Add War Widget",
+  "settingsWarWidgetLinkClanFirst": "Link an account in a clan first",
+  "settingsWarWidgetClanCount": "{count} clan(s) available",
+  "generalDiscord": "Discord",
+  "settingsDiscordConnectedSubtitle": "Bot-linked accounts and Discord data",
+  "settingsDiscordSyncSubtitle": "Sync bot-linked accounts and Discord data",
+  "settingsConnected": "Connected",
+  "settingsClashKingAccount": "ClashKing account",
+  "settingsEmailConnectedSubtitle": "Email login is connected",
+  "settingsEmailRecoverySubtitle": "Add email login for account recovery",
+  "settingsFeatureRequestsTitle": "Feature Requests",
+  "playerOpenInGame": "Open in game",
+  "playerBookmarkRemove": "Remove player bookmark",
+  "playerBookmarkAdd": "Bookmark player",
+  "playerBestTrophies": "Best trophies",
+  "clanLoadFailed": "Failed to load clan.",
+  "gameItemLevels": "Levels",
+  "resourceDarkElixir": "Dark Elixir",
+  "resourceBuilderElixir": "Builder Elixir",
+  "resourceBuilderGold": "Builder Gold",
+  "resourceElixir": "Elixir",
+  "resourceGold": "Gold",
+  "resourceGlowyOre": "Glowy Ore",
+  "resourceStarryOre": "Starry Ore",
+  "resourceShinyOre": "Shiny Ore",
+  "resourceGeneric": "Resource",
+  "seasonStatsGoldGrabbed": "Gold Grabbed",
+  "seasonStatsActivity": "Activity",
+  "seasonStatsAttackWins": "Attack Wins",
+  "seasonStatsTrophies": "Season Trophies",
+  "todoSearchAccountsHint": "Search accounts",
+  "generalClearSearch": "Clear search",
+  "clanCapitalAvgRewards": "Avg rewards",
+  "clanCapitalAvgDistrictsPerWeek": "Avg districts/week",
+  "clanCapitalTopAttackers": "Top attackers",
+  "clanCapitalPlayersTracked": "{count} players tracked",
+  "clanCapitalDefenseOverTime": "Defense over time",
+  "clanCapitalDistrictsTracked": "{count} districts tracked",
+  "clanCapitalSelectedRaid": "Selected raid",
+  "generalSummary": "Summary",
+  "generalBreakdown": "Breakdown",
+  "clanPointsTitle": "Clan points",
+  "clanBuilderBasePoints": "Builder base points",
+  "clanType": "Clan type",
+  "clanRequiredTownHall": "Required Town Hall",
+  "clanRequiredTownHallOnly": "{level}+ only",
+  "clanCapitalPoints": "Capital points",
+  "todoAllAccounts": "All accounts",
+  "todoCombinedAcrossAccounts": "Combined to-do across your accounts",
+  "todoPreviewAccount": "Preview account",
+  "todoLastActiveUnavailable": "Last active unavailable",
+  "todoActiveRelative": "Active {time}",
+  "@todoActiveRelative": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todoCompleteLower": "complete",
+  "todoPointsLeftShort": "{points} points left",
+  "@todoPointsLeftShort": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "todoItemsLeftShort": "{count} left",
+  "@todoItemsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAllCaughtUpForNow": "All caught up for now",
+  "todoEventEndsIn": "Ends in {duration}",
+  "@todoEventEndsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoEventStartsIn": "Starts in {duration}",
+  "@todoEventStartsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoRemainingUpgradeTooltip": "Tap for remaining upgrade cost and time",
+  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
+  "sideRankingsTitle": "Rankings",
+  "sideRankingsSubtitle": "Official leaderboards plus ClashKing endpoints.",
+  "sideRankingsLoadError": "Could not load official rankings.",
+  "sideRankingsEmptyTitle": "No rankings returned",
+  "sideRankingsEmptyBody": "Try another leaderboard or location.",
+  "sideRankingsMockups": "ClashKing mockups",
+  "sideStatsTitle": "Stats",
+  "sideStatsSubtitle": "Leaderboard stats from official Clash API surfaces.",
+  "sideStatsLoadError": "Could not load leaderboard stats.",
+  "sideTopScore": "Top score",
+  "sideTop200Avg": "Top 200 avg",
+  "sideBasesArmiesTitle": "Bases & Armies",
+  "sideBasesArmiesSubtitle": "Discord-saved layouts and army links.",
+  "sideBotSyncTarget": "Bot sync target",
+  "sideBotSyncTargetBody": "The bot already saves bases and armies to the Discord profile. This page is ready for that synced payload.",
+  "sideSavedBases": "Saved bases",
+  "sideWarBaseSlots": "War base slots",
+  "sideWarBaseSlotsBody": "Town hall, base type, link, and last updated.",
+  "sideLegendBaseSlots": "Legend base slots",
+  "sideLegendBaseSlotsBody": "Quick copy plus account association.",
+  "sideSavedArmies": "Saved armies",
+  "sideArmyLinks": "Army links",
+  "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
+  "sideGameAssetsTitle": "Game Assets",
+  "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
+  "sideNoLinkedPlayersTitle": "No linked players loaded",
+  "sideNoLinkedPlayersBody": "Add or refresh linked accounts to prefill league data.",
+  "sideReadyNow": "Ready now",
+  "sideDays": "{count} days",
+  "@sideDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideOreLeft": "{shiny} shiny, {glowy} glowy, {starry} starry left",
+  "@sideOreLeft": {
+    "placeholders": {
+      "shiny": {
+        "type": "String"
+      },
+      "glowy": {
+        "type": "String"
+      },
+      "starry": {
+        "type": "String"
+      }
+    }
+  },
+  "sideShinyOre": "Shiny ore",
+  "sideGlowyOre": "Glowy ore",
+  "sideStarryOre": "Starry ore",
+  "sideDailyBonusAdjustment": "Daily bonus adjustment",
+  "sideExtraShiny": "Extra shiny",
+  "sideExtraGlowy": "Extra glowy",
+  "sideExtraStarry": "Extra starry",
+  "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
+  "@sideZapQuakeTitle": {
+    "placeholders": {
+      "zaps": {
+        "type": "int"
+      }
+    }
+  },
+  "sideZapQuakeSubtitle": "{quakeDamage} quake damage, {lightningDamage} per lightning",
+  "@sideZapQuakeSubtitle": {
+    "placeholders": {
+      "quakeDamage": {
+        "type": "String"
+      },
+      "lightningDamage": {
+        "type": "String"
+      }
+    }
+  },
+  "sideBuildingHp": "Building HP",
+  "sideLightningLevel": "Lightning level",
+  "sideEarthquakeLevel": "Earthquake level",
+  "sideWithoutEarthquake": "Without earthquake",
+  "sideLightningCount": "{count} lightning",
+  "@sideLightningCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideFireballQuakeTitle": "Fireball + 1 quake",
+  "sideAddSupportDamage": "Add support damage",
+  "sideFireballQuakeSubtitle": "{fireballDamage} fireball damage, {hpLeft} HP left after quake",
+  "@sideFireballQuakeSubtitle": {
+    "placeholders": {
+      "fireballDamage": {
+        "type": "String"
+      },
+      "hpLeft": {
+        "type": "String"
+      }
+    }
+  },
+  "sideFireballLevel": "Fireball level",
+  "sideQuakePressure": "Quake pressure",
+  "sideQuakeSpellCount": "{count} quake spell(s)",
+  "@sideQuakeSpellCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideLocation": "Location",
+  "sideFilter": "Filter",
+  "sideRefresh": "Refresh",
+  "sideOfficialClashLeaderboard": "Official Clash leaderboard",
+  "sideAllTownHallsShort": "All TH",
+  "sideOwned": "Owned",
+  "sideTarget": "Target",
+  "sideDailyValue": "daily {value}",
+  "@sideDailyValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "sideDecrease": "Decrease",
+  "sideIncrease": "Increase",
+  "sideLevel": "Level {level}",
+  "@sideLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "sidePopularPlayers": "Players",
+  "sidePopularClans": "Clans",
+  "sidePopularWarsCwl": "Wars & CWL",
+  "rankingPlayerTrophies": "Player trophies",
+  "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
+  "rankingPlayerBuilder": "Player builder",
+  "rankingPlayerBuilderHeading": "Players Builder Base Ranking",
+  "rankingClanTrophies": "Clan trophies",
+  "rankingClanTrophiesHeading": "Clans Trophies Ranking",
+  "rankingClanBuilder": "Clan builder",
+  "rankingClanBuilderHeading": "Clans Builder Base Ranking",
+  "rankingClanCapital": "Clan capital",
+  "rankingClanCapitalHeading": "Clan Capital Ranking",
+  "assetFolderTroops": "Troops",
+  "assetFolderSpells": "Spells",
+  "assetFolderHeroes": "Heroes",
+  "assetFolderEquipment": "Equipment",
+  "assetFolderLeagues": "Leagues",
+  "assetFolderResources": "Resources",
+  "assetFolderStickers": "Stickers",
+  "upgradeSectionHeroes": "Heroes",
+  "upgradeSectionTroops": "Troops",
+  "upgradeSectionSpells": "Spells",
+  "upgradeSectionPets": "Pets",
+  "upgradeSectionEquipment": "Equipment",
+  "sideMockupSource": "Source",
+  "sideMockupMode": "Mode",
+  "sideMockupPreview": "Preview",
+  "sideMockupRows": "Rows",
+  "sideMockupRowsValue": "5 mockups",
+  "endpointLeagueTop200": "League top 200",
+  "endpointLeagueTop200Preview": "Legend League · 5,742 trophies",
+  "endpointTownhallTop200": "Townhall top 200",
+  "endpointTownhallTop200Preview": "TH17 · Global player board",
+  "endpointClanDonations": "Clan donations",
+  "endpointClanDonationsPreview": "United States · weekly clan totals",
+  "endpointClanWarWins": "Clan war wins",
+  "endpointClanWarWinsPreview": "International · all-time war wins",
+  "endpointTop200ArmyUsage": "Top 200 army usage",
+  "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
+  "endpointStateTop200": "Top 200",
+  "endpointStateWeekly": "Weekly",
+  "endpointStateWins": "Wins",
+  "endpointStateUsage": "Usage",
+  "notifGroupBattles": "Battles",
+  "notifGroupReminders": "Reminders",
+  "notifGroupSupport": "Support",
+  "notifGroupProgress": "Progress",
+  "notifLeagueDefense": "League defense",
+  "notifLeagueDefenseResult": "League defense result",
+  "notifLeagueTriple": "League triple",
+  "notifLeagueAttackBody": "Lord Clasher attacked {player} • {percent}% • {stars} stars • {league}",
+  "@notifLeagueAttackBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarDefense": "War defense",
+  "notifWarAttackOnTh": "War attack on TH{th}",
+  "@notifWarAttackOnTh": {
+    "placeholders": {
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarDefenseBody": "{opponentClan} attacked {player} • {percent}% • {stars} stars • {clan} defense",
+  "@notifWarDefenseBody": {
+    "placeholders": {
+      "opponentClan": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarFeed5v5": "5v5 war feed",
+  "notifWarAttackResult": "War attack result",
+  "notifWarAttackResultBody": "{clan} attacked Pine Riders TH{th} • 100% • 3 stars",
+  "@notifWarAttackResultBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarMatched": "War matched",
+  "notifWarMatchedBody": "{clan} matched with Pine Riders. Preparation day started.",
+  "@notifWarMatchedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarStarted": "War started",
+  "notifBattleDayStarted": "Battle day started",
+  "notifWarStartedBody": "{clan} vs Pine Riders is live. Good luck.",
+  "@notifWarStartedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarEnded": "War ended",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final results are available.",
+  "@notifWarEndedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarReminder1h": "War reminder: 1h",
+  "notifWarReminder30m": "War reminder: 30m",
+  "notifWarReminder15m": "War reminder: 15m",
+  "notifOneHourLeft": "1 hour left",
+  "notifThirtyMinutesLeft": "30 minutes left",
+  "notifFifteenMinutesLeft": "15 minutes left",
+  "notifRemainingWarAttacksBody": "{player} has remaining war attacks. {time}.",
+  "@notifRemainingWarAttacksBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notifStarted": "{name} started",
+  "@notifStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifClanGamesPointsBody": "{clan} can start earning {name} points.",
+  "@notifClanGamesPointsBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCwlPreparationBody": "{clan} can begin Clan War League preparation.",
+  "@notifCwlPreparationBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRaidWeekendBody": "{clan} can start Capital Raid attacks.",
+  "@notifRaidWeekendBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSeasonStart": "Season start",
+  "notifNewSeasonStarted": "New season started",
+  "notifSeasonStartedBody": "{league} season has started for {player}.",
+  "@notifSeasonStartedBody": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSpecialEvent": "Special event",
+  "notifNewEventLive": "A new event is live",
+  "notifNewClashEventBody": "A new Clash event is available.",
+  "notifSupportClashKing": "Support ClashKing",
+  "notifMonthlySupportBody": "Monthly support helps keep ClashKing available and improving. Thank you.",
+  "notifUpgradeFinished": "Upgrade finished",
+  "notifUpgradeReadyTitle": "{name} is ready",
+  "@notifUpgradeReadyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUpgradeCompleteBody": "Level {level} finished for {player}. Upgrade complete.",
+  "@notifUpgradeCompleteBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "clanSearchLoadFailed": "Failed to load clan data: {error}",
+  "@clanSearchLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appIconDefault": "Default",
+  "appIconChristmas": "Christmas",
+  "appIconBlackWhite": "Black & White",
+  "appIconDarkMode": "Dark Mode",
+  "generalMembersCount": "{count} members",
+  "@generalMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "generalBookmarked": "bookmarked",
+  "clanLevelValue": "level {level}",
+  "@clanLevelValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRankShort": "Rank {rank}",
+  "@cwlRankShort": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRoundShort": "Round {round}",
+  "@cwlRoundShort": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTownHallShortLevel": "TH{level}",
+  "@gameTownHallShortLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
 }

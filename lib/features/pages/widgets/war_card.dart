@@ -40,7 +40,7 @@ class WarCard extends StatelessWidget {
               case 'warEnded':
                 return _warEnded(context, clanTag);
               default:
-                return Text('Clan state unknown');
+                return Text(AppLocalizations.of(context)!.generalUnknown);
             }
           }(),
           if (footer != null) ...[const SizedBox(height: 8), footer!],

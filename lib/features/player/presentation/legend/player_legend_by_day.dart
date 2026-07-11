@@ -3,9 +3,9 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_day_trophies_start_end_card.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_day_offense_defense_card.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_day_used_gear_card.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:intl/intl.dart';
 
 class LegendByDayTab extends StatefulWidget {
@@ -42,6 +42,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
           children: [
             const SizedBox(width: 16),
             IconButton(
+              tooltip: MaterialLocalizations.of(context).datePickerHelpText,
               icon: Icon(
                 Icons.calendar_today,
                 color: Theme.of(context).colorScheme.onSurface,
@@ -64,6 +65,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
               width: 30,
               height: 30,
               child: IconButton(
+                tooltip: MaterialLocalizations.of(context).previousMonthTooltip,
                 icon: Icon(
                   Icons.arrow_back,
                   color: Theme.of(context).colorScheme.onSurface,
@@ -83,6 +85,7 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
               width: 30,
               height: 30,
               child: IconButton(
+                tooltip: MaterialLocalizations.of(context).nextMonthTooltip,
                 icon: Icon(
                   Icons.arrow_forward,
                   color: Theme.of(context).colorScheme.onSurface,
@@ -149,25 +152,12 @@ class _LegendByDayTabState extends State<LegendByDayTab> {
             ),
           )
         else
-          Column(
-            children: [
-              Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    AppLocalizations.of(context)?.generalNoDataAvailable ??
-                        'No data available',
-                  ),
-                ),
-              ),
-              MobileWebImage(
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageUrl: ImageAssets.villager,
-                height: 350,
-                width: 200,
-              ),
-            ],
+          AppEmptyState(
+            title: AppLocalizations.of(context)!.generalNoDataAvailable,
+            icon: Icons.history_toggle_off_rounded,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            stickerHeight: 350,
+            stickerWidth: 200,
           ),
       ],
     );

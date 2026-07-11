@@ -576,8 +576,6 @@ class _TodoHeaderSummary {
     List<Player> players,
     Map<String, WarMemberPresence> presenceMap,
   ) {
-    final now = DateTime.now();
-    final activeThreshold = now.subtract(const Duration(days: 14));
     var legendDone = 0;
     var legendTotal = 0;
     var warDone = 0;
@@ -596,11 +594,6 @@ class _TodoHeaderSummary {
     final progressMetricOrder = <String>[];
 
     for (final player in players) {
-      final isActive = player.lastOnline.isAfter(activeThreshold);
-      if (!isActive) {
-        continue;
-      }
-
       final presence = presenceMap[player.tag] ?? WarMemberPresence.empty();
       var playerOpenTasks = 0;
 

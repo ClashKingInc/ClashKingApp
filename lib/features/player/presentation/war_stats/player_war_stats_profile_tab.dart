@@ -16,6 +16,7 @@ import 'package:clashkingapp/features/player/presentation/war_stats/war_stats_fi
 import 'package:clashkingapp/features/player/presentation/war_stats/widgets/th_heatmap_chart.dart';
 import 'package:clashkingapp/features/player/services/player_war_export_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -162,7 +163,10 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
                   },
                 ),
               )
-            : Center(child: Text(loc.generalNoDataAvailable)),
+            : AppEmptyState(
+                title: loc.generalNoDataAvailable,
+                icon: Icons.history_toggle_off_rounded,
+              ),
         const SizedBox(height: 10),
       ],
     );
@@ -372,7 +376,10 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
 
   Widget _buildPerformanceChartsTab() {
     if (_displayedWarStats == null) {
-      return const Center(child: Text('No data available'));
+      return AppEmptyState(
+        title: AppLocalizations.of(context)!.generalNoDataAvailable,
+        icon: Icons.history_toggle_off_rounded,
+      );
     }
 
     final selectedTypes = _getSelectedTypes();

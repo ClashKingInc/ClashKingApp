@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -29,8 +30,8 @@ class HeaderIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const size = 42.0;
-    const radius = 19.0;
+    const size = 48.0;
+    const radius = 20.0;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Tooltip(
@@ -53,8 +54,6 @@ class HeaderIconButton extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(radius),
                 onTap: onTap,
-                splashFactory: NoSplash.splashFactory,
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
                 child: imageUrl != null
                     ? Padding(
                         padding: const EdgeInsets.all(8),
@@ -121,6 +120,7 @@ class MetricChip extends StatelessWidget {
   final String? imageUrl;
   final IconData? icon;
   final Color? color;
+  final String? semanticLabel;
 
   const MetricChip({
     super.key,
@@ -129,73 +129,20 @@ class MetricChip extends StatelessWidget {
     this.imageUrl,
     this.icon,
     this.color,
+    this.semanticLabel,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(6, 5, 10, 5),
-      decoration: BoxDecoration(
-        color: color != null
-            ? color!.withValues(alpha: 0.14)
-            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: colorScheme.surface.withValues(alpha: 0.72),
-              shape: BoxShape.circle,
-            ),
-            child: SizedBox.square(
-              dimension: 26,
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: imageUrl != null
-                    ? MobileWebImage(imageUrl: imageUrl!)
-                    : Icon(
-                        icon,
-                        size: 14,
-                        color: color ?? colorScheme.onSurfaceVariant,
-                      ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 6),
-          Flexible(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 1),
-                Text(
-                  value,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: color ?? colorScheme.onSurface,
-                    fontWeight: FontWeight.w900,
-                    height: 1.1,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return CKMetricChip(
+      label: label,
+      value: value,
+      color: color,
+      semanticLabel: semanticLabel,
+      icon: imageUrl != null
+          ? MobileWebImage(imageUrl: imageUrl!)
+          : Icon(icon, size: 14, color: color ?? colorScheme.onSurfaceVariant),
     );
   }
 }
@@ -218,24 +165,7 @@ class MetricChipGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (chips.isEmpty) return const SizedBox.shrink();
-
-    final rows = <Widget>[];
-    for (var i = 0; i < chips.length; i += columns) {
-      if (i > 0) rows.add(SizedBox(height: spacing));
-      final rowChips = chips.skip(i).take(columns).toList();
-      final rowChildren = <Widget>[];
-      for (var j = 0; j < rowChips.length; j++) {
-        if (j > 0) rowChildren.add(SizedBox(width: spacing));
-        rowChildren.add(Expanded(child: rowChips[j]));
-      }
-      rows.add(Row(children: rowChildren));
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: rows,
-    );
+    return CKMetricChipGrid(chips: chips, spacing: spacing, columns: columns);
   }
 }
 
@@ -412,11 +342,12 @@ class MetricBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SizedBox(
       height: 40,
       child: Material(
-        color: color.withValues(alpha: 0.16),
+        color: color.withValues(alpha: isDark ? 0.26 : 0.34),
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
           onTap: onTap,

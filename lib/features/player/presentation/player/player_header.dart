@@ -102,7 +102,7 @@ class PlayerInfoHeader extends StatelessWidget {
                 child: PlayerInfoHeaderActions(player: player),
               )
             else
-              const SizedBox(height: 42),
+              const SizedBox(height: 48),
             const SizedBox(height: 6),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -157,7 +157,7 @@ class PlayerInfoHeaderActions extends StatelessWidget {
         HeaderIconButton(
           icon: Icons.open_in_new_rounded,
           iconColor: Colors.white,
-          tooltip: 'Open in game',
+          tooltip: AppLocalizations.of(context)!.playerOpenInGame,
           onTap: () => _showOpenPlayerDialog(context, player),
           showBackground: false,
         ),
@@ -171,8 +171,8 @@ class PlayerInfoHeaderActions extends StatelessWidget {
                   : Icons.bookmark_border_rounded,
               iconColor: bookmarked ? const Color(0xFF2F8CFF) : Colors.white,
               tooltip: bookmarked
-                  ? 'Remove player bookmark'
-                  : 'Bookmark player',
+                  ? AppLocalizations.of(context)!.playerBookmarkRemove
+                  : AppLocalizations.of(context)!.playerBookmarkAdd,
               onTap: () => bookmarks.togglePlayer(player),
               showBackground: false,
             );
@@ -342,7 +342,7 @@ class _PlayerHeaderStats extends StatelessWidget {
               _PlayerQuickChip(
                 value: formatter.format(player.bestTrophies),
                 imageUrl: ImageAssets.bestTrophies,
-                tooltip: 'Best trophies',
+                tooltip: loc.playerBestTrophies,
               ),
             ],
           ),
@@ -550,7 +550,7 @@ _WarActionInfo? _currentWarAction(BuildContext context, Player player) {
   if (player.warData != null) {
     return _WarActionInfo(
       imageUrl: ImageAssets.war,
-      label: 'Ongoing War',
+      label: AppLocalizations.of(context)!.warOngoing,
       onTap: () => _openWar(context, player.warData!),
     );
   }
@@ -559,7 +559,7 @@ _WarActionInfo? _currentWarAction(BuildContext context, Player player) {
   if (cwl != null && cwl.isInWar) {
     return _WarActionInfo(
       imageUrl: ImageAssets.war,
-      label: 'Ongoing War',
+      label: AppLocalizations.of(context)!.warOngoing,
       onTap: () => _openWar(context, cwl.warInfo),
     );
   }
@@ -567,7 +567,7 @@ _WarActionInfo? _currentWarAction(BuildContext context, Player player) {
   if (cwl != null && cwl.isInCwl) {
     return _WarActionInfo(
       imageUrl: ImageAssets.cwlSwordsNoBorder,
-      label: 'Ongoing CWL',
+      label: AppLocalizations.of(context)!.cwlOngoing,
       onTap: () => _openCwl(context, player),
     );
   }
@@ -827,9 +827,9 @@ class _PlayerClanIdentityLineState extends State<_PlayerClanIdentityLine> {
     } catch (_) {
       navigator.pop();
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Failed to load clan.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.clanLoadFailed)),
+      );
     }
   }
 }

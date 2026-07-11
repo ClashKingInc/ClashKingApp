@@ -6,9 +6,12 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:provider/provider.dart';
@@ -71,20 +74,29 @@ class _PlayersPageState extends State<PlayersPage> {
     final itemCount = showingLinked
         ? linkedPlayers.length
         : bookmarkedPlayers.length;
+    final l10n = AppLocalizations.of(context)!;
+    final horizontalPadding = ((MediaQuery.sizeOf(context).width - 840) / 2)
+        .clamp(16.0, double.infinity)
+        .toDouble();
 
     return Scaffold(
       body: CustomScrollView(
         scrollCacheExtent: const ScrollCacheExtent.pixels(800),
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding,
+              8,
+              horizontalPadding,
+              14,
+            ),
             sliver: SliverToBoxAdapter(
               child: LiquidGlassSegmentedControl<_PlayerRosterMode>(
                 values: const [
                   _PlayerRosterMode.linked,
                   _PlayerRosterMode.bookmarked,
                 ],
-                labels: const ['Linked', 'Bookmarked'],
+                labels: [l10n.playersLinked, l10n.playersBookmarked],
                 selected: _mode,
                 color: Theme.of(context).colorScheme.onSurface,
                 onChanged: (value) => setState(() => _mode = value),
@@ -93,20 +105,41 @@ class _PlayersPageState extends State<PlayersPage> {
           ),
           SliverPadding(
             padding: EdgeInsets.fromLTRB(
-              16,
+              horizontalPadding,
               0,
-              16,
+              horizontalPadding,
               MediaQuery.paddingOf(context).bottom + 96,
             ),
             sliver: itemCount == 0
                 ? SliverToBoxAdapter(
                     child: _EmptyRosterMessage(
                       title: showingLinked
-                          ? 'No linked accounts'
-                          : 'No bookmarked players yet',
+                          ? AppLocalizations.of(
+                              context,
+                            )!.dashboardNoLinkedAccountsTitle
+                          : AppLocalizations.of(
+                              context,
+                            )!.playersNoBookmarkedTitle,
                       subtitle: showingLinked
-                          ? 'Manage accounts from the account setup screen.'
-                          : 'Open a player profile and save it for later.',
+                          ? AppLocalizations.of(context)!.playersNoLinkedBody
+                          : AppLocalizations.of(
+                              context,
+                            )!.playersNoBookmarkedBody,
+                      icon: showingLinked
+                          ? Icons.account_circle_outlined
+                          : Icons.bookmark_border_rounded,
+                      actionLabel: showingLinked
+                          ? l10n.drawerManageAccounts
+                          : null,
+                      onAction: showingLinked
+                          ? () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const AddCocAccountPage(
+                                  refreshOnExit: false,
+                                ),
+                              ),
+                            )
+                          : null,
                     ),
                   )
                 : SliverList.separated(
@@ -199,7 +232,9 @@ class _PlayersPageState extends State<PlayersPage> {
       navigator.pop();
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to load bookmarked player.')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.bookmarkPlayerLoadFailed),
+        ),
       );
     }
   }
@@ -522,35 +557,48 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                       children: [
                         _PlayerOptionSwitch(
                           icon: Icons.notifications_outlined,
-                          title: 'Notifications',
-                          subtitle: 'Get alerts for this account.',
+                          title: AppLocalizations.of(
+                            context,
+                          )!.playerOptionNotificationsTitle,
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.playerOptionNotificationsSubtitle,
                           value: options.notificationsEnabled,
                           onChanged: (value) =>
                               prefs.setNotificationsEnabled(tag, value),
                         ),
                         _PlayerOptionSwitch(
                           icon: Icons.checklist_rounded,
-                          title: 'Show to-do on home',
-                          subtitle:
-                              "Pin this account's to-do card to the home tab.",
+                          title: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowTodoHomeTitle,
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowTodoHomeSubtitle,
                           value: options.showTodoOnHome,
                           onChanged: (value) =>
                               prefs.setShowTodoOnHome(tag, value),
                         ),
                         _PlayerOptionSwitch(
                           icon: Icons.fact_check_outlined,
-                          title: 'Show on to-do page',
-                          subtitle:
-                              'Include this account in the full to-do list.',
+                          title: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowTodoPageTitle,
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowTodoPageSubtitle,
                           value: options.showInTodoPage,
                           onChanged: (value) =>
                               prefs.setShowInTodoPage(tag, value),
                         ),
                         _PlayerOptionSwitch(
                           icon: Icons.shield_moon_outlined,
-                          title: 'Show in War tab',
-                          subtitle:
-                              "Include this account's clan in the War tab.",
+                          title: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowWarTabTitle,
+                          subtitle: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowWarTabSubtitle,
                           value: options.showInWarTab,
                           onChanged: (value) =>
                               prefs.setShowInWarTab(tag, value),
@@ -691,37 +739,29 @@ class _InfoChip extends StatelessWidget {
 }
 
 class _EmptyRosterMessage extends StatelessWidget {
-  const _EmptyRosterMessage({required this.title, required this.subtitle});
+  const _EmptyRosterMessage({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    this.actionLabel,
+    this.onAction,
+  });
 
   final String title;
   final String subtitle;
+  final IconData icon;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ),
+    return AppEmptyState(
+      title: title,
+      body: subtitle,
+      icon: icon,
+      actionLabel: actionLabel,
+      onAction: onAction,
+      padding: EdgeInsets.zero,
     );
   }
 }

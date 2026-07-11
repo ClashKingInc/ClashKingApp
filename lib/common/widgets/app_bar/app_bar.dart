@@ -5,7 +5,7 @@ import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MainPageHeader extends StatelessWidget {
+class MainPageHeader extends StatelessWidget implements PreferredSizeWidget {
   const MainPageHeader({
     super.key,
     required this.title,
@@ -20,6 +20,9 @@ class MainPageHeader extends StatelessWidget {
   final String? searchHint;
   final VoidCallback? onSearchTap;
   final VoidCallback? onProfileTap;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(64);
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +75,8 @@ class MainPageHeader extends StatelessWidget {
     );
   }
 }
+
+typedef CustomAppBar = MainPageHeader;
 
 class _HeaderProfileButton extends StatelessWidget {
   const _HeaderProfileButton({required this.authService, required this.onTap});
