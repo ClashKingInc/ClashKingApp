@@ -3,32 +3,32 @@
   "appTitle": "ClashKing",
   "appDescription": "統計の追跡、クランの管理、パフォーマンスの分析のためのあなたの究極のClash of Clansコンパニオン。",
   "generalLoading": "読み込み中...",
-  "loadingVillages": "Loading your villages...",
-  "loadingClanData": "Fetching clan data...",
-  "loadingWarStats": "Analyzing war stats...",
-  "loadingLegendsData": "Preparing legends data...",
-  "loadingCapitalRaids": "Loading capital raids...",
-  "loadingAlmostReady": "Almost ready...",
-  "accountVerificationTitle": "Verify Account",
-  "accountVerified": "Verified",
-  "accountVerify": "Verify",
-  "accountVerificationSuccess": "Account verified successfully!",
+  "loadingVillages": "村を読み込み中...",
+  "loadingClanData": "クランデータを取得中...",
+  "loadingWarStats": "戦争統計を分析中...",
+  "loadingLegendsData": "レジェンドデータを準備中...",
+  "loadingCapitalRaids": "都のレイドを読み込み中...",
+  "loadingAlmostReady": "まもなく準備完了...",
+  "accountVerificationTitle": "アカウント確認",
+  "accountVerified": "確認済み",
+  "accountVerify": "確認",
+  "accountVerificationSuccess": "アカウントの確認が完了しました！",
   "generalRetry": "再試行",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "再試行中...",
   "generalTryAgain": "もう一度試す",
-  "generalReset": "Reset",
+  "generalReset": "リセット",
   "generalCancel": "キャンセル",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalManage": "Manage",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalLastRefresh": "Last refresh: {time}",
+  "generalApply": "適用",
+  "generalConfirm": "確認",
+  "generalManage": "管理",
+  "generalSettings": "設定",
+  "generalCopiedToClipboard": "クリップボードにコピーしました",
+  "generalComingSoon": "近日公開！",
+  "generalLastRefresh": "最終更新: {time}",
   "@generalLastRefresh": {
     "description": "Last refresh time indicator",
     "placeholders": {
@@ -38,7 +38,7 @@
       }
     }
   },
-  "generalRefreshFailed": "Refresh failed: {error}",
+  "generalRefreshFailed": "更新に失敗しました: {error}",
   "@generalRefreshFailed": {
     "description": "Error message when refresh fails",
     "placeholders": {
@@ -48,108 +48,108 @@
       }
     }
   },
-  "generalAll": "All",
+  "generalAll": "すべて",
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "全期間",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalOthers": "その他",
+  "generalCompleted": "完了",
+  "generalTotal": "合計",
+  "generalBest": "最高",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "最低",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "平均",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "残り",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "アクティブ",
+  "generalInactive": "非アクティブ",
+  "generalStarted": "開始済み",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "終了済み",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalRole": "Role",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalRole": "役職",
+  "generalStats": "統計",
+  "generalFullStats": "詳細統計",
+  "generalDetails": "詳細",
+  "generalHistory": "履歴",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalFilters": "Filters",
-  "generalNotSet": "Not set",
+  "generalFilters": "フィルター",
+  "generalNotSet": "未設定",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalUnknown": "Unknown",
-  "generalNoDataAvailable": "No data available.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalWarning": "警告",
+  "generalUnknown": "不明",
+  "generalNoDataAvailable": "利用可能なデータがありません。",
+  "generalNoFilteredResults": "フィルターに一致する結果がありません",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "すべてのデータを見るには、フィルター条件を調整するかフィルターをクリアしてください。",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "フィルターをクリア",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "保存済みプリセット",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "保存",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "フィルタープリセットを保存",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "プリセット名",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "このプリセットの名前を入力",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "候補:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "プリセットとして保存する前にフィルターを適用してください",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "名前を入力してください",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "この名前のプリセットはすでに存在します",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "プリセット「{name}」を保存しました",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -159,27 +159,27 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "プリセットの保存に失敗しました",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "プリセットを適用",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "名前を変更",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "削除",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "プリセット名を変更",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "プリセット名を「{name}」に変更しました",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -189,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "プリセット名の変更に失敗しました",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "プリセットを削除",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "「{name}」を削除してもよろしいですか？",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "プリセット「{name}」を削除しました",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -217,135 +217,135 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "プリセットの削除に失敗しました",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "generalCharts": "チャート",
+  "authSignUp": "登録",
+  "authLogin": "ログイン",
+  "authLogout": "ログアウト",
+  "authCreateAccount": "アカウントを作成",
+  "authJoinClashKing": "ClashKingに参加",
+  "authCreateAccountToGetStarted": "始めるにはアカウントを作成してください",
+  "authAlreadyHaveAccount": "すでにアカウントをお持ちですか？ログイン",
+  "authConfirmLogout": "ログアウトしてもよろしいですか？",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
-  "authDiscordSignIn": "Sign In with Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authDiscordSignIn": "Discordでログイン",
+  "authDiscordContinue": "Discordで続行",
+  "authDiscordDescription": "ClashKing Botとデータを同期し、ClashKingのすべての機能を解放しましょう！",
   "authEmail": "Email",
-  "authEmailHint": "Enter your email address",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
+  "authEmailHint": "メールアドレスを入力",
+  "authEmailDescription": "Discordにアクセスできない場合やアプリ内機能だけを使いたい場合はメールを使用してください",
+  "authEmailRequired": "メールアドレスを入力してください",
+  "authEmailInvalid": "有効なメールアドレスを入力してください",
   "authPasswordLabel": "Password",
-  "authPasswordHint": "Enter your password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
-  "authPasswordHeader": "Password must contain:",
-  "authPasswordUppercase": "Uppercase letter",
-  "authPasswordLowercase": "Lowercase letter",
-  "authPasswordNumber": "Number",
-  "authPasswordSpecial": "Special character",
-  "authPasswordInvalid": "Password does not meet requirements",
-  "authPasswordForgot": "Forgot password?",
-  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
-  "authPasswordResetSend": "Send Reset Code",
-  "authPasswordResetSent": "Code Sent!",
-  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
-  "authPasswordReset": "Reset Password",
-  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
-  "authPasswordNew": "New Password",
-  "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
-  "authPasswordResetContinue": "Continue to Reset Password",
-  "authPasswordResetCode": "Reset Code",
-  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
-  "authPasswordResetCodeRequired": "Please enter the reset code",
-  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
-  "authBackToLogin": "Back to Login",
-  "authUsernameLabel": "Username",
-  "authUsernameRequired": "Please enter a username",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
-  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
-  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
-  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
-  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
-  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
-  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
-  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
-  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
-  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
-  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authEmailVerificationTitle": "Verify Email",
-  "authEmailVerificationCheckEmail": "Check Your Email",
-  "authEmailVerificationSentTo": "We've sent a verification email to:",
-  "authEmailVerificationResend": "Resend Verification Email",
-  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationExpired": "Verification expired. Please register again.",
-  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
-  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
-  "authEmailVerificationVerifying": "Verifying your email...",
-  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
-  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
-  "authEmailVerificationVerify": "Verify Code",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
-  "accountsWelcome": "Welcome!",
-  "accountsWelcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-  "accountsManageTitle": "Manage your accounts",
-  "accountsNoneFound": "No account linked to your profile found",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsEnterPlayerTag": "Enter a player tag",
-  "accountsAdd": "Add account",
-  "accountsAddInstruction": "Tap the + button to add your account",
-  "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
-  "accountsFillAllFields": "Please fill all fields.",
-  "accountsErrorTagNotExists": "The player tag entered does not exist.",
-  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
-  "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
-  "accountsErrorWrongApiToken": "The API token entered is incorrect",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
-  "errorLoadingVersion": "Error loading version",
+  "authPasswordHint": "パスワードを入力",
+  "authPasswordConfirm": "パスワードを確認",
+  "authPasswordRequired": "パスワードを入力してください",
+  "authPasswordConfirmRequired": "パスワードを確認してください",
+  "authPasswordMismatch": "パスワードが一致しません",
+  "authPasswordTooShort": "パスワードは8文字以上である必要があります",
+  "authPasswordRequirements": "パスワードには次を含める必要があります:\n• 大文字\n• 小文字\n• 数字\n• 特殊文字",
+  "authPasswordHeader": "パスワードには次を含める必要があります:",
+  "authPasswordUppercase": "大文字",
+  "authPasswordLowercase": "小文字",
+  "authPasswordNumber": "数字",
+  "authPasswordSpecial": "特殊文字",
+  "authPasswordInvalid": "パスワードが要件を満たしていません",
+  "authPasswordForgot": "パスワードをお忘れですか？",
+  "authPasswordForgotDescription": "メールアドレスを入力すると、パスワードをリセットするための6桁コードを送信します。",
+  "authPasswordResetSend": "リセットコードを送信",
+  "authPasswordResetSent": "コードを送信しました！",
+  "authPasswordResetSentDescription": "6桁のリセットコードをメールアドレスに送信しました。受信箱を確認し、そのコードでパスワードをリセットしてください。",
+  "authPasswordReset": "パスワードをリセット",
+  "authPasswordResetDescription": "メールアドレス、メールに記載された6桁コード、新しいパスワードを下に入力してください。",
+  "authPasswordNew": "新しいパスワード",
+  "authPasswordConfirmHint": "新しいパスワードを再入力",
+  "authPasswordResetSuccess": "パスワードのリセットに成功しました！ログインできるようになりました。",
+  "authPasswordResetContinue": "パスワードリセットへ進む",
+  "authPasswordResetCode": "リセットコード",
+  "authPasswordResetCodeHint": "メールの6桁コードを入力",
+  "authPasswordResetCodeRequired": "リセットコードを入力してください",
+  "authPasswordResetCodeInvalid": "有効な6桁コードを入力してください",
+  "authBackToLogin": "ログインに戻る",
+  "authUsernameLabel": "ユーザー名",
+  "authUsernameRequired": "ユーザー名を入力してください",
+  "authUsernameTooShort": "ユーザー名は3文字以上である必要があります",
+  "authUsernameTooLong": "ユーザー名は30文字以下である必要があります",
+  "authErrorConnection": "エラーが発生しました。インターネット接続を確認してもう一度お試しください。",
+  "authErrorConnectionRelaunch": "エラーが発生しました。インターネット接続を確認し、アプリを再起動してください。",
+  "authErrorEmailAlreadyRegistered": "このメールアドレスはすでに登録されています。代わりにログインしてみてください。",
+  "authErrorEmailAlreadyPending": "このアドレスにはすでに確認メールが送信されています。メールを確認するか、再送信してください。",
+  "authErrorEmailInvalidFormat": "有効なメールアドレスを入力してください。",
+  "authErrorPasswordWeak": "パスワードが弱すぎます。より強力なパスワードを使用してください。",
+  "authErrorUsernameInvalid": "ユーザー名が無効です。英字、数字、アンダースコアのみを使用してください。",
+  "authErrorRegistrationFailed": "登録に失敗しました。後でもう一度お試しください。",
+  "authErrorEmailSendFailed": "確認メールの送信に失敗しました。後でもう一度お試しください。",
+  "authErrorRateLimited": "試行回数が多すぎます。少し待ってからもう一度お試しください。",
+  "authErrorServerUnavailable": "サーバーは一時的に利用できません。後でもう一度お試しください。",
+  "authAccountManagement": "ここでClash of Clansアカウントを追加、削除、並べ替えできます。すべての機能にアクセスするにはトークンでアカウントを確認してください。",
+  "authAccountConnected": "接続済みアカウント",
+  "authAccountConnectedStatus": "接続済み",
+  "authAccountNotConnected": "未接続",
+  "authAccountEmailAndPassword": "メールとパスワード",
+  "authAccountSecured": "あなたのアカウントは複数の認証方法で保護されています",
+  "authAccountLinkEmail": "メールアカウントを連携",
+  "authAccountAddEmailAuth": "追加のセキュリティとしてメールとパスワード認証をアカウントに追加します。",
+  "authAccountEmailLinkedSuccess": "メールアカウントを連携しました！",
+  "authEmailVerificationTitle": "メール確認",
+  "authEmailVerificationCheckEmail": "メールを確認してください",
+  "authEmailVerificationSentTo": "確認メールを次の宛先に送信しました:",
+  "authEmailVerificationResend": "確認メールを再送信",
+  "authEmailVerificationResendSuccess": "確認メールを再送信しました！メールを確認してください。",
+  "authEmailVerificationExpired": "確認の有効期限が切れました。もう一度登録してください。",
+  "authEmailVerificationAlreadyVerified": "このメールはすでに確認済みです。代わりにログインしてみてください。",
+  "authEmailVerificationNoToken": "保留中の確認が見つかりません。先に登録してください。",
+  "authEmailVerificationExpiredResend": "確認の有効期限が切れました。登録画面に戻ってもう一度登録してください。",
+  "authEmailVerificationVerifying": "メールを確認中...",
+  "authEmailVerificationCodeInstructions": "メールに送信された6桁コードを入力してください:",
+  "authEmailVerificationCodeRequired": "6桁の確認コードを入力してください",
+  "authEmailVerificationCodeInvalid": "コードが無効または期限切れです。コードを確認するか確認メールを再送信してください。",
+  "authEmailVerificationVerify": "コードを確認",
+  "helpTitle": "ヘルプが必要ですか？",
+  "helpJoinDiscord": "Discordに参加",
+  "helpEmailUs": "メールで問い合わせ",
+  "accountsWelcome": "ようこそ！",
+  "accountsWelcomeMessage": "プロフィールに1つ以上のClash of Clansアカウントを追加してください。アカウントは後から追加または削除できます。",
+  "accountsManageTitle": "アカウントを管理",
+  "accountsNoneFound": "プロフィールに連携されたアカウントが見つかりません",
+  "accountsPlayerTag": "プレイヤータグ (#ABC123)",
+  "accountsEnterPlayerTag": "プレイヤータグを入力",
+  "accountsAdd": "アカウントを追加",
+  "accountsAddInstruction": "+ ボタンをタップしてアカウントを追加してください",
+  "accountsApiToken": "アカウントAPIトークン",
+  "accountsEnterApiToken": "本人確認のため、アカウントAPIトークンを入力してください。Clash of Clans内で確認できます:",
+  "accountsApiTokenLocation": "設定 > その他の設定 > APIトークン",
+  "accountsOpenMoreSettings": "その他の設定を開く",
+  "accountsCouldNotOpenClash": "Clash of Clansを開けませんでした。手動で開いてください。",
+  "accountsFillAllFields": "すべての項目を入力してください。",
+  "accountsErrorTagNotExists": "入力されたプレイヤータグは存在しません。",
+  "accountsErrorAlreadyLinked": "そのプレイヤータグはすでに他の人に連携されています。",
+  "accountsErrorAlreadyLinkedToYou": "そのプレイヤータグはすでにあなたに連携されています。",
+  "accountsErrorWrongApiToken": "入力されたAPIトークンが正しくありません",
+  "accountsErrorFailedToAdd": "アカウントの追加に失敗しました。後でもう一度お試しください。",
+  "accountsErrorFailedToUpdateOrder": "アカウントの順序更新に失敗しました。",
+  "errorTitle": "おっと！サーバーが顔面にファイアボールを受けたかもしれません！回復呪文を唱えています... 少し待ってからもう一度お試しください。",
+  "errorSubtitle": "問題が続く場合は、Discordサーバーで既知の問題かどうか確認してください。",
+  "errorNetworkTitle": "接続の問題",
+  "errorNetworkMessage": "サーバーへの接続に問題があります。インターネット接続、またはこちら側の問題が原因の可能性があります。接続を確認してもう一度お試しください。",
+  "errorLoadingVersion": "バージョンの読み込みエラー",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorCannotOpenLink": "We can't open this link.",
-  "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerSearchTitle": "Search player",
-  "playerSearchPlaceholder": "Player's name or tag",
-  "playerLastActive": "Last active: {date}",
+  "errorCannotOpenLink": "このリンクを開けません。",
+  "errorExitAppToOpenClash": "Clash of Clansを開くためにアプリを離れようとしています。",
+  "playerSearchTitle": "プレイヤーを検索",
+  "playerSearchPlaceholder": "プレイヤー名またはタグ",
+  "playerLastActive": "最終アクティブ: {date}",
   "@playerLastActive": {
     "placeholders": {
       "date": {
@@ -353,8 +353,8 @@
       }
     }
   },
-  "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
-  "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+  "playerNotTracked": "このプレイヤーは追跡されていません。データが不正確な可能性があります。",
+  "playerClanDescription": "あなたのクランは「{clan}」({tag})です。",
   "@playerClanDescription": {
     "placeholders": {
       "clan": {
@@ -365,7 +365,7 @@
       }
     }
   },
-  "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+  "playerRatioDescription": "寄付比率は{ratio}です。{donations}体を寄付し、{received}体を受け取りました。",
   "@playerRatioDescription": {
     "placeholders": {
       "ratio": {
@@ -379,7 +379,7 @@
       }
     }
   },
-  "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+  "playerWarPreferenceDescription": "戦争設定は「{preference}」です。",
   "@playerWarPreferenceDescription": {
     "placeholders": {
       "preference": {
@@ -387,7 +387,7 @@
       }
     }
   },
-  "playerWarStarsDescription": "You have {stars} war stars.",
+  "playerWarStarsDescription": "戦争の星を{stars}個獲得しています。",
   "@playerWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -395,7 +395,7 @@
       }
     }
   },
-  "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+  "playerTrophiesDescription": "トロフィーは{trophies}個です。現在は{league}に所属しています。",
   "@playerTrophiesDescription": {
     "placeholders": {
       "trophies": {
@@ -406,7 +406,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "トロフィーは{trophies}個です。どのリーグにもランクインしていません。",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -414,7 +414,7 @@
       }
     }
   },
-  "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+  "playerTownHallLevelDescription": "タウンホールレベルは{level}です。",
   "@playerTownHallLevelDescription": {
     "placeholders": {
       "level": {
@@ -422,7 +422,7 @@
       }
     }
   },
-  "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+  "playerBuilderBaseDescription": "大工の拠点のホールレベルは{level}で、トロフィーは{trophies}個です。",
   "@playerBuilderBaseDescription": {
     "placeholders": {
       "level": {
@@ -433,12 +433,12 @@
       }
     }
   },
-  "gameBaseHome": "Home Base",
-  "gameBaseBuilder": "Builder Base",
-  "gameClanCapital": "Clan Capital",
+  "gameBaseHome": "自分の村",
+  "gameBaseBuilder": "大工の拠点",
+  "gameClanCapital": "クランの都",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "TH Level",
-  "gameTownHallLevelNumber": "Town Hall {level}",
+  "gameTownHallLevel": "THレベル",
+  "gameTownHallLevelNumber": "タウンホール {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
       "level": {
@@ -454,13 +454,13 @@
       }
     }
   },
-  "gameExpLevel": "Experience Level",
-  "gameTrophies": "Trophies",
-  "gameBuilderBaseTrophies": "BB Trophies",
-  "gameDonations": "Donations",
+  "gameExpLevel": "経験値レベル",
+  "gameTrophies": "トロフィー",
+  "gameBuilderBaseTrophies": "大工トロフィー",
+  "gameDonations": "寄付",
   "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameDonationsRatio": "寄付比率",
+  "gameLevel": "レベル: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -471,52 +471,52 @@
       }
     }
   },
-  "gameHeroes": "Heroes",
-  "gameEquipment": "Equipments",
-  "gameHeroesEquipments": "Hero equipments",
-  "gameTroops": "Troops",
-  "gameActiveSuperTroops": "Active Super Troops",
-  "gamePets": "Pets",
-  "gameSiegeMachines": "Siege Machines",
-  "gameSpells": "Spells",
-  "gameAchievements": "Achievements",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
-  "gameCreatorCodeDialogTitle": "Support ClashKing",
-  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
-  "gameCreatorCodeDialogButton": "Use Creator Code",
-  "clanTitle": "Clan",
-  "clanSearchTitle": "Search clan",
-  "clanSearchPlaceholder": "Clan's name",
-  "clanNone": "No clan",
-  "clanJoinToUnlock": "Join a clan to unlock new features.",
-  "clanMembers": "Members",
-  "clanMinimumMembers": "Minimum members",
-  "clanMaximumMembers": "Maximum members",
-  "clanLocation": "Location",
-  "clanMinimumPoints": "Minimum clan points",
-  "clanMinimumLevel": "Minimum clan level",
-  "clanInviteOnly": "Invite Only",
+  "gameHeroes": "ヒーロー",
+  "gameEquipment": "装備",
+  "gameHeroesEquipments": "ヒーロー装備",
+  "gameTroops": "ユニット",
+  "gameActiveSuperTroops": "有効なスーパーユニット",
+  "gamePets": "ペット",
+  "gameSiegeMachines": "突破兵器",
+  "gameSpells": "呪文",
+  "gameAchievements": "達成項目",
+  "gameClanGames": "クランゲーム",
+  "gameSeasonPass": "シーズンパス",
+  "gameCreatorCode": "クリエイターコード: ClashKing",
+  "gameCreatorCodeDescription": "無料で応援してください！",
+  "gameCreatorCodeDialogTitle": "ClashKingを応援",
+  "gameCreatorCodeDialogDescription": "クリエイターコードを使用すると、開発資金、アプリとボットの無料提供、新機能の追加を支援できます。\n\nSupercellゲームのショップで「ClashKing」を入力するだけで、追加費用なしでゲーム内購入額の5%を受け取ります。\n\nご支援ありがとうございます！",
+  "gameCreatorCodeDialogButton": "クリエイターコードを使う",
+  "clanTitle": "クラン",
+  "clanSearchTitle": "クランを検索",
+  "clanSearchPlaceholder": "クラン名",
+  "clanNone": "クランなし",
+  "clanJoinToUnlock": "クランに参加して新機能を解放しましょう。",
+  "clanMembers": "メンバー",
+  "clanMinimumMembers": "最小メンバー数",
+  "clanMaximumMembers": "最大メンバー数",
+  "clanLocation": "所在地",
+  "clanMinimumPoints": "必要クランポイント",
+  "clanMinimumLevel": "必要クランレベル",
+  "clanInviteOnly": "招待制",
   "@clanInviteOnly": {
     "description": "Clan is invite only"
   },
-  "clanOpened": "Opened",
+  "clanOpened": "公開",
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanRoleLeader": "Leader",
-  "clanRoleCoLeader": "Co-Leader",
-  "clanRoleElder": "Elder",
-  "clanRoleMember": "Member",
-  "clanWarFrequencyAlways": "Always",
-  "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyOncePerWeek": "1/week",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
-  "clanWarFrequencyRarely": "Rarely",
+  "clanRoleLeader": "リーダー",
+  "clanRoleCoLeader": "サブリーダー",
+  "clanRoleElder": "長老",
+  "clanRoleMember": "メンバー",
+  "clanWarFrequencyAlways": "常時",
+  "clanWarFrequencyNever": "なし",
+  "clanWarFrequencyOncePerWeek": "週1回",
+  "clanWarFrequencyMoreThanOncePerWeek": "週1回以上",
+  "clanWarFrequencyRarely": "まれ",
   "timeHourIndicator": "h",
-  "timeDaysAgo": "{days} days ago",
+  "timeDaysAgo": "{days}日前",
   "@timeDaysAgo": {
     "placeholders": {
       "days": {
@@ -524,7 +524,7 @@
       }
     }
   },
-  "timeDayAgo": "{day} day ago",
+  "timeDayAgo": "{day}日前",
   "@timeDayAgo": {
     "placeholders": {
       "day": {
@@ -532,7 +532,7 @@
       }
     }
   },
-  "timeHourAgo": "{hour} hour ago",
+  "timeHourAgo": "{hour}時間前",
   "@timeHourAgo": {
     "placeholders": {
       "hour": {
@@ -540,7 +540,7 @@
       }
     }
   },
-  "timeHoursAgo": "{hours} hours ago",
+  "timeHoursAgo": "{hours}時間前",
   "@timeHoursAgo": {
     "placeholders": {
       "hours": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "timeMinuteAgo": "{minute} minute ago",
+  "timeMinuteAgo": "{minute}分前",
   "@timeMinuteAgo": {
     "placeholders": {
       "minute": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "timeMinutesAgo": "{minutes} minutes ago",
+  "timeMinutesAgo": "{minutes}分前",
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -564,12 +564,12 @@
       }
     }
   },
-  "timeJustNow": "Just Now",
+  "timeJustNow": "たった今",
   "@timeJustNow": {
     "description": "Indicates something happened just now"
   },
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeEndedJustNow": "たった今終了",
+  "timeEndedMinutesAgo": "{minutes}分前に終了",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -577,7 +577,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "{hours}時間前に終了",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -585,7 +585,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "{days}日前に終了",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -593,7 +593,7 @@
       }
     }
   },
-  "timeStartsIn": "Starts in {time}",
+  "timeStartsIn": "{time}後に開始",
   "@timeStartsIn": {
     "placeholders": {
       "time": {
@@ -601,7 +601,7 @@
       }
     }
   },
-  "timeStartsAt": "Starts at {time}",
+  "timeStartsAt": "{time}に開始",
   "@timeStartsAt": {
     "placeholders": {
       "time": {
@@ -609,7 +609,7 @@
       }
     }
   },
-  "timeEndsIn": "Ends in {time}",
+  "timeEndsIn": "{time}後に終了",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -617,7 +617,7 @@
       }
     }
   },
-  "timeEndsAt": "Ends at {time}",
+  "timeEndsAt": "{time}に終了",
   "@timeEndsAt": {
     "placeholders": {
       "time": {
@@ -626,9 +626,9 @@
     }
   },
   "legendsTitle": "Inaccurate data?",
-  "legendsNotInLeague": "Not in Legend League",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
-  "legendsStartDescription": "You started the day with {trophies} trophies.",
+  "legendsNotInLeague": "レジェンドリーグ未参加",
+  "legendsNoDataToday": "現在レジェンドリーグにはいませんが、過去シーズンは利用できます。",
+  "legendsStartDescription": "この日は{trophies}トロフィーで開始しました。",
   "@legendsStartDescription": {
     "placeholders": {
       "trophies": {
@@ -636,7 +636,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+  "legendsNoRankLocalDescription": "現在、{trophies}トロフィーで（{country}）ランキング外です。",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
@@ -647,7 +647,7 @@
       }
     }
   },
-  "legendsRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+  "legendsRankLocalDescription": "現在、{trophies}トロフィーで（{country}）{rank}位です。",
   "@legendsRankLocalDescription": {
     "placeholders": {
       "rank": {
@@ -661,7 +661,7 @@
       }
     }
   },
-  "legendsGainDescription": "You gained {trophies} trophies for now.",
+  "legendsGainDescription": "現時点で{trophies}トロフィー増加しています。",
   "@legendsGainDescription": {
     "placeholders": {
       "trophies": {
@@ -669,7 +669,7 @@
       }
     }
   },
-  "legendsLossDescription": "You lost {trophies} trophies for now.",
+  "legendsLossDescription": "現時点で{trophies}トロフィー減少しています。",
   "@legendsLossDescription": {
     "placeholders": {
       "trophies": {
@@ -677,7 +677,7 @@
       }
     }
   },
-  "legendsNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+  "legendsNoGlobalRankDescription": "現在、{trophies}トロフィーで世界ランキング外です。",
   "@legendsNoGlobalRankDescription": {
     "placeholders": {
       "trophies": {
@@ -685,7 +685,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "現在、{trophies}トロフィーで世界{rank}位です。",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -696,36 +696,36 @@
       }
     }
   },
-  "legendsNoRank": "No ranking",
-  "legendsBestTrophies": "Best Trophies",
-  "legendsMostAttacks": "Most Attacks",
-  "legendsLastSeason": "Last Season",
-  "legendsBestRank": "Best Global Rank",
-  "legendsTrophiesBySeason": "Trophies by season",
-  "legendsEosTrophies": "End Of Season Trophies",
-  "legendsEosDetails": "End Of Season Details",
-  "legendsInaccurateTitle": "Inaccurate data?",
-  "legendsInaccurateIntro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-  "legendsInaccurateApiDelayTitle": "1. API Delay: ",
-  "legendsInaccurateApiDelayBody": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-  "legendsInaccurateConcurrentTitle": "2. Concurrent Changes: \n",
-  "legendsInaccurateMultipleAttacksTitle": "- Multiple Attacks/Defenses: ",
-  "legendsInaccurateMultipleAttacksBody": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-  "legendsInaccurateSimultaneousTitle": "- Simultaneous Attack and Defense: ",
-  "legendsInaccurateSimultaneousBody": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-  "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
-  "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-  "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Season Stats",
-  "statsByDay": "By Day",
+  "legendsNoRank": "ランキングなし",
+  "legendsBestTrophies": "最高トロフィー",
+  "legendsMostAttacks": "最多攻撃",
+  "legendsLastSeason": "前シーズン",
+  "legendsBestRank": "最高世界順位",
+  "legendsTrophiesBySeason": "シーズン別トロフィー",
+  "legendsEosTrophies": "シーズン終了時トロフィー",
+  "legendsEosDetails": "シーズン終了時の詳細",
+  "legendsInaccurateTitle": "データが不正確ですか？",
+  "legendsInaccurateIntro": "Clash of Clans APIの制限により、データが常に完全に正確とは限りません。理由は次のとおりです:\n",
+  "legendsInaccurateApiDelayTitle": "1. APIの遅延: ",
+  "legendsInaccurateApiDelayBody": "APIの更新には最大5分かかることがあり、リアルタイムのトロフィー変動の反映に遅れが生じます。\n",
+  "legendsInaccurateConcurrentTitle": "2. 同時発生する変動: \n",
+  "legendsInaccurateMultipleAttacksTitle": "- 複数の攻撃/防衛: ",
+  "legendsInaccurateMultipleAttacksBody": "短時間に複数の攻撃や防衛が発生すると、APIが合算された結果（例: +68または-68）を表示する場合があります。\n",
+  "legendsInaccurateSimultaneousTitle": "- 攻撃と防衛の同時発生: ",
+  "legendsInaccurateSimultaneousBody": "攻撃と防衛が同時に発生すると、混在した結果（例: +4）が表示される場合があります。\n",
+  "legendsInaccurateNetGainTitle": "3. 純増減: ",
+  "legendsInaccurateNetGainBody": "タイミングの問題があっても、その日の全体的な純増減は正確です。 ",
+  "legendsInaccurateConclusion": "これらの制限は、Clash of Clans APIを使用するすべてのツールで共通です。残念ながらSupercell側の仕様のため、私たちには修正できません。可能な限り現実に近い結果を提供できるよう最善を尽くしています。ご理解ありがとうございます！",
+  "statsSeasonStats": "シーズン統計",
+  "statsByDay": "日別",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
-  "statsBySeason": "By Season",
+  "statsBySeason": "シーズン別",
   "@statsBySeason": {
     "description": "Shows stats by season"
   },
-  "statsDayIndex": "Day {index}",
+  "statsDayIndex": "{index}日目",
   "@statsDayIndex": {
     "placeholders": {
       "index": {
@@ -733,7 +733,7 @@
       }
     }
   },
-  "statsIndexDays": "{index} days",
+  "statsIndexDays": "{index}日",
   "@statsIndexDays": {
     "placeholders": {
       "index": {
@@ -741,7 +741,7 @@
       }
     }
   },
-  "statsSeasonDate": "{date} season",
+  "statsSeasonDate": "{date}シーズン",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
     "placeholders": {
@@ -750,23 +750,23 @@
       }
     }
   },
-  "statsAllTownHalls": "All Town Halls",
-  "statsMembers": "Members Stats",
-  "todoTitle": "To-do list",
-  "todoExplanationTitle": "Task Calculation",
-  "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-  "todoExplanationLegendsTitle": "Legend League:",
-  "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "todoExplanationClanWarsTitle": "Clan Wars:",
-  "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-  "todoExplanationCwlTitle": "Clan War League:",
-  "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-  "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
-  "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
+  "statsAllTownHalls": "すべてのタウンホール",
+  "statsMembers": "メンバー統計",
+  "todoTitle": "To-doリスト",
+  "todoExplanationTitle": "タスク計算",
+  "todoExplanationIntro": "タスク完了率は、次のアクティビティに基づき、指定された重みで計算されます:",
+  "todoExplanationLegendsTitle": "レジェンドリーグ:",
+  "todoExplanationLegends": "アカウントごとに8ポイントの重み、1攻撃 = 1ポイント。",
+  "todoExplanationRaidsTitle": "レイド:",
+  "todoExplanationRaids": "アカウントごとに5ポイントの重み（最後の攻撃が解放されている場合は6）、1攻撃 = 1ポイント。",
+  "todoExplanationClanWarsTitle": "クラン対戦:",
+  "todoExplanationClanWars": "アカウントごとに2ポイントの重み、1攻撃 = 1ポイント。",
+  "todoExplanationCwlTitle": "クラン対戦リーグ:",
+  "todoExplanationCwl": "アカウントごとに1ポイントの重み、1攻撃 = 1ポイント。プレイヤーがリーグ用クランにいない場合、CWLは追跡できません。",
+  "todoExplanationPassAndGamesTitle": "シーズンパスとクランゲーム:",
+  "todoExplanationPassAndGames": "アカウントごとにそれぞれ2ポイントの重み。比率は残り日数（パスは1か月、ゲームは6日）に基づきます。緑 = パスまたはゲーム完了のペース、赤 = 遅れています。",
   "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-  "todoAccountsNumber": "{number} accounts",
+  "todoAccountsNumber": "{number}アカウント",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -775,7 +775,7 @@
     },
     "description": "Number of accounts (ex: 4 accounts)"
   },
-  "todoAccountsNumberActive": "{number} active accounts",
+  "todoAccountsNumberActive": "{number}個のアクティブアカウント",
   "@todoAccountsNumberActive": {
     "placeholders": {
       "number": {
@@ -783,7 +783,7 @@
       }
     }
   },
-  "todoAccountsNumberInactive": "{number} inactive accounts",
+  "todoAccountsNumberInactive": "{number}個の非アクティブアカウント",
   "@todoAccountsNumberInactive": {
     "placeholders": {
       "number": {
@@ -791,11 +791,11 @@
       }
     }
   },
-  "todoAccountsActive": "Active accounts",
-  "todoAccountsInactive": "Inactive accounts",
-  "todoAccountsNoInactive": "No inactive accounts.",
-  "todoAccountsNoActive": "No active accounts.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAccountsActive": "アクティブアカウント",
+  "todoAccountsInactive": "非アクティブアカウント",
+  "todoAccountsNoInactive": "非アクティブなアカウントはありません。",
+  "todoAccountsNoActive": "アクティブなアカウントはありません。",
+  "todoAttacksLeftDescription": "残り攻撃回数は{attacks}回です（{type}）。",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -806,7 +806,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "残り防衛回数は{defenses}回です（{type}）。",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -817,7 +817,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "おめでとうございます、すべての攻撃を完了しました（{type}）！",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -825,7 +825,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "イベント終了に間に合わせるには、今日あと{points}ポイント獲得する必要があります（{type}）。",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -836,7 +836,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "おめでとうございます、イベント終了時に最大報酬を獲得できるペースです（{type}）！",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -844,12 +844,12 @@
       }
     }
   },
-  "warTitle": "War",
-  "warFrequency": "War frequency",
-  "warParticipation": "War Participation",
-  "warLeague": "War/League",
-  "warHistory": "War History",
-  "warLog": "War Log",
+  "warTitle": "対戦",
+  "warFrequency": "対戦頻度",
+  "warParticipation": "対戦参加",
+  "warLeague": "対戦/リーグ",
+  "warHistory": "対戦履歴",
+  "warLog": "対戦ログ",
   "warLogClosed": "{clan}の対戦ログは非公開です。",
   "@warLogClosed": {
     "placeholders": {
@@ -858,9 +858,9 @@
       }
     }
   },
-  "warStats": "War Stats",
+  "warStats": "対戦統計",
   "warOngoing": "Ongoing war",
-  "warIsNotInWar": "{clan} is not in war.",
+  "warIsNotInWar": "{clan}は対戦中ではありません。",
   "@warIsNotInWar": {
     "placeholders": {
       "clan": {
@@ -868,27 +868,27 @@
       }
     }
   },
-  "warAskForWar": "Contact the leader or a co-leader to start a war.",
-  "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-  "warEnded": "War ended",
-  "warInWar": "In War",
+  "warAskForWar": "対戦を開始するには、リーダーまたはサブリーダーに連絡してください。",
+  "warAskForWarLogOpening": "対戦ログを公開するには、リーダーまたはサブリーダーに連絡してください。",
+  "warEnded": "対戦終了",
+  "warInWar": "対戦中",
   "@warInWar": {
     "description": "War state: active"
   },
-  "warPreparation": "Preparation",
-  "warPerfectWar": "Perfect war",
-  "warVictory": "Victory",
-  "warDefeat": "Defeat",
-  "warDraw": "Draw",
+  "warPreparation": "準備日",
+  "warPerfectWar": "パーフェクト対戦",
+  "warVictory": "勝利",
+  "warDefeat": "敗北",
+  "warDraw": "引き分け",
   "@warDraw": {
     "description": "War ended in a draw"
   },
-  "warTeamSize": "Team size",
-  "warMyTeam": "My team",
-  "warEnemiesTeam": "Enemies",
-  "warClanDraw": "The two clans are tied",
-  "warStateOfTheWar": "State of the war",
-  "warStarsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+  "warTeamSize": "チームサイズ",
+  "warMyTeam": "自チーム",
+  "warEnemiesTeam": "敵チーム",
+  "warClanDraw": "2つのクランは同点です",
+  "warStateOfTheWar": "対戦状況",
+  "warStarsNeededToTakeTheLead": "{clan}がリードするには、あと{star}個の星、または{stars2}個の星と{percent}%が必要です。",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -905,7 +905,7 @@
       }
     }
   },
-  "warStarsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+  "warStarsAndPercentNeededToTakeTheLead": "{clan}がリードするには、あと{percent}%または星1個が必要です",
   "@warStarsAndPercentNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -916,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "対戦はまだ始まっていません",
+  "warWonByStars": "{clanName}が対戦に勝利しました！",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -925,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName}は対戦に敗北しました",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -933,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName}が破壊率で勝利しました！",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -941,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName}は破壊率で敗北しました",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -949,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "完全引き分け",
+  "warCanTieNeedsStars": "{clanName}は同点にできますが、星{stars}個が必要です",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -961,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName}は星数で追いつけません",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -973,9 +973,9 @@
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
   },
-  "warNoDataAvailableForThisWar": "No data available for this war",
-  "warCalculatorFast": "Fast calculator",
-  "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+  "warNoDataAvailableForThisWar": "この対戦の利用可能なデータはありません",
+  "warCalculatorFast": "簡易計算機",
+  "warCalculatorAnswer": "破壊率{percentNeeded}%を達成するには、合計{result}%が必要です。",
   "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
@@ -986,17 +986,17 @@
       }
     }
   },
-  "warCalculatorNeededOverall": "% Needed overall",
-  "warCalculatorCalculate": "Calculate",
-  "warAttacksTitle": "Attacks",
-  "warAttacksNone": "No attack yet",
+  "warCalculatorNeededOverall": "全体で必要な%",
+  "warCalculatorCalculate": "計算",
+  "warAttacksTitle": "攻撃",
+  "warAttacksNone": "まだ攻撃はありません",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "ベスト攻撃",
+  "warAttacksCount": "攻撃数",
+  "warAttacksMissed": "未消化攻撃",
+  "warAttacksNumber": "直近{number_war}回の対戦で{number_time}回攻撃しました。",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -1007,7 +1007,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "対戦あたり平均{stars}個の星を獲得しました。",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -1015,7 +1015,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "対戦あたり平均破壊率は{percent}%でした。",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1023,13 +1023,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "防衛",
+  "warDefensesNone": "まだ防衛はありません",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "ベスト防衛",
+  "warDefensesBestOutOf": "ベスト防衛（{number}件中）",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -1038,7 +1038,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "直近{number_war}回の対戦で{number_time}回防衛しました。",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -1049,7 +1049,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "防衛あたり平均{stars}個の星を取られました。",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -1057,7 +1057,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "防衛あたり平均破壊率は{percent}%でした。",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1065,24 +1065,24 @@
       }
     }
   },
-  "warStarsTitle": "Stars",
-  "warStarsAverage": "Average stars",
-  "warStarsNumber": "Number of stars",
-  "warStarsOne": "1 star",
-  "warStarsTwo": "2 stars",
-  "warStarsThree": "3 stars",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsTitle": "星",
+  "warStarsAverage": "平均星数",
+  "warStarsNumber": "星の数",
+  "warStarsOne": "星1個",
+  "warStarsTwo": "星2個",
+  "warStarsThree": "星3個",
+  "warStarsZero": "星0個",
+  "warStarsBestPerformance": "最高成績",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
-  "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Destruction rate",
+  "warDestructionTitle": "破壊",
+  "warDestructionAverage": "平均破壊率",
+  "warDestructionRate": "破壊率",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryWinsDescription": "あなたのクランは直近50回の対戦中{wins}回勝利しました（{percent}%）。",
   "@warHistoryWinsDescription": {
     "placeholders": {
       "wins": {
@@ -1093,7 +1093,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryLossesDescription": "あなたのクランは直近50回の対戦中{losses}回敗北しました（{percent}%）。",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -1104,7 +1104,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+  "warHistoryDrawsDescription": "あなたのクランは直近50回の対戦中{draws}回引き分けました（{percent}%）。",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -1115,7 +1115,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "あなたのクランは直近50回の対戦で平均{members}人が参加しています。",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -1123,7 +1123,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+  "warHistoryAverageWarStarsDescription": "あなたのクランは直近50回の対戦で平均{stars}個の星を獲得しました。これは総星数の{percent}に相当します。",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -1134,7 +1134,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "あなたのクランは直近50回の対戦で平均破壊率{percent}%でした。",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -1142,28 +1142,28 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "マップ位置",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "位置",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "順序",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "相手TH",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
-  "warOpponentEqualThLevel": "Equal TH",
-  "warOpponentSelectMembersThLevel": "Members TH Level",
-  "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersLastXwars": "Last {number} wars",
+  "warOpponentLowerTownhall": "低いTH",
+  "warOpponentUpperTownhall": "高いTH",
+  "warOpponentEqualThLevel": "同じTH",
+  "warOpponentSelectMembersThLevel": "メンバーのTHレベル",
+  "warOpponentSelectOpponentsThLevel": "相手のTHレベル",
+  "warFiltersLastXwars": "直近{number}回の対戦",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
     "placeholders": {
@@ -1172,37 +1172,37 @@
       }
     }
   },
-  "warFiltersFriendly": "Friendly",
+  "warFiltersFriendly": "フレンド対戦",
   "@warFiltersFriendly": {
     "description": "Friendly war"
   },
-  "warFiltersRandom": "Random",
+  "warFiltersRandom": "ランダム対戦",
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
+  "warVisibilityToggleTownHall": "以前のTHレベルの統計を非表示/表示",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Events",
+  "warEventsTitle": "イベント",
   "@warEventsTitle": {
     "description": "War events"
   },
-  "warEventsNewest": "Newest",
-  "warEventsOldest": "Oldest",
-  "warStatusReady": "Opted In",
+  "warEventsNewest": "新しい順",
+  "warEventsOldest": "古い順",
+  "warStatusReady": "参加希望",
   "@warStatusReady": {
     "description": "Opted In for war"
   },
-  "warStatusUnready": "Opted Out",
+  "warStatusUnready": "不参加",
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "未消化",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "未消化: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1211,19 +1211,19 @@
       }
     }
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "平均",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "平均 %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clan War League",
-  "cwlOngoing": "Ongoing CWL",
-  "cwlRounds": "Rounds",
-  "cwlRoundNumber": "Round {number}",
+  "cwlClanWarLeague": "クラン対戦リーグ",
+  "cwlOngoing": "進行中のCWL",
+  "cwlRounds": "ラウンド",
+  "cwlRoundNumber": "ラウンド {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1239,7 +1239,7 @@
       }
     }
   },
-  "cwlRank": "Your clan is currently ranked {rank}.",
+  "cwlRank": "あなたのクランは現在{rank}位です。",
   "@cwlRank": {
     "placeholders": {
       "rank": {
@@ -1247,7 +1247,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "あなたのクランは合計{stars}個の星を獲得しています。",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -1255,7 +1255,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "あなたのクランの合計破壊率は{percent}%です。",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1263,7 +1263,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "あなたのクランは可能な{totalAttacks}回中、合計{attacks}回攻撃しています。",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1274,20 +1274,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
-  "joinLeaveJoin": "Join",
-  "joinLeaveLeave": "Leave",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveTitle": "参加/脱退ログ（現在のシーズン）",
+  "joinLeaveJoin": "参加",
+  "joinLeaveLeave": "脱退",
+  "joinLeaveJoins": "参加",
+  "joinLeaveLeaves": "脱退",
+  "joinLeaveUniquePlayers": "ユニークプレイヤー",
+  "joinLeaveMovingPlayers": "移動したプレイヤー",
+  "joinLeaveMostMovingPlayers": "最も移動したプレイヤー",
+  "joinLeaveStillInClan": "まだクラン内",
+  "joinLeaveLeftForever": "戻っていない",
+  "joinLeaveRejoinedPlayers": "再参加したプレイヤー",
+  "joinLeaveAvgTimeJoinLeave": "平均参加/脱退時間",
+  "joinLeavePeakHour": "最もアクティブな時間",
+  "joinLeaveNumberDescription": "現在のシーズン（{date}）中に{number}件の脱退イベントが発生しました。",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1298,7 +1298,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "現在のシーズン（{date}）中に{number}件の参加イベントが発生しました。",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1309,7 +1309,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "現在のシーズン（{date}）中に{number}人のプレイヤーがクランを脱退して再参加しました。",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1321,7 +1321,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "現在のシーズン（{date}）中に{number}人のユニークプレイヤーがクランに参加/脱退しました。",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1333,7 +1333,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number}人のプレイヤーが参加し、まだクランにいます。",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1341,7 +1341,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number}人のプレイヤーが参加後に脱退し、再参加していません。",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1352,7 +1352,7 @@
   "@joinLeaveTitle": {
     "description": "Logs of players joining or leaving the clan."
   },
-  "joinLeaveLeftOnAt": "Left on {date} at {time}.",
+  "joinLeaveLeftOnAt": "{date} {time}に脱退しました。",
   "@joinLeaveLeftOnAt": {
     "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1364,7 +1364,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Joined on {date} at {time}.",
+  "joinLeaveJoinedOnAt": "{date} {time}に参加しました。",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1376,17 +1376,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
-  "raidsLast": "Last raids",
-  "raidsOngoing": "Ongoing raids",
-  "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "Raids completed",
-  "searchNoResult": "No result.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "raidsTitle": "レイド",
+  "raidsLast": "前回のレイド",
+  "raidsOngoing": "進行中のレイド",
+  "raidsDistrictsDestroyed": "破壊した地区",
+  "raidsCompleted": "完了したレイド",
+  "searchNoResult": "結果がありません。",
+  "maintenanceTitle": "メンテナンス",
+  "maintenanceDescription": "Clash of Clansは現在メンテナンス中のため、APIにアクセスできません。後でもう一度確認してください。",
+  "downloadTooltip": "CWLサマリーをダウンロード",
+  "downloadInProgress": "ファイルをダウンロード中... 数秒かかる場合があります...",
+  "downloadSuccess": "ファイルを{path}に保存しました",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1394,125 +1394,125 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
-  "dashboardTitle": "Dashboard",
-  "toolsTitle": "Tools",
-  "navigationTeam": "Teams",
-  "navigationStatistics": "Statistics",
-  "versionDevice": "Version & Device",
+  "downloadError": "ファイルのダウンロードに失敗しました",
+  "dashboardTitle": "ダッシュボード",
+  "toolsTitle": "ツール",
+  "navigationTeam": "チーム",
+  "navigationStatistics": "統計",
+  "versionDevice": "バージョンと端末",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenses",
-  "settingsLicensesSubtitle": "View licenses for third-party libraries",
-  "settingsPrivacyPolicy": "Privacy Policy",
-  "settingsPrivacyPolicySubtitle": "How we handle your data",
-  "betaFeature": "Beta Feature",
+  "settingsLicenses": "オープンソースライセンス",
+  "settingsLicensesSubtitle": "サードパーティライブラリのライセンスを表示",
+  "settingsPrivacyPolicy": "プライバシーポリシー",
+  "settingsPrivacyPolicySubtitle": "データの取り扱いについて",
+  "betaFeature": "ベータ機能",
   "betaLabel": "BETA",
-  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  "settingsLanguage": "Language",
-  "settingsSelectLanguage": "Select a language",
-  "settingsToggleTheme": "Toggle Theme",
+  "betaDescription": "この機能は現在ベータ版のため、バグや未完成の部分がある可能性があります。改善に積極的に取り組んでおり、フィードバックを歓迎します。Discordサーバーでアイデアや問題を共有し、より良いものにする手助けをしてください。",
+  "settingsLanguage": "言語",
+  "settingsSelectLanguage": "言語を選択",
+  "settingsToggleTheme": "テーマを切り替え",
   "faqTitle": "FAQ",
-  "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-  "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-  "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
-  "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
-  "faqSupportUsOnPatreon": "Support us on Patreon",
-  "faqRateTheApp": "Rate the app in the store",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
-  "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
-  "translationHelpUsTranslate": "Help us translate",
-  "translationSuggestFeatures": "Suggest features",
-  "translationThankYou": "Thank you!",
-  "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-  "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-  "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators",
-  "filtersTimeFilters": "Time Filters",
+  "faqSubtitle": "よくある質問",
+  "faqIsThisFromSupercell": "このアプリはSupercell公式ですか？",
+  "faqFanContentPolicy": "この素材は非公式であり、Supercellによる承認を受けていません。詳細はSupercellのファンコンテンツポリシーをご覧ください: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "データが不正確または欠落することがあるのはなぜですか？",
+  "faqClanNotTracked": "クランが追跡されていません",
+  "faqClanNotTrackedAnswer": "ClashKingは、クランが追跡されている場合にのみこの情報を取得できます。クランが追跡されていない場合は、ClashKing BotをDiscordサーバーに招待し、/addclan コマンドを使用してください。この機能をアプリでも利用できるように現在作業中です。",
+  "faqTrackingDown": "追跡の停止",
+  "faqTrackingDownAnswer": "追跡が一定期間動作しなくなることがあります。そのため、データに欠落が生じる場合があります。改善に取り組んでいます。",
+  "faqApiLimitation": "Clash of Clans APIの制限",
+  "faqApiLimitationAnswer": "一部のデータはClash of ClansとそのAPIから提供されており、いくつかの制限があります。レジェンド追跡では、トロフィーの増減が1回の攻撃のようにまとめて表示されることがあります。建物レベルの情報がないのもこのためです。",
+  "faqSupportWork": "活動を支援するにはどうすればよいですか？",
+  "faqSupportWorkAnswer": "私たちを支援する方法はいくつかあります:",
+  "faqUseCodeClashKing": "コード「ClashKing」を使用",
+  "faqSupportUsOnPatreon": "Patreonで支援",
+  "faqRateTheApp": "ストアでアプリを評価",
+  "faqWhatCanBotDo": "ClashKing Discordボットでは何ができますか？",
+  "faqWhatCanBotDoAnswer": "ClashKing Discordボットは、包括的な追跡ツール、自動通知、このアプリとのシームレスな連携により、Discordから直接クラン管理を支援します。つながりを保ち、整理したいクランリーダーとメンバー向けに設計されています:",
+  "faqInviteBotToServer": "ボットをサーバーに招待",
+  "faqBotFeatureTracking": "プレイヤーとクランの追跡",
+  "faqBotFeatureTrackingDesc": "複数のクランやプレイヤーを追加し、リアルタイム更新で監視します",
+  "faqBotFeatureWars": "対戦管理",
+  "faqBotFeatureWarsDesc": "対戦成績を追跡し、攻撃を分析し、対戦通知を受け取ります",
+  "faqBotFeatureNotifications": "スマート通知",
+  "faqBotFeatureNotificationsDesc": "寄付、対戦攻撃、重要なクランイベントのアラートを受け取ります",
+  "faqBotFeatureCommands": "強力なコマンド",
+  "faqBotFeatureCommandsDesc": "スラッシュコマンドでプレイヤー統計、対戦情報などに素早くアクセスします",
+  "faqNeedHelp": "ヘルプが必要、または提案したいことがあります。どう連絡すればよいですか？",
+  "faqNeedHelpAnswer": "ヘルプやフィードバックはDiscordサーバーに参加するか、devs@clashk.ing までメールしてください。英語またはフランス語のみでご連絡ください。",
+  "faqSendEmail": "メールを送信",
+  "faqJoinDiscord": "Discordサーバーに参加",
+  "faqCannotOpenMailClient": "何らかの理由でメールクライアントを開けません。メールアドレスをコピーしました。メールを書いて宛先欄に貼り付けてください。",
+  "faqTroubleshooting": "トラブルシューティング",
+  "faqTroubleshootingDataTitle": "データが同期されないのはなぜですか？",
+  "faqTroubleshootingDataDescription": "プレイヤーまたはクランデータが古いようです",
+  "faqTroubleshootingDataSolution1": "ページを下に引いて更新してください",
+  "faqTroubleshootingDataSolution2": "クランが追跡されているか確認してください（上記参照）",
+  "faqTroubleshootingDataSolution3": "数分待ってからもう一度お試しください: APIの更新には時間がかかる場合があります",
+  "faqTroubleshootingCrashTitle": "アプリがクラッシュするのはなぜですか？",
+  "faqTroubleshootingCrashDescription": "アプリが突然閉じる、またはフリーズします",
+  "faqTroubleshootingCrashSolution1": "アプリを閉じて再起動してください",
+  "faqTroubleshootingCrashSolution2": "アプリを最新バージョンに更新してください",
+  "faqTroubleshootingCrashSolution3": "アプリのキャッシュとデータをクリアする（Android）か、アプリを再インストールしてください",
+  "faqTroubleshootingCrashSolution4": "端末の空き容量を増やしてください",
+  "faqContactSupport": "問題が続く場合はサポートに連絡してください（最後のセクション参照）",
+  "faqTroubleshootingAccountTitle": "アカウントを認証できないのはなぜですか？",
+  "faqTroubleshootingAccountDescription": "Clash of Clansアカウントの連携に関する問題",
+  "faqTroubleshootingAccountSolution1": "#で始まる正しいプレイヤータグを使用していることを確認してください",
+  "faqTroubleshootingAccountSolution2": "アカウントが既に連携済みに見える場合は、Clash of Clans設定のAPIトークンを使用してください",
+  "faqTroubleshootingSolutions": "解決方法:",
+  "faqWhatIsClashKingProject": "ClashKingプロジェクトとは？",
+  "faqWhatIsClashKingProjectAnswer": "ClashKingは、情熱あるプレイヤーがコミュニティのために作った、オープンソースのClash of Clans統計・クラン管理プロジェクトです。私たちは本業のかたわら、ゲームへの愛を原動力にサイドプロジェクトとして開発しています。モバイルアプリ、Discordボット、無料APIを提供し、それらが連携して最高のClash of Clans体験を届けます。プロジェクトはユーザーの寄付とSupercellクリエイターコードの利用だけで運営されており、広告もプレミアム機能もありません！",
+  "faqViewOnGitHub": "GitHubで見る",
+  "faqFeaturesGuide": "ClashKingアプリで何ができますか？",
+  "faqFeaturesGuideDescription": "Clash of Clans体験を次のレベルへ！ClashKingアプリは、すべての統計とクランデータへ美しく高速にアクセスできます。Discordを使っていないプレイヤーや、洗練されたモバイル体験を好む方に最適です:",
+  "faqAppDevelopmentNotice": "アプリをさらに良くするため、新機能を積極的に開発しています。あなたのフィードバックが改善に役立ちます！",
+  "faqFeaturesPlayerTitle": "プレイヤー統計",
+  "faqFeaturesPlayerDescription": "進行状況、実績、レジェンドリーグの成績を追跡",
+  "faqFeaturesClanTitle": "クラン管理",
+  "faqFeaturesClanDescription": "クランメンバー、寄付、クラン全体の状態を監視",
+  "faqFeaturesWarTitle": "対戦追跡",
+  "faqFeaturesWarDescription": "対戦成績、攻撃戦略、勝率を分析",
+  "faqFeaturesLegendsTitle": "データが不正確ですか？",
+  "faqFeaturesLegendsDescription": "毎日のトロフィー追跡とシーズン終了時の統計",
+  "faqFeaturesCwlTitle": "CWL分析",
+  "faqFeaturesCwlDescription": "クラン対戦リーグの成績とメンバー貢献度",
+  "faqSearchHint": "FAQを検索...",
+  "faqSectionGettingStarted": "はじめに・概要",
+  "faqSectionSupportAndContact": "サポート・お問い合わせ",
+  "faqTranslationIssue": "翻訳が不足または間違っていますか？",
+  "faqTranslationIssueAnswer": "翻訳はあなたのようなアプリユーザーによって行われています！私たち開発者はフランス語と英語の翻訳のみ提供しています。翻訳の不足や誤りを見つけたら、改善に協力できます。協力したい場合は、Discordまたはメールで気軽にご連絡ください。翻訳者向けの専用Discordチャンネルがあり、質問したり助けを得たりできます。",
+  "faqWaysToSupport": "支援する方法:",
+  "translationHelpUsTranslate": "翻訳に協力する",
+  "translationSuggestFeatures": "機能を提案する",
+  "translationThankYou": "ありがとうございます！",
+  "translationThankYouContent": "このアプリを世界中のより多くの人に届けるために協力してくれる素晴らしい翻訳者の皆さんに、心から感謝します！",
+  "translationHelpTranslateContent": "Crowdinでアプリの翻訳に協力できます。あなたの言語がCrowdinにない場合は、Discordサーバーでリクエストしてください。ご協力本当にありがとうございます！",
+  "translationHelpTranslateButton": "Crowdinで翻訳を手伝う",
+  "translationCurrentTranslators": "現在の翻訳者",
+  "filtersTimeFilters": "時間フィルター",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "対戦設定",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "成績",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "詳細",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "有効なフィルターはありません",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "直近{count}件の対戦を表示中（デフォルト）",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1522,115 +1522,115 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "クイックフィルター",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "直近30日",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "3つ星のみ",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "初回攻撃",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "シーズン",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "日付範囲",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "対戦タイプ",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "タウンホール",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "攻撃側TH",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "防衛側TH",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "同じタウンホールのみ",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "破壊率",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "オプション",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "初回攻撃のみ",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "結果数の上限",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "最小順位",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "最大順位",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "開始日",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "終了日",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersYear": "Year",
+  "filtersYear": "年",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "月",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "年を選択",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "すべての対戦",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "THレベル別の攻撃成績",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "THレベル別の防衛成績",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "行: 自分のTH | 列: 相手のTH",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsGood": "Good",
+  "chartsGood": "良い",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "優秀",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
@@ -1638,143 +1638,143 @@
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "成績インサイト",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "星の統計に基づいて、成績パターンを強調するフィルター候補を表示します",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
-  "generalExport": "Export",
+  "generalExport": "エクスポート",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "対戦統計をエクスポート",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "エクスポート成功！",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "全体統計、詳細な攻撃、TH分析など複数シートを含むExcelファイルとして対戦統計をダウンロードします。",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "エクスポートを生成中...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "クラン対戦統計のエクスポート機能は近日公開予定です",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "フィルターは適用されていません",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "プレイヤーデータの読み込みに失敗しました",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "deepLinkInvalidPlayer": "Invalid player link.",
+  "deepLinkInvalidPlayer": "無効なプレイヤーリンクです。",
   "@deepLinkInvalidPlayer": {
     "description": "Shown when a player deep link does not include a valid tag"
   },
-  "deepLinkInvalidClan": "Invalid clan link.",
+  "deepLinkInvalidClan": "無効なクランリンクです。",
   "@deepLinkInvalidClan": {
     "description": "Shown when a clan deep link does not include a valid tag"
   },
-  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "deepLinkFailedToOpenPlayer": "プレイヤーを開けませんでした。",
   "@deepLinkFailedToOpenPlayer": {
     "description": "Shown when a player deep link target could not be loaded"
   },
-  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "deepLinkFailedToOpenClan": "クランを開けませんでした。",
   "@deepLinkFailedToOpenClan": {
     "description": "Shown when a clan deep link target could not be loaded"
   },
-  "deepLinkUnknown": "Unknown deep link.",
+  "deepLinkUnknown": "不明なディープリンクです。",
   "@deepLinkUnknown": {
     "description": "Shown when the app receives a deep link it does not understand"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "攻撃の詳細",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "攻撃順",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "攻撃者",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "防衛者",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "名前",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "状態",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "メンバーごとの攻撃数",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "対戦開始",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "対戦終了",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "クランレベル",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "合計星数",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "破壊率 %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "対戦情報",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "対戦結果",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "プレイヤー",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "失敗した攻撃（0〜1星）",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "2つ星以上を獲得できなかった攻撃を表示します",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "逃した完全攻撃",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "2つ星だった攻撃を表示します — 完全攻撃の可能性があったものです",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "TH{thLevel}相手の星が少ない",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1784,7 +1784,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "TH{thLevel}相手に星数が低かった攻撃を表示します",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1794,7 +1794,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "TH{thLevel}に弱い",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1804,7 +1804,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "TH{thLevel}の攻撃者があなたに対して高い星数を取る場合を表示します",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1814,91 +1814,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "CWLでの低成績",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "通常対戦より平均星数が低いCWL攻撃を表示します",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "ランダム対戦での低成績",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "CWLより平均星数が低いランダム対戦攻撃を表示します",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "初回攻撃分析",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "未攻撃の基地に対する成績のみを分析します",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "最近の成績（30日）",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "現在の傾向を把握するために最近の成績を表示します",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "重要度の高い攻撃",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "対戦上位5ポジションからの攻撃を表示します",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": " cleanup攻撃",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "対戦下位ポジションからの攻撃を表示します",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "改善が必要",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "高い3つ星率",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "高い破壊率",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "安定した成績",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "3つ星の安定性",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "全体的な星成績",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "CWLのみ",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "ランダム対戦",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "フレンド対戦",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "{count}つ星のみ",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1907,15 +1907,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "完全攻撃",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "失敗した攻撃",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "TH{level}のみ",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1924,46 +1924,46 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "先週",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "先月",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "自分のプリセット",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "カスタムフィルター",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "最近のフィルター",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
   "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalSuccess": "成功",
+  "generalFailed": "失敗",
+  "generalMinimum": "最小値",
+  "generalMaximum": "最大",
+  "generalHigh": "高",
+  "generalLow": "低",
+  "generalPoor": "悪い",
+  "generalOpen": "開く",
+  "generalClosed": "閉じる",
+  "generalAvailable": "利用可能",
+  "authErrorUserCancelledDiscordLogin": "ユーザーがDiscordログインをキャンセルしました。",
+  "authErrorDiscordLoginFailed": "Discordログインに失敗しました。もう一度お試しください。",
+  "authErrorEmailLoginFailed": "メールログインに失敗しました。認証情報を確認してください。",
+  "authErrorEmailNotVerified": "メールアドレスが確認されていません。メールを確認し、認証コードを入力してください。",
+  "authErrorEmailVerificationFailed": "メール認証に失敗しました。トークンが無効または期限切れの可能性があります。",
+  "authErrorDiscordLinkFailed": "Discordアカウントの連携に失敗しました。すでに別のアカウントに連携されている可能性があります。",
+  "authErrorEmailLinkFailed": "メールアカウントの連携に失敗しました。メールがすでに使用されている可能性があります。",
+  "authErrorUserNotAuthenticated": "ユーザーが認証されていません。再度ログインしてください。",
+  "apiErrorInvalidJsonResponse": "問題が発生しました。もう一度お試しください。",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1973,7 +1973,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "問題が発生しました。入力内容を確認してください。",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1987,7 +1987,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "認証されていません。再度ログインしてください。",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1997,7 +1997,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "この操作を実行する権限がありません。",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -2007,7 +2007,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "探しているものが見つかりませんでした。",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -2017,7 +2017,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "リクエストが多すぎます。後でもう一度お試しください。",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -2027,7 +2027,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "サーバーは一時的に利用できません。しばらくしてからお試しください。",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -2041,7 +2041,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "予期しないエラーが発生しました。もう一度お試しください。",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -2055,10 +2055,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "インターネット接続がありません。ネットワークを確認して再試行してください。",
+  "apiErrorTimeout": "リクエストがタイムアウトしました。もう一度お試しください。",
+  "apiErrorInvalidFormat": "応答形式が無効です。もう一度お試しください。",
+  "apiErrorOperationFailed": "リクエストを完了できませんでした。もう一度お試しください。",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -2068,7 +2068,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "オフラインのようです。接続を確認して再試行してください。",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -2078,7 +2078,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "リクエストに時間がかかりすぎました。もう一度お試しください。",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2088,7 +2088,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "データ処理中に問題が発生しました。もう一度お試しください。",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2098,7 +2098,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "アプリ設定を読み込めませんでした（エラー {statusCode}）。もう一度お試しください。",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2108,7 +2108,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "サーバーから設定を読み込む際にエラーが発生しました",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
@@ -2118,22 +2118,22 @@
       }
     }
   },
-  "gameItemHousingSpace": "Housing Space",
-  "gameItemAttackSpeed": "Attack Speed",
-  "gameItemAttackRange": "Attack Range",
-  "gameItemMovementSpeed": "Movement Speed",
-  "gameItemUpgradeResource": "Upgrade Resource",
-  "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero",
+  "gameItemHousingSpace": "収容スペース",
+  "gameItemAttackSpeed": "攻撃速度",
+  "gameItemAttackRange": "攻撃範囲",
+  "gameItemMovementSpeed": "移動速度",
+  "gameItemUpgradeResource": "アップグレード資源",
+  "gameItemRarity": "レア度",
+  "gameItemHero": "ヒーロー",
   "gameItemDps": "DPS",
   "gameItemHitpoints": "HP",
-  "gameItemHealOnActivation": "Heal",
-  "gameItemTargets": "Targets",
-  "gameItemTargetsGround": "Ground",
-  "gameItemTargetsAir": "Air",
-  "gameItemFlying": "Flying",
-  "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time",
+  "gameItemHealOnActivation": "回復",
+  "gameItemTargets": "対象",
+  "gameItemTargetsGround": "地上",
+  "gameItemTargetsAir": "空中",
+  "gameItemFlying": "飛行",
+  "gameItemUpgradeCost": "アップグレード費用",
+  "gameItemUpgradeTime": "アップグレード時間",
   "generalExpand": "拡大する",
   "generalCollapse": "崩壊",
   "generalBookmark": "ブックマーク",
@@ -2431,67 +2431,67 @@
   "warStatsFilterFreshAttacksDescription": "各拠点の最初の攻撃のみを表示",
   "warStatsFilterResultLimit": "結果の制限",
   "generalResultsCount": "{count}の結果",
-  "notifEventsDescription": "Clan Games, CWL, Raid Weekend, and season events.",
-  "notifAnnouncementsDescription": "In-app banners and future push alerts for ClashKing updates.",
-  "notifUpgradeFinishesDescription": "Troops, heroes, pets, spells, equipment, and buildings.",
-  "notifSupportReminderDescription": "Monthly reminder to support ClashKing.",
-  "notifDevicePushSetup": "Device push setup",
-  "notifAccountScope": "Account scope",
-  "notifTestNotification": "Test notification",
-  "settingsAppIcon": "App Icon",
-  "settingsChanging": "Changing...",
-  "settingsAddWarWidget": "Add War Widget",
-  "settingsWarWidgetLinkClanFirst": "Link an account in a clan first",
-  "settingsWarWidgetClanCount": "{count} clan(s) available",
+  "notifEventsDescription": "クランゲーム、CWL、レイド週末、シーズンイベント。",
+  "notifAnnouncementsDescription": "アプリ内バナーとClashKing更新の今後のプッシュ通知。",
+  "notifUpgradeFinishesDescription": "ユニット、ヒーロー、ペット、呪文、装備、建物。",
+  "notifSupportReminderDescription": "ClashKingを支援する月次リマインダー。",
+  "notifDevicePushSetup": "端末プッシュ設定",
+  "notifAccountScope": "アカウント範囲",
+  "notifTestNotification": "テスト通知",
+  "settingsAppIcon": "アプリアイコン",
+  "settingsChanging": "変更中...",
+  "settingsAddWarWidget": "対戦ウィジェットを追加",
+  "settingsWarWidgetLinkClanFirst": "まずクラン内のアカウントを連携してください",
+  "settingsWarWidgetClanCount": "{count}個のクランが利用可能",
   "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Bot-linked accounts and Discord data",
-  "settingsDiscordSyncSubtitle": "Sync bot-linked accounts and Discord data",
-  "settingsConnected": "Connected",
-  "settingsClashKingAccount": "ClashKing account",
-  "settingsEmailConnectedSubtitle": "Email login is connected",
-  "settingsEmailRecoverySubtitle": "Add email login for account recovery",
-  "settingsFeatureRequestsTitle": "Feature Requests",
-  "playerOpenInGame": "Open in game",
-  "playerBookmarkRemove": "Remove player bookmark",
-  "playerBookmarkAdd": "Bookmark player",
-  "playerBestTrophies": "Best trophies",
-  "clanLoadFailed": "Failed to load clan.",
-  "gameItemLevels": "Levels",
-  "resourceDarkElixir": "Dark Elixir",
-  "resourceBuilderElixir": "Builder Elixir",
-  "resourceBuilderGold": "Builder Gold",
+  "settingsDiscordConnectedSubtitle": "ボット連携アカウントとDiscordデータ",
+  "settingsDiscordSyncSubtitle": "ボット連携アカウントとDiscordデータを同期",
+  "settingsConnected": "接続済み",
+  "settingsClashKingAccount": "ClashKingアカウント",
+  "settingsEmailConnectedSubtitle": "メールログインが接続されています",
+  "settingsEmailRecoverySubtitle": "アカウント復旧用にメールログインを追加",
+  "settingsFeatureRequestsTitle": "機能リクエスト",
+  "playerOpenInGame": "ゲーム内で開く",
+  "playerBookmarkRemove": "プレイヤーのブックマークを削除",
+  "playerBookmarkAdd": "プレイヤーをブックマーク",
+  "playerBestTrophies": "最高トロフィー",
+  "clanLoadFailed": "クランの読み込みに失敗しました。",
+  "gameItemLevels": "レベル",
+  "resourceDarkElixir": "ダークエリクサー",
+  "resourceBuilderElixir": "大工エリクサー",
+  "resourceBuilderGold": "大工ゴールド",
   "resourceElixir": "Elixir",
-  "resourceGold": "Gold",
-  "resourceGlowyOre": "Glowy Ore",
-  "resourceStarryOre": "Starry Ore",
-  "resourceShinyOre": "Shiny Ore",
-  "resourceGeneric": "Resource",
-  "seasonStatsGoldGrabbed": "Gold Grabbed",
-  "seasonStatsActivity": "Activity",
-  "seasonStatsAttackWins": "Attack Wins",
-  "seasonStatsTrophies": "Season Trophies",
-  "todoSearchAccountsHint": "Search accounts",
-  "generalClearSearch": "Clear search",
-  "clanCapitalAvgRewards": "Avg rewards",
-  "clanCapitalAvgDistrictsPerWeek": "Avg districts/week",
-  "clanCapitalTopAttackers": "Top attackers",
-  "clanCapitalPlayersTracked": "{count} players tracked",
-  "clanCapitalDefenseOverTime": "Defense over time",
-  "clanCapitalDistrictsTracked": "{count} districts tracked",
-  "clanCapitalSelectedRaid": "Selected raid",
-  "generalSummary": "Summary",
-  "generalBreakdown": "Breakdown",
-  "clanPointsTitle": "Clan points",
-  "clanBuilderBasePoints": "Builder base points",
-  "clanType": "Clan type",
-  "clanRequiredTownHall": "Required Town Hall",
-  "clanRequiredTownHallOnly": "{level}+ only",
-  "clanCapitalPoints": "Capital points",
-  "todoAllAccounts": "All accounts",
-  "todoCombinedAcrossAccounts": "Combined to-do across your accounts",
-  "todoPreviewAccount": "Preview account",
-  "todoLastActiveUnavailable": "Last active unavailable",
-  "todoActiveRelative": "Active {time}",
+  "resourceGold": "ゴールド",
+  "resourceGlowyOre": "グロー鉱石",
+  "resourceStarryOre": "スター鉱石",
+  "resourceShinyOre": "シャイニー鉱石",
+  "resourceGeneric": "資源",
+  "seasonStatsGoldGrabbed": "奪ったゴールド",
+  "seasonStatsActivity": "アクティビティ",
+  "seasonStatsAttackWins": "攻撃勝利",
+  "seasonStatsTrophies": "シーズントロフィー",
+  "todoSearchAccountsHint": "アカウントを検索",
+  "generalClearSearch": "検索をクリア",
+  "clanCapitalAvgRewards": "平均報酬",
+  "clanCapitalAvgDistrictsPerWeek": "平均地区/週",
+  "clanCapitalTopAttackers": "上位攻撃者",
+  "clanCapitalPlayersTracked": "{count}人のプレイヤーを追跡中",
+  "clanCapitalDefenseOverTime": "時間別防衛",
+  "clanCapitalDistrictsTracked": "{count}地区を追跡中",
+  "clanCapitalSelectedRaid": "選択中のレイド",
+  "generalSummary": "概要",
+  "generalBreakdown": "内訳",
+  "clanPointsTitle": "クランポイント",
+  "clanBuilderBasePoints": "大工の拠点ポイント",
+  "clanType": "クランタイプ",
+  "clanRequiredTownHall": "必要タウンホール",
+  "clanRequiredTownHallOnly": "{level}+のみ",
+  "clanCapitalPoints": "クランの都ポイント",
+  "todoAllAccounts": "すべてのアカウント",
+  "todoCombinedAcrossAccounts": "あなたのアカウント全体の統合To-do",
+  "todoPreviewAccount": "プレビューアカウント",
+  "todoLastActiveUnavailable": "最終アクティブは利用できません",
+  "todoActiveRelative": "{time}アクティブ",
   "@todoActiveRelative": {
     "placeholders": {
       "time": {
@@ -2499,8 +2499,8 @@
       }
     }
   },
-  "todoCompleteLower": "complete",
-  "todoPointsLeftShort": "{points} points left",
+  "todoCompleteLower": "完了",
+  "todoPointsLeftShort": "残り{points}ポイント",
   "@todoPointsLeftShort": {
     "placeholders": {
       "points": {
@@ -2508,7 +2508,7 @@
       }
     }
   },
-  "todoItemsLeftShort": "{count} left",
+  "todoItemsLeftShort": "残り{count}",
   "@todoItemsLeftShort": {
     "placeholders": {
       "count": {
@@ -2516,8 +2516,8 @@
       }
     }
   },
-  "todoAllCaughtUpForNow": "All caught up for now",
-  "todoEventEndsIn": "Ends in {duration}",
+  "todoAllCaughtUpForNow": "今のところすべて完了",
+  "todoEventEndsIn": "{duration}後に終了",
   "@todoEventEndsIn": {
     "placeholders": {
       "duration": {
@@ -2525,7 +2525,7 @@
       }
     }
   },
-  "todoEventStartsIn": "Starts in {duration}",
+  "todoEventStartsIn": "{duration}後に開始",
   "@todoEventStartsIn": {
     "placeholders": {
       "duration": {
@@ -2533,38 +2533,38 @@
       }
     }
   },
-  "todoRemainingUpgradeTooltip": "Tap for remaining upgrade cost and time",
+  "todoRemainingUpgradeTooltip": "タップして残りのアップグレード費用と時間を表示",
   "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
-  "sideRankingsTitle": "Rankings",
-  "sideRankingsSubtitle": "Official leaderboards plus ClashKing endpoints.",
-  "sideRankingsLoadError": "Could not load official rankings.",
-  "sideRankingsEmptyTitle": "No rankings returned",
-  "sideRankingsEmptyBody": "Try another leaderboard or location.",
-  "sideRankingsMockups": "ClashKing mockups",
-  "sideStatsTitle": "Stats",
-  "sideStatsSubtitle": "Leaderboard stats from official Clash API surfaces.",
-  "sideStatsLoadError": "Could not load leaderboard stats.",
-  "sideTopScore": "Top score",
-  "sideTop200Avg": "Top 200 avg",
-  "sideBasesArmiesTitle": "Bases & Armies",
-  "sideBasesArmiesSubtitle": "Discord-saved layouts and army links.",
-  "sideBotSyncTarget": "Bot sync target",
-  "sideBotSyncTargetBody": "The bot already saves bases and armies to the Discord profile. This page is ready for that synced payload.",
-  "sideSavedBases": "Saved bases",
-  "sideWarBaseSlots": "War base slots",
-  "sideWarBaseSlotsBody": "Town hall, base type, link, and last updated.",
-  "sideLegendBaseSlots": "Legend base slots",
-  "sideLegendBaseSlotsBody": "Quick copy plus account association.",
-  "sideSavedArmies": "Saved armies",
-  "sideArmyLinks": "Army links",
-  "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
-  "sideGameAssetsTitle": "Game Assets",
-  "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
-  "sideNoLinkedPlayersTitle": "No linked players loaded",
-  "sideNoLinkedPlayersBody": "Add or refresh linked accounts to prefill league data.",
-  "sideReadyNow": "Ready now",
-  "sideDays": "{count} days",
+  "announcementAnimeFurySubtitle": "タップして2026年6月アップデートを見る",
+  "sideRankingsTitle": "ランキング",
+  "sideRankingsSubtitle": "公式リーダーボードとClashKingエンドポイント。",
+  "sideRankingsLoadError": "公式ランキングを読み込めませんでした。",
+  "sideRankingsEmptyTitle": "ランキングが返されませんでした",
+  "sideRankingsEmptyBody": "別のリーダーボードまたは場所を試してください。",
+  "sideRankingsMockups": "ClashKingモックアップ",
+  "sideStatsTitle": "統計",
+  "sideStatsSubtitle": "公式Clash API面からのリーダーボード統計。",
+  "sideStatsLoadError": "リーダーボード統計を読み込めませんでした。",
+  "sideTopScore": "最高スコア",
+  "sideTop200Avg": "Top 200平均",
+  "sideBasesArmiesTitle": "基地と編成",
+  "sideBasesArmiesSubtitle": "Discordに保存されたレイアウトと編成リンク。",
+  "sideBotSyncTarget": "ボット同期先",
+  "sideBotSyncTargetBody": "ボットはすでに基地と編成をDiscordプロフィールに保存しています。このページはその同期データに対応する準備ができています。",
+  "sideSavedBases": "保存済み基地",
+  "sideWarBaseSlots": "対戦基地スロット",
+  "sideWarBaseSlotsBody": "タウンホール、基地タイプ、リンク、最終更新。",
+  "sideLegendBaseSlots": "レジェンド基地スロット",
+  "sideLegendBaseSlotsBody": "クイックコピーとアカウント紐付け。",
+  "sideSavedArmies": "保存済み編成",
+  "sideArmyLinks": "編成リンク",
+  "sideArmyLinksBody": "構成、呪文、突破兵器、メモ、共有リンク。",
+  "sideGameAssetsTitle": "ゲーム素材",
+  "sideGameAssetsSubtitle": "フォルダーごとに分類されたホスト済みClashKing素材。",
+  "sideNoLinkedPlayersTitle": "連携済みプレイヤーが読み込まれていません",
+  "sideNoLinkedPlayersBody": "リーグデータを事前入力するには、連携済みアカウントを追加または更新してください。",
+  "sideReadyNow": "今すぐ準備完了",
+  "sideDays": "{count}日",
   "@sideDays": {
     "placeholders": {
       "count": {
@@ -2572,7 +2572,7 @@
       }
     }
   },
-  "sideOreLeft": "{shiny} shiny, {glowy} glowy, {starry} starry left",
+  "sideOreLeft": "残り シャイニー{shiny}、グロー{glowy}、スター{starry}",
   "@sideOreLeft": {
     "placeholders": {
       "shiny": {
@@ -2586,14 +2586,14 @@
       }
     }
   },
-  "sideShinyOre": "Shiny ore",
-  "sideGlowyOre": "Glowy ore",
-  "sideStarryOre": "Starry ore",
-  "sideDailyBonusAdjustment": "Daily bonus adjustment",
-  "sideExtraShiny": "Extra shiny",
-  "sideExtraGlowy": "Extra glowy",
-  "sideExtraStarry": "Extra starry",
-  "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
+  "sideShinyOre": "シャイニー鉱石",
+  "sideGlowyOre": "グロー鉱石",
+  "sideStarryOre": "スター鉱石",
+  "sideDailyBonusAdjustment": "デイリーボーナス調整",
+  "sideExtraShiny": "追加シャイニー",
+  "sideExtraGlowy": "追加グロー",
+  "sideExtraStarry": "追加スター",
+  "sideZapQuakeTitle": "ライトニング{zaps}個 + アースクエイク1個",
   "@sideZapQuakeTitle": {
     "placeholders": {
       "zaps": {
@@ -2601,7 +2601,7 @@
       }
     }
   },
-  "sideZapQuakeSubtitle": "{quakeDamage} quake damage, {lightningDamage} per lightning",
+  "sideZapQuakeSubtitle": "アースクエイクダメージ {quakeDamage}、ライトニング1個あたり {lightningDamage}",
   "@sideZapQuakeSubtitle": {
     "placeholders": {
       "quakeDamage": {
@@ -2612,11 +2612,11 @@
       }
     }
   },
-  "sideBuildingHp": "Building HP",
-  "sideLightningLevel": "Lightning level",
-  "sideEarthquakeLevel": "Earthquake level",
-  "sideWithoutEarthquake": "Without earthquake",
-  "sideLightningCount": "{count} lightning",
+  "sideBuildingHp": "建物HP",
+  "sideLightningLevel": "ライトニングレベル",
+  "sideEarthquakeLevel": "アースクエイクレベル",
+  "sideWithoutEarthquake": "アースクエイクなし",
+  "sideLightningCount": "ライトニング{count}個",
   "@sideLightningCount": {
     "placeholders": {
       "count": {
@@ -2624,9 +2624,9 @@
       }
     }
   },
-  "sideFireballQuakeTitle": "Fireball + 1 quake",
-  "sideAddSupportDamage": "Add support damage",
-  "sideFireballQuakeSubtitle": "{fireballDamage} fireball damage, {hpLeft} HP left after quake",
+  "sideFireballQuakeTitle": "ファイアボール + アースクエイク1個",
+  "sideAddSupportDamage": "サポートダメージを追加",
+  "sideFireballQuakeSubtitle": "ファイアボールダメージ {fireballDamage}、アースクエイク後の残りHP {hpLeft}",
   "@sideFireballQuakeSubtitle": {
     "placeholders": {
       "fireballDamage": {
@@ -2637,9 +2637,9 @@
       }
     }
   },
-  "sideFireballLevel": "Fireball level",
-  "sideQuakePressure": "Quake pressure",
-  "sideQuakeSpellCount": "{count} quake spell(s)",
+  "sideFireballLevel": "ファイアボールレベル",
+  "sideQuakePressure": "アースクエイク圧力",
+  "sideQuakeSpellCount": "アースクエイク呪文 {count}個",
   "@sideQuakeSpellCount": {
     "placeholders": {
       "count": {
@@ -2647,14 +2647,14 @@
       }
     }
   },
-  "sideLocation": "Location",
-  "sideFilter": "Filter",
-  "sideRefresh": "Refresh",
-  "sideOfficialClashLeaderboard": "Official Clash leaderboard",
-  "sideAllTownHallsShort": "All TH",
-  "sideOwned": "Owned",
-  "sideTarget": "Target",
-  "sideDailyValue": "daily {value}",
+  "sideLocation": "場所",
+  "sideFilter": "フィルター",
+  "sideRefresh": "更新",
+  "sideOfficialClashLeaderboard": "公式Clashリーダーボード",
+  "sideAllTownHallsShort": "すべてのTH",
+  "sideOwned": "所有済み",
+  "sideTarget": "目標",
+  "sideDailyValue": "毎日 {value}",
   "@sideDailyValue": {
     "placeholders": {
       "value": {
@@ -2662,9 +2662,9 @@
       }
     }
   },
-  "sideDecrease": "Decrease",
-  "sideIncrease": "Increase",
-  "sideLevel": "Level {level}",
+  "sideDecrease": "減らす",
+  "sideIncrease": "増やす",
+  "sideLevel": "レベル {level}",
   "@sideLevel": {
     "placeholders": {
       "level": {
@@ -2672,58 +2672,58 @@
       }
     }
   },
-  "sidePopularPlayers": "Players",
-  "sidePopularClans": "Clans",
-  "sidePopularWarsCwl": "Wars & CWL",
-  "rankingPlayerTrophies": "Player trophies",
-  "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
-  "rankingPlayerBuilder": "Player builder",
-  "rankingPlayerBuilderHeading": "Players Builder Base Ranking",
-  "rankingClanTrophies": "Clan trophies",
-  "rankingClanTrophiesHeading": "Clans Trophies Ranking",
-  "rankingClanBuilder": "Clan builder",
-  "rankingClanBuilderHeading": "Clans Builder Base Ranking",
-  "rankingClanCapital": "Clan capital",
-  "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "assetFolderEquipment": "Equipment",
-  "assetFolderLeagues": "Leagues",
-  "assetFolderResources": "Resources",
-  "assetFolderStickers": "Stickers",
-  "upgradeSectionHeroes": "Heroes",
-  "upgradeSectionTroops": "Troops",
-  "upgradeSectionSpells": "Spells",
-  "upgradeSectionPets": "Pets",
-  "upgradeSectionEquipment": "Equipment",
-  "sideMockupSource": "Source",
-  "sideMockupMode": "Mode",
-  "sideMockupPreview": "Preview",
-  "sideMockupRows": "Rows",
-  "sideMockupRowsValue": "5 mockups",
-  "endpointLeagueTop200": "League top 200",
-  "endpointLeagueTop200Preview": "Legend League · 5,742 trophies",
-  "endpointTownhallTop200": "Townhall top 200",
-  "endpointTownhallTop200Preview": "TH17 · Global player board",
-  "endpointClanDonations": "Clan donations",
-  "endpointClanDonationsPreview": "United States · weekly clan totals",
-  "endpointClanWarWins": "Clan war wins",
-  "endpointClanWarWinsPreview": "International · all-time war wins",
-  "endpointTop200ArmyUsage": "Top 200 army usage",
-  "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
+  "sidePopularPlayers": "プレイヤー",
+  "sidePopularClans": "クラン",
+  "sidePopularWarsCwl": "対戦とCWL",
+  "rankingPlayerTrophies": "プレイヤートロフィー",
+  "rankingPlayerTrophiesHeading": "プレイヤートロフィーランキング",
+  "rankingPlayerBuilder": "プレイヤー大工",
+  "rankingPlayerBuilderHeading": "プレイヤー大工の拠点ランキング",
+  "rankingClanTrophies": "クラントロフィー",
+  "rankingClanTrophiesHeading": "クラントロフィーランキング",
+  "rankingClanBuilder": "クラン大工",
+  "rankingClanBuilderHeading": "クラン大工の拠点ランキング",
+  "rankingClanCapital": "クランの都",
+  "rankingClanCapitalHeading": "クランの都ランキング",
+  "assetFolderTroops": "ユニット",
+  "assetFolderSpells": "呪文",
+  "assetFolderHeroes": "ヒーロー",
+  "assetFolderEquipment": "装備",
+  "assetFolderLeagues": "リーグ",
+  "assetFolderResources": "資源",
+  "assetFolderStickers": "ステッカー",
+  "upgradeSectionHeroes": "ヒーロー",
+  "upgradeSectionTroops": "ユニット",
+  "upgradeSectionSpells": "呪文",
+  "upgradeSectionPets": "ペット",
+  "upgradeSectionEquipment": "装備",
+  "sideMockupSource": "ソース",
+  "sideMockupMode": "モード",
+  "sideMockupPreview": "プレビュー",
+  "sideMockupRows": "行",
+  "sideMockupRowsValue": "5件のモックアップ",
+  "endpointLeagueTop200": "リーグTop 200",
+  "endpointLeagueTop200Preview": "レジェンドリーグ · 5,742トロフィー",
+  "endpointTownhallTop200": "タウンホールTop 200",
+  "endpointTownhallTop200Preview": "TH17 · グローバルプレイヤーボード",
+  "endpointClanDonations": "クラン寄付",
+  "endpointClanDonationsPreview": "アメリカ合衆国 · 週次クラン合計",
+  "endpointClanWarWins": "クラン対戦勝利",
+  "endpointClanWarWinsPreview": "インターナショナル · 全期間の対戦勝利",
+  "endpointTop200ArmyUsage": "Top 200編成使用率",
+  "endpointTop200ArmyUsagePreview": "バトルログ · ユニットと呪文の使用率",
   "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Weekly",
-  "endpointStateWins": "Wins",
-  "endpointStateUsage": "Usage",
-  "notifGroupBattles": "Battles",
-  "notifGroupReminders": "Reminders",
-  "notifGroupSupport": "Support",
-  "notifGroupProgress": "Progress",
-  "notifLeagueDefense": "League defense",
-  "notifLeagueDefenseResult": "League defense result",
-  "notifLeagueTriple": "League triple",
-  "notifLeagueAttackBody": "Lord Clasher attacked {player} • {percent}% • {stars} stars • {league}",
+  "endpointStateWeekly": "週間",
+  "endpointStateWins": "勝利",
+  "endpointStateUsage": "使用率",
+  "notifGroupBattles": "バトル",
+  "notifGroupReminders": "リマインダー",
+  "notifGroupSupport": "サポート",
+  "notifGroupProgress": "進行状況",
+  "notifLeagueDefense": "リーグ防衛",
+  "notifLeagueDefenseResult": "リーグ防衛結果",
+  "notifLeagueTriple": "リーグ3つ星",
+  "notifLeagueAttackBody": "Lord Clasherが{player}を攻撃 • {percent}% • {stars}星 • {league}",
   "@notifLeagueAttackBody": {
     "placeholders": {
       "player": {
@@ -2740,8 +2740,8 @@
       }
     }
   },
-  "notifWarDefense": "War defense",
-  "notifWarAttackOnTh": "War attack on TH{th}",
+  "notifWarDefense": "対戦防衛",
+  "notifWarAttackOnTh": "TH{th}への対戦攻撃",
   "@notifWarAttackOnTh": {
     "placeholders": {
       "th": {
@@ -2749,7 +2749,7 @@
       }
     }
   },
-  "notifWarDefenseBody": "{opponentClan} attacked {player} • {percent}% • {stars} stars • {clan} defense",
+  "notifWarDefenseBody": "{opponentClan}が{player}を攻撃 • {percent}% • {stars}星 • {clan}防衛",
   "@notifWarDefenseBody": {
     "placeholders": {
       "opponentClan": {
@@ -2769,9 +2769,9 @@
       }
     }
   },
-  "notifWarFeed5v5": "5v5 war feed",
-  "notifWarAttackResult": "War attack result",
-  "notifWarAttackResultBody": "{clan} attacked Pine Riders TH{th} • 100% • 3 stars",
+  "notifWarFeed5v5": "5v5対戦フィード",
+  "notifWarAttackResult": "対戦攻撃結果",
+  "notifWarAttackResultBody": "{clan}がPine Riders TH{th}を攻撃 • 100% • 3星",
   "@notifWarAttackResultBody": {
     "placeholders": {
       "clan": {
@@ -2782,8 +2782,8 @@
       }
     }
   },
-  "notifWarMatched": "War matched",
-  "notifWarMatchedBody": "{clan} matched with Pine Riders. Preparation day started.",
+  "notifWarMatched": "対戦がマッチしました",
+  "notifWarMatchedBody": "{clan}がPine Ridersとマッチしました。準備日が始まりました。",
   "@notifWarMatchedBody": {
     "placeholders": {
       "clan": {
@@ -2791,9 +2791,9 @@
       }
     }
   },
-  "notifWarStarted": "War started",
-  "notifBattleDayStarted": "Battle day started",
-  "notifWarStartedBody": "{clan} vs Pine Riders is live. Good luck.",
+  "notifWarStarted": "対戦開始",
+  "notifBattleDayStarted": "戦闘日開始",
+  "notifWarStartedBody": "{clan} vs Pine Ridersが開始されました。幸運を。",
   "@notifWarStartedBody": {
     "placeholders": {
       "clan": {
@@ -2801,8 +2801,8 @@
       }
     }
   },
-  "notifWarEnded": "War ended",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final results are available.",
+  "notifWarEnded": "対戦終了",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders。最終結果が利用可能です。",
   "@notifWarEndedBody": {
     "placeholders": {
       "clan": {
@@ -2810,13 +2810,13 @@
       }
     }
   },
-  "notifWarReminder1h": "War reminder: 1h",
-  "notifWarReminder30m": "War reminder: 30m",
-  "notifWarReminder15m": "War reminder: 15m",
-  "notifOneHourLeft": "1 hour left",
-  "notifThirtyMinutesLeft": "30 minutes left",
-  "notifFifteenMinutesLeft": "15 minutes left",
-  "notifRemainingWarAttacksBody": "{player} has remaining war attacks. {time}.",
+  "notifWarReminder1h": "対戦リマインダー: 1時間",
+  "notifWarReminder30m": "対戦リマインダー: 30分",
+  "notifWarReminder15m": "対戦リマインダー: 15分",
+  "notifOneHourLeft": "残り1時間",
+  "notifThirtyMinutesLeft": "残り30分",
+  "notifFifteenMinutesLeft": "残り15分",
+  "notifRemainingWarAttacksBody": "{player}には対戦攻撃が残っています。{time}。",
   "@notifRemainingWarAttacksBody": {
     "placeholders": {
       "player": {
@@ -2827,7 +2827,7 @@
       }
     }
   },
-  "notifStarted": "{name} started",
+  "notifStarted": "{name}が開始しました",
   "@notifStarted": {
     "placeholders": {
       "name": {
@@ -2835,7 +2835,7 @@
       }
     }
   },
-  "notifClanGamesPointsBody": "{clan} can start earning {name} points.",
+  "notifClanGamesPointsBody": "{clan}は{name}ポイントを獲得し始められます。",
   "@notifClanGamesPointsBody": {
     "placeholders": {
       "clan": {
@@ -2846,7 +2846,7 @@
       }
     }
   },
-  "notifCwlPreparationBody": "{clan} can begin Clan War League preparation.",
+  "notifCwlPreparationBody": "{clan}はクラン対戦リーグの準備を開始できます。",
   "@notifCwlPreparationBody": {
     "placeholders": {
       "clan": {
@@ -2854,7 +2854,7 @@
       }
     }
   },
-  "notifRaidWeekendBody": "{clan} can start Capital Raid attacks.",
+  "notifRaidWeekendBody": "{clan}はクランの都レイド攻撃を開始できます。",
   "@notifRaidWeekendBody": {
     "placeholders": {
       "clan": {
@@ -2862,9 +2862,9 @@
       }
     }
   },
-  "notifSeasonStart": "Season start",
-  "notifNewSeasonStarted": "New season started",
-  "notifSeasonStartedBody": "{league} season has started for {player}.",
+  "notifSeasonStart": "シーズン開始",
+  "notifNewSeasonStarted": "新シーズンが開始しました",
+  "notifSeasonStartedBody": "{player}の{league}シーズンが開始しました。",
   "@notifSeasonStartedBody": {
     "placeholders": {
       "league": {
@@ -2875,13 +2875,13 @@
       }
     }
   },
-  "notifSpecialEvent": "Special event",
-  "notifNewEventLive": "A new event is live",
-  "notifNewClashEventBody": "A new Clash event is available.",
-  "notifSupportClashKing": "Support ClashKing",
-  "notifMonthlySupportBody": "Monthly support helps keep ClashKing available and improving. Thank you.",
-  "notifUpgradeFinished": "Upgrade finished",
-  "notifUpgradeReadyTitle": "{name} is ready",
+  "notifSpecialEvent": "特別イベント",
+  "notifNewEventLive": "新しいイベントが開催中",
+  "notifNewClashEventBody": "新しいClashイベントが利用可能です。",
+  "notifSupportClashKing": "ClashKingをサポート",
+  "notifMonthlySupportBody": "毎月のサポートはClashKingの提供と改善に役立ちます。ありがとうございます。",
+  "notifUpgradeFinished": "アップグレード完了",
+  "notifUpgradeReadyTitle": "{name}の準備ができました",
   "@notifUpgradeReadyTitle": {
     "placeholders": {
       "name": {
@@ -2889,7 +2889,7 @@
       }
     }
   },
-  "notifUpgradeCompleteBody": "Level {level} finished for {player}. Upgrade complete.",
+  "notifUpgradeCompleteBody": "{player}のレベル{level}が完了しました。アップグレード完了。",
   "@notifUpgradeCompleteBody": {
     "placeholders": {
       "level": {
@@ -2900,7 +2900,7 @@
       }
     }
   },
-  "clanSearchLoadFailed": "Failed to load clan data: {error}",
+  "clanSearchLoadFailed": "クランデータの読み込みに失敗しました: {error}",
   "@clanSearchLoadFailed": {
     "placeholders": {
       "error": {
@@ -2908,11 +2908,11 @@
       }
     }
   },
-  "appIconDefault": "Default",
-  "appIconChristmas": "Christmas",
-  "appIconBlackWhite": "Black & White",
-  "appIconDarkMode": "Dark Mode",
-  "generalMembersCount": "{count} members",
+  "appIconDefault": "デフォルト",
+  "appIconChristmas": "クリスマス",
+  "appIconBlackWhite": "白黒",
+  "appIconDarkMode": "ダークモード",
+  "generalMembersCount": "{count}人のメンバー",
   "@generalMembersCount": {
     "placeholders": {
       "count": {
@@ -2920,8 +2920,8 @@
       }
     }
   },
-  "generalBookmarked": "bookmarked",
-  "clanLevelValue": "level {level}",
+  "generalBookmarked": "ブックマーク済み",
+  "clanLevelValue": "レベル {level}",
   "@clanLevelValue": {
     "placeholders": {
       "level": {
@@ -2929,7 +2929,7 @@
       }
     }
   },
-  "cwlRankShort": "Rank {rank}",
+  "cwlRankShort": "順位 {rank}",
   "@cwlRankShort": {
     "placeholders": {
       "rank": {
@@ -2937,7 +2937,7 @@
       }
     }
   },
-  "cwlRoundShort": "Round {round}",
+  "cwlRoundShort": "ラウンド {round}",
   "@cwlRoundShort": {
     "placeholders": {
       "round": {
@@ -2953,5 +2953,5 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
+  "faqSupercellFanContentPolicyLink": "Supercellファンコンテンツポリシー"
 }

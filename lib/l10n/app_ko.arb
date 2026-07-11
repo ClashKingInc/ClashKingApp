@@ -3,32 +3,32 @@
   "appTitle": "ClashKing",
   "appDescription": "통계 추적, 클랜 관리 및 성능 분석을 위한 최고의 Clash of Clans 동반자.",
   "generalLoading": "로딩 중...",
-  "loadingVillages": "Loading your villages...",
-  "loadingClanData": "Fetching clan data...",
-  "loadingWarStats": "Analyzing war stats...",
-  "loadingLegendsData": "Preparing legends data...",
-  "loadingCapitalRaids": "Loading capital raids...",
-  "loadingAlmostReady": "Almost ready...",
-  "accountVerificationTitle": "Verify Account",
-  "accountVerified": "Verified",
-  "accountVerify": "Verify",
-  "accountVerificationSuccess": "Account verified successfully!",
+  "loadingVillages": "마을을 불러오는 중...",
+  "loadingClanData": "클랜 데이터를 가져오는 중...",
+  "loadingWarStats": "전쟁 통계를 분석하는 중...",
+  "loadingLegendsData": "전설 데이터를 준비하는 중...",
+  "loadingCapitalRaids": "클랜 수도 습격을 불러오는 중...",
+  "loadingAlmostReady": "거의 준비되었습니다...",
+  "accountVerificationTitle": "계정 인증",
+  "accountVerified": "인증됨",
+  "accountVerify": "인증",
+  "accountVerificationSuccess": "계정이 성공적으로 인증되었습니다!",
   "generalRetry": "다시 시도",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "다시 시도 중...",
   "generalTryAgain": "다시 시도하기",
-  "generalReset": "Reset",
+  "generalReset": "초기화",
   "generalCancel": "취소",
   "generalOk": "OK",
   "@generalOk": {
     "description": "OK button on pop up"
   },
-  "generalApply": "Apply",
-  "generalConfirm": "Confirm",
-  "generalManage": "Manage",
-  "generalSettings": "Settings",
-  "generalCopiedToClipboard": "Copied to clipboard",
-  "generalComingSoon": "Coming soon!",
-  "generalLastRefresh": "Last refresh: {time}",
+  "generalApply": "적용",
+  "generalConfirm": "확인",
+  "generalManage": "관리",
+  "generalSettings": "설정",
+  "generalCopiedToClipboard": "클립보드에 복사되었습니다",
+  "generalComingSoon": "곧 제공됩니다!",
+  "generalLastRefresh": "마지막 새로고침: {time}",
   "@generalLastRefresh": {
     "description": "Last refresh time indicator",
     "placeholders": {
@@ -38,7 +38,7 @@
       }
     }
   },
-  "generalRefreshFailed": "Refresh failed: {error}",
+  "generalRefreshFailed": "새로고침 실패: {error}",
   "@generalRefreshFailed": {
     "description": "Error message when refresh fails",
     "placeholders": {
@@ -48,108 +48,108 @@
       }
     }
   },
-  "generalAll": "All",
+  "generalAll": "전체",
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "전체 기간",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
-  "generalTotal": "Total",
-  "generalBest": "Best",
+  "generalOthers": "기타",
+  "generalCompleted": "완료됨",
+  "generalTotal": "합계",
+  "generalBest": "최고",
   "@generalBest": {
     "description": "Best end of day trophies"
   },
-  "generalWorst": "Worst",
+  "generalWorst": "최저",
   "@generalWorst": {
     "description": "Worst end of day trophies"
   },
-  "generalAverage": "Average",
+  "generalAverage": "평균",
   "@generalAverage": {
     "description": "Average value of legend trophies (defense and attack)"
   },
-  "generalRemaining": "Remaining",
+  "generalRemaining": "남음",
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
-  "generalStarted": "Started",
+  "generalActive": "활성",
+  "generalInactive": "비활성",
+  "generalStarted": "시작됨",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
   },
-  "generalEnded": "Ended",
+  "generalEnded": "종료됨",
   "@generalEnded": {
     "description": "Title for the number of trophies at the end of the day"
   },
-  "generalRole": "Role",
-  "generalStats": "Stats",
-  "generalFullStats": "Full Stats",
-  "generalDetails": "Details",
-  "generalHistory": "History",
+  "generalRole": "역할",
+  "generalStats": "통계",
+  "generalFullStats": "전체 통계",
+  "generalDetails": "상세 정보",
+  "generalHistory": "기록",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalFilters": "Filters",
-  "generalNotSet": "Not set",
+  "generalFilters": "필터",
+  "generalNotSet": "설정되지 않음",
   "@generalNotSet": {
     "description": "Filter value is not set"
   },
-  "generalWarning": "Warning",
-  "generalUnknown": "Unknown",
-  "generalNoDataAvailable": "No data available.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalWarning": "경고",
+  "generalUnknown": "알 수 없음",
+  "generalNoDataAvailable": "사용 가능한 데이터가 없습니다.",
+  "generalNoFilteredResults": "필터와 일치하는 결과가 없습니다",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "모든 데이터를 보려면 필터 조건을 조정하거나 필터를 지우세요.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "필터 지우기",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "저장된 프리셋",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "저장",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "필터 프리셋 저장",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "프리셋 이름",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "이 프리셋의 이름을 입력하세요",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "추천:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "프리셋으로 저장하기 전에 필터를 먼저 적용하세요",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "이름을 입력하세요",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "이 이름의 프리셋이 이미 있습니다",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "프리셋 \"{name}\"이(가) 성공적으로 저장되었습니다",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -159,27 +159,27 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "프리셋 저장에 실패했습니다",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "프리셋 적용",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "이름 변경",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "삭제",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "프리셋 이름 변경",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "프리셋 이름이 \"{name}\"(으)로 변경되었습니다",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -189,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "프리셋 이름 변경에 실패했습니다",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "프리셋 삭제",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "\"{name}\"을(를) 삭제하시겠습니까?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "프리셋 \"{name}\"이(가) 삭제되었습니다",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -217,135 +217,135 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "프리셋 삭제에 실패했습니다",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
-  "authSignUp": "Sign up",
-  "authLogin": "Login",
-  "authLogout": "Log out",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "generalCharts": "차트",
+  "authSignUp": "가입하기",
+  "authLogin": "로그인",
+  "authLogout": "로그아웃",
+  "authCreateAccount": "계정 만들기",
+  "authJoinClashKing": "ClashKing 가입",
+  "authCreateAccountToGetStarted": "시작하려면 계정을 만드세요",
+  "authAlreadyHaveAccount": "이미 계정이 있으신가요? 로그인",
+  "authConfirmLogout": "정말 로그아웃하시겠습니까?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
-  "authDiscordSignIn": "Sign In with Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
-  "authEmail": "Email",
-  "authEmailHint": "Enter your email address",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
-  "authPasswordLabel": "Password",
-  "authPasswordHint": "Enter your password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
-  "authPasswordHeader": "Password must contain:",
-  "authPasswordUppercase": "Uppercase letter",
-  "authPasswordLowercase": "Lowercase letter",
-  "authPasswordNumber": "Number",
-  "authPasswordSpecial": "Special character",
-  "authPasswordInvalid": "Password does not meet requirements",
-  "authPasswordForgot": "Forgot password?",
-  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
-  "authPasswordResetSend": "Send Reset Code",
-  "authPasswordResetSent": "Code Sent!",
-  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
-  "authPasswordReset": "Reset Password",
-  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
-  "authPasswordNew": "New Password",
-  "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
-  "authPasswordResetContinue": "Continue to Reset Password",
-  "authPasswordResetCode": "Reset Code",
-  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
-  "authPasswordResetCodeRequired": "Please enter the reset code",
-  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
-  "authBackToLogin": "Back to Login",
-  "authUsernameLabel": "Username",
-  "authUsernameRequired": "Please enter a username",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
-  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
-  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
-  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
-  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
-  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
-  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
-  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
-  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
-  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
-  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authEmailVerificationTitle": "Verify Email",
-  "authEmailVerificationCheckEmail": "Check Your Email",
-  "authEmailVerificationSentTo": "We've sent a verification email to:",
-  "authEmailVerificationResend": "Resend Verification Email",
-  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationExpired": "Verification expired. Please register again.",
-  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
-  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
-  "authEmailVerificationVerifying": "Verifying your email...",
-  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
-  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
-  "authEmailVerificationVerify": "Verify Code",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
-  "accountsWelcome": "Welcome!",
-  "accountsWelcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-  "accountsManageTitle": "Manage your accounts",
-  "accountsNoneFound": "No account linked to your profile found",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsEnterPlayerTag": "Enter a player tag",
-  "accountsAdd": "Add account",
-  "accountsAddInstruction": "Tap the + button to add your account",
-  "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
-  "accountsFillAllFields": "Please fill all fields.",
-  "accountsErrorTagNotExists": "The player tag entered does not exist.",
-  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
-  "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
-  "accountsErrorWrongApiToken": "The API token entered is incorrect",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
-  "errorLoadingVersion": "Error loading version",
+  "authDiscordSignIn": "Discord로 로그인",
+  "authDiscordContinue": "Discord로 계속",
+  "authDiscordDescription": "ClashKing Bot과 데이터를 동기화하고 ClashKing의 모든 기능을 이용하세요!",
+  "authEmail": "이메일",
+  "authEmailHint": "이메일 주소를 입력하세요",
+  "authEmailDescription": "Discord를 이용할 수 없거나 앱 전용 기능을 선호한다면 이메일을 사용하세요",
+  "authEmailRequired": "이메일을 입력하세요",
+  "authEmailInvalid": "유효한 이메일을 입력하세요",
+  "authPasswordLabel": "비밀번호",
+  "authPasswordHint": "비밀번호를 입력하세요",
+  "authPasswordConfirm": "비밀번호 확인",
+  "authPasswordRequired": "비밀번호를 입력하세요",
+  "authPasswordConfirmRequired": "비밀번호를 확인해 주세요",
+  "authPasswordMismatch": "비밀번호가 일치하지 않습니다",
+  "authPasswordTooShort": "비밀번호는 최소 8자 이상이어야 합니다",
+  "authPasswordRequirements": "비밀번호에는 다음이 포함되어야 합니다:\n• 대문자\n• 소문자\n• 숫자\n• 특수 문자",
+  "authPasswordHeader": "비밀번호에는 다음이 포함되어야 합니다:",
+  "authPasswordUppercase": "대문자",
+  "authPasswordLowercase": "소문자",
+  "authPasswordNumber": "숫자",
+  "authPasswordSpecial": "특수 문자",
+  "authPasswordInvalid": "비밀번호가 요구 사항을 충족하지 않습니다",
+  "authPasswordForgot": "비밀번호를 잊으셨나요?",
+  "authPasswordForgotDescription": "이메일 주소를 입력하면 비밀번호 재설정을 위한 6자리 코드를 보내드립니다.",
+  "authPasswordResetSend": "재설정 코드 보내기",
+  "authPasswordResetSent": "코드가 전송되었습니다!",
+  "authPasswordResetSentDescription": "이메일 주소로 6자리 재설정 코드를 보냈습니다. 받은 편지함을 확인하고 코드를 사용해 비밀번호를 재설정하세요.",
+  "authPasswordReset": "비밀번호 재설정",
+  "authPasswordResetDescription": "아래에 이메일, 이메일로 받은 6자리 코드, 새 비밀번호를 입력하세요.",
+  "authPasswordNew": "새 비밀번호",
+  "authPasswordConfirmHint": "새 비밀번호를 다시 입력하세요",
+  "authPasswordResetSuccess": "비밀번호가 성공적으로 재설정되었습니다! 이제 로그인할 수 있습니다.",
+  "authPasswordResetContinue": "비밀번호 재설정 계속",
+  "authPasswordResetCode": "재설정 코드",
+  "authPasswordResetCodeHint": "이메일로 받은 6자리 코드를 입력하세요",
+  "authPasswordResetCodeRequired": "재설정 코드를 입력하세요",
+  "authPasswordResetCodeInvalid": "유효한 6자리 코드를 입력하세요",
+  "authBackToLogin": "로그인으로 돌아가기",
+  "authUsernameLabel": "사용자 이름",
+  "authUsernameRequired": "사용자 이름을 입력하세요",
+  "authUsernameTooShort": "사용자 이름은 최소 3자 이상이어야 합니다",
+  "authUsernameTooLong": "사용자 이름은 30자를 초과할 수 없습니다",
+  "authErrorConnection": "오류가 발생했습니다. 인터넷 연결을 확인한 뒤 다시 시도하세요.",
+  "authErrorConnectionRelaunch": "오류가 발생했습니다. 인터넷 연결을 확인하고 앱을 다시 실행하세요.",
+  "authErrorEmailAlreadyRegistered": "이 이메일은 이미 등록되어 있습니다. 대신 로그인해 보세요.",
+  "authErrorEmailAlreadyPending": "이 주소로 인증 이메일이 이미 전송되었습니다. 이메일을 확인하거나 다시 보내기를 시도하세요.",
+  "authErrorEmailInvalidFormat": "유효한 이메일 주소를 입력하세요.",
+  "authErrorPasswordWeak": "비밀번호가 너무 약합니다. 더 강력한 비밀번호를 사용하세요.",
+  "authErrorUsernameInvalid": "사용자 이름이 유효하지 않습니다. 문자, 숫자, 밑줄만 사용하세요.",
+  "authErrorRegistrationFailed": "등록에 실패했습니다. 나중에 다시 시도하세요.",
+  "authErrorEmailSendFailed": "인증 이메일 전송에 실패했습니다. 나중에 다시 시도하세요.",
+  "authErrorRateLimited": "시도가 너무 많습니다. 잠시 후 다시 시도하세요.",
+  "authErrorServerUnavailable": "서버를 일시적으로 사용할 수 없습니다. 나중에 다시 시도하세요.",
+  "authAccountManagement": "여기에서 Clash of Clans 계정을 추가, 제거하고 순서를 변경할 수 있습니다. 모든 기능에 접근하려면 토큰으로 계정을 인증하세요.",
+  "authAccountConnected": "연결된 계정",
+  "authAccountConnectedStatus": "연결됨",
+  "authAccountNotConnected": "연결되지 않음",
+  "authAccountEmailAndPassword": "이메일 및 비밀번호",
+  "authAccountSecured": "계정이 여러 인증 방식으로 보호되고 있습니다",
+  "authAccountLinkEmail": "이메일 계정 연결",
+  "authAccountAddEmailAuth": "추가 보안을 위해 계정에 이메일 및 비밀번호 인증을 추가하세요.",
+  "authAccountEmailLinkedSuccess": "이메일 계정이 성공적으로 연결되었습니다!",
+  "authEmailVerificationTitle": "이메일 인증",
+  "authEmailVerificationCheckEmail": "이메일을 확인하세요",
+  "authEmailVerificationSentTo": "인증 이메일을 다음 주소로 보냈습니다:",
+  "authEmailVerificationResend": "인증 이메일 다시 보내기",
+  "authEmailVerificationResendSuccess": "인증 이메일을 다시 보냈습니다! 이메일을 확인하세요.",
+  "authEmailVerificationExpired": "인증이 만료되었습니다. 다시 등록하세요.",
+  "authEmailVerificationAlreadyVerified": "이 이메일은 이미 인증되었습니다. 대신 로그인해 보세요.",
+  "authEmailVerificationNoToken": "대기 중인 인증을 찾을 수 없습니다. 먼저 등록하세요.",
+  "authEmailVerificationExpiredResend": "인증이 만료되었습니다. 등록 화면으로 돌아가 다시 시도하세요.",
+  "authEmailVerificationVerifying": "이메일을 인증하는 중...",
+  "authEmailVerificationCodeInstructions": "이메일로 전송된 6자리 코드를 입력하세요:",
+  "authEmailVerificationCodeRequired": "6자리 인증 코드를 입력하세요",
+  "authEmailVerificationCodeInvalid": "코드가 유효하지 않거나 만료되었습니다. 코드를 확인하거나 인증 이메일을 다시 보내세요.",
+  "authEmailVerificationVerify": "코드 인증",
+  "helpTitle": "도움이 필요하신가요?",
+  "helpJoinDiscord": "Discord 참여",
+  "helpEmailUs": "이메일 보내기",
+  "accountsWelcome": "환영합니다!",
+  "accountsWelcomeMessage": "프로필에 하나 이상의 Clash of Clans 계정을 추가하세요. 나중에 계정을 추가하거나 제거할 수 있습니다.",
+  "accountsManageTitle": "계정 관리",
+  "accountsNoneFound": "프로필에 연결된 계정을 찾을 수 없습니다",
+  "accountsPlayerTag": "플레이어 태그 (#ABC123)",
+  "accountsEnterPlayerTag": "플레이어 태그를 입력하세요",
+  "accountsAdd": "계정 추가",
+  "accountsAddInstruction": "+ 버튼을 눌러 계정을 추가하세요",
+  "accountsApiToken": "계정 API 토큰",
+  "accountsEnterApiToken": "본인 계정임을 확인하려면 계정 API 토큰을 입력하세요. Clash of Clans에서 찾을 수 있습니다:",
+  "accountsApiTokenLocation": "설정 > 추가 설정 > API 토큰",
+  "accountsOpenMoreSettings": "추가 설정 열기",
+  "accountsCouldNotOpenClash": "Clash of Clans를 열 수 없습니다. 직접 열어 주세요.",
+  "accountsFillAllFields": "모든 필드를 입력하세요.",
+  "accountsErrorTagNotExists": "입력한 플레이어 태그가 존재하지 않습니다.",
+  "accountsErrorAlreadyLinked": "해당 플레이어 태그는 이미 다른 사람에게 연결되어 있습니다.",
+  "accountsErrorAlreadyLinkedToYou": "해당 플레이어 태그는 이미 내 계정에 연결되어 있습니다.",
+  "accountsErrorWrongApiToken": "입력한 API 토큰이 올바르지 않습니다",
+  "accountsErrorFailedToAdd": "계정을 추가하지 못했습니다. 나중에 다시 시도하세요.",
+  "accountsErrorFailedToUpdateOrder": "계정 순서를 업데이트하지 못했습니다.",
+  "errorTitle": "이런! 저희 서버가 얼굴에 파이어볼을 맞은 것 같습니다! 치유 마법을 시전 중이니 잠시 후 다시 시도하세요.",
+  "errorSubtitle": "문제가 계속되면 Discord 서버에서 이미 알려진 문제인지 확인해 주세요.",
+  "errorNetworkTitle": "연결 문제",
+  "errorNetworkMessage": "서버에 연결하는 데 문제가 있습니다. 인터넷 연결 문제이거나 저희 쪽 문제일 수 있습니다. 연결을 확인하고 다시 시도하세요.",
+  "errorLoadingVersion": "버전 로드 오류",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorCannotOpenLink": "We can't open this link.",
-  "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerSearchTitle": "Search player",
-  "playerSearchPlaceholder": "Player's name or tag",
-  "playerLastActive": "Last active: {date}",
+  "errorCannotOpenLink": "이 링크를 열 수 없습니다.",
+  "errorExitAppToOpenClash": "Clash of Clans를 열기 위해 앱을 떠나려고 합니다.",
+  "playerSearchTitle": "플레이어 검색",
+  "playerSearchPlaceholder": "플레이어 이름 또는 태그",
+  "playerLastActive": "마지막 활동: {date}",
   "@playerLastActive": {
     "placeholders": {
       "date": {
@@ -353,8 +353,8 @@
       }
     }
   },
-  "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
-  "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+  "playerNotTracked": "이 플레이어는 추적되지 않습니다. 데이터가 부정확할 수 있습니다.",
+  "playerClanDescription": "내 클랜은 \"{clan}\" ({tag})입니다.",
   "@playerClanDescription": {
     "placeholders": {
       "clan": {
@@ -365,7 +365,7 @@
       }
     }
   },
-  "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+  "playerRatioDescription": "지원 비율은 {ratio}입니다. 병력 {donations}명을 지원했고 {received}명을 받았습니다.",
   "@playerRatioDescription": {
     "placeholders": {
       "ratio": {
@@ -379,7 +379,7 @@
       }
     }
   },
-  "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+  "playerWarPreferenceDescription": "전쟁 선호 설정은 \"{preference}\"입니다.",
   "@playerWarPreferenceDescription": {
     "placeholders": {
       "preference": {
@@ -387,7 +387,7 @@
       }
     }
   },
-  "playerWarStarsDescription": "You have {stars} war stars.",
+  "playerWarStarsDescription": "전쟁 별을 {stars}개 보유하고 있습니다.",
   "@playerWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -395,7 +395,7 @@
       }
     }
   },
-  "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+  "playerTrophiesDescription": "트로피가 {trophies}개 있습니다. 현재 {league}에 속해 있습니다.",
   "@playerTrophiesDescription": {
     "placeholders": {
       "trophies": {
@@ -406,7 +406,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "트로피가 {trophies}개 있습니다. 현재 어떤 리그에도 순위가 없습니다.",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -414,7 +414,7 @@
       }
     }
   },
-  "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+  "playerTownHallLevelDescription": "마을회관 레벨은 {level}입니다.",
   "@playerTownHallLevelDescription": {
     "placeholders": {
       "level": {
@@ -422,7 +422,7 @@
       }
     }
   },
-  "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+  "playerBuilderBaseDescription": "장인회관 레벨은 {level}이고 트로피가 {trophies}개 있습니다.",
   "@playerBuilderBaseDescription": {
     "placeholders": {
       "level": {
@@ -433,12 +433,12 @@
       }
     }
   },
-  "gameBaseHome": "Home Base",
-  "gameBaseBuilder": "Builder Base",
-  "gameClanCapital": "Clan Capital",
+  "gameBaseHome": "본 마을",
+  "gameBaseBuilder": "장인 기지",
+  "gameClanCapital": "클랜 수도",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "TH Level",
-  "gameTownHallLevelNumber": "Town Hall {level}",
+  "gameTownHallLevel": "마을회관 레벨",
+  "gameTownHallLevelNumber": "마을회관 {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
       "level": {
@@ -446,7 +446,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "마을회관 {level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -454,13 +454,13 @@
       }
     }
   },
-  "gameExpLevel": "Experience Level",
-  "gameTrophies": "Trophies",
-  "gameBuilderBaseTrophies": "BB Trophies",
-  "gameDonations": "Donations",
+  "gameExpLevel": "경험치 레벨",
+  "gameTrophies": "트로피",
+  "gameBuilderBaseTrophies": "장인 기지 트로피",
+  "gameDonations": "지원",
   "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameDonationsRatio": "지원 비율",
+  "gameLevel": "레벨: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -471,52 +471,52 @@
       }
     }
   },
-  "gameHeroes": "Heroes",
-  "gameEquipment": "Equipments",
-  "gameHeroesEquipments": "Hero equipments",
-  "gameTroops": "Troops",
-  "gameActiveSuperTroops": "Active Super Troops",
-  "gamePets": "Pets",
-  "gameSiegeMachines": "Siege Machines",
-  "gameSpells": "Spells",
-  "gameAchievements": "Achievements",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
-  "gameCreatorCodeDialogTitle": "Support ClashKing",
-  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
-  "gameCreatorCodeDialogButton": "Use Creator Code",
-  "clanTitle": "Clan",
-  "clanSearchTitle": "Search clan",
-  "clanSearchPlaceholder": "Clan's name",
-  "clanNone": "No clan",
-  "clanJoinToUnlock": "Join a clan to unlock new features.",
-  "clanMembers": "Members",
-  "clanMinimumMembers": "Minimum members",
-  "clanMaximumMembers": "Maximum members",
-  "clanLocation": "Location",
-  "clanMinimumPoints": "Minimum clan points",
-  "clanMinimumLevel": "Minimum clan level",
-  "clanInviteOnly": "Invite Only",
+  "gameHeroes": "영웅",
+  "gameEquipment": "장비",
+  "gameHeroesEquipments": "영웅 장비",
+  "gameTroops": "유닛",
+  "gameActiveSuperTroops": "활성 슈퍼 유닛",
+  "gamePets": "펫",
+  "gameSiegeMachines": "시즈 머신",
+  "gameSpells": "마법",
+  "gameAchievements": "업적",
+  "gameClanGames": "클랜 게임",
+  "gameSeasonPass": "시즌 패스",
+  "gameCreatorCode": "크리에이터 코드: ClashKing",
+  "gameCreatorCodeDescription": "무료로 저희를 후원하세요!",
+  "gameCreatorCodeDialogTitle": "ClashKing 후원",
+  "gameCreatorCodeDialogDescription": "크리에이터 코드를 사용하면 개발 자금을 마련하고, 앱과 봇을 모두에게 무료로 유지하며, 새 기능 추가를 지원할 수 있습니다.\n\nSupercell 게임 상점에서 \"ClashKing\"을 입력하기만 하면 추가 비용 없이 게임 내 구매 금액의 5%를 저희가 받습니다.\n\n후원해 주셔서 감사합니다!",
+  "gameCreatorCodeDialogButton": "크리에이터 코드 사용",
+  "clanTitle": "클랜",
+  "clanSearchTitle": "클랜 검색",
+  "clanSearchPlaceholder": "클랜 이름",
+  "clanNone": "클랜 없음",
+  "clanJoinToUnlock": "새 기능을 잠금 해제하려면 클랜에 가입하세요.",
+  "clanMembers": "멤버",
+  "clanMinimumMembers": "최소 멤버 수",
+  "clanMaximumMembers": "최대 멤버 수",
+  "clanLocation": "위치",
+  "clanMinimumPoints": "최소 클랜 점수",
+  "clanMinimumLevel": "최소 클랜 레벨",
+  "clanInviteOnly": "초대 전용",
   "@clanInviteOnly": {
     "description": "Clan is invite only"
   },
-  "clanOpened": "Opened",
+  "clanOpened": "공개",
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanRoleLeader": "Leader",
-  "clanRoleCoLeader": "Co-Leader",
-  "clanRoleElder": "Elder",
-  "clanRoleMember": "Member",
-  "clanWarFrequencyAlways": "Always",
-  "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyOncePerWeek": "1/week",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
-  "clanWarFrequencyRarely": "Rarely",
+  "clanRoleLeader": "대표",
+  "clanRoleCoLeader": "공동 대표",
+  "clanRoleElder": "장로",
+  "clanRoleMember": "멤버",
+  "clanWarFrequencyAlways": "항상",
+  "clanWarFrequencyNever": "하지 않음",
+  "clanWarFrequencyOncePerWeek": "주 1회",
+  "clanWarFrequencyMoreThanOncePerWeek": "주 1회 이상",
+  "clanWarFrequencyRarely": "드물게",
   "timeHourIndicator": "h",
-  "timeDaysAgo": "{days} days ago",
+  "timeDaysAgo": "{days}일 전",
   "@timeDaysAgo": {
     "placeholders": {
       "days": {
@@ -524,7 +524,7 @@
       }
     }
   },
-  "timeDayAgo": "{day} day ago",
+  "timeDayAgo": "{day}일 전",
   "@timeDayAgo": {
     "placeholders": {
       "day": {
@@ -532,7 +532,7 @@
       }
     }
   },
-  "timeHourAgo": "{hour} hour ago",
+  "timeHourAgo": "{hour}시간 전",
   "@timeHourAgo": {
     "placeholders": {
       "hour": {
@@ -540,7 +540,7 @@
       }
     }
   },
-  "timeHoursAgo": "{hours} hours ago",
+  "timeHoursAgo": "{hours}시간 전",
   "@timeHoursAgo": {
     "placeholders": {
       "hours": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "timeMinuteAgo": "{minute} minute ago",
+  "timeMinuteAgo": "{minute}분 전",
   "@timeMinuteAgo": {
     "placeholders": {
       "minute": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "timeMinutesAgo": "{minutes} minutes ago",
+  "timeMinutesAgo": "{minutes}분 전",
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -564,12 +564,12 @@
       }
     }
   },
-  "timeJustNow": "Just Now",
+  "timeJustNow": "방금",
   "@timeJustNow": {
     "description": "Indicates something happened just now"
   },
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeEndedJustNow": "방금 종료됨",
+  "timeEndedMinutesAgo": "{minutes}분 전에 종료됨",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -577,7 +577,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "{hours}시간 전에 종료됨",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -585,7 +585,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "{days}일 전에 종료됨",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -593,7 +593,7 @@
       }
     }
   },
-  "timeStartsIn": "Starts in {time}",
+  "timeStartsIn": "{time} 후 시작",
   "@timeStartsIn": {
     "placeholders": {
       "time": {
@@ -601,7 +601,7 @@
       }
     }
   },
-  "timeStartsAt": "Starts at {time}",
+  "timeStartsAt": "{time}에 시작",
   "@timeStartsAt": {
     "placeholders": {
       "time": {
@@ -609,7 +609,7 @@
       }
     }
   },
-  "timeEndsIn": "Ends in {time}",
+  "timeEndsIn": "{time} 후 종료",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -617,7 +617,7 @@
       }
     }
   },
-  "timeEndsAt": "Ends at {time}",
+  "timeEndsAt": "{time}에 종료",
   "@timeEndsAt": {
     "placeholders": {
       "time": {
@@ -626,9 +626,9 @@
     }
   },
   "legendsTitle": "Inaccurate data?",
-  "legendsNotInLeague": "Not in Legend League",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
-  "legendsStartDescription": "You started the day with {trophies} trophies.",
+  "legendsNotInLeague": "전설 리그가 아닙니다",
+  "legendsNoDataToday": "전설 리그에는 없지만 지난 시즌은 확인할 수 있습니다.",
+  "legendsStartDescription": "오늘을 트로피 {trophies}개로 시작했습니다.",
   "@legendsStartDescription": {
     "placeholders": {
       "trophies": {
@@ -636,7 +636,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+  "legendsNoRankLocalDescription": "현재 {country}에서 순위가 없으며 트로피는 {trophies}개입니다.",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
@@ -647,7 +647,7 @@
       }
     }
   },
-  "legendsRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+  "legendsRankLocalDescription": "현재 {country}에서 {rank}위이며 트로피는 {trophies}개입니다.",
   "@legendsRankLocalDescription": {
     "placeholders": {
       "rank": {
@@ -661,7 +661,7 @@
       }
     }
   },
-  "legendsGainDescription": "You gained {trophies} trophies for now.",
+  "legendsGainDescription": "현재까지 트로피 {trophies}개를 획득했습니다.",
   "@legendsGainDescription": {
     "placeholders": {
       "trophies": {
@@ -669,7 +669,7 @@
       }
     }
   },
-  "legendsLossDescription": "You lost {trophies} trophies for now.",
+  "legendsLossDescription": "현재까지 트로피 {trophies}개를 잃었습니다.",
   "@legendsLossDescription": {
     "placeholders": {
       "trophies": {
@@ -677,7 +677,7 @@
       }
     }
   },
-  "legendsNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+  "legendsNoGlobalRankDescription": "현재 전 세계 순위가 없으며 트로피는 {trophies}개입니다.",
   "@legendsNoGlobalRankDescription": {
     "placeholders": {
       "trophies": {
@@ -685,7 +685,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "현재 전 세계 {rank}위이며 트로피는 {trophies}개입니다.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -696,36 +696,36 @@
       }
     }
   },
-  "legendsNoRank": "No ranking",
-  "legendsBestTrophies": "Best Trophies",
-  "legendsMostAttacks": "Most Attacks",
-  "legendsLastSeason": "Last Season",
-  "legendsBestRank": "Best Global Rank",
-  "legendsTrophiesBySeason": "Trophies by season",
-  "legendsEosTrophies": "End Of Season Trophies",
-  "legendsEosDetails": "End Of Season Details",
-  "legendsInaccurateTitle": "Inaccurate data?",
-  "legendsInaccurateIntro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-  "legendsInaccurateApiDelayTitle": "1. API Delay: ",
-  "legendsInaccurateApiDelayBody": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-  "legendsInaccurateConcurrentTitle": "2. Concurrent Changes: \n",
-  "legendsInaccurateMultipleAttacksTitle": "- Multiple Attacks/Defenses: ",
-  "legendsInaccurateMultipleAttacksBody": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-  "legendsInaccurateSimultaneousTitle": "- Simultaneous Attack and Defense: ",
-  "legendsInaccurateSimultaneousBody": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-  "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
-  "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-  "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Season Stats",
-  "statsByDay": "By Day",
+  "legendsNoRank": "순위 없음",
+  "legendsBestTrophies": "최고 트로피",
+  "legendsMostAttacks": "최다 공격",
+  "legendsLastSeason": "지난 시즌",
+  "legendsBestRank": "최고 글로벌 순위",
+  "legendsTrophiesBySeason": "시즌별 트로피",
+  "legendsEosTrophies": "시즌 종료 트로피",
+  "legendsEosDetails": "시즌 종료 상세 정보",
+  "legendsInaccurateTitle": "데이터가 부정확한가요?",
+  "legendsInaccurateIntro": "Clash of Clans API의 제한으로 인해 데이터가 항상 완벽하게 정확하지 않을 수 있습니다. 이유는 다음과 같습니다:\n",
+  "legendsInaccurateApiDelayTitle": "1. API 지연: ",
+  "legendsInaccurateApiDelayBody": "API 업데이트에는 최대 5분이 걸릴 수 있어 실시간 트로피 변경 반영이 지연될 수 있습니다.\n",
+  "legendsInaccurateConcurrentTitle": "2. 동시 변경: ",
+  "legendsInaccurateMultipleAttacksTitle": "- 여러 공격/방어: ",
+  "legendsInaccurateMultipleAttacksBody": "여러 공격이나 방어가 짧은 시간 안에 발생하면 API가 결과를 합쳐 표시할 수 있습니다(예: +68 또는 -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- 동시 공격과 방어: ",
+  "legendsInaccurateSimultaneousBody": "공격과 방어가 동시에 발생하면 혼합된 결과가 보일 수 있습니다(예: +4).\n",
+  "legendsInaccurateNetGainTitle": "3. 순증감: ",
+  "legendsInaccurateNetGainBody": "타이밍 문제가 있어도 하루 전체의 순증가 또는 순손실은 정확합니다. ",
+  "legendsInaccurateConclusion": "이러한 제한은 Clash of Clans API를 사용하는 모든 도구에 공통적으로 존재합니다. 안타깝게도 Supercell 측의 문제라 저희가 직접 고칠 수는 없습니다. 저희는 이러한 한계를 보완하고 최대한 현실에 가까운 결과를 제공하기 위해 노력하고 있습니다. 이해해 주셔서 감사합니다!",
+  "statsSeasonStats": "시즌 통계",
+  "statsByDay": "일별",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
-  "statsBySeason": "By Season",
+  "statsBySeason": "시즌별",
   "@statsBySeason": {
     "description": "Shows stats by season"
   },
-  "statsDayIndex": "Day {index}",
+  "statsDayIndex": "{index}일차",
   "@statsDayIndex": {
     "placeholders": {
       "index": {
@@ -733,7 +733,7 @@
       }
     }
   },
-  "statsIndexDays": "{index} days",
+  "statsIndexDays": "{index}일",
   "@statsIndexDays": {
     "placeholders": {
       "index": {
@@ -741,7 +741,7 @@
       }
     }
   },
-  "statsSeasonDate": "{date} season",
+  "statsSeasonDate": "{date} 시즌",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
     "placeholders": {
@@ -750,23 +750,23 @@
       }
     }
   },
-  "statsAllTownHalls": "All Town Halls",
-  "statsMembers": "Members Stats",
-  "todoTitle": "To-do list",
-  "todoExplanationTitle": "Task Calculation",
-  "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-  "todoExplanationLegendsTitle": "Legend League:",
-  "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "todoExplanationClanWarsTitle": "Clan Wars:",
-  "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-  "todoExplanationCwlTitle": "Clan War League:",
-  "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-  "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
-  "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
+  "statsAllTownHalls": "모든 마을회관",
+  "statsMembers": "멤버 통계",
+  "todoTitle": "할 일 목록",
+  "todoExplanationTitle": "작업 계산",
+  "todoExplanationIntro": "작업 완료율은 다음 활동과 특정 가중치를 기준으로 계산됩니다:",
+  "todoExplanationLegendsTitle": "전설 리그:",
+  "todoExplanationLegends": "계정당 8점 가중치, 공격 1회 = 1점.",
+  "todoExplanationRaidsTitle": "습격:",
+  "todoExplanationRaids": "계정당 5점 가중치(마지막 공격이 해제된 경우 6점), 공격 1회 = 1점.",
+  "todoExplanationClanWarsTitle": "클랜전:",
+  "todoExplanationClanWars": "계정당 2점 가중치, 공격 1회 = 1점.",
+  "todoExplanationCwlTitle": "클랜전 리그:",
+  "todoExplanationCwl": "계정당 1점 가중치, 공격 1회 = 1점. 플레이어가 리그 클랜에 속해 있지 않으면 CWL을 추적할 수 없습니다.",
+  "todoExplanationPassAndGamesTitle": "시즌 패스 및 클랜 게임:",
+  "todoExplanationPassAndGames": "계정당 각각 2점 가중치입니다. 비율은 남은 일수(패스는 1개월, 게임은 6일)를 기준으로 합니다. 초록색 = 패스 또는 게임 완료 일정에 맞음, 빨간색 = 일정에 뒤처짐.",
   "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-  "todoAccountsNumber": "{number} accounts",
+  "todoAccountsNumber": "{number}개 계정",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -775,7 +775,7 @@
     },
     "description": "Number of accounts (ex: 4 accounts)"
   },
-  "todoAccountsNumberActive": "{number} active accounts",
+  "todoAccountsNumberActive": "활성 계정 {number}개",
   "@todoAccountsNumberActive": {
     "placeholders": {
       "number": {
@@ -783,7 +783,7 @@
       }
     }
   },
-  "todoAccountsNumberInactive": "{number} inactive accounts",
+  "todoAccountsNumberInactive": "비활성 계정 {number}개",
   "@todoAccountsNumberInactive": {
     "placeholders": {
       "number": {
@@ -791,11 +791,11 @@
       }
     }
   },
-  "todoAccountsActive": "Active accounts",
-  "todoAccountsInactive": "Inactive accounts",
-  "todoAccountsNoInactive": "No inactive accounts.",
-  "todoAccountsNoActive": "No active accounts.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAccountsActive": "활성 계정",
+  "todoAccountsInactive": "비활성 계정",
+  "todoAccountsNoInactive": "비활성 계정이 없습니다.",
+  "todoAccountsNoActive": "활성 계정이 없습니다.",
+  "todoAttacksLeftDescription": "{type}에서 남은 공격이 {attacks}회 있습니다.",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -806,7 +806,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "{type}에서 남은 방어가 {defenses}회 있습니다.",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -817,7 +817,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "축하합니다, {type}의 모든 공격을 완료했습니다!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -825,7 +825,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "이벤트 종료 시간에 맞추려면 오늘 {type}에서 {points}점을 더 획득해야 합니다.",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -836,7 +836,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "축하합니다, 이벤트 종료 시 최대 보상을 받을 수 있는 일정에 맞춰 진행 중입니다({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -844,12 +844,12 @@
       }
     }
   },
-  "warTitle": "War",
-  "warFrequency": "War frequency",
-  "warParticipation": "War Participation",
-  "warLeague": "War/League",
-  "warHistory": "War History",
-  "warLog": "War Log",
+  "warTitle": "전쟁",
+  "warFrequency": "전쟁 빈도",
+  "warParticipation": "전쟁 참여",
+  "warLeague": "전쟁/리그",
+  "warHistory": "전쟁 기록",
+  "warLog": "전쟁 로그",
   "warLogClosed": "{clan}의 전쟁 기록이 비공개입니다.",
   "@warLogClosed": {
     "placeholders": {
@@ -858,9 +858,9 @@
       }
     }
   },
-  "warStats": "War Stats",
+  "warStats": "전쟁 통계",
   "warOngoing": "Ongoing war",
-  "warIsNotInWar": "{clan} is not in war.",
+  "warIsNotInWar": "{clan}은(는) 전쟁 중이 아닙니다.",
   "@warIsNotInWar": {
     "placeholders": {
       "clan": {
@@ -868,27 +868,27 @@
       }
     }
   },
-  "warAskForWar": "Contact the leader or a co-leader to start a war.",
-  "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-  "warEnded": "War ended",
-  "warInWar": "In War",
+  "warAskForWar": "전쟁을 시작하려면 대표 또는 공동 대표에게 문의하세요.",
+  "warAskForWarLogOpening": "전쟁 로그를 공개하려면 대표 또는 공동 대표에게 문의하세요.",
+  "warEnded": "전쟁 종료",
+  "warInWar": "전쟁 중",
   "@warInWar": {
     "description": "War state: active"
   },
-  "warPreparation": "Preparation",
-  "warPerfectWar": "Perfect war",
-  "warVictory": "Victory",
-  "warDefeat": "Defeat",
-  "warDraw": "Draw",
+  "warPreparation": "준비일",
+  "warPerfectWar": "완벽한 전쟁",
+  "warVictory": "승리",
+  "warDefeat": "패배",
+  "warDraw": "무승부",
   "@warDraw": {
     "description": "War ended in a draw"
   },
-  "warTeamSize": "Team size",
-  "warMyTeam": "My team",
-  "warEnemiesTeam": "Enemies",
-  "warClanDraw": "The two clans are tied",
-  "warStateOfTheWar": "State of the war",
-  "warStarsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+  "warTeamSize": "팀 규모",
+  "warMyTeam": "내 팀",
+  "warEnemiesTeam": "상대",
+  "warClanDraw": "두 클랜이 동점입니다",
+  "warStateOfTheWar": "전쟁 상황",
+  "warStarsNeededToTakeTheLead": "{clan}이(가) 앞서려면 별 {star}개 또는 별 {stars2}개와 {percent}%가 더 필요합니다.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -905,7 +905,7 @@
       }
     }
   },
-  "warStarsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+  "warStarsAndPercentNeededToTakeTheLead": "{clan}이(가) 앞서려면 {percent}% 또는 별 1개가 더 필요합니다",
   "@warStarsAndPercentNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -916,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "전쟁이 아직 시작되지 않았습니다",
+  "warWonByStars": "{clanName}이(가) 전쟁에서 승리했습니다!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -925,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName}이(가) 전쟁에서 패배했습니다",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -933,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName}이(가) 파괴율로 승리했습니다!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -941,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName}이(가) 파괴율로 패배했습니다",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -949,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "완벽한 무승부",
+  "warCanTieNeedsStars": "{clanName}은(는) 동점이 가능하지만 별 {stars}개가 필요합니다",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -961,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName}은(는) 별 수에서 따라잡을 수 없습니다",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -973,9 +973,9 @@
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
   },
-  "warNoDataAvailableForThisWar": "No data available for this war",
-  "warCalculatorFast": "Fast calculator",
-  "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+  "warNoDataAvailableForThisWar": "이 전쟁에 사용할 수 있는 데이터가 없습니다",
+  "warCalculatorFast": "빠른 계산기",
+  "warCalculatorAnswer": "{percentNeeded}%의 파괴율을 달성하려면 총 {result}%가 필요합니다.",
   "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
@@ -986,17 +986,17 @@
       }
     }
   },
-  "warCalculatorNeededOverall": "% Needed overall",
-  "warCalculatorCalculate": "Calculate",
-  "warAttacksTitle": "Attacks",
-  "warAttacksNone": "No attack yet",
+  "warCalculatorNeededOverall": "전체 필요 %",
+  "warCalculatorCalculate": "계산",
+  "warAttacksTitle": "공격",
+  "warAttacksNone": "아직 공격 없음",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "최고 공격",
+  "warAttacksCount": "공격 횟수",
+  "warAttacksMissed": "놓친 공격",
+  "warAttacksNumber": "최근 {number_war}번의 전쟁 동안 {number_time}회 공격했습니다.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -1007,7 +1007,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "전쟁당 평균 별 {stars}개를 획득했습니다.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -1015,7 +1015,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "전쟁당 평균 파괴율은 {percent}%였습니다.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1023,13 +1023,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "방어",
+  "warDefensesNone": "아직 방어 없음",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "최고 방어",
+  "warDefensesBestOutOf": "최고 방어({number}개 중)",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -1038,7 +1038,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "최근 {number_war}번의 전쟁 동안 {number_time}회 방어했습니다.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -1049,7 +1049,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "방어당 평균 별 {stars}개를 허용했습니다.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -1057,7 +1057,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "방어당 평균 파괴율은 {percent}%였습니다.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1065,24 +1065,24 @@
       }
     }
   },
-  "warStarsTitle": "Stars",
-  "warStarsAverage": "Average stars",
-  "warStarsNumber": "Number of stars",
-  "warStarsOne": "1 star",
-  "warStarsTwo": "2 stars",
-  "warStarsThree": "3 stars",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsTitle": "별",
+  "warStarsAverage": "평균 별",
+  "warStarsNumber": "별 개수",
+  "warStarsOne": "별 1개",
+  "warStarsTwo": "별 2개",
+  "warStarsThree": "별 3개",
+  "warStarsZero": "별 0개",
+  "warStarsBestPerformance": "최고 성과",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
-  "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Destruction rate",
+  "warDestructionTitle": "파괴",
+  "warDestructionAverage": "평균 파괴율",
+  "warDestructionRate": "파괴율",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryWinsDescription": "내 클랜은 최근 50번의 전쟁 중 {wins}번 승리했습니다({percent}%).",
   "@warHistoryWinsDescription": {
     "placeholders": {
       "wins": {
@@ -1093,7 +1093,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryLossesDescription": "내 클랜은 최근 50번의 전쟁 중 {losses}번 패배했습니다({percent}%).",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -1104,7 +1104,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+  "warHistoryDrawsDescription": "내 클랜은 최근 50번의 전쟁 중 {draws}번 무승부를 기록했습니다({percent}%).",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -1115,7 +1115,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "내 클랜은 최근 50번의 전쟁에서 평균 {members}명의 멤버가 참여했습니다.",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -1123,7 +1123,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+  "warHistoryAverageWarStarsDescription": "내 클랜은 최근 50번의 전쟁에서 전쟁당 평균 별 {stars}개를 획득했습니다. 이는 전체 별의 {percent}입니다.",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -1134,7 +1134,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "내 클랜은 최근 50번의 전쟁에서 평균 파괴율 {percent}%를 기록했습니다.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -1142,28 +1142,28 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "지도 위치",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "위치",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "순서",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "상대 마을회관",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
-  "warOpponentEqualThLevel": "Equal TH",
-  "warOpponentSelectMembersThLevel": "Members TH Level",
-  "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersLastXwars": "Last {number} wars",
+  "warOpponentLowerTownhall": "낮은 마을회관",
+  "warOpponentUpperTownhall": "높은 마을회관",
+  "warOpponentEqualThLevel": "동일 마을회관",
+  "warOpponentSelectMembersThLevel": "멤버 마을회관 레벨",
+  "warOpponentSelectOpponentsThLevel": "상대 마을회관 레벨",
+  "warFiltersLastXwars": "최근 {number}번의 전쟁",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
     "placeholders": {
@@ -1172,37 +1172,37 @@
       }
     }
   },
-  "warFiltersFriendly": "Friendly",
+  "warFiltersFriendly": "친선전",
   "@warFiltersFriendly": {
     "description": "Friendly war"
   },
-  "warFiltersRandom": "Random",
+  "warFiltersRandom": "일반전",
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
+  "warVisibilityToggleTownHall": "이전 마을회관 레벨 통계 숨기기/표시",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Events",
+  "warEventsTitle": "이벤트",
   "@warEventsTitle": {
     "description": "War events"
   },
-  "warEventsNewest": "Newest",
-  "warEventsOldest": "Oldest",
-  "warStatusReady": "Opted In",
+  "warEventsNewest": "최신순",
+  "warEventsOldest": "오래된순",
+  "warStatusReady": "참가 설정",
   "@warStatusReady": {
     "description": "Opted In for war"
   },
-  "warStatusUnready": "Opted Out",
+  "warStatusUnready": "불참 설정",
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "놓침",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "놓침: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1211,19 +1211,19 @@
       }
     }
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "평균",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "평균 %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clan War League",
-  "cwlOngoing": "Ongoing CWL",
-  "cwlRounds": "Rounds",
-  "cwlRoundNumber": "Round {number}",
+  "cwlClanWarLeague": "클랜전 리그",
+  "cwlOngoing": "진행 중인 CWL",
+  "cwlRounds": "라운드",
+  "cwlRoundNumber": "{number}라운드",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1239,7 +1239,7 @@
       }
     }
   },
-  "cwlRank": "Your clan is currently ranked {rank}.",
+  "cwlRank": "내 클랜은 현재 {rank}위입니다.",
   "@cwlRank": {
     "placeholders": {
       "rank": {
@@ -1247,7 +1247,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "내 클랜은 총 별 {stars}개를 획득했습니다.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -1255,7 +1255,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "내 클랜의 총 파괴율은 {percent}%입니다.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1263,7 +1263,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "내 클랜은 가능한 {totalAttacks}회 공격 중 {attacks}회를 사용했습니다.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1274,20 +1274,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
-  "joinLeaveJoin": "Join",
-  "joinLeaveLeave": "Leave",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveTitle": "가입/탈퇴 로그(현재 시즌)",
+  "joinLeaveJoin": "가입",
+  "joinLeaveLeave": "탈퇴",
+  "joinLeaveJoins": "가입",
+  "joinLeaveLeaves": "탈퇴",
+  "joinLeaveUniquePlayers": "고유 플레이어",
+  "joinLeaveMovingPlayers": "이동 플레이어",
+  "joinLeaveMostMovingPlayers": "가장 많이 이동한 플레이어",
+  "joinLeaveStillInClan": "아직 클랜에 있음",
+  "joinLeaveLeftForever": "완전히 탈퇴",
+  "joinLeaveRejoinedPlayers": "재가입한 플레이어",
+  "joinLeaveAvgTimeJoinLeave": "평균 가입/탈퇴 시간",
+  "joinLeavePeakHour": "가장 활발한 시간",
+  "joinLeaveNumberDescription": "현재 시즌({date}) 동안 탈퇴 이벤트가 {number}회 발생했습니다.",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1298,7 +1298,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "현재 시즌({date}) 동안 가입 이벤트가 {number}회 발생했습니다.",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1309,7 +1309,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "현재 시즌({date}) 동안 {number}명의 플레이어가 클랜을 떠났다가 다시 가입했습니다.",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1321,7 +1321,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "현재 시즌({date}) 동안 {number}명의 고유 플레이어가 클랜에 가입/탈퇴했습니다.",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1333,7 +1333,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number}명의 플레이어가 가입했고 아직 클랜에 있습니다.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1341,7 +1341,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number}명의 플레이어가 가입한 뒤 클랜을 떠났고 다시 가입하지 않았습니다.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1352,7 +1352,7 @@
   "@joinLeaveTitle": {
     "description": "Logs of players joining or leaving the clan."
   },
-  "joinLeaveLeftOnAt": "Left on {date} at {time}.",
+  "joinLeaveLeftOnAt": "{date} {time}에 탈퇴했습니다.",
   "@joinLeaveLeftOnAt": {
     "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1364,7 +1364,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Joined on {date} at {time}.",
+  "joinLeaveJoinedOnAt": "{date} {time}에 가입했습니다.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1376,17 +1376,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
-  "raidsLast": "Last raids",
-  "raidsOngoing": "Ongoing raids",
-  "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "Raids completed",
-  "searchNoResult": "No result.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "raidsTitle": "습격",
+  "raidsLast": "최근 습격",
+  "raidsOngoing": "진행 중인 습격",
+  "raidsDistrictsDestroyed": "파괴된 구역",
+  "raidsCompleted": "완료된 습격",
+  "searchNoResult": "결과 없음.",
+  "maintenanceTitle": "점검",
+  "maintenanceDescription": "현재 Clash of Clans가 점검 중이라 API에 접근할 수 없습니다. 나중에 다시 확인해 주세요.",
+  "downloadTooltip": "CWL 요약 다운로드",
+  "downloadInProgress": "파일 다운로드 중... 몇 초 정도 걸릴 수 있습니다...",
+  "downloadSuccess": "파일이 {path}에 성공적으로 저장되었습니다",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1394,125 +1394,125 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
-  "dashboardTitle": "Dashboard",
-  "toolsTitle": "Tools",
-  "navigationTeam": "Teams",
-  "navigationStatistics": "Statistics",
-  "versionDevice": "Version & Device",
+  "downloadError": "파일 다운로드 실패",
+  "dashboardTitle": "대시보드",
+  "toolsTitle": "도구",
+  "navigationTeam": "팀",
+  "navigationStatistics": "통계",
+  "versionDevice": "버전 및 기기",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenses",
-  "settingsLicensesSubtitle": "View licenses for third-party libraries",
-  "settingsPrivacyPolicy": "Privacy Policy",
-  "settingsPrivacyPolicySubtitle": "How we handle your data",
-  "betaFeature": "Beta Feature",
+  "settingsLicenses": "오픈 소스 라이선스",
+  "settingsLicensesSubtitle": "타사 라이브러리 라이선스 보기",
+  "settingsPrivacyPolicy": "개인정보 처리방침",
+  "settingsPrivacyPolicySubtitle": "데이터 처리 방식",
+  "betaFeature": "베타 기능",
   "betaLabel": "BETA",
-  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  "settingsLanguage": "Language",
-  "settingsSelectLanguage": "Select a language",
-  "settingsToggleTheme": "Toggle Theme",
+  "betaDescription": "이 기능은 현재 베타 버전이므로 버그가 있거나 완성되지 않았을 수 있습니다. 저희는 개선 작업을 적극적으로 진행 중이며 여러분의 의견을 환영합니다. 더 나은 기능을 만들 수 있도록 Discord 서버에서 아이디어를 공유하고 문제를 제보해 주세요.",
+  "settingsLanguage": "언어",
+  "settingsSelectLanguage": "언어 선택",
+  "settingsToggleTheme": "테마 전환",
   "faqTitle": "FAQ",
-  "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-  "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
-  "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
-  "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
-  "faqSupportUsOnPatreon": "Support us on Patreon",
-  "faqRateTheApp": "Rate the app in the store",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
-  "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
-  "translationHelpUsTranslate": "Help us translate",
-  "translationSuggestFeatures": "Suggest features",
-  "translationThankYou": "Thank you!",
-  "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-  "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-  "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators",
-  "filtersTimeFilters": "Time Filters",
+  "faqSubtitle": "자주 묻는 질문",
+  "faqIsThisFromSupercell": "이 앱은 Supercell에서 만든 것인가요?",
+  "faqFanContentPolicy": "이 자료는 비공식이며 Supercell의 보증을 받지 않았습니다. 자세한 내용은 Supercell 팬 콘텐츠 정책을 확인하세요: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "데이터가 가끔 부정확하거나 누락되는 이유는 무엇인가요?",
+  "faqClanNotTracked": "클랜이 추적되지 않음",
+  "faqClanNotTrackedAnswer": "ClashKing은 클랜이 추적 중일 때만 이 정보를 가져올 수 있습니다. 클랜이 추적되지 않는다면 Discord 서버에 ClashKing Bot을 초대하고 /addclan 명령어를 사용하세요. 이 기능을 곧 앱에서도 사용할 수 있도록 작업 중입니다.",
+  "faqTrackingDown": "추적 중단",
+  "faqTrackingDownAnswer": "추적이 일정 기간 동안 작동을 멈출 수 있습니다. 그래서 데이터에 빈 구간이 생길 수 있습니다. 이를 개선하기 위해 노력하고 있습니다.",
+  "faqApiLimitation": "Clash of Clans API 제한",
+  "faqApiLimitationAnswer": "일부 데이터는 Clash of Clans와 API에서 제공되며 몇 가지 제한이 있습니다. 전설 추적의 경우 트로피 증감이 단일 공격처럼 합산되어 보일 때가 있습니다. 건물 레벨 정보를 제공하지 못하는 이유도 이 때문입니다.",
+  "faqSupportWork": "어떻게 여러분의 작업을 지원할 수 있나요?",
+  "faqSupportWorkAnswer": "저희를 지원하는 방법은 여러 가지가 있습니다:",
+  "faqUseCodeClashKing": "\"ClashKing\" 코드 사용",
+  "faqSupportUsOnPatreon": "Patreon에서 후원",
+  "faqRateTheApp": "스토어에서 앱 평가",
+  "faqWhatCanBotDo": "ClashKing Discord 봇은 무엇을 할 수 있나요?",
+  "faqWhatCanBotDoAnswer": "ClashKing Discord 봇은 포괄적인 추적 도구, 자동 알림, 이 앱과의 원활한 연동으로 Discord에서 바로 클랜을 관리할 수 있게 도와줍니다. 연결 상태를 유지하고 체계적으로 관리하려는 클랜 대표와 멤버를 위해 설계되었습니다:",
+  "faqInviteBotToServer": "서버에 봇 초대",
+  "faqBotFeatureTracking": "플레이어 및 클랜 추적",
+  "faqBotFeatureTrackingDesc": "실시간 업데이트로 여러 클랜과 플레이어를 추가하고 모니터링하세요",
+  "faqBotFeatureWars": "전쟁 관리",
+  "faqBotFeatureWarsDesc": "전쟁 성과를 추적하고 공격을 분석하며 전쟁 알림을 받으세요",
+  "faqBotFeatureNotifications": "스마트 알림",
+  "faqBotFeatureNotificationsDesc": "지원, 전쟁 공격, 중요한 클랜 이벤트에 대한 알림을 받으세요",
+  "faqBotFeatureCommands": "강력한 명령어",
+  "faqBotFeatureCommandsDesc": "슬래시 명령어로 플레이어 통계, 전쟁 정보 등에 빠르게 접근하세요",
+  "faqNeedHelp": "도움이 필요하거나 제안을 하고 싶습니다. 어떻게 연락할 수 있나요?",
+  "faqNeedHelpAnswer": "Discord 서버에 참여해 도움을 요청하거나 의견을 남길 수 있고, devs@clashk.ing으로 이메일을 보낼 수도 있습니다. 영어 또는 프랑스어로만 작성해 주세요.",
+  "faqSendEmail": "이메일 보내기",
+  "faqJoinDiscord": "Discord 서버 참여",
+  "faqCannotOpenMailClient": "어떤 이유로 메일 클라이언트를 열 수 없습니다. 대신 이메일 주소를 복사해 두었습니다. 이메일을 작성한 뒤 받는 사람 필드에 주소를 붙여넣으세요.",
+  "faqTroubleshooting": "문제 해결",
+  "faqTroubleshootingDataTitle": "내 데이터가 동기화되지 않는 이유는 무엇인가요?",
+  "faqTroubleshootingDataDescription": "플레이어 또는 클랜 데이터가 오래된 것처럼 보입니다",
+  "faqTroubleshootingDataSolution1": "페이지를 아래로 당겨 새로고침하세요",
+  "faqTroubleshootingDataSolution2": "클랜이 추적 중인지 확인하세요(위 내용 참조)",
+  "faqTroubleshootingDataSolution3": "몇 분 기다렸다가 다시 시도하세요. API 업데이트에는 시간이 걸릴 수 있습니다",
+  "faqTroubleshootingCrashTitle": "앱이 충돌하는 이유는 무엇인가요?",
+  "faqTroubleshootingCrashDescription": "앱이 예기치 않게 종료되거나 멈춥니다",
+  "faqTroubleshootingCrashSolution1": "앱을 닫고 다시 시작하세요",
+  "faqTroubleshootingCrashSolution2": "앱을 최신 버전으로 업데이트하세요",
+  "faqTroubleshootingCrashSolution3": "앱 캐시와 데이터를 지우거나(Android) 앱을 다시 설치하세요",
+  "faqTroubleshootingCrashSolution4": "기기 저장 공간을 확보하세요",
+  "faqContactSupport": "문제가 계속되면 지원팀에 문의하세요(마지막 섹션 참조)",
+  "faqTroubleshootingAccountTitle": "계정을 인증할 수 없는 이유는 무엇인가요?",
+  "faqTroubleshootingAccountDescription": "Clash of Clans 계정 연결 문제",
+  "faqTroubleshootingAccountSolution1": "#으로 시작하는 올바른 플레이어 태그를 사용하고 있는지 확인하세요",
+  "faqTroubleshootingAccountSolution2": "계정이 이미 연결된 것처럼 보이면 Clash of Clans 설정의 API 토큰을 사용하세요",
+  "faqTroubleshootingSolutions": "해결 방법:",
+  "faqWhatIsClashKingProject": "ClashKing 프로젝트란 무엇인가요?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing은 커뮤니티를 위해 열정적인 플레이어들이 만든 오픈 소스 Clash of Clans 통계 및 클랜 관리 프로젝트입니다. 저희는 게임에 대한 애정으로 본업과 병행해 사이드 프로젝트로 개발하고 있습니다. 모바일 앱, Discord 봇, 무료 API를 함께 제공해 최고의 Clash of Clans 경험을 제공합니다. 이 프로젝트는 사용자 기부와 Supercell 크리에이터 코드 사용만으로 운영되며, 광고도 프리미엄 기능도 없습니다!",
+  "faqViewOnGitHub": "GitHub에서 보기",
+  "faqFeaturesGuide": "ClashKing 앱은 무엇을 할 수 있나요?",
+  "faqFeaturesGuideDescription": "Clash of Clans 경험을 한 단계 끌어올리세요! ClashKing 앱은 모든 통계와 클랜 데이터에 아름답고 빠르게 접근할 수 있게 해 주며, Discord가 없거나 깔끔한 모바일 경험을 선호하는 플레이어에게 완벽합니다:",
+  "faqAppDevelopmentNotice": "앱을 더 좋게 만들기 위해 새 기능을 적극적으로 개발하고 있습니다. 여러분의 피드백이 개선에 도움이 됩니다!",
+  "faqFeaturesPlayerTitle": "플레이어 통계",
+  "faqFeaturesPlayerDescription": "진행 상황, 업적, 전설 리그 성과를 추적하세요",
+  "faqFeaturesClanTitle": "클랜 관리",
+  "faqFeaturesClanDescription": "클랜 멤버, 지원, 전반적인 클랜 상태를 모니터링하세요",
+  "faqFeaturesWarTitle": "전쟁 추적",
+  "faqFeaturesWarDescription": "전쟁 성과, 공격 전략, 승률을 분석하세요",
+  "faqFeaturesLegendsTitle": "데이터가 부정확한가요?",
+  "faqFeaturesLegendsDescription": "일일 트로피 추적 및 시즌 종료 통계",
+  "faqFeaturesCwlTitle": "CWL 분석",
+  "faqFeaturesCwlDescription": "클랜전 리그 성과와 멤버 기여도",
+  "faqSearchHint": "FAQ 검색...",
+  "faqSectionGettingStarted": "시작하기 및 소개",
+  "faqSectionSupportAndContact": "지원 및 연락",
+  "faqTranslationIssue": "번역이 누락되었거나 잘못되었나요?",
+  "faqTranslationIssueAnswer": "번역은 여러분 같은 앱 사용자들이 도와주고 있습니다! 저희 개발자는 프랑스어와 영어 번역만 제공합니다. 누락되었거나 잘못된 번역을 발견했다면 개선에 도움을 줄 수 있습니다. 도와주고 싶다면 Discord 또는 이메일로 언제든 연락해 주세요. 번역자를 위한 전용 Discord 채널도 있어 질문하고 도움을 받을 수 있습니다.",
+  "faqWaysToSupport": "저희를 지원하는 방법:",
+  "translationHelpUsTranslate": "번역에 참여하기",
+  "translationSuggestFeatures": "기능 제안",
+  "translationThankYou": "감사합니다!",
+  "translationThankYouContent": "이 앱을 전 세계 더 많은 사람들이 사용할 수 있도록 도와주는 모든 멋진 번역자 여러분께 진심으로 감사드립니다!",
+  "translationHelpTranslateContent": "Crowdin에서 앱 번역을 도울 수 있습니다. 여러분의 언어가 Crowdin에 없다면 Discord 서버에서 요청해 주세요. 도움에 정말 감사드립니다!",
+  "translationHelpTranslateButton": "Crowdin에서 번역 돕기",
+  "translationCurrentTranslators": "현재 번역자",
+  "filtersTimeFilters": "시간 필터",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "전쟁 설정",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "성과",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "고급",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "활성 필터 없음",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "최근 {count}번의 전쟁 표시 중(기본값)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1522,115 +1522,115 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "빠른 필터",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "최근 30일",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "3별만",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "첫 공격",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "시즌",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "날짜 범위",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "전쟁 유형",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "마을회관",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "공격자 마을회관",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "방어자 마을회관",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "동일 마을회관만",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "파괴율",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "옵션",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "첫 공격만",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "결과 제한",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "최소 위치",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "최대 위치",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "시작일",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "종료일",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersYear": "Year",
+  "filtersYear": "연도",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "월",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "연도 선택",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "모든 전쟁",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "마을회관 레벨별 공격 성과",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "마을회관 레벨별 방어 성과",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "행: 내 마을회관 | 열: 상대 마을회관",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsGood": "Good",
+  "chartsGood": "좋음",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "훌륭함",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
@@ -1638,143 +1638,143 @@
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "성과 인사이트",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "별 통계를 기준으로 필터를 제안해 성과 패턴을 강조합니다",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
-  "generalExport": "Export",
+  "generalExport": "내보내기",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "전쟁 통계 내보내기",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "내보내기 성공!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "전체 통계, 상세 공격, 마을회관 분석 등 여러 시트가 포함된 Excel 파일로 전쟁 통계를 다운로드합니다.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "내보내기 생성 중...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "클랜전 통계 내보내기 기능은 곧 제공됩니다",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "적용된 필터 없음",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "플레이어 데이터를 불러오지 못했습니다",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "deepLinkInvalidPlayer": "Invalid player link.",
+  "deepLinkInvalidPlayer": "유효하지 않은 플레이어 링크입니다.",
   "@deepLinkInvalidPlayer": {
     "description": "Shown when a player deep link does not include a valid tag"
   },
-  "deepLinkInvalidClan": "Invalid clan link.",
+  "deepLinkInvalidClan": "유효하지 않은 클랜 링크입니다.",
   "@deepLinkInvalidClan": {
     "description": "Shown when a clan deep link does not include a valid tag"
   },
-  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "deepLinkFailedToOpenPlayer": "플레이어를 열지 못했습니다.",
   "@deepLinkFailedToOpenPlayer": {
     "description": "Shown when a player deep link target could not be loaded"
   },
-  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "deepLinkFailedToOpenClan": "클랜을 열지 못했습니다.",
   "@deepLinkFailedToOpenClan": {
     "description": "Shown when a clan deep link target could not be loaded"
   },
-  "deepLinkUnknown": "Unknown deep link.",
+  "deepLinkUnknown": "알 수 없는 딥 링크입니다.",
   "@deepLinkUnknown": {
     "description": "Shown when the app receives a deep link it does not understand"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "공격 상세 정보",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "공격 순서",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "공격자",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "방어자",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "이름",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "상태",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "멤버당 공격",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "전쟁 시작",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "전쟁 종료",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "클랜 레벨",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "총 별",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "파괴율 %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "전쟁 정보",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "전쟁 결과",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "플레이어",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "실패한 공격(0~1별)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "2별 이상을 얻지 못한 공격을 표시합니다",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "놓친 완파 공격",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "2별을 얻은 공격을 표시합니다. 완파 기회였을 수 있습니다",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "TH{thLevel} 상대 낮은 별",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1784,7 +1784,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "TH{thLevel}을(를) 상대로 별 획득이 낮은 공격을 표시합니다",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1794,7 +1794,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "TH{thLevel}에 취약",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1804,7 +1804,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "TH{thLevel} 공격자가 높은 별을 얻은 경우를 표시합니다",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1814,91 +1814,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "CWL 낮은 성과",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "일반 전쟁보다 평균 별이 낮은 CWL 공격을 표시합니다",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "일반 전쟁 낮은 성과",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "CWL보다 평균 별이 낮은 일반 전쟁 공격을 표시합니다",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "첫 공격 분석",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "처음 공격하는 기지에서의 성과만 분석합니다",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "최근 성과(30일)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "현재 추세를 파악하기 위해 최근 성과를 표시합니다",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "중요 공격",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "전쟁 상위 5개 위치의 공격을 표시합니다",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "정리 공격",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "전쟁 하위 위치의 공격을 표시합니다",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "개선 필요",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "높은 3별 비율",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "높은 파괴율",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "꾸준한 성과",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "3별 안정성",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "전체 별 성과",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "CWL만",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "일반 전쟁",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "친선전",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "{count}별만",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1907,15 +1907,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "완파 공격",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "실패한 공격",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "TH{level}만",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1924,46 +1924,46 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "지난주",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "지난달",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "내 프리셋",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "사용자 지정 필터",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "최근 필터",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
-  "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalError": "오류",
+  "generalSuccess": "성공",
+  "generalFailed": "실패",
+  "generalMinimum": "최소",
+  "generalMaximum": "최대",
+  "generalHigh": "높음",
+  "generalLow": "낮음",
+  "generalPoor": "나쁨",
+  "generalOpen": "열기",
+  "generalClosed": "닫힘",
+  "generalAvailable": "사용 가능",
+  "authErrorUserCancelledDiscordLogin": "사용자가 Discord 로그인을 취소했습니다.",
+  "authErrorDiscordLoginFailed": "Discord 로그인에 실패했습니다. 다시 시도하세요.",
+  "authErrorEmailLoginFailed": "이메일 로그인에 실패했습니다. 자격 증명을 확인하세요.",
+  "authErrorEmailNotVerified": "이메일 주소가 인증되지 않았습니다. 이메일을 확인하고 인증 코드를 입력하세요.",
+  "authErrorEmailVerificationFailed": "이메일 인증에 실패했습니다. 토큰이 유효하지 않거나 만료되었을 수 있습니다.",
+  "authErrorDiscordLinkFailed": "Discord 계정 연결에 실패했습니다. 이미 다른 계정에 연결되어 있을 수 있습니다.",
+  "authErrorEmailLinkFailed": "이메일 계정 연결에 실패했습니다. 이메일이 이미 사용 중일 수 있습니다.",
+  "authErrorUserNotAuthenticated": "사용자가 인증되지 않았습니다. 다시 로그인하세요.",
+  "apiErrorInvalidJsonResponse": "문제가 발생했습니다. 다시 시도하세요.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1973,7 +1973,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "문제가 발생했습니다. 입력 내용을 확인하세요.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1987,7 +1987,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "권한이 없습니다. 다시 로그인하세요.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1997,7 +1997,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "이 작업을 수행할 권한이 없습니다.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -2007,7 +2007,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "찾고 있는 항목을 찾을 수 없습니다.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -2017,7 +2017,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "요청이 너무 많습니다. 나중에 다시 시도하세요.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -2027,7 +2027,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "서버를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도하세요.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -2041,7 +2041,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "예상치 못한 오류가 발생했습니다. 다시 시도하세요.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -2055,10 +2055,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "인터넷 연결이 없습니다. 네트워크를 확인하고 다시 시도하세요.",
+  "apiErrorTimeout": "요청 시간이 초과되었습니다. 다시 시도하세요.",
+  "apiErrorInvalidFormat": "응답 형식이 유효하지 않습니다. 다시 시도하세요.",
+  "apiErrorOperationFailed": "요청을 완료할 수 없었습니다. 다시 시도하세요.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -2068,7 +2068,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "오프라인 상태인 것 같습니다. 연결을 확인하고 다시 시도하세요.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -2078,7 +2078,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "요청이 너무 오래 걸렸습니다. 다시 시도하세요.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2088,7 +2088,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "데이터를 처리하는 중 문제가 발생했습니다. 다시 시도하세요.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2098,7 +2098,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "앱 설정을 불러올 수 없습니다(오류 {statusCode}). 다시 시도하세요.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2108,7 +2108,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "서버에서 구성을 불러오는 중 오류가 발생했습니다",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
@@ -2118,22 +2118,22 @@
       }
     }
   },
-  "gameItemHousingSpace": "Housing Space",
-  "gameItemAttackSpeed": "Attack Speed",
-  "gameItemAttackRange": "Attack Range",
-  "gameItemMovementSpeed": "Movement Speed",
-  "gameItemUpgradeResource": "Upgrade Resource",
-  "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero",
+  "gameItemHousingSpace": "인구수",
+  "gameItemAttackSpeed": "공격 속도",
+  "gameItemAttackRange": "공격 사거리",
+  "gameItemMovementSpeed": "이동 속도",
+  "gameItemUpgradeResource": "업그레이드 자원",
+  "gameItemRarity": "희귀도",
+  "gameItemHero": "영웅",
   "gameItemDps": "DPS",
   "gameItemHitpoints": "HP",
-  "gameItemHealOnActivation": "Heal",
-  "gameItemTargets": "Targets",
-  "gameItemTargetsGround": "Ground",
-  "gameItemTargetsAir": "Air",
-  "gameItemFlying": "Flying",
-  "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time",
+  "gameItemHealOnActivation": "치유",
+  "gameItemTargets": "대상",
+  "gameItemTargetsGround": "지상",
+  "gameItemTargetsAir": "공중",
+  "gameItemFlying": "비행",
+  "gameItemUpgradeCost": "업그레이드 비용",
+  "gameItemUpgradeTime": "업그레이드 시간",
   "generalExpand": "확장하다",
   "generalCollapse": "무너지다",
   "generalBookmark": "서표",
@@ -2431,67 +2431,67 @@
   "warStatsFilterFreshAttacksDescription": "각 기지의 첫 번째 공격만 표시",
   "warStatsFilterResultLimit": "결과 제한",
   "generalResultsCount": "{count} 결과",
-  "notifEventsDescription": "Clan Games, CWL, Raid Weekend, and season events.",
-  "notifAnnouncementsDescription": "In-app banners and future push alerts for ClashKing updates.",
-  "notifUpgradeFinishesDescription": "Troops, heroes, pets, spells, equipment, and buildings.",
-  "notifSupportReminderDescription": "Monthly reminder to support ClashKing.",
-  "notifDevicePushSetup": "Device push setup",
-  "notifAccountScope": "Account scope",
-  "notifTestNotification": "Test notification",
-  "settingsAppIcon": "App Icon",
-  "settingsChanging": "Changing...",
-  "settingsAddWarWidget": "Add War Widget",
-  "settingsWarWidgetLinkClanFirst": "Link an account in a clan first",
-  "settingsWarWidgetClanCount": "{count} clan(s) available",
+  "notifEventsDescription": "클랜 게임, CWL, 습격 주말, 시즌 이벤트.",
+  "notifAnnouncementsDescription": "ClashKing 업데이트를 위한 앱 내 배너 및 향후 푸시 알림.",
+  "notifUpgradeFinishesDescription": "유닛, 영웅, 펫, 마법, 장비, 건물.",
+  "notifSupportReminderDescription": "ClashKing 후원을 위한 월간 알림.",
+  "notifDevicePushSetup": "기기 푸시 설정",
+  "notifAccountScope": "계정 범위",
+  "notifTestNotification": "테스트 알림",
+  "settingsAppIcon": "앱 아이콘",
+  "settingsChanging": "변경 중...",
+  "settingsAddWarWidget": "전쟁 위젯 추가",
+  "settingsWarWidgetLinkClanFirst": "먼저 클랜에 속한 계정을 연결하세요",
+  "settingsWarWidgetClanCount": "사용 가능한 클랜 {count}개",
   "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Bot-linked accounts and Discord data",
-  "settingsDiscordSyncSubtitle": "Sync bot-linked accounts and Discord data",
-  "settingsConnected": "Connected",
-  "settingsClashKingAccount": "ClashKing account",
-  "settingsEmailConnectedSubtitle": "Email login is connected",
-  "settingsEmailRecoverySubtitle": "Add email login for account recovery",
-  "settingsFeatureRequestsTitle": "Feature Requests",
-  "playerOpenInGame": "Open in game",
-  "playerBookmarkRemove": "Remove player bookmark",
-  "playerBookmarkAdd": "Bookmark player",
-  "playerBestTrophies": "Best trophies",
-  "clanLoadFailed": "Failed to load clan.",
-  "gameItemLevels": "Levels",
-  "resourceDarkElixir": "Dark Elixir",
-  "resourceBuilderElixir": "Builder Elixir",
-  "resourceBuilderGold": "Builder Gold",
-  "resourceElixir": "Elixir",
-  "resourceGold": "Gold",
-  "resourceGlowyOre": "Glowy Ore",
-  "resourceStarryOre": "Starry Ore",
-  "resourceShinyOre": "Shiny Ore",
-  "resourceGeneric": "Resource",
-  "seasonStatsGoldGrabbed": "Gold Grabbed",
-  "seasonStatsActivity": "Activity",
-  "seasonStatsAttackWins": "Attack Wins",
-  "seasonStatsTrophies": "Season Trophies",
-  "todoSearchAccountsHint": "Search accounts",
-  "generalClearSearch": "Clear search",
-  "clanCapitalAvgRewards": "Avg rewards",
-  "clanCapitalAvgDistrictsPerWeek": "Avg districts/week",
-  "clanCapitalTopAttackers": "Top attackers",
-  "clanCapitalPlayersTracked": "{count} players tracked",
-  "clanCapitalDefenseOverTime": "Defense over time",
-  "clanCapitalDistrictsTracked": "{count} districts tracked",
-  "clanCapitalSelectedRaid": "Selected raid",
-  "generalSummary": "Summary",
-  "generalBreakdown": "Breakdown",
-  "clanPointsTitle": "Clan points",
-  "clanBuilderBasePoints": "Builder base points",
-  "clanType": "Clan type",
-  "clanRequiredTownHall": "Required Town Hall",
-  "clanRequiredTownHallOnly": "{level}+ only",
-  "clanCapitalPoints": "Capital points",
-  "todoAllAccounts": "All accounts",
-  "todoCombinedAcrossAccounts": "Combined to-do across your accounts",
-  "todoPreviewAccount": "Preview account",
-  "todoLastActiveUnavailable": "Last active unavailable",
-  "todoActiveRelative": "Active {time}",
+  "settingsDiscordConnectedSubtitle": "봇 연결 계정 및 Discord 데이터",
+  "settingsDiscordSyncSubtitle": "봇 연결 계정과 Discord 데이터 동기화",
+  "settingsConnected": "연결됨",
+  "settingsClashKingAccount": "ClashKing 계정",
+  "settingsEmailConnectedSubtitle": "이메일 로그인이 연결되었습니다",
+  "settingsEmailRecoverySubtitle": "계정 복구를 위해 이메일 로그인을 추가하세요",
+  "settingsFeatureRequestsTitle": "기능 요청",
+  "playerOpenInGame": "게임에서 열기",
+  "playerBookmarkRemove": "플레이어 북마크 제거",
+  "playerBookmarkAdd": "플레이어 북마크",
+  "playerBestTrophies": "최고 트로피",
+  "clanLoadFailed": "클랜을 불러오지 못했습니다.",
+  "gameItemLevels": "레벨",
+  "resourceDarkElixir": "다크 엘릭서",
+  "resourceBuilderElixir": "장인 엘릭서",
+  "resourceBuilderGold": "장인 골드",
+  "resourceElixir": "엘릭서",
+  "resourceGold": "골드",
+  "resourceGlowyOre": "반짝 광석",
+  "resourceStarryOre": "별빛 광석",
+  "resourceShinyOre": "빛나는 광석",
+  "resourceGeneric": "자원",
+  "seasonStatsGoldGrabbed": "획득한 골드",
+  "seasonStatsActivity": "활동",
+  "seasonStatsAttackWins": "공격 승리",
+  "seasonStatsTrophies": "시즌 트로피",
+  "todoSearchAccountsHint": "계정 검색",
+  "generalClearSearch": "검색 지우기",
+  "clanCapitalAvgRewards": "평균 보상",
+  "clanCapitalAvgDistrictsPerWeek": "주당 평균 구역",
+  "clanCapitalTopAttackers": "상위 공격자",
+  "clanCapitalPlayersTracked": "{count}명 플레이어 추적 중",
+  "clanCapitalDefenseOverTime": "시간별 방어",
+  "clanCapitalDistrictsTracked": "{count}개 구역 추적 중",
+  "clanCapitalSelectedRaid": "선택한 습격",
+  "generalSummary": "요약",
+  "generalBreakdown": "분석",
+  "clanPointsTitle": "클랜 점수",
+  "clanBuilderBasePoints": "장인 기지 점수",
+  "clanType": "클랜 유형",
+  "clanRequiredTownHall": "필요 마을회관",
+  "clanRequiredTownHallOnly": "{level}+ 전용",
+  "clanCapitalPoints": "수도 점수",
+  "todoAllAccounts": "모든 계정",
+  "todoCombinedAcrossAccounts": "계정 전체 통합 할 일",
+  "todoPreviewAccount": "계정 미리보기",
+  "todoLastActiveUnavailable": "마지막 활동 정보 없음",
+  "todoActiveRelative": "{time} 활동",
   "@todoActiveRelative": {
     "placeholders": {
       "time": {
@@ -2499,8 +2499,8 @@
       }
     }
   },
-  "todoCompleteLower": "complete",
-  "todoPointsLeftShort": "{points} points left",
+  "todoCompleteLower": "완료",
+  "todoPointsLeftShort": "{points}점 남음",
   "@todoPointsLeftShort": {
     "placeholders": {
       "points": {
@@ -2508,7 +2508,7 @@
       }
     }
   },
-  "todoItemsLeftShort": "{count} left",
+  "todoItemsLeftShort": "{count}개 남음",
   "@todoItemsLeftShort": {
     "placeholders": {
       "count": {
@@ -2516,8 +2516,8 @@
       }
     }
   },
-  "todoAllCaughtUpForNow": "All caught up for now",
-  "todoEventEndsIn": "Ends in {duration}",
+  "todoAllCaughtUpForNow": "현재 모두 완료되었습니다",
+  "todoEventEndsIn": "{duration} 후 종료",
   "@todoEventEndsIn": {
     "placeholders": {
       "duration": {
@@ -2525,7 +2525,7 @@
       }
     }
   },
-  "todoEventStartsIn": "Starts in {duration}",
+  "todoEventStartsIn": "{duration} 후 시작",
   "@todoEventStartsIn": {
     "placeholders": {
       "duration": {
@@ -2533,38 +2533,38 @@
       }
     }
   },
-  "todoRemainingUpgradeTooltip": "Tap for remaining upgrade cost and time",
-  "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
-  "sideRankingsTitle": "Rankings",
-  "sideRankingsSubtitle": "Official leaderboards plus ClashKing endpoints.",
-  "sideRankingsLoadError": "Could not load official rankings.",
-  "sideRankingsEmptyTitle": "No rankings returned",
-  "sideRankingsEmptyBody": "Try another leaderboard or location.",
-  "sideRankingsMockups": "ClashKing mockups",
-  "sideStatsTitle": "Stats",
-  "sideStatsSubtitle": "Leaderboard stats from official Clash API surfaces.",
-  "sideStatsLoadError": "Could not load leaderboard stats.",
-  "sideTopScore": "Top score",
-  "sideTop200Avg": "Top 200 avg",
-  "sideBasesArmiesTitle": "Bases & Armies",
-  "sideBasesArmiesSubtitle": "Discord-saved layouts and army links.",
-  "sideBotSyncTarget": "Bot sync target",
-  "sideBotSyncTargetBody": "The bot already saves bases and armies to the Discord profile. This page is ready for that synced payload.",
-  "sideSavedBases": "Saved bases",
-  "sideWarBaseSlots": "War base slots",
-  "sideWarBaseSlotsBody": "Town hall, base type, link, and last updated.",
-  "sideLegendBaseSlots": "Legend base slots",
-  "sideLegendBaseSlotsBody": "Quick copy plus account association.",
-  "sideSavedArmies": "Saved armies",
-  "sideArmyLinks": "Army links",
-  "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
-  "sideGameAssetsTitle": "Game Assets",
-  "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
-  "sideNoLinkedPlayersTitle": "No linked players loaded",
-  "sideNoLinkedPlayersBody": "Add or refresh linked accounts to prefill league data.",
-  "sideReadyNow": "Ready now",
-  "sideDays": "{count} days",
+  "todoRemainingUpgradeTooltip": "남은 업그레이드 비용과 시간을 보려면 탭하세요",
+  "announcementAnimeFuryTitle": "애니메 퓨리",
+  "announcementAnimeFurySubtitle": "2026년 6월 업데이트를 둘러보세요",
+  "sideRankingsTitle": "순위",
+  "sideRankingsSubtitle": "공식 리더보드와 ClashKing 엔드포인트.",
+  "sideRankingsLoadError": "공식 순위를 불러올 수 없습니다.",
+  "sideRankingsEmptyTitle": "반환된 순위가 없습니다",
+  "sideRankingsEmptyBody": "다른 리더보드나 위치를 시도하세요.",
+  "sideRankingsMockups": "ClashKing 목업",
+  "sideStatsTitle": "통계",
+  "sideStatsSubtitle": "공식 Clash API 화면의 리더보드 통계.",
+  "sideStatsLoadError": "리더보드 통계를 불러올 수 없습니다.",
+  "sideTopScore": "최고 점수",
+  "sideTop200Avg": "상위 200 평균",
+  "sideBasesArmiesTitle": "기지 및 군대",
+  "sideBasesArmiesSubtitle": "Discord에 저장된 배치와 군대 링크.",
+  "sideBotSyncTarget": "봇 동기화 대상",
+  "sideBotSyncTargetBody": "봇은 이미 Discord 프로필에 기지와 군대를 저장합니다. 이 페이지는 동기화된 데이터를 받을 준비가 되어 있습니다.",
+  "sideSavedBases": "저장된 기지",
+  "sideWarBaseSlots": "전쟁 기지 슬롯",
+  "sideWarBaseSlotsBody": "마을회관, 기지 유형, 링크, 마지막 업데이트.",
+  "sideLegendBaseSlots": "전설 기지 슬롯",
+  "sideLegendBaseSlotsBody": "빠른 복사 및 계정 연결.",
+  "sideSavedArmies": "저장된 군대",
+  "sideArmyLinks": "군대 링크",
+  "sideArmyLinksBody": "구성, 마법, 시즈, 메모, 공유 링크.",
+  "sideGameAssetsTitle": "게임 에셋",
+  "sideGameAssetsSubtitle": "폴더별로 묶인 호스팅 ClashKing 에셋.",
+  "sideNoLinkedPlayersTitle": "연결된 플레이어를 불러오지 않았습니다",
+  "sideNoLinkedPlayersBody": "리그 데이터를 미리 채우려면 연결 계정을 추가하거나 새로고침하세요.",
+  "sideReadyNow": "지금 준비됨",
+  "sideDays": "{count}일",
   "@sideDays": {
     "placeholders": {
       "count": {
@@ -2572,7 +2572,7 @@
       }
     }
   },
-  "sideOreLeft": "{shiny} shiny, {glowy} glowy, {starry} starry left",
+  "sideOreLeft": "빛나는 광석 {shiny}, 반짝 광석 {glowy}, 별빛 광석 {starry} 남음",
   "@sideOreLeft": {
     "placeholders": {
       "shiny": {
@@ -2586,14 +2586,14 @@
       }
     }
   },
-  "sideShinyOre": "Shiny ore",
-  "sideGlowyOre": "Glowy ore",
-  "sideStarryOre": "Starry ore",
-  "sideDailyBonusAdjustment": "Daily bonus adjustment",
-  "sideExtraShiny": "Extra shiny",
-  "sideExtraGlowy": "Extra glowy",
-  "sideExtraStarry": "Extra starry",
-  "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
+  "sideShinyOre": "빛나는 광석",
+  "sideGlowyOre": "반짝 광석",
+  "sideStarryOre": "별빛 광석",
+  "sideDailyBonusAdjustment": "일일 보너스 조정",
+  "sideExtraShiny": "추가 빛나는 광석",
+  "sideExtraGlowy": "추가 반짝 광석",
+  "sideExtraStarry": "추가 별빛 광석",
+  "sideZapQuakeTitle": "번개 {zaps}개 + 지진 1개",
   "@sideZapQuakeTitle": {
     "placeholders": {
       "zaps": {
@@ -2601,7 +2601,7 @@
       }
     }
   },
-  "sideZapQuakeSubtitle": "{quakeDamage} quake damage, {lightningDamage} per lightning",
+  "sideZapQuakeSubtitle": "지진 피해 {quakeDamage}, 번개당 {lightningDamage}",
   "@sideZapQuakeSubtitle": {
     "placeholders": {
       "quakeDamage": {
@@ -2612,11 +2612,11 @@
       }
     }
   },
-  "sideBuildingHp": "Building HP",
-  "sideLightningLevel": "Lightning level",
-  "sideEarthquakeLevel": "Earthquake level",
-  "sideWithoutEarthquake": "Without earthquake",
-  "sideLightningCount": "{count} lightning",
+  "sideBuildingHp": "건물 HP",
+  "sideLightningLevel": "번개 레벨",
+  "sideEarthquakeLevel": "지진 레벨",
+  "sideWithoutEarthquake": "지진 없이",
+  "sideLightningCount": "번개 {count}개",
   "@sideLightningCount": {
     "placeholders": {
       "count": {
@@ -2624,9 +2624,9 @@
       }
     }
   },
-  "sideFireballQuakeTitle": "Fireball + 1 quake",
-  "sideAddSupportDamage": "Add support damage",
-  "sideFireballQuakeSubtitle": "{fireballDamage} fireball damage, {hpLeft} HP left after quake",
+  "sideFireballQuakeTitle": "화염구 + 지진 1개",
+  "sideAddSupportDamage": "지원 피해 추가",
+  "sideFireballQuakeSubtitle": "화염구 피해 {fireballDamage}, 지진 후 남은 HP {hpLeft}",
   "@sideFireballQuakeSubtitle": {
     "placeholders": {
       "fireballDamage": {
@@ -2637,9 +2637,9 @@
       }
     }
   },
-  "sideFireballLevel": "Fireball level",
-  "sideQuakePressure": "Quake pressure",
-  "sideQuakeSpellCount": "{count} quake spell(s)",
+  "sideFireballLevel": "화염구 레벨",
+  "sideQuakePressure": "지진 압박",
+  "sideQuakeSpellCount": "지진 마법 {count}개",
   "@sideQuakeSpellCount": {
     "placeholders": {
       "count": {
@@ -2647,14 +2647,14 @@
       }
     }
   },
-  "sideLocation": "Location",
-  "sideFilter": "Filter",
-  "sideRefresh": "Refresh",
-  "sideOfficialClashLeaderboard": "Official Clash leaderboard",
-  "sideAllTownHallsShort": "All TH",
-  "sideOwned": "Owned",
-  "sideTarget": "Target",
-  "sideDailyValue": "daily {value}",
+  "sideLocation": "위치",
+  "sideFilter": "필터",
+  "sideRefresh": "새로고침",
+  "sideOfficialClashLeaderboard": "공식 Clash 리더보드",
+  "sideAllTownHallsShort": "모든 TH",
+  "sideOwned": "보유",
+  "sideTarget": "목표",
+  "sideDailyValue": "일일 {value}",
   "@sideDailyValue": {
     "placeholders": {
       "value": {
@@ -2662,9 +2662,9 @@
       }
     }
   },
-  "sideDecrease": "Decrease",
-  "sideIncrease": "Increase",
-  "sideLevel": "Level {level}",
+  "sideDecrease": "감소",
+  "sideIncrease": "증가",
+  "sideLevel": "레벨 {level}",
   "@sideLevel": {
     "placeholders": {
       "level": {
@@ -2672,58 +2672,58 @@
       }
     }
   },
-  "sidePopularPlayers": "Players",
-  "sidePopularClans": "Clans",
-  "sidePopularWarsCwl": "Wars & CWL",
-  "rankingPlayerTrophies": "Player trophies",
-  "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
-  "rankingPlayerBuilder": "Player builder",
-  "rankingPlayerBuilderHeading": "Players Builder Base Ranking",
-  "rankingClanTrophies": "Clan trophies",
-  "rankingClanTrophiesHeading": "Clans Trophies Ranking",
-  "rankingClanBuilder": "Clan builder",
-  "rankingClanBuilderHeading": "Clans Builder Base Ranking",
-  "rankingClanCapital": "Clan capital",
-  "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "assetFolderEquipment": "Equipment",
-  "assetFolderLeagues": "Leagues",
-  "assetFolderResources": "Resources",
-  "assetFolderStickers": "Stickers",
-  "upgradeSectionHeroes": "Heroes",
-  "upgradeSectionTroops": "Troops",
-  "upgradeSectionSpells": "Spells",
-  "upgradeSectionPets": "Pets",
-  "upgradeSectionEquipment": "Equipment",
-  "sideMockupSource": "Source",
-  "sideMockupMode": "Mode",
-  "sideMockupPreview": "Preview",
-  "sideMockupRows": "Rows",
-  "sideMockupRowsValue": "5 mockups",
-  "endpointLeagueTop200": "League top 200",
-  "endpointLeagueTop200Preview": "Legend League · 5,742 trophies",
-  "endpointTownhallTop200": "Townhall top 200",
-  "endpointTownhallTop200Preview": "TH17 · Global player board",
-  "endpointClanDonations": "Clan donations",
-  "endpointClanDonationsPreview": "United States · weekly clan totals",
-  "endpointClanWarWins": "Clan war wins",
-  "endpointClanWarWinsPreview": "International · all-time war wins",
-  "endpointTop200ArmyUsage": "Top 200 army usage",
-  "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
-  "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Weekly",
-  "endpointStateWins": "Wins",
-  "endpointStateUsage": "Usage",
-  "notifGroupBattles": "Battles",
-  "notifGroupReminders": "Reminders",
-  "notifGroupSupport": "Support",
-  "notifGroupProgress": "Progress",
-  "notifLeagueDefense": "League defense",
-  "notifLeagueDefenseResult": "League defense result",
-  "notifLeagueTriple": "League triple",
-  "notifLeagueAttackBody": "Lord Clasher attacked {player} • {percent}% • {stars} stars • {league}",
+  "sidePopularPlayers": "플레이어",
+  "sidePopularClans": "클랜",
+  "sidePopularWarsCwl": "전쟁 및 CWL",
+  "rankingPlayerTrophies": "플레이어 트로피",
+  "rankingPlayerTrophiesHeading": "플레이어 트로피 순위",
+  "rankingPlayerBuilder": "플레이어 장인",
+  "rankingPlayerBuilderHeading": "플레이어 장인 기지 순위",
+  "rankingClanTrophies": "클랜 트로피",
+  "rankingClanTrophiesHeading": "클랜 트로피 순위",
+  "rankingClanBuilder": "클랜 장인",
+  "rankingClanBuilderHeading": "클랜 장인 기지 순위",
+  "rankingClanCapital": "클랜 수도",
+  "rankingClanCapitalHeading": "클랜 수도 순위",
+  "assetFolderTroops": "유닛",
+  "assetFolderSpells": "마법",
+  "assetFolderHeroes": "영웅",
+  "assetFolderEquipment": "장비",
+  "assetFolderLeagues": "리그",
+  "assetFolderResources": "자원",
+  "assetFolderStickers": "스티커",
+  "upgradeSectionHeroes": "영웅",
+  "upgradeSectionTroops": "유닛",
+  "upgradeSectionSpells": "마법",
+  "upgradeSectionPets": "펫",
+  "upgradeSectionEquipment": "장비",
+  "sideMockupSource": "소스",
+  "sideMockupMode": "모드",
+  "sideMockupPreview": "미리보기",
+  "sideMockupRows": "행",
+  "sideMockupRowsValue": "목업 5개",
+  "endpointLeagueTop200": "리그 상위 200",
+  "endpointLeagueTop200Preview": "전설 리그 · 트로피 5,742개",
+  "endpointTownhallTop200": "마을회관 상위 200",
+  "endpointTownhallTop200Preview": "TH17 · 글로벌 플레이어 보드",
+  "endpointClanDonations": "클랜 지원",
+  "endpointClanDonationsPreview": "미국 · 주간 클랜 합계",
+  "endpointClanWarWins": "클랜전 승리",
+  "endpointClanWarWinsPreview": "국제 · 전체 기간 전쟁 승리",
+  "endpointTop200ArmyUsage": "상위 200 군대 사용률",
+  "endpointTop200ArmyUsagePreview": "전투 로그 · 유닛 및 마법 사용률",
+  "endpointStateTop200": "상위 200",
+  "endpointStateWeekly": "주간",
+  "endpointStateWins": "승리",
+  "endpointStateUsage": "사용률",
+  "notifGroupBattles": "전투",
+  "notifGroupReminders": "알림",
+  "notifGroupSupport": "후원",
+  "notifGroupProgress": "진행",
+  "notifLeagueDefense": "리그 방어",
+  "notifLeagueDefenseResult": "리그 방어 결과",
+  "notifLeagueTriple": "리그 3별",
+  "notifLeagueAttackBody": "Lord Clasher가 {player}을(를) 공격했습니다 • {percent}% • 별 {stars}개 • {league}",
   "@notifLeagueAttackBody": {
     "placeholders": {
       "player": {
@@ -2740,8 +2740,8 @@
       }
     }
   },
-  "notifWarDefense": "War defense",
-  "notifWarAttackOnTh": "War attack on TH{th}",
+  "notifWarDefense": "전쟁 방어",
+  "notifWarAttackOnTh": "TH{th} 대상 전쟁 공격",
   "@notifWarAttackOnTh": {
     "placeholders": {
       "th": {
@@ -2749,7 +2749,7 @@
       }
     }
   },
-  "notifWarDefenseBody": "{opponentClan} attacked {player} • {percent}% • {stars} stars • {clan} defense",
+  "notifWarDefenseBody": "{opponentClan}이(가) {player}을(를) 공격했습니다 • {percent}% • 별 {stars}개 • {clan} 방어",
   "@notifWarDefenseBody": {
     "placeholders": {
       "opponentClan": {
@@ -2769,9 +2769,9 @@
       }
     }
   },
-  "notifWarFeed5v5": "5v5 war feed",
-  "notifWarAttackResult": "War attack result",
-  "notifWarAttackResultBody": "{clan} attacked Pine Riders TH{th} • 100% • 3 stars",
+  "notifWarFeed5v5": "5v5 전쟁 피드",
+  "notifWarAttackResult": "전쟁 공격 결과",
+  "notifWarAttackResultBody": "{clan}이(가) Pine Riders TH{th}을(를) 공격했습니다 • 100% • 별 3개",
   "@notifWarAttackResultBody": {
     "placeholders": {
       "clan": {
@@ -2782,8 +2782,8 @@
       }
     }
   },
-  "notifWarMatched": "War matched",
-  "notifWarMatchedBody": "{clan} matched with Pine Riders. Preparation day started.",
+  "notifWarMatched": "전쟁 매칭됨",
+  "notifWarMatchedBody": "{clan}이(가) Pine Riders와 매칭되었습니다. 준비일이 시작되었습니다.",
   "@notifWarMatchedBody": {
     "placeholders": {
       "clan": {
@@ -2791,9 +2791,9 @@
       }
     }
   },
-  "notifWarStarted": "War started",
-  "notifBattleDayStarted": "Battle day started",
-  "notifWarStartedBody": "{clan} vs Pine Riders is live. Good luck.",
+  "notifWarStarted": "전쟁 시작",
+  "notifBattleDayStarted": "전투일 시작",
+  "notifWarStartedBody": "{clan} vs Pine Riders가 시작되었습니다. 행운을 빕니다.",
   "@notifWarStartedBody": {
     "placeholders": {
       "clan": {
@@ -2801,8 +2801,8 @@
       }
     }
   },
-  "notifWarEnded": "War ended",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final results are available.",
+  "notifWarEnded": "전쟁 종료",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. 최종 결과를 확인할 수 있습니다.",
   "@notifWarEndedBody": {
     "placeholders": {
       "clan": {
@@ -2810,13 +2810,13 @@
       }
     }
   },
-  "notifWarReminder1h": "War reminder: 1h",
-  "notifWarReminder30m": "War reminder: 30m",
-  "notifWarReminder15m": "War reminder: 15m",
-  "notifOneHourLeft": "1 hour left",
-  "notifThirtyMinutesLeft": "30 minutes left",
-  "notifFifteenMinutesLeft": "15 minutes left",
-  "notifRemainingWarAttacksBody": "{player} has remaining war attacks. {time}.",
+  "notifWarReminder1h": "전쟁 알림: 1시간",
+  "notifWarReminder30m": "전쟁 알림: 30분",
+  "notifWarReminder15m": "전쟁 알림: 15분",
+  "notifOneHourLeft": "1시간 남음",
+  "notifThirtyMinutesLeft": "30분 남음",
+  "notifFifteenMinutesLeft": "15분 남음",
+  "notifRemainingWarAttacksBody": "{player}에게 남은 전쟁 공격이 있습니다. {time}.",
   "@notifRemainingWarAttacksBody": {
     "placeholders": {
       "player": {
@@ -2827,7 +2827,7 @@
       }
     }
   },
-  "notifStarted": "{name} started",
+  "notifStarted": "{name} 시작됨",
   "@notifStarted": {
     "placeholders": {
       "name": {
@@ -2835,7 +2835,7 @@
       }
     }
   },
-  "notifClanGamesPointsBody": "{clan} can start earning {name} points.",
+  "notifClanGamesPointsBody": "{clan}이(가) {name} 포인트를 획득하기 시작할 수 있습니다.",
   "@notifClanGamesPointsBody": {
     "placeholders": {
       "clan": {
@@ -2846,7 +2846,7 @@
       }
     }
   },
-  "notifCwlPreparationBody": "{clan} can begin Clan War League preparation.",
+  "notifCwlPreparationBody": "{clan}이(가) 클랜전 리그 준비를 시작할 수 있습니다.",
   "@notifCwlPreparationBody": {
     "placeholders": {
       "clan": {
@@ -2854,7 +2854,7 @@
       }
     }
   },
-  "notifRaidWeekendBody": "{clan} can start Capital Raid attacks.",
+  "notifRaidWeekendBody": "{clan}이(가) 클랜 수도 습격 공격을 시작할 수 있습니다.",
   "@notifRaidWeekendBody": {
     "placeholders": {
       "clan": {
@@ -2862,9 +2862,9 @@
       }
     }
   },
-  "notifSeasonStart": "Season start",
-  "notifNewSeasonStarted": "New season started",
-  "notifSeasonStartedBody": "{league} season has started for {player}.",
+  "notifSeasonStart": "시즌 시작",
+  "notifNewSeasonStarted": "새 시즌 시작됨",
+  "notifSeasonStartedBody": "{player}의 {league} 시즌이 시작되었습니다.",
   "@notifSeasonStartedBody": {
     "placeholders": {
       "league": {
@@ -2875,13 +2875,13 @@
       }
     }
   },
-  "notifSpecialEvent": "Special event",
-  "notifNewEventLive": "A new event is live",
-  "notifNewClashEventBody": "A new Clash event is available.",
-  "notifSupportClashKing": "Support ClashKing",
-  "notifMonthlySupportBody": "Monthly support helps keep ClashKing available and improving. Thank you.",
-  "notifUpgradeFinished": "Upgrade finished",
-  "notifUpgradeReadyTitle": "{name} is ready",
+  "notifSpecialEvent": "특별 이벤트",
+  "notifNewEventLive": "새 이벤트가 진행 중입니다",
+  "notifNewClashEventBody": "새 Clash 이벤트를 이용할 수 있습니다.",
+  "notifSupportClashKing": "ClashKing 후원",
+  "notifMonthlySupportBody": "월간 후원은 ClashKing을 계속 제공하고 개선하는 데 도움이 됩니다. 감사합니다.",
+  "notifUpgradeFinished": "업그레이드 완료",
+  "notifUpgradeReadyTitle": "{name} 준비됨",
   "@notifUpgradeReadyTitle": {
     "placeholders": {
       "name": {
@@ -2889,7 +2889,7 @@
       }
     }
   },
-  "notifUpgradeCompleteBody": "Level {level} finished for {player}. Upgrade complete.",
+  "notifUpgradeCompleteBody": "{player}의 레벨 {level}이 완료되었습니다. 업그레이드 완료.",
   "@notifUpgradeCompleteBody": {
     "placeholders": {
       "level": {
@@ -2900,7 +2900,7 @@
       }
     }
   },
-  "clanSearchLoadFailed": "Failed to load clan data: {error}",
+  "clanSearchLoadFailed": "클랜 데이터를 불러오지 못했습니다: {error}",
   "@clanSearchLoadFailed": {
     "placeholders": {
       "error": {
@@ -2908,11 +2908,11 @@
       }
     }
   },
-  "appIconDefault": "Default",
-  "appIconChristmas": "Christmas",
-  "appIconBlackWhite": "Black & White",
-  "appIconDarkMode": "Dark Mode",
-  "generalMembersCount": "{count} members",
+  "appIconDefault": "기본",
+  "appIconChristmas": "크리스마스",
+  "appIconBlackWhite": "흑백",
+  "appIconDarkMode": "다크 모드",
+  "generalMembersCount": "멤버 {count}명",
   "@generalMembersCount": {
     "placeholders": {
       "count": {
@@ -2920,8 +2920,8 @@
       }
     }
   },
-  "generalBookmarked": "bookmarked",
-  "clanLevelValue": "level {level}",
+  "generalBookmarked": "북마크됨",
+  "clanLevelValue": "레벨 {level}",
   "@clanLevelValue": {
     "placeholders": {
       "level": {
@@ -2929,7 +2929,7 @@
       }
     }
   },
-  "cwlRankShort": "Rank {rank}",
+  "cwlRankShort": "{rank}위",
   "@cwlRankShort": {
     "placeholders": {
       "rank": {
@@ -2937,7 +2937,7 @@
       }
     }
   },
-  "cwlRoundShort": "Round {round}",
+  "cwlRoundShort": "{round}라운드",
   "@cwlRoundShort": {
     "placeholders": {
       "round": {
@@ -2953,5 +2953,5 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
+  "faqSupercellFanContentPolicyLink": "Supercell 팬 콘텐츠 정책"
 }

@@ -3,18 +3,18 @@
   "appTitle": "ClashKing",
   "appDescription": "شماریات کی ٹریکنگ، کلینز کے انتظام اور کارکردگی کے تجزیے کے لیے آپ کا حتمی Clash of Clans ساتھی۔",
   "generalLoading": "لوڈ ہو رہا ہے...",
-  "loadingVillages": "Loading your villages...",
-  "loadingClanData": "Fetching clan data...",
-  "loadingWarStats": "Analyzing war stats...",
-  "loadingLegendsData": "Preparing legends data...",
-  "loadingCapitalRaids": "Loading capital raids...",
-  "loadingAlmostReady": "Almost ready...",
-  "accountVerificationTitle": "Verify Account",
-  "accountVerified": "Verified",
-  "accountVerify": "Verify",
-  "accountVerificationSuccess": "Account verified successfully!",
+  "loadingVillages": "آپ کے گاؤں لوڈ ہو رہے ہیں...",
+  "loadingClanData": "کلین ڈیٹا حاصل کیا جا رہا ہے...",
+  "loadingWarStats": "وار اعدادوشمار کا تجزیہ ہو رہا ہے...",
+  "loadingLegendsData": "لیجنڈز ڈیٹا تیار کیا جا رہا ہے...",
+  "loadingCapitalRaids": "کیپیٹل ریڈز لوڈ ہو رہے ہیں...",
+  "loadingAlmostReady": "تقریباً تیار...",
+  "accountVerificationTitle": "اکاؤنٹ کی تصدیق کریں",
+  "accountVerified": "تصدیق شدہ",
+  "accountVerify": "تصدیق کریں",
+  "accountVerificationSuccess": "اکاؤنٹ کامیابی سے تصدیق ہو گیا!",
   "generalRetry": "دوبارہ کوشش کریں",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "دوبارہ کوشش ہو رہی ہے...",
   "generalTryAgain": "دوبارہ کوشش کریں",
   "generalReset": "دوبارہ ترتیب دیں۔",
   "generalCancel": "منسوخ کریں۔",
@@ -28,7 +28,7 @@
   "generalSettings": "ترتیبات",
   "generalCopiedToClipboard": "کلپ بورڈ پر کاپی ہو گیا۔",
   "generalComingSoon": "جلد آ رہا ہے!",
-  "generalLastRefresh": "Last refresh: {time}",
+  "generalLastRefresh": "آخری ریفریش: {time}",
   "@generalLastRefresh": {
     "description": "Last refresh time indicator",
     "placeholders": {
@@ -38,7 +38,7 @@
       }
     }
   },
-  "generalRefreshFailed": "Refresh failed: {error}",
+  "generalRefreshFailed": "ریفریش ناکام: {error}",
   "@generalRefreshFailed": {
     "description": "Error message when refresh fails",
     "placeholders": {
@@ -52,12 +52,12 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "تمام وقت",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "دیگر",
+  "generalCompleted": "مکمل",
   "generalTotal": "کل",
   "generalBest": "بہترین",
   "@generalBest": {
@@ -99,57 +99,57 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "وارننگ",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "نامعلوم",
   "generalNoDataAvailable": "کوئی ڈیٹا دستیاب نہیں ہے.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "آپ کے فلٹرز سے کوئی نتیجہ نہیں ملا",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "تمام ڈیٹا دیکھنے کے لیے فلٹر معیار بدلیں یا فلٹرز صاف کریں۔",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "فلٹرز صاف کریں",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "محفوظ شدہ پری سیٹس",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "محفوظ کریں",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "فلٹر پری سیٹ محفوظ کریں",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "پری سیٹ نام",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "اس پری سیٹ کے لیے نام درج کریں",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "تجاویز:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "پری سیٹ محفوظ کرنے سے پہلے کچھ فلٹرز لگائیں",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "براہ کرم نام درج کریں",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "اس نام کا پری سیٹ پہلے سے موجود ہے",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "پری سیٹ \"{name}\" کامیابی سے محفوظ ہو گیا",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -159,27 +159,27 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "پری سیٹ محفوظ کرنے میں ناکامی",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "پری سیٹ لگائیں",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "نام تبدیل کریں",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "حذف کریں",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "پری سیٹ کا نام تبدیل کریں",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "پری سیٹ کا نام \"{name}\" کر دیا گیا",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -189,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "پری سیٹ کا نام تبدیل کرنے میں ناکامی",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "پری سیٹ حذف کریں",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "کیا آپ واقعی \"{name}\" کو حذف کرنا چاہتے ہیں؟",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "پری سیٹ \"{name}\" حذف ہو گیا",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -217,11 +217,11 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "پری سیٹ حذف کرنے میں ناکامی",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "چارٹس",
   "authSignUp": "رجسٹر کریں",
   "authLogin": "لاگ ان",
   "authLogout": "لاگ آؤٹ کریں۔",
@@ -238,56 +238,56 @@
   "authDiscordContinue": "Discord کے ساتھ جاری رکھیں",
   "authDiscordDescription": "ClashKing Bot کے ساتھ اپنا ڈیٹا ہم آہنگ کریں اور ClashKing کی مکمل صلاحیت کو غیر مقفل کریں!",
   "authEmail": "Email",
-  "authEmailHint": "Enter your email address",
+  "authEmailHint": "اپنا ای میل پتہ درج کریں",
   "authEmailDescription": "اگر آپ Discord تک رسائی نہیں رکھ سکتے یا صرف ایپ کی خصوصیات کو ترجیح دیتے ہیں تو ای میل استعمال کریں",
   "authEmailRequired": "براہ کرم اپنا ای میل درج کریں",
   "authEmailInvalid": "براہ کرم ایک درست ای میل درج کریں",
   "authPasswordLabel": "پاس ورڈ",
-  "authPasswordHint": "Enter your password",
+  "authPasswordHint": "اپنا پاس ورڈ درج کریں",
   "authPasswordConfirm": "پاس ورڈ کی تصدیق کریں",
   "authPasswordRequired": "براہ کرم اپنا پاس ورڈ درج کریں",
   "authPasswordConfirmRequired": "براہ کرم اپنے پاس ورڈ کی تصدیق کریں",
   "authPasswordMismatch": "پاس ورڈ میل نہیں کھاتے",
   "authPasswordTooShort": "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
-  "authPasswordHeader": "Password must contain:",
-  "authPasswordUppercase": "Uppercase letter",
-  "authPasswordLowercase": "Lowercase letter",
-  "authPasswordNumber": "Number",
-  "authPasswordSpecial": "Special character",
-  "authPasswordInvalid": "Password does not meet requirements",
+  "authPasswordRequirements": "پاس ورڈ میں یہ شامل ہونا چاہیے:\n• بڑا حرف\n• چھوٹا حرف\n• عدد\n• خاص حرف",
+  "authPasswordHeader": "پاس ورڈ میں یہ شامل ہونا چاہیے:",
+  "authPasswordUppercase": "بڑا حرف",
+  "authPasswordLowercase": "چھوٹا حرف",
+  "authPasswordNumber": "عدد",
+  "authPasswordSpecial": "خاص حرف",
+  "authPasswordInvalid": "پاس ورڈ شرائط پر پورا نہیں اترتا",
   "authPasswordForgot": "پاس ورڈ بھول گئے؟",
-  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
-  "authPasswordResetSend": "Send Reset Code",
-  "authPasswordResetSent": "Code Sent!",
-  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
-  "authPasswordReset": "Reset Password",
-  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
-  "authPasswordNew": "New Password",
-  "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
-  "authPasswordResetContinue": "Continue to Reset Password",
-  "authPasswordResetCode": "Reset Code",
-  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
-  "authPasswordResetCodeRequired": "Please enter the reset code",
-  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
-  "authBackToLogin": "Back to Login",
+  "authPasswordForgotDescription": "اپنا ای میل پتہ درج کریں اور ہم آپ کو پاس ورڈ ری سیٹ کرنے کے لیے 6 ہندسوں کا کوڈ بھیجیں گے۔",
+  "authPasswordResetSend": "ری سیٹ کوڈ بھیجیں",
+  "authPasswordResetSent": "کوڈ بھیج دیا گیا!",
+  "authPasswordResetSentDescription": "ہم نے آپ کے ای میل پتے پر 6 ہندسوں کا ری سیٹ کوڈ بھیجا ہے۔ براہ کرم اپنا ان باکس چیک کریں اور پاس ورڈ ری سیٹ کرنے کے لیے کوڈ استعمال کریں۔",
+  "authPasswordReset": "پاس ورڈ ری سیٹ کریں",
+  "authPasswordResetDescription": "نیچے اپنا ای میل، ای میل میں آیا 6 ہندسوں کا کوڈ، اور نیا پاس ورڈ درج کریں۔",
+  "authPasswordNew": "نیا پاس ورڈ",
+  "authPasswordConfirmHint": "اپنا نیا پاس ورڈ دوبارہ درج کریں",
+  "authPasswordResetSuccess": "پاس ورڈ کامیابی سے ری سیٹ ہو گیا! اب آپ لاگ اِن کر سکتے ہیں۔",
+  "authPasswordResetContinue": "پاس ورڈ ری سیٹ جاری رکھیں",
+  "authPasswordResetCode": "ری سیٹ کوڈ",
+  "authPasswordResetCodeHint": "اپنے ای میل سے 6 ہندسوں کا کوڈ درج کریں",
+  "authPasswordResetCodeRequired": "براہ کرم ری سیٹ کوڈ درج کریں",
+  "authPasswordResetCodeInvalid": "براہ کرم درست 6 ہندسوں کا کوڈ درج کریں",
+  "authBackToLogin": "لاگ اِن پر واپس",
   "authUsernameLabel": "صارف نام",
   "authUsernameRequired": "براہ کرم ایک صارف نام درج کریں",
   "authUsernameTooShort": "صارف نام کم از کم 3 حروف کا ہونا چاہیے",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
+  "authUsernameTooLong": "یوزرنیم 30 حروف سے زیادہ نہیں ہونا چاہیے",
   "authErrorConnection": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں.",
   "authErrorConnectionRelaunch": "ایک خرابی پیش آگئی۔ براہ کرم اپنا انٹرنیٹ کنکشن چیک کریں اور ایپ کو دوبارہ لانچ کریں.",
-  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
-  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
-  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
-  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
-  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
-  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
-  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
-  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
-  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
+  "authErrorEmailAlreadyRegistered": "یہ ای میل پہلے سے رجسٹرڈ ہے۔ براہ کرم اس کے بجائے لاگ اِن کرنے کی کوشش کریں۔",
+  "authErrorEmailAlreadyPending": "اس پتے پر تصدیقی ای میل پہلے ہی بھیجی جا چکی ہے۔ براہ کرم اپنا ای میل چیک کریں یا دوبارہ بھیجنے کی کوشش کریں۔",
+  "authErrorEmailInvalidFormat": "براہ کرم درست ای میل پتہ درج کریں۔",
+  "authErrorPasswordWeak": "پاس ورڈ کمزور ہے۔ براہ کرم مضبوط پاس ورڈ استعمال کریں۔",
+  "authErrorUsernameInvalid": "یوزرنیم درست نہیں۔ براہ کرم صرف حروف، اعداد اور انڈر اسکور استعمال کریں۔",
+  "authErrorRegistrationFailed": "رجسٹریشن ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
+  "authErrorEmailSendFailed": "تصدیقی ای میل بھیجنے میں ناکامی۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
+  "authErrorRateLimited": "بہت زیادہ کوششیں۔ براہ کرم کچھ دیر انتظار کریں اور دوبارہ کوشش کریں۔",
+  "authErrorServerUnavailable": "سرور عارضی طور پر دستیاب نہیں۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
+  "authAccountManagement": "یہاں اپنے Clash of Clans اکاؤنٹس شامل، حذف اور ترتیب دیں۔ تمام فیچرز تک رسائی کے لیے اپنے اکاؤنٹس کو ٹوکن سے تصدیق کریں۔",
   "authAccountConnected": "منسلک اکاؤنٹس",
   "authAccountConnectedStatus": "منسلک",
   "authAccountNotConnected": "غیر منسلک",
@@ -296,20 +296,20 @@
   "authAccountLinkEmail": "ای میل اکاؤنٹ لنک کریں",
   "authAccountAddEmailAuth": "اضافی سیکیورٹی کے لیے اپنے اکاؤنٹ میں ای میل اور پاس ورڈ تصدیق شامل کریں۔",
   "authAccountEmailLinkedSuccess": "ای میل اکاؤنٹ کامیابی سے لنک ہو گیا!",
-  "authEmailVerificationTitle": "Verify Email",
-  "authEmailVerificationCheckEmail": "Check Your Email",
-  "authEmailVerificationSentTo": "We've sent a verification email to:",
-  "authEmailVerificationResend": "Resend Verification Email",
-  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationExpired": "Verification expired. Please register again.",
-  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
-  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
-  "authEmailVerificationVerifying": "Verifying your email...",
-  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
-  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
-  "authEmailVerificationVerify": "Verify Code",
+  "authEmailVerificationTitle": "ای میل کی تصدیق کریں",
+  "authEmailVerificationCheckEmail": "اپنا ای میل چیک کریں",
+  "authEmailVerificationSentTo": "ہم نے تصدیقی ای میل بھیجی ہے:",
+  "authEmailVerificationResend": "تصدیقی ای میل دوبارہ بھیجیں",
+  "authEmailVerificationResendSuccess": "تصدیقی ای میل کامیابی سے دوبارہ بھیج دی گئی! براہ کرم اپنا ای میل چیک کریں۔",
+  "authEmailVerificationExpired": "تصدیق کی مدت ختم ہو گئی۔ براہ کرم دوبارہ رجسٹر کریں۔",
+  "authEmailVerificationAlreadyVerified": "یہ ای میل پہلے ہی تصدیق شدہ ہے۔ براہ کرم لاگ اِن کرنے کی کوشش کریں۔",
+  "authEmailVerificationNoToken": "کوئی زیرِ التوا تصدیق نہیں ملی۔ براہ کرم پہلے رجسٹر کریں۔",
+  "authEmailVerificationExpiredResend": "تصدیق کی مدت ختم ہو گئی۔ براہ کرم واپس جا کر دوبارہ رجسٹر کریں۔",
+  "authEmailVerificationVerifying": "آپ کے ای میل کی تصدیق ہو رہی ہے...",
+  "authEmailVerificationCodeInstructions": "اپنے ای میل پر بھیجا گیا 6 ہندسوں کا کوڈ درج کریں:",
+  "authEmailVerificationCodeRequired": "براہ کرم 6 ہندسوں کا تصدیقی کوڈ درج کریں",
+  "authEmailVerificationCodeInvalid": "کوڈ غلط یا ختم ہو چکا ہے۔ براہ کرم اپنا کوڈ چیک کریں یا تصدیقی ای میل دوبارہ بھیجیں۔",
+  "authEmailVerificationVerify": "کوڈ کی تصدیق کریں",
   "helpTitle": "مدد درکار ہے؟",
   "helpJoinDiscord": "Discord ہاکمین شامل ہوں",
   "helpEmailUs": "ہمیں ای میل کریں",
@@ -320,23 +320,23 @@
   "accountsPlayerTag": "پلیئر ٹیگ (#ABC123)",
   "accountsEnterPlayerTag": "پلیئر ٹیگ درج کریں۔",
   "accountsAdd": "اکاؤنٹ شامل کریں۔",
-  "accountsAddInstruction": "Tap the + button to add your account",
+  "accountsAddInstruction": "اپنا اکاؤنٹ شامل کرنے کے لیے + بٹن دبائیں",
   "accountsApiToken": "اکاؤنٹ API ٹوکن",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
+  "accountsEnterApiToken": "براہ کرم اکاؤنٹ API ٹوکن درج کریں تاکہ تصدیق ہو سکے کہ یہ آپ کا ہے۔ آپ اسے Clash of Clans میں تلاش کر سکتے ہیں:",
+  "accountsApiTokenLocation": "ترتیبات > مزید ترتیبات > API ٹوکن",
+  "accountsOpenMoreSettings": "More Settings کھولیں",
+  "accountsCouldNotOpenClash": "Clash of Clans نہیں کھل سکا۔ براہ کرم اسے خود کھولیں۔",
   "accountsFillAllFields": "براہ کرم تمام فیلڈز بھریں۔",
   "accountsErrorTagNotExists": "درج کردہ پلیئر ٹیگ موجود نہیں ہے.",
   "accountsErrorAlreadyLinked": "کھلاڑی کا ٹیگ پہلے ہی کسی سے منسلک ہے.",
   "accountsErrorAlreadyLinkedToYou": "پلیئر ٹیگ پہلے ہی آپ سے منسلک ہے.",
   "accountsErrorWrongApiToken": "درج کردہ API ٹوکن غلط ہے.",
   "accountsErrorFailedToAdd": "اکاؤنٹ شامل کرنے میں ناکام۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
+  "accountsErrorFailedToUpdateOrder": "اکاؤنٹس کی ترتیب اپ ڈیٹ کرنے میں ناکامی۔",
+  "errorTitle": "اوہ! شاید ہمارے سرورز کے منہ پر فائر بال لگ گیا ہے! ہم ہیلنگ اسپیل ڈال رہے ہیں... ایک لمحے بعد دوبارہ کوشش کریں۔",
+  "errorSubtitle": "اگر مسئلہ برقرار رہے تو ہمارے Discord سرور کو چیک کریں کہ کیا ہمیں اس کا علم ہے۔",
+  "errorNetworkTitle": "کنکشن کا مسئلہ",
+  "errorNetworkMessage": "ہمیں اپنے سرورز سے کنیکٹ ہونے میں مشکل ہو رہی ہے۔ یہ آپ کے انٹرنیٹ کنکشن یا ہماری طرف کسی مسئلے کی وجہ سے ہو سکتا ہے۔ براہ کرم اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔",
   "errorLoadingVersion": "ورژن لوڈ کرنے میں خرابی۔",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -406,7 +406,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "آپ کے پاس {trophies} ٹرافیاں ہیں۔ آپ کسی لیگ میں رینک نہیں ہیں۔",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -446,7 +446,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "TH {level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -460,7 +460,7 @@
   "gameDonations": "عطیات",
   "gameDonationsReceived": "عطیات موصول ہوئے۔",
   "gameDonationsRatio": "عطیہ کا تناسب",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameLevel": "لیول: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -483,10 +483,10 @@
   "gameClanGames": "کلان گیمز",
   "gameSeasonPass": "سیزن پاس",
   "gameCreatorCode": "خالق کوڈ: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
-  "gameCreatorCodeDialogTitle": "Support ClashKing",
-  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
-  "gameCreatorCodeDialogButton": "Use Creator Code",
+  "gameCreatorCodeDescription": "مفت میں ہماری مدد کریں!",
+  "gameCreatorCodeDialogTitle": "ClashKing کی مدد کریں",
+  "gameCreatorCodeDialogDescription": "جب آپ ہمارا کریئیٹر کوڈ استعمال کرتے ہیں تو آپ ڈیولپمنٹ فنڈ کرنے، ایپ اور بوٹ کو سب کے لیے مفت رکھنے، اور نئے فیچرز کے اضافے میں مدد کرتے ہیں۔\n\nآپ کی اِن گیم خریداریوں کا 5% ہمیں ملتا ہے، آپ کے لیے کوئی اضافی لاگت نہیں — بس کسی بھی Supercell گیم کی شاپ میں \"ClashKing\" درج کریں۔\n\nآپ کی حمایت کا شکریہ!",
+  "gameCreatorCodeDialogButton": "کریئیٹر کوڈ استعمال کریں",
   "clanTitle": "قبیلہ",
   "clanSearchTitle": "قبیلہ تلاش کریں۔",
   "clanSearchPlaceholder": "قبیلے کا نام",
@@ -871,7 +871,7 @@
   "warAskForWar": "جنگ شروع کرنے کے لیے لیڈر یا شریک لیڈر سے رابطہ کریں.",
   "warAskForWarLogOpening": "جنگ کے لاگ کو کھولنے کے لیے کسی رہنما یا شریک رہنما سے رابطہ کریں.",
   "warEnded": "جنگ ختم ہوئی۔",
-  "warInWar": "In War",
+  "warInWar": "وار میں",
   "@warInWar": {
     "description": "War state: active"
   },
@@ -916,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "وار ابھی شروع نہیں ہوئی",
+  "warWonByStars": "{clanName} نے وار جیت لی!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -925,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName} وار ہار گیا",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -933,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName} نے تباہی کے فیصد سے جیت لیا!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -941,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName} تباہی کے فیصد سے ہار گیا",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -949,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "کامل برابر مقابلہ",
+  "warCanTieNeedsStars": "{clanName} برابر کر سکتا ہے مگر اسے {stars} ستارے چاہیے",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -961,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName} ستاروں میں برابر نہیں آ سکتا",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -1142,24 +1142,24 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "میپ پوزیشن",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "پوزیشن",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "ترتیب",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "مخالف TH",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
+  "warOpponentLowerTownhall": "کم TH",
+  "warOpponentUpperTownhall": "زیادہ TH",
   "warOpponentEqualThLevel": "مساوی TH",
   "warOpponentSelectMembersThLevel": "ممبران ٹی ایچ سطح",
   "warOpponentSelectOpponentsThLevel": "مخالفین ٹی ایچ سطح",
@@ -1198,11 +1198,11 @@
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "رہ گیا",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "رہ گیا: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1211,11 +1211,11 @@
       }
     }
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "اوسط",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "اوسط %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
@@ -1223,7 +1223,7 @@
   "cwlClanWarLeague": "قبیلہ وار لیگ",
   "cwlOngoing": "جاری CWL",
   "cwlRounds": "راؤنڈز",
-  "cwlRoundNumber": "Round {number}",
+  "cwlRoundNumber": "راؤنڈ {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1263,7 +1263,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "آپ کے کلین کے پاس ممکنہ {totalAttacks} حملوں میں سے کل {attacks} حملے ہیں۔",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1274,20 +1274,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
+  "joinLeaveTitle": "جوائن/لیو لاگز (موجودہ سیزن)",
   "joinLeaveJoin": "شمولیت",
   "joinLeaveLeave": "چھوڑو",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveJoins": "جوائنز",
+  "joinLeaveLeaves": "لیوز",
+  "joinLeaveUniquePlayers": "منفرد کھلاڑی",
+  "joinLeaveMovingPlayers": "منتقل ہونے والے کھلاڑی",
+  "joinLeaveMostMovingPlayers": "سب سے زیادہ منتقل ہونے والے کھلاڑی",
+  "joinLeaveStillInClan": "اب بھی کلین میں",
+  "joinLeaveLeftForever": "ہمیشہ کے لیے چھوڑ گئے",
+  "joinLeaveRejoinedPlayers": "دوبارہ شامل ہونے والے کھلاڑی",
+  "joinLeaveAvgTimeJoinLeave": "اوسط جوائن/لیو وقت",
+  "joinLeavePeakHour": "سب سے فعال گھنٹہ",
+  "joinLeaveNumberDescription": "موجودہ سیزن ({date}) کے دوران {number} لیو ایونٹس ہوئے۔",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1298,7 +1298,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "موجودہ سیزن ({date}) کے دوران {number} جوائن ایونٹس ہوئے۔",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1309,7 +1309,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "موجودہ سیزن ({date}) کے دوران {number} کھلاڑی کلین چھوڑ کر دوبارہ شامل ہوئے۔",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1321,7 +1321,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "موجودہ سیزن ({date}) کے دوران {number} منفرد کھلاڑی کلین میں آئے/گئے۔",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1333,7 +1333,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} کھلاڑی شامل ہوئے اور اب بھی کلین میں ہیں۔",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1341,7 +1341,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number} کھلاڑی شامل ہوئے، پھر کلین چھوڑ گئے اور دوبارہ شامل نہیں ہوئے۔",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1376,17 +1376,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
+  "raidsTitle": "ریڈز",
   "raidsLast": "آخری چھاپے۔",
   "raidsOngoing": "جاری چھاپے۔",
   "raidsDistrictsDestroyed": "اضلاع تباہ",
   "raidsCompleted": "چھاپے مکمل",
   "searchNoResult": "کوئی نتیجہ نہیں نکلا.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "maintenanceTitle": "مینٹیننس",
+  "maintenanceDescription": "Clash of Clans فی الحال مینٹیننس میں ہے، اس لیے ہم API تک رسائی نہیں کر سکتے۔ براہ کرم بعد میں دوبارہ چیک کریں۔",
+  "downloadTooltip": "CWL خلاصہ ڈاؤن لوڈ کریں",
+  "downloadInProgress": "فائل ڈاؤن لوڈ ہو رہی ہے... اس میں چند سیکنڈ لگ سکتے ہیں...",
+  "downloadSuccess": "فائل کامیابی سے {path} میں محفوظ ہو گئی",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1394,7 +1394,7 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
+  "downloadError": "فائل ڈاؤن لوڈ کرنے میں ناکامی",
   "dashboardTitle": "ڈیش بورڈ",
   "toolsTitle": "اوزار",
   "navigationTeam": "ٹیمیں",
@@ -1403,10 +1403,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenses",
-  "settingsLicensesSubtitle": "View licenses for third-party libraries",
-  "settingsPrivacyPolicy": "Privacy Policy",
-  "settingsPrivacyPolicySubtitle": "How we handle your data",
+  "settingsLicenses": "اوپن سورس لائسنسز",
+  "settingsLicensesSubtitle": "تھرڈ پارٹی لائبریریوں کے لائسنس دیکھیں",
+  "settingsPrivacyPolicy": "پرائیویسی پالیسی",
+  "settingsPrivacyPolicySubtitle": "ہم آپ کا ڈیٹا کیسے سنبھالتے ہیں",
   "betaFeature": "بیٹا فیچر",
   "betaLabel": "BETA",
   "betaDescription": "یہ فیچر فی الحال بیٹا میں ہے، اس میں کچھ کیڑے ہو سکتے ہیں یا نامکمل ہیں۔ ہم بہتری پر سرگرمی سے کام کر رہے ہیں اور آپ کے تاثرات کا خیرمقدم کرتے ہیں۔ براہ کرم اپنے خیالات کا اشتراک کریں اور اسے بہتر بنانے میں ہماری مدد کرنے کے لیے ہمارے Discord Server میں کسی بھی مسئلے کی اطلاع دیں.",
@@ -1429,62 +1429,62 @@
   "faqUseCodeClashKing": "ہمارا کوڈ \"ClashKing\" k استعمال کریں۔",
   "faqSupportUsOnPatreon": "پیٹریون پر ہمارا ساتھ دیں۔",
   "faqRateTheApp": "اسٹور میں ایپ کی درجہ بندی کریں",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
+  "faqWhatCanBotDo": "ClashKing Discord بوٹ کیا کر سکتا ہے؟",
+  "faqWhatCanBotDoAnswer": "ClashKing Discord بوٹ جامع ٹریکنگ ٹولز، خودکار نوٹیفکیشنز اور اس ایپ کے ساتھ ہموار انضمام کے ذریعے آپ کو اپنا کلین براہ راست Discord سے مینیج کرنے میں مدد دیتا ہے۔ یہ کلین لیڈرز اور اراکین کے لیے بنایا گیا ہے جو منظم اور رابطے میں رہنا چاہتے ہیں:",
+  "faqInviteBotToServer": "بوٹ کو سرور میں مدعو کریں",
+  "faqBotFeatureTracking": "کھلاڑی اور کلین ٹریکنگ",
+  "faqBotFeatureTrackingDesc": "ریئل ٹائم اپ ڈیٹس کے ساتھ متعدد کلینز اور کھلاڑی شامل اور مانیٹر کریں",
+  "faqBotFeatureWars": "وار مینجمنٹ",
+  "faqBotFeatureWarsDesc": "وار کارکردگی ٹریک کریں، حملوں کا تجزیہ کریں، اور وار نوٹیفکیشنز حاصل کریں",
+  "faqBotFeatureNotifications": "سمارٹ نوٹیفکیشنز",
+  "faqBotFeatureNotificationsDesc": "ڈونیشنز، وار حملوں، اور اہم کلین ایونٹس کے الرٹس حاصل کریں",
+  "faqBotFeatureCommands": "طاقتور کمانڈز",
+  "faqBotFeatureCommandsDesc": "کھلاڑی اعدادوشمار، وار معلومات اور مزید تک جلد رسائی کے لیے سلیش کمانڈز استعمال کریں",
   "faqNeedHelp": "مجھے مدد کی ضرورت ہے یا میں کوئی تجویز دینا چاہوں گا۔ میں آپ سے کیسے رابطہ کر سکتا ہوں؟",
   "faqNeedHelpAnswer": "آپ مدد طلب کرنے یا رائے دینے کے لیے ہمارے Discord سرور میں شامل ہو سکتے ہیں، یا آپ ہمیں devs@clashk.ing پر ای میل کر سکتے ہیں۔ براہ کرم صرف انگریزی یا فرانسیسی میں لکھیں.",
   "faqSendEmail": "ای میل بھیجیں۔",
   "faqJoinDiscord": "ہمارے ڈسکارڈ سرور میں شامل ہوں۔",
   "faqCannotOpenMailClient": "کچھ وجوہات کی بنا پر ہم آپ کے میل کلائنٹ کو نہیں کھول سکتے۔ ہم نے آپ کے لیے ای میل ایڈریس کاپی کیا ہے۔ آپ ایک ای میل لکھ سکتے ہیں اور وصول کنندہ کے خانے میں پتہ چسپاں کر سکتے ہیں.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
+  "faqTroubleshooting": "مسئلہ حل کرنا",
+  "faqTroubleshootingDataTitle": "میرا ڈیٹا سنک کیوں نہیں ہو رہا؟",
+  "faqTroubleshootingDataDescription": "کھلاڑی یا کلین کا ڈیٹا پرانا لگ رہا ہے",
+  "faqTroubleshootingDataSolution1": "صفحہ ریفریش کرنے کے لیے نیچے کھینچیں",
+  "faqTroubleshootingDataSolution2": "چیک کریں کہ آپ کا کلین ٹریک ہو رہا ہے یا نہیں (اوپر دیکھیں)",
+  "faqTroubleshootingDataSolution3": "چند منٹ انتظار کریں اور دوبارہ کوشش کریں: API کو اپ ڈیٹ ہونے میں کچھ وقت لگ سکتا ہے",
+  "faqTroubleshootingCrashTitle": "ایپ کریش کیوں ہوتی ہے؟",
+  "faqTroubleshootingCrashDescription": "ایپ اچانک بند ہو جاتی ہے یا فریز ہو جاتی ہے",
+  "faqTroubleshootingCrashSolution1": "ایپ بند کریں اور دوبارہ شروع کریں",
+  "faqTroubleshootingCrashSolution2": "ایپ کو تازہ ترین ورژن پر اپ ڈیٹ کریں",
+  "faqTroubleshootingCrashSolution3": "ایپ کیش اور ڈیٹا صاف کریں (Android) یا ایپ دوبارہ انسٹال کریں",
+  "faqTroubleshootingCrashSolution4": "ڈیوائس اسٹوریج میں جگہ خالی کریں",
+  "faqContactSupport": "اگر مسئلہ برقرار رہے تو سپورٹ سے رابطہ کریں (آخری سیکشن دیکھیں)",
+  "faqTroubleshootingAccountTitle": "میں اپنے اکاؤنٹ کی تصدیق کیوں نہیں کر سکتا؟",
+  "faqTroubleshootingAccountDescription": "آپ کے Clash of Clans اکاؤنٹ کو لنک کرنے میں مسائل",
+  "faqTroubleshootingAccountSolution1": "یقینی بنائیں کہ آپ # سے شروع ہونے والا درست پلیئر ٹیگ استعمال کر رہے ہیں",
+  "faqTroubleshootingAccountSolution2": "اگر اکاؤنٹ پہلے سے لنک لگتا ہے تو Clash of Clans سیٹنگز سے API ٹوکن استعمال کریں",
+  "faqTroubleshootingSolutions": "حل:",
+  "faqWhatIsClashKingProject": "ClashKing پروجیکٹ کیا ہے؟",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing ایک اوپن سورس Clash of Clans اعدادوشمار اور کلین مینجمنٹ پروجیکٹ ہے جو کمیونٹی کے لیے پرجوش کھلاڑیوں نے بنایا ہے۔ ہم اسے اپنی فل ٹائم جابز کے ساتھ سائیڈ پروجیکٹ کے طور پر، گیم سے محبت کی وجہ سے ڈیولپ کرتے ہیں۔ ہم موبائل ایپ، Discord بوٹ، اور مفت API فراہم کرتے ہیں جو مل کر بہترین Clash of Clans تجربہ دیتے ہیں۔ پروجیکٹ مکمل طور پر صارفین کی ڈونیشنز اور Supercell Creator code کے استعمال سے فنڈ ہوتا ہے - نہ اشتہارات، نہ پریمیم فیچرز!",
+  "faqViewOnGitHub": "GitHub پر دیکھیں",
+  "faqFeaturesGuide": "ClashKing ایپ کیا کر سکتی ہے؟",
+  "faqFeaturesGuideDescription": "اپنے Clash of Clans تجربے کو اگلے درجے پر لے جائیں! ClashKing ایپ آپ کے تمام اعدادوشمار اور کلین ڈیٹا تک خوبصورت اور تیز رسائی دیتی ہے - ان کھلاڑیوں کے لیے بہترین جن کے پاس Discord نہیں اور ان کے لیے بھی جو ایک نفیس موبائل تجربہ پسند کرتے ہیں:",
+  "faqAppDevelopmentNotice": "ہم ایپ کو مزید بہتر بنانے کے لیے نئے فیچرز پر سرگرمی سے کام کر رہے ہیں۔ آپ کی رائے ہمیں بہتر بنانے میں مدد دیتی ہے!",
+  "faqFeaturesPlayerTitle": "کھلاڑی اعدادوشمار",
+  "faqFeaturesPlayerDescription": "اپنی پیشرفت، کامیابیاں، اور لیجنڈ لیگ کارکردگی ٹریک کریں",
+  "faqFeaturesClanTitle": "کلین مینجمنٹ",
+  "faqFeaturesClanDescription": "کلین ممبرز، ڈونیشنز، اور مجموعی کلین صحت مانیٹر کریں",
+  "faqFeaturesWarTitle": "وار ٹریکنگ",
+  "faqFeaturesWarDescription": "وار کارکردگی، حملے کی حکمتِ عملیاں، اور جیت کی شرحوں کا تجزیہ کریں",
+  "faqFeaturesLegendsTitle": "غلط ڈیٹا؟",
+  "faqFeaturesLegendsDescription": "روزانہ ٹرافی ٹریکنگ اور سیزن کے آخر کے اعدادوشمار",
+  "faqFeaturesCwlTitle": "CWL تجزیات",
+  "faqFeaturesCwlDescription": "کلین وار لیگ کارکردگی اور ممبرز کی شراکتیں",
+  "faqSearchHint": "FAQ تلاش کریں...",
+  "faqSectionGettingStarted": "شروع کرنا اور تعارف",
+  "faqSectionSupportAndContact": "سپورٹ اور رابطہ",
+  "faqTranslationIssue": "ترجمہ غائب یا غلط ہے؟",
+  "faqTranslationIssueAnswer": "ترجمے آپ جیسے ایپ صارفین کرتے ہیں! ہم (ڈیولپرز) صرف فرانسیسی اور انگریزی ترجمے فراہم کرتے ہیں۔ اگر آپ کو غائب یا غلط ترجمے ملیں تو آپ انہیں بہتر بنانے میں مدد کر سکتے ہیں۔ اگر آپ ہماری مدد کرنا چاہتے ہیں تو Discord یا ای میل کے ذریعے بلا جھجھک رابطہ کریں۔ ہمارے پاس مترجمین کے لیے مخصوص Discord چینل ہے جہاں آپ سوال پوچھ سکتے ہیں اور مدد حاصل کر سکتے ہیں۔",
+  "faqWaysToSupport": "ہماری مدد کے طریقے:",
   "translationHelpUsTranslate": "ترجمہ کرنے میں ہماری مدد کریں۔",
   "translationSuggestFeatures": "خصوصیات تجویز کریں۔",
   "translationThankYou": "شکریہ!",
@@ -1492,27 +1492,27 @@
   "translationHelpTranslateContent": "آپ Crowdin پر ایپ کا ترجمہ کرنے میں ہماری مدد کر سکتے ہیں۔ اگر آپ کی زبان Crowdin پر دستیاب نہیں ہے تو بلا جھجھک ہمارے Discord Server میں اس کی درخواست کریں۔ آپ کی مدد کے لیے آپ کا بہت بہت شکریہ!",
   "translationHelpTranslateButton": "Crowdin پر ترجمہ میں مدد کریں۔",
   "translationCurrentTranslators": "موجودہ مترجم",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "وقت کے فلٹرز",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "وار سیٹنگز",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "کارکردگی",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "ایڈوانسڈ",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "کوئی فلٹر فعال نہیں",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "آخری {count} وارز دکھائی جا رہی ہیں (ڈیفالٹ)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1522,115 +1522,115 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "فوری فلٹرز",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "آخری 30 دن",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "صرف 3 ستارے",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "فرَیش حملے",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "سیزن",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "تاریخ کی حد",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "وار قسم",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "ٹاؤن ہال",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "حملہ آور TH",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "دفاعی TH",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "صرف ایک ہی ٹاؤن ہال",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "تباہی فیصد",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "اختیارات",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "صرف فرَیش حملے",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "نتائج کی حد",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "کم از کم پوزیشن",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "زیادہ سے زیادہ پوزیشن",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "شروع تاریخ",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "اختتام تاریخ",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersYear": "Year",
+  "filtersYear": "سال",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "مہینہ",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "سال منتخب کریں",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "تمام وارز",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "TH لیول کے لحاظ سے حملہ کارکردگی",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "TH لیول کے لحاظ سے دفاع کارکردگی",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "قطاریں: آپ کا TH | کالمز: مخالف TH",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsGood": "Good",
+  "chartsGood": "اچھا",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "بہترین",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
@@ -1638,143 +1638,143 @@
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "کارکردگی بصیرتیں",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "اپنے ستاروں کے اعدادوشمار کی بنیاد پر فلٹر تجاویز تاکہ کارکردگی کے پیٹرنز نمایاں ہوں",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
-  "generalExport": "Export",
+  "generalExport": "ایکسپورٹ",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "وار اعدادوشمار ایکسپورٹ کریں",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "ایکسپورٹ کامیاب!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "یہ آپ کے وار اعدادوشمار کو Excel فائل کے طور پر ڈاؤن لوڈ کرے گا جس میں مجموعی اعدادوشمار، تفصیلی حملے، اور TH تجزیہ سمیت متعدد شیٹس ہوں گی۔",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "ایکسپورٹ بنایا جا رہا ہے...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "کلین وار اعدادوشمار کے لیے ایکسپورٹ فیچر جلد آ رہا ہے",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "کوئی فلٹر نہیں لگایا گیا",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "پلیئر ڈیٹا لوڈ کرنے میں ناکامی",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "deepLinkInvalidPlayer": "Invalid player link.",
+  "deepLinkInvalidPlayer": "پلیئر لنک غلط ہے۔",
   "@deepLinkInvalidPlayer": {
     "description": "Shown when a player deep link does not include a valid tag"
   },
-  "deepLinkInvalidClan": "Invalid clan link.",
+  "deepLinkInvalidClan": "کلین لنک غلط ہے۔",
   "@deepLinkInvalidClan": {
     "description": "Shown when a clan deep link does not include a valid tag"
   },
-  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "deepLinkFailedToOpenPlayer": "پلیئر کھولنے میں ناکامی۔",
   "@deepLinkFailedToOpenPlayer": {
     "description": "Shown when a player deep link target could not be loaded"
   },
-  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "deepLinkFailedToOpenClan": "کلین کھولنے میں ناکامی۔",
   "@deepLinkFailedToOpenClan": {
     "description": "Shown when a clan deep link target could not be loaded"
   },
-  "deepLinkUnknown": "Unknown deep link.",
+  "deepLinkUnknown": "نامعلوم ڈیپ لنک۔",
   "@deepLinkUnknown": {
     "description": "Shown when the app receives a deep link it does not understand"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "حملے کی تفصیلات",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "حملے کی ترتیب",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "حملہ آور",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "دفاع کرنے والا",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "نام",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "حالت",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "فی ممبر حملے",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "وار شروع",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "وار ختم",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "کلین لیول",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "کل ستارے",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "تباہی %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "وار معلومات",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "وار نتائج",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "کھلاڑی",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "ناکام حملے (0-1 ستارے)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "وہ حملے دکھاتا ہے جو 2+ ستارے حاصل کرنے میں ناکام رہے",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "چھوٹے ہوئے پرفیکٹ حملے",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "وہ حملے دکھاتا ہے جن میں 2 ستارے آئے - ممکنہ پرفیکٹ مواقع",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "TH{thLevel} کے خلاف کم ستارے",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1784,7 +1784,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "TH{thLevel} کے خلاف کم ستاروں والے حملے دکھاتا ہے",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1794,7 +1794,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "TH{thLevel} کے لیے کمزور",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1804,7 +1804,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "دکھاتا ہے جب TH{thLevel} حملہ آور آپ کے خلاف زیادہ ستارے لیتے ہیں",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1814,91 +1814,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "CWL کم کارکردگی",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "ایسے CWL حملے دکھاتا ہے جن کا اوسط ستارہ عام وارز سے کم ہے",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "رینڈم وار کم کارکردگی",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "ایسے رینڈم وار حملے دکھاتا ہے جن کا اوسط ستارہ CWL سے کم ہے",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "فرَیش حملوں کا تجزیہ",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "صرف فرَیش بیسز پر کارکردگی کا تجزیہ کرتا ہے",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "حالیہ کارکردگی (30 دن)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "موجودہ رجحانات پہچاننے کے لیے حالیہ کارکردگی دکھاتا ہے",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "اہم حملے",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "ٹاپ 5 وار پوزیشنز سے حملے دکھاتا ہے",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "کلین اَپ حملے",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "نچلی وار پوزیشنز سے حملے دکھاتا ہے",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "بہتری کی ضرورت",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "زیادہ تین ستارہ شرح",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "زیادہ تباہی",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "مستقل کارکردگی",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "تین ستاروں میں تسلسل",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "مجموعی ستارہ کارکردگی",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "صرف CWL",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "رینڈم وارز",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "فرینڈلی وارز",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "صرف {count} ستارے",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1907,15 +1907,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "پرفیکٹ حملے",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "ناکام حملے",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "صرف TH{level}",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1924,46 +1924,46 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "پچھلا ہفتہ",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "پچھلا مہینہ",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "میرا پری سیٹ",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "کسٹم فلٹر",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "حالیہ فلٹر",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
   "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalSuccess": "کامیابی",
+  "generalFailed": "ناکام",
+  "generalMinimum": "کم از کم",
+  "generalMaximum": "زیادہ سے زیادہ",
+  "generalHigh": "زیادہ",
+  "generalLow": "کم",
+  "generalPoor": "کمزور",
+  "generalOpen": "کھلا",
+  "generalClosed": "بند",
+  "generalAvailable": "دستیاب",
+  "authErrorUserCancelledDiscordLogin": "صارف نے Discord لاگ اِن منسوخ کر دیا۔",
+  "authErrorDiscordLoginFailed": "Discord لاگ اِن ناکام۔ براہ کرم دوبارہ کوشش کریں۔",
+  "authErrorEmailLoginFailed": "ای میل لاگ اِن ناکام۔ براہ کرم اپنی معلومات چیک کریں۔",
+  "authErrorEmailNotVerified": "آپ کا ای میل پتہ تصدیق شدہ نہیں۔ براہ کرم اپنا ای میل چیک کریں اور تصدیقی کوڈ درج کریں۔",
+  "authErrorEmailVerificationFailed": "ای میل تصدیق ناکام۔ ٹوکن غلط یا ختم ہو چکا ہو سکتا ہے۔",
+  "authErrorDiscordLinkFailed": "Discord اکاؤنٹ لنک کرنے میں ناکامی۔ یہ پہلے ہی کسی دوسرے اکاؤنٹ سے لنک ہو سکتا ہے۔",
+  "authErrorEmailLinkFailed": "ای میل اکاؤنٹ لنک کرنے میں ناکامی۔ ای میل پہلے سے استعمال میں ہو سکتی ہے۔",
+  "authErrorUserNotAuthenticated": "صارف تصدیق شدہ نہیں۔ براہ کرم دوبارہ سائن اِن کریں۔",
+  "apiErrorInvalidJsonResponse": "کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1973,7 +1973,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "کچھ غلط ہو گیا۔ براہ کرم اپنی ان پٹ چیک کریں۔",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1987,7 +1987,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "آپ مجاز نہیں ہیں۔ براہ کرم دوبارہ لاگ اِن کریں۔",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1997,7 +1997,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "آپ کو یہ عمل کرنے کی اجازت نہیں۔",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -2007,7 +2007,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "ہم وہ چیز نہیں ڈھونڈ سکے جسے آپ تلاش کر رہے تھے۔",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -2017,7 +2017,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "بہت زیادہ درخواستیں۔ براہ کرم بعد میں دوبارہ کوشش کریں۔",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -2027,7 +2027,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "سرور عارضی طور پر دستیاب نہیں۔ براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں۔",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -2041,7 +2041,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "ایک غیر متوقع خرابی پیش آئی۔ براہ کرم دوبارہ کوشش کریں۔",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -2055,10 +2055,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "انٹرنیٹ کنکشن نہیں۔ براہ کرم اپنا نیٹ ورک چیک کریں اور دوبارہ کوشش کریں۔",
+  "apiErrorTimeout": "درخواست کا وقت ختم ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔",
+  "apiErrorInvalidFormat": "جواب کا فارمیٹ غلط ہے۔ براہ کرم دوبارہ کوشش کریں۔",
+  "apiErrorOperationFailed": "ہم آپ کی درخواست مکمل نہیں کر سکے۔ براہ کرم دوبارہ کوشش کریں۔",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -2068,7 +2068,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "لگتا ہے آپ آف لائن ہیں۔ براہ کرم اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -2078,7 +2078,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "درخواست میں بہت وقت لگا۔ براہ کرم دوبارہ کوشش کریں۔",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2088,7 +2088,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "ڈیٹا پراسیس کرتے وقت کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2098,7 +2098,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "ہم ایپ سیٹنگز لوڈ نہیں کر سکے (خرابی {statusCode})۔ براہ کرم دوبارہ کوشش کریں۔",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2108,7 +2108,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "سرور سے کنفیگریشن لوڈ کرتے وقت خرابی",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
@@ -2118,22 +2118,22 @@
       }
     }
   },
-  "gameItemHousingSpace": "Housing Space",
-  "gameItemAttackSpeed": "Attack Speed",
-  "gameItemAttackRange": "Attack Range",
-  "gameItemMovementSpeed": "Movement Speed",
-  "gameItemUpgradeResource": "Upgrade Resource",
-  "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero",
+  "gameItemHousingSpace": "ہاؤسنگ اسپیس",
+  "gameItemAttackSpeed": "حملے کی رفتار",
+  "gameItemAttackRange": "حملے کی رینج",
+  "gameItemMovementSpeed": "حرکت کی رفتار",
+  "gameItemUpgradeResource": "اپ گریڈ ریسورس",
+  "gameItemRarity": "نایابی",
+  "gameItemHero": "ہیرو",
   "gameItemDps": "DPS",
   "gameItemHitpoints": "HP",
-  "gameItemHealOnActivation": "Heal",
-  "gameItemTargets": "Targets",
-  "gameItemTargetsGround": "Ground",
-  "gameItemTargetsAir": "Air",
-  "gameItemFlying": "Flying",
-  "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time",
+  "gameItemHealOnActivation": "ہیل",
+  "gameItemTargets": "اہداف",
+  "gameItemTargetsGround": "زمین",
+  "gameItemTargetsAir": "ہوا",
+  "gameItemFlying": "اڑنے والا",
+  "gameItemUpgradeCost": "اپ گریڈ لاگت",
+  "gameItemUpgradeTime": "اپ گریڈ وقت",
   "generalExpand": "پھیلائیں۔",
   "generalCollapse": "سمٹنا",
   "generalBookmark": "بک مارک",
@@ -2393,105 +2393,105 @@
   "todoMockCaughtUpName": "پکڑا گیا۔",
   "todoMockCaughtUpSubtitle": "TH14 · کوئی کھلا کام نہیں۔",
   "todoMockCaughtUpStatus": "آج فعال · کسی کارروائی کی ضرورت نہیں ہے۔",
-  "notifChooseAlerts": "Choose alerts",
-  "notifLeagueDefenseDescription": "Defense results with attacker, stars, percentage, and league context.",
-  "notifWarAttackOptionsDescription": "War attack results, defense alerts, and 5v5 attack feed options.",
-  "notifWarAlertsDescription": "War matched, battle day started, and war ended.",
-  "notifWarRemindersDescription": "Custom reminders before war ends.",
-  "notifDefensesAgainstYourBase": "Defenses against your base",
-  "notifDefensesAgainstYourBaseDescription": "Only hits where this account is defending.",
-  "notifAllAttacks": "All attacks",
-  "notifAllAttacksDescription": "Every hit in 5v5 wars only.",
-  "notifThirtyMinutes": "30 minutes",
-  "notifFifteenMinutes": "15 minutes",
-  "notifSendTestNotification": "Send test notification",
-  "notifScheduledMessage": "Scheduled: {title}",
-  "generalStartDate": "Start Date",
-  "generalEndDate": "End Date",
-  "warFiltersAllWars": "All Wars",
-  "warFiltersRandomWars": "Random Wars",
-  "warFiltersCwlWars": "CWL Wars",
-  "warFiltersFriendlyWars": "Friendly Wars",
-  "warType": "War Type",
-  "warFiltersAnyTownHall": "Any TH",
-  "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "Attacker TH",
-  "warDefenderTownHall": "Defender TH",
-  "warStatsFilterSameTownHallOnly": "Same Town Hall Only",
-  "warStatsFilterSameTownHallDescription": "Only show attacks where attacker and defender have the same TH level",
-  "generalAny": "Any",
-  "warStarsWithIcon": "{stars} ⭐",
-  "warStatsFilterMinStars": "Min Stars",
-  "warStatsFilterMaxStars": "Max Stars",
-  "warStatsFilterMinDestructionPercent": "Min Destruction %",
-  "warStatsFilterMaxDestructionPercent": "Max Destruction %",
-  "warStatsFilterMinPosition": "Min Position",
-  "warStatsFilterMaxPosition": "Max Position",
-  "warStatsFilterFreshAttacksOnly": "Fresh Attacks Only",
-  "warStatsFilterFreshAttacksDescription": "Only show first attacks on each base",
-  "warStatsFilterResultLimit": "Result Limit",
-  "generalResultsCount": "{count} results",
-  "notifEventsDescription": "Clan Games, CWL, Raid Weekend, and season events.",
-  "notifAnnouncementsDescription": "In-app banners and future push alerts for ClashKing updates.",
-  "notifUpgradeFinishesDescription": "Troops, heroes, pets, spells, equipment, and buildings.",
-  "notifSupportReminderDescription": "Monthly reminder to support ClashKing.",
-  "notifDevicePushSetup": "Device push setup",
-  "notifAccountScope": "Account scope",
-  "notifTestNotification": "Test notification",
-  "settingsAppIcon": "App Icon",
-  "settingsChanging": "Changing...",
-  "settingsAddWarWidget": "Add War Widget",
-  "settingsWarWidgetLinkClanFirst": "Link an account in a clan first",
-  "settingsWarWidgetClanCount": "{count} clan(s) available",
+  "notifChooseAlerts": "الرٹس منتخب کریں",
+  "notifLeagueDefenseDescription": "دفاعی نتائج حملہ آور، ستاروں، فیصد اور لیگ سیاق کے ساتھ۔",
+  "notifWarAttackOptionsDescription": "وار حملے کے نتائج، دفاعی الرٹس، اور 5v5 حملہ فیڈ کے اختیارات۔",
+  "notifWarAlertsDescription": "وار میچ، بیٹل ڈے شروع، اور وار ختم۔",
+  "notifWarRemindersDescription": "وار ختم ہونے سے پہلے کسٹم یاددہانیاں۔",
+  "notifDefensesAgainstYourBase": "آپ کی بیس کے خلاف دفاع",
+  "notifDefensesAgainstYourBaseDescription": "صرف وہ ہٹس جہاں یہ اکاؤنٹ دفاع کر رہا ہے۔",
+  "notifAllAttacks": "تمام حملے",
+  "notifAllAttacksDescription": "صرف 5v5 وارز میں ہر ہٹ۔",
+  "notifThirtyMinutes": "30 منٹ",
+  "notifFifteenMinutes": "15 منٹ",
+  "notifSendTestNotification": "ٹیسٹ نوٹیفکیشن بھیجیں",
+  "notifScheduledMessage": "شیڈولڈ: {title}",
+  "generalStartDate": "شروع تاریخ",
+  "generalEndDate": "اختتام تاریخ",
+  "warFiltersAllWars": "تمام وارز",
+  "warFiltersRandomWars": "رینڈم وارز",
+  "warFiltersCwlWars": "CWL وارز",
+  "warFiltersFriendlyWars": "فرینڈلی وارز",
+  "warType": "وار قسم",
+  "warFiltersAnyTownHall": "کوئی بھی TH",
+  "gameTownHallLevelShort": "TH {level}",
+  "warAttackerTownHall": "حملہ آور TH",
+  "warDefenderTownHall": "دفاعی TH",
+  "warStatsFilterSameTownHallOnly": "صرف ایک ہی ٹاؤن ہال",
+  "warStatsFilterSameTownHallDescription": "صرف وہ حملے دکھائیں جہاں حملہ آور اور دفاعی کا TH لیول ایک جیسا ہو",
+  "generalAny": "کوئی بھی",
+  "warStarsWithIcon": "‏{stars} ⭐",
+  "warStatsFilterMinStars": "کم از کم ستارے",
+  "warStatsFilterMaxStars": "زیادہ سے زیادہ ستارے",
+  "warStatsFilterMinDestructionPercent": "کم از کم تباہی %",
+  "warStatsFilterMaxDestructionPercent": "زیادہ سے زیادہ تباہی %",
+  "warStatsFilterMinPosition": "کم از کم پوزیشن",
+  "warStatsFilterMaxPosition": "زیادہ سے زیادہ پوزیشن",
+  "warStatsFilterFreshAttacksOnly": "صرف فرَیش حملے",
+  "warStatsFilterFreshAttacksDescription": "ہر بیس پر صرف پہلے حملے دکھائیں",
+  "warStatsFilterResultLimit": "نتائج کی حد",
+  "generalResultsCount": "{count} نتائج",
+  "notifEventsDescription": "کلین گیمز، CWL، ریڈ ویک اینڈ، اور سیزن ایونٹس۔",
+  "notifAnnouncementsDescription": "ClashKing اپ ڈیٹس کے لیے ایپ کے اندر بینرز اور مستقبل کے پش الرٹس۔",
+  "notifUpgradeFinishesDescription": "ٹروپس، ہیروز، پالتو جانور، اسپیلز، ایکوئپمنٹ، اور عمارتیں۔",
+  "notifSupportReminderDescription": "ClashKing کی مدد کے لیے ماہانہ یاددہانی۔",
+  "notifDevicePushSetup": "ڈیوائس پش سیٹ اَپ",
+  "notifAccountScope": "اکاؤنٹ دائرہ",
+  "notifTestNotification": "ٹیسٹ نوٹیفکیشن",
+  "settingsAppIcon": "ایپ آئیکن",
+  "settingsChanging": "تبدیل ہو رہا ہے...",
+  "settingsAddWarWidget": "وار ویجٹ شامل کریں",
+  "settingsWarWidgetLinkClanFirst": "پہلے کسی کلین میں اکاؤنٹ لنک کریں",
+  "settingsWarWidgetClanCount": "{count} کلین دستیاب",
   "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Bot-linked accounts and Discord data",
-  "settingsDiscordSyncSubtitle": "Sync bot-linked accounts and Discord data",
-  "settingsConnected": "Connected",
-  "settingsClashKingAccount": "ClashKing account",
-  "settingsEmailConnectedSubtitle": "Email login is connected",
-  "settingsEmailRecoverySubtitle": "Add email login for account recovery",
-  "settingsFeatureRequestsTitle": "Feature Requests",
-  "playerOpenInGame": "Open in game",
-  "playerBookmarkRemove": "Remove player bookmark",
-  "playerBookmarkAdd": "Bookmark player",
-  "playerBestTrophies": "Best trophies",
-  "clanLoadFailed": "Failed to load clan.",
-  "gameItemLevels": "Levels",
-  "resourceDarkElixir": "Dark Elixir",
-  "resourceBuilderElixir": "Builder Elixir",
-  "resourceBuilderGold": "Builder Gold",
+  "settingsDiscordConnectedSubtitle": "بوٹ سے لنک اکاؤنٹس اور Discord ڈیٹا",
+  "settingsDiscordSyncSubtitle": "بوٹ سے لنک اکاؤنٹس اور Discord ڈیٹا سنک کریں",
+  "settingsConnected": "کنیکٹڈ",
+  "settingsClashKingAccount": "ClashKing اکاؤنٹ",
+  "settingsEmailConnectedSubtitle": "ای میل لاگ اِن کنیکٹڈ ہے",
+  "settingsEmailRecoverySubtitle": "اکاؤنٹ ریکوری کے لیے ای میل لاگ اِن شامل کریں",
+  "settingsFeatureRequestsTitle": "فیچر درخواستیں",
+  "playerOpenInGame": "گیم میں کھولیں",
+  "playerBookmarkRemove": "پلیئر بک مارک ہٹائیں",
+  "playerBookmarkAdd": "پلیئر بک مارک کریں",
+  "playerBestTrophies": "بہترین ٹرافیاں",
+  "clanLoadFailed": "کلین لوڈ کرنے میں ناکامی۔",
+  "gameItemLevels": "لیولز",
+  "resourceDarkElixir": "ڈارک ایلیکسیر",
+  "resourceBuilderElixir": "بلڈر ایلیکسر",
+  "resourceBuilderGold": "بلڈر گولڈ",
   "resourceElixir": "Elixir",
-  "resourceGold": "Gold",
-  "resourceGlowyOre": "Glowy Ore",
-  "resourceStarryOre": "Starry Ore",
-  "resourceShinyOre": "Shiny Ore",
-  "resourceGeneric": "Resource",
-  "seasonStatsGoldGrabbed": "Gold Grabbed",
-  "seasonStatsActivity": "Activity",
-  "seasonStatsAttackWins": "Attack Wins",
-  "seasonStatsTrophies": "Season Trophies",
-  "todoSearchAccountsHint": "Search accounts",
-  "generalClearSearch": "Clear search",
-  "clanCapitalAvgRewards": "Avg rewards",
-  "clanCapitalAvgDistrictsPerWeek": "Avg districts/week",
-  "clanCapitalTopAttackers": "Top attackers",
-  "clanCapitalPlayersTracked": "{count} players tracked",
-  "clanCapitalDefenseOverTime": "Defense over time",
-  "clanCapitalDistrictsTracked": "{count} districts tracked",
-  "clanCapitalSelectedRaid": "Selected raid",
-  "generalSummary": "Summary",
-  "generalBreakdown": "Breakdown",
-  "clanPointsTitle": "Clan points",
-  "clanBuilderBasePoints": "Builder base points",
-  "clanType": "Clan type",
-  "clanRequiredTownHall": "Required Town Hall",
-  "clanRequiredTownHallOnly": "{level}+ only",
-  "clanCapitalPoints": "Capital points",
-  "todoAllAccounts": "All accounts",
-  "todoCombinedAcrossAccounts": "Combined to-do across your accounts",
-  "todoPreviewAccount": "Preview account",
-  "todoLastActiveUnavailable": "Last active unavailable",
-  "todoActiveRelative": "Active {time}",
+  "resourceGold": "گولڈ",
+  "resourceGlowyOre": "گلوئی اور",
+  "resourceStarryOre": "اسٹاری اور",
+  "resourceShinyOre": "شائنی اور",
+  "resourceGeneric": "ریسورس",
+  "seasonStatsGoldGrabbed": "حاصل کیا گیا گولڈ",
+  "seasonStatsActivity": "سرگرمی",
+  "seasonStatsAttackWins": "حملہ جیتیں",
+  "seasonStatsTrophies": "سیزن ٹرافیاں",
+  "todoSearchAccountsHint": "اکاؤنٹس تلاش کریں",
+  "generalClearSearch": "تلاش صاف کریں",
+  "clanCapitalAvgRewards": "اوسط انعامات",
+  "clanCapitalAvgDistrictsPerWeek": "اوسط اضلاع/ہفتہ",
+  "clanCapitalTopAttackers": "ٹاپ حملہ آور",
+  "clanCapitalPlayersTracked": "{count} کھلاڑی ٹریک ہوئے",
+  "clanCapitalDefenseOverTime": "وقت کے ساتھ دفاع",
+  "clanCapitalDistrictsTracked": "{count} اضلاع ٹریک ہوئے",
+  "clanCapitalSelectedRaid": "منتخب ریڈ",
+  "generalSummary": "خلاصہ",
+  "generalBreakdown": "تفصیل",
+  "clanPointsTitle": "کلین پوائنٹس",
+  "clanBuilderBasePoints": "بلڈر بیس پوائنٹس",
+  "clanType": "کلین قسم",
+  "clanRequiredTownHall": "درکار ٹاؤن ہال",
+  "clanRequiredTownHallOnly": "صرف {level}+",
+  "clanCapitalPoints": "کیپیٹل پوائنٹس",
+  "todoAllAccounts": "تمام اکاؤنٹس",
+  "todoCombinedAcrossAccounts": "آپ کے اکاؤنٹس کی مشترکہ ٹو ڈو",
+  "todoPreviewAccount": "اکاؤنٹ پیش نظارہ",
+  "todoLastActiveUnavailable": "آخری سرگرمی دستیاب نہیں",
+  "todoActiveRelative": "فعال {time}",
   "@todoActiveRelative": {
     "placeholders": {
       "time": {
@@ -2499,8 +2499,8 @@
       }
     }
   },
-  "todoCompleteLower": "complete",
-  "todoPointsLeftShort": "{points} points left",
+  "todoCompleteLower": "مکمل",
+  "todoPointsLeftShort": "{points} پوائنٹس باقی",
   "@todoPointsLeftShort": {
     "placeholders": {
       "points": {
@@ -2508,7 +2508,7 @@
       }
     }
   },
-  "todoItemsLeftShort": "{count} left",
+  "todoItemsLeftShort": "{count} باقی",
   "@todoItemsLeftShort": {
     "placeholders": {
       "count": {
@@ -2516,8 +2516,8 @@
       }
     }
   },
-  "todoAllCaughtUpForNow": "All caught up for now",
-  "todoEventEndsIn": "Ends in {duration}",
+  "todoAllCaughtUpForNow": "ابھی سب مکمل ہے",
+  "todoEventEndsIn": "{duration} میں ختم",
   "@todoEventEndsIn": {
     "placeholders": {
       "duration": {
@@ -2525,7 +2525,7 @@
       }
     }
   },
-  "todoEventStartsIn": "Starts in {duration}",
+  "todoEventStartsIn": "{duration} میں شروع",
   "@todoEventStartsIn": {
     "placeholders": {
       "duration": {
@@ -2533,38 +2533,38 @@
       }
     }
   },
-  "todoRemainingUpgradeTooltip": "Tap for remaining upgrade cost and time",
+  "todoRemainingUpgradeTooltip": "باقی اپ گریڈ لاگت اور وقت کے لیے ٹیپ کریں",
   "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
-  "sideRankingsTitle": "Rankings",
-  "sideRankingsSubtitle": "Official leaderboards plus ClashKing endpoints.",
-  "sideRankingsLoadError": "Could not load official rankings.",
-  "sideRankingsEmptyTitle": "No rankings returned",
-  "sideRankingsEmptyBody": "Try another leaderboard or location.",
-  "sideRankingsMockups": "ClashKing mockups",
-  "sideStatsTitle": "Stats",
-  "sideStatsSubtitle": "Leaderboard stats from official Clash API surfaces.",
-  "sideStatsLoadError": "Could not load leaderboard stats.",
-  "sideTopScore": "Top score",
-  "sideTop200Avg": "Top 200 avg",
-  "sideBasesArmiesTitle": "Bases & Armies",
-  "sideBasesArmiesSubtitle": "Discord-saved layouts and army links.",
-  "sideBotSyncTarget": "Bot sync target",
-  "sideBotSyncTargetBody": "The bot already saves bases and armies to the Discord profile. This page is ready for that synced payload.",
-  "sideSavedBases": "Saved bases",
-  "sideWarBaseSlots": "War base slots",
-  "sideWarBaseSlotsBody": "Town hall, base type, link, and last updated.",
-  "sideLegendBaseSlots": "Legend base slots",
-  "sideLegendBaseSlotsBody": "Quick copy plus account association.",
-  "sideSavedArmies": "Saved armies",
-  "sideArmyLinks": "Army links",
-  "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
-  "sideGameAssetsTitle": "Game Assets",
-  "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
-  "sideNoLinkedPlayersTitle": "No linked players loaded",
-  "sideNoLinkedPlayersBody": "Add or refresh linked accounts to prefill league data.",
-  "sideReadyNow": "Ready now",
-  "sideDays": "{count} days",
+  "announcementAnimeFurySubtitle": "جون 2026 اپ ڈیٹ دیکھنے کے لیے ٹیپ کریں",
+  "sideRankingsTitle": "رینکنگز",
+  "sideRankingsSubtitle": "آفیشل لیڈر بورڈز کے ساتھ ClashKing endpoints۔",
+  "sideRankingsLoadError": "آفیشل رینکنگز لوڈ نہیں ہو سکیں۔",
+  "sideRankingsEmptyTitle": "کوئی رینکنگ واپس نہیں آئی",
+  "sideRankingsEmptyBody": "کوئی دوسرا لیڈر بورڈ یا مقام آزمائیں۔",
+  "sideRankingsMockups": "ClashKing موک اَپس",
+  "sideStatsTitle": "اعدادوشمار",
+  "sideStatsSubtitle": "آفیشل Clash API ذرائع سے لیڈر بورڈ اعدادوشمار۔",
+  "sideStatsLoadError": "لیڈر بورڈ اعدادوشمار لوڈ نہیں ہو سکے۔",
+  "sideTopScore": "ٹاپ اسکور",
+  "sideTop200Avg": "ٹاپ 200 اوسط",
+  "sideBasesArmiesTitle": "بیسز اور آرميز",
+  "sideBasesArmiesSubtitle": "Discord میں محفوظ لے آؤٹس اور آرمی لنکس۔",
+  "sideBotSyncTarget": "بوٹ سنک ہدف",
+  "sideBotSyncTargetBody": "بوٹ پہلے ہی بیسز اور آرميز کو Discord پروفائل میں محفوظ کرتا ہے۔ یہ صفحہ اس سنک شدہ پے لوڈ کے لیے تیار ہے۔",
+  "sideSavedBases": "محفوظ بیسز",
+  "sideWarBaseSlots": "وار بیس سلاٹس",
+  "sideWarBaseSlotsBody": "ٹاؤن ہال، بیس قسم، لنک، اور آخری اپ ڈیٹ۔",
+  "sideLegendBaseSlots": "لیجنڈ بیس سلاٹس",
+  "sideLegendBaseSlotsBody": "فوری کاپی کے ساتھ اکاؤنٹ تعلق۔",
+  "sideSavedArmies": "محفوظ آرميز",
+  "sideArmyLinks": "آرمی لنکس",
+  "sideArmyLinksBody": "کمپوزیشن، اسپیلز، سیج، نوٹس، اور شیئر لنک۔",
+  "sideGameAssetsTitle": "گیم اثاثے",
+  "sideGameAssetsSubtitle": "Hosted ClashKing اثاثے، فولڈر کے لحاظ سے گروپ شدہ۔",
+  "sideNoLinkedPlayersTitle": "کوئی لنکڈ پلیئر لوڈ نہیں",
+  "sideNoLinkedPlayersBody": "لیگ ڈیٹا پہلے سے بھرنے کے لیے لنکڈ اکاؤنٹس شامل یا ریفریش کریں۔",
+  "sideReadyNow": "اب تیار",
+  "sideDays": "{count} دن",
   "@sideDays": {
     "placeholders": {
       "count": {
@@ -2572,7 +2572,7 @@
       }
     }
   },
-  "sideOreLeft": "{shiny} shiny, {glowy} glowy, {starry} starry left",
+  "sideOreLeft": "{shiny} شائنی، {glowy} گلوئی، {starry} اسٹاری باقی",
   "@sideOreLeft": {
     "placeholders": {
       "shiny": {
@@ -2586,14 +2586,14 @@
       }
     }
   },
-  "sideShinyOre": "Shiny ore",
-  "sideGlowyOre": "Glowy ore",
-  "sideStarryOre": "Starry ore",
-  "sideDailyBonusAdjustment": "Daily bonus adjustment",
-  "sideExtraShiny": "Extra shiny",
-  "sideExtraGlowy": "Extra glowy",
-  "sideExtraStarry": "Extra starry",
-  "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
+  "sideShinyOre": "شائنی اور",
+  "sideGlowyOre": "گلوئی اور",
+  "sideStarryOre": "اسٹاری اور",
+  "sideDailyBonusAdjustment": "روزانہ بونس ایڈجسٹمنٹ",
+  "sideExtraShiny": "اضافی شائنی",
+  "sideExtraGlowy": "اضافی گلوئی",
+  "sideExtraStarry": "اضافی اسٹاری",
+  "sideZapQuakeTitle": "{zaps} لائٹننگ + 1 کوئیک",
   "@sideZapQuakeTitle": {
     "placeholders": {
       "zaps": {
@@ -2601,7 +2601,7 @@
       }
     }
   },
-  "sideZapQuakeSubtitle": "{quakeDamage} quake damage, {lightningDamage} per lightning",
+  "sideZapQuakeSubtitle": "{quakeDamage} کوئیک ڈیمیج، فی لائٹننگ {lightningDamage}",
   "@sideZapQuakeSubtitle": {
     "placeholders": {
       "quakeDamage": {
@@ -2612,11 +2612,11 @@
       }
     }
   },
-  "sideBuildingHp": "Building HP",
-  "sideLightningLevel": "Lightning level",
-  "sideEarthquakeLevel": "Earthquake level",
-  "sideWithoutEarthquake": "Without earthquake",
-  "sideLightningCount": "{count} lightning",
+  "sideBuildingHp": "عمارت HP",
+  "sideLightningLevel": "لائٹننگ لیول",
+  "sideEarthquakeLevel": "ارتھ کوئیک لیول",
+  "sideWithoutEarthquake": "ارتھ کوئیک کے بغیر",
+  "sideLightningCount": "{count} لائٹننگ",
   "@sideLightningCount": {
     "placeholders": {
       "count": {
@@ -2624,9 +2624,9 @@
       }
     }
   },
-  "sideFireballQuakeTitle": "Fireball + 1 quake",
-  "sideAddSupportDamage": "Add support damage",
-  "sideFireballQuakeSubtitle": "{fireballDamage} fireball damage, {hpLeft} HP left after quake",
+  "sideFireballQuakeTitle": "فائر بال + 1 کوئیک",
+  "sideAddSupportDamage": "سپورٹ ڈیمیج شامل کریں",
+  "sideFireballQuakeSubtitle": "{fireballDamage} فائر بال ڈیمیج، کوئیک کے بعد {hpLeft} HP باقی",
   "@sideFireballQuakeSubtitle": {
     "placeholders": {
       "fireballDamage": {
@@ -2637,9 +2637,9 @@
       }
     }
   },
-  "sideFireballLevel": "Fireball level",
-  "sideQuakePressure": "Quake pressure",
-  "sideQuakeSpellCount": "{count} quake spell(s)",
+  "sideFireballLevel": "فائر بال کی سطح",
+  "sideQuakePressure": "زلزلے کا دباؤ",
+  "sideQuakeSpellCount": "{count} زلزلے کے اسپیل",
   "@sideQuakeSpellCount": {
     "placeholders": {
       "count": {
@@ -2647,14 +2647,14 @@
       }
     }
   },
-  "sideLocation": "Location",
-  "sideFilter": "Filter",
-  "sideRefresh": "Refresh",
-  "sideOfficialClashLeaderboard": "Official Clash leaderboard",
-  "sideAllTownHallsShort": "All TH",
-  "sideOwned": "Owned",
-  "sideTarget": "Target",
-  "sideDailyValue": "daily {value}",
+  "sideLocation": "مقام",
+  "sideFilter": "فلٹر",
+  "sideRefresh": "ریفریش",
+  "sideOfficialClashLeaderboard": "آفیشل Clash لیڈر بورڈ",
+  "sideAllTownHallsShort": "تمام TH",
+  "sideOwned": "ملکیت میں",
+  "sideTarget": "ہدف",
+  "sideDailyValue": "روزانہ {value}",
   "@sideDailyValue": {
     "placeholders": {
       "value": {
@@ -2662,9 +2662,9 @@
       }
     }
   },
-  "sideDecrease": "Decrease",
-  "sideIncrease": "Increase",
-  "sideLevel": "Level {level}",
+  "sideDecrease": "کم کریں",
+  "sideIncrease": "بڑھائیں",
+  "sideLevel": "سطح {level}",
   "@sideLevel": {
     "placeholders": {
       "level": {
@@ -2672,58 +2672,58 @@
       }
     }
   },
-  "sidePopularPlayers": "Players",
-  "sidePopularClans": "Clans",
-  "sidePopularWarsCwl": "Wars & CWL",
-  "rankingPlayerTrophies": "Player trophies",
-  "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
-  "rankingPlayerBuilder": "Player builder",
-  "rankingPlayerBuilderHeading": "Players Builder Base Ranking",
-  "rankingClanTrophies": "Clan trophies",
-  "rankingClanTrophiesHeading": "Clans Trophies Ranking",
-  "rankingClanBuilder": "Clan builder",
-  "rankingClanBuilderHeading": "Clans Builder Base Ranking",
-  "rankingClanCapital": "Clan capital",
-  "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "assetFolderEquipment": "Equipment",
-  "assetFolderLeagues": "Leagues",
-  "assetFolderResources": "Resources",
-  "assetFolderStickers": "Stickers",
-  "upgradeSectionHeroes": "Heroes",
-  "upgradeSectionTroops": "Troops",
-  "upgradeSectionSpells": "Spells",
-  "upgradeSectionPets": "Pets",
-  "upgradeSectionEquipment": "Equipment",
-  "sideMockupSource": "Source",
-  "sideMockupMode": "Mode",
-  "sideMockupPreview": "Preview",
-  "sideMockupRows": "Rows",
-  "sideMockupRowsValue": "5 mockups",
-  "endpointLeagueTop200": "League top 200",
-  "endpointLeagueTop200Preview": "Legend League · 5,742 trophies",
-  "endpointTownhallTop200": "Townhall top 200",
-  "endpointTownhallTop200Preview": "TH17 · Global player board",
-  "endpointClanDonations": "Clan donations",
-  "endpointClanDonationsPreview": "United States · weekly clan totals",
-  "endpointClanWarWins": "Clan war wins",
-  "endpointClanWarWinsPreview": "International · all-time war wins",
-  "endpointTop200ArmyUsage": "Top 200 army usage",
-  "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
+  "sidePopularPlayers": "کھلاڑی",
+  "sidePopularClans": "کلینز",
+  "sidePopularWarsCwl": "وارز اور CWL",
+  "rankingPlayerTrophies": "کھلاڑیوں کی ٹرافیاں",
+  "rankingPlayerTrophiesHeading": "کھلاڑیوں کی ٹرافی رینکنگ",
+  "rankingPlayerBuilder": "کھلاڑی بلڈر",
+  "rankingPlayerBuilderHeading": "کھلاڑیوں کی بلڈر بیس رینکنگ",
+  "rankingClanTrophies": "کلین ٹرافیاں",
+  "rankingClanTrophiesHeading": "کلین ٹرافی رینکنگ",
+  "rankingClanBuilder": "کلین بلڈر",
+  "rankingClanBuilderHeading": "کلینز کی بلڈر بیس رینکنگ",
+  "rankingClanCapital": "کلین کیپیٹل",
+  "rankingClanCapitalHeading": "کلین کیپیٹل رینکنگ",
+  "assetFolderTroops": "ٹروپس",
+  "assetFolderSpells": "اسپیلز",
+  "assetFolderHeroes": "ہیروز",
+  "assetFolderEquipment": "سامان",
+  "assetFolderLeagues": "لیگز",
+  "assetFolderResources": "وسائل",
+  "assetFolderStickers": "اسٹیکرز",
+  "upgradeSectionHeroes": "ہیروز",
+  "upgradeSectionTroops": "ٹروپس",
+  "upgradeSectionSpells": "اسپیلز",
+  "upgradeSectionPets": "پالتو",
+  "upgradeSectionEquipment": "سامان",
+  "sideMockupSource": "ماخذ",
+  "sideMockupMode": "موڈ",
+  "sideMockupPreview": "پیش منظر",
+  "sideMockupRows": "قطاریں",
+  "sideMockupRowsValue": "5 موک اپس",
+  "endpointLeagueTop200": "لیگ ٹاپ 200",
+  "endpointLeagueTop200Preview": "لیجنڈ لیگ · 5,742 ٹرافیاں",
+  "endpointTownhallTop200": "ٹاؤن ہال ٹاپ 200",
+  "endpointTownhallTop200Preview": "TH17 · عالمی کھلاڑی بورڈ",
+  "endpointClanDonations": "کلین عطیات",
+  "endpointClanDonationsPreview": "امریکہ · ہفتہ وار کلین مجموعے",
+  "endpointClanWarWins": "کلین وار جیتیں",
+  "endpointClanWarWinsPreview": "بین الاقوامی · ہر وقت کی وار جیتیں",
+  "endpointTop200ArmyUsage": "ٹاپ 200 آرمی استعمال",
+  "endpointTop200ArmyUsagePreview": "بیٹل لاگز · ٹروپس اور اسپیلز کا استعمال",
   "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Weekly",
-  "endpointStateWins": "Wins",
-  "endpointStateUsage": "Usage",
-  "notifGroupBattles": "Battles",
-  "notifGroupReminders": "Reminders",
-  "notifGroupSupport": "Support",
-  "notifGroupProgress": "Progress",
-  "notifLeagueDefense": "League defense",
-  "notifLeagueDefenseResult": "League defense result",
-  "notifLeagueTriple": "League triple",
-  "notifLeagueAttackBody": "Lord Clasher attacked {player} • {percent}% • {stars} stars • {league}",
+  "endpointStateWeekly": "ہفتہ وار",
+  "endpointStateWins": "جیتیں",
+  "endpointStateUsage": "استعمال",
+  "notifGroupBattles": "لڑائیاں",
+  "notifGroupReminders": "یاد دہانیاں",
+  "notifGroupSupport": "سپورٹ",
+  "notifGroupProgress": "پیش رفت",
+  "notifLeagueDefense": "لیگ دفاع",
+  "notifLeagueDefenseResult": "لیگ دفاع کا نتیجہ",
+  "notifLeagueTriple": "لیگ ٹرپل",
+  "notifLeagueAttackBody": "Lord Clasher نے {player} پر حملہ کیا • {percent}% • {stars} ستارے • {league}",
   "@notifLeagueAttackBody": {
     "placeholders": {
       "player": {
@@ -2740,8 +2740,8 @@
       }
     }
   },
-  "notifWarDefense": "War defense",
-  "notifWarAttackOnTh": "War attack on TH{th}",
+  "notifWarDefense": "وار دفاع",
+  "notifWarAttackOnTh": "TH{th} پر وار حملہ",
   "@notifWarAttackOnTh": {
     "placeholders": {
       "th": {
@@ -2749,7 +2749,7 @@
       }
     }
   },
-  "notifWarDefenseBody": "{opponentClan} attacked {player} • {percent}% • {stars} stars • {clan} defense",
+  "notifWarDefenseBody": "{opponentClan} نے {player} پر حملہ کیا • {percent}% • {stars} ستارے • {clan} دفاع",
   "@notifWarDefenseBody": {
     "placeholders": {
       "opponentClan": {
@@ -2769,9 +2769,9 @@
       }
     }
   },
-  "notifWarFeed5v5": "5v5 war feed",
-  "notifWarAttackResult": "War attack result",
-  "notifWarAttackResultBody": "{clan} attacked Pine Riders TH{th} • 100% • 3 stars",
+  "notifWarFeed5v5": "5v5 وار فیڈ",
+  "notifWarAttackResult": "وار حملے کا نتیجہ",
+  "notifWarAttackResultBody": "{clan} نے Pine Riders TH{th} پر حملہ کیا • 100% • 3 ستارے",
   "@notifWarAttackResultBody": {
     "placeholders": {
       "clan": {
@@ -2782,8 +2782,8 @@
       }
     }
   },
-  "notifWarMatched": "War matched",
-  "notifWarMatchedBody": "{clan} matched with Pine Riders. Preparation day started.",
+  "notifWarMatched": "وار میچ ہو گئی",
+  "notifWarMatchedBody": "{clan} کا Pine Riders سے میچ ہو گیا۔ تیاری کا دن شروع ہو گیا۔",
   "@notifWarMatchedBody": {
     "placeholders": {
       "clan": {
@@ -2791,9 +2791,9 @@
       }
     }
   },
-  "notifWarStarted": "War started",
-  "notifBattleDayStarted": "Battle day started",
-  "notifWarStartedBody": "{clan} vs Pine Riders is live. Good luck.",
+  "notifWarStarted": "وار شروع ہو گئی",
+  "notifBattleDayStarted": "بیٹل ڈے شروع ہو گیا",
+  "notifWarStartedBody": "{clan} بمقابلہ Pine Riders لائیو ہے۔ گڈ لک۔",
   "@notifWarStartedBody": {
     "placeholders": {
       "clan": {
@@ -2801,8 +2801,8 @@
       }
     }
   },
-  "notifWarEnded": "War ended",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final results are available.",
+  "notifWarEnded": "وار ختم ہو گئی",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders۔ حتمی نتائج دستیاب ہیں۔",
   "@notifWarEndedBody": {
     "placeholders": {
       "clan": {
@@ -2810,13 +2810,13 @@
       }
     }
   },
-  "notifWarReminder1h": "War reminder: 1h",
-  "notifWarReminder30m": "War reminder: 30m",
-  "notifWarReminder15m": "War reminder: 15m",
-  "notifOneHourLeft": "1 hour left",
-  "notifThirtyMinutesLeft": "30 minutes left",
-  "notifFifteenMinutesLeft": "15 minutes left",
-  "notifRemainingWarAttacksBody": "{player} has remaining war attacks. {time}.",
+  "notifWarReminder1h": "وار یاد دہانی: 1 گھنٹہ",
+  "notifWarReminder30m": "وار یاد دہانی: 30 منٹ",
+  "notifWarReminder15m": "وار یاد دہانی: 15 منٹ",
+  "notifOneHourLeft": "1 گھنٹہ باقی",
+  "notifThirtyMinutesLeft": "30 منٹ باقی",
+  "notifFifteenMinutesLeft": "15 منٹ باقی",
+  "notifRemainingWarAttacksBody": "{player} کے وار حملے باقی ہیں۔ {time}.",
   "@notifRemainingWarAttacksBody": {
     "placeholders": {
       "player": {
@@ -2827,7 +2827,7 @@
       }
     }
   },
-  "notifStarted": "{name} started",
+  "notifStarted": "{name} شروع ہو گیا",
   "@notifStarted": {
     "placeholders": {
       "name": {
@@ -2835,7 +2835,7 @@
       }
     }
   },
-  "notifClanGamesPointsBody": "{clan} can start earning {name} points.",
+  "notifClanGamesPointsBody": "{clan} {name} پوائنٹس کمانا شروع کر سکتا ہے۔",
   "@notifClanGamesPointsBody": {
     "placeholders": {
       "clan": {
@@ -2846,7 +2846,7 @@
       }
     }
   },
-  "notifCwlPreparationBody": "{clan} can begin Clan War League preparation.",
+  "notifCwlPreparationBody": "{clan} کلین وار لیگ کی تیاری شروع کر سکتا ہے۔",
   "@notifCwlPreparationBody": {
     "placeholders": {
       "clan": {
@@ -2854,7 +2854,7 @@
       }
     }
   },
-  "notifRaidWeekendBody": "{clan} can start Capital Raid attacks.",
+  "notifRaidWeekendBody": "{clan} کیپیٹل ریڈ حملے شروع کر سکتا ہے۔",
   "@notifRaidWeekendBody": {
     "placeholders": {
       "clan": {
@@ -2862,9 +2862,9 @@
       }
     }
   },
-  "notifSeasonStart": "Season start",
-  "notifNewSeasonStarted": "New season started",
-  "notifSeasonStartedBody": "{league} season has started for {player}.",
+  "notifSeasonStart": "سیزن شروع",
+  "notifNewSeasonStarted": "نیا سیزن شروع ہو گیا",
+  "notifSeasonStartedBody": "{player} کے لیے {league} سیزن شروع ہو گیا ہے۔",
   "@notifSeasonStartedBody": {
     "placeholders": {
       "league": {
@@ -2875,13 +2875,13 @@
       }
     }
   },
-  "notifSpecialEvent": "Special event",
-  "notifNewEventLive": "A new event is live",
-  "notifNewClashEventBody": "A new Clash event is available.",
-  "notifSupportClashKing": "Support ClashKing",
-  "notifMonthlySupportBody": "Monthly support helps keep ClashKing available and improving. Thank you.",
-  "notifUpgradeFinished": "Upgrade finished",
-  "notifUpgradeReadyTitle": "{name} is ready",
+  "notifSpecialEvent": "خصوصی ایونٹ",
+  "notifNewEventLive": "ایک نیا ایونٹ لائیو ہے",
+  "notifNewClashEventBody": "ایک نیا Clash ایونٹ دستیاب ہے۔",
+  "notifSupportClashKing": "ClashKing کو سپورٹ کریں",
+  "notifMonthlySupportBody": "ماہانہ سپورٹ ClashKing کو دستیاب رکھنے اور بہتر بنانے میں مدد دیتی ہے۔ شکریہ۔",
+  "notifUpgradeFinished": "اپ گریڈ مکمل",
+  "notifUpgradeReadyTitle": "{name} تیار ہے",
   "@notifUpgradeReadyTitle": {
     "placeholders": {
       "name": {
@@ -2889,7 +2889,7 @@
       }
     }
   },
-  "notifUpgradeCompleteBody": "Level {level} finished for {player}. Upgrade complete.",
+  "notifUpgradeCompleteBody": "{player} کے لیے سطح {level} مکمل ہو گئی۔ اپ گریڈ مکمل۔",
   "@notifUpgradeCompleteBody": {
     "placeholders": {
       "level": {
@@ -2900,7 +2900,7 @@
       }
     }
   },
-  "clanSearchLoadFailed": "Failed to load clan data: {error}",
+  "clanSearchLoadFailed": "کلین ڈیٹا لوڈ کرنے میں ناکام: {error}",
   "@clanSearchLoadFailed": {
     "placeholders": {
       "error": {
@@ -2908,11 +2908,11 @@
       }
     }
   },
-  "appIconDefault": "Default",
-  "appIconChristmas": "Christmas",
-  "appIconBlackWhite": "Black & White",
-  "appIconDarkMode": "Dark Mode",
-  "generalMembersCount": "{count} members",
+  "appIconDefault": "ڈیفالٹ",
+  "appIconChristmas": "کرسمس",
+  "appIconBlackWhite": "سیاہ و سفید",
+  "appIconDarkMode": "ڈارک موڈ",
+  "generalMembersCount": "{count} ارکان",
   "@generalMembersCount": {
     "placeholders": {
       "count": {
@@ -2920,8 +2920,8 @@
       }
     }
   },
-  "generalBookmarked": "bookmarked",
-  "clanLevelValue": "level {level}",
+  "generalBookmarked": "بک مارک کیا گیا",
+  "clanLevelValue": "سطح {level}",
   "@clanLevelValue": {
     "placeholders": {
       "level": {
@@ -2929,7 +2929,7 @@
       }
     }
   },
-  "cwlRankShort": "Rank {rank}",
+  "cwlRankShort": "رینک {rank}",
   "@cwlRankShort": {
     "placeholders": {
       "rank": {
@@ -2937,7 +2937,7 @@
       }
     }
   },
-  "cwlRoundShort": "Round {round}",
+  "cwlRoundShort": "راؤنڈ {round}",
   "@cwlRoundShort": {
     "placeholders": {
       "round": {
@@ -2945,7 +2945,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "TH {level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -2953,5 +2953,5 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
+  "faqSupercellFanContentPolicyLink": "Supercell فین کنٹینٹ پالیسی"
 }

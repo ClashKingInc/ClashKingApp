@@ -3,20 +3,20 @@
   "appTitle": "ClashKing",
   "appDescription": "رفيقك النهائي في Clash of Clans لتتبع الإحصائيات وإدارة العشائر وتحليل الأداء.",
   "generalLoading": "جاري التحميل...",
-  "loadingVillages": "Loading your villages...",
-  "loadingClanData": "Fetching clan data...",
-  "loadingWarStats": "Analyzing war stats...",
-  "loadingLegendsData": "Preparing legends data...",
-  "loadingCapitalRaids": "Loading capital raids...",
-  "loadingAlmostReady": "Almost ready...",
-  "accountVerificationTitle": "Verify Account",
-  "accountVerified": "Verified",
-  "accountVerify": "Verify",
-  "accountVerificationSuccess": "Account verified successfully!",
+  "loadingVillages": "جارٍ تحميل قراك...",
+  "loadingClanData": "جارٍ جلب بيانات القبيلة...",
+  "loadingWarStats": "جارٍ تحليل إحصاءات الحرب...",
+  "loadingLegendsData": "جارٍ تجهيز بيانات دوري الأساطير...",
+  "loadingCapitalRaids": "جارٍ تحميل غارات العاصمة...",
+  "loadingAlmostReady": "أوشكنا على الانتهاء...",
+  "accountVerificationTitle": "تحقق من الحساب",
+  "accountVerified": "تم التحقق",
+  "accountVerify": "تحقق",
+  "accountVerificationSuccess": "تم التحقق من الحساب بنجاح!",
   "generalRetry": "إعادة المحاولة",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "جارٍ إعادة المحاولة...",
   "generalTryAgain": "حاول مرة أخرى",
-  "generalReset": "Reset",
+  "generalReset": "إعادة تعيين",
   "generalCancel": "إلغاء",
   "generalOk": "موافق",
   "@generalOk": {
@@ -28,7 +28,7 @@
   "generalSettings": "الإعدادات",
   "generalCopiedToClipboard": "تم النسخ إلى الحافظة",
   "generalComingSoon": "قريباً!",
-  "generalLastRefresh": "Last refresh: {time}",
+  "generalLastRefresh": "آخر تحديث: {time}",
   "@generalLastRefresh": {
     "description": "Last refresh time indicator",
     "placeholders": {
@@ -38,7 +38,7 @@
       }
     }
   },
-  "generalRefreshFailed": "Refresh failed: {error}",
+  "generalRefreshFailed": "فشل التحديث: {error}",
   "@generalRefreshFailed": {
     "description": "Error message when refresh fails",
     "placeholders": {
@@ -52,12 +52,12 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "كل الأوقات",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "أخرى",
+  "generalCompleted": "مكتمل",
   "generalTotal": "المجموع",
   "generalBest": "أفضل",
   "@generalBest": {
@@ -99,57 +99,57 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "تحذير",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "غير معروف",
   "generalNoDataAvailable": "لا توجد بيانات متاحة.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "لا توجد نتائج تطابق عوامل التصفية",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "جرّب تعديل معايير التصفية أو امسح عوامل التصفية لعرض كل البيانات.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "مسح عوامل التصفية",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "الإعدادات المسبقة المحفوظة",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "حفظ",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "حفظ إعداد تصفية مسبق",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "اسم الإعداد المسبق",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "أدخل اسمًا لهذا الإعداد المسبق",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "اقتراحات:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "طبّق بعض عوامل التصفية قبل الحفظ كإعداد مسبق",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "يرجى إدخال اسم",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "يوجد إعداد مسبق بهذا الاسم بالفعل",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "تم حفظ الإعداد المسبق «{name}» بنجاح",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -159,27 +159,27 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "فشل حفظ الإعداد المسبق",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "تطبيق الإعداد المسبق",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "إعادة تسمية",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "حذف",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "إعادة تسمية الإعداد المسبق",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "تمت إعادة تسمية الإعداد المسبق إلى «{name}»",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -189,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "فشلت إعادة تسمية الإعداد المسبق",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "حذف الإعداد المسبق",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "هل أنت متأكد أنك تريد حذف «{name}»؟",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "تم حذف الإعداد المسبق «{name}»",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -217,135 +217,135 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "فشل حذف الإعداد المسبق",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "المخططات",
   "authSignUp": "إنشاء حساب",
   "authLogin": "تسجيل الدخول",
   "authLogout": "تسجيل الخروج",
   "authCreateAccount": "إنشاء حساب",
   "authJoinClashKing": "انضم إلى ClashKing",
   "authCreateAccountToGetStarted": "أنشئ حساباً للبدء",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
-  "authConfirmLogout": "Are you sure you want to log out?",
+  "authAlreadyHaveAccount": "لديك حساب بالفعل؟ سجّل الدخول",
+  "authConfirmLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
-  "authDiscordSignIn": "Sign In with Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authDiscordSignIn": "تسجيل الدخول باستخدام Discord",
+  "authDiscordContinue": "المتابعة باستخدام Discord",
+  "authDiscordDescription": "زامن بياناتك مع بوت ClashKing وافتح كامل إمكانات ClashKing!",
   "authEmail": "Email",
-  "authEmailHint": "Enter your email address",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
+  "authEmailHint": "أدخل عنوان بريدك الإلكتروني",
+  "authEmailDescription": "استخدم البريد الإلكتروني إذا لم تستطع الوصول إلى Discord أو كنت تفضّل ميزات التطبيق فقط",
+  "authEmailRequired": "يرجى إدخال بريدك الإلكتروني",
+  "authEmailInvalid": "يرجى إدخال بريد إلكتروني صالح",
   "authPasswordLabel": "Password",
-  "authPasswordHint": "Enter your password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
-  "authPasswordHeader": "Password must contain:",
-  "authPasswordUppercase": "Uppercase letter",
-  "authPasswordLowercase": "Lowercase letter",
-  "authPasswordNumber": "Number",
-  "authPasswordSpecial": "Special character",
-  "authPasswordInvalid": "Password does not meet requirements",
-  "authPasswordForgot": "Forgot password?",
-  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
-  "authPasswordResetSend": "Send Reset Code",
-  "authPasswordResetSent": "Code Sent!",
-  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
-  "authPasswordReset": "Reset Password",
-  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
-  "authPasswordNew": "New Password",
-  "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
-  "authPasswordResetContinue": "Continue to Reset Password",
-  "authPasswordResetCode": "Reset Code",
-  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
-  "authPasswordResetCodeRequired": "Please enter the reset code",
-  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
-  "authBackToLogin": "Back to Login",
-  "authUsernameLabel": "Username",
-  "authUsernameRequired": "Please enter a username",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
-  "authErrorConnection": "An error occurred. Please check your internet connection and try again.",
-  "authErrorConnectionRelaunch": "An error occurred. Please check your internet connection and relaunch the app.",
-  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
-  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
-  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
-  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
-  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
-  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
-  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
-  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
-  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authEmailVerificationTitle": "Verify Email",
-  "authEmailVerificationCheckEmail": "Check Your Email",
-  "authEmailVerificationSentTo": "We've sent a verification email to:",
-  "authEmailVerificationResend": "Resend Verification Email",
-  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationExpired": "Verification expired. Please register again.",
-  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
-  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
-  "authEmailVerificationVerifying": "Verifying your email...",
-  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
-  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
-  "authEmailVerificationVerify": "Verify Code",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
-  "accountsWelcome": "Welcome!",
-  "accountsWelcomeMessage": "Please add one or more Clash of Clans accounts to your profile. You can add or remove accounts later.",
-  "accountsManageTitle": "Manage your accounts",
-  "accountsNoneFound": "No account linked to your profile found",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
-  "accountsEnterPlayerTag": "Enter a player tag",
-  "accountsAdd": "Add account",
-  "accountsAddInstruction": "Tap the + button to add your account",
-  "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
-  "accountsFillAllFields": "Please fill all fields.",
-  "accountsErrorTagNotExists": "The player tag entered does not exist.",
-  "accountsErrorAlreadyLinked": "The player tag is already linked to someone.",
-  "accountsErrorAlreadyLinkedToYou": "The player tag is already linked to you.",
-  "accountsErrorWrongApiToken": "The API token entered is incorrect",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
-  "errorLoadingVersion": "Error loading version",
+  "authPasswordHint": "أدخل كلمة المرور",
+  "authPasswordConfirm": "تأكيد كلمة المرور",
+  "authPasswordRequired": "يرجى إدخال كلمة المرور",
+  "authPasswordConfirmRequired": "يرجى تأكيد كلمة المرور",
+  "authPasswordMismatch": "كلمتا المرور غير متطابقتين",
+  "authPasswordTooShort": "يجب ألا تقل كلمة المرور عن 8 أحرف",
+  "authPasswordRequirements": "يجب أن تحتوي كلمة المرور على:\n• حرف كبير\n• حرف صغير\n• رقم\n• رمز خاص",
+  "authPasswordHeader": "يجب أن تحتوي كلمة المرور على:",
+  "authPasswordUppercase": "حرف كبير",
+  "authPasswordLowercase": "حرف صغير",
+  "authPasswordNumber": "رقم",
+  "authPasswordSpecial": "رمز خاص",
+  "authPasswordInvalid": "كلمة المرور لا تستوفي المتطلبات",
+  "authPasswordForgot": "هل نسيت كلمة المرور؟",
+  "authPasswordForgotDescription": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رمزًا من 6 أرقام لإعادة تعيين كلمة المرور.",
+  "authPasswordResetSend": "إرسال رمز إعادة التعيين",
+  "authPasswordResetSent": "تم إرسال الرمز!",
+  "authPasswordResetSentDescription": "أرسلنا رمز إعادة تعيين من 6 أرقام إلى بريدك الإلكتروني. يرجى تفقد صندوق الوارد واستخدام الرمز لإعادة تعيين كلمة المرور.",
+  "authPasswordReset": "إعادة تعيين كلمة المرور",
+  "authPasswordResetDescription": "أدخل بريدك الإلكتروني، والرمز المكوّن من 6 أرقام من البريد، وكلمة المرور الجديدة أدناه.",
+  "authPasswordNew": "كلمة مرور جديدة",
+  "authPasswordConfirmHint": "أعد إدخال كلمة المرور الجديدة",
+  "authPasswordResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول.",
+  "authPasswordResetContinue": "المتابعة لإعادة تعيين كلمة المرور",
+  "authPasswordResetCode": "رمز إعادة التعيين",
+  "authPasswordResetCodeHint": "أدخل الرمز المكوّن من 6 أرقام من بريدك الإلكتروني",
+  "authPasswordResetCodeRequired": "يرجى إدخال رمز إعادة التعيين",
+  "authPasswordResetCodeInvalid": "يرجى إدخال رمز صالح مكوّن من 6 أرقام",
+  "authBackToLogin": "العودة إلى تسجيل الدخول",
+  "authUsernameLabel": "اسم المستخدم",
+  "authUsernameRequired": "يرجى إدخال اسم مستخدم",
+  "authUsernameTooShort": "يجب أن يتكوّن اسم المستخدم من 3 أحرف على الأقل",
+  "authUsernameTooLong": "يجب ألا يزيد اسم المستخدم عن 30 حرفًا",
+  "authErrorConnection": "حدث خطأ. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.",
+  "authErrorConnectionRelaunch": "حدث خطأ. يرجى التحقق من اتصال الإنترنت وإعادة تشغيل التطبيق.",
+  "authErrorEmailAlreadyRegistered": "هذا البريد الإلكتروني مسجّل بالفعل. يرجى محاولة تسجيل الدخول بدلًا من ذلك.",
+  "authErrorEmailAlreadyPending": "تم إرسال رسالة تحقق إلى هذا العنوان بالفعل. يرجى تفقد بريدك أو محاولة إعادة الإرسال.",
+  "authErrorEmailInvalidFormat": "يرجى إدخال عنوان بريد إلكتروني صالح.",
+  "authErrorPasswordWeak": "كلمة المرور ضعيفة جدًا. يرجى استخدام كلمة مرور أقوى.",
+  "authErrorUsernameInvalid": "اسم المستخدم غير صالح. استخدم الأحرف والأرقام والشرطات السفلية فقط.",
+  "authErrorRegistrationFailed": "فشل التسجيل. يرجى المحاولة لاحقًا.",
+  "authErrorEmailSendFailed": "فشل إرسال رسالة التحقق. يرجى المحاولة لاحقًا.",
+  "authErrorRateLimited": "محاولات كثيرة جدًا. انتظر قليلًا ثم حاول مرة أخرى.",
+  "authErrorServerUnavailable": "الخادم غير متاح مؤقتًا. يرجى المحاولة لاحقًا.",
+  "authAccountManagement": "أضف حسابات Clash of Clans الخاصة بك أو أزلها أو أعد ترتيبها هنا. تحقق من حساباتك باستخدام رمز للوصول إلى كل الميزات.",
+  "authAccountConnected": "الحسابات المتصلة",
+  "authAccountConnectedStatus": "متصل",
+  "authAccountNotConnected": "غير متصل",
+  "authAccountEmailAndPassword": "البريد الإلكتروني وكلمة المرور",
+  "authAccountSecured": "حسابك مؤمّن بعدة طرق مصادقة",
+  "authAccountLinkEmail": "ربط حساب بريد إلكتروني",
+  "authAccountAddEmailAuth": "أضف مصادقة البريد الإلكتروني وكلمة المرور إلى حسابك لمزيد من الأمان.",
+  "authAccountEmailLinkedSuccess": "تم ربط حساب البريد الإلكتروني بنجاح!",
+  "authEmailVerificationTitle": "تحقق من البريد الإلكتروني",
+  "authEmailVerificationCheckEmail": "تحقق من بريدك الإلكتروني",
+  "authEmailVerificationSentTo": "أرسلنا رسالة تحقق إلى:",
+  "authEmailVerificationResend": "إعادة إرسال رسالة التحقق",
+  "authEmailVerificationResendSuccess": "تمت إعادة إرسال رسالة التحقق بنجاح! يرجى تفقد بريدك الإلكتروني.",
+  "authEmailVerificationExpired": "انتهت صلاحية التحقق. يرجى التسجيل مرة أخرى.",
+  "authEmailVerificationAlreadyVerified": "تم التحقق من هذا البريد الإلكتروني بالفعل. يرجى محاولة تسجيل الدخول بدلًا من ذلك.",
+  "authEmailVerificationNoToken": "لم يتم العثور على تحقق معلّق. يرجى التسجيل أولًا.",
+  "authEmailVerificationExpiredResend": "انتهت صلاحية التحقق. يرجى العودة للتسجيل مرة أخرى.",
+  "authEmailVerificationVerifying": "جارٍ التحقق من بريدك الإلكتروني...",
+  "authEmailVerificationCodeInstructions": "أدخل الرمز المكوّن من 6 أرقام المرسل إلى بريدك الإلكتروني:",
+  "authEmailVerificationCodeRequired": "يرجى إدخال رمز التحقق المكوّن من 6 أرقام",
+  "authEmailVerificationCodeInvalid": "الرمز غير صالح أو منتهي الصلاحية. يرجى التحقق من الرمز أو إعادة إرسال رسالة التحقق.",
+  "authEmailVerificationVerify": "تحقق من الرمز",
+  "helpTitle": "تحتاج إلى مساعدة؟",
+  "helpJoinDiscord": "انضم إلى Discord",
+  "helpEmailUs": "راسلنا بالبريد الإلكتروني",
+  "accountsWelcome": "مرحبًا!",
+  "accountsWelcomeMessage": "يرجى إضافة حساب واحد أو أكثر من Clash of Clans إلى ملفك الشخصي. يمكنك إضافة الحسابات أو إزالتها لاحقًا.",
+  "accountsManageTitle": "إدارة حساباتك",
+  "accountsNoneFound": "لم يتم العثور على أي حساب مرتبط بملفك الشخصي",
+  "accountsPlayerTag": "وسم اللاعب (#ABC123)",
+  "accountsEnterPlayerTag": "أدخل وسم اللاعب",
+  "accountsAdd": "إضافة حساب",
+  "accountsAddInstruction": "اضغط زر + لإضافة حسابك",
+  "accountsApiToken": "رمز API للحساب",
+  "accountsEnterApiToken": "يرجى إدخال رمز API للحساب لتأكيد أنه يخصك. يمكنك العثور عليه في Clash of Clans:",
+  "accountsApiTokenLocation": "الإعدادات > المزيد من الإعدادات > رمز API",
+  "accountsOpenMoreSettings": "فتح المزيد من الإعدادات",
+  "accountsCouldNotOpenClash": "تعذر فتح Clash of Clans. يرجى فتحها يدويًا.",
+  "accountsFillAllFields": "يرجى ملء كل الحقول.",
+  "accountsErrorTagNotExists": "وسم اللاعب المدخل غير موجود.",
+  "accountsErrorAlreadyLinked": "وسم اللاعب مرتبط بشخص آخر بالفعل.",
+  "accountsErrorAlreadyLinkedToYou": "وسم اللاعب مرتبط بك بالفعل.",
+  "accountsErrorWrongApiToken": "رمز API المدخل غير صحيح",
+  "accountsErrorFailedToAdd": "فشل إضافة الحساب. يرجى المحاولة لاحقًا.",
+  "accountsErrorFailedToUpdateOrder": "فشل تحديث ترتيب الحسابات.",
+  "errorTitle": "عفوًا! ربما تلقت خوادمنا كرة نارية في الوجه! نحن نلقي تعويذة شفاء... حاول مرة أخرى بعد قليل.",
+  "errorSubtitle": "إذا استمرت المشكلة، تحقق من خادم Discord لدينا لمعرفة ما إذا كنا على علم بها.",
+  "errorNetworkTitle": "مشكلة في الاتصال",
+  "errorNetworkMessage": "نواجه مشكلة في الاتصال بخوادمنا. قد يكون ذلك بسبب اتصالك بالإنترنت أو مشكلة من جانبنا. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
+  "errorLoadingVersion": "خطأ في تحميل الإصدار",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorCannotOpenLink": "We can't open this link.",
-  "errorExitAppToOpenClash": "You are about to leave the app to open Clash of Clans.",
-  "playerSearchTitle": "Search player",
-  "playerSearchPlaceholder": "Player's name or tag",
-  "playerLastActive": "Last active: {date}",
+  "errorCannotOpenLink": "لا يمكننا فتح هذا الرابط.",
+  "errorExitAppToOpenClash": "أنت على وشك مغادرة التطبيق لفتح Clash of Clans.",
+  "playerSearchTitle": "البحث عن لاعب",
+  "playerSearchPlaceholder": "اسم اللاعب أو وسمه",
+  "playerLastActive": "آخر نشاط: {date}",
   "@playerLastActive": {
     "placeholders": {
       "date": {
@@ -353,8 +353,8 @@
       }
     }
   },
-  "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
-  "playerClanDescription": "Your clan is \"{clan}\" ({tag}).",
+  "playerNotTracked": "هذا اللاعب غير متتبّع. قد تكون البيانات غير دقيقة.",
+  "playerClanDescription": "قبيلتك هي «{clan}» ({tag}).",
   "@playerClanDescription": {
     "placeholders": {
       "clan": {
@@ -365,7 +365,7 @@
       }
     }
   },
-  "playerRatioDescription": "Your donation ratio is {ratio}. You have donated {donations} troops and received {received} troops.",
+  "playerRatioDescription": "نسبة تبرعاتك هي {ratio}. لقد تبرعت بـ {donations} قوات وتلقيت {received} قوات.",
   "@playerRatioDescription": {
     "placeholders": {
       "ratio": {
@@ -379,7 +379,7 @@
       }
     }
   },
-  "playerWarPreferenceDescription": "Your war preference is \"{preference}\".",
+  "playerWarPreferenceDescription": "تفضيلك للحرب هو «{preference}».",
   "@playerWarPreferenceDescription": {
     "placeholders": {
       "preference": {
@@ -387,7 +387,7 @@
       }
     }
   },
-  "playerWarStarsDescription": "You have {stars} war stars.",
+  "playerWarStarsDescription": "لديك {stars} نجوم حرب.",
   "@playerWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -395,7 +395,7 @@
       }
     }
   },
-  "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+  "playerTrophiesDescription": "لديك {trophies} كؤوس. أنت حاليًا في {league}.",
   "@playerTrophiesDescription": {
     "placeholders": {
       "trophies": {
@@ -406,7 +406,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "لديك {trophies} كؤوس. أنت غير مصنّف في أي دوري.",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -414,7 +414,7 @@
       }
     }
   },
-  "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+  "playerTownHallLevelDescription": "مستوى قاعة المدينة لديك هو {level}.",
   "@playerTownHallLevelDescription": {
     "placeholders": {
       "level": {
@@ -422,7 +422,7 @@
       }
     }
   },
-  "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+  "playerBuilderBaseDescription": "مستوى قاعة البنّاء لديك هو {level} ولديك {trophies} كؤوس.",
   "@playerBuilderBaseDescription": {
     "placeholders": {
       "level": {
@@ -433,12 +433,12 @@
       }
     }
   },
-  "gameBaseHome": "Home Base",
-  "gameBaseBuilder": "Builder Base",
-  "gameClanCapital": "Clan Capital",
+  "gameBaseHome": "القرية الرئيسية",
+  "gameBaseBuilder": "قاعدة البنّاء",
+  "gameClanCapital": "عاصمة القبيلة",
   "gameTownHall": "TH",
-  "gameTownHallLevel": "TH Level",
-  "gameTownHallLevelNumber": "Town Hall {level}",
+  "gameTownHallLevel": "مستوى قاعة المدينة",
+  "gameTownHallLevelNumber": "قاعة المدينة {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
       "level": {
@@ -446,7 +446,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "قاعة {level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -454,13 +454,13 @@
       }
     }
   },
-  "gameExpLevel": "Experience Level",
-  "gameTrophies": "Trophies",
-  "gameBuilderBaseTrophies": "BB Trophies",
-  "gameDonations": "Donations",
+  "gameExpLevel": "مستوى الخبرة",
+  "gameTrophies": "الكؤوس",
+  "gameBuilderBaseTrophies": "كؤوس قاعدة البنّاء",
+  "gameDonations": "التبرعات",
   "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameDonationsRatio": "نسبة التبرعات",
+  "gameLevel": "المستوى: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -471,52 +471,52 @@
       }
     }
   },
-  "gameHeroes": "Heroes",
-  "gameEquipment": "Equipments",
-  "gameHeroesEquipments": "Hero equipments",
-  "gameTroops": "Troops",
-  "gameActiveSuperTroops": "Active Super Troops",
-  "gamePets": "Pets",
-  "gameSiegeMachines": "Siege Machines",
-  "gameSpells": "Spells",
-  "gameAchievements": "Achievements",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
-  "gameCreatorCodeDialogTitle": "Support ClashKing",
-  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
-  "gameCreatorCodeDialogButton": "Use Creator Code",
-  "clanTitle": "Clan",
-  "clanSearchTitle": "Search clan",
-  "clanSearchPlaceholder": "Clan's name",
-  "clanNone": "No clan",
-  "clanJoinToUnlock": "Join a clan to unlock new features.",
-  "clanMembers": "Members",
-  "clanMinimumMembers": "Minimum members",
-  "clanMaximumMembers": "Maximum members",
-  "clanLocation": "Location",
-  "clanMinimumPoints": "Minimum clan points",
-  "clanMinimumLevel": "Minimum clan level",
-  "clanInviteOnly": "Invite Only",
+  "gameHeroes": "الأبطال",
+  "gameEquipment": "المعدات",
+  "gameHeroesEquipments": "معدات الأبطال",
+  "gameTroops": "القوات",
+  "gameActiveSuperTroops": "القوات الخارقة النشطة",
+  "gamePets": "الحيوانات الأليفة",
+  "gameSiegeMachines": "آلات الحصار",
+  "gameSpells": "التعاويذ",
+  "gameAchievements": "الإنجازات",
+  "gameClanGames": "ألعاب القبيلة",
+  "gameSeasonPass": "تذكرة الموسم",
+  "gameCreatorCode": "رمز المنشئ: ClashKing",
+  "gameCreatorCodeDescription": "ادعمنا مجانًا!",
+  "gameCreatorCodeDialogTitle": "ادعم ClashKing",
+  "gameCreatorCodeDialogDescription": "عند استخدام رمز المنشئ الخاص بنا، تساعد في تمويل التطوير، وإبقاء التطبيق والبوت مجانيين للجميع، ودعم إضافة ميزات جديدة.\n\nنحصل على 5% من مشترياتك داخل اللعبة دون أي تكلفة إضافية عليك — فقط أدخل \"ClashKing\" في متجر أي لعبة من Supercell.\n\nشكرًا لدعمك!",
+  "gameCreatorCodeDialogButton": "استخدام رمز المنشئ",
+  "clanTitle": "القبيلة",
+  "clanSearchTitle": "البحث عن قبيلة",
+  "clanSearchPlaceholder": "اسم القبيلة",
+  "clanNone": "لا توجد قبيلة",
+  "clanJoinToUnlock": "انضم إلى قبيلة لفتح ميزات جديدة.",
+  "clanMembers": "الأعضاء",
+  "clanMinimumMembers": "الحد الأدنى للأعضاء",
+  "clanMaximumMembers": "الحد الأقصى للأعضاء",
+  "clanLocation": "الموقع",
+  "clanMinimumPoints": "الحد الأدنى لنقاط القبيلة",
+  "clanMinimumLevel": "الحد الأدنى لمستوى القبيلة",
+  "clanInviteOnly": "بالدعوة فقط",
   "@clanInviteOnly": {
     "description": "Clan is invite only"
   },
-  "clanOpened": "Opened",
+  "clanOpened": "مفتوحة",
   "@clanOpened": {
     "description": "Clan is opened"
   },
-  "clanRoleLeader": "Leader",
-  "clanRoleCoLeader": "Co-Leader",
-  "clanRoleElder": "Elder",
-  "clanRoleMember": "Member",
-  "clanWarFrequencyAlways": "Always",
-  "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyOncePerWeek": "1/week",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
-  "clanWarFrequencyRarely": "Rarely",
+  "clanRoleLeader": "القائد",
+  "clanRoleCoLeader": "نائب القائد",
+  "clanRoleElder": "كبير",
+  "clanRoleMember": "عضو",
+  "clanWarFrequencyAlways": "دائمًا",
+  "clanWarFrequencyNever": "أبدًا",
+  "clanWarFrequencyOncePerWeek": "مرة/أسبوع",
+  "clanWarFrequencyMoreThanOncePerWeek": "أكثر من مرة/أسبوع",
+  "clanWarFrequencyRarely": "نادرًا",
   "timeHourIndicator": "h",
-  "timeDaysAgo": "{days} days ago",
+  "timeDaysAgo": "منذ {days} أيام",
   "@timeDaysAgo": {
     "placeholders": {
       "days": {
@@ -524,7 +524,7 @@
       }
     }
   },
-  "timeDayAgo": "{day} day ago",
+  "timeDayAgo": "منذ {day} يوم",
   "@timeDayAgo": {
     "placeholders": {
       "day": {
@@ -532,7 +532,7 @@
       }
     }
   },
-  "timeHourAgo": "{hour} hour ago",
+  "timeHourAgo": "منذ {hour} ساعة",
   "@timeHourAgo": {
     "placeholders": {
       "hour": {
@@ -540,7 +540,7 @@
       }
     }
   },
-  "timeHoursAgo": "{hours} hours ago",
+  "timeHoursAgo": "منذ {hours} ساعات",
   "@timeHoursAgo": {
     "placeholders": {
       "hours": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "timeMinuteAgo": "{minute} minute ago",
+  "timeMinuteAgo": "منذ {minute} دقيقة",
   "@timeMinuteAgo": {
     "placeholders": {
       "minute": {
@@ -556,7 +556,7 @@
       }
     }
   },
-  "timeMinutesAgo": "{minutes} minutes ago",
+  "timeMinutesAgo": "منذ {minutes} دقائق",
   "@timeMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -564,12 +564,12 @@
       }
     }
   },
-  "timeJustNow": "Just Now",
+  "timeJustNow": "الآن",
   "@timeJustNow": {
     "description": "Indicates something happened just now"
   },
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeEndedJustNow": "انتهى الآن",
+  "timeEndedMinutesAgo": "انتهى منذ {minutes} دقائق",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -577,7 +577,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "انتهى منذ {hours} ساعات",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -585,7 +585,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "انتهى منذ {days} أيام",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -593,7 +593,7 @@
       }
     }
   },
-  "timeStartsIn": "Starts in {time}",
+  "timeStartsIn": "يبدأ خلال {time}",
   "@timeStartsIn": {
     "placeholders": {
       "time": {
@@ -601,7 +601,7 @@
       }
     }
   },
-  "timeStartsAt": "Starts at {time}",
+  "timeStartsAt": "يبدأ عند {time}",
   "@timeStartsAt": {
     "placeholders": {
       "time": {
@@ -609,7 +609,7 @@
       }
     }
   },
-  "timeEndsIn": "Ends in {time}",
+  "timeEndsIn": "ينتهي خلال {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -617,7 +617,7 @@
       }
     }
   },
-  "timeEndsAt": "Ends at {time}",
+  "timeEndsAt": "ينتهي عند {time}",
   "@timeEndsAt": {
     "placeholders": {
       "time": {
@@ -626,9 +626,9 @@
     }
   },
   "legendsTitle": "Inaccurate data?",
-  "legendsNotInLeague": "Not in Legend League",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
-  "legendsStartDescription": "You started the day with {trophies} trophies.",
+  "legendsNotInLeague": "لست في دوري الأساطير",
+  "legendsNoDataToday": "أنت لست في دوري الأساطير، لكن المواسم السابقة متاحة.",
+  "legendsStartDescription": "بدأت اليوم بـ {trophies} كؤوس.",
   "@legendsStartDescription": {
     "placeholders": {
       "trophies": {
@@ -636,7 +636,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+  "legendsNoRankLocalDescription": "أنت حاليًا غير مصنّف ({country}) ولديك {trophies} كؤوس.",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
@@ -647,7 +647,7 @@
       }
     }
   },
-  "legendsRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+  "legendsRankLocalDescription": "أنت حاليًا في المرتبة {rank} ({country}) ولديك {trophies} كؤوس.",
   "@legendsRankLocalDescription": {
     "placeholders": {
       "rank": {
@@ -661,7 +661,7 @@
       }
     }
   },
-  "legendsGainDescription": "You gained {trophies} trophies for now.",
+  "legendsGainDescription": "ربحت {trophies} كؤوس حتى الآن.",
   "@legendsGainDescription": {
     "placeholders": {
       "trophies": {
@@ -669,7 +669,7 @@
       }
     }
   },
-  "legendsLossDescription": "You lost {trophies} trophies for now.",
+  "legendsLossDescription": "خسرت {trophies} كؤوس حتى الآن.",
   "@legendsLossDescription": {
     "placeholders": {
       "trophies": {
@@ -677,7 +677,7 @@
       }
     }
   },
-  "legendsNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+  "legendsNoGlobalRankDescription": "أنت حاليًا غير مصنّف عالميًا ولديك {trophies} كؤوس.",
   "@legendsNoGlobalRankDescription": {
     "placeholders": {
       "trophies": {
@@ -685,7 +685,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "أنت حاليًا في المرتبة {rank} عالميًا ولديك {trophies} كؤوس.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -696,36 +696,36 @@
       }
     }
   },
-  "legendsNoRank": "No ranking",
-  "legendsBestTrophies": "Best Trophies",
-  "legendsMostAttacks": "Most Attacks",
-  "legendsLastSeason": "Last Season",
-  "legendsBestRank": "Best Global Rank",
-  "legendsTrophiesBySeason": "Trophies by season",
-  "legendsEosTrophies": "End Of Season Trophies",
-  "legendsEosDetails": "End Of Season Details",
-  "legendsInaccurateTitle": "Inaccurate data?",
-  "legendsInaccurateIntro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-  "legendsInaccurateApiDelayTitle": "1. API Delay: ",
-  "legendsInaccurateApiDelayBody": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-  "legendsInaccurateConcurrentTitle": "2. Concurrent Changes: \n",
-  "legendsInaccurateMultipleAttacksTitle": "- Multiple Attacks/Defenses: ",
-  "legendsInaccurateMultipleAttacksBody": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-  "legendsInaccurateSimultaneousTitle": "- Simultaneous Attack and Defense: ",
-  "legendsInaccurateSimultaneousBody": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-  "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
-  "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-  "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
-  "statsSeasonStats": "Season Stats",
-  "statsByDay": "By Day",
+  "legendsNoRank": "لا يوجد ترتيب",
+  "legendsBestTrophies": "أفضل كؤوس",
+  "legendsMostAttacks": "أكثر الهجمات",
+  "legendsLastSeason": "الموسم السابق",
+  "legendsBestRank": "أفضل ترتيب عالمي",
+  "legendsTrophiesBySeason": "الكؤوس حسب الموسم",
+  "legendsEosTrophies": "كؤوس نهاية الموسم",
+  "legendsEosDetails": "تفاصيل نهاية الموسم",
+  "legendsInaccurateTitle": "بيانات غير دقيقة؟",
+  "legendsInaccurateIntro": "بسبب قيود واجهة Clash of Clans API، قد لا تكون بياناتنا دقيقة تمامًا دائمًا. إليك السبب:\n",
+  "legendsInaccurateApiDelayTitle": "1. تأخر API: ",
+  "legendsInaccurateApiDelayBody": "قد تستغرق API حتى 5 دقائق للتحديث، مما يسبب تأخرًا في عكس تغييرات الكؤوس بالوقت الحقيقي.\n",
+  "legendsInaccurateConcurrentTitle": "2. تغييرات متزامنة: ",
+  "legendsInaccurateMultipleAttacksTitle": "- هجمات/دفاعات متعددة: ",
+  "legendsInaccurateMultipleAttacksBody": "إذا حدثت عدة هجمات أو دفاعات خلال وقت قصير، قد تعرض API نتائج مدمجة (مثل +68 أو -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- هجوم ودفاع في الوقت نفسه: ",
+  "legendsInaccurateSimultaneousBody": "إذا حدث هجوم ودفاع في الوقت نفسه، قد ترى نتيجة مختلطة (مثل +4).\n",
+  "legendsInaccurateNetGainTitle": "3. صافي الربح/الخسارة: ",
+  "legendsInaccurateNetGainBody": "رغم مشاكل التوقيت، فإن صافي الربح أو الخسارة الإجمالي لليوم دقيق. ",
+  "legendsInaccurateConclusion": "هذه القيود شائعة في كل الأدوات التي تستخدم واجهة Clash of Clans API. للأسف لا يمكننا إصلاح ذلك لأنه بيد Supercell. نبذل قصارى جهدنا للتعويض عن هذه القيود وتقديم نتائج قريبة من الواقع قدر الإمكان. شكرًا لتفهمك!",
+  "statsSeasonStats": "إحصاءات الموسم",
+  "statsByDay": "حسب اليوم",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
-  "statsBySeason": "By Season",
+  "statsBySeason": "حسب الموسم",
   "@statsBySeason": {
     "description": "Shows stats by season"
   },
-  "statsDayIndex": "Day {index}",
+  "statsDayIndex": "اليوم {index}",
   "@statsDayIndex": {
     "placeholders": {
       "index": {
@@ -733,7 +733,7 @@
       }
     }
   },
-  "statsIndexDays": "{index} days",
+  "statsIndexDays": "{index} أيام",
   "@statsIndexDays": {
     "placeholders": {
       "index": {
@@ -741,7 +741,7 @@
       }
     }
   },
-  "statsSeasonDate": "{date} season",
+  "statsSeasonDate": "موسم {date}",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
     "placeholders": {
@@ -750,23 +750,23 @@
       }
     }
   },
-  "statsAllTownHalls": "All Town Halls",
-  "statsMembers": "Members Stats",
-  "todoTitle": "To-do list",
-  "todoExplanationTitle": "Task Calculation",
-  "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-  "todoExplanationLegendsTitle": "Legend League:",
-  "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "todoExplanationClanWarsTitle": "Clan Wars:",
-  "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-  "todoExplanationCwlTitle": "Clan War League:",
-  "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-  "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
-  "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
+  "statsAllTownHalls": "كل قاعات المدينة",
+  "statsMembers": "إحصاءات الأعضاء",
+  "todoTitle": "قائمة المهام",
+  "todoExplanationTitle": "حساب المهام",
+  "todoExplanationIntro": "يتم حساب نسبة إكمال المهام بناءً على الأنشطة التالية مع أوزان محددة:",
+  "todoExplanationLegendsTitle": "دوري الأساطير:",
+  "todoExplanationLegends": "وزن 8 نقاط لكل حساب، هجوم واحد = نقطة واحدة.",
+  "todoExplanationRaidsTitle": "الغارات:",
+  "todoExplanationRaids": "وزن 5 نقاط لكل حساب (أو 6 إذا تم فتح الهجوم الأخير)، هجوم واحد = نقطة واحدة.",
+  "todoExplanationClanWarsTitle": "حروب القبائل:",
+  "todoExplanationClanWars": "وزن نقطتين لكل حساب، هجوم واحد = نقطة واحدة.",
+  "todoExplanationCwlTitle": "دوري حروب القبائل:",
+  "todoExplanationCwl": "وزن نقطة واحدة لكل حساب، هجوم واحد = نقطة واحدة. لا يمكن تتبع CWL إذا لم يكن اللاعب في قبيلة الدوري الخاصة به.",
+  "todoExplanationPassAndGamesTitle": "تذكرة الموسم وألعاب القبيلة:",
+  "todoExplanationPassAndGames": "وزن نقطتين لكل منهما لكل حساب. تعتمد النسبة على عدد الأيام المتبقية (شهر واحد للتذكرة و6 أيام للألعاب). أخضر = على المسار لإكمال التذكرة أو الألعاب، أحمر = متأخر عن الجدول.",
   "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-  "todoAccountsNumber": "{number} accounts",
+  "todoAccountsNumber": "{number} حسابات",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -775,7 +775,7 @@
     },
     "description": "Number of accounts (ex: 4 accounts)"
   },
-  "todoAccountsNumberActive": "{number} active accounts",
+  "todoAccountsNumberActive": "{number} حسابات نشطة",
   "@todoAccountsNumberActive": {
     "placeholders": {
       "number": {
@@ -783,7 +783,7 @@
       }
     }
   },
-  "todoAccountsNumberInactive": "{number} inactive accounts",
+  "todoAccountsNumberInactive": "{number} حسابات غير نشطة",
   "@todoAccountsNumberInactive": {
     "placeholders": {
       "number": {
@@ -791,11 +791,11 @@
       }
     }
   },
-  "todoAccountsActive": "Active accounts",
-  "todoAccountsInactive": "Inactive accounts",
-  "todoAccountsNoInactive": "No inactive accounts.",
-  "todoAccountsNoActive": "No active accounts.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAccountsActive": "الحسابات النشطة",
+  "todoAccountsInactive": "الحسابات غير النشطة",
+  "todoAccountsNoInactive": "لا توجد حسابات غير نشطة.",
+  "todoAccountsNoActive": "لا توجد حسابات نشطة.",
+  "todoAttacksLeftDescription": "لديك {attacks} هجوم/هجمات متبقية ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -806,7 +806,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "لديك {defenses} دفاع/دفاعات متبقية ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -817,7 +817,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "تهانينا، لقد أنهيت كل هجماتك ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -825,7 +825,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "لديك {points} نقاط متبقية لتحصل عليها اليوم لتكون في الوقت المناسب قبل نهاية الحدث ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -836,7 +836,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "تهانينا، أنت في الوقت المناسب للحصول على الحد الأقصى من المكافآت عند نهاية الحدث ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -844,12 +844,12 @@
       }
     }
   },
-  "warTitle": "War",
-  "warFrequency": "War frequency",
-  "warParticipation": "War Participation",
-  "warLeague": "War/League",
-  "warHistory": "War History",
-  "warLog": "War Log",
+  "warTitle": "الحرب",
+  "warFrequency": "تكرار الحرب",
+  "warParticipation": "المشاركة في الحرب",
+  "warLeague": "حرب/دوري",
+  "warHistory": "تاريخ الحروب",
+  "warLog": "سجل الحرب",
   "warLogClosed": "سجل حرب {clan} مغلق.",
   "@warLogClosed": {
     "placeholders": {
@@ -858,9 +858,9 @@
       }
     }
   },
-  "warStats": "War Stats",
+  "warStats": "إحصاءات الحرب",
   "warOngoing": "Ongoing war",
-  "warIsNotInWar": "{clan} is not in war.",
+  "warIsNotInWar": "{clan} ليست في حرب.",
   "@warIsNotInWar": {
     "placeholders": {
       "clan": {
@@ -868,27 +868,27 @@
       }
     }
   },
-  "warAskForWar": "Contact the leader or a co-leader to start a war.",
-  "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-  "warEnded": "War ended",
-  "warInWar": "In War",
+  "warAskForWar": "تواصل مع القائد أو نائب القائد لبدء حرب.",
+  "warAskForWarLogOpening": "تواصل مع قائد أو نائب قائد لفتح سجل الحرب.",
+  "warEnded": "انتهت الحرب",
+  "warInWar": "في الحرب",
   "@warInWar": {
     "description": "War state: active"
   },
-  "warPreparation": "Preparation",
-  "warPerfectWar": "Perfect war",
-  "warVictory": "Victory",
-  "warDefeat": "Defeat",
-  "warDraw": "Draw",
+  "warPreparation": "التحضير",
+  "warPerfectWar": "حرب مثالية",
+  "warVictory": "انتصار",
+  "warDefeat": "هزيمة",
+  "warDraw": "تعادل",
   "@warDraw": {
     "description": "War ended in a draw"
   },
-  "warTeamSize": "Team size",
-  "warMyTeam": "My team",
-  "warEnemiesTeam": "Enemies",
-  "warClanDraw": "The two clans are tied",
-  "warStateOfTheWar": "State of the war",
-  "warStarsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+  "warTeamSize": "حجم الفريق",
+  "warMyTeam": "فريقي",
+  "warEnemiesTeam": "الأعداء",
+  "warClanDraw": "القبيلتان متعادلتان",
+  "warStateOfTheWar": "حالة الحرب",
+  "warStarsNeededToTakeTheLead": "لا تزال {clan} تحتاج إلى {star} نجمة إضافية أو {stars2} نجمة و{percent}% للتقدم.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -905,7 +905,7 @@
       }
     }
   },
-  "warStarsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+  "warStarsAndPercentNeededToTakeTheLead": "لا تزال {clan} تحتاج إلى {percent}% أو نجمة إضافية واحدة للتقدم",
   "@warStarsAndPercentNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -916,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "لم تبدأ الحرب بعد",
+  "warWonByStars": "فازت {clanName} بالحرب!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -925,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "خسرت {clanName} الحرب",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -933,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "فازت {clanName} بنسبة التدمير!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -941,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "خسرت {clanName} بنسبة التدمير",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -949,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "تعادل مثالي",
+  "warCanTieNeedsStars": "يمكن لـ {clanName} التعادل لكنها تحتاج إلى {stars} نجوم",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -961,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "لا تستطيع {clanName} اللحاق بالنجوم",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -973,9 +973,9 @@
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
   },
-  "warNoDataAvailableForThisWar": "No data available for this war",
-  "warCalculatorFast": "Fast calculator",
-  "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+  "warNoDataAvailableForThisWar": "لا توجد بيانات متاحة لهذه الحرب",
+  "warCalculatorFast": "حاسبة سريعة",
+  "warCalculatorAnswer": "لتحقيق معدل تدمير {percentNeeded}%، يلزم إجمالي {result}%.",
   "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
@@ -986,17 +986,17 @@
       }
     }
   },
-  "warCalculatorNeededOverall": "% Needed overall",
-  "warCalculatorCalculate": "Calculate",
-  "warAttacksTitle": "Attacks",
-  "warAttacksNone": "No attack yet",
+  "warCalculatorNeededOverall": "% مطلوب إجمالًا",
+  "warCalculatorCalculate": "احسب",
+  "warAttacksTitle": "الهجمات",
+  "warAttacksNone": "لا توجد هجمات بعد",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "أفضل الهجمات",
+  "warAttacksCount": "عدد الهجمات",
+  "warAttacksMissed": "الهجمات الفائتة",
+  "warAttacksNumber": "هاجمت {number_time} مرة خلال آخر {number_war} حروب.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -1007,7 +1007,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "كان متوسطك {stars} نجوم لكل حرب.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -1015,7 +1015,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "كان متوسط معدل التدمير لديك {percent}% لكل حرب.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1023,13 +1023,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "الدفاعات",
+  "warDefensesNone": "لا يوجد دفاع بعد",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "أفضل الدفاعات",
+  "warDefensesBestOutOf": "أفضل دفاع (من أصل {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -1038,7 +1038,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "دافعت {number_time} مرة خلال آخر {number_war} حروب.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -1049,7 +1049,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "كان متوسطك {stars} نجوم لكل دفاع.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -1057,7 +1057,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "كان متوسط معدل التدمير لديك {percent}% لكل دفاع.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1065,24 +1065,24 @@
       }
     }
   },
-  "warStarsTitle": "Stars",
-  "warStarsAverage": "Average stars",
-  "warStarsNumber": "Number of stars",
-  "warStarsOne": "1 star",
-  "warStarsTwo": "2 stars",
-  "warStarsThree": "3 stars",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsTitle": "النجوم",
+  "warStarsAverage": "متوسط النجوم",
+  "warStarsNumber": "عدد النجوم",
+  "warStarsOne": "نجمة واحدة",
+  "warStarsTwo": "نجمتان",
+  "warStarsThree": "3 نجوم",
+  "warStarsZero": "0 نجمة",
+  "warStarsBestPerformance": "أفضل أداء",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
-  "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Destruction rate",
+  "warDestructionTitle": "التدمير",
+  "warDestructionAverage": "متوسط التدمير",
+  "warDestructionRate": "معدل التدمير",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryWinsDescription": "فازت قبيلتك بـ {wins} حروب ({percent}%) من آخر 50 حربًا.",
   "@warHistoryWinsDescription": {
     "placeholders": {
       "wins": {
@@ -1093,7 +1093,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryLossesDescription": "خسرت قبيلتك {losses} حروب ({percent}%) من آخر 50 حربًا.",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -1104,7 +1104,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+  "warHistoryDrawsDescription": "حققت قبيلتك {draws} تعادلات ({percent}%) من آخر 50 حربًا.",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -1115,7 +1115,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "لدى قبيلتك متوسط {members} عضوًا مشاركًا خلال آخر 50 حربًا.",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -1123,7 +1123,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+  "warHistoryAverageWarStarsDescription": "حققت قبيلتك متوسط {stars} نجوم لكل حرب من آخر 50 حربًا. وهذا يمثل {percent} من إجمالي النجوم.",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -1134,7 +1134,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "حققت قبيلتك متوسط معدل تدمير {percent}% من آخر 50 حربًا.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -1142,28 +1142,28 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "موضع الخريطة",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "الموضع",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "الترتيب",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "قاعة الخصم",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
-  "warOpponentEqualThLevel": "Equal TH",
-  "warOpponentSelectMembersThLevel": "Members TH Level",
-  "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersLastXwars": "Last {number} wars",
+  "warOpponentLowerTownhall": "قاعة أدنى",
+  "warOpponentUpperTownhall": "قاعة أعلى",
+  "warOpponentEqualThLevel": "قاعة مساوية",
+  "warOpponentSelectMembersThLevel": "مستوى قاعة الأعضاء",
+  "warOpponentSelectOpponentsThLevel": "مستوى قاعة الخصوم",
+  "warFiltersLastXwars": "آخر {number} حروب",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
     "placeholders": {
@@ -1172,37 +1172,37 @@
       }
     }
   },
-  "warFiltersFriendly": "Friendly",
+  "warFiltersFriendly": "ودية",
   "@warFiltersFriendly": {
     "description": "Friendly war"
   },
-  "warFiltersRandom": "Random",
+  "warFiltersRandom": "عشوائية",
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
+  "warVisibilityToggleTownHall": "إخفاء/إظهار إحصاءات مستويات قاعة المدينة السابقة",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Events",
+  "warEventsTitle": "الأحداث",
   "@warEventsTitle": {
     "description": "War events"
   },
-  "warEventsNewest": "Newest",
-  "warEventsOldest": "Oldest",
-  "warStatusReady": "Opted In",
+  "warEventsNewest": "الأحدث",
+  "warEventsOldest": "الأقدم",
+  "warStatusReady": "مشترك",
   "@warStatusReady": {
     "description": "Opted In for war"
   },
-  "warStatusUnready": "Opted Out",
+  "warStatusUnready": "غير مشترك",
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "فائت",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "فائت: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1211,19 +1211,19 @@
       }
     }
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "متوسط",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "متوسط %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clan War League",
-  "cwlOngoing": "Ongoing CWL",
-  "cwlRounds": "Rounds",
-  "cwlRoundNumber": "Round {number}",
+  "cwlClanWarLeague": "دوري حروب القبائل",
+  "cwlOngoing": "CWL جارٍ",
+  "cwlRounds": "الجولات",
+  "cwlRoundNumber": "الجولة {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1239,7 +1239,7 @@
       }
     }
   },
-  "cwlRank": "Your clan is currently ranked {rank}.",
+  "cwlRank": "قبيلتك حاليًا في المرتبة {rank}.",
   "@cwlRank": {
     "placeholders": {
       "rank": {
@@ -1247,7 +1247,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "لدى قبيلتك إجمالي {stars} نجوم.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -1255,7 +1255,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "لدى قبيلتك معدل تدمير إجمالي {percent}%.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1263,7 +1263,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "لدى قبيلتك إجمالي {attacks} هجمات من أصل {totalAttacks} هجومًا ممكنًا.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1274,20 +1274,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
-  "joinLeaveJoin": "Join",
-  "joinLeaveLeave": "Leave",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveTitle": "سجلات الانضمام/المغادرة (الموسم الحالي)",
+  "joinLeaveJoin": "انضمام",
+  "joinLeaveLeave": "مغادرة",
+  "joinLeaveJoins": "انضمامات",
+  "joinLeaveLeaves": "مغادرات",
+  "joinLeaveUniquePlayers": "لاعبون فريدون",
+  "joinLeaveMovingPlayers": "لاعبون متنقلون",
+  "joinLeaveMostMovingPlayers": "أكثر اللاعبين تنقلًا",
+  "joinLeaveStillInClan": "ما زالوا في القبيلة",
+  "joinLeaveLeftForever": "غادروا نهائيًا",
+  "joinLeaveRejoinedPlayers": "لاعبون عادوا للانضمام",
+  "joinLeaveAvgTimeJoinLeave": "متوسط وقت الانضمام/المغادرة",
+  "joinLeavePeakHour": "أكثر ساعة نشاطًا",
+  "joinLeaveNumberDescription": "حدثت {number} حالات مغادرة خلال الموسم الحالي ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1298,7 +1298,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "حدثت {number} حالات انضمام خلال الموسم الحالي ({date}).",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1309,7 +1309,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "غادر {number} لاعب/لاعبين وعادوا للانضمام إلى القبيلة خلال الموسم الحالي ({date}).",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1321,7 +1321,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "انضم/غادر {number} لاعب/لاعبين فريدين القبيلة خلال الموسم الحالي ({date}).",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1333,7 +1333,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "انضم {number} لاعب/لاعبين وما زالوا في القبيلة.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1341,7 +1341,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "انضم {number} لاعب/لاعبين، ثم غادروا القبيلة ولم يعودوا.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1352,7 +1352,7 @@
   "@joinLeaveTitle": {
     "description": "Logs of players joining or leaving the clan."
   },
-  "joinLeaveLeftOnAt": "Left on {date} at {time}.",
+  "joinLeaveLeftOnAt": "غادر في {date} عند {time}.",
   "@joinLeaveLeftOnAt": {
     "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1364,7 +1364,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Joined on {date} at {time}.",
+  "joinLeaveJoinedOnAt": "انضم في {date} عند {time}.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1376,17 +1376,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
-  "raidsLast": "Last raids",
-  "raidsOngoing": "Ongoing raids",
-  "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "Raids completed",
-  "searchNoResult": "No result.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "raidsTitle": "الغارات",
+  "raidsLast": "آخر الغارات",
+  "raidsOngoing": "الغارات الجارية",
+  "raidsDistrictsDestroyed": "المناطق المدمرة",
+  "raidsCompleted": "الغارات المكتملة",
+  "searchNoResult": "لا توجد نتيجة.",
+  "maintenanceTitle": "الصيانة",
+  "maintenanceDescription": "Clash of Clans تحت الصيانة حاليًا، لذلك لا يمكننا الوصول إلى API. يرجى العودة لاحقًا.",
+  "downloadTooltip": "تنزيل ملخص CWL",
+  "downloadInProgress": "جارٍ تنزيل الملف... قد يستغرق ذلك بضع ثوانٍ...",
+  "downloadSuccess": "تم حفظ الملف بنجاح في {path}",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1394,34 +1394,34 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
-  "dashboardTitle": "Dashboard",
-  "toolsTitle": "Tools",
-  "navigationTeam": "Teams",
-  "navigationStatistics": "Statistics",
-  "versionDevice": "Version & Device",
+  "downloadError": "فشل تنزيل الملف",
+  "dashboardTitle": "لوحة التحكم",
+  "toolsTitle": "الأدوات",
+  "navigationTeam": "الفِرق",
+  "navigationStatistics": "الإحصاءات",
+  "versionDevice": "الإصدار والجهاز",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenses",
-  "settingsLicensesSubtitle": "View licenses for third-party libraries",
-  "settingsPrivacyPolicy": "Privacy Policy",
-  "settingsPrivacyPolicySubtitle": "How we handle your data",
-  "betaFeature": "Beta Feature",
+  "settingsLicenses": "تراخيص المصدر المفتوح",
+  "settingsLicensesSubtitle": "عرض تراخيص مكتبات الطرف الثالث",
+  "settingsPrivacyPolicy": "سياسة الخصوصية",
+  "settingsPrivacyPolicySubtitle": "كيف نتعامل مع بياناتك",
+  "betaFeature": "ميزة تجريبية",
   "betaLabel": "BETA",
-  "betaDescription": "This feature is currently in beta, it may have some bugs or be incomplete. We are actively working on improvements and welcome your feedback. Please share your ideas and report any issues in our Discord Server to help us make it better.",
-  "settingsLanguage": "Language",
-  "settingsSelectLanguage": "Select a language",
-  "settingsToggleTheme": "Toggle Theme",
+  "betaDescription": "هذه الميزة حاليًا في المرحلة التجريبية، وقد تحتوي على بعض الأخطاء أو تكون غير مكتملة. نعمل بنشاط على تحسينها ونرحب بملاحظاتك. يرجى مشاركة أفكارك والإبلاغ عن أي مشاكل في خادم Discord لدينا لمساعدتنا على جعلها أفضل.",
+  "settingsLanguage": "اللغة",
+  "settingsSelectLanguage": "اختر لغة",
+  "settingsToggleTheme": "تبديل السمة",
   "faqTitle": "FAQ",
-  "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
-  "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
-  "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
+  "faqSubtitle": "الأسئلة الشائعة",
+  "faqIsThisFromSupercell": "هل هذا التطبيق من Supercell؟",
+  "faqFanContentPolicy": "هذه المادة غير رسمية ولا تعتمدها Supercell. لمزيد من المعلومات راجع سياسة محتوى المعجبين لدى Supercell: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "لماذا تكون البيانات أحيانًا غير دقيقة أو مفقودة؟",
+  "faqClanNotTracked": "القبيلة غير متتبعة",
+  "faqClanNotTrackedAnswer": "يمكن لـ ClashKing جلب هذه المعلومات فقط إذا كانت القبيلة متتبعة. إذا لم تكن قبيلتك متتبعة، يرجى دعوة بوت ClashKing إلى خادم Discord الخاص بك واستخدام الأمر /addclan. نعمل على إتاحة هذه الميزة في التطبيق قريبًا.",
+  "faqTrackingDown": "التتبع متوقف",
+  "faqTrackingDownAnswer": "قد يتوقف التتبع عن العمل لفترة معينة. لهذا قد ترى أحيانًا فراغات في بياناتك. نحن نعمل على تحسين ذلك.",
   "faqApiLimitation": "حدود API لمعركة حرب العصابات",
   "faqApiLimitationAnswer": "بعض البيانات مقدمة من Clash of العصابات، و API لديها بعض القيود. وهذه هي الحالة فيما يتعلق بتعقب الأسطورة، فهي في بعض الأحيان تكبح الكأس والخسارة كما لو كانت هجوما واحدا. هذا أيضا هو السبب في أننا لا نملك أي معلومات عن مستوى المبنى الخاص بك.",
   "faqSupportWork": "كيف يمكنني دعم عملك؟",
@@ -1429,90 +1429,90 @@
   "faqUseCodeClashKing": "استخدام الرمز \"ClashKing\"",
   "faqSupportUsOnPatreon": "دعمنا على باتريون",
   "faqRateTheApp": "قيّم التطبيق في المتجر",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
+  "faqWhatCanBotDo": "ماذا يمكن أن يفعل بوت ClashKing على Discord؟",
+  "faqWhatCanBotDoAnswer": "يساعدك بوت ClashKing على Discord في إدارة قبيلتك مباشرة من Discord باستخدام أدوات تتبع شاملة، وإشعارات تلقائية، وتكامل سلس مع هذا التطبيق. صُمم لقادة القبائل والأعضاء الذين يريدون البقاء متصلين ومنظمين:",
+  "faqInviteBotToServer": "دعوة البوت إلى الخادم",
+  "faqBotFeatureTracking": "تتبع اللاعبين والقبائل",
+  "faqBotFeatureTrackingDesc": "أضف وراقب عدة قبائل ولاعبين مع تحديثات بالوقت الحقيقي",
+  "faqBotFeatureWars": "إدارة الحروب",
+  "faqBotFeatureWarsDesc": "تتبع أداء الحرب، وحلل الهجمات، واحصل على إشعارات الحرب",
+  "faqBotFeatureNotifications": "إشعارات ذكية",
+  "faqBotFeatureNotificationsDesc": "احصل على تنبيهات للتبرعات، وهجمات الحرب، وأحداث القبيلة المهمة",
+  "faqBotFeatureCommands": "أوامر قوية",
+  "faqBotFeatureCommandsDesc": "استخدم أوامر الشرطة المائلة للوصول بسرعة إلى إحصاءات اللاعبين ومعلومات الحرب والمزيد",
   "faqNeedHelp": "أحتاج إلى المساعدة أو أود أن أتقدم باقتراح. كيف يمكنني الاتصال بك؟",
-  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
+  "faqNeedHelpAnswer": "يمكنك الانضمام إلى خادم Discord لدينا لطلب المساعدة أو تقديم ملاحظات، أو مراسلتنا عبر البريد devs@clashk.ing. يرجى الكتابة بالإنجليزية أو الفرنسية فقط.",
   "faqSendEmail": "إرسال بريد إلكتروني",
   "faqJoinDiscord": "انضم إلى خادم ديسكورد",
   "faqCannotOpenMailClient": "لبعض الأسباب لا يمكننا فتح عميل بريدك الإلكتروني. قمنا بنسخ عنوان البريد الإلكتروني لك. يمكنك كتابة بريد إلكتروني ولصق العنوان في حقل المستلم.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
-  "translationHelpUsTranslate": "Help us translate",
-  "translationSuggestFeatures": "Suggest features",
-  "translationThankYou": "Thank you!",
-  "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-  "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-  "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators",
-  "filtersTimeFilters": "Time Filters",
+  "faqTroubleshooting": "استكشاف الأخطاء وإصلاحها",
+  "faqTroubleshootingDataTitle": "لماذا لا تتم مزامنة بياناتي؟",
+  "faqTroubleshootingDataDescription": "تبدو بيانات اللاعب أو القبيلة قديمة",
+  "faqTroubleshootingDataSolution1": "اسحب للأسفل لتحديث الصفحة",
+  "faqTroubleshootingDataSolution2": "تحقق مما إذا كانت قبيلتك متتبعة (انظر أعلاه)",
+  "faqTroubleshootingDataSolution3": "انتظر بضع دقائق وحاول مرة أخرى: قد تستغرق API بعض الوقت للتحديث",
+  "faqTroubleshootingCrashTitle": "لماذا يتعطل التطبيق؟",
+  "faqTroubleshootingCrashDescription": "يغلق التطبيق بشكل غير متوقع أو يتجمّد",
+  "faqTroubleshootingCrashSolution1": "أغلق التطبيق وأعد تشغيله",
+  "faqTroubleshootingCrashSolution2": "حدّث التطبيق إلى أحدث إصدار",
+  "faqTroubleshootingCrashSolution3": "امسح ذاكرة التخزين المؤقت وبيانات التطبيق (Android) أو أعد تثبيت التطبيق",
+  "faqTroubleshootingCrashSolution4": "حرّر مساحة تخزين على الجهاز",
+  "faqContactSupport": "تواصل مع الدعم إذا استمرت المشكلة (انظر القسم الأخير)",
+  "faqTroubleshootingAccountTitle": "لماذا لا أستطيع التحقق من حسابي؟",
+  "faqTroubleshootingAccountDescription": "مشاكل في ربط حساب Clash of Clans الخاص بك",
+  "faqTroubleshootingAccountSolution1": "تأكد من استخدام وسم اللاعب الصحيح الذي يبدأ بـ #",
+  "faqTroubleshootingAccountSolution2": "إذا بدا أن الحساب مرتبط بالفعل، استخدم رمز API من إعدادات Clash of Clans",
+  "faqTroubleshootingSolutions": "الحلول:",
+  "faqWhatIsClashKingProject": "ما هو مشروع ClashKing؟",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing هو مشروع مفتوح المصدر لإحصاءات Clash of Clans وإدارة القبائل، أنشأه لاعبون شغوفون من أجل المجتمع. نطوره كمشروع جانبي إلى جانب وظائفنا بدوام كامل، بدافع حبنا للعبة. نوفر تطبيقًا للهاتف، وبوت Discord، وAPI مجانية تعمل معًا لتقديم تجربة Clash of Clans المثلى. يتم تمويل المشروع بالكامل من تبرعات المستخدمين واستخدام رمز منشئ Supercell - بلا إعلانات ولا ميزات مدفوعة!",
+  "faqViewOnGitHub": "عرض على GitHub",
+  "faqFeaturesGuide": "ماذا يمكن أن يفعل تطبيق ClashKing؟",
+  "faqFeaturesGuideDescription": "ارتقِ بتجربة Clash of Clans إلى مستوى جديد! يوفر تطبيق ClashKing وصولًا جميلًا وسريعًا إلى كل إحصاءاتك وبيانات قبيلتك - مثالي للاعبين الذين لا يملكون Discord والذين يفضلون تجربة هاتف أنيقة:",
+  "faqAppDevelopmentNotice": "نحن نطوّر ميزات جديدة بنشاط لجعل التطبيق أفضل. ملاحظاتك تساعدنا على التحسين!",
+  "faqFeaturesPlayerTitle": "إحصاءات اللاعب",
+  "faqFeaturesPlayerDescription": "تتبع تقدمك وإنجازاتك وأداء دوري الأساطير",
+  "faqFeaturesClanTitle": "إدارة القبيلة",
+  "faqFeaturesClanDescription": "راقب أعضاء القبيلة والتبرعات وصحة القبيلة عمومًا",
+  "faqFeaturesWarTitle": "تتبع الحروب",
+  "faqFeaturesWarDescription": "حلل أداء الحرب واستراتيجيات الهجوم ومعدلات الفوز",
+  "faqFeaturesLegendsTitle": "بيانات غير دقيقة؟",
+  "faqFeaturesLegendsDescription": "تتبع يومي للكؤوس وإحصاءات نهاية الموسم",
+  "faqFeaturesCwlTitle": "تحليلات CWL",
+  "faqFeaturesCwlDescription": "أداء دوري حروب القبائل ومساهمات الأعضاء",
+  "faqSearchHint": "ابحث في الأسئلة الشائعة...",
+  "faqSectionGettingStarted": "البدء والتعريف",
+  "faqSectionSupportAndContact": "الدعم والتواصل",
+  "faqTranslationIssue": "الترجمة مفقودة أو غير صحيحة؟",
+  "faqTranslationIssueAnswer": "تتم الترجمات بواسطة مستخدمي التطبيق مثلك! نحن (المطورون) نوفر ترجمات الفرنسية والإنجليزية فقط. إذا وجدت ترجمة مفقودة أو غير صحيحة، يمكنك المساعدة في تحسينها. لا تتردد في التواصل معنا على Discord أو عبر البريد الإلكتروني إذا كنت تريد مساعدتنا. لدينا قناة Discord مخصصة للمترجمين يمكنك فيها طرح الأسئلة والحصول على المساعدة.",
+  "faqWaysToSupport": "طرق دعمنا:",
+  "translationHelpUsTranslate": "ساعدنا في الترجمة",
+  "translationSuggestFeatures": "اقترح ميزات",
+  "translationThankYou": "شكرًا لك!",
+  "translationThankYouContent": "شكر جزيل لكل مترجمينا الرائعين الذين يساعدوننا في جعل هذا التطبيق متاحًا لعدد أكبر من الناس حول العالم!",
+  "translationHelpTranslateContent": "يمكنك مساعدتنا في ترجمة التطبيق على Crowdin. إذا لم تكن لغتك متاحة على Crowdin، فلا تتردد في طلبها في خادم Discord الخاص بنا. شكرًا جزيلًا لمساعدتك!",
+  "translationHelpTranslateButton": "المساعدة في الترجمة على Crowdin",
+  "translationCurrentTranslators": "المترجمون الحاليون",
+  "filtersTimeFilters": "عوامل تصفية الوقت",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "إعدادات الحرب",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "الأداء",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "متقدم",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "لا توجد عوامل تصفية نشطة",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "عرض آخر {count} حروب (افتراضي)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1522,115 +1522,115 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "عوامل تصفية سريعة",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "آخر 30 يومًا",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "3 نجوم فقط",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "الهجمات الأولى",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "الموسم",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "نطاق التاريخ",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "نوع الحرب",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "قاعة المدينة",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "قاعة المهاجم",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "قاعة المدافع",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "نفس قاعة المدينة فقط",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "نسبة التدمير",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "الخيارات",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "الهجمات الأولى فقط",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "حد النتائج",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "أدنى موضع",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "أعلى موضع",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "تاريخ البدء",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "تاريخ الانتهاء",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersYear": "Year",
+  "filtersYear": "السنة",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "الشهر",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "اختر السنة",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "كل الحروب",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "أداء الهجوم حسب مستوى قاعة المدينة",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "أداء الدفاع حسب مستوى قاعة المدينة",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "الصفوف: قاعتك | الأعمدة: قاعة الخصم",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsGood": "Good",
+  "chartsGood": "جيد",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "ممتاز",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
@@ -1638,143 +1638,143 @@
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "رؤى الأداء",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "اقتراحات تصفية مبنية على إحصاءات نجومك لإبراز أنماط الأداء",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
-  "generalExport": "Export",
+  "generalExport": "تصدير",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "تصدير إحصاءات الحرب",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "تم التصدير بنجاح!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "سيؤدي ذلك إلى تنزيل إحصاءات الحرب كملف Excel بعدة أوراق تتضمن الإحصاءات العامة، والهجمات التفصيلية، وتحليل قاعات المدينة.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "جارٍ إنشاء التصدير...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "ميزة التصدير قادمة قريبًا لإحصاءات حروب القبائل",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "لم يتم تطبيق أي عوامل تصفية",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "فشل تحميل بيانات اللاعب",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "deepLinkInvalidPlayer": "Invalid player link.",
+  "deepLinkInvalidPlayer": "رابط اللاعب غير صالح.",
   "@deepLinkInvalidPlayer": {
     "description": "Shown when a player deep link does not include a valid tag"
   },
-  "deepLinkInvalidClan": "Invalid clan link.",
+  "deepLinkInvalidClan": "رابط القبيلة غير صالح.",
   "@deepLinkInvalidClan": {
     "description": "Shown when a clan deep link does not include a valid tag"
   },
-  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "deepLinkFailedToOpenPlayer": "فشل فتح اللاعب.",
   "@deepLinkFailedToOpenPlayer": {
     "description": "Shown when a player deep link target could not be loaded"
   },
-  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "deepLinkFailedToOpenClan": "فشل فتح القبيلة.",
   "@deepLinkFailedToOpenClan": {
     "description": "Shown when a clan deep link target could not be loaded"
   },
-  "deepLinkUnknown": "Unknown deep link.",
+  "deepLinkUnknown": "رابط عميق غير معروف.",
   "@deepLinkUnknown": {
     "description": "Shown when the app receives a deep link it does not understand"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "تفاصيل الهجوم",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "ترتيب الهجوم",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "المهاجم",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "المدافع",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "الاسم",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "الحالة",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "الهجمات لكل عضو",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "بداية الحرب",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "نهاية الحرب",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "مستوى القبيلة",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "إجمالي النجوم",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "نسبة التدمير %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "معلومات الحرب",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "نتائج الحرب",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "اللاعبون",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "الهجمات الفاشلة (0-1 نجوم)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "يعرض الهجمات التي فشلت في الحصول على نجمتين أو أكثر",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "الهجمات المثالية الفائتة",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "يعرض الهجمات التي حصلت على نجمتين - فرص مثالية محتملة",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "نجوم منخفضة ضد TH{thLevel}",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1784,7 +1784,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "يعرض الهجمات ذات عدد نجوم منخفض ضد TH{thLevel}",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1794,7 +1794,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "ضعيف أمام TH{thLevel}",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1804,7 +1804,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "يعرض الحالات التي يحصل فيها مهاجمو TH{thLevel} على نجوم عالية ضدك",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1814,91 +1814,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "أداء منخفض في CWL",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "يعرض هجمات CWL ذات متوسط نجوم أقل من الحروب العادية",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "أداء منخفض في الحرب العشوائية",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "يعرض هجمات الحروب العشوائية ذات متوسط نجوم أقل من CWL",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "تحليل الهجمات الأولى",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "يحلل الأداء على القواعد غير المهاجمة فقط",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "الأداء الأخير (30 يومًا)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "يعرض الأداء الأخير لتحديد الاتجاهات الحالية",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "هجمات عالية الأهمية",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "يعرض الهجمات من أعلى 5 مواضع في الحرب",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "هجمات التنظيف",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "يعرض الهجمات من مواضع الحرب الأدنى",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "يحتاج إلى تحسين",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "معدل ثلاث نجوم مرتفع",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "تدمير مرتفع",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "أداء ثابت",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "ثبات الثلاث نجوم",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "أداء النجوم الإجمالي",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "CWL فقط",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "الحروب العشوائية",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "الحروب الودية",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "{count} نجوم فقط",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1907,15 +1907,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "الهجمات المثالية",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "الهجمات الفاشلة",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "TH{level} فقط",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1924,46 +1924,46 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "الأسبوع الماضي",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "الشهر الماضي",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "إعدادي المسبق",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "عامل تصفية مخصص",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "عامل تصفية حديث",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
   "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalSuccess": "نجاح",
+  "generalFailed": "فشل",
+  "generalMinimum": "الحد الأدنى",
+  "generalMaximum": "الحد الأقصى",
+  "generalHigh": "مرتفع",
+  "generalLow": "منخفض",
+  "generalPoor": "ضعيف",
+  "generalOpen": "مفتوح",
+  "generalClosed": "مغلق",
+  "generalAvailable": "متاح",
+  "authErrorUserCancelledDiscordLogin": "ألغى المستخدم تسجيل الدخول عبر Discord.",
+  "authErrorDiscordLoginFailed": "فشل تسجيل الدخول عبر Discord. يرجى المحاولة مرة أخرى.",
+  "authErrorEmailLoginFailed": "فشل تسجيل الدخول بالبريد الإلكتروني. يرجى التحقق من بيانات الاعتماد.",
+  "authErrorEmailNotVerified": "لم يتم التحقق من عنوان بريدك الإلكتروني. يرجى تفقد بريدك وإدخال رمز التحقق.",
+  "authErrorEmailVerificationFailed": "فشل التحقق من البريد الإلكتروني. قد يكون الرمز غير صالح أو منتهي الصلاحية.",
+  "authErrorDiscordLinkFailed": "فشل ربط حساب Discord. قد يكون مرتبطًا بالفعل بحساب آخر.",
+  "authErrorEmailLinkFailed": "فشل ربط حساب البريد الإلكتروني. قد يكون البريد مستخدمًا بالفعل.",
+  "authErrorUserNotAuthenticated": "المستخدم غير مصادق عليه. يرجى تسجيل الدخول مرة أخرى.",
+  "apiErrorInvalidJsonResponse": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1973,7 +1973,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "حدث خطأ ما. يرجى التحقق من مدخلاتك.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1987,7 +1987,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "غير مصرح لك. يرجى تسجيل الدخول مرة أخرى.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1997,7 +1997,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "ليس لديك إذن لتنفيذ هذا الإجراء.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -2007,7 +2007,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "لم نتمكن من العثور على ما تبحث عنه.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -2017,7 +2017,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "طلبات كثيرة جدًا. يرجى المحاولة لاحقًا.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -2027,7 +2027,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "الخادم غير متاح مؤقتًا. يرجى المحاولة بعد قليل.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -2041,7 +2041,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -2055,10 +2055,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "لا يوجد اتصال بالإنترنت. يرجى التحقق من شبكتك والمحاولة مرة أخرى.",
+  "apiErrorTimeout": "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.",
+  "apiErrorInvalidFormat": "تنسيق الاستجابة غير صالح. يرجى المحاولة مرة أخرى.",
+  "apiErrorOperationFailed": "لم نتمكن من إكمال طلبك. يرجى المحاولة مرة أخرى.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -2068,7 +2068,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "يبدو أنك غير متصل. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -2078,7 +2078,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "استغرق الطلب وقتًا طويلًا جدًا. يرجى المحاولة مرة أخرى.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2088,7 +2088,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "حدث خطأ أثناء معالجة البيانات. يرجى المحاولة مرة أخرى.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2098,7 +2098,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "تعذر تحميل إعدادات التطبيق (خطأ {statusCode}). يرجى المحاولة مرة أخرى.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2108,7 +2108,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "خطأ عند تحميل التهيئة من الخادم",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
@@ -2118,22 +2118,22 @@
       }
     }
   },
-  "gameItemHousingSpace": "Housing Space",
-  "gameItemAttackSpeed": "Attack Speed",
-  "gameItemAttackRange": "Attack Range",
-  "gameItemMovementSpeed": "Movement Speed",
-  "gameItemUpgradeResource": "Upgrade Resource",
-  "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero",
+  "gameItemHousingSpace": "مساحة السكن",
+  "gameItemAttackSpeed": "سرعة الهجوم",
+  "gameItemAttackRange": "مدى الهجوم",
+  "gameItemMovementSpeed": "سرعة الحركة",
+  "gameItemUpgradeResource": "مورد الترقية",
+  "gameItemRarity": "الندرة",
+  "gameItemHero": "البطل",
   "gameItemDps": "DPS",
   "gameItemHitpoints": "HP",
-  "gameItemHealOnActivation": "Heal",
-  "gameItemTargets": "Targets",
-  "gameItemTargetsGround": "Ground",
-  "gameItemTargetsAir": "Air",
-  "gameItemFlying": "Flying",
-  "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time",
+  "gameItemHealOnActivation": "شفاء",
+  "gameItemTargets": "الأهداف",
+  "gameItemTargetsGround": "أرضية",
+  "gameItemTargetsAir": "جوية",
+  "gameItemFlying": "طائر",
+  "gameItemUpgradeCost": "تكلفة الترقية",
+  "gameItemUpgradeTime": "وقت الترقية",
   "generalExpand": "يوسع",
   "generalCollapse": "ينهار",
   "generalBookmark": "إشارة مرجعية",
@@ -2414,7 +2414,7 @@
   "warFiltersFriendlyWars": "الحروب الودية",
   "warType": "نوع الحرب",
   "warFiltersAnyTownHall": "أي ث",
-  "gameTownHallLevelShort": "TH{level}",
+  "gameTownHallLevelShort": "قاعة {level}",
   "warAttackerTownHall": "المهاجم ث",
   "warDefenderTownHall": "المدافع ث",
   "warStatsFilterSameTownHallOnly": "نفس قاعة المدينة فقط",
@@ -2431,67 +2431,67 @@
   "warStatsFilterFreshAttacksDescription": "تظهر فقط الهجمات الأولى على كل قاعدة",
   "warStatsFilterResultLimit": "حد النتيجة",
   "generalResultsCount": "نتائج {count}",
-  "notifEventsDescription": "Clan Games, CWL, Raid Weekend, and season events.",
-  "notifAnnouncementsDescription": "In-app banners and future push alerts for ClashKing updates.",
-  "notifUpgradeFinishesDescription": "Troops, heroes, pets, spells, equipment, and buildings.",
-  "notifSupportReminderDescription": "Monthly reminder to support ClashKing.",
-  "notifDevicePushSetup": "Device push setup",
-  "notifAccountScope": "Account scope",
-  "notifTestNotification": "Test notification",
-  "settingsAppIcon": "App Icon",
-  "settingsChanging": "Changing...",
-  "settingsAddWarWidget": "Add War Widget",
-  "settingsWarWidgetLinkClanFirst": "Link an account in a clan first",
-  "settingsWarWidgetClanCount": "{count} clan(s) available",
+  "notifEventsDescription": "ألعاب القبيلة، CWL، عطلة الغارات، وأحداث الموسم.",
+  "notifAnnouncementsDescription": "لافتات داخل التطبيق وتنبيهات دفع مستقبلية لتحديثات ClashKing.",
+  "notifUpgradeFinishesDescription": "القوات، الأبطال، الحيوانات الأليفة، التعاويذ، المعدات، والمباني.",
+  "notifSupportReminderDescription": "تذكير شهري لدعم ClashKing.",
+  "notifDevicePushSetup": "إعداد إشعارات الجهاز",
+  "notifAccountScope": "نطاق الحساب",
+  "notifTestNotification": "إشعار تجريبي",
+  "settingsAppIcon": "أيقونة التطبيق",
+  "settingsChanging": "جارٍ التغيير...",
+  "settingsAddWarWidget": "إضافة ويدجت الحرب",
+  "settingsWarWidgetLinkClanFirst": "اربط حسابًا في قبيلة أولًا",
+  "settingsWarWidgetClanCount": "{count} قبيلة/قبائل متاحة",
   "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Bot-linked accounts and Discord data",
-  "settingsDiscordSyncSubtitle": "Sync bot-linked accounts and Discord data",
-  "settingsConnected": "Connected",
-  "settingsClashKingAccount": "ClashKing account",
-  "settingsEmailConnectedSubtitle": "Email login is connected",
-  "settingsEmailRecoverySubtitle": "Add email login for account recovery",
-  "settingsFeatureRequestsTitle": "Feature Requests",
-  "playerOpenInGame": "Open in game",
-  "playerBookmarkRemove": "Remove player bookmark",
-  "playerBookmarkAdd": "Bookmark player",
-  "playerBestTrophies": "Best trophies",
-  "clanLoadFailed": "Failed to load clan.",
-  "gameItemLevels": "Levels",
-  "resourceDarkElixir": "Dark Elixir",
-  "resourceBuilderElixir": "Builder Elixir",
-  "resourceBuilderGold": "Builder Gold",
+  "settingsDiscordConnectedSubtitle": "حسابات مرتبطة بالبوت وبيانات Discord",
+  "settingsDiscordSyncSubtitle": "مزامنة الحسابات المرتبطة بالبوت وبيانات Discord",
+  "settingsConnected": "متصل",
+  "settingsClashKingAccount": "حساب ClashKing",
+  "settingsEmailConnectedSubtitle": "تسجيل الدخول بالبريد الإلكتروني متصل",
+  "settingsEmailRecoverySubtitle": "أضف تسجيل الدخول بالبريد الإلكتروني لاسترداد الحساب",
+  "settingsFeatureRequestsTitle": "طلبات الميزات",
+  "playerOpenInGame": "فتح داخل اللعبة",
+  "playerBookmarkRemove": "إزالة إشارة اللاعب المرجعية",
+  "playerBookmarkAdd": "إضافة اللاعب إلى الإشارات المرجعية",
+  "playerBestTrophies": "أفضل كؤوس",
+  "clanLoadFailed": "فشل تحميل القبيلة.",
+  "gameItemLevels": "المستويات",
+  "resourceDarkElixir": "إكسير الظلام",
+  "resourceBuilderElixir": "إكسير البنّاء",
+  "resourceBuilderGold": "ذهب البنّاء",
   "resourceElixir": "Elixir",
-  "resourceGold": "Gold",
-  "resourceGlowyOre": "Glowy Ore",
-  "resourceStarryOre": "Starry Ore",
-  "resourceShinyOre": "Shiny Ore",
-  "resourceGeneric": "Resource",
-  "seasonStatsGoldGrabbed": "Gold Grabbed",
-  "seasonStatsActivity": "Activity",
-  "seasonStatsAttackWins": "Attack Wins",
-  "seasonStatsTrophies": "Season Trophies",
-  "todoSearchAccountsHint": "Search accounts",
-  "generalClearSearch": "Clear search",
-  "clanCapitalAvgRewards": "Avg rewards",
-  "clanCapitalAvgDistrictsPerWeek": "Avg districts/week",
-  "clanCapitalTopAttackers": "Top attackers",
-  "clanCapitalPlayersTracked": "{count} players tracked",
-  "clanCapitalDefenseOverTime": "Defense over time",
-  "clanCapitalDistrictsTracked": "{count} districts tracked",
-  "clanCapitalSelectedRaid": "Selected raid",
-  "generalSummary": "Summary",
-  "generalBreakdown": "Breakdown",
-  "clanPointsTitle": "Clan points",
-  "clanBuilderBasePoints": "Builder base points",
-  "clanType": "Clan type",
-  "clanRequiredTownHall": "Required Town Hall",
-  "clanRequiredTownHallOnly": "{level}+ only",
-  "clanCapitalPoints": "Capital points",
-  "todoAllAccounts": "All accounts",
-  "todoCombinedAcrossAccounts": "Combined to-do across your accounts",
-  "todoPreviewAccount": "Preview account",
-  "todoLastActiveUnavailable": "Last active unavailable",
-  "todoActiveRelative": "Active {time}",
+  "resourceGold": "الذهب",
+  "resourceGlowyOre": "الخام المتوهج",
+  "resourceStarryOre": "الخام النجمي",
+  "resourceShinyOre": "الخام اللامع",
+  "resourceGeneric": "مورد",
+  "seasonStatsGoldGrabbed": "الذهب المنهوب",
+  "seasonStatsActivity": "النشاط",
+  "seasonStatsAttackWins": "انتصارات الهجوم",
+  "seasonStatsTrophies": "كؤوس الموسم",
+  "todoSearchAccountsHint": "ابحث في الحسابات",
+  "generalClearSearch": "مسح البحث",
+  "clanCapitalAvgRewards": "متوسط المكافآت",
+  "clanCapitalAvgDistrictsPerWeek": "متوسط المناطق/الأسبوع",
+  "clanCapitalTopAttackers": "أفضل المهاجمين",
+  "clanCapitalPlayersTracked": "{count} لاعبين متتبعين",
+  "clanCapitalDefenseOverTime": "الدفاع بمرور الوقت",
+  "clanCapitalDistrictsTracked": "{count} مناطق متتبعة",
+  "clanCapitalSelectedRaid": "الغارة المحددة",
+  "generalSummary": "ملخص",
+  "generalBreakdown": "تفصيل",
+  "clanPointsTitle": "نقاط القبيلة",
+  "clanBuilderBasePoints": "نقاط قاعدة البنّاء",
+  "clanType": "نوع القبيلة",
+  "clanRequiredTownHall": "قاعة المدينة المطلوبة",
+  "clanRequiredTownHallOnly": "{level}+ فقط",
+  "clanCapitalPoints": "نقاط العاصمة",
+  "todoAllAccounts": "كل الحسابات",
+  "todoCombinedAcrossAccounts": "مهام مجمعة عبر حساباتك",
+  "todoPreviewAccount": "معاينة الحساب",
+  "todoLastActiveUnavailable": "آخر نشاط غير متاح",
+  "todoActiveRelative": "نشط {time}",
   "@todoActiveRelative": {
     "placeholders": {
       "time": {
@@ -2499,8 +2499,8 @@
       }
     }
   },
-  "todoCompleteLower": "complete",
-  "todoPointsLeftShort": "{points} points left",
+  "todoCompleteLower": "مكتمل",
+  "todoPointsLeftShort": "تبقى {points} نقطة",
   "@todoPointsLeftShort": {
     "placeholders": {
       "points": {
@@ -2508,7 +2508,7 @@
       }
     }
   },
-  "todoItemsLeftShort": "{count} left",
+  "todoItemsLeftShort": "تبقى {count}",
   "@todoItemsLeftShort": {
     "placeholders": {
       "count": {
@@ -2516,8 +2516,8 @@
       }
     }
   },
-  "todoAllCaughtUpForNow": "All caught up for now",
-  "todoEventEndsIn": "Ends in {duration}",
+  "todoAllCaughtUpForNow": "كل شيء منجز حاليًا",
+  "todoEventEndsIn": "ينتهي خلال {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
       "duration": {
@@ -2525,7 +2525,7 @@
       }
     }
   },
-  "todoEventStartsIn": "Starts in {duration}",
+  "todoEventStartsIn": "يبدأ خلال {duration}",
   "@todoEventStartsIn": {
     "placeholders": {
       "duration": {
@@ -2533,38 +2533,38 @@
       }
     }
   },
-  "todoRemainingUpgradeTooltip": "Tap for remaining upgrade cost and time",
-  "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
-  "sideRankingsTitle": "Rankings",
-  "sideRankingsSubtitle": "Official leaderboards plus ClashKing endpoints.",
-  "sideRankingsLoadError": "Could not load official rankings.",
-  "sideRankingsEmptyTitle": "No rankings returned",
-  "sideRankingsEmptyBody": "Try another leaderboard or location.",
-  "sideRankingsMockups": "ClashKing mockups",
-  "sideStatsTitle": "Stats",
-  "sideStatsSubtitle": "Leaderboard stats from official Clash API surfaces.",
-  "sideStatsLoadError": "Could not load leaderboard stats.",
-  "sideTopScore": "Top score",
-  "sideTop200Avg": "Top 200 avg",
-  "sideBasesArmiesTitle": "Bases & Armies",
-  "sideBasesArmiesSubtitle": "Discord-saved layouts and army links.",
-  "sideBotSyncTarget": "Bot sync target",
-  "sideBotSyncTargetBody": "The bot already saves bases and armies to the Discord profile. This page is ready for that synced payload.",
-  "sideSavedBases": "Saved bases",
-  "sideWarBaseSlots": "War base slots",
-  "sideWarBaseSlotsBody": "Town hall, base type, link, and last updated.",
-  "sideLegendBaseSlots": "Legend base slots",
-  "sideLegendBaseSlotsBody": "Quick copy plus account association.",
-  "sideSavedArmies": "Saved armies",
-  "sideArmyLinks": "Army links",
-  "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
-  "sideGameAssetsTitle": "Game Assets",
-  "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
-  "sideNoLinkedPlayersTitle": "No linked players loaded",
-  "sideNoLinkedPlayersBody": "Add or refresh linked accounts to prefill league data.",
-  "sideReadyNow": "Ready now",
-  "sideDays": "{count} days",
+  "todoRemainingUpgradeTooltip": "اضغط لمعرفة تكلفة ووقت الترقية المتبقيين",
+  "announcementAnimeFuryTitle": "غضب الأنمي",
+  "announcementAnimeFurySubtitle": "تصفح تحديث يونيو 2026",
+  "sideRankingsTitle": "التصنيفات",
+  "sideRankingsSubtitle": "لوحات الصدارة الرسمية بالإضافة إلى نقاط نهاية ClashKing.",
+  "sideRankingsLoadError": "تعذر تحميل التصنيفات الرسمية.",
+  "sideRankingsEmptyTitle": "لم يتم إرجاع أي تصنيفات",
+  "sideRankingsEmptyBody": "جرّب لوحة صدارة أو موقعًا آخر.",
+  "sideRankingsMockups": "نماذج ClashKing",
+  "sideStatsTitle": "الإحصاءات",
+  "sideStatsSubtitle": "إحصاءات لوحات الصدارة من واجهات Clash API الرسمية.",
+  "sideStatsLoadError": "تعذر تحميل إحصاءات لوحة الصدارة.",
+  "sideTopScore": "أعلى نتيجة",
+  "sideTop200Avg": "متوسط أفضل 200",
+  "sideBasesArmiesTitle": "القواعد والجيوش",
+  "sideBasesArmiesSubtitle": "تخطيطات محفوظة في Discord وروابط جيوش.",
+  "sideBotSyncTarget": "هدف مزامنة البوت",
+  "sideBotSyncTargetBody": "يحفظ البوت بالفعل القواعد والجيوش في ملف Discord الشخصي. هذه الصفحة جاهزة للحمولة المتزامنة.",
+  "sideSavedBases": "القواعد المحفوظة",
+  "sideWarBaseSlots": "خانات قواعد الحرب",
+  "sideWarBaseSlotsBody": "قاعة المدينة، نوع القاعدة، الرابط، وآخر تحديث.",
+  "sideLegendBaseSlots": "خانات قواعد الأساطير",
+  "sideLegendBaseSlotsBody": "نسخ سريع مع ربط الحساب.",
+  "sideSavedArmies": "الجيوش المحفوظة",
+  "sideArmyLinks": "روابط الجيوش",
+  "sideArmyLinksBody": "التشكيلة، التعاويذ، الحصار، الملاحظات، ورابط المشاركة.",
+  "sideGameAssetsTitle": "أصول اللعبة",
+  "sideGameAssetsSubtitle": "أصول ClashKing المستضافة، مجمّعة حسب المجلد.",
+  "sideNoLinkedPlayersTitle": "لم يتم تحميل لاعبين مرتبطين",
+  "sideNoLinkedPlayersBody": "أضف الحسابات المرتبطة أو حدّثها لملء بيانات الدوري مسبقًا.",
+  "sideReadyNow": "جاهز الآن",
+  "sideDays": "{count} أيام",
   "@sideDays": {
     "placeholders": {
       "count": {
@@ -2572,7 +2572,7 @@
       }
     }
   },
-  "sideOreLeft": "{shiny} shiny, {glowy} glowy, {starry} starry left",
+  "sideOreLeft": "تبقى {shiny} لامع، {glowy} متوهج، {starry} نجمي",
   "@sideOreLeft": {
     "placeholders": {
       "shiny": {
@@ -2586,14 +2586,14 @@
       }
     }
   },
-  "sideShinyOre": "Shiny ore",
-  "sideGlowyOre": "Glowy ore",
-  "sideStarryOre": "Starry ore",
-  "sideDailyBonusAdjustment": "Daily bonus adjustment",
-  "sideExtraShiny": "Extra shiny",
-  "sideExtraGlowy": "Extra glowy",
-  "sideExtraStarry": "Extra starry",
-  "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
+  "sideShinyOre": "خام لامع",
+  "sideGlowyOre": "خام متوهج",
+  "sideStarryOre": "خام نجمي",
+  "sideDailyBonusAdjustment": "تعديل المكافأة اليومية",
+  "sideExtraShiny": "لامع إضافي",
+  "sideExtraGlowy": "متوهج إضافي",
+  "sideExtraStarry": "نجمي إضافي",
+  "sideZapQuakeTitle": "{zaps} برق + زلزال واحد",
   "@sideZapQuakeTitle": {
     "placeholders": {
       "zaps": {
@@ -2601,7 +2601,7 @@
       }
     }
   },
-  "sideZapQuakeSubtitle": "{quakeDamage} quake damage, {lightningDamage} per lightning",
+  "sideZapQuakeSubtitle": "ضرر الزلزال {quakeDamage}، و{lightningDamage} لكل برق",
   "@sideZapQuakeSubtitle": {
     "placeholders": {
       "quakeDamage": {
@@ -2612,11 +2612,11 @@
       }
     }
   },
-  "sideBuildingHp": "Building HP",
-  "sideLightningLevel": "Lightning level",
-  "sideEarthquakeLevel": "Earthquake level",
-  "sideWithoutEarthquake": "Without earthquake",
-  "sideLightningCount": "{count} lightning",
+  "sideBuildingHp": "صحة المبنى",
+  "sideLightningLevel": "مستوى البرق",
+  "sideEarthquakeLevel": "مستوى الزلزال",
+  "sideWithoutEarthquake": "بدون زلزال",
+  "sideLightningCount": "{count} برق",
   "@sideLightningCount": {
     "placeholders": {
       "count": {
@@ -2624,9 +2624,9 @@
       }
     }
   },
-  "sideFireballQuakeTitle": "Fireball + 1 quake",
-  "sideAddSupportDamage": "Add support damage",
-  "sideFireballQuakeSubtitle": "{fireballDamage} fireball damage, {hpLeft} HP left after quake",
+  "sideFireballQuakeTitle": "كرة نارية + زلزال واحد",
+  "sideAddSupportDamage": "إضافة ضرر دعم",
+  "sideFireballQuakeSubtitle": "ضرر الكرة النارية {fireballDamage}، و{hpLeft} صحة متبقية بعد الزلزال",
   "@sideFireballQuakeSubtitle": {
     "placeholders": {
       "fireballDamage": {
@@ -2637,9 +2637,9 @@
       }
     }
   },
-  "sideFireballLevel": "Fireball level",
-  "sideQuakePressure": "Quake pressure",
-  "sideQuakeSpellCount": "{count} quake spell(s)",
+  "sideFireballLevel": "مستوى الكرة النارية",
+  "sideQuakePressure": "ضغط الزلزال",
+  "sideQuakeSpellCount": "{count} تعويذة زلزال",
   "@sideQuakeSpellCount": {
     "placeholders": {
       "count": {
@@ -2647,14 +2647,14 @@
       }
     }
   },
-  "sideLocation": "Location",
-  "sideFilter": "Filter",
-  "sideRefresh": "Refresh",
-  "sideOfficialClashLeaderboard": "Official Clash leaderboard",
-  "sideAllTownHallsShort": "All TH",
-  "sideOwned": "Owned",
-  "sideTarget": "Target",
-  "sideDailyValue": "daily {value}",
+  "sideLocation": "الموقع",
+  "sideFilter": "تصفية",
+  "sideRefresh": "تحديث",
+  "sideOfficialClashLeaderboard": "لوحة صدارة Clash الرسمية",
+  "sideAllTownHallsShort": "كل القاعات",
+  "sideOwned": "مملوك",
+  "sideTarget": "الهدف",
+  "sideDailyValue": "يوميًا {value}",
   "@sideDailyValue": {
     "placeholders": {
       "value": {
@@ -2662,9 +2662,9 @@
       }
     }
   },
-  "sideDecrease": "Decrease",
-  "sideIncrease": "Increase",
-  "sideLevel": "Level {level}",
+  "sideDecrease": "إنقاص",
+  "sideIncrease": "زيادة",
+  "sideLevel": "المستوى {level}",
   "@sideLevel": {
     "placeholders": {
       "level": {
@@ -2672,58 +2672,58 @@
       }
     }
   },
-  "sidePopularPlayers": "Players",
-  "sidePopularClans": "Clans",
-  "sidePopularWarsCwl": "Wars & CWL",
-  "rankingPlayerTrophies": "Player trophies",
-  "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
-  "rankingPlayerBuilder": "Player builder",
-  "rankingPlayerBuilderHeading": "Players Builder Base Ranking",
-  "rankingClanTrophies": "Clan trophies",
-  "rankingClanTrophiesHeading": "Clans Trophies Ranking",
-  "rankingClanBuilder": "Clan builder",
-  "rankingClanBuilderHeading": "Clans Builder Base Ranking",
-  "rankingClanCapital": "Clan capital",
-  "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "assetFolderEquipment": "Equipment",
-  "assetFolderLeagues": "Leagues",
-  "assetFolderResources": "Resources",
-  "assetFolderStickers": "Stickers",
-  "upgradeSectionHeroes": "Heroes",
-  "upgradeSectionTroops": "Troops",
-  "upgradeSectionSpells": "Spells",
-  "upgradeSectionPets": "Pets",
-  "upgradeSectionEquipment": "Equipment",
-  "sideMockupSource": "Source",
-  "sideMockupMode": "Mode",
-  "sideMockupPreview": "Preview",
-  "sideMockupRows": "Rows",
-  "sideMockupRowsValue": "5 mockups",
-  "endpointLeagueTop200": "League top 200",
-  "endpointLeagueTop200Preview": "Legend League · 5,742 trophies",
-  "endpointTownhallTop200": "Townhall top 200",
-  "endpointTownhallTop200Preview": "TH17 · Global player board",
-  "endpointClanDonations": "Clan donations",
-  "endpointClanDonationsPreview": "United States · weekly clan totals",
-  "endpointClanWarWins": "Clan war wins",
-  "endpointClanWarWinsPreview": "International · all-time war wins",
-  "endpointTop200ArmyUsage": "Top 200 army usage",
-  "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
-  "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Weekly",
-  "endpointStateWins": "Wins",
-  "endpointStateUsage": "Usage",
-  "notifGroupBattles": "Battles",
-  "notifGroupReminders": "Reminders",
-  "notifGroupSupport": "Support",
-  "notifGroupProgress": "Progress",
-  "notifLeagueDefense": "League defense",
-  "notifLeagueDefenseResult": "League defense result",
-  "notifLeagueTriple": "League triple",
-  "notifLeagueAttackBody": "Lord Clasher attacked {player} • {percent}% • {stars} stars • {league}",
+  "sidePopularPlayers": "اللاعبون",
+  "sidePopularClans": "القبائل",
+  "sidePopularWarsCwl": "الحروب وCWL",
+  "rankingPlayerTrophies": "كؤوس اللاعبين",
+  "rankingPlayerTrophiesHeading": "تصنيف كؤوس اللاعبين",
+  "rankingPlayerBuilder": "بنّاء اللاعب",
+  "rankingPlayerBuilderHeading": "تصنيف قاعدة البنّاء للاعبين",
+  "rankingClanTrophies": "كؤوس القبائل",
+  "rankingClanTrophiesHeading": "تصنيف كؤوس القبائل",
+  "rankingClanBuilder": "بنّاء القبيلة",
+  "rankingClanBuilderHeading": "تصنيف قاعدة البنّاء للقبائل",
+  "rankingClanCapital": "عاصمة القبيلة",
+  "rankingClanCapitalHeading": "تصنيف عاصمة القبيلة",
+  "assetFolderTroops": "القوات",
+  "assetFolderSpells": "التعاويذ",
+  "assetFolderHeroes": "الأبطال",
+  "assetFolderEquipment": "المعدات",
+  "assetFolderLeagues": "الدوريات",
+  "assetFolderResources": "الموارد",
+  "assetFolderStickers": "الملصقات",
+  "upgradeSectionHeroes": "الأبطال",
+  "upgradeSectionTroops": "القوات",
+  "upgradeSectionSpells": "التعاويذ",
+  "upgradeSectionPets": "الحيوانات الأليفة",
+  "upgradeSectionEquipment": "المعدات",
+  "sideMockupSource": "المصدر",
+  "sideMockupMode": "الوضع",
+  "sideMockupPreview": "معاينة",
+  "sideMockupRows": "الصفوف",
+  "sideMockupRowsValue": "5 نماذج",
+  "endpointLeagueTop200": "أفضل 200 في الدوري",
+  "endpointLeagueTop200Preview": "دوري الأساطير · 5,742 كأسًا",
+  "endpointTownhallTop200": "أفضل 200 قاعة مدينة",
+  "endpointTownhallTop200Preview": "TH17 · لوحة اللاعبين العالمية",
+  "endpointClanDonations": "تبرعات القبيلة",
+  "endpointClanDonationsPreview": "الولايات المتحدة · إجماليات القبيلة الأسبوعية",
+  "endpointClanWarWins": "انتصارات حروب القبيلة",
+  "endpointClanWarWinsPreview": "دولي · انتصارات الحرب عبر كل الوقت",
+  "endpointTop200ArmyUsage": "استخدام الجيوش ضمن أفضل 200",
+  "endpointTop200ArmyUsagePreview": "سجلات المعارك · استخدام القوات والتعاويذ",
+  "endpointStateTop200": "أفضل 200",
+  "endpointStateWeekly": "أسبوعي",
+  "endpointStateWins": "انتصارات",
+  "endpointStateUsage": "الاستخدام",
+  "notifGroupBattles": "المعارك",
+  "notifGroupReminders": "التذكيرات",
+  "notifGroupSupport": "الدعم",
+  "notifGroupProgress": "التقدم",
+  "notifLeagueDefense": "دفاع الدوري",
+  "notifLeagueDefenseResult": "نتيجة دفاع الدوري",
+  "notifLeagueTriple": "ثلاث نجوم في الدوري",
+  "notifLeagueAttackBody": "هاجم Lord Clasher اللاعب {player} • {percent}% • {stars} نجوم • {league}",
   "@notifLeagueAttackBody": {
     "placeholders": {
       "player": {
@@ -2740,8 +2740,8 @@
       }
     }
   },
-  "notifWarDefense": "War defense",
-  "notifWarAttackOnTh": "War attack on TH{th}",
+  "notifWarDefense": "دفاع الحرب",
+  "notifWarAttackOnTh": "هجوم حرب على TH{th}",
   "@notifWarAttackOnTh": {
     "placeholders": {
       "th": {
@@ -2749,7 +2749,7 @@
       }
     }
   },
-  "notifWarDefenseBody": "{opponentClan} attacked {player} • {percent}% • {stars} stars • {clan} defense",
+  "notifWarDefenseBody": "هاجمت {opponentClan} اللاعب {player} • {percent}% • {stars} نجوم • دفاع {clan}",
   "@notifWarDefenseBody": {
     "placeholders": {
       "opponentClan": {
@@ -2769,9 +2769,9 @@
       }
     }
   },
-  "notifWarFeed5v5": "5v5 war feed",
-  "notifWarAttackResult": "War attack result",
-  "notifWarAttackResultBody": "{clan} attacked Pine Riders TH{th} • 100% • 3 stars",
+  "notifWarFeed5v5": "موجز حرب 5 ضد 5",
+  "notifWarAttackResult": "نتيجة هجوم الحرب",
+  "notifWarAttackResultBody": "هاجمت {clan} Pine Riders TH{th} • 100% • 3 نجوم",
   "@notifWarAttackResultBody": {
     "placeholders": {
       "clan": {
@@ -2782,8 +2782,8 @@
       }
     }
   },
-  "notifWarMatched": "War matched",
-  "notifWarMatchedBody": "{clan} matched with Pine Riders. Preparation day started.",
+  "notifWarMatched": "تمت مطابقة الحرب",
+  "notifWarMatchedBody": "تمت مطابقة {clan} مع Pine Riders. بدأ يوم التحضير.",
   "@notifWarMatchedBody": {
     "placeholders": {
       "clan": {
@@ -2791,9 +2791,9 @@
       }
     }
   },
-  "notifWarStarted": "War started",
-  "notifBattleDayStarted": "Battle day started",
-  "notifWarStartedBody": "{clan} vs Pine Riders is live. Good luck.",
+  "notifWarStarted": "بدأت الحرب",
+  "notifBattleDayStarted": "بدأ يوم المعركة",
+  "notifWarStartedBody": "{clan} ضد Pine Riders مباشرة الآن. حظًا موفقًا.",
   "@notifWarStartedBody": {
     "placeholders": {
       "clan": {
@@ -2801,8 +2801,8 @@
       }
     }
   },
-  "notifWarEnded": "War ended",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final results are available.",
+  "notifWarEnded": "انتهت الحرب",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. النتائج النهائية متاحة.",
   "@notifWarEndedBody": {
     "placeholders": {
       "clan": {
@@ -2810,13 +2810,13 @@
       }
     }
   },
-  "notifWarReminder1h": "War reminder: 1h",
-  "notifWarReminder30m": "War reminder: 30m",
-  "notifWarReminder15m": "War reminder: 15m",
-  "notifOneHourLeft": "1 hour left",
-  "notifThirtyMinutesLeft": "30 minutes left",
-  "notifFifteenMinutesLeft": "15 minutes left",
-  "notifRemainingWarAttacksBody": "{player} has remaining war attacks. {time}.",
+  "notifWarReminder1h": "تذكير الحرب: ساعة واحدة",
+  "notifWarReminder30m": "تذكير الحرب: 30 دقيقة",
+  "notifWarReminder15m": "تذكير الحرب: 15 دقيقة",
+  "notifOneHourLeft": "تبقت ساعة واحدة",
+  "notifThirtyMinutesLeft": "تبقت 30 دقيقة",
+  "notifFifteenMinutesLeft": "تبقت 15 دقيقة",
+  "notifRemainingWarAttacksBody": "لدى {player} هجمات حرب متبقية. {time}.",
   "@notifRemainingWarAttacksBody": {
     "placeholders": {
       "player": {
@@ -2827,7 +2827,7 @@
       }
     }
   },
-  "notifStarted": "{name} started",
+  "notifStarted": "بدأ {name}",
   "@notifStarted": {
     "placeholders": {
       "name": {
@@ -2835,7 +2835,7 @@
       }
     }
   },
-  "notifClanGamesPointsBody": "{clan} can start earning {name} points.",
+  "notifClanGamesPointsBody": "يمكن لـ {clan} بدء كسب نقاط {name}.",
   "@notifClanGamesPointsBody": {
     "placeholders": {
       "clan": {
@@ -2846,7 +2846,7 @@
       }
     }
   },
-  "notifCwlPreparationBody": "{clan} can begin Clan War League preparation.",
+  "notifCwlPreparationBody": "يمكن لـ {clan} بدء التحضير لدوري حروب القبائل.",
   "@notifCwlPreparationBody": {
     "placeholders": {
       "clan": {
@@ -2854,7 +2854,7 @@
       }
     }
   },
-  "notifRaidWeekendBody": "{clan} can start Capital Raid attacks.",
+  "notifRaidWeekendBody": "يمكن لـ {clan} بدء هجمات غارات العاصمة.",
   "@notifRaidWeekendBody": {
     "placeholders": {
       "clan": {
@@ -2862,9 +2862,9 @@
       }
     }
   },
-  "notifSeasonStart": "Season start",
-  "notifNewSeasonStarted": "New season started",
-  "notifSeasonStartedBody": "{league} season has started for {player}.",
+  "notifSeasonStart": "بداية الموسم",
+  "notifNewSeasonStarted": "بدأ موسم جديد",
+  "notifSeasonStartedBody": "بدأ موسم {league} للاعب {player}.",
   "@notifSeasonStartedBody": {
     "placeholders": {
       "league": {
@@ -2875,13 +2875,13 @@
       }
     }
   },
-  "notifSpecialEvent": "Special event",
-  "notifNewEventLive": "A new event is live",
-  "notifNewClashEventBody": "A new Clash event is available.",
-  "notifSupportClashKing": "Support ClashKing",
-  "notifMonthlySupportBody": "Monthly support helps keep ClashKing available and improving. Thank you.",
-  "notifUpgradeFinished": "Upgrade finished",
-  "notifUpgradeReadyTitle": "{name} is ready",
+  "notifSpecialEvent": "حدث خاص",
+  "notifNewEventLive": "حدث جديد متاح الآن",
+  "notifNewClashEventBody": "يتوفر حدث Clash جديد.",
+  "notifSupportClashKing": "ادعم ClashKing",
+  "notifMonthlySupportBody": "الدعم الشهري يساعد على إبقاء ClashKing متاحًا وفي تحسن مستمر. شكرًا لك.",
+  "notifUpgradeFinished": "اكتملت الترقية",
+  "notifUpgradeReadyTitle": "{name} جاهز",
   "@notifUpgradeReadyTitle": {
     "placeholders": {
       "name": {
@@ -2889,7 +2889,7 @@
       }
     }
   },
-  "notifUpgradeCompleteBody": "Level {level} finished for {player}. Upgrade complete.",
+  "notifUpgradeCompleteBody": "اكتمل المستوى {level} للاعب {player}. انتهت الترقية.",
   "@notifUpgradeCompleteBody": {
     "placeholders": {
       "level": {
@@ -2900,7 +2900,7 @@
       }
     }
   },
-  "clanSearchLoadFailed": "Failed to load clan data: {error}",
+  "clanSearchLoadFailed": "فشل تحميل بيانات القبيلة: {error}",
   "@clanSearchLoadFailed": {
     "placeholders": {
       "error": {
@@ -2908,11 +2908,11 @@
       }
     }
   },
-  "appIconDefault": "Default",
-  "appIconChristmas": "Christmas",
-  "appIconBlackWhite": "Black & White",
-  "appIconDarkMode": "Dark Mode",
-  "generalMembersCount": "{count} members",
+  "appIconDefault": "افتراضي",
+  "appIconChristmas": "عيد الميلاد",
+  "appIconBlackWhite": "أبيض وأسود",
+  "appIconDarkMode": "الوضع الداكن",
+  "generalMembersCount": "{count} أعضاء",
   "@generalMembersCount": {
     "placeholders": {
       "count": {
@@ -2920,8 +2920,8 @@
       }
     }
   },
-  "generalBookmarked": "bookmarked",
-  "clanLevelValue": "level {level}",
+  "generalBookmarked": "مضاف إلى الإشارات",
+  "clanLevelValue": "المستوى {level}",
   "@clanLevelValue": {
     "placeholders": {
       "level": {
@@ -2929,7 +2929,7 @@
       }
     }
   },
-  "cwlRankShort": "Rank {rank}",
+  "cwlRankShort": "المرتبة {rank}",
   "@cwlRankShort": {
     "placeholders": {
       "rank": {
@@ -2937,7 +2937,7 @@
       }
     }
   },
-  "cwlRoundShort": "Round {round}",
+  "cwlRoundShort": "الجولة {round}",
   "@cwlRoundShort": {
     "placeholders": {
       "round": {
@@ -2945,7 +2945,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "قاعة {level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -2953,5 +2953,5 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
+  "faqSupercellFanContentPolicyLink": "سياسة محتوى المعجبين لدى Supercell"
 }

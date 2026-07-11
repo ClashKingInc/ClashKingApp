@@ -3,18 +3,18 @@
   "appTitle": "ClashKing",
   "appDescription": "Ваш кращий супутник Clash of Clans для відстеження статистики, управління кланами та аналізу продуктивності.",
   "generalLoading": "Завантаження...",
-  "loadingVillages": "Loading your villages...",
-  "loadingClanData": "Fetching clan data...",
-  "loadingWarStats": "Analyzing war stats...",
-  "loadingLegendsData": "Preparing legends data...",
-  "loadingCapitalRaids": "Loading capital raids...",
-  "loadingAlmostReady": "Almost ready...",
-  "accountVerificationTitle": "Verify Account",
-  "accountVerified": "Verified",
-  "accountVerify": "Verify",
-  "accountVerificationSuccess": "Account verified successfully!",
+  "loadingVillages": "Завантажуємо ваші села...",
+  "loadingClanData": "Отримуємо дані клану...",
+  "loadingWarStats": "Аналізуємо статистику війни...",
+  "loadingLegendsData": "Готуємо дані Ліги легенд...",
+  "loadingCapitalRaids": "Завантажуємо рейди столиці...",
+  "loadingAlmostReady": "Майже готово...",
+  "accountVerificationTitle": "Підтвердити акаунт",
+  "accountVerified": "Підтверджено",
+  "accountVerify": "Підтвердити",
+  "accountVerificationSuccess": "Акаунт успішно підтверджено!",
   "generalRetry": "Повторити",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "Повторна спроба...",
   "generalTryAgain": "Спробуйте ще раз",
   "generalReset": "Скинути",
   "generalCancel": "Скасувати",
@@ -23,12 +23,12 @@
     "description": "OK button on pop up"
   },
   "generalApply": "Застосувати",
-  "generalConfirm": "Confirm",
+  "generalConfirm": "Підтвердити",
   "generalManage": "Керувати",
   "generalSettings": "Налаштування",
   "generalCopiedToClipboard": "Скопійовано в буфер обміну",
   "generalComingSoon": "Незабаром!",
-  "generalLastRefresh": "Last refresh: {time}",
+  "generalLastRefresh": "Останнє оновлення: {time}",
   "@generalLastRefresh": {
     "description": "Last refresh time indicator",
     "placeholders": {
@@ -38,7 +38,7 @@
       }
     }
   },
-  "generalRefreshFailed": "Refresh failed: {error}",
+  "generalRefreshFailed": "Не вдалося оновити: {error}",
   "@generalRefreshFailed": {
     "description": "Error message when refresh fails",
     "placeholders": {
@@ -52,12 +52,12 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "За весь час",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "Інші",
+  "generalCompleted": "завершено",
   "generalTotal": "Всього",
   "generalBest": "Найкращий",
   "@generalBest": {
@@ -75,8 +75,8 @@
   "@generalRemaining": {
     "description": "Remaining attacks or defenses"
   },
-  "generalActive": "Active",
-  "generalInactive": "Inactive",
+  "generalActive": "Активний",
+  "generalInactive": "Неактивний",
   "generalStarted": "Почато",
   "@generalStarted": {
     "description": "Title for the number of trophies at the beginning of the day"
@@ -87,7 +87,7 @@
   },
   "generalRole": "Роль",
   "generalStats": "Статистика",
-  "generalFullStats": "Full Stats",
+  "generalFullStats": "Повна статистика",
   "generalDetails": "Детальніше",
   "generalHistory": "Історія",
   "@generalHistory": {
@@ -99,57 +99,57 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Попередження",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "Невідомо",
   "generalNoDataAvailable": "Дані відсутні.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Немає результатів, що відповідають вашим фільтрам",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Спробуйте змінити критерії фільтрів або очистити їх, щоб побачити всі дані.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Очистити фільтри",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "Збережені пресети",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "Зберегти",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "Зберегти пресет фільтрів",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "Назва пресету",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "Введіть назву для цього пресету",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "Пропозиції:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "Застосуйте кілька фільтрів перед збереженням пресету",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "Будь ласка, введіть назву",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "Пресет із такою назвою вже існує",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "Пресет \"{name}\" успішно збережено",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -159,27 +159,27 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "Не вдалося зберегти пресет",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "Застосувати пресет",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "Перейменувати",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "Видалити",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "Перейменувати пресет",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "Пресет перейменовано на \"{name}\"",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -189,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "Не вдалося перейменувати пресет",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "Видалити пресет",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "Ви впевнені, що хочете видалити \"{name}\"?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "Пресет \"{name}\" видалено",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -217,126 +217,126 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "Не вдалося видалити пресет",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
-  "authSignUp": "Sign up",
+  "generalCharts": "Графіки",
+  "authSignUp": "Зареєструватися",
   "authLogin": "Увійти",
   "authLogout": "Вийти",
-  "authCreateAccount": "Create Account",
-  "authJoinClashKing": "Join ClashKing",
-  "authCreateAccountToGetStarted": "Create your account to get started",
-  "authAlreadyHaveAccount": "Already have an account? Sign in",
+  "authCreateAccount": "Створити акаунт",
+  "authJoinClashKing": "Приєднатися до ClashKing",
+  "authCreateAccountToGetStarted": "Створіть акаунт, щоб почати",
+  "authAlreadyHaveAccount": "Уже маєте акаунт? Увійдіть",
   "authConfirmLogout": "Впевнені, що хочете вийти?",
   "@authConfirmLogout": {
     "description": "Prompt asking the user to confirm logout"
   },
   "authDiscordTitle": "Discord",
   "authDiscordSignIn": "Увійти за допомогою Discord",
-  "authDiscordContinue": "Continue with Discord",
-  "authDiscordDescription": "Sync your data with ClashKing Bot and unlock the full potential of ClashKing!",
+  "authDiscordContinue": "Продовжити з Discord",
+  "authDiscordDescription": "Синхронізуйте свої дані з ботом ClashKing і відкрийте всі можливості ClashKing!",
   "authEmail": "Email",
-  "authEmailHint": "Enter your email address",
-  "authEmailDescription": "Use email if you can't access Discord or prefer app-only features",
-  "authEmailRequired": "Please enter your email",
-  "authEmailInvalid": "Please enter a valid email",
+  "authEmailHint": "Введіть свою адресу електронної пошти",
+  "authEmailDescription": "Використовуйте email, якщо не маєте доступу до Discord або віддаєте перевагу функціям лише в застосунку",
+  "authEmailRequired": "Будь ласка, введіть email",
+  "authEmailInvalid": "Будь ласка, введіть дійсний email",
   "authPasswordLabel": "Password",
-  "authPasswordHint": "Enter your password",
-  "authPasswordConfirm": "Confirm Password",
-  "authPasswordRequired": "Please enter your password",
-  "authPasswordConfirmRequired": "Please confirm your password",
-  "authPasswordMismatch": "Passwords do not match",
-  "authPasswordTooShort": "Password must be at least 8 characters",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
-  "authPasswordHeader": "Password must contain:",
-  "authPasswordUppercase": "Uppercase letter",
-  "authPasswordLowercase": "Lowercase letter",
-  "authPasswordNumber": "Number",
-  "authPasswordSpecial": "Special character",
-  "authPasswordInvalid": "Password does not meet requirements",
-  "authPasswordForgot": "Forgot password?",
-  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
-  "authPasswordResetSend": "Send Reset Code",
-  "authPasswordResetSent": "Code Sent!",
-  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
-  "authPasswordReset": "Reset Password",
-  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
-  "authPasswordNew": "New Password",
-  "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
-  "authPasswordResetContinue": "Continue to Reset Password",
-  "authPasswordResetCode": "Reset Code",
-  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
-  "authPasswordResetCodeRequired": "Please enter the reset code",
-  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
-  "authBackToLogin": "Back to Login",
+  "authPasswordHint": "Введіть пароль",
+  "authPasswordConfirm": "Підтвердьте пароль",
+  "authPasswordRequired": "Будь ласка, введіть пароль",
+  "authPasswordConfirmRequired": "Будь ласка, підтвердьте пароль",
+  "authPasswordMismatch": "Паролі не збігаються",
+  "authPasswordTooShort": "Пароль має містити щонайменше 8 символів",
+  "authPasswordRequirements": "Пароль має містити:\n• Велику літеру\n• Малу літеру\n• Цифру\n• Спеціальний символ",
+  "authPasswordHeader": "Пароль має містити:",
+  "authPasswordUppercase": "Велика літера",
+  "authPasswordLowercase": "Мала літера",
+  "authPasswordNumber": "Цифра",
+  "authPasswordSpecial": "Спеціальний символ",
+  "authPasswordInvalid": "Пароль не відповідає вимогам",
+  "authPasswordForgot": "Забули пароль?",
+  "authPasswordForgotDescription": "Введіть свою адресу email, і ми надішлемо вам 6-значний код для скидання пароля.",
+  "authPasswordResetSend": "Надіслати код скидання",
+  "authPasswordResetSent": "Код надіслано!",
+  "authPasswordResetSentDescription": "Ми надіслали 6-значний код скидання на вашу адресу email. Перевірте вхідні та використайте код, щоб скинути пароль.",
+  "authPasswordReset": "Скинути пароль",
+  "authPasswordResetDescription": "Введіть нижче свій email, 6-значний код із листа та новий пароль.",
+  "authPasswordNew": "Новий пароль",
+  "authPasswordConfirmHint": "Повторно введіть новий пароль",
+  "authPasswordResetSuccess": "Пароль успішно скинуто! Тепер ви можете увійти.",
+  "authPasswordResetContinue": "Продовжити скидання пароля",
+  "authPasswordResetCode": "Код скидання",
+  "authPasswordResetCodeHint": "Введіть 6-значний код із вашого листа",
+  "authPasswordResetCodeRequired": "Будь ласка, введіть код скидання",
+  "authPasswordResetCodeInvalid": "Будь ласка, введіть дійсний 6-значний код",
+  "authBackToLogin": "Назад до входу",
   "authUsernameLabel": "Ім'я користувача",
   "authUsernameRequired": "Будь ласка, введіть ім'я користувача",
-  "authUsernameTooShort": "Username must be at least 3 characters",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
+  "authUsernameTooShort": "Ім’я користувача має містити щонайменше 3 символи",
+  "authUsernameTooLong": "Ім’я користувача має містити не більше 30 символів",
   "authErrorConnection": "Сталася помилка. Перевірте підключення до Інтернету та спробуйте ще раз.",
   "authErrorConnectionRelaunch": "Сталася помилка. Будь ласка, перевірте підключення до Інтернету та перезапустіть додаток.",
-  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
-  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
-  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
-  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
-  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
-  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
-  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
-  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
-  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authEmailVerificationTitle": "Verify Email",
-  "authEmailVerificationCheckEmail": "Check Your Email",
-  "authEmailVerificationSentTo": "We've sent a verification email to:",
-  "authEmailVerificationResend": "Resend Verification Email",
-  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationExpired": "Verification expired. Please register again.",
-  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
-  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
-  "authEmailVerificationVerifying": "Verifying your email...",
-  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
-  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
-  "authEmailVerificationVerify": "Verify Code",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
+  "authErrorEmailAlreadyRegistered": "Цей email уже зареєстровано. Спробуйте увійти.",
+  "authErrorEmailAlreadyPending": "Лист підтвердження вже було надіслано на цю адресу. Перевірте пошту або спробуйте надіслати повторно.",
+  "authErrorEmailInvalidFormat": "Будь ласка, введіть дійсну адресу email.",
+  "authErrorPasswordWeak": "Пароль занадто слабкий. Використайте надійніший пароль.",
+  "authErrorUsernameInvalid": "Ім’я користувача недійсне. Використовуйте лише літери, цифри та підкреслення.",
+  "authErrorRegistrationFailed": "Не вдалося зареєструватися. Спробуйте пізніше.",
+  "authErrorEmailSendFailed": "Не вдалося надіслати лист підтвердження. Спробуйте пізніше.",
+  "authErrorRateLimited": "Забагато спроб. Зачекайте трохи й спробуйте знову.",
+  "authErrorServerUnavailable": "Сервер тимчасово недоступний. Спробуйте пізніше.",
+  "authAccountManagement": "Тут можна додавати, видаляти та змінювати порядок ваших акаунтів Clash of Clans. Підтвердьте акаунти токеном, щоб отримати доступ до всіх функцій.",
+  "authAccountConnected": "Підключені акаунти",
+  "authAccountConnectedStatus": "Підключено",
+  "authAccountNotConnected": "Не підключено",
+  "authAccountEmailAndPassword": "Email і пароль",
+  "authAccountSecured": "Ваш акаунт захищено кількома способами автентифікації",
+  "authAccountLinkEmail": "Прив’язати email-акаунт",
+  "authAccountAddEmailAuth": "Додайте автентифікацію через email і пароль для додаткової безпеки акаунта.",
+  "authAccountEmailLinkedSuccess": "Email-акаунт успішно прив’язано!",
+  "authEmailVerificationTitle": "Підтвердити email",
+  "authEmailVerificationCheckEmail": "Перевірте пошту",
+  "authEmailVerificationSentTo": "Ми надіслали лист підтвердження на:",
+  "authEmailVerificationResend": "Надіслати лист підтвердження повторно",
+  "authEmailVerificationResendSuccess": "Лист підтвердження успішно надіслано повторно! Перевірте пошту.",
+  "authEmailVerificationExpired": "Термін підтвердження минув. Зареєструйтеся знову.",
+  "authEmailVerificationAlreadyVerified": "Цей email уже підтверджено. Спробуйте увійти.",
+  "authEmailVerificationNoToken": "Немає очікуваного підтвердження. Спочатку зареєструйтеся.",
+  "authEmailVerificationExpiredResend": "Термін підтвердження минув. Поверніться та зареєструйтеся знову.",
+  "authEmailVerificationVerifying": "Підтверджуємо ваш email...",
+  "authEmailVerificationCodeInstructions": "Введіть 6-значний код, надісланий на ваш email:",
+  "authEmailVerificationCodeRequired": "Будь ласка, введіть 6-значний код підтвердження",
+  "authEmailVerificationCodeInvalid": "Недійсний або прострочений код. Перевірте код або надішліть лист підтвердження повторно.",
+  "authEmailVerificationVerify": "Підтвердити код",
+  "helpTitle": "Потрібна допомога?",
+  "helpJoinDiscord": "Приєднатися до Discord",
+  "helpEmailUs": "Написати нам",
   "accountsWelcome": "Вітаємо!",
   "accountsWelcomeMessage": "Будь ласка, додайте один або кілька облікових записів Clash of Clans до свого профілю. Ви можете додати або видалити облікові записи пізніше.",
-  "accountsManageTitle": "Manage your accounts",
+  "accountsManageTitle": "Керування акаунтами",
   "accountsNoneFound": "Не знайдено облікового запису, пов'язаного з вашим профілем",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
+  "accountsPlayerTag": "Тег гравця (#ABC123)",
   "accountsEnterPlayerTag": "Введіть тег гравця",
   "accountsAdd": "Додати обліковий запис",
-  "accountsAddInstruction": "Tap the + button to add your account",
+  "accountsAddInstruction": "Натисніть кнопку +, щоб додати акаунт",
   "accountsApiToken": "API-токен облікового запису",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
-  "accountsFillAllFields": "Please fill all fields.",
+  "accountsEnterApiToken": "Введіть API-токен акаунта, щоб підтвердити, що він ваш. Його можна знайти в Clash of Clans:",
+  "accountsApiTokenLocation": "Налаштування > Додаткові налаштування > API-токен",
+  "accountsOpenMoreSettings": "Відкрити додаткові налаштування",
+  "accountsCouldNotOpenClash": "Не вдалося відкрити Clash of Clans. Відкрийте його вручну.",
+  "accountsFillAllFields": "Будь ласка, заповніть усі поля.",
   "accountsErrorTagNotExists": "Тег гравця, який був введений, не існує.",
   "accountsErrorAlreadyLinked": "Тег гравця вже зв'язаний з кимось.",
   "accountsErrorAlreadyLinkedToYou": "Тег гравця вже прив'язаний до вас.",
   "accountsErrorWrongApiToken": "Введений токен API невірний",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
+  "accountsErrorFailedToAdd": "Не вдалося додати акаунт. Спробуйте пізніше.",
+  "accountsErrorFailedToUpdateOrder": "Не вдалося оновити порядок акаунтів.",
+  "errorTitle": "Ой! Наші сервери, здається, отримали фаєрбол просто в обличчя! Накладаємо закляття лікування... Спробуйте ще раз за мить.",
+  "errorSubtitle": "Якщо проблема не зникає, перевірте наш Discord-сервер — можливо, ми вже знаємо про неї.",
+  "errorNetworkTitle": "Проблема з підключенням",
+  "errorNetworkMessage": "У нас виникли проблеми з підключенням до серверів. Причиною може бути ваше інтернет-з’єднання або проблема з нашого боку. Перевірте підключення та спробуйте знову.",
   "errorLoadingVersion": "Помилка при завантаженні версії",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
@@ -406,7 +406,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "У вас {trophies} трофеїв. Ви не маєте рейтингу в жодній лізі.",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -460,7 +460,7 @@
   "gameDonations": "Пожертви",
   "gameDonationsReceived": "Пожертв отримано",
   "gameDonationsRatio": "Співвідношення пожертв",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameLevel": "Рівень: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -480,16 +480,16 @@
   "gameSiegeMachines": "Облогові машини",
   "gameSpells": "Заклинання",
   "gameAchievements": "Досягнення",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
+  "gameClanGames": "Кланові ігри",
+  "gameSeasonPass": "Сезонний пропуск",
   "gameCreatorCode": "Код Творця: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
-  "gameCreatorCodeDialogTitle": "Support ClashKing",
-  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
-  "gameCreatorCodeDialogButton": "Use Creator Code",
+  "gameCreatorCodeDescription": "Підтримайте нас безкоштовно!",
+  "gameCreatorCodeDialogTitle": "Підтримати ClashKing",
+  "gameCreatorCodeDialogDescription": "Коли ви використовуєте наш код автора, ви допомагаєте фінансувати розробку, залишати застосунок і бота безкоштовними для всіх та підтримуєте додавання нових функцій.\n\nМи отримуємо 5% від ваших внутрішньоігрових покупок без додаткових витрат для вас — просто введіть \"ClashKing\" у магазині будь-якої гри Supercell.\n\nДякуємо за підтримку!",
+  "gameCreatorCodeDialogButton": "Використати код автора",
   "clanTitle": "Клан",
   "clanSearchTitle": "Пошук клану",
-  "clanSearchPlaceholder": "Clan's name",
+  "clanSearchPlaceholder": "Назва клану",
   "clanNone": "Без клану",
   "clanJoinToUnlock": "Приєднуйтеся до клану, щоб розблокувати нові можливості.",
   "clanMembers": "Учасники",
@@ -513,7 +513,7 @@
   "clanWarFrequencyAlways": "Завжди",
   "clanWarFrequencyNever": "Ніколи",
   "clanWarFrequencyOncePerWeek": "1/тиждень",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
+  "clanWarFrequencyMoreThanOncePerWeek": "Більше ніж 1/тиждень",
   "clanWarFrequencyRarely": "Рідко",
   "timeHourIndicator": "год",
   "timeDaysAgo": "{days} Днів тому",
@@ -568,8 +568,8 @@
   "@timeJustNow": {
     "description": "Indicates something happened just now"
   },
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeEndedJustNow": "Щойно завершилося",
+  "timeEndedMinutesAgo": "Завершилося {minutes} хв тому",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -577,7 +577,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "Завершилося {hours} год тому",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -585,7 +585,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "Завершилося {days} дн тому",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -627,7 +627,7 @@
   },
   "legendsTitle": "Некоректні дані?",
   "legendsNotInLeague": "Не в Легендарній Лізі",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
+  "legendsNoDataToday": "Ви не в Лізі легенд, але минулі сезони доступні.",
   "legendsStartDescription": "Ви розпочали день з {trophies} трофеїв.",
   "@legendsStartDescription": {
     "placeholders": {
@@ -685,7 +685,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "Зараз ви на {rank} місці у світі з {trophies} трофеями.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -703,7 +703,7 @@
   "legendsBestRank": "Найкращий глобальний ранг",
   "legendsTrophiesBySeason": "Трофеї за сезон",
   "legendsEosTrophies": "Трофеї в кінці сезону",
-  "legendsEosDetails": "End Of Season Details",
+  "legendsEosDetails": "Деталі завершення сезону",
   "legendsInaccurateTitle": "Некоректні дані?",
   "legendsInaccurateIntro": "Через обмеження Clash of Clans API, наші дані можуть бути не завжди точними. Ось чому:\n",
   "legendsInaccurateApiDelayTitle": "1. Затримка API: ",
@@ -795,7 +795,7 @@
   "todoAccountsInactive": "Неактивні облікові записи",
   "todoAccountsNoInactive": "Немає неактивних облікових записів.",
   "todoAccountsNoActive": "Немає активних облікових записів.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAttacksLeftDescription": "У вас залишилося атак: {attacks} ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -806,7 +806,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "У вас залишилося захистів: {defenses} ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -817,7 +817,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "Вітаємо, ви виконали всі атаки ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -825,7 +825,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "Сьогодні вам залишилося набрати {points} очок, щоб встигнути до завершення події ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -836,7 +836,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Вітаємо, ви встигаєте отримати максимальні нагороди наприкінці події ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -871,7 +871,7 @@
   "warAskForWar": "Звертайтеся до лідера або спів-лідера, щоб розпочати війну.",
   "warAskForWarLogOpening": "Звертайтеся до лідера або спів-лідера, аби відкрити журнал бою.",
   "warEnded": "Війна завершилася",
-  "warInWar": "In War",
+  "warInWar": "У війні",
   "@warInWar": {
     "description": "War state: active"
   },
@@ -916,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "Війна ще не почалася",
+  "warWonByStars": "{clanName} виграв війну!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -925,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName} програв війну",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -933,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName} виграв за руйнуванням!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -941,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName} програв за руйнуванням",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -949,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "Ідеальна нічия",
+  "warCanTieNeedsStars": "{clanName} може зрівняти рахунок, але потрібно {stars} зірок",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -961,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName} не може наздогнати за зірками",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -989,14 +989,14 @@
   "warCalculatorNeededOverall": "% Потрібно загалом",
   "warCalculatorCalculate": "Розрахувати",
   "warAttacksTitle": "Атаки",
-  "warAttacksNone": "No attack yet",
+  "warAttacksNone": "Атак ще немає",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "Найкращі атаки",
+  "warAttacksCount": "Кількість атак",
+  "warAttacksMissed": "Пропущені атаки",
+  "warAttacksNumber": "Ви атакували {number_time} раз(и) протягом останніх {number_war} воєн.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -1007,7 +1007,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "У середньому ви мали {stars} зірок за війну.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -1015,7 +1015,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "Ваш середній відсоток руйнування за війну становив {percent}%.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1024,12 +1024,12 @@
     }
   },
   "warDefensesTitle": "Захисти",
-  "warDefensesNone": "No defense yet",
+  "warDefensesNone": "Захистів ще немає",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "Найкращі захисти",
+  "warDefensesBestOutOf": "Найкращий захист (із {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -1038,7 +1038,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "Ви захищалися {number_time} раз(и) протягом останніх {number_war} воєн.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -1049,7 +1049,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "У середньому ви віддавали {stars} зірок за захист.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -1057,7 +1057,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "Ваш середній відсоток руйнування в захисті становив {percent}%.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1071,12 +1071,12 @@
   "warStarsOne": "1 зірка",
   "warStarsTwo": "2 зірки",
   "warStarsThree": "3 зірки",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsZero": "0 зірок",
+  "warStarsBestPerformance": "Найкращий результат",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
+  "warDestructionTitle": "Руйнування",
   "warDestructionAverage": "Середнє знищення",
   "warDestructionRate": "Рівень руйнування",
   "@warDestructionRate": {
@@ -1142,24 +1142,24 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "Позиція на мапі",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "Поз.",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "Порядок",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "ТХ суперника",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
+  "warOpponentLowerTownhall": "Нижчий ТХ",
+  "warOpponentUpperTownhall": "Вищий ТХ",
   "warOpponentEqualThLevel": "Рівний ТХ",
   "warOpponentSelectMembersThLevel": "Рівень ТХ учасників",
   "warOpponentSelectOpponentsThLevel": "Рівень ТХ противників",
@@ -1198,11 +1198,11 @@
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "Пропущено",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "Пропущено: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1211,11 +1211,11 @@
       }
     }
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "Сер.",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "Сер. %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
@@ -1223,7 +1223,7 @@
   "cwlClanWarLeague": "Ліга Війн Кланів",
   "cwlOngoing": "Поточна ЛВК",
   "cwlRounds": "Раунди",
-  "cwlRoundNumber": "Round {number}",
+  "cwlRoundNumber": "Раунд {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1263,7 +1263,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "Ваш клан має загалом {attacks} атак із {totalAttacks} можливих.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1274,20 +1274,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
+  "joinLeaveTitle": "Журнал входів/виходів (поточний сезон)",
   "joinLeaveJoin": "Приєднатися",
   "joinLeaveLeave": "Залишити",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveJoins": "Приєднання",
+  "joinLeaveLeaves": "Виходи",
+  "joinLeaveUniquePlayers": "Унікальні гравці",
+  "joinLeaveMovingPlayers": "Гравці, що переходять",
+  "joinLeaveMostMovingPlayers": "Найактивніші переходи",
+  "joinLeaveStillInClan": "Досі в клані",
+  "joinLeaveLeftForever": "Пішли назавжди",
+  "joinLeaveRejoinedPlayers": "Гравці, що повернулися",
+  "joinLeaveAvgTimeJoinLeave": "Сер. час входу/виходу",
+  "joinLeavePeakHour": "Найактивніша година",
+  "joinLeaveNumberDescription": "Протягом поточного сезону сталося {number} подій виходу ({date}).",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1298,7 +1298,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "Протягом поточного сезону сталося {number} подій приєднання ({date}).",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1309,7 +1309,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "{number} гравців вийшли й знову приєдналися до клану протягом поточного сезону ({date}).",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1321,7 +1321,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "{number} унікальних гравців приєдналися/вийшли з клану протягом поточного сезону ({date}).",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1333,7 +1333,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} гравців приєдналися й досі перебувають у клані.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1341,7 +1341,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number} гравців приєдналися, потім вийшли з клану й більше не повернулися.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1376,17 +1376,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
+  "raidsTitle": "Рейди",
   "raidsLast": "Останні рейди",
   "raidsOngoing": "Поточні рейди",
   "raidsDistrictsDestroyed": "Знищені райони",
   "raidsCompleted": "Завершені рейди",
   "searchNoResult": "Нічого не знайдено.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "maintenanceTitle": "Технічне обслуговування",
+  "maintenanceDescription": "У Clash of Clans зараз технічне обслуговування, тому ми не можемо отримати доступ до API. Перевірте пізніше.",
+  "downloadTooltip": "Завантажити підсумок CWL",
+  "downloadInProgress": "Завантаження файлу... Це може зайняти кілька секунд...",
+  "downloadSuccess": "Файл успішно збережено в {path}",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1394,7 +1394,7 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
+  "downloadError": "Не вдалося завантажити файл",
   "dashboardTitle": "Панель керування",
   "toolsTitle": "Інструменти",
   "navigationTeam": "Команди",
@@ -1403,10 +1403,10 @@
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenses",
-  "settingsLicensesSubtitle": "View licenses for third-party libraries",
-  "settingsPrivacyPolicy": "Privacy Policy",
-  "settingsPrivacyPolicySubtitle": "How we handle your data",
+  "settingsLicenses": "Ліцензії відкритого коду",
+  "settingsLicensesSubtitle": "Переглянути ліцензії сторонніх бібліотек",
+  "settingsPrivacyPolicy": "Політика конфіденційності",
+  "settingsPrivacyPolicySubtitle": "Як ми обробляємо ваші дані",
   "betaFeature": "Бета-функції",
   "betaLabel": "Бета",
   "betaDescription": "Ця функція наразі знаходиться в бета-версії, може містити деякі помилки або бути неповною. Ми активно працюємо над удосконаленнями й раді вашому зворотному зв'язку. Будь ласка, поділіться своїми ідеями та повідомте про будь-які проблеми на нашому сервері Discord, щоб допомогти нам зробити це краще.",
@@ -1429,62 +1429,62 @@
   "faqUseCodeClashKing": "Використовуйте код \"ClashKing\"",
   "faqSupportUsOnPatreon": "Підтримайте нас на Patreon",
   "faqRateTheApp": "Оцініть додаток в магазині",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
+  "faqWhatCanBotDo": "Що може робити Discord-бот ClashKing?",
+  "faqWhatCanBotDoAnswer": "Discord-бот ClashKing допомагає керувати кланом прямо з Discord завдяки комплексним інструментам відстеження, автоматичним сповіщенням і безшовній інтеграції з цим застосунком. Він створений для лідерів і учасників кланів, які хочуть залишатися на зв’язку та бути організованими:",
+  "faqInviteBotToServer": "Запросити бота на сервер",
+  "faqBotFeatureTracking": "Відстеження гравців і кланів",
+  "faqBotFeatureTrackingDesc": "Додавайте й відстежуйте кілька кланів і гравців з оновленнями в реальному часі",
+  "faqBotFeatureWars": "Керування війнами",
+  "faqBotFeatureWarsDesc": "Відстежуйте результати війни, аналізуйте атаки та отримуйте сповіщення про війну",
+  "faqBotFeatureNotifications": "Розумні сповіщення",
+  "faqBotFeatureNotificationsDesc": "Отримуйте сповіщення про донати, атаки у війні та важливі події клану",
+  "faqBotFeatureCommands": "Потужні команди",
+  "faqBotFeatureCommandsDesc": "Використовуйте слеш-команди, щоб швидко відкривати статистику гравця, інформацію про війну тощо",
   "faqNeedHelp": "Мені потрібна допомога або я хочу зробити пропозицію. Як я можу з вами зв'язатися?",
   "faqNeedHelpAnswer": "Ви можете приєднатися до нашого Discord-серверу, щоб попросити допомоги або надати відгук, або ви можете написати нам за адресою devs@clashk.ing. Будь ласка, пишіть тільки англійською або французькою.",
   "faqSendEmail": "Відправити e-mail",
   "faqJoinDiscord": "Приєднуйтеся до нашого сервера Discord",
   "faqCannotOpenMailClient": "З деяких причин ми не можемо відкрити клієнт вашої пошти. Ми скопіювали адресу електронної пошти для вас. Ви можете написати лист і вставити адресу у поле одержувача.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
+  "faqTroubleshooting": "Усунення несправностей",
+  "faqTroubleshootingDataTitle": "Чому мої дані не синхронізуються?",
+  "faqTroubleshootingDataDescription": "Дані гравця або клану здаються застарілими",
+  "faqTroubleshootingDataSolution1": "Потягни вниз, щоб оновити сторінку",
+  "faqTroubleshootingDataSolution2": "Перевір, чи відстежується твій клан (див. вище)",
+  "faqTroubleshootingDataSolution3": "Зачекай кілька хвилин і спробуй знову: API може потребувати часу для оновлення",
+  "faqTroubleshootingCrashTitle": "Чому застосунок вилітає?",
+  "faqTroubleshootingCrashDescription": "Застосунок несподівано закривається або зависає",
+  "faqTroubleshootingCrashSolution1": "Закрий застосунок і запусти його знову",
+  "faqTroubleshootingCrashSolution2": "Онови застосунок до останньої версії",
+  "faqTroubleshootingCrashSolution3": "Очисть кеш і дані застосунку (Android) або перевстанови застосунок",
+  "faqTroubleshootingCrashSolution4": "Звільни місце на пристрої",
+  "faqContactSupport": "Звернися до підтримки, якщо проблема не зникає (див. останній розділ)",
+  "faqTroubleshootingAccountTitle": "Чому я не можу підтвердити свій акаунт?",
+  "faqTroubleshootingAccountDescription": "Проблеми з прив’язкою акаунта Clash of Clans",
+  "faqTroubleshootingAccountSolution1": "Переконайся, що використовуєш правильний тег гравця, який починається з #",
+  "faqTroubleshootingAccountSolution2": "Якщо здається, що акаунт уже прив’язаний, використай API-токен із налаштувань Clash of Clans",
+  "faqTroubleshootingSolutions": "Рішення:",
+  "faqWhatIsClashKingProject": "Що таке проєкт ClashKing?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing — це open-source проєкт статистики Clash of Clans і керування кланами, створений захопленими гравцями для спільноти. Ми розробляємо його як побічний проєкт поряд із основною роботою, керуючись любов’ю до гри. Ми пропонуємо мобільний застосунок, Discord-бота та безкоштовний API, які разом забезпечують найкращий досвід Clash of Clans. Проєкт повністю фінансується пожертвами користувачів і використанням коду творця Supercell — без реклами й преміум-функцій!",
+  "faqViewOnGitHub": "Переглянути на GitHub",
+  "faqFeaturesGuide": "Що може застосунок ClashKing?",
+  "faqFeaturesGuideDescription": "Підніми свій досвід Clash of Clans на новий рівень! Застосунок ClashKing дає красивий і швидкий доступ до всієї твоєї статистики та даних клану — ідеально для гравців без Discord і тих, хто віддає перевагу зручному мобільному досвіду:",
+  "faqAppDevelopmentNotice": "Ми активно розробляємо нові функції, щоб зробити застосунок ще кращим. Твої відгуки допомагають нам покращуватися!",
+  "faqFeaturesPlayerTitle": "Статистика гравця",
+  "faqFeaturesPlayerDescription": "Відстежуй свій прогрес, досягнення та виступи в легендарній лізі",
+  "faqFeaturesClanTitle": "Керування кланом",
+  "faqFeaturesClanDescription": "Відстежуй учасників клану, донати та загальний стан клану",
+  "faqFeaturesWarTitle": "Відстеження воєн",
+  "faqFeaturesWarDescription": "Аналізуй бойову ефективність, стратегії атак і відсоток перемог",
+  "faqFeaturesLegendsTitle": "Неточні дані?",
+  "faqFeaturesLegendsDescription": "Щоденне відстеження трофеїв і статистика кінця сезону",
+  "faqFeaturesCwlTitle": "Аналітика CWL",
+  "faqFeaturesCwlDescription": "Ефективність у Лізі воєн кланів і внесок учасників",
+  "faqSearchHint": "Пошук у FAQ...",
+  "faqSectionGettingStarted": "Початок і про застосунок",
+  "faqSectionSupportAndContact": "Підтримка та контакт",
+  "faqTranslationIssue": "Переклад відсутній або неправильний?",
+  "faqTranslationIssueAnswer": "Переклади роблять користувачі застосунку, такі як ти! Ми (розробники) надаємо лише французький та англійський переклади. Якщо знайдеш відсутній або неправильний переклад, можеш допомогти його покращити. Не соромся звернутися до нас у Discord або електронною поштою, якщо хочеш допомогти. У нас є окремий Discord-канал для перекладачів, де можна ставити питання й отримувати допомогу.",
+  "faqWaysToSupport": "Способи підтримати нас:",
   "translationHelpUsTranslate": "Допомогти з перекладом",
   "translationSuggestFeatures": "Запропонувати можливості",
   "translationThankYou": "Дякуємо!",
@@ -1492,27 +1492,27 @@
   "translationHelpTranslateContent": "Ви можете допомогти нам перекласти додаток на Crowdin. Якщо вашої мови немає на Crowdin, не соромтеся запитати її на нашому сервері Discord. Дуже вдячні за вашу допомогу!",
   "translationHelpTranslateButton": "Допоможіть перекласти на Crowdin",
   "translationCurrentTranslators": "Поточні перекладачі",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "Фільтри часу",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "Налаштування війни",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "Ефективність",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "Розширені",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "Немає активних фільтрів",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "Показано останні {count} воєн (за замовчуванням)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1522,115 +1522,115 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "Швидкі фільтри",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "Останні 30 днів",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "Лише 3 зірки",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "Перші атаки",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "Сезон",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "Діапазон дат",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "Тип війни",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "Ратуша",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "TH атакувальника",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "TH захисника",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "Лише однакова ратуша",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "Відсоток руйнування",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "Опції",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "Лише перші атаки",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "Ліміт результатів",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "Мін. позиція",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "Макс. позиція",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "Дата початку",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "Дата завершення",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersYear": "Year",
+  "filtersYear": "Рік",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "Місяць",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "Вибери рік",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "Усі війни",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "Ефективність атаки за рівнем TH",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "Ефективність захисту за рівнем TH",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "Рядки: твій TH | Стовпці: TH суперника",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsGood": "Good",
+  "chartsGood": "Добре",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "Відмінно",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
@@ -1638,143 +1638,143 @@
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "Інсайти ефективності",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "Пропозиції фільтрів на основі твоєї статистики зірок, щоб підсвітити патерни ефективності",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
-  "generalExport": "Export",
+  "generalExport": "Експорт",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "Експорт статистики війни",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "Експорт успішний!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "Це завантажить твою статистику війни як Excel-файл із кількома аркушами, включно із загальною статистикою, деталями атак і TH-аналізом.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "Генерація експорту...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "Функція експорту статистики кланових воєн скоро з’явиться",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "Фільтри не застосовано",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "Не вдалося завантажити дані гравця",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "deepLinkInvalidPlayer": "Invalid player link.",
+  "deepLinkInvalidPlayer": "Недійсне посилання гравця.",
   "@deepLinkInvalidPlayer": {
     "description": "Shown when a player deep link does not include a valid tag"
   },
-  "deepLinkInvalidClan": "Invalid clan link.",
+  "deepLinkInvalidClan": "Недійсне посилання клану.",
   "@deepLinkInvalidClan": {
     "description": "Shown when a clan deep link does not include a valid tag"
   },
-  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "deepLinkFailedToOpenPlayer": "Не вдалося відкрити гравця.",
   "@deepLinkFailedToOpenPlayer": {
     "description": "Shown when a player deep link target could not be loaded"
   },
-  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "deepLinkFailedToOpenClan": "Не вдалося відкрити клан.",
   "@deepLinkFailedToOpenClan": {
     "description": "Shown when a clan deep link target could not be loaded"
   },
-  "deepLinkUnknown": "Unknown deep link.",
+  "deepLinkUnknown": "Невідомий deep link.",
   "@deepLinkUnknown": {
     "description": "Shown when the app receives a deep link it does not understand"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "Деталі атаки",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "Порядок атаки",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "Атакувальник",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "Захисник",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "Ім’я",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "Стан",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "Атак на учасника",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "Початок війни",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "Кінець війни",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "Рівень клану",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "Усього зірок",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "Руйнування %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "Інформація про війну",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "Результати війни",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "Гравці",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "Невдалі атаки (0–1 зірка)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "Показує атаки, які не здобули 2+ зірки",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "Пропущені ідеальні атаки",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "Показує атаки з 2 зірками — потенційні можливості для ідеальної атаки",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "Мало зірок проти TH{thLevel}",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1784,7 +1784,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "Показує атаки з низькою кількістю зірок проти TH{thLevel}",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1794,7 +1794,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "Вразливість до TH{thLevel}",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1804,7 +1804,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "Показує, коли атакувальники TH{thLevel} здобувають багато зірок проти тебе",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1814,91 +1814,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "Низька ефективність у CWL",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "Показує CWL атаки з нижчим середнім числом зірок, ніж у звичайних війнах",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "Низька ефективність у випадкових війнах",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "Показує атаки випадкових воєн із нижчим середнім числом зірок, ніж у CWL",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "Аналіз перших атак",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "Аналізує ефективність лише на базах без попередніх атак",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "Недавня ефективність (30 днів)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "Показує недавню ефективність для визначення поточних трендів",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "Атаки з високими ставками",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "Показує атаки з перших 5 позицій війни",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "Атаки добивання",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "Показує атаки з нижчих позицій війни",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "Потребує покращення",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "Високий відсоток трьох зірок",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "Високе руйнування",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "Стабільна ефективність",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "Стабільність трьох зірок",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "Загальна зіркова ефективність",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "Лише CWL",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "Випадкові війни",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "Дружні війни",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "Лише {count} зірок",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1907,15 +1907,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "Ідеальні атаки",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "Невдалі атаки",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "Лише TH{level}",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1924,46 +1924,46 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "Минулого тижня",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "Минулого місяця",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "Мій пресет",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "Власний фільтр",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "Недавній фільтр",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
   "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalSuccess": "Успіх",
+  "generalFailed": "Невдало",
+  "generalMinimum": "Мінімальне значення",
+  "generalMaximum": "Максимум",
+  "generalHigh": "Високий",
+  "generalLow": "Низький",
+  "generalPoor": "Слабкий",
+  "generalOpen": "Відкрито",
+  "generalClosed": "Закрито",
+  "generalAvailable": "Доступно",
+  "authErrorUserCancelledDiscordLogin": "Користувач скасував вхід через Discord.",
+  "authErrorDiscordLoginFailed": "Не вдалося увійти через Discord. Спробуйте ще раз.",
+  "authErrorEmailLoginFailed": "Не вдалося увійти через Email. Перевірте свої облікові дані.",
+  "authErrorEmailNotVerified": "Вашу email-адресу не підтверджено. Перевірте пошту й введіть код підтвердження.",
+  "authErrorEmailVerificationFailed": "Не вдалося підтвердити email. Токен може бути недійсним або простроченим.",
+  "authErrorDiscordLinkFailed": "Не вдалося прив’язати обліковий запис Discord. Можливо, він уже прив’язаний до іншого акаунта.",
+  "authErrorEmailLinkFailed": "Не вдалося прив’язати email. Можливо, цей email уже використовується.",
+  "authErrorUserNotAuthenticated": "Користувач не автентифікований. Увійдіть ще раз.",
+  "apiErrorInvalidJsonResponse": "Щось пішло не так. Спробуйте ще раз.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1973,7 +1973,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "Щось пішло не так. Перевірте введені дані.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1987,7 +1987,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "Ви не авторизовані. Увійдіть знову.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1997,7 +1997,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "У вас немає дозволу виконати цю дію.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -2007,7 +2007,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "Ми не змогли знайти те, що ви шукали.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -2017,7 +2017,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "Забагато запитів. Спробуйте пізніше.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -2027,7 +2027,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "Сервер тимчасово недоступний. Спробуйте трохи пізніше.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -2041,7 +2041,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "Сталася неочікувана помилка. Спробуйте ще раз.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -2055,10 +2055,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "Немає підключення до інтернету. Перевірте мережу й спробуйте ще раз.",
+  "apiErrorTimeout": "Час очікування запиту минув. Спробуйте ще раз.",
+  "apiErrorInvalidFormat": "Недійсний формат відповіді. Спробуйте ще раз.",
+  "apiErrorOperationFailed": "Не вдалося виконати ваш запит. Спробуйте ще раз.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -2068,7 +2068,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "Схоже, ви офлайн. Перевірте підключення й спробуйте ще раз.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -2078,7 +2078,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "Запит виконувався занадто довго. Спробуйте ще раз.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2088,7 +2088,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "Щось пішло не так під час обробки даних. Спробуйте ще раз.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2098,7 +2098,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "Не вдалося завантажити налаштування застосунку (помилка {statusCode}). Спробуйте ще раз.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2108,7 +2108,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "Помилка під час завантаження конфігурації із сервера",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
@@ -2118,22 +2118,22 @@
       }
     }
   },
-  "gameItemHousingSpace": "Housing Space",
-  "gameItemAttackSpeed": "Attack Speed",
-  "gameItemAttackRange": "Attack Range",
-  "gameItemMovementSpeed": "Movement Speed",
-  "gameItemUpgradeResource": "Upgrade Resource",
-  "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero",
+  "gameItemHousingSpace": "Місце в житлі",
+  "gameItemAttackSpeed": "Швидкість атаки",
+  "gameItemAttackRange": "Дальність атаки",
+  "gameItemMovementSpeed": "Швидкість руху",
+  "gameItemUpgradeResource": "Ресурс покращення",
+  "gameItemRarity": "Рідкість",
+  "gameItemHero": "Герой",
   "gameItemDps": "DPS",
   "gameItemHitpoints": "HP",
-  "gameItemHealOnActivation": "Heal",
-  "gameItemTargets": "Targets",
-  "gameItemTargetsGround": "Ground",
-  "gameItemTargetsAir": "Air",
-  "gameItemFlying": "Flying",
-  "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time",
+  "gameItemHealOnActivation": "Лікування",
+  "gameItemTargets": "Цілі",
+  "gameItemTargetsGround": "Наземні",
+  "gameItemTargetsAir": "Повітряні",
+  "gameItemFlying": "Літає",
+  "gameItemUpgradeCost": "Вартість покращення",
+  "gameItemUpgradeTime": "Час покращення",
   "generalExpand": "Розгорнути",
   "generalCollapse": "Згорнути",
   "generalBookmark": "Закладка",
@@ -2370,7 +2370,7 @@
   "todoCwlAttacks": "Атаки CWL",
   "todoRaidAttacks": "Рейдові атаки",
   "gameSeasonPassShort": "Пас",
-  "todoMockMaxedMainName": "Maxed Main",
+  "todoMockMaxedMainName": "Максимальний основний акаунт",
   "todoMockMaxedMainSubtitle": "TH17 · все активне",
   "todoMockMaxedMainStatus": "Активний зараз · повний щоденний контрольний список",
   "todoMockLegend5Left": "5 залишилося сьогодні",
@@ -2385,7 +2385,7 @@
   "todoMockWar2Left": "залишилося 2",
   "todoMockClanGames900Left": "Залишилося 900 балів",
   "todoMockRaid1Left": "залишився 1",
-  "todoMockLegendPushName": "Legend Push",
+  "todoMockLegendPushName": "Пуш у Легенді",
   "todoMockLegendPushSubtitle": "TH16 · щоденні напади",
   "todoMockLegendPushStatus": "Активний 1 годину тому · легенди та прогрес пропуску",
   "todoMockLegend2Left": "Сьогодні залишилось 2",
@@ -2393,105 +2393,105 @@
   "todoMockCaughtUpName": "Наздогнали",
   "todoMockCaughtUpSubtitle": "TH14 · немає відкритих завдань",
   "todoMockCaughtUpStatus": "Активний сьогодні · жодних дій не потрібно",
-  "notifChooseAlerts": "Choose alerts",
-  "notifLeagueDefenseDescription": "Defense results with attacker, stars, percentage, and league context.",
-  "notifWarAttackOptionsDescription": "War attack results, defense alerts, and 5v5 attack feed options.",
-  "notifWarAlertsDescription": "War matched, battle day started, and war ended.",
-  "notifWarRemindersDescription": "Custom reminders before war ends.",
-  "notifDefensesAgainstYourBase": "Defenses against your base",
-  "notifDefensesAgainstYourBaseDescription": "Only hits where this account is defending.",
-  "notifAllAttacks": "All attacks",
-  "notifAllAttacksDescription": "Every hit in 5v5 wars only.",
-  "notifThirtyMinutes": "30 minutes",
-  "notifFifteenMinutes": "15 minutes",
-  "notifSendTestNotification": "Send test notification",
-  "notifScheduledMessage": "Scheduled: {title}",
-  "generalStartDate": "Start Date",
-  "generalEndDate": "End Date",
-  "warFiltersAllWars": "All Wars",
-  "warFiltersRandomWars": "Random Wars",
-  "warFiltersCwlWars": "CWL Wars",
-  "warFiltersFriendlyWars": "Friendly Wars",
-  "warType": "War Type",
-  "warFiltersAnyTownHall": "Any TH",
+  "notifChooseAlerts": "Виберіть сповіщення",
+  "notifLeagueDefenseDescription": "Результати захисту з нападником, зірками, відсотком і контекстом ліги.",
+  "notifWarAttackOptionsDescription": "Результати атак у війні, сповіщення про захист і параметри стрічки атак 5v5.",
+  "notifWarAlertsDescription": "Війну знайдено, день битви почався, війну завершено.",
+  "notifWarRemindersDescription": "Власні нагадування перед завершенням війни.",
+  "notifDefensesAgainstYourBase": "Захисти проти вашої бази",
+  "notifDefensesAgainstYourBaseDescription": "Лише удари, де цей акаунт обороняється.",
+  "notifAllAttacks": "Усі атаки",
+  "notifAllAttacksDescription": "Кожен удар лише у війнах 5v5.",
+  "notifThirtyMinutes": "30 хвилин",
+  "notifFifteenMinutes": "15 хвилин",
+  "notifSendTestNotification": "Надіслати тестове сповіщення",
+  "notifScheduledMessage": "Заплановано: {title}",
+  "generalStartDate": "Дата початку",
+  "generalEndDate": "Дата завершення",
+  "warFiltersAllWars": "Усі війни",
+  "warFiltersRandomWars": "Випадкові війни",
+  "warFiltersCwlWars": "Війни Ліги війн кланів",
+  "warFiltersFriendlyWars": "Дружні війни",
+  "warType": "Тип війни",
+  "warFiltersAnyTownHall": "Будь-яка ратуша",
   "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "Attacker TH",
-  "warDefenderTownHall": "Defender TH",
-  "warStatsFilterSameTownHallOnly": "Same Town Hall Only",
-  "warStatsFilterSameTownHallDescription": "Only show attacks where attacker and defender have the same TH level",
-  "generalAny": "Any",
+  "warAttackerTownHall": "Ратуша нападника",
+  "warDefenderTownHall": "Ратуша захисника",
+  "warStatsFilterSameTownHallOnly": "Лише однаковий рівень ратуші",
+  "warStatsFilterSameTownHallDescription": "Показувати лише атаки, де нападник і захисник мають однаковий рівень ратуші",
+  "generalAny": "Будь-який",
   "warStarsWithIcon": "{stars} ⭐",
-  "warStatsFilterMinStars": "Min Stars",
-  "warStatsFilterMaxStars": "Max Stars",
-  "warStatsFilterMinDestructionPercent": "Min Destruction %",
-  "warStatsFilterMaxDestructionPercent": "Max Destruction %",
-  "warStatsFilterMinPosition": "Min Position",
-  "warStatsFilterMaxPosition": "Max Position",
-  "warStatsFilterFreshAttacksOnly": "Fresh Attacks Only",
-  "warStatsFilterFreshAttacksDescription": "Only show first attacks on each base",
-  "warStatsFilterResultLimit": "Result Limit",
-  "generalResultsCount": "{count} results",
-  "notifEventsDescription": "Clan Games, CWL, Raid Weekend, and season events.",
-  "notifAnnouncementsDescription": "In-app banners and future push alerts for ClashKing updates.",
-  "notifUpgradeFinishesDescription": "Troops, heroes, pets, spells, equipment, and buildings.",
-  "notifSupportReminderDescription": "Monthly reminder to support ClashKing.",
-  "notifDevicePushSetup": "Device push setup",
-  "notifAccountScope": "Account scope",
-  "notifTestNotification": "Test notification",
-  "settingsAppIcon": "App Icon",
-  "settingsChanging": "Changing...",
-  "settingsAddWarWidget": "Add War Widget",
-  "settingsWarWidgetLinkClanFirst": "Link an account in a clan first",
-  "settingsWarWidgetClanCount": "{count} clan(s) available",
+  "warStatsFilterMinStars": "Мін. зірок",
+  "warStatsFilterMaxStars": "Макс. зірок",
+  "warStatsFilterMinDestructionPercent": "Мін. % руйнування",
+  "warStatsFilterMaxDestructionPercent": "Макс. % руйнування",
+  "warStatsFilterMinPosition": "Мін. позиція",
+  "warStatsFilterMaxPosition": "Макс. позиція",
+  "warStatsFilterFreshAttacksOnly": "Лише перші атаки",
+  "warStatsFilterFreshAttacksDescription": "Показувати лише перші атаки по кожній базі",
+  "warStatsFilterResultLimit": "Ліміт результатів",
+  "generalResultsCount": "{count} результатів",
+  "notifEventsDescription": "Ігри клану, Ліга війн кланів, Рейдові вихідні та сезонні події.",
+  "notifAnnouncementsDescription": "Банери в застосунку та майбутні push-сповіщення про оновлення ClashKing.",
+  "notifUpgradeFinishesDescription": "Війська, герої, улюбленці, закляття, спорядження та будівлі.",
+  "notifSupportReminderDescription": "Щомісячне нагадування підтримати ClashKing.",
+  "notifDevicePushSetup": "Налаштування push на пристрої",
+  "notifAccountScope": "Область акаунта",
+  "notifTestNotification": "Тестове сповіщення",
+  "settingsAppIcon": "Іконка застосунку",
+  "settingsChanging": "Змінюється...",
+  "settingsAddWarWidget": "Додати віджет війни",
+  "settingsWarWidgetLinkClanFirst": "Спочатку прив’яжіть акаунт у клані",
+  "settingsWarWidgetClanCount": "Доступно кланів: {count}",
   "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Bot-linked accounts and Discord data",
-  "settingsDiscordSyncSubtitle": "Sync bot-linked accounts and Discord data",
-  "settingsConnected": "Connected",
-  "settingsClashKingAccount": "ClashKing account",
-  "settingsEmailConnectedSubtitle": "Email login is connected",
-  "settingsEmailRecoverySubtitle": "Add email login for account recovery",
-  "settingsFeatureRequestsTitle": "Feature Requests",
-  "playerOpenInGame": "Open in game",
-  "playerBookmarkRemove": "Remove player bookmark",
-  "playerBookmarkAdd": "Bookmark player",
-  "playerBestTrophies": "Best trophies",
-  "clanLoadFailed": "Failed to load clan.",
-  "gameItemLevels": "Levels",
-  "resourceDarkElixir": "Dark Elixir",
-  "resourceBuilderElixir": "Builder Elixir",
-  "resourceBuilderGold": "Builder Gold",
+  "settingsDiscordConnectedSubtitle": "Акаунти, прив’язані через бота, і дані Discord",
+  "settingsDiscordSyncSubtitle": "Синхронізація акаунтів, прив’язаних через бота, і даних Discord",
+  "settingsConnected": "Підключено",
+  "settingsClashKingAccount": "Акаунт ClashKing",
+  "settingsEmailConnectedSubtitle": "Вхід через email підключено",
+  "settingsEmailRecoverySubtitle": "Додайте вхід через email для відновлення акаунта",
+  "settingsFeatureRequestsTitle": "Запити функцій",
+  "playerOpenInGame": "Відкрити в грі",
+  "playerBookmarkRemove": "Видалити закладку гравця",
+  "playerBookmarkAdd": "Додати гравця в закладки",
+  "playerBestTrophies": "Найкращі трофеї",
+  "clanLoadFailed": "Не вдалося завантажити клан.",
+  "gameItemLevels": "Рівні",
+  "resourceDarkElixir": "Темний еліксир",
+  "resourceBuilderElixir": "Еліксир будівельника",
+  "resourceBuilderGold": "Золото будівельника",
   "resourceElixir": "Elixir",
-  "resourceGold": "Gold",
-  "resourceGlowyOre": "Glowy Ore",
-  "resourceStarryOre": "Starry Ore",
-  "resourceShinyOre": "Shiny Ore",
-  "resourceGeneric": "Resource",
-  "seasonStatsGoldGrabbed": "Gold Grabbed",
-  "seasonStatsActivity": "Activity",
-  "seasonStatsAttackWins": "Attack Wins",
-  "seasonStatsTrophies": "Season Trophies",
-  "todoSearchAccountsHint": "Search accounts",
-  "generalClearSearch": "Clear search",
-  "clanCapitalAvgRewards": "Avg rewards",
-  "clanCapitalAvgDistrictsPerWeek": "Avg districts/week",
-  "clanCapitalTopAttackers": "Top attackers",
-  "clanCapitalPlayersTracked": "{count} players tracked",
-  "clanCapitalDefenseOverTime": "Defense over time",
-  "clanCapitalDistrictsTracked": "{count} districts tracked",
-  "clanCapitalSelectedRaid": "Selected raid",
-  "generalSummary": "Summary",
-  "generalBreakdown": "Breakdown",
-  "clanPointsTitle": "Clan points",
-  "clanBuilderBasePoints": "Builder base points",
-  "clanType": "Clan type",
-  "clanRequiredTownHall": "Required Town Hall",
-  "clanRequiredTownHallOnly": "{level}+ only",
-  "clanCapitalPoints": "Capital points",
-  "todoAllAccounts": "All accounts",
-  "todoCombinedAcrossAccounts": "Combined to-do across your accounts",
-  "todoPreviewAccount": "Preview account",
-  "todoLastActiveUnavailable": "Last active unavailable",
-  "todoActiveRelative": "Active {time}",
+  "resourceGold": "Золото",
+  "resourceGlowyOre": "Сяйлива руда",
+  "resourceStarryOre": "Зоряна руда",
+  "resourceShinyOre": "Блискуча руда",
+  "resourceGeneric": "Ресурс",
+  "seasonStatsGoldGrabbed": "Здобуте золото",
+  "seasonStatsActivity": "Активність",
+  "seasonStatsAttackWins": "Перемоги в атаках",
+  "seasonStatsTrophies": "Сезонні трофеї",
+  "todoSearchAccountsHint": "Пошук акаунтів",
+  "generalClearSearch": "Очистити пошук",
+  "clanCapitalAvgRewards": "Сер. нагороди",
+  "clanCapitalAvgDistrictsPerWeek": "Сер. районів/тиждень",
+  "clanCapitalTopAttackers": "Найкращі нападники",
+  "clanCapitalPlayersTracked": "Відстежується гравців: {count}",
+  "clanCapitalDefenseOverTime": "Захист із часом",
+  "clanCapitalDistrictsTracked": "Відстежується районів: {count}",
+  "clanCapitalSelectedRaid": "Вибраний рейд",
+  "generalSummary": "Підсумок",
+  "generalBreakdown": "Розбивка",
+  "clanPointsTitle": "Очки клану",
+  "clanBuilderBasePoints": "Очки бази будівельника",
+  "clanType": "Тип клану",
+  "clanRequiredTownHall": "Потрібна ратуша",
+  "clanRequiredTownHallOnly": "Лише {level}+",
+  "clanCapitalPoints": "Очки столиці",
+  "todoAllAccounts": "Усі акаунти",
+  "todoCombinedAcrossAccounts": "Об’єднаний список справ для ваших акаунтів",
+  "todoPreviewAccount": "Попередній перегляд акаунта",
+  "todoLastActiveUnavailable": "Остання активність недоступна",
+  "todoActiveRelative": "Активний {time}",
   "@todoActiveRelative": {
     "placeholders": {
       "time": {
@@ -2499,8 +2499,8 @@
       }
     }
   },
-  "todoCompleteLower": "complete",
-  "todoPointsLeftShort": "{points} points left",
+  "todoCompleteLower": "завершено",
+  "todoPointsLeftShort": "залишилось очок: {points}",
   "@todoPointsLeftShort": {
     "placeholders": {
       "points": {
@@ -2508,7 +2508,7 @@
       }
     }
   },
-  "todoItemsLeftShort": "{count} left",
+  "todoItemsLeftShort": "залишилось: {count}",
   "@todoItemsLeftShort": {
     "placeholders": {
       "count": {
@@ -2516,8 +2516,8 @@
       }
     }
   },
-  "todoAllCaughtUpForNow": "All caught up for now",
-  "todoEventEndsIn": "Ends in {duration}",
+  "todoAllCaughtUpForNow": "Поки що все виконано",
+  "todoEventEndsIn": "Завершиться через {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
       "duration": {
@@ -2525,7 +2525,7 @@
       }
     }
   },
-  "todoEventStartsIn": "Starts in {duration}",
+  "todoEventStartsIn": "Почнеться через {duration}",
   "@todoEventStartsIn": {
     "placeholders": {
       "duration": {
@@ -2533,38 +2533,38 @@
       }
     }
   },
-  "todoRemainingUpgradeTooltip": "Tap for remaining upgrade cost and time",
+  "todoRemainingUpgradeTooltip": "Торкніться, щоб побачити залишкову вартість і час покращення",
   "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
-  "sideRankingsTitle": "Rankings",
-  "sideRankingsSubtitle": "Official leaderboards plus ClashKing endpoints.",
-  "sideRankingsLoadError": "Could not load official rankings.",
-  "sideRankingsEmptyTitle": "No rankings returned",
-  "sideRankingsEmptyBody": "Try another leaderboard or location.",
-  "sideRankingsMockups": "ClashKing mockups",
-  "sideStatsTitle": "Stats",
-  "sideStatsSubtitle": "Leaderboard stats from official Clash API surfaces.",
-  "sideStatsLoadError": "Could not load leaderboard stats.",
-  "sideTopScore": "Top score",
-  "sideTop200Avg": "Top 200 avg",
-  "sideBasesArmiesTitle": "Bases & Armies",
-  "sideBasesArmiesSubtitle": "Discord-saved layouts and army links.",
-  "sideBotSyncTarget": "Bot sync target",
-  "sideBotSyncTargetBody": "The bot already saves bases and armies to the Discord profile. This page is ready for that synced payload.",
-  "sideSavedBases": "Saved bases",
-  "sideWarBaseSlots": "War base slots",
-  "sideWarBaseSlotsBody": "Town hall, base type, link, and last updated.",
-  "sideLegendBaseSlots": "Legend base slots",
-  "sideLegendBaseSlotsBody": "Quick copy plus account association.",
-  "sideSavedArmies": "Saved armies",
-  "sideArmyLinks": "Army links",
-  "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
-  "sideGameAssetsTitle": "Game Assets",
-  "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
-  "sideNoLinkedPlayersTitle": "No linked players loaded",
-  "sideNoLinkedPlayersBody": "Add or refresh linked accounts to prefill league data.",
-  "sideReadyNow": "Ready now",
-  "sideDays": "{count} days",
+  "announcementAnimeFurySubtitle": "Перегляньте оновлення червня 2026",
+  "sideRankingsTitle": "Рейтинги",
+  "sideRankingsSubtitle": "Офіційні таблиці лідерів плюс ендпоїнти ClashKing.",
+  "sideRankingsLoadError": "Не вдалося завантажити офіційні рейтинги.",
+  "sideRankingsEmptyTitle": "Рейтинги не повернулися",
+  "sideRankingsEmptyBody": "Спробуйте іншу таблицю лідерів або локацію.",
+  "sideRankingsMockups": "Макети ClashKing",
+  "sideStatsTitle": "Статистика",
+  "sideStatsSubtitle": "Статистика таблиць лідерів з офіційних поверхонь Clash API.",
+  "sideStatsLoadError": "Не вдалося завантажити статистику таблиці лідерів.",
+  "sideTopScore": "Найкращий результат",
+  "sideTop200Avg": "Середнє Top 200",
+  "sideBasesArmiesTitle": "Бази та армії",
+  "sideBasesArmiesSubtitle": "Макети й посилання на армії, збережені в Discord.",
+  "sideBotSyncTarget": "Ціль синхронізації бота",
+  "sideBotSyncTargetBody": "Бот уже зберігає бази й армії в профілі Discord. Ця сторінка готова для синхронізованих даних.",
+  "sideSavedBases": "Збережені бази",
+  "sideWarBaseSlots": "Слоти воєнних баз",
+  "sideWarBaseSlotsBody": "Ратуша, тип бази, посилання й останнє оновлення.",
+  "sideLegendBaseSlots": "Слоти баз Легенди",
+  "sideLegendBaseSlotsBody": "Швидке копіювання плюс зв’язок з акаунтом.",
+  "sideSavedArmies": "Збережені армії",
+  "sideArmyLinks": "Посилання на армії",
+  "sideArmyLinksBody": "Склад, закляття, облогова машина, нотатки й посилання для поширення.",
+  "sideGameAssetsTitle": "Ігрові ресурси",
+  "sideGameAssetsSubtitle": "Розміщені ресурси ClashKing, згруповані за папками.",
+  "sideNoLinkedPlayersTitle": "Прив’язаних гравців не завантажено",
+  "sideNoLinkedPlayersBody": "Додайте або оновіть прив’язані акаунти, щоб попередньо заповнити дані ліги.",
+  "sideReadyNow": "Готово зараз",
+  "sideDays": "{count} дн.",
   "@sideDays": {
     "placeholders": {
       "count": {
@@ -2572,7 +2572,7 @@
       }
     }
   },
-  "sideOreLeft": "{shiny} shiny, {glowy} glowy, {starry} starry left",
+  "sideOreLeft": "залишилось: {shiny} блискучої, {glowy} сяйливої, {starry} зоряної",
   "@sideOreLeft": {
     "placeholders": {
       "shiny": {
@@ -2586,14 +2586,14 @@
       }
     }
   },
-  "sideShinyOre": "Shiny ore",
-  "sideGlowyOre": "Glowy ore",
-  "sideStarryOre": "Starry ore",
-  "sideDailyBonusAdjustment": "Daily bonus adjustment",
-  "sideExtraShiny": "Extra shiny",
-  "sideExtraGlowy": "Extra glowy",
-  "sideExtraStarry": "Extra starry",
-  "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
+  "sideShinyOre": "Блискуча руда",
+  "sideGlowyOre": "Сяйлива руда",
+  "sideStarryOre": "Зоряна руда",
+  "sideDailyBonusAdjustment": "Коригування щоденного бонусу",
+  "sideExtraShiny": "Додаткова блискуча",
+  "sideExtraGlowy": "Додаткова сяйлива",
+  "sideExtraStarry": "Додаткова зоряна",
+  "sideZapQuakeTitle": "{zaps} блискавок + 1 землетрус",
   "@sideZapQuakeTitle": {
     "placeholders": {
       "zaps": {
@@ -2601,7 +2601,7 @@
       }
     }
   },
-  "sideZapQuakeSubtitle": "{quakeDamage} quake damage, {lightningDamage} per lightning",
+  "sideZapQuakeSubtitle": "{quakeDamage} шкоди землетрусом, {lightningDamage} за блискавку",
   "@sideZapQuakeSubtitle": {
     "placeholders": {
       "quakeDamage": {
@@ -2612,11 +2612,11 @@
       }
     }
   },
-  "sideBuildingHp": "Building HP",
-  "sideLightningLevel": "Lightning level",
-  "sideEarthquakeLevel": "Earthquake level",
-  "sideWithoutEarthquake": "Without earthquake",
-  "sideLightningCount": "{count} lightning",
+  "sideBuildingHp": "HP будівлі",
+  "sideLightningLevel": "Рівень блискавки",
+  "sideEarthquakeLevel": "Рівень землетрусу",
+  "sideWithoutEarthquake": "Без землетрусу",
+  "sideLightningCount": "Блискавок: {count}",
   "@sideLightningCount": {
     "placeholders": {
       "count": {
@@ -2624,9 +2624,9 @@
       }
     }
   },
-  "sideFireballQuakeTitle": "Fireball + 1 quake",
-  "sideAddSupportDamage": "Add support damage",
-  "sideFireballQuakeSubtitle": "{fireballDamage} fireball damage, {hpLeft} HP left after quake",
+  "sideFireballQuakeTitle": "Вогняна куля + 1 землетрус",
+  "sideAddSupportDamage": "Додати підтримувальну шкоду",
+  "sideFireballQuakeSubtitle": "{fireballDamage} шкоди вогняною кулею, {hpLeft} HP лишається після землетрусу",
   "@sideFireballQuakeSubtitle": {
     "placeholders": {
       "fireballDamage": {
@@ -2637,9 +2637,9 @@
       }
     }
   },
-  "sideFireballLevel": "Fireball level",
-  "sideQuakePressure": "Quake pressure",
-  "sideQuakeSpellCount": "{count} quake spell(s)",
+  "sideFireballLevel": "Рівень вогняної кулі",
+  "sideQuakePressure": "Тиск землетрусу",
+  "sideQuakeSpellCount": "Заклять землетрусу: {count}",
   "@sideQuakeSpellCount": {
     "placeholders": {
       "count": {
@@ -2647,14 +2647,14 @@
       }
     }
   },
-  "sideLocation": "Location",
-  "sideFilter": "Filter",
-  "sideRefresh": "Refresh",
-  "sideOfficialClashLeaderboard": "Official Clash leaderboard",
-  "sideAllTownHallsShort": "All TH",
-  "sideOwned": "Owned",
-  "sideTarget": "Target",
-  "sideDailyValue": "daily {value}",
+  "sideLocation": "Локація",
+  "sideFilter": "Фільтр",
+  "sideRefresh": "Оновити",
+  "sideOfficialClashLeaderboard": "Офіційна таблиця лідерів Clash",
+  "sideAllTownHallsShort": "Усі ратуші",
+  "sideOwned": "Є у вас",
+  "sideTarget": "Ціль",
+  "sideDailyValue": "щодня {value}",
   "@sideDailyValue": {
     "placeholders": {
       "value": {
@@ -2662,9 +2662,9 @@
       }
     }
   },
-  "sideDecrease": "Decrease",
-  "sideIncrease": "Increase",
-  "sideLevel": "Level {level}",
+  "sideDecrease": "Зменшити",
+  "sideIncrease": "Збільшити",
+  "sideLevel": "Рівень {level}",
   "@sideLevel": {
     "placeholders": {
       "level": {
@@ -2672,58 +2672,58 @@
       }
     }
   },
-  "sidePopularPlayers": "Players",
-  "sidePopularClans": "Clans",
-  "sidePopularWarsCwl": "Wars & CWL",
-  "rankingPlayerTrophies": "Player trophies",
-  "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
-  "rankingPlayerBuilder": "Player builder",
-  "rankingPlayerBuilderHeading": "Players Builder Base Ranking",
-  "rankingClanTrophies": "Clan trophies",
-  "rankingClanTrophiesHeading": "Clans Trophies Ranking",
-  "rankingClanBuilder": "Clan builder",
-  "rankingClanBuilderHeading": "Clans Builder Base Ranking",
-  "rankingClanCapital": "Clan capital",
-  "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "assetFolderEquipment": "Equipment",
-  "assetFolderLeagues": "Leagues",
-  "assetFolderResources": "Resources",
-  "assetFolderStickers": "Stickers",
-  "upgradeSectionHeroes": "Heroes",
-  "upgradeSectionTroops": "Troops",
-  "upgradeSectionSpells": "Spells",
-  "upgradeSectionPets": "Pets",
-  "upgradeSectionEquipment": "Equipment",
-  "sideMockupSource": "Source",
-  "sideMockupMode": "Mode",
-  "sideMockupPreview": "Preview",
-  "sideMockupRows": "Rows",
-  "sideMockupRowsValue": "5 mockups",
-  "endpointLeagueTop200": "League top 200",
-  "endpointLeagueTop200Preview": "Legend League · 5,742 trophies",
-  "endpointTownhallTop200": "Townhall top 200",
-  "endpointTownhallTop200Preview": "TH17 · Global player board",
-  "endpointClanDonations": "Clan donations",
-  "endpointClanDonationsPreview": "United States · weekly clan totals",
-  "endpointClanWarWins": "Clan war wins",
-  "endpointClanWarWinsPreview": "International · all-time war wins",
-  "endpointTop200ArmyUsage": "Top 200 army usage",
-  "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
+  "sidePopularPlayers": "Гравці",
+  "sidePopularClans": "Клани",
+  "sidePopularWarsCwl": "Війни та Ліга війн кланів",
+  "rankingPlayerTrophies": "Трофеї гравців",
+  "rankingPlayerTrophiesHeading": "Рейтинг гравців за трофеями",
+  "rankingPlayerBuilder": "Гравці: будівельник",
+  "rankingPlayerBuilderHeading": "Рейтинг гравців у базі будівельника",
+  "rankingClanTrophies": "Трофеї кланів",
+  "rankingClanTrophiesHeading": "Рейтинг кланів за трофеями",
+  "rankingClanBuilder": "Клани: будівельник",
+  "rankingClanBuilderHeading": "Рейтинг кланів у базі будівельника",
+  "rankingClanCapital": "Столиця клану",
+  "rankingClanCapitalHeading": "Рейтинг столиці клану",
+  "assetFolderTroops": "Війська",
+  "assetFolderSpells": "Закляття",
+  "assetFolderHeroes": "Герої",
+  "assetFolderEquipment": "Спорядження",
+  "assetFolderLeagues": "Ліги",
+  "assetFolderResources": "Ресурси",
+  "assetFolderStickers": "Стікери",
+  "upgradeSectionHeroes": "Герої",
+  "upgradeSectionTroops": "Війська",
+  "upgradeSectionSpells": "Закляття",
+  "upgradeSectionPets": "Улюбленці",
+  "upgradeSectionEquipment": "Спорядження",
+  "sideMockupSource": "Джерело",
+  "sideMockupMode": "Режим",
+  "sideMockupPreview": "Перегляд",
+  "sideMockupRows": "Рядки",
+  "sideMockupRowsValue": "5 макетів",
+  "endpointLeagueTop200": "Топ 200 ліги",
+  "endpointLeagueTop200Preview": "Легендарна ліга · 5 742 трофеї",
+  "endpointTownhallTop200": "Топ 200 ратуш",
+  "endpointTownhallTop200Preview": "Ратуша 17 · глобальна таблиця гравців",
+  "endpointClanDonations": "Донати клану",
+  "endpointClanDonationsPreview": "США · щотижневі підсумки клану",
+  "endpointClanWarWins": "Перемоги клану у війнах",
+  "endpointClanWarWinsPreview": "Міжнародний · усі перемоги у війнах",
+  "endpointTop200ArmyUsage": "Використання армій у Top 200",
+  "endpointTop200ArmyUsagePreview": "Журнали боїв · використання військ і заклять",
   "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Weekly",
-  "endpointStateWins": "Wins",
-  "endpointStateUsage": "Usage",
-  "notifGroupBattles": "Battles",
-  "notifGroupReminders": "Reminders",
-  "notifGroupSupport": "Support",
-  "notifGroupProgress": "Progress",
-  "notifLeagueDefense": "League defense",
-  "notifLeagueDefenseResult": "League defense result",
-  "notifLeagueTriple": "League triple",
-  "notifLeagueAttackBody": "Lord Clasher attacked {player} • {percent}% • {stars} stars • {league}",
+  "endpointStateWeekly": "Щотижня",
+  "endpointStateWins": "Перемоги",
+  "endpointStateUsage": "Використання",
+  "notifGroupBattles": "Битви",
+  "notifGroupReminders": "Нагадування",
+  "notifGroupSupport": "Підтримка",
+  "notifGroupProgress": "Прогрес",
+  "notifLeagueDefense": "Захист у лізі",
+  "notifLeagueDefenseResult": "Результат захисту в лізі",
+  "notifLeagueTriple": "Трипл у лізі",
+  "notifLeagueAttackBody": "Lord Clasher атакував {player} • {percent}% • {stars} зірок • {league}",
   "@notifLeagueAttackBody": {
     "placeholders": {
       "player": {
@@ -2740,8 +2740,8 @@
       }
     }
   },
-  "notifWarDefense": "War defense",
-  "notifWarAttackOnTh": "War attack on TH{th}",
+  "notifWarDefense": "Захист у війні",
+  "notifWarAttackOnTh": "Атака у війні на ратушу {th}",
   "@notifWarAttackOnTh": {
     "placeholders": {
       "th": {
@@ -2749,7 +2749,7 @@
       }
     }
   },
-  "notifWarDefenseBody": "{opponentClan} attacked {player} • {percent}% • {stars} stars • {clan} defense",
+  "notifWarDefenseBody": "{opponentClan} атакував {player} • {percent}% • {stars} зірок • захист {clan}",
   "@notifWarDefenseBody": {
     "placeholders": {
       "opponentClan": {
@@ -2769,9 +2769,9 @@
       }
     }
   },
-  "notifWarFeed5v5": "5v5 war feed",
-  "notifWarAttackResult": "War attack result",
-  "notifWarAttackResultBody": "{clan} attacked Pine Riders TH{th} • 100% • 3 stars",
+  "notifWarFeed5v5": "Стрічка війни 5v5",
+  "notifWarAttackResult": "Результат атаки у війні",
+  "notifWarAttackResultBody": "{clan} атакував Pine Riders, ратуша {th} • 100% • 3 зірки",
   "@notifWarAttackResultBody": {
     "placeholders": {
       "clan": {
@@ -2782,8 +2782,8 @@
       }
     }
   },
-  "notifWarMatched": "War matched",
-  "notifWarMatchedBody": "{clan} matched with Pine Riders. Preparation day started.",
+  "notifWarMatched": "Війну знайдено",
+  "notifWarMatchedBody": "{clan} отримав суперника Pine Riders. День підготовки почався.",
   "@notifWarMatchedBody": {
     "placeholders": {
       "clan": {
@@ -2791,9 +2791,9 @@
       }
     }
   },
-  "notifWarStarted": "War started",
-  "notifBattleDayStarted": "Battle day started",
-  "notifWarStartedBody": "{clan} vs Pine Riders is live. Good luck.",
+  "notifWarStarted": "Війна почалась",
+  "notifBattleDayStarted": "День битви почався",
+  "notifWarStartedBody": "{clan} проти Pine Riders уже в ефірі. Удачі.",
   "@notifWarStartedBody": {
     "placeholders": {
       "clan": {
@@ -2801,8 +2801,8 @@
       }
     }
   },
-  "notifWarEnded": "War ended",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final results are available.",
+  "notifWarEnded": "Війна завершилась",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Фінальні результати доступні.",
   "@notifWarEndedBody": {
     "placeholders": {
       "clan": {
@@ -2810,13 +2810,13 @@
       }
     }
   },
-  "notifWarReminder1h": "War reminder: 1h",
-  "notifWarReminder30m": "War reminder: 30m",
-  "notifWarReminder15m": "War reminder: 15m",
-  "notifOneHourLeft": "1 hour left",
-  "notifThirtyMinutesLeft": "30 minutes left",
-  "notifFifteenMinutesLeft": "15 minutes left",
-  "notifRemainingWarAttacksBody": "{player} has remaining war attacks. {time}.",
+  "notifWarReminder1h": "Нагадування війни: 1 год",
+  "notifWarReminder30m": "Нагадування війни: 30 хв",
+  "notifWarReminder15m": "Нагадування війни: 15 хв",
+  "notifOneHourLeft": "Залишилась 1 година",
+  "notifThirtyMinutesLeft": "Залишилось 30 хвилин",
+  "notifFifteenMinutesLeft": "Залишилось 15 хвилин",
+  "notifRemainingWarAttacksBody": "У {player} залишились атаки у війні. {time}.",
   "@notifRemainingWarAttacksBody": {
     "placeholders": {
       "player": {
@@ -2827,7 +2827,7 @@
       }
     }
   },
-  "notifStarted": "{name} started",
+  "notifStarted": "{name} почалось",
   "@notifStarted": {
     "placeholders": {
       "name": {
@@ -2835,7 +2835,7 @@
       }
     }
   },
-  "notifClanGamesPointsBody": "{clan} can start earning {name} points.",
+  "notifClanGamesPointsBody": "{clan} може почати заробляти очки {name}.",
   "@notifClanGamesPointsBody": {
     "placeholders": {
       "clan": {
@@ -2846,7 +2846,7 @@
       }
     }
   },
-  "notifCwlPreparationBody": "{clan} can begin Clan War League preparation.",
+  "notifCwlPreparationBody": "{clan} може почати підготовку до Ліги війн кланів.",
   "@notifCwlPreparationBody": {
     "placeholders": {
       "clan": {
@@ -2854,7 +2854,7 @@
       }
     }
   },
-  "notifRaidWeekendBody": "{clan} can start Capital Raid attacks.",
+  "notifRaidWeekendBody": "{clan} може почати атаки в рейдах столиці.",
   "@notifRaidWeekendBody": {
     "placeholders": {
       "clan": {
@@ -2862,9 +2862,9 @@
       }
     }
   },
-  "notifSeasonStart": "Season start",
-  "notifNewSeasonStarted": "New season started",
-  "notifSeasonStartedBody": "{league} season has started for {player}.",
+  "notifSeasonStart": "Початок сезону",
+  "notifNewSeasonStarted": "Новий сезон почався",
+  "notifSeasonStartedBody": "Сезон {league} почався для {player}.",
   "@notifSeasonStartedBody": {
     "placeholders": {
       "league": {
@@ -2875,13 +2875,13 @@
       }
     }
   },
-  "notifSpecialEvent": "Special event",
-  "notifNewEventLive": "A new event is live",
-  "notifNewClashEventBody": "A new Clash event is available.",
-  "notifSupportClashKing": "Support ClashKing",
-  "notifMonthlySupportBody": "Monthly support helps keep ClashKing available and improving. Thank you.",
-  "notifUpgradeFinished": "Upgrade finished",
-  "notifUpgradeReadyTitle": "{name} is ready",
+  "notifSpecialEvent": "Особлива подія",
+  "notifNewEventLive": "Нова подія вже активна",
+  "notifNewClashEventBody": "Доступна нова подія Clash.",
+  "notifSupportClashKing": "Підтримати ClashKing",
+  "notifMonthlySupportBody": "Щомісячна підтримка допомагає ClashKing залишатися доступним і ставати кращим. Дякуємо.",
+  "notifUpgradeFinished": "Покращення завершено",
+  "notifUpgradeReadyTitle": "{name} готовий",
   "@notifUpgradeReadyTitle": {
     "placeholders": {
       "name": {
@@ -2889,7 +2889,7 @@
       }
     }
   },
-  "notifUpgradeCompleteBody": "Level {level} finished for {player}. Upgrade complete.",
+  "notifUpgradeCompleteBody": "Рівень {level} завершено для {player}. Покращення виконано.",
   "@notifUpgradeCompleteBody": {
     "placeholders": {
       "level": {
@@ -2900,7 +2900,7 @@
       }
     }
   },
-  "clanSearchLoadFailed": "Failed to load clan data: {error}",
+  "clanSearchLoadFailed": "Не вдалося завантажити дані клану: {error}",
   "@clanSearchLoadFailed": {
     "placeholders": {
       "error": {
@@ -2908,11 +2908,11 @@
       }
     }
   },
-  "appIconDefault": "Default",
-  "appIconChristmas": "Christmas",
-  "appIconBlackWhite": "Black & White",
-  "appIconDarkMode": "Dark Mode",
-  "generalMembersCount": "{count} members",
+  "appIconDefault": "Стандартна",
+  "appIconChristmas": "Різдвяна",
+  "appIconBlackWhite": "Чорно-біла",
+  "appIconDarkMode": "Темний режим",
+  "generalMembersCount": "Учасників: {count}",
   "@generalMembersCount": {
     "placeholders": {
       "count": {
@@ -2920,8 +2920,8 @@
       }
     }
   },
-  "generalBookmarked": "bookmarked",
-  "clanLevelValue": "level {level}",
+  "generalBookmarked": "у закладках",
+  "clanLevelValue": "рівень {level}",
   "@clanLevelValue": {
     "placeholders": {
       "level": {
@@ -2929,7 +2929,7 @@
       }
     }
   },
-  "cwlRankShort": "Rank {rank}",
+  "cwlRankShort": "Ранг {rank}",
   "@cwlRankShort": {
     "placeholders": {
       "rank": {
@@ -2937,7 +2937,7 @@
       }
     }
   },
-  "cwlRoundShort": "Round {round}",
+  "cwlRoundShort": "Раунд {round}",
   "@cwlRoundShort": {
     "placeholders": {
       "round": {
@@ -2953,5 +2953,5 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
+  "faqSupercellFanContentPolicyLink": "Політика фан-контенту Supercell"
 }
