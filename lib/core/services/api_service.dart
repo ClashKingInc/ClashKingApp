@@ -3,14 +3,20 @@ import 'dart:convert';
 import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:clashkingapp/core/services/token_service.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'dart:io';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 class ApiService {
-  ApiService({http.Client? client}) : _client = client ?? http.Client();
+  ApiService({http.Client? client, TokenService? tokenService})
+    : _client = client ?? http.Client(),
+      _tokenService = tokenService ?? TokenService.shared;
+
+  static final ApiService shared = ApiService(
+    tokenService: TokenService.shared,
+  );
 
   static const String betterStackSentryDsn =
       'https://6wB3LFzRuW4wyEj1MJVx3SvG@s2574992.eu-fsn-3.betterstackdata.com/2574992';
@@ -26,6 +32,7 @@ class ApiService {
 
   static String get sentryDsn => betterStackSentryDsn;
   final http.Client _client;
+  final TokenService _tokenService;
 
   static AppLocalizations? _currentL10n() {
     final context = globalNavigatorKey.currentContext;
@@ -311,7 +318,7 @@ class ApiService {
     final headers = <String, String>{'Content-Type': 'application/json'};
 
     if (requiresAuth) {
-      final token = await TokenService().getAccessToken();
+      final token = await _tokenService.getAccessToken();
       if (token == null) {
         throw UnauthorizedException(
           _localized(
@@ -369,8 +376,11 @@ class ApiService {
       );
     }
 
-    Sentry.captureException(error, stackTrace: stackTrace);
-    Sentry.captureMessage(errorMessage);
+    ErrorReporter.captureException(
+      error,
+      stackTrace: stackTrace,
+      operation: '$operation: $errorMessage',
+    );
   }
 
   static String cocAssetsProxyUrl(String url) {
@@ -383,22 +393,7 @@ class ApiService {
     return url;
   }
 
-  static Future<void> loadConfig() async {
-    try {
-      final response = await http
-          .get(
-            Uri.parse('$apiUrlV2/public-config'),
-            headers: {'Content-Type': 'application/json'},
-          )
-          .timeout(const Duration(seconds: 10));
-
-      if (response.statusCode != 200) {
-        DebugUtils.debugError('Failed to load config: ${response.statusCode}');
-      }
-    } catch (e) {
-      DebugUtils.debugError('Error loading config: $e');
-    }
-  }
+  void close() => _client.close();
 
   static String getErrorMessage(dynamic error) {
     if (error is BadRequestException) {

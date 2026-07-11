@@ -42,11 +42,6 @@ void main() {
       final service = AuthService();
       expect(service.currentUser, isNull);
     });
-
-    test('starts with null cocAccounts', () {
-      final service = AuthService();
-      expect(service.cocAccounts, isNull);
-    });
   });
 
   // ---------------------------------------------------------------------------
@@ -55,22 +50,25 @@ void main() {
 
   group('AuthService — initializeAuth (no token)', () {
     test('stays not authenticated when no token stored', () async {
-      final service =
-          AuthService(tokenService: FakeTokenService(fakeToken: null));
+      final service = AuthService(
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await service.initializeAuth();
       expect(service.isAuthenticated, isFalse);
     });
 
     test('accessToken remains null when no token stored', () async {
-      final service =
-          AuthService(tokenService: FakeTokenService(fakeToken: null));
+      final service = AuthService(
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await service.initializeAuth();
       expect(service.accessToken, isNull);
     });
 
     test('notifies listeners even when no token stored', () async {
-      final service =
-          AuthService(tokenService: FakeTokenService(fakeToken: null));
+      final service = AuthService(
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       var notified = false;
       service.addListener(() => notified = true);
       await service.initializeAuth();
@@ -84,37 +82,30 @@ void main() {
 
     setUp(() {
       fakeApi = FakeApiService();
-      fakeApi.getStubs['/auth/me'] = http.Response(
-        jsonEncode(userJson()),
-        200,
-      );
+      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
       fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
     });
 
     test('sets isAuthenticated = true', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.initializeAuth();
       expect(service.isAuthenticated, isTrue);
     });
 
     test('populates currentUser.username', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.initializeAuth();
       expect(service.currentUser?.username, 'TestUser');
     });
 
     test('populates accessToken', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.initializeAuth();
       expect(service.accessToken, isNotNull);
     });
 
     test('notifies listeners', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       var notified = false;
       service.addListener(() => notified = true);
       await service.initializeAuth();
@@ -127,12 +118,8 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.getStubs['/auth/me'] = http.Response('Unauthorized', 401);
       final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
-      await expectLater(
-        () => service.initializeAuth(),
-        throwsA(anything),
-      );
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await expectLater(() => service.initializeAuth(), throwsA(anything));
       expect(service.isAuthenticated, isFalse);
     });
 
@@ -140,8 +127,7 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.getStubs['/auth/me'] = http.Response('Unauthorized', 401);
       final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await expectLater(() => service.initializeAuth(), throwsA(anything));
       expect(fakeToken.clearCalled, isTrue);
     });
@@ -151,12 +137,8 @@ void main() {
     test('keeps isAuthenticated = true on SocketException', () async {
       final fakeApi = NetworkErrorApiService();
       final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
-      await expectLater(
-        () => service.initializeAuth(),
-        throwsA(anything),
-      );
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
+      await expectLater(() => service.initializeAuth(), throwsA(anything));
       expect(service.isAuthenticated, isTrue);
     });
   });
@@ -183,36 +165,31 @@ void main() {
     });
 
     test('sets isAuthenticated = true', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.signInWithEmail('a@b.com', 'pass');
       expect(service.isAuthenticated, isTrue);
     });
 
     test('sets accessToken', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.signInWithEmail('a@b.com', 'pass');
       expect(service.accessToken, 'acc123');
     });
 
     test('populates currentUser', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.signInWithEmail('a@b.com', 'pass');
       expect(service.currentUser?.username, 'TestUser');
     });
 
     test('calls saveTokens', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.signInWithEmail('a@b.com', 'pass');
       expect(fakeToken.saveTokensCalled, isTrue);
     });
 
     test('notifies listeners', () async {
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       var notified = false;
       service.addListener(() => notified = true);
       await service.signInWithEmail('a@b.com', 'pass');
@@ -223,11 +200,11 @@ void main() {
   group('AuthService — signInWithEmail (failure)', () {
     test('throws Exception on API error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/email'] =
-          http.Response('Unauthorized', 401);
+      fakeApi.postStubs['/auth/email'] = http.Response('Unauthorized', 401);
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await expectLater(
         () => service.signInWithEmail('a@b.com', 'wrong'),
         throwsA(isA<Exception>()),
@@ -236,11 +213,11 @@ void main() {
 
     test('isAuthenticated stays false on failure', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/email'] =
-          http.Response('Unauthorized', 401);
+      fakeApi.postStubs['/auth/email'] = http.Response('Unauthorized', 401);
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       try {
         await service.signInWithEmail('a@b.com', 'wrong');
       } catch (_) {}
@@ -260,8 +237,9 @@ void main() {
         200,
       );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await service.registerWithEmail('a@b.com', 'pass', 'user');
       expect(service.isAuthenticated, isFalse);
     });
@@ -273,8 +251,9 @@ void main() {
         200,
       );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       final result = await service.registerWithEmail('a@b.com', 'pass', 'u');
       expect(result['verification_sent'], isTrue);
     });
@@ -301,12 +280,6 @@ void main() {
       final service = AuthService(tokenService: FakeTokenService());
       await service.signOut();
       expect(service.currentUser, isNull);
-    });
-
-    test('cocAccounts is null after signOut', () async {
-      final service = AuthService(tokenService: FakeTokenService());
-      await service.signOut();
-      expect(service.cocAccounts, isNull);
     });
 
     test('notifies listeners on signOut', () async {
@@ -348,12 +321,6 @@ void main() {
       expect(service.currentUser, isNull);
     });
 
-    test('resets cocAccounts', () async {
-      final service = AuthService(tokenService: FakeTokenService());
-      await service.logoutAndClearAllData();
-      expect(service.cocAccounts, isNull);
-    });
-
     test('notifies listeners', () async {
       final service = AuthService(tokenService: FakeTokenService());
       var notified = false;
@@ -386,8 +353,9 @@ void main() {
         200,
       );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await service.verifyEmailWithCode('a@b.com', '123456');
       expect(service.isAuthenticated, isTrue);
     });
@@ -403,19 +371,23 @@ void main() {
         200,
       );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await service.verifyEmailWithCode('a@b.com', '123456');
       expect(service.accessToken, 'acc99');
     });
 
     test('rethrows on API error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/verify-email-code'] =
-          http.Response('invalid code', 400);
+      fakeApi.postStubs['/auth/verify-email-code'] = http.Response(
+        'invalid code',
+        400,
+      );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await expectLater(
         () => service.verifyEmailWithCode('a@b.com', 'bad'),
         throwsA(anything),
@@ -435,19 +407,23 @@ void main() {
         200,
       );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       final result = await service.resendVerificationEmail('a@b.com');
       expect(result['sent'], isTrue);
     });
 
     test('rethrows on API error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/resend-verification'] =
-          http.Response('error', 429);
+      fakeApi.postStubs['/auth/resend-verification'] = http.Response(
+        'error',
+        429,
+      );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await expectLater(
         () => service.resendVerificationEmail('a@b.com'),
         throwsA(anything),
@@ -467,19 +443,23 @@ void main() {
         200,
       );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       final result = await service.forgotPassword('a@b.com');
       expect(result['reset_sent'], isTrue);
     });
 
     test('rethrows on API error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/forgot-password'] =
-          http.Response('not found', 404);
+      fakeApi.postStubs['/auth/forgot-password'] = http.Response(
+        'not found',
+        404,
+      );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await expectLater(
         () => service.forgotPassword('nobody@b.com'),
         throwsA(anything),
@@ -503,8 +483,9 @@ void main() {
         200,
       );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await service.resetPassword('a@b.com', 'CODE123', 'newpass');
       expect(service.isAuthenticated, isTrue);
     });
@@ -520,8 +501,7 @@ void main() {
         200,
       );
       final fakeToken = FakeTokenService(fakeToken: null);
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.resetPassword('a@b.com', 'CODE123', 'newpass');
       expect(service.accessToken, 'acc_reset');
       expect(fakeToken.saveTokensCalled, isTrue);
@@ -529,11 +509,14 @@ void main() {
 
     test('rethrows on error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/reset-password'] =
-          http.Response('bad code', 400);
+      fakeApi.postStubs['/auth/reset-password'] = http.Response(
+        'bad code',
+        400,
+      );
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await expectLater(
         () => service.resetPassword('a@b.com', 'BADCODE', 'newpass'),
         throwsA(anything),
@@ -549,24 +532,20 @@ void main() {
     test('calls initializeAuth after linking — sets isAuthenticated', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/auth/link-email'] = http.Response('{}', 200);
-      fakeApi.getStubs['/auth/me'] = http.Response(
-        jsonEncode(userJson()),
-        200,
-      );
+      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
       final fakeToken = FakeTokenService(fakeToken: 'token123');
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.linkEmailAccount('a@b.com', 'pass', 'user');
       expect(service.isAuthenticated, isTrue);
     });
 
     test('throws localized Exception on API error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-email'] =
-          http.Response('conflict', 409);
+      fakeApi.postStubs['/auth/link-email'] = http.Response('conflict', 409);
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await expectLater(
         () => service.linkEmailAccount('a@b.com', 'pass', 'user'),
         throwsA(isA<Exception>()),
@@ -582,24 +561,20 @@ void main() {
     test('calls initializeAuth after linking — sets isAuthenticated', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/auth/link-discord'] = http.Response('{}', 200);
-      fakeApi.getStubs['/auth/me'] = http.Response(
-        jsonEncode(userJson()),
-        200,
-      );
+      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
       final fakeToken = FakeTokenService(fakeToken: 'token123');
-      final service =
-          AuthService(apiService: fakeApi, tokenService: fakeToken);
+      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
       await service.linkDiscordAccount('discord_token', 'refresh', 3600);
       expect(service.isAuthenticated, isTrue);
     });
 
     test('throws localized Exception on API error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-discord'] =
-          http.Response('forbidden', 403);
+      fakeApi.postStubs['/auth/link-discord'] = http.Response('forbidden', 403);
       final service = AuthService(
-          apiService: fakeApi,
-          tokenService: FakeTokenService(fakeToken: null));
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+      );
       await expectLater(
         () => service.linkDiscordAccount('bad_token', null, null),
         throwsA(isA<Exception>()),

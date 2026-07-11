@@ -6,25 +6,16 @@ import 'package:clashkingapp/l10n/locale.dart';
 
 class MyAppState extends ChangeNotifier {
   MyAppState({WarWidgetSyncService? warWidgetSyncService})
-      : _warWidgetSyncService =
-            warWidgetSyncService ?? const WarWidgetSyncService() {
+    : _warWidgetSyncService =
+          warWidgetSyncService ?? const WarWidgetSyncService() {
     _loadLanguage();
     _warWidgetSyncService.registerPeriodicRefresh();
-    _scheduleInitialWidgetUpdate();
   }
 
   final WarWidgetSyncService _warWidgetSyncService;
   Locale _locale = Locale('en'); // Default language is English
   Locale get locale => _locale; // Getter for the locale
   bool isLoading = false; // Loading state of the app
-
-  void _scheduleInitialWidgetUpdate() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future<void>.delayed(const Duration(seconds: 2), () async {
-        await _warWidgetSyncService.updateWidgets();
-      });
-    });
-  }
 
   /* Language management */
 
@@ -58,7 +49,7 @@ class MyAppState extends ChangeNotifier {
     return Locale('en'); // Fallback to English
   }
 
-// Load the language from the shared preferences or set to the system locale
+  // Load the language from the shared preferences or set to the system locale
   Future<void> _loadLanguage() async {
     String? languageCode = await getPrefs('languageCode');
 
@@ -66,8 +57,9 @@ class MyAppState extends ChangeNotifier {
       Locale userLocale = Locale(languageCode);
       _locale = _getLocaleFallback(userLocale);
     } else {
-      Locale systemLocale = Locale(WidgetsBinding
-          .instance.platformDispatcher.locales.first.languageCode);
+      Locale systemLocale = Locale(
+        WidgetsBinding.instance.platformDispatcher.locales.first.languageCode,
+      );
       _locale = _getLocaleFallback(systemLocale);
     }
 

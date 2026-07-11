@@ -316,6 +316,57 @@ void main() {
       expect(service.isLoading, isFalse);
     });
 
+    test('coalesces concurrent requests for the same player', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/players'] = http.Response(
+        jsonEncode({
+          'items': [_playerBasicJson('#P1', name: 'Hero')],
+        }),
+        200,
+      );
+      final service = PlayerService(apiService: fakeApi);
+
+      final players = await Future.wait([
+        service.getPlayerAndClanData('#P1'),
+        service.getPlayerAndClanData('#P1'),
+      ]);
+
+      expect(players.map((player) => player.tag), everyElement('#P1'));
+      expect(fakeApi.getCallCounts['/players/%23P1'], 1);
+    });
+
+    test('forwards search tracking headers on the detail request', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/players'] = http.Response(
+        jsonEncode({
+          'items': [_playerBasicJson('#P1')],
+        }),
+        200,
+      );
+      final service = PlayerService(apiService: fakeApi);
+
+      await service.getPlayerAndClanData(
+        '#P1',
+        extraHeaders: const {'x-ck-user-id': 'user-1'},
+      );
+
+      expect(fakeApi.lastGetHeaders['/players/%23P1'], const {
+        'x-ck-user-id': 'user-1',
+      });
+    });
+
+    test('uses an already loaded official profile without a request', () async {
+      final fakeApi = FakeApiService();
+      final service = PlayerService(apiService: fakeApi);
+
+      final player = await service.useOfficialPlayerData(
+        _playerBasicJson('#P1'),
+      );
+
+      expect(player.tag, '#P1');
+      expect(fakeApi.getCallCounts, isEmpty);
+    });
+
     test('throws when the official profile request fails', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/players'] = http.Response('error', 500);

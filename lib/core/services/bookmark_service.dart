@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,9 +9,7 @@ import 'package:http/http.dart' as http;
 
 class BookmarkService extends ChangeNotifier {
   BookmarkService({ApiService? apiService})
-    : _apiService = apiService ?? ApiService() {
-    unawaited(load());
-  }
+    : _apiService = apiService ?? ApiService.shared;
 
   final ApiService _apiService;
   bool _loaded = false;

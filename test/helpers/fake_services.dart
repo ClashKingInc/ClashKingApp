@@ -18,6 +18,8 @@ class FakeApiService extends ApiService {
   final Map<String, Object?> lastPostBodies = {};
   final Map<String, Object?> lastPutBodies = {};
   final Map<String, Object?> lastDeleteBodies = {};
+  final Map<String, Map<String, String>?> lastGetHeaders = {};
+  final Map<String, int> getCallCounts = {};
 
   /// If set, the next call to the corresponding method for [endpoint] will
   /// throw this exception instead of returning a stubbed response.
@@ -33,6 +35,8 @@ class FakeApiService extends ApiService {
     Duration timeout = const Duration(seconds: 15),
     Map<String, String>? extraHeaders,
   }) async {
+    lastGetHeaders[endpoint] = extraHeaders;
+    getCallCounts.update(endpoint, (count) => count + 1, ifAbsent: () => 1);
     if (throwOnGet.containsKey(endpoint)) throw throwOnGet[endpoint]!;
     if (getStubs.containsKey(endpoint)) return getStubs[endpoint]!;
     return _derivedProxyGet(endpoint) ??

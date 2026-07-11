@@ -644,15 +644,15 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
-  // clearAccounts
+  // clearAccountData
   // ---------------------------------------------------------------------------
 
-  group('CocAccountService — clearAccounts', () {
+  group('CocAccountService — clearAccountData', () {
     test('clears all accounts and resets state', () async {
       final service = await serviceWithAccounts([
         {'player_tag': '#X'},
       ]);
-      service.clearAccounts();
+      service.clearAccountData();
       expect(service.cocAccounts, isEmpty);
       expect(service.selectedTag, isNull);
       expect(service.isLoading, isFalse);
@@ -662,7 +662,7 @@ void main() {
       final service = CocAccountService();
       var notified = false;
       service.addListener(() => notified = true);
-      service.clearAccounts();
+      service.clearAccountData();
       expect(notified, isTrue);
     });
   });

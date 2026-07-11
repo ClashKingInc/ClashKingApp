@@ -16,7 +16,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class ClanService extends ChangeNotifier {
   ClanService({ApiService? apiService})
-    : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService.shared;
 
   bool _disposed = false;
 
@@ -38,6 +38,7 @@ class ClanService extends ChangeNotifier {
   List<CapitalHistoryItems> capitalHistory = [];
   List<ClanWarLog> warLogList = [];
   List<ClanWarStats> warStatsList = [];
+  final Map<String, Future<Clan?>> _officialClanLoads = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -86,11 +87,42 @@ class ClanService extends ChangeNotifier {
     }
   }
 
-  Future<Clan?> _fetchOfficialClan(String clanTag, bool throwOnError) async {
+  Future<Clan?> _fetchOfficialClan(
+    String clanTag,
+    bool throwOnError, {
+    Map<String, String>? extraHeaders,
+  }) async {
+    final loadKey = '$clanTag|${extraHeaders?['x-ck-user-id'] ?? ''}';
+    final existing = _officialClanLoads[loadKey];
+    if (existing != null) return existing;
+
+    final load = _fetchOfficialClanOnce(
+      clanTag,
+      throwOnError,
+      extraHeaders: extraHeaders,
+    );
+    _officialClanLoads[loadKey] = load;
+    try {
+      return await load;
+    } finally {
+      if (identical(_officialClanLoads[loadKey], load)) {
+        _officialClanLoads.remove(loadKey);
+      }
+    }
+  }
+
+  Future<Clan?> _fetchOfficialClanOnce(
+    String clanTag,
+    bool throwOnError, {
+    Map<String, String>? extraHeaders,
+  }) async {
     try {
       final normalizedTag = clanTag.startsWith('#') ? clanTag : '#$clanTag';
       final encodedTag = Uri.encodeComponent(normalizedTag);
-      final response = await _apiService.proxyGet('/clans/$encodedTag');
+      final response = await _apiService.proxyGet(
+        '/clans/$encodedTag',
+        extraHeaders: extraHeaders,
+      );
 
       if (response.statusCode != 200) {
         Sentry.captureMessage(_errLoadingClanData, level: SentryLevel.error);
@@ -116,8 +148,11 @@ class ClanService extends ChangeNotifier {
     }
   }
 
-  Future<Clan> loadClanData(String clanTag) async {
-    if (_clans.containsKey(clanTag)) {
+  Future<Clan> loadClanData(
+    String clanTag, {
+    Map<String, String>? extraHeaders,
+  }) async {
+    if (_clans.containsKey(clanTag) && extraHeaders == null) {
       return _clans[clanTag]!;
     }
 
@@ -126,7 +161,11 @@ class ClanService extends ChangeNotifier {
 
     try {
       DebugUtils.debugApi("Loading clan data for tag: $clanTag");
-      final clan = await _fetchOfficialClan(clanTag, true);
+      final clan = await _fetchOfficialClan(
+        clanTag,
+        true,
+        extraHeaders: extraHeaders,
+      );
       if (clan == null) {
         throw Exception("Failed to load clan data");
       }
@@ -146,8 +185,11 @@ class ClanService extends ChangeNotifier {
 
   /// Loads the official clan profile. Heavy tab data is fetched by the clan
   /// detail page after navigation.
-  Future<Clan> getClanAndWarData(String clanTag) async {
-    final clan = await loadClanData(clanTag);
+  Future<Clan> getClanAndWarData(
+    String clanTag, {
+    Map<String, String>? extraHeaders,
+  }) async {
+    final clan = await loadClanData(clanTag, extraHeaders: extraHeaders);
     await _enrichMissingMemberData(clan);
     return _clans[clan.tag]!; // Return the updated clan with war stats
   }

@@ -2,7 +2,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 
 class UserService {
   UserService({ApiService? apiService})
-    : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService.shared;
 
   final ApiService _apiService;
 

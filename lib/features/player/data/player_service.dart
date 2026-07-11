@@ -11,10 +11,11 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 class PlayerService extends ChangeNotifier {
   PlayerService({ApiService? apiService})
-    : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService.shared;
 
   bool _disposed = false;
 
@@ -31,7 +32,8 @@ class PlayerService extends ChangeNotifier {
   final ApiService _apiService;
   bool _isLoading = false;
   List<Player> _profiles = [];
-  List<Map<String, dynamic>> _clans = [];
+  final List<Map<String, dynamic>> _clans = [];
+  final Map<String, Future<Player>> _officialPlayerLoads = {};
 
   bool get isLoading => _isLoading;
   List<Player> get profiles => _profiles;
@@ -64,6 +66,7 @@ class PlayerService extends ChangeNotifier {
     List<String> playerTags, {
     bool notify = true,
     bool throwOnError = false,
+    Map<String, String>? extraHeaders,
   }) async {
     _isLoading = true;
     if (notify) {
@@ -71,6 +74,8 @@ class PlayerService extends ChangeNotifier {
     }
 
     final clanTagsByPlayer = <String, String>{};
+    Object? firstLoadError;
+    StackTrace? firstLoadStackTrace;
 
     try {
       final loadedProfiles = await Future.wait(
@@ -78,19 +83,23 @@ class PlayerService extends ChangeNotifier {
           final playerTag = _canonicalTag(rawTag);
           if (playerTag.isEmpty) return null;
           try {
-            final player = await _fetchOfficialPlayer(playerTag);
+            final player = await _fetchOfficialPlayer(
+              playerTag,
+              extraHeaders: extraHeaders,
+            );
             final clanTag = player.clanOverview.tag;
             if (clanTag.isNotEmpty) {
               clanTagsByPlayer[player.tag] = clanTag;
               await storePrefs('player_${player.tag}_clan_tag', clanTag);
             }
             return player;
-          } catch (e) {
+          } catch (e, stackTrace) {
             DebugUtils.debugWarning(
               "⚠️ Failed to load official player profile for $playerTag: $e",
             );
             if (throwOnError) {
-              rethrow;
+              firstLoadError ??= e;
+              firstLoadStackTrace ??= stackTrace;
             }
             return null;
           }
@@ -106,9 +115,12 @@ class PlayerService extends ChangeNotifier {
       DebugUtils.debugSuccess(
         "Loaded public player profiles: ${_profiles.map((p) => p.tag).toList()}",
       );
+      if (profiles.isEmpty && firstLoadError != null) {
+        Error.throwWithStackTrace(firstLoadError!, firstLoadStackTrace!);
+      }
       return clanTagsByPlayer;
     } catch (e) {
-      Sentry.captureException(e);
+      ErrorReporter.captureException(e, operation: 'player.load_official');
       DebugUtils.debugError(" Error loading official player data: $e");
       if (throwOnError) {
         rethrow;
@@ -122,9 +134,37 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  Future<Player> _fetchOfficialPlayer(String playerTag) async {
+  Future<Player> _fetchOfficialPlayer(
+    String playerTag, {
+    Map<String, String>? extraHeaders,
+  }) async {
+    final loadKey = '$playerTag|${extraHeaders?['x-ck-user-id'] ?? ''}';
+    final existing = _officialPlayerLoads[loadKey];
+    if (existing != null) return existing;
+
+    final load = _fetchOfficialPlayerOnce(
+      playerTag,
+      extraHeaders: extraHeaders,
+    );
+    _officialPlayerLoads[loadKey] = load;
+    try {
+      return await load;
+    } finally {
+      if (identical(_officialPlayerLoads[loadKey], load)) {
+        _officialPlayerLoads.remove(loadKey);
+      }
+    }
+  }
+
+  Future<Player> _fetchOfficialPlayerOnce(
+    String playerTag, {
+    Map<String, String>? extraHeaders,
+  }) async {
     final encodedTag = Uri.encodeComponent(playerTag);
-    final response = await _apiService.proxyGet('/players/$encodedTag');
+    final response = await _apiService.proxyGet(
+      '/players/$encodedTag',
+      extraHeaders: extraHeaders,
+    );
 
     if (response.statusCode != 200) {
       throw HttpException(
@@ -175,7 +215,10 @@ class PlayerService extends ChangeNotifier {
     );
   }
 
-  Future<Player> getPlayerAndClanData(String playerTag) async {
+  Future<Player> getPlayerAndClanData(
+    String playerTag, {
+    Map<String, String>? extraHeaders,
+  }) async {
     // NOSONAR
     _isLoading = true;
     _safeNotify();
@@ -186,6 +229,7 @@ class PlayerService extends ChangeNotifier {
         [normalizedTag],
         notify: false,
         throwOnError: true,
+        extraHeaders: extraHeaders,
       );
       final player = _profiles.firstWhere((p) => p.tag == normalizedTag);
 
@@ -194,13 +238,35 @@ class PlayerService extends ChangeNotifier {
       );
       return player;
     } catch (e, st) {
-      Sentry.captureException(e, stackTrace: st);
+      ErrorReporter.captureException(
+        e,
+        stackTrace: st,
+        operation: 'player.load_detail',
+      );
       DebugUtils.debugError(" Error in getPlayerAndClanData: $e");
       rethrow;
     } finally {
       _isLoading = false;
       _safeNotify();
     }
+  }
+
+  Future<Player> useOfficialPlayerData(Map<String, dynamic> data) async {
+    final player = Player.fromJson(data);
+    final index = _profiles.indexWhere((profile) => profile.tag == player.tag);
+    if (index == -1) {
+      _profiles = [player, ..._profiles];
+    } else {
+      _profiles[index] = player;
+    }
+    if (player.clanOverview.tag.isNotEmpty) {
+      await storePrefs(
+        'player_${player.tag}_clan_tag',
+        player.clanOverview.tag,
+      );
+    }
+    _safeNotify();
+    return player;
   }
 
   /// Hydrates full profiles for bookmarked player tags in parallel (each
@@ -288,7 +354,7 @@ class PlayerService extends ChangeNotifier {
         throw Exception("Error loading war stats");
       }
     } catch (e) {
-      Sentry.captureException(e);
+      ErrorReporter.captureException(e, operation: 'player.load_war_stats');
       DebugUtils.debugError(" Error loading war stats: $e");
       if (throwOnError) {
         rethrow;
@@ -368,7 +434,10 @@ class PlayerService extends ChangeNotifier {
         throw Exception("Error loading filtered war stats");
       }
     } catch (e) {
-      Sentry.captureException(e);
+      ErrorReporter.captureException(
+        e,
+        operation: 'player.load_filtered_war_stats',
+      );
       DebugUtils.debugError("❌ Error loading filtered war stats: $e");
       rethrow;
     }

@@ -7,16 +7,13 @@ import 'package:http/http.dart' as http;
 import '../../../helpers/fake_services.dart';
 
 Map<String, dynamic> _minimalWarCwl(String tag) => {
-      'clan_tag': tag,
-      'isInWar': false,
-      'isInCwl': false,
-      'war_info': {
-        'state': 'notInWar',
-        'currentWarInfo': null,
-      },
-      'league_info': null,
-      'war_league_infos': [],
-    };
+  'clan_tag': tag,
+  'isInWar': false,
+  'isInCwl': false,
+  'war_info': {'state': 'notInWar', 'currentWarInfo': null},
+  'league_info': null,
+  'war_league_infos': [],
+};
 
 void main() {
   setUpAll(() {
@@ -43,10 +40,10 @@ void main() {
   group('WarCwlService — processBulkWarData', () {
     test('adds entries to summaries map', () {
       final service = WarCwlService();
-      service.processBulkWarData(
-        [_minimalWarCwl('#CLAN1'), _minimalWarCwl('#CLAN2')],
-        notify: false,
-      );
+      service.processBulkWarData([
+        _minimalWarCwl('#CLAN1'),
+        _minimalWarCwl('#CLAN2'),
+      ], notify: false);
       expect(service.summaries, hasLength(2));
       expect(service.summaries['#CLAN1'], isNotNull);
       expect(service.summaries['#CLAN2'], isNotNull);
@@ -98,7 +95,9 @@ void main() {
     test('populates summaries on 200 response', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/war/war-summary'] = http.Response(
-        jsonEncode({'items': [_minimalWarCwl('#CLAN1')]}),
+        jsonEncode({
+          'items': [_minimalWarCwl('#CLAN1')],
+        }),
         200,
       );
       final service = WarCwlService(apiService: fakeApi);
@@ -110,7 +109,9 @@ void main() {
     test('populates multiple clans on 200 response', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/war/war-summary'] = http.Response(
-        jsonEncode({'items': [_minimalWarCwl('#C1'), _minimalWarCwl('#C2')]}),
+        jsonEncode({
+          'items': [_minimalWarCwl('#C1'), _minimalWarCwl('#C2')],
+        }),
         200,
       );
       final service = WarCwlService(apiService: fakeApi);
@@ -133,8 +134,11 @@ void main() {
       fakeApi.postStubs['/war/war-summary'] = http.Response('error', 503);
       final service = WarCwlService(apiService: fakeApi);
       await expectLater(
-        () => service.loadAllWarData(['#CLAN1'],
-            notify: false, throwOnError: true),
+        () => service.loadAllWarData(
+          ['#CLAN1'],
+          notify: false,
+          throwOnError: true,
+        ),
         throwsA(isA<Exception>()),
       );
     });
@@ -154,8 +158,11 @@ void main() {
       fakeApi.throwOnPost['/war/war-summary'] = Exception('no network');
       final service = WarCwlService(apiService: fakeApi);
       await expectLater(
-        () => service.loadAllWarData(['#CLAN1'],
-            notify: false, throwOnError: true),
+        () => service.loadAllWarData(
+          ['#CLAN1'],
+          notify: false,
+          throwOnError: true,
+        ),
         throwsA(isA<Exception>()),
       );
     });

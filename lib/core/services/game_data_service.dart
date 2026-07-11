@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
@@ -16,6 +17,7 @@ class GameDataService {
       Uri.parse("${ApiService.assetUrl}/translations.json");
   static const _userAgent = 'ClashKing-App/1.0';
   static const _cacheDirName = 'game_data';
+  static const _cacheRefreshInterval = Duration(hours: 6);
   static const _staticDataCache = _CachedJsonAsset(
     label: 'static data',
     fileName: 'static_data.json',
@@ -29,18 +31,20 @@ class GameDataService {
     cachedAtKey: 'game_data_translations_cached_at',
   );
 
-  static Map<String, dynamic> _petsData = {};
-  static Map<String, dynamic> _heroesData = {};
-  static Map<String, dynamic> _troopsData = {};
-  static Map<String, dynamic> _spellsData = {};
-  static Map<String, dynamic> _gearsData = {};
-  static Map<String, dynamic> _leagueData = {};
-  static Map<String, dynamic> _warLeagueData = {};
-  static Map<String, dynamic> _playerLeagueData = {};
-  static Map<String, dynamic> _gameData = {};
+  static final Map<String, dynamic> _petsData = {};
+  static final Map<String, dynamic> _heroesData = {};
+  static final Map<String, dynamic> _troopsData = {};
+  static final Map<String, dynamic> _spellsData = {};
+  static final Map<String, dynamic> _gearsData = {};
+  static final Map<String, dynamic> _leagueData = {};
+  static final Map<String, dynamic> _warLeagueData = {};
+  static final Map<String, dynamic> _playerLeagueData = {};
+  static final Map<String, dynamic> _gameData = {};
   static final Map<String, dynamic> _bundleData = {};
   static final Map<String, String> _translationsData = {};
   static String _translationLocale = 'EN';
+  static Future<void>? _bundleLoad;
+  static final Map<String, Future<void>> _translationLoads = {};
 
   static Future<void> loadGameData({Locale? locale}) async {
     final preferredLocale = locale ?? await resolvePreferredLocale();
@@ -51,6 +55,19 @@ class GameDataService {
   }
 
   static Future<void> _loadBundle() async {
+    final existing = _bundleLoad;
+    if (existing != null) return existing;
+
+    final load = _loadBundleOnce();
+    _bundleLoad = load;
+    try {
+      await load;
+    } finally {
+      if (identical(_bundleLoad, load)) _bundleLoad = null;
+    }
+  }
+
+  static Future<void> _loadBundleOnce() async {
     try {
       final decoded = await _loadCachedJsonAsset(
         _staticDataCache,
@@ -73,30 +90,75 @@ class GameDataService {
     final cachedLastModified = prefs.getString(asset.lastModifiedKey);
 
     if (cacheExists) {
-      final remoteLastModified = await _fetchLastModified(uri, asset.label);
-      if (remoteLastModified == null ||
-          (cachedLastModified != null &&
-              remoteLastModified == cachedLastModified)) {
-        return _decodeJsonFile(file, asset.label);
-      }
-
       try {
-        return await _downloadJsonAsset(
-          asset,
-          uri,
-          file,
-          prefs,
-          remoteLastModified,
-        );
+        final cached = await _decodeJsonFile(file, asset.label);
+        if (_cacheNeedsRefresh(prefs.getString(asset.cachedAtKey))) {
+          unawaited(
+            _refreshCachedJsonAsset(
+              asset,
+              uri,
+              file,
+              prefs,
+              cachedLastModified,
+            ),
+          );
+        }
+        return cached;
       } catch (e) {
         DebugUtils.debugError(
-          "Using cached ${asset.label} after refresh failed: $e",
+          "Cached ${asset.label} is invalid; downloading a replacement: $e",
         );
-        return _decodeJsonFile(file, asset.label);
       }
     }
 
-    return _downloadJsonAsset(asset, uri, file, prefs, null);
+    return _downloadJsonAsset(asset, uri, file, prefs, null, maxRetries: 1);
+  }
+
+  static bool _cacheNeedsRefresh(String? cachedAt) {
+    final timestamp = cachedAt == null ? null : DateTime.tryParse(cachedAt);
+    if (timestamp == null) return true;
+    return DateTime.now().toUtc().difference(timestamp.toUtc()) >=
+        _cacheRefreshInterval;
+  }
+
+  static Future<void> _refreshCachedJsonAsset(
+    _CachedJsonAsset asset,
+    Uri uri,
+    File file,
+    SharedPreferences prefs,
+    String? cachedLastModified,
+  ) async {
+    final remoteLastModified = await _fetchLastModified(uri, asset.label);
+    if (remoteLastModified == null) return;
+
+    if (cachedLastModified != null &&
+        remoteLastModified == cachedLastModified) {
+      await prefs.setString(
+        asset.cachedAtKey,
+        DateTime.now().toUtc().toIso8601String(),
+      );
+      return;
+    }
+
+    try {
+      final updated = await _downloadJsonAsset(
+        asset,
+        uri,
+        file,
+        prefs,
+        remoteLastModified,
+        maxRetries: 2,
+      );
+      if (asset.fileName == _staticDataCache.fileName) {
+        _applyBundle(updated);
+      } else if (_translationLocale != 'EN') {
+        _applyTranslations(updated, _translationLocale);
+      }
+    } catch (e) {
+      DebugUtils.debugError(
+        "Keeping cached ${asset.label} after refresh failed: $e",
+      );
+    }
   }
 
   static Future<String?> _fetchLastModified(Uri uri, String label) async {
@@ -121,9 +183,9 @@ class GameDataService {
     Uri uri,
     File file,
     SharedPreferences prefs,
-    String? remoteLastModified,
-  ) async {
-    const int maxRetries = 3;
+    String? remoteLastModified, {
+    int maxRetries = 3,
+  }) async {
     const Duration initialDelay = Duration(seconds: 1);
 
     for (int attempt = 1; attempt <= maxRetries; attempt++) {
@@ -266,6 +328,21 @@ class GameDataService {
       return;
     }
 
+    final existing = _translationLoads[clashyLocale];
+    if (existing != null) return existing;
+
+    final load = _loadTranslationsOnce(clashyLocale);
+    _translationLoads[clashyLocale] = load;
+    try {
+      await load;
+    } finally {
+      if (identical(_translationLoads[clashyLocale], load)) {
+        _translationLoads.remove(clashyLocale);
+      }
+    }
+  }
+
+  static Future<void> _loadTranslationsOnce(String clashyLocale) async {
     try {
       final decoded = await _loadCachedJsonAsset(
         _translationsCache,

@@ -163,9 +163,16 @@ UpgradeRemainingSummary calculateRemainingUpgradeSummary(
   final costs = <String, num>{};
   var totalSeconds = 0;
   final firstUpgradeLevel = item.level <= 0 ? 1 : item.level;
+  final levels = meta['levels'];
+  final levelStats = <int, Map<String, dynamic>>{
+    if (levels is List)
+      for (final entry in levels.whereType<Map>())
+        if (entry['level'] is num)
+          (entry['level'] as num).toInt(): Map<String, dynamic>.from(entry),
+  };
 
   for (var level = firstUpgradeLevel; level < targetLevel; level++) {
-    final stats = findLevelStats(meta, level);
+    final stats = levelStats[level];
     if (stats == null) continue;
 
     totalSeconds += (stats['upgrade_time'] as num?)?.toInt() ?? 0;

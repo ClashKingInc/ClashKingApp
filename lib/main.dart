@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
-import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -26,6 +25,8 @@ import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:app_links/app_links.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
+import 'package:clashkingapp/core/config/observability_config.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 // CallbackDispatcher for background execution (Android only)
 @pragma('vm:entry-point')
@@ -33,7 +34,6 @@ void callbackDispatcher() {
   AndroidWorkmanagerService.instance.executeTask((task, inputData) async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      await ApiService.loadConfig();
 
       // Handle different background tasks
       if (task == 'simplePeriodicTask') {
@@ -68,7 +68,7 @@ void _initializeDeepLinks() {
       DeepLinkHandler.queueDeepLink(uri);
       DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
         DebugUtils.debugError(" Deep link handling error: $err");
-        Sentry.captureException(err);
+        ErrorReporter.captureException(err);
       });
     },
     onError: (err) {
@@ -85,7 +85,7 @@ void _initializeDeepLinks() {
           DeepLinkHandler.queueDeepLink(uri);
           DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
             DebugUtils.debugError(" Deep link handling error: $err");
-            Sentry.captureException(err);
+            ErrorReporter.captureException(err);
           });
         }
       })
@@ -98,19 +98,18 @@ Future<void> main() async {
   // Initialize Flutter binding BEFORE Sentry
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Pre-warm liquid glass shaders (prototype: bottom nav bar only for now)
+  // Pre-warm the shared Flutter glass shader before first use.
   await LiquidGlassWidgets.initialize();
-
-  // Load config from backend first
-  await ApiService.loadConfig();
 
   await SentryFlutter.init(
     (options) {
       options.dsn = ApiService.sentryDsn;
-      options.tracesSampleRate = 1.0;
+      options.tracesSampleRate = ObservabilityConfig.tracesSampleRate;
       options.debug = false;
-      options.replay.sessionSampleRate = 1.0;
-      options.replay.onErrorSampleRate = 1.0;
+      options.replay.sessionSampleRate =
+          ObservabilityConfig.replaySessionSampleRate;
+      options.replay.onErrorSampleRate =
+          ObservabilityConfig.replayErrorSampleRate;
     },
     appRunner: () async {
       if (!kIsWeb) {
@@ -127,12 +126,6 @@ Future<void> main() async {
         // Override with the app-level callback (handles widget taps → WarWidgetSyncService)
         HomeWidget.registerInteractivityCallback(backgroundCallback);
       }
-
-      await Future.wait([
-        GameDataService.loadGameData().then(
-          (_) => DebugUtils.debugSuccess("GameDataService OK"),
-        ),
-      ]);
 
       FlutterNativeSplash.remove();
 
@@ -154,9 +147,9 @@ Future<void> main() async {
               ChangeNotifierProvider(
                 create: (_) => PlayerCardPreferencesService(),
               ),
-              Provider(create: (_) => ApiService()),
+              Provider.value(value: ApiService.shared),
               Provider(create: (_) => UserService()),
-              Provider(create: (_) => TokenService()),
+              Provider.value(value: TokenService.shared),
             ],
             child: MyApp(),
           ),

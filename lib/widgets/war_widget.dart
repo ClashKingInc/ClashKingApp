@@ -5,12 +5,12 @@ import 'package:clashkingapp/widgets/widgets_functions.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 const String _widgetAppGroup = 'group.com.clashking.apps';
 
@@ -44,6 +44,8 @@ class WarWidgetService {
   static final WarWidgetService _instance = WarWidgetService._internal();
   factory WarWidgetService() => _instance;
   WarWidgetService._internal();
+
+  static final Map<String, Future<String>> _warSummaryLoads = {};
 
   static String _normalizedClanTag(String clanTag) {
     return clanTag.replaceAll('#', '').toUpperCase();
@@ -135,9 +137,9 @@ class WarWidgetService {
 
       final cachedClans = await getCachedClanOptions();
       if (cachedClans.isNotEmpty) {
-        for (final clan in cachedClans) {
-          await refreshWarInfoForClan(clan.tag);
-        }
+        await Future.wait(
+          cachedClans.map((clan) => refreshWarInfoForClan(clan.tag)),
+        );
         await _updateWidget();
         DebugUtils.debugSuccess("War widget refresh completed");
         return;
@@ -156,7 +158,11 @@ class WarWidgetService {
 
       DebugUtils.debugSuccess("War widget refresh completed");
     } catch (e, stackTrace) {
-      Sentry.captureException(e, stackTrace: stackTrace);
+      ErrorReporter.captureException(
+        e,
+        stackTrace: stackTrace,
+        operation: 'widget.refresh',
+      );
       DebugUtils.debugError(" Error refreshing war widget: $e");
     }
   }
@@ -244,7 +250,7 @@ class WarWidgetService {
   // Get the first available CoC account from the API
   static Future<String?> _getFirstAvailableAccount() async {
     try {
-      final token = await TokenService().getAccessToken();
+      final token = await TokenService.shared.getAccessToken();
       if (token == null) {
         DebugUtils.debugWarning("⚠️ User not authenticated");
         return null;
@@ -328,7 +334,7 @@ class WarWidgetService {
         "🔍 No cached clan tag found, making API call for $playerTag",
       );
 
-      final token = await TokenService().getAccessToken();
+      final token = await TokenService.shared.getAccessToken();
       if (token == null) {
         DebugUtils.debugWarning(
           "⚠️ User not authenticated - no token available",
@@ -409,8 +415,9 @@ class WarWidgetService {
   static Future<void> cacheClanOptions(
     List<WarWidgetClanOption> clans, {
     String? selectedClanTag,
+    bool syncConfig = true,
   }) async {
-    await syncWidgetProxyConfig();
+    if (syncConfig) await syncWidgetProxyConfig();
 
     final deduped = <String, WarWidgetClanOption>{};
     for (final clan in clans) {
@@ -445,7 +452,7 @@ class WarWidgetService {
     String clanTag, {
     bool makeDefault = false,
   }) async {
-    final warInfo = await fetchWarSummary(clanTag);
+    final warInfo = await _loadWarSummary(clanTag);
     await HomeWidget.saveWidgetData<String>(
       warInfoKeyForClan(clanTag),
       warInfo,
@@ -466,22 +473,53 @@ class WarWidgetService {
     }
   }
 
+  static Future<String> _loadWarSummary(String clanTag) async {
+    final key = _normalizedClanTag(clanTag);
+    final existing = _warSummaryLoads[key];
+    if (existing != null) return existing;
+
+    final load = fetchWarSummary(clanTag);
+    _warSummaryLoads[key] = load;
+    try {
+      return await load;
+    } finally {
+      if (identical(_warSummaryLoads[key], load)) {
+        _warSummaryLoads.remove(key);
+      }
+    }
+  }
+
   static Future<void> prepareClanWidgets(
     List<WarWidgetClanOption> clans, {
     String? selectedClanTag,
   }) async {
     await syncWidgetProxyConfig();
-    await cacheClanOptions(clans, selectedClanTag: selectedClanTag);
+    await cacheClanOptions(
+      clans,
+      selectedClanTag: selectedClanTag,
+      syncConfig: false,
+    );
 
-    for (final clan in clans) {
-      await refreshWarInfoForClan(
-        clan.tag,
-        makeDefault: clan.tag == selectedClanTag,
-      );
-    }
+    final selectedKey = selectedClanTag == null
+        ? null
+        : _normalizedClanTag(selectedClanTag);
+    final clansByTag = <String, WarWidgetClanOption>{
+      for (final clan in clans)
+        if (clan.tag.isNotEmpty) _normalizedClanTag(clan.tag): clan,
+    };
+    await Future.wait(
+      clansByTag.entries.map(
+        (entry) => refreshWarInfoForClan(
+          entry.value.tag,
+          makeDefault: entry.key == selectedKey,
+        ),
+      ),
+    );
 
-    if (selectedClanTag != null && selectedClanTag.isNotEmpty) {
-      await refreshWarInfoForClan(selectedClanTag, makeDefault: true);
+    if (selectedKey != null &&
+        selectedKey.isNotEmpty &&
+        !clansByTag.containsKey(selectedKey)) {
+      await refreshWarInfoForClan(selectedClanTag!, makeDefault: true);
     }
 
     await _updateWidget();
@@ -503,7 +541,7 @@ class WarWidgetService {
       appGroupId: _appGroupForPlatform(),
     );
 
-    final token = await TokenService().getAccessToken();
+    final token = await TokenService.shared.getAccessToken();
     if (token != null && token.isNotEmpty) {
       await HomeWidget.saveWidgetData<String>(
         'warWidgetAuthToken',

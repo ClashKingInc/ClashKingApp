@@ -5,28 +5,25 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
-import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class AuthService extends ChangeNotifier {
   AuthService({ApiService? apiService, TokenService? tokenService})
-    : _apiService = apiService ?? ApiService(),
-      _tokenService = tokenService ?? TokenService();
+    : _apiService = apiService ?? ApiService.shared,
+      _tokenService = tokenService ?? TokenService.shared;
 
   final ApiService _apiService;
   final TokenService _tokenService;
   String? _accessToken;
   bool _isAuthenticated = false;
   User? _currentUser;
-  List<dynamic>? _cocAccounts;
 
   String? get accessToken => _accessToken;
   bool get isAuthenticated => _isAuthenticated;
   bool get canUseApp => _isAuthenticated;
   User? get currentUser => _currentUser;
-  List<dynamic>? get cocAccounts => _cocAccounts;
 
   String _localized(
     String fallback,
@@ -298,7 +295,7 @@ class AuthService extends ChangeNotifier {
 
       await _apiService.post('/auth/link-discord', {
         'access_token': discordAccessToken,
-        if (refreshToken != null) 'refresh_token': refreshToken,
+        'refresh_token': ?refreshToken,
         if (expiresIn != null) 'expires_in': expiresIn.toString(),
         'device_id': deviceId,
         'device_name': deviceName,
@@ -351,18 +348,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _tokenService.clearTokens();
-    try {
-      await clearPrefs();
-    } catch (_) {}
-    _isAuthenticated = false;
-    _currentUser = null;
-    _cocAccounts = null;
-    _accessToken = null;
-    notifyListeners();
-    globalNavigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
+    await signOut();
   }
 
   Future<void> signOut() async {
@@ -372,7 +358,6 @@ class AuthService extends ChangeNotifier {
     } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
-    _cocAccounts = null;
     _accessToken = null;
     notifyListeners();
   }
@@ -386,7 +371,6 @@ class AuthService extends ChangeNotifier {
     } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
-    _cocAccounts = null;
     _accessToken = null;
     notifyListeners();
 

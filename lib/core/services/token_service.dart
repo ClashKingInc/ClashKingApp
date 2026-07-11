@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,17 +9,41 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 class TokenService {
+  TokenService({
+    FlutterSecureStorage? secureStorage,
+    http.Client? client,
+    DeviceInfoPlugin? deviceInfo,
+  }) : _secureStorage = secureStorage ?? const FlutterSecureStorage(),
+       _providedClient = client,
+       _deviceInfo = deviceInfo ?? DeviceInfoPlugin();
+
+  static final TokenService shared = TokenService();
+
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
-  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage;
+  final http.Client? _providedClient;
+  final DeviceInfoPlugin _deviceInfo;
+  http.Client? _defaultClient;
+
+  http.Client get _client =>
+      _providedClient ?? (_defaultClient ??= http.Client());
+
+  String? _cachedAccessToken;
+  String? _cachedRefreshToken;
+  bool _tokensLoaded = false;
+  Future<(String?, String?)>? _tokenLoad;
+  Future<String?>? _refreshInFlight;
+  Future<String>? _deviceIdLoad;
+  Future<String>? _deviceNameLoad;
 
   Future<String?> getAccessToken() async {
-    final tokens = await _readTokens();
+    final tokens = await _loadTokensOnce();
     final accessToken = tokens.$1;
     final refreshToken = tokens.$2;
-    final deviceId = await getDeviceId();
 
     if (accessToken == null || refreshToken == null) {
       return null;
@@ -27,30 +51,51 @@ class TokenService {
 
     if (isTokenExpired(accessToken)) {
       DebugUtils.debugInfo("🔄 Access Token has expired. Trying to refresh...");
-      final newAccessToken = await refreshAccessToken(refreshToken, deviceId);
-
-      if (newAccessToken != null) {
-        return newAccessToken;
-      } else {
-        DebugUtils.debugError(
-            " Failed to refresh token, user must re-authenticate");
-        await clearTokens();
-        return null;
-      }
+      return _refreshExpiredToken(refreshToken);
     }
 
     return accessToken;
   }
 
-  Future<String?> refreshAccessToken(
-      String refreshToken, String deviceId) async {
+  Future<String?> _refreshExpiredToken(String refreshToken) async {
+    final existing = _refreshInFlight;
+    if (existing != null) return existing;
+
+    final refresh = () async {
+      final deviceId = await getDeviceId();
+      final newAccessToken = await refreshAccessToken(refreshToken, deviceId);
+      if (newAccessToken != null) return newAccessToken;
+
+      DebugUtils.debugError(
+        "Failed to refresh token, user must re-authenticate",
+      );
+      await clearTokens();
+      return null;
+    }();
+
+    _refreshInFlight = refresh;
     try {
-      final response = await http
+      return await refresh;
+    } finally {
+      if (identical(_refreshInFlight, refresh)) {
+        _refreshInFlight = null;
+      }
+    }
+  }
+
+  Future<String?> refreshAccessToken(
+    String refreshToken,
+    String deviceId,
+  ) async {
+    try {
+      final response = await _client
           .post(
-            Uri.parse('${ApiService.apiUrlV2}/auth/refresh'),
+            Uri.parse('${ApiConfig.apiUrlV2}/auth/refresh'),
             headers: {'Content-Type': 'application/json'},
-            body: jsonEncode(
-                {"refresh_token": refreshToken, "device_id": deviceId}),
+            body: jsonEncode({
+              "refresh_token": refreshToken,
+              "device_id": deviceId,
+            }),
           )
           .timeout(const Duration(seconds: 10));
 
@@ -60,14 +105,14 @@ class TokenService {
 
         if (newAccessToken == null || newAccessToken.isEmpty) {
           Sentry.captureMessage(
-              "Token refresh API returned empty access token");
+            "Token refresh API returned empty access token",
+          );
           return null;
         }
 
-        await _secureStorage.write(
-          key: _accessTokenKey,
-          value: newAccessToken,
-        );
+        await _secureStorage.write(key: _accessTokenKey, value: newAccessToken);
+        _cachedAccessToken = newAccessToken;
+        _tokensLoaded = true;
 
         DebugUtils.debugSuccess("Token refreshed successfully");
         return newAccessToken;
@@ -78,29 +123,41 @@ class TokenService {
         return null;
       }
     } catch (e, stackTrace) {
-      final errorMessage = "Exception during token refresh: $e";
-      Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage(errorMessage);
+      ErrorReporter.captureException(
+        e,
+        stackTrace: stackTrace,
+        operation: 'token.refresh',
+      );
       return null;
     }
   }
 
   Future<void> saveTokens(String accessToken, String refreshToken) async {
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
-    await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
-
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey);
-    await prefs.remove(_refreshTokenKey);
+    await Future.wait([
+      _secureStorage.write(key: _accessTokenKey, value: accessToken),
+      _secureStorage.write(key: _refreshTokenKey, value: refreshToken),
+      prefs.remove(_accessTokenKey),
+      prefs.remove(_refreshTokenKey),
+    ]);
+    _cachedAccessToken = accessToken;
+    _cachedRefreshToken = refreshToken;
+    _tokensLoaded = true;
   }
 
   Future<void> clearTokens() async {
-    await _secureStorage.delete(key: _accessTokenKey);
-    await _secureStorage.delete(key: _refreshTokenKey);
-
+    _cachedAccessToken = null;
+    _cachedRefreshToken = null;
+    _tokensLoaded = true;
+    _tokenLoad = null;
+    _refreshInFlight = null;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey);
-    await prefs.remove(_refreshTokenKey);
+    await Future.wait([
+      _secureStorage.delete(key: _accessTokenKey),
+      _secureStorage.delete(key: _refreshTokenKey),
+      prefs.remove(_accessTokenKey),
+      prefs.remove(_refreshTokenKey),
+    ]);
   }
 
   bool isTokenExpired(String token) {
@@ -112,12 +169,14 @@ class TokenService {
       final parts = token.split('.');
       if (parts.length != 3) {
         DebugUtils.debugWarning(
-            "⚠️ Invalid JWT token format: expected 3 parts, got ${parts.length}");
+          "⚠️ Invalid JWT token format: expected 3 parts, got ${parts.length}",
+        );
         return true;
       }
 
-      final payload = json
-          .decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
+      final payload = json.decode(
+        utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))),
+      );
 
       final exp = payload['exp'];
       if (exp == null) {
@@ -130,24 +189,29 @@ class TokenService {
 
       return now >= (exp - bufferTime);
     } catch (e, stackTrace) {
-      Sentry.captureException(e, stackTrace: stackTrace);
-      Sentry.captureMessage("Error parsing JWT token expiration");
+      ErrorReporter.captureException(
+        e,
+        stackTrace: stackTrace,
+        operation: 'token.parse_expiration',
+      );
       return true;
     }
   }
 
   Future<String> getDeviceId() async {
-    final deviceInfo = DeviceInfoPlugin();
+    return _deviceIdLoad ??= _loadDeviceId();
+  }
 
+  Future<String> _loadDeviceId() async {
     try {
       if (kIsWeb) {
-        final webInfo = await deviceInfo.webBrowserInfo;
+        final webInfo = await _deviceInfo.webBrowserInfo;
         return webInfo.userAgent ?? "unknown-web-device";
       } else if (Platform.isAndroid) {
-        final androidInfo = await deviceInfo.androidInfo;
+        final androidInfo = await _deviceInfo.androidInfo;
         return androidInfo.id;
       } else if (Platform.isIOS) {
-        final iosInfo = await deviceInfo.iosInfo;
+        final iosInfo = await _deviceInfo.iosInfo;
         final vendorId = iosInfo.identifierForVendor;
         if (vendorId != null) return vendorId;
         // identifierForVendor is null when the device hasn't been unlocked
@@ -163,23 +227,29 @@ class TokenService {
         return "unsupported-platform";
       }
     } catch (e, stackTrace) {
-      Sentry.captureException(e, stackTrace: stackTrace);
+      ErrorReporter.captureException(
+        e,
+        stackTrace: stackTrace,
+        operation: 'device.identity',
+      );
       return "unknown-device";
     }
   }
 
   Future<String> getDeviceName() async {
-    final deviceInfo = DeviceInfoPlugin();
+    return _deviceNameLoad ??= _loadDeviceName();
+  }
 
+  Future<String> _loadDeviceName() async {
     try {
       if (kIsWeb) {
-        final webInfo = await deviceInfo.webBrowserInfo;
+        final webInfo = await _deviceInfo.webBrowserInfo;
         return webInfo.browserName.name; // ex: "chrome", "safari"
       } else if (Platform.isAndroid) {
-        final androidInfo = await deviceInfo.androidInfo;
+        final androidInfo = await _deviceInfo.androidInfo;
         return androidInfo.model;
       } else if (Platform.isIOS) {
-        final iosInfo = await deviceInfo.iosInfo;
+        final iosInfo = await _deviceInfo.iosInfo;
         return iosInfo.name;
       } else {
         return "unsupported-platform";
@@ -190,9 +260,32 @@ class TokenService {
     }
   }
 
+  Future<(String?, String?)> _loadTokensOnce() async {
+    if (_tokensLoaded) return (_cachedAccessToken, _cachedRefreshToken);
+
+    final existing = _tokenLoad;
+    if (existing != null) return existing;
+
+    final load = _readTokens();
+    _tokenLoad = load;
+    try {
+      final tokens = await load;
+      _cachedAccessToken = tokens.$1;
+      _cachedRefreshToken = tokens.$2;
+      _tokensLoaded = true;
+      return tokens;
+    } finally {
+      if (identical(_tokenLoad, load)) _tokenLoad = null;
+    }
+  }
+
   Future<(String?, String?)> _readTokens() async {
-    String? accessToken = await _secureStorage.read(key: _accessTokenKey);
-    String? refreshToken = await _secureStorage.read(key: _refreshTokenKey);
+    final storedTokens = await Future.wait([
+      _secureStorage.read(key: _accessTokenKey),
+      _secureStorage.read(key: _refreshTokenKey),
+    ]);
+    String? accessToken = storedTokens[0];
+    String? refreshToken = storedTokens[1];
 
     if (accessToken != null && refreshToken != null) {
       return (accessToken, refreshToken);

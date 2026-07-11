@@ -4,19 +4,19 @@ import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
-import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 class CocAccountService extends ChangeNotifier {
   static const String _msgNotAuthenticated = 'User not authenticated';
 
   CocAccountService({ApiService? apiService, String? currentUserId})
-    : _apiService = apiService ?? ApiService(),
+    : _apiService = apiService ?? ApiService.shared,
       _currentUserId = currentUserId?.trim().isEmpty == true
           ? null
           : currentUserId?.trim();
@@ -38,7 +38,6 @@ class CocAccountService extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get selectedTag => _selectedTag;
   DateTime? get lastRefresh => _lastRefresh;
-  List<Player> profiles = [];
   List<String> get accounts =>
       _cocAccounts.map((account) => account["player_tag"].toString()).toList();
 
@@ -64,7 +63,6 @@ class CocAccountService extends ChangeNotifier {
     _cocAccounts = [];
     _selectedTag = null;
     selectedTagNotifier.value = null;
-    profiles = [];
     _isLoading = false;
     _lastRefresh = null;
     _safeNotify();
@@ -97,7 +95,11 @@ class CocAccountService extends ChangeNotifier {
         );
       }
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      ErrorReporter.captureException(
+        exception,
+        stackTrace: stackTrace,
+        operation: 'accounts.fetch',
+      );
       rethrow;
     } finally {
       _isLoading = false;
@@ -240,7 +242,7 @@ class CocAccountService extends ChangeNotifier {
         );
       }
     } catch (e) {
-      Sentry.captureException(e);
+      ErrorReporter.captureException(e, operation: 'accounts.remove');
     }
   }
 
@@ -266,15 +268,6 @@ class CocAccountService extends ChangeNotifier {
 
     final account = _cocAccounts.removeAt(oldIndex);
     _cocAccounts.insert(newIndex, account);
-
-    final currentProfiles = profiles;
-    final profilesByTag = {
-      for (final profile in currentProfiles) profile.tag: profile,
-    };
-    profiles = _cocAccounts
-        .map((account) => profilesByTag[account["player_tag"]])
-        .whereType<Player>()
-        .toList();
 
     _safeNotify();
     await updateAccountOrder(getAccountTags());
@@ -326,10 +319,6 @@ class CocAccountService extends ChangeNotifier {
       );
       // Continue without stored tag - will use first account as default
     }
-  }
-
-  Future<void> refreshSelectedAccountData() async {
-    // To Do: Implement
   }
 
   /// Updates the last refresh timestamp and notifies listeners
@@ -420,6 +409,9 @@ class CocAccountService extends ChangeNotifier {
       _lastRefresh = DateTime.now();
       await initializeSelectedTag();
     } on HttpException catch (e) {
+      transaction.throwable = e;
+      transaction.status = SpanStatus.internalError();
+      transaction.finish();
       if (e.message.contains("503")) {
         throw Exception("503");
       } else if (e.message.contains("500")) {
@@ -431,7 +423,11 @@ class CocAccountService extends ChangeNotifier {
       transaction.throwable = e;
       transaction.status = SpanStatus.internalError();
       transaction.finish();
-      Sentry.captureException(e, stackTrace: stack);
+      ErrorReporter.captureException(
+        e,
+        stackTrace: stack,
+        operation: 'accounts.startup',
+      );
       rethrow;
     }
   }
@@ -513,16 +509,22 @@ class CocAccountService extends ChangeNotifier {
   Future<Map<String, String>> _cachedClanTagsByPlayer(
     List<String> playerTags,
   ) async {
-    final cached = <String, String>{};
-    for (final rawTag in playerTags) {
-      final tag = rawTag.trim().toUpperCase();
-      if (tag.isEmpty) continue;
-      final normalizedTag = tag.startsWith('#') ? tag : '#$tag';
-      final cachedClanTag = await getPrefs('player_${normalizedTag}_clan_tag');
-      if (cachedClanTag != null && cachedClanTag.isNotEmpty) {
-        cached[normalizedTag] = cachedClanTag;
-      }
-    }
+    final entries = await Future.wait(
+      playerTags.map((rawTag) async {
+        final tag = rawTag.trim().toUpperCase();
+        if (tag.isEmpty) return null;
+        final normalizedTag = tag.startsWith('#') ? tag : '#$tag';
+        final cachedClanTag = await getPrefs(
+          'player_${normalizedTag}_clan_tag',
+        );
+        if (cachedClanTag == null || cachedClanTag.isEmpty) return null;
+        return MapEntry(normalizedTag, cachedClanTag);
+      }),
+    );
+    final cached = <String, String>{
+      for (final entry in entries.whereType<MapEntry<String, String>>())
+        entry.key: entry.value,
+    };
     return cached;
   }
 
@@ -535,13 +537,10 @@ class CocAccountService extends ChangeNotifier {
     if (clanTags.isEmpty) return;
     final tags = clanTags.toList(growable: false);
 
-    await clanService.loadAllClanData(tags, notify: false, throwOnError: false);
-
-    await warCwlService.loadAllWarData(
-      tags,
-      notify: false,
-      throwOnError: false,
-    );
+    await Future.wait([
+      clanService.loadAllClanData(tags, notify: false, throwOnError: false),
+      warCwlService.loadAllWarData(tags, notify: false, throwOnError: false),
+    ]);
   }
 
   void _linkHydratedData(
@@ -727,15 +726,6 @@ class CocAccountService extends ChangeNotifier {
       orElse: () => <String, dynamic>{},
     );
     return account["is_verified"] ?? false;
-  }
-
-  void clearAccounts() {
-    _cocAccounts.clear();
-    _isLoading = false;
-    _selectedTag = null;
-    selectedTagNotifier.value = null;
-    profiles.clear();
-    _safeNotify();
   }
 
   Map<String, dynamic> _decodeResponseMap(String responseBody) {

@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 // Get the current war data for a clan using the new /war/war-summary endpoint
 Future<String> fetchWarSummary(String? clanTag) async {
@@ -15,37 +16,43 @@ Future<String> fetchWarSummary(String? clanTag) async {
       "updatedAt": "Updated at ${DateFormat('HH:mm').format(DateTime.now())}",
       "timeState": "",
       "state": "notInClan",
-      "mode": "war"
+      "mode": "war",
     });
   }
 
   try {
-    final token = await TokenService().getAccessToken();
+    final token = await TokenService.shared.getAccessToken();
     if (token == null) {
       throw Exception("User not authenticated");
     }
 
     final encodedTag = Uri.encodeComponent(clanTag);
 
-    final response = await http.get(
-      Uri.parse("${ApiService.apiUrlV2}/war/$encodedTag/war-summary"),
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-    ).timeout(const Duration(seconds: 15));
+    final response = await http
+        .get(
+          Uri.parse("${ApiService.apiUrlV2}/war/$encodedTag/war-summary"),
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+        )
+        .timeout(const Duration(seconds: 15));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(utf8.decode(response.bodyBytes));
       return _buildWarWidgetData(data, clanTag);
     } else {
       Sentry.captureMessage(
-          "War summary API returned status ${response.statusCode} for clan $clanTag");
+        "War summary API returned status ${response.statusCode} for clan $clanTag",
+      );
       return _buildErrorResult();
     }
   } catch (e, stackTrace) {
-    Sentry.captureException(e, stackTrace: stackTrace);
-    Sentry.captureMessage("Error fetching war summary for clan: $clanTag");
+    ErrorReporter.captureException(
+      e,
+      stackTrace: stackTrace,
+      operation: 'widget.fetch_war_summary',
+    );
     return _buildErrorResult();
   }
 }
@@ -56,7 +63,8 @@ String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
       "Updated at ${DateFormat('HH:mm').format(DateTime.now())}";
 
   DebugUtils.debugWidget(
-      "🔍 API data - isInWar: ${data["isInWar"]}, isInCwl: ${data["isInCwl"]}");
+    "🔍 API data - isInWar: ${data["isInWar"]}, isInCwl: ${data["isInCwl"]}",
+  );
 
   final warInfo = data["war_info"] ?? {};
   final currentWarInfo = warInfo["currentWarInfo"] ?? {};
@@ -81,7 +89,8 @@ String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
   final state = warInfo["state"] ?? "notInWar";
 
   DebugUtils.debugWidget(
-      "⚠️ Not in war or CWL - state: $state, war_info: ${jsonEncode(warInfo)}");
+    "⚠️ Not in war or CWL - state: $state, war_info: ${jsonEncode(warInfo)}",
+  );
 
   switch (state) {
     case "accessDenied":
@@ -93,7 +102,7 @@ String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
         "statusIcon": "🔒",
         "primaryText": "War Log Private",
         "secondaryText": "",
-        "colorTheme": "warning"
+        "colorTheme": "warning",
       });
     case "notInWar":
     default:
@@ -105,7 +114,7 @@ String _buildWarWidgetData(Map<String, dynamic> data, String clanTag) {
         "statusIcon": "😴",
         "primaryText": "Not in War",
         "secondaryText": "",
-        "colorTheme": "neutral"
+        "colorTheme": "neutral",
       });
   }
 }
@@ -188,36 +197,42 @@ String _buildRegularWarData(Map<String, dynamic> warInfo, String updatedAt) {
     "colorTheme": colorTheme,
     "clan": {
       "name": clan["name"] ?? "Unknown",
-      "badgeUrlMedium": clan["badgeUrls"]?["medium"] ??
+      "badgeUrlMedium":
+          clan["badgeUrls"]?["medium"] ??
           "https://assets.clashk.ing/clashkinglogo.png",
       "percent": "${(clan["destructionPercentage"] ?? 0).toStringAsFixed(2)}%",
       "attacks": "${clan["attacks"] ?? 0}/${teamSize * 2}",
       "stars": clanStars,
-      "maxStars": teamSize * 3
+      "maxStars": teamSize * 3,
     },
     "opponent": {
       "name": opponent["name"] ?? "Unknown",
-      "badgeUrlMedium": opponent["badgeUrls"]?["medium"] ??
+      "badgeUrlMedium":
+          opponent["badgeUrls"]?["medium"] ??
           "https://assets.clashk.ing/clashkinglogo.png",
       "percent":
           "${(opponent["destructionPercentage"] ?? 0).toStringAsFixed(2)}%",
       "attacks": "${opponent["attacks"] ?? 0}/${teamSize * 2}",
       "stars": opponentStars,
-      "maxStars": teamSize * 3
-    }
+      "maxStars": teamSize * 3,
+    },
   });
 }
 
 // Build data for CWL war
 String _buildCwlWarData(
-    Map<String, dynamic> data, String updatedAt, String clanTag) {
+  Map<String, dynamic> data,
+  String updatedAt,
+  String clanTag,
+) {
   DebugUtils.debugCwl("🏅 CWL Debug - clan_tag: '$clanTag'");
   DebugUtils.debugCwl("🏅 CWL Debug - clan_tag length: ${clanTag.length}");
 
   // Use WarCwl class to properly find the war for this clan
   final warCwl = WarCwl.fromJson(data, clanTag);
   DebugUtils.debugCwl(
-      "🔍 WarCwl created with ${warCwl.warLeagueInfos.length} wars");
+    "🔍 WarCwl created with ${warCwl.warLeagueInfos.length} wars",
+  );
   final activeWar = warCwl.getActiveWarByTag(clanTag);
 
   if (activeWar == null) {
@@ -233,7 +248,7 @@ String _buildCwlWarData(
       "secondaryText": "No active wars",
       "colorTheme": "neutral",
       "clan": null,
-      "opponent": null
+      "opponent": null,
     });
   }
 
@@ -256,7 +271,8 @@ String _buildCwlWarData(
   final opponentStars = currentWar.opponent?.stars ?? 0;
 
   DebugUtils.debugCwl(
-      "🏅 CWL Stars - Clan: $clanStars, Opponent: $opponentStars");
+    "🏅 CWL Stars - Clan: $clanStars, Opponent: $opponentStars",
+  );
 
   if (state == "preparation") {
     statusIcon = "🏅";
@@ -326,9 +342,11 @@ String _buildCwlWarData(
   final theirStars = isOurClanFirst ? opponentStars : clanStars;
 
   DebugUtils.debugCwl(
-      "🏅 CWL Final data - Our Clan: ${ourClan?.name ?? "Unknown"}, Their Clan: ${theirClan?.name ?? "Unknown"}");
+    "🏅 CWL Final data - Our Clan: ${ourClan?.name ?? "Unknown"}, Their Clan: ${theirClan?.name ?? "Unknown"}",
+  );
   DebugUtils.debugCwl(
-      "🏅 CWL Position - Our clan is ${isOurClanFirst ? 'first' : 'second'} in war data");
+    "🏅 CWL Position - Our clan is ${isOurClanFirst ? 'first' : 'second'} in war data",
+  );
 
   // Update score and color theme based on our clan's position
   if (state == "inWar") {
@@ -352,7 +370,7 @@ String _buildCwlWarData(
     "percent": "${(ourClan?.destructionPercentage ?? 0).toStringAsFixed(2)}%",
     "attacks": "${ourClan?.attacks ?? 0}/$teamSize",
     "stars": ourStars,
-    "maxStars": teamSize * 3
+    "maxStars": teamSize * 3,
   };
 
   final opponentData = {
@@ -361,7 +379,7 @@ String _buildCwlWarData(
     "percent": "${(theirClan?.destructionPercentage ?? 0).toStringAsFixed(2)}%",
     "attacks": "${theirClan?.attacks ?? 0}/$teamSize",
     "stars": theirStars,
-    "maxStars": teamSize * 3
+    "maxStars": teamSize * 3,
   };
 
   final result = {
@@ -377,7 +395,7 @@ String _buildCwlWarData(
     "clan": clanData,
     "cwlRank": warCwl.leagueInfo?.getClanDetails(clanTag)?.rank,
     "cwlLeague": warCwl.leagueInfo?.season,
-    "opponent": opponentData
+    "opponent": opponentData,
   };
 
   DebugUtils.debugWidget("🏅 CWL Widget data created: ${jsonEncode(result)}");
@@ -394,6 +412,6 @@ String _buildErrorResult() {
     "statusIcon": "⚠️",
     "primaryText": "Unable to load war data",
     "secondaryText": "Tap to open ClashKing",
-    "colorTheme": "warning"
+    "colorTheme": "warning",
   });
 }

@@ -5,7 +5,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 
 const String _widgetAppGroup = 'group.com.clashking.apps';
 
@@ -59,7 +59,11 @@ class WarWidgetSyncService {
 
       DebugUtils.debugSuccess("War widget updated successfully");
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      ErrorReporter.captureException(
+        exception,
+        stackTrace: stackTrace,
+        operation: 'widget.update',
+      );
       DebugUtils.debugError(" Error updating war widget: $exception");
     }
   }
