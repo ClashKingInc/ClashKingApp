@@ -102,3 +102,7 @@ What’s new
 - Improved clan detail filters, ranking season previews, and member donation stats
 - Fixed Windows builds by avoiding incompatible fallback liquid glass shaders
 - Improved player item details, To Do summaries, clan Join/Leave empty states, and image loading consistency
+- Notification settings now request system push permission before registering this device for alerts
+- Notification settings now let each alert target different linked accounts
+- Notification settings now make pause state and account audience rules clearer
+- Fixed distorted images when cached inside square or fixed-size layouts

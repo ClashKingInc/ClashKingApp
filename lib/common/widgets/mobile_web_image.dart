@@ -39,13 +39,18 @@ class MobileWebImage extends StatelessWidget {
             height ??
             (constraints.hasBoundedHeight ? constraints.maxHeight : null);
         final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
-        final cacheWidth = _physicalCacheDimension(
+        final requestedCacheWidth = _physicalCacheDimension(
           logicalWidth,
           devicePixelRatio,
         );
-        final cacheHeight = _physicalCacheDimension(
+        final requestedCacheHeight = _physicalCacheDimension(
           logicalHeight,
           devicePixelRatio,
+        );
+        final (cacheWidth, cacheHeight) = _cacheDimensions(
+          fit: fit,
+          width: requestedCacheWidth,
+          height: requestedCacheHeight,
         );
 
         Widget fallback(Object error) {
@@ -107,5 +112,18 @@ class MobileWebImage extends StatelessWidget {
       return null;
     }
     return (logicalSize * scale).ceil().clamp(1, 4096);
+  }
+
+  static (int?, int?) _cacheDimensions({
+    required BoxFit fit,
+    required int? width,
+    required int? height,
+  }) {
+    // Supplying both target dimensions makes Flutter decode the source into
+    // that exact rectangle before BoxFit is applied. Keep one dimension so
+    // contain/cover preserve the source aspect ratio during decoding.
+    if (fit == BoxFit.fill) return (width, height);
+    if (width != null) return (width, null);
+    return (null, height);
   }
 }

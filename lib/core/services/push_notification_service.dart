@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,6 +36,7 @@ enum PushNotificationSetupState {
   notConfigured,
   initializing,
   ready,
+  permissionRequired,
   permissionDenied,
   tokenUnavailable,
 }
@@ -71,6 +73,7 @@ class PushNotificationService {
   }
 
   static const _deviceEndpoint = '/notifications/devices';
+  static const _preferencesEndpoint = '/notifications/preferences';
   static const _tokenPrefsKey = 'push_fcm_token';
   static const _lastRegistrationPrefsKey = 'push_last_registration_token';
   static const _channelId = 'clashking_push';
@@ -129,6 +132,18 @@ class PushNotificationService {
       _bindMessageStreams();
       _initialized = true;
 
+      final settings = await FirebaseMessaging.instance
+          .getNotificationSettings();
+      if (!_hasDisplayPermission(settings.authorizationStatus)) {
+        return _setResult(
+          PushNotificationSetupResult(
+            state: _permissionStateFor(settings.authorizationStatus),
+            authorizationStatus: settings.authorizationStatus,
+            message: null,
+          ),
+        );
+      }
+
       final token = await FirebaseMessaging.instance.getToken();
       if (token == null || token.isEmpty) {
         return _setResult(
@@ -174,7 +189,7 @@ class PushNotificationService {
     }
 
     try {
-      final settings = await FirebaseMessaging.instance.requestPermission(
+      await FirebaseMessaging.instance.requestPermission(
         alert: true,
         announcement: false,
         badge: true,
@@ -192,11 +207,15 @@ class PushNotificationService {
             ?.requestNotificationsPermission();
       }
 
-      if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      final resolvedSettings = await FirebaseMessaging.instance
+          .getNotificationSettings();
+      final authorizationStatus = resolvedSettings.authorizationStatus;
+
+      if (!_hasDisplayPermission(authorizationStatus)) {
         return _setResult(
           PushNotificationSetupResult(
-            state: PushNotificationSetupState.permissionDenied,
-            authorizationStatus: settings.authorizationStatus,
+            state: _permissionStateFor(authorizationStatus),
+            authorizationStatus: authorizationStatus,
             message: null,
           ),
         );
@@ -207,7 +226,7 @@ class PushNotificationService {
         return _setResult(
           PushNotificationSetupResult(
             state: PushNotificationSetupState.tokenUnavailable,
-            authorizationStatus: settings.authorizationStatus,
+            authorizationStatus: authorizationStatus,
             message: null,
           ),
         );
@@ -219,7 +238,7 @@ class PushNotificationService {
       return _setResult(
         PushNotificationSetupResult(
           state: PushNotificationSetupState.ready,
-          authorizationStatus: settings.authorizationStatus,
+          authorizationStatus: authorizationStatus,
           token: token,
         ),
       );
@@ -243,12 +262,21 @@ class PushNotificationService {
     }
 
     final packageInfo = await PackageInfo.fromPlatform();
+    final tokenService = TokenService();
+    final settings = await FirebaseMessaging.instance.getNotificationSettings();
     final payload = <String, dynamic>{
       'token': resolvedToken,
+      'device_id': await tokenService.getDeviceId(),
       'provider': 'fcm',
       'platform': Platform.operatingSystem,
+      'environment': _pushApiV2BaseOverride.isEmpty ? 'production' : 'sandbox',
       'app_version': packageInfo.version,
       'build_number': packageInfo.buildNumber,
+      'os_version': Platform.operatingSystemVersion,
+      'device_model': await tokenService.getDeviceName(),
+      'authorization_status': settings.authorizationStatus.name,
+      'locale': PlatformDispatcher.instance.locale.toLanguageTag(),
+      'timezone': DateTime.now().timeZoneName,
     };
 
     if (Platform.isIOS) {
@@ -283,6 +311,41 @@ class PushNotificationService {
       // reception can be tested before server registration is wired.
       await Sentry.captureException(error, stackTrace: stackTrace);
       DebugUtils.debugWarning('Push token registration skipped: $error');
+    }
+  }
+
+  Future<bool> savePreferences(Map<String, dynamic> preferences) async {
+    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
+    final payload = <String, dynamic>{
+      'device_id': await TokenService().getDeviceId(),
+      'environment': _pushApiV2BaseOverride.isEmpty ? 'production' : 'sandbox',
+      'locale': PlatformDispatcher.instance.locale.toLanguageTag(),
+      'timezone': DateTime.now().timeZoneName,
+      'enabled_types': <String>[],
+      'war_attack_modes': <String>[],
+      'event_types': <String>[],
+      'reminder_timings': <String>[],
+      'account_scope': 'all',
+      'selected_accounts': <String>[],
+      'selected_town_halls': <int>[],
+      'selected_clan_tags': <String>[],
+      ...preferences,
+    };
+    try {
+      final url = _pushApiV2BaseOverride.isEmpty
+          ? null
+          : '$_pushApiV2BaseOverride$_preferencesEndpoint';
+      final response = await ApiService().putResponse(
+        _preferencesEndpoint,
+        body: payload,
+        requiresAuth: true,
+        url: url,
+      );
+      return response.statusCode >= 200 && response.statusCode < 300;
+    } catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+      DebugUtils.debugWarning('Push preferences sync failed: $error');
+      return false;
     }
   }
 
@@ -440,5 +503,16 @@ class PushNotificationService {
   PushNotificationSetupResult _setResult(PushNotificationSetupResult result) {
     _lastResult = result;
     return result;
+  }
+
+  bool _hasDisplayPermission(AuthorizationStatus status) {
+    return status == AuthorizationStatus.authorized ||
+        status == AuthorizationStatus.provisional;
+  }
+
+  PushNotificationSetupState _permissionStateFor(AuthorizationStatus status) {
+    return status == AuthorizationStatus.denied
+        ? PushNotificationSetupState.permissionDenied
+        : PushNotificationSetupState.permissionRequired;
   }
 }
