@@ -1,5 +1,6 @@
 plugins {
     id "com.android.application"
+    id "org.jetbrains.kotlin.android"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -73,9 +74,4 @@ tasks.withType(JavaCompile).configureEach {
 
 flutter {
     source '../..'
-}
-
-dependencies {
-    implementation 'androidx.work:work-runtime:2.9.0'
-    implementation 'androidx.work:work-runtime-ktx:2.9.0'
 }
