@@ -8,41 +8,45 @@ import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 WarMember _member(String tag) => WarMember(
-      tag: tag,
-      name: 'Player $tag',
-      townhallLevel: 14,
-      mapPosition: 1,
-      opponentAttacks: 0,
-    );
+  tag: tag,
+  name: 'Player $tag',
+  townhallLevel: 14,
+  mapPosition: 1,
+  opponentAttacks: 0,
+);
 
 WarClan _clan(String tag, {List<WarMember> members = const []}) => WarClan(
-      tag: tag,
-      name: 'Clan $tag',
-      badgeUrls: ClanBadgeUrls(small: '', medium: '', large: ''),
-      clanLevel: 10,
-      attacks: 0,
-      stars: 0,
-      destructionPercentage: 0.0,
-      members: members,
-    );
+  tag: tag,
+  name: 'Clan $tag',
+  badgeUrls: ClanBadgeUrls(small: '', medium: '', large: ''),
+  clanLevel: 10,
+  attacks: 0,
+  stars: 0,
+  destructionPercentage: 0.0,
+  members: members,
+);
 
-WarInfo _war(String state, String clanTag, String oppTag,
-    {String? warTag, List<WarMember> clanMembers = const []}) =>
-    WarInfo(
-      state: state,
-      tag: warTag,
-      clan: _clan(clanTag, members: clanMembers),
-      opponent: _clan(oppTag),
-    );
+WarInfo _war(
+  String state,
+  String clanTag,
+  String oppTag, {
+  String? warTag,
+  List<WarMember> clanMembers = const [],
+}) => WarInfo(
+  state: state,
+  tag: warTag,
+  clan: _clan(clanTag, members: clanMembers),
+  opponent: _clan(oppTag),
+);
 
 WarCwl _warCwl(List<WarInfo> wars, {CwlLeague? league}) => WarCwl(
-      tag: '#CLAN',
-      isInWar: false,
-      isInCwl: true,
-      warInfo: WarInfo(state: 'notInWar'),
-      leagueInfo: league,
-      warLeagueInfos: wars,
-    );
+  tag: '#CLAN',
+  isInWar: false,
+  isInCwl: true,
+  warInfo: WarInfo(state: 'notInWar'),
+  leagueInfo: league,
+  warLeagueInfos: wars,
+);
 
 void main() {
   group('WarCwl.fromJson', () {
@@ -51,10 +55,7 @@ void main() {
         'clan_tag': '#2QPCJQQ2U',
         'isInWar': false,
         'isInCwl': true,
-        'war_info': {
-          'state': 'notInWar',
-          'currentWarInfo': null,
-        },
+        'war_info': {'state': 'notInWar', 'currentWarInfo': null},
         'league_info': {
           'state': 'inWar',
           'season': '2025-05',
@@ -202,7 +203,9 @@ void main() {
         state: 'ended',
         season: '2025-05',
         clans: [],
-        rounds: [CwlLeagueRound(roundNumber: 1, warTags: ['#OTHER'])],
+        rounds: [
+          CwlLeagueRound(roundNumber: 1, warTags: ['#OTHER']),
+        ],
       );
       final cwl = _warCwl([], league: league);
       final result = cwl.getRoundForWarTag('#NOTFOUND');
@@ -283,15 +286,17 @@ void main() {
       expect(result.clan!.tag, '#CLAN');
     });
 
-    test('finds inWar war and reorders when player is in opponent position', () {
-      final cwl = _warCwl([
-        _war('inWar', '#CLAN', '#OPP',
-            clanMembers: [_member('#P1')]),
-      ]);
-      // Member P1 is in clan already — no swap needed
-      final result = cwl.getActiveWarByPlayerTag('#P1');
-      expect(result!.clan!.tag, '#CLAN');
-    });
+    test(
+      'finds inWar war and reorders when player is in opponent position',
+      () {
+        final cwl = _warCwl([
+          _war('inWar', '#CLAN', '#OPP', clanMembers: [_member('#P1')]),
+        ]);
+        // Member P1 is in clan already — no swap needed
+        final result = cwl.getActiveWarByPlayerTag('#P1');
+        expect(result!.clan!.tag, '#CLAN');
+      },
+    );
 
     test('falls back to preparation when no inWar', () {
       final cwl = _warCwl([

@@ -37,8 +37,9 @@ RaidAttackLog _entry({
     ),
     attackCount: attackCount,
     districtCount: districts.length,
-    districtsDestroyed:
-        districts.where((d) => d.destructionPercent == 100).length,
+    districtsDestroyed: districts
+        .where((d) => d.destructionPercent == 100)
+        .length,
     districts: districts,
   );
 }
@@ -90,26 +91,33 @@ void main() {
     });
 
     test('returns null before any attack has been made', () {
-      final raid = _raid(state: 'ongoing', capitalTotalLoot: 0, totalAttacks: 0);
+      final raid = _raid(
+        state: 'ongoing',
+        capitalTotalLoot: 0,
+        totalAttacks: 0,
+      );
       expect(CapitalRaidAnalytics.projectedTotalLoot(raid), isNull);
     });
   });
 
   group('predictTrophyChange', () {
-    test('matches a hand-computed value for an ended raid with no defense log', () {
-      // avgLoot = 100000/200 = 500; skill = 500 (no defense data) is inside
-      // the +-664 threshold band, so perf = loot^0.6 + skill + 34.
-      // 100000^0.6 = 10^3 = 1000 exactly -> perf = 1000 + 500 + 34 = 1534.
-      // predicted = 3000*0.8 + 1534*0.2 = 2400 + 306.8 = 2706.8 -> 2707.
-      final raid = _raid(
-        state: 'ended',
-        capitalTotalLoot: 100000,
-        totalAttacks: 200,
-      );
-      final result = CapitalRaidAnalytics.predictTrophyChange(raid, 3000);
-      expect(result.predictedPoints, 2707);
-      expect(result.change, -293);
-    });
+    test(
+      'matches a hand-computed value for an ended raid with no defense log',
+      () {
+        // avgLoot = 100000/200 = 500; skill = 500 (no defense data) is inside
+        // the +-664 threshold band, so perf = loot^0.6 + skill + 34.
+        // 100000^0.6 = 10^3 = 1000 exactly -> perf = 1000 + 500 + 34 = 1534.
+        // predicted = 3000*0.8 + 1534*0.2 = 2400 + 306.8 = 2706.8 -> 2707.
+        final raid = _raid(
+          state: 'ended',
+          capitalTotalLoot: 100000,
+          totalAttacks: 200,
+        );
+        final result = CapitalRaidAnalytics.predictTrophyChange(raid, 3000);
+        expect(result.predictedPoints, 2707);
+        expect(result.change, -293);
+      },
+    );
   });
 
   group('districtStats', () {
@@ -194,7 +202,10 @@ void main() {
 
       final stats = CapitalRaidAnalytics.opponentStats(log);
 
-      expect(stats.map((s) => s.clan.name), ['High Loot Clan', 'Low Loot Clan']);
+      expect(stats.map((s) => s.clan.name), [
+        'High Loot Clan',
+        'Low Loot Clan',
+      ]);
     });
   });
 

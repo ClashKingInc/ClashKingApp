@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
@@ -10,6 +10,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:provider/provider.dart';
 
 enum _PlayerRosterMode { linked, bookmarked }
@@ -73,17 +74,19 @@ class _PlayersPageState extends State<PlayersPage> {
 
     return Scaffold(
       body: CustomScrollView(
+        scrollCacheExtent: const ScrollCacheExtent.pixels(800),
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
             sliver: SliverToBoxAdapter(
-              child: NativeLiquidGlassSegmentedControl<_PlayerRosterMode>(
+              child: LiquidGlassSegmentedControl<_PlayerRosterMode>(
                 values: const [
                   _PlayerRosterMode.linked,
                   _PlayerRosterMode.bookmarked,
                 ],
                 labels: const ['Linked', 'Bookmarked'],
                 selected: _mode,
+                color: Theme.of(context).colorScheme.onSurface,
                 onChanged: (value) => setState(() => _mode = value),
               ),
             ),
@@ -440,7 +443,7 @@ class _PlayerCardShell extends StatelessWidget {
               ),
             ),
           ),
-          if (footer != null) footer!,
+          ?footer,
         ],
       ),
     );

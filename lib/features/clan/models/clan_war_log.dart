@@ -189,7 +189,7 @@ class ClanDetails {
 
 class WarLogService {
   static Future<ClanWarLog> fetchWarLogData(String tag) async {
-    final response = await ApiService().proxyGet(
+    final response = await ApiService.shared.proxyGet(
       '/clans/${Uri.encodeComponent(tag)}/warlog',
     );
 

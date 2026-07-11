@@ -1,5 +1,5 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member.dart'
@@ -314,7 +314,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                   padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
                   child: Column(
                     children: [
-                      NativeLiquidGlassSegmentedControl<int>(
+                      LiquidGlassSegmentedControl<int>(
                         values: const [1, 2],
                         labels: [
                           AppLocalizations.of(context)!.warMyTeam,

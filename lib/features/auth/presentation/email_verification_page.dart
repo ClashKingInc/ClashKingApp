@@ -74,7 +74,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
     try {
       await authService.verifyEmailWithCode(widget.email, _verificationCode);
 
-      final accessToken = await TokenService().getAccessToken();
+      final accessToken = await TokenService.shared.getAccessToken();
       if (accessToken != null && mounted) {
         if (mounted) {
           // Navigate to StartupWidget to show loading screen and handle proper navigation

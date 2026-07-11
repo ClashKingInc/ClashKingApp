@@ -12,19 +12,27 @@ void main() {
     });
 
     test('matches known network error strings', () {
-      expect(isNetworkError(Exception('No address associated with hostname')),
-          isTrue);
+      expect(
+        isNetworkError(Exception('No address associated with hostname')),
+        isTrue,
+      );
       expect(isNetworkError(Exception('plain failure')), isFalse);
     });
   });
 
   group('isMaintenanceError', () {
     test('returns true when error contains 503', () {
-      expect(isMaintenanceError(Exception('HTTP 503 Service Unavailable')), isTrue);
+      expect(
+        isMaintenanceError(Exception('HTTP 503 Service Unavailable')),
+        isTrue,
+      );
     });
 
     test('returns true when error contains 500', () {
-      expect(isMaintenanceError(Exception('HTTP 500 Internal Server Error')), isTrue);
+      expect(
+        isMaintenanceError(Exception('HTTP 500 Internal Server Error')),
+        isTrue,
+      );
     });
 
     test('returns false for other status codes', () {

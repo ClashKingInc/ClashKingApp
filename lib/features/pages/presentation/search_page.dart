@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
@@ -35,7 +35,7 @@ class _SearchPageState extends State<SearchPage> {
   static const int _recentLimit = 10;
   static final RegExp _tagRegExp = RegExp(r'^[PYLQGRJCUV0289]{3,9}$');
 
-  final ApiService _apiService = ApiService();
+  final ApiService _apiService = ApiService.shared;
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   Timer? _debounce;
@@ -48,6 +48,7 @@ class _SearchPageState extends State<SearchPage> {
   bool _isSearching = false;
   bool _hasSearched = false;
   int _searchVersion = 0;
+  final Set<String> _trackedFullPlayerTags = {};
 
   @override
   void initState() {
@@ -210,6 +211,10 @@ class _SearchPageState extends State<SearchPage> {
       if (data is Map<String, dynamic> && data['items'] is List) {
         return data['items'] as List<dynamic>;
       }
+      if (data is Map<String, dynamic>) {
+        final tag = data['tag']?.toString();
+        if (tag != null && tag.isNotEmpty) _trackedFullPlayerTags.add(tag);
+      }
       return [data];
     }
 
@@ -268,10 +273,14 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     try {
-      final selectedPlayer = await playerService.getPlayerAndClanData(
-        player['tag'],
-      );
-      await _recordPlayerRecent(player['tag']?.toString() ?? '');
+      final tag = player['tag']?.toString() ?? '';
+      final selectedPlayer =
+          _trackedFullPlayerTags.contains(tag) && player['heroes'] is List
+          ? await playerService.useOfficialPlayerData(player)
+          : await playerService.getPlayerAndClanData(
+              tag,
+              extraHeaders: _searchTrackingHeaders(),
+            );
       unawaited(_loadRecents());
       navigator.pop();
       if (!mounted) return;
@@ -305,7 +314,6 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     try {
-      await _recordClanRecent(clan['tag']?.toString() ?? '');
       final clanInfo = await _loadClanForResult(clan, clanService);
       unawaited(_loadRecents());
       navigator.pop();
@@ -335,11 +343,15 @@ class _SearchPageState extends State<SearchPage> {
     final tag = clan['tag']?.toString() ?? '';
 
     try {
-      return await clanService.getClanAndWarData(tag);
+      return await clanService.getClanAndWarData(
+        tag,
+        extraHeaders: _searchTrackingHeaders(),
+      );
     } catch (_) {
       final response = await _apiService.proxyGet(
         '/clans/${Uri.encodeComponent(tag)}',
         timeout: const Duration(seconds: 10),
+        extraHeaders: _searchTrackingHeaders(),
       );
 
       if (response.statusCode != 200) {
@@ -354,26 +366,6 @@ class _SearchPageState extends State<SearchPage> {
       await clanService.loadJoinLeaveForClan(loadedClan);
       return loadedClan;
     }
-  }
-
-  Future<void> _recordPlayerRecent(String tag) async {
-    if (tag.isEmpty || _currentSearchUserId() == null) return;
-    try {
-      await _apiService.proxyGet(
-        '/players/${Uri.encodeComponent(tag)}',
-        extraHeaders: _searchTrackingHeaders(),
-      );
-    } catch (_) {}
-  }
-
-  Future<void> _recordClanRecent(String tag) async {
-    if (tag.isEmpty || _currentSearchUserId() == null) return;
-    try {
-      await _apiService.proxyGet(
-        '/clans/${Uri.encodeComponent(tag)}',
-        extraHeaders: _searchTrackingHeaders(),
-      );
-    } catch (_) {}
   }
 
   Future<void> _openRecent(_RecentSearchItem item) async {
@@ -400,7 +392,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            NativeLiquidGlassBar(
+            LiquidGlassBar(
               height: 48,
               cornerRadius: 24,
               interactive: true,
@@ -571,7 +563,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: _ModeSelector(
                   mode: _mode,
                   onChanged: _setMode,
-                  useNativeLiquidGlass: false,
+                  useLiquidGlass: false,
                   compact: true,
                 ),
               ),
@@ -598,11 +590,7 @@ class _SearchPageState extends State<SearchPage> {
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
       children: [
-        _ModeSelector(
-          mode: _mode,
-          onChanged: _setMode,
-          useNativeLiquidGlass: true,
-        ),
+        _ModeSelector(mode: _mode, onChanged: _setMode, useLiquidGlass: true),
         const SizedBox(height: 12),
         searchField(overlay: false),
         ...resultChildren,
@@ -617,13 +605,13 @@ class _ModeSelector extends StatelessWidget {
   const _ModeSelector({
     required this.mode,
     required this.onChanged,
-    this.useNativeLiquidGlass = true,
+    this.useLiquidGlass = true,
     this.compact = false,
   });
 
   final _SearchMode mode;
   final ValueChanged<_SearchMode> onChanged;
-  final bool useNativeLiquidGlass;
+  final bool useLiquidGlass;
   final bool compact;
 
   @override
@@ -651,7 +639,7 @@ class _ModeSelector extends StatelessWidget {
               _ModeSegmentChrome(
                 height: height,
                 cornerRadius: height / 2,
-                native: useNativeLiquidGlass,
+                useGlass: useLiquidGlass,
               ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 180),
@@ -664,7 +652,7 @@ class _ModeSelector extends StatelessWidget {
                   height: selectedHeight,
                   cornerRadius: selectedRadius,
                   selected: true,
-                  native: useNativeLiquidGlass,
+                  useGlass: useLiquidGlass,
                 ),
               ),
               Row(
@@ -693,11 +681,11 @@ class _ModeSelector extends StatelessWidget {
       ),
     );
 
-    if (!useNativeLiquidGlass) {
+    if (!useLiquidGlass) {
       return fallbackControl(context);
     }
 
-    return NativeLiquidGlassSegmentedControl<_SearchMode>(
+    return LiquidGlassSegmentedControl<_SearchMode>(
       height: height,
       values: const [_SearchMode.players, _SearchMode.clans],
       labels: [
@@ -716,19 +704,19 @@ class _ModeSegmentChrome extends StatelessWidget {
   const _ModeSegmentChrome({
     required this.height,
     required this.cornerRadius,
-    required this.native,
+    required this.useGlass,
     this.selected = false,
   });
 
   final double height;
   final double cornerRadius;
-  final bool native;
+  final bool useGlass;
   final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    if (native) {
-      return NativeLiquidGlassBar(
+    if (useGlass) {
+      return LiquidGlassBar(
         height: height,
         cornerRadius: cornerRadius,
         interactive: selected,
@@ -859,7 +847,7 @@ class _SearchResultTile extends StatelessWidget {
     final leagueData = player['league'];
     final clan = clanData is Map ? clanData['name'] : player['clan_name'];
     final league = leagueData is Map ? leagueData['name'] : player['league'];
-    return [if (clan != null) clan, if (league != null) league].join(' • ');
+    return [?clan, ?league].join(' • ');
   }
 
   String _townHallImage(Map<String, dynamic> player) {

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class NoClanCard extends StatelessWidget {
+  const NoClanCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
@@ -24,13 +26,16 @@ class NoClanCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(AppLocalizations.of(context)?.clanNone ?? 'No Clan',
-                        style: (Theme.of(context).textTheme.titleSmall)),
                     Text(
-                        AppLocalizations.of(context)!
-                            .clanJoinToUnlock,
-                        style: (Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.tertiary))),
+                      AppLocalizations.of(context)?.clanNone ?? 'No Clan',
+                      style: (Theme.of(context).textTheme.titleSmall),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.clanJoinToUnlock,
+                      style: (Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      )),
+                    ),
                   ],
                 ),
               ),

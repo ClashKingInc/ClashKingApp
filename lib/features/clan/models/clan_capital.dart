@@ -4,10 +4,7 @@ class ClanCapital {
   final int capitalHallLevel;
   final List<ClanDistrict> districts;
 
-  ClanCapital({
-    required this.capitalHallLevel,
-    required this.districts,
-  });
+  ClanCapital({required this.capitalHallLevel, required this.districts});
 
   factory ClanCapital.fromJson(Map<String, dynamic> json) {
     final districts = (json["districts"] as List<dynamic>? ?? const []);

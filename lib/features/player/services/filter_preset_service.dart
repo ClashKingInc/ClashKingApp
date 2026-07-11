@@ -6,9 +6,9 @@ import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 class FilterPresetService {
   static const String _presetsKey = 'war_stats_filter_presets';
   static FilterPresetService? _instance;
-  
+
   FilterPresetService._internal();
-  
+
   static FilterPresetService get instance {
     _instance ??= FilterPresetService._internal();
     return _instance!;
@@ -27,7 +27,7 @@ class FilterPresetService {
         filter: filter,
         createdAt: DateTime.now(),
       );
-      
+
       presets.add(newPreset);
       return await _savePresets(presets);
     } catch (e) {
@@ -40,14 +40,14 @@ class FilterPresetService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final presetsJson = prefs.getString(_presetsKey);
-      
+
       if (presetsJson == null) return [];
-      
+
       final List<dynamic> presetsList = json.decode(presetsJson);
-      return presetsList
-          .map((json) => FilterPreset.fromJson(json))
-          .toList()
-        ..sort((a, b) => b.createdAt.compareTo(a.createdAt)); // Most recent first
+      return presetsList.map((json) => FilterPreset.fromJson(json)).toList()
+        ..sort(
+          (a, b) => b.createdAt.compareTo(a.createdAt),
+        ); // Most recent first
     } catch (e) {
       return [];
     }
@@ -58,9 +58,9 @@ class FilterPresetService {
     try {
       final presets = await getPresets();
       final index = presets.indexWhere((p) => p.id == preset.id);
-      
+
       if (index == -1) return false;
-      
+
       presets[index] = preset;
       return await _savePresets(presets);
     } catch (e) {
@@ -82,9 +82,11 @@ class FilterPresetService {
   /// Check if a preset name already exists
   Future<bool> presetNameExists(String name, {String? excludeId}) async {
     final presets = await getPresets();
-    return presets.any((preset) => 
-        preset.name.toLowerCase() == name.toLowerCase() && 
-        preset.id != excludeId);
+    return presets.any(
+      (preset) =>
+          preset.name.toLowerCase() == name.toLowerCase() &&
+          preset.id != excludeId,
+    );
   }
 
   /// Get preset by ID
@@ -124,59 +126,76 @@ class FilterPresetService {
     Map<String, String> localizations = const {},
   }) {
     List<String> suggestions = [];
-    
+
     // Based on war types
     if (filter.warTypes != null && filter.warTypes!.length == 1) {
       switch (filter.warTypes!.first.toLowerCase()) {
         case 'cwl':
-          suggestions.add(localizations['presetSuggestionCwlOnly'] ?? 'CWL Only');
+          suggestions.add(
+            localizations['presetSuggestionCwlOnly'] ?? 'CWL Only',
+          );
           break;
         case 'random':
-          suggestions.add(localizations['presetSuggestionRandomWars'] ?? 'Random Wars');
+          suggestions.add(
+            localizations['presetSuggestionRandomWars'] ?? 'Random Wars',
+          );
           break;
         case 'friendly':
-          suggestions.add(localizations['presetSuggestionFriendlyWars'] ?? 'Friendly Wars');
+          suggestions.add(
+            localizations['presetSuggestionFriendlyWars'] ?? 'Friendly Wars',
+          );
           break;
       }
     }
-    
+
     // Based on stars
     if (filter.allowedStars != null) {
       if (filter.allowedStars!.length == 1) {
         final starCount = filter.allowedStars!.first;
-        final template = localizations['presetSuggestionStarOnly'] ?? '{count} Star Only';
+        final template =
+            localizations['presetSuggestionStarOnly'] ?? '{count} Star Only';
         suggestions.add(template.replaceAll('{count}', starCount.toString()));
       }
-      if (filter.allowedStars!.contains(3) && filter.allowedStars!.length == 1) {
-        suggestions.add(localizations['presetSuggestionPerfectAttacks'] ?? 'Perfect Attacks');
+      if (filter.allowedStars!.contains(3) &&
+          filter.allowedStars!.length == 1) {
+        suggestions.add(
+          localizations['presetSuggestionPerfectAttacks'] ?? 'Perfect Attacks',
+        );
       }
       if (!filter.allowedStars!.contains(3)) {
-        suggestions.add(localizations['presetSuggestionFailedAttacks'] ?? 'Failed Attacks');
+        suggestions.add(
+          localizations['presetSuggestionFailedAttacks'] ?? 'Failed Attacks',
+        );
       }
     }
-    
+
     // Based on town hall
     if (filter.ownTownHalls != null && filter.ownTownHalls!.length == 1) {
       final thLevel = filter.ownTownHalls!.first;
-      final template = localizations['presetSuggestionThOnly'] ?? 'TH{level} Only';
+      final template =
+          localizations['presetSuggestionThOnly'] ?? 'TH{level} Only';
       suggestions.add(template.replaceAll('{level}', thLevel.toString()));
     }
-    
+
     // Based on fresh attacks
     if (filter.freshAttacksOnly == true) {
       suggestions.add(localizations['filtersFreshAttacks'] ?? 'Fresh Attacks');
     }
-    
+
     // Based on time range
     if (filter.startDate != null && filter.endDate != null) {
       final daysDiff = filter.endDate!.difference(filter.startDate!).inDays;
       if (daysDiff <= 7) {
-        suggestions.add(localizations['presetSuggestionLastWeek'] ?? 'Last Week');
+        suggestions.add(
+          localizations['presetSuggestionLastWeek'] ?? 'Last Week',
+        );
       } else if (daysDiff <= 30) {
-        suggestions.add(localizations['presetSuggestionLastMonth'] ?? 'Last Month');
+        suggestions.add(
+          localizations['presetSuggestionLastMonth'] ?? 'Last Month',
+        );
       }
     }
-    
+
     // Default suggestions
     if (suggestions.isEmpty) {
       suggestions.addAll([
@@ -185,7 +204,7 @@ class FilterPresetService {
         localizations['presetSuggestionRecentFilter'] ?? 'Recent Filter',
       ]);
     }
-    
+
     return suggestions;
   }
 }

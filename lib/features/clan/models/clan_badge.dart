@@ -5,8 +5,11 @@ class ClanBadgeUrls {
   final String medium;
   final String large;
 
-  ClanBadgeUrls(
-      {required this.small, required this.medium, required this.large});
+  ClanBadgeUrls({
+    required this.small,
+    required this.medium,
+    required this.large,
+  });
 
   factory ClanBadgeUrls.fromJson(Map<String, dynamic>? json) {
     final data = json ?? const <String, dynamic>{};
@@ -18,9 +21,6 @@ class ClanBadgeUrls {
     );
   }
 
-  factory ClanBadgeUrls.empty() => ClanBadgeUrls(
-        small: 'No small',
-        medium: 'No medium',
-        large: 'No large',
-      );
+  factory ClanBadgeUrls.empty() =>
+      ClanBadgeUrls(small: 'No small', medium: 'No medium', large: 'No large');
 }

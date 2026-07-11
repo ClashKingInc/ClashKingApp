@@ -27,7 +27,11 @@ class FilterPreset {
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
       filter: WarStatsFilter.fromJson(json['filter'] ?? {}),
-      createdAt: json['createdAt'] != null ? DateTime.fromMillisecondsSinceEpoch((json['createdAt'] as num).toInt()) : DateTime.now(),
+      createdAt: json['createdAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              (json['createdAt'] as num).toInt(),
+            )
+          : DateTime.now(),
     );
   }
 

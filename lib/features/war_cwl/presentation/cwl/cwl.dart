@@ -18,7 +18,7 @@ class CwlScreen extends StatefulWidget {
   final CwlClan clanInfo;
   final String? warLeagueName;
 
-  CwlScreen({
+  const CwlScreen({
     super.key,
     required this.warCwl,
     required this.clanTag,
@@ -57,43 +57,50 @@ class CwlScreenState extends State<CwlScreen> {
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragEnd: _handleTabSwipe,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            bottom: 16 + MediaQuery.of(context).padding.bottom,
-          ),
-          child: Column(
-            children: [
-              _CwlHeaderCard(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverToBoxAdapter(
+              child: _CwlHeaderCard(
                 warCwl: widget.warCwl,
                 clanTag: widget.clanTag,
                 clanInfo: clan,
                 warLeagueName: widget.warLeagueName,
               ),
-              const SizedBox(height: 10),
-              _CwlProfileTabs(
-                selectedIndex: selectedTab,
-                onTabSelected: _selectTab,
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  _CwlProfileTabs(
+                    selectedIndex: selectedTab,
+                    onTabSelected: _selectTab,
+                  ),
+                ],
               ),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 180),
-                switchInCurve: Curves.easeOutCubic,
-                switchOutCurve: Curves.easeOutCubic,
-                child: KeyedSubtree(
-                  key: ValueKey(selectedTab),
-                  child: switch (selectedTab) {
-                    0 => CwlRoundsTab(warCwl: widget.warCwl),
-                    1 => CwlTeamsTab(warCwl: widget.warCwl),
-                    _ => CwlMembersTab(
-                      warCwl: widget.warCwl,
-                      clanTag: widget.clanTag,
-                    ),
-                  },
-                ),
-              ),
-            ],
+            ),
+          ],
+          body: KeyedSubtree(
+            key: ValueKey(selectedTab),
+            child: _buildSelectedTab(context),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSelectedTab(BuildContext context) {
+    if (selectedTab == 2) {
+      return CwlMembersTab(warCwl: widget.warCwl, clanTag: widget.clanTag);
+    }
+
+    final content = selectedTab == 0
+        ? CwlRoundsTab(warCwl: widget.warCwl)
+        : CwlTeamsTab(warCwl: widget.warCwl);
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(
+        bottom: 16 + MediaQuery.paddingOf(context).bottom,
+      ),
+      child: content,
     );
   }
 }

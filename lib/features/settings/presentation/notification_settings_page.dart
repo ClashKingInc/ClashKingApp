@@ -12,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clashkingapp/features/pages/data/announcement_presentation_service.dart';
@@ -183,7 +182,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             title: 'Choose alerts',
             children: [
               _NotificationToggleRow(
-                icon: LucideIcons.shield,
+                icon: Icons.shield_outlined,
                 title: _NotifGroup.leagueBattles,
                 subtitle:
                     'Defense results with attacker, stars, percentage, and league context.',
@@ -192,7 +191,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     _toggleType(_NotifGroup.leagueBattles, value),
               ),
               _NotificationDisclosureRow(
-                icon: LucideIcons.swords,
+                icon: Icons.sports_martial_arts_rounded,
                 title: _NotifGroup.warAttacks,
                 subtitle:
                     'War attack results, defense alerts, and 5v5 attack feed options.',
@@ -219,14 +218,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
               ),
               _NotificationToggleRow(
-                icon: LucideIcons.flag,
+                icon: Icons.flag_outlined,
                 title: _NotifGroup.warState,
                 subtitle: 'War matched, battle day started, and war ended.',
                 enabled: _enabledTypes.contains(_NotifGroup.warState),
                 onChanged: (value) => _toggleType(_NotifGroup.warState, value),
               ),
               _NotificationDisclosureRow(
-                icon: LucideIcons.alarmClock,
+                icon: Icons.alarm_rounded,
                 title: _NotifGroup.warReminders,
                 subtitle: 'Custom reminders before war ends.',
                 enabled: _enabledTypes.contains(_NotifGroup.warReminders),
@@ -250,7 +249,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
               ),
               _NotificationDisclosureRow(
-                icon: LucideIcons.calendarDays,
+                icon: Icons.calendar_month_outlined,
                 title: _NotifGroup.events,
                 subtitle: 'Clan Games, CWL, Raid Weekend, and season events.',
                 enabled: _enabledTypes.contains(_NotifGroup.events),
@@ -275,7 +274,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
               ),
               _NotificationToggleRow(
-                icon: LucideIcons.megaphone,
+                icon: Icons.campaign_outlined,
                 title: _NotifGroup.announcements,
                 subtitle:
                     'In-app banners and future push alerts for ClashKing updates.',
@@ -284,7 +283,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     _toggleType(_NotifGroup.announcements, value),
               ),
               _NotificationToggleRow(
-                icon: LucideIcons.hammer,
+                icon: Icons.handyman_outlined,
                 title: _NotifGroup.upgradeFinishes,
                 subtitle:
                     'Troops, heroes, pets, spells, equipment, and buildings.',
@@ -293,7 +292,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     _toggleType(_NotifGroup.upgradeFinishes, value),
               ),
               _NotificationToggleRow(
-                icon: LucideIcons.heartHandshake,
+                icon: Icons.volunteer_activism_outlined,
                 title: _NotifGroup.monthlySupport,
                 subtitle: 'Monthly reminder to support ClashKing.',
                 enabled: _enabledTypes.contains(_NotifGroup.monthlySupport),
@@ -357,7 +356,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                             dimension: 18,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(LucideIcons.bellRing),
+                        : const Icon(Icons.notifications_active_outlined),
                     label: const Text('Send test notification'),
                   ),
                 ),
@@ -767,7 +766,7 @@ class _NotificationDisclosureRow extends StatelessWidget {
                   duration: const Duration(milliseconds: 180),
                   curve: Curves.easeOutCubic,
                   child: Icon(
-                    LucideIcons.chevronDown,
+                    Icons.keyboard_arrow_down_rounded,
                     size: 20,
                     color: enabled
                         ? colorScheme.onSurfaceVariant
@@ -809,14 +808,14 @@ class _WarAttackModePicker extends StatelessWidget {
     return _InlineOptions(
       children: [
         _IconSwitchTile(
-          icon: LucideIcons.shieldCheck,
+          icon: Icons.verified_user_outlined,
           title: 'Defenses against your base',
           subtitle: 'Only hits where this account is defending.',
           selected: selectedModes.contains('defenses'),
           onChanged: (value) => onChanged('defenses', value),
         ),
         _IconSwitchTile(
-          icon: LucideIcons.swords,
+          icon: Icons.sports_martial_arts_rounded,
           title: 'All attacks',
           subtitle: 'Every hit in 5v5 wars only.',
           selected: selectedModes.contains('all5v5'),
@@ -855,7 +854,7 @@ class _WarReminderTimingPicker extends StatelessWidget {
                   children: [
                     for (final timing in sorted)
                       InputChip(
-                        avatar: const Icon(LucideIcons.clock, size: 16),
+                        avatar: const Icon(Icons.schedule_rounded, size: 16),
                         label: Text(_timingLabel(timing)),
                         onDeleted: () {
                           final next = {...selectedTimings}..remove(timing);
@@ -872,8 +871,8 @@ class _WarReminderTimingPicker extends StatelessWidget {
                     : () => _showTimingSheet(context),
                 icon: Icon(
                   selectedTimings.length >= 3
-                      ? LucideIcons.circleCheck
-                      : LucideIcons.plus,
+                      ? Icons.check_circle_outline_rounded
+                      : Icons.add_rounded,
                 ),
                 label: Text(
                   selectedTimings.length >= 3
@@ -1137,7 +1136,8 @@ class _ImageSwitchTile extends StatelessWidget {
         child: MobileWebImage(
           imageUrl: imageUrl,
           fit: BoxFit.contain,
-          errorWidget: (_, _, _) => const Icon(LucideIcons.bell),
+          errorWidget: (_, _, _) =>
+              const Icon(Icons.notifications_none_rounded),
         ),
       ),
       title: title,
@@ -1228,12 +1228,12 @@ class _ScopeSelector extends StatelessWidget {
           segments: [
             ButtonSegment(
               value: _NotificationAccountScope.all,
-              icon: const Icon(LucideIcons.users),
+              icon: const Icon(Icons.group_outlined),
               label: Text(l10n?.notifScopeAllAccounts ?? 'All accounts'),
             ),
             ButtonSegment(
               value: _NotificationAccountScope.selected,
-              icon: const Icon(LucideIcons.userCheck),
+              icon: const Icon(Icons.how_to_reg_rounded),
               label: Text(l10n?.notifScopeSelected ?? 'Selected'),
             ),
           ],
@@ -1358,7 +1358,7 @@ class _AccountPicker extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Icon(
-                LucideIcons.chevronRight,
+                Icons.chevron_right_rounded,
                 size: 20,
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -1450,7 +1450,7 @@ class _AccountAvatarStack extends StatelessWidget {
         height: 42,
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Icon(LucideIcons.users),
+          child: Icon(Icons.group_outlined),
         ),
       );
     }
@@ -1556,7 +1556,10 @@ class _SamplePicker extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(LucideIcons.bellRing, color: colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.notifications_active_outlined,
+                color: colorScheme.onSurfaceVariant,
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -1583,7 +1586,7 @@ class _SamplePicker extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Icon(
-                LucideIcons.chevronDown,
+                Icons.keyboard_arrow_down_rounded,
                 color: colorScheme.onSurfaceVariant,
               ),
             ],
@@ -1634,14 +1637,15 @@ class _SamplePicker extends StatelessWidget {
                       child: MobileWebImage(
                         imageUrl: sample.assetUrl,
                         fit: BoxFit.contain,
-                        errorWidget: (_, _, _) => const Icon(LucideIcons.bell),
+                        errorWidget: (_, _, _) =>
+                            const Icon(Icons.notifications_none_rounded),
                       ),
                     ),
                     title: Text(sample.label),
                     subtitle: Text(sample.title),
                     trailing: sample.id == selected.id
                         ? Icon(
-                            LucideIcons.check,
+                            Icons.check_rounded,
                             color: Theme.of(context).colorScheme.primary,
                           )
                         : null,
@@ -1698,7 +1702,7 @@ class _PreviewCard extends StatelessWidget {
                         imageUrl: sample.assetUrl,
                         fit: BoxFit.contain,
                         errorWidget: (_, _, _) => Icon(
-                          LucideIcons.bell,
+                          Icons.notifications_none_rounded,
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),

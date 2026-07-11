@@ -1,12 +1,10 @@
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_achievement.dart';
-import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_profile_tab.dart';
@@ -31,18 +29,6 @@ class PlayerScreenState extends State<PlayerScreen> {
   late int selectedTab = widget.initialTab;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!mounted) return;
-      await context.read<PlayerService>().refreshOfficialPlayerSummary(
-        widget.selectedPlayer,
-      );
-      if (mounted) setState(() {});
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final bottomPadding = 16 + MediaQuery.paddingOf(context).bottom;
 
@@ -50,37 +36,39 @@ class PlayerScreenState extends State<PlayerScreen> {
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragEnd: _handleTabSwipe,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: bottomPadding),
-          child: Column(
-            children: [
-              PlayerInfoHeader(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: PlayerInfoHeader(
                 selectedTab: selectedTab,
                 player: widget.selectedPlayer,
               ),
-              _PlayerProfileTabs(
+            ),
+            SliverToBoxAdapter(
+              child: _PlayerProfileTabs(
                 player: widget.selectedPlayer,
                 selectedIndex: selectedTab,
                 onTabSelected: _selectTab,
               ),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 180),
-                switchInCurve: Curves.easeOutCubic,
-                switchOutCurve: Curves.easeOutCubic,
-                child: KeyedSubtree(
-                  key: ValueKey(selectedTab),
-                  child: switch (selectedTab) {
-                    0 => _buildPlayerContent(widget.selectedPlayer),
-                    1 => _buildBuilderContent(widget.selectedPlayer),
-                    2 => PlayerWarStatsProfileTab(
-                      player: widget.selectedPlayer,
-                    ),
-                    _ => _buildAchievementContent(widget.selectedPlayer),
-                  },
+            ),
+            ...switch (selectedTab) {
+              0 => _buildPlayerSlivers(widget.selectedPlayer),
+              1 => _buildBuilderSlivers(widget.selectedPlayer),
+              2 => [
+                SliverToBoxAdapter(
+                  child: PlayerWarStatsProfileTab(
+                    player: widget.selectedPlayer,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+              _ => [
+                SliverToBoxAdapter(
+                  child: _buildAchievementContent(widget.selectedPlayer),
+                ),
+              ],
+            },
+            SliverToBoxAdapter(child: SizedBox(height: bottomPadding)),
+          ],
         ),
       ),
     );
@@ -103,66 +91,76 @@ class PlayerScreenState extends State<PlayerScreen> {
     }
   }
 
-  Widget _buildPlayerContent(Player player) {
-    return Column(
-      children: [
-        SizedBox(height: 10),
-        PlayerSuperTroopSection(superTroops: player.superTroops),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gameHeroes,
-          items: player.heroes,
-          townHallLevel: player.townHallLevel,
-          initiallyExpanded: true,
-        ),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gameEquipment,
-          items: player.equipments,
-          townHallLevel: player.townHallLevel,
-          initiallyExpanded: true,
-        ),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gameTroops,
-          items: player.troops,
-          townHallLevel: player.townHallLevel,
-        ),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gameSpells,
-          items: player.spells,
-          townHallLevel: player.townHallLevel,
-        ),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gameSiegeMachines,
-          items: player.siegeMachines,
-          townHallLevel: player.townHallLevel,
-        ),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gamePets,
-          items: player.pets,
-          townHallLevel: player.townHallLevel,
-        ),
-        SizedBox(height: 10),
-      ],
-    );
+  List<Widget> _buildPlayerSlivers(Player player) {
+    final loc = AppLocalizations.of(context)!;
+    final builders = <Widget Function()>[
+      () => const SizedBox(height: 10),
+      () => PlayerSuperTroopSection(superTroops: player.superTroops),
+      () => PlayerItemSection(
+        title: loc.gameHeroes,
+        items: player.heroes,
+        townHallLevel: player.townHallLevel,
+        initiallyExpanded: true,
+      ),
+      () => PlayerItemSection(
+        title: loc.gameEquipment,
+        items: player.equipments,
+        townHallLevel: player.townHallLevel,
+        initiallyExpanded: true,
+      ),
+      () => PlayerItemSection(
+        title: loc.gameTroops,
+        items: player.troops,
+        townHallLevel: player.townHallLevel,
+      ),
+      () => PlayerItemSection(
+        title: loc.gameSpells,
+        items: player.spells,
+        townHallLevel: player.townHallLevel,
+      ),
+      () => PlayerItemSection(
+        title: loc.gameSiegeMachines,
+        items: player.siegeMachines,
+        townHallLevel: player.townHallLevel,
+      ),
+      () => PlayerItemSection(
+        title: loc.gamePets,
+        items: player.pets,
+        townHallLevel: player.townHallLevel,
+      ),
+      () => const SizedBox(height: 10),
+    ];
+    return [
+      SliverList.builder(
+        itemCount: builders.length,
+        itemBuilder: (_, index) => builders[index](),
+      ),
+    ];
   }
 
-  Widget _buildBuilderContent(Player player) {
-    return Column(
-      children: [
-        SizedBox(height: 10),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gameHeroes,
-          items: player.bbHeroes,
-          townHallLevel: player.builderHallLevel,
-          initiallyExpanded: true,
-        ),
-        PlayerItemSection(
-          title: AppLocalizations.of(context)!.gameTroops,
-          items: player.bbTroops,
-          townHallLevel: player.builderHallLevel,
-        ),
-        SizedBox(height: 10),
-      ],
-    );
+  List<Widget> _buildBuilderSlivers(Player player) {
+    final loc = AppLocalizations.of(context)!;
+    final builders = <Widget Function()>[
+      () => const SizedBox(height: 10),
+      () => PlayerItemSection(
+        title: loc.gameHeroes,
+        items: player.bbHeroes,
+        townHallLevel: player.builderHallLevel,
+        initiallyExpanded: true,
+      ),
+      () => PlayerItemSection(
+        title: loc.gameTroops,
+        items: player.bbTroops,
+        townHallLevel: player.builderHallLevel,
+      ),
+      () => const SizedBox(height: 10),
+    ];
+    return [
+      SliverList.builder(
+        itemCount: builders.length,
+        itemBuilder: (_, index) => builders[index](),
+      ),
+    ];
   }
 
   Widget _buildAchievementContent(Player player) {
@@ -208,7 +206,7 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: NativeLiquidGlassSegmentedControl<int>(
+          child: LiquidGlassSegmentedControl<int>(
             values: const [0, 1],
             labels: [
               '$homeLabel · $homeDone/${home.length}',

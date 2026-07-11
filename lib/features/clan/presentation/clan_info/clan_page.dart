@@ -88,72 +88,94 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragEnd: _handleTabSwipe,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            bottom: 16 + MediaQuery.of(context).padding.bottom,
+        child: NestedScrollView(
+          physics: _NoImplicitScrollPhysics(
+            parent: ScrollConfiguration.of(context).getScrollPhysics(context),
           ),
-          child: Column(
-            children: [
-              ClanInfoHeaderCard(clanInfo: widget.clanInfo),
-              const SizedBox(height: 10),
-              _ClanProfileTabs(
-                selectedIndex: selectedTab,
-                onTabSelected: _selectTab,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverToBoxAdapter(
+              child: ClanInfoHeaderCard(clanInfo: widget.clanInfo),
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  _ClanProfileTabs(
+                    selectedIndex: selectedTab,
+                    onTabSelected: _selectTab,
+                  ),
+                ],
               ),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 180),
-                switchInCurve: Curves.easeOutCubic,
-                switchOutCurve: Curves.easeOutCubic,
-                child: KeyedSubtree(
-                  key: ValueKey(selectedTab),
-                  child: switch (selectedTab) {
-                    0 => ClanMembers(clanInfo: widget.clanInfo),
-                    1 => _ClanWarLogTab(
-                      clan: widget.clanInfo,
-                      isCWLChecked: isCWLChecked,
-                      isRandomChecked: isRandomChecked,
-                      isFriendlyChecked: isFriendlyChecked,
-                      selectedTypes: _selectedWarTypes,
-                      onCWLChanged: () =>
-                          setState(() => isCWLChecked = !isCWLChecked),
-                      onRandomChanged: () =>
-                          setState(() => isRandomChecked = !isRandomChecked),
-                      onFriendlyChanged: () => setState(
-                        () => isFriendlyChecked = !isFriendlyChecked,
-                      ),
-                    ),
-                    2 => _ClanJoinLeaveTab(
-                      joinLeave: widget.clanInfo.joinLeave,
-                    ),
-                    3 => _ClanStatisticsTab(
-                      clan: widget.clanInfo,
-                      isCWLChecked: isCWLChecked,
-                      isRandomChecked: isRandomChecked,
-                      isFriendlyChecked: isFriendlyChecked,
-                      selectedTypes: _selectedWarTypes,
-                      onCWLChanged: () =>
-                          setState(() => isCWLChecked = !isCWLChecked),
-                      onRandomChanged: () =>
-                          setState(() => isRandomChecked = !isRandomChecked),
-                      onFriendlyChanged: () => setState(
-                        () => isFriendlyChecked = !isFriendlyChecked,
-                      ),
-                      onResetWarTypes: _resetWarTypeFilters,
-                    ),
-                    4 => _ClanRankingsTab(clanInfo: widget.clanInfo),
-                    _ => _ClanCwlHistoryTab(clan: widget.clanInfo),
-                  },
-                ),
-              ),
-            ],
+            ),
+          ],
+          body: KeyedSubtree(
+            key: ValueKey(selectedTab),
+            child: _buildSelectedTab(context),
           ),
         ),
       ),
     );
   }
+
+  Widget _buildSelectedTab(BuildContext context) {
+    if (selectedTab == 0) {
+      return ClanMembers(clanInfo: widget.clanInfo);
+    }
+
+    final content = switch (selectedTab) {
+      1 => _ClanWarLogTab(
+        clan: widget.clanInfo,
+        isCWLChecked: isCWLChecked,
+        isRandomChecked: isRandomChecked,
+        isFriendlyChecked: isFriendlyChecked,
+        selectedTypes: _selectedWarTypes,
+        onCWLChanged: () => setState(() => isCWLChecked = !isCWLChecked),
+        onRandomChanged: () =>
+            setState(() => isRandomChecked = !isRandomChecked),
+        onFriendlyChanged: () =>
+            setState(() => isFriendlyChecked = !isFriendlyChecked),
+      ),
+      2 => _ClanJoinLeaveTab(joinLeave: widget.clanInfo.joinLeave),
+      3 => _ClanStatisticsTab(
+        clan: widget.clanInfo,
+        isCWLChecked: isCWLChecked,
+        isRandomChecked: isRandomChecked,
+        isFriendlyChecked: isFriendlyChecked,
+        selectedTypes: _selectedWarTypes,
+        onCWLChanged: () => setState(() => isCWLChecked = !isCWLChecked),
+        onRandomChanged: () =>
+            setState(() => isRandomChecked = !isRandomChecked),
+        onFriendlyChanged: () =>
+            setState(() => isFriendlyChecked = !isFriendlyChecked),
+        onResetWarTypes: _resetWarTypeFilters,
+      ),
+      4 => _ClanRankingsTab(clanInfo: widget.clanInfo),
+      _ => _ClanCwlHistoryTab(clan: widget.clanInfo),
+    };
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(
+        bottom: 16 + MediaQuery.paddingOf(context).bottom,
+      ),
+      child: content,
+    );
+  }
+}
+
+class _NoImplicitScrollPhysics extends ScrollPhysics {
+  const _NoImplicitScrollPhysics({super.parent});
+
+  @override
+  _NoImplicitScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return _NoImplicitScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  bool get allowImplicitScrolling => false;
 }
 
 class _ClanProfileTabs extends StatefulWidget {

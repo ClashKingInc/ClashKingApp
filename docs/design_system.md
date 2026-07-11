@@ -92,22 +92,22 @@ All in `lib/common/widgets/`.
 - **`ClanFilterRail`** — horizontal-scroll rail for `ClanFilterChip`s.
 
 ### `search_sort_bar.dart`
-- **`ClanTabSearchSortBar`** — glass search `TextField` (via `NativeLiquidGlassBar`) + compact sort `FilterDropdown`, the standard header for any searchable/sortable list (clan members, war log, capital raid members...).
+- **`ClanTabSearchSortBar`** — glass search `TextField` (via `LiquidGlassBar`) + compact sort `FilterDropdown`, the standard header for any searchable/sortable list (clan members, war log, capital raid members...).
 
 ### `header_widgets.dart`
 - **`HeaderIconButton`** — frosted circular icon button that floats over a hero header image. `showBackground: false` for a borderless icon-only variant (used for the back button so it doesn't compete visually with header content).
 - **`CompactLeagueTile`** — league/rank tile: badge image, name, one-line subtitle (with optional small icon), optional chevron if `onTap` is set. The standard "featured stat" tile in a header's stats panel (war league, capital league, CWL rank...).
 - **`MetricChip`** / **`MetricChipGrid`** — icon-in-circle + label/value chip, laid out N-per-row at equal width. Used less often than `ClanSummaryChip` now; prefer `ClanSummaryChip` for new work unless you specifically need the grid layout.
-- **`GlassPanel`** — small floating glass card via `NativeLiquidGlassBar`, optionally tinted via `dominantTintFromImage`/`LeagueTint` to pick up a badge's dominant color.
+- **`GlassPanel`** — small floating glass card via `LiquidGlassBar`, optionally tinted via `dominantTintFromImage`/`LeagueTint` to pick up a badge's dominant color.
 - **`LeagueSummaryTile`** — the full-size version of `CompactLeagueTile`: badge, league name, large trophy count, season label, and a secondary attack/defense-wins or best-trophies row. Used where there's room for one prominent tile rather than two compact ones side by side (originally the player header's hero league tile).
 - **`MetricBar`** — tinted metric row (icon-in-circle + label/value + optional chevron), fixed 40px height; fills whatever width its parent gives it (not self-widening), used for single prominent stats.
 
-### `native_liquid_glass.dart`
-Thin wrapper layer around the [`liquid_glass_widgets`](https://pub.dev/packages/liquid_glass_widgets) package (shader-based — Impeller/Vulkan on Android, native Impeller on iOS/macOS, lightweight shader on Skia/Web — not a native platform view). Every consumer in the app goes through these wrappers rather than importing `liquid_glass_widgets` directly, so tint/blur/border stay centrally tunable:
-- **`NativeLiquidGlassBar`** — the shared glass background for tab bars, search fields, header panels and buttons. Backed by `glass.GlassContainer(useOwnLayer: true)`; tint (`opacity`), `borderOpacity` and `shadowOpacity` are real Dart params honored identically on every platform.
-- **`NativeLiquidGlassIconButton`** — frosted round button via `glass.GlassIconButton`, built-in squash/press feedback.
-- **`NativeLiquidGlassSegmentedControl<T>`** — filter/mode toggles via `glass.GlassSegmentedControl`.
-- The app's bottom navigation bar (`my_home_page.dart`) uses `glass.GlassTabBar.bottom` directly (not wrapped) since it needs the placement-aware jelly-indicator layout `GlassTabBar` provides.
+### `liquid_glass.dart`
+Thin wrapper layer around the [`liquid_glass_widgets`](https://pub.dev/packages/liquid_glass_widgets) package. It stays inside Flutter's compositor on every platform and never creates a UIKit platform view. Every consumer goes through these wrappers so tint, blur, border, and performance settings remain centrally tunable:
+- **`LiquidGlassBar`** — the shared glass background for tab bars, search fields, header panels and buttons. Backed by `glass.GlassContainer(useOwnLayer: true)`; tint (`opacity`), `borderOpacity` and `shadowOpacity` are real Dart params honored identically on every platform.
+- **`LiquidGlassIconButton`** — frosted round button via `glass.GlassIconButton`, built-in squash/press feedback.
+- **`LiquidGlassSegmentedControl<T>`** — filter/mode toggles via `glass.GlassSegmentedControl`.
+- The app's bottom navigation bar (`my_home_page.dart`) uses `LiquidGlassTabBar`, which delegates to the placement-aware `GlassTabBar.bottom` layout.
 - Setup: `LiquidGlassWidgets.initialize()` + `LiquidGlassWidgets.wrap(child: ...)` around the app root in `main.dart` (shader pre-warm + accessibility bridging + theming — see package README "Quick Start"). No per-widget setup needed beyond that.
 
 ## Layout patterns
@@ -141,7 +141,7 @@ Stack(
 Reference: `clan_info/clan_header.dart`, `clan_capital/clan_capital_header.dart`, `war_cwl/cwl.dart`'s `_CwlHeaderCard`.
 
 ### 2. Tab bar
-`NativeLiquidGlassBar` background + `TabBar` with icon+label tabs (image or `IconData`, dimmed when unselected via `onSurface.withValues(alpha: 0.58)`). The `TabController` is driven by an **external `int selectedTab` held in the parent**, not `TabBarView` — content below crossfades via `AnimatedSwitcher` + `KeyedSubtree(key: ValueKey(selectedTab))`. This lets the parent share state (e.g. a selected week, or war-type filters) between tabs without each tab owning an independent copy.
+`LiquidGlassBar` background + `TabBar` with icon+label tabs (image or `IconData`, dimmed when unselected via `onSurface.withValues(alpha: 0.58)`). The `TabController` is driven by an **external `int selectedTab` held in the parent**, not `TabBarView` — content below crossfades via `AnimatedSwitcher` + `KeyedSubtree(key: ValueKey(selectedTab))`. This lets the parent share state (e.g. a selected week, or war-type filters) between tabs without each tab owning an independent copy.
 
 ```dart
 AnimatedSwitcher(
@@ -197,7 +197,7 @@ Never a bare `Card` with a single line of text. Reference: `clan_info/clan_page.
 ## Recipe: building a new detail screen
 
 1. **Header** — hero header pattern (background image, gradient, back button, identity, stats panel with `CompactLeagueTile`s).
-2. **Tabs** (if the screen has more than one logical section) — `NativeLiquidGlassBar` + `TabBar`, external `selectedTab` state, `AnimatedSwitcher`.
+2. **Tabs** (if the screen has more than one logical section) — `LiquidGlassBar` + `TabBar`, external `selectedTab` state, `AnimatedSwitcher`.
 3. **Content** — flat `Container` rows/panels for every list item and summary block; `ClanSummaryChip(s)` for read-only stats, `ClanFilterChip`/`ClanFilterRail` for toggles, `ClanTabSearchSortBar` if the tab is a searchable list.
 4. **Empty/error states** — the empty-state recipe above, not a raw `Card`.
 5. Before considering it done: does any screen area show two bordered containers nested inside each other? If yes, flatten it.

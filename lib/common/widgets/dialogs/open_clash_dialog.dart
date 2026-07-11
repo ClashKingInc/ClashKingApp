@@ -14,21 +14,25 @@ class OpenClashDialog extends StatelessWidget {
         AppLocalizations.of(context)!.generalWarning,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).colorScheme.error,
-            ),
+          color: Theme.of(context).colorScheme.error,
+        ),
       ),
       content: Text(AppLocalizations.of(context)!.errorExitAppToOpenClash),
       actions: <Widget>[
         TextButton(
-          child: Text(AppLocalizations.of(context)!.generalCancel,
-              style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(
+            AppLocalizations.of(context)!.generalCancel,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text(AppLocalizations.of(context)!.generalOk,
-              style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(
+            AppLocalizations.of(context)!.generalOk,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
             launchUrl(url);

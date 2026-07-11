@@ -1,12 +1,12 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({
+class MainPageHeader extends StatelessWidget {
+  const MainPageHeader({
     super.key,
     required this.title,
     this.subtitle,
@@ -22,22 +22,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onProfileTap;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  @override
   Widget build(BuildContext context) {
     final authService = context.watch<AuthService>();
     final colorScheme = Theme.of(context).colorScheme;
 
-    return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      titleSpacing: 0,
-      title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+    return SafeArea(
+      bottom: false,
+      child: SizedBox(
+        height: 64,
         child: Row(
           children: [
             _HeaderProfileButton(authService: authService, onTap: onProfileTap),
@@ -89,51 +81,55 @@ class _HeaderProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 46,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          const _TopGlassSurface(),
-          Material(
-            color: Colors.transparent,
-            shape: const CircleBorder(),
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              splashFactory: NoSplash.splashFactory,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap:
-                  onTap ??
-                  (authService.currentUser == null
-                      ? null
-                      : () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SettingsInfoScreen(
-                                user: authService.currentUser!,
+    return Semantics(
+      button: true,
+      label: 'Open profile menu',
+      child: SizedBox.square(
+        dimension: 46,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            const _TopGlassSurface(),
+            Material(
+              color: Colors.transparent,
+              shape: const CircleBorder(),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                splashFactory: NoSplash.splashFactory,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap:
+                    onTap ??
+                    (authService.currentUser == null
+                        ? null
+                        : () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SettingsInfoScreen(
+                                  user: authService.currentUser!,
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-              child: Center(
-                child: ClipOval(
-                  child: SizedBox.square(
-                    dimension: 36,
-                    child: MobileWebImage(
-                      imageUrl: authService.currentUser?.avatarUrl ?? '',
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.person),
+                            );
+                          }),
+                child: Center(
+                  child: ClipOval(
+                    child: SizedBox.square(
+                      dimension: 36,
+                      child: MobileWebImage(
+                        imageUrl: authService.currentUser?.avatarUrl ?? '',
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.person),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -149,58 +145,62 @@ class _HeaderSearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Material(
-      color: Colors.transparent,
-      child: SizedBox(
-        height: 48,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            NativeLiquidGlassBar(
-              height: 48,
-              cornerRadius: 24,
-              interactive: true,
-              borderOpacity: Theme.of(context).brightness == Brightness.dark
-                  ? 0.22
-                  : 0.30,
-              shadowOpacity: Theme.of(context).brightness == Brightness.dark
-                  ? 0.22
-                  : 0.08,
-            ),
-            Material(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(24),
-              child: InkWell(
+    return Semantics(
+      button: true,
+      label: hint,
+      child: Material(
+        color: Colors.transparent,
+        child: SizedBox(
+          height: 48,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              LiquidGlassBar(
+                height: 48,
+                cornerRadius: 24,
+                interactive: true,
+                borderOpacity: Theme.of(context).brightness == Brightness.dark
+                    ? 0.14
+                    : 0.30,
+                shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                    ? 0.12
+                    : 0.08,
+              ),
+              Material(
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(24),
-                splashFactory: NoSplash.splashFactory,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: onTap,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search_rounded,
-                        size: 20,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          hint,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(24),
+                  splashFactory: NoSplash.splashFactory,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: onTap,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.search_rounded,
+                          size: 20,
+                          color: colorScheme.onSurfaceVariant,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            hint,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: colorScheme.onSurfaceVariant),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -212,15 +212,15 @@ class _TopGlassSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NativeLiquidGlassBar(
+    return LiquidGlassBar(
       height: 46,
       cornerRadius: 23,
       interactive: true,
       borderOpacity: Theme.of(context).brightness == Brightness.dark
-          ? 0.26
+          ? 0.16
           : 0.32,
       shadowOpacity: Theme.of(context).brightness == Brightness.dark
-          ? 0.3
+          ? 0.14
           : 0.1,
     );
   }

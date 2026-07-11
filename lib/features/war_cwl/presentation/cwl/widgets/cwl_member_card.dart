@@ -328,7 +328,8 @@ class MembersCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ??
+        color:
+            Theme.of(context).cardTheme.color ??
             Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(AppRadius.chip),
         border: Border.all(

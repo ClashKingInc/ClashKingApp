@@ -1,7 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class FilterDropdown extends StatefulWidget {
   final String sortBy;
@@ -92,7 +91,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
                     ),
                     if (isSelected)
                       Icon(
-                        LucideIcons.check,
+                        Icons.check_rounded,
                         size: 16,
                         color: colorScheme.onSurface,
                       ),
@@ -138,7 +137,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
             ),
           ),
           iconStyleData: IconStyleData(
-            icon: const Icon(LucideIcons.arrowDown),
+            icon: const Icon(Icons.keyboard_arrow_down_rounded),
             iconSize: 16,
             // Not colorScheme.primary: this app's brand red doesn't clear
             // 4.5:1 contrast against a dark surface — onSurface always does.

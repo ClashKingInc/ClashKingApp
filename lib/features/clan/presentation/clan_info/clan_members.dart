@@ -9,7 +9,6 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -157,207 +156,232 @@ class ClanMembersState extends State<ClanMembers> {
       }
     });
 
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        ClanTabSearchSortBar(
-          controller: _searchController,
-          query: _searchQuery,
-          hintText: loc?.clanMembersSearchPlaceholder ?? 'Search members',
-          sortBy: currentFilter,
-          updateSortBy: updateFilter,
-          sortByOptions: filterOptions,
-          maxSortWidth: 130,
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Stack(
-            alignment: Alignment.centerLeft,
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Column(
             children: [
-              ClanSummaryChips(
-                padding: EdgeInsets.zero,
-                children: [
-                  const SizedBox(width: 44),
-                  ClanSummaryChip(
-                    icon: LucideIcons.chevronUp,
-                    value: numberFormat.format(totalDonations),
-                    label: loc?.gameDonations ?? 'Donated',
-                    color: Colors.green,
-                  ),
-                  ClanSummaryChip(
-                    icon: LucideIcons.chevronDown,
-                    value: numberFormat.format(totalReceived),
-                    label: loc?.clanMembersReceivedShort ?? 'Received',
-                    color: Colors.redAccent,
-                  ),
-                  ClanSummaryChip(
-                    icon: Icons.home_work_rounded,
-                    value: averageTownHall == 0
-                        ? '-'
-                        : averageTownHall.toStringAsFixed(1),
-                    label: loc?.clanMembersAverageTh ?? 'Avg TH',
-                    color: Colors.amber.shade700,
-                  ),
-                ],
+              ClanTabSearchSortBar(
+                controller: _searchController,
+                query: _searchQuery,
+                hintText: loc?.clanMembersSearchPlaceholder ?? 'Search members',
+                sortBy: currentFilter,
+                updateSortBy: updateFilter,
+                sortByOptions: filterOptions,
+                maxSortWidth: 130,
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
               ),
-              _StatsToggleButton(
-                selected: _showTotals,
-                tooltip: _showTotals
-                    ? (loc?.clanMembersHideTotals ?? 'Hide clan totals')
-                    : (loc?.clanMembersShowTotals ?? 'Show clan totals'),
-                onTap: () => setState(() => _showTotals = !_showTotals),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        if (_showTotals)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: _MemberBreakdown(
-              townHalls: townHallBreakdown,
-              leagues: leagueBreakdown,
-            ),
-          ),
-        if (members.isEmpty)
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                _searchQuery.isNotEmpty
-                    ? (loc?.generalNoFilteredResults ??
-                          'No results match your filters')
-                    : (loc?.accountsNoneFound ??
-                          'No account linked to your profile found'),
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
-        else ...[
-          ...members.asMap().entries.map((entry) {
-            int index = entry.key + 1;
-            ClanMember member = entry.value;
-            final isLinked = activeUserTags.contains(member.tag);
-
-            return GestureDetector(
-              onTap: () async {
-                final navigator = Navigator.of(context);
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) =>
-                      const Center(child: CircularProgressIndicator()),
-                );
-
-                try {
-                  final Player selectedPlayer = await context
-                      .read<PlayerService>()
-                      .getPlayerAndClanData(member.tag);
-
-                  navigator.pop();
-                  navigator.push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          PlayerScreen(selectedPlayer: selectedPlayer),
-                    ),
-                  );
-                } catch (e) {
-                  // Dismiss loading dialog
-                  navigator.pop();
-
-                  // Show error message
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.generalRefreshFailed(e.toString()),
-                        ),
-                        duration: const Duration(seconds: 3),
-                      ),
-                    );
-                  }
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).cardTheme.color ??
-                      Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isLinked
-                        ? Colors.green.withValues(alpha: 0.7)
-                        : colorScheme.outlineVariant.withValues(alpha: 0.32),
-                  ),
-                ),
-                child: Row(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Stack(
+                  alignment: Alignment.centerLeft,
                   children: [
-                    SizedBox(
-                      width: 19,
-                      child: Text(
-                        index.toString(),
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
+                    ClanSummaryChips(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        const SizedBox(width: 44),
+                        ClanSummaryChip(
+                          icon: Icons.keyboard_arrow_up_rounded,
+                          value: numberFormat.format(totalDonations),
+                          label: loc?.gameDonations ?? 'Donated',
+                          color: Colors.green,
+                        ),
+                        ClanSummaryChip(
+                          icon: Icons.keyboard_arrow_down_rounded,
+                          value: numberFormat.format(totalReceived),
+                          label: loc?.clanMembersReceivedShort ?? 'Received',
+                          color: Colors.redAccent,
+                        ),
+                        ClanSummaryChip(
+                          icon: Icons.home_work_rounded,
+                          value: averageTownHall == 0
+                              ? '-'
+                              : averageTownHall.toStringAsFixed(1),
+                          label: loc?.clanMembersAverageTh ?? 'Avg TH',
+                          color: Colors.amber.shade700,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 7),
-                    MobileWebImage(
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      imageUrl: ImageAssets.townHall(member.townHallLevel),
-                      width: 38,
-                    ),
-                    const SizedBox(width: 9),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  member.name,
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.w800),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 1),
-                                Text(
-                                  _localizedRole(context, member.role),
-                                  style: Theme.of(context).textTheme.labelMedium
-                                      ?.copyWith(
-                                        color: colorScheme.onSurfaceVariant,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          _SortValueChip(member: member, sortBy: currentFilter),
-                        ],
-                      ),
+                    _StatsToggleButton(
+                      selected: _showTotals,
+                      tooltip: _showTotals
+                          ? (loc?.clanMembersHideTotals ?? 'Hide clan totals')
+                          : (loc?.clanMembersShowTotals ?? 'Show clan totals'),
+                      onTap: () => setState(() => _showTotals = !_showTotals),
                     ),
                   ],
                 ),
               ),
-            );
-          }),
-        ],
+              const SizedBox(height: 8),
+              if (_showTotals)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  child: _MemberBreakdown(
+                    townHalls: townHallBreakdown,
+                    leagues: leagueBreakdown,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (members.isEmpty)
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    _searchQuery.isNotEmpty
+                        ? (loc?.generalNoFilteredResults ??
+                              'No results match your filters')
+                        : (loc?.accountsNoneFound ??
+                              'No account linked to your profile found'),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          )
+        else
+          SliverList.builder(
+            itemCount: members.length,
+            itemBuilder: (context, memberIndex) {
+              int index = memberIndex + 1;
+              ClanMember member = members[memberIndex];
+              final isLinked = activeUserTags.contains(member.tag);
+
+              return GestureDetector(
+                onTap: () async {
+                  final navigator = Navigator.of(context);
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) =>
+                        const Center(child: CircularProgressIndicator()),
+                  );
+
+                  try {
+                    final Player selectedPlayer = await context
+                        .read<PlayerService>()
+                        .getPlayerAndClanData(member.tag);
+
+                    navigator.pop();
+                    navigator.push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PlayerScreen(selectedPlayer: selectedPlayer),
+                      ),
+                    );
+                  } catch (e) {
+                    // Dismiss loading dialog
+                    navigator.pop();
+
+                    // Show error message
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.generalRefreshFailed(e.toString()),
+                          ),
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 3,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 7,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).cardTheme.color ??
+                        Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isLinked
+                          ? Colors.green.withValues(alpha: 0.7)
+                          : colorScheme.outlineVariant.withValues(alpha: 0.32),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 19,
+                        child: Text(
+                          index.toString(),
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                      ),
+                      const SizedBox(width: 7),
+                      MobileWebImage(
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        imageUrl: ImageAssets.townHall(member.townHallLevel),
+                        width: 38,
+                      ),
+                      const SizedBox(width: 9),
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    member.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.w800),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 1),
+                                  Text(
+                                    _localizedRole(context, member.role),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium
+                                        ?.copyWith(
+                                          color: colorScheme.onSurfaceVariant,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            _SortValueChip(
+                              member: member,
+                              sortBy: currentFilter,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 16 + MediaQuery.paddingOf(context).bottom),
+        ),
       ],
     );
   }
@@ -577,13 +601,13 @@ class _SortValueChip extends StatelessWidget {
         );
       case 'donations':
         return _MemberMiniStat(
-          icon: LucideIcons.chevronUp,
+          icon: Icons.keyboard_arrow_up_rounded,
           value: member.donations.toString(),
           color: Colors.green,
         );
       case 'donationsReceived':
         return _MemberMiniStat(
-          icon: LucideIcons.chevronDown,
+          icon: Icons.keyboard_arrow_down_rounded,
           value: member.donationsReceived.toString(),
           color: Colors.red,
         );
@@ -597,7 +621,7 @@ class _SortValueChip extends StatelessWidget {
             ? ratio.toStringAsFixed(1)
             : ratio.toStringAsFixed(2);
         return _MemberMiniStat(
-          icon: LucideIcons.chevronsUpDown,
+          icon: Icons.unfold_more_rounded,
           value: display,
           color: Colors.blue,
         );

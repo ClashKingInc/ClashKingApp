@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/file_opener.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -94,7 +94,7 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: NativeLiquidGlassSegmentedControl<int>(
+          child: LiquidGlassSegmentedControl<int>(
             values: const [0, 1, 2, 3],
             labels: [
               loc.generalStats,

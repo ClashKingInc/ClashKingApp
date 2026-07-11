@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 class AnnouncementService {
   AnnouncementService({ApiService? apiService})
-    : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService.shared;
 
   final ApiService _apiService;
 

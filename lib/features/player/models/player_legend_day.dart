@@ -35,8 +35,16 @@ class PlayerLegendDay {
 
   factory PlayerLegendDay.fromJson(Map<String, dynamic> json) {
     return PlayerLegendDay(
-      attacks:  (json['attacks'] as List?)?.map((e) => (e as num?)?.toInt() ?? 0).toList() ?? [],
-      defenses: (json['defenses'] as List?)?.map((e) => (e as num?)?.toInt() ?? 0).toList() ?? [],
+      attacks:
+          (json['attacks'] as List?)
+              ?.map((e) => (e as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      defenses:
+          (json['defenses'] as List?)
+              ?.map((e) => (e as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
       trophiesGainedTotal: json['trophies_gained_total'] ?? 0,
       trophiesLostTotal: json['trophies_lost_total'] ?? 0,
       trophiesTotal: json['trophies_total'] ?? 0,
@@ -44,11 +52,13 @@ class PlayerLegendDay {
       totalDefenses: json['num_defenses'] ?? 0,
       startTrophies: json['start_trophies'],
       endTrophies: json['end_trophies'],
-      newAttacks: (json['new_attacks'] as List?)
+      newAttacks:
+          (json['new_attacks'] as List?)
               ?.map((x) => PlayerLegendAttack.fromJson(x))
               .toList() ??
           [],
-      newDefenses: (json['new_defenses'] as List?)
+      newDefenses:
+          (json['new_defenses'] as List?)
               ?.map((x) => PlayerLegendAttack.fromJson(x))
               .toList() ??
           [],
@@ -56,7 +66,8 @@ class PlayerLegendDay {
   }
 
   Map<String, PlayerEquipment> gearCountsFlatFromProfile(
-      List<PlayerEquipment> playerEquipments) {
+    List<PlayerEquipment> playerEquipments,
+  ) {
     final Map<String, PlayerEquipment> result = {};
     final Set<String> processed = {};
 
@@ -72,8 +83,8 @@ class PlayerLegendDay {
           orElse: () => PlayerEquipment(
             name: gearName,
             level: gear.level,
-            maxLevel: GameDataService.gearsData["gears"]?[gearName]
-                    ?["maxLevel"] ??
+            maxLevel:
+                GameDataService.gearsData["gears"]?[gearName]?["maxLevel"] ??
                 gear.level,
             rarity:
                 GameDataService.gearsData["gears"]?[gearName]?["rarity"] ?? "1",

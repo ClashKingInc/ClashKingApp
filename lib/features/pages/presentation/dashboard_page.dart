@@ -2,6 +2,7 @@ import 'package:clashkingapp/core/services/player_card_preferences_service.dart'
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/pages/widgets/home_todo_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,16 +11,24 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerService = context.watch<PlayerService>();
-    final prefs = context.watch<PlayerCardPreferencesService>();
-    final cocService = context.watch<CocAccountService>();
-    final players = playerService.profiles;
-    final linkedTags = cocService
-        .getAccountTags()
+    final players = context.select<PlayerService, List<Player>>(
+      (service) => service.profiles,
+    );
+    final pinnedTagKey = context.select<PlayerCardPreferencesService, String>(
+      (service) => (service.todoOnHomeTags.toList()..sort()).join('|'),
+    );
+    final linkedTagKey = context.select<CocAccountService, String>(
+      (service) => service.getAccountTags().join('|'),
+    );
+    final linkedTags = linkedTagKey
+        .split('|')
         .map(_normalizeTag)
         .where((tag) => tag.isNotEmpty)
         .toSet();
-    final pinnedTags = prefs.todoOnHomeTags;
+    final pinnedTags = pinnedTagKey
+        .split('|')
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
     final pinnedPlayers = players
         .where((player) => pinnedTags.contains(_normalizeTag(player.tag)))
         .toList(growable: false);
@@ -36,6 +45,7 @@ class DashboardPage extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
+        top: false,
         bottom: false,
         child: ListView(
           padding: EdgeInsets.fromLTRB(

@@ -9,6 +9,8 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   RegisterPageState createState() => RegisterPageState();
 }

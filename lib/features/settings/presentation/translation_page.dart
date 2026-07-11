@@ -4,6 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class TranslationScreen extends StatelessWidget {
+  const TranslationScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

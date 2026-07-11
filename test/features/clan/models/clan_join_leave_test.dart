@@ -19,37 +19,34 @@ Map<String, dynamic> _statsJson({
   int? mostMovingHour,
   double? avgTimeBetweenJoinLeave,
   List<dynamic>? mostMovingPlayers,
-}) =>
-    <String, dynamic>{
-      'total_events': totalEvents,
-      'total_joins': totalJoins,
-      'total_leaves': totalLeaves,
-      'unique_players': uniquePlayers,
-      'moving_players': movingPlayers,
-      'players_still_in_clan': playerStillInClan,
-      'players_left_forever': playerLeftClan,
-      'rejoined_players': rejoinedPlayers,
-      if (firstEvent != null) 'first_event': firstEvent,
-      if (lastEvent != null) 'last_event': lastEvent,
-      if (mostMovingHour != null) 'most_moving_hour': mostMovingHour,
-      if (avgTimeBetweenJoinLeave != null)
-        'avg_time_between_join_leave': avgTimeBetweenJoinLeave,
-      'most_moving_players': mostMovingPlayers ?? [],
-    };
+}) => <String, dynamic>{
+  'total_events': totalEvents,
+  'total_joins': totalJoins,
+  'total_leaves': totalLeaves,
+  'unique_players': uniquePlayers,
+  'moving_players': movingPlayers,
+  'players_still_in_clan': playerStillInClan,
+  'players_left_forever': playerLeftClan,
+  'rejoined_players': rejoinedPlayers,
+  'first_event': ?firstEvent,
+  'last_event': ?lastEvent,
+  'most_moving_hour': ?mostMovingHour,
+  'avg_time_between_join_leave': ?avgTimeBetweenJoinLeave,
+  'most_moving_players': mostMovingPlayers ?? [],
+};
 
 Map<String, dynamic> _joinLeaveJson({
   String tag = '#CLAN1',
   int tsStart = 1000,
   int tsEnd = 2000,
   List<dynamic>? events,
-}) =>
-    <String, dynamic>{
-      'clan_tag': tag,
-      'timestamp_start': tsStart,
-      'timestamp_end': tsEnd,
-      'stats': _statsJson(),
-      'join_leave_list': events ?? [],
-    };
+}) => <String, dynamic>{
+  'clan_tag': tag,
+  'timestamp_start': tsStart,
+  'timestamp_end': tsEnd,
+  'stats': _statsJson(),
+  'join_leave_list': events ?? [],
+};
 
 Map<String, dynamic> _eventJson({
   String type = 'join',
@@ -58,15 +55,14 @@ Map<String, dynamic> _eventJson({
   String playerTag = '#P1',
   String name = 'Hero',
   int th = 14,
-}) =>
-    <String, dynamic>{
-      'type': type,
-      'clan': clan,
-      'time': time,
-      'tag': playerTag,
-      'name': name,
-      'th': th,
-    };
+}) => <String, dynamic>{
+  'type': type,
+  'clan': clan,
+  'time': time,
+  'tag': playerTag,
+  'name': name,
+  'th': th,
+};
 
 void main() {
   setUpAll(() {
@@ -104,8 +100,9 @@ void main() {
     });
 
     test('parses time as DateTime', () {
-      final event =
-          JoinLeaveEvent.fromJson(_eventJson(time: '2024-06-01T12:30:00'));
+      final event = JoinLeaveEvent.fromJson(
+        _eventJson(time: '2024-06-01T12:30:00'),
+      );
       expect(event.time, DateTime.parse('2024-06-01T12:30:00'));
     });
 
@@ -128,32 +125,27 @@ void main() {
 
     test('type defaults to empty string when null', () {
       // The source uses json['type'] ?? "" — if key is present with value it works
-      final event = JoinLeaveEvent.fromJson(
-          _eventJson()..['type'] = null,);
+      final event = JoinLeaveEvent.fromJson(_eventJson()..['type'] = null);
       expect(event.type, '');
     });
 
     test('clan defaults to empty string when null', () {
-      final event = JoinLeaveEvent.fromJson(
-          _eventJson()..['clan'] = null,);
+      final event = JoinLeaveEvent.fromJson(_eventJson()..['clan'] = null);
       expect(event.clan, '');
     });
 
     test('tag defaults to empty string when null', () {
-      final event = JoinLeaveEvent.fromJson(
-          _eventJson()..['tag'] = null,);
+      final event = JoinLeaveEvent.fromJson(_eventJson()..['tag'] = null);
       expect(event.tag, '');
     });
 
     test('name defaults to empty string when null', () {
-      final event = JoinLeaveEvent.fromJson(
-          _eventJson()..['name'] = null,);
+      final event = JoinLeaveEvent.fromJson(_eventJson()..['name'] = null);
       expect(event.name, '');
     });
 
     test('th defaults to 0 when null', () {
-      final event = JoinLeaveEvent.fromJson(
-          _eventJson()..['th'] = null,);
+      final event = JoinLeaveEvent.fromJson(_eventJson()..['th'] = null);
       expect(event.th, 0);
     });
   });
@@ -184,10 +176,14 @@ void main() {
     });
 
     test('parses non-empty join_leave_list', () {
-      final obj = ClanJoinLeave.fromJson(_joinLeaveJson(events: [
-        _eventJson(playerTag: '#P1'),
-        _eventJson(playerTag: '#P2', type: 'leave'),
-      ]));
+      final obj = ClanJoinLeave.fromJson(
+        _joinLeaveJson(
+          events: [
+            _eventJson(playerTag: '#P1'),
+            _eventJson(playerTag: '#P2', type: 'leave'),
+          ],
+        ),
+      );
       expect(obj.joinLeaveList, hasLength(2));
       expect(obj.joinLeaveList.first.tag, '#P1');
       expect(obj.joinLeaveList.last.type, 'leave');
@@ -288,8 +284,7 @@ void main() {
     });
 
     test('parses playerStillInClan', () {
-      final stats =
-          JoinLeaveStats.fromJson(_statsJson(playerStillInClan: 7));
+      final stats = JoinLeaveStats.fromJson(_statsJson(playerStillInClan: 7));
       expect(stats.playerStillInClan, 7);
     });
 
@@ -305,7 +300,8 @@ void main() {
 
     test('parses avgTimeBetweenJoinLeave as double', () {
       final stats = JoinLeaveStats.fromJson(
-          _statsJson(avgTimeBetweenJoinLeave: 3.14));
+        _statsJson(avgTimeBetweenJoinLeave: 3.14),
+      );
       expect(stats.avgTimeBetweenJoinLeave, closeTo(3.14, 0.001));
     });
 
@@ -315,12 +311,14 @@ void main() {
     });
 
     test('parses mostMovingPlayers list', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(
-        mostMovingPlayers: [
-          {'tag': '#P1', 'name': 'Alpha', 'count': 5},
-          {'tag': '#P2', 'name': 'Beta', 'count': 3},
-        ],
-      ));
+      final stats = JoinLeaveStats.fromJson(
+        _statsJson(
+          mostMovingPlayers: [
+            {'tag': '#P1', 'name': 'Alpha', 'count': 5},
+            {'tag': '#P2', 'name': 'Beta', 'count': 3},
+          ],
+        ),
+      );
       expect(stats.mostMovingPlayers, hasLength(2));
       expect(stats.mostMovingPlayers.first.tag, '#P1');
       expect(stats.mostMovingPlayers.last.count, 3);
@@ -339,13 +337,15 @@ void main() {
 
     test('parses firstEvent as string', () {
       final stats = JoinLeaveStats.fromJson(
-          _statsJson(firstEvent: '2024-01-01T00:00:00'));
+        _statsJson(firstEvent: '2024-01-01T00:00:00'),
+      );
       expect(stats.firstEvent, '2024-01-01T00:00:00');
     });
 
     test('parses lastEvent as string', () {
-      final stats =
-          JoinLeaveStats.fromJson(_statsJson(lastEvent: '2024-12-31T23:59:59'));
+      final stats = JoinLeaveStats.fromJson(
+        _statsJson(lastEvent: '2024-12-31T23:59:59'),
+      );
       expect(stats.lastEvent, '2024-12-31T23:59:59');
     });
 
@@ -361,24 +361,33 @@ void main() {
 
   group('MostActivePlayer.fromJson', () {
     test('parses tag, name, count', () {
-      final player = MostActivePlayer.fromJson(
-          {'tag': '#MVP', 'name': 'King', 'count': 12});
+      final player = MostActivePlayer.fromJson({
+        'tag': '#MVP',
+        'name': 'King',
+        'count': 12,
+      });
       expect(player.tag, '#MVP');
       expect(player.name, 'King');
       expect(player.count, 12);
     });
 
     test('defaults to empty strings and 0 count on null fields', () {
-      final player = MostActivePlayer.fromJson(
-          <String, dynamic>{'tag': null, 'name': null, 'count': null});
+      final player = MostActivePlayer.fromJson(<String, dynamic>{
+        'tag': null,
+        'name': null,
+        'count': null,
+      });
       expect(player.tag, '');
       expect(player.name, '');
       expect(player.count, 0);
     });
 
     test('parses count correctly', () {
-      final player = MostActivePlayer.fromJson(
-          {'tag': '#A', 'name': 'B', 'count': 99});
+      final player = MostActivePlayer.fromJson({
+        'tag': '#A',
+        'name': 'B',
+        'count': 99,
+      });
       expect(player.count, 99);
     });
   });

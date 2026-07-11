@@ -6,6 +6,8 @@ import 'dart:async';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 
 class ClanSearchFilters extends StatefulWidget {
+  const ClanSearchFilters({super.key});
+
   @override
   ClanSearchFiltersState createState() => ClanSearchFiltersState();
 }
@@ -38,7 +40,7 @@ class ClanSearchFiltersState extends State<ClanSearchFilters> {
   }
 
   Future<void> _fetchCountries() async {
-    final response = await ApiService().proxyGet('/locations');
+    final response = await ApiService.shared.proxyGet('/locations');
     if (response.statusCode == 200) {
       final List items = json.decode(utf8.decode(response.bodyBytes))['items'];
       final countries = items.where((item) => item["name"] != "").toList();

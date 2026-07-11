@@ -20,7 +20,9 @@ class PlayerClanOverview {
         tag: json['tag']?.toString() ?? '',
         name: json['name']?.toString() ?? '',
         clanLevel: (json['clanLevel'] as num?)?.toInt() ?? 0,
-        badgeUrls: ClanBadgeUrls.fromJson((json['badgeUrls'] as Map<String, dynamic>?) ?? {}),
+        badgeUrls: ClanBadgeUrls.fromJson(
+          (json['badgeUrls'] as Map<String, dynamic>?) ?? {},
+        ),
       );
     } catch (e) {
       DebugUtils.debugError(" Error parsing PlayerClanOverview: $e");
@@ -29,12 +31,8 @@ class PlayerClanOverview {
   }
 
   PlayerClanOverview.empty()
-      : tag = "",
-        name = "",
-        clanLevel = 0,
-        badgeUrls = ClanBadgeUrls(
-          small: "",
-          large: "",
-          medium: "",
-        );
+    : tag = "",
+      name = "",
+      clanLevel = 0,
+      badgeUrls = ClanBadgeUrls(small: "", large: "", medium: "");
 }

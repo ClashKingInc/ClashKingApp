@@ -21,7 +21,10 @@ class PlayerWarStats {
   });
 
   factory PlayerWarStats.fromJson(
-      Map<String, dynamic> json, String? playerTag, List<dynamic>? wars) {
+    Map<String, dynamic> json,
+    String? playerTag,
+    List<dynamic>? wars,
+  ) {
     try {
       return PlayerWarStats(
         name: json['name'] ?? '',
@@ -32,20 +35,26 @@ class PlayerWarStats {
             : {'start': 0, 'end': 0},
         wars: wars != null
             ? wars
-                .map((w) =>
-                    PlayerWarStatsData.fromJson(w, playerTag ?? json['tag']))
-                .toList()
+                  .map(
+                    (w) => PlayerWarStatsData.fromJson(
+                      w,
+                      playerTag ?? json['tag'],
+                    ),
+                  )
+                  .toList()
             : json['wars'] != null
-                ? (json['wars'] as List<dynamic>)
-                    .map((w) => PlayerWarStatsData.fromJson(
-                        w, playerTag ?? json['tag']))
-                    .toList()
-                : [],
-        statsByType: (json['stats'] as Map<String, dynamic>)
-            .map((key, value) => MapEntry(
-                  key,
-                  PlayerWarTypeStats.fromJson(value),
-                )),
+            ? (json['wars'] as List<dynamic>)
+                  .map(
+                    (w) => PlayerWarStatsData.fromJson(
+                      w,
+                      playerTag ?? json['tag'],
+                    ),
+                  )
+                  .toList()
+            : [],
+        statsByType: (json['stats'] as Map<String, dynamic>).map(
+          (key, value) => MapEntry(key, PlayerWarTypeStats.fromJson(value)),
+        ),
       );
     } catch (e) {
       DebugUtils.debugError(' Error parsing PlayerWarStats: $e');
@@ -99,10 +108,10 @@ class PlayerWarStats {
 
         final matchAttacker =
             (attackerThFilter == null || attackerThFilter.isEmpty) ||
-                attackerThFilter.contains(attackerTh);
+            attackerThFilter.contains(attackerTh);
         final matchDefender =
             (defenderThFilter == null || defenderThFilter.isEmpty) ||
-                defenderThFilter.contains(defenderTh);
+            defenderThFilter.contains(defenderTh);
 
         final match = equalThSelected
             ? (attackerTh == defenderTh && matchAttacker && matchDefender)
@@ -135,10 +144,10 @@ class PlayerWarStats {
         final matchEqual = equalThSelected && attackerTh == defenderTh;
         final matchAttacker =
             (attackerThFilter == null || attackerThFilter.isEmpty) ||
-                attackerThFilter.contains(attackerTh);
+            attackerThFilter.contains(attackerTh);
         final matchDefender =
             (defenderThFilter == null || defenderThFilter.isEmpty) ||
-                defenderThFilter.contains(defenderTh);
+            defenderThFilter.contains(defenderTh);
 
         final match = matchEqual || (matchAttacker && matchDefender);
         if (!match) return;
@@ -256,12 +265,7 @@ class PlayerWarTypeStats {
   Map<String, int> getStarsCountAgainstTh(int? thLevel) {
     if (thLevel == null || byEnemyTownhall.isEmpty) return starsCount;
 
-    final Map<String, int> result = {
-      "0": 0,
-      "1": 0,
-      "2": 0,
-      "3": 0,
-    };
+    final Map<String, int> result = {"0": 0, "1": 0, "2": 0, "3": 0};
 
     final matchingKeys = byEnemyTownhall.keys.where(
       (key) => key.endsWith('vs$thLevel'),
@@ -288,11 +292,14 @@ class PlayerWarTypeStats {
       missedDefenses: json['missedDefenses'] ?? 0,
       starsCount: Map<String, int>.from(json['starsCount'] ?? {}),
       starsCountDef: Map<String, int>.from(json['starsCountDef'] ?? {}),
-      byEnemyTownhall: ((json['byEnemyTownhall'] as Map<String, dynamic>?) ?? {}).map(
-          (key, value) => MapEntry(key, EnemyTownhallStats.fromJson(value))),
-      byEnemyTownhallDef: ((json['byEnemyTownhallDef'] as Map<String, dynamic>?) ?? {})
-          .map((key, value) =>
-              MapEntry(key, EnemyTownhallStats.fromJson(value))),
+      byEnemyTownhall:
+          ((json['byEnemyTownhall'] as Map<String, dynamic>?) ?? {}).map(
+            (key, value) => MapEntry(key, EnemyTownhallStats.fromJson(value)),
+          ),
+      byEnemyTownhallDef:
+          ((json['byEnemyTownhallDef'] as Map<String, dynamic>?) ?? {}).map(
+            (key, value) => MapEntry(key, EnemyTownhallStats.fromJson(value)),
+          ),
     );
   }
 }
@@ -301,13 +308,12 @@ class PlayerWarStatsData {
   final WarInfo warDetails;
   final WarMemberData memberData;
 
-  PlayerWarStatsData({
-    required this.warDetails,
-    required this.memberData,
-  });
+  PlayerWarStatsData({required this.warDetails, required this.memberData});
 
   factory PlayerWarStatsData.fromJson(
-      Map<String, dynamic> json, String playerTag) {
+    Map<String, dynamic> json,
+    String playerTag,
+  ) {
     try {
       final warDetails = WarInfo.fromJson(json['war_data']);
       final members = json['members'] as List<dynamic>? ?? [];
@@ -315,8 +321,10 @@ class PlayerWarStatsData {
       // On ne peut parser qu'un seul membre ici, donc on choisit le premier si présent
       if (members.isEmpty) throw Exception("No members in war json");
 
-      final member =
-          members.firstWhere((m) => m['tag'] == playerTag, orElse: () => null);
+      final member = members.firstWhere(
+        (m) => m['tag'] == playerTag,
+        orElse: () => null,
+      );
 
       if (member == null) {
         throw Exception("Member with tag $playerTag not found in war.");

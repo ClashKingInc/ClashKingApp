@@ -1,5 +1,5 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -36,7 +36,7 @@ class PlayerToDoScreen extends StatefulWidget {
   final List<Player> players;
   final Map<String, WarMemberPresence> memberPresenceMap;
 
-  PlayerToDoScreen({
+  const PlayerToDoScreen({
     super.key,
     required this.players,
     required this.memberPresenceMap,
@@ -329,7 +329,7 @@ class _TodoSearchField extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          NativeLiquidGlassBar(
+          LiquidGlassBar(
             height: 44,
             cornerRadius: 22,
             borderOpacity: Theme.of(context).brightness == Brightness.dark

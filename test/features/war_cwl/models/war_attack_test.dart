@@ -11,14 +11,13 @@ Map<String, dynamic> _miniMemberJson({
   int townhallLevel = 15,
   int mapPosition = 1,
   int? opponentAttacks,
-}) =>
-    <String, dynamic>{
-      'tag': tag,
-      'name': name,
-      'townhallLevel': townhallLevel,
-      'mapPosition': mapPosition,
-      if (opponentAttacks != null) 'opponentAttacks': opponentAttacks,
-    };
+}) => <String, dynamic>{
+  'tag': tag,
+  'name': name,
+  'townhallLevel': townhallLevel,
+  'mapPosition': mapPosition,
+  'opponentAttacks': ?opponentAttacks,
+};
 
 Map<String, dynamic> _warAttackJson({
   String attackerTag = '#ATTACKER',
@@ -29,17 +28,16 @@ Map<String, dynamic> _warAttackJson({
   int? duration,
   Map<String, dynamic>? defender,
   Map<String, dynamic>? attacker,
-}) =>
-    <String, dynamic>{
-      'attackerTag': attackerTag,
-      'defenderTag': defenderTag,
-      'stars': stars,
-      'destructionPercentage': destructionPercentage,
-      'order': order,
-      if (duration != null) 'duration': duration,
-      if (defender != null) 'defender': defender,
-      if (attacker != null) 'attacker': attacker,
-    };
+}) => <String, dynamic>{
+  'attackerTag': attackerTag,
+  'defenderTag': defenderTag,
+  'stars': stars,
+  'destructionPercentage': destructionPercentage,
+  'order': order,
+  'duration': ?duration,
+  'defender': ?defender,
+  'attacker': ?attacker,
+};
 
 void main() {
   setUpAll(() {
@@ -119,8 +117,9 @@ void main() {
     });
 
     test('parses destructionPercentage correctly', () {
-      final attack =
-          WarAttack.fromJson(_warAttackJson(destructionPercentage: 85));
+      final attack = WarAttack.fromJson(
+        _warAttackJson(destructionPercentage: 85),
+      );
       expect(attack.destructionPercentage, 85);
     });
 
@@ -140,18 +139,22 @@ void main() {
     });
 
     test('parses nested defender MiniMember', () {
-      final attack = WarAttack.fromJson(_warAttackJson(
-        defender: _miniMemberJson(tag: '#DEF1', name: 'Defender'),
-      ));
+      final attack = WarAttack.fromJson(
+        _warAttackJson(
+          defender: _miniMemberJson(tag: '#DEF1', name: 'Defender'),
+        ),
+      );
       expect(attack.defender, isNotNull);
       expect(attack.defender!.tag, '#DEF1');
       expect(attack.defender!.name, 'Defender');
     });
 
     test('parses nested attacker MiniMember', () {
-      final attack = WarAttack.fromJson(_warAttackJson(
-        attacker: _miniMemberJson(tag: '#ATK1', name: 'Attacker'),
-      ));
+      final attack = WarAttack.fromJson(
+        _warAttackJson(
+          attacker: _miniMemberJson(tag: '#ATK1', name: 'Attacker'),
+        ),
+      );
       expect(attack.attacker, isNotNull);
       expect(attack.attacker!.tag, '#ATK1');
     });
@@ -195,9 +198,9 @@ void main() {
     });
 
     test('defender is non-null when json has defender key', () {
-      final attack = WarAttack.fromJson(_warAttackJson(
-        defender: _miniMemberJson(),
-      ));
+      final attack = WarAttack.fromJson(
+        _warAttackJson(defender: _miniMemberJson()),
+      );
       expect(attack.defender, isNotNull);
     });
   });
@@ -213,7 +216,9 @@ void main() {
     });
 
     test('zero destructionPercentage parsed correctly', () {
-      final attack = WarAttack.fromJson(_warAttackJson(destructionPercentage: 0));
+      final attack = WarAttack.fromJson(
+        _warAttackJson(destructionPercentage: 0),
+      );
       expect(attack.destructionPercentage, 0);
     });
 
@@ -244,8 +249,9 @@ void main() {
     });
 
     test('serialises destructionPercentage', () {
-      final attack =
-          WarAttack.fromJson(_warAttackJson(destructionPercentage: 73));
+      final attack = WarAttack.fromJson(
+        _warAttackJson(destructionPercentage: 73),
+      );
       expect(attack.toJson()['destructionPercentage'], 73);
     });
 

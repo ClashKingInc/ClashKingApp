@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 
 class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CocAccountsAppBar({super.key});
+
   @override
   Size get preferredSize => const Size.fromHeight(60.0);
 
@@ -24,7 +27,14 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
           : IconButton(
               icon: const Icon(Icons.logout),
               tooltip: AppLocalizations.of(context)?.authLogout ?? 'Log out',
-              onPressed: () => context.read<AuthService>().logout(),
+              onPressed: () async {
+                await context.read<AuthService>().logout();
+                if (!context.mounted) return;
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => LoginPage()),
+                  (_) => false,
+                );
+              },
             ),
       actions: <Widget>[
         Row(

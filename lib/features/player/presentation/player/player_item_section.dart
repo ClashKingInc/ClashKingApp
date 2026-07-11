@@ -44,6 +44,9 @@ class PlayerItemSection extends StatefulWidget {
 
 class _PlayerItemSectionState extends State<PlayerItemSection> {
   late bool _expanded;
+  late double _thPercentage;
+  late _RemainingSummary _remainingSummary;
+  late List<PlayerItem> _sortedItems;
 
   List<PlayerItem> get items => widget.items;
   int get townHallLevel => widget.townHallLevel;
@@ -53,20 +56,31 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
   void initState() {
     super.initState();
     _expanded = widget.initiallyExpanded;
+    _recalculateSectionSummary();
+  }
+
+  @override
+  void didUpdateWidget(covariant PlayerItemSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.items, widget.items) ||
+        oldWidget.townHallLevel != widget.townHallLevel) {
+      _recalculateSectionSummary();
+    }
+  }
+
+  void _recalculateSectionSummary() {
+    _thPercentage = _calculateTHCompletionPercentage();
+    _remainingSummary = _calculateRemainingSummary();
+    _sortedItems = [...items]
+      ..sort((a, b) {
+        if (a.isUnlocked == b.isUnlocked) return 0;
+        return a.isUnlocked ? -1 : 1;
+      });
   }
 
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) return const SizedBox.shrink();
-
-    final thPercentage = _calculateTHCompletionPercentage();
-    final remainingSummary = _calculateRemainingSummary();
-    final sortedItems = _expanded
-        ? ([...items]..sort((a, b) {
-            if (a.isUnlocked == b.isUnlocked) return 0;
-            return a.isUnlocked ? -1 : 1;
-          }))
-        : const <PlayerItem>[];
 
     return SizedBox(
       width: double.infinity,
@@ -116,9 +130,9 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                       ),
                       if (items[0] is! PlayerSuperTroop)
                         _TownHallMaxBadge(
-                          percentage: thPercentage,
-                          formattedPercentage: _formatPercentage(thPercentage),
-                          summary: remainingSummary,
+                          percentage: _thPercentage,
+                          formattedPercentage: _formatPercentage(_thPercentage),
+                          summary: _remainingSummary,
                           townHallLevel: townHallLevel,
                         ),
                     ],
@@ -146,7 +160,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
                     return Wrap(
                       spacing: spacing,
                       runSpacing: spacing,
-                      children: sortedItems
+                      children: _sortedItems
                           .map(
                             (item) => _buildItemTile(context, item, tileSize),
                           )

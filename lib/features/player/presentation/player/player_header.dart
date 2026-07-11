@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:clipboard/clipboard.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
@@ -845,7 +844,7 @@ class _CopyablePlayerTag extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(6),
       onTap: () {
-        FlutterClipboard.copy(tag).then((_) {
+        copyTextToClipboard(tag).then((_) {
           if (context.mounted) {
             showClipboardSnackbar(
               context,

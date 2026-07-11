@@ -19,7 +19,7 @@ FutureOr<void> backgroundCallback(Uri? data) async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   static final ColorScheme _darkColorScheme = ColorScheme.fromSeed(
     seedColor: const Color(0xFF0B0B0C),
@@ -78,6 +78,12 @@ class MyApp extends StatelessWidget {
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: Color(0xFF151516),
       contentTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: Color(0xFF030304),
+      modalBackgroundColor: Color(0xFF030304),
+      surfaceTintColor: Colors.transparent,
+      dragHandleColor: Color(0xFF68686C),
     ),
     canvasColor: Colors.transparent,
     elevatedButtonTheme: ElevatedButtonThemeData(

@@ -9,7 +9,6 @@ import 'package:clashkingapp/features/clan/models/clan_league.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_capital/clan_capital_page.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -489,7 +488,7 @@ class _CopyableClanTag extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(6),
       onTap: () {
-        FlutterClipboard.copy(tag).then((_) {
+        copyTextToClipboard(tag).then((_) {
           if (context.mounted) {
             showClipboardSnackbar(
               context,

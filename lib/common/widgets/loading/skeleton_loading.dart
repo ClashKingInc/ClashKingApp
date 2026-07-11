@@ -31,9 +31,10 @@ class _SkeletonLoaderState extends State<SkeletonLoader>
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _controller.repeat();
   }
 
@@ -100,7 +101,7 @@ class WarStatsSkeletonCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           const SizedBox(width: 12),
-          
+
           // Content skeleton
           Expanded(
             child: Column(
@@ -113,7 +114,7 @@ class WarStatsSkeletonCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 const SizedBox(height: 8),
-                
+
                 // Performance indicators skeleton
                 Row(
                   children: [
@@ -124,7 +125,7 @@ class WarStatsSkeletonCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     const SizedBox(width: 12),
-                    
+
                     // Destruction skeleton
                     SkeletonLoader(
                       width: 40,
@@ -134,7 +135,7 @@ class WarStatsSkeletonCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                
+
                 // Date skeleton
                 SkeletonLoader(
                   width: 80,
@@ -144,7 +145,7 @@ class WarStatsSkeletonCard extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Performance indicator skeleton
           SkeletonLoader(
             width: 40,
@@ -179,7 +180,7 @@ class StatCardSkeleton extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           const SizedBox(height: 16),
-          
+
           // Performance indicators skeleton
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -200,7 +201,7 @@ class StatCardSkeleton extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               // Destruction skeleton
               Column(
                 children: [
@@ -217,7 +218,7 @@ class StatCardSkeleton extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               // Count skeleton
               Column(
                 children: [

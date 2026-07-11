@@ -1,19 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' as lgw;
-import 'package:native_liquid_glass/native_liquid_glass.dart' as glass;
 
-/// iOS keeps Apple's real system Liquid Glass (`native_liquid_glass`, a true
-/// `UIVisualEffectView`-backed platform view). Every other platform renders
-/// via `liquid_glass_widgets` (shader-based — Impeller/Vulkan on Android,
-/// lightweight shader on web/desktop) since there is no equivalent system
-/// material to call into there.
-bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
-
+/// UIKit platform-view glass is intentionally avoided. Keeping every surface
+/// in Flutter's compositor avoids platform-view tearing during iOS navigation
+/// and gives every supported platform the same rendering behavior.
 /// Shared floating glass surface — used as a background for buttons, search
 /// fields, header panels and tab bars.
-class NativeLiquidGlassBar extends StatelessWidget {
-  const NativeLiquidGlassBar({
+class LiquidGlassBar extends StatelessWidget {
+  const LiquidGlassBar({
     super.key,
     required this.height,
     this.cornerRadius = 28,
@@ -49,44 +44,10 @@ class NativeLiquidGlassBar extends StatelessWidget {
             ? constraints.maxWidth
             : null;
 
-        // In light mode, colorScheme.surface is near-white — tinting the
-        // glass with it against typically-light page content leaves no
-        // visible glass definition (reads as flat gray/blurry instead).
-        // surfaceContainerHighest carries enough tone to stay visible
-        // while dark mode keeps the original near-black surface tint.
+        // Use a stable theme tint so glass remains legible over mixed content.
         final glassTint = isDark
             ? colorScheme.surface
             : colorScheme.surfaceContainerHighest;
-
-        if (_isIOS) {
-          return glass.LiquidGlassContainer(
-            height: resolvedHeight,
-            config: glass.LiquidGlassConfig(
-              // Always .clear ("less visual weight" per the plugin docs),
-              // even when selected — selected state is already conveyed
-              // by the stronger tint/border below.
-              effect: glass.LiquidGlassEffect.clear,
-              shape: cornerRadius >= resolvedHeight / 2
-                  ? glass.LiquidGlassEffectShape.capsule
-                  : glass.LiquidGlassEffectShape.rect,
-              cornerRadius: cornerRadius,
-              tint: glassTint.withValues(alpha: opacity * 0.7),
-              backgroundColor: glassTint.withValues(
-                alpha: selected ? 0.34 : 0.22,
-              ),
-              interactive: interactive,
-              border: glass.LiquidGlassBorder(
-                color: colorScheme.outlineVariant.withValues(
-                  alpha: selected
-                      ? effectiveBorderOpacity.clamp(0.42, 1.0)
-                      : effectiveBorderOpacity,
-                ),
-                width: 0.8,
-              ),
-            ),
-            child: const SizedBox.expand(),
-          );
-        }
 
         return DecoratedBox(
           decoration: BoxDecoration(
@@ -116,6 +77,11 @@ class NativeLiquidGlassBar extends StatelessWidget {
                     ),
                     blur: 6,
                     thickness: 16,
+                    chromaticAberration: 0.002,
+                    lightIntensity: 0.16,
+                    saturation: 1.05,
+                    glowIntensity: 0.10,
+                    shadowElevation: 0.35,
                   ),
                 ),
                 IgnorePointer(
@@ -142,8 +108,8 @@ class NativeLiquidGlassBar extends StatelessWidget {
   }
 }
 
-class NativeLiquidGlassTabItem {
-  const NativeLiquidGlassTabItem({
+class LiquidGlassTabItem {
+  const LiquidGlassTabItem({
     required this.icon,
     required this.label,
     this.selectedIcon,
@@ -156,14 +122,9 @@ class NativeLiquidGlassTabItem {
   final Color? selectedItemColor;
 }
 
-/// Floating bottom tab bar. iOS uses Apple's real native tab bar; other
-/// platforms use `liquid_glass_widgets`' `GlassTabBar.bottom` — note that
-/// widget wants to sit directly as `Scaffold.bottomNavigationBar` for
-/// correct safe-area/floating-margin behavior, so most call sites (e.g. the
-/// app's bottom navigation in `my_home_page.dart`) call `GlassTabBar.bottom`
-/// directly for non-iOS rather than through this wrapper.
-class NativeLiquidGlassTabBar extends StatelessWidget {
-  const NativeLiquidGlassTabBar({
+/// Flutter-composited floating bottom tab bar for every platform.
+class LiquidGlassTabBar extends StatelessWidget {
+  const LiquidGlassTabBar({
     super.key,
     required this.height,
     required this.itemCount,
@@ -184,8 +145,8 @@ class NativeLiquidGlassTabBar extends StatelessWidget {
   final int itemCount;
   final int selectedIndex;
   final ValueChanged<int>? onTabSelected;
-  final List<NativeLiquidGlassTabItem>? items;
-  final NativeLiquidGlassTabItem? actionButton;
+  final List<LiquidGlassTabItem>? items;
+  final LiquidGlassTabItem? actionButton;
   final VoidCallback? onActionButtonPressed;
   final double cornerRadius;
   final double selectedCornerRadius;
@@ -196,7 +157,9 @@ class NativeLiquidGlassTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
 
     if (items == null ||
         items!.length != itemCount ||
@@ -204,46 +167,6 @@ class NativeLiquidGlassTabBar extends StatelessWidget {
         selectedIndex >= itemCount ||
         onTabSelected == null) {
       return const SizedBox.shrink();
-    }
-
-    if (_isIOS) {
-      return glass.LiquidGlassTabBar(
-        height: height,
-        currentIndex: selectedIndex,
-        onTabSelected: onTabSelected!,
-        onActionButtonPressed: onActionButtonPressed,
-        iosActionButton: actionButton == null
-            ? null
-            : glass.LiquidGlassTabItem(
-                label: actionButton!.label,
-                icon: glass.NativeLiquidGlassIcon.iconData(actionButton!.icon),
-                selectedIcon: glass.NativeLiquidGlassIcon.iconData(
-                  actionButton!.selectedIcon ?? actionButton!.icon,
-                ),
-                selectedItemColor:
-                    actionButton!.selectedItemColor ?? colorScheme.primary,
-              ),
-        items: items!
-            .map(
-              (item) => glass.LiquidGlassTabItem(
-                label: item.label,
-                icon: glass.NativeLiquidGlassIcon.iconData(item.icon),
-                selectedIcon: glass.NativeLiquidGlassIcon.iconData(
-                  item.selectedIcon ?? item.icon,
-                ),
-                selectedItemColor:
-                    item.selectedItemColor ?? colorScheme.primary,
-              ),
-            )
-            .toList(growable: false),
-        selectedItemColor: colorScheme.primary,
-        iosItemPositioning: glass.LiquidGlassTabBarItemPositioning.fill,
-        iconSize: iconSize,
-        labelTextStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
-          fontWeight: FontWeight.w600,
-          height: 1.0,
-        ),
-      );
     }
 
     return lgw.GlassTabBar.bottom(
@@ -262,13 +185,30 @@ class NativeLiquidGlassTabBar extends StatelessWidget {
       selectedIconColor: items![selectedIndex].selectedItemColor,
       selectedLabelColor: items![selectedIndex].selectedItemColor,
       iconSize: iconSize,
+      settings: lgw.LiquidGlassSettings(
+        glassColor: (isDark ? const Color(0xFF080809) : Colors.white)
+            .withValues(alpha: isDark ? 0.72 : 0.56),
+        blur: 7,
+        thickness: 16,
+        chromaticAberration: 0.002,
+        lightIntensity: 0.14,
+        saturation: 1.0,
+        glowIntensity: 0.08,
+        shadowElevation: 0.4,
+      ),
+      indicatorColor:
+          (isDark ? colorScheme.surfaceContainerHighest : colorScheme.surface)
+              .withValues(alpha: isDark ? 0.72 : 0.68),
+      unselectedIconColor: colorScheme.onSurface.withValues(alpha: 0.82),
+      unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.82),
+      glowOpacity: 0.14,
     );
   }
 }
 
 /// Frosted round/pill icon button.
-class NativeLiquidGlassIconButton extends StatelessWidget {
-  const NativeLiquidGlassIconButton({
+class LiquidGlassIconButton extends StatelessWidget {
+  const LiquidGlassIconButton({
     super.key,
     required this.icon,
     required this.onPressed,
@@ -290,17 +230,6 @@ class NativeLiquidGlassIconButton extends StatelessWidget {
     final iconColor =
         tint ?? (selected ? colorScheme.primary : colorScheme.onSurface);
 
-    if (_isIOS) {
-      return glass.LiquidGlassButton.icon(
-        size: size,
-        iconSize: 30,
-        icon: glass.NativeLiquidGlassIcon.iconData(icon),
-        iconColor: iconColor,
-        tint: colorScheme.surface.withValues(alpha: selected ? 0.72 : 0.58),
-        onPressed: onPressed,
-      );
-    }
-
     final glassTint = isDark
         ? colorScheme.surface
         : colorScheme.surfaceContainerHighest;
@@ -321,8 +250,8 @@ class NativeLiquidGlassIconButton extends StatelessWidget {
 }
 
 /// Glass-style segmented control — filter/mode toggles throughout the app.
-class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
-  const NativeLiquidGlassSegmentedControl({
+class LiquidGlassSegmentedControl<T> extends StatelessWidget {
+  const LiquidGlassSegmentedControl({
     super.key,
     required this.values,
     required this.labels,
@@ -352,17 +281,7 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
 
     final resolvedColor = color ?? Theme.of(context).colorScheme.primary;
 
-    if (_isIOS) {
-      return glass.LiquidGlassSegmentedControl(
-        labels: labels,
-        selectedIndex: selectedIndex,
-        height: height,
-        color: resolvedColor,
-        onValueChanged: (index) => onChanged(values[index]),
-      );
-    }
-
-    return _AndroidSegmentedControl<T>(
+    return _FallbackSegmentedControl<T>(
       values: values,
       labels: labels,
       selectedIndex: selectedIndex,
@@ -373,8 +292,8 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
   }
 }
 
-class _AndroidSegmentedControl<T> extends StatelessWidget {
-  const _AndroidSegmentedControl({
+class _FallbackSegmentedControl<T> extends StatelessWidget {
+  const _FallbackSegmentedControl({
     required this.values,
     required this.labels,
     required this.selectedIndex,
@@ -442,7 +361,7 @@ class _AndroidSegmentedControl<T> extends StatelessWidget {
                   children: [
                     for (var index = 0; index < labels.length; index++)
                       Expanded(
-                        child: _AndroidSegmentButton(
+                        child: _GlassSegmentButton(
                           label: labels[index],
                           selected: index == selectedIndex,
                           selectedColor: selectedColor,
@@ -460,8 +379,8 @@ class _AndroidSegmentedControl<T> extends StatelessWidget {
   }
 }
 
-class _AndroidSegmentButton extends StatelessWidget {
-  const _AndroidSegmentButton({
+class _GlassSegmentButton extends StatelessWidget {
+  const _GlassSegmentButton({
     required this.label,
     required this.selected,
     required this.selectedColor,
@@ -527,10 +446,4 @@ class _AndroidSegmentButton extends StatelessWidget {
 /// rely on this flag to fall back to an opaque fill — see
 /// [HeaderPanelBackground] in header_widgets.dart for the
 /// backdrop-sampling-in-slivers rationale.
-bool get supportsNativeLiquidGlass => !kIsWeb;
-
-/// Whether the current platform renders Apple's real native Liquid Glass
-/// (vs. the shader-based `liquid_glass_widgets` used elsewhere). Exposed so
-/// call sites with platform-specific layout needs (e.g. the app's bottom
-/// navigation bar) can branch without duplicating the platform check.
-bool get usesNativeGlassPlatform => _isIOS;
+bool get supportsLiquidGlass => !kIsWeb;

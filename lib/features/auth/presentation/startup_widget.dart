@@ -1,6 +1,7 @@
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/account_bootstrap_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
@@ -14,14 +15,17 @@ import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
-import 'package:clashkingapp/widgets/war_widget.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 
 class StartupWidget extends StatefulWidget {
+  const StartupWidget({super.key});
+
   @override
   StartupWidgetState createState() => StartupWidgetState();
 }
 
 class StartupWidgetState extends State<StartupWidget> {
+  static const _accountBootstrap = AccountBootstrapService();
   bool _isInitializing = true;
 
   @override
@@ -32,9 +36,10 @@ class StartupWidgetState extends State<StartupWidget> {
 
   Future<void> _initAuth() async {
     final authService = context.read<AuthService>();
+    final gameDataLoad = GameDataService.loadGameData();
 
     try {
-      await authService.initializeAuth();
+      await Future.wait([authService.initializeAuth(), gameDataLoad]);
     } catch (e) {
       if (isNetworkError(e) || isMaintenanceError(e)) {
         if (mounted) _showInitializationFailure(e);
@@ -54,30 +59,14 @@ class StartupWidgetState extends State<StartupWidget> {
       final warService = context.read<WarCwlService>();
       final bookmarkService = context.read<BookmarkService>();
       try {
-        cocService.setCurrentUserId(authService.currentUser?.userId);
-        bookmarkService.setCurrentUserId(authService.currentUser?.userId);
-        // Load the selected tag from SharedPreferences first
-        await cocService.loadSelectedTag();
-        if (!bookmarkService.loaded) {
-          await bookmarkService.load();
-        }
-        final bookmarkedPlayerTags = bookmarkService.players
-            .map((player) => player.tag)
-            .toList(growable: false);
-        final bookmarkedClanTags = bookmarkService.clans
-            .map((clan) => clan.tag)
-            .toList(growable: false);
-        await Future.wait([
-          cocService.loadApiData(
-            playerService,
-            clanService,
-            warService,
-            bookmarkedClanTags: bookmarkedClanTags,
-          ),
-          if (bookmarkedPlayerTags.isNotEmpty)
-            playerService.hydrateBookmarkedPlayers(bookmarkedPlayerTags),
-        ]);
-        _seedWarWidgetClans(cocService, playerService, bookmarkService);
+        await _accountBootstrap.initialize(
+          userId: authService.currentUser?.userId,
+          cocAccounts: cocService,
+          bookmarks: bookmarkService,
+          players: playerService,
+          clans: clanService,
+          wars: warService,
+        );
       } catch (e, stackTrace) {
         DebugUtils.debugError(" Startup data initialization failed: $e");
         DebugUtils.debugError(stackTrace.toString());
@@ -93,21 +82,6 @@ class StartupWidgetState extends State<StartupWidget> {
     });
 
     _navigateToNextScreen(authService);
-  }
-
-  void _seedWarWidgetClans(
-    CocAccountService cocService,
-    PlayerService playerService,
-    BookmarkService bookmarkService,
-  ) {
-    WarWidgetService.seedClanOptionsFromProfiles(
-      playerService.profiles,
-      bookmarkedClans: bookmarkService.clans,
-      selectedPlayerTag: cocService.selectedTag,
-      refreshWarData: true,
-    ).catchError((error) {
-      DebugUtils.debugWarning("Could not seed war widget clans: $error");
-    });
   }
 
   void _showInitializationFailure(dynamic error) {

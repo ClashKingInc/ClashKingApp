@@ -4,17 +4,14 @@ import 'package:clashkingapp/features/player/models/player_item.dart';
 class PlayerSpell extends PlayerItem {
   final String village;
 
-  PlayerSpell(
-      {required super.name,
-      required super.level,
-      required super.maxLevel,
-      required this.village,
-      required super.isUnlocked,
-      super.meta})
-      : super(
-          type: 'spell',
-          imageUrl: ImageAssets.getSpellImage(name),
-        );
+  PlayerSpell({
+    required super.name,
+    required super.level,
+    required super.maxLevel,
+    required this.village,
+    required super.isUnlocked,
+    super.meta,
+  }) : super(type: 'spell', imageUrl: ImageAssets.getSpellImage(name));
 
   factory PlayerSpell.fromJson(Map<String, dynamic> json) {
     return PlayerSpell(
@@ -26,13 +23,14 @@ class PlayerSpell extends PlayerItem {
     );
   }
 
-  factory PlayerSpell.fromRaw(
-      {required String name,
-      required int level,
-      required int maxLevel,
-      required bool isUnlocked,
-      Map<String, dynamic>? meta,
-    Map<String, dynamic>? rawJson}) {
+  factory PlayerSpell.fromRaw({
+    required String name,
+    required int level,
+    required int maxLevel,
+    required bool isUnlocked,
+    Map<String, dynamic>? meta,
+    Map<String, dynamic>? rawJson,
+  }) {
     return PlayerSpell(
       name: name,
       level: level,

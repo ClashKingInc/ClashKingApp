@@ -14,22 +14,21 @@ class PlayerHero extends PlayerItem {
     required this.equipment,
     required super.isUnlocked,
     super.meta,
-  }) : super(
-          type: 'hero',
-          imageUrl: ImageAssets.getHeroImage(name),
-        );
+  }) : super(type: 'hero', imageUrl: ImageAssets.getHeroImage(name));
 
   factory PlayerHero.fromJson(Map<String, dynamic> json) {
     return PlayerHero(
-        name: json['name'] ?? 'No name',
-        level: json['level'] ?? 0,
-        maxLevel: json['maxLevel'] ?? 0,
-        village: json['village'] ?? 'home',
-        equipment: json['equipment'] != null
-            ? List<PlayerEquipedEquipment>.from(json['equipment']
-                .map((x) => PlayerEquipedEquipment.fromJson(x)))
-            : [],
-        isUnlocked: true);
+      name: json['name'] ?? 'No name',
+      level: json['level'] ?? 0,
+      maxLevel: json['maxLevel'] ?? 0,
+      village: json['village'] ?? 'home',
+      equipment: json['equipment'] != null
+          ? List<PlayerEquipedEquipment>.from(
+              json['equipment'].map((x) => PlayerEquipedEquipment.fromJson(x)),
+            )
+          : [],
+      isUnlocked: true,
+    );
   }
 
   factory PlayerHero.fromRaw({
@@ -47,8 +46,11 @@ class PlayerHero extends PlayerItem {
       isUnlocked: isUnlocked,
       meta: meta,
       equipment: rawJson?['equipment'] != null
-          ? List<PlayerEquipedEquipment>.from(rawJson!['equipment']
-              .map((x) => PlayerEquipedEquipment.fromJson(x)))
+          ? List<PlayerEquipedEquipment>.from(
+              rawJson!['equipment'].map(
+                (x) => PlayerEquipedEquipment.fromJson(x),
+              ),
+            )
           : [],
       village: meta?['village'] ?? 'home',
     );

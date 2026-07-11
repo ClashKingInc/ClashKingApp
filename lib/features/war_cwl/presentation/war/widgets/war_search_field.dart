@@ -1,4 +1,4 @@
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:flutter/material.dart';
 
 class WarSearchField extends StatelessWidget {
@@ -22,7 +22,7 @@ class WarSearchField extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          NativeLiquidGlassBar(
+          LiquidGlassBar(
             height: 44,
             cornerRadius: 22,
             borderOpacity: Theme.of(context).brightness == Brightness.dark

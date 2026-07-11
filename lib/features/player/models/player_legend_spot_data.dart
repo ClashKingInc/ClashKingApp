@@ -37,13 +37,14 @@ class SpotData {
     final spots = rankings.map((ranking) {
       final seasonDate = DateTime.parse(
         ranking.season.split('-').length == 2
-          ? '${ranking.season}-01'
-          : ranking.season
+            ? '${ranking.season}-01'
+            : ranking.season,
       );
-      return FlSpot(seasonDate.millisecondsSinceEpoch.toDouble(),
-          ranking.trophies.toDouble());
-    }).toList()
-      ..sort((a, b) => a.x.compareTo(b.x));
+      return FlSpot(
+        seasonDate.millisecondsSinceEpoch.toDouble(),
+        ranking.trophies.toDouble(),
+      );
+    }).toList()..sort((a, b) => a.x.compareTo(b.x));
 
     final minX = spots.first.x;
     final maxX = spots.last.x;

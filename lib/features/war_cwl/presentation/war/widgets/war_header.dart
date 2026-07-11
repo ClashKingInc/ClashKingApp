@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:clipboard/clipboard.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -359,7 +358,7 @@ class _CopyableWarClanTag extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          FlutterClipboard.copy(tag).then((_) {
+          copyTextToClipboard(tag).then((_) {
             if (!context.mounted) return;
             showClipboardSnackbar(
               context,

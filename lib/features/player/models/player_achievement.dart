@@ -1,4 +1,3 @@
-
 class PlayerAchievement {
   final String name;
   final int stars;
@@ -8,14 +7,15 @@ class PlayerAchievement {
   final String completionInfo;
   final String village;
 
-  PlayerAchievement(
-      {required this.name,
-      required this.stars,
-      required this.value,
-      required this.target,
-      this.info = '',
-      this.completionInfo = '',
-      this.village = ''});
+  PlayerAchievement({
+    required this.name,
+    required this.stars,
+    required this.value,
+    required this.target,
+    this.info = '',
+    this.completionInfo = '',
+    this.village = '',
+  });
 
   factory PlayerAchievement.fromJson(Map<String, dynamic> json) {
     return PlayerAchievement(

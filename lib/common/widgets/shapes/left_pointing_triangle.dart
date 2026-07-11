@@ -37,7 +37,7 @@ class _LeftPointingTrianglePainter extends CustomPainter {
       ..lineTo(0, size.height / 2) // Middle left corner
       ..lineTo(size.width, size.height) // Bottom right corner
       ..close(); // Automatically draws a line to the start point to close the path
-    
+
     canvas.drawPath(path, paint);
   }
 

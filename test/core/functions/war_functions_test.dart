@@ -17,13 +17,15 @@ WarMember _memberWithStars(List<int> stars) {
     attacks: stars
         .asMap()
         .entries
-        .map((e) => WarAttack(
-              attackerTag: '#TAG',
-              defenderTag: '#DEF',
-              stars: e.value,
-              destructionPercentage: 100,
-              order: e.key + 1,
-            ))
+        .map(
+          (e) => WarAttack(
+            attackerTag: '#TAG',
+            defenderTag: '#DEF',
+            stars: e.value,
+            destructionPercentage: 100,
+            order: e.key + 1,
+          ),
+        )
         .toList(),
   );
 }
@@ -42,15 +44,15 @@ WarClan _clanWithMembers(List<WarMember> members) {
 }
 
 ClanDetails _clanDetails({int stars = 10, double dest = 80.0}) => ClanDetails(
-      tag: '#CLAN',
-      name: 'Test Clan',
-      badgeUrls: ClanBadgeUrls(small: '', medium: '', large: ''),
-      clanLevel: 10,
-      attacks: 0,
-      stars: stars,
-      destructionPercentage: dest,
-      expEarned: 0,
-    );
+  tag: '#CLAN',
+  name: 'Test Clan',
+  badgeUrls: ClanBadgeUrls(small: '', medium: '', large: ''),
+  clanLevel: 10,
+  attacks: 0,
+  stars: stars,
+  destructionPercentage: dest,
+  expEarned: 0,
+);
 
 WarLogDetails _logDetails({
   String result = 'win',
@@ -60,16 +62,15 @@ WarLogDetails _logDetails({
   double clanDest = 80.0,
   int oppStars = 5,
   double oppDest = 60.0,
-}) =>
-    WarLogDetails(
-      result: result,
-      clanTag: '#CLAN',
-      endTime: DateTime(2024, 1, 1),
-      teamSize: teamSize,
-      attacksPerMember: attacksPerMember,
-      clan: _clanDetails(stars: clanStars, dest: clanDest),
-      opponent: _clanDetails(stars: oppStars, dest: oppDest),
-    );
+}) => WarLogDetails(
+  result: result,
+  clanTag: '#CLAN',
+  endTime: DateTime(2024, 1, 1),
+  teamSize: teamSize,
+  attacksPerMember: attacksPerMember,
+  clan: _clanDetails(stars: clanStars, dest: clanDest),
+  opponent: _clanDetails(stars: oppStars, dest: oppDest),
+);
 
 void main() {
   setUpAll(() {
@@ -96,7 +97,9 @@ void main() {
     });
 
     test('counts a single 3-star attack', () {
-      final members = [_memberWithStars([3])];
+      final members = [
+        _memberWithStars([3]),
+      ];
       final result = countStars(members);
       expect(result[3], 1);
       expect(result[0], 0);
@@ -156,9 +159,27 @@ void main() {
 
     test('finds correct member among multiple', () {
       final members = [
-        WarMember(tag: '#P1', name: 'Alice', townhallLevel: 15, mapPosition: 1, opponentAttacks: 0),
-        WarMember(tag: '#P2', name: 'Bob', townhallLevel: 14, mapPosition: 2, opponentAttacks: 0),
-        WarMember(tag: '#P3', name: 'Carol', townhallLevel: 13, mapPosition: 3, opponentAttacks: 0),
+        WarMember(
+          tag: '#P1',
+          name: 'Alice',
+          townhallLevel: 15,
+          mapPosition: 1,
+          opponentAttacks: 0,
+        ),
+        WarMember(
+          tag: '#P2',
+          name: 'Bob',
+          townhallLevel: 14,
+          mapPosition: 2,
+          opponentAttacks: 0,
+        ),
+        WarMember(
+          tag: '#P3',
+          name: 'Carol',
+          townhallLevel: 13,
+          mapPosition: 3,
+          opponentAttacks: 0,
+        ),
       ];
       final clan = _clanWithMembers(members);
       expect(getMemberByTag('#P2', clan)!.name, 'Bob');
@@ -242,10 +263,7 @@ void main() {
     });
 
     test('computes average destruction correctly', () {
-      final logs = [
-        _logDetails(clanDest: 80.0),
-        _logDetails(clanDest: 60.0),
-      ];
+      final logs = [_logDetails(clanDest: 80.0), _logDetails(clanDest: 60.0)];
       final result = analyzeWarLogs(logs);
       expect(result['averageClanDestruction'], '70');
     });

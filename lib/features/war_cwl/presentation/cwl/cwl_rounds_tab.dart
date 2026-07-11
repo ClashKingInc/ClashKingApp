@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class CwlRoundsTab extends StatefulWidget {
   final WarCwl warCwl;
 
-  CwlRoundsTab({super.key, required this.warCwl});
+  const CwlRoundsTab({super.key, required this.warCwl});
 
   @override
   CwlRoundsTabState createState() => CwlRoundsTabState();

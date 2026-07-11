@@ -24,7 +24,8 @@ class WarAttack {
       attackerTag: json['attackerTag']?.toString() ?? '',
       defenderTag: json['defenderTag']?.toString() ?? '',
       stars: (json['stars'] as num?)?.toInt() ?? 0,
-      destructionPercentage: (json['destructionPercentage'] as num?)?.toInt() ?? 0,
+      destructionPercentage:
+          (json['destructionPercentage'] as num?)?.toInt() ?? 0,
       order: (json['order'] as num?)?.toInt() ?? 0,
       duration: (json['duration'] as num?)?.toInt(), // Attack duration from API
       defender: json['defender'] != null
@@ -47,7 +48,6 @@ class WarAttack {
     };
   }
 }
-
 
 class MiniMember {
   final String tag;

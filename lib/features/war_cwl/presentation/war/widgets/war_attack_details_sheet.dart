@@ -532,7 +532,7 @@ class _MemberSnapshot {
     final map = mapPosition == null || mapPosition == 0
         ? null
         : 'N°$mapPosition';
-    return [if (map != null) map, tag].join(' · ');
+    return [?map, tag].join(' · ');
   }
 
   factory _MemberSnapshot.fromWar(

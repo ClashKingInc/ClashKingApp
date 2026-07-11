@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -12,31 +15,25 @@ class AppLoadingScreen extends StatefulWidget {
 
 class _AppLoadingScreenState extends State<AppLoadingScreen>
     with TickerProviderStateMixin {
-  late AnimationController _rotationController;
   late AnimationController _pulseController;
   late AnimationController _textController;
   late Animation<double> _textOpacityAnimation;
+  Timer? _textTimer;
 
   List<String> get _loadingTexts => [
-        AppLocalizations.of(context)!.loadingVillages,
-        AppLocalizations.of(context)!.loadingClanData,
-        AppLocalizations.of(context)!.loadingWarStats,
-        AppLocalizations.of(context)!.loadingLegendsData,
-        AppLocalizations.of(context)!.loadingCapitalRaids,
-        AppLocalizations.of(context)!.loadingAlmostReady,
-      ];
+    AppLocalizations.of(context)!.loadingVillages,
+    AppLocalizations.of(context)!.loadingClanData,
+    AppLocalizations.of(context)!.loadingWarStats,
+    AppLocalizations.of(context)!.loadingLegendsData,
+    AppLocalizations.of(context)!.loadingCapitalRaids,
+    AppLocalizations.of(context)!.loadingAlmostReady,
+  ];
 
   int _currentTextIndex = 0;
 
   @override
   void initState() {
     super.initState();
-
-    // Rotation animation for the logo (disabled)
-    _rotationController = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
 
     // Pulse animation for the progress indicator
     _pulseController = AnimationController(
@@ -49,27 +46,18 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    _textOpacityAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _textController,
-      curve: Curves.easeInOut,
-    ));
+    _textOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _textController, curve: Curves.easeInOut),
+    );
 
-    // Start animations
-    // _rotationController.repeat(); // Disabled rotation
     _pulseController.repeat(reverse: true);
     _textController.forward();
-
-    // Cycle through loading texts
-    _startTextCycle();
+    _scheduleNextText();
   }
 
-  void _startTextCycle() {
-    // Start with the first text immediately visible
-    _textController.forward();
-    Future.delayed(const Duration(milliseconds: 800), () {
+  void _scheduleNextText() {
+    _textTimer?.cancel();
+    _textTimer = Timer(const Duration(milliseconds: 800), () {
       if (mounted) {
         _cycleText();
       }
@@ -87,11 +75,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
         _textController.forward().then((_) {
           // Only continue cycling if we haven't reached the last text
           if (_currentTextIndex < _loadingTexts.length - 1) {
-            Future.delayed(const Duration(milliseconds: 800), () {
-              if (mounted) {
-                _cycleText();
-              }
-            });
+            _scheduleNextText();
           }
         });
       }
@@ -100,7 +84,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
   @override
   void dispose() {
-    _rotationController.dispose();
+    _textTimer?.cancel();
     _pulseController.dispose();
     _textController.dispose();
     super.dispose();
@@ -116,14 +100,17 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
           children: [
             // Static Logo
             SizedBox(
+              key: const Key('startup-mark'),
               width: 80,
               height: 80,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: MobileWebImage(
-                    imageUrl: Theme.of(context).brightness == Brightness.dark
-                        ? ImageAssets.darkModeLogo
-                        : ImageAssets.lightModeLogo),
+                  imageUrl: Theme.of(context).brightness == Brightness.dark
+                      ? ImageAssets.darkModeLogo
+                      : ImageAssets.lightModeLogo,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
 
@@ -131,12 +118,18 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
             // App Text Logo
             SizedBox(
-              height: 35,
-              child: MobileWebImage(
+              key: const Key('startup-wordmark'),
+              width: math.min(MediaQuery.sizeOf(context).width * 0.82, 320),
+              child: AspectRatio(
+                // Intrinsic dimensions of both CK wordmark variants.
+                aspectRatio: 3806 / 558,
+                child: MobileWebImage(
                   imageUrl: Theme.of(context).brightness == Brightness.dark
                       ? ImageAssets.darkModeTextLogo
                       : ImageAssets.lightModeTextLogo,
-                  fit: BoxFit.contain),
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
 
             const SizedBox(height: 200),
@@ -150,11 +143,10 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
                   child: Text(
                     _loadingTexts[_currentTextIndex],
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.7),
-                        ),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 );
@@ -177,10 +169,9 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
                     borderRadius: BorderRadius.circular(4),
                     color: isActive
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.3),
+                        : Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.3),
                   ),
                 );
               }),

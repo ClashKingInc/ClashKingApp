@@ -21,11 +21,9 @@ import 'package:clashkingapp/features/settings/presentation/translation_page.dar
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -96,7 +94,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               Consumer<ThemeNotifier>(
                 builder: (context, themeNotifier, child) {
                   return _SettingsTile(
-                    icon: LucideIcons.sunMoon,
+                    icon: Icons.brightness_6_outlined,
                     title: l10n.settingsToggleTheme,
                     trailingText: _themeModeLabel(
                       context,
@@ -109,7 +107,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               ),
               if (_supportsAlternateIcons)
                 _SettingsTile(
-                  icon: LucideIcons.image,
+                  icon: Icons.image_outlined,
                   title: 'App Icon',
                   trailingText: _isChangingAppIcon
                       ? 'Changing...'
@@ -119,7 +117,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   onTap: _isChangingAppIcon ? null : _showAppIconSelection,
                 ),
               _SettingsTile(
-                icon: LucideIcons.bellRing,
+                icon: Icons.notifications_active_outlined,
                 title: l10n.settingsNotificationsTitle,
                 subtitle: l10n.settingsNotificationsSubtitle,
                 onTap: () {
@@ -131,7 +129,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                 },
               ),
               _SettingsTile(
-                icon: LucideIcons.panelTop,
+                icon: Icons.web_asset_outlined,
                 title: 'Add War Widget',
                 subtitle: widgetClans.isEmpty
                     ? 'Link an account in a clan first'
@@ -145,19 +143,19 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
               title: l10n.settingsLiveActivityTest,
               children: [
                 _SettingsTile(
-                  icon: LucideIcons.radio,
+                  icon: Icons.radio_outlined,
                   title: l10n.settingsLiveActivityStart,
                   subtitle: l10n.settingsLiveActivityStartSubtitle,
                   onTap: () => _runLiveActivityAction('start'),
                 ),
                 _SettingsTile(
-                  icon: LucideIcons.refreshCw,
+                  icon: Icons.refresh_rounded,
                   title: l10n.settingsLiveActivityUpdate,
                   subtitle: l10n.settingsLiveActivityUpdateSubtitle,
                   onTap: () => _runLiveActivityAction('update'),
                 ),
                 _SettingsTile(
-                  icon: LucideIcons.circleStop,
+                  icon: Icons.stop_circle_outlined,
                   title: l10n.settingsLiveActivityEnd,
                   subtitle: l10n.settingsLiveActivityEndSubtitle,
                   onTap: () => _runLiveActivityAction('end'),
@@ -806,64 +804,70 @@ class _SettingsTile extends StatelessWidget {
 
     final rowHeight = subtitle == null ? 50.0 : 62.0;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          height: rowHeight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 28,
-                  child: Icon(icon, color: foreground, size: 22),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: foreground,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17,
-                        ),
-                      ),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 1),
+    return Semantics(
+      button: onTap != null,
+      enabled: onTap != null,
+      label: [title, if (trailingText != null) trailingText].join(', '),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: SizedBox(
+            height: rowHeight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 28,
+                    child: Icon(icon, color: foreground, size: 22),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          subtitle!,
+                          title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: secondary, fontSize: 13),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: foreground,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17,
+                              ),
                         ),
+                        if (subtitle != null) ...[
+                          const SizedBox(height: 1),
+                          Text(
+                            subtitle!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: secondary, fontSize: 13),
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
-                ),
-                if (trailingText != null) ...[
-                  const SizedBox(width: 10),
-                  Text(
-                    trailingText!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: secondary,
-                      fontSize: 16,
                     ),
                   ),
+                  if (trailingText != null) ...[
+                    const SizedBox(width: 10),
+                    Text(
+                      trailingText!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: secondary,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                  if (showChevron && onTap != null) ...[
+                    const SizedBox(width: 5),
+                    Icon(Icons.chevron_right, color: secondary, size: 22),
+                  ],
                 ],
-                if (showChevron && onTap != null) ...[
-                  const SizedBox(width: 5),
-                  Icon(Icons.chevron_right, color: secondary, size: 22),
-                ],
-              ],
+              ),
             ),
           ),
         ),
@@ -1034,7 +1038,7 @@ class _VersionSettingsTile extends StatelessWidget {
           showChevron: false,
           onTap: snapshot.hasData
               ? () {
-                  FlutterClipboard.copy(snapshot.data ?? '').then((_) {
+                  copyTextToClipboard(snapshot.data ?? '').then((_) {
                     if (context.mounted) {
                       showClipboardSnackbar(
                         context,

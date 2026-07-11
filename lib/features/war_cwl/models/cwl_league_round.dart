@@ -11,5 +11,6 @@ class CwlLeagueRound {
     );
   }
 
-  bool containsWar(String? warTag) => warTag != null && warTags.contains(warTag);
+  bool containsWar(String? warTag) =>
+      warTag != null && warTags.contains(warTag);
 }

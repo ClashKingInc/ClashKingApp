@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -85,28 +86,38 @@ class _ClanPageState extends State<ClanPage> {
           clanService,
           warCwlService,
         ),
-        child: ListView(
-          padding: EdgeInsets.fromLTRB(
-            16,
-            0,
-            16,
-            MediaQuery.paddingOf(context).bottom + 96,
-          ),
-          children: [
-            LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-            const SizedBox(height: 8),
-            if (clans.isEmpty)
-              Card(child: NoClanCard())
-            else
-              ...clans.map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _ClanCard(
-                    item: item,
-                    onOpen: () => _openClan(context, clanService, item),
-                  ),
+        child: CustomScrollView(
+          scrollCacheExtent: const ScrollCacheExtent.pixels(800),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverToBoxAdapter(
+                child: LastRefreshIndicator(
+                  lastRefresh: cocService.lastRefresh,
                 ),
               ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(
+                16,
+                8,
+                16,
+                MediaQuery.paddingOf(context).bottom + 96,
+              ),
+              sliver: clans.isEmpty
+                  ? SliverToBoxAdapter(child: Card(child: NoClanCard()))
+                  : SliverList.separated(
+                      itemCount: clans.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      itemBuilder: (context, index) {
+                        final item = clans[index];
+                        return _ClanCard(
+                          item: item,
+                          onOpen: () => _openClan(context, clanService, item),
+                        );
+                      },
+                    ),
+            ),
           ],
         ),
       ),
@@ -276,74 +287,51 @@ class _ClanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat('#,###');
-    return Card(
-      margin: EdgeInsets.zero,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onOpen,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(14, 14, 44, 14),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _ClanBadgeWithMembers(item: item),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: item.bookmarked ? 28 : 86,
-                          ),
-                          child: Text(
-                            item.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 17,
-                                ),
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                item.tag,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.labelLarge
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                    ),
-                              ),
+    return Semantics(
+      button: true,
+      label: 'Open clan ${item.name}',
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onOpen,
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14, 14, 44, 14),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _ClanBadgeWithMembers(item: item),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: item.bookmarked ? 28 : 86,
                             ),
-                            if (item.countryCode.isNotEmpty &&
-                                item.locationName.isNotEmpty) ...[
-                              const SizedBox(width: 6),
-                              SizedBox.square(
-                                dimension: 13,
-                                child: MobileWebImage(
-                                  imageUrl: ImageAssets.flag(item.countryCode),
-                                  fit: BoxFit.contain,
-                                  errorWidget: (context, url, error) =>
-                                      const SizedBox.shrink(),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
+                            child: Text(
+                              item.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 17,
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Row(
+                            children: [
                               Flexible(
                                 child: Text(
-                                  item.locationName,
+                                  item.tag,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.labelMedium
+                                  style: Theme.of(context).textTheme.labelLarge
                                       ?.copyWith(
                                         color: Theme.of(
                                           context,
@@ -351,55 +339,86 @@ class _ClanCard extends StatelessWidget {
                                       ),
                                 ),
                               ),
-                            ],
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
-                          children: [
-                            if (item.clanPoints > 0)
-                              _ClanImageChip(
-                                label: formatter.format(item.clanPoints),
-                                imageUrl: ImageAssets.trophies,
-                              ),
-                            if (item.warLeague.isNotEmpty)
-                              _ClanImageChip(
-                                label: item.warLeague,
-                                imageUrl: ImageAssets.getWarLeagueImage(
-                                  item.warLeague,
+                              if (item.countryCode.isNotEmpty &&
+                                  item.locationName.isNotEmpty) ...[
+                                const SizedBox(width: 6),
+                                SizedBox.square(
+                                  dimension: 13,
+                                  child: MobileWebImage(
+                                    imageUrl: ImageAssets.flag(
+                                      item.countryCode,
+                                    ),
+                                    fit: BoxFit.contain,
+                                    errorWidget: (context, url, error) =>
+                                        const SizedBox.shrink(),
+                                  ),
                                 ),
-                              ),
-                            if (item.type.isNotEmpty)
-                              _ClanIconChip(
-                                label: _clanTypeLabel(context, item.type),
-                                icon: Icons.mail_rounded,
-                              ),
-                          ],
-                        ),
-                      ],
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    item.locationName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium
+                                        ?.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: [
+                              if (item.clanPoints > 0)
+                                _ClanImageChip(
+                                  label: formatter.format(item.clanPoints),
+                                  imageUrl: ImageAssets.trophies,
+                                ),
+                              if (item.warLeague.isNotEmpty)
+                                _ClanImageChip(
+                                  label: item.warLeague,
+                                  imageUrl: ImageAssets.getWarLeagueImage(
+                                    item.warLeague,
+                                  ),
+                                ),
+                              if (item.type.isNotEmpty)
+                                _ClanIconChip(
+                                  label: _clanTypeLabel(context, item.type),
+                                  icon: Icons.mail_rounded,
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              top: 14,
-              right: 14,
-              child: _ClanTrailingStatus(item: item),
-            ),
-            Positioned(
-              right: 10,
-              top: 0,
-              bottom: 0,
-              child: Icon(
-                Icons.chevron_right_rounded,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 30,
+              Positioned(
+                top: 14,
+                right: 14,
+                child: _ClanTrailingStatus(item: item),
               ),
-            ),
-          ],
+              Positioned(
+                right: 10,
+                top: 0,
+                bottom: 0,
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  size: 30,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

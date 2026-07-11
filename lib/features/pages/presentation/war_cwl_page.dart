@@ -22,6 +22,7 @@ import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:provider/provider.dart';
 
 class WarCwlPage extends StatefulWidget {
@@ -185,25 +186,33 @@ class _WarCwlPageState extends State<WarCwlPage> {
           warCwlService,
           extraWarClanTags,
         ),
-        child: ListView(
-          padding: EdgeInsets.fromLTRB(
-            16,
-            0,
-            16,
-            MediaQuery.paddingOf(context).bottom + 96,
-          ),
-          children: [
-            LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-            const SizedBox(height: 8),
-            if (items.isEmpty)
-              const _EmptyWarMessage()
-            else
-              ...items.map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _WarListCard(item: item),
+        child: CustomScrollView(
+          scrollCacheExtent: const ScrollCacheExtent.pixels(800),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverToBoxAdapter(
+                child: LastRefreshIndicator(
+                  lastRefresh: cocService.lastRefresh,
                 ),
               ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(
+                16,
+                8,
+                16,
+                MediaQuery.paddingOf(context).bottom + 96,
+              ),
+              sliver: items.isEmpty
+                  ? const SliverToBoxAdapter(child: _EmptyWarMessage())
+                  : SliverList.separated(
+                      itemCount: items.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      itemBuilder: (context, index) =>
+                          _WarListCard(item: items[index]),
+                    ),
+            ),
           ],
         ),
       ),

@@ -17,24 +17,28 @@ class PlayerWarExportService {
     // Build API URL for new export endpoint
     final baseUrl = ApiService.apiUrlV2;
     final uri = Uri.parse('$baseUrl/exports/war/player-stats');
-    
+
     // Build request body as PlayerWarhitsFilter
     final requestBody = <String, dynamic>{
       'player_tags': [playerTag],
     };
-    
+
     // Add filter parameters if present
     if (filter != null && filter.hasActiveFilters()) {
       if (filter.season != null) {
         requestBody['season'] = filter.season!;
       }
       if (filter.startDate != null) {
-        requestBody['timestamp_start'] = filter.startDate!.millisecondsSinceEpoch ~/ 1000;
+        requestBody['timestamp_start'] =
+            filter.startDate!.millisecondsSinceEpoch ~/ 1000;
       }
       if (filter.endDate != null) {
-        requestBody['timestamp_end'] = filter.endDate!.millisecondsSinceEpoch ~/ 1000;
+        requestBody['timestamp_end'] =
+            filter.endDate!.millisecondsSinceEpoch ~/ 1000;
       }
-      if (filter.warTypes != null && filter.warTypes!.isNotEmpty && !filter.warTypes!.contains('all')) {
+      if (filter.warTypes != null &&
+          filter.warTypes!.isNotEmpty &&
+          !filter.warTypes!.contains('all')) {
         requestBody['type'] = filter.warTypes!;
       }
       if (filter.ownTownHalls != null && filter.ownTownHalls!.isNotEmpty) {
@@ -62,44 +66,48 @@ class PlayerWarExportService {
         requestBody['fresh_only'] = true;
       }
     }
-    
+
     // Make POST API request with JSON body
     final response = await http.post(
       uri,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(requestBody),
     );
-    
+
     if (response.statusCode != 200) {
-      throw Exception('Failed to export war stats: ${response.statusCode} ${response.reasonPhrase}');
+      throw Exception(
+        'Failed to export war stats: ${response.statusCode} ${response.reasonPhrase}',
+      );
     }
-    
+
     // Check if response is actually an Excel file
     final contentType = response.headers['content-type'] ?? '';
-    
-    if (!contentType.contains('spreadsheet') && !contentType.contains('excel') && !contentType.contains('application/octet-stream')) {
+
+    if (!contentType.contains('spreadsheet') &&
+        !contentType.contains('excel') &&
+        !contentType.contains('application/octet-stream')) {
       throw Exception('Expected Excel file but got: $contentType');
     }
-    
+
     // Save file to device
     final directory = await getApplicationDocumentsDirectory();
     final fileName = _generateFileName(playerName);
     final file = File('${directory.path}/$fileName');
-    
+
     await file.writeAsBytes(response.bodyBytes);
-    
+
     return file;
   }
-  
+
   /// Generate a timestamped filename for the export
   static String _generateFileName(String? playerName) {
     final timestamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
-    final playerPart = playerName != null ? '_${playerName.replaceAll(RegExp(r'[^\w\s-]'), '')}' : '';
+    final playerPart = playerName != null
+        ? '_${playerName.replaceAll(RegExp(r'[^\w\s-]'), '')}'
+        : '';
     return 'war_stats${playerPart}_$timestamp.xlsx';
   }
-  
+
   /// Get export summary for user display
   static Map<String, String> getExportInfo({
     WarStatsFilter? filter,
@@ -110,13 +118,13 @@ class PlayerWarExportService {
       'format': 'Excel (.xlsx)',
       'includes': 'Overall stats, detailed attacks, TH analysis',
     };
-    
+
     if (filter != null && filter.hasActiveFilters()) {
       info['filters'] = filter.getFilterSummary();
     } else {
       info['filters'] = 'All data';
     }
-    
+
     return info;
   }
 }

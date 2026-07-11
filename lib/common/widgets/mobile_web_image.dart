@@ -30,43 +30,82 @@ class MobileWebImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget fallback(Object error) {
-      final customError = errorWidget?.call(context, imageUrl, error);
-      if (customError != null) return customError;
-      return Image.network(
-        ImageAssets.defaultImage,
-        width: width,
-        height: height,
-        fit: fit,
-        alignment: alignment,
-        color: color,
-        colorBlendMode: colorBlendMode,
-      );
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final logicalWidth =
+            width ??
+            (constraints.hasBoundedWidth ? constraints.maxWidth : null);
+        final logicalHeight =
+            height ??
+            (constraints.hasBoundedHeight ? constraints.maxHeight : null);
+        final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+        final cacheWidth = _physicalCacheDimension(
+          logicalWidth,
+          devicePixelRatio,
+        );
+        final cacheHeight = _physicalCacheDimension(
+          logicalHeight,
+          devicePixelRatio,
+        );
 
-    if (kIsWeb) {
-      return Image.network(
-        imageUrl,
-        width: width,
-        height: height,
-        fit: fit,
-        alignment: alignment,
-        color: color,
-        colorBlendMode: colorBlendMode,
-        errorBuilder: (_, error, _) => fallback(error),
-      );
-    } else {
-      return CachedNetworkImage(
-        imageUrl: imageUrl,
-        width: width,
-        height: height,
-        fit: fit,
-        alignment: alignment,
-        color: color,
-        colorBlendMode: colorBlendMode,
-        placeholder: placeholder ?? (_, _) => const SizedBox.shrink(),
-        errorWidget: (_, _, error) => fallback(error),
-      );
+        Widget fallback(Object error) {
+          final customError = errorWidget?.call(context, imageUrl, error);
+          if (customError != null) return customError;
+          return Image.network(
+            ImageAssets.defaultImage,
+            width: width,
+            height: height,
+            cacheWidth: cacheWidth,
+            cacheHeight: cacheHeight,
+            fit: fit,
+            alignment: alignment,
+            color: color,
+            colorBlendMode: colorBlendMode,
+            gaplessPlayback: true,
+            filterQuality: FilterQuality.low,
+          );
+        }
+
+        if (kIsWeb) {
+          return Image.network(
+            imageUrl,
+            width: width,
+            height: height,
+            fit: fit,
+            alignment: alignment,
+            color: color,
+            colorBlendMode: colorBlendMode,
+            gaplessPlayback: true,
+            filterQuality: FilterQuality.low,
+            errorBuilder: (_, error, _) => fallback(error),
+          );
+        }
+
+        return CachedNetworkImage(
+          imageUrl: imageUrl,
+          width: width,
+          height: height,
+          memCacheWidth: cacheWidth,
+          memCacheHeight: cacheHeight,
+          fit: fit,
+          alignment: alignment,
+          color: color,
+          colorBlendMode: colorBlendMode,
+          fadeInDuration: Duration.zero,
+          fadeOutDuration: Duration.zero,
+          useOldImageOnUrlChange: true,
+          filterQuality: FilterQuality.low,
+          placeholder: placeholder ?? (_, _) => const SizedBox.shrink(),
+          errorWidget: (_, _, error) => fallback(error),
+        );
+      },
+    );
+  }
+
+  static int? _physicalCacheDimension(double? logicalSize, double scale) {
+    if (logicalSize == null || !logicalSize.isFinite || logicalSize <= 0) {
+      return null;
     }
+    return (logicalSize * scale).ceil().clamp(1, 4096);
   }
 }

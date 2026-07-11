@@ -8,6 +8,8 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
   @override
   ForgotPasswordPageState createState() => ForgotPasswordPageState();
 }

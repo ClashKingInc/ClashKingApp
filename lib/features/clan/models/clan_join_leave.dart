@@ -90,7 +90,8 @@ class JoinLeaveStats {
       firstEvent: json['first_event'] ?? "",
       lastEvent: json['last_event'] ?? "",
       mostMovingHour: json['most_moving_hour'] ?? 0,
-      avgTimeBetweenJoinLeave: (json['avg_time_between_join_leave'] as num?)?.toDouble(),
+      avgTimeBetweenJoinLeave: (json['avg_time_between_join_leave'] as num?)
+          ?.toDouble(),
       mostMovingPlayers: (json['most_moving_players'] as List<dynamic>? ?? [])
           .map((e) => MostActivePlayer.fromJson(e))
           .toList(),

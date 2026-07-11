@@ -50,12 +50,14 @@ class LegendSeasonChart extends StatelessWidget {
     }
     if (currentLine.isNotEmpty) separatedSpots.add(currentLine);
 
-    final double rangeY =
-        ((maxTrophies - minTrophies) / 5).ceilToDouble().clamp(20, 100);
+    final double rangeY = ((maxTrophies - minTrophies) / 5)
+        .ceilToDouble()
+        .clamp(20, 100);
 
     final lastDayKey = sortedDays.last.key;
-    final maxX =
-        DateTime.parse(lastDayKey).difference(season!.start).inDays.toDouble();
+    final maxX = DateTime.parse(
+      lastDayKey,
+    ).difference(season!.start).inDays.toDouble();
 
     final minY = ((minTrophies / 50).floor() * 50 - 50).toDouble();
     final maxY = ((maxTrophies / 50).ceil() * 50 + 50).toDouble();
@@ -84,28 +86,31 @@ class LegendSeasonChart extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(children: [
-            Text(
-              AppLocalizations.of(context)?.legendsTrophiesBySeason ?? "Trophies by Season",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(
-                    show: true,
-                    horizontalInterval: rangeY,
-                  ),
-                  titlesData: FlTitlesData(
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
+          child: Column(
+            children: [
+              Text(
+                AppLocalizations.of(context)?.legendsTrophiesBySeason ??
+                    "Trophies by Season",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: LineChart(
+                  LineChartData(
+                    gridData: FlGridData(
+                      show: true,
+                      horizontalInterval: rangeY,
+                    ),
+                    titlesData: FlTitlesData(
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
                           showTitles: true,
                           reservedSize: 30,
                           interval: 1,
                           getTitlesWidget: (value, meta) {
-                            final date = season!.start
-                                .add(Duration(days: value.toInt()));
+                            final date = season!.start.add(
+                              Duration(days: value.toInt()),
+                            );
                             if (date.day % 2 == 0) {
                               return Text(
                                 DateFormat('dd').format(date),
@@ -114,57 +119,65 @@ class LegendSeasonChart extends StatelessWidget {
                             } else {
                               return const SizedBox.shrink();
                             }
-                          }),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        interval: rangeY,
-                        getTitlesWidget: (value, meta) {
-                          return Text(
-                            NumberFormat('#,###', locale).format(value.toInt()),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          );
-                        },
+                          },
+                        ),
+                      ),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          interval: rangeY,
+                          getTitlesWidget: (value, meta) {
+                            return Text(
+                              NumberFormat(
+                                '#,###',
+                                locale,
+                              ).format(value.toInt()),
+                              style: Theme.of(context).textTheme.bodySmall,
+                            );
+                          },
+                        ),
+                      ),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
                       ),
                     ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 1,
+                      ),
                     ),
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                  ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 1,
-                    ),
-                  ),
-                  lineBarsData: lines,
-                  minX: 0,
-                  maxX: maxX,
-                  minY: minY,
-                  maxY: maxY,
-                  lineTouchData: LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(
-                      getTooltipColor: (_) => Theme.of(context).colorScheme.primary,
-                      getTooltipItems: (touchedSpots) => touchedSpots
-                          .map((spot) => LineTooltipItem(
+                    lineBarsData: lines,
+                    minX: 0,
+                    maxX: maxX,
+                    minY: minY,
+                    maxY: maxY,
+                    lineTouchData: LineTouchData(
+                      touchTooltipData: LineTouchTooltipData(
+                        getTooltipColor: (_) =>
+                            Theme.of(context).colorScheme.primary,
+                        getTooltipItems: (touchedSpots) => touchedSpots
+                            .map(
+                              (spot) => LineTooltipItem(
                                 spot.y.toInt().toString(),
                                 const TextStyle(color: Colors.white),
-                              ))
-                          .toList(),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                      handleBuiltInTouches: true,
                     ),
-                    handleBuiltInTouches: true,
                   ),
+                  duration: const Duration(milliseconds: 250),
                 ),
-                duration: const Duration(milliseconds: 250),
               ),
-            )
-          ]),
+            ],
+          ),
         ),
       ),
     );

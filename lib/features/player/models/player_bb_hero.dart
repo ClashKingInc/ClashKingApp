@@ -4,17 +4,14 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 class PlayerBuilderBaseHero extends PlayerItem {
   final String village;
 
-  PlayerBuilderBaseHero(
-      {required super.name,
-      required super.level,
-      required super.maxLevel,
-      required this.village,
-      required super.isUnlocked,
-      super.meta})
-      : super(
-          type: 'hero',
-          imageUrl: ImageAssets.getBuilderBaseHeroImage(name),
-        );
+  PlayerBuilderBaseHero({
+    required super.name,
+    required super.level,
+    required super.maxLevel,
+    required this.village,
+    required super.isUnlocked,
+    super.meta,
+  }) : super(type: 'hero', imageUrl: ImageAssets.getBuilderBaseHeroImage(name));
 
   factory PlayerBuilderBaseHero.fromJson(Map<String, dynamic> json) {
     return PlayerBuilderBaseHero(
@@ -26,13 +23,14 @@ class PlayerBuilderBaseHero extends PlayerItem {
     );
   }
 
-  factory PlayerBuilderBaseHero.fromRaw(
-      {required String name,
-      required int level,
-      required int maxLevel,
-      required bool isUnlocked,
-      Map<String, dynamic>? meta,
-    Map<String, dynamic>? rawJson}) {
+  factory PlayerBuilderBaseHero.fromRaw({
+    required String name,
+    required int level,
+    required int maxLevel,
+    required bool isUnlocked,
+    Map<String, dynamic>? meta,
+    Map<String, dynamic>? rawJson,
+  }) {
     return PlayerBuilderBaseHero(
       name: name,
       level: level,

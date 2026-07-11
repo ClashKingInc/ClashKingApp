@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
@@ -110,6 +110,7 @@ class MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(
       PageRouteBuilder<void>(
         opaque: true,
+        allowSnapshotting: false,
         transitionDuration: const Duration(milliseconds: 240),
         reverseTransitionDuration: const Duration(milliseconds: 180),
         pageBuilder: (context, animation, secondaryAnimation) {
@@ -147,41 +148,44 @@ class MyHomePageState extends State<MyHomePage> {
       // the Android/Samsung system "back" gesture edge, which made the swipe
       // close the app instead of opening the menu.
       drawerEdgeDragWidth: MediaQuery.of(context).padding.left + 80,
-      appBar: CustomAppBar(
-        title: 'ClashKing',
-        searchHint: 'Search players or clans',
-        onSearchTap: _openSearchOverlay,
-        onProfileTap: () => _scaffoldKey.currentState?.openDrawer(),
-      ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        children: const [
-          DashboardPage(),
-          PlayersPage(),
-          ClanPage(),
-          WarCwlPage(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _buildFixedHeader(),
+          ),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              children: const [
+                DashboardPage(),
+                PlayersPage(),
+                ClanPage(),
+                WarCwlPage(),
+              ],
+            ),
+          ),
         ],
       ),
-      bottomNavigationBar: usesNativeGlassPlatform
-          ? _NativeIOSTabBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            )
-          : _AndroidFloatingTabBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
+      bottomNavigationBar: _AppLiquidGlassTabBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
     );
   }
+
+  Widget _buildFixedHeader() => MainPageHeader(
+    title: 'ClashKing',
+    searchHint: 'Search players or clans',
+    onSearchTap: _openSearchOverlay,
+    onProfileTap: () => _scaffoldKey.currentState?.openDrawer(),
+  );
 }
 
-/// Android fallback for the app-level floating tab bar.
-///
-/// Keep this custom instead of using the liquid glass background on Android:
-/// the native/glass border reads too bright on black gesture-bar backgrounds.
-class _AndroidFloatingTabBar extends StatelessWidget {
-  const _AndroidFloatingTabBar({
+/// Flutter-composited Liquid Glass tab bar used on every platform.
+class _AppLiquidGlassTabBar extends StatelessWidget {
+  const _AppLiquidGlassTabBar({
     required this.selectedIndex,
     required this.onItemTapped,
   });
@@ -192,250 +196,59 @@ class _AndroidFloatingTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bottomPadding = MediaQuery.paddingOf(context).bottom;
     final tabs = [
-      _AndroidTabItem(
+      _AppTabItem(
         icon: Icons.home_outlined,
         selectedIcon: Icons.home_rounded,
         label: 'Home',
       ),
-      _AndroidTabItem(
+      _AppTabItem(
         icon: Icons.person_outline_rounded,
         selectedIcon: Icons.person_rounded,
         label: 'Players',
       ),
-      _AndroidTabItem(
+      _AppTabItem(
         icon: Icons.groups_outlined,
         selectedIcon: Icons.groups,
         label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
       ),
-      const _AndroidTabItem(
+      const _AppTabItem(
         icon: CustomIcons.swordCross,
         selectedIcon: CustomIcons.swordCross,
         label: 'War',
       ),
     ];
 
-    return SafeArea(
-      top: false,
-      minimum: EdgeInsets.fromLTRB(14, 0, 14, bottomPadding > 0 ? 2 : 10),
-      child: SizedBox(
-        height: 68,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.90)
-                : colorScheme.surface.withValues(alpha: 0.94),
-            borderRadius: BorderRadius.circular(34),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: isDark ? 0.30 : 0.14),
-                blurRadius: 18,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              for (var index = 0; index < tabs.length; index++)
-                Expanded(
-                  child: _AndroidTabButton(
-                    item: tabs[index],
-                    selected: selectedIndex == index,
-                    onTap: () => onItemTapped(index),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
+    return LiquidGlassTabBar(
+      height: 64,
+      itemCount: tabs.length,
+      selectedIndex: selectedIndex,
+      onTabSelected: onItemTapped,
+      items: tabs
+          .map(
+            (item) => LiquidGlassTabItem(
+              icon: item.icon,
+              selectedIcon: item.selectedIcon,
+              label: item.label,
+              selectedItemColor: colorScheme.primary,
+            ),
+          )
+          .toList(growable: false),
+      iconSize: 23,
     );
   }
 }
 
-class _AndroidTabItem {
+class _AppTabItem {
   final IconData icon;
   final IconData selectedIcon;
   final String label;
 
-  const _AndroidTabItem({
+  const _AppTabItem({
     required this.icon,
     required this.selectedIcon,
     required this.label,
   });
-}
-
-class _AndroidTabButton extends StatelessWidget {
-  const _AndroidTabButton({
-    required this.item,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final _AndroidTabItem item;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final selectedColor = colorScheme.primary;
-    final unselectedColor = colorScheme.onSurface.withValues(alpha: 0.92);
-
-    return Semantics(
-      button: true,
-      selected: selected,
-      label: item.label,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-        child: Material(
-          color: selected
-              ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.58)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(29),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(29),
-            onTap: onTap,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  selected ? item.selectedIcon : item.icon,
-                  size: 25,
-                  color: selected ? selectedColor : unselectedColor,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  item.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: selected ? selectedColor : unselectedColor,
-                    fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
-                    height: 1,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Apple's real native Liquid Glass bottom tab bar, sized/positioned by the
-/// caller (unlike liquid_glass_widgets' `GlassTabBar.bottom`, which wants to
-/// own the whole `bottomNavigationBar` slot directly).
-class _NativeIOSTabBar extends StatelessWidget {
-  const _NativeIOSTabBar({
-    required this.selectedIndex,
-    required this.onItemTapped,
-  });
-
-  final int selectedIndex;
-  final ValueChanged<int> onItemTapped;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
-      child: SizedBox(
-        height: 78,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final colorScheme = Theme.of(context).colorScheme;
-            final tabItems = [
-              NativeLiquidGlassTabItem(
-                icon: Icons.home_outlined,
-                selectedIcon: Icons.home_rounded,
-                label: 'Home',
-                selectedItemColor: colorScheme.primary,
-              ),
-              NativeLiquidGlassTabItem(
-                icon: Icons.person_outline_rounded,
-                selectedIcon: Icons.person_rounded,
-                label: 'Players',
-                selectedItemColor: colorScheme.primary,
-              ),
-              NativeLiquidGlassTabItem(
-                icon: Icons.groups_outlined,
-                selectedIcon: Icons.groups,
-                label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
-                selectedItemColor: colorScheme.primary,
-              ),
-              NativeLiquidGlassTabItem(
-                icon: CustomIcons.swordCross,
-                selectedIcon: CustomIcons.swordCross,
-                label: 'War',
-                selectedItemColor: colorScheme.primary,
-              ),
-            ];
-
-            return Stack(
-              fit: StackFit.expand,
-              children: [
-                NativeLiquidGlassTabBar(
-                  height: 62,
-                  itemCount: 4,
-                  selectedIndex: selectedIndex,
-                  onTabSelected: onItemTapped,
-                  items: tabItems,
-                  cornerRadius: 31,
-                  selectedCornerRadius: 25,
-                  inset: 6,
-                  borderOpacity: Theme.of(context).brightness == Brightness.dark
-                      ? 0.22
-                      : 0.34,
-                  shadowOpacity: Theme.of(context).brightness == Brightness.dark
-                      ? 0.5
-                      : 0.18,
-                  iconSize: 22,
-                ),
-                Row(
-                  children: [
-                    _NavHitTarget(label: 'Home', onTap: () => onItemTapped(0)),
-                    _NavHitTarget(
-                      label: 'Players',
-                      onTap: () => onItemTapped(1),
-                    ),
-                    _NavHitTarget(
-                      label: AppLocalizations.of(context)?.clanTitle ?? 'Clan',
-                      onTap: () => onItemTapped(2),
-                    ),
-                    _NavHitTarget(label: 'War', onTap: () => onItemTapped(3)),
-                  ],
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _NavHitTarget extends StatelessWidget {
-  const _NavHitTarget({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Semantics(
-        button: true,
-        label: label,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onTap,
-          child: const SizedBox.expand(),
-        ),
-      ),
-    );
-  }
 }
 
 class _AccountMenuDrawer extends StatelessWidget {
@@ -719,41 +532,46 @@ class _DrawerMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: dense ? 8 : 9.5),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                size: dense ? 18 : 19,
-                color: onTap == null
-                    ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
-                    : colorScheme.onSurface,
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  label,
-                  style:
-                      (dense
-                              ? Theme.of(context).textTheme.bodyLarge
-                              : Theme.of(context).textTheme.titleMedium)
-                          ?.copyWith(
-                            color: onTap == null
-                                ? colorScheme.onSurfaceVariant.withValues(
-                                    alpha: 0.45,
-                                  )
-                                : colorScheme.onSurface,
-                            fontWeight: FontWeight.w700,
-                          ),
+    return Semantics(
+      button: onTap != null,
+      enabled: onTap != null,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: dense ? 8 : 9.5),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: dense ? 18 : 19,
+                  color: onTap == null
+                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
+                      : colorScheme.onSurface,
                 ),
-              ),
-            ],
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text(
+                    label,
+                    style:
+                        (dense
+                                ? Theme.of(context).textTheme.bodyLarge
+                                : Theme.of(context).textTheme.titleMedium)
+                            ?.copyWith(
+                              color: onTap == null
+                                  ? colorScheme.onSurfaceVariant.withValues(
+                                      alpha: 0.45,
+                                    )
+                                  : colorScheme.onSurface,
+                              fontWeight: FontWeight.w700,
+                            ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

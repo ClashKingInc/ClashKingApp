@@ -3,13 +3,12 @@ import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 
-/// Frosted round icon button floating over a hero header image — same
-/// native Liquid Glass recipe as the player header's button, so every
-/// hero-header screen shares one real glass button implementation.
+/// Frosted round icon button floating over a hero header image. Every
+/// hero-header screen shares the same Flutter-composited glass implementation.
 class HeaderIconButton extends StatelessWidget {
   final IconData? icon;
   final String? imageUrl;
@@ -42,7 +41,7 @@ class HeaderIconButton extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             if (showBackground)
-              const NativeLiquidGlassBar(
+              const LiquidGlassBar(
                 height: size,
                 cornerRadius: radius,
                 opacity: 0.70,
@@ -75,10 +74,9 @@ class HeaderIconButton extends StatelessWidget {
   }
 }
 
-/// Background for hero-header panels. iOS gets the native glass; Android
-/// gets a near-opaque card fill instead of the shader glass — inside
-/// slivers the page body can paint before the header, and a
-/// backdrop-sampling shader would wash the content below with its fill.
+/// Background for hero-header panels. Flutter mobile platforms get the shared
+/// shader glass; web gets a near-opaque card fill because backdrop sampling in
+/// slivers can wash the content below with the panel fill.
 class HeaderPanelBackground extends StatelessWidget {
   final double height;
   final double cornerRadius;
@@ -91,8 +89,8 @@ class HeaderPanelBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (supportsNativeLiquidGlass) {
-      return NativeLiquidGlassBar(
+    if (supportsLiquidGlass) {
+      return LiquidGlassBar(
         height: height,
         cornerRadius: cornerRadius,
         opacity: 0.95,
@@ -278,7 +276,7 @@ class GlassPanel extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: NativeLiquidGlassBar(
+              child: LiquidGlassBar(
                 height: height,
                 cornerRadius: borderRadius,
                 opacity: 0.72,
@@ -772,8 +770,9 @@ class CompactLeagueTile extends StatelessWidget {
                         subtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelSmall
-                            ?.copyWith(color: colorScheme.onSurfaceVariant),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   ],

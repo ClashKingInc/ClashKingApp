@@ -21,13 +21,17 @@ District _district({
   );
 }
 
-RaidAttackLog _entry({required int attackCount, required List<District> districts}) {
+RaidAttackLog _entry({
+  required int attackCount,
+  required List<District> districts,
+}) {
   return RaidAttackLog(
     defender: RaidDefender(tag: '', name: '', level: 0, badgeUrls: const {}),
     attackCount: attackCount,
     districtCount: districts.length,
-    districtsDestroyed:
-        districts.where((d) => d.destructionPercent == 100).length,
+    districtsDestroyed: districts
+        .where((d) => d.destructionPercent == 100)
+        .length,
     districts: districts,
   );
 }
@@ -43,14 +47,26 @@ void main() {
         _entry(
           attackCount: 4,
           districts: [
-            _district(id: 70000000, districtHallLevel: 4, destructionPercent: 100),
-            _district(id: 70000001, districtHallLevel: 2, destructionPercent: 100),
+            _district(
+              id: 70000000,
+              districtHallLevel: 4,
+              destructionPercent: 100,
+            ),
+            _district(
+              id: 70000001,
+              districtHallLevel: 2,
+              destructionPercent: 100,
+            ),
           ],
         ),
         _entry(
           attackCount: 3,
           districts: [
-            _district(id: 70000002, districtHallLevel: 1, destructionPercent: 100),
+            _district(
+              id: 70000002,
+              districtHallLevel: 1,
+              destructionPercent: 100,
+            ),
           ],
         ),
       ];
@@ -64,7 +80,11 @@ void main() {
         _entry(
           attackCount: 2,
           districts: [
-            _district(id: 70000001, districtHallLevel: 3, destructionPercent: 80),
+            _district(
+              id: 70000001,
+              districtHallLevel: 3,
+              destructionPercent: 80,
+            ),
           ],
         ),
       ];
@@ -77,7 +97,11 @@ void main() {
         _entry(
           attackCount: 1,
           districts: [
-            _district(id: 70000000, districtHallLevel: 10, destructionPercent: 100),
+            _district(
+              id: 70000000,
+              districtHallLevel: 10,
+              destructionPercent: 100,
+            ),
           ],
         ),
       ];
@@ -91,27 +115,30 @@ void main() {
       expect(RaidMedalPredictor.predictDefensiveReward(const []), 0);
     });
 
-    test('matches the reference floor-division behaviour on a single opponent', () {
-      final defenseLog = [
-        _entry(
-          attackCount: 2,
-          districts: [
-            _district(
-              id: 70000002,
-              districtHallLevel: 3,
-              destructionPercent: 100,
-              totalLooted: 1000,
-              attackCount: 2,
-            ),
-          ],
-        ),
-      ];
+    test(
+      'matches the reference floor-division behaviour on a single opponent',
+      () {
+        final defenseLog = [
+          _entry(
+            attackCount: 2,
+            districts: [
+              _district(
+                id: 70000002,
+                districtHallLevel: 3,
+                destructionPercent: 100,
+                totalLooted: 1000,
+                attackCount: 2,
+              ),
+            ],
+          ),
+        ];
 
-      // housingSpace = 25 + 5*3 = 40
-      // weight = (max(1000-750,0) + min(1000, 100000)) ~/ 2 = (250+1000) ~/ 2 = 625
-      // troopsKilled = 2*40 - floorDiv(1000-625, 3) = 80 - 125 = -45
-      // floorDiv(-45, 25) = -2 (Python-style floor division, not truncation)
-      expect(RaidMedalPredictor.predictDefensiveReward(defenseLog), -2);
-    });
+        // housingSpace = 25 + 5*3 = 40
+        // weight = (max(1000-750,0) + min(1000, 100000)) ~/ 2 = (250+1000) ~/ 2 = 625
+        // troopsKilled = 2*40 - floorDiv(1000-625, 3) = 80 - 125 = -45
+        // floorDiv(-45, 25) = -2 (Python-style floor division, not truncation)
+        expect(RaidMedalPredictor.predictDefensiveReward(defenseLog), -2);
+      },
+    );
   });
 }

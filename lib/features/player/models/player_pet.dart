@@ -4,17 +4,17 @@ import 'package:clashkingapp/features/player/models/player_item.dart';
 class PlayerPet extends PlayerItem {
   final String village;
 
-  PlayerPet(
-      {required super.name,
-      required super.level,
-      required super.maxLevel,
-      required this.village,
-      super.meta})
-      : super(
-          isUnlocked: true,
-          type: 'pet',
-          imageUrl: ImageAssets.getPetImage(name),
-        );
+  PlayerPet({
+    required super.name,
+    required super.level,
+    required super.maxLevel,
+    required this.village,
+    super.meta,
+  }) : super(
+         isUnlocked: true,
+         type: 'pet',
+         imageUrl: ImageAssets.getPetImage(name),
+       );
 
   factory PlayerPet.fromJson(Map<String, dynamic> json) {
     return PlayerPet(
@@ -25,13 +25,14 @@ class PlayerPet extends PlayerItem {
     );
   }
 
-  factory PlayerPet.fromRaw(
-      {required String name,
-      required int level,
-      required int maxLevel,
-      required bool isUnlocked,
-      Map<String, dynamic>? meta,
-    Map<String, dynamic>? rawJson}) {
+  factory PlayerPet.fromRaw({
+    required String name,
+    required int level,
+    required int maxLevel,
+    required bool isUnlocked,
+    Map<String, dynamic>? meta,
+    Map<String, dynamic>? rawJson,
+  }) {
     return PlayerPet(
       name: name,
       level: level,

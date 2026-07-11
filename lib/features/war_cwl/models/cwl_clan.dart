@@ -26,31 +26,32 @@ class CwlClan {
   }
 
   int get totalThreeStars => members.fold(
-      0,
-      (sum, m) =>
-          sum +
-          (m.attackStats?.threeStars.values.fold(0, (a, b) => (a ?? 0) + b) ??
-              0));
+    0,
+    (sum, m) =>
+        sum +
+        (m.attackStats?.threeStars.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0),
+  );
 
   int get totalTwoStars => members.fold(
-      0,
-      (sum, m) =>
-          sum +
-          (m.attackStats?.twoStars.values.fold(0, (a, b) => (a ?? 0) + b) ??
-              0));
+    0,
+    (sum, m) =>
+        sum +
+        (m.attackStats?.twoStars.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0),
+  );
 
   int get totalOneStar => members.fold(
-      0,
-      (sum, m) =>
-          sum +
-          (m.attackStats?.oneStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0));
+    0,
+    (sum, m) =>
+        sum +
+        (m.attackStats?.oneStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0),
+  );
 
   int get totalZeroStar => members.fold(
-      0,
-      (sum, m) =>
-          sum +
-          (m.attackStats?.zeroStar.values.fold(0, (a, b) => (a ?? 0) + b) ??
-              0));
+    0,
+    (sum, m) =>
+        sum +
+        (m.attackStats?.zeroStar.values.fold(0, (a, b) => (a ?? 0) + b) ?? 0),
+  );
 
   int _sumStars(Map<String, int> Function(CwlAttackStats) selector) {
     int total = 0;
@@ -130,8 +131,11 @@ class CwlClan {
   int get threeStarsDef {
     int totalThreeStarsDefense = 0;
     for (var member in members) {
-      totalThreeStarsDefense += member.defenseStats?.threeStars.values
-              .fold(0, (a, b) => (a ?? 0) + b) ??
+      totalThreeStarsDefense +=
+          member.defenseStats?.threeStars.values.fold(
+            0,
+            (a, b) => (a ?? 0) + b,
+          ) ??
           0;
     }
     return totalThreeStarsDefense;
@@ -140,8 +144,11 @@ class CwlClan {
   int get twoStarsDef {
     int totalTwoStarsDefense = 0;
     for (var member in members) {
-      totalTwoStarsDefense += member.defenseStats?.twoStars.values
-              .fold(0, (a, b) => (a ?? 0) + b) ??
+      totalTwoStarsDefense +=
+          member.defenseStats?.twoStars.values.fold(
+            0,
+            (a, b) => (a ?? 0) + b,
+          ) ??
           0;
     }
     return totalTwoStarsDefense;
@@ -152,7 +159,7 @@ class CwlClan {
     for (var member in members) {
       totalOneStarDefense +=
           member.defenseStats?.oneStar.values.fold(0, (a, b) => (a ?? 0) + b) ??
-              0;
+          0;
     }
     return totalOneStarDefense;
   }
@@ -160,8 +167,11 @@ class CwlClan {
   int get zeroStarDef {
     int totalZeroStarDefense = 0;
     for (var member in members) {
-      totalZeroStarDefense += member.defenseStats?.zeroStar.values
-              .fold(0, (a, b) => (a ?? 0) + b) ??
+      totalZeroStarDefense +=
+          member.defenseStats?.zeroStar.values.fold(
+            0,
+            (a, b) => (a ?? 0) + b,
+          ) ??
           0;
     }
     return totalZeroStarDefense;
@@ -199,7 +209,8 @@ class CwlClan {
             (data['total_destruction_inflicted'] as num?)?.toDouble() ?? 0.0,
         rank: (data['rank'] as num?)?.toInt() ?? 0,
         warsPlayed: (data['wars_played'] as num?)?.toInt() ?? 0,
-        members: (data['members'] as List<dynamic>?)
+        members:
+            (data['members'] as List<dynamic>?)
                 ?.whereType<Map>()
                 .map((e) => CwlMember.fromJson(Map<String, dynamic>.from(e)))
                 .toList() ??
@@ -242,19 +253,19 @@ class CwlClan {
   }
 
   factory CwlClan.empty() => CwlClan(
-        tag: '',
-        name: '',
-        badgeUrls: ClanBadgeUrls.empty(),
-        clanLevel: 0,
-        attackCount: 0,
-        stars: 0,
-        destructionPercentage: 0.0,
-        destructionPercentageInflicted: 0.0,
-        members: [],
-        rank: 0,
-        warsPlayed: 0,
-        townHallLevels: {},
-      );
+    tag: '',
+    name: '',
+    badgeUrls: ClanBadgeUrls.empty(),
+    clanLevel: 0,
+    attackCount: 0,
+    stars: 0,
+    destructionPercentage: 0.0,
+    destructionPercentageInflicted: 0.0,
+    members: [],
+    rank: 0,
+    warsPlayed: 0,
+    townHallLevels: {},
+  );
 }
 
 Map<String, dynamic>? _asMap(dynamic value) {

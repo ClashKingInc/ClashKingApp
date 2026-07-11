@@ -6,7 +6,7 @@ class WarAccessDeniedCard extends StatefulWidget {
   final String clanName;
   final String clanBadgeUrl;
 
-  WarAccessDeniedCard({
+  const WarAccessDeniedCard({
     super.key,
     required this.clanName,
     required this.clanBadgeUrl,

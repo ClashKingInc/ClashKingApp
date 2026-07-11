@@ -98,7 +98,11 @@ void main() {
     test('parses chatLanguage', () {
       final clan = Clan.fromJson({
         'tag': '#CLAN',
-        'chatLanguage': {'id': 75000000, 'name': 'English', 'languageCode': 'EN'},
+        'chatLanguage': {
+          'id': 75000000,
+          'name': 'English',
+          'languageCode': 'EN',
+        },
       });
       expect(clan.chatLanguage, isNotNull);
       expect(clan.chatLanguage!.name, 'English');

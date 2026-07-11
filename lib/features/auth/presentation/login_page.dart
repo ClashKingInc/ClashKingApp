@@ -1,10 +1,9 @@
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
-import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/register_page.dart';
@@ -13,6 +12,7 @@ import 'package:clashkingapp/features/auth/presentation/email_verification_page.
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/account_bootstrap_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
@@ -239,7 +239,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           // Tab Bar
                           Padding(
                             padding: const EdgeInsets.all(8),
-                            child: NativeLiquidGlassSegmentedControl<int>(
+                            child: LiquidGlassSegmentedControl<int>(
                               values: const [0, 1],
                               labels: [
                                 AppLocalizations.of(context)!.authDiscordTitle,
@@ -623,6 +623,7 @@ class _PostAuthLoadingScreen extends StatefulWidget {
 }
 
 class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
+  static const _accountBootstrap = AccountBootstrapService();
   bool _isInitializing = true;
 
   @override
@@ -632,8 +633,7 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
   }
 
   Future<void> _initPostAuth() async {
-    final accessToken = await TokenService().getAccessToken();
-    if (accessToken != null && mounted) {
+    if (mounted) {
       final cocService = context.read<CocAccountService>();
       final playerService = context.read<PlayerService>();
       final clanService = context.read<ClanService>();
@@ -642,12 +642,14 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
       final bookmarkService = context.read<BookmarkService>();
 
       try {
-        cocService.setCurrentUserId(authService.currentUser?.userId);
-        bookmarkService.setCurrentUserId(authService.currentUser?.userId);
-        // Load the selected tag from SharedPreferences first
-        await cocService.loadSelectedTag();
-        await bookmarkService.load();
-        await cocService.loadApiData(playerService, clanService, warCwlService);
+        await _accountBootstrap.initialize(
+          userId: authService.currentUser?.userId,
+          cocAccounts: cocService,
+          bookmarks: bookmarkService,
+          players: playerService,
+          clans: clanService,
+          wars: warCwlService,
+        );
       } catch (e) {
         if (mounted) {
           _showPostAuthFailure(e);

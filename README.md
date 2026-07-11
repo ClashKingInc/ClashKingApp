@@ -1,7 +1,7 @@
 # ClashKing Mobile App
 
 [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-blue)](https://github.com/ClashKingInc)
-[![Flutter](https://img.shields.io/badge/Flutter-3.0+-blue)](https://flutter.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-3.44-blue)](https://flutter.dev)
 [![License](https://img.shields.io/badge/license-Open%20Source-green)](https://github.com/ClashKingInc)
 
 The ultimate Clash of Clans companion app for tracking stats, managing clans, and analyzing performance. Built with Flutter for a beautiful, fast mobile experience.
@@ -38,12 +38,13 @@ The ultimate Clash of Clans companion app for tracking stats, managing clans, an
 - Account verification with API tokens
 - Android home screen widgets
 - Offline data caching
+- Flutter-composited Liquid Glass on every platform
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter 3.0 or higher
-- Dart 3.0 or higher
+- Flutter 3.44.0 (see `.flutter-version`)
+- Dart 3.12.0
 - Android Studio / Xcode for device deployment
 
 ### Installation
@@ -68,9 +69,10 @@ The ultimate Clash of Clans companion app for tracking stats, managing clans, an
 
 - `flutter pub get` - Install dependencies
 - `flutter run` - Run the app in development mode
-- `flutter test` - Run tests
-- `flutter build apk` - Build Android APK
-- `flutter build ios` - Build iOS app
+- `flutter analyze` - Run static analysis
+- `flutter test` - Run the full test suite
+- `flutter build apk --release` - Build the Android APK
+- `flutter build ios --release --no-codesign` - Compile iOS and its widget extension
 
 ## 🌐 ClashKing Ecosystem
 
@@ -97,6 +99,10 @@ lib/
 ├── common/         # Shared widgets and utilities
 └── l10n/          # Internationalization files
 ```
+
+Startup and post-login account hydration share `AccountBootstrapService`.
+Reusable API and token transports live in `ApiService.shared` and
+`TokenService.shared`; non-secret settings live in `AppPreferences`.
 
 ### Key Technologies
 - **Flutter** - Cross-platform mobile framework

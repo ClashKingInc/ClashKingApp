@@ -3,10 +3,11 @@ class WarMemberPresence {
   final int attacksDone;
   final int attacksAvailable;
 
-  WarMemberPresence(
-      {required this.isInWar,
-      this.attacksDone = 0,
-      this.attacksAvailable = 0});
+  WarMemberPresence({
+    required this.isInWar,
+    this.attacksDone = 0,
+    this.attacksAvailable = 0,
+  });
 
   factory WarMemberPresence.empty() {
     return WarMemberPresence(

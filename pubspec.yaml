@@ -1,5 +1,5 @@
 name: clashkingapp
-description: "A new Flutter project."
+description: "The ClashKing companion app for Clash of Clans players and clans."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -32,51 +32,35 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   provider: ^6.1.5+1
-  app_links: ^7.0.0
+  app_links: ^7.2.1
   shared_preferences: ^2.5.4
   http: ^1.6.0
   crypto: ^3.0.7
-  clipboard: ^3.0.8
-  lucide_icons_flutter: ^3.1.14+1
   fl_chart: ^1.1.1
-  tuple: ^2.0.2
-  custom_sliding_segmented_control: ^1.8.5
   dropdown_button2: ^3.1.0
-  home_widget : ^0.9.3
+  home_widget: ^0.9.3
   workmanager_android: ^0.9.0+2
   workmanager_platform_interface: ^0.9.1+1
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
-  sentry_flutter: ^9.23.0
-  retry: ^3.1.2
+  sentry_flutter: ^9.24.0
   flutter_secure_storage: ^10.0.0
-  collection: ^1.19.1
-  flutter_gif: ^0.0.4
   package_info_plus: ^10.2.0
   device_info_plus: ^13.2.0
-  mailto: ^2.0.0
-  timeago: ^3.7.1
-  dio: ^5.8.0
   universal_html: ^2.3.0
-  cupertino_icons: ^1.0.8
   liquid_glass_widgets: ^0.21.3
-  native_liquid_glass: ^0.2.10
   intl: ^0.20.2
   url_launcher: ^6.3.2
   open_filex: ^4.6.0
-  webview_flutter: ^4.13.0
+  webview_flutter: ^4.14.1
   flutter_native_splash: ^2.4.7
-  path_provider: ^2.1.5
+  path_provider: ^2.1.6
   uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  integration_test:
-    sdk: flutter
-
   flutter_launcher_icons: ^0.14.4
-  mockito: ^5.6.1
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -102,7 +86,12 @@ flutter:
         - asset: fonts/CustomIcons.ttf
 
   assets:
-    - assets/icons/
+    # Alternate-icon previews used at runtime. Launcher and splash source
+    # images remain generator inputs and do not need to ship in Flutter assets.
+    - assets/icons/app_icon_ios_default.png
+    - assets/icons/app_icon_christmas.png
+    - assets/icons/app_icon_black_white.png
+    - assets/icons/app_icon_dark_logo.png
 
 
   # To add assets to your application, add an assets section, like this:
@@ -136,10 +125,11 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/app-icon.png"
+  image_path: "assets/icons/icon-play-store.png"
+  image_path_ios: "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png"
 
 
 flutter_native_splash:
@@ -156,7 +146,7 @@ flutter_native_splash:
   android_gravity: center
   ios_content_mode: scaleAspectFit
   web: true
-  
+
   android_12:
     image: assets/icons/splash12light.png
     icon_background_color: "#ffffff"

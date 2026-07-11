@@ -18,7 +18,11 @@ class PlayerLegendAttack {
       change: json['change'] ?? 0,
       trophies: json['trophies'] ?? 0,
       time: json['time'] ?? 0,
-      heroGear: (json['hero_gear'] as List?)?.map((x) => LegendHeroGear.fromJson(x)).toList() ?? [],
+      heroGear:
+          (json['hero_gear'] as List?)
+              ?.map((x) => LegendHeroGear.fromJson(x))
+              .toList() ??
+          [],
     );
   }
 }
