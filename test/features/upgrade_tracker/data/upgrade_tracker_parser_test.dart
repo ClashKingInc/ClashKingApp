@@ -208,6 +208,66 @@ void main() {
 
     expect(futureMineUpgrades, hasLength(1));
   });
+
+  test('planner preserves pending-chain order as dependencies advance', () {
+    final startsAt = DateTime.utc(2026, 7, 11);
+    UpgradeTrackerItem item(int id, String name, List<int> durations) =>
+        UpgradeTrackerItem(
+          id: id,
+          name: name,
+          imageUrl: 'https://example.com/$id.png',
+          village: UpgradeVillage.home,
+          category: UpgradeCategory.defenses,
+          queue: UpgradeQueue.builders,
+          currentLevel: 0,
+          targetLevel: durations.length,
+          count: 1,
+          steps: [
+            for (var index = 0; index < durations.length; index++)
+              UpgradeStep(
+                targetLevel: index + 1,
+                costs: const [UpgradeCost('gold', 1)],
+                seconds: durations[index],
+              ),
+          ],
+          completedUpgradeSeconds: 0,
+          totalUpgradeSeconds: durations.fold(
+            0,
+            (total, value) => total + value,
+          ),
+        );
+
+    final snapshot = UpgradeTrackerSnapshot(
+      tag: '#TEST',
+      name: 'Chief',
+      townHallLevel: 18,
+      builderHallLevel: 0,
+      homeBuilderCount: 1,
+      builderBaseBuilderCount: 1,
+      items: [
+        item(1, 'Long', const [10, 10]),
+        item(2, 'Short', const [5, 5]),
+      ],
+      collections: const [],
+      boosts: const UpgradeBoosts(),
+      events: const [],
+      capturedAt: startsAt,
+    );
+
+    final plan = snapshot.buildPlan(
+      queue: UpgradeQueue.builders,
+      strategy: UpgradePlanStrategy.balanced,
+      village: UpgradeVillage.home,
+      startsAt: startsAt,
+    );
+
+    expect(
+      plan.single.upgrades
+          .map((upgrade) => '${upgrade.item.name}:${upgrade.step.targetLevel}')
+          .toList(),
+      ['Long:1', 'Short:1', 'Long:2', 'Short:2'],
+    );
+  });
 }
 
 final _bundle = <String, dynamic>{

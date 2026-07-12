@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 enum UpgradeVillage { home, builderBase }
 
 enum UpgradeCategory {
@@ -935,28 +937,49 @@ class UpgradeTrackerSnapshot {
       preferences: preferences,
       village: planVillage,
     );
-    final pendingChains = [...orderedChains];
+    final readyChains = HeapPriorityQueue<_PendingUpgradeChain>(
+      (a, b) => a.sequence.compareTo(b.sequence),
+    );
+    final futureChains = HeapPriorityQueue<_PendingUpgradeChain>((a, b) {
+      final dependency = a.chain.dependencyReadyAt.compareTo(
+        b.chain.dependencyReadyAt,
+      );
+      return dependency != 0 ? dependency : a.sequence.compareTo(b.sequence);
+    });
+    var pendingSequence = 0;
+    DateTime earliestLaneEnd() {
+      var earliest = laneEnds.first;
+      for (var index = 1; index < baseLaneCount; index++) {
+        if (laneEnds[index].isBefore(earliest)) earliest = laneEnds[index];
+      }
+      return earliest;
+    }
+
+    void enqueue(_UpgradeChain chain) {
+      final pending = _PendingUpgradeChain(chain, pendingSequence++);
+      if (chain.dependencyReadyAt.isAfter(earliestLaneEnd())) {
+        futureChains.add(pending);
+      } else {
+        readyChains.add(pending);
+      }
+    }
+
+    for (final chain in orderedChains) {
+      enqueue(chain);
+    }
     final laneItems = List.generate(laneCount, (_) => <PlannedUpgrade>[]);
 
-    while (pendingChains.isNotEmpty) {
-      var selectedIndex = 0;
-      var selectedStart = _earliestChainStart(
-        pendingChains.first,
-        laneEnds,
-        laneCount: baseLaneCount,
-      );
-      for (var index = 1; index < pendingChains.length; index++) {
-        final start = _earliestChainStart(
-          pendingChains[index],
-          laneEnds,
-          laneCount: baseLaneCount,
-        );
-        if (start.isBefore(selectedStart)) {
-          selectedIndex = index;
-          selectedStart = start;
-        }
+    while (readyChains.isNotEmpty || futureChains.isNotEmpty) {
+      final laneReadyAt = earliestLaneEnd();
+      while (futureChains.isNotEmpty &&
+          !futureChains.first.chain.dependencyReadyAt.isAfter(laneReadyAt)) {
+        readyChains.add(futureChains.removeFirst());
       }
-      final chain = pendingChains.removeAt(selectedIndex);
+      final chain =
+          (readyChains.isNotEmpty
+                  ? readyChains.removeFirst()
+                  : futureChains.removeFirst())
+              .chain;
       final lane = _laneFor(
         chain.dependencyReadyAt,
         laneEnds,
@@ -985,7 +1008,7 @@ class UpgradeTrackerSnapshot {
       );
       laneEnds[lane] = end;
       chain.advance(end);
-      if (chain.hasNextStep) pendingChains.add(chain);
+      if (chain.hasNextStep) enqueue(chain);
     }
 
     return List.generate(
@@ -1109,17 +1132,11 @@ class _UpgradeChain {
   }
 }
 
-DateTime _earliestChainStart(
-  _UpgradeChain chain,
-  List<DateTime> laneEnds, {
-  required int laneCount,
-}) {
-  var earliest = _laterDate(laneEnds.first, chain.dependencyReadyAt);
-  for (var index = 1; index < laneCount; index++) {
-    final candidate = _laterDate(laneEnds[index], chain.dependencyReadyAt);
-    if (candidate.isBefore(earliest)) earliest = candidate;
-  }
-  return earliest;
+class _PendingUpgradeChain {
+  const _PendingUpgradeChain(this.chain, this.sequence);
+
+  final _UpgradeChain chain;
+  final int sequence;
 }
 
 int _laneFor(

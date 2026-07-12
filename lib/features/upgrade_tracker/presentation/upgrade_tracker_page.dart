@@ -62,6 +62,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   int _section = 0;
   int _goldPassPercent = 0;
   UpgradePlanPreferences _planPreferences = const UpgradePlanPreferences();
+  _TrackerPlanData? _planData;
   final _capturedAtByTag = <String, DateTime>{};
   Timer? _ticker;
 
@@ -69,19 +70,74 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _section);
-    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      final snapshot = _snapshot;
-      if (mounted &&
-          snapshot != null &&
-          (snapshot.items.any(
-                (item) =>
-                    snapshot.remainingActiveSeconds(item) > 0 ||
-                    snapshot.remainingHelperSeconds(item) > 0 ||
-                    snapshot.remainingCooldownSeconds(item) > 0,
-              ) ||
-              _activeBoostLabels(snapshot).isNotEmpty)) {
-        _clock.value = DateTime.now();
+  }
+
+  void _scheduleClockTick() {
+    _ticker?.cancel();
+    _ticker = null;
+    final snapshot = _snapshot;
+    if (!mounted || snapshot == null) return;
+
+    final now = DateTime.now();
+    DateTime? nextTick;
+    void consider(DateTime candidate) {
+      if (!candidate.isAfter(now)) return;
+      if (nextTick == null || candidate.isBefore(nextTick!)) {
+        nextTick = candidate;
       }
+    }
+
+    void considerRemaining(int originalSeconds) {
+      final remaining = snapshot.remainingCapturedSeconds(
+        originalSeconds,
+        now: now,
+      );
+      if (remaining <= 0) return;
+      final deadline = snapshot.capturedAt.add(
+        Duration(seconds: originalSeconds),
+      );
+      consider(deadline);
+      final displayUnit = remaining >= Duration.secondsPerDay
+          ? Duration.secondsPerHour
+          : Duration.secondsPerMinute;
+      consider(now.add(Duration(seconds: remaining % displayUnit + 1)));
+    }
+
+    final age = now.difference(snapshot.capturedAt);
+    if (age.isNegative || age.inMinutes < 1) {
+      consider(snapshot.capturedAt.add(const Duration(minutes: 1)));
+    } else if (age.inHours < 1) {
+      consider(snapshot.capturedAt.add(Duration(minutes: age.inMinutes + 1)));
+    } else if (age.inHours < 24) {
+      consider(snapshot.capturedAt.add(Duration(hours: age.inHours + 1)));
+    }
+
+    for (final item in snapshot.items) {
+      considerRemaining(item.activeSeconds ?? 0);
+      considerRemaining(item.helperSeconds ?? 0);
+      considerRemaining(item.cooldownSeconds ?? 0);
+    }
+    final boosts = snapshot.boosts;
+    considerRemaining(boosts.builderBoostSeconds);
+    considerRemaining(boosts.labBoostSeconds);
+    considerRemaining(boosts.clockTowerBoostSeconds);
+    considerRemaining(boosts.builderConsumableSeconds);
+    considerRemaining(boosts.labConsumableSeconds);
+    considerRemaining(boosts.petConsumableSeconds);
+    considerRemaining(boosts.clockTowerCooldownSeconds);
+    for (final event in snapshot.events) {
+      if (!now.isBefore(event.startsAt) && now.isBefore(event.endsAt)) {
+        consider(event.endsAt);
+      }
+    }
+
+    final target = nextTick;
+    if (target == null) return;
+    final delay = target.difference(now) + const Duration(milliseconds: 12);
+    _ticker = Timer(delay, () {
+      if (!mounted) return;
+      _clock.value = DateTime.now();
+      _scheduleClockTick();
     });
   }
 
@@ -127,10 +183,13 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   }
 
   Future<void> _load(String tag) async {
+    _ticker?.cancel();
+    _ticker = null;
     setState(() {
       _selectedTag = tag;
       _loading = true;
       _error = null;
+      _planData = null;
     });
     try {
       final snapshot = await _repository.load(tag);
@@ -166,15 +225,22 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               : null,
         );
       });
-      if (snapshot != null) _rebuildPlanLanes(snapshot);
+      if (snapshot != null) {
+        _rebuildPlanLanes(snapshot);
+        _scheduleClockTick();
+      } else {
+        _planLanes.value = const [];
+      }
       _scheduleWidgetSync();
     } catch (error) {
       if (!mounted) return;
       setState(() {
         _error = error;
         _snapshot = null;
+        _planData = null;
         _loading = false;
       });
+      _planLanes.value = const [];
     }
   }
 
@@ -354,6 +420,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         ].reduce((a, b) => a > b ? a : b);
       });
       _rebuildPlanLanes(snapshot);
+      _scheduleClockTick();
       if (_pageController.hasClients) _pageController.jumpToPage(0);
       _scheduleWidgetSync();
       if (!mounted) return;
@@ -680,6 +747,10 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         onSecondaryAction: _selectedTag == null ? null : _openClashMoreSettings,
       );
     }
+    final planData = _planData;
+    if (planData == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return PageView(
       controller: _pageController,
       onPageChanged: _onPageChanged,
@@ -689,64 +760,28 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           snapshot: snapshot,
           village: UpgradeVillage.home,
           clock: _clock,
-          goldPassPercent: _goldPassPercent,
-          preferences: _planPreferences,
         ),
         _UpgradesTab(
           key: const ValueKey('builder-upgrades'),
           snapshot: snapshot,
           village: UpgradeVillage.builderBase,
           clock: _clock,
-          goldPassPercent: _goldPassPercent,
-          preferences: _planPreferences,
         ),
-        _PlanCalendarTab(
-          snapshot: snapshot,
-          goldPassPercent: _goldPassPercent,
-          preferences: _planPreferences,
-        ),
-        _PlanTab(
-          snapshot: snapshot,
-          goldPassPercent: _goldPassPercent,
-          preferences: _planPreferences,
-          onLanesChanged: (lanes) => _planLanes.value = lanes,
-        ),
+        _PlanCalendarTab(snapshot: snapshot, planData: planData),
+        _PlanTab(planData: planData),
         _CollectionTab(snapshot: snapshot),
       ],
     );
   }
 
   void _rebuildPlanLanes(UpgradeTrackerSnapshot snapshot) {
-    final startsAt = DateTime.now();
-    List<UpgradePlanLane> build(UpgradeVillage village, UpgradeQueue queue) =>
-        _buildPlannerLanes(
-          snapshot,
-          queue: queue,
-          strategy: UpgradePlanStrategy.balanced,
-          village: village,
-          startsAt: startsAt,
-          goldPassPercent: _goldPassPercent,
-          preferences: _preferencesForQueue(
-            snapshot,
-            _planPreferences,
-            village,
-            queue,
-          ),
-        );
-    final walls = _buildWallPlan(
+    final planData = _buildTrackerPlanData(
       snapshot,
-      _planPreferences,
       goldPassPercent: _goldPassPercent,
-      startsAt: startsAt,
+      preferences: _planPreferences,
     );
-    _planLanes.value = [
-      ...build(UpgradeVillage.home, UpgradeQueue.builders),
-      ...build(UpgradeVillage.home, UpgradeQueue.laboratory),
-      ...build(UpgradeVillage.home, UpgradeQueue.pets),
-      ...build(UpgradeVillage.builderBase, UpgradeQueue.builders),
-      ...build(UpgradeVillage.builderBase, UpgradeQueue.laboratory),
-      if (walls.isNotEmpty) UpgradePlanLane(index: 0, upgrades: walls),
-    ];
+    _planData = planData;
+    _planLanes.value = planData.allLanes;
   }
 
   Future<void> _showGoldPassPicker(UpgradeTrackerSnapshot snapshot) async {
@@ -1289,15 +1324,11 @@ class _UpgradesTab extends StatefulWidget {
     required this.snapshot,
     required this.village,
     required this.clock,
-    required this.goldPassPercent,
-    required this.preferences,
   });
 
   final UpgradeTrackerSnapshot snapshot;
   final UpgradeVillage village;
   final ValueListenable<DateTime> clock;
-  final int goldPassPercent;
-  final UpgradePlanPreferences preferences;
 
   @override
   State<_UpgradesTab> createState() => _UpgradesTabState();
@@ -1308,27 +1339,50 @@ class _UpgradesTabState extends State<_UpgradesTab> {
   final _searchController = TextEditingController();
   String _query = '';
   String _groupFilter = 'all';
+  late _UpgradeVillageIndex _index;
   late _UpgradeVillageViewData _viewData;
+  late Set<UpgradeTrackerItem> _activeItems;
 
   @override
   void initState() {
     super.initState();
-    _rebuildViewData();
+    _rebuildIndex();
+    _activeItems = _currentActiveItems();
+    widget.clock.addListener(_handleClockChange);
   }
 
   @override
   void didUpdateWidget(covariant _UpgradesTab oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.clock != widget.clock) {
+      oldWidget.clock.removeListener(_handleClockChange);
+      widget.clock.addListener(_handleClockChange);
+    }
     if (!identical(oldWidget.snapshot, widget.snapshot) ||
         oldWidget.village != widget.village) {
-      _rebuildViewData();
+      _rebuildIndex();
+      _activeItems = _currentActiveItems();
     }
   }
 
   @override
   void dispose() {
+    widget.clock.removeListener(_handleClockChange);
     _searchController.dispose();
     super.dispose();
+  }
+
+  Set<UpgradeTrackerItem> _currentActiveItems() => Set.identity()
+    ..addAll(
+      widget.snapshot
+          .itemsFor(village: widget.village)
+          .where((item) => widget.snapshot.remainingActiveSeconds(item) > 0),
+    );
+
+  void _handleClockChange() {
+    final next = _currentActiveItems();
+    if (setEquals(_activeItems, next)) return;
+    setState(() => _activeItems = next);
   }
 
   void _setQuery(String value) {
@@ -1341,20 +1395,19 @@ class _UpgradesTabState extends State<_UpgradesTab> {
 
   void _rebuildViewData() {
     final normalized = _query.trim().toLowerCase();
-    _viewData = _UpgradeVillageViewData.build(
-      widget.snapshot,
-      widget.village,
-      normalized,
-    );
+    _viewData = _index.viewFor(normalized);
+  }
+
+  void _rebuildIndex() {
+    _index = _UpgradeVillageIndex.build(widget.snapshot, widget.village);
+    _rebuildViewData();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final village = widget.village;
-    final hasActive = widget.snapshot
-        .itemsFor(village: village)
-        .any((item) => widget.snapshot.remainingActiveSeconds(item) > 0);
+    final hasActive = _activeItems.isNotEmpty;
     final slivers = <Widget>[];
     if (hasActive) {
       slivers.add(
@@ -1596,11 +1649,14 @@ class _UpgradesTabState extends State<_UpgradesTab> {
         crossAxisSpacing: 6,
       ),
       itemCount: items.length,
-      itemBuilder: (context, index) => _UpgradeIconTile(
-        snapshot: widget.snapshot,
-        item: items[index],
-        clock: widget.clock,
-      ),
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return _UpgradeIconTile(
+          snapshot: widget.snapshot,
+          item: item,
+          clock: _activeItems.contains(item) ? widget.clock : null,
+        );
+      },
     ),
   );
 }
@@ -1619,35 +1675,39 @@ class _UpgradeVillageViewData {
   final List<_UpgradeGroup> groups;
   final Map<_UpgradeGroup, List<UpgradeTrackerItem>> itemsByGroup;
   final Map<_UpgradeGroup, UpgradeCategorySummary> summaryByGroup;
+}
 
-  factory _UpgradeVillageViewData.build(
+class _UpgradeVillageIndex {
+  const _UpgradeVillageIndex({
+    required this.displayItems,
+    required this.normalizedNames,
+    required this.summary,
+    required this.groups,
+    required this.itemsByGroup,
+    required this.summaryByGroup,
+  });
+
+  final List<UpgradeTrackerItem> displayItems;
+  final Map<UpgradeTrackerItem, String> normalizedNames;
+  final UpgradeCategorySummary summary;
+  final List<_UpgradeGroup> groups;
+  final Map<_UpgradeGroup, List<UpgradeTrackerItem>> itemsByGroup;
+  final Map<_UpgradeGroup, UpgradeCategorySummary> summaryByGroup;
+
+  factory _UpgradeVillageIndex.build(
     UpgradeTrackerSnapshot snapshot,
     UpgradeVillage village,
-    String normalizedQuery,
   ) {
     final displayItems = snapshot.itemsFor(village: village);
     final completionItems = displayItems
         .where((item) => item.category != UpgradeCategory.builders)
         .toList(growable: false);
-    final visible = displayItems
-        .where(
-          (item) =>
-              normalizedQuery.isEmpty ||
-              item.name.toLowerCase().contains(normalizedQuery),
-        )
-        .toList(growable: false);
-    final groups = _availableUpgradeGroups(snapshot, village)
-        .where(
-          (group) => visible.any(
-            (item) => _itemBelongsToUpgradeGroup(item, group, village),
-          ),
-        )
-        .toList(growable: false);
+    final groups = _availableUpgradeGroups(snapshot, village);
     final itemsByGroup = <_UpgradeGroup, List<UpgradeTrackerItem>>{};
     final summaryByGroup = <_UpgradeGroup, UpgradeCategorySummary>{};
     for (final group in groups) {
       final items =
-          visible
+          displayItems
               .where((item) => _itemBelongsToUpgradeGroup(item, group, village))
               .toList()
             ..sort((a, b) {
@@ -1665,11 +1725,49 @@ class _UpgradeVillageViewData {
         ),
       );
     }
-    return _UpgradeVillageViewData(
-      visibleItems: visible,
+    return _UpgradeVillageIndex(
+      displayItems: displayItems,
+      normalizedNames: {
+        for (final item in displayItems) item: item.name.toLowerCase(),
+      },
       summary: snapshot.summaryForItems(completionItems),
       groups: groups,
       itemsByGroup: itemsByGroup,
+      summaryByGroup: summaryByGroup,
+    );
+  }
+
+  _UpgradeVillageViewData viewFor(String normalizedQuery) {
+    if (normalizedQuery.isEmpty) {
+      final visibleGroups = groups
+          .where((group) => itemsByGroup[group]!.isNotEmpty)
+          .toList(growable: false);
+      return _UpgradeVillageViewData(
+        visibleItems: displayItems,
+        summary: summary,
+        groups: visibleGroups,
+        itemsByGroup: itemsByGroup,
+        summaryByGroup: summaryByGroup,
+      );
+    }
+    final visible = displayItems
+        .where((item) => normalizedNames[item]!.contains(normalizedQuery))
+        .toList(growable: false);
+    final visibleByGroup = <_UpgradeGroup, List<UpgradeTrackerItem>>{};
+    final visibleGroups = <_UpgradeGroup>[];
+    for (final group in groups) {
+      final items = itemsByGroup[group]!
+          .where((item) => normalizedNames[item]!.contains(normalizedQuery))
+          .toList(growable: false);
+      if (items.isEmpty) continue;
+      visibleGroups.add(group);
+      visibleByGroup[group] = items;
+    }
+    return _UpgradeVillageViewData(
+      visibleItems: visible,
+      summary: summary,
+      groups: List.unmodifiable(visibleGroups),
+      itemsByGroup: visibleByGroup,
       summaryByGroup: summaryByGroup,
     );
   }
@@ -1814,17 +1912,71 @@ class _UpgradeIconTile extends StatelessWidget {
   final ValueListenable<DateTime>? clock;
 
   @override
-  Widget build(BuildContext context) => clock == null
-      ? _buildContent(context, DateTime.now())
-      : ValueListenableBuilder<DateTime>(
-          valueListenable: clock!,
-          builder: (context, now, _) => _buildContent(context, now),
-        );
-
-  Widget _buildContent(BuildContext context, DateTime now) {
-    final scheme = Theme.of(context).colorScheme;
-    final active = snapshot.remainingActiveSeconds(item, now: now) > 0;
-    final border = active ? scheme.primary : scheme.outlineVariant;
+  Widget build(BuildContext context) {
+    final content = Stack(
+      children: [
+        Positioned.fill(
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: MobileWebImage(
+              imageUrl: item.imageUrl,
+              fallbackImageUrls: _upgradeImageFallbacks(item),
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        Positioned(
+          right: 2,
+          bottom: 2,
+          child: Container(
+            constraints: const BoxConstraints(minWidth: 23),
+            height: 18,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: item.isComplete
+                  ? CKUpgradeColors.completion
+                  : Colors.black.withValues(alpha: 0.86),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '${item.currentLevel}',
+              style: CKTypography.of(context, CKTextRole.compactLabel).copyWith(
+                color: item.isComplete ? Colors.black : Colors.white,
+                height: 1,
+              ),
+            ),
+          ),
+        ),
+        if (item.count > 1)
+          Positioned(
+            left: 2,
+            top: 2,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.78),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                '×${item.count}',
+                style: CKTypography.of(
+                  context,
+                  CKTextRole.compactLabel,
+                ).copyWith(color: Colors.white, height: 1),
+              ),
+            ),
+          ),
+      ],
+    );
+    final tile = clock == null
+        ? _buildFrame(context, DateTime.now(), content)
+        : ValueListenableBuilder<DateTime>(
+            valueListenable: clock!,
+            child: content,
+            builder: (context, now, child) =>
+                _buildFrame(context, now, child ?? const SizedBox.shrink()),
+          );
     return Semantics(
       button: true,
       label:
@@ -1832,74 +1984,24 @@ class _UpgradeIconTile extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => showUpgradeDetails(context, item),
-        child: Container(
-          decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
-            borderRadius: BorderRadius.circular(CKRadius.tile),
-            border: Border.all(color: border, width: active ? 2 : 1),
-          ),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: MobileWebImage(
-                    imageUrl: item.imageUrl,
-                    fallbackImageUrls: _upgradeImageFallbacks(item),
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 2,
-                bottom: 2,
-                child: Container(
-                  constraints: const BoxConstraints(minWidth: 23),
-                  height: 18,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: item.isComplete
-                        ? CKUpgradeColors.completion
-                        : Colors.black.withValues(alpha: 0.86),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '${item.currentLevel}',
-                    style: CKTypography.of(context, CKTextRole.compactLabel)
-                        .copyWith(
-                          color: item.isComplete ? Colors.black : Colors.white,
-                          height: 1,
-                        ),
-                  ),
-                ),
-              ),
-              if (item.count > 1)
-                Positioned(
-                  left: 2,
-                  top: 2,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.78),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      '×${item.count}',
-                      style: CKTypography.of(
-                        context,
-                        CKTextRole.compactLabel,
-                      ).copyWith(color: Colors.white, height: 1),
-                    ),
-                  ),
-                ),
-            ],
-          ),
+        child: tile,
+      ),
+    );
+  }
+
+  Widget _buildFrame(BuildContext context, DateTime now, Widget child) {
+    final scheme = Theme.of(context).colorScheme;
+    final active = snapshot.remainingActiveSeconds(item, now: now) > 0;
+    return Container(
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
+        borderRadius: BorderRadius.circular(CKRadius.tile),
+        border: Border.all(
+          color: active ? scheme.primary : scheme.outlineVariant,
+          width: active ? 2 : 1,
         ),
       ),
+      child: child,
     );
   }
 }
@@ -2018,95 +2120,42 @@ class _UpgradeRow extends StatelessWidget {
 }
 
 class _PlanTab extends StatefulWidget {
-  const _PlanTab({
-    required this.snapshot,
-    required this.goldPassPercent,
-    required this.preferences,
-    required this.onLanesChanged,
-  });
+  const _PlanTab({required this.planData});
 
-  final UpgradeTrackerSnapshot snapshot;
-  final int goldPassPercent;
-  final UpgradePlanPreferences preferences;
-  final ValueChanged<List<UpgradePlanLane>> onLanesChanged;
+  final _TrackerPlanData planData;
 
   @override
   State<_PlanTab> createState() => _PlanTabState();
 }
 
 class _PlanTabState extends State<_PlanTab> {
-  late DateTime _startsAt;
-  late List<UpgradePlanLane> _allLanes;
-  late String _preferenceSignature;
   _PlanVillageFilter _villageFilter = _PlanVillageFilter.all;
   _PlanQueueFilter _queueFilter = _PlanQueueFilter.all;
   _PlanSort _planSort = _PlanSort.scheduled;
+  late List<_PlannedUpgradeGroup> _groups;
 
   @override
   void initState() {
     super.initState();
-    _computePlan();
-    _notifyLanes();
+    _rebuildGroups();
   }
 
   @override
   void didUpdateWidget(covariant _PlanTab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final nextSignature = jsonEncode(widget.preferences.toJson());
-    if (!identical(oldWidget.snapshot, widget.snapshot) ||
-        oldWidget.snapshot.capturedAt != widget.snapshot.capturedAt ||
-        oldWidget.goldPassPercent != widget.goldPassPercent ||
-        nextSignature != _preferenceSignature) {
-      _computePlan();
-      _notifyLanes();
-    }
+    if (!identical(oldWidget.planData, widget.planData)) _rebuildGroups();
   }
 
-  void _notifyLanes() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) widget.onLanesChanged(_allLanes);
+  void _updateFilters(VoidCallback change) {
+    setState(() {
+      change();
+      _rebuildGroups();
     });
   }
 
-  void _computePlan() {
-    _startsAt = DateTime.now();
-    _preferenceSignature = jsonEncode(widget.preferences.toJson());
-    List<UpgradePlanLane> build(UpgradeVillage village, UpgradeQueue queue) =>
-        _buildPlannerLanes(
-          widget.snapshot,
-          queue: queue,
-          strategy: UpgradePlanStrategy.balanced,
-          village: village,
-          startsAt: _startsAt,
-          goldPassPercent: widget.goldPassPercent,
-          preferences: _preferencesForQueue(
-            widget.snapshot,
-            widget.preferences,
-            village,
-            queue,
-          ),
-        );
-
-    final walls = _buildWallPlan(
-      widget.snapshot,
-      widget.preferences,
-      goldPassPercent: widget.goldPassPercent,
-      startsAt: _startsAt,
-    );
-    _allLanes = [
-      ...build(UpgradeVillage.home, UpgradeQueue.builders),
-      ...build(UpgradeVillage.home, UpgradeQueue.laboratory),
-      ...build(UpgradeVillage.home, UpgradeQueue.pets),
-      ...build(UpgradeVillage.builderBase, UpgradeQueue.builders),
-      ...build(UpgradeVillage.builderBase, UpgradeQueue.laboratory),
-      if (walls.isNotEmpty) UpgradePlanLane(index: 0, upgrades: walls),
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  void _rebuildGroups() {
     final filtered =
-        _allLanes
+        widget.planData.allLanes
             .expand((lane) => lane.upgrades)
             .where(
               (upgrade) =>
@@ -2128,13 +2177,20 @@ class _PlanTabState extends State<_PlanTab> {
             };
             return comparison != 0 ? comparison : a.endsAt.compareTo(b.endsAt);
           });
-    final groups = _groupPlannedUpgrades(filtered);
+    _groups = _groupPlannedUpgrades(filtered);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
           sliver: SliverToBoxAdapter(
-            child: _LootOutlookCard(lanes: _allLanes, startsAt: _startsAt),
+            child: _LootOutlookCard(
+              lanes: widget.planData.allLanes,
+              startsAt: widget.planData.startsAt,
+            ),
           ),
         ),
         SliverPadding(
@@ -2152,7 +2208,8 @@ class _PlanTabState extends State<_PlanTab> {
                           (value) => _FilterChip(
                             label: _planVillageFilterLabel(value),
                             selected: _villageFilter == value,
-                            onTap: () => setState(() => _villageFilter = value),
+                            onTap: () =>
+                                _updateFilters(() => _villageFilter = value),
                           ),
                         )
                         .toList(growable: false),
@@ -2167,7 +2224,8 @@ class _PlanTabState extends State<_PlanTab> {
                           (value) => _FilterChip(
                             label: _planQueueFilterLabel(value),
                             selected: _queueFilter == value,
-                            onTap: () => setState(() => _queueFilter = value),
+                            onTap: () =>
+                                _updateFilters(() => _queueFilter = value),
                           ),
                         )
                         .toList(growable: false),
@@ -2183,7 +2241,7 @@ class _PlanTabState extends State<_PlanTab> {
                       for (final value in _PlanSort.values)
                         _planSortLabel(value): value.name,
                     },
-                    updateSortBy: (value) => setState(
+                    updateSortBy: (value) => _updateFilters(
                       () => _planSort = _PlanSort.values.byName(value),
                     ),
                   ),
@@ -2192,7 +2250,7 @@ class _PlanTabState extends State<_PlanTab> {
             ),
           ),
         ),
-        if (groups.isEmpty)
+        if (_groups.isEmpty)
           const SliverFillRemaining(
             hasScrollBody: false,
             child: _TrackerEmptyState(
@@ -2205,10 +2263,10 @@ class _PlanTabState extends State<_PlanTab> {
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
             sliver: SliverList.separated(
-              itemCount: groups.length,
+              itemCount: _groups.length,
               separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, index) =>
-                  _PlannedUpgradeRow(group: groups[index]),
+                  _PlannedUpgradeRow(group: _groups[index]),
             ),
           ),
       ],
@@ -2258,6 +2316,59 @@ extension on _PlanCalendarGroup {
   };
 }
 
+class _TrackerPlanData {
+  const _TrackerPlanData({
+    required this.startsAt,
+    required this.allLanes,
+    required this.calendarGroups,
+  });
+
+  final DateTime startsAt;
+  final List<UpgradePlanLane> allLanes;
+  final List<_PlanTimelineGroup> calendarGroups;
+}
+
+_TrackerPlanData _buildTrackerPlanData(
+  UpgradeTrackerSnapshot snapshot, {
+  required int goldPassPercent,
+  required UpgradePlanPreferences preferences,
+}) {
+  final startsAt = DateTime.now();
+  final calendarGroups = _PlanCalendarGroup.values
+      .map((group) {
+        final lanes = _buildPlannerLanes(
+          snapshot,
+          queue: group.queue,
+          strategy: UpgradePlanStrategy.balanced,
+          village: group.village,
+          startsAt: startsAt,
+          goldPassPercent: goldPassPercent,
+          preferences: _preferencesForQueue(
+            snapshot,
+            preferences,
+            group.village,
+            group.queue,
+          ),
+        );
+        return _PlanTimelineGroup(type: group, lanes: lanes);
+      })
+      .toList(growable: false);
+  final walls = _buildWallPlan(
+    snapshot,
+    preferences,
+    goldPassPercent: goldPassPercent,
+    startsAt: startsAt,
+  );
+  return _TrackerPlanData(
+    startsAt: startsAt,
+    allLanes: List.unmodifiable([
+      ...calendarGroups.expand((group) => group.lanes),
+      if (walls.isNotEmpty) UpgradePlanLane(index: 0, upgrades: walls),
+    ]),
+    calendarGroups: List.unmodifiable(calendarGroups),
+  );
+}
+
 String _planCalendarGroupImage(
   UpgradeTrackerSnapshot snapshot,
   _PlanCalendarGroup group,
@@ -2302,58 +2413,18 @@ class _PlanTimelineGroup {
   final List<UpgradePlanLane> lanes;
 }
 
-List<_PlanTimelineGroup> _buildPlanCalendarGroups(
-  UpgradeTrackerSnapshot snapshot, {
-  required int goldPassPercent,
-  required UpgradePlanPreferences preferences,
-  required DateTime startsAt,
-}) {
-  List<UpgradePlanLane> build(_PlanCalendarGroup group) => _buildPlannerLanes(
-    snapshot,
-    queue: group.queue,
-    strategy: UpgradePlanStrategy.balanced,
-    village: group.village,
-    startsAt: startsAt,
-    goldPassPercent: goldPassPercent,
-    preferences: _preferencesForQueue(
-      snapshot,
-      preferences,
-      group.village,
-      group.queue,
-    ),
-  );
-
-  return _PlanCalendarGroup.values
-      .map((group) => _PlanTimelineGroup(type: group, lanes: build(group)))
-      .toList(growable: false);
-}
-
 class _PlanCalendarTab extends StatelessWidget {
-  const _PlanCalendarTab({
-    required this.snapshot,
-    required int goldPassPercent,
-    required UpgradePlanPreferences preferences,
-  }) : _goldPassPercent = goldPassPercent,
-       _preferences = preferences;
+  const _PlanCalendarTab({required this.snapshot, required this.planData});
 
   final UpgradeTrackerSnapshot snapshot;
-  final int _goldPassPercent;
-  final UpgradePlanPreferences _preferences;
+  final _TrackerPlanData planData;
 
   @override
-  Widget build(BuildContext context) {
-    final startsAt = DateTime.now();
-    return _PlanTimeline(
-      snapshot: snapshot,
-      startsAt: startsAt,
-      groups: _buildPlanCalendarGroups(
-        snapshot,
-        goldPassPercent: _goldPassPercent,
-        preferences: _preferences,
-        startsAt: startsAt,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => _PlanTimeline(
+    snapshot: snapshot,
+    startsAt: planData.startsAt,
+    groups: planData.calendarGroups,
+  );
 }
 
 class _PlanTimeline extends StatelessWidget {
@@ -2421,31 +2492,38 @@ class _PlanTimeline extends StatelessWidget {
                           ),
                           const Divider(height: 1),
                           Expanded(
-                            child: SingleChildScrollView(
+                            child: CustomScrollView(
                               key: ValueKey(
                                 'plan-calendar-vertical-${startsAt.microsecondsSinceEpoch}',
                               ),
-                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
                               // Share the NestedScrollView's vertical
                               // controller so pulling down at the top restores
                               // the collapsed scenic header.
                               primary: true,
                               physics: const AlwaysScrollableScrollPhysics(),
-                              child: Column(
-                                children: groups
-                                    .map(
-                                      (group) => _PlanTimelineSection(
-                                        snapshot: snapshot,
-                                        group: group,
-                                        firstDay: startsAt,
-                                        days: _horizonDays,
-                                        labelWidth: _labelWidth,
-                                        dayWidth: _dayWidth,
-                                        laneHeight: _laneHeight,
-                                      ),
-                                    )
-                                    .toList(growable: false),
-                              ),
+                              slivers: [
+                                SliverPadding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    16,
+                                    8,
+                                    16,
+                                    28,
+                                  ),
+                                  sliver: SliverList.builder(
+                                    itemCount: groups.length,
+                                    itemBuilder: (context, index) =>
+                                        _PlanTimelineSection(
+                                          snapshot: snapshot,
+                                          group: groups[index],
+                                          firstDay: startsAt,
+                                          days: _horizonDays,
+                                          labelWidth: _labelWidth,
+                                          dayWidth: _dayWidth,
+                                          laneHeight: _laneHeight,
+                                        ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -2476,28 +2554,30 @@ class _PlanTimelineHeader extends StatelessWidget {
   final double dayWidth;
 
   @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      SizedBox(width: labelWidth),
-      ...List.generate(
-        days,
-        (index) => SizedBox(
-          width: dayWidth,
-          child: Text(
-            DateFormat(
-              'EEE\nMMM d',
-            ).format(firstDay.add(Duration(days: index))),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w800,
-              height: 1.1,
+  Widget build(BuildContext context) {
+    final formatter = DateFormat('EEE\nMMM d');
+    final style = Theme.of(context).textTheme.labelSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+      fontWeight: FontWeight.w800,
+      height: 1.1,
+    );
+    return Row(
+      children: [
+        SizedBox(width: labelWidth),
+        ...List.generate(
+          days,
+          (index) => SizedBox(
+            width: dayWidth,
+            child: Text(
+              formatter.format(firstDay.add(Duration(days: index))),
+              textAlign: TextAlign.center,
+              style: style,
             ),
           ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }
 
 class _PlanTimelineSection extends StatefulWidget {
@@ -2523,11 +2603,16 @@ class _PlanTimelineSection extends StatefulWidget {
   State<_PlanTimelineSection> createState() => _PlanTimelineSectionState();
 }
 
-class _PlanTimelineSectionState extends State<_PlanTimelineSection> {
+class _PlanTimelineSectionState extends State<_PlanTimelineSection>
+    with AutomaticKeepAliveClientMixin {
   bool _expanded = true;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final scheme = Theme.of(context).colorScheme;
     final accent = widget.group.type.accent;
     final plannedLanes = widget.group.lanes
@@ -2645,6 +2730,15 @@ class _PlanTimelineLane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = days * dayWidth;
+    final horizonEnd = firstDay.add(Duration(days: days));
+    final visibleUpgrades = upgrades
+        .where(
+          (upgrade) =>
+              upgrade.endsAt.isAfter(firstDay) &&
+              upgrade.startsAt.isBefore(horizonEnd),
+        )
+        .toList(growable: false);
+    final scheme = Theme.of(context).colorScheme;
     return SizedBox(
       height: laneHeight,
       child: Row(
@@ -2668,31 +2762,18 @@ class _PlanTimelineLane extends StatelessWidget {
                 clipBehavior: Clip.hardEdge,
                 children: [
                   Positioned.fill(
-                    child: Row(
-                      children: List.generate(
-                        days,
-                        (index) => Container(
-                          width: dayWidth,
-                          decoration: BoxDecoration(
-                            color: index.isEven
-                                ? Theme.of(
-                                    context,
-                                  ).colorScheme.surface.withValues(alpha: 0.18)
-                                : Colors.transparent,
-                            border: Border(
-                              left: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant
-                                    .withValues(alpha: 0.28),
-                              ),
-                            ),
-                          ),
+                    child: CustomPaint(
+                      painter: _PlanTimelineGridPainter(
+                        days: days,
+                        dayWidth: dayWidth,
+                        alternateColor: scheme.surface.withValues(alpha: 0.18),
+                        lineColor: scheme.outlineVariant.withValues(
+                          alpha: 0.28,
                         ),
                       ),
                     ),
                   ),
-                  ...upgrades.map(
+                  ...visibleUpgrades.map(
                     (upgrade) => _PlanTimelineBlock(
                       upgrade: upgrade,
                       firstDay: firstDay,
@@ -2710,6 +2791,47 @@ class _PlanTimelineLane extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PlanTimelineGridPainter extends CustomPainter {
+  const _PlanTimelineGridPainter({
+    required this.days,
+    required this.dayWidth,
+    required this.alternateColor,
+    required this.lineColor,
+  });
+
+  final int days;
+  final double dayWidth;
+  final Color alternateColor;
+  final Color lineColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final alternatePaint = Paint()
+      ..color = alternateColor
+      ..isAntiAlias = false;
+    final linePaint = Paint()
+      ..color = lineColor
+      ..isAntiAlias = false;
+    for (var index = 0; index < days; index++) {
+      final left = index * dayWidth;
+      if (index.isEven) {
+        canvas.drawRect(
+          Rect.fromLTWH(left, 0, dayWidth, size.height),
+          alternatePaint,
+        );
+      }
+      canvas.drawRect(Rect.fromLTWH(left, 0, 1, size.height), linePaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _PlanTimelineGridPainter oldDelegate) =>
+      oldDelegate.days != days ||
+      oldDelegate.dayWidth != dayWidth ||
+      oldDelegate.alternateColor != alternateColor ||
+      oldDelegate.lineColor != lineColor;
 }
 
 class _PlanTimelineBlock extends StatelessWidget {
@@ -3416,6 +3538,12 @@ class _CollectionTabState extends State<_CollectionTab> {
   bool _showFilters = false;
   late bool _supportsVillage;
   late Map<UpgradeCollectionType, List<UpgradeCollectionItem>> _itemsByType;
+  late Map<UpgradeCollectionItem, String> _normalizedNames;
+  late Map<
+    UpgradeCollectionType,
+    Map<_CollectionSort, List<UpgradeCollectionItem>>
+  >
+  _sortedItemsByType;
   late List<_CollectionSectionViewData> _sections;
 
   @override
@@ -3450,7 +3578,36 @@ class _CollectionTabState extends State<_CollectionTab> {
       hasBuilderBase |= item.village == UpgradeVillage.builderBase;
     }
     _supportsVillage = hasHome && hasBuilderBase;
+    _normalizedNames = {
+      for (final item in widget.snapshot.collections)
+        item: item.name.toLowerCase(),
+    };
+    _sortedItemsByType = {
+      for (final type in UpgradeCollectionType.values)
+        type: {
+          for (final sort in _CollectionSort.values)
+            sort: List.unmodifiable(
+              [..._itemsByType[type]!]
+                ..sort((a, b) => _compareCollectionItems(a, b, sort)),
+            ),
+        },
+    };
   }
+
+  int _compareCollectionItems(
+    UpgradeCollectionItem a,
+    UpgradeCollectionItem b,
+    _CollectionSort sort,
+  ) => switch (sort) {
+    _CollectionSort.nameAscending => _normalizedNames[a]!.compareTo(
+      _normalizedNames[b]!,
+    ),
+    _CollectionSort.nameDescending => _normalizedNames[b]!.compareTo(
+      _normalizedNames[a]!,
+    ),
+    _CollectionSort.newest => b.id.compareTo(a.id),
+    _CollectionSort.oldest => a.id.compareTo(b.id),
+  };
 
   void _update(VoidCallback change) {
     setState(() {
@@ -3474,24 +3631,17 @@ class _CollectionTabState extends State<_CollectionTab> {
           )
           .toList(growable: false);
       if (scoped.isEmpty) continue;
-      final visible = scoped.where((item) {
+      final visible = _sortedItemsByType[type]![_sort]!.where((item) {
+        if (_village != null &&
+            type != UpgradeCollectionType.capitalHouseParts &&
+            item.village != _village) {
+          return false;
+        }
         if (_filter == _CollectionFilter.owned && !item.owned) return false;
         if (_filter == _CollectionFilter.missing && item.owned) return false;
         return normalized.isEmpty ||
-            item.name.toLowerCase().contains(normalized);
+            _normalizedNames[item]!.contains(normalized);
       }).toList();
-      visible.sort(
-        (a, b) => switch (_sort) {
-          _CollectionSort.nameAscending => a.name.toLowerCase().compareTo(
-            b.name.toLowerCase(),
-          ),
-          _CollectionSort.nameDescending => b.name.toLowerCase().compareTo(
-            a.name.toLowerCase(),
-          ),
-          _CollectionSort.newest => b.id.compareTo(a.id),
-          _CollectionSort.oldest => a.id.compareTo(b.id),
-        },
-      );
       _sections.add(
         _CollectionSectionViewData(
           type: type,
@@ -3734,30 +3884,32 @@ class _CollectionTile extends StatelessWidget {
     final image = MobileWebImage(imageUrl: item.imageUrl, fit: BoxFit.contain);
     final artwork = item.owned
         ? image
-        : ColorFiltered(
-            colorFilter: const ColorFilter.matrix(<double>[
-              0.2126,
-              0.7152,
-              0.0722,
-              0,
-              0,
-              0.2126,
-              0.7152,
-              0.0722,
-              0,
-              0,
-              0.2126,
-              0.7152,
-              0.0722,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0.56,
-              0,
-            ]),
-            child: image,
+        : RepaintBoundary(
+            child: ColorFiltered(
+              colorFilter: const ColorFilter.matrix(<double>[
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0.2126,
+                0.7152,
+                0.0722,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0.56,
+                0,
+              ]),
+              child: image,
+            ),
           );
     return CKCollectionTile(
       image: Stack(
@@ -5155,54 +5307,6 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
       ),
     );
   }
-}
-
-List<String> _activeBoostLabels(
-  UpgradeTrackerSnapshot snapshot, {
-  DateTime? now,
-}) {
-  final boosts = snapshot.boosts;
-  final labels = <String>[];
-  void addTimed(String name, int seconds) {
-    final remaining = snapshot.remainingCapturedSeconds(seconds, now: now);
-    if (remaining > 0) labels.add('$name · ${_duration(remaining)}');
-  }
-
-  addTimed('Builder boost', boosts.builderBoostSeconds);
-  addTimed('Research boost', boosts.labBoostSeconds);
-  addTimed('Clock Tower', boosts.clockTowerBoostSeconds);
-  addTimed('Builder Potion', boosts.builderConsumableSeconds);
-  addTimed('Research Potion', boosts.labConsumableSeconds);
-  addTimed('Pet Potion', boosts.petConsumableSeconds);
-  final clockCooldown = snapshot.remainingCapturedSeconds(
-    boosts.clockTowerCooldownSeconds,
-    now: now,
-  );
-  if (boosts.clockTowerBoostSeconds <= 0 && clockCooldown > 0) {
-    labels.add('Clock Tower · Ready in ${_duration(clockCooldown)}');
-  }
-  if (boosts.builderCostReductionPercent > 0 ||
-      boosts.builderTimeReductionPercent > 0) {
-    labels.add(
-      'Builder perk · ${boosts.builderCostReductionPercent}% cost / '
-      '${boosts.builderTimeReductionPercent}% time',
-    );
-  }
-  if (boosts.labCostReductionPercent > 0 ||
-      boosts.labTimeReductionPercent > 0) {
-    labels.add(
-      'Research perk · ${boosts.labCostReductionPercent}% cost / '
-      '${boosts.labTimeReductionPercent}% time',
-    );
-  }
-  final effectiveNow = now ?? DateTime.now();
-  for (final event in snapshot.events) {
-    if (!effectiveNow.isBefore(event.startsAt) &&
-        effectiveNow.isBefore(event.endsAt)) {
-      labels.add(event.name);
-    }
-  }
-  return labels;
 }
 
 UpgradePlanPreferences _preferencesForQueue(
@@ -7510,6 +7614,8 @@ String _upgradeImageForLevel(UpgradeTrackerItem item, int level) {
   return item.imageUrl;
 }
 
+final Expando<Map<int, List<String>>> _upgradeImageFallbackCache = Expando();
+
 List<String> _upgradeImageFallbacks(UpgradeTrackerItem item, {int? fromLevel}) {
   if (!const {
     UpgradeCategory.defenses,
@@ -7523,12 +7629,16 @@ List<String> _upgradeImageFallbacks(UpgradeTrackerItem item, {int? fromLevel}) {
   }
   final current = fromLevel ?? item.currentLevel;
   if (current <= 1) return const [];
-  return [
-    for (var level = current - 1; level >= 1; level--)
-      item.village == UpgradeVillage.home
-          ? ImageAssets.getHomeVillageBuildingImage(item.name, level)
-          : ImageAssets.getBuilderBaseBuildingImage(item.name, level),
-  ];
+  final byLevel = _upgradeImageFallbackCache[item] ??= {};
+  return byLevel.putIfAbsent(
+    current,
+    () => List.unmodifiable([
+      for (var level = current - 1; level >= 1; level--)
+        item.village == UpgradeVillage.home
+            ? ImageAssets.getHomeVillageBuildingImage(item.name, level)
+            : ImageAssets.getBuilderBaseBuildingImage(item.name, level),
+    ]),
+  );
 }
 
 List<(String, List<UpgradeTrackerItem>)> _equipmentHeroGroups(
