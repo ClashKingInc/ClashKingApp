@@ -7,6 +7,8 @@ import 'dart:ui' as ui;
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/collapsible_item_section.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -165,6 +167,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               : null,
         );
       });
+      if (snapshot != null) _rebuildPlanLanes(snapshot);
       _scheduleWidgetSync();
     } catch (error) {
       if (!mounted) return;
@@ -351,7 +354,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           snapshot.boosts.labTimeReductionPercent,
         ].reduce((a, b) => a > b ? a : b);
       });
-      _planLanes.value = const [];
+      _rebuildPlanLanes(snapshot);
       if (_pageController.hasClients) _pageController.jumpToPage(0);
       _scheduleWidgetSync();
       if (!mounted) return;
@@ -462,6 +465,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     context.select<CocAccountService, int>(
       (service) => Object.hashAll(
         service.cocAccounts.map(
@@ -483,7 +487,6 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         ),
       ),
     );
-    final l10n = AppLocalizations.of(context)!;
     final linkedAccounts = _linkedAccountOptions();
     final accounts = linkedAccounts;
     final uniqueAccounts = <String, _TrackerAccountOption>{
@@ -498,111 +501,72 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               UpgradeTrackerRepository.normalizeTag(_selectedTag ?? ''),
         )
         .firstOrNull;
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 52,
-        titleSpacing: 4,
-        title: Semantics(
-          button: true,
-          label: l10n.upgradeTrackerSwitchAccount(
+    final snapshot = _snapshot;
+    if (_loading || _error != null || snapshot == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
             selectedAccount?.name ?? l10n.upgradeTrackerChooseAccount,
           ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(AppRadius.pill),
-            onTap: () => _showAccountPicker(uniqueAccounts),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if ((selectedAccount?.townHallLevel ?? 0) > 0) ...[
-                    MobileWebImage(
-                      imageUrl: ImageAssets.townHall(
-                        selectedAccount!.townHallLevel,
-                      ),
-                      width: 28,
-                      height: 28,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(width: 7),
-                  ],
-                  Flexible(
-                    child: ValueListenableBuilder<DateTime>(
-                      valueListenable: _clock,
-                      builder: (context, now, _) => Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            selectedAccount?.name ??
-                                l10n.upgradeTrackerChooseAccount,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: CKTypography.of(
-                              context,
-                              CKTextRole.rowTitle,
-                            ),
-                          ),
-                          if (selectedAccount?.capturedAt
-                              case final capturedAt?)
-                            Text(
-                              _snapshotAgeLabel(context, capturedAt, now: now),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  CKTypography.of(
-                                    context,
-                                    CKTextRole.compactLabel,
-                                  ).copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                  ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 3),
-                  const Icon(Icons.expand_more_rounded, size: 20),
-                ],
+          actions: [
+            IconButton(
+              tooltip: l10n.upgradeTrackerSwitchAccount(
+                selectedAccount?.name ?? l10n.upgradeTrackerChooseAccount,
               ),
+              onPressed: () => _showAccountPicker(uniqueAccounts),
+              icon: const Icon(Icons.switch_account_rounded),
+            ),
+            IconButton(
+              tooltip: l10n.upgradeTrackerPasteJson,
+              onPressed: _importSnapshot,
+              icon: const Icon(Icons.content_paste_rounded),
+            ),
+          ],
+        ),
+        body: _buildBody(),
+      );
+    }
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverToBoxAdapter(
+            child: _TrackerInfoHeader(
+              snapshot: snapshot,
+              selectedTab: _section,
+              selectedAccount: selectedAccount,
+              clock: _clock,
+              lanes: _planLanes,
+              onBack: () => Navigator.of(context).pop(),
+              onSwitchAccount: () => _showAccountPicker(uniqueAccounts),
+              onShare: () => _showShareHub(snapshot),
+              onImport: _importSnapshot,
+              onOpenPlan: () => _showPlanHub(snapshot),
             ),
           ),
-        ),
-        actions: [
-          if (_snapshot != null)
-            IconButton(
-              tooltip: l10n.upgradeTrackerShare,
-              onPressed: () => _showShareHub(_snapshot!),
-              icon: const Icon(Icons.ios_share_rounded),
+          SliverToBoxAdapter(
+            child: InfoProfileTabs(
+              selectedIndex: _section,
+              onTabSelected: _selectSection,
+              tabs: [
+                InfoProfileTabData(
+                  label: l10n.upgradeTrackerHomeVillage,
+                  imageUrl: ImageAssets.townHall(snapshot.townHallLevel),
+                ),
+                InfoProfileTabData(
+                  label: l10n.upgradeTrackerBuilderBase,
+                  imageUrl: ImageAssets.builderHall(snapshot.builderHallLevel),
+                ),
+                InfoProfileTabData(
+                  label: l10n.upgradeTrackerCollection,
+                  icon: Icons.collections_rounded,
+                ),
+              ],
             ),
-          IconButton(
-            tooltip: l10n.upgradeTrackerPasteJson,
-            onPressed: _importSnapshot,
-            icon: const Icon(Icons.content_paste_rounded),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
-            child: LiquidGlassSegmentedControl<int>(
-              values: const [0, 1, 2],
-              labels: [
-                l10n.upgradeTrackerPlan,
-                l10n.upgradeTrackerUpgrades,
-                l10n.upgradeTrackerCollection,
-              ],
-              selected: _section,
-              color: Theme.of(context).colorScheme.onSurface,
-              height: CKControlDensity.compact.minimumHeight,
-              onChanged: _selectSection,
-            ),
-          ),
-        ),
+        body: _buildBody(),
       ),
-      body: _buildBody(),
     );
   }
 
@@ -683,7 +647,68 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       controller: _pageController,
       onPageChanged: _onPageChanged,
       children: [
-        _PlanTab(
+        _UpgradesTab(
+          key: const ValueKey('home-upgrades'),
+          snapshot: snapshot,
+          village: UpgradeVillage.home,
+          clock: _clock,
+          goldPassPercent: _goldPassPercent,
+          preferences: _planPreferences,
+        ),
+        _UpgradesTab(
+          key: const ValueKey('builder-upgrades'),
+          snapshot: snapshot,
+          village: UpgradeVillage.builderBase,
+          clock: _clock,
+          goldPassPercent: _goldPassPercent,
+          preferences: _planPreferences,
+        ),
+        _CollectionTab(snapshot: snapshot),
+      ],
+    );
+  }
+
+  void _rebuildPlanLanes(UpgradeTrackerSnapshot snapshot) {
+    final startsAt = DateTime.now();
+    List<UpgradePlanLane> build(UpgradeVillage village, UpgradeQueue queue) =>
+        _buildPlannerLanes(
+          snapshot,
+          queue: queue,
+          strategy: UpgradePlanStrategy.balanced,
+          village: village,
+          startsAt: startsAt,
+          goldPassPercent: _goldPassPercent,
+          preferences: _preferencesForQueue(
+            snapshot,
+            _planPreferences,
+            village,
+            queue,
+          ),
+        );
+    final walls = _buildWallPlan(
+      snapshot,
+      _planPreferences,
+      goldPassPercent: _goldPassPercent,
+      startsAt: startsAt,
+    );
+    _planLanes.value = [
+      ...build(UpgradeVillage.home, UpgradeQueue.builders),
+      ...build(UpgradeVillage.home, UpgradeQueue.laboratory),
+      ...build(UpgradeVillage.home, UpgradeQueue.pets),
+      ...build(UpgradeVillage.builderBase, UpgradeQueue.builders),
+      ...build(UpgradeVillage.builderBase, UpgradeQueue.laboratory),
+      if (walls.isNotEmpty) UpgradePlanLane(index: 0, upgrades: walls),
+    ];
+  }
+
+  Future<void> _showPlanHub(UpgradeTrackerSnapshot snapshot) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => FractionallySizedBox(
+        heightFactor: 0.92,
+        child: _PlanTab(
           snapshot: snapshot,
           goldPassPercent: _goldPassPercent,
           preferences: _planPreferences,
@@ -691,14 +716,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           onLanesChanged: (lanes) => _planLanes.value = lanes,
           controls: _buildPlanActions(snapshot),
         ),
-        _UpgradesTab(
-          snapshot: snapshot,
-          clock: _clock,
-          goldPassPercent: _goldPassPercent,
-          preferences: _planPreferences,
-        ),
-        _CollectionTab(snapshot: snapshot),
-      ],
+      ),
     );
   }
 
@@ -713,6 +731,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                 initialValue: _goldPassPercent,
                 onSelected: (value) {
                   setState(() => _goldPassPercent = value);
+                  _rebuildPlanLanes(snapshot);
                   unawaited(_savePlanDraft());
                 },
                 itemBuilder: (context) => [0, 10, 15, 20]
@@ -754,6 +773,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                   _planPreferences,
                   (value) {
                     setState(() => _planPreferences = value);
+                    _rebuildPlanLanes(snapshot);
                     unawaited(_savePlanDraft());
                   },
                 ),
@@ -876,6 +896,290 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           _ShareProgressSheet(snapshot: snapshot, village: village),
     );
   }
+}
+
+class _TrackerInfoHeader extends StatelessWidget {
+  const _TrackerInfoHeader({
+    required this.snapshot,
+    required this.selectedTab,
+    required this.selectedAccount,
+    required this.clock,
+    required this.lanes,
+    required this.onBack,
+    required this.onSwitchAccount,
+    required this.onShare,
+    required this.onImport,
+    required this.onOpenPlan,
+  });
+
+  final UpgradeTrackerSnapshot snapshot;
+  final int selectedTab;
+  final _TrackerAccountOption? selectedAccount;
+  final ValueListenable<DateTime> clock;
+  final ValueListenable<List<UpgradePlanLane>> lanes;
+  final VoidCallback onBack;
+  final VoidCallback onSwitchAccount;
+  final VoidCallback onShare;
+  final VoidCallback onImport;
+  final VoidCallback onOpenPlan;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final village = selectedTab == 1
+        ? UpgradeVillage.builderBase
+        : UpgradeVillage.home;
+    final hallImage = village == UpgradeVillage.home
+        ? ImageAssets.townHall(snapshot.townHallLevel)
+        : ImageAssets.builderHall(snapshot.builderHallLevel);
+    final background = village == UpgradeVillage.home
+        ? ImageAssets.homeBaseBackground
+        : ImageAssets.builderBaseBackground;
+    final summary = snapshot.overallSummary(village: village);
+    final collectionTotal = snapshot.collections.length;
+    final collectionOwned = snapshot.collections
+        .where((item) => item.owned)
+        .length;
+    final active = snapshot
+        .itemsFor(village: village)
+        .where((item) => snapshot.remainingActiveSeconds(item) > 0)
+        .length;
+    final headerHeight = MediaQuery.paddingOf(context).top + 276;
+
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: InfoHeroBackdrop(imageUrl: background, height: headerHeight),
+        ),
+        SizedBox(
+          height: headerHeight,
+          child: Column(
+            children: [
+              SizedBox(height: MediaQuery.paddingOf(context).top),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    HeaderIconButton(
+                      icon: Icons.arrow_back_rounded,
+                      iconColor: Colors.white,
+                      tooltip: MaterialLocalizations.of(
+                        context,
+                      ).backButtonTooltip,
+                      onTap: onBack,
+                      showBackground: false,
+                    ),
+                    const Spacer(),
+                    if (selectedTab != 2) ...[
+                      HeaderIconButton(
+                        icon: Icons.calendar_month_rounded,
+                        iconColor: Colors.white,
+                        tooltip: 'Plan and loot outlook',
+                        onTap: onOpenPlan,
+                        showBackground: false,
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                    HeaderIconButton(
+                      icon: Icons.ios_share_rounded,
+                      iconColor: Colors.white,
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.upgradeTrackerShare,
+                      onTap: onShare,
+                      showBackground: false,
+                    ),
+                    const SizedBox(width: 4),
+                    HeaderIconButton(
+                      icon: Icons.content_paste_rounded,
+                      iconColor: Colors.white,
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.upgradeTrackerPasteJson,
+                      onTap: onImport,
+                      showBackground: false,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: onSwitchAccount,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MobileWebImage(
+                        imageUrl: selectedTab == 2
+                            ? ImageAssets.townHall(snapshot.townHallLevel)
+                            : hallImage,
+                        width: 70,
+                        height: 70,
+                      ),
+                      const SizedBox(height: 3),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              snapshot.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(width: 3),
+                          const Icon(
+                            Icons.expand_more_rounded,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        snapshot.tag,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.78),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      ValueListenableBuilder<DateTime>(
+                        valueListenable: clock,
+                        builder: (context, now, _) => Text(
+                          _snapshotAgeLabel(
+                            context,
+                            selectedAccount?.capturedAt ?? snapshot.capturedAt,
+                            now: now,
+                          ),
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.70),
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                child: ValueListenableBuilder<List<UpgradePlanLane>>(
+                  valueListenable: lanes,
+                  builder: (context, planLanes, _) {
+                    final finish = planLanes
+                        .where(
+                          (lane) => lane.upgrades.any(
+                            (upgrade) => upgrade.item.village == village,
+                          ),
+                        )
+                        .map((lane) => lane.finishesAt)
+                        .whereType<DateTime>()
+                        .fold<DateTime?>(
+                          null,
+                          (latest, date) =>
+                              latest == null || date.isAfter(latest)
+                              ? date
+                              : latest,
+                        );
+                    final values = selectedTab == 2
+                        ? <(String, String)>[
+                            (
+                              l10n.upgradeTrackerCollected,
+                              collectionTotal == 0
+                                  ? '0%'
+                                  : '${(collectionOwned * 100 / collectionTotal).toStringAsFixed(1)}%',
+                            ),
+                            (
+                              l10n.upgradeTrackerHeaderOwned,
+                              '$collectionOwned / $collectionTotal',
+                            ),
+                            (
+                              l10n.upgradeTrackerHeaderUpdated,
+                              _shortAge(snapshot.capturedAt),
+                            ),
+                          ]
+                        : <(String, String)>[
+                            (
+                              l10n.upgradeTrackerHeaderComplete,
+                              '${(summary.completion * 100).toStringAsFixed(1)}%',
+                            ),
+                            (
+                              l10n.upgradeTrackerHeaderLevelsLeft,
+                              '${summary.levelsRemaining}',
+                            ),
+                            (l10n.upgradeTrackerHeaderActive, '$active'),
+                            (
+                              l10n.upgradeTrackerHeaderFinishes,
+                              finish == null ? '—' : _dateLabel(finish),
+                            ),
+                          ];
+                    return Row(
+                      children: [
+                        for (var index = 0; index < values.length; index++) ...[
+                          if (index > 0) const SizedBox(width: 6),
+                          Expanded(
+                            child: GlassPanel(
+                              height: 52,
+                              borderRadius: 16,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 6,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    values[index].$2,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                  ),
+                                  Text(
+                                    values[index].$1,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: Colors.white.withValues(
+                                            alpha: 0.72,
+                                          ),
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+String _shortAge(DateTime capturedAt) {
+  final duration = DateTime.now().difference(capturedAt);
+  if (duration.inDays > 0) return '${duration.inDays}d';
+  if (duration.inHours > 0) return '${duration.inHours}h';
+  return '${duration.inMinutes.clamp(0, 59)}m';
 }
 
 // Kept temporarily as a visual reference while the merged Progress surface is
@@ -1419,13 +1723,16 @@ class _TrackerCollapsibleCard extends StatelessWidget {
 
 class _UpgradesTab extends StatefulWidget {
   const _UpgradesTab({
+    super.key,
     required this.snapshot,
+    required this.village,
     required this.clock,
     required this.goldPassPercent,
     required this.preferences,
   });
 
   final UpgradeTrackerSnapshot snapshot;
+  final UpgradeVillage village;
   final ValueListenable<DateTime> clock;
   final int goldPassPercent;
   final UpgradePlanPreferences preferences;
@@ -1435,11 +1742,11 @@ class _UpgradesTab extends StatefulWidget {
 }
 
 class _UpgradesTabState extends State<_UpgradesTab> {
-  final _expandedVillages = <UpgradeVillage>{UpgradeVillage.home};
-  final _expandedGroups = <String>{'home-buildings'};
+  final _expandedGroups = <String>{};
   final _searchController = TextEditingController();
   String _query = '';
-  late Map<UpgradeVillage, _UpgradeVillageViewData> _viewData;
+  String _groupFilter = 'all';
+  late _UpgradeVillageViewData _viewData;
 
   @override
   void initState() {
@@ -1450,7 +1757,8 @@ class _UpgradesTabState extends State<_UpgradesTab> {
   @override
   void didUpdateWidget(covariant _UpgradesTab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!identical(oldWidget.snapshot, widget.snapshot)) {
+    if (!identical(oldWidget.snapshot, widget.snapshot) ||
+        oldWidget.village != widget.village) {
       _rebuildViewData();
     }
   }
@@ -1471,14 +1779,11 @@ class _UpgradesTabState extends State<_UpgradesTab> {
 
   void _rebuildViewData() {
     final normalized = _query.trim().toLowerCase();
-    _viewData = {
-      for (final village in UpgradeVillage.values)
-        village: _UpgradeVillageViewData.build(
-          widget.snapshot,
-          village,
-          normalized,
-        ),
-    };
+    _viewData = _UpgradeVillageViewData.build(
+      widget.snapshot,
+      widget.village,
+      normalized,
+    );
   }
 
   @override
@@ -1493,65 +1798,48 @@ class _UpgradesTabState extends State<_UpgradesTab> {
           10,
         ),
         sliver: SliverToBoxAdapter(
-          child: AppSearchField(
-            controller: _searchController,
-            query: _query,
-            hintText: l10n.upgradeTrackerSearchUpgrades,
-            onChanged: _setQuery,
+          child: Row(
+            children: [
+              Expanded(
+                child: AppSearchField(
+                  controller: _searchController,
+                  query: _query,
+                  hintText: l10n.upgradeTrackerSearchUpgrades,
+                  onChanged: _setQuery,
+                ),
+              ),
+              const SizedBox(width: CKSpacing.sm),
+              FilterDropdown(
+                sortBy: _groupFilter,
+                maxWidth: 118,
+                sortByOptions: const {
+                  'All': 'all',
+                  'Buildings': 'buildings',
+                  'Heroes': 'heroes',
+                  'Research': 'research',
+                  'Other': 'other',
+                },
+                updateSortBy: (value) => setState(() => _groupFilter = value),
+              ),
+            ],
           ),
         ),
       ),
     ];
 
-    for (final village in UpgradeVillage.values) {
-      final data = _viewData[village]!;
-      if (data.visibleItems.isEmpty) continue;
-      final expanded = _expandedVillages.contains(village);
-      final title = village == UpgradeVillage.home
-          ? l10n.upgradeTrackerHomeVillage
-          : l10n.upgradeTrackerBuilderBase;
-      final image = village == UpgradeVillage.home
-          ? ImageAssets.townHall(widget.snapshot.townHallLevel)
-          : ImageAssets.builderHall(widget.snapshot.builderHallLevel);
+    final village = widget.village;
+    final data = _viewData;
+    if (data.visibleItems.isEmpty) {
       slivers.add(
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: CollapsibleItemSection(
-              title: title,
-              leading: _AspectSafeImage(imageUrl: image, width: 38, height: 34),
-              subtitle: l10n.upgradeTrackerLevelsLeft(
-                data.summary.levelsRemaining,
-              ),
-              trailing: SectionProgressBadge(
-                progress: data.summary.completion,
-                onTap: () => _showUpgradeSectionSummary(
-                  context,
-                  title,
-                  data.summary,
-                  snapshot: widget.snapshot,
-                  village: village,
-                  goldPassPercent: widget.goldPassPercent,
-                  preferences: widget.preferences,
-                ),
-              ),
-              expanded: expanded,
-              onToggle: () => setState(() {
-                expanded
-                    ? _expandedVillages.remove(village)
-                    : _expandedVillages.add(village);
-              }),
-              margin: const EdgeInsets.only(bottom: 10),
-              showContent: false,
-              surfaceWhenExpanded: false,
-              child: const SizedBox.shrink(),
-            ),
-          ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(child: Text(l10n.upgradeTrackerNoMatchingItems)),
         ),
       );
-      if (!expanded) continue;
-
-      for (final group in data.groups) {
+    } else {
+      for (final group in data.groups.where(
+        (group) => _matchesUpgradeGroupFilter(group, _groupFilter),
+      )) {
         final items = data.itemsByGroup[group]!;
         final summary = data.summaryByGroup[group]!;
         final key = '${village.name}-${group.name}';
@@ -3357,6 +3645,27 @@ enum _UpgradeGroup {
   walls,
   helpers,
 }
+
+bool _matchesUpgradeGroupFilter(_UpgradeGroup group, String filter) =>
+    switch (filter) {
+      'buildings' => const {
+        _UpgradeGroup.buildings,
+        _UpgradeGroup.defenses,
+        _UpgradeGroup.craftedDefenses,
+        _UpgradeGroup.traps,
+        _UpgradeGroup.supercharges,
+        _UpgradeGroup.walls,
+      }.contains(group),
+      'heroes' => const {
+        _UpgradeGroup.heroes,
+        _UpgradeGroup.guardians,
+        _UpgradeGroup.equipment,
+        _UpgradeGroup.pets,
+      }.contains(group),
+      'research' => group == _UpgradeGroup.laboratory,
+      'other' => group == _UpgradeGroup.helpers,
+      _ => true,
+    };
 
 List<_UpgradeGroup> _availableUpgradeGroups(
   UpgradeTrackerSnapshot snapshot,

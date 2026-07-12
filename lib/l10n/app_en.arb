@@ -3262,5 +3262,11 @@
       "date": {"type": "String"},
       "duration": {"type": "String"}
     }
-  }
+  },
+  "upgradeTrackerHeaderComplete": "Complete",
+  "upgradeTrackerHeaderLevelsLeft": "Levels left",
+  "upgradeTrackerHeaderActive": "Active",
+  "upgradeTrackerHeaderFinishes": "Finishes",
+  "upgradeTrackerHeaderOwned": "Owned",
+  "upgradeTrackerHeaderUpdated": "Updated"
 }
