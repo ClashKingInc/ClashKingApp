@@ -3237,6 +3237,10 @@
   "@upgradeTrackerLevelsLeft": {
     "placeholders": {"count": {"type": "int"}}
   },
+  "upgradeTrackerItemCount": "{count} items",
+  "@upgradeTrackerItemCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
   "upgradeTrackerCollected": "collected",
   "upgradeTrackerMissing": "missing",
   "upgradeTrackerDataAge": "Account data",

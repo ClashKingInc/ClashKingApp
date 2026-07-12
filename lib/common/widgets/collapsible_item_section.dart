@@ -44,6 +44,8 @@ class CollapsibleItemSection extends StatelessWidget {
           child: InkWell(
             onTap: onToggle,
             borderRadius: BorderRadius.circular(CKRadius.control),
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Row(

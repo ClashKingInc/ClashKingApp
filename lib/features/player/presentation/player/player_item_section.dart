@@ -6,8 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/models/player_item.dart';
 import 'package:clashkingapp/features/player/models/player_super_troop.dart';
 import 'package:clashkingapp/features/player/models/player_equipment.dart';
+import 'package:clashkingapp/features/player/models/player_pet.dart';
+import 'package:clashkingapp/features/player/models/player_siege_machine.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/player/data/player_item_utils.dart';
+import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
+import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 const String _resourceGold = '${ImageAssets.baseUrl}/resources/gold.webp';
@@ -252,6 +256,10 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
 
   void _showItemDialog(BuildContext context, PlayerItem item) {
     final isSuperTroop = item is PlayerSuperTroop;
+    if (!isSuperTroop) {
+      showUpgradeDetails(context, _upgradeDetailsItem(item));
+      return;
+    }
     final isEquipment = item is PlayerEquipment;
     final l10n = AppLocalizations.of(context)!;
     final meta = item.meta;
@@ -1181,6 +1189,97 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
     return value.trim().toLowerCase().replaceAll(' ', '_').replaceAll('-', '_');
   }
 }
+
+UpgradeTrackerItem _upgradeDetailsItem(PlayerItem item) {
+  final meta = item.meta;
+  final category = switch (item) {
+    PlayerEquipment() => UpgradeCategory.equipment,
+    PlayerPet() => UpgradeCategory.pets,
+    PlayerSiegeMachine() => UpgradeCategory.sieges,
+    _ => switch (item.type) {
+      'hero' => UpgradeCategory.heroes,
+      'spell' => UpgradeCategory.spells,
+      'builderBase' => UpgradeCategory.troops,
+      _ => UpgradeCategory.troops,
+    },
+  };
+  final queue = switch (category) {
+    UpgradeCategory.pets => UpgradeQueue.pets,
+    UpgradeCategory.troops ||
+    UpgradeCategory.darkTroops ||
+    UpgradeCategory.spells ||
+    UpgradeCategory.sieges => UpgradeQueue.laboratory,
+    _ => UpgradeQueue.builders,
+  };
+  final rawLevels = meta?['levels'];
+  final levels = rawLevels is List
+      ? rawLevels.whereType<Map>().map(Map<String, dynamic>.from).toList()
+      : const <Map<String, dynamic>>[];
+  final byLevel = <int, Map<String, dynamic>>{};
+  for (final level in levels) {
+    final value = int.tryParse('${level['level']}');
+    if (value != null) byLevel[value] = level;
+  }
+  final steps = <UpgradeStep>[];
+  for (var target = item.level + 1; target <= item.maxLevel; target++) {
+    final stats = byLevel[target - 1];
+    if (stats == null) continue;
+    steps.add(
+      UpgradeStep(
+        targetLevel: target,
+        costs: _upgradeDetailsCosts(
+          stats['upgrade_cost'],
+          meta?['upgrade_resource']?.toString(),
+        ),
+        seconds: (stats['upgrade_time'] as num?)?.toInt() ?? 0,
+      ),
+    );
+  }
+  final builderBase =
+      item.type == 'builderBase' ||
+      meta?['village']?.toString().toLowerCase().contains('builder') == true;
+  return UpgradeTrackerItem(
+    id: (meta?['_id'] as num?)?.toInt() ?? item.name.hashCode,
+    name: item.name,
+    imageUrl: item.imageUrl,
+    village: builderBase ? UpgradeVillage.builderBase : UpgradeVillage.home,
+    category: category,
+    queue: queue,
+    currentLevel: item.level,
+    targetLevel: item.maxLevel,
+    count: 1,
+    steps: steps,
+    completedUpgradeSeconds: 0,
+    totalUpgradeSeconds: steps.fold(0, (total, step) => total + step.seconds),
+    meta: meta,
+  );
+}
+
+List<UpgradeCost> _upgradeDetailsCosts(dynamic value, String? fallback) {
+  if (value is Map) {
+    return value.entries
+        .where((entry) => entry.value is num && (entry.value as num) > 0)
+        .map(
+          (entry) => UpgradeCost(
+            _normalizeUpgradeDetailsResource(entry.key.toString()),
+            entry.value as num,
+          ),
+        )
+        .toList(growable: false);
+  }
+  if (value is num && value > 0) {
+    return [
+      UpgradeCost(_normalizeUpgradeDetailsResource(fallback ?? ''), value),
+    ];
+  }
+  return const [];
+}
+
+String _normalizeUpgradeDetailsResource(String value) => value
+    .trim()
+    .toLowerCase()
+    .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+    .replaceAll(RegExp(r'^_+|_+$'), '');
 
 class _TownHallMaxBadge extends StatelessWidget {
   final double percentage;

@@ -36,6 +36,8 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const _trackerContentGutter = 28.0;
+
 class UpgradeTrackerPage extends StatefulWidget {
   const UpgradeTrackerPage({super.key});
 
@@ -1477,7 +1479,12 @@ class _UpgradesTabState extends State<_UpgradesTab> {
     final l10n = AppLocalizations.of(context)!;
     final slivers = <Widget>[
       SliverPadding(
-        padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+        padding: const EdgeInsets.fromLTRB(
+          _trackerContentGutter,
+          8,
+          _trackerContentGutter,
+          10,
+        ),
         sliver: SliverToBoxAdapter(
           child: AppSearchField(
             controller: _searchController,
@@ -1502,7 +1509,9 @@ class _UpgradesTabState extends State<_UpgradesTab> {
           : ImageAssets.builderHall(widget.snapshot.builderHallLevel);
       slivers.add(
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(
+            horizontal: _trackerContentGutter,
+          ),
           sliver: SliverToBoxAdapter(
             child: CollapsibleItemSection(
               title: title,
@@ -1546,12 +1555,17 @@ class _UpgradesTabState extends State<_UpgradesTab> {
         final groupTitle = _upgradeGroupLabelForVillage(group, village);
         slivers.add(
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(22, 0, 22, 8),
+            padding: const EdgeInsets.fromLTRB(
+              _trackerContentGutter,
+              0,
+              _trackerContentGutter,
+              8,
+            ),
             sliver: SliverToBoxAdapter(
               child: CollapsibleItemSection(
                 title: groupTitle,
                 subtitle:
-                    '${l10n.upgradeTrackerLevelsLeft(summary.levelsRemaining)} · ${items.length}',
+                    '${l10n.upgradeTrackerLevelsLeft(summary.levelsRemaining)} · ${l10n.upgradeTrackerItemCount(items.length)}',
                 leading: _AspectSafeImage(
                   imageUrl: _groupImage(widget.snapshot, group, village),
                   width: 34,
@@ -1605,7 +1619,12 @@ class _UpgradesTabState extends State<_UpgradesTab> {
             if (category.$2.isEmpty) continue;
             slivers.add(
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(26, 4, 26, 6),
+                padding: const EdgeInsets.fromLTRB(
+                  _trackerContentGutter,
+                  4,
+                  _trackerContentGutter,
+                  6,
+                ),
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     category.$1,
@@ -1626,7 +1645,12 @@ class _UpgradesTabState extends State<_UpgradesTab> {
   }
 
   Widget _upgradeGridSliver(List<UpgradeTrackerItem> items) => SliverPadding(
-    padding: const EdgeInsets.fromLTRB(26, 0, 26, 12),
+    padding: const EdgeInsets.fromLTRB(
+      _trackerContentGutter,
+      0,
+      _trackerContentGutter,
+      12,
+    ),
     sliver: SliverGrid.builder(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 76,
@@ -1865,7 +1889,7 @@ class _UpgradeIconTile extends StatelessWidget {
       label:
           '${item.name}, level ${item.currentLevel} of ${item.targetLevel}${item.count > 1 ? ', ${item.count} buildings' : ''}',
       child: InkWell(
-        onTap: () => _showUpgradeDetails(context, item),
+        onTap: () => showUpgradeDetails(context, item),
         borderRadius: BorderRadius.circular(CKRadius.tile),
         child: Container(
           decoration: BoxDecoration(
@@ -1952,7 +1976,7 @@ class _UpgradeRow extends StatelessWidget {
     final next = item.steps.firstOrNull;
     final remainingActive = snapshot.remainingActiveSeconds(item);
     return InkWell(
-      onTap: item.isComplete ? null : () => _showUpgradeDetails(context, item),
+      onTap: item.isComplete ? null : () => showUpgradeDetails(context, item),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
@@ -2775,7 +2799,7 @@ class _PlanTimelineBlock extends StatelessWidget {
       height: 56,
       child: Semantics(
         label:
-            '${upgrade.item.name}, ${_timelineDateTimeLabel(upgrade.startsAt)} to ${_timelineDateTimeLabel(upgrade.endsAt)}',
+            '${upgrade.item.name}, level ${upgrade.step.targetLevel}, ${_timelineDateTimeLabel(upgrade.startsAt)} to ${_timelineDateTimeLabel(upgrade.endsAt)}',
         child: Container(
           padding: EdgeInsets.symmetric(
             horizontal: iconOnly ? 2 : 6,
@@ -2815,7 +2839,7 @@ class _PlanTimelineBlock extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            upgrade.item.name,
+                            '${upgrade.item.name} · Lv ${upgrade.step.targetLevel}',
                             maxLines: showMetadata ? 1 : 2,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.labelSmall
@@ -6877,63 +6901,69 @@ void _showVillageUpgradeSummary(
           maxWidth: 520,
           maxHeight: MediaQuery.sizeOf(context).height * 0.88,
         ),
-        child: CustomScrollView(
-          shrinkWrap: true,
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
-              sliver: SliverToBoxAdapter(
-                child: Row(
+        child: LayoutBuilder(
+          builder: (context, constraints) => FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: constraints.maxWidth,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: CKTypography.of(
-                              context,
-                              CKTextRole.screenTitle,
-                            ),
-                          ),
-                          const SizedBox(height: CKSpacing.xs),
-                          Text(
-                            '${(overall.completion * 100).toStringAsFixed(1)}% complete · ${overall.levelsRemaining} levels left',
-                            style: CKTypography.of(context, CKTextRole.metadata)
-                                .copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: CKTypography.of(
+                                  context,
+                                  CKTextRole.screenTitle,
                                 ),
+                              ),
+                              const SizedBox(height: CKSpacing.xs),
+                              Text(
+                                '${(overall.completion * 100).toStringAsFixed(1)}% complete · ${overall.levelsRemaining} levels left',
+                                style:
+                                    CKTypography.of(
+                                      context,
+                                      CKTextRole.metadata,
+                                    ).copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
+                        IconButton(
+                          tooltip: MaterialLocalizations.of(
+                            context,
+                          ).closeButtonTooltip,
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.close_rounded),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: CKSpacing.sm),
+                    for (var index = 0; index < sections.length; index++) ...[
+                      if (index > 0) const SizedBox(height: CKSpacing.sm),
+                      _VillageBreakdownCard(
+                        data: sections[index],
+                        startsAt: startsAt,
+                        l10n: l10n,
                       ),
-                    ),
-                    IconButton(
-                      tooltip: MaterialLocalizations.of(
-                        context,
-                      ).closeButtonTooltip,
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close_rounded),
-                    ),
+                    ],
                   ],
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
-              sliver: SliverList.separated(
-                itemCount: sections.length,
-                separatorBuilder: (_, _) =>
-                    const SizedBox(height: CKSpacing.sm),
-                itemBuilder: (context, index) => _VillageBreakdownCard(
-                  data: sections[index],
-                  startsAt: startsAt,
-                  l10n: l10n,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     ),
@@ -7287,7 +7317,7 @@ class _SummaryMetricTile extends StatelessWidget {
   );
 }
 
-void _showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
+void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
   final meta = item.meta;
   final description = meta == null
       ? null
