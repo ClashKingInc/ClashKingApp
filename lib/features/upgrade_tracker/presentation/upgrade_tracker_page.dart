@@ -10,7 +10,6 @@ import 'package:clashkingapp/common/widgets/collapsible_item_section.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
-import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -39,7 +38,7 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const _trackerContentGutter = 28.0;
+const _trackerContentGutter = 16.0;
 
 class UpgradeTrackerPage extends StatefulWidget {
   const UpgradeTrackerPage({super.key});
@@ -541,7 +540,6 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               onSwitchAccount: () => _showAccountPicker(uniqueAccounts),
               onShare: () => _showShareHub(snapshot),
               onImport: _importSnapshot,
-              onOpenPlan: () => _showPlanHub(snapshot),
             ),
           ),
           SliverToBoxAdapter(
@@ -556,6 +554,14 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                 InfoProfileTabData(
                   label: l10n.upgradeTrackerBuilderBase,
                   imageUrl: ImageAssets.builderHall(snapshot.builderHallLevel),
+                ),
+                InfoProfileTabData(
+                  label: l10n.upgradeTrackerPlan,
+                  icon: Icons.route_rounded,
+                ),
+                const InfoProfileTabData(
+                  label: 'Calendar',
+                  icon: Icons.calendar_month_rounded,
                 ),
                 InfoProfileTabData(
                   label: l10n.upgradeTrackerCollection,
@@ -663,6 +669,18 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           goldPassPercent: _goldPassPercent,
           preferences: _planPreferences,
         ),
+        _PlanTab(
+          snapshot: snapshot,
+          goldPassPercent: _goldPassPercent,
+          preferences: _planPreferences,
+          onLanesChanged: (lanes) => _planLanes.value = lanes,
+          controls: _buildPlanActions(snapshot),
+        ),
+        _PlanCalendarTab(
+          snapshot: snapshot,
+          goldPassPercent: _goldPassPercent,
+          preferences: _planPreferences,
+        ),
         _CollectionTab(snapshot: snapshot),
       ],
     );
@@ -699,25 +717,6 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       ...build(UpgradeVillage.builderBase, UpgradeQueue.laboratory),
       if (walls.isNotEmpty) UpgradePlanLane(index: 0, upgrades: walls),
     ];
-  }
-
-  Future<void> _showPlanHub(UpgradeTrackerSnapshot snapshot) async {
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (context) => FractionallySizedBox(
-        heightFactor: 0.92,
-        child: _PlanTab(
-          snapshot: snapshot,
-          goldPassPercent: _goldPassPercent,
-          preferences: _planPreferences,
-          clock: _clock,
-          onLanesChanged: (lanes) => _planLanes.value = lanes,
-          controls: _buildPlanActions(snapshot),
-        ),
-      ),
-    );
   }
 
   Widget _buildPlanActions(UpgradeTrackerSnapshot snapshot) {
@@ -788,12 +787,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               child: _PlanToolButton(
                 icon: Icons.calendar_month_rounded,
                 label: 'Calendar',
-                onTap: () => _showPlanCalendar(
-                  context,
-                  snapshot,
-                  goldPassPercent: _goldPassPercent,
-                  preferences: _planPreferences,
-                ),
+                onTap: () => _selectSection(3),
               ),
             ),
             const SizedBox(width: 8),
@@ -909,7 +903,6 @@ class _TrackerInfoHeader extends StatelessWidget {
     required this.onSwitchAccount,
     required this.onShare,
     required this.onImport,
-    required this.onOpenPlan,
   });
 
   final UpgradeTrackerSnapshot snapshot;
@@ -921,7 +914,6 @@ class _TrackerInfoHeader extends StatelessWidget {
   final VoidCallback onSwitchAccount;
   final VoidCallback onShare;
   final VoidCallback onImport;
-  final VoidCallback onOpenPlan;
 
   @override
   Widget build(BuildContext context) {
@@ -970,16 +962,6 @@ class _TrackerInfoHeader extends StatelessWidget {
                       showBackground: false,
                     ),
                     const Spacer(),
-                    if (selectedTab != 2) ...[
-                      HeaderIconButton(
-                        icon: Icons.calendar_month_rounded,
-                        iconColor: Colors.white,
-                        tooltip: 'Plan and loot outlook',
-                        onTap: onOpenPlan,
-                        showBackground: false,
-                      ),
-                      const SizedBox(width: 4),
-                    ],
                     HeaderIconButton(
                       icon: Icons.ios_share_rounded,
                       iconColor: Colors.white,
@@ -1009,7 +991,7 @@ class _TrackerInfoHeader extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MobileWebImage(
-                        imageUrl: selectedTab == 2
+                        imageUrl: selectedTab == 4
                             ? ImageAssets.townHall(snapshot.townHallLevel)
                             : hallImage,
                         width: 70,
@@ -1085,7 +1067,7 @@ class _TrackerInfoHeader extends StatelessWidget {
                               ? date
                               : latest,
                         );
-                    final values = selectedTab == 2
+                    final values = selectedTab == 4
                         ? <(String, String)>[
                             (
                               l10n.upgradeTrackerCollected,
@@ -1122,12 +1104,19 @@ class _TrackerInfoHeader extends StatelessWidget {
                         for (var index = 0; index < values.length; index++) ...[
                           if (index > 0) const SizedBox(width: 6),
                           Expanded(
-                            child: GlassPanel(
+                            flex: values.length == 4 && index == 3 ? 2 : 1,
+                            child: Container(
                               height: 52,
-                              borderRadius: 16,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.34),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.12),
+                                ),
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1185,431 +1174,6 @@ String _shortAge(DateTime capturedAt) {
 // Kept temporarily as a visual reference while the merged Progress surface is
 // validated; it is not reachable from navigation.
 // ignore: unused_element
-class _OverviewTab extends StatelessWidget {
-  const _OverviewTab({
-    required this.snapshot,
-    required this.village,
-    required this.onVillageChanged,
-    required this.onShare,
-    required this.onOpenCategory,
-  });
-
-  final UpgradeTrackerSnapshot snapshot;
-  final UpgradeVillage village;
-  final ValueChanged<UpgradeVillage> onVillageChanged;
-  final VoidCallback onShare;
-  final ValueChanged<UpgradeCategory> onOpenCategory;
-
-  @override
-  Widget build(BuildContext context) {
-    final summary = snapshot.overallSummary(village: village);
-    final categories = UpgradeCategory.values
-        .map((category) => snapshot.summaryFor(category, village: village))
-        .where((entry) => entry.target > 0)
-        .toList(growable: false);
-    final active = snapshot
-        .itemsFor(village: village)
-        .where((item) => (item.activeSeconds ?? 0) > 0)
-        .toList(growable: false);
-
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
-      children: [
-        _VillageControl(value: village, onChanged: onVillageChanged),
-        const SizedBox(height: 12),
-        _ProgressHero(snapshot: snapshot, village: village, summary: summary),
-        const SizedBox(height: 12),
-        if (snapshot.events.isNotEmpty || snapshot.boosts.hasTemporaryBoost)
-          _ModifierNotice(snapshot: snapshot),
-        if (snapshot.events.isNotEmpty || snapshot.boosts.hasTemporaryBoost)
-          const SizedBox(height: 14),
-        if (active.isNotEmpty) ...[
-          _SectionHeading(
-            title: 'In progress',
-            trailing: '${active.length} active',
-          ),
-          const SizedBox(height: 6),
-          ...active.map(
-            (item) => _ActiveUpgradeRow(snapshot: snapshot, item: item),
-          ),
-          const SizedBox(height: 10),
-        ],
-        const _SectionHeading(title: 'Completion'),
-        const SizedBox(height: 6),
-        ...categories.map(
-          (category) => _CategoryProgressRow(
-            summary: category,
-            imageUrl: _categoryImage(snapshot, category.category, village),
-            onTap: () => onOpenCategory(category.category),
-          ),
-        ),
-        const SizedBox(height: 14),
-        FilledButton.icon(
-          onPressed: onShare,
-          icon: const Icon(Icons.ios_share_rounded),
-          label: const Text('Share progress'),
-        ),
-      ],
-    );
-  }
-}
-
-class _ProgressHero extends StatelessWidget {
-  const _ProgressHero({
-    required this.snapshot,
-    required this.village,
-    required this.summary,
-    this.finish,
-    this.clock,
-  });
-
-  final UpgradeTrackerSnapshot snapshot;
-  final UpgradeVillage village;
-  final UpgradeCategorySummary summary;
-  final DateTime? finish;
-  final ValueListenable<DateTime>? clock;
-
-  @override
-  Widget build(BuildContext context) => clock == null
-      ? _buildContent(context, DateTime.now())
-      : ValueListenableBuilder<DateTime>(
-          valueListenable: clock!,
-          builder: (context, now, _) => _buildContent(context, now),
-        );
-
-  Widget _buildContent(BuildContext context, DateTime now) {
-    final scheme = Theme.of(context).colorScheme;
-    final hall = village == UpgradeVillage.home
-        ? snapshot.townHallLevel
-        : snapshot.builderHallLevel;
-    final image = village == UpgradeVillage.home
-        ? ImageAssets.townHall(hall)
-        : ImageAssets.builderHall(hall);
-    final active = snapshot.items
-        .where((item) => snapshot.remainingActiveSeconds(item, now: now) > 0)
-        .toList(growable: false);
-    final helpers = snapshot.items
-        .where(
-          (item) =>
-              item.category == UpgradeCategory.builders &&
-              _isHelperStatusItem(item),
-        )
-        .toList(growable: false);
-    final boosts = _activeBoostLabels(snapshot, now: now);
-    return CKSectionPanel(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              _AspectSafeImage(imageUrl: image, width: 72, height: 72),
-              const SizedBox(width: 13),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${(summary.completion * 100).toStringAsFixed(1)}%',
-                      style: CKTypography.of(context, CKTextRole.heroMetric),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      summary.levelsRemaining == 0
-                          ? 'Everything tracked is complete'
-                          : '${summary.levelsRemaining} levels left${finish == null ? '' : ' · ${_dateLabel(finish!)}'}',
-                      style: CKTypography.of(
-                        context,
-                        CKTextRole.metadata,
-                      ).copyWith(color: scheme.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          if (boosts.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: boosts
-                  .map(
-                    (label) =>
-                        _BoostStatusPill(label: label, snapshot: snapshot),
-                  )
-                  .toList(growable: false),
-            ),
-          ],
-          if (active.isNotEmpty) ...[
-            const Divider(height: 20),
-            _SectionHeading(
-              title: 'In progress',
-              trailing: '${active.length} active',
-            ),
-            ...active.map(
-              (item) =>
-                  _ActiveUpgradeRow(snapshot: snapshot, item: item, now: now),
-            ),
-          ],
-          if (helpers.isNotEmpty) ...[
-            const Divider(height: 20),
-            const _SectionHeading(title: 'Helpers'),
-            ...helpers.map(
-              (helper) => _HelperStatusRow(
-                snapshot: snapshot,
-                helper: helper,
-                now: now,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-bool _isHelperStatusItem(UpgradeTrackerItem item) {
-  final name = item.name.toLowerCase();
-  return name.contains('apprentice') ||
-      name.contains('assistant') ||
-      name.contains('alchemist');
-}
-
-class _HelperStatusRow extends StatelessWidget {
-  const _HelperStatusRow({
-    required this.snapshot,
-    required this.helper,
-    this.now,
-  });
-
-  final UpgradeTrackerSnapshot snapshot;
-  final UpgradeTrackerItem helper;
-  final DateTime? now;
-
-  @override
-  Widget build(BuildContext context) {
-    final assigned = snapshot.items.where((item) {
-      final helperName = snapshot.helperNameFor(item);
-      return helperName == helper.name &&
-          snapshot.remainingHelperSeconds(item, now: now) > 0;
-    }).firstOrNull;
-    final cooldown = snapshot.remainingCooldownSeconds(helper, now: now);
-    final status = assigned != null
-        ? 'Helping ${assigned.name} · ${_duration(snapshot.remainingHelperSeconds(assigned, now: now))}'
-        : cooldown > 0
-        ? 'Ready in ${_duration(cooldown)}'
-        : 'Ready';
-    return Padding(
-      padding: const EdgeInsets.only(top: 7),
-      child: Row(
-        children: [
-          _AspectSafeImage(imageUrl: helper.imageUrl, width: 38, height: 32),
-          const SizedBox(width: 9),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${helper.name} · Level ${helper.currentLevel}',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w800),
-                ),
-                Text(
-                  status,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BoostStatusPill extends StatelessWidget {
-  const _BoostStatusPill({required this.label, required this.snapshot});
-
-  final String label;
-  final UpgradeTrackerSnapshot snapshot;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final imageUrl = _boostImageUrl(label, snapshot);
-    final parts = label.split(' · ');
-    final title = parts.first;
-    final detail = parts.length > 1 ? parts.skip(1).join(' · ') : null;
-    return Container(
-      constraints: const BoxConstraints(minHeight: 30),
-      padding: const EdgeInsets.fromLTRB(7, 4, 10, 4),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.78),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _AspectSafeImage(imageUrl: imageUrl, width: 22, height: 22),
-          const SizedBox(width: 6),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                maxLines: 1,
-                style: Theme.of(
-                  context,
-                ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w800),
-              ),
-              if (detail != null)
-                Text(
-                  detail,
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-String _boostImageUrl(String label, UpgradeTrackerSnapshot snapshot) {
-  final normalized = label.toLowerCase();
-  if (normalized.startsWith('builder potion')) {
-    return ImageAssets.builderPotion;
-  }
-  if (normalized.startsWith('research potion')) {
-    return ImageAssets.researchPotion;
-  }
-  if (normalized.startsWith('pet potion')) return ImageAssets.petPotion;
-  if (normalized.startsWith('clock tower')) {
-    return ImageAssets.clockTowerPotion;
-  }
-  if (normalized.contains('perk')) return ImageAssets.iconGoldPass;
-  return ImageAssets.townHall(snapshot.townHallLevel);
-}
-
-class _ModifierNotice extends StatelessWidget {
-  const _ModifierNotice({required this.snapshot});
-
-  final UpgradeTrackerSnapshot snapshot;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final labels = _activeBoostLabels(snapshot);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.72),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Wrap(
-              spacing: 7,
-              runSpacing: 6,
-              children: labels
-                  .map(
-                    (label) =>
-                        _BoostStatusPill(label: label, snapshot: snapshot),
-                  )
-                  .toList(growable: false),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CategoryProgressRow extends StatelessWidget {
-  const _CategoryProgressRow({
-    required this.summary,
-    required this.imageUrl,
-    required this.onTap,
-  });
-
-  final UpgradeCategorySummary summary;
-  final String imageUrl;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.chip),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 9),
-        child: Row(
-          children: [
-            SizedBox.square(
-              dimension: 36,
-              child: Padding(
-                padding: const EdgeInsets.all(2),
-                child: MobileWebImage(
-                  imageUrl: imageUrl,
-                  width: 32,
-                  height: 32,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            const SizedBox(width: 11),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          _categoryLabel(summary.category),
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                      Text(
-                        '${(summary.completion * 100).toStringAsFixed(summary.completion == 1 ? 0 : 1)}%',
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  LinearProgressIndicator(
-                    value: summary.completion,
-                    minHeight: 5,
-                    borderRadius: BorderRadius.circular(999),
-                    backgroundColor: scheme.surfaceContainerHighest,
-                    color: scheme.onSurface.withValues(alpha: 0.82),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(Icons.chevron_right_rounded, color: scheme.onSurfaceVariant),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _ActiveUpgradeRow extends StatelessWidget {
   const _ActiveUpgradeRow({
     required this.snapshot,
@@ -1784,7 +1348,61 @@ class _UpgradesTabState extends State<_UpgradesTab> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final slivers = <Widget>[
+    final village = widget.village;
+    final hasActive = widget.snapshot
+        .itemsFor(village: village)
+        .any((item) => widget.snapshot.remainingActiveSeconds(item) > 0);
+    final slivers = <Widget>[];
+    if (hasActive) {
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(
+            _trackerContentGutter,
+            8,
+            _trackerContentGutter,
+            4,
+          ),
+          sliver: SliverToBoxAdapter(
+            child: ValueListenableBuilder<DateTime>(
+              valueListenable: widget.clock,
+              builder: (context, now, _) {
+                final active = widget.snapshot
+                    .itemsFor(village: village)
+                    .where(
+                      (item) =>
+                          widget.snapshot.remainingActiveSeconds(
+                            item,
+                            now: now,
+                          ) >
+                          0,
+                    )
+                    .toList(growable: false);
+                return CKSectionPanel(
+                  padding: const EdgeInsets.all(CKSpacing.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _SectionHeading(
+                        title: 'In progress',
+                        trailing: '${active.length} active',
+                      ),
+                      ...active.map(
+                        (item) => _ActiveUpgradeRow(
+                          snapshot: widget.snapshot,
+                          item: item,
+                          now: now,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+    }
+    slivers.add(
       SliverPadding(
         padding: const EdgeInsets.fromLTRB(
           _trackerContentGutter,
@@ -1820,9 +1438,8 @@ class _UpgradesTabState extends State<_UpgradesTab> {
           ),
         ),
       ),
-    ];
+    );
 
-    final village = widget.village;
     final data = _viewData;
     if (data.visibleItems.isEmpty) {
       slivers.add(
@@ -2465,7 +2082,6 @@ class _PlanTab extends StatefulWidget {
     required this.preferences,
     required this.onLanesChanged,
     required this.controls,
-    required this.clock,
   });
 
   final UpgradeTrackerSnapshot snapshot;
@@ -2473,7 +2089,6 @@ class _PlanTab extends StatefulWidget {
   final UpgradePlanPreferences preferences;
   final ValueChanged<List<UpgradePlanLane>> onLanesChanged;
   final Widget controls;
-  final ValueListenable<DateTime> clock;
 
   @override
   State<_PlanTab> createState() => _PlanTabState();
@@ -2482,7 +2097,6 @@ class _PlanTab extends StatefulWidget {
 class _PlanTabState extends State<_PlanTab> {
   late DateTime _startsAt;
   late List<UpgradePlanLane> _allLanes;
-  late DateTime? _finish;
   late String _preferenceSignature;
 
   @override
@@ -2544,12 +2158,6 @@ class _PlanTabState extends State<_PlanTab> {
       ...build(UpgradeVillage.builderBase, UpgradeQueue.laboratory),
       if (walls.isNotEmpty) UpgradePlanLane(index: 0, upgrades: walls),
     ];
-    _finish = _allLanes
-        .map((lane) => lane.finishesAt)
-        .whereType<DateTime>()
-        .fold<DateTime?>(null, (latest, date) {
-          return latest == null || date.isAfter(latest) ? date : latest;
-        });
   }
 
   @override
@@ -2557,14 +2165,6 @@ class _PlanTabState extends State<_PlanTab> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 2, 16, 30),
       children: [
-        _ProgressHero(
-          snapshot: widget.snapshot,
-          village: UpgradeVillage.home,
-          summary: widget.snapshot.overallSummary(village: UpgradeVillage.home),
-          finish: _finish,
-          clock: widget.clock,
-        ),
-        const SizedBox(height: 12),
         widget.controls,
         const SizedBox(height: 12),
         _LootOutlookCard(lanes: _allLanes, startsAt: _startsAt),
@@ -2685,34 +2285,32 @@ List<_PlanTimelineGroup> _buildPlanCalendarGroups(
       .toList(growable: false);
 }
 
-Future<void> _showPlanCalendar(
-  BuildContext context,
-  UpgradeTrackerSnapshot snapshot, {
-  required int goldPassPercent,
-  required UpgradePlanPreferences preferences,
-}) async {
-  final startsAt = DateTime.now();
-  final groups = _buildPlanCalendarGroups(
-    snapshot,
-    goldPassPercent: goldPassPercent,
-    preferences: preferences,
-    startsAt: startsAt,
-  );
-  await showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    showDragHandle: true,
-    backgroundColor: Theme.of(context).colorScheme.surface,
-    builder: (context) => FractionallySizedBox(
-      heightFactor: 0.98,
-      child: _PlanTimeline(
-        snapshot: snapshot,
+class _PlanCalendarTab extends StatelessWidget {
+  const _PlanCalendarTab({
+    required this.snapshot,
+    required int goldPassPercent,
+    required UpgradePlanPreferences preferences,
+  }) : _goldPassPercent = goldPassPercent,
+       _preferences = preferences;
+
+  final UpgradeTrackerSnapshot snapshot;
+  final int _goldPassPercent;
+  final UpgradePlanPreferences _preferences;
+
+  @override
+  Widget build(BuildContext context) {
+    final startsAt = DateTime.now();
+    return _PlanTimeline(
+      snapshot: snapshot,
+      startsAt: startsAt,
+      groups: _buildPlanCalendarGroups(
+        snapshot,
+        goldPassPercent: _goldPassPercent,
+        preferences: _preferences,
         startsAt: startsAt,
-        groups: groups,
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _PlanTimeline extends StatelessWidget {
@@ -5069,25 +4667,6 @@ class _ProgressGraphic extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _VillageControl extends StatelessWidget {
-  const _VillageControl({required this.value, required this.onChanged});
-
-  final UpgradeVillage value;
-  final ValueChanged<UpgradeVillage> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return LiquidGlassSegmentedControl<UpgradeVillage>(
-      values: UpgradeVillage.values,
-      labels: const ['Home Village', 'Builder Base'],
-      selected: value,
-      color: Theme.of(context).colorScheme.onSurface,
-      height: 40,
-      onChanged: onChanged,
     );
   }
 }
