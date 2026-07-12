@@ -1,5 +1,6 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 /// Shared collapsible item-section shell used by Player Info and the upgrade
 /// tracker so their hierarchy, spacing, and motion stay in sync.
@@ -18,6 +19,8 @@ class CollapsibleItemSection extends StatelessWidget {
     this.showContent = true,
     this.surfaceWhenExpanded = true,
     this.showSurface = true,
+    this.contentPadding = const EdgeInsets.all(CKSpacing.md),
+    this.expandedSpacing = 12,
   });
 
   final String title;
@@ -32,11 +35,16 @@ class CollapsibleItemSection extends StatelessWidget {
   final bool showContent;
   final bool surfaceWhenExpanded;
   final bool showSurface;
+  final EdgeInsetsGeometry contentPadding;
+  final double expandedSpacing;
 
   @override
   Widget build(BuildContext context) {
     final expandedChild = expanded
-        ? Padding(padding: const EdgeInsets.only(top: 12), child: child)
+        ? Padding(
+            padding: EdgeInsets.only(top: expandedSpacing),
+            child: child,
+          )
         : const SizedBox(width: double.infinity);
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,11 +124,8 @@ class CollapsibleItemSection extends StatelessWidget {
       ],
     );
     final section = !showSurface || (expanded && !surfaceWhenExpanded)
-        ? Padding(padding: const EdgeInsets.all(CKSpacing.md), child: content)
-        : CKSectionPanel(
-            padding: const EdgeInsets.all(CKSpacing.md),
-            child: content,
-          );
+        ? Padding(padding: contentPadding, child: content)
+        : CKSectionPanel(padding: contentPadding, child: content);
     return Container(width: double.infinity, margin: margin, child: section);
   }
 }
@@ -174,21 +179,25 @@ class SliverItemSectionPanel extends StatelessWidget {
   final EdgeInsetsGeometry margin;
 
   @override
-  Widget build(BuildContext context) => SliverPadding(
-    padding: margin,
-    sliver: DecoratedSliver(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(CKRadius.panel),
-        border: Border.all(
-          color: Theme.of(
-            context,
-          ).colorScheme.outlineVariant.withValues(alpha: CKOpacity.border),
+  Widget build(BuildContext context) => SliverAnimatedPaintExtent(
+    duration: CKMotion.durationOf(context, CKMotion.standard),
+    curve: CKMotion.standardCurve,
+    child: SliverPadding(
+      padding: margin,
+      sliver: DecoratedSliver(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(CKRadius.panel),
+          border: Border.all(
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: CKOpacity.border),
+          ),
         ),
-      ),
-      sliver: SliverPadding(
-        padding: const EdgeInsets.all(CKSpacing.sm),
-        sliver: SliverMainAxisGroup(slivers: slivers),
+        sliver: SliverPadding(
+          padding: const EdgeInsets.all(CKSpacing.xs),
+          sliver: SliverMainAxisGroup(slivers: slivers),
+        ),
       ),
     ),
   );

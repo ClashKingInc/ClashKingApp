@@ -1400,13 +1400,18 @@ class _TrackerCollapsibleCard extends StatelessWidget {
     return CollapsibleItemSection(
       title: title,
       subtitle: countLabel,
-      leading: _AspectSafeImage(imageUrl: imageUrl, width: 40, height: 36),
+      leading: _AspectSafeImage(imageUrl: imageUrl, width: 34, height: 30),
       trailing: SectionProgressBadge(progress: completion, onTap: onSummaryTap),
       expanded: expanded,
       onToggle: onToggle,
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: showSurface ? const EdgeInsets.only(bottom: 10) : EdgeInsets.zero,
       showContent: showContent,
       showSurface: showSurface,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: CKSpacing.sm,
+        vertical: CKSpacing.xs,
+      ),
+      expandedSpacing: CKSpacing.sm,
       animateContent: false,
       child: child,
     );
@@ -1512,9 +1517,7 @@ class _UpgradesTabState extends State<_UpgradesTab> {
           : ImageAssets.builderHall(widget.snapshot.builderHallLevel);
       slivers.add(
         SliverPadding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: _trackerContentGutter,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: CollapsibleItemSection(
               title: title,
@@ -1542,7 +1545,10 @@ class _UpgradesTabState extends State<_UpgradesTab> {
               }),
               margin: const EdgeInsets.only(bottom: 10),
               showContent: false,
-              surfaceWhenExpanded: false,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: CKSpacing.sm,
+                vertical: CKSpacing.xs,
+              ),
               child: const SizedBox.shrink(),
             ),
           ),
@@ -1581,6 +1587,10 @@ class _UpgradesTabState extends State<_UpgradesTab> {
               margin: EdgeInsets.zero,
               showContent: false,
               showSurface: false,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: CKSpacing.sm,
+                vertical: CKSpacing.xs,
+              ),
               child: const SizedBox.shrink(),
             ),
           ),
@@ -1655,10 +1665,10 @@ class _UpgradesTabState extends State<_UpgradesTab> {
       12,
     ),
     sliver: SliverGrid.builder(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 76,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: MediaQuery.sizeOf(context).width < 600 ? 5 : 8,
+        mainAxisSpacing: 6,
+        crossAxisSpacing: 6,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) => _UpgradeIconTile(
@@ -3510,7 +3520,12 @@ class _CollectionTabState extends State<_CollectionTab> {
     final l10n = AppLocalizations.of(context)!;
     final slivers = <Widget>[
       SliverPadding(
-        padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+        padding: const EdgeInsets.fromLTRB(
+          _trackerContentGutter,
+          8,
+          _trackerContentGutter,
+          10,
+        ),
         sliver: SliverToBoxAdapter(
           child: Column(
             children: [
