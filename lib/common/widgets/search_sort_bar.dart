@@ -114,3 +114,91 @@ class ClanTabSearchSortBar extends StatelessWidget {
     );
   }
 }
+
+class AppSearchField extends StatelessWidget {
+  const AppSearchField({
+    super.key,
+    required this.controller,
+    required this.query,
+    required this.hintText,
+    required this.onChanged,
+    this.useGlass = true,
+  });
+
+  final TextEditingController controller;
+  final String query;
+  final String hintText;
+  final ValueChanged<String> onChanged;
+  final bool useGlass;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      height: 44,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (useGlass)
+            NativeLiquidGlassBar(
+              height: 44,
+              cornerRadius: 22,
+              borderOpacity: Theme.of(context).brightness == Brightness.dark
+                  ? 0.22
+                  : 0.30,
+              shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                  ? 0.22
+                  : 0.08,
+            )
+          else
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(22),
+              ),
+            ),
+          TextField(
+            controller: controller,
+            scrollPadding: EdgeInsets.zero,
+            onChanged: onChanged,
+            textInputAction: TextInputAction.search,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+              isDense: true,
+              prefixIcon: Icon(
+                Icons.search_rounded,
+                size: 20,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 40,
+                minHeight: 44,
+              ),
+              suffixIcon: query.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.close_rounded,
+                        size: 18,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      onPressed: () {
+                        controller.clear();
+                        onChanged('');
+                      },
+                    )
+                  : null,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

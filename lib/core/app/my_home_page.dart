@@ -16,6 +16,7 @@ import 'package:clashkingapp/features/pages/presentation/announcement_story_dial
 import 'package:clashkingapp/features/pages/presentation/players_page.dart';
 import 'package:clashkingapp/features/pages/presentation/search_page.dart';
 import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
+import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -590,7 +591,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                       onTap: () => _pushAndClose(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const UpgradeTrackerTeasePage(),
+                          builder: (context) => const UpgradeTrackerPage(),
                         ),
                       ),
                     ),

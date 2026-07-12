@@ -67,6 +67,9 @@ dependencies:
   webview_flutter: ^4.14.1
   flutter_native_splash: ^2.4.7
   path_provider: ^2.1.6
+  share_plus: ^13.2.0
+  flutter_soloud: ^4.0.12
+  audio_session: ^0.2.2
   uuid: ^4.5.1
   clashking_design_system:
     path: ../clashking-devkit/design/packages/flutter
@@ -108,8 +111,6 @@ flutter:
 
   assets:
     - assets/icons/
-
-
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

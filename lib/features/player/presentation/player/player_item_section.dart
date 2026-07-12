@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/collapsible_item_section.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
@@ -82,96 +83,22 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
   Widget build(BuildContext context) {
     if (items.isEmpty) return const SizedBox.shrink();
 
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-        decoration: BoxDecoration(
-          color:
-              Theme.of(context).cardTheme.color ??
-              Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Theme.of(
-              context,
-            ).colorScheme.outlineVariant.withValues(alpha: 0.32),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => setState(() => _expanded = !_expanded),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Row(
-                    children: [
-                      AnimatedRotation(
-                        turns: _expanded ? 0.25 : 0,
-                        duration: const Duration(milliseconds: 160),
-                        child: Icon(
-                          Icons.chevron_right_rounded,
-                          size: 22,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withValues(alpha: 0.72),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      if (items[0] is! PlayerSuperTroop)
-                        _TownHallMaxBadge(
-                          percentage: _thPercentage,
-                          formattedPercentage: _formatPercentage(_thPercentage),
-                          summary: _remainingSummary,
-                          townHallLevel: townHallLevel,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              if (_expanded) ...[
-                const SizedBox(height: 12),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    // Same column math for every section so tiles line up
-                    // edge-to-edge across heroes/troops/equipment instead
-                    // of each section centering its own (possibly
-                    // narrower) block independently.
-                    const spacing = 8.0;
-                    const minTileSize = 54.0;
-                    final columns =
-                        ((constraints.maxWidth + spacing) /
-                                (minTileSize + spacing))
-                            .floor()
-                            .clamp(1, 999);
-                    final tileSize =
-                        (constraints.maxWidth - (columns - 1) * spacing) /
-                        columns;
-                    return Wrap(
-                      spacing: spacing,
-                      runSpacing: spacing,
-                      children: _sortedItems
-                          .map(
-                            (item) => _buildItemTile(context, item, tileSize),
-                          )
-                          .toList(),
-                    );
-                  },
-                ),
-              ],
-            ],
-          ),
-        ),
+    return CollapsibleItemSection(
+      title: title,
+      expanded: _expanded,
+      onToggle: () => setState(() => _expanded = !_expanded),
+      trailing: items[0] is PlayerSuperTroop
+          ? null
+          : _TownHallMaxBadge(
+              percentage: _thPercentage,
+              formattedPercentage: _formatPercentage(_thPercentage),
+              summary: _remainingSummary,
+              townHallLevel: townHallLevel,
+            ),
+      child: CompactItemGrid(
+        itemCount: _sortedItems.length,
+        itemBuilder: (context, index, size) =>
+            _buildItemTile(context, _sortedItems[index], size),
       ),
     );
   }
@@ -358,29 +285,18 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
     final accentColor = _itemAccentColor(context, item);
     var statsExpanded = false;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             final colorScheme = Theme.of(context).colorScheme;
-            final mediaQuery = MediaQuery.of(context);
-            final maxDialogWidth = mediaQuery.size.width >= 600 ? 460.0 : 380.0;
-
             return Dialog(
-              insetPadding: const EdgeInsets.symmetric(
-                horizontal: 18,
-                vertical: 24,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(28),
-              ),
-              clipBehavior: Clip.antiAlias,
+              insetPadding: EdgeInsets.zero,
               backgroundColor: colorScheme.surface,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: maxDialogWidth,
-                  maxHeight: mediaQuery.size.height * 0.82,
+                  maxHeight: MediaQuery.sizeOf(context).height * 0.9,
                 ),
                 child: SingleChildScrollView(
                   child: DecoratedBox(
@@ -1280,190 +1196,94 @@ class _TownHallMaxBadge extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    const progressRed = Color(0xFFE0302B);
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Tooltip(
-      message: AppLocalizations.of(context)!.todoRemainingUpgradeTooltip,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(999),
-          onTap: () => _showRemainingSheet(context),
-          child: CustomPaint(
-            foregroundPainter: _PercentOutlinePainter(
-              progress: percentage / 100,
-              radius: 999,
-              trackColor: colorScheme.outlineVariant.withValues(alpha: 0.58),
-              progressColor: progressRed,
-            ),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(999),
-                color: colorScheme.surfaceContainerHighest.withValues(
-                  alpha: 0.55,
-                ),
-              ),
-              child: Text(
-                '$formattedPercentage%',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.onSurface,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SectionProgressBadge(
+    progress: percentage / 100,
+    onTap: () => _showRemainingSheet(context),
+  );
 
   void _showRemainingSheet(BuildContext context) {
     final isComplete = percentage >= 100;
 
     showDialog<void>(
       context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+      builder: (context) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 420,
+            maxHeight: MediaQuery.sizeOf(context).height * 0.72,
           ),
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: 420,
-              maxHeight: MediaQuery.of(context).size.height * 0.72,
-            ),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '$formattedPercentage% Maxed for TH$townHallLevel',
-                            maxLines: 1,
-                            softWrap: false,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600),
-                          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '$formattedPercentage% Maxed for TH$townHallLevel',
+                          maxLines: 1,
+                          softWrap: false,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
-                      IconButton(
-                        tooltip: MaterialLocalizations.of(
-                          context,
-                        ).closeButtonTooltip,
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: const Icon(Icons.close_rounded),
-                      ),
-                    ],
+                    ),
+                    IconButton(
+                      tooltip: MaterialLocalizations.of(
+                        context,
+                      ).closeButtonTooltip,
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                if (isComplete)
+                  Text(
+                    'This section is maxed for TH$townHallLevel.',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )
+                else ...[
+                  const _PopupLabel(text: 'Time Remaining:'),
+                  const SizedBox(height: 6),
+                  _RemainingRow(
+                    icon: Icons.schedule_rounded,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    value: _PlayerItemSectionState._formatUpgradeTime(
+                      summary.seconds,
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  if (isComplete)
+                  const SizedBox(height: 14),
+                  const _PopupLabel(text: 'Resources:'),
+                  const SizedBox(height: 6),
+                  if (summary.resources.isEmpty)
                     Text(
-                      'This section is maxed for TH$townHallLevel.',
+                      'No resource data',
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
-                  else ...[
-                    const _PopupLabel(text: 'Time Remaining:'),
-                    const SizedBox(height: 6),
-                    _RemainingRow(
-                      icon: Icons.schedule_rounded,
-                      iconColor: Theme.of(context).colorScheme.primary,
-                      value: _PlayerItemSectionState._formatUpgradeTime(
-                        summary.seconds,
-                      ),
+                  else
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: summary.resources
+                          .map(
+                            (resource) => _ResourceCostChip(resource: resource),
+                          )
+                          .toList(),
                     ),
-                    const SizedBox(height: 14),
-                    const _PopupLabel(text: 'Resources:'),
-                    const SizedBox(height: 6),
-                    if (summary.resources.isEmpty)
-                      Text(
-                        'No resource data',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      )
-                    else
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: summary.resources
-                            .map(
-                              (resource) =>
-                                  _ResourceCostChip(resource: resource),
-                            )
-                            .toList(),
-                      ),
-                  ],
                 ],
-              ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
-  }
-}
-
-class _PercentOutlinePainter extends CustomPainter {
-  final double progress;
-  final double radius;
-  final Color trackColor;
-  final Color progressColor;
-
-  const _PercentOutlinePainter({
-    required this.progress,
-    required this.radius,
-    required this.trackColor,
-    required this.progressColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final rrect = RRect.fromRectAndRadius(
-      rect.deflate(1),
-      Radius.circular(radius),
-    );
-    final path = Path()..addRRect(rrect);
-    final trackPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round
-      ..color = trackColor;
-    final progressPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round
-      ..color = progressColor;
-
-    canvas.drawPath(path, trackPaint);
-
-    final clampedProgress = progress.clamp(0.0, 1.0);
-    if (clampedProgress <= 0) return;
-
-    for (final metric in path.computeMetrics()) {
-      final progressPath = metric.extractPath(
-        0,
-        metric.length * clampedProgress,
-      );
-      canvas.drawPath(progressPath, progressPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _PercentOutlinePainter oldDelegate) {
-    return oldDelegate.progress != progress ||
-        oldDelegate.trackColor != trackColor ||
-        oldDelegate.progressColor != progressColor ||
-        oldDelegate.radius != radius;
   }
 }
 
