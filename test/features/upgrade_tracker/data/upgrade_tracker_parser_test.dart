@@ -178,6 +178,36 @@ void main() {
     expect(helpers, hasLength(2));
     expect(summary.completion, closeTo(0.05, 0.0001));
   });
+
+  test('active grouped building consumes one planned instance', () {
+    final capturedAt = DateTime.utc(2026, 7, 11, 10);
+    final snapshot = parser.parse(
+      {
+        'tag': '#TEST',
+        'timestamp': capturedAt.millisecondsSinceEpoch ~/ 1000,
+        'buildings': [
+          {'data': 1, 'lvl': 18},
+          {'data': 2, 'lvl': 1, 'cnt': 5},
+          {'data': 3, 'lvl': 16, 'cnt': 2, 'timer': 3600},
+        ],
+      },
+      staticData: _bundle,
+      now: capturedAt,
+    );
+
+    final plan = snapshot.buildPlan(
+      queue: UpgradeQueue.builders,
+      strategy: UpgradePlanStrategy.balanced,
+      village: UpgradeVillage.home,
+      startsAt: capturedAt,
+    );
+    final futureMineUpgrades = plan
+        .expand((lane) => lane.upgrades)
+        .where((upgrade) => upgrade.item.name == 'Gold Mine')
+        .toList();
+
+    expect(futureMineUpgrades, hasLength(1));
+  });
 }
 
 final _bundle = <String, dynamic>{

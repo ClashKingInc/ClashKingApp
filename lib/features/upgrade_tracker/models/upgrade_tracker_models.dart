@@ -884,7 +884,11 @@ class UpgradeTrackerSnapshot {
                 ),
               );
         }
-        for (var instance = 1; instance <= item.count; instance++) {
+        // The active timer belongs to one physical instance. Reserve its lane
+        // and schedule only the other copies; otherwise grouped buildings such
+        // as Army Camps appear once as ongoing work and again as an extra
+        // future upgrade.
+        for (var instance = 1; instance < item.count; instance++) {
           queues
               .putIfAbsent(item.category, () => [])
               .add(
