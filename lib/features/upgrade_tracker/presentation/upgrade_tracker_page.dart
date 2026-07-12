@@ -540,6 +540,25 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               onSwitchAccount: () => _showAccountPicker(uniqueAccounts),
               onShare: () => _showShareHub(snapshot),
               onImport: _importSnapshot,
+              onInfo: _section > 1
+                  ? null
+                  : () {
+                      final village = _section == 1
+                          ? UpgradeVillage.builderBase
+                          : UpgradeVillage.home;
+                      final title = village == UpgradeVillage.home
+                          ? l10n.upgradeTrackerHomeVillage
+                          : l10n.upgradeTrackerBuilderBase;
+                      _showUpgradeSectionSummary(
+                        context,
+                        title,
+                        snapshot.overallSummary(village: village),
+                        snapshot: snapshot,
+                        village: village,
+                        goldPassPercent: _goldPassPercent,
+                        preferences: _planPreferences,
+                      );
+                    },
               goldPassPercent: _goldPassPercent,
               onGoldPass: () => _showGoldPassPicker(snapshot),
               onPriorities: () => _showPlanPreferences(
@@ -856,6 +875,7 @@ class _TrackerInfoHeader extends StatelessWidget {
     required this.onSwitchAccount,
     required this.onShare,
     required this.onImport,
+    required this.onInfo,
     required this.goldPassPercent,
     required this.onGoldPass,
     required this.onPriorities,
@@ -870,6 +890,7 @@ class _TrackerInfoHeader extends StatelessWidget {
   final VoidCallback onSwitchAccount;
   final VoidCallback onShare;
   final VoidCallback onImport;
+  final VoidCallback? onInfo;
   final int goldPassPercent;
   final VoidCallback onGoldPass;
   final VoidCallback onPriorities;
@@ -936,6 +957,14 @@ class _TrackerInfoHeader extends StatelessWidget {
                       onTap: onPriorities,
                       showBackground: false,
                     ),
+                    if (onInfo != null)
+                      HeaderIconButton(
+                        icon: Icons.info_outline_rounded,
+                        iconColor: Colors.white,
+                        tooltip: 'Village completion details',
+                        onTap: onInfo!,
+                        showBackground: false,
+                      ),
                     HeaderIconButton(
                       icon: Icons.ios_share_rounded,
                       iconColor: Colors.white,
