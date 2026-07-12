@@ -1649,9 +1649,19 @@ class _UpgradesTabState extends State<_UpgradesTab> {
                   6,
                 ),
                 sliver: SliverToBoxAdapter(
-                  child: Text(
-                    heroGroup.$1,
-                    style: CKTypography.of(context, CKTextRole.rowTitle),
+                  child: Row(
+                    children: [
+                      _AspectSafeImage(
+                        imageUrl: ImageAssets.getHeroImage(heroGroup.$1),
+                        width: 26,
+                        height: 26,
+                      ),
+                      const SizedBox(width: CKSpacing.xs),
+                      Text(
+                        heroGroup.$1,
+                        style: CKTypography.of(context, CKTextRole.rowTitle),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -2619,8 +2629,11 @@ class _PlanTimelineSectionState extends State<_PlanTimelineSection> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
+        color: Theme.of(context).cardTheme.color ?? scheme.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -3048,16 +3061,8 @@ class _LootOutlookCard extends StatelessWidget {
               ),
         )
         .toList(growable: false);
-    final scheme = Theme.of(context).colorScheme;
-    return Container(
+    return CKSectionPanel(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.46),
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -3128,7 +3133,7 @@ class _PlanPeriodSummary extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
-        color: scheme.surface,
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.24),
         borderRadius: BorderRadius.circular(AppRadius.chip),
         border: Border.all(
           color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
@@ -6776,8 +6781,11 @@ class _PlanComparisonCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.48),
+        color: Theme.of(context).cardTheme.color ?? scheme.surface,
         borderRadius: BorderRadius.circular(AppRadius.chip),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
       ),
       child: Row(
         children: [
