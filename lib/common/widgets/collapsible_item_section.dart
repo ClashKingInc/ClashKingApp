@@ -1,3 +1,4 @@
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:flutter/material.dart';
 
 /// Shared collapsible item-section shell used by Player Info and the upgrade
@@ -13,6 +14,9 @@ class CollapsibleItemSection extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.margin = const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+    this.animateContent = true,
+    this.showContent = true,
+    this.surfaceWhenExpanded = true,
   });
 
   final String title;
@@ -23,85 +27,98 @@ class CollapsibleItemSection extends StatelessWidget {
   final VoidCallback onToggle;
   final Widget child;
   final EdgeInsetsGeometry margin;
+  final bool animateContent;
+  final bool showContent;
+  final bool surfaceWhenExpanded;
 
   @override
-  Widget build(BuildContext context) => Container(
-    width: double.infinity,
-    margin: margin,
-    padding: const EdgeInsets.all(14),
-    decoration: BoxDecoration(
-      color:
-          Theme.of(context).cardTheme.color ??
-          Theme.of(context).colorScheme.surface,
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(
-        color: Theme.of(
-          context,
-        ).colorScheme.outlineVariant.withValues(alpha: 0.32),
-      ),
-    ),
-    child: Column(
+  Widget build(BuildContext context) {
+    final expandedChild = expanded
+        ? Padding(padding: const EdgeInsets.only(top: 12), child: child)
+        : const SizedBox(width: double.infinity);
+    final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InkWell(
-          onTap: onToggle,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Row(
-              children: [
-                AnimatedRotation(
-                  turns: expanded ? 0.25 : 0,
-                  duration: const Duration(milliseconds: 160),
-                  curve: Curves.easeOutCubic,
-                  child: Icon(
-                    Icons.chevron_right_rounded,
-                    size: 22,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withValues(alpha: 0.72),
+        ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 44),
+          child: InkWell(
+            onTap: onToggle,
+            borderRadius: BorderRadius.circular(CKRadius.control),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Row(
+                children: [
+                  AnimatedRotation(
+                    turns: expanded ? 0.25 : 0,
+                    duration: CKMotion.durationOf(context, CKMotion.fast),
+                    curve: CKMotion.standardCurve,
+                    child: Icon(
+                      Icons.chevron_right_rounded,
+                      size: 22,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.72),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                if (leading != null) ...[leading!, const SizedBox(width: 9)],
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      if (subtitle != null)
+                  const SizedBox(width: CKSpacing.xs),
+                  if (leading != null) ...[
+                    leading!,
+                    const SizedBox(width: CKSpacing.sm),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          subtitle!,
-                          style: Theme.of(context).textTheme.labelSmall
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
+                          title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: CKTypography.of(
+                            context,
+                            CKTextRole.sectionTitle,
+                          ),
                         ),
-                    ],
+                        if (subtitle != null)
+                          Text(
+                            subtitle!,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: CKTypography.of(context, CKTextRole.metadata)
+                                .copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-                ?trailing,
-              ],
+                  ?trailing,
+                ],
+              ),
             ),
           ),
         ),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOutCubic,
-          alignment: Alignment.topCenter,
-          child: expanded
-              ? Padding(padding: const EdgeInsets.only(top: 12), child: child)
-              : const SizedBox(width: double.infinity),
-        ),
+        if (showContent)
+          if (animateContent)
+            AnimatedSize(
+              duration: CKMotion.durationOf(context, CKMotion.standard),
+              curve: CKMotion.standardCurve,
+              alignment: Alignment.topCenter,
+              child: expandedChild,
+            )
+          else
+            expandedChild,
       ],
-    ),
-  );
+    );
+    final section = expanded && !surfaceWhenExpanded
+        ? Padding(padding: const EdgeInsets.all(CKSpacing.md), child: content)
+        : CKSectionPanel(
+            padding: const EdgeInsets.all(CKSpacing.md),
+            child: content,
+          );
+    return Container(width: double.infinity, margin: margin, child: section);
+  }
 }
 
 class CompactItemGrid extends StatelessWidget {

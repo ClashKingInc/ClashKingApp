@@ -823,10 +823,10 @@ packages:
     dependency: "direct main"
     description:
       name: native_liquid_glass
-      sha256: c5677bb39d98878d021988b912119183135f747087b8e7e7f99079ac0673f022
+      sha256: "1e8299dae31c6a6962973fbe0f7f3823aecf307f29aba110fa1e4fe28640451a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.13"
+    version: "0.2.12"
   nested:
     dependency: transitive
     description:

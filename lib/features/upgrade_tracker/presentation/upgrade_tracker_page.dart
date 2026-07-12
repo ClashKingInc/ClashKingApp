@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/collapsible_item_section.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
@@ -18,18 +19,22 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_widget_sync_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UpgradeTrackerPage extends StatefulWidget {
   const UpgradeTrackerPage({super.key});
@@ -41,9 +46,8 @@ class UpgradeTrackerPage extends StatefulWidget {
 class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   final _repository = UpgradeTrackerRepository();
   final _widgetSync = const UpgradeWidgetSyncService();
-  final _upgradeSearchController = TextEditingController();
-  final _collectionSearchController = TextEditingController();
   final _planLanes = ValueNotifier<List<UpgradePlanLane>>(const []);
+  final _clock = ValueNotifier<DateTime>(DateTime.now());
   late final PageController _pageController;
 
   UpgradeTrackerSnapshot? _snapshot;
@@ -54,11 +58,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   int _section = 0;
   int _goldPassPercent = 0;
   UpgradePlanPreferences _planPreferences = const UpgradePlanPreferences();
-  _CollectionFilter _collectionFilter = _CollectionFilter.all;
-  _CollectionSort _collectionSort = _CollectionSort.nameAscending;
-  UpgradeVillage? _collectionVillage;
-  String _upgradeQuery = '';
-  String _collectionQuery = '';
+  final _capturedAtByTag = <String, DateTime>{};
   Timer? _ticker;
 
   @override
@@ -76,7 +76,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                     snapshot.remainingCooldownSeconds(item) > 0,
               ) ||
               _activeBoostLabels(snapshot).isNotEmpty)) {
-        setState(() {});
+        _clock.value = DateTime.now();
       }
     });
   }
@@ -88,6 +88,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     _initialized = true;
     final linkedTags = context.read<CocAccountService>().accounts;
     final initial = linkedTags.firstOrNull;
+    unawaited(_loadSnapshotMetadata());
     if (initial == null) {
       setState(() => _loading = false);
     } else {
@@ -100,10 +101,25 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   void dispose() {
     _pageController.dispose();
     _planLanes.dispose();
+    _clock.dispose();
     _ticker?.cancel();
-    _upgradeSearchController.dispose();
-    _collectionSearchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadSnapshotMetadata() async {
+    final accounts = await _repository.savedSnapshotAccounts();
+    if (!mounted) return;
+    setState(() {
+      for (final account in accounts) {
+        final capturedAt = DateTime.tryParse(account['capturedAt'] ?? '');
+        if (capturedAt != null) {
+          _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(
+                account['tag'] ?? '',
+              )] =
+              capturedAt;
+        }
+      }
+    });
   }
 
   Future<void> _load(String tag) async {
@@ -121,6 +137,12 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       setState(() {
         _snapshot = snapshot;
         _loading = false;
+        if (snapshot != null) {
+          _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(
+                snapshot.tag,
+              )] =
+              snapshot.capturedAt;
+        }
         final detectedGoldPass = snapshot == null
             ? 0
             : [
@@ -140,7 +162,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               : null,
         );
       });
-      unawaited(_syncWidget());
+      _scheduleWidgetSync();
     } catch (error) {
       if (!mounted) return;
       setState(() {
@@ -153,6 +175,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
 
   Future<void> _importSnapshot() async {
     final controller = TextEditingController();
+    final l10n = AppLocalizations.of(context)!;
     try {
       final rawJson = await showModalBottomSheet<String>(
         context: context,
@@ -173,25 +196,30 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Import account',
-                          style: Theme.of(sheetContext).textTheme.titleLarge
-                              ?.copyWith(fontWeight: FontWeight.w900),
+                          l10n.upgradeTrackerImportTitle,
+                          style: CKTypography.of(
+                            sheetContext,
+                            CKTextRole.screenTitle,
+                          ),
                         ),
                       ),
                       IconButton(
-                        tooltip: 'Close',
+                        tooltip: MaterialLocalizations.of(
+                          sheetContext,
+                        ).closeButtonTooltip,
                         onPressed: () => Navigator.pop(sheetContext),
                         icon: const Icon(Icons.close_rounded),
                       ),
                     ],
                   ),
                   Text(
-                    'Paste the raw account JSON. It stays on this device.',
-                    style: Theme.of(sheetContext).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(
-                        sheetContext,
-                      ).colorScheme.onSurfaceVariant,
-                    ),
+                    l10n.upgradeTrackerImportDescription,
+                    style: CKTypography.of(sheetContext, CKTextRole.metadata)
+                        .copyWith(
+                          color: Theme.of(
+                            sheetContext,
+                          ).colorScheme.onSurfaceVariant,
+                        ),
                   ),
                   const SizedBox(height: 12),
                   Expanded(
@@ -205,8 +233,8 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                       autocorrect: false,
                       enableSuggestions: false,
                       decoration:
-                          const InputDecoration(
-                            labelText: 'Account JSON',
+                          InputDecoration(
+                            labelText: l10n.upgradeTrackerAccountJson,
                             alignLabelWithHint: true,
                             hintText: '{"tag":"#...","buildings":[...]}',
                           ).copyWith(
@@ -243,12 +271,12 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                           controller.text = data?.text ?? '';
                         },
                         icon: const Icon(Icons.content_paste_rounded),
-                        label: const Text('Paste clipboard'),
+                        label: Text(l10n.upgradeTrackerPasteClipboard),
                       ),
                       const Spacer(),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
@@ -262,7 +290,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                       ),
                       onPressed: () =>
                           Navigator.pop(sheetContext, controller.text.trim()),
-                      child: const Text('Import account'),
+                      child: Text(l10n.upgradeTrackerImportAction),
                     ),
                   ),
                 ],
@@ -272,7 +300,28 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         ),
       );
       if (rawJson == null || rawJson.isEmpty) return;
-      final bytes = utf8.encode(rawJson);
+      await _importSnapshotBytes(utf8.encode(rawJson));
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.upgradeTrackerImportFailed('$error'))),
+      );
+    } finally {
+      // Modal route teardown finishes just after its result resolves. Keep the
+      // controller alive through that animation so EditableText can detach.
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      controller.dispose();
+    }
+  }
+
+  Future<void> _pasteSnapshotFromClipboard() async {
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    await _importSnapshotBytes(utf8.encode(data?.text?.trim() ?? ''));
+  }
+
+  Future<void> _importSnapshotBytes(List<int> bytes) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
       final linkedAccounts = _linkedAccountOptions();
       final linkedNames = {
         for (final account in linkedAccounts)
@@ -287,6 +336,8 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       setState(() {
         _snapshot = snapshot;
         _selectedTag = snapshot.tag;
+        _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(snapshot.tag)] =
+            snapshot.capturedAt;
         _loading = false;
         _error = null;
         _section = 0;
@@ -299,21 +350,43 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       });
       _planLanes.value = const [];
       if (_pageController.hasClients) _pageController.jumpToPage(0);
-      unawaited(_syncWidget());
+      _scheduleWidgetSync();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${snapshot.name} imported on this device')),
+        SnackBar(
+          content: Text(l10n.upgradeTrackerImportSuccess(snapshot.name)),
+        ),
       );
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Could not import JSON: $error')));
-    } finally {
-      // Modal route teardown finishes just after its result resolves. Keep the
-      // controller alive through that animation so EditableText can detach.
-      await Future<void>.delayed(const Duration(milliseconds: 400));
-      controller.dispose();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.upgradeTrackerImportFailed('$error'))),
+      );
+    }
+  }
+
+  void _scheduleWidgetSync() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(
+        SchedulerBinding.instance.scheduleTask(_syncWidget, Priority.idle),
+      );
+    });
+  }
+
+  Future<void> _openClashMoreSettings() async {
+    final uri = Uri.parse(
+      'https://link.clashofclans.com/?action=OpenMoreSettings',
+    );
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.accountsCouldNotOpenClash,
+          ),
+        ),
+      );
     }
   }
 
@@ -340,17 +413,16 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   List<_TrackerAccountOption> _linkedAccountOptions() {
     final linked = context.read<CocAccountService>().cocAccounts;
     final profiles = context.read<PlayerService>().profiles;
+    final profilesByTag = {
+      for (final player in profiles)
+        UpgradeTrackerRepository.normalizeTag(player.tag): player,
+    };
     return linked
         .map((raw) {
           final tag =
               raw['player_tag']?.toString() ?? raw['tag']?.toString() ?? '';
-          final profile = profiles
-              .where(
-                (player) =>
-                    UpgradeTrackerRepository.normalizeTag(player.tag) ==
-                    UpgradeTrackerRepository.normalizeTag(tag),
-              )
-              .firstOrNull;
+          final normalizedTag = UpgradeTrackerRepository.normalizeTag(tag);
+          final profile = profilesByTag[normalizedTag];
           int readInt(Object? value) => switch (value) {
             final num number => number.toInt(),
             final String text => int.tryParse(text) ?? 0,
@@ -378,6 +450,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
             ].join(' · '),
             townHallLevel: townHall,
             builderHallLevel: builderHall,
+            capturedAt: _capturedAtByTag[normalizedTag],
           );
         })
         .where((account) => account.tag.isNotEmpty)
@@ -386,8 +459,28 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<PlayerService>();
-    context.watch<CocAccountService>();
+    context.select<CocAccountService, int>(
+      (service) => Object.hashAll(
+        service.cocAccounts.map(
+          (account) => Object.hash(
+            account['player_tag'],
+            account['tag'],
+            account['name'],
+            account['townHallLevel'],
+            account['builderHallLevel'],
+          ),
+        ),
+      ),
+    );
+    context.select<PlayerService, int>(
+      (service) => Object.hashAll(
+        service.profiles.map(
+          (player) =>
+              Object.hash(player.tag, player.name, player.townHallLevel),
+        ),
+      ),
+    );
+    final l10n = AppLocalizations.of(context)!;
     final linkedAccounts = _linkedAccountOptions();
     final accounts = linkedAccounts;
     final uniqueAccounts = <String, _TrackerAccountOption>{
@@ -408,7 +501,9 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         titleSpacing: 4,
         title: Semantics(
           button: true,
-          label: 'Switch account, ${selectedAccount?.name ?? 'choose account'}',
+          label: l10n.upgradeTrackerSwitchAccount(
+            selectedAccount?.name ?? l10n.upgradeTrackerChooseAccount,
+          ),
           child: InkWell(
             borderRadius: BorderRadius.circular(AppRadius.pill),
             onTap: () => _showAccountPicker(uniqueAccounts),
@@ -429,11 +524,39 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                     const SizedBox(width: 7),
                   ],
                   Flexible(
-                    child: Text(
-                      selectedAccount?.name ?? 'Choose account',
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w900,
+                    child: ValueListenableBuilder<DateTime>(
+                      valueListenable: _clock,
+                      builder: (context, now, _) => Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            selectedAccount?.name ??
+                                l10n.upgradeTrackerChooseAccount,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: CKTypography.of(
+                              context,
+                              CKTextRole.rowTitle,
+                            ),
+                          ),
+                          if (selectedAccount?.capturedAt
+                              case final capturedAt?)
+                            Text(
+                              _snapshotAgeLabel(context, capturedAt, now: now),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  CKTypography.of(
+                                    context,
+                                    CKTextRole.compactLabel,
+                                  ).copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
@@ -447,12 +570,12 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         actions: [
           if (_snapshot != null)
             IconButton(
-              tooltip: 'Share tracker',
+              tooltip: l10n.upgradeTrackerShare,
               onPressed: () => _showShareHub(_snapshot!),
               icon: const Icon(Icons.ios_share_rounded),
             ),
           IconButton(
-            tooltip: 'Paste account JSON',
+            tooltip: l10n.upgradeTrackerPasteJson,
             onPressed: _importSnapshot,
             icon: const Icon(Icons.content_paste_rounded),
           ),
@@ -463,10 +586,14 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
             child: LiquidGlassSegmentedControl<int>(
               values: const [0, 1, 2],
-              labels: const ['Plan', 'Upgrades', 'Collection'],
+              labels: [
+                l10n.upgradeTrackerPlan,
+                l10n.upgradeTrackerUpgrades,
+                l10n.upgradeTrackerCollection,
+              ],
               selected: _section,
               color: Theme.of(context).colorScheme.onSurface,
-              height: 40,
+              height: CKControlDensity.compact.minimumHeight,
               onChanged: _selectSection,
             ),
           ),
@@ -516,25 +643,37 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   }
 
   Widget _buildBody() {
+    final l10n = AppLocalizations.of(context)!;
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
     if (_error != null) {
       return _TrackerEmptyState(
         icon: Icons.error_outline_rounded,
-        title: 'Snapshot could not be read',
+        title: l10n.upgradeTrackerSnapshotUnreadable,
         body: _error.toString(),
-        actionLabel: _selectedTag == null ? null : 'Try again',
+        actionLabel: _selectedTag == null ? null : l10n.upgradeTrackerTryAgain,
         onAction: _selectedTag == null ? null : () => _load(_selectedTag!),
       );
     }
     final snapshot = _snapshot;
     if (snapshot == null) {
       return _TrackerEmptyState(
-        icon: Icons.sync_rounded,
-        title: 'Upgrade snapshot not synced yet',
-        body:
-            'This account is linked, but its raw village snapshot is not available on this device. The planned API sync will populate it automatically.',
+        icon: Icons.content_paste_rounded,
+        stickerUrl: ImageAssets.builderWave,
+        title: l10n.upgradeTrackerNoDataTitle,
+        body: _selectedTag == null
+            ? l10n.upgradeTrackerNoLinkedAccount
+            : l10n.upgradeTrackerNoDataBody,
+        detail: _selectedTag == null ? null : l10n.upgradeTrackerNoDataLocation,
+        actionLabel: _selectedTag == null
+            ? null
+            : l10n.upgradeTrackerPasteClipboard,
+        onAction: _selectedTag == null ? null : _pasteSnapshotFromClipboard,
+        secondaryActionLabel: _selectedTag == null
+            ? null
+            : l10n.upgradeTrackerOpenMoreSettings,
+        onSecondaryAction: _selectedTag == null ? null : _openClashMoreSettings,
       );
     }
     return PageView(
@@ -545,28 +684,17 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           snapshot: snapshot,
           goldPassPercent: _goldPassPercent,
           preferences: _planPreferences,
+          clock: _clock,
           onLanesChanged: (lanes) => _planLanes.value = lanes,
           controls: _buildPlanActions(snapshot),
         ),
         _UpgradesTab(
           snapshot: snapshot,
-          query: _upgradeQuery,
-          searchController: _upgradeSearchController,
-          onQueryChanged: (value) => setState(() => _upgradeQuery = value),
+          clock: _clock,
+          goldPassPercent: _goldPassPercent,
+          preferences: _planPreferences,
         ),
-        _CollectionTab(
-          snapshot: snapshot,
-          filter: _collectionFilter,
-          query: _collectionQuery,
-          village: _collectionVillage,
-          sort: _collectionSort,
-          searchController: _collectionSearchController,
-          onQueryChanged: (value) => setState(() => _collectionQuery = value),
-          onFilterChanged: (value) => setState(() => _collectionFilter = value),
-          onVillageChanged: (value) =>
-              setState(() => _collectionVillage = value),
-          onSortChanged: (value) => setState(() => _collectionSort = value),
-        ),
+        _CollectionTab(snapshot: snapshot),
       ],
     );
   }
@@ -824,14 +952,25 @@ class _ProgressHero extends StatelessWidget {
     required this.snapshot,
     required this.village,
     required this.summary,
+    this.finish,
+    this.clock,
   });
 
   final UpgradeTrackerSnapshot snapshot;
   final UpgradeVillage village;
   final UpgradeCategorySummary summary;
+  final DateTime? finish;
+  final ValueListenable<DateTime>? clock;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => clock == null
+      ? _buildContent(context, DateTime.now())
+      : ValueListenableBuilder<DateTime>(
+          valueListenable: clock!,
+          builder: (context, now, _) => _buildContent(context, now),
+        );
+
+  Widget _buildContent(BuildContext context, DateTime now) {
     final scheme = Theme.of(context).colorScheme;
     final hall = village == UpgradeVillage.home
         ? snapshot.townHallLevel
@@ -839,27 +978,8 @@ class _ProgressHero extends StatelessWidget {
     final image = village == UpgradeVillage.home
         ? ImageAssets.townHall(hall)
         : ImageAssets.builderHall(hall);
-    final queue = village == UpgradeVillage.home
-        ? UpgradeQueue.builders
-        : UpgradeQueue.builders;
-    final plan = _buildPlannerLanes(
-      snapshot,
-      queue: queue,
-      strategy: UpgradePlanStrategy.balanced,
-      village: village,
-      startsAt: DateTime.now(),
-      goldPassPercent: 0,
-      preferences: const UpgradePlanPreferences(),
-    );
-    final finish = plan
-        .map((lane) => lane.finishesAt)
-        .whereType<DateTime>()
-        .fold<DateTime?>(null, (latest, date) {
-          if (latest == null || date.isAfter(latest)) return date;
-          return latest;
-        });
     final active = snapshot.items
-        .where((item) => snapshot.remainingActiveSeconds(item) > 0)
+        .where((item) => snapshot.remainingActiveSeconds(item, now: now) > 0)
         .toList(growable: false);
     final helpers = snapshot.items
         .where(
@@ -868,16 +988,9 @@ class _ProgressHero extends StatelessWidget {
               _isHelperStatusItem(item),
         )
         .toList(growable: false);
-    final boosts = _activeBoostLabels(snapshot);
-    return Container(
+    final boosts = _activeBoostLabels(snapshot, now: now);
+    return CKGlassPanel(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ?? scheme.surface,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -891,20 +1004,17 @@ class _ProgressHero extends StatelessWidget {
                   children: [
                     Text(
                       '${(summary.completion * 100).toStringAsFixed(1)}%',
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        height: 0.95,
-                      ),
+                      style: CKTypography.of(context, CKTextRole.heroMetric),
                     ),
                     const SizedBox(height: 5),
                     Text(
                       summary.levelsRemaining == 0
                           ? 'Everything tracked is complete'
-                          : '${summary.levelsRemaining} levels left${finish == null ? '' : ' · ${_dateLabel(finish)}'}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
+                          : '${summary.levelsRemaining} levels left${finish == null ? '' : ' · ${_dateLabel(finish!)}'}',
+                      style: CKTypography.of(
+                        context,
+                        CKTextRole.metadata,
+                      ).copyWith(color: scheme.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -933,14 +1043,22 @@ class _ProgressHero extends StatelessWidget {
             ...active
                 .take(6)
                 .map(
-                  (item) => _ActiveUpgradeRow(snapshot: snapshot, item: item),
+                  (item) => _ActiveUpgradeRow(
+                    snapshot: snapshot,
+                    item: item,
+                    now: now,
+                  ),
                 ),
           ],
           if (helpers.isNotEmpty) ...[
             const Divider(height: 20),
             const _SectionHeading(title: 'Helpers'),
             ...helpers.map(
-              (helper) => _HelperStatusRow(snapshot: snapshot, helper: helper),
+              (helper) => _HelperStatusRow(
+                snapshot: snapshot,
+                helper: helper,
+                now: now,
+              ),
             ),
           ],
         ],
@@ -957,21 +1075,26 @@ bool _isHelperStatusItem(UpgradeTrackerItem item) {
 }
 
 class _HelperStatusRow extends StatelessWidget {
-  const _HelperStatusRow({required this.snapshot, required this.helper});
+  const _HelperStatusRow({
+    required this.snapshot,
+    required this.helper,
+    this.now,
+  });
 
   final UpgradeTrackerSnapshot snapshot;
   final UpgradeTrackerItem helper;
+  final DateTime? now;
 
   @override
   Widget build(BuildContext context) {
     final assigned = snapshot.items.where((item) {
       final helperName = snapshot.helperNameFor(item);
       return helperName == helper.name &&
-          snapshot.remainingHelperSeconds(item) > 0;
+          snapshot.remainingHelperSeconds(item, now: now) > 0;
     }).firstOrNull;
-    final cooldown = snapshot.remainingCooldownSeconds(helper);
+    final cooldown = snapshot.remainingCooldownSeconds(helper, now: now);
     final status = assigned != null
-        ? 'Helping ${assigned.name} · ${_duration(snapshot.remainingHelperSeconds(assigned))}'
+        ? 'Helping ${assigned.name} · ${_duration(snapshot.remainingHelperSeconds(assigned, now: now))}'
         : cooldown > 0
         ? 'Ready in ${_duration(cooldown)}'
         : 'Ready';
@@ -1186,10 +1309,15 @@ class _CategoryProgressRow extends StatelessWidget {
 }
 
 class _ActiveUpgradeRow extends StatelessWidget {
-  const _ActiveUpgradeRow({required this.snapshot, required this.item});
+  const _ActiveUpgradeRow({
+    required this.snapshot,
+    required this.item,
+    this.now,
+  });
 
   final UpgradeTrackerSnapshot snapshot;
   final UpgradeTrackerItem item;
+  final DateTime? now;
 
   @override
   Widget build(BuildContext context) {
@@ -1221,7 +1349,7 @@ class _ActiveUpgradeRow extends StatelessWidget {
                 ),
                 if (snapshot.helperNameFor(item) case final helper?)
                   Text(
-                    '$helper helping · ${_duration(snapshot.remainingHelperSeconds(item))}',
+                    '$helper helping · ${_duration(snapshot.remainingHelperSeconds(item, now: now))}',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: scheme.onSurfaceVariant,
                       fontWeight: FontWeight.w700,
@@ -1231,7 +1359,7 @@ class _ActiveUpgradeRow extends StatelessWidget {
             ),
           ),
           _Pill(
-            text: _duration(snapshot.remainingActiveSeconds(item)),
+            text: _duration(snapshot.remainingActiveSeconds(item, now: now)),
             icon: Icons.schedule_rounded,
           ),
         ],
@@ -1250,6 +1378,7 @@ class _TrackerCollapsibleCard extends StatelessWidget {
     required this.onToggle,
     required this.onSummaryTap,
     required this.child,
+    this.showContent = true,
   });
 
   final String title;
@@ -1260,6 +1389,7 @@ class _TrackerCollapsibleCard extends StatelessWidget {
   final VoidCallback onToggle;
   final VoidCallback onSummaryTap;
   final Widget child;
+  final bool showContent;
 
   @override
   Widget build(BuildContext context) {
@@ -1271,6 +1401,8 @@ class _TrackerCollapsibleCard extends StatelessWidget {
       expanded: expanded,
       onToggle: onToggle,
       margin: const EdgeInsets.only(bottom: 10),
+      showContent: showContent,
+      animateContent: false,
       child: child,
     );
   }
@@ -1279,15 +1411,15 @@ class _TrackerCollapsibleCard extends StatelessWidget {
 class _UpgradesTab extends StatefulWidget {
   const _UpgradesTab({
     required this.snapshot,
-    required this.query,
-    required this.searchController,
-    required this.onQueryChanged,
+    required this.clock,
+    required this.goldPassPercent,
+    required this.preferences,
   });
 
   final UpgradeTrackerSnapshot snapshot;
-  final String query;
-  final TextEditingController searchController;
-  final ValueChanged<String> onQueryChanged;
+  final ValueListenable<DateTime> clock;
+  final int goldPassPercent;
+  final UpgradePlanPreferences preferences;
 
   @override
   State<_UpgradesTab> createState() => _UpgradesTabState();
@@ -1296,112 +1428,289 @@ class _UpgradesTab extends StatefulWidget {
 class _UpgradesTabState extends State<_UpgradesTab> {
   final _expandedVillages = <UpgradeVillage>{UpgradeVillage.home};
   final _expandedGroups = <String>{'home-buildings'};
+  final _searchController = TextEditingController();
+  String _query = '';
+  late Map<UpgradeVillage, _UpgradeVillageViewData> _viewData;
+
+  @override
+  void initState() {
+    super.initState();
+    _rebuildViewData();
+  }
+
+  @override
+  void didUpdateWidget(covariant _UpgradesTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.snapshot, widget.snapshot)) {
+      _rebuildViewData();
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _setQuery(String value) {
+    if (value == _query) return;
+    setState(() {
+      _query = value;
+      _rebuildViewData();
+    });
+  }
+
+  void _rebuildViewData() {
+    final normalized = _query.trim().toLowerCase();
+    _viewData = {
+      for (final village in UpgradeVillage.values)
+        village: _UpgradeVillageViewData.build(
+          widget.snapshot,
+          village,
+          normalized,
+        ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
-    final normalized = widget.query.trim().toLowerCase();
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(14, 8, 14, 28),
-      children: [
-        AppSearchField(
-          controller: widget.searchController,
-          query: widget.query,
-          hintText: 'Search upgrades',
-          onChanged: widget.onQueryChanged,
-          useGlass: false,
+    final l10n = AppLocalizations.of(context)!;
+    final slivers = <Widget>[
+      SliverPadding(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+        sliver: SliverToBoxAdapter(
+          child: AppSearchField(
+            controller: _searchController,
+            query: _query,
+            hintText: l10n.upgradeTrackerSearchUpgrades,
+            onChanged: _setQuery,
+            useGlass: false,
+          ),
         ),
-        const SizedBox(height: 10),
-        ...UpgradeVillage.values.map((village) {
-          final scopedVillageItems = widget.snapshot
-              .itemsFor(village: village)
-              .where((item) => item.category != UpgradeCategory.builders)
-              .toList(growable: false);
-          final villageItems = scopedVillageItems
-              .where(
-                (item) =>
-                    normalized.isEmpty ||
-                    item.name.toLowerCase().contains(normalized),
-              )
-              .toList(growable: false);
-          if (villageItems.isEmpty) return const SizedBox.shrink();
-          final expanded = _expandedVillages.contains(village);
-          final summary = widget.snapshot.summaryForItems(scopedVillageItems);
-          final groups = _availableUpgradeGroups(widget.snapshot, village)
-              .where(
-                (group) => villageItems.any(
-                  (item) => _upgradeGroupFor(item.category) == group,
+      ),
+    ];
+
+    for (final village in UpgradeVillage.values) {
+      final data = _viewData[village]!;
+      if (data.visibleItems.isEmpty) continue;
+      final expanded = _expandedVillages.contains(village);
+      final title = village == UpgradeVillage.home
+          ? l10n.upgradeTrackerHomeVillage
+          : l10n.upgradeTrackerBuilderBase;
+      final image = village == UpgradeVillage.home
+          ? ImageAssets.townHall(widget.snapshot.townHallLevel)
+          : ImageAssets.builderHall(widget.snapshot.builderHallLevel);
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          sliver: SliverToBoxAdapter(
+            child: CollapsibleItemSection(
+              title: title,
+              leading: _AspectSafeImage(imageUrl: image, width: 38, height: 34),
+              subtitle: l10n.upgradeTrackerLevelsLeft(
+                data.summary.levelsRemaining,
+              ),
+              trailing: SectionProgressBadge(
+                progress: data.summary.completion,
+                onTap: () => _showUpgradeSectionSummary(
+                  context,
+                  title,
+                  data.summary,
+                  snapshot: widget.snapshot,
+                  village: village,
+                  goldPassPercent: widget.goldPassPercent,
+                  preferences: widget.preferences,
                 ),
-              )
-              .toList(growable: false);
-          final title = village == UpgradeVillage.home
-              ? 'Home Village'
-              : 'Builder Base';
-          final image = village == UpgradeVillage.home
-              ? ImageAssets.townHall(widget.snapshot.townHallLevel)
-              : ImageAssets.builderHall(widget.snapshot.builderHallLevel);
-          return CollapsibleItemSection(
-            title: title,
-            leading: _AspectSafeImage(imageUrl: image, width: 38, height: 34),
-            subtitle: '${summary.levelsRemaining} levels left',
-            trailing: SectionProgressBadge(
-              progress: summary.completion,
-              onTap: () => _showUpgradeSectionSummary(context, title, summary),
+              ),
+              expanded: expanded,
+              onToggle: () => setState(() {
+                expanded
+                    ? _expandedVillages.remove(village)
+                    : _expandedVillages.add(village);
+              }),
+              margin: const EdgeInsets.only(bottom: 10),
+              showContent: false,
+              surfaceWhenExpanded: false,
+              child: const SizedBox.shrink(),
             ),
-            expanded: expanded,
-            onToggle: () => setState(() {
-              expanded
-                  ? _expandedVillages.remove(village)
-                  : _expandedVillages.add(village);
-            }),
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Column(
-              children: groups
-                  .map((group) {
-                    final items =
-                        villageItems
-                            .where(
-                              (item) =>
-                                  _upgradeGroupFor(item.category) == group,
-                            )
-                            .toList()
-                          ..sort((a, b) {
-                            final id = a.id.compareTo(b.id);
-                            if (id != 0) return id;
-                            final name = a.name.compareTo(b.name);
-                            if (name != 0) return name;
-                            return a.currentLevel.compareTo(b.currentLevel);
-                          });
-                    if (items.isEmpty) return const SizedBox.shrink();
-                    final key = '${village.name}-${group.name}';
-                    final groupExpanded = _expandedGroups.contains(key);
-                    final groupSummary = widget.snapshot.summaryForItems(
-                      scopedVillageItems.where(
-                        (item) => _upgradeGroupFor(item.category) == group,
-                      ),
-                    );
-                    return _UpgradeGroupSection(
-                      snapshot: widget.snapshot,
-                      group: group,
-                      village: village,
-                      items: items,
-                      summary: groupSummary,
-                      expanded: groupExpanded,
-                      onToggle: () => setState(() {
-                        groupExpanded
-                            ? _expandedGroups.remove(key)
-                            : _expandedGroups.add(key);
-                      }),
-                    );
-                  })
+          ),
+        ),
+      );
+      if (!expanded) continue;
+
+      for (final group in data.groups) {
+        final items = data.itemsByGroup[group]!;
+        final summary = data.summaryByGroup[group]!;
+        final key = '${village.name}-${group.name}';
+        final groupExpanded = _expandedGroups.contains(key);
+        final groupTitle = _upgradeGroupLabelForVillage(group, village);
+        slivers.add(
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(22, 0, 22, 8),
+            sliver: SliverToBoxAdapter(
+              child: CollapsibleItemSection(
+                title: groupTitle,
+                subtitle:
+                    '${l10n.upgradeTrackerLevelsLeft(summary.levelsRemaining)} · ${items.length}',
+                leading: _AspectSafeImage(
+                  imageUrl: _groupImage(widget.snapshot, group, village),
+                  width: 34,
+                  height: 30,
+                ),
+                trailing: SectionProgressBadge(
+                  progress: summary.completion,
+                  onTap: () =>
+                      _showUpgradeSectionSummary(context, groupTitle, summary),
+                ),
+                expanded: groupExpanded,
+                onToggle: () => setState(() {
+                  groupExpanded
+                      ? _expandedGroups.remove(key)
+                      : _expandedGroups.add(key);
+                }),
+                margin: EdgeInsets.zero,
+                showContent: false,
+                surfaceWhenExpanded: false,
+                child: const SizedBox.shrink(),
+              ),
+            ),
+          ),
+        );
+        if (!groupExpanded) continue;
+        if (group == _UpgradeGroup.laboratory) {
+          for (final category in <(String, List<UpgradeTrackerItem>)>[
+            (
+              'Troops',
+              items
+                  .where(
+                    (item) =>
+                        item.category == UpgradeCategory.troops ||
+                        item.category == UpgradeCategory.darkTroops,
+                  )
                   .toList(growable: false),
             ),
-          );
-        }),
-      ],
+            (
+              'Spells',
+              items
+                  .where((item) => item.category == UpgradeCategory.spells)
+                  .toList(growable: false),
+            ),
+            (
+              'Siege Machines',
+              items
+                  .where((item) => item.category == UpgradeCategory.sieges)
+                  .toList(growable: false),
+            ),
+          ]) {
+            if (category.$2.isEmpty) continue;
+            slivers.add(
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(26, 4, 26, 6),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    category.$1,
+                    style: CKTypography.of(context, CKTextRole.rowTitle),
+                  ),
+                ),
+              ),
+            );
+            slivers.add(_upgradeGridSliver(category.$2));
+          }
+        } else {
+          slivers.add(_upgradeGridSliver(items));
+        }
+      }
+    }
+    slivers.add(const SliverToBoxAdapter(child: SizedBox(height: 28)));
+    return CustomScrollView(slivers: slivers);
+  }
+
+  Widget _upgradeGridSliver(List<UpgradeTrackerItem> items) => SliverPadding(
+    padding: const EdgeInsets.fromLTRB(26, 0, 26, 12),
+    sliver: SliverGrid.builder(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 76,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+      ),
+      itemCount: items.length,
+      itemBuilder: (context, index) => _UpgradeIconTile(
+        snapshot: widget.snapshot,
+        item: items[index],
+        clock: widget.clock,
+      ),
+    ),
+  );
+}
+
+class _UpgradeVillageViewData {
+  const _UpgradeVillageViewData({
+    required this.visibleItems,
+    required this.summary,
+    required this.groups,
+    required this.itemsByGroup,
+    required this.summaryByGroup,
+  });
+
+  final List<UpgradeTrackerItem> visibleItems;
+  final UpgradeCategorySummary summary;
+  final List<_UpgradeGroup> groups;
+  final Map<_UpgradeGroup, List<UpgradeTrackerItem>> itemsByGroup;
+  final Map<_UpgradeGroup, UpgradeCategorySummary> summaryByGroup;
+
+  factory _UpgradeVillageViewData.build(
+    UpgradeTrackerSnapshot snapshot,
+    UpgradeVillage village,
+    String normalizedQuery,
+  ) {
+    final displayItems = snapshot.itemsFor(village: village);
+    final completionItems = displayItems
+        .where((item) => item.category != UpgradeCategory.builders)
+        .toList(growable: false);
+    final visible = displayItems
+        .where(
+          (item) =>
+              normalizedQuery.isEmpty ||
+              item.name.toLowerCase().contains(normalizedQuery),
+        )
+        .toList(growable: false);
+    final groups = _availableUpgradeGroups(snapshot, village)
+        .where(
+          (group) =>
+              visible.any((item) => _upgradeGroupFor(item.category) == group),
+        )
+        .toList(growable: false);
+    final itemsByGroup = <_UpgradeGroup, List<UpgradeTrackerItem>>{};
+    final summaryByGroup = <_UpgradeGroup, UpgradeCategorySummary>{};
+    for (final group in groups) {
+      final items =
+          visible
+              .where((item) => _upgradeGroupFor(item.category) == group)
+              .toList()
+            ..sort((a, b) {
+              final id = a.id.compareTo(b.id);
+              if (id != 0) return id;
+              final name = a.name.compareTo(b.name);
+              return name != 0
+                  ? name
+                  : a.currentLevel.compareTo(b.currentLevel);
+            });
+      itemsByGroup[group] = items;
+      summaryByGroup[group] = snapshot.summaryForItems(
+        displayItems.where((item) => _upgradeGroupFor(item.category) == group),
+      );
+    }
+    return _UpgradeVillageViewData(
+      visibleItems: visible,
+      summary: snapshot.summaryForItems(completionItems),
+      groups: groups,
+      itemsByGroup: itemsByGroup,
+      summaryByGroup: summaryByGroup,
     );
   }
 }
 
+/*
 class _UpgradeGroupSection extends StatelessWidget {
   const _UpgradeGroupSection({
     required this.snapshot,
@@ -1527,39 +1836,42 @@ class _UpgradeCategoryGrid extends StatelessWidget {
 }
 
 class _UpgradeIconTile extends StatelessWidget {
+*/
+class _UpgradeIconTile extends StatelessWidget {
   const _UpgradeIconTile({
     required this.snapshot,
     required this.item,
-    required this.size,
+    this.clock,
   });
 
   final UpgradeTrackerSnapshot snapshot;
   final UpgradeTrackerItem item;
-  final double size;
+  final ValueListenable<DateTime>? clock;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => clock == null
+      ? _buildContent(context, DateTime.now())
+      : ValueListenableBuilder<DateTime>(
+          valueListenable: clock!,
+          builder: (context, now, _) => _buildContent(context, now),
+        );
+
+  Widget _buildContent(BuildContext context, DateTime now) {
     final scheme = Theme.of(context).colorScheme;
-    final active = snapshot.remainingActiveSeconds(item) > 0;
-    final border = item.isComplete
-        ? const Color(0xFFFFD75E)
-        : active
-        ? scheme.primary
-        : scheme.outlineVariant;
+    final active = snapshot.remainingActiveSeconds(item, now: now) > 0;
+    final border = active ? scheme.primary : scheme.outlineVariant;
     return Semantics(
       button: true,
       label:
           '${item.name}, level ${item.currentLevel} of ${item.targetLevel}${item.count > 1 ? ', ${item.count} buildings' : ''}',
       child: InkWell(
         onTap: () => _showUpgradeDetails(context, item),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(CKRadius.tile),
         child: Container(
-          width: size,
-          height: size,
           decoration: BoxDecoration(
             color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: border, width: item.isComplete ? 2.5 : 2),
+            borderRadius: BorderRadius.circular(CKRadius.tile),
+            border: Border.all(color: border, width: active ? 2 : 1),
           ),
           child: Stack(
             children: [
@@ -1581,18 +1893,18 @@ class _UpgradeIconTile extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     color: item.isComplete
-                        ? const Color(0xFFFFD75E)
+                        ? CKUpgradeColors.completion
                         : Colors.black.withValues(alpha: 0.86),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   alignment: Alignment.center,
                   child: Text(
                     '${item.currentLevel}',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: item.isComplete ? Colors.black : Colors.white,
-                      fontWeight: FontWeight.w700,
-                      height: 1,
-                    ),
+                    style: CKTypography.of(context, CKTextRole.compactLabel)
+                        .copyWith(
+                          color: item.isComplete ? Colors.black : Colors.white,
+                          height: 1,
+                        ),
                   ),
                 ),
               ),
@@ -1611,11 +1923,10 @@ class _UpgradeIconTile extends StatelessWidget {
                     ),
                     child: Text(
                       '×${item.count}',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        height: 1,
-                      ),
+                      style: CKTypography.of(
+                        context,
+                        CKTextRole.compactLabel,
+                      ).copyWith(color: Colors.white, height: 1),
                     ),
                   ),
                 ),
@@ -1801,13 +2112,14 @@ class _PlanToolButton extends StatelessWidget {
   }
 }
 
-class _PlanTab extends StatelessWidget {
+class _PlanTab extends StatefulWidget {
   const _PlanTab({
     required this.snapshot,
     required this.goldPassPercent,
     required this.preferences,
     required this.onLanesChanged,
     required this.controls,
+    required this.clock,
   });
 
   final UpgradeTrackerSnapshot snapshot;
@@ -1815,66 +2127,101 @@ class _PlanTab extends StatelessWidget {
   final UpgradePlanPreferences preferences;
   final ValueChanged<List<UpgradePlanLane>> onLanesChanged;
   final Widget controls;
+  final ValueListenable<DateTime> clock;
 
   @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
+  State<_PlanTab> createState() => _PlanTabState();
+}
+
+class _PlanTabState extends State<_PlanTab> {
+  late DateTime _startsAt;
+  late List<UpgradePlanLane> _allLanes;
+  late DateTime? _finish;
+  late String _preferenceSignature;
+
+  @override
+  void initState() {
+    super.initState();
+    _computePlan();
+    _notifyLanes();
+  }
+
+  @override
+  void didUpdateWidget(covariant _PlanTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final nextSignature = jsonEncode(widget.preferences.toJson());
+    if (!identical(oldWidget.snapshot, widget.snapshot) ||
+        oldWidget.snapshot.capturedAt != widget.snapshot.capturedAt ||
+        oldWidget.goldPassPercent != widget.goldPassPercent ||
+        nextSignature != _preferenceSignature) {
+      _computePlan();
+      _notifyLanes();
+    }
+  }
+
+  void _notifyLanes() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onLanesChanged(_allLanes);
+    });
+  }
+
+  void _computePlan() {
+    _startsAt = DateTime.now();
+    _preferenceSignature = jsonEncode(widget.preferences.toJson());
     List<UpgradePlanLane> build(UpgradeVillage village, UpgradeQueue queue) =>
         _buildPlannerLanes(
-          snapshot,
+          widget.snapshot,
           queue: queue,
           strategy: UpgradePlanStrategy.balanced,
           village: village,
-          startsAt: now,
-          goldPassPercent: goldPassPercent,
+          startsAt: _startsAt,
+          goldPassPercent: widget.goldPassPercent,
           preferences: _preferencesForQueue(
-            snapshot,
-            preferences,
+            widget.snapshot,
+            widget.preferences,
             village,
             queue,
           ),
         );
 
-    final homeBuilders = build(UpgradeVillage.home, UpgradeQueue.builders);
-    final laboratory = build(UpgradeVillage.home, UpgradeQueue.laboratory);
-    final pets = build(UpgradeVillage.home, UpgradeQueue.pets);
-    final builderBase = build(
-      UpgradeVillage.builderBase,
-      UpgradeQueue.builders,
-    );
-    final builderBaseLaboratory = build(
-      UpgradeVillage.builderBase,
-      UpgradeQueue.laboratory,
-    );
     final walls = _buildWallPlan(
-      snapshot,
-      preferences,
-      goldPassPercent: goldPassPercent,
-      startsAt: now,
+      widget.snapshot,
+      widget.preferences,
+      goldPassPercent: widget.goldPassPercent,
+      startsAt: _startsAt,
     );
-    final allLanes = [
-      ...homeBuilders,
-      ...laboratory,
-      ...pets,
-      ...builderBase,
-      ...builderBaseLaboratory,
+    _allLanes = [
+      ...build(UpgradeVillage.home, UpgradeQueue.builders),
+      ...build(UpgradeVillage.home, UpgradeQueue.laboratory),
+      ...build(UpgradeVillage.home, UpgradeQueue.pets),
+      ...build(UpgradeVillage.builderBase, UpgradeQueue.builders),
+      ...build(UpgradeVillage.builderBase, UpgradeQueue.laboratory),
       if (walls.isNotEmpty) UpgradePlanLane(index: 0, upgrades: walls),
     ];
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (context.mounted) onLanesChanged(allLanes);
-    });
+    _finish = _allLanes
+        .map((lane) => lane.finishesAt)
+        .whereType<DateTime>()
+        .fold<DateTime?>(null, (latest, date) {
+          return latest == null || date.isAfter(latest) ? date : latest;
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 2, 16, 30),
       children: [
         _ProgressHero(
-          snapshot: snapshot,
+          snapshot: widget.snapshot,
           village: UpgradeVillage.home,
-          summary: snapshot.overallSummary(village: UpgradeVillage.home),
+          summary: widget.snapshot.overallSummary(village: UpgradeVillage.home),
+          finish: _finish,
+          clock: widget.clock,
         ),
         const SizedBox(height: 12),
-        controls,
+        widget.controls,
         const SizedBox(height: 12),
-        _LootOutlookCard(lanes: allLanes, startsAt: now),
+        _LootOutlookCard(lanes: _allLanes, startsAt: _startsAt),
       ],
     );
   }
@@ -2917,11 +3264,9 @@ List<_UpgradeGroup> _availableUpgradeGroups(
   UpgradeVillage village,
 ) => _UpgradeGroup.values
     .where(
-      (group) =>
-          group != _UpgradeGroup.helpers &&
-          snapshot
-              .itemsFor(village: village)
-              .any((item) => _upgradeGroupFor(item.category) == group),
+      (group) => snapshot
+          .itemsFor(village: village)
+          .any((item) => _upgradeGroupFor(item.category) == group),
     )
     .toList(growable: false);
 
@@ -2957,6 +3302,14 @@ String _upgradeGroupLabel(_UpgradeGroup group) => switch (group) {
   _UpgradeGroup.walls => 'Walls',
   _UpgradeGroup.helpers => 'Helpers',
 };
+
+String _upgradeGroupLabelForVillage(
+  _UpgradeGroup group,
+  UpgradeVillage village,
+) {
+  if (group != _UpgradeGroup.helpers) return _upgradeGroupLabel(group);
+  return village == UpgradeVillage.home ? 'Builders & Helpers' : 'Builders';
+}
 
 String _groupImage(
   UpgradeTrackerSnapshot snapshot,
@@ -2996,29 +3349,9 @@ enum _CollectionFilter { all, owned, missing }
 enum _CollectionSort { nameAscending, nameDescending, newest, oldest }
 
 class _CollectionTab extends StatefulWidget {
-  const _CollectionTab({
-    required this.snapshot,
-    required this.filter,
-    required this.query,
-    required this.village,
-    required this.sort,
-    required this.searchController,
-    required this.onQueryChanged,
-    required this.onFilterChanged,
-    required this.onVillageChanged,
-    required this.onSortChanged,
-  });
+  const _CollectionTab({required this.snapshot});
 
   final UpgradeTrackerSnapshot snapshot;
-  final _CollectionFilter filter;
-  final String query;
-  final UpgradeVillage? village;
-  final _CollectionSort sort;
-  final TextEditingController searchController;
-  final ValueChanged<String> onQueryChanged;
-  final ValueChanged<_CollectionFilter> onFilterChanged;
-  final ValueChanged<UpgradeVillage?> onVillageChanged;
-  final ValueChanged<_CollectionSort> onSortChanged;
 
   @override
   State<_CollectionTab> createState() => _CollectionTabState();
@@ -3026,209 +3359,298 @@ class _CollectionTab extends StatefulWidget {
 
 class _CollectionTabState extends State<_CollectionTab> {
   final _expanded = <UpgradeCollectionType>{UpgradeCollectionType.skins};
+  final _searchController = TextEditingController();
+  _CollectionFilter _filter = _CollectionFilter.all;
+  _CollectionSort _sort = _CollectionSort.nameAscending;
+  UpgradeVillage? _village;
+  String _query = '';
   bool _showFilters = false;
+  late bool _supportsVillage;
+  late Map<UpgradeCollectionType, List<UpgradeCollectionItem>> _itemsByType;
+  late List<_CollectionSectionViewData> _sections;
+
+  @override
+  void initState() {
+    super.initState();
+    _indexSnapshot();
+    _rebuildSections();
+  }
+
+  @override
+  void didUpdateWidget(covariant _CollectionTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.snapshot, widget.snapshot)) {
+      _indexSnapshot();
+      _rebuildSections();
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _indexSnapshot() {
+    _itemsByType = {for (final type in UpgradeCollectionType.values) type: []};
+    var hasHome = false;
+    var hasBuilderBase = false;
+    for (final item in widget.snapshot.collections) {
+      _itemsByType[item.type]!.add(item);
+      hasHome |= item.village == UpgradeVillage.home;
+      hasBuilderBase |= item.village == UpgradeVillage.builderBase;
+    }
+    _supportsVillage = hasHome && hasBuilderBase;
+  }
+
+  void _update(VoidCallback change) {
+    setState(() {
+      change();
+      _rebuildSections();
+    });
+  }
+
+  void _rebuildSections() {
+    final normalized = _query.trim().toLowerCase();
+    _sections = [];
+    for (final type in UpgradeCollectionType.values) {
+      final all = _itemsByType[type]!;
+      if (all.isEmpty) continue;
+      final scoped = all
+          .where(
+            (item) =>
+                _village == null ||
+                type == UpgradeCollectionType.capitalHouseParts ||
+                item.village == _village,
+          )
+          .toList(growable: false);
+      if (scoped.isEmpty) continue;
+      final visible = scoped.where((item) {
+        if (_filter == _CollectionFilter.owned && !item.owned) return false;
+        if (_filter == _CollectionFilter.missing && item.owned) return false;
+        return normalized.isEmpty ||
+            item.name.toLowerCase().contains(normalized);
+      }).toList();
+      visible.sort(
+        (a, b) => switch (_sort) {
+          _CollectionSort.nameAscending => a.name.toLowerCase().compareTo(
+            b.name.toLowerCase(),
+          ),
+          _CollectionSort.nameDescending => b.name.toLowerCase().compareTo(
+            a.name.toLowerCase(),
+          ),
+          _CollectionSort.newest => b.id.compareTo(a.id),
+          _CollectionSort.oldest => a.id.compareTo(b.id),
+        },
+      );
+      _sections.add(
+        _CollectionSectionViewData(
+          type: type,
+          scoped: scoped,
+          visible: visible,
+          owned: scoped.where((item) => item.owned).length,
+          preview:
+              scoped.where((item) => item.owned).firstOrNull ?? scoped.first,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final normalized = widget.query.trim().toLowerCase();
-    final supportsVillage =
-        widget.snapshot.collections.any(
-          (item) => item.village == UpgradeVillage.home,
-        ) &&
-        widget.snapshot.collections.any(
-          (item) => item.village == UpgradeVillage.builderBase,
-        );
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(14, 8, 14, 28),
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: AppSearchField(
-                controller: widget.searchController,
-                query: widget.query,
-                hintText: 'Search collection',
-                onChanged: widget.onQueryChanged,
-                useGlass: false,
+    final l10n = AppLocalizations.of(context)!;
+    final slivers = <Widget>[
+      SliverPadding(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+        sliver: SliverToBoxAdapter(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: AppSearchField(
+                      controller: _searchController,
+                      query: _query,
+                      hintText: l10n.upgradeTrackerSearchCollection,
+                      onChanged: (value) => _update(() => _query = value),
+                      useGlass: false,
+                    ),
+                  ),
+                  const SizedBox(width: CKSpacing.sm),
+                  IconButton.filledTonal(
+                    tooltip: _showFilters
+                        ? l10n.upgradeTrackerHideFilters
+                        : l10n.upgradeTrackerShowFilters,
+                    onPressed: () =>
+                        setState(() => _showFilters = !_showFilters),
+                    icon: Icon(
+                      _showFilters
+                          ? Icons.filter_list_off_rounded
+                          : Icons.filter_list_rounded,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 8),
-            IconButton.filledTonal(
-              tooltip: _showFilters ? 'Hide filters' : 'Show filters',
-              onPressed: () => setState(() => _showFilters = !_showFilters),
-              icon: Icon(
-                _showFilters
-                    ? Icons.filter_list_off_rounded
-                    : Icons.filter_list_rounded,
-              ),
-            ),
-          ],
-        ),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOutCubic,
-          alignment: Alignment.topCenter,
-          child: _showFilters
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Wrap(
-                              spacing: 6,
-                              runSpacing: 6,
-                              children: _CollectionFilter.values
-                                  .map(
-                                    (filter) => ChoiceChip(
-                                      label: Text(switch (filter) {
-                                        _CollectionFilter.all => 'All',
-                                        _CollectionFilter.owned => 'Owned',
-                                        _CollectionFilter.missing => 'Missing',
-                                      }),
-                                      selected: widget.filter == filter,
-                                      onSelected: (_) =>
-                                          widget.onFilterChanged(filter),
-                                      visualDensity: VisualDensity.compact,
-                                    ),
-                                  )
-                                  .toList(growable: false),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          FilterDropdown(
-                            sortBy: widget.sort.name,
-                            maxWidth: 118,
-                            sortByOptions: const {
-                              'Name A–Z': 'nameAscending',
-                              'Name Z–A': 'nameDescending',
-                              'Newest': 'newest',
-                              'Oldest': 'oldest',
-                            },
-                            updateSortBy: (value) => widget.onSortChanged(
-                              _CollectionSort.values.byName(value),
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (supportsVillage) ...[
-                        const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 6,
+              AnimatedSize(
+                duration: CKMotion.durationOf(context, CKMotion.standard),
+                curve: CKMotion.standardCurve,
+                alignment: Alignment.topCenter,
+                child: !_showFilters
+                    ? const SizedBox(width: double.infinity)
+                    : Padding(
+                        padding: const EdgeInsets.only(top: CKSpacing.sm),
+                        child: Column(
                           children: [
-                            ChoiceChip(
-                              label: const Text('All villages'),
-                              selected: widget.village == null,
-                              onSelected: (_) => widget.onVillageChanged(null),
-                              visualDensity: VisualDensity.compact,
+                            CKSegmentedControl<_CollectionFilter>(
+                              values: _CollectionFilter.values,
+                              labels: [
+                                l10n.upgradeTrackerFilterAll,
+                                l10n.upgradeTrackerFilterOwned,
+                                l10n.upgradeTrackerFilterMissing,
+                              ],
+                              selected: _filter,
+                              density: CKControlDensity.compact,
+                              onChanged: (value) =>
+                                  _update(() => _filter = value),
                             ),
-                            ChoiceChip(
-                              label: const Text('Home'),
-                              selected: widget.village == UpgradeVillage.home,
-                              onSelected: (_) =>
-                                  widget.onVillageChanged(UpgradeVillage.home),
-                              visualDensity: VisualDensity.compact,
-                            ),
-                            ChoiceChip(
-                              label: const Text('Builder Base'),
-                              selected:
-                                  widget.village == UpgradeVillage.builderBase,
-                              onSelected: (_) => widget.onVillageChanged(
-                                UpgradeVillage.builderBase,
-                              ),
-                              visualDensity: VisualDensity.compact,
+                            const SizedBox(height: CKSpacing.sm),
+                            Row(
+                              children: [
+                                if (_supportsVillage)
+                                  Expanded(
+                                    child: CKSegmentedControl<UpgradeVillage?>(
+                                      values: const [
+                                        null,
+                                        UpgradeVillage.home,
+                                        UpgradeVillage.builderBase,
+                                      ],
+                                      labels: [
+                                        l10n.upgradeTrackerFilterAll,
+                                        l10n.upgradeTrackerHomeVillage,
+                                        l10n.upgradeTrackerBuilderBase,
+                                      ],
+                                      selected: _village,
+                                      density: CKControlDensity.compact,
+                                      onChanged: (value) =>
+                                          _update(() => _village = value),
+                                    ),
+                                  ),
+                                if (_supportsVillage)
+                                  const SizedBox(width: CKSpacing.sm),
+                                FilterDropdown(
+                                  sortBy: _sort.name,
+                                  maxWidth: 118,
+                                  sortByOptions: const {
+                                    'Name A–Z': 'nameAscending',
+                                    'Name Z–A': 'nameDescending',
+                                    'Newest': 'newest',
+                                    'Oldest': 'oldest',
+                                  },
+                                  updateSortBy: (value) => _update(
+                                    () => _sort = _CollectionSort.values.byName(
+                                      value,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ],
-                  ),
-                )
-              : const SizedBox(width: double.infinity),
+                      ),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 10),
-        ...UpgradeCollectionType.values.map((type) {
-          final all = widget.snapshot.collections
-              .where((item) => item.type == type)
-              .toList(growable: false);
-          if (all.isEmpty) return const SizedBox.shrink();
-          final scoped = all
-              .where(
-                (item) =>
-                    widget.village == null ||
-                    type == UpgradeCollectionType.capitalHouseParts ||
-                    item.village == widget.village,
-              )
-              .toList(growable: false);
-          if (scoped.isEmpty) return const SizedBox.shrink();
-          final visible =
-              scoped.where((item) {
-                if (widget.filter == _CollectionFilter.owned && !item.owned) {
-                  return false;
-                }
-                if (widget.filter == _CollectionFilter.missing && item.owned) {
-                  return false;
-                }
-                return normalized.isEmpty ||
-                    item.name.toLowerCase().contains(normalized);
-              }).toList()..sort(
-                (a, b) => switch (widget.sort) {
-                  _CollectionSort.nameAscending =>
-                    a.name.toLowerCase().compareTo(b.name.toLowerCase()),
-                  _CollectionSort.nameDescending =>
-                    b.name.toLowerCase().compareTo(a.name.toLowerCase()),
-                  _CollectionSort.newest => b.id.compareTo(a.id),
-                  _CollectionSort.oldest => a.id.compareTo(b.id),
-                },
-              );
-          final owned = scoped.where((item) => item.owned).length;
-          final expanded = _expanded.contains(type);
-          final preview =
-              scoped.where((item) => item.owned).firstOrNull ?? scoped.first;
-          return _TrackerCollapsibleCard(
-            title: _collectionLabel(type),
-            imageUrl: preview.imageUrl,
-            completion: owned / scoped.length,
-            countLabel: '$owned of ${scoped.length} owned',
-            expanded: expanded,
-            onToggle: () => setState(() {
-              expanded ? _expanded.remove(type) : _expanded.add(type);
-            }),
-            onSummaryTap: () => _showCollectionSectionSummary(
-              context,
-              _collectionLabel(type),
-              items: scoped,
+      ),
+    ];
+
+    for (final section in _sections) {
+      final expanded = _expanded.contains(section.type);
+      final title = _collectionLabel(section.type);
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          sliver: SliverToBoxAdapter(
+            child: _TrackerCollapsibleCard(
+              title: title,
+              imageUrl: section.preview.imageUrl,
+              completion: section.owned / section.scoped.length,
+              countLabel: l10n.upgradeTrackerOwnedCount(
+                section.owned,
+                section.scoped.length,
+              ),
+              expanded: expanded,
+              onToggle: () => setState(() {
+                expanded
+                    ? _expanded.remove(section.type)
+                    : _expanded.add(section.type);
+              }),
+              onSummaryTap: () => _showCollectionSectionSummary(
+                context,
+                title,
+                items: section.scoped,
+              ),
+              showContent: false,
+              child: const SizedBox.shrink(),
             ),
-            child: visible.isEmpty
-                ? const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text('No matching items'),
-                  )
-                : GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(top: 4),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: type == UpgradeCollectionType.sceneries
-                          ? 2
-                          : 3,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: type == UpgradeCollectionType.sceneries
-                          ? 1.12
-                          : 0.84,
-                    ),
-                    itemCount: visible.length,
-                    itemBuilder: (context, index) =>
-                        _CollectionTile(item: visible[index]),
-                  ),
-          );
-        }),
-      ],
-    );
+          ),
+        ),
+      );
+      if (!expanded) continue;
+      if (section.visible.isEmpty) {
+        slivers.add(
+          SliverPadding(
+            padding: const EdgeInsets.all(CKSpacing.lg),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                l10n.upgradeTrackerNoMatchingItems,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        );
+        continue;
+      }
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(18, 4, 18, 14),
+          sliver: SliverGrid.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: section.type == UpgradeCollectionType.sceneries
+                  ? 2
+                  : 3,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 10,
+              childAspectRatio: section.type == UpgradeCollectionType.sceneries
+                  ? 1.12
+                  : 0.84,
+            ),
+            itemCount: section.visible.length,
+            itemBuilder: (context, index) =>
+                _CollectionTile(item: section.visible[index]),
+          ),
+        ),
+      );
+    }
+    slivers.add(const SliverToBoxAdapter(child: SizedBox(height: 28)));
+    return CustomScrollView(slivers: slivers);
   }
+}
+
+class _CollectionSectionViewData {
+  const _CollectionSectionViewData({
+    required this.type,
+    required this.scoped,
+    required this.visible,
+    required this.owned,
+    required this.preview,
+  });
+
+  final UpgradeCollectionType type;
+  final List<UpgradeCollectionItem> scoped;
+  final List<UpgradeCollectionItem> visible;
+  final int owned;
+  final UpgradeCollectionItem preview;
 }
 
 class _CollectionTile extends StatelessWidget {
@@ -3238,98 +3660,58 @@ class _CollectionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Semantics(
-      button: true,
-      label:
-          '${_collectionDisplayName(item)}, ${item.owned ? 'collected' : 'missing'}',
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        onTap: () => _showCollectionPreview(context, item),
-        child: Padding(
-          padding: const EdgeInsets.all(3),
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppRadius.chip),
-                  ),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      ColorFiltered(
-                        colorFilter: item.owned
-                            ? const ColorFilter.mode(
-                                Colors.transparent,
-                                BlendMode.dst,
-                              )
-                            : const ColorFilter.matrix(<double>[
-                                0.2126,
-                                0.7152,
-                                0.0722,
-                                0,
-                                0,
-                                0.2126,
-                                0.7152,
-                                0.0722,
-                                0,
-                                0,
-                                0.2126,
-                                0.7152,
-                                0.0722,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0.56,
-                                0,
-                              ]),
-                        child: MobileWebImage(
-                          imageUrl: item.imageUrl,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      if (item.count > 1)
-                        Positioned(
-                          right: 2,
-                          top: 2,
-                          child: _Pill(text: '×${item.count}'),
-                        ),
-                      if (item.type == UpgradeCollectionType.skins &&
-                          item.meta?['tier'] != null)
-                        Positioned(
-                          right: 4,
-                          top: 4,
-                          child: _CollectionTierCorner(
-                            color: _skinTierColor(
-                              item.meta!['tier'].toString(),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
+    final l10n = AppLocalizations.of(context)!;
+    final image = MobileWebImage(imageUrl: item.imageUrl, fit: BoxFit.contain);
+    final artwork = item.owned
+        ? image
+        : ColorFiltered(
+            colorFilter: const ColorFilter.matrix(<double>[
+              0.2126,
+              0.7152,
+              0.0722,
+              0,
+              0,
+              0.2126,
+              0.7152,
+              0.0722,
+              0,
+              0,
+              0.2126,
+              0.7152,
+              0.0722,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0.56,
+              0,
+            ]),
+            child: image,
+          );
+    return CKCollectionTile(
+      image: Stack(
+        fit: StackFit.expand,
+        children: [
+          Padding(padding: const EdgeInsets.all(2), child: artwork),
+          if (item.count > 1)
+            Positioned(right: 2, top: 2, child: _Pill(text: '×${item.count}')),
+          if (item.type == UpgradeCollectionType.skins &&
+              item.meta?['tier'] != null)
+            Positioned(
+              right: 4,
+              top: 4,
+              child: _CollectionTierCorner(
+                color: _skinTierColor(item.meta!['tier'].toString()),
               ),
-              const SizedBox(height: 5),
-              Text(
-                _collectionDisplayName(item),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: item.owned
-                      ? scheme.onSurface
-                      : scheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+        ],
       ),
+      label: _collectionDisplayName(item),
+      owned: item.owned,
+      semanticLabel:
+          '${_collectionDisplayName(item)}, ${item.owned ? l10n.upgradeTrackerCollected : l10n.upgradeTrackerMissing}',
+      onTap: () => _showCollectionPreview(context, item),
     );
   }
 }
@@ -4442,48 +4824,119 @@ class _TrackerEmptyState extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.body,
+    this.detail,
+    this.stickerUrl,
     this.actionLabel,
     this.onAction,
+    this.secondaryActionLabel,
+    this.onSecondaryAction,
   });
 
   final IconData icon;
   final String title;
   final String body;
+  final String? detail;
+  final String? stickerUrl;
   final String? actionLabel;
   final VoidCallback? onAction;
+  final String? secondaryActionLabel;
+  final VoidCallback? onSecondaryAction;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(28),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 42, color: scheme.onSurfaceVariant),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(CKSpacing.xl),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: CKSectionPanel(
+            padding: const EdgeInsets.all(CKSpacing.xl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (stickerUrl != null)
+                  MobileWebImage(
+                    imageUrl: stickerUrl!,
+                    width: 118,
+                    height: 104,
+                    fit: BoxFit.contain,
+                  )
+                else
+                  Icon(icon, size: 48, color: scheme.onSurfaceVariant),
+                const SizedBox(height: CKSpacing.lg),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: CKTypography.of(context, CKTextRole.sectionTitle),
+                ),
+                const SizedBox(height: CKSpacing.sm),
+                Text(
+                  body,
+                  textAlign: TextAlign.center,
+                  style: CKTypography.of(
+                    context,
+                    CKTextRole.body,
+                  ).copyWith(color: scheme.onSurfaceVariant),
+                ),
+                if (detail != null) ...[
+                  const SizedBox(height: CKSpacing.md),
+                  Container(
+                    padding: const EdgeInsets.all(CKSpacing.md),
+                    decoration: BoxDecoration(
+                      color: scheme.surfaceContainerHighest.withValues(
+                        alpha: 0.32,
+                      ),
+                      borderRadius: BorderRadius.circular(CKRadius.control),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.info_outline_rounded,
+                          size: 20,
+                          color: scheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: CKSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            detail!,
+                            style: CKTypography.of(
+                              context,
+                              CKTextRole.metadata,
+                            ).copyWith(color: scheme.onSurfaceVariant),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                if (actionLabel != null && onAction != null) ...[
+                  const SizedBox(height: CKSpacing.lg),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      onPressed: onAction,
+                      icon: const Icon(Icons.content_paste_rounded),
+                      label: Text(actionLabel!),
+                    ),
+                  ),
+                ],
+                if (secondaryActionLabel != null &&
+                    onSecondaryAction != null) ...[
+                  const SizedBox(height: CKSpacing.sm),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton.icon(
+                      onPressed: onSecondaryAction,
+                      icon: const Icon(Icons.open_in_new_rounded),
+                      label: Text(secondaryActionLabel!),
+                    ),
+                  ),
+                ],
+              ],
             ),
-            const SizedBox(height: 5),
-            Text(
-              body,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: scheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            if (actionLabel != null && onAction != null) ...[
-              const SizedBox(height: 14),
-              FilledButton(onPressed: onAction, child: Text(actionLabel!)),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -4497,6 +4950,7 @@ class _TrackerAccountOption {
     required this.subtitle,
     this.townHallLevel = 0,
     this.builderHallLevel = 0,
+    this.capturedAt,
   });
 
   final String tag;
@@ -4504,6 +4958,7 @@ class _TrackerAccountOption {
   final String subtitle;
   final int townHallLevel;
   final int builderHallLevel;
+  final DateTime? capturedAt;
 }
 
 class _AccountPickerSheet extends StatefulWidget {
@@ -4526,6 +4981,7 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final normalized = _query.trim().toLowerCase();
     final accounts = widget.accounts
         .where(
@@ -4545,14 +5001,12 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
               children: [
                 Expanded(
                   child: Text(
-                    'Accounts',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w900,
-                    ),
+                    l10n.accountsManageTitle,
+                    style: CKTypography.of(context, CKTextRole.screenTitle),
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Close',
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close_rounded),
                 ),
@@ -4563,9 +5017,9 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
             child: TextField(
               onChanged: (value) => setState(() => _query = value),
-              decoration: const InputDecoration(
-                hintText: 'Find an account',
-                prefixIcon: Icon(Icons.search_rounded),
+              decoration: InputDecoration(
+                hintText: l10n.upgradeTrackerChooseAccount,
+                prefixIcon: const Icon(Icons.search_rounded),
               ),
             ),
           ),
@@ -4606,8 +5060,13 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   subtitle: Text(
-                    '${account.tag} · ${account.subtitle}',
-                    maxLines: 1,
+                    [
+                      '${account.tag} · ${account.subtitle}',
+                      if (account.capturedAt case final capturedAt?)
+                        _snapshotAgeLabel(context, capturedAt),
+                    ].join('\n'),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   trailing: selected
                       ? Icon(
@@ -4631,7 +5090,7 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
                 ),
                 onPressed: widget.onImport,
                 icon: const Icon(Icons.content_paste_rounded),
-                label: const Text('Paste account JSON'),
+                label: Text(l10n.upgradeTrackerImportAction),
               ),
             ),
           ),
@@ -4641,11 +5100,14 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
   }
 }
 
-List<String> _activeBoostLabels(UpgradeTrackerSnapshot snapshot) {
+List<String> _activeBoostLabels(
+  UpgradeTrackerSnapshot snapshot, {
+  DateTime? now,
+}) {
   final boosts = snapshot.boosts;
   final labels = <String>[];
   void addTimed(String name, int seconds) {
-    final remaining = snapshot.remainingCapturedSeconds(seconds);
+    final remaining = snapshot.remainingCapturedSeconds(seconds, now: now);
     if (remaining > 0) labels.add('$name · ${_duration(remaining)}');
   }
 
@@ -4657,6 +5119,7 @@ List<String> _activeBoostLabels(UpgradeTrackerSnapshot snapshot) {
   addTimed('Pet Potion', boosts.petConsumableSeconds);
   final clockCooldown = snapshot.remainingCapturedSeconds(
     boosts.clockTowerCooldownSeconds,
+    now: now,
   );
   if (boosts.clockTowerBoostSeconds <= 0 && clockCooldown > 0) {
     labels.add('Clock Tower · Ready in ${_duration(clockCooldown)}');
@@ -4675,9 +5138,10 @@ List<String> _activeBoostLabels(UpgradeTrackerSnapshot snapshot) {
       '${boosts.labTimeReductionPercent}% time',
     );
   }
-  final now = DateTime.now();
+  final effectiveNow = now ?? DateTime.now();
   for (final event in snapshot.events) {
-    if (!now.isBefore(event.startsAt) && now.isBefore(event.endsAt)) {
+    if (!effectiveNow.isBefore(event.startsAt) &&
+        effectiveNow.isBefore(event.endsAt)) {
       labels.add(event.name);
     }
   }
@@ -4744,6 +5208,7 @@ List<UpgradePlanLane> _buildPlannerLanes(
   required DateTime startsAt,
   required int goldPassPercent,
   required UpgradePlanPreferences preferences,
+  Set<String>? includedItemKeys,
 }) {
   final lanes = snapshot.buildPlan(
     queue: queue,
@@ -4752,12 +5217,15 @@ List<UpgradePlanLane> _buildPlannerLanes(
     startsAt: startsAt,
     goldPassPercent: goldPassPercent,
     preferences: preferences,
+    includedItemKeys: includedItemKeys,
   );
   final activeItems =
       snapshot
           .itemsFor(village: village, queue: queue)
           .where(
             (item) =>
+                (includedItemKeys == null ||
+                    includedItemKeys.contains(item.planKey)) &&
                 item.steps.isNotEmpty &&
                 snapshot.remainingActiveSeconds(item, now: startsAt) > 0,
           )
@@ -6215,8 +6683,24 @@ class _PlanComparisonCard extends StatelessWidget {
 void _showUpgradeSectionSummary(
   BuildContext context,
   String title,
-  UpgradeCategorySummary summary,
-) {
+  UpgradeCategorySummary summary, {
+  UpgradeTrackerSnapshot? snapshot,
+  UpgradeVillage? village,
+  int goldPassPercent = 0,
+  UpgradePlanPreferences preferences = const UpgradePlanPreferences(),
+}) {
+  if (snapshot != null && village != null) {
+    _showVillageUpgradeSummary(
+      context,
+      title,
+      summary,
+      snapshot: snapshot,
+      village: village,
+      goldPassPercent: goldPassPercent,
+      preferences: preferences,
+    );
+    return;
+  }
   showDialog<void>(
     context: context,
     builder: (context) => Dialog(
@@ -6293,6 +6777,264 @@ void _showUpgradeSectionSummary(
       ),
     ),
   );
+}
+
+void _showVillageUpgradeSummary(
+  BuildContext context,
+  String title,
+  UpgradeCategorySummary overall, {
+  required UpgradeTrackerSnapshot snapshot,
+  required UpgradeVillage village,
+  required int goldPassPercent,
+  required UpgradePlanPreferences preferences,
+}) {
+  final l10n = AppLocalizations.of(context)!;
+  final startsAt = DateTime.now();
+  _VillageUpgradeBreakdown? timedSection(
+    String label,
+    UpgradeQueue queue, {
+    String? preferredImageName,
+  }) {
+    final items = snapshot
+        .itemsFor(village: village, queue: queue)
+        .where((item) => item.category != UpgradeCategory.builders)
+        .toList(growable: false);
+    if (items.isEmpty) return null;
+    final lanes = _buildPlannerLanes(
+      snapshot,
+      queue: queue,
+      strategy: UpgradePlanStrategy.balanced,
+      village: village,
+      startsAt: startsAt,
+      goldPassPercent: goldPassPercent,
+      preferences: _preferencesForQueue(snapshot, preferences, village, queue),
+      includedItemKeys: items.map((item) => item.planKey).toSet(),
+    );
+    final finish = lanes
+        .map((lane) => lane.finishesAt)
+        .whereType<DateTime>()
+        .fold<DateTime?>(null, (latest, date) {
+          return latest == null || date.isAfter(latest) ? date : latest;
+        });
+    final image = preferredImageName == null
+        ? items.first.imageUrl
+        : items
+                  .where((item) => item.name == preferredImageName)
+                  .firstOrNull
+                  ?.imageUrl ??
+              items.first.imageUrl;
+    return _VillageUpgradeBreakdown(
+      label: label,
+      imageUrl: image,
+      summary: snapshot.summaryForItems(items),
+      finishesAt: finish,
+    );
+  }
+
+  _VillageUpgradeBreakdown? untimedSection(
+    String label,
+    UpgradeCategory category,
+  ) {
+    final items = snapshot.itemsFor(village: village, category: category);
+    if (items.isEmpty) return null;
+    return _VillageUpgradeBreakdown(
+      label: label,
+      imageUrl: items.first.imageUrl,
+      summary: snapshot.summaryForItems(items, category: category),
+    );
+  }
+
+  final sections = <_VillageUpgradeBreakdown?>[
+    timedSection(
+      l10n.upgradeTrackerBuildersCount(snapshot.buildersFor(village)),
+      UpgradeQueue.builders,
+      preferredImageName: "Builder's Hut",
+    ),
+    timedSection(
+      l10n.upgradeTrackerLaboratory,
+      UpgradeQueue.laboratory,
+      preferredImageName: village == UpgradeVillage.home
+          ? 'Laboratory'
+          : 'Star Laboratory',
+    ),
+    if (village == UpgradeVillage.home)
+      timedSection(
+        l10n.upgradeTrackerPets,
+        UpgradeQueue.pets,
+        preferredImageName: 'Pet House',
+      ),
+    untimedSection(l10n.upgradeTrackerWalls, UpgradeCategory.walls),
+    if (village == UpgradeVillage.home)
+      untimedSection(l10n.upgradeTrackerEquipment, UpgradeCategory.equipment),
+  ].whereType<_VillageUpgradeBreakdown>().toList(growable: false);
+
+  showDialog<void>(
+    context: context,
+    builder: (context) => Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 520,
+          maxHeight: MediaQuery.sizeOf(context).height * 0.88,
+        ),
+        child: CustomScrollView(
+          shrinkWrap: true,
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: CKTypography.of(
+                              context,
+                              CKTextRole.screenTitle,
+                            ),
+                          ),
+                          const SizedBox(height: CKSpacing.xs),
+                          Text(
+                            '${(overall.completion * 100).toStringAsFixed(1)}% complete · ${overall.levelsRemaining} levels left',
+                            style: CKTypography.of(context, CKTextRole.metadata)
+                                .copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: MaterialLocalizations.of(
+                        context,
+                      ).closeButtonTooltip,
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+              sliver: SliverList.separated(
+                itemCount: sections.length,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: CKSpacing.sm),
+                itemBuilder: (context, index) => _VillageBreakdownCard(
+                  data: sections[index],
+                  startsAt: startsAt,
+                  l10n: l10n,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+class _VillageUpgradeBreakdown {
+  const _VillageUpgradeBreakdown({
+    required this.label,
+    required this.imageUrl,
+    required this.summary,
+    this.finishesAt,
+  });
+
+  final String label;
+  final String imageUrl;
+  final UpgradeCategorySummary summary;
+  final DateTime? finishesAt;
+}
+
+class _VillageBreakdownCard extends StatelessWidget {
+  const _VillageBreakdownCard({
+    required this.data,
+    required this.startsAt,
+    required this.l10n,
+  });
+
+  final _VillageUpgradeBreakdown data;
+  final DateTime startsAt;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final costs = data.summary.costs.entries.toList()
+      ..sort(
+        (a, b) => _resourceWeight(a.key).compareTo(_resourceWeight(b.key)),
+      );
+    return CKSectionPanel(
+      padding: const EdgeInsets.all(CKSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _AspectSafeImage(imageUrl: data.imageUrl, width: 46, height: 42),
+              const SizedBox(width: CKSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data.label,
+                      style: CKTypography.of(context, CKTextRole.sectionTitle),
+                    ),
+                    Text(
+                      data.finishesAt == null
+                          ? l10n.upgradeTrackerLevelsRemaining(
+                              data.summary.levelsRemaining,
+                            )
+                          : l10n.upgradeTrackerCompletesOn(
+                              DateFormat.yMMMd(
+                                Localizations.localeOf(context).toString(),
+                              ).format(data.finishesAt!),
+                              _duration(
+                                data.finishesAt!.difference(startsAt).inSeconds,
+                              ),
+                            ),
+                      style: CKTypography.of(
+                        context,
+                        CKTextRole.metadata,
+                      ).copyWith(color: scheme.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (costs.isNotEmpty) ...[
+            const SizedBox(height: CKSpacing.md),
+            Wrap(
+              spacing: CKSpacing.md,
+              runSpacing: CKSpacing.sm,
+              children: costs
+                  .map(
+                    (cost) => CKResourceCost(
+                      icon: MobileWebImage(
+                        imageUrl: _resourceImage(cost.key),
+                        fit: BoxFit.contain,
+                      ),
+                      amount: _compact(cost.value),
+                      label: _resourceLabel(cost.key),
+                    ),
+                  )
+                  .toList(growable: false),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 void _showCollectionSectionSummary(
@@ -7446,11 +8188,13 @@ class _SceneryMusicButtonState extends State<_SceneryMusicButton> {
         if (handle != null && _soloud.getIsValidVoiceHandle(handle)) {
           _soloud.setPause(handle, true);
         }
+        _stopPositionTimer();
         if (mounted) setState(() => _playing = false);
       } else {
         final existing = _handle;
         if (existing != null && _soloud.getIsValidVoiceHandle(existing)) {
           _soloud.setPause(existing, false);
+          _startPositionTimer();
           if (mounted) setState(() => _playing = true);
           return;
         }
@@ -7471,24 +8215,11 @@ class _SceneryMusicButtonState extends State<_SceneryMusicButton> {
           ),
         );
         await session.setActive(true);
-        _source ??= await _soloud.loadUrl(widget.url, mode: LoadMode.memory);
+        _source ??= await _soloud.loadUrl(widget.url, mode: LoadMode.disk);
         _handle = _soloud.play(_source!);
         _soloud.setVolume(_handle!, 1);
         _duration = _soloud.getLength(_source!);
-        _positionTimer ??= Timer.periodic(const Duration(milliseconds: 250), (
-          _,
-        ) {
-          final handle = _handle;
-          if (!mounted || handle == null || !_soloud.isInitialized) return;
-          if (!_soloud.getIsValidVoiceHandle(handle)) {
-            setState(() {
-              _playing = false;
-              _position = Duration.zero;
-            });
-            return;
-          }
-          setState(() => _position = _soloud.getPosition(handle));
-        });
+        _startPositionTimer();
         if (mounted) {
           setState(() {
             _playing = true;
@@ -7497,6 +8228,7 @@ class _SceneryMusicButtonState extends State<_SceneryMusicButton> {
         }
       }
     } catch (_) {
+      _stopPositionTimer();
       if (mounted) {
         setState(() {
           _available = false;
@@ -7504,6 +8236,27 @@ class _SceneryMusicButtonState extends State<_SceneryMusicButton> {
         });
       }
     }
+  }
+
+  void _startPositionTimer() {
+    _positionTimer ??= Timer.periodic(const Duration(milliseconds: 250), (_) {
+      final handle = _handle;
+      if (!mounted || handle == null || !_soloud.isInitialized) return;
+      if (!_soloud.getIsValidVoiceHandle(handle)) {
+        _stopPositionTimer();
+        setState(() {
+          _playing = false;
+          _position = Duration.zero;
+        });
+        return;
+      }
+      setState(() => _position = _soloud.getPosition(handle));
+    });
+  }
+
+  void _stopPositionTimer() {
+    _positionTimer?.cancel();
+    _positionTimer = null;
   }
 
   @override
@@ -7808,6 +8561,28 @@ String _strategyLabel(UpgradePlanStrategy value) => switch (value) {
   UpgradePlanStrategy.shortest => 'Shortest first',
   UpgradePlanStrategy.cheapest => 'Cheapest first',
 };
+
+String _snapshotAgeLabel(
+  BuildContext context,
+  DateTime capturedAt, {
+  DateTime? now,
+}) {
+  final l10n = AppLocalizations.of(context)!;
+  final age = (now ?? DateTime.now()).difference(capturedAt);
+  if (age.isNegative || age.inMinutes < 1) {
+    return l10n.upgradeTrackerUpdatedJustNow;
+  }
+  if (age.inHours < 1) {
+    return l10n.upgradeTrackerUpdatedMinutesAgo(age.inMinutes);
+  }
+  if (age.inHours < 24) {
+    return l10n.upgradeTrackerUpdatedHoursAgo(age.inHours);
+  }
+  final locale = Localizations.localeOf(context).toString();
+  return l10n.upgradeTrackerUpdatedOn(
+    DateFormat.yMMMd(locale).add_jm().format(capturedAt),
+  );
+}
 
 String _duration(int seconds) {
   if (seconds <= 0) return 'Now';
