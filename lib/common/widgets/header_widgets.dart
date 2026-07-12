@@ -20,44 +20,42 @@ class InfoHeroBackdrop extends StatelessWidget {
   final double height;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    height: height,
-    child: Stack(
-      fit: StackFit.expand,
-      children: [
-        ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.50),
-            BlendMode.darken,
-          ),
-          child: MobileWebImage(
-            imageUrl: imageUrl,
-            fit: BoxFit.cover,
-            alignment: Alignment.bottomCenter,
-            errorWidget: (context, url, error) =>
-                ColoredBox(color: Theme.of(context).colorScheme.surface),
-          ),
-        ),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: Theme.of(context).brightness == Brightness.dark
-                  ? const [
-                      Color.fromRGBO(0, 0, 0, 0.36),
-                      Color.fromRGBO(0, 0, 0, 0.64),
-                      Color.fromRGBO(0, 0, 0, 0.92),
-                    ]
-                  : const [
-                      Color.fromRGBO(0, 0, 0, 0.20),
-                      Color.fromRGBO(0, 0, 0, 0.40),
-                      Color.fromRGBO(0, 0, 0, 0.65),
-                    ],
+  Widget build(BuildContext context) => ClipRect(
+    child: RepaintBoundary(
+      child: SizedBox(
+        height: height,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            MobileWebImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              alignment: Alignment.bottomCenter,
+              errorWidget: (context, url, error) =>
+                  ColoredBox(color: Theme.of(context).colorScheme.surface),
             ),
-          ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: Theme.of(context).brightness == Brightness.dark
+                      ? const [
+                          Color.fromRGBO(0, 0, 0, 0.50),
+                          Color.fromRGBO(0, 0, 0, 0.72),
+                          Color.fromRGBO(0, 0, 0, 0.94),
+                        ]
+                      : const [
+                          Color.fromRGBO(0, 0, 0, 0.34),
+                          Color.fromRGBO(0, 0, 0, 0.52),
+                          Color.fromRGBO(0, 0, 0, 0.72),
+                        ],
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     ),
   );
 }
