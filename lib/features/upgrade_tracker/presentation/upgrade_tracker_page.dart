@@ -33,6 +33,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -1381,7 +1382,6 @@ class _TrackerCollapsibleCard extends StatelessWidget {
     required this.onSummaryTap,
     required this.child,
     this.showContent = true,
-    this.showSurface = true,
   });
 
   final String title;
@@ -1393,7 +1393,6 @@ class _TrackerCollapsibleCard extends StatelessWidget {
   final VoidCallback onSummaryTap;
   final Widget child;
   final bool showContent;
-  final bool showSurface;
 
   @override
   Widget build(BuildContext context) {
@@ -1404,9 +1403,8 @@ class _TrackerCollapsibleCard extends StatelessWidget {
       trailing: SectionProgressBadge(progress: completion, onTap: onSummaryTap),
       expanded: expanded,
       onToggle: onToggle,
-      margin: showSurface ? const EdgeInsets.only(bottom: 10) : EdgeInsets.zero,
+      margin: const EdgeInsets.only(bottom: 10),
       showContent: showContent,
-      showSurface: showSurface,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: CKSpacing.sm,
         vertical: CKSpacing.xs,
@@ -1499,7 +1497,6 @@ class _UpgradesTabState extends State<_UpgradesTab> {
             query: _query,
             hintText: l10n.upgradeTrackerSearchUpgrades,
             onChanged: _setQuery,
-            useGlass: false,
           ),
         ),
       ),
@@ -1545,14 +1542,7 @@ class _UpgradesTabState extends State<_UpgradesTab> {
               }),
               margin: const EdgeInsets.only(bottom: 10),
               showContent: false,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: CKSpacing.sm,
-                vertical: CKSpacing.xs,
-              ),
-              surfaceColor: expanded
-                  ? Theme.of(context).colorScheme.surfaceContainerHighest
-                        .withValues(alpha: 0.58)
-                  : null,
+              surfaceWhenExpanded: false,
               child: const SizedBox.shrink(),
             ),
           ),
@@ -1566,39 +1556,44 @@ class _UpgradesTabState extends State<_UpgradesTab> {
         final key = '${village.name}-${group.name}';
         final groupExpanded = _expandedGroups.contains(key);
         final groupTitle = _upgradeGroupLabelForVillage(group, village);
-        final groupSlivers = <Widget>[
-          SliverToBoxAdapter(
-            child: CollapsibleItemSection(
-              title: groupTitle,
-              subtitle:
-                  '${l10n.upgradeTrackerLevelsLeft(summary.levelsRemaining)} · ${l10n.upgradeTrackerItemCount(items.length)}',
-              leading: _AspectSafeImage(
-                imageUrl: _groupImage(widget.snapshot, group, village),
-                width: 34,
-                height: 30,
+        slivers.add(
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              _trackerContentGutter,
+              0,
+              _trackerContentGutter,
+              8,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: CollapsibleItemSection(
+                title: groupTitle,
+                subtitle:
+                    '${l10n.upgradeTrackerLevelsLeft(summary.levelsRemaining)} · ${l10n.upgradeTrackerItemCount(items.length)}',
+                leading: _AspectSafeImage(
+                  imageUrl: _groupImage(widget.snapshot, group, village),
+                  width: 34,
+                  height: 30,
+                ),
+                trailing: SectionProgressBadge(
+                  progress: summary.completion,
+                  onTap: () =>
+                      _showUpgradeSectionSummary(context, groupTitle, summary),
+                ),
+                expanded: groupExpanded,
+                onToggle: () => setState(() {
+                  groupExpanded
+                      ? _expandedGroups.remove(key)
+                      : _expandedGroups.add(key);
+                }),
+                margin: EdgeInsets.zero,
+                showContent: false,
+                surfaceWhenExpanded: false,
+                child: const SizedBox.shrink(),
               ),
-              trailing: SectionProgressBadge(
-                progress: summary.completion,
-                onTap: () =>
-                    _showUpgradeSectionSummary(context, groupTitle, summary),
-              ),
-              expanded: groupExpanded,
-              onToggle: () => setState(() {
-                groupExpanded
-                    ? _expandedGroups.remove(key)
-                    : _expandedGroups.add(key);
-              }),
-              margin: EdgeInsets.zero,
-              showContent: false,
-              showSurface: false,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: CKSpacing.sm,
-                vertical: CKSpacing.xs,
-              ),
-              child: const SizedBox.shrink(),
             ),
           ),
-        ];
+        );
+        final groupSlivers = <Widget>[];
         if (groupExpanded && group == _UpgradeGroup.laboratory) {
           for (final category in <(String, List<UpgradeTrackerItem>)>[
             (
@@ -1627,7 +1622,12 @@ class _UpgradesTabState extends State<_UpgradesTab> {
             if (category.$2.isEmpty) continue;
             groupSlivers.add(
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(4, 4, 4, 6),
+                padding: const EdgeInsets.fromLTRB(
+                  _trackerContentGutter,
+                  4,
+                  _trackerContentGutter,
+                  6,
+                ),
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     category.$1,
@@ -1636,20 +1636,25 @@ class _UpgradesTabState extends State<_UpgradesTab> {
                 ),
               ),
             );
-            groupSlivers.add(_upgradeGridSliver(category.$2, embedded: true));
+            groupSlivers.add(_upgradeGridSliver(category.$2));
           }
         } else if (groupExpanded) {
-          groupSlivers.add(_upgradeGridSliver(items, embedded: true));
+          groupSlivers.add(_upgradeGridSliver(items));
         }
         slivers.add(
-          SliverItemSectionPanel(
-            margin: const EdgeInsets.fromLTRB(
-              _trackerContentGutter,
-              0,
-              _trackerContentGutter,
-              10,
-            ),
-            slivers: groupSlivers,
+          SliverAnimatedSwitcher(
+            duration: CKMotion.durationOf(context, CKMotion.standard),
+            switchInCurve: CKMotion.standardCurve,
+            switchOutCurve: CKMotion.standardCurve,
+            child: groupExpanded
+                ? SliverMainAxisGroup(
+                    key: ValueKey('$key-open'),
+                    slivers: groupSlivers,
+                  )
+                : SliverToBoxAdapter(
+                    key: ValueKey('$key-closed'),
+                    child: const SizedBox.shrink(),
+                  ),
           ),
         );
       }
@@ -1658,14 +1663,11 @@ class _UpgradesTabState extends State<_UpgradesTab> {
     return CustomScrollView(slivers: slivers);
   }
 
-  Widget _upgradeGridSliver(
-    List<UpgradeTrackerItem> items, {
-    bool embedded = false,
-  }) => SliverPadding(
+  Widget _upgradeGridSliver(List<UpgradeTrackerItem> items) => SliverPadding(
     padding: EdgeInsets.fromLTRB(
-      embedded ? 4 : _trackerContentGutter,
+      _trackerContentGutter,
       0,
-      embedded ? 4 : _trackerContentGutter,
+      _trackerContentGutter,
       12,
     ),
     sliver: SliverGrid.builder(
@@ -1903,26 +1905,19 @@ class _UpgradeIconTile extends StatelessWidget {
   Widget _buildContent(BuildContext context, DateTime now) {
     final scheme = Theme.of(context).colorScheme;
     final active = snapshot.remainingActiveSeconds(item, now: now) > 0;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final border = item.isComplete
-        ? const Color(0xFFFFD75E)
-        : active
-        ? scheme.primary
-        : isDark
-        ? Colors.white.withValues(alpha: 0.88)
-        : Colors.black87;
+    final border = active ? scheme.primary : scheme.outlineVariant;
     return Semantics(
       button: true,
       label:
           '${item.name}, level ${item.currentLevel} of ${item.targetLevel}${item.count > 1 ? ', ${item.count} buildings' : ''}',
       child: InkWell(
         onTap: () => showUpgradeDetails(context, item),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(CKRadius.tile),
         child: Container(
           decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest.withValues(alpha: 0.22),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: border, width: 2),
+            color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
+            borderRadius: BorderRadius.circular(CKRadius.tile),
+            border: Border.all(color: border, width: active ? 2 : 1),
           ),
           child: Stack(
             children: [
@@ -1944,7 +1939,7 @@ class _UpgradeIconTile extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     color: item.isComplete
-                        ? const Color(0xFFFFD75E)
+                        ? CKUpgradeColors.completion
                         : Colors.black.withValues(alpha: 0.86),
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -3029,6 +3024,16 @@ class _LootOutlookCard extends StatelessWidget {
 
     final week = within(7);
     final month = within(30);
+    final lootNow = upgrades
+        .where(
+          (upgrade) =>
+              upgrade.item.village == UpgradeVillage.home &&
+              upgrade.item.queue == UpgradeQueue.builders &&
+              !upgrade.startsAt.isAfter(
+                startsAt.add(const Duration(minutes: 1)),
+              ),
+        )
+        .toList(growable: false);
     final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
@@ -3049,6 +3054,17 @@ class _LootOutlookCard extends StatelessWidget {
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 7),
+          _PlanPeriodSummary(
+            label: lootNow.isEmpty
+                ? 'Loot now · all builders occupied'
+                : 'Loot now · ${lootNow.length} idle ${lootNow.length == 1 ? 'builder' : 'builders'}',
+            upgrades: lootNow,
+            costs: costsFor(lootNow),
+            countLabel: lootNow.isEmpty
+                ? 'Nothing needed right now'
+                : 'to put every free builder to work',
+          ),
+          const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -3080,11 +3096,13 @@ class _PlanPeriodSummary extends StatelessWidget {
     required this.label,
     required this.upgrades,
     required this.costs,
+    this.countLabel = 'upgrades starting',
   });
 
   final String label;
   final List<PlannedUpgrade> upgrades;
   final Map<String, num> costs;
+  final String countLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -3119,7 +3137,7 @@ class _PlanPeriodSummary extends StatelessWidget {
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
           ),
           Text(
-            'upgrades starting',
+            countLabel,
             style: Theme.of(
               context,
             ).textTheme.labelSmall?.copyWith(color: scheme.onSurfaceVariant),
@@ -3561,7 +3579,6 @@ class _CollectionTabState extends State<_CollectionTab> {
                       query: _query,
                       hintText: l10n.upgradeTrackerSearchCollection,
                       onChanged: (value) => _update(() => _query = value),
-                      useGlass: false,
                     ),
                   ),
                   const SizedBox(width: CKSpacing.sm),
@@ -3597,11 +3614,6 @@ class _CollectionTabState extends State<_CollectionTab> {
                                 l10n.upgradeTrackerFilterMissing,
                               ],
                               selected: _filter,
-                              icons: const [
-                                Icon(Icons.grid_view_rounded),
-                                Icon(Icons.check_circle_rounded),
-                                Icon(Icons.circle_outlined),
-                              ],
                               density: CKControlDensity.compact,
                               onChanged: (value) =>
                                   _update(() => _filter = value),
@@ -3623,21 +3635,6 @@ class _CollectionTabState extends State<_CollectionTab> {
                                         l10n.upgradeTrackerBuilderBase,
                                       ],
                                       selected: _village,
-                                      icons: [
-                                        const Icon(Icons.public_rounded),
-                                        MobileWebImage(
-                                          imageUrl: ImageAssets.townHall(
-                                            widget.snapshot.townHallLevel,
-                                          ),
-                                          fit: BoxFit.contain,
-                                        ),
-                                        MobileWebImage(
-                                          imageUrl: ImageAssets.builderHall(
-                                            widget.snapshot.builderHallLevel,
-                                          ),
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ],
                                       density: CKControlDensity.compact,
                                       onChanged: (value) =>
                                           _update(() => _village = value),
@@ -3675,33 +3672,38 @@ class _CollectionTabState extends State<_CollectionTab> {
     for (final section in _sections) {
       final expanded = _expanded.contains(section.type);
       final title = _collectionLabel(section.type);
-      final sectionSlivers = <Widget>[
-        SliverToBoxAdapter(
-          child: _TrackerCollapsibleCard(
-            title: title,
-            imageUrl: section.preview.imageUrl,
-            completion: section.owned / section.scoped.length,
-            countLabel: l10n.upgradeTrackerOwnedCount(
-              section.owned,
-              section.scoped.length,
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: _trackerContentGutter,
+          ),
+          sliver: SliverToBoxAdapter(
+            child: _TrackerCollapsibleCard(
+              title: title,
+              imageUrl: section.preview.imageUrl,
+              completion: section.owned / section.scoped.length,
+              countLabel: l10n.upgradeTrackerOwnedCount(
+                section.owned,
+                section.scoped.length,
+              ),
+              expanded: expanded,
+              onToggle: () => setState(() {
+                expanded
+                    ? _expanded.remove(section.type)
+                    : _expanded.add(section.type);
+              }),
+              onSummaryTap: () => _showCollectionSectionSummary(
+                context,
+                title,
+                items: section.scoped,
+              ),
+              showContent: false,
+              child: const SizedBox.shrink(),
             ),
-            expanded: expanded,
-            onToggle: () => setState(() {
-              expanded
-                  ? _expanded.remove(section.type)
-                  : _expanded.add(section.type);
-            }),
-            onSummaryTap: () => _showCollectionSectionSummary(
-              context,
-              title,
-              items: section.scoped,
-            ),
-            showContent: false,
-            showSurface: false,
-            child: const SizedBox.shrink(),
           ),
         ),
-      ];
+      );
+      final sectionSlivers = <Widget>[];
       if (expanded && section.visible.isEmpty) {
         sectionSlivers.add(
           SliverPadding(
@@ -3717,7 +3719,12 @@ class _CollectionTabState extends State<_CollectionTab> {
       } else if (expanded) {
         sectionSlivers.add(
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(4, 4, 4, 14),
+            padding: const EdgeInsets.fromLTRB(
+              _trackerContentGutter,
+              4,
+              _trackerContentGutter,
+              14,
+            ),
             sliver: SliverGrid.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: section.type == UpgradeCollectionType.sceneries
@@ -3738,14 +3745,19 @@ class _CollectionTabState extends State<_CollectionTab> {
         );
       }
       slivers.add(
-        SliverItemSectionPanel(
-          margin: const EdgeInsets.fromLTRB(
-            _trackerContentGutter,
-            0,
-            _trackerContentGutter,
-            10,
-          ),
-          slivers: sectionSlivers,
+        SliverAnimatedSwitcher(
+          duration: CKMotion.durationOf(context, CKMotion.standard),
+          switchInCurve: CKMotion.standardCurve,
+          switchOutCurve: CKMotion.standardCurve,
+          child: expanded
+              ? SliverMainAxisGroup(
+                  key: ValueKey('${section.type.name}-open'),
+                  slivers: sectionSlivers,
+                )
+              : SliverToBoxAdapter(
+                  key: ValueKey('${section.type.name}-closed'),
+                  child: const SizedBox.shrink(),
+                ),
         ),
       );
     }
@@ -3779,11 +3791,38 @@ class _CollectionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final image = MobileWebImage(imageUrl: item.imageUrl, fit: BoxFit.contain);
+    final artwork = item.owned
+        ? image
+        : ColorFiltered(
+            colorFilter: const ColorFilter.matrix(<double>[
+              0.2126,
+              0.7152,
+              0.0722,
+              0,
+              0,
+              0.2126,
+              0.7152,
+              0.0722,
+              0,
+              0,
+              0.2126,
+              0.7152,
+              0.0722,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0.56,
+              0,
+            ]),
+            child: image,
+          );
     return CKCollectionTile(
       image: Stack(
         fit: StackFit.expand,
         children: [
-          Padding(padding: const EdgeInsets.all(2), child: image),
+          Padding(padding: const EdgeInsets.all(2), child: artwork),
           if (item.count > 1)
             Positioned(right: 2, top: 2, child: _Pill(text: '×${item.count}')),
           if (item.type == UpgradeCollectionType.skins &&
@@ -5117,7 +5156,6 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
               query: _query,
               hintText: l10n.upgradeTrackerChooseAccount,
               onChanged: (value) => setState(() => _query = value),
-              useGlass: false,
             ),
           ),
           Expanded(

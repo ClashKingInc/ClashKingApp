@@ -1,6 +1,5 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 /// Shared collapsible item-section shell used by Player Info and the upgrade
 /// tracker so their hierarchy, spacing, and motion stay in sync.
@@ -21,7 +20,6 @@ class CollapsibleItemSection extends StatelessWidget {
     this.showSurface = true,
     this.contentPadding = const EdgeInsets.all(CKSpacing.md),
     this.expandedSpacing = 12,
-    this.surfaceColor,
   });
 
   final String title;
@@ -38,7 +36,6 @@ class CollapsibleItemSection extends StatelessWidget {
   final bool showSurface;
   final EdgeInsetsGeometry contentPadding;
   final double expandedSpacing;
-  final Color? surfaceColor;
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +122,20 @@ class CollapsibleItemSection extends StatelessWidget {
             expandedChild,
       ],
     );
+    final scheme = Theme.of(context).colorScheme;
     final section = !showSurface || (expanded && !surfaceWhenExpanded)
         ? Padding(padding: contentPadding, child: content)
-        : CKSectionPanel(
+        : Container(
             padding: contentPadding,
-            color: surfaceColor,
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardTheme.color ?? scheme.surface,
+              borderRadius: BorderRadius.circular(CKRadius.panel),
+              border: Border.all(
+                color: scheme.outlineVariant.withValues(
+                  alpha: CKOpacity.border,
+                ),
+              ),
+            ),
             child: content,
           );
     return Container(width: double.infinity, margin: margin, child: section);
@@ -169,46 +175,6 @@ class CompactItemGrid extends StatelessWidget {
         ),
       );
     },
-  );
-}
-
-/// Sliver-native counterpart to [CollapsibleItemSection]. Keeps large grids
-/// lazy while giving Upgrades and Collection the same quiet section shell.
-class SliverItemSectionPanel extends StatelessWidget {
-  const SliverItemSectionPanel({
-    super.key,
-    required this.slivers,
-    required this.margin,
-    this.color,
-  });
-
-  final List<Widget> slivers;
-  final EdgeInsetsGeometry margin;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) => SliverAnimatedPaintExtent(
-    duration: CKMotion.durationOf(context, CKMotion.standard),
-    curve: CKMotion.standardCurve,
-    child: SliverPadding(
-      padding: margin,
-      sliver: DecoratedSliver(
-        decoration: BoxDecoration(
-          color:
-              color ??
-              Theme.of(
-                context,
-              ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.18),
-          borderRadius: BorderRadius.circular(CKRadius.panel),
-          border: Border.all(
-            color: Theme.of(
-              context,
-            ).colorScheme.outlineVariant.withValues(alpha: CKOpacity.border),
-          ),
-        ),
-        sliver: SliverMainAxisGroup(slivers: slivers),
-      ),
-    ),
   );
 }
 

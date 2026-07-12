@@ -135,14 +135,14 @@ class AppSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
-      height: 44,
+      height: 48,
       child: Stack(
         fit: StackFit.expand,
         children: [
           if (useGlass)
             NativeLiquidGlassBar(
-              height: 44,
-              cornerRadius: 22,
+              height: 48,
+              cornerRadius: 24,
               borderOpacity: Theme.of(context).brightness == Brightness.dark
                   ? 0.22
                   : 0.30,
@@ -154,7 +154,7 @@ class AppSearchField extends StatelessWidget {
             DecoratedBox(
               decoration: BoxDecoration(
                 color: colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(24),
               ),
             ),
           TextField(
@@ -177,8 +177,8 @@ class AppSearchField extends StatelessWidget {
                 color: colorScheme.onSurfaceVariant,
               ),
               prefixIconConstraints: const BoxConstraints(
-                minWidth: 40,
-                minHeight: 44,
+                minWidth: 42,
+                minHeight: 48,
               ),
               suffixIcon: query.isNotEmpty
                   ? IconButton(
