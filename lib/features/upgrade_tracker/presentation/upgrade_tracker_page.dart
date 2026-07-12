@@ -1405,6 +1405,7 @@ class _TrackerCollapsibleCard extends StatelessWidget {
       onToggle: onToggle,
       margin: const EdgeInsets.only(bottom: 10),
       showContent: showContent,
+      surfaceWhenExpanded: false,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: CKSpacing.sm,
         vertical: CKSpacing.xs,
@@ -1562,32 +1563,24 @@ class _UpgradesTabState extends State<_UpgradesTab> {
               _trackerContentGutter,
               0,
               _trackerContentGutter,
-              8,
+              0,
             ),
             sliver: SliverToBoxAdapter(
-              child: CollapsibleItemSection(
+              child: _TrackerCollapsibleCard(
                 title: groupTitle,
-                subtitle:
+                countLabel:
                     '${l10n.upgradeTrackerLevelsLeft(summary.levelsRemaining)} · ${l10n.upgradeTrackerItemCount(items.length)}',
-                leading: _AspectSafeImage(
-                  imageUrl: _groupImage(widget.snapshot, group, village),
-                  width: 34,
-                  height: 30,
-                ),
-                trailing: SectionProgressBadge(
-                  progress: summary.completion,
-                  onTap: () =>
-                      _showUpgradeSectionSummary(context, groupTitle, summary),
-                ),
+                imageUrl: _groupImage(widget.snapshot, group, village),
+                completion: summary.completion,
                 expanded: groupExpanded,
                 onToggle: () => setState(() {
                   groupExpanded
                       ? _expandedGroups.remove(key)
                       : _expandedGroups.add(key);
                 }),
-                margin: EdgeInsets.zero,
+                onSummaryTap: () =>
+                    _showUpgradeSectionSummary(context, groupTitle, summary),
                 showContent: false,
-                surfaceWhenExpanded: false,
                 child: const SizedBox.shrink(),
               ),
             ),
@@ -3082,6 +3075,7 @@ class _LootOutlookCard extends StatelessWidget {
             countLabel: lootNow.isEmpty
                 ? 'Nothing needed right now'
                 : 'to put every free builder to work',
+            showCount: false,
           ),
           const Divider(height: 24),
           Row(
@@ -3116,12 +3110,14 @@ class _PlanPeriodSummary extends StatelessWidget {
     required this.upgrades,
     required this.costs,
     this.countLabel = 'upgrades starting',
+    this.showCount = true,
   });
 
   final String label;
   final List<PlannedUpgrade> upgrades;
   final Map<String, num> costs;
   final String countLabel;
+  final bool showCount;
 
   @override
   Widget build(BuildContext context) {
@@ -3141,19 +3137,21 @@ class _PlanPeriodSummary extends StatelessWidget {
               context,
             ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
           ),
-          const SizedBox(height: 2),
-          Text(
-            '${upgrades.length}',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
-          ),
-          Text(
-            countLabel,
-            style: Theme.of(
-              context,
-            ).textTheme.labelSmall?.copyWith(color: scheme.onSurfaceVariant),
-          ),
+          if (showCount) ...[
+            const SizedBox(height: 2),
+            Text(
+              '${upgrades.length}',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+            ),
+            Text(
+              countLabel,
+              style: Theme.of(
+                context,
+              ).textTheme.labelSmall?.copyWith(color: scheme.onSurfaceVariant),
+            ),
+          ],
           const Divider(height: 16),
           Wrap(
             spacing: 5,
