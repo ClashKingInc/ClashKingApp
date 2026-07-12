@@ -748,7 +748,8 @@ class UpgradeTrackerSnapshot {
         normalizedTotal += count;
         final comparable =
             item.category == UpgradeCategory.walls ||
-            item.category == UpgradeCategory.equipment;
+            item.category == UpgradeCategory.equipment ||
+            item.category == UpgradeCategory.builders;
         if (!comparable ||
             (resourceCategory != null && resourceCategory != item.category)) {
           comparableResourceCategories = false;

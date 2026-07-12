@@ -151,6 +151,33 @@ void main() {
       2700,
     );
   });
+
+  test('weights helper completion by gems spent', () {
+    final snapshot = parser.parse(
+      {
+        'tag': '#TEST',
+        'buildings': [
+          {'data': 1, 'lvl': 18},
+        ],
+        'helpers': [
+          {'data': 20, 'lvl': 2},
+          {'data': 21, 'lvl': 1},
+        ],
+      },
+      staticData: _bundle,
+      now: DateTime.utc(2026, 7, 11),
+    );
+
+    final helpers = snapshot.itemsFor(
+      village: UpgradeVillage.home,
+      category: UpgradeCategory.builders,
+      queue: UpgradeQueue.none,
+    );
+    final summary = snapshot.summaryForItems(helpers);
+
+    expect(helpers, hasLength(2));
+    expect(summary.completion, closeTo(0.05, 0.0001));
+  });
 }
 
 final _bundle = <String, dynamic>{
@@ -325,5 +352,28 @@ final _bundle = <String, dynamic>{
   ],
   'capital_house_parts': [
     {'_id': 11, 'name': 'Fence', 'slot_type': 'decoration'},
+  ],
+  'helpers': [
+    {
+      '_id': 20,
+      'name': 'Builder Apprentice',
+      'village': 'home',
+      'upgrade_resource': 'Gems',
+      'levels': [
+        {'level': 1, 'upgrade_cost': 100},
+        {'level': 2, 'upgrade_cost': 900},
+        {'level': 3, 'upgrade_cost': 0},
+      ],
+    },
+    {
+      '_id': 21,
+      'name': 'Lab Assistant',
+      'village': 'home',
+      'upgrade_resource': 'Gems',
+      'levels': [
+        {'level': 1, 'upgrade_cost': 1000},
+        {'level': 2, 'upgrade_cost': 0},
+      ],
+    },
   ],
 };

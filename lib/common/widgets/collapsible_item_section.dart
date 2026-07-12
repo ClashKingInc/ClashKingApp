@@ -17,6 +17,7 @@ class CollapsibleItemSection extends StatelessWidget {
     this.animateContent = true,
     this.showContent = true,
     this.surfaceWhenExpanded = true,
+    this.showSurface = true,
   });
 
   final String title;
@@ -30,6 +31,7 @@ class CollapsibleItemSection extends StatelessWidget {
   final bool animateContent;
   final bool showContent;
   final bool surfaceWhenExpanded;
+  final bool showSurface;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +115,7 @@ class CollapsibleItemSection extends StatelessWidget {
             expandedChild,
       ],
     );
-    final section = expanded && !surfaceWhenExpanded
+    final section = !showSurface || (expanded && !surfaceWhenExpanded)
         ? Padding(padding: const EdgeInsets.all(CKSpacing.md), child: content)
         : CKSectionPanel(
             padding: const EdgeInsets.all(CKSpacing.md),
@@ -159,6 +161,39 @@ class CompactItemGrid extends StatelessWidget {
   );
 }
 
+/// Sliver-native counterpart to [CollapsibleItemSection]. Keeps large grids
+/// lazy while giving Upgrades and Collection the same quiet section shell.
+class SliverItemSectionPanel extends StatelessWidget {
+  const SliverItemSectionPanel({
+    super.key,
+    required this.slivers,
+    required this.margin,
+  });
+
+  final List<Widget> slivers;
+  final EdgeInsetsGeometry margin;
+
+  @override
+  Widget build(BuildContext context) => SliverPadding(
+    padding: margin,
+    sliver: DecoratedSliver(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(CKRadius.panel),
+        border: Border.all(
+          color: Theme.of(
+            context,
+          ).colorScheme.outlineVariant.withValues(alpha: CKOpacity.border),
+        ),
+      ),
+      sliver: SliverPadding(
+        padding: const EdgeInsets.all(CKSpacing.sm),
+        sliver: SliverMainAxisGroup(slivers: slivers),
+      ),
+    ),
+  );
+}
+
 class SectionProgressBadge extends StatelessWidget {
   const SectionProgressBadge({
     super.key,
@@ -173,9 +208,11 @@ class SectionProgressBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const progressRed = Color(0xFFE0302B);
     final colorScheme = Theme.of(context).colorScheme;
     final normalized = progress.clamp(0.0, 1.0).toDouble();
+    final progressColor = normalized >= 1
+        ? CKUpgradeColors.completion
+        : const Color(0xFFE0302B);
     final percentage = normalized * 100;
     final label = percentage % 1 == 0
         ? percentage.toInt().toString()
@@ -191,15 +228,17 @@ class SectionProgressBadge extends StatelessWidget {
             foregroundPainter: _SectionPercentOutlinePainter(
               progress: normalized,
               trackColor: colorScheme.outlineVariant.withValues(alpha: 0.58),
-              progressColor: progressRed,
+              progressColor: progressColor,
             ),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(999),
-                color: colorScheme.surfaceContainerHighest.withValues(
-                  alpha: 0.55,
-                ),
+                color: normalized >= 1
+                    ? progressColor.withValues(alpha: 0.14)
+                    : colorScheme.surfaceContainerHighest.withValues(
+                        alpha: 0.55,
+                      ),
               ),
               child: Text(
                 '$label%',

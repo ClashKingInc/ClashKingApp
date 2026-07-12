@@ -429,12 +429,16 @@ class UpgradeTrackerParser {
         usesBuildFields: usesBuildFields,
         steps: steps,
       );
-      final resourceTotals = itemCategory == UpgradeCategory.equipment
+      final itemQueue = queue(data);
+      final resourceTotals =
+          itemCategory == UpgradeCategory.equipment ||
+              (itemCategory == UpgradeCategory.builders &&
+                  itemQueue == UpgradeQueue.none)
           ? _resourceProgressTotals(
               data,
               current: current,
               usesBuildFields: usesBuildFields,
-              category: UpgradeCategory.equipment,
+              category: itemCategory,
               steps: steps,
             )
           : null;
@@ -445,7 +449,7 @@ class UpgradeTrackerParser {
           imageUrl: image(data, current),
           village: village,
           category: itemCategory,
-          queue: queue(data),
+          queue: itemQueue,
           currentLevel: current,
           targetLevel: target,
           count: _int(raw['cnt'], fallback: 1),
