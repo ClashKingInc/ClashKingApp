@@ -1,6 +1,7 @@
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
@@ -45,10 +46,38 @@ class PlayerScreenState extends State<PlayerScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: _PlayerProfileTabs(
-                player: widget.selectedPlayer,
+              child: InfoProfileTabs(
                 selectedIndex: selectedTab,
                 onTabSelected: _selectTab,
+                tabs: [
+                  InfoProfileTabData(
+                    label:
+                        AppLocalizations.of(context)?.gameBaseHome ??
+                        'Home Base',
+                    imageUrl: ImageAssets.townHall(
+                      widget.selectedPlayer.townHallLevel,
+                    ),
+                  ),
+                  InfoProfileTabData(
+                    label:
+                        AppLocalizations.of(context)?.gameBaseBuilder ??
+                        'Builder Base',
+                    imageUrl: ImageAssets.builderHall(
+                      widget.selectedPlayer.builderHallLevel,
+                    ),
+                  ),
+                  InfoProfileTabData(
+                    label:
+                        AppLocalizations.of(context)?.warStats ?? 'War Stats',
+                    imageUrl: ImageAssets.war,
+                  ),
+                  InfoProfileTabData(
+                    label:
+                        AppLocalizations.of(context)?.gameAchievements ??
+                        'Achievements',
+                    imageUrl: ImageAssets.attackStar,
+                  ),
+                ],
               ),
             ),
             ...switch (selectedTab) {
@@ -231,150 +260,6 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         ),
         const SizedBox(height: 10),
       ],
-    );
-  }
-}
-
-class _PlayerProfileTabs extends StatefulWidget {
-  final Player player;
-  final int selectedIndex;
-  final ValueChanged<int> onTabSelected;
-
-  const _PlayerProfileTabs({
-    required this.player,
-    required this.selectedIndex,
-    required this.onTabSelected,
-  });
-
-  @override
-  State<_PlayerProfileTabs> createState() => _PlayerProfileTabsState();
-}
-
-class _PlayerProfileTabsState extends State<_PlayerProfileTabs>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-      length: 4,
-      vsync: this,
-      initialIndex: widget.selectedIndex,
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant _PlayerProfileTabs oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedIndex != widget.selectedIndex &&
-        _tabController.index != widget.selectedIndex) {
-      _tabController.animateTo(
-        widget.selectedIndex,
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(color: colorScheme.surface),
-      child: SizedBox(
-        height: 50,
-        child: TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-          labelColor: colorScheme.onSurface,
-          unselectedLabelColor: colorScheme.onSurface,
-          indicatorColor: colorScheme.primary,
-          indicatorWeight: 2.5,
-          indicatorSize: TabBarIndicatorSize.tab,
-          dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
-          splashFactory: NoSplash.splashFactory,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          onTap: widget.onTabSelected,
-          tabs: [
-            _ProfileTab(
-              label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
-              imageUrl: ImageAssets.townHall(widget.player.townHallLevel),
-              selected: widget.selectedIndex == 0,
-            ),
-            _ProfileTab(
-              label:
-                  AppLocalizations.of(context)?.gameBaseBuilder ??
-                  'Builder Base',
-              imageUrl: ImageAssets.builderHall(widget.player.builderHallLevel),
-              selected: widget.selectedIndex == 1,
-            ),
-            _ProfileTab(
-              label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
-              imageUrl: ImageAssets.war,
-              selected: widget.selectedIndex == 2,
-            ),
-            _ProfileTab(
-              label:
-                  AppLocalizations.of(context)?.gameAchievements ??
-                  'Achievements',
-              imageUrl: ImageAssets.attackStar,
-              selected: widget.selectedIndex == 3,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfileTab extends StatelessWidget {
-  final String label;
-  final String imageUrl;
-  final bool selected;
-
-  const _ProfileTab({
-    required this.label,
-    required this.imageUrl,
-    required this.selected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final foreground = selected
-        ? colorScheme.onSurface
-        : colorScheme.onSurface.withValues(alpha: 0.68);
-
-    return Tab(
-      height: 48,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MobileWebImage(imageUrl: imageUrl, width: 18, height: 18),
-          const SizedBox(width: 5),
-          Text(
-            label,
-            maxLines: 1,
-            softWrap: false,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: foreground,
-              fontSize: 13,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

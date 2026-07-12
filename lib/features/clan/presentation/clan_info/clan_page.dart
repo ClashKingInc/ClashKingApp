@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/common/widgets/summary_chips.dart';
@@ -105,9 +106,35 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  _ClanProfileTabs(
+                  InfoProfileTabs(
                     selectedIndex: selectedTab,
                     onTabSelected: _selectTab,
+                    tabs: [
+                      InfoProfileTabData(
+                        label: AppLocalizations.of(context)!.clanMembers,
+                        icon: Icons.groups_rounded,
+                      ),
+                      InfoProfileTabData(
+                        label: AppLocalizations.of(context)!.warLog,
+                        imageUrl: ImageAssets.war,
+                      ),
+                      InfoProfileTabData(
+                        label: AppLocalizations.of(context)!.clanJoinLeaveTab,
+                        icon: Icons.swap_horiz_rounded,
+                      ),
+                      InfoProfileTabData(
+                        label: AppLocalizations.of(context)!.warStats,
+                        icon: Icons.bar_chart_rounded,
+                      ),
+                      InfoProfileTabData(
+                        label: AppLocalizations.of(context)!.clanRankingsTab,
+                        icon: Icons.leaderboard_rounded,
+                      ),
+                      InfoProfileTabData(
+                        label: AppLocalizations.of(context)!.cwlHistoryTitle,
+                        icon: Icons.emoji_events_rounded,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -177,159 +204,6 @@ class _NoImplicitScrollPhysics extends ScrollPhysics {
 
   @override
   bool get allowImplicitScrolling => false;
-}
-
-class _ClanProfileTabs extends StatefulWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onTabSelected;
-
-  const _ClanProfileTabs({
-    required this.selectedIndex,
-    required this.onTabSelected,
-  });
-
-  @override
-  State<_ClanProfileTabs> createState() => _ClanProfileTabsState();
-}
-
-class _ClanProfileTabsState extends State<_ClanProfileTabs>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-      length: 6,
-      vsync: this,
-      initialIndex: widget.selectedIndex,
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant _ClanProfileTabs oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedIndex != widget.selectedIndex &&
-        _tabController.index != widget.selectedIndex) {
-      _tabController.animateTo(
-        widget.selectedIndex,
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final loc = AppLocalizations.of(context)!;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(color: colorScheme.surface),
-      child: SizedBox(
-        height: 50,
-        child: TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 12),
-          labelColor: colorScheme.onSurface,
-          unselectedLabelColor: colorScheme.onSurface,
-          indicatorColor: colorScheme.primary,
-          indicatorWeight: 2.5,
-          indicatorSize: TabBarIndicatorSize.tab,
-          dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
-          splashFactory: NoSplash.splashFactory,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          onTap: widget.onTabSelected,
-          tabs: [
-            _ClanTab(
-              label: loc.clanMembers,
-              icon: Icons.groups_rounded,
-              selected: widget.selectedIndex == 0,
-            ),
-            _ClanTab(
-              label: loc.warLog,
-              imageUrl: ImageAssets.war,
-              selected: widget.selectedIndex == 1,
-            ),
-            _ClanTab(
-              label: loc.clanJoinLeaveTab,
-              icon: Icons.swap_horiz_rounded,
-              selected: widget.selectedIndex == 2,
-            ),
-            _ClanTab(
-              label: loc.warStats,
-              icon: Icons.bar_chart_rounded,
-              selected: widget.selectedIndex == 3,
-            ),
-            _ClanTab(
-              label: loc.clanRankingsTab,
-              icon: Icons.leaderboard_rounded,
-              selected: widget.selectedIndex == 4,
-            ),
-            _ClanTab(
-              label: loc.cwlHistoryTitle,
-              icon: Icons.emoji_events_rounded,
-              selected: widget.selectedIndex == 5,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ClanTab extends StatelessWidget {
-  final String label;
-  final String? imageUrl;
-  final IconData? icon;
-  final bool selected;
-
-  const _ClanTab({
-    required this.label,
-    this.imageUrl,
-    this.icon,
-    required this.selected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final foreground = selected
-        ? colorScheme.onSurface
-        : colorScheme.onSurface.withValues(alpha: 0.58);
-
-    return Tab(
-      height: 48,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          imageUrl != null
-              ? MobileWebImage(imageUrl: imageUrl!, width: 18, height: 18)
-              : Icon(icon, size: 18, color: foreground),
-          const SizedBox(width: 5),
-          Text(
-            label,
-            maxLines: 1,
-            softWrap: false,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: foreground,
-              fontSize: 13,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _ClanJoinLeaveTab extends StatefulWidget {
