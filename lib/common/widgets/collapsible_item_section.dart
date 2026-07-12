@@ -48,7 +48,20 @@ class CollapsibleItemSection extends StatelessWidget {
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ConstrainedBox(
+        AnimatedContainer(
+          duration: CKMotion.durationOf(context, CKMotion.fast),
+          curve: CKMotion.standardCurve,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: expanded && !surfaceWhenExpanded
+                    ? Theme.of(
+                        context,
+                      ).colorScheme.outlineVariant.withValues(alpha: 0.62)
+                    : Colors.transparent,
+              ),
+            ),
+          ),
           constraints: const BoxConstraints(minHeight: 44),
           child: InkWell(
             onTap: onToggle,
