@@ -9,7 +9,7 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   });
 
-  testWidgets('sizes memory decoding to rendered physical pixels', (
+  testWidgets('sizes memory decoding without distorting the source ratio', (
     tester,
   ) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
@@ -35,7 +35,7 @@ void main() {
       find.byType(CachedNetworkImage),
     );
     expect(image.memCacheWidth, 40);
-    expect(image.memCacheHeight, 60);
+    expect(image.memCacheHeight, isNull);
     debugDefaultTargetPlatformOverride = null;
   });
 }
