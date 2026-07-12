@@ -540,6 +540,18 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
               onSwitchAccount: () => _showAccountPicker(uniqueAccounts),
               onShare: () => _showShareHub(snapshot),
               onImport: _importSnapshot,
+              goldPassPercent: _goldPassPercent,
+              onGoldPass: () => _showGoldPassPicker(snapshot),
+              onPriorities: () => _showPlanPreferences(
+                context,
+                snapshot,
+                _planPreferences,
+                (value) {
+                  setState(() => _planPreferences = value);
+                  _rebuildPlanLanes(snapshot);
+                  unawaited(_savePlanDraft());
+                },
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -556,12 +568,12 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                   imageUrl: ImageAssets.builderHall(snapshot.builderHallLevel),
                 ),
                 InfoProfileTabData(
-                  label: l10n.upgradeTrackerPlan,
-                  icon: Icons.route_rounded,
-                ),
-                const InfoProfileTabData(
                   label: 'Calendar',
                   icon: Icons.calendar_month_rounded,
+                ),
+                InfoProfileTabData(
+                  label: l10n.upgradeTrackerPlan,
+                  icon: Icons.route_rounded,
                 ),
                 InfoProfileTabData(
                   label: l10n.upgradeTrackerCollection,
@@ -669,17 +681,16 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           goldPassPercent: _goldPassPercent,
           preferences: _planPreferences,
         ),
+        _PlanCalendarTab(
+          snapshot: snapshot,
+          goldPassPercent: _goldPassPercent,
+          preferences: _planPreferences,
+        ),
         _PlanTab(
           snapshot: snapshot,
           goldPassPercent: _goldPassPercent,
           preferences: _planPreferences,
           onLanesChanged: (lanes) => _planLanes.value = lanes,
-          controls: _buildPlanActions(snapshot),
-        ),
-        _PlanCalendarTab(
-          snapshot: snapshot,
-          goldPassPercent: _goldPassPercent,
-          preferences: _planPreferences,
         ),
         _CollectionTab(snapshot: snapshot),
       ],
@@ -719,94 +730,36 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     ];
   }
 
-  Widget _buildPlanActions(UpgradeTrackerSnapshot snapshot) {
-    return Column(
-      children: [
-        Row(
+  Future<void> _showGoldPassPicker(UpgradeTrackerSnapshot snapshot) async {
+    final selected = await showModalBottomSheet<int>(
+      context: context,
+      useSafeArea: true,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: PopupMenuButton<int>(
-                tooltip: 'Gold Pass reduction',
-                initialValue: _goldPassPercent,
-                onSelected: (value) {
-                  setState(() => _goldPassPercent = value);
-                  _rebuildPlanLanes(snapshot);
-                  unawaited(_savePlanDraft());
-                },
-                itemBuilder: (context) => [0, 10, 15, 20]
-                    .map(
-                      (value) => PopupMenuItem(
-                        value: value,
-                        child: Row(
-                          children: [
-                            _AspectSafeImage(
-                              imageUrl: ImageAssets.goldPass,
-                              width: 25,
-                              height: 25,
-                            ),
-                            const SizedBox(width: 9),
-                            Text(
-                              value == 0 ? 'No Gold Pass' : '$value% Gold Pass',
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(growable: false),
-                child: _PlanToolButton(
+            for (final value in const [0, 10, 15, 20])
+              ListTile(
+                leading: _AspectSafeImage(
                   imageUrl: ImageAssets.goldPass,
-                  label: _goldPassPercent == 0
-                      ? 'No Gold Pass'
-                      : 'Gold Pass $_goldPassPercent%',
+                  width: 28,
+                  height: 28,
                 ),
+                title: Text(value == 0 ? 'No Gold Pass' : '$value% Gold Pass'),
+                trailing: value == _goldPassPercent
+                    ? const Icon(Icons.check_rounded)
+                    : null,
+                onTap: () => Navigator.pop(context, value),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _PlanToolButton(
-                icon: Icons.tune_rounded,
-                label: 'Priorities',
-                onTap: () => _showPlanPreferences(
-                  context,
-                  snapshot,
-                  _planPreferences,
-                  (value) {
-                    setState(() => _planPreferences = value);
-                    _rebuildPlanLanes(snapshot);
-                    unawaited(_savePlanDraft());
-                  },
-                ),
-              ),
-            ),
           ],
         ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: _PlanToolButton(
-                icon: Icons.calendar_month_rounded,
-                label: 'Calendar',
-                onTap: () => _selectSection(3),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: ValueListenableBuilder<List<UpgradePlanLane>>(
-                valueListenable: _planLanes,
-                builder: (context, lanes, _) => _PlanToolButton(
-                  icon: Icons.view_list_rounded,
-                  label: 'Entire plan',
-                  onTap: lanes.isEmpty
-                      ? null
-                      : () => _showFullPlan(context, lanes),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+      ),
     );
+    if (selected == null || selected == _goldPassPercent) return;
+    setState(() => _goldPassPercent = selected);
+    _rebuildPlanLanes(snapshot);
+    unawaited(_savePlanDraft());
   }
 
   Future<void> _savePlanDraft() async {
@@ -903,6 +856,9 @@ class _TrackerInfoHeader extends StatelessWidget {
     required this.onSwitchAccount,
     required this.onShare,
     required this.onImport,
+    required this.goldPassPercent,
+    required this.onGoldPass,
+    required this.onPriorities,
   });
 
   final UpgradeTrackerSnapshot snapshot;
@@ -914,6 +870,9 @@ class _TrackerInfoHeader extends StatelessWidget {
   final VoidCallback onSwitchAccount;
   final VoidCallback onShare;
   final VoidCallback onImport;
+  final int goldPassPercent;
+  final VoidCallback onGoldPass;
+  final VoidCallback onPriorities;
 
   @override
   Widget build(BuildContext context) {
@@ -962,6 +921,21 @@ class _TrackerInfoHeader extends StatelessWidget {
                       showBackground: false,
                     ),
                     const Spacer(),
+                    HeaderIconButton(
+                      imageUrl: ImageAssets.goldPass,
+                      tooltip: goldPassPercent == 0
+                          ? 'No Gold Pass'
+                          : '$goldPassPercent% Gold Pass',
+                      onTap: onGoldPass,
+                      showBackground: false,
+                    ),
+                    HeaderIconButton(
+                      icon: Icons.tune_rounded,
+                      iconColor: Colors.white,
+                      tooltip: 'Priorities',
+                      onTap: onPriorities,
+                      showBackground: false,
+                    ),
                     HeaderIconButton(
                       icon: Icons.ios_share_rounded,
                       iconColor: Colors.white,
@@ -2014,81 +1988,18 @@ class _UpgradeRow extends StatelessWidget {
   }
 }
 
-class _PlanToolButton extends StatelessWidget {
-  const _PlanToolButton({
-    required this.label,
-    this.icon,
-    this.imageUrl,
-    this.onTap,
-  });
-
-  final String label;
-  final IconData? icon;
-  final String? imageUrl;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Semantics(
-      button: true,
-      label: label,
-      enabled: onTap != null || imageUrl != null,
-      child: Material(
-        color: onTap == null && imageUrl == null
-            ? scheme.surfaceContainerHighest.withValues(alpha: 0.18)
-            : scheme.surfaceContainerHighest.withValues(alpha: 0.48),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadius.chip),
-          child: SizedBox(
-            height: 46,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (imageUrl != null)
-                    _AspectSafeImage(imageUrl: imageUrl!, width: 25, height: 25)
-                  else
-                    Icon(icon, size: 19, color: scheme.onSurface),
-                  const SizedBox(width: 7),
-                  Flexible(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: scheme.onSurface,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _PlanTab extends StatefulWidget {
   const _PlanTab({
     required this.snapshot,
     required this.goldPassPercent,
     required this.preferences,
     required this.onLanesChanged,
-    required this.controls,
   });
 
   final UpgradeTrackerSnapshot snapshot;
   final int goldPassPercent;
   final UpgradePlanPreferences preferences;
   final ValueChanged<List<UpgradePlanLane>> onLanesChanged;
-  final Widget controls;
 
   @override
   State<_PlanTab> createState() => _PlanTabState();
@@ -2098,6 +2009,9 @@ class _PlanTabState extends State<_PlanTab> {
   late DateTime _startsAt;
   late List<UpgradePlanLane> _allLanes;
   late String _preferenceSignature;
+  _PlanVillageFilter _villageFilter = _PlanVillageFilter.all;
+  _PlanQueueFilter _queueFilter = _PlanQueueFilter.all;
+  _PlanSort _planSort = _PlanSort.scheduled;
 
   @override
   void initState() {
@@ -2162,12 +2076,112 @@ class _PlanTabState extends State<_PlanTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 2, 16, 30),
-      children: [
-        widget.controls,
-        const SizedBox(height: 12),
-        _LootOutlookCard(lanes: _allLanes, startsAt: _startsAt),
+    final filtered =
+        _allLanes
+            .expand((lane) => lane.upgrades)
+            .where(
+              (upgrade) =>
+                  _matchesPlanFilters(upgrade, _villageFilter, _queueFilter),
+            )
+            .toList()
+          ..sort((a, b) {
+            final comparison = switch (_planSort) {
+              _PlanSort.scheduled => a.startsAt.compareTo(b.startsAt),
+              _PlanSort.nameAscending => a.item.name.compareTo(b.item.name),
+              _PlanSort.durationLong =>
+                b.endsAt
+                    .difference(b.startsAt)
+                    .compareTo(a.endsAt.difference(a.startsAt)),
+              _PlanSort.durationShort =>
+                a.endsAt
+                    .difference(a.startsAt)
+                    .compareTo(b.endsAt.difference(b.startsAt)),
+            };
+            return comparison != 0 ? comparison : a.endsAt.compareTo(b.endsAt);
+          });
+    final groups = _groupPlannedUpgrades(filtered);
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+          sliver: SliverToBoxAdapter(
+            child: _LootOutlookCard(lanes: _allLanes, startsAt: _startsAt),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 36,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: _PlanVillageFilter.values
+                        .map(
+                          (value) => _FilterChip(
+                            label: _planVillageFilterLabel(value),
+                            selected: _villageFilter == value,
+                            onTap: () => setState(() => _villageFilter = value),
+                          ),
+                        )
+                        .toList(growable: false),
+                  ),
+                ),
+                SizedBox(
+                  height: 36,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: _PlanQueueFilter.values
+                        .map(
+                          (value) => _FilterChip(
+                            label: _planQueueFilterLabel(value),
+                            selected: _queueFilter == value,
+                            onTap: () => setState(() => _queueFilter = value),
+                          ),
+                        )
+                        .toList(growable: false),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: FilterDropdown(
+                    sortBy: _planSort.name,
+                    maxWidth: 160,
+                    sortByOptions: {
+                      for (final value in _PlanSort.values)
+                        _planSortLabel(value): value.name,
+                    },
+                    updateSortBy: (value) => setState(
+                      () => _planSort = _PlanSort.values.byName(value),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (groups.isEmpty)
+          const SliverFillRemaining(
+            hasScrollBody: false,
+            child: _TrackerEmptyState(
+              icon: Icons.task_alt_rounded,
+              title: 'No matching upgrades',
+              body: 'Try another village or queue.',
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
+            sliver: SliverList.separated(
+              itemCount: groups.length,
+              separatorBuilder: (_, _) => const Divider(height: 1),
+              itemBuilder: (context, index) =>
+                  _PlannedUpgradeRow(group: groups[index]),
+            ),
+          ),
       ],
     );
   }
@@ -2324,7 +2338,7 @@ class _PlanTimeline extends StatelessWidget {
   final DateTime startsAt;
   final List<_PlanTimelineGroup> groups;
 
-  static const _horizonDays = 30;
+  static const _horizonDays = 60;
   static const _labelWidth = 64.0;
   static const _dayWidth = 72.0;
   static const _laneHeight = 64.0;
@@ -2340,30 +2354,6 @@ class _PlanTimeline extends StatelessWidget {
         top: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 8, 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Calendar',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Text(
-                          '30-day horizon · swipe sideways to explore',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: scheme.onSurfaceVariant),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(height: 1),
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -2376,43 +2366,56 @@ class _PlanTimeline extends StatelessWidget {
                       math.max(timelineViewport, _horizonDays * _dayWidth);
                   return SingleChildScrollView(
                     key: ValueKey(
-                      'plan-calendar-vertical-${startsAt.microsecondsSinceEpoch}',
+                      'plan-calendar-horizontal-${startsAt.microsecondsSinceEpoch}',
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+                    scrollDirection: Axis.horizontal,
                     primary: false,
-                    child: SingleChildScrollView(
-                      key: ValueKey(
-                        'plan-calendar-horizontal-${startsAt.microsecondsSinceEpoch}',
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      primary: false,
-                      physics: const ClampingScrollPhysics(),
-                      dragStartBehavior: DragStartBehavior.down,
-                      child: SizedBox(
-                        width: contentWidth,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _PlanTimelineHeader(
-                              firstDay: firstDay,
-                              days: _horizonDays,
-                              labelWidth: _labelWidth,
-                              dayWidth: _dayWidth,
-                            ),
-                            const SizedBox(height: 8),
-                            ...groups.map(
-                              (group) => _PlanTimelineSection(
-                                snapshot: snapshot,
-                                group: group,
-                                firstDay: startsAt,
+                    physics: const ClampingScrollPhysics(),
+                    dragStartBehavior: DragStartBehavior.down,
+                    child: SizedBox(
+                      width: contentWidth,
+                      height: constraints.maxHeight,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ColoredBox(
+                            color: scheme.surface,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                              child: _PlanTimelineHeader(
+                                firstDay: firstDay,
                                 days: _horizonDays,
                                 labelWidth: _labelWidth,
                                 dayWidth: _dayWidth,
-                                laneHeight: _laneHeight,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const Divider(height: 1),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              key: ValueKey(
+                                'plan-calendar-vertical-${startsAt.microsecondsSinceEpoch}',
+                              ),
+                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+                              primary: false,
+                              child: Column(
+                                children: groups
+                                    .map(
+                                      (group) => _PlanTimelineSection(
+                                        snapshot: snapshot,
+                                        group: group,
+                                        firstDay: startsAt,
+                                        days: _horizonDays,
+                                        labelWidth: _labelWidth,
+                                        dayWidth: _dayWidth,
+                                        laneHeight: _laneHeight,
+                                      ),
+                                    )
+                                    .toList(growable: false),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -3371,7 +3374,7 @@ class _CollectionTab extends StatefulWidget {
 }
 
 class _CollectionTabState extends State<_CollectionTab> {
-  final _expanded = <UpgradeCollectionType>{UpgradeCollectionType.skins};
+  final _expanded = <UpgradeCollectionType>{};
   final _searchController = TextEditingController();
   _CollectionFilter _filter = _CollectionFilter.all;
   _CollectionSort _sort = _CollectionSort.nameAscending;
@@ -6184,174 +6187,6 @@ List<UpgradePlanLane> _allPlanLanes(
   );
   if (walls.isNotEmpty) lanes.add(UpgradePlanLane(index: 0, upgrades: walls));
   return lanes;
-}
-
-Future<void> _showFullPlan(
-  BuildContext context,
-  List<UpgradePlanLane> lanes,
-) async {
-  final upgrades = lanes.expand((lane) => lane.upgrades).toList();
-  var villageFilter = _PlanVillageFilter.all;
-  var queueFilter = _PlanQueueFilter.all;
-  var planSort = _PlanSort.scheduled;
-  await showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    showDragHandle: true,
-    backgroundColor: Theme.of(context).colorScheme.surface,
-    builder: (context) => StatefulBuilder(
-      builder: (context, setSheetState) {
-        final filtered =
-            upgrades
-                .where(
-                  (upgrade) =>
-                      _matchesPlanFilters(upgrade, villageFilter, queueFilter),
-                )
-                .toList()
-              ..sort((a, b) {
-                final comparison = switch (planSort) {
-                  _PlanSort.scheduled => a.startsAt.compareTo(b.startsAt),
-                  _PlanSort.nameAscending => a.item.name.compareTo(b.item.name),
-                  _PlanSort.durationLong =>
-                    b.endsAt
-                        .difference(b.startsAt)
-                        .compareTo(a.endsAt.difference(a.startsAt)),
-                  _PlanSort.durationShort =>
-                    a.endsAt
-                        .difference(a.startsAt)
-                        .compareTo(b.endsAt.difference(b.startsAt)),
-                };
-                return comparison != 0
-                    ? comparison
-                    : a.endsAt.compareTo(b.endsAt);
-              });
-        final groups = _groupPlannedUpgrades(filtered);
-        return FractionallySizedBox(
-          heightFactor: 0.94,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 8, 6),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Entire plan',
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(fontWeight: FontWeight.w900),
-                          ),
-                          Text(
-                            '${filtered.length} upgrades in plan',
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Village',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 36,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: _PlanVillageFilter.values
-                            .map(
-                              (value) => _FilterChip(
-                                label: _planVillageFilterLabel(value),
-                                selected: villageFilter == value,
-                                onTap: () =>
-                                    setSheetState(() => villageFilter = value),
-                              ),
-                            )
-                            .toList(growable: false),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Queue',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 36,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: _PlanQueueFilter.values
-                            .map(
-                              (value) => _FilterChip(
-                                label: _planQueueFilterLabel(value),
-                                selected: queueFilter == value,
-                                onTap: () =>
-                                    setSheetState(() => queueFilter = value),
-                              ),
-                            )
-                            .toList(growable: false),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: FilterDropdown(
-                        sortBy: planSort.name,
-                        maxWidth: 160,
-                        sortByOptions: {
-                          for (final value in _PlanSort.values)
-                            _planSortLabel(value): value.name,
-                        },
-                        updateSortBy: (value) => setSheetState(
-                          () => planSort = _PlanSort.values.byName(value),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-              Expanded(
-                child: groups.isEmpty
-                    ? const _TrackerEmptyState(
-                        icon: Icons.task_alt_rounded,
-                        title: 'No matching upgrades',
-                        body: 'Try another village or queue.',
-                      )
-                    : ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
-                        itemCount: groups.length,
-                        separatorBuilder: (_, _) => const Divider(height: 1),
-                        itemBuilder: (context, index) =>
-                            _PlannedUpgradeRow(group: groups[index]),
-                      ),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-  );
 }
 
 class _PlanPriorityList extends StatelessWidget {
