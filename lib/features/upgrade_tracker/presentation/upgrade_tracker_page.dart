@@ -1549,6 +1549,10 @@ class _UpgradesTabState extends State<_UpgradesTab> {
                 horizontal: CKSpacing.sm,
                 vertical: CKSpacing.xs,
               ),
+              surfaceColor: expanded
+                  ? Theme.of(context).colorScheme.surfaceContainerHighest
+                        .withValues(alpha: 0.58)
+                  : null,
               child: const SizedBox.shrink(),
             ),
           ),
@@ -2862,7 +2866,7 @@ class _PlanTimelineBlock extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${upgrade.item.name} · Lv ${upgrade.step.targetLevel}',
+                            '${upgrade.isOngoing ? 'Now · ' : ''}${upgrade.item.name} · Lv ${upgrade.step.targetLevel}',
                             maxLines: showMetadata ? 1 : 2,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.labelSmall
@@ -2999,7 +3003,10 @@ class _LootOutlookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final upgrades = lanes.expand((lane) => lane.upgrades).toList();
+    final upgrades = lanes
+        .expand((lane) => lane.upgrades)
+        .where((upgrade) => !upgrade.isOngoing)
+        .toList();
     upgrades.sort((a, b) {
       final starts = a.startsAt.compareTo(b.startsAt);
       return starts != 0 ? starts : a.endsAt.compareTo(b.endsAt);
@@ -3144,6 +3151,7 @@ class _PlannedUpgradeGroup {
 
   PlannedUpgrade get first => upgrades.first;
   int get count => upgrades.length;
+  bool get isOngoing => upgrades.any((upgrade) => upgrade.isOngoing);
 
   DateTime get startsAt => upgrades
       .map((upgrade) => upgrade.startsAt)
@@ -3213,12 +3221,28 @@ class _PlannedUpgradeRow extends StatelessWidget {
                     context,
                   ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
                 ),
-                Text(
-                  'Level ${upgrade.step.targetLevel - 1} → ${upgrade.step.targetLevel} · ${DateFormat.MMMd().format(group.startsAt)}',
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text:
+                            'Level ${upgrade.step.targetLevel - 1} → ${upgrade.step.targetLevel} · ${DateFormat.MMMd().format(group.startsAt)}',
+                      ),
+                      if (group.isOngoing)
+                        TextSpan(
+                          text: ' · Upgrading now',
+                          style: const TextStyle(
+                            color: CKUpgradeColors.completion,
+                          ),
+                        ),
+                    ],
+                  ),
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: scheme.onSurfaceVariant,
                     fontWeight: FontWeight.w700,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 if (group.costs.isNotEmpty)
                   Wrap(
@@ -3755,38 +3779,11 @@ class _CollectionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final image = MobileWebImage(imageUrl: item.imageUrl, fit: BoxFit.contain);
-    final artwork = item.owned
-        ? image
-        : ColorFiltered(
-            colorFilter: const ColorFilter.matrix(<double>[
-              0.2126,
-              0.7152,
-              0.0722,
-              0,
-              0,
-              0.2126,
-              0.7152,
-              0.0722,
-              0,
-              0,
-              0.2126,
-              0.7152,
-              0.0722,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0.56,
-              0,
-            ]),
-            child: image,
-          );
     return CKCollectionTile(
       image: Stack(
         fit: StackFit.expand,
         children: [
-          Padding(padding: const EdgeInsets.all(2), child: artwork),
+          Padding(padding: const EdgeInsets.all(2), child: image),
           if (item.count > 1)
             Positioned(right: 2, top: 2, child: _Pill(text: '×${item.count}')),
           if (item.type == UpgradeCollectionType.skins &&

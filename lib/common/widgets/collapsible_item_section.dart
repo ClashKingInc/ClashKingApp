@@ -21,6 +21,7 @@ class CollapsibleItemSection extends StatelessWidget {
     this.showSurface = true,
     this.contentPadding = const EdgeInsets.all(CKSpacing.md),
     this.expandedSpacing = 12,
+    this.surfaceColor,
   });
 
   final String title;
@@ -37,6 +38,7 @@ class CollapsibleItemSection extends StatelessWidget {
   final bool showSurface;
   final EdgeInsetsGeometry contentPadding;
   final double expandedSpacing;
+  final Color? surfaceColor;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +127,11 @@ class CollapsibleItemSection extends StatelessWidget {
     );
     final section = !showSurface || (expanded && !surfaceWhenExpanded)
         ? Padding(padding: contentPadding, child: content)
-        : CKSectionPanel(padding: contentPadding, child: content);
+        : CKSectionPanel(
+            padding: contentPadding,
+            color: surfaceColor,
+            child: content,
+          );
     return Container(width: double.infinity, margin: margin, child: section);
   }
 }
@@ -173,10 +179,12 @@ class SliverItemSectionPanel extends StatelessWidget {
     super.key,
     required this.slivers,
     required this.margin,
+    this.color,
   });
 
   final List<Widget> slivers;
   final EdgeInsetsGeometry margin;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => SliverAnimatedPaintExtent(
@@ -186,7 +194,11 @@ class SliverItemSectionPanel extends StatelessWidget {
       padding: margin,
       sliver: DecoratedSliver(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          color:
+              color ??
+              Theme.of(
+                context,
+              ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.18),
           borderRadius: BorderRadius.circular(CKRadius.panel),
           border: Border.all(
             color: Theme.of(
@@ -194,10 +206,7 @@ class SliverItemSectionPanel extends StatelessWidget {
             ).colorScheme.outlineVariant.withValues(alpha: CKOpacity.border),
           ),
         ),
-        sliver: SliverPadding(
-          padding: const EdgeInsets.all(CKSpacing.xs),
-          sliver: SliverMainAxisGroup(slivers: slivers),
-        ),
+        sliver: SliverMainAxisGroup(slivers: slivers),
       ),
     ),
   );
