@@ -6764,6 +6764,19 @@ void _showVillageUpgradeSummary(
     context: context,
     builder: (context) => Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+      backgroundColor:
+          Theme.of(context).cardTheme.color ??
+          Theme.of(context).colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(CKRadius.panel),
+        side: BorderSide(
+          color: Theme.of(
+            context,
+          ).colorScheme.outlineVariant.withValues(alpha: CKOpacity.border),
+        ),
+      ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: 520,
@@ -6820,7 +6833,7 @@ void _showVillageUpgradeSummary(
                     ),
                     const SizedBox(height: CKSpacing.sm),
                     for (var index = 0; index < sections.length; index++) ...[
-                      if (index > 0) const SizedBox(height: CKSpacing.sm),
+                      if (index > 0) const Divider(height: CKSpacing.lg),
                       _VillageBreakdownCard(
                         data: sections[index],
                         startsAt: startsAt,
@@ -6870,8 +6883,11 @@ class _VillageBreakdownCard extends StatelessWidget {
       ..sort(
         (a, b) => _resourceWeight(a.key).compareTo(_resourceWeight(b.key)),
       );
-    return CKSectionPanel(
-      padding: const EdgeInsets.all(CKSpacing.md),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: CKSpacing.xs,
+        vertical: CKSpacing.sm,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
