@@ -3083,7 +3083,7 @@ class _LootOutlookCard extends StatelessWidget {
                 ? 'Nothing needed right now'
                 : 'to put every free builder to work',
           ),
-          const SizedBox(height: 12),
+          const Divider(height: 24),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -3130,15 +3130,8 @@ class _PlanPeriodSummary extends StatelessWidget {
       ..sort(
         (a, b) => _resourceWeight(a.key).compareTo(_resourceWeight(b.key)),
       );
-    return Container(
-      padding: const EdgeInsets.all(11),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.24),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
