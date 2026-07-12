@@ -3244,7 +3244,7 @@
   "upgradeTrackerCollected": "collected",
   "upgradeTrackerMissing": "missing",
   "upgradeTrackerDataAge": "Account data",
-  "upgradeTrackerBuildersCount": "Builders · {count}",
+  "upgradeTrackerBuildersCount": "{count} builders",
   "@upgradeTrackerBuildersCount": {
     "placeholders": {"count": {"type": "int"}}
   },
