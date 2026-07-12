@@ -2397,7 +2397,11 @@ class _PlanTimeline extends StatelessWidget {
                                 'plan-calendar-vertical-${startsAt.microsecondsSinceEpoch}',
                               ),
                               padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
-                              primary: false,
+                              // Share the NestedScrollView's vertical
+                              // controller so pulling down at the top restores
+                              // the collapsed scenic header.
+                              primary: true,
+                              physics: const AlwaysScrollableScrollPhysics(),
                               child: Column(
                                 children: groups
                                     .map(
