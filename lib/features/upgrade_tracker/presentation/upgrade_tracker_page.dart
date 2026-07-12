@@ -1638,23 +1638,36 @@ class _UpgradesTabState extends State<_UpgradesTab> {
             );
             groupSlivers.add(_upgradeGridSliver(category.$2));
           }
+        } else if (groupExpanded && group == _UpgradeGroup.equipment) {
+          for (final heroGroup in _equipmentHeroGroups(items)) {
+            groupSlivers.add(
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(
+                  _trackerContentGutter,
+                  4,
+                  _trackerContentGutter,
+                  6,
+                ),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    heroGroup.$1,
+                    style: CKTypography.of(context, CKTextRole.rowTitle),
+                  ),
+                ),
+              ),
+            );
+            groupSlivers.add(_upgradeGridSliver(heroGroup.$2));
+          }
         } else if (groupExpanded) {
           groupSlivers.add(_upgradeGridSliver(items));
         }
         slivers.add(
-          SliverAnimatedSwitcher(
+          SliverAnimatedPaintExtent(
             duration: CKMotion.durationOf(context, CKMotion.standard),
-            switchInCurve: CKMotion.standardCurve,
-            switchOutCurve: CKMotion.standardCurve,
+            curve: CKMotion.standardCurve,
             child: groupExpanded
-                ? SliverMainAxisGroup(
-                    key: ValueKey('$key-open'),
-                    slivers: groupSlivers,
-                  )
-                : SliverToBoxAdapter(
-                    key: ValueKey('$key-closed'),
-                    child: const SizedBox.shrink(),
-                  ),
+                ? SliverMainAxisGroup(slivers: groupSlivers)
+                : SliverToBoxAdapter(child: const SizedBox.shrink()),
           ),
         );
       }
@@ -1910,9 +1923,9 @@ class _UpgradeIconTile extends StatelessWidget {
       button: true,
       label:
           '${item.name}, level ${item.currentLevel} of ${item.targetLevel}${item.count > 1 ? ', ${item.count} buildings' : ''}',
-      child: InkWell(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => showUpgradeDetails(context, item),
-        borderRadius: BorderRadius.circular(CKRadius.tile),
         child: Container(
           decoration: BoxDecoration(
             color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
@@ -1926,6 +1939,7 @@ class _UpgradeIconTile extends StatelessWidget {
                   padding: const EdgeInsets.all(4),
                   child: MobileWebImage(
                     imageUrl: item.imageUrl,
+                    fallbackImageUrls: _upgradeImageFallbacks(item),
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -3745,19 +3759,12 @@ class _CollectionTabState extends State<_CollectionTab> {
         );
       }
       slivers.add(
-        SliverAnimatedSwitcher(
+        SliverAnimatedPaintExtent(
           duration: CKMotion.durationOf(context, CKMotion.standard),
-          switchInCurve: CKMotion.standardCurve,
-          switchOutCurve: CKMotion.standardCurve,
+          curve: CKMotion.standardCurve,
           child: expanded
-              ? SliverMainAxisGroup(
-                  key: ValueKey('${section.type.name}-open'),
-                  slivers: sectionSlivers,
-                )
-              : SliverToBoxAdapter(
-                  key: ValueKey('${section.type.name}-closed'),
-                  child: const SizedBox.shrink(),
-                ),
+              ? SliverMainAxisGroup(slivers: sectionSlivers)
+              : SliverToBoxAdapter(child: const SizedBox.shrink()),
         ),
       );
     }
@@ -7516,6 +7523,11 @@ void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
                                           item,
                                           selectedLevel,
                                         ),
+                                        fallbackImageUrls:
+                                            _upgradeImageFallbacks(
+                                              item,
+                                              fromLevel: selectedLevel,
+                                            ),
                                         fit: BoxFit.contain,
                                       ),
                                     ),
@@ -7730,6 +7742,55 @@ String _upgradeImageForLevel(UpgradeTrackerItem item, int level) {
         : ImageAssets.getBuilderBaseBuildingImage(item.name, level);
   }
   return item.imageUrl;
+}
+
+List<String> _upgradeImageFallbacks(UpgradeTrackerItem item, {int? fromLevel}) {
+  if (!const {
+    UpgradeCategory.defenses,
+    UpgradeCategory.craftedDefenses,
+    UpgradeCategory.army,
+    UpgradeCategory.resources,
+    UpgradeCategory.walls,
+    UpgradeCategory.supercharge,
+  }.contains(item.category)) {
+    return const [];
+  }
+  final current = fromLevel ?? item.currentLevel;
+  if (current <= 1) return const [];
+  return [
+    for (var level = current - 1; level >= 1; level--)
+      item.village == UpgradeVillage.home
+          ? ImageAssets.getHomeVillageBuildingImage(item.name, level)
+          : ImageAssets.getBuilderBaseBuildingImage(item.name, level),
+  ];
+}
+
+List<(String, List<UpgradeTrackerItem>)> _equipmentHeroGroups(
+  List<UpgradeTrackerItem> items,
+) {
+  const preferredOrder = <String>[
+    'Barbarian King',
+    'Archer Queen',
+    'Grand Warden',
+    'Royal Champion',
+    'Minion Prince',
+  ];
+  final grouped = <String, List<UpgradeTrackerItem>>{};
+  for (final item in items) {
+    final rawHero = item.meta?['hero']?.toString().trim();
+    final hero = rawHero == null || rawHero.isEmpty ? 'Other' : rawHero;
+    grouped.putIfAbsent(hero, () => []).add(item);
+  }
+  final labels = grouped.keys.toList()
+    ..sort((a, b) {
+      final aIndex = preferredOrder.indexOf(a);
+      final bIndex = preferredOrder.indexOf(b);
+      if (aIndex >= 0 && bIndex >= 0) return aIndex.compareTo(bIndex);
+      if (aIndex >= 0) return -1;
+      if (bIndex >= 0) return 1;
+      return a.compareTo(b);
+    });
+  return [for (final label in labels) (label, grouped[label]!)];
 }
 
 List<UpgradeStep> _upgradeStepsFromLevel(

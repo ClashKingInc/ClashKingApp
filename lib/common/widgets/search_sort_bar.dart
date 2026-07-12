@@ -1,10 +1,11 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Standard search field + sort dropdown row for list-style tabs (clan
-/// members, war log, war stats, capital raid members...). The glass
+/// members, war log, war stats, capital raid members...). The stable card
 /// search field plus compact [FilterDropdown] combo used by every
 /// searchable/sortable list in the app.
 class ClanTabSearchSortBar extends StatelessWidget {
@@ -122,14 +123,12 @@ class AppSearchField extends StatelessWidget {
     required this.query,
     required this.hintText,
     required this.onChanged,
-    this.useGlass = true,
   });
 
   final TextEditingController controller;
   final String query;
   final String hintText;
   final ValueChanged<String> onChanged;
-  final bool useGlass;
 
   @override
   Widget build(BuildContext context) {
@@ -139,24 +138,17 @@ class AppSearchField extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (useGlass)
-            NativeLiquidGlassBar(
-              height: 48,
-              cornerRadius: 24,
-              borderOpacity: Theme.of(context).brightness == Brightness.dark
-                  ? 0.22
-                  : 0.30,
-              shadowOpacity: Theme.of(context).brightness == Brightness.dark
-                  ? 0.22
-                  : 0.08,
-            )
-          else
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(24),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(
+                  alpha: AppOpacity.border,
+                ),
               ),
             ),
+          ),
           TextField(
             controller: controller,
             scrollPadding: EdgeInsets.zero,

@@ -14,6 +14,7 @@ class MobileWebImage extends StatelessWidget {
   final Widget Function(BuildContext context, String url)? placeholder;
   final Widget Function(BuildContext context, String url, Object error)?
   errorWidget;
+  final List<String> fallbackImageUrls;
 
   const MobileWebImage({
     super.key,
@@ -26,6 +27,7 @@ class MobileWebImage extends StatelessWidget {
     this.colorBlendMode,
     this.placeholder,
     this.errorWidget,
+    this.fallbackImageUrls = const [],
   });
 
   @override
@@ -54,6 +56,22 @@ class MobileWebImage extends StatelessWidget {
         );
 
         Widget fallback(Object error) {
+          if (fallbackImageUrls.isNotEmpty) {
+            return MobileWebImage(
+              imageUrl: fallbackImageUrls.first,
+              fallbackImageUrls: fallbackImageUrls
+                  .skip(1)
+                  .toList(growable: false),
+              fit: fit,
+              width: width,
+              height: height,
+              alignment: alignment,
+              color: color,
+              colorBlendMode: colorBlendMode,
+              placeholder: placeholder,
+              errorWidget: errorWidget,
+            );
+          }
           final customError = errorWidget?.call(context, imageUrl, error);
           if (customError != null) return customError;
           return Image.network(
