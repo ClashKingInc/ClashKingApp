@@ -1347,15 +1347,10 @@ class _ProgressHero extends StatelessWidget {
               title: 'In progress',
               trailing: '${active.length} active',
             ),
-            ...active
-                .take(6)
-                .map(
-                  (item) => _ActiveUpgradeRow(
-                    snapshot: snapshot,
-                    item: item,
-                    now: now,
-                  ),
-                ),
+            ...active.map(
+              (item) =>
+                  _ActiveUpgradeRow(snapshot: snapshot, item: item, now: now),
+            ),
           ],
           if (helpers.isNotEmpty) ...[
             const Divider(height: 20),
