@@ -576,7 +576,7 @@ class UpgradePlanLane {
 }
 
 class UpgradeTrackerSnapshot {
-  const UpgradeTrackerSnapshot({
+  UpgradeTrackerSnapshot({
     required this.tag,
     required this.name,
     required this.townHallLevel,
@@ -654,6 +654,13 @@ class UpgradeTrackerSnapshot {
   final UpgradeBoosts boosts;
   final List<UpgradeEventModifier> events;
   final DateTime capturedAt;
+  final Map<
+    (UpgradeVillage?, UpgradeCategory?, UpgradeQueue?, bool),
+    List<UpgradeTrackerItem>
+  >
+  _itemsForCache = {};
+  final Map<(UpgradeVillage, UpgradeCategory), UpgradeCategorySummary>
+  _summaryCache = {};
 
   List<UpgradeTrackerItem> itemsFor({
     UpgradeVillage? village,
@@ -661,23 +668,32 @@ class UpgradeTrackerSnapshot {
     UpgradeQueue? queue,
     bool remainingOnly = false,
   }) {
-    return items
-        .where((item) {
-          if (village != null && item.village != village) return false;
-          if (category != null && item.category != category) return false;
-          if (queue != null && item.queue != queue) return false;
-          if (remainingOnly && item.isComplete) return false;
-          return true;
-        })
-        .toList(growable: false);
+    final key = (village, category, queue, remainingOnly);
+    return _itemsForCache.putIfAbsent(
+      key,
+      () => items
+          .where((item) {
+            if (village != null && item.village != village) return false;
+            if (category != null && item.category != category) return false;
+            if (queue != null && item.queue != queue) return false;
+            if (remainingOnly && item.isComplete) return false;
+            return true;
+          })
+          .toList(growable: false),
+    );
   }
 
   UpgradeCategorySummary summaryFor(
     UpgradeCategory category, {
     UpgradeVillage village = UpgradeVillage.home,
   }) {
-    final matching = itemsFor(village: village, category: category);
-    return summaryForItems(matching, category: category);
+    return _summaryCache.putIfAbsent(
+      (village, category),
+      () => summaryForItems(
+        itemsFor(village: village, category: category),
+        category: category,
+      ),
+    );
   }
 
   UpgradeCategorySummary summaryForItems(

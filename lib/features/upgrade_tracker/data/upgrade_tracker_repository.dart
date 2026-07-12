@@ -17,16 +17,21 @@ class UpgradeTrackerRepository {
   static const _preferencesPrefix = 'upgrade_tracker_preferences_v2_';
 
   final UpgradeTrackerParser _parser;
+  final Map<String, UpgradeTrackerSnapshot> _snapshotCache = {};
 
   Future<UpgradeTrackerSnapshot?> load(String playerTag) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
+    final cached = _snapshotCache[normalized];
+    if (cached != null) return cached;
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString('$_snapshotPrefix$normalized');
     if (saved != null) {
       final decoded = jsonDecode(saved);
       if (decoded is Map) {
-        return _parser.parse(Map<String, dynamic>.from(decoded));
+        final parsed = _parser.parse(Map<String, dynamic>.from(decoded));
+        _snapshotCache[normalized] = parsed;
+        return parsed;
       }
     }
     return null;
@@ -34,15 +39,17 @@ class UpgradeTrackerRepository {
 
   Future<void> saveRawSnapshot(
     String playerTag,
-    Map<String, dynamic> snapshot,
-  ) async {
+    Map<String, dynamic> snapshot, {
+    UpgradeTrackerSnapshot? parsedSnapshot,
+  }) async {
     final normalized = normalizeTag(playerTag);
     if (normalized.isEmpty) {
       throw const FormatException('Account JSON must include a player tag');
     }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('$_snapshotPrefix$normalized', jsonEncode(snapshot));
-    final parsed = _parser.parse(snapshot);
+    final parsed = parsedSnapshot ?? _parser.parse(snapshot);
+    _snapshotCache[normalized] = parsed;
     final accounts = await savedSnapshotAccounts();
     final next = <String, Map<String, String>>{
       for (final account in accounts) account['tag']!: account,
@@ -53,6 +60,7 @@ class UpgradeTrackerRepository {
             : 'Imported player',
         'townHallLevel': parsed.townHallLevel.toString(),
         'builderHallLevel': parsed.builderHallLevel.toString(),
+        'capturedAt': parsed.capturedAt.toUtc().toIso8601String(),
       },
     }.values.toList(growable: false);
     await prefs.setString(_snapshotIndexKey, jsonEncode(next));
@@ -97,7 +105,7 @@ class UpgradeTrackerRepository {
         'This does not look like a raw Clash account snapshot',
       );
     }
-    await saveRawSnapshot(tag, raw);
+    await saveRawSnapshot(tag, raw, parsedSnapshot: parsed);
     return parsed;
   }
 
@@ -120,13 +128,19 @@ class UpgradeTrackerRepository {
     final prefs = await SharedPreferences.getInstance();
     final snapshots = <UpgradeTrackerSnapshot>[];
     for (final playerTag in playerTags) {
-      final saved = prefs.getString(
-        '$_snapshotPrefix${normalizeTag(playerTag)}',
-      );
+      final normalized = normalizeTag(playerTag);
+      final cached = _snapshotCache[normalized];
+      if (cached != null) {
+        snapshots.add(cached);
+        continue;
+      }
+      final saved = prefs.getString('$_snapshotPrefix$normalized');
       if (saved == null) continue;
       final decoded = jsonDecode(saved);
       if (decoded is Map) {
-        snapshots.add(_parser.parse(Map<String, dynamic>.from(decoded)));
+        final parsed = _parser.parse(Map<String, dynamic>.from(decoded));
+        _snapshotCache[normalized] = parsed;
+        snapshots.add(parsed);
       }
     }
     return snapshots;

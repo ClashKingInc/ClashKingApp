@@ -5,13 +5,16 @@ import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_mod
 class UpgradeTrackerParser {
   const UpgradeTrackerParser();
 
+  static Map<String, dynamic>? _cachedBundle;
+  static _StaticLookup? _cachedLookup;
+
   UpgradeTrackerSnapshot parse(
     Map<String, dynamic> account, {
     Map<String, dynamic>? staticData,
     DateTime? now,
   }) {
     final bundle = staticData ?? GameDataService.bundleData;
-    final lookup = _StaticLookup(bundle);
+    final lookup = _lookupFor(bundle);
     final items = <UpgradeTrackerItem>[];
     final buildingRows = [
       ..._mapList(account['buildings']),
@@ -181,6 +184,14 @@ class UpgradeTrackerParser {
       events: const [],
       capturedAt: capturedAt,
     );
+  }
+
+  static _StaticLookup _lookupFor(Map<String, dynamic> bundle) {
+    if (identical(bundle, _cachedBundle) && _cachedLookup != null) {
+      return _cachedLookup!;
+    }
+    _cachedBundle = bundle;
+    return _cachedLookup = _StaticLookup(bundle);
   }
 
   static void _addBuildingItems(
@@ -647,6 +658,7 @@ class UpgradeTrackerParser {
     }
 
     final collections = <UpgradeCollectionItem>[];
+    final collectionKeys = <(UpgradeCollectionType, int)>{};
     void addSection(
       String staticKey,
       UpgradeCollectionType type,
@@ -657,9 +669,7 @@ class UpgradeTrackerParser {
     }) {
       for (final data in _mapList(lookup.bundle[staticKey])) {
         final id = _int(data['_id']);
-        if (collections.any((item) => item.type == type && item.id == id)) {
-          continue;
-        }
+        if (!collectionKeys.add((type, id))) continue;
         final owned =
             ownedIds.contains(id) || (defaultOwned?.call(data) ?? false);
         collections.add(

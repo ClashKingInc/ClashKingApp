@@ -51,14 +51,18 @@ void main() {
     expect(imported.name, 'Magic Jr.');
     expect(imported.townHallLevel, 18);
     expect(await repository.load('#2J8V28GV0'), isNotNull);
-    expect(await repository.savedSnapshotAccounts(), [
-      {
-        'tag': '#2J8V28GV0',
-        'name': 'Magic Jr.',
-        'townHallLevel': '18',
-        'builderHallLevel': '0',
-      },
-    ]);
+    expect(
+      await repository.savedSnapshotAccounts(),
+      contains(
+        allOf(
+          containsPair('tag', '#2J8V28GV0'),
+          containsPair('name', 'Magic Jr.'),
+          containsPair('townHallLevel', '18'),
+          containsPair('builderHallLevel', '0'),
+          containsPair('capturedAt', isNotEmpty),
+        ),
+      ),
+    );
   });
 
   test('rejects JSON without a player tag', () async {
