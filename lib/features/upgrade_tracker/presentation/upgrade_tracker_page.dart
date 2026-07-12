@@ -992,7 +992,7 @@ class _ProgressHero extends StatelessWidget {
         )
         .toList(growable: false);
     final boosts = _activeBoostLabels(snapshot, now: now);
-    return CKGlassPanel(
+    return CKSectionPanel(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
