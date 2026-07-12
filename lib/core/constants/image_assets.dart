@@ -4,6 +4,7 @@ class ImageAssets {
   static const String baseUrl = "https://assets.clashk.ing";
   static const String defaultImage = "$baseUrl/icons/Icon_Unknown_Troop.png";
   static const String thinkingBuilder = "$baseUrl/stickers/thinking_bk.webp";
+  static const String goldPass = "$baseUrl/icons/Icon_HV_Gold_Pass.png";
 
   // 👑 Logos
   static const String darkModeLogo =
@@ -212,6 +213,13 @@ class ImageAssets {
   static const String iconClock = "$baseUrl/bot/icons/clock.png";
   static const String iconBuilderPotion =
       "$baseUrl/icons/Magic_Item_Builder_Potion.png";
+  static const String builderPotion =
+      "$baseUrl/magic_items/builder_potion.webp";
+  static const String researchPotion =
+      "$baseUrl/magic_items/research_potion.webp";
+  static const String petPotion = "$baseUrl/magic_items/pet_potion.webp";
+  static const String clockTowerPotion =
+      "$baseUrl/magic_items/clock_tower_potion.webp";
   static const String iconGoldPass = "$baseUrl/icons/Icon_HV_Gold_Pass.png";
 
   // ⭐ Clan Capital

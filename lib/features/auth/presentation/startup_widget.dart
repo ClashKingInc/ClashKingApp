@@ -40,7 +40,7 @@ class StartupWidgetState extends State<StartupWidget> {
 
   Future<void> _initAuth() async {
     final authService = context.read<AuthService>();
-    final gameDataLoad = GameDataService.loadGameData();
+    final gameDataLoad = GameDataService.loadFreshGameData();
 
     try {
       await Future.wait([authService.initializeAuth(), gameDataLoad]);

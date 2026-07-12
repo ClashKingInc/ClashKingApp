@@ -44,6 +44,7 @@ class GameDataService {
   static final Map<String, String> _translationsData = {};
   static String _translationLocale = 'EN';
   static Future<void>? _bundleLoad;
+  static Future<void>? _staticRefresh;
   static final Map<String, Future<void>> _translationLoads = {};
 
   static Future<void> loadGameData({Locale? locale}) async {
@@ -52,6 +53,49 @@ class GameDataService {
       _loadBundle(),
       loadTranslationsForLocale(preferredLocale),
     ]);
+  }
+
+  static Future<void> loadFreshGameData({Locale? locale}) async {
+    await loadGameData(locale: locale);
+    await refreshStaticDataIfChanged();
+  }
+
+  /// Checks the remote validator and applies newer static data before returning.
+  ///
+  /// App startup awaits this check so calculation screens never render one
+  /// visit behind while a background static-data refresh completes.
+  static Future<void> refreshStaticDataIfChanged() async {
+    final existing = _staticRefresh;
+    if (existing != null) return existing;
+
+    final refresh = _refreshStaticDataIfChangedOnce();
+    _staticRefresh = refresh;
+    try {
+      await refresh;
+    } finally {
+      if (identical(_staticRefresh, refresh)) _staticRefresh = null;
+    }
+  }
+
+  static Future<void> _refreshStaticDataIfChangedOnce() async {
+    final file = await _cacheFile(_staticDataCache.fileName);
+    final prefs = await SharedPreferences.getInstance();
+    if (!await file.exists()) {
+      await _loadBundle();
+      return;
+    }
+
+    await _refreshCachedJsonAsset(
+      _staticDataCache,
+      _staticDataUri,
+      file,
+      prefs,
+      prefs.getString(_staticDataCache.lastModifiedKey),
+    );
+
+    // Re-read even when the validator is unchanged. This also repairs stale
+    // in-memory data after a previous background download completed.
+    _applyBundle(await _decodeJsonFile(file, _staticDataCache.label));
   }
 
   static Future<void> _loadBundle() async {
@@ -94,13 +138,15 @@ class GameDataService {
         final cached = await _decodeJsonFile(file, asset.label);
         if (_cacheNeedsRefresh(prefs.getString(asset.cachedAtKey))) {
           unawaited(
-            _refreshCachedJsonAsset(
-              asset,
-              uri,
-              file,
-              prefs,
-              cachedLastModified,
-            ),
+            asset.fileName == _staticDataCache.fileName
+                ? refreshStaticDataIfChanged()
+                : _refreshCachedJsonAsset(
+                    asset,
+                    uri,
+                    file,
+                    prefs,
+                    cachedLastModified,
+                  ),
           );
         }
         return cached;
@@ -388,6 +434,10 @@ class GameDataService {
     }
 
     return {
+      // Keep the authoritative raw sections available for features that need
+      // ID-based joins (buildings, traps, cosmetics, account snapshots) while
+      // preserving the normalized legacy views below for existing callers.
+      ...rawBundle,
       'pets_data': {
         'pets': _itemsByName(
           rawBundle['pets'],
