@@ -1,6 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+NavigationDecision announcementNavigationDecision({
+  required String requestedUrl,
+  String? initialUrl,
+  bool loadsLocalFile = false,
+}) {
+  final requestedUri = Uri.tryParse(requestedUrl);
+  if (requestedUri == null) {
+    return NavigationDecision.prevent;
+  }
+
+  if (requestedUri.scheme == 'about' || requestedUri.scheme == 'data') {
+    return NavigationDecision.navigate;
+  }
+
+  if (loadsLocalFile && requestedUri.scheme == 'file') {
+    return NavigationDecision.navigate;
+  }
+
+  final initialUri = initialUrl == null ? null : Uri.tryParse(initialUrl);
+  if (requestedUri.scheme == 'https' &&
+      initialUri?.scheme == 'https' &&
+      requestedUri.origin == initialUri?.origin) {
+    return NavigationDecision.navigate;
+  }
+
+  return NavigationDecision.prevent;
+}
+
 class AnnouncementWebViewPage extends StatefulWidget {
   const AnnouncementWebViewPage({
     super.key,
@@ -76,6 +104,11 @@ class _AnnouncementWebViewState extends State<AnnouncementWebView> {
               setState(() => _loadingProgress = progress);
             }
           },
+          onNavigationRequest: (request) => announcementNavigationDecision(
+            requestedUrl: request.url,
+            initialUrl: widget.url,
+            loadsLocalFile: widget.filePath?.isNotEmpty ?? false,
+          ),
           onPageFinished: (url) async {
             final javaScript = widget.pageFinishedJavaScript;
             if (javaScript != null && javaScript.isNotEmpty) {
@@ -88,14 +121,20 @@ class _AnnouncementWebViewState extends State<AnnouncementWebView> {
 
     final channelName = widget.javaScriptChannelName;
     final messageHandler = widget.onJavaScriptMessage;
-    if (channelName != null && messageHandler != null) {
-      _controller.addJavaScriptChannel(
-        channelName,
+    final filePath = widget.filePath;
+    final isTrustedLocalStory =
+        filePath != null &&
+        filePath.isNotEmpty &&
+        channelName == 'AnnouncementStory';
+    if (isTrustedLocalStory && messageHandler != null) {
+      // The bridge is limited to a cached local story and only receives the
+      // validated ready/close/complete events handled by the dialog.
+      _controller.addJavaScriptChannel( // NOSONAR
+        channelName!,
         onMessageReceived: (message) => messageHandler(message.message),
       );
     }
 
-    final filePath = widget.filePath;
     final url = widget.url;
     if (filePath != null && filePath.isNotEmpty) {
       _controller.loadFile(filePath);
