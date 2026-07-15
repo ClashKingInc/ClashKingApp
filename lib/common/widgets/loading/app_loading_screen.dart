@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -16,6 +18,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
   late AnimationController _pulseController;
   late AnimationController _textController;
   late Animation<double> _textOpacityAnimation;
+  Timer? _textCycleTimer;
 
   List<String> get _loadingTexts => [
     AppLocalizations.of(context)!.loadingVillages,
@@ -65,6 +68,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
     if (reduceMotion) {
       _animationsStarted = false;
+      _textCycleTimer?.cancel();
       _pulseController.stop();
       _textController
         ..stop()
@@ -82,7 +86,12 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
   void _startTextCycle() {
     // Start with the first text immediately visible
     _textController.forward();
-    Future.delayed(const Duration(milliseconds: 800), () {
+    _scheduleTextCycle();
+  }
+
+  void _scheduleTextCycle() {
+    _textCycleTimer?.cancel();
+    _textCycleTimer = Timer(const Duration(milliseconds: 800), () {
       if (mounted && !_reduceMotion) {
         _cycleText();
       }
@@ -100,11 +109,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
         _textController.forward().then((_) {
           // Only continue cycling if we haven't reached the last text
           if (!_reduceMotion && _currentTextIndex < _loadingTexts.length - 1) {
-            Future.delayed(const Duration(milliseconds: 800), () {
-              if (mounted) {
-                _cycleText();
-              }
-            });
+            _scheduleTextCycle();
           }
         });
       }
@@ -113,6 +118,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
   @override
   void dispose() {
+    _textCycleTimer?.cancel();
     _rotationController.dispose();
     _pulseController.dispose();
     _textController.dispose();
@@ -130,6 +136,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
           children: [
             // Static Logo
             SizedBox(
+              key: const Key('startup-mark'),
               width: 80,
               height: 80,
               child: ClipRRect(
@@ -145,13 +152,17 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
             const SizedBox(height: 30),
 
             // App Text Logo
-            SizedBox(
-              height: 35,
-              child: MobileWebImage(
-                imageUrl: Theme.of(context).brightness == Brightness.dark
-                    ? ImageAssets.darkModeTextLogo
-                    : ImageAssets.lightModeTextLogo,
-                fit: BoxFit.contain,
+            FractionallySizedBox(
+              key: const Key('startup-wordmark'),
+              widthFactor: 0.82,
+              child: AspectRatio(
+                aspectRatio: 3806 / 558,
+                child: MobileWebImage(
+                  imageUrl: Theme.of(context).brightness == Brightness.dark
+                      ? ImageAssets.darkModeTextLogo
+                      : ImageAssets.lightModeTextLogo,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
 

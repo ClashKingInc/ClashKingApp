@@ -50,6 +50,8 @@ class ApiConfig {
 
     return switch (environment) {
       ApiEnvironment.local => '$apiBaseUrl/v2',
+      // The notification endpoints are currently deployed on local-api.
+      // Move this to api.clashk.ing after the v2 rollout is complete.
       ApiEnvironment.production => 'https://local-api.clashk.ing/v2',
     };
   }
