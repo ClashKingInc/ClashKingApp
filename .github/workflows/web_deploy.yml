@@ -4,10 +4,13 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.url }}
 
     steps:
       - name: Checkout
@@ -26,9 +29,18 @@ jobs:
         run: flutter build web --release
 
       - name: Publish to Cloudflare Pages
+        id: deploy
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: clashkingapp
           directory: build/web
+
+  e2e:
+    needs: build-and-deploy
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/e2e.yml
+    with:
+      base_url: ${{ needs.build-and-deploy.outputs.deployment-url }}
+    secrets: inherit
