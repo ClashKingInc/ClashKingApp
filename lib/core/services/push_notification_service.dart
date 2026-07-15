@@ -503,12 +503,7 @@ class PushNotificationService {
     if (route == null || route.isEmpty) return;
 
     // Route handling will be expanded when backend payload contracts are final.
-    final context = globalNavigatorKey.currentContext;
-    if (context == null) return;
-
-    ScaffoldMessenger.maybeOf(
-      context,
-    )?.showSnackBar(SnackBar(content: Text('Notification opened: $route')));
+    DebugUtils.debugInfo('Push route not handled yet: $route');
   }
 
   Future<void> _openAdminPost(String postID) async {
