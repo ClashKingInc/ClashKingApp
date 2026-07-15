@@ -30,14 +30,14 @@ class HomeEventBanner extends StatefulWidget {
 class _HomeEventBannerState extends State<HomeEventBanner> {
   late final PageController _controller;
   late final AnnouncementService _announcementService;
-  late final Future<AppAnnouncement?> _announcementFuture;
+  late final Future<List<AppAnnouncement>> _announcementsFuture;
 
   @override
   void initState() {
     super.initState();
     _controller = PageController();
     _announcementService = AnnouncementService();
-    _announcementFuture = _announcementService.getActiveAnnouncement();
+    _announcementsFuture = _announcementService.getActiveAnnouncements();
   }
 
   @override
@@ -53,13 +53,13 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final loc = AppLocalizations.of(context)!;
 
-    return FutureBuilder<AppAnnouncement?>(
-      future: _announcementFuture,
+    return FutureBuilder<List<AppAnnouncement>>(
+      future: _announcementsFuture,
       builder: (context, snapshot) {
         final items = _BannerItem.build(
           loc: loc,
           isDark: isDark,
-          announcement: snapshot.data,
+          announcements: snapshot.data ?? const [],
         );
 
         return Column(
@@ -869,13 +869,65 @@ class _PageDots extends StatelessWidget {
   }
 }
 
-class _BannerTile extends StatelessWidget {
+class _BannerTile extends StatefulWidget {
   const _BannerTile({super.key, required this.item});
 
   final _BannerItem item;
 
   @override
+  State<_BannerTile> createState() => _BannerTileState();
+}
+
+class _BannerTileState extends State<_BannerTile>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _shimmerController;
+
+  @override
+  void initState() {
+    super.initState();
+    _shimmerController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2800),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.item.highlighted && !CKMotion.animationsDisabled(context)) {
+      if (!_shimmerController.isAnimating) {
+        _shimmerController.repeat();
+      }
+    } else {
+      _shimmerController
+        ..stop()
+        ..value = 0.5;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _BannerTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.item.highlighted != oldWidget.item.highlighted) {
+      if (widget.item.highlighted && !CKMotion.animationsDisabled(context)) {
+        _shimmerController.repeat();
+      } else {
+        _shimmerController
+          ..stop()
+          ..value = 0.5;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _shimmerController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final item = widget.item;
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final sourceHsl = HSLColor.fromColor(item.color);
@@ -924,77 +976,113 @@ class _BannerTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 1),
         child: Material(
-          color: accentColor.withValues(alpha: isDark ? 0.22 : 0.12),
+          color: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
             side: BorderSide(
-              color: accentColor.withValues(alpha: isDark ? 0.42 : 0.24),
+              color: accentColor.withValues(
+                alpha: item.highlighted
+                    ? (isDark ? 0.72 : 0.58)
+                    : (isDark ? 0.42 : 0.24),
+              ),
             ),
           ),
           clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface.withValues(alpha: 0.72),
-                      shape: BoxShape.circle,
-                    ),
-                    child: SizedBox.square(
-                      dimension: 40,
-                      child: Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: MobileWebImage(
-                          imageUrl: item.imageUrl,
-                          fit: BoxFit.contain,
-                          errorWidget: (context, url, error) => Icon(
-                            item.fallbackIcon,
-                            color: accentColor,
-                            size: 22,
+          child: AnimatedBuilder(
+            animation: _shimmerController,
+            builder: (context, child) {
+              final progress = _shimmerController.value;
+              final background = accentColor.withValues(
+                alpha: isDark ? 0.22 : 0.12,
+              );
+              return Ink(
+                decoration: BoxDecoration(
+                  color: item.highlighted ? null : background,
+                  gradient: item.highlighted
+                      ? LinearGradient(
+                          begin: Alignment(-2.4 + (progress * 4.8), -0.35),
+                          end: Alignment(-0.4 + (progress * 4.8), 0.35),
+                          colors: [
+                            CKColors.warGold.withValues(
+                              alpha: isDark ? 0.18 : 0.10,
+                            ),
+                            const Color(
+                              0xFFFFE7A0,
+                            ).withValues(alpha: isDark ? 0.42 : 0.32),
+                            CKColors.warGold.withValues(
+                              alpha: isDark ? 0.18 : 0.10,
+                            ),
+                          ],
+                        )
+                      : null,
+                ),
+                child: child,
+              );
+            },
+            child: InkWell(
+              onTap: onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface.withValues(alpha: 0.72),
+                        shape: BoxShape.circle,
+                      ),
+                      child: SizedBox.square(
+                        dimension: 40,
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: MobileWebImage(
+                            imageUrl: item.imageUrl,
+                            fit: BoxFit.contain,
+                            errorWidget: (context, url, error) => Icon(
+                              item.fallbackIcon,
+                              color: accentColor,
+                              size: 22,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelLarge
-                              ?.copyWith(fontWeight: FontWeight.w900),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          item.subtitle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.w700,
-                              ),
-                        ),
-                      ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.labelLarge
+                                ?.copyWith(fontWeight: FontWeight.w900),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            item.subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.labelMedium
+                                ?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  if (onTap != null) ...[
-                    const SizedBox(width: 8),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 16,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+                    if (onTap != null) ...[
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 16,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),
@@ -1443,6 +1531,7 @@ class _BannerItem {
     this.announcement,
     this.html,
     this.htmlUrl,
+    this.highlighted = false,
   });
 
   final String title;
@@ -1453,6 +1542,7 @@ class _BannerItem {
   final AppAnnouncement? announcement;
   final String? html;
   final String? htmlUrl;
+  final bool highlighted;
 
   /// The event's next relevant moment: its end when active, its start
   /// otherwise. Null for non-event tiles (promo).
@@ -1461,7 +1551,7 @@ class _BannerItem {
   static List<_BannerItem> build({
     required AppLocalizations loc,
     required bool isDark,
-    AppAnnouncement? announcement,
+    List<AppAnnouncement> announcements = const [],
   }) {
     final now = DateTime.now().toUtc();
     final events = [
@@ -1512,20 +1602,10 @@ class _BannerItem {
       ),
     ]..sort((a, b) => a.sortKey!.compareTo(b.sortKey!));
 
-    final featuredStory = AppAnnouncement.animeFury;
-
     return [
-      if (announcement != null) _announcementItem(announcement, loc),
-      if (announcement?.id != featuredStory.id)
-        _announcementItem(featuredStory, loc),
-      if (announcement == null)
-        _BannerItem(
-          title: loc.todoMagicDispatch,
-          subtitle: loc.todoMagicDispatchDescription,
-          imageUrl: ImageAssets.builderWave,
-          fallbackIcon: Icons.auto_awesome_rounded,
-          color: CKColors.primaryRed,
-        ),
+      ...announcements.map(
+        (announcement) => _announcementItem(announcement, loc),
+      ),
       _BannerItem(
         title: loc.todoUseCodeClashKing,
         subtitle: loc.todoUseCodeClashKingDescription,
@@ -1541,15 +1621,13 @@ class _BannerItem {
     AppAnnouncement announcement,
     AppLocalizations loc,
   ) {
-    final isAnimeFury = announcement.id == AppAnnouncement.animeFury.id;
     return _BannerItem(
-      title: isAnimeFury ? loc.announcementAnimeFuryTitle : announcement.title,
-      subtitle: isAnimeFury
-          ? loc.announcementAnimeFurySubtitle
-          : announcement.subtitle,
+      title: announcement.title,
+      subtitle: announcement.subtitle,
       imageUrl: announcement.bannerImageUrl ?? ImageAssets.builderWave,
       fallbackIcon: Icons.auto_awesome_rounded,
-      color: CKColors.primaryRed,
+      color: CKColors.warGold,
+      highlighted: true,
       announcement: announcement,
       html: announcement.body,
       htmlUrl: announcement.htmlUrl,

@@ -6,6 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
+const testStoryAnnouncement = AppAnnouncement(
+  id: 'announcement-1',
+  version: '2',
+  title: 'Test update',
+  subtitle: 'Test story',
+  storyUrl: 'https://example.com/story.html',
+);
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -32,8 +40,8 @@ void main() {
       directoryLoader: () async => temporaryDirectory,
     );
 
-    final firstPath = await service.prepare(AppAnnouncement.animeFury);
-    final secondPath = await service.prepare(AppAnnouncement.animeFury);
+    final firstPath = await service.prepare(testStoryAnnouncement);
+    final secondPath = await service.prepare(testStoryAnnouncement);
 
     expect(firstPath, isNotNull);
     expect(secondPath, firstPath);

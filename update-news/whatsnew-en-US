@@ -1,3 +1,7 @@
+- Admin announcements now open the exact published post when their push notification is tapped
+- Announcement pushes now respect each device's notification preferences
+- Interactive update stories and pinned home announcements can now be published from the admin panel
+- Added a Posts archive in the side menu for current and previous ClashKing announcements
 - Improved accessibility with reduced-motion support, larger header actions, localized navigation, and clearer empty-state actions
 - Shared stat chips, tiles, and segmented controls now provide more consistent styling and screen-reader support
 - Added push notification setup for device permissions, FCM token registration, and foreground alerts
