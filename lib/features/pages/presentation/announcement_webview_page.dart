@@ -29,6 +29,29 @@ NavigationDecision announcementNavigationDecision({
   return NavigationDecision.prevent;
 }
 
+String? announcementStoryMessageFromNavigation({
+  required String requestedUrl,
+  required bool isTrustedLocalStory,
+}) {
+  if (!isTrustedLocalStory) {
+    return null;
+  }
+  final uri = Uri.tryParse(requestedUrl);
+  if (uri?.scheme != 'clashking-story' || uri?.host != 'message') {
+    return null;
+  }
+  return uri?.queryParameters['payload'];
+}
+
+const _announcementStoryBridgeJavaScript = '''
+window.AnnouncementStory = Object.freeze({
+  postMessage: function(message) {
+    window.location.href = 'clashking-story://message?payload=' +
+      encodeURIComponent(String(message));
+  }
+});
+''';
+
 class AnnouncementWebViewPage extends StatefulWidget {
   const AnnouncementWebViewPage({
     super.key,
@@ -91,6 +114,30 @@ class _AnnouncementWebViewState extends State<AnnouncementWebView> {
   late final WebViewController _controller;
   var _loadingProgress = 0;
 
+  bool get _isTrustedLocalStory {
+    final filePath = widget.filePath;
+    return filePath != null &&
+        filePath.isNotEmpty &&
+        widget.javaScriptChannelName == 'AnnouncementStory' &&
+        widget.onJavaScriptMessage != null;
+  }
+
+  NavigationDecision _handleNavigationRequest(NavigationRequest request) {
+    final storyMessage = announcementStoryMessageFromNavigation(
+      requestedUrl: request.url,
+      isTrustedLocalStory: _isTrustedLocalStory,
+    );
+    if (storyMessage != null) {
+      widget.onJavaScriptMessage?.call(storyMessage);
+      return NavigationDecision.prevent;
+    }
+    return announcementNavigationDecision(
+      requestedUrl: request.url,
+      initialUrl: widget.url,
+      loadsLocalFile: widget.filePath?.isNotEmpty ?? false,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -104,12 +151,13 @@ class _AnnouncementWebViewState extends State<AnnouncementWebView> {
               setState(() => _loadingProgress = progress);
             }
           },
-          onNavigationRequest: (request) => announcementNavigationDecision(
-            requestedUrl: request.url,
-            initialUrl: widget.url,
-            loadsLocalFile: widget.filePath?.isNotEmpty ?? false,
-          ),
+          onNavigationRequest: _handleNavigationRequest,
           onPageFinished: (url) async {
+            if (_isTrustedLocalStory) {
+              await _controller.runJavaScript(
+                _announcementStoryBridgeJavaScript,
+              );
+            }
             final javaScript = widget.pageFinishedJavaScript;
             if (javaScript != null && javaScript.isNotEmpty) {
               await _controller.runJavaScript(javaScript);
@@ -119,22 +167,7 @@ class _AnnouncementWebViewState extends State<AnnouncementWebView> {
         ),
       );
 
-    final channelName = widget.javaScriptChannelName;
-    final messageHandler = widget.onJavaScriptMessage;
     final filePath = widget.filePath;
-    final isTrustedLocalStory =
-        filePath != null &&
-        filePath.isNotEmpty &&
-        channelName == 'AnnouncementStory';
-    if (isTrustedLocalStory && messageHandler != null) {
-      // The bridge is limited to a cached local story and only receives the
-      // validated ready/close/complete events handled by the dialog.
-      _controller.addJavaScriptChannel( // NOSONAR
-        channelName!,
-        onMessageReceived: (message) => messageHandler(message.message),
-      );
-    }
-
     final url = widget.url;
     if (filePath != null && filePath.isNotEmpty) {
       _controller.loadFile(filePath);

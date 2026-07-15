@@ -60,4 +60,34 @@ void main() {
       );
     });
   });
+
+  group('announcementStoryMessageFromNavigation', () {
+    test('returns decoded messages from the trusted local story bridge', () {
+      expect(
+        announcementStoryMessageFromNavigation(
+          requestedUrl:
+              'clashking-story://message?payload=%7B%22type%22%3A%22complete%22%7D',
+          isTrustedLocalStory: true,
+        ),
+        '{"type":"complete"}',
+      );
+    });
+
+    test('rejects bridge URLs outside a trusted local story', () {
+      expect(
+        announcementStoryMessageFromNavigation(
+          requestedUrl: 'clashking-story://message?payload=close',
+          isTrustedLocalStory: false,
+        ),
+        isNull,
+      );
+      expect(
+        announcementStoryMessageFromNavigation(
+          requestedUrl: 'https://attacker.example/?payload=close',
+          isTrustedLocalStory: true,
+        ),
+        isNull,
+      );
+    });
+  });
 }
