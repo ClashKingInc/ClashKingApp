@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
@@ -16,24 +16,26 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum _SearchMode { players, clans }
 
 enum _RecentSearchType { player, clan }
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  const SearchPage({super.key, this.overlay = false, this.autofocus = false});
+
+  final bool overlay;
+  final bool autofocus;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  static const int _recentLimit = 5;
-  static const String _recentKey = 'clashking_recent_search_results';
+  static const int _recentLimit = 10;
   static final RegExp _tagRegExp = RegExp(r'^[PYLQGRJCUV0289]{3,9}$');
 
+  final ApiService _apiService = ApiService.shared;
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   Timer? _debounce;
@@ -46,12 +48,24 @@ class _SearchPageState extends State<SearchPage> {
   bool _isSearching = false;
   bool _hasSearched = false;
   int _searchVersion = 0;
+  final Set<String> _trackedFullPlayerTags = {};
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_queueSearch);
     _loadRecents();
+    if (widget.autofocus) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (widget.overlay) {
+          Future.delayed(const Duration(milliseconds: 180), () {
+            if (mounted) _focusNode.requestFocus();
+          });
+        } else if (mounted) {
+          _focusNode.requestFocus();
+        }
+      });
+    }
   }
 
   @override
@@ -63,30 +77,74 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _loadRecents() async {
-    final prefs = await SharedPreferences.getInstance();
-    final items =
-        prefs
-            .getStringList(_recentKey)
-            ?.map((value) => _RecentSearchItem.tryDecode(value))
-            .whereType<_RecentSearchItem>()
-            .toList() ??
-        [];
+    final loc = AppLocalizations.of(context)!;
+    final userId = _currentSearchUserId();
+    if (userId == null) {
+      if (!mounted) return;
+      setState(() => _recentItems = []);
+      return;
+    }
+
+    final items = <_RecentSearchItem>[];
+    try {
+      final encodedUserId = Uri.encodeComponent(userId);
+      final response = await _apiService.getResponse(
+        '/links/$encodedUserId/searches',
+        requiresAuth: true,
+      );
+
+      items.addAll(_decodeRecentItems(response, loc));
+      items.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    } catch (_) {
+      items.clear();
+    }
+
     if (!mounted) return;
-    setState(() => _recentItems = items);
+    setState(() => _recentItems = items.take(_recentLimit).toList());
   }
 
-  Future<void> _saveRecent(_RecentSearchItem item) async {
-    final prefs = await SharedPreferences.getInstance();
-    final next = [
-      item,
-      ..._recentItems.where((recent) => recent.tag != item.tag),
-    ].take(_recentLimit).toList();
-    await prefs.setStringList(
-      _recentKey,
-      next.map((item) => jsonEncode(item.toJson())).toList(),
+  List<_RecentSearchItem> _decodeRecentItems(
+    http.Response response,
+    AppLocalizations loc,
+  ) {
+    if (response.statusCode != 200) return [];
+    final data = jsonDecode(utf8.decode(response.bodyBytes));
+    if (data is! Map<String, dynamic>) return [];
+
+    final items = <_RecentSearchItem>[];
+    items.addAll(
+      _decodeRecentGroup(data['players'], _RecentSearchType.player, loc),
     );
-    if (!mounted) return;
-    setState(() => _recentItems = next);
+    items.addAll(
+      _decodeRecentGroup(data['clans'], _RecentSearchType.clan, loc),
+    );
+    return items;
+  }
+
+  List<_RecentSearchItem> _decodeRecentGroup(
+    Object? rawItems,
+    _RecentSearchType type,
+    AppLocalizations loc,
+  ) {
+    if (rawItems is! List) return [];
+    return rawItems
+        .whereType<Map<String, dynamic>>()
+        .map((item) => _RecentSearchItem.fromApiJson(item, type, loc))
+        .whereType<_RecentSearchItem>()
+        .toList();
+  }
+
+  String? _currentSearchUserId() {
+    final authService = context.read<AuthService>();
+    final userId = authService.currentUser?.userId.trim();
+    if (userId == null || userId.isEmpty) return null;
+    return userId;
+  }
+
+  Map<String, String>? _searchTrackingHeaders() {
+    final userId = _currentSearchUserId();
+    if (userId == null) return null;
+    return {'x-ck-user-id': userId};
   }
 
   void _queueSearch() {
@@ -150,18 +208,28 @@ class _SearchPageState extends State<SearchPage> {
     const timeout = Duration(seconds: 10);
     final normalizedTag = query.replaceFirst('#', '').toUpperCase();
     final isTag = _tagRegExp.hasMatch(normalizedTag);
-    final Uri uri;
-
     if (isTag) {
-      uri = Uri.parse(
-        '${ApiService.proxyUrl}/players/${Uri.encodeComponent('#$normalizedTag')}',
+      final response = await _apiService.proxyGet(
+        '/players/${Uri.encodeComponent('#$normalizedTag')}',
+        timeout: timeout,
+        extraHeaders: _searchTrackingHeaders(),
       );
-    } else {
-      uri = Uri.parse(
-        '${ApiService.apiUrlV1}/player/full-search/${Uri.encodeComponent(query)}',
-      );
+      if (response.statusCode != 200) return [];
+
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      if (data is Map<String, dynamic> && data['items'] is List) {
+        return data['items'] as List<dynamic>;
+      }
+      if (data is Map<String, dynamic>) {
+        final tag = data['tag']?.toString();
+        if (tag != null && tag.isNotEmpty) _trackedFullPlayerTags.add(tag);
+      }
+      return [data];
     }
 
+    final uri = Uri.parse(
+      '${ApiService.apiUrlV1}/player/full-search/${Uri.encodeComponent(query)}',
+    );
     final response = await http.get(uri).timeout(timeout);
     if (response.statusCode != 200) return [];
 
@@ -174,16 +242,14 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<List<dynamic>> _searchClans(String query) async {
     final searchQuery = 'name=${Uri.encodeQueryComponent(query)}';
-    final response = await http
-        .get(
-          Uri.parse(
-            '${ApiService.proxyUrl}/clans?$searchQuery$_clanFilters&limit=20&memberList=false',
-          ),
-        )
-        .timeout(const Duration(seconds: 10));
+    final response = await _apiService.proxyGet(
+      '/clans?$searchQuery$_clanFilters&limit=20&memberList=false',
+      timeout: const Duration(seconds: 10),
+    );
+    final body = utf8.decode(response.bodyBytes, allowMalformed: true);
     if (response.statusCode != 200) return [];
 
-    final data = jsonDecode(utf8.decode(response.bodyBytes));
+    final data = jsonDecode(body);
     if (data is Map<String, dynamic> && data['items'] is List) {
       return data['items'] as List<dynamic>;
     }
@@ -216,10 +282,15 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     try {
-      final selectedPlayer = await playerService.getPlayerAndClanData(
-        player['tag'],
-      );
-      await _saveRecent(_RecentSearchItem.fromPlayer(player));
+      final tag = player['tag']?.toString() ?? '';
+      final selectedPlayer =
+          _trackedFullPlayerTags.contains(tag) && player['heroes'] is List
+          ? await playerService.useOfficialPlayerData(player)
+          : await playerService.getPlayerAndClanData(
+              tag,
+              extraHeaders: _searchTrackingHeaders(),
+            );
+      unawaited(_loadRecents());
       navigator.pop();
       if (!mounted) return;
       navigator.push(
@@ -253,7 +324,7 @@ class _SearchPageState extends State<SearchPage> {
 
     try {
       final clanInfo = await _loadClanForResult(clan, clanService);
-      await _saveRecent(_RecentSearchItem.fromClan(clan));
+      unawaited(_loadRecents());
       navigator.pop();
       if (!mounted) return;
       navigator.push(
@@ -281,15 +352,16 @@ class _SearchPageState extends State<SearchPage> {
     final tag = clan['tag']?.toString() ?? '';
 
     try {
-      return await clanService.getClanAndWarData(tag);
+      return await clanService.getClanAndWarData(
+        tag,
+        extraHeaders: _searchTrackingHeaders(),
+      );
     } catch (_) {
-      final response = await http
-          .get(
-            Uri.parse(
-              '${ApiService.proxyUrl}/clans/${Uri.encodeComponent(tag)}',
-            ),
-          )
-          .timeout(const Duration(seconds: 10));
+      final response = await _apiService.proxyGet(
+        '/clans/${Uri.encodeComponent(tag)}',
+        timeout: const Duration(seconds: 10),
+        extraHeaders: _searchTrackingHeaders(),
+      );
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load clan data');
@@ -299,7 +371,9 @@ class _SearchPageState extends State<SearchPage> {
       if (data is! Map<String, dynamic>) {
         throw const FormatException('Invalid clan response');
       }
-      return Clan.fromJson(data);
+      final loadedClan = Clan.fromJson(data);
+      await clanService.loadJoinLeaveForClan(loadedClan);
+      return loadedClan;
     }
   }
 
@@ -321,163 +395,273 @@ class _SearchPageState extends State<SearchPage> {
     final showRecents =
         _recentItems.isNotEmpty && _controller.text.trim().isEmpty;
 
-    return Scaffold(
-      body: ListView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-        children: [
-          _ModeSelector(mode: _mode, onChanged: _setMode),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            textInputAction: TextInputAction.search,
-            onSubmitted: (_) => _runSearch(),
-            decoration: InputDecoration(
-              hintText: hint,
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (_mode == _SearchMode.clans)
-                    IconButton(
-                      tooltip: l10n?.searchFilters ?? 'Filters',
-                      onPressed: _showClanFilters,
-                      icon: Icon(
-                        Icons.filter_list,
-                        color: _clanFilters.isEmpty
-                            ? colorScheme.onSurfaceVariant
-                            : colorScheme.primary,
-                      ),
-                    ),
-                  if (_isSearching)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14),
-                      child: SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    )
-                  else if (_controller.text.isNotEmpty)
-                    IconButton(
-                      tooltip: l10n?.searchClear ?? 'Clear',
-                      onPressed: () {
-                        _controller.clear();
-                        setState(() {
-                          _results = [];
-                          _hasSearched = false;
-                          _lastQuery = '';
-                        });
-                      },
-                      icon: const Icon(Icons.close),
-                    ),
-                ],
-              ),
-              filled: true,
-              fillColor: colorScheme.surface,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.35),
+    Widget searchField({required bool overlay}) {
+      return SizedBox(
+        height: 48,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            LiquidGlassBar(
+              height: 48,
+              cornerRadius: 24,
+              interactive: true,
+              borderOpacity: Theme.of(context).brightness == Brightness.dark
+                  ? 0.22
+                  : 0.30,
+              shadowOpacity: Theme.of(context).brightness == Brightness.dark
+                  ? 0.22
+                  : 0.08,
+            ),
+            TextField(
+              controller: _controller,
+              focusNode: _focusNode,
+              textInputAction: TextInputAction.search,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+              onSubmitted: (_) => _runSearch(),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
                 ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(
-                  color: colorScheme.outlineVariant.withValues(alpha: 0.35),
+                isDense: true,
+                prefixIcon: Icon(
+                  Icons.search_rounded,
+                  size: 20,
+                  color: colorScheme.onSurfaceVariant,
                 ),
+                prefixIconConstraints: const BoxConstraints(
+                  minWidth: 42,
+                  minHeight: 48,
+                ),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_mode == _SearchMode.clans)
+                      IconButton(
+                        tooltip: l10n?.searchFilters ?? 'Filters',
+                        onPressed: _showClanFilters,
+                        splashRadius: 18,
+                        icon: Icon(
+                          Icons.filter_list_rounded,
+                          color: _clanFilters.isEmpty
+                              ? colorScheme.onSurfaceVariant
+                              : colorScheme.onSurface,
+                        ),
+                      ),
+                    if (_isSearching)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 14),
+                        child: SizedBox.square(
+                          dimension: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                    else if (_controller.text.isNotEmpty)
+                      IconButton(
+                        tooltip: l10n?.searchClear ?? 'Clear',
+                        onPressed: () {
+                          _controller.clear();
+                          setState(() {
+                            _results = [];
+                            _hasSearched = false;
+                            _lastQuery = '';
+                          });
+                        },
+                        splashRadius: 18,
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                  ],
+                ),
+                suffixIconConstraints: const BoxConstraints(minHeight: 48),
+                filled: false,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: 14,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: colorScheme.primary, width: 1.2),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final resultChildren = <Widget>[
+      if (showRecents) ...[
+        Padding(
+          padding: EdgeInsets.only(top: widget.overlay ? 4 : 18),
+          child: Text(
+            l10n?.searchRecent ?? 'Recent',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: widget.overlay
+                  ? colorScheme.onSurfaceVariant
+                  : colorScheme.onSurface,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        ..._recentItems
+            .take(_recentLimit)
+            .map(
+              (item) => _RecentResultTile(
+                item: item,
+                overlay: widget.overlay,
+                onTap: () => _openRecent(item),
+              ),
+            ),
+      ],
+      if (!showRecents) SizedBox(height: widget.overlay ? 2 : 14),
+      if (_hasSearched && !_isSearching && _results.isEmpty)
+        Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: Center(
+            child: Text(
+              AppLocalizations.of(context)?.searchNoResult ?? 'No result.',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
             ),
           ),
-          if (showRecents) ...[
-            const SizedBox(height: 18),
-            Text(l10n?.searchRecent ?? 'Recent', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 10),
-            ..._recentItems
-                .take(_recentLimit)
-                .map(
-                  (item) => _RecentResultTile(
-                    item: item,
-                    onTap: () => _openRecent(item),
-                  ),
-                ),
-          ],
-          const SizedBox(height: 14),
-          if (_hasSearched && !_isSearching && _results.isEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)?.searchNoResult ?? 'No result.',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+        )
+      else
+        ..._results.map(
+          (result) => _SearchResultTile(
+            result: result as Map<String, dynamic>,
+            mode: _mode,
+            overlay: widget.overlay,
+            onTap: () => _mode == _SearchMode.players
+                ? _openPlayer(result)
+                : _openClan(result),
+          ),
+        ),
+    ];
+
+    if (widget.overlay) {
+      return Material(
+        color: colorScheme.surface,
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 12, 8),
+                child: Row(
+                  children: [
+                    Expanded(child: searchField(overlay: true)),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: TextButton.styleFrom(
+                        foregroundColor: colorScheme.onSurface,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: const Size(60, 40),
+                        textStyle: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      child: Text(AppLocalizations.of(context)!.searchCancel),
+                    ),
+                  ],
                 ),
               ),
-            )
-          else
-            ..._results.map(
-              (result) => _SearchResultTile(
-                result: result as Map<String, dynamic>,
-                mode: _mode,
-                onTap: () => _mode == _SearchMode.players
-                    ? _openPlayer(result)
-                    : _openClan(result),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                child: _ModeSelector(
+                  mode: _mode,
+                  onChanged: _setMode,
+                  useLiquidGlass: false,
+                  compact: true,
+                ),
               ),
-            ),
-        ],
-      ),
+              Expanded(
+                child: ListView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.fromLTRB(
+                    16,
+                    10,
+                    16,
+                    MediaQuery.paddingOf(context).bottom + 20,
+                  ),
+                  children: resultChildren,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final content = ListView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+      children: [
+        _ModeSelector(mode: _mode, onChanged: _setMode, useLiquidGlass: true),
+        const SizedBox(height: 12),
+        searchField(overlay: false),
+        ...resultChildren,
+      ],
     );
+
+    return Scaffold(body: content);
   }
 }
 
 class _ModeSelector extends StatelessWidget {
-  const _ModeSelector({required this.mode, required this.onChanged});
+  const _ModeSelector({
+    required this.mode,
+    required this.onChanged,
+    this.useLiquidGlass = true,
+    this.compact = false,
+  });
 
   final _SearchMode mode;
   final ValueChanged<_SearchMode> onChanged;
+  final bool useLiquidGlass;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
 
-    return SizedBox(
-      height: 52,
+    final height = compact ? 40.0 : 52.0;
+    final inset = compact ? 4.0 : 5.0;
+    final selectedHeight = height - (inset * 2);
+    final selectedRadius = selectedHeight / 2;
+
+    Widget fallbackControl(BuildContext context) => SizedBox(
+      height: height,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final segmentWidth = constraints.maxWidth / 2;
           final selectedLeft = mode == _SearchMode.players
-              ? 5.0
-              : segmentWidth + 5.0;
+              ? inset
+              : segmentWidth + inset;
 
           return Stack(
             fit: StackFit.expand,
             children: [
-              const NativeLiquidGlassBar(
-                height: 52,
-                cornerRadius: 26,
-                borderOpacity: 0.28,
-                shadowOpacity: 0.08,
+              _ModeSegmentChrome(
+                height: height,
+                cornerRadius: height / 2,
+                useGlass: useLiquidGlass,
               ),
               AnimatedPositioned(
-                duration: const Duration(milliseconds: 240),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOutCubic,
                 left: selectedLeft,
-                top: 5,
-                width: segmentWidth - 10,
-                height: 42,
-                child: const NativeLiquidGlassBar(
-                  height: 42,
-                  cornerRadius: 21,
-                  interactive: true,
+                top: inset,
+                width: segmentWidth - (inset * 2),
+                height: selectedHeight,
+                child: _ModeSegmentChrome(
+                  height: selectedHeight,
+                  cornerRadius: selectedRadius,
                   selected: true,
-                  borderOpacity: 0.46,
-                  shadowOpacity: 0.12,
+                  useGlass: useLiquidGlass,
                 ),
               ),
               Row(
@@ -487,6 +671,7 @@ class _ModeSelector extends StatelessWidget {
                     label: l10n?.searchTabPlayers ?? 'Players',
                     selected: mode == _SearchMode.players,
                     colorScheme: colorScheme,
+                    compact: compact,
                     onTap: () => onChanged(_SearchMode.players),
                   ),
                   _ModeButton(
@@ -494,6 +679,7 @@ class _ModeSelector extends StatelessWidget {
                     label: l10n?.searchTabClans ?? 'Clans',
                     selected: mode == _SearchMode.clans,
                     colorScheme: colorScheme,
+                    compact: compact,
                     onTap: () => onChanged(_SearchMode.clans),
                   ),
                 ],
@@ -502,6 +688,67 @@ class _ModeSelector extends StatelessWidget {
           );
         },
       ),
+    );
+
+    if (!useLiquidGlass) {
+      return fallbackControl(context);
+    }
+
+    return LiquidGlassSegmentedControl<_SearchMode>(
+      height: height,
+      values: const [_SearchMode.players, _SearchMode.clans],
+      labels: [
+        l10n?.searchTabPlayers ?? 'Players',
+        l10n?.searchTabClans ?? 'Clans',
+      ],
+      selected: mode,
+      color: colorScheme.primary,
+      onChanged: onChanged,
+      fallbackBuilder: fallbackControl,
+    );
+  }
+}
+
+class _ModeSegmentChrome extends StatelessWidget {
+  const _ModeSegmentChrome({
+    required this.height,
+    required this.cornerRadius,
+    required this.useGlass,
+    this.selected = false,
+  });
+
+  final double height;
+  final double cornerRadius;
+  final bool useGlass;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    if (useGlass) {
+      return LiquidGlassBar(
+        height: height,
+        cornerRadius: cornerRadius,
+        interactive: selected,
+        selected: selected,
+        borderOpacity: selected ? 0.46 : 0.28,
+        shadowOpacity: selected ? 0.12 : 0.08,
+      );
+    }
+
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: selected
+            ? colorScheme.surface.withValues(alpha: 0.98)
+            : colorScheme.surface.withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(cornerRadius),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(
+            alpha: selected ? 0.38 : 0.30,
+          ),
+        ),
+      ),
+      child: SizedBox(height: height),
     );
   }
 }
@@ -512,6 +759,7 @@ class _ModeButton extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.colorScheme,
+    required this.compact,
     required this.onTap,
   });
 
@@ -519,32 +767,48 @@ class _ModeButton extends StatelessWidget {
   final String label;
   final bool selected;
   final ColorScheme colorScheme;
+  final bool compact;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = selected ? colorScheme.primary : colorScheme.onSurfaceVariant;
+    final color = selected
+        ? colorScheme.onSurface
+        : colorScheme.onSurfaceVariant;
 
     return Expanded(
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(24),
-          onTap: onTap,
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 20, color: color),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: color,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            splashFactory: NoSplash.splashFactory,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: onTap,
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 20, color: color),
+                  SizedBox(width: compact ? 6 : 8),
+                  Text(
+                    label,
+                    style:
+                        (compact
+                                ? Theme.of(context).textTheme.labelMedium
+                                : Theme.of(context).textTheme.labelLarge)
+                            ?.copyWith(
+                              color: color,
+                              fontWeight: selected
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                            ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -557,11 +821,13 @@ class _SearchResultTile extends StatelessWidget {
   const _SearchResultTile({
     required this.result,
     required this.mode,
+    required this.overlay,
     required this.onTap,
   });
 
   final Map<String, dynamic> result;
   final _SearchMode mode;
+  final bool overlay;
   final VoidCallback onTap;
 
   @override
@@ -580,6 +846,7 @@ class _SearchResultTile extends StatelessWidget {
       leading: isPlayer
           ? MobileWebImage(imageUrl: _townHallImage(result))
           : _ClanBadge(imageUrl: _clanBadge(result)),
+      overlay: overlay,
       onTap: onTap,
     );
   }
@@ -589,7 +856,7 @@ class _SearchResultTile extends StatelessWidget {
     final leagueData = player['league'];
     final clan = clanData is Map ? clanData['name'] : player['clan_name'];
     final league = leagueData is Map ? leagueData['name'] : player['league'];
-    return [if (clan != null) clan, if (league != null) league].join(' • ');
+    return [?clan, ?league].join(' • ');
   }
 
   String _townHallImage(Map<String, dynamic> player) {
@@ -608,9 +875,14 @@ class _SearchResultTile extends StatelessWidget {
 }
 
 class _RecentResultTile extends StatelessWidget {
-  const _RecentResultTile({required this.item, required this.onTap});
+  const _RecentResultTile({
+    required this.item,
+    required this.overlay,
+    required this.onTap,
+  });
 
   final _RecentSearchItem item;
+  final bool overlay;
   final VoidCallback onTap;
 
   @override
@@ -622,6 +894,7 @@ class _RecentResultTile extends StatelessWidget {
       leading: item.type == _RecentSearchType.player
           ? MobileWebImage(imageUrl: item.imageUrl ?? ImageAssets.townHall(1))
           : _ClanBadge(imageUrl: item.imageUrl),
+      overlay: overlay,
       onTap: onTap,
     );
   }
@@ -633,6 +906,7 @@ class _EntityTile extends StatelessWidget {
     required this.tag,
     required this.subtitle,
     required this.leading,
+    required this.overlay,
     required this.onTap,
   });
 
@@ -640,11 +914,68 @@ class _EntityTile extends StatelessWidget {
   final String tag;
   final String subtitle;
   final Widget leading;
+  final bool overlay;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final tileContent = Row(
+      children: [
+        SizedBox.square(dimension: overlay ? 48 : 54, child: leading),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: overlay ? FontWeight.w700 : null,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                tag,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              if (subtitle.isNotEmpty) ...[
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        Icon(
+          overlay ? Icons.north_west_rounded : Icons.chevron_right,
+          color: overlay ? colorScheme.primary : colorScheme.onSurfaceVariant,
+        ),
+      ],
+    );
+
+    if (overlay) {
+      return InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          child: tileContent,
+        ),
+      );
+    }
 
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
@@ -654,49 +985,7 @@ class _EntityTile extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              SizedBox.square(dimension: 54, child: leading),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      tag,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    if (subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
-            ],
-          ),
-        ),
+        child: Padding(padding: const EdgeInsets.all(12), child: tileContent),
       ),
     );
   }
@@ -713,7 +1002,7 @@ class _ClanBadge extends StatelessWidget {
       return const Icon(Icons.shield_outlined, size: 40);
     }
 
-    return CachedNetworkImage(
+    return MobileWebImage(
       imageUrl: imageUrl!,
       fit: BoxFit.contain,
       errorWidget: (context, url, error) =>
@@ -728,6 +1017,7 @@ class _RecentSearchItem {
     required this.name,
     required this.tag,
     required this.subtitle,
+    required this.createdAt,
     this.imageUrl,
   });
 
@@ -735,62 +1025,57 @@ class _RecentSearchItem {
   final String name;
   final String tag;
   final String subtitle;
+  final DateTime createdAt;
   final String? imageUrl;
 
-  factory _RecentSearchItem.fromPlayer(Map<String, dynamic> player) {
-    final clanData = player['clan'];
-    final clan = clanData is Map ? clanData['name'] : player['clan_name'];
-    return _RecentSearchItem(
-      type: _RecentSearchType.player,
-      name: player['name']?.toString() ?? 'Player',
-      tag: player['tag']?.toString() ?? '',
-      subtitle: clan?.toString() ?? 'Player',
-      imageUrl: ImageAssets.townHall(
-        player['townHallLevel'] ?? player['townhall'] ?? 1,
-      ),
-    );
-  }
+  static _RecentSearchItem? fromApiJson(
+    Map<String, dynamic> json,
+    _RecentSearchType fallbackType,
+    AppLocalizations loc,
+  ) {
+    final type = fallbackType;
+    final source = json;
+    final tag = source['tag']?.toString() ?? '';
+    if (tag.isEmpty) return null;
 
-  factory _RecentSearchItem.fromClan(Map<String, dynamic> clan) {
-    final badgeUrls = clan['badgeUrls'];
-    final badgeUrl = badgeUrls is Map<String, dynamic>
-        ? badgeUrls['medium'] ?? badgeUrls['small']
+    final createdAt =
+        DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0);
+
+    if (type == _RecentSearchType.clan) {
+      final badgeUrls = source['badgeUrls'];
+      final badgeUrl = badgeUrls is Map<String, dynamic>
+          ? badgeUrls['large']?.toString()
+          : null;
+      return _RecentSearchItem(
+        type: type,
+        name: source['name']?.toString() ?? tag,
+        tag: tag,
+        subtitle: loc.generalMembersCount(
+          (source['members'] as num?)?.toInt() ?? 0,
+        ),
+        createdAt: createdAt,
+        imageUrl: badgeUrl,
+      );
+    }
+
+    final clanData = source['clan'];
+    final leagueData = source['league'];
+    final clan = clanData is Map<String, dynamic> ? clanData['name'] : null;
+    final league = leagueData is Map<String, dynamic>
+        ? leagueData['name']
         : null;
     return _RecentSearchItem(
-      type: _RecentSearchType.clan,
-      name: clan['name']?.toString() ?? 'Clan',
-      tag: clan['tag']?.toString() ?? '',
-      subtitle: '${clan['members'] ?? 0} members',
-      imageUrl: badgeUrl?.toString(),
+      type: type,
+      name: source['name']?.toString() ?? tag,
+      tag: tag,
+      subtitle: [
+        if (clan != null) clan.toString(),
+        if (league != null) league.toString(),
+      ].join(' • '),
+      createdAt: createdAt,
+      imageUrl: ImageAssets.townHall(source['townHallLevel'] ?? 1),
     );
-  }
-
-  static _RecentSearchItem? tryDecode(String value) {
-    try {
-      final json = jsonDecode(value);
-      if (json is! Map<String, dynamic>) return null;
-      return _RecentSearchItem(
-        type: json['type'] == 'clan'
-            ? _RecentSearchType.clan
-            : _RecentSearchType.player,
-        name: json['name']?.toString() ?? '',
-        tag: json['tag']?.toString() ?? '',
-        subtitle: json['subtitle']?.toString() ?? '',
-        imageUrl: json['imageUrl']?.toString(),
-      );
-    } catch (_) {
-      return null;
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'type': type == _RecentSearchType.clan ? 'clan' : 'player',
-      'name': name,
-      'tag': tag,
-      'subtitle': subtitle,
-      'imageUrl': imageUrl,
-    };
   }
 
   Map<String, dynamic> toPlayerResult() {

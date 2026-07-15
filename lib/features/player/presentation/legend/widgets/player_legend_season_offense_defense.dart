@@ -1,7 +1,7 @@
 import 'package:clashkingapp/features/player/models/player_legend_attack.dart';
 import 'package:clashkingapp/features/player/models/player_legend_stats.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 
 class PlayerLegendOffenseDefense extends StatelessWidget {
   const PlayerLegendOffenseDefense({
@@ -34,8 +34,10 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title, style: Theme.of(context).textTheme.bodyMedium),
-            Text(' ($plusMinus$sum)',
-                style: Theme.of(context).textTheme.labelSmall),
+            Text(
+              ' ($plusMinus$sum)',
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -45,28 +47,28 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
             Stack(
               alignment: Alignment.topCenter,
               children: [
-                CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                MobileWebImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl:
                       "https://assets.clashk.ing/icons/Icon_HV_Trophy.png",
                   width: 16,
                   height: 16,
                   fit: BoxFit.cover,
                 ),
-                CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                MobileWebImage(
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: "https://assets.clashk.ing/icons/Icon_BB_Star.png",
                   width: 8,
                   height: 8,
                   fit: BoxFit.cover,
-                )
+                ),
               ],
             ),
             const SizedBox(width: 4),
-            Text("$plusMinus${average.toStringAsFixed(1)}",
-                style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              "$plusMinus${average.toStringAsFixed(1)}",
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -78,8 +80,10 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
               children: list.map((attack) {
                 final int change = attack.change;
                 final int time = attack.time;
-                final String timeAgo =
-                    PlayerLegendStats.convertToTimeAgo(time, context);
+                final String timeAgo = PlayerLegendStats.convertToTimeAgo(
+                  time,
+                  context,
+                );
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,9 +95,9 @@ class PlayerLegendOffenseDefense extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                            child: MobileWebImage(
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                               imageUrl: icon,
                               width: 20,
                             ),

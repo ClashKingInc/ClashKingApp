@@ -6,18 +6,15 @@ class PlayerEquipment extends PlayerItem {
   final String village;
   final String rarity;
 
-  PlayerEquipment(
-      {required super.name,
-      required super.level,
-      required super.maxLevel,
-      required this.rarity,
-      required this.village,
-      required super.isUnlocked,
-      super.meta})
-      : super(
-          type: 'gear',
-          imageUrl: ImageAssets.getGearImage(name),
-        );
+  PlayerEquipment({
+    required super.name,
+    required super.level,
+    required super.maxLevel,
+    required this.rarity,
+    required this.village,
+    required super.isUnlocked,
+    super.meta,
+  }) : super(type: 'gear', imageUrl: ImageAssets.getGearImage(name));
 
   factory PlayerEquipment.fromJson(Map<String, dynamic> json) {
     return PlayerEquipment(
@@ -31,13 +28,14 @@ class PlayerEquipment extends PlayerItem {
     );
   }
 
-  factory PlayerEquipment.fromRaw(
-      {required String name,
-      required int level,
-      required int maxLevel,
-      required bool isUnlocked,
-      Map<String, dynamic>? meta,
-      Map<String, dynamic>? rawJson}) {
+  factory PlayerEquipment.fromRaw({
+    required String name,
+    required int level,
+    required int maxLevel,
+    required bool isUnlocked,
+    Map<String, dynamic>? meta,
+    Map<String, dynamic>? rawJson,
+  }) {
     return PlayerEquipment(
       name: name,
       level: level,

@@ -1,6 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+
+Future<void> copyTextToClipboard(String text) {
+  return Clipboard.setData(ClipboardData(text: text));
+}
 
 Future<void> showClipboardSnackbar(BuildContext context, String message) async {
   if (!context.mounted) return;

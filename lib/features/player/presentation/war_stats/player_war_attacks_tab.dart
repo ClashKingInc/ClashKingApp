@@ -1,66 +1,93 @@
+import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_attacks_card.dart';
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
-class PlayerWarAttacksTab extends StatefulWidget {
+class PlayerWarAttacksTab extends StatelessWidget {
   final List<PlayerWarStatsData> wars;
+  final PlayerWarTypeStats stats;
+  final String type;
 
-  const PlayerWarAttacksTab({super.key, required this.wars});
+  const PlayerWarAttacksTab({
+    super.key,
+    required this.wars,
+    required this.stats,
+    required this.type,
+  });
 
-  @override
-  State<PlayerWarAttacksTab> createState() => _PlayerWarAttacksTabState();
-}
-
-class _PlayerWarAttacksTabState extends State<PlayerWarAttacksTab> {
-  int _currentSegment = 1;
+  bool get _isAttack => type == "attacks";
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: 8),
-        CustomSlidingSegmentedControl<int>(
-          initialValue: _currentSegment,
-          children: {
-            1: Text(AppLocalizations.of(context)!.warAttacksTitle),
-            2: Text(AppLocalizations.of(context)!.warDefensesTitle),
-          },
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _WarStatsCompactSummary(
+            count: _isAttack ? stats.totalAttacks : stats.totalDefenses,
+            averageStars: _isAttack
+                ? stats.averageStars
+                : stats.averageStarsDef,
+            destruction: _isAttack
+                ? stats.averageDestruction
+                : stats.averageDestructionDef,
+            missed: _isAttack ? stats.missedAttacks : stats.missedDefenses,
           ),
-          thumbDecoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(6),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-                blurRadius: 4.0,
-                spreadRadius: 1.0,
-                offset: Offset(0.0, 2.0),
-              ),
-            ],
-          ),
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInToLinear,
-          onValueChanged: (v) {
-            setState(() {
-              _currentSegment = v;
-            });
-          },
         ),
         const SizedBox(height: 8),
-        _currentSegment == 1
-            ? PlayerWarAttacksCard(
-                wars: widget.wars,
-                type: "attacks",
-              )
-            : PlayerWarAttacksCard(
-                wars: widget.wars,
-                type: "defenses",
-              ),
+        PlayerWarAttacksCard(wars: wars, type: type),
+      ],
+    );
+  }
+}
+
+class _WarStatsCompactSummary extends StatelessWidget {
+  final int count;
+  final double averageStars;
+  final double destruction;
+  final int missed;
+
+  const _WarStatsCompactSummary({
+    required this.count,
+    required this.averageStars,
+    required this.destruction,
+    required this.missed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final missedColor = missed > 0
+        ? Theme.of(context).colorScheme.error
+        : Theme.of(context).colorScheme.primary;
+
+    return ClanSummaryChips(
+      padding: EdgeInsets.zero,
+      children: [
+        ClanSummaryChip(
+          label: loc.generalTotal,
+          value: count.toString(),
+          icon: Icons.format_list_numbered_rounded,
+        ),
+        ClanSummaryChip(
+          label: loc.warStarsAverage,
+          value: averageStars.toStringAsFixed(2),
+          icon: Icons.star_rounded,
+        ),
+        ClanSummaryChip(
+          label: loc.warDestructionTitle,
+          value: '${destruction.toStringAsFixed(1)}%',
+          icon: Icons.percent_rounded,
+        ),
+        ClanSummaryChip(
+          label: loc.warAttacksMissedShort,
+          value: missed.toString(),
+          icon: Icons.warning_amber_rounded,
+          color: missedColor,
+          selected: missed > 0,
+        ),
       ],
     );
   }

@@ -5,18 +5,18 @@ class PlayerBuilderBaseTroop extends PlayerItem {
   final String village;
   final bool superTroopIsActive;
 
-  PlayerBuilderBaseTroop(
-      {required super.name,
-      required super.level,
-      required super.maxLevel,
-      required this.superTroopIsActive,
-      required this.village,
-      required super.isUnlocked,
-      super.meta})
-      : super(
-          type: 'builderBase',
-          imageUrl: ImageAssets.getBuilderBaseTroopImage(name),
-        );
+  PlayerBuilderBaseTroop({
+    required super.name,
+    required super.level,
+    required super.maxLevel,
+    required this.superTroopIsActive,
+    required this.village,
+    required super.isUnlocked,
+    super.meta,
+  }) : super(
+         type: 'builderBase',
+         imageUrl: ImageAssets.getBuilderBaseTroopImage(name),
+       );
 
   factory PlayerBuilderBaseTroop.fromJson(Map<String, dynamic> json) {
     return PlayerBuilderBaseTroop(
@@ -29,14 +29,15 @@ class PlayerBuilderBaseTroop extends PlayerItem {
     );
   }
 
-  factory PlayerBuilderBaseTroop.fromRaw(
-      {required String name,
-      required int level,
-      required int maxLevel,
-      required bool isUnlocked,
-      Map<String, dynamic>? meta,
-      bool? superTroopIsActive,
-      Map<String, dynamic>? rawJson}) {
+  factory PlayerBuilderBaseTroop.fromRaw({
+    required String name,
+    required int level,
+    required int maxLevel,
+    required bool isUnlocked,
+    Map<String, dynamic>? meta,
+    bool? superTroopIsActive,
+    Map<String, dynamic>? rawJson,
+  }) {
     return PlayerBuilderBaseTroop(
       name: name,
       level: level,

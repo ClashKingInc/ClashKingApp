@@ -1,14 +1,15 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class ClanSearchResultTile extends StatefulWidget {
   final dynamic clan;
 
-  ClanSearchResultTile({required this.clan});
+  const ClanSearchResultTile({super.key, required this.clan});
 
   @override
   ClanSearchResultTileState createState() => ClanSearchResultTileState();
@@ -32,26 +33,31 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
             context: context,
             barrierDismissible: false,
             builder: (BuildContext context) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return Center(child: CircularProgressIndicator());
             },
           );
 
           try {
-            final clanInfo =
-                await ClanService().getClanAndWarData(widget.clan['tag']);
+            final clanInfo = await ClanService().getClanAndWarData(
+              widget.clan['tag'],
+            );
             navigator.pop();
             navigator.push(
               MaterialPageRoute(
-                  builder: (context) => ClanInfoScreen(clanInfo: clanInfo)),
+                builder: (context) => ClanInfoScreen(clanInfo: clanInfo),
+              ),
             );
           } catch (e) {
             navigator.pop();
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                    content: Text('Failed to load clan data: ${e.toString()}')),
+                  content: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.clanSearchLoadFailed(e.toString()),
+                  ),
+                ),
               );
             }
           }
@@ -68,10 +74,11 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                       padding: EdgeInsets.only(right: 8),
                       child: SizedBox(
                         width: 50,
-                        child: CachedNetworkImage(
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            imageUrl: widget.clan['badgeUrls']['medium']),
+                        child: MobileWebImage(
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          imageUrl: widget.clan['badgeUrls']['medium'],
+                        ),
                       ),
                     ),
                   ],
@@ -90,30 +97,35 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                         children: [
                           Text("${widget.clan['name']} "),
                           (widget.clan.containsKey('location') &&
-                                  widget.clan['location']!
-                                      .containsKey('countryCode'))
-                              ? CachedNetworkImage(
+                                  widget.clan['location']!.containsKey(
+                                    'countryCode',
+                                  ))
+                              ? MobileWebImage(
                                   errorWidget: (context, url, error) =>
                                       const Icon(Icons.error),
-                                  imageUrl: ImageAssets.flag(widget
-                                      .clan['location']['countryCode']
-                                      .toLowerCase()),
-                                  width: 16)
+                                  imageUrl: ImageAssets.flag(
+                                    widget.clan['location']['countryCode']
+                                        .toLowerCase(),
+                                  ),
+                                  width: 16,
+                                )
                               : SizedBox.shrink(),
                           SizedBox(width: 8),
-                          CachedNetworkImage(
+                          MobileWebImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                             width: 20,
                             imageUrl: ImageAssets.getLeagueImage(
-                                widget.clan['warLeague']['name'] ?? 'Unranked'),
+                              widget.clan['warLeague']['name'] ?? 'Unranked',
+                            ),
                           ),
                         ],
                       ),
                       Text(
                         "${widget.clan['tag']}",
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.tertiary),
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
                       ),
                       SizedBox(width: 8),
                       Row(
@@ -125,11 +137,13 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                             runSpacing: -7.0,
                             children: <Widget>[
                               Chip(
-                                avatar: Icon(LucideIcons.users,
-                                    size: 16,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface),
+                                avatar: Icon(
+                                  LucideIcons.users,
+                                  size: 16,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
                                 label: Text(
                                   widget.clan['members'].toString(),
                                   style: Theme.of(context).textTheme.labelLarge,
@@ -138,10 +152,11 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                               Chip(
                                 avatar: CircleAvatar(
                                   backgroundColor: Colors.transparent,
-                                  child: CachedNetworkImage(
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                      imageUrl: ImageAssets.trophies),
+                                  child: MobileWebImage(
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                    imageUrl: ImageAssets.trophies,
+                                  ),
                                 ),
                                 label: Text(
                                   widget.clan['clanPoints'].toString(),
@@ -163,4 +178,3 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
     );
   }
 }
-

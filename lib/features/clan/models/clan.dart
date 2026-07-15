@@ -72,7 +72,7 @@ class Clan {
     required this.requiredBuilderBaseTrophies,
     required this.requiredTownhallLevel,
     this.clanCapital,
-    this.chatLanguage
+    this.chatLanguage,
   });
 
   factory Clan.fromJson(Map<String, dynamic> json) {
@@ -110,9 +110,7 @@ class Clan {
           ? ClanLeague.fromJson(json["warLeague"])
           : null,
       members: (json["members"] as num?)?.toInt() ?? 0,
-      memberList: memberList
-          .map((m) => ClanMember.fromJson(m))
-          .toList(),
+      memberList: memberList.map((m) => ClanMember.fromJson(m)).toList(),
       labels: labels.map((l) => ClanLeague.fromJson(l)).toList(),
       requiredBuilderBaseTrophies:
           (json["requiredBuilderBaseTrophies"] as num?)?.toInt() ?? 0,

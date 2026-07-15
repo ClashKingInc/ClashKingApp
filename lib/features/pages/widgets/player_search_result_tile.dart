@@ -7,23 +7,15 @@ import 'package:clashkingapp/features/player/presentation/player/player_page.dar
 import 'package:flutter/material.dart';
 
 class PlayerSearchResultTile extends StatefulWidget {
-  final dynamic player;
+  const PlayerSearchResultTile({super.key, required this.player});
 
-  PlayerSearchResultTile({required this.player});
+  final dynamic player;
 
   @override
   PlayerSearchResultTileState createState() => PlayerSearchResultTileState();
 }
 
 class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
-  String? townHallUrl;
-  String? leagueUrl;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   String? getLeagueName(dynamic player) {
     if (player['league'] is Map) return player['league']?['name'];
     return player['league'] ?? 'Unranked';
@@ -33,7 +25,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
     return ImageAssets.getLeagueImage(getLeagueName(player) ?? 'Unranked');
   }
 
-  String getClanName(dynamic player) {
+  String? getClanName(dynamic player) {
     if (player['clan'] is Map) return player['clan']?['name'];
     return player['clan_name'];
   }
@@ -54,10 +46,8 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (BuildContext context) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+            builder: (context) {
+              return const Center(child: CircularProgressIndicator());
             },
           );
 
@@ -67,9 +57,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
           navigator.pop();
           navigator.push(
             MaterialPageRoute(
-              builder: (context) => PlayerScreen(
-                selectedPlayer: player,
-              ),
+              builder: (context) => PlayerScreen(selectedPlayer: player),
             ),
           );
         },
@@ -78,21 +66,19 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: 50,
-                      child: MobileWebImage(
-                          imageUrl: ImageAssets.townHall(
-                              widget.player['townHallLevel'] ??
-                                  widget.player['townhall'] ??
-                                  1)),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  width: 50,
+                  child: MobileWebImage(
+                    imageUrl: ImageAssets.townHall(
+                      widget.player['townHallLevel'] ??
+                          widget.player['townhall'] ??
+                          1,
                     ),
-                  ],
+                  ),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,9 +87,10 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                     Text(
                       "${widget.player['tag']}",
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.tertiary),
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -119,9 +106,10 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
                             ),
                             ImageChip(
                               context: context,
-                              imageUrl: getClanBadge(widget.player) ??
+                              imageUrl:
+                                  getClanBadge(widget.player) ??
                                   ImageAssets.defaultImage,
-                              label: getClanName(widget.player),
+                              label: getClanName(widget.player) ?? '',
                             ),
                           ],
                         ),

@@ -2,10 +2,10 @@ import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/utils/discord_auth_helper.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/observability_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
-import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -15,26 +15,22 @@ class AuthService extends ChangeNotifier {
     ApiService? apiService,
     TokenService? tokenService,
     Future<Map<String, String>?> Function()? discordAuthCodeProvider,
-  })  : _apiService = apiService ?? ApiService(),
-        _tokenService = tokenService ?? TokenService(),
-        _discordAuthCodeProvider =
-            discordAuthCodeProvider ?? DiscordAuthHelper.getDiscordAuthCode;
+  }) : _apiService = apiService ?? ApiService.shared,
+       _tokenService = tokenService ?? TokenService.shared,
+       _discordAuthCodeProvider =
+           discordAuthCodeProvider ?? DiscordAuthHelper.getDiscordAuthCode;
 
   final ApiService _apiService;
   final TokenService _tokenService;
-
-  // Injectable so tests can drive the OAuth-code step without a real browser
-  // flow; defaults to the static DiscordAuthHelper implementation in production.
   final Future<Map<String, String>?> Function() _discordAuthCodeProvider;
   String? _accessToken;
   bool _isAuthenticated = false;
   User? _currentUser;
-  List<dynamic>? _cocAccounts;
 
   String? get accessToken => _accessToken;
   bool get isAuthenticated => _isAuthenticated;
+  bool get canUseApp => _isAuthenticated;
   User? get currentUser => _currentUser;
-  List<dynamic>? get cocAccounts => _cocAccounts;
 
   String _localized(
     String fallback,
@@ -54,11 +50,14 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> initializeAuth() async {
+    await deletePrefs('auth_local_mode');
+
     _accessToken = await _tokenService.getAccessToken();
     if (_accessToken != null) {
       try {
         final response = await _apiService.get('/auth/me');
         _currentUser = User.fromJson(response);
+        await ObservabilityService.setAuthenticatedUser(_currentUser);
         _isAuthenticated = true;
       } catch (e) {
         if (isNetworkError(e)) {
@@ -71,6 +70,7 @@ class AuthService extends ChangeNotifier {
           _isAuthenticated = false;
           _accessToken = null;
           await _tokenService.clearTokens();
+          await ObservabilityService.clearUser();
           DebugUtils.debugWarning("⚠️ Authentication error: $e");
         }
         // Rethrow the error so startup can handle it appropriately
@@ -104,8 +104,12 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
       DebugUtils.debugSuccess("🔄 Tokens saved successfully.");
@@ -135,8 +139,12 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
 
@@ -157,7 +165,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> registerWithEmail(
-      String email, String password, String username) async {
+    String email,
+    String password,
+    String username,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Starting email registration process...");
       final deviceId = await _tokenService.getDeviceId();
@@ -174,7 +185,8 @@ class AuthService extends ChangeNotifier {
       // Registration now sends verification email instead of creating account
       // No tokens returned yet - user needs to verify email first
       DebugUtils.debugSuccess(
-          "🔄 Email registration verification sent successfully");
+        "🔄 Email registration verification sent successfully",
+      );
 
       // Don't set authentication state yet - wait for email verification
       notifyListeners();
@@ -197,13 +209,18 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
 
       DebugUtils.debugSuccess(
-          "🔄 Email verification with code completed successfully");
+        "🔄 Email verification with code completed successfully",
+      );
       notifyListeners();
     } catch (e) {
       DebugUtils.debugError(" Email verification with code error: $e");
@@ -244,7 +261,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> resetPassword(
-      String email, String resetCode, String newPassword) async {
+    String email,
+    String resetCode,
+    String newPassword,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Resetting password...");
       final deviceId = await _tokenService.getDeviceId();
@@ -259,8 +279,12 @@ class AuthService extends ChangeNotifier {
       });
 
       await _tokenService.saveTokens(
-          response['access_token'], response['refresh_token']);
+        response['access_token'],
+        response['refresh_token'],
+      );
+      await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
       _isAuthenticated = true;
       _accessToken = response['access_token'];
 
@@ -288,19 +312,13 @@ class AuthService extends ChangeNotifier {
       final deviceId = await _tokenService.getDeviceId();
       final deviceName = await _tokenService.getDeviceName();
 
-      // requiresAuth: true so the bearer token is attached — the backend needs
-      // it to know which signed-in ClashKing account to link Discord to.
-      await _apiService.post(
-        '/auth/link-discord-code',
-        {
-          'code': result['code']!,
-          'redirect_uri': DiscordAuthHelper.getRedirectUri(),
-          'code_verifier': result['code_verifier']!,
-          'device_id': deviceId,
-          'device_name': deviceName,
-        },
-        requiresAuth: true,
-      );
+      await _apiService.post('/auth/link-discord-code', {
+        'code': result['code']!,
+        'redirect_uri': DiscordAuthHelper.getRedirectUri(),
+        'code_verifier': result['code_verifier']!,
+        'device_id': deviceId,
+        'device_name': deviceName,
+      }, requiresAuth: true);
 
       DebugUtils.debugSuccess("🔄 Discord linking completed");
       await initializeAuth();
@@ -316,7 +334,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> linkDiscordAccount(
-      String discordAccessToken, String? refreshToken, int? expiresIn) async {
+    String discordAccessToken,
+    String? refreshToken,
+    int? expiresIn,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Linking Discord account...");
       final deviceId = await _tokenService.getDeviceId();
@@ -324,7 +345,7 @@ class AuthService extends ChangeNotifier {
 
       await _apiService.post('/auth/link-discord', {
         'access_token': discordAccessToken,
-        if (refreshToken != null) 'refresh_token': refreshToken,
+        'refresh_token': ?refreshToken,
         if (expiresIn != null) 'expires_in': expiresIn.toString(),
         'device_id': deviceId,
         'device_name': deviceName,
@@ -345,7 +366,10 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> linkEmailAccount(
-      String email, String password, String username) async {
+    String email,
+    String password,
+    String username,
+  ) async {
     try {
       DebugUtils.debugInfo("🔄 Linking email account...");
       final deviceId = await _tokenService.getDeviceId();
@@ -374,25 +398,18 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _tokenService.clearTokens();
-    try { await clearPrefs(); } catch (_) {}
-    _isAuthenticated = false;
-    _currentUser = null;
-    _cocAccounts = null;
-    _accessToken = null;
-    notifyListeners();
-    globalNavigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
+    await signOut();
   }
 
   Future<void> signOut() async {
     await _tokenService.clearTokens();
-    try { await clearPrefs(); } catch (_) {}
+    try {
+      await clearPrefs();
+    } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
-    _cocAccounts = null;
     _accessToken = null;
+    await ObservabilityService.clearUser();
     notifyListeners();
   }
 
@@ -400,15 +417,18 @@ class AuthService extends ChangeNotifier {
   /// Call this method and then separately call clearAccountData() on CocAccountService
   Future<void> logoutAndClearAllData() async {
     await _tokenService.clearTokens();
-    try { await clearPrefs(); } catch (_) {}
+    try {
+      await clearPrefs();
+    } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
-    _cocAccounts = null;
     _accessToken = null;
+    await ObservabilityService.clearUser();
     notifyListeners();
 
     // Note: Also call CocAccountService.clearAccountData() after this
     DebugUtils.debugInfo(
-        "🔄 AuthService data cleared. Make sure to also clear CocAccountService data.");
+      "🔄 AuthService data cleared. Make sure to also clear CocAccountService data.",
+    );
   }
 }

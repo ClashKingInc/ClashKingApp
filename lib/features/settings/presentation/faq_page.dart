@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -8,6 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class FaqScreen extends StatefulWidget {
+  const FaqScreen({super.key});
+
   @override
   State<FaqScreen> createState() => _FaqScreenState();
 }
@@ -25,22 +28,24 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
       duration: Duration(milliseconds: 300),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
     _animationController.forward();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _animationController.value = 1;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.faqTitle),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.faqTitle)),
       body: Column(
         children: [
           // Search bar
@@ -51,10 +56,9 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .outline
-                      .withValues(alpha: 0.2),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.outline.withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),
@@ -71,10 +75,12 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   ),
                   suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
+                          tooltip: AppLocalizations.of(context)!.searchClear,
                           icon: Icon(
                             Icons.clear,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                           onPressed: () {
                             setState(() {
@@ -85,8 +91,10 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         )
                       : null,
                   border: InputBorder.none,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -115,7 +123,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
     final faqItems = [
       // Getting Started & About Section
       _buildSectionHeader(
-          AppLocalizations.of(context)!.faqSectionGettingStarted),
+        AppLocalizations.of(context)!.faqSectionGettingStarted,
+      ),
       _buildFAQItem(
         question: AppLocalizations.of(context)!.faqWhatIsClashKingProject,
         icon: Icons.info,
@@ -166,45 +175,54 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   context: context,
                   icon: Icons.person,
                   title: AppLocalizations.of(context)!.faqFeaturesPlayerTitle,
-                  description: AppLocalizations.of(context)!
-                      .faqFeaturesPlayerDescription,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqFeaturesPlayerDescription,
                 ),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.group,
                   title: AppLocalizations.of(context)!.faqFeaturesClanTitle,
-                  description:
-                      AppLocalizations.of(context)!.faqFeaturesClanDescription,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqFeaturesClanDescription,
                 ),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.military_tech,
                   title: AppLocalizations.of(context)!.faqFeaturesWarTitle,
-                  description:
-                      AppLocalizations.of(context)!.faqFeaturesWarDescription,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqFeaturesWarDescription,
                 ),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.trending_up,
                   title: AppLocalizations.of(context)!.faqFeaturesLegendsTitle,
-                  description: AppLocalizations.of(context)!
-                      .faqFeaturesLegendsDescription,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqFeaturesLegendsDescription,
                 ),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.assessment,
                   title: AppLocalizations.of(context)!.faqFeaturesCwlTitle,
-                  description:
-                      AppLocalizations.of(context)!.faqFeaturesCwlDescription,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqFeaturesCwlDescription,
                 ),
                 SizedBox(height: 16),
                 Container(
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.3),
                       width: 1,
                     ),
                   ),
@@ -219,7 +237,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context)!.faqAppDevelopmentNotice,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
@@ -251,25 +270,35 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   context: context,
                   icon: Icons.track_changes,
                   title: AppLocalizations.of(context)!.faqBotFeatureTracking,
-                  description: AppLocalizations.of(context)!.faqBotFeatureTrackingDesc,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqBotFeatureTrackingDesc,
                 ),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.military_tech,
                   title: AppLocalizations.of(context)!.faqBotFeatureWars,
-                  description: AppLocalizations.of(context)!.faqBotFeatureWarsDesc,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqBotFeatureWarsDesc,
                 ),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.notifications,
-                  title: AppLocalizations.of(context)!.faqBotFeatureNotifications,
-                  description: AppLocalizations.of(context)!.faqBotFeatureNotificationsDesc,
+                  title: AppLocalizations.of(
+                    context,
+                  )!.faqBotFeatureNotifications,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqBotFeatureNotificationsDesc,
                 ),
                 _buildFeatureItem(
                   context: context,
                   icon: Icons.code,
                   title: AppLocalizations.of(context)!.faqBotFeatureCommands,
-                  description: AppLocalizations.of(context)!.faqBotFeatureCommandsDesc,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.faqBotFeatureCommandsDesc,
                 ),
                 SizedBox(height: 16),
                 Row(
@@ -278,10 +307,13 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       context: context,
                       label: AppLocalizations.of(context)!.faqInviteBotToServer,
                       icon: LucideIcons.bot,
-                      color: Color(0xFF5865F2),
+                      color: CKColors.discordBlurple,
                       onPressed: () async {
-                        launchUrl(Uri.parse(
-                            'https://discord.com/api/oauth2/authorize?client_id=824653933347209227&permissions=8&scope=bot%20applications.commands'));
+                        launchUrl(
+                          Uri.parse(
+                            'https://discord.com/api/oauth2/authorize?client_id=824653933347209227&permissions=8&scope=bot%20applications.commands',
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -310,12 +342,17 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   children: [
                     _buildActionButton(
                       context: context,
-                      label: "Supercell Fan Content Policy",
+                      label: AppLocalizations.of(
+                        context,
+                      )!.faqSupercellFanContentPolicyLink,
                       icon: Icons.policy,
-                      color: Color(0xFF4CAF50),
+                      color: CKColors.donationGreen,
                       onPressed: () async {
-                        launchUrl(Uri.parse(
-                            'https://supercell.com/en/fan-content-policy/'));
+                        launchUrl(
+                          Uri.parse(
+                            'https://supercell.com/en/fan-content-policy/',
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -326,10 +363,10 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         ],
       ),
 
-      
       // Support & Contact Section (grouped)
       _buildSectionHeader(
-          AppLocalizations.of(context)!.faqSectionSupportAndContact),
+        AppLocalizations.of(context)!.faqSectionSupportAndContact,
+      ),
       _buildFAQItem(
         question: AppLocalizations.of(context)!.faqSupportWork,
         icon: Icons.favorite,
@@ -346,9 +383,9 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                 SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqWaysToSupport,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 12),
                 Column(
@@ -357,22 +394,26 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       children: [
                         _buildActionButton(
                           context: context,
-                          label:
-                              AppLocalizations.of(context)!.faqUseCodeClashKing,
+                          label: AppLocalizations.of(
+                            context,
+                          )!.faqUseCodeClashKing,
                           icon: Icons.gamepad,
                           color: Theme.of(context).colorScheme.primary,
                           onPressed: () async {
-                            final languageCode = Localizations.localeOf(context)
-                                .languageCode
-                                .toLowerCase();
+                            final languageCode = Localizations.localeOf(
+                              context,
+                            ).languageCode.toLowerCase();
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 final url = Uri.https(
-                                    'link.clashofclans.com', '/$languageCode', {
-                                  'action': 'SupportCreator',
-                                  'id': 'Clashking',
-                                });
+                                  'link.clashofclans.com',
+                                  '/$languageCode',
+                                  {
+                                    'action': 'SupportCreator',
+                                    'id': 'Clashking',
+                                  },
+                                );
                                 return OpenClashDialog(url: url);
                               },
                             );
@@ -380,13 +421,17 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         ),
                         _buildActionButton(
                           context: context,
-                          label: AppLocalizations.of(context)!
-                              .faqSupportUsOnPatreon,
+                          label: AppLocalizations.of(
+                            context,
+                          )!.faqSupportUsOnPatreon,
                           icon: Icons.coffee,
                           color: Theme.of(context).colorScheme.secondary,
                           onPressed: () async {
-                            launchUrl(Uri.parse(
-                                'https://www.patreon.com/clashking?utm_campaign=creatorshare_creator'));
+                            launchUrl(
+                              Uri.parse(
+                                'https://www.patreon.com/clashking?utm_campaign=creatorshare_creator',
+                              ),
+                            );
                           },
                         ),
                       ],
@@ -398,10 +443,11 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                           context: context,
                           label: AppLocalizations.of(context)!.faqJoinDiscord,
                           icon: Icons.discord,
-                          color: Color(0xFF5865F2),
+                          color: CKColors.discordBlurple,
                           onPressed: () async {
                             launchUrl(
-                                Uri.parse('https://discord.gg/clashking'));
+                              Uri.parse('https://discord.gg/clashking'),
+                            );
                           },
                         ),
                         _buildActionButton(
@@ -413,8 +459,11 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                             // TODO: Implement app rating logic
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(AppLocalizations.of(context)!
-                                    .generalComingSoon),
+                                content: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.generalComingSoon,
+                                ),
                               ),
                             );
                           },
@@ -460,39 +509,45 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         try {
                           await launchUrl(params);
                         } catch (exception, stackTrace) {
-                          Sentry.captureException(exception,
-                              stackTrace: stackTrace);
+                          Sentry.captureException(
+                            exception,
+                            stackTrace: stackTrace,
+                          );
 
                           if (mounted) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  content: Text(AppLocalizations.of(context)!
-                                      .faqCannotOpenMailClient),
+                                  content: Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.faqCannotOpenMailClient,
+                                  ),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text(AppLocalizations.of(context)!
-                                          .generalOk),
+                                      child: Text(
+                                        AppLocalizations.of(context)!.generalOk,
+                                      ),
                                     ),
                                   ],
                                 );
                               },
                             );
 
-                            FlutterClipboard.copy('devs@clashk.ing')
-                                  .then((_) {
-                                if (mounted) {
-                                  showClipboardSnackbar(
+                            FlutterClipboard.copy('devs@clashk.ing').then((_) {
+                              if (mounted) {
+                                showClipboardSnackbar(
+                                  context,
+                                  AppLocalizations.of(
                                     context,
-                                    AppLocalizations.of(context)!
-                                        .generalCopiedToClipboard,
-                                  );
-                                }
-                              });
+                                  )!.generalCopiedToClipboard,
+                                );
+                              }
+                            });
                           }
                         }
                       },
@@ -501,7 +556,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       context: context,
                       label: AppLocalizations.of(context)!.faqJoinDiscord,
                       icon: Icons.discord,
-                      color: Color(0xFF5865F2),
+                      color: CKColors.discordBlurple,
                       onPressed: () async {
                         launchUrl(Uri.parse('https://discord.gg/clashking'));
                       },
@@ -515,8 +570,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
       ),
 
       // Troubleshooting Section
-      _buildSectionHeader(
-          AppLocalizations.of(context)!.faqTroubleshooting),
+      _buildSectionHeader(AppLocalizations.of(context)!.faqTroubleshooting),
       _buildFAQItem(
         question: AppLocalizations.of(context)!.faqWhyNotAccurate,
         icon: Icons.warning,
@@ -536,8 +590,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   ),
                   TextSpan(text: '\n'),
                   TextSpan(
-                      text: AppLocalizations.of(context)!
-                          .faqClanNotTrackedAnswer),
+                    text: AppLocalizations.of(context)!.faqClanNotTrackedAnswer,
+                  ),
                   TextSpan(text: '\n\n'),
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqTrackingDown,
@@ -548,8 +602,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   ),
                   TextSpan(text: '\n'),
                   TextSpan(
-                      text:
-                          AppLocalizations.of(context)!.faqTrackingDownAnswer),
+                    text: AppLocalizations.of(context)!.faqTrackingDownAnswer,
+                  ),
                   TextSpan(text: '\n\n'),
                   TextSpan(
                     text: AppLocalizations.of(context)!.faqApiLimitation,
@@ -560,8 +614,8 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   ),
                   TextSpan(text: '\n'),
                   TextSpan(
-                      text:
-                          AppLocalizations.of(context)!.faqApiLimitationAnswer),
+                    text: AppLocalizations.of(context)!.faqApiLimitationAnswer,
+                  ),
                 ],
               ),
             ),
@@ -586,13 +640,15 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   children: [
                     _buildActionButton(
                       context: context,
-                      label: AppLocalizations.of(context)!
-                          .translationHelpUsTranslate,
+                      label: AppLocalizations.of(
+                        context,
+                      )!.translationHelpUsTranslate,
                       icon: Icons.language,
-                      color: Color(0xFF2196F3),
+                      color: CKColors.secondaryBlue,
                       onPressed: () async {
-                        launchUrl(Uri.parse(
-                            'https://crowdin.com/project/clashkingapp'));
+                        launchUrl(
+                          Uri.parse('https://crowdin.com/project/clashkingapp'),
+                        );
                       },
                     ),
                   ],
@@ -612,40 +668,50 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.of(context)!
-                      .faqTroubleshootingDataDescription,
+                  AppLocalizations.of(
+                    context,
+                  )!.faqTroubleshootingDataDescription,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqTroubleshootingSolutions,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingDataSolution1
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingDataSolution1.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingDataSolution1),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingDataSolution1,
+                        ),
                       ]
                     : [],
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingDataSolution2
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingDataSolution2.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingDataSolution2),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingDataSolution2,
+                        ),
                       ]
                     : [],
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingDataSolution3
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingDataSolution3.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingDataSolution3),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingDataSolution3,
+                        ),
                       ]
                     : [],
               ],
@@ -664,54 +730,68 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.of(context)!
-                      .faqTroubleshootingCrashDescription,
+                  AppLocalizations.of(
+                    context,
+                  )!.faqTroubleshootingCrashDescription,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqTroubleshootingSolutions,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingCrashSolution1
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingCrashSolution1.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingCrashSolution1),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingCrashSolution1,
+                        ),
                       ]
                     : [],
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingCrashSolution2
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingCrashSolution2.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingCrashSolution2),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingCrashSolution2,
+                        ),
                       ]
                     : [],
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingCrashSolution3
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingCrashSolution3.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingCrashSolution3),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingCrashSolution3,
+                        ),
                       ]
                     : [],
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingCrashSolution4
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingCrashSolution4.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingCrashSolution4),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingCrashSolution4,
+                        ),
                       ]
                     : [],
                 ...AppLocalizations.of(context)!.faqContactSupport.isNotEmpty
                     ? [
                         _buildSolutionItem(
-                            AppLocalizations.of(context)!.faqContactSupport),
+                          AppLocalizations.of(context)!.faqContactSupport,
+                        ),
                       ]
                     : [],
               ],
@@ -730,38 +810,46 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.of(context)!
-                      .faqTroubleshootingAccountDescription,
+                  AppLocalizations.of(
+                    context,
+                  )!.faqTroubleshootingAccountDescription,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqTroubleshootingSolutions,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingAccountSolution1
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingAccountSolution1.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingAccountSolution1),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingAccountSolution1,
+                        ),
                       ]
                     : [],
-                ...AppLocalizations.of(context)!
-                        .faqTroubleshootingAccountSolution2
-                        .isNotEmpty
+                ...AppLocalizations.of(
+                      context,
+                    )!.faqTroubleshootingAccountSolution2.isNotEmpty
                     ? [
-                        _buildSolutionItem(AppLocalizations.of(context)!
-                            .faqTroubleshootingAccountSolution2),
+                        _buildSolutionItem(
+                          AppLocalizations.of(
+                            context,
+                          )!.faqTroubleshootingAccountSolution2,
+                        ),
                       ]
                     : [],
                 ...AppLocalizations.of(context)!.faqContactSupport.isNotEmpty
                     ? [
                         _buildSolutionItem(
-                            AppLocalizations.of(context)!.faqContactSupport),
+                          AppLocalizations.of(context)!.faqContactSupport,
+                        ),
                       ]
                     : [],
               ],
@@ -769,7 +857,6 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
           ),
         ],
       ),
-
     ];
 
     if (_searchQuery.isEmpty) {
@@ -847,21 +934,21 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
             offset: Offset(0, 4),
           ),
           BoxShadow(
-            color:
-                Theme.of(context).colorScheme.primary.withValues(alpha: 0.02),
+            color: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.02),
             blurRadius: 6,
             offset: Offset(0, 2),
           ),
         ],
       ),
       child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
-        ),
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           iconColor: Theme.of(context).colorScheme.primary,
-          collapsedIconColor:
-              Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+          collapsedIconColor: Theme.of(
+            context,
+          ).colorScheme.primary.withValues(alpha: 0.7),
           tilePadding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
           childrenPadding: EdgeInsets.zero,
           title: Row(
@@ -909,19 +996,15 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
             gradient: LinearGradient(
               colors: [
                 Theme.of(context).colorScheme.surfaceContainer,
-                Theme.of(context)
-                    .colorScheme
-                    .surfaceContainer
-                    .withValues(alpha: 0.7),
+                Theme.of(
+                  context,
+                ).colorScheme.surfaceContainer.withValues(alpha: 0.7),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: color.withValues(alpha: 0.4),
-              width: 1.5,
-            ),
+            border: Border.all(color: color.withValues(alpha: 0.4), width: 1.5),
             boxShadow: [
               BoxShadow(
                 color: color.withValues(alpha: 0.1),
@@ -929,10 +1012,9 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                 offset: Offset(0, 3),
               ),
               BoxShadow(
-                color: Theme.of(context)
-                    .colorScheme
-                    .shadow
-                    .withValues(alpha: 0.05),
+                color: Theme.of(
+                  context,
+                ).colorScheme.shadow.withValues(alpha: 0.05),
                 blurRadius: 4,
                 offset: Offset(0, 2),
               ),
@@ -941,11 +1023,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 32,
-                color: color,
-              ),
+              Icon(icon, size: 32, color: color),
               SizedBox(height: 8),
               Text(
                 label,
@@ -996,10 +1074,9 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
               ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withValues(alpha: 0.3),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -1017,16 +1094,16 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 SizedBox(height: 4),
                 Text(
                   description,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),

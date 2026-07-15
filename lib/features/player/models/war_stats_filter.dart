@@ -49,44 +49,54 @@ class WarStatsFilter {
   factory WarStatsFilter.fromJson(Map<String, dynamic> json) {
     return WarStatsFilter(
       season: json['season'],
-      startDate: json['timestamp_start'] != null 
+      startDate: json['timestamp_start'] != null
           ? DateTime.fromMillisecondsSinceEpoch(json['timestamp_start'] * 1000)
           : null,
-      endDate: json['timestamp_end'] != null 
+      endDate: json['timestamp_end'] != null
           ? DateTime.fromMillisecondsSinceEpoch(json['timestamp_end'] * 1000)
           : null,
-      ownTownHall: json['own_th'] is List && (json['own_th'] as List).length == 1
+      ownTownHall:
+          json['own_th'] is List && (json['own_th'] as List).length == 1
           ? (json['own_th'] as List)[0]
           : null,
-      enemyTownHall: json['enemy_th'] is List && (json['enemy_th'] as List).length == 1
+      enemyTownHall:
+          json['enemy_th'] is List && (json['enemy_th'] as List).length == 1
           ? (json['enemy_th'] as List)[0]
           : null,
-      ownTownHalls: json['own_th'] is List ? List<int>.from(json['own_th']) : null,
-      enemyTownHalls: json['enemy_th'] is List ? List<int>.from(json['enemy_th']) : null,
+      ownTownHalls: json['own_th'] is List
+          ? List<int>.from(json['own_th'])
+          : null,
+      enemyTownHalls: json['enemy_th'] is List
+          ? List<int>.from(json['enemy_th'])
+          : null,
       sameTownHall: json['same_th'] ?? false,
       warType: json['type'] is List && (json['type'] as List).length == 1
           ? (json['type'] as List)[0]
           : "all",
       warTypes: json['type'] is List ? List<String>.from(json['type']) : null,
       freshAttacksOnly: json['fresh_only'],
-      allowedStars: json['stars'] is List ? List<int>.from(json['stars']) : null,
+      allowedStars: json['stars'] is List
+          ? List<int>.from(json['stars'])
+          : null,
       minDestruction: json['min_destruction']?.toDouble(),
       maxDestruction: json['max_destruction']?.toDouble(),
       minMapPosition: json['map_position_min'],
       maxMapPosition: json['map_position_max'],
       limit: json['limit'] ?? 1000,
-      metadata: json['metadata'] != null ? Map<String, dynamic>.from(json['metadata']) : null,
+      metadata: json['metadata'] != null
+          ? Map<String, dynamic>.from(json['metadata'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {
-      'same_th': sameTownHall,
-    };
-    
+    final Map<String, dynamic> data = {'same_th': sameTownHall};
+
     data['limit'] = limit;
-    
-    if (warTypes != null && warTypes!.isNotEmpty && !warTypes!.contains('all')) {
+
+    if (warTypes != null &&
+        warTypes!.isNotEmpty &&
+        !warTypes!.contains('all')) {
       data['type'] = warTypes;
     } else if (warType != "all") {
       data['type'] = warType;
@@ -194,12 +204,7 @@ class WarStatsFilter {
 
   /// Default filter for mobile app
   static WarStatsFilter defaultFilter() {
-    return WarStatsFilter(
-      startDate: DateTime.now().subtract(const Duration(days: 180)), // 6 months ago
-      endDate: DateTime.now(),
-      warType: "all",
-      limit: 50, // Default limit (not "All")
-    );
+    return WarStatsFilter(warType: "all", limit: 50);
   }
 
   /// Check if any filters are active (not default)
@@ -227,24 +232,32 @@ class WarStatsFilter {
   /// Get filter summary text
   String getFilterSummary([BuildContext? context]) {
     List<String> filters = [];
-    
+
     if (season != null) {
       filters.add("Season $season");
     }
-    
+
     // Add date range filter display
     if (startDate != null && endDate != null) {
-      final start = context != null ? _formatDate(startDate!, context) : "${startDate!.day}/${startDate!.month}/${startDate!.year}";
-      final end = context != null ? _formatDate(endDate!, context) : "${endDate!.day}/${endDate!.month}/${endDate!.year}";
+      final start = context != null
+          ? _formatDate(startDate!, context)
+          : "${startDate!.day}/${startDate!.month}/${startDate!.year}";
+      final end = context != null
+          ? _formatDate(endDate!, context)
+          : "${endDate!.day}/${endDate!.month}/${endDate!.year}";
       filters.add("$start - $end");
     } else if (startDate != null) {
-      final start = context != null ? _formatDate(startDate!, context) : "${startDate!.day}/${startDate!.month}/${startDate!.year}";
+      final start = context != null
+          ? _formatDate(startDate!, context)
+          : "${startDate!.day}/${startDate!.month}/${startDate!.year}";
       filters.add("From $start");
     } else if (endDate != null) {
-      final end = context != null ? _formatDate(endDate!, context) : "${endDate!.day}/${endDate!.month}/${endDate!.year}";
+      final end = context != null
+          ? _formatDate(endDate!, context)
+          : "${endDate!.day}/${endDate!.month}/${endDate!.year}";
       filters.add("Until $end");
     }
-    
+
     if (ownTownHalls != null && ownTownHalls!.isNotEmpty) {
       if (ownTownHalls!.length == 1) {
         filters.add("TH${ownTownHalls!.first} attacks");
@@ -254,7 +267,7 @@ class WarStatsFilter {
     } else if (ownTownHall != null) {
       filters.add("TH$ownTownHall attacks");
     }
-    
+
     if (enemyTownHalls != null && enemyTownHalls!.isNotEmpty) {
       if (enemyTownHalls!.length == 1) {
         filters.add("vs TH${enemyTownHalls!.first}");
@@ -264,9 +277,9 @@ class WarStatsFilter {
     } else if (enemyTownHall != null) {
       filters.add("vs TH$enemyTownHall");
     }
-    
+
     if (sameTownHall) filters.add("Same TH only");
-    
+
     if (warTypes != null && warTypes!.isNotEmpty) {
       if (warTypes!.length == 1) {
         filters.add("${warTypes!.first.toUpperCase()} wars");
@@ -276,9 +289,9 @@ class WarStatsFilter {
     } else if (warType != "all") {
       filters.add("${warType.toUpperCase()} wars");
     }
-    
+
     if (freshAttacksOnly == true) filters.add("Fresh attacks only");
-    
+
     if (allowedStars != null && allowedStars!.isNotEmpty) {
       if (allowedStars!.length == 1) {
         filters.add("${allowedStars!.first} ⭐ only");
@@ -296,14 +309,16 @@ class WarStatsFilter {
     }
     if (minDestruction != null || maxDestruction != null) {
       if (minDestruction != null && maxDestruction != null) {
-        filters.add("${minDestruction!.toStringAsFixed(0)}-${maxDestruction!.toStringAsFixed(0)}% destruction");
+        filters.add(
+          "${minDestruction!.toStringAsFixed(0)}-${maxDestruction!.toStringAsFixed(0)}% destruction",
+        );
       } else if (minDestruction != null) {
         filters.add("${minDestruction!.toStringAsFixed(0)}%+ destruction");
       } else {
         filters.add("≤${maxDestruction!.toStringAsFixed(0)}% destruction");
       }
     }
-    
+
     return filters.isEmpty ? "No filters applied" : filters.join(", ");
   }
 

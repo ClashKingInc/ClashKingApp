@@ -4,20 +4,16 @@ import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
-import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:provider/provider.dart';
 
 class EmailVerificationPage extends StatefulWidget {
   final String email;
 
-  const EmailVerificationPage({
-    super.key,
-    required this.email,
-  });
+  const EmailVerificationPage({super.key, required this.email});
 
   @override
   EmailVerificationPageState createState() => EmailVerificationPageState();
@@ -25,8 +21,10 @@ class EmailVerificationPage extends StatefulWidget {
 
 class EmailVerificationPageState extends State<EmailVerificationPage> {
   bool _isLoading = false;
-  final List<TextEditingController> _codeControllers =
-      List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _codeControllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   @override
@@ -62,7 +60,8 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              AppLocalizations.of(context)!.authEmailVerificationCodeRequired),
+            AppLocalizations.of(context)!.authEmailVerificationCodeRequired,
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -75,7 +74,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
     try {
       await authService.verifyEmailWithCode(widget.email, _verificationCode);
 
-      final accessToken = await TokenService().getAccessToken();
+      final accessToken = await TokenService.shared.getAccessToken();
       if (accessToken != null && mounted) {
         if (mounted) {
           // Navigate to StartupWidget to show loading screen and handle proper navigation
@@ -93,28 +92,30 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
         } else {
           String errorString = e.toString().toLowerCase();
           String displayMessage = e.toString().replaceAll('Exception: ', '');
-          
+
           // Check if email is already verified - redirect to login
-          if (errorString.contains('already verified') || 
+          if (errorString.contains('already verified') ||
               errorString.contains('try logging in instead')) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => LoginPage(
-                  prefillEmail: widget.email,
-                ),
+                builder: (context) => LoginPage(prefillEmail: widget.email),
               ),
             );
             return;
           }
-          
+
           // Check for verification errors (401 - invalid or expired code)
-          if (errorString.contains('unauthorized') || errorString.contains('autorisations') ||
-              errorString.contains('expired') || errorString.contains('expiré') ||
+          if (errorString.contains('unauthorized') ||
+              errorString.contains('autorisations') ||
+              errorString.contains('expired') ||
+              errorString.contains('expiré') ||
               errorString.contains('invalid')) {
             // Invalid or expired code - unified message
-            displayMessage = AppLocalizations.of(context)!.authEmailVerificationCodeInvalid;
+            displayMessage = AppLocalizations.of(
+              context,
+            )!.authEmailVerificationCodeInvalid;
           }
-          
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(displayMessage),
@@ -142,59 +143,46 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!
-                .authEmailVerificationResendSuccess),
+            content: Text(
+              AppLocalizations.of(context)!.authEmailVerificationResendSuccess,
+            ),
             backgroundColor: Colors.green,
           ),
         );
       }
     } catch (e) {
       if (mounted) {
-        String errorMessage = e.toString()
+        String errorMessage = e
+            .toString()
             .replaceAll('Exception: ', '')
             .replaceAll('ApiException: ', '')
             .replaceAll('NotFoundException: ', '');
 
         // Handle specific error cases
-        if (errorMessage.contains("already verified") ||
-            errorMessage.contains("This email is already verified")) {
-          // Already verified → go straight to login
+        if (errorMessage.contains("already verified")) {
+          // Redirect to login page if email is already verified
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => LoginPage(prefillEmail: widget.email),
             ),
           );
           return;
-        }
-
-        if (errorMessage.contains("expired") ||
-            errorMessage.contains("No pending verification")) {
-          // Verification expired or deleted → user must register again.
-          // Show a message then redirect to register page so they can restart.
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                AppLocalizations.of(context)!.authEmailVerificationExpired,
-              ),
-              backgroundColor: Colors.orange,
-              duration: const Duration(seconds: 3),
-            ),
-          );
-          await Future.delayed(const Duration(seconds: 3));
-          if (mounted) {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => RegisterPage()),
-              (route) => false,
-            );
-          }
-          return;
+        } else if (errorMessage.contains("expired")) {
+          errorMessage = AppLocalizations.of(
+            context,
+          )!.authEmailVerificationExpired;
+        } else if (errorMessage.contains("No pending verification")) {
+          errorMessage = AppLocalizations.of(
+            context,
+          )!.authEmailVerificationExpiredResend;
+        } else if (errorMessage.contains("This email is already verified")) {
+          errorMessage = AppLocalizations.of(
+            context,
+          )!.authEmailVerificationAlreadyVerified;
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
         );
       }
     }
@@ -203,8 +191,9 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final logoUrl =
-        (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
+    final logoUrl = (isDarkMode
+        ? ImageAssets.darkModeLogo
+        : ImageAssets.lightModeLogo);
 
     return Scaffold(
       appBar: AppBar(
@@ -224,7 +213,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
               child: SizedBox(
                 height: 100,
                 width: 100,
-                child: CachedNetworkImage(
+                child: MobileWebImage(
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   imageUrl: logoUrl,
                 ),
@@ -235,9 +224,9 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
 
             Text(
               AppLocalizations.of(context)!.authEmailVerificationCheckEmail,
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
 
@@ -245,10 +234,9 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
 
             Text(
               AppLocalizations.of(context)!.authEmailVerificationSentTo,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               textAlign: TextAlign.center,
             ),
 
@@ -256,9 +244,9 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
 
             Text(
               widget.email,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
 
@@ -272,10 +260,12 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                 child: Column(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!
-                          .authEmailVerificationCodeInstructions,
+                      AppLocalizations.of(
+                        context,
+                      )!.authEmailVerificationCodeInstructions,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                       textAlign: TextAlign.center,
                     ),
 
@@ -298,12 +288,8 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                               FilteringTextInputFormatter.digitsOnly,
                               LengthLimitingTextInputFormatter(1),
                             ],
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.headlineSmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -325,8 +311,9 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                           CircularProgressIndicator(),
                           SizedBox(height: 16),
                           Text(
-                            AppLocalizations.of(context)!
-                                .authEmailVerificationVerifying,
+                            AppLocalizations.of(
+                              context,
+                            )!.authEmailVerificationVerifying,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -341,17 +328,20 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                               ? _verifyEmailWithCode
                               : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .authEmailVerificationVerify,
+                            AppLocalizations.of(
+                              context,
+                            )!.authEmailVerificationVerify,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -369,17 +359,20 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                         child: ElevatedButton(
                           onPressed: _resendVerificationEmail,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .authEmailVerificationResend,
+                            AppLocalizations.of(
+                              context,
+                            )!.authEmailVerificationResend,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -396,13 +389,14 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                           onPressed: () {
                             // Navigate back to login page specifically
                             Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) => LoginPage()),
+                              MaterialPageRoute(
+                                builder: (context) => LoginPage(),
+                              ),
                               (route) => false,
                             );
                           },
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .authBackToLogin,
+                            AppLocalizations.of(context)!.authBackToLogin,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w500,

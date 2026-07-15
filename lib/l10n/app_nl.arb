@@ -16,7 +16,7 @@
   "generalRetry": "Opnieuw proberen",
   "generalRetrying": "Opnieuw proberen...",
   "generalTryAgain": "Probeer het opnieuw",
-  "generalReset": "Reset",
+  "generalReset": "Resetten",
   "generalCancel": "Annuleren",
   "generalOk": "Oké",
   "@generalOk": {
@@ -86,14 +86,14 @@
     "description": "Title for the number of trophies at the end of the day"
   },
   "generalRole": "Rol",
-  "generalStats": "Stats",
+  "generalStats": "Statistieken",
   "generalFullStats": "Volledige statistieken",
-  "generalDetails": "Details",
+  "generalDetails": "Detailscherm",
   "generalHistory": "Geschiedenis",
   "@generalHistory": {
     "description": "Shows EOS trophies history"
   },
-  "generalFilters": "Filters",
+  "generalFilters": "Filteropties",
   "generalNotSet": "Niet ingesteld",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -249,7 +249,7 @@
   "authPasswordConfirmRequired": "Bevestig je wachtwoord",
   "authPasswordMismatch": "Wachtwoorden komen niet overeen",
   "authPasswordTooShort": "Wachtwoord moet minimaal 8 tekens lang zijn",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
+  "authPasswordRequirements": "Wachtwoord moet bevatten:\n• Hoofdletter\n• Kleine letter\n• Cijfer\n• Speciaal teken",
   "authPasswordHeader": "Wachtwoord moet bevatten:",
   "authPasswordUppercase": "Hoofdletter",
   "authPasswordLowercase": "Kleine letter",
@@ -304,11 +304,11 @@
   "authEmailVerificationExpired": "Verificatie verlopen. Gelieve opnieuw te registreren.",
   "authEmailVerificationAlreadyVerified": "Dit e-mailadres is al geverifieerd. Probeer in plaats daarvan in te loggen.",
   "authEmailVerificationNoToken": "Geen lopende verificatie gevonden. Registreer eerst.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
+  "authEmailVerificationExpiredResend": "Verificatie verlopen. Ga terug om je opnieuw te registreren.",
   "authEmailVerificationVerifying": "Je e-mailadres verifiëren...",
   "authEmailVerificationCodeInstructions": "Voer de 6-cijferige code in die naar je e-mailadres gestuurd is:",
   "authEmailVerificationCodeRequired": "Voer de 6-cijferige verificatiecode in",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
+  "authEmailVerificationCodeInvalid": "Ongeldige of verlopen code. Controleer je code of verstuur de verificatiemail opnieuw.",
   "authEmailVerificationVerify": "Code verifiëren",
   "helpTitle": "Hulp nodig?",
   "helpJoinDiscord": "Doe mee op Discord",
@@ -321,7 +321,7 @@
   "accountsEnterPlayerTag": "Voer een speler-ID in",
   "accountsAdd": "Account toevoegen",
   "accountsAddInstruction": "Tik op de + knop om je account toe te voegen",
-  "accountsApiToken": "Account API Token",
+  "accountsApiToken": "Account-API-token",
   "accountsEnterApiToken": "Voer de API-token van je account in om te bevestigen dat het van jou is. Je kunt deze vinden in Clash of Clans:",
   "accountsApiTokenLocation": "Instellingen > meer instellingen > API Token",
   "accountsOpenMoreSettings": "Open meer instellingen",
@@ -460,7 +460,7 @@
   "gameDonations": "Donaties",
   "gameDonationsReceived": "Donaties ontvangen",
   "gameDonationsRatio": "Donatieverhouding",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameLevel": "Niveau: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -487,7 +487,7 @@
   "gameCreatorCodeDialogTitle": "Steun ClashKing",
   "gameCreatorCodeDialogDescription": "Wanneer je onze creatorcode gebruikt, help je de ontwikkeling te financieren, de app en bot gratis te houden voor iedereen én nieuwe functies mogelijk te maken.\n\nWij ontvangen 5% van je aankopen in het spel, zonder extra kosten voor jou — vul gewoon \"ClashKing\" in bij de winkel van een Supercell-spel.\n\nBedankt voor je steun!",
   "gameCreatorCodeDialogButton": "Gebruik makerscode",
-  "clanTitle": "Clan",
+  "clanTitle": "De clan",
   "clanSearchTitle": "Zoek clan",
   "clanSearchPlaceholder": "Clannaam",
   "clanNone": "Geen clan",
@@ -512,7 +512,7 @@
   "clanRoleMember": "Lid",
   "clanWarFrequencyAlways": "Altijd",
   "clanWarFrequencyNever": "Nooit",
-  "clanWarFrequencyOncePerWeek": "1/week",
+  "clanWarFrequencyOncePerWeek": "1 keer/week",
   "clanWarFrequencyMoreThanOncePerWeek": "Meer dan 1/week",
   "clanWarFrequencyRarely": "Zelden",
   "timeHourIndicator": "u",
@@ -765,8 +765,8 @@
   "todoExplanationCwl": "Gewicht van 1 punt per account, 1 aanval = 1 punt. CWL (clanoorlogdivisie) kan niet worden gevolgd als de speler niet in zijn divisie clan zit.",
   "todoExplanationPassAndGamesTitle": "Seizoenspas & Clan Spellen:",
   "todoExplanationPassAndGames": "Gewicht van 2 punten per account. De verhouding is gebaseerd op het aantal resterende dagen (1 maand voor de pas en 6 dagen voor de spellen). Groen = op schema om de pas of spellen te voltooien, rood = achter op schema.",
-  "todoExplanationConclusion": "Het uiteindelijke percentage wordt berekend door het totaal aantal voltooide acties tijdens lopende evenementen te delen door het totaal aantal vereiste acties. Accounts die langer dan 14 dagen inactief zijn worden uitgesloten van de berekening.",
-  "todoAccountsNumber": "{number} accounts",
+  "todoExplanationConclusion": "Het uiteindelijke percentage wordt berekend door het totaal aantal voltooide acties tijdens lopende evenementen te delen door het totaal aantal vereiste acties.",
+  "todoAccountsNumber": "{number} accounts gekoppeld",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -916,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "De oorlog is nog niet begonnen",
+  "warWonByStars": "{clanName} heeft de oorlog gewonnen!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -925,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName} heeft de oorlog verloren",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -933,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName} won op vernietiging!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -941,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName} verloor op vernietiging",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -949,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "Perfect gelijkspel",
+  "warCanTieNeedsStars": "{clanName} kan gelijkspelen, maar heeft {stars} sterren nodig",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -961,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName} kan niet meer in sterren inhalen",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -1146,7 +1146,7 @@
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "Pos.",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
@@ -1376,7 +1376,7 @@
       }
     }
   },
-  "raidsTitle": "Raids",
+  "raidsTitle": "Hoofdstadraids",
   "raidsLast": "Laatste raids",
   "raidsOngoing": "Lopende raids",
   "raidsDistrictsDestroyed": "Districten vernietigd",
@@ -1397,7 +1397,7 @@
   "downloadError": "Bestand downloaden mislukt",
   "dashboardTitle": "Hoofdpaneel",
   "toolsTitle": "Hulpmiddelen",
-  "navigationTeam": "Teams",
+  "navigationTeam": "Teams beheren",
   "navigationStatistics": "Statistieken",
   "versionDevice": "Versie & apparaat",
   "@versionDevice": {
@@ -1678,23 +1678,23 @@
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "deepLinkInvalidPlayer": "Invalid player link.",
+  "deepLinkInvalidPlayer": "Ongeldige spelerlink.",
   "@deepLinkInvalidPlayer": {
     "description": "Shown when a player deep link does not include a valid tag"
   },
-  "deepLinkInvalidClan": "Invalid clan link.",
+  "deepLinkInvalidClan": "Ongeldige clanlink.",
   "@deepLinkInvalidClan": {
     "description": "Shown when a clan deep link does not include a valid tag"
   },
-  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "deepLinkFailedToOpenPlayer": "Speler openen mislukt.",
   "@deepLinkFailedToOpenPlayer": {
     "description": "Shown when a player deep link target could not be loaded"
   },
-  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "deepLinkFailedToOpenClan": "Clan openen mislukt.",
   "@deepLinkFailedToOpenClan": {
     "description": "Shown when a clan deep link target could not be loaded"
   },
-  "deepLinkUnknown": "Unknown deep link.",
+  "deepLinkUnknown": "Onbekende deep link.",
   "@deepLinkUnknown": {
     "description": "Shown when the app receives a deep link it does not understand"
   },
@@ -1947,18 +1947,18 @@
   "generalError": "Fout",
   "generalSuccess": "Succes",
   "generalFailed": "Mislukt",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
+  "generalMinimum": "Minimumwaarde",
+  "generalMaximum": "Maximumwaarde",
   "generalHigh": "Hoog",
   "generalLow": "Laag",
   "generalPoor": "Slecht",
-  "generalOpen": "Open",
+  "generalOpen": "Openen",
   "generalClosed": "Gesloten",
   "generalAvailable": "Beschikbaar",
   "authErrorUserCancelledDiscordLogin": "Gebruiker heeft Discord login geannuleerd.",
   "authErrorDiscordLoginFailed": "Inloggen met Discord mislukt. Probeer het opnieuw.",
   "authErrorEmailLoginFailed": "Inloggen met e-mail mislukt. Controleer uw inloggegevens.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
+  "authErrorEmailNotVerified": "Je e-mailadres is niet geverifieerd. Controleer je e-mail en voer de verificatiecode in.",
   "authErrorEmailVerificationFailed": "E-mailverificatie mislukt. De token is mogelijk ongeldig of verlopen.",
   "authErrorDiscordLinkFailed": "Kan Discord account niet koppelen. Het is mogelijk al gekoppeld aan een ander account.",
   "authErrorEmailLinkFailed": "E-mailaccount koppelen mislukt. E-mail wordt mogelijk al gebruikt.",
@@ -2118,20 +2118,840 @@
       }
     }
   },
-  "gameItemHousingSpace": "Housing Space",
-  "gameItemAttackSpeed": "Attack Speed",
-  "gameItemAttackRange": "Attack Range",
-  "gameItemMovementSpeed": "Movement Speed",
-  "gameItemUpgradeResource": "Upgrade Resource",
-  "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero",
+  "gameItemHousingSpace": "Woonruimte",
+  "gameItemAttackSpeed": "Aanvalssnelheid",
+  "gameItemAttackRange": "Aanvalsbereik",
+  "gameItemMovementSpeed": "Bewegingssnelheid",
+  "gameItemUpgradeResource": "Upgradegrondstof",
+  "gameItemRarity": "Zeldzaamheid",
+  "gameItemHero": "Held",
   "gameItemDps": "DPS",
   "gameItemHitpoints": "HP",
-  "gameItemHealOnActivation": "Heal",
-  "gameItemTargets": "Targets",
-  "gameItemTargetsGround": "Ground",
-  "gameItemTargetsAir": "Air",
-  "gameItemFlying": "Flying",
-  "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time"
+  "gameItemHealOnActivation": "Genezing",
+  "gameItemTargets": "Doelen",
+  "gameItemTargetsGround": "Grond",
+  "gameItemTargetsAir": "Lucht",
+  "gameItemFlying": "Vliegend",
+  "gameItemUpgradeCost": "Upgradekosten",
+  "gameItemUpgradeTime": "Upgradetijd",
+  "todoNoMatchingAccounts": "Geen overeenkomende accounts",
+  "todoNoConfiguredAccounts": "Geen To Do-accounts ingesteld",
+  "todoNoLinkedAccounts": "Geen gekoppelde accounts",
+  "todoNoAccountsNeedAction": "Geen accounts vereisen actie",
+  "todoNoCompletedAccounts": "Geen voltooide accounts",
+  "todoNoBookmarkedAccounts": "Geen accounts met bladwijzer",
+  "todoTryAnotherSearchOrFilter": "Probeer een andere zoekopdracht of filter.",
+  "clanJoinLeaveNoDataTitle": "Geen toetredings-/vertrekgegevens",
+  "clanJoinLeaveNoDataBody": "Recente ledenbewegingen verschijnen hier zodra trackinggegevens zijn geladen.",
+  "clanJoinLeaveNoRecentMovementTitle": "Geen recente beweging",
+  "clanJoinLeaveNoRecentMovementBody": "De samenvatting is geladen, maar de evenementenlijst is leeg.",
+  "capitalRaidMembersAttackLogFallback": "De ledenlijst wordt niet teruggegeven voor dit raidweekend. In plaats daarvan worden statistieken uit het aanvalslog getoond.",
+  "capitalRaidMembersNoPlayerData": "Er worden geen gegevens per speler teruggegeven voor dit raidweekend. De API bevat alleen district- en tegenstandertotalen.",
+  "capitalRaidMembersNoIndividualData": "Geen spelerslijst of individuele aanvallen beschikbaar voor deze raid.",
+  "dashboardNoLinkedAccountsTitle": "Geen gekoppelde accounts",
+  "dashboardNoLinkedAccountsBody": "Koppel een Clash-account om aanvallen, evenementen en activiteit hier te zien.",
+  "dashboardNothingPinnedTitle": "Nog niets vastgezet",
+  "dashboardNothingPinnedBody": "Open het tabblad Spelers, vouw de opties van een kaart uit en schakel “To Do op home tonen” in om een account hier vast te zetten.",
+  "playersNoBookmarkedTitle": "Nog geen spelers met bladwijzer",
+  "playersNoBookmarkedBody": "Open een spelersprofiel en sla het op voor later.",
+  "playersNoLinkedBody": "Beheer je accounts via het accountconfiguratiescherm.",
+  "navigationHome": "Startpagina",
+  "drawerFollowers": "Volgers",
+  "drawerFollowersHelp": "Mensen die een van je geverifieerde gekoppelde accounts als favoriet hebben opgeslagen.",
+  "drawerPopular": "Populair",
+  "drawerCalculators": "Rekenmachines",
+  "drawerSubscription": "Abonnement",
+  "drawerUpgradeTracker": "Upgrade-tracker",
+  "drawerBasesArmies": "Basissen en legers",
+  "drawerGameAssets": "Spelbronnen",
+  "drawerManageAccounts": "Accounts beheren",
+  "playersLinked": "Gekoppeld",
+  "playersBookmarked": "Bladwijzers",
+  "searchGlobalHint": "Spelers of clans zoeken",
+  "tooltipDecreaseMinimumMembers": "Minimumaantal leden verlagen",
+  "tooltipIncreaseMinimumMembers": "Minimumaantal leden verhogen",
+  "tooltipDecreaseMaximumMembers": "Maximumaantal leden verlagen",
+  "tooltipIncreaseMaximumMembers": "Maximumaantal leden verhogen",
+  "tooltipDecreaseMinimumClanPoints": "Minimumaantal clanpunten verlagen",
+  "tooltipIncreaseMinimumClanPoints": "Minimumaantal clanpunten verhogen",
+  "tooltipDecreaseMinimumClanLevel": "Minimaal clanniveau verlagen",
+  "tooltipIncreaseMinimumClanLevel": "Minimaal clanniveau verhogen",
+  "tooltipShowChart": "Grafiek tonen",
+  "tooltipShowTable": "Tabel tonen",
+  "tooltipDismissMessage": "Bericht sluiten",
+  "searchFilters": "Filteropties",
+  "searchClear": "Wissen",
+  "tooltipShowPassword": "Wachtwoord tonen",
+  "tooltipHidePassword": "Wachtwoord verbergen",
+  "tooltipRemoveAccount": "Account verwijderen",
+  "generalExpand": "Uitvouwen",
+  "generalCollapse": "Samenvouwen",
+  "generalBookmark": "Bladwijzer toevoegen",
+  "generalRemoveBookmark": "Bladwijzer verwijderen",
+  "gameLeague": "Competitie",
+  "clanMembersSearchPlaceholder": "Leden zoeken",
+  "clanMembersShowTotals": "Clantotalen tonen",
+  "clanMembersHideTotals": "Clantotalen verbergen",
+  "clanMembersReceivedShort": "Ontvangen",
+  "clanMembersAverageTh": "Gem. TH",
+  "warLogSearchPlaceholder": "Oorlogen zoeken",
+  "warStatsSearchPlaceholder": "Spelers zoeken",
+  "warStatsCurrentTownHall": "Mijn TH",
+  "warStatsLast50": "Laatste 50",
+  "warStatsWars": "Oorlogen",
+  "warStatsSelectSeason": "Selecteer war-statistiekenseizoen",
+  "warAnalysisToWin": "Om te winnen",
+  "warAnalysisToLose": "Om te verliezen",
+  "warAnalysisNoAttacksLeft": "Geen aanvallen over",
+  "warAnalysisScenario": "{attacks} aanvallen over -> nodig {stars} sterren / {percent}% per aanval",
+  "warAnalysisImpossibleScenario": "{attacks} aanvallen over -> onmogelijk ({stars} sterren / {percent}% per aanval)",
+  "warAttacksSuccessful": "Succesvolle aanvallen",
+  "warAttacksFailed": "Mislukte aanvallen",
+  "warAttacksMissedShort": "Gemist",
+  "cwlHistoryTitle": "CWL-geschiedenis",
+  "clanJoinLeaveTab": "Toegetreden/Vertrokken",
+  "clanRankingsTab": "Ranglijsten",
+  "clanRankingsSeason": "Seizoen",
+  "clanRankingsSelectSeason": "Selecteer ranglijstseizoen",
+  "clanRankingsFilterActivity": "Activiteit",
+  "clanRankingsFilterWar": "Oorlog",
+  "clanRankingsFilterPoints": "Punten",
+  "cwlHistoryPreviewBadge": "Voorbeeld",
+  "cwlHistoryPreviewSubtitle": "Mock-up van {clan} totdat het CWL-endpoint is opgelost",
+  "cwlHistoryEmptyTitle": "Nog geen CWL-geschiedenis",
+  "cwlHistoryEmptyBody": "Deze clan heeft nog niet deelgenomen aan een Clan War League-seizoen.",
+  "cwlRankTitle": "Rang",
+  "cwlWarsPlayedTitle": "Oorlogen gespeeld",
+  "playerWarStarsTitle": "Oorlogssterren",
+  "playerWarPreferenceTitle": "War-voorkeur",
+  "playerDonatedTitle": "Gedoneerd",
+  "playerReceivedTitle": "Ontvangen",
+  "playerCapitalTitle": "Hoofdstad",
+  "playerExpLevelTitle": "Exp.-niveau",
+  "clanWarWinsTitle": "War-overwinningen",
+  "clanWinStreakTitle": "Winstreeks",
+  "clanBuilderBaseTitle": "Bouwersbasis",
+  "clanTypeTitle": "Clantype",
+  "clanWarFrequencyTitle": "Oorlogen",
+  "clanMinTownHallTitle": "Min. stadhuis",
+  "clanMinTrophiesTitle": "Min. trofeeën",
+  "clanCapitalHallTitle": "Hoofdstadhal",
+  "clanDistrictsTitle": "Districten",
+  "legendsCountryTitle": "Land",
+  "legendsLocalRankTitle": "Lokale rang",
+  "legendsGlobalRankTitle": "Wereldrang",
+  "warWinsTitle": "Overwinningen",
+  "warLossesTitle": "Nederlagen",
+  "warDrawsTitle": "Gelijkspel",
+  "capitalRaidStatusOngoing": "Bezig",
+  "capitalRaidStatusEnded": "Afgelopen",
+  "capitalRaidLoot": "Buit",
+  "capitalRaidRewards": "Beloningen",
+  "capitalRaidPreviousWeek": "Vorige week",
+  "capitalRaidNextWeek": "Volgende week",
+  "capitalRaidFilterAttacked": "Aangevallen",
+  "capitalRaidFilterNotAttacked": "Niet aangevallen",
+  "capitalRaidFilterLinked": "Gekoppelde accounts",
+  "capitalRaidEmptyTitle": "Geen hoofdstadraidgegevens",
+  "capitalRaidEmptyBody": "Raidgeschiedenis verschijnt hier zodra de hoofdstadraidweekenden van deze clan worden bijgehouden.",
+  "capitalRaidEstimated": "Geschat",
+  "capitalRaidEstimatedTooltip": "Nog niet officieel: geschat op basis van de aanvals- en verdedigingslogs van deze week. Supercell publiceert het echte aantal medailles zodra de raid eindigt.",
+  "capitalRaidTrophyPrediction": "Voorspelde trofeeën",
+  "capitalRaidTrophyPredictionTooltip": "Geschatte Capital League-trofeeën na deze raid, gebaseerd op de prestaties van deze week. Niet officieel.",
+  "capitalRaidProjectedLoot": "Verwachte buit",
+  "capitalRaidOneshots": "In één aanval",
+  "capitalRaidFails": "Mislukkingen",
+  "capitalDetailsOffense": "Aanval",
+  "capitalDetailsDefense": "Verdediging",
+  "capitalDistrictsSection": "Districten",
+  "capitalOpponentsSection": "Tegenstanders",
+  "capitalAvgAttacksPerDistrict": "Gem. aanvallen/district",
+  "capitalAvgLootPerAttack": "Gem. buit/aanval",
+  "capitalHistorySection": "Raidgeschiedenis",
+  "capitalHistoryWeeksTracked": "Weken bijgehouden",
+  "capitalAvgLootPerWeek": "Gem. buit/week",
+  "capitalAvgAttacksPerWeek": "Gem. aanvallen/week",
+  "capitalBestRaid": "Beste raid",
+  "capitalWorstRaid": "Slechtste raid",
+  "capitalHistoryChartTitle": "Wekelijkse trend",
+  "warAttacksDetailsDuration": "Duur",
+  "gameItemRemainingToTownHallMax": "Tot TH max",
+  "gameItemRemainingToGlobalMax": "Tot globale max",
+  "gameItemLevelsLeft": "{count} niveau(s) resterend",
+  "gameItemOverview": "Overzicht",
+  "gameItemStats": "Statistieken",
+  "gameItemNextUpgrade": "Volgende upgrade",
+  "gameItemUpgradePlan": "Upgradeplan",
+  "gameItemUpgradeDataUnavailable": "Upgradegegevens niet beschikbaar",
+  "notifScopeAllAccounts": "Alle accounts",
+  "notifScopeSelected": "Geselecteerd",
+  "settingsPreferences": "Voorkeuren",
+  "settingsNotificationsTitle": "Meldingen",
+  "settingsNotificationsSubtitle": "Kies meldingen en stuur lokale testvoorbeelden.",
+  "settingsLiveActivityTest": "Live Activity-test",
+  "settingsLiveActivityStart": "Testactiviteit starten",
+  "settingsLiveActivityStartSubtitle": "Toont een lokale clanwar-preview.",
+  "settingsLiveActivityUpdate": "Score bijwerken",
+  "settingsLiveActivityUpdateSubtitle": "Verhoogt de nep-war-score.",
+  "settingsLiveActivityEnd": "Testactiviteit beëindigen",
+  "settingsLiveActivityEndSubtitle": "Verwijdert de lokale preview.",
+  "settingsSupport": "Ondersteuning",
+  "settingsAbout": "Over",
+  "settingsAccount": "Gebruikersaccount",
+  "settingsSignedIn": "Ingelogd",
+  "settingsAppearance": "Weergave",
+  "settingsThemeSystem": "Systeem",
+  "settingsThemeMatchDevice": "Dit apparaat volgen",
+  "settingsThemeLight": "Licht",
+  "settingsThemeDark": "Donker",
+  "settingsThemeSelected": "Geselecteerd",
+  "notifNoAccountsLoadedYet": "Nog geen gekoppelde accounts geladen.",
+  "notifNoAccountsSelected": "Geen accounts geselecteerd",
+  "notifAccountsSelected": "{count} accounts geselecteerd",
+  "notifSelectedAccounts": "Geselecteerde accounts",
+  "searchRecent": "Recent bekeken",
+  "searchTabPlayers": "Spelers",
+  "searchTabClans": "Clans zoeken",
+  "warStatsRefreshSuccess": "Gegevens succesvol vernieuwd",
+  "warStatsRefreshFailed": "Gegevens vernieuwen mislukt: {error}",
+  "warStatsFilterFailed": "Gefilterde gegevens laden mislukt: {error}",
+  "warStatsExportFailed": "Export mislukt: {error}",
+  "exportLabelPlayer": "Speler",
+  "exportLabelFormat": "Formaat",
+  "exportLabelExcel": "Excel (.xlsx)",
+  "exportLabelIncludes": "Bevat",
+  "exportLabelContent": "Stats, aanvallen, TH-analyse",
+  "accountNoUserData": "Geen gebruikersgegevens beschikbaar",
+  "accountsMenuTitle": "Accountbeheer",
+  "searchErrorPlayerLoadFailed": "Spelergegevens laden mislukt.",
+  "searchErrorClanLoadFailed": "Clangegevens laden mislukt.",
+  "popularPlayersTitle": "Spelers",
+  "popularClansTitle": "Populaire clans",
+  "popularWarsCwlTitle": "Oorlogen & CWL",
+  "popularTitle": "Populair",
+  "popularSubtitle": "Bladwijzers, gekoppelde accounts en actieve oorlogen.",
+  "popularEmptyTitle": "Nog geen populaire items",
+  "popularEmptyBody": "Voeg spelers en clans toe aan bladwijzers of koppel accounts om dit te vullen.",
+  "calculatorsTitle": "Rekenhulpen",
+  "calculatorsSubtitle": "Erts, zap quake en fireball quake.",
+  "calculatorOre": "Erts",
+  "calculatorZapQuake": "Bliksem + aardbeving",
+  "calculatorFireball": "Vuurbal",
+  "upgradeTrackerTitle": "Upgrade-tracker",
+  "upgradeTrackerSubtitle": "Resterende upgradekosten en tijd.",
+  "linkedAccountLabel": "Gekoppeld account",
+  "noLinkedPlayersLoadedTitle": "Geen gekoppelde spelers geladen",
+  "noLinkedPlayersLoadedBody": "Voeg gekoppelde accounts toe of vernieuw ze om upgradetotalen te zien.",
+  "playerOptionNotificationsTitle": "Meldingen",
+  "playerOptionNotificationsSubtitle": "Ontvang meldingen voor dit account.",
+  "playerOptionShowTodoHomeTitle": "To Do op home tonen",
+  "playerOptionShowTodoHomeSubtitle": "Zet de To Do-kaart van dit account vast op het home-tabblad.",
+  "playerOptionShowTodoPageTitle": "Tonen op To Do-pagina",
+  "playerOptionShowTodoPageSubtitle": "Neem dit account op in de volledige To Do-lijst.",
+  "playerOptionShowWarTabTitle": "Tonen in War-tab",
+  "playerOptionShowWarTabSubtitle": "Neem de clan van dit account op in het War-tabblad.",
+  "searchCancel": "Annuleren",
+  "bookmarkPlayerLoadFailed": "Favoriete speler laden mislukt.",
+  "warNoLinkedOrBookmarked": "Geen gekoppelde of opgeslagen clanoorlogen om te tonen.",
+  "warWidgetRefreshData": "Oorlogsgegevens vernieuwen",
+  "warWidgetNoData": "Geen oorlogsgegevens beschikbaar",
+  "warWidgetLastUpdated": "Laatst bijgewerkt: {time}",
+  "todoEventClanGames": "Clanspelen",
+  "todoEventCwl": "CWL",
+  "todoEventSeasonEnds": "Seizoen eindigt",
+  "todoEventLeagueReset": "League-reset",
+  "todoEventRaidWeekend": "Raidweekend",
+  "todoMagicDispatch": "Magische verzending",
+  "todoMagicDispatchDescription": "Bekijk de nieuwste ClashKing-update",
+  "todoUseCodeClashKing": "Gebruik code ClashKing",
+  "todoUseCodeClashKingDescription": "Steun het project in de Supercell Store",
+  "todoLegendAttacks": "Legende-aanvallen",
+  "todoWarAttacks": "War-aanvallen",
+  "todoCwlAttacks": "CWL-aanvallen",
+  "todoRaidAttacks": "Raidaanvallen",
+  "gameSeasonPassShort": "Pas",
+  "todoMockMaxedMainName": "Maxed main",
+  "todoMockMaxedMainSubtitle": "TH17 · alles actief",
+  "todoMockMaxedMainStatus": "Nu actief · volledige dagelijkse checklist",
+  "todoMockLegend5Left": "5 over vandaag",
+  "todoMockWar1Left": "1 over",
+  "todoMockCwl1LeftRound": "1 over deze ronde",
+  "todoMockClanGames2700Left": "2,7K punten over",
+  "todoMockRaid4Left": "4 over",
+  "todoMockPass850Left": "850 punten over",
+  "todoMockWarAltName": "War alt",
+  "todoMockWarAltSubtitle": "TH15 · war-gericht",
+  "todoMockWarAltStatus": "18 min geleden actief · war en raids vragen aandacht",
+  "todoMockWar2Left": "2 over",
+  "todoMockClanGames900Left": "900 punten over",
+  "todoMockRaid1Left": "1 over",
+  "todoMockLegendPushName": "Legend push",
+  "todoMockLegendPushSubtitle": "TH16 · dagelijkse aanvallen",
+  "todoMockLegendPushStatus": "1 u geleden actief · legends en pass voortgang",
+  "todoMockLegend2Left": "2 over vandaag",
+  "todoMockOnPace": "op schema",
+  "todoMockCaughtUpName": "Bijgewerkt",
+  "todoMockCaughtUpSubtitle": "TH14 · geen open taken",
+  "todoMockCaughtUpStatus": "Vandaag actief · geen actie nodig",
+  "notifChooseAlerts": "Meldingen kiezen",
+  "notifLeagueDefenseDescription": "Verdedigingsresultaten met aanvaller, sterren, percentage en league-context.",
+  "notifWarAttackOptionsDescription": "War-aanvalsresultaten, verdedigingsmeldingen en opties voor de 5v5-aanvalsfeed.",
+  "notifWarAlertsDescription": "War gematcht, battle day gestart en war geëindigd.",
+  "notifWarRemindersDescription": "Aangepaste herinneringen voordat de war eindigt.",
+  "notifDefensesAgainstYourBase": "Verdedigingen tegen je basis",
+  "notifDefensesAgainstYourBaseDescription": "Alleen hits waarbij dit account verdedigt.",
+  "notifAllAttacks": "Alle aanvallen",
+  "notifAllAttacksDescription": "Elke hit alleen in 5v5-wars.",
+  "notifThirtyMinutes": "30 minuten",
+  "notifFifteenMinutes": "15 minuten",
+  "notifSendTestNotification": "Testmelding verzenden",
+  "notifScheduledMessage": "Gepland: {title}",
+  "generalStartDate": "Startdatum",
+  "generalEndDate": "Einddatum",
+  "warFiltersAllWars": "Alle wars",
+  "warFiltersRandomWars": "Random wars",
+  "warFiltersCwlWars": "CWL-wars",
+  "warFiltersFriendlyWars": "Friendly wars",
+  "warType": "War-type",
+  "warFiltersAnyTownHall": "Elke TH",
+  "gameTownHallLevelShort": "TH{level}",
+  "warAttackerTownHall": "Aanvaller TH",
+  "warDefenderTownHall": "Verdediger TH",
+  "warStatsFilterSameTownHallOnly": "Alleen dezelfde TH",
+  "warStatsFilterSameTownHallDescription": "Toon alleen aanvallen waarbij aanvaller en verdediger hetzelfde TH-niveau hebben",
+  "generalAny": "Alles",
+  "warStarsWithIcon": "{stars} ⭐",
+  "warStatsFilterMinStars": "Min. sterren",
+  "warStatsFilterMaxStars": "Max. sterren",
+  "warStatsFilterMinDestructionPercent": "Min. vernietiging %",
+  "warStatsFilterMaxDestructionPercent": "Max. vernietiging %",
+  "warStatsFilterMinPosition": "Min. positie",
+  "warStatsFilterMaxPosition": "Max. positie",
+  "warStatsFilterFreshAttacksOnly": "Alleen fresh attacks",
+  "warStatsFilterFreshAttacksDescription": "Toon alleen eerste aanvallen op elke basis",
+  "warStatsFilterResultLimit": "Resultaatlimiet",
+  "generalResultsCount": "{count} resultaten",
+  "notifEventsDescription": "Clan Games, CWL, Raidweekend en seizoensevenementen.",
+  "notifAnnouncementsDescription": "In-app banners en toekomstige pushmeldingen voor ClashKing-updates.",
+  "notifUpgradeFinishesDescription": "Troepen, helden, pets, spreuken, uitrusting en gebouwen.",
+  "notifSupportReminderDescription": "Maandelijkse herinnering om ClashKing te steunen.",
+  "notifDevicePushSetup": "Pushconfiguratie apparaat",
+  "notifAccountScope": "Accountbereik",
+  "notifTestNotification": "Testmelding",
+  "settingsAppIcon": "App-icoon",
+  "settingsChanging": "Wijzigen...",
+  "settingsAddWarWidget": "War-widget toevoegen",
+  "settingsWarWidgetLinkClanFirst": "Koppel eerst een account in een clan",
+  "settingsWarWidgetClanCount": "{count} clan(s) beschikbaar",
+  "generalDiscord": "Discord",
+  "settingsDiscordConnectedSubtitle": "Bot-gekoppelde accounts en Discord-gegevens",
+  "settingsDiscordSyncSubtitle": "Synchroniseer bot-gekoppelde accounts en Discord-gegevens",
+  "settingsConnected": "Verbonden",
+  "settingsClashKingAccount": "ClashKing-account",
+  "settingsEmailConnectedSubtitle": "E-maillogin is verbonden",
+  "settingsEmailRecoverySubtitle": "Voeg e-maillogin toe voor accountherstel",
+  "settingsFeatureRequestsTitle": "Feature requests",
+  "playerOpenInGame": "Openen in game",
+  "playerBookmarkRemove": "Spelerbladwijzer verwijderen",
+  "playerBookmarkAdd": "Speler toevoegen aan bladwijzers",
+  "playerBestTrophies": "Beste trofeeën",
+  "clanLoadFailed": "Clan laden mislukt.",
+  "gameItemLevels": "Niveaus",
+  "resourceDarkElixir": "Donkere elixir",
+  "resourceBuilderElixir": "Bouwerselixir",
+  "resourceBuilderGold": "Bouwersgoud",
+  "resourceElixir": "Elixir",
+  "resourceGold": "Goud",
+  "resourceGlowyOre": "Glowy-erts",
+  "resourceStarryOre": "Starry-erts",
+  "resourceShinyOre": "Shiny-erts",
+  "resourceGeneric": "Grondstof",
+  "seasonStatsGoldGrabbed": "Goud buitgemaakt",
+  "seasonStatsActivity": "Activiteit",
+  "seasonStatsAttackWins": "Aanvalsoverwinningen",
+  "seasonStatsTrophies": "Seizoenstrofeeën",
+  "todoSearchAccountsHint": "Accounts zoeken",
+  "generalClearSearch": "Zoekopdracht wissen",
+  "clanCapitalAvgRewards": "Gem. beloningen",
+  "clanCapitalAvgDistrictsPerWeek": "Gem. districten/week",
+  "clanCapitalTopAttackers": "Topaanvallers",
+  "clanCapitalPlayersTracked": "{count} spelers gevolgd",
+  "clanCapitalDefenseOverTime": "Verdediging door de tijd",
+  "clanCapitalDistrictsTracked": "{count} districten gevolgd",
+  "clanCapitalSelectedRaid": "Geselecteerde raid",
+  "generalSummary": "Samenvatting",
+  "generalBreakdown": "Uitsplitsing",
+  "clanPointsTitle": "Clanpunten",
+  "clanBuilderBasePoints": "Bouwersbasispunten",
+  "clanType": "Clantype",
+  "clanRequiredTownHall": "Vereiste stadhuis",
+  "clanRequiredTownHallOnly": "{level}+ alleen",
+  "clanCapitalPoints": "Hoofdstadpunten",
+  "todoAllAccounts": "Alle accounts",
+  "todoCombinedAcrossAccounts": "Gecombineerde to-do voor je accounts",
+  "todoPreviewAccount": "Voorbeeldaccount",
+  "todoLastActiveUnavailable": "Laatste activiteit niet beschikbaar",
+  "todoActiveRelative": "Actief {time}",
+  "@todoActiveRelative": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todoCompleteLower": "voltooid",
+  "todoPointsLeftShort": "{points} punten over",
+  "@todoPointsLeftShort": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "todoItemsLeftShort": "{count} over",
+  "@todoItemsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAllCaughtUpForNow": "Alles is voorlopig bijgewerkt",
+  "todoEventEndsIn": "Eindigt over {duration}",
+  "@todoEventEndsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoEventStartsIn": "Begint over {duration}",
+  "@todoEventStartsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoRemainingUpgradeTooltip": "Tik voor resterende upgradekosten en -tijd",
+  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFurySubtitle": "Bekijk de update van juni 2026",
+  "sideRankingsTitle": "Ranglijsten",
+  "sideRankingsSubtitle": "Officiële ranglijsten plus ClashKing-endpoints.",
+  "sideRankingsLoadError": "Kon officiële ranglijsten niet laden.",
+  "sideRankingsEmptyTitle": "Geen ranglijsten teruggegeven",
+  "sideRankingsEmptyBody": "Probeer een ander klassement of een andere locatie.",
+  "sideRankingsMockups": "ClashKing-mockups",
+  "sideStatsTitle": "Statistieken",
+  "sideStatsSubtitle": "Klassementstatistieken van officiële Clash API-bronnen.",
+  "sideStatsLoadError": "Kon klassementstatistieken niet laden.",
+  "sideTopScore": "Topscore",
+  "sideTop200Avg": "Top 200-gemiddelde",
+  "sideBasesArmiesTitle": "Bases & legers",
+  "sideBasesArmiesSubtitle": "Via Discord opgeslagen layouts en legerlinks.",
+  "sideBotSyncTarget": "Bot-synchronisatiedoel",
+  "sideBotSyncTargetBody": "De bot slaat bases en legers al op in het Discord-profiel. Deze pagina is klaar voor die gesynchroniseerde payload.",
+  "sideSavedBases": "Opgeslagen bases",
+  "sideWarBaseSlots": "Oorlogsbaseslots",
+  "sideWarBaseSlotsBody": "Stadhuis, basetype, link en laatst bijgewerkt.",
+  "sideLegendBaseSlots": "Legendabasis-slots",
+  "sideLegendBaseSlotsBody": "Snel kopiëren plus accountkoppeling.",
+  "sideSavedArmies": "Opgeslagen legers",
+  "sideArmyLinks": "Legerlinks",
+  "sideArmyLinksBody": "Samenstelling, spreuken, belegering, notities en deellink.",
+  "sideGameAssetsTitle": "Game-assets",
+  "sideGameAssetsSubtitle": "Gehoste ClashKing-assets, gegroepeerd per map.",
+  "sideNoLinkedPlayersTitle": "Geen gekoppelde spelers geladen",
+  "sideNoLinkedPlayersBody": "Voeg gekoppelde accounts toe of vernieuw ze om competitiegegevens vooraf in te vullen.",
+  "sideReadyNow": "Nu klaar",
+  "sideDays": "{count} dagen",
+  "@sideDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideOreLeft": "{shiny} glinsterend, {glowy} gloeiend, {starry} sterachtig over",
+  "@sideOreLeft": {
+    "placeholders": {
+      "shiny": {
+        "type": "String"
+      },
+      "glowy": {
+        "type": "String"
+      },
+      "starry": {
+        "type": "String"
+      }
+    }
+  },
+  "sideShinyOre": "Glinstererts",
+  "sideGlowyOre": "Gloei-erts",
+  "sideStarryOre": "Sterrenerts",
+  "sideDailyBonusAdjustment": "Aanpassing dagelijkse bonus",
+  "sideExtraShiny": "Extra glinsterend",
+  "sideExtraGlowy": "Extra gloeiend",
+  "sideExtraStarry": "Extra sterachtig",
+  "sideZapQuakeTitle": "{zaps} bliksem + 1 aardbeving",
+  "@sideZapQuakeTitle": {
+    "placeholders": {
+      "zaps": {
+        "type": "int"
+      }
+    }
+  },
+  "sideZapQuakeSubtitle": "{quakeDamage} aardbevingsschade, {lightningDamage} per bliksem",
+  "@sideZapQuakeSubtitle": {
+    "placeholders": {
+      "quakeDamage": {
+        "type": "String"
+      },
+      "lightningDamage": {
+        "type": "String"
+      }
+    }
+  },
+  "sideBuildingHp": "Gebouw-HP",
+  "sideLightningLevel": "Bliksemniveau",
+  "sideEarthquakeLevel": "Aardbevingsniveau",
+  "sideWithoutEarthquake": "Zonder aardbeving",
+  "sideLightningCount": "{count} bliksemspreuken",
+  "@sideLightningCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideFireballQuakeTitle": "Vuurbal + 1 aardbeving",
+  "sideAddSupportDamage": "Ondersteunende schade toevoegen",
+  "sideFireballQuakeSubtitle": "{fireballDamage} vuurbalschade, {hpLeft} HP over na aardbeving",
+  "@sideFireballQuakeSubtitle": {
+    "placeholders": {
+      "fireballDamage": {
+        "type": "String"
+      },
+      "hpLeft": {
+        "type": "String"
+      }
+    }
+  },
+  "sideFireballLevel": "Vuurbalniveau",
+  "sideQuakePressure": "Aardbevingsdruk",
+  "sideQuakeSpellCount": "{count} aardbevingsspreuk(en)",
+  "@sideQuakeSpellCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideLocation": "Locatie",
+  "sideFilter": "Filteren",
+  "sideRefresh": "Vernieuwen",
+  "sideOfficialClashLeaderboard": "Officieel Clash-klassement",
+  "sideAllTownHallsShort": "Alle TH",
+  "sideOwned": "In bezit",
+  "sideTarget": "Doel",
+  "sideDailyValue": "dagelijks {value}",
+  "@sideDailyValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "sideDecrease": "Verlagen",
+  "sideIncrease": "Verhogen",
+  "sideLevel": "Niveau {level}",
+  "@sideLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "sidePopularPlayers": "Spelers",
+  "sidePopularClans": "Populaire clans",
+  "sidePopularWarsCwl": "Oorlogen & CWL",
+  "rankingPlayerTrophies": "Spelertrofeeën",
+  "rankingPlayerTrophiesHeading": "Ranglijst spelertrofeeën",
+  "rankingPlayerBuilder": "Speler-bouwersbasis",
+  "rankingPlayerBuilderHeading": "Ranglijst bouwersbasis spelers",
+  "rankingClanTrophies": "Clantrofeeën",
+  "rankingClanTrophiesHeading": "Ranglijst clantrofeeën",
+  "rankingClanBuilder": "Clanbouwersbasis",
+  "rankingClanBuilderHeading": "Ranglijst bouwersbasis clans",
+  "rankingClanCapital": "Clanhoofdstad",
+  "rankingClanCapitalHeading": "Ranglijst clanhoofdstad",
+  "assetFolderTroops": "Troepen",
+  "assetFolderSpells": "Spreuken",
+  "assetFolderHeroes": "Helden",
+  "assetFolderEquipment": "Uitrusting",
+  "assetFolderLeagues": "Competities",
+  "assetFolderResources": "Grondstoffen",
+  "assetFolderStickers": "Stickerset",
+  "upgradeSectionHeroes": "Helden",
+  "upgradeSectionTroops": "Troepen",
+  "upgradeSectionSpells": "Spreuken",
+  "upgradeSectionPets": "Huisdieren",
+  "upgradeSectionEquipment": "Uitrusting",
+  "sideMockupSource": "Bron",
+  "sideMockupMode": "Modus",
+  "sideMockupPreview": "Voorbeeld",
+  "sideMockupRows": "Rijen",
+  "sideMockupRowsValue": "5 mock-ups",
+  "endpointLeagueTop200": "Top 200 competitie",
+  "endpointLeagueTop200Preview": "Legendecompetitie · 5.742 trofeeën",
+  "endpointTownhallTop200": "Top 200 stadhuis",
+  "endpointTownhallTop200Preview": "TH17 · Globaal spelersbord",
+  "endpointClanDonations": "Clandonaties",
+  "endpointClanDonationsPreview": "Verenigde Staten · wekelijkse clantotalen",
+  "endpointClanWarWins": "Clanoorlogsoverwinningen",
+  "endpointClanWarWinsPreview": "Internationaal · oorlogsoverwinningen aller tijden",
+  "endpointTop200ArmyUsage": "Legergebruik top 200",
+  "endpointTop200ArmyUsagePreview": "Gevechtslogs · troepen- en spreukgebruik",
+  "endpointStateTop200": "Top 200",
+  "endpointStateWeekly": "Wekelijks",
+  "endpointStateWins": "Overwinningen",
+  "endpointStateUsage": "Gebruik",
+  "notifGroupBattles": "Gevechten",
+  "notifGroupReminders": "Herinneringen",
+  "notifGroupSupport": "Ondersteuning",
+  "notifGroupProgress": "Voortgang",
+  "notifLeagueDefense": "League-verdediging",
+  "notifLeagueDefenseResult": "Competitieverdedigingsresultaat",
+  "notifLeagueTriple": "Competitie-triple",
+  "notifLeagueAttackBody": "Lord Clasher viel {player} aan • {percent}% • {stars} sterren • {league}",
+  "@notifLeagueAttackBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarDefense": "Oorlogsverdediging",
+  "notifWarAttackOnTh": "Oorlogsaanval op TH{th}",
+  "@notifWarAttackOnTh": {
+    "placeholders": {
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarDefenseBody": "{opponentClan} viel {player} aan • {percent}% • {stars} sterren • verdediging van {clan}",
+  "@notifWarDefenseBody": {
+    "placeholders": {
+      "opponentClan": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarFeed5v5": "5v5-oorlogsfeed",
+  "notifWarAttackResult": "Oorlogsaanvalresultaat",
+  "notifWarAttackResultBody": "{clan} viel Pine Riders TH{th} aan • 100% • 3 sterren",
+  "@notifWarAttackResultBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarMatched": "Oorlog gematcht",
+  "notifWarMatchedBody": "{clan} is gekoppeld aan Pine Riders. Voorbereidingsdag is begonnen.",
+  "@notifWarMatchedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarStarted": "Oorlog gestart",
+  "notifBattleDayStarted": "Gevechtsdag begonnen",
+  "notifWarStartedBody": "{clan} vs Pine Riders is live. Succes.",
+  "@notifWarStartedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarEnded": "Oorlog geëindigd",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Eindresultaten zijn beschikbaar.",
+  "@notifWarEndedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarReminder1h": "Oorlogsherinnering: 1u",
+  "notifWarReminder30m": "Oorlogsherinnering: 30m",
+  "notifWarReminder15m": "Oorlogsherinnering: 15m",
+  "notifOneHourLeft": "1 uur over",
+  "notifThirtyMinutesLeft": "30 minuten over",
+  "notifFifteenMinutesLeft": "15 minuten over",
+  "notifRemainingWarAttacksBody": "{player} heeft nog oorlogsaanvallen over. {time}.",
+  "@notifRemainingWarAttacksBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notifStarted": "{name} begonnen",
+  "@notifStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifClanGamesPointsBody": "{clan} kan beginnen met {name}-punten verdienen.",
+  "@notifClanGamesPointsBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCwlPreparationBody": "{clan} kan beginnen met de voorbereiding op Clan War League.",
+  "@notifCwlPreparationBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRaidWeekendBody": "{clan} kan beginnen met aanvallen in hoofdstadraids.",
+  "@notifRaidWeekendBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSeasonStart": "Seizoensstart",
+  "notifNewSeasonStarted": "Nieuw seizoen begonnen",
+  "notifSeasonStartedBody": "Het {league}-seizoen is begonnen voor {player}.",
+  "@notifSeasonStartedBody": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSpecialEvent": "Speciaal evenement",
+  "notifNewEventLive": "Er is een nieuw evenement live",
+  "notifNewClashEventBody": "Er is een nieuw Clash-evenement beschikbaar.",
+  "notifSupportClashKing": "Steun ClashKing",
+  "notifMonthlySupportBody": "Maandelijkse steun helpt ClashKing beschikbaar te houden en te verbeteren. Bedankt.",
+  "notifUpgradeFinished": "Upgrade voltooid",
+  "notifUpgradeReadyTitle": "{name} is klaar",
+  "@notifUpgradeReadyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUpgradeCompleteBody": "Niveau {level} voltooid voor {player}. Upgrade voltooid.",
+  "@notifUpgradeCompleteBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "clanSearchLoadFailed": "Kan clangegevens niet laden: {error}",
+  "@clanSearchLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appIconDefault": "Standaard",
+  "appIconChristmas": "Kerst",
+  "appIconBlackWhite": "Zwart-wit",
+  "appIconDarkMode": "Donkere modus",
+  "generalMembersCount": "{count} leden",
+  "@generalMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "generalBookmarked": "bladwijzer",
+  "clanLevelValue": "niveau {level}",
+  "@clanLevelValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRankShort": "Rang {rank}",
+  "@cwlRankShort": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRoundShort": "Ronde {round}",
+  "@cwlRoundShort": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTownHallShortLevel": "TH{level}",
+  "@gameTownHallShortLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "faqSupercellFanContentPolicyLink": "Supercell-beleid voor fancontent"
 }

@@ -1,305 +1,388 @@
+import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
+import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'dart:ui';
-import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
+import 'package:provider/provider.dart';
 
-class LegendHeaderCard extends StatefulWidget {
+/// Hero header for the Legend League screen — same shell as the clan and
+/// player pages: fixed-height backdrop image, glass action buttons, an
+/// identity row (badge beside name/tag), then a floating stats card
+/// straddling the image edge.
+class LegendHeaderCard extends StatelessWidget {
   final Player player;
 
   const LegendHeaderCard({super.key, required this.player});
 
   @override
-  State<LegendHeaderCard> createState() => _LegendHeaderCardState();
-}
-
-class _LegendHeaderCardState extends State<LegendHeaderCard> {
-  @override
   Widget build(BuildContext context) {
-    final currentSeason = widget.player.legendsBySeason?.currentSeason;
-    int currentTrophies = 0;
-    currentSeason != null
-        ? currentTrophies = currentSeason.endTrophies
-        : widget.player.trophies;
-
-    final diffTrophies = currentTrophies - 5000;
+    final imageHeight = MediaQuery.of(context).padding.top + 280;
 
     return Stack(
-      clipBehavior: Clip.none,
-      children: <Widget>[
-        SizedBox(
-          height: 240,
-          width: double.infinity,
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-            child: ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                Colors.black.withValues(alpha: 0.7),
-                BlendMode.darken,
-              ),
-              child: MobileWebImage(
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: imageHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              MobileWebImage(
                 imageUrl: ImageAssets.legendPageBackground,
-                width: double.infinity,
                 fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    ColoredBox(color: Theme.of(context).colorScheme.surface),
               ),
-            ),
+              ColoredBox(color: Colors.black.withValues(alpha: 0.62)),
+            ],
           ),
         ),
-        Positioned(
-          top: 26,
-          bottom: 0,
-          left: 10,
-          right: 10,
+        Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top + 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: _TopActions(player: player),
+            ),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _Identity(player: player),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: _StatsPanel(player: player),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _TopActions extends StatelessWidget {
+  final Player player;
+
+  const _TopActions({required this.player});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        HeaderIconButton(
+          icon: Icons.arrow_back_rounded,
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onTap: () => Navigator.of(context).pop(),
+        ),
+        const Spacer(),
+        HeaderIconButton(
+          icon: Icons.open_in_new_rounded,
+          tooltip: AppLocalizations.of(context)!.playerOpenInGame,
+          onTap: () => _openInGame(context, player),
+        ),
+        const SizedBox(width: 8),
+        Consumer<BookmarkService>(
+          builder: (context, bookmarks, child) {
+            final bookmarked = bookmarks.isPlayerBookmarked(player.tag);
+            return HeaderIconButton(
+              icon: bookmarked
+                  ? Icons.bookmark_rounded
+                  : Icons.bookmark_border_rounded,
+              tooltip: bookmarked
+                  ? AppLocalizations.of(context)!.playerBookmarkRemove
+                  : AppLocalizations.of(context)!.playerBookmarkAdd,
+              onTap: () => bookmarks.togglePlayer(player),
+            );
+          },
+        ),
+        const SizedBox(width: 8),
+        HeaderIconButton(
+          icon: Icons.info_outline_rounded,
+          tooltip: AppLocalizations.of(context)!.legendsInaccurateTitle,
+          onTap: () => _showInfo(context),
+        ),
+      ],
+    );
+  }
+
+  void _openInGame(BuildContext context, Player player) {
+    final languageCode = Localizations.localeOf(
+      context,
+    ).languageCode.toLowerCase();
+    final url = Uri.https('link.clashofclans.com', '/$languageCode', {
+      'action': 'OpenPlayerProfile',
+      'tag': player.tag,
+    });
+    showDialog(
+      context: context,
+      builder: (context) => OpenClashDialog(url: url),
+    );
+  }
+
+  void _showInfo(BuildContext context) {
+    showInfoPopup(
+      context,
+      TextSpan(
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+        children: [
+          TextSpan(
+            text: "${AppLocalizations.of(context)!.legendsInaccurateIntro}\n",
+          ),
+          TextSpan(
+            text:
+                "${AppLocalizations.of(context)!.legendsInaccurateApiDelayTitle}\n",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text:
+                "${AppLocalizations.of(context)!.legendsInaccurateApiDelayBody}\n",
+          ),
+          TextSpan(
+            text: AppLocalizations.of(
+              context,
+            )!.legendsInaccurateConcurrentTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: AppLocalizations.of(
+              context,
+            )!.legendsInaccurateMultipleAttacksTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: AppLocalizations.of(
+              context,
+            )!.legendsInaccurateMultipleAttacksBody,
+          ),
+          TextSpan(
+            text: AppLocalizations.of(
+              context,
+            )!.legendsInaccurateSimultaneousTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text:
+                "${AppLocalizations.of(context)!.legendsInaccurateSimultaneousBody}\n",
+          ),
+          TextSpan(
+            text:
+                "${AppLocalizations.of(context)!.legendsInaccurateNetGainTitle}\n",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text:
+                "${AppLocalizations.of(context)!.legendsInaccurateNetGainBody}\n\n",
+          ),
+          TextSpan(
+            text: AppLocalizations.of(context)!.legendsInaccurateConclusion,
+          ),
+        ],
+      ),
+      AppLocalizations.of(context)!.legendsInaccurateTitle,
+    );
+  }
+}
+
+class _Identity extends StatelessWidget {
+  final Player player;
+
+  const _Identity({required this.player});
+
+  @override
+  Widget build(BuildContext context) {
+    final inLegends =
+        (player.legendsBySeason?.currentSeason?.endTrophies ?? 0) > 0;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 64,
+          height: 64,
+          child: MobileWebImage(
+            imageUrl: inLegends
+                ? ImageAssets.legendBlazon
+                : ImageAssets.legendBlazonBorders,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Center(
+              Text(
+                player.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Text(
+                player.tag,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.75),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StatsPanel extends StatelessWidget {
+  final Player player;
+
+  const _StatsPanel({required this.player});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final locale = Localizations.localeOf(context).toString();
+    final formatter = NumberFormat('#,###', locale);
+    final currentSeason = player.legendsBySeason?.currentSeason;
+    final currentTrophies = currentSeason?.endTrophies ?? 0;
+    final inLegends = currentTrophies > 0;
+    final diffTrophies = currentTrophies - 5000;
+    final rankings = player.rankings;
+    final hasCountry =
+        rankings?.countryCode != null && rankings!.countryCode!.isNotEmpty;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: (theme.cardTheme.color ?? colorScheme.surface).withValues(
+          alpha: 0.94,
+        ),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.5,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: SizedBox.square(
+                  dimension: 36,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: MobileWebImage(
+                      imageUrl: inLegends
+                          ? ImageAssets.legendBlazonNoPadding
+                          : ImageAssets.legendBlazonBordersNoPadding,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.player.name,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
-                          ),
-                    ),
-                    Text(widget.player.tag,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: Colors.grey,
-                            )),
-                    SizedBox(height: 10),
-                    if (currentTrophies > 0)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MobileWebImage(
-                            imageUrl: ImageAssets.legendBlazon,
-                            width: 60,
-                          ),
-                          Text(
-                              NumberFormat(
-                                      '#,###',
-                                      Localizations.localeOf(context)
-                                          .toString())
-                                  .format(currentTrophies),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 32,
-                                  )),
-                          SizedBox(width: 8),
-                          Column(
-                            children: [
-                              Text(
-                                "(${diffTrophies >= 0 ? '+' : ''}$diffTrophies)",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(
-                                        color: diffTrophies >= 0
-                                            ? Colors.green
-                                            : Colors.red),
-                              ),
-                              SizedBox(height: 32),
-                            ],
-                          ),
-                        ],
-                      )
-                    else
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MobileWebImage(
-                            imageUrl: ImageAssets.legendBlazonBorders,
-                            width: 60,
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.legendsNotInLeague,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(color: Colors.white),
-                          ),
-                        ],
+                      AppLocalizations.of(context)?.legendsTitle ??
+                          'Legend League',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w800,
                       ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 0,
-                                children: <Widget>[
-                                  if (widget.player.rankings?.countryCode != "")
-                                    Chip(
-                                      avatar: CircleAvatar(
-                                          backgroundColor: Colors.transparent,
-                                          child: MobileWebImage(
-                                              imageUrl: ImageAssets.flag(widget
-                                                      .player
-                                                      .rankings
-                                                      ?.countryCode ??
-                                                  ''))),
-                                      label: Text(
-                                        widget.player.rankings?.countryName ??
-                                            'No Country',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium
-                                            ?.copyWith(color: Colors.white),
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        side: BorderSide(
-                                            color: Colors.white, width: 1),
-                                      ),
-                                    ),
-                                  if (widget.player.rankings?.countryCode != "")
-                                    Chip(
-                                      avatar: CircleAvatar(
-                                          backgroundColor: Colors.transparent,
-                                          child: MobileWebImage(
-                                              imageUrl: ImageAssets.flag(widget
-                                                      .player
-                                                      .rankings
-                                                      ?.countryCode ??
-                                                  ''))),
-                                      label: widget
-                                                  .player.rankings?.localRank !=
-                                              0
-                                          ? Text(
-                                              widget.player.rankings?.localRank
-                                                      ?.toString() ??
-                                                  AppLocalizations.of(context)
-                                                      ?.legendsNoRank ??
-                                                  'No rank',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium
-                                                  ?.copyWith(
-                                                      color: Colors.white),
-                                            )
-                                          : Text(
-                                              AppLocalizations.of(context)
-                                                      ?.legendsNoRank ??
-                                                  'No rank',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium
-                                                  ?.copyWith(
-                                                      color: Colors.white),
-                                            ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        side: BorderSide(
-                                            color: Colors.white, width: 1),
-                                      ),
-                                    ),
-                                  Chip(
-                                    avatar: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: MobileWebImage(
-                                          imageUrl: ImageAssets.planet),
-                                    ),
-                                    label: Text(
-                                        widget.player.rankings?.globalRank != 0
-                                            ? NumberFormat(
-                                                    '#,###',
-                                                    Localizations.localeOf(
-                                                            context)
-                                                        .toString())
-                                                .format(widget.player.rankings
-                                                    ?.globalRank)
-                                            : AppLocalizations.of(context)
-                                                    ?.legendsNoRank ??
-                                                'No rank',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium
-                                            ?.copyWith(color: Colors.white)),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      side: BorderSide(
-                                          color: Colors.white, width: 1),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
+                    const SizedBox(height: 1),
+                    inLegends
+                        ? Text(
+                            formatter.format(currentTrophies),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w900,
+                              height: 1,
+                            ),
+                          )
+                        : Text(
+                            AppLocalizations.of(context)!.legendsNotInLeague,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: 40,
-          left: 10,
-          child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onPrimary, size: 32),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-        InfoButton(
-          textSpan: TextSpan(
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+              if (inLegends) ...[
+                const SizedBox(width: 10),
+                Text(
+                  "${diffTrophies >= 0 ? '+' : ''}$diffTrophies",
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: diffTrophies >= 0 ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-            children: [
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsInaccurateIntro}\n"),
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsInaccurateApiDelayTitle}\n",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsInaccurateApiDelayBody}\n"),
-              TextSpan(
-                  text: AppLocalizations.of(context)!
-                      .legendsInaccurateConcurrentTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text: AppLocalizations.of(context)!
-                      .legendsInaccurateMultipleAttacksTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text: AppLocalizations.of(context)!
-                      .legendsInaccurateMultipleAttacksBody),
-              TextSpan(
-                  text: AppLocalizations.of(context)!
-                      .legendsInaccurateSimultaneousTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsInaccurateSimultaneousBody}\n"),
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsInaccurateNetGainTitle}\n",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text:
-                      "${AppLocalizations.of(context)!.legendsInaccurateNetGainBody}\n\n"),
-              TextSpan(
-                  text: AppLocalizations.of(context)!
-                      .legendsInaccurateConclusion),
+              ],
             ],
           ),
-          title: AppLocalizations.of(context)!.legendsInaccurateTitle,
-        ),
-      ],
+          const SizedBox(height: 12),
+          MetricChipGrid(
+            columns: 3,
+            chips: [
+              if (hasCountry)
+                MetricChip(
+                  label:
+                      AppLocalizations.of(context)?.legendsCountryTitle ??
+                      'Country',
+                  value: rankings.countryName ?? '',
+                  imageUrl: ImageAssets.flag(rankings.countryCode!),
+                ),
+              if (hasCountry)
+                MetricChip(
+                  label:
+                      AppLocalizations.of(context)?.legendsLocalRankTitle ??
+                      'Local rank',
+                  value: (rankings.localRank ?? 0) != 0
+                      ? '#${rankings.localRank}'
+                      : AppLocalizations.of(context)?.legendsNoRank ??
+                            'No rank',
+                  imageUrl: ImageAssets.flag(rankings.countryCode!),
+                ),
+              MetricChip(
+                label:
+                    AppLocalizations.of(context)?.legendsGlobalRankTitle ??
+                    'Global rank',
+                value: (rankings?.globalRank ?? 0) != 0
+                    ? '#${formatter.format(rankings!.globalRank)}'
+                    : AppLocalizations.of(context)?.legendsNoRank ?? 'No rank',
+                imageUrl: ImageAssets.planet,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -54,17 +54,21 @@ class CwlLeague {
   int? getStarsGapFromRank(String clanTag, int targetRank) {
     if (clans.isEmpty) return null;
 
-    final currentClan = clans.firstWhere((c) => c.tag == clanTag,
-        orElse: () => CwlClan.empty());
+    final currentClan = clans.firstWhere(
+      (c) => c.tag == clanTag,
+      orElse: () => CwlClan.empty(),
+    );
     if (currentClan.tag.isEmpty) return null;
 
     final targetClan = clans.firstWhere(
       (c) => c.rank == targetRank,
       orElse: () {
         final sortedByGap = List<CwlClan>.from(clans)
-          ..sort((a, b) => (a.rank - targetRank)
-              .abs()
-              .compareTo((b.rank - targetRank).abs()));
+          ..sort(
+            (a, b) => (a.rank - targetRank).abs().compareTo(
+              (b.rank - targetRank).abs(),
+            ),
+          );
         return sortedByGap.first;
       },
     );
@@ -86,8 +90,9 @@ class CwlLeague {
         clans.sort((a, b) => b.stars.compareTo(a.stars));
         break;
       case 'percentage':
-        clans.sort((a, b) =>
-            b.destructionPercentage.compareTo(a.destructionPercentage));
+        clans.sort(
+          (a, b) => b.destructionPercentage.compareTo(a.destructionPercentage),
+        );
         break;
     }
   }

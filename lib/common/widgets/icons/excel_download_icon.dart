@@ -4,7 +4,7 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -27,17 +27,19 @@ class _DownloadCwlExcelButtonState extends State<DownloadCwlExcelButton> {
 
   Future<void> downloadExcel(BuildContext context) async {
     final loc = AppLocalizations.of(context)!;
-    final dioClient = Dio();
 
     setState(() => _isDownloading = true);
 
     try {
-      final response = await dioClient.get<List<int>>(
-        widget.url,
-        options: Options(responseType: ResponseType.bytes),
-      );
+      final response = await http.get(Uri.parse(widget.url));
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw HttpException(
+          'Download failed (${response.statusCode})',
+          uri: response.request?.url,
+        );
+      }
 
-      final bytes = response.data!;
+      final bytes = response.bodyBytes;
       final filename = widget.fileName;
 
       if (kIsWeb) {

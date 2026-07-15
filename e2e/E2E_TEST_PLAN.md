@@ -1,6 +1,6 @@
 # ClashKing — E2E Test Plan
 
-> Tests Playwright contre `https://app.clashk.ing` (ou URL configurée via `BASE_URL`).  
+> Tests Playwright contre `https://app.clashk.ing` (ou URL configurée via `BASE_URL`).
 > Moteur : Chromium headless, Flutter web (semantics tree activé).
 
 ---

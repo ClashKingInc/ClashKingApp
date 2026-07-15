@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 
 class LegendOffenseDefenseCard extends StatelessWidget {
   const LegendOffenseDefenseCard({
@@ -39,8 +39,10 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(title, style: Theme.of(context).textTheme.titleSmall),
-                  Text(' ($plusMinus$totalTrophies)',
-                      style: Theme.of(context).textTheme.labelLarge),
+                  Text(
+                    ' ($plusMinus$totalTrophies)',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -58,9 +60,9 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                              child: MobileWebImage(
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                                 imageUrl: icon,
                                 width: 20,
                               ),
@@ -78,20 +80,27 @@ class LegendOffenseDefenseCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(AppLocalizations.of(context)?.navigationStatistics ?? "Statistics",
-                  style: Theme.of(context).textTheme.bodyLarge),
               Text(
-                  "${AppLocalizations.of(context)?.generalTotal ?? "Total"} : $totalCount/8",
-                  style: Theme.of(context).textTheme.bodySmall),
+                AppLocalizations.of(context)?.navigationStatistics ??
+                    "Statistics",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
               Text(
-                  '${AppLocalizations.of(context)?.generalAverage ?? "Average"} : ${average.toStringAsFixed(1)}',
-                  style: Theme.of(context).textTheme.bodySmall),
+                "${AppLocalizations.of(context)?.generalTotal ?? "Total"} : $totalCount/8",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
               Text(
-                  '${AppLocalizations.of(context)?.generalRemaining ?? "Remaining"} : $remaining',
-                  style: Theme.of(context).textTheme.bodySmall),
+                '${AppLocalizations.of(context)?.generalAverage ?? "Average"} : ${average.toStringAsFixed(1)}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
               Text(
-                  '${plusMinus == "-" ? AppLocalizations.of(context)?.generalWorst ?? "Worst" : AppLocalizations.of(context)?.generalBest ?? "Best"} : $bestPossible',
-                  style: Theme.of(context).textTheme.bodySmall),
+                '${AppLocalizations.of(context)?.generalRemaining ?? "Remaining"} : $remaining',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              Text(
+                '${plusMinus == "-" ? AppLocalizations.of(context)?.generalWorst ?? "Worst" : AppLocalizations.of(context)?.generalBest ?? "Best"} : $bestPossible',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ],
           ),
         ),

@@ -9,13 +9,13 @@ import 'dart:async';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class PlayerSearchCard extends StatefulWidget {
-  PlayerSearchCard({super.key});
+  const PlayerSearchCard({super.key});
   @override
   PlayerSearchCardState createState() => PlayerSearchCardState();
 }
 
 class PlayerSearchCardState extends State<PlayerSearchCard> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   Future<List<dynamic>>? _searchResults;
   bool isSearching = false;
   bool isEmpty = true;
@@ -62,7 +62,8 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
       Sentry.captureMessage(
-          'Error in search, search: ${_controller.text}, searchResults: $_searchResults');
+        'Error in search, search: ${_controller.text}, searchResults: $_searchResults',
+      );
     }
   }
 
@@ -74,13 +75,14 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
 
       dynamic response;
       const timeout = Duration(seconds: 10);
-      
+
       if (RegExp(r'^#[PYLQGRJCUV0289]{3,9}$').hasMatch(query) ||
           RegExp(r'^[PYLQGRJCUV0289]{3,9}$').hasMatch(query)) {
-        query = query.replaceFirst('#', '!');
-        response = await http
-            .get(Uri.parse('${ApiService.proxyUrl}/players/$query'))
-            .timeout(timeout);
+        final playerTag = query.startsWith('#') ? query : '#$query';
+        response = await ApiService().proxyGet(
+          '/players/${Uri.encodeComponent(playerTag)}',
+          timeout: timeout,
+        );
       } else {
         response = await http
             .get(Uri.parse('${ApiService.apiUrlV1}/player/full-search/$query'))
@@ -96,7 +98,9 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
           return [data];
         }
       } else {
-        Sentry.captureMessage('Search API returned status ${response.statusCode} for query: $query');
+        Sentry.captureMessage(
+          'Search API returned status ${response.statusCode} for query: $query',
+        );
         return [];
       }
     } catch (exception, stackTrace) {
@@ -135,26 +139,27 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                               child: CircularProgressIndicator(),
                             )
                           : !isEmpty
-                              ? IconButton(
-                                  icon: Icon(
-                                    Icons.clear,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                  onPressed: () {
-                                    _controller.clear();
-                                    if (mounted) {
-                                      setState(() {
-                                        isSearching = false;
-                                      });
-                                    }
-                                  },
-                                )
-                              : Icon(
-                                  Icons.search,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
+                          ? IconButton(
+                              tooltip: AppLocalizations.of(
+                                context,
+                              )!.searchClear,
+                              icon: Icon(
+                                Icons.clear,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              onPressed: () {
+                                _controller.clear();
+                                if (mounted) {
+                                  setState(() {
+                                    isSearching = false;
+                                  });
+                                }
+                              },
+                            )
+                          : Icon(
+                              Icons.search,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
                       SizedBox(width: 8.0),
                     ],
                   ),
@@ -168,17 +173,22 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox.shrink();
               } else if (snapshot.hasError) {
-                return Center(child: Text("No results found."));
+                return Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.generalNoFilteredResults,
+                  ),
+                );
               } else if (snapshot.hasData &&
                   snapshot.data != null &&
                   snapshot.data != [] &&
                   snapshot.data!.isNotEmpty) {
                 return SingleChildScrollView(
-                    child: Column(
-                  children: snapshot.data!.map<Widget>((player) {
-                    return PlayerSearchResultTile(player: player);
-                  }).toList(),
-                ));
+                  child: Column(
+                    children: snapshot.data!.map<Widget>((player) {
+                      return PlayerSearchResultTile(player: player);
+                    }).toList(),
+                  ),
+                );
               } else {
                 if (_controller.text.length >= 2) {
                   return Column(

@@ -39,7 +39,8 @@ class WarInfo {
         startTime: _parseDateTime(data['startTime']),
         endTime: _parseDateTime(data['endTime']),
         preparationStartTime: _parseDateTime(data['preparationStartTime']),
-        warType: data['warType']?.toString() ??
+        warType:
+            data['warType']?.toString() ??
             data['type']?.toString() ??
             'unknown',
         clan: _asMap(data['clan']) != null
@@ -51,11 +52,7 @@ class WarInfo {
       );
     } catch (e) {
       DebugUtils.debugError("Error parsing WarInfo: $e");
-      return WarInfo(
-        state: 'unknown',
-        clan: null,
-        opponent: null,
-      );
+      return WarInfo(state: 'unknown', clan: null, opponent: null);
     }
   }
 
@@ -65,6 +62,18 @@ class WarInfo {
       clan: WarClan.empty(),
       opponent: WarClan.empty(),
     );
+  }
+
+  bool get isClanWarLeague {
+    final type = warType?.toLowerCase() ?? '';
+    return type == 'cwl' ||
+        type.contains('league') ||
+        type.contains('clanwarleague');
+  }
+
+  int get effectiveAttacksPerMember {
+    if (isClanWarLeague || attacksPerMember == null) return 1;
+    return attacksPerMember!;
   }
 
   /// Return a WarMember from either clan or opponent by tag
@@ -107,15 +116,19 @@ class WarInfo {
   int getAttacksDoneByPlayer(String playerTag, String clanTag) {
     if (clan?.tag == clanTag) {
       return clan?.members
-              .firstWhere((member) => member.tag == playerTag,
-                  orElse: () => WarMember.empty())
+              .firstWhere(
+                (member) => member.tag == playerTag,
+                orElse: () => WarMember.empty(),
+              )
               .attacks
               ?.length ??
           0;
     } else if (opponent?.tag == clanTag) {
       return opponent?.members
-              .firstWhere((member) => member.tag == playerTag,
-                  orElse: () => WarMember.empty())
+              .firstWhere(
+                (member) => member.tag == playerTag,
+                orElse: () => WarMember.empty(),
+              )
               .attacks
               ?.length ??
           0;
@@ -133,7 +146,8 @@ class WarInfo {
     return false;
   }
 
-  String getWarResult(String clanTag) { // NOSONAR
+  String getWarResult(String clanTag) {
+    // NOSONAR
     if (clan?.tag != clanTag && opponent?.tag != clanTag) {
       return 'unknown';
     }
@@ -208,19 +222,13 @@ class WarInfo {
     final isUserInOpponent =
         opponent?.members.any((member) => member.tag == userPlayerTag) ?? false;
 
-    DebugUtils.debugInfo(
-        "Reordering war for user $userPlayerTag: inClan=$isUserInClan, inOpponent=$isUserInOpponent");
-
     // If user is in clan position, no reordering needed
     if (isUserInClan && !isUserInOpponent) {
-      DebugUtils.debugInfo("User is in clan position, no reordering needed");
       return this;
     }
 
     // If user is in opponent position, swap clan and opponent
     if (isUserInOpponent && !isUserInClan) {
-      DebugUtils.debugInfo(
-          "User is in opponent position, swapping clan and opponent");
       return WarInfo(
         tag: tag,
         state: state,
@@ -238,10 +246,12 @@ class WarInfo {
     // If user is not found in either side, or found in both (shouldn't happen), return original
     if (!isUserInClan && !isUserInOpponent) {
       DebugUtils.debugWarning(
-          "User $userPlayerTag not found in either clan or opponent");
+        "User $userPlayerTag not found in either clan or opponent",
+      );
     } else if (isUserInClan && isUserInOpponent) {
       DebugUtils.debugWarning(
-          "User $userPlayerTag found in both clan and opponent (unexpected)");
+        "User $userPlayerTag found in both clan and opponent (unexpected)",
+      );
     }
 
     return this;
@@ -257,25 +267,20 @@ class WarInfo {
     }
 
     final normalizedTargetTag = normalizeClanTag(clanTag);
-    final normalizedClanTag =
-        clan?.tag != null ? normalizeClanTag(clan!.tag) : null;
-    final normalizedOpponentTag =
-        opponent?.tag != null ? normalizeClanTag(opponent!.tag) : null;
-
-    DebugUtils.debugInfo(
-        "Reordering war for clan $normalizedTargetTag: clanTag=$normalizedClanTag, opponentTag=$normalizedOpponentTag");
+    final normalizedClanTag = clan?.tag != null
+        ? normalizeClanTag(clan!.tag)
+        : null;
+    final normalizedOpponentTag = opponent?.tag != null
+        ? normalizeClanTag(opponent!.tag)
+        : null;
 
     // If target clan is already in clan position, no reordering needed
     if (normalizedClanTag == normalizedTargetTag) {
-      DebugUtils.debugInfo(
-          "Target clan is already in clan position, no reordering needed");
       return this;
     }
 
     // If target clan is in opponent position, swap clan and opponent
     if (normalizedOpponentTag == normalizedTargetTag) {
-      DebugUtils.debugInfo(
-          "Target clan is in opponent position, swapping clan and opponent");
       return WarInfo(
         tag: tag,
         state: state,
@@ -292,7 +297,8 @@ class WarInfo {
 
     // If target clan is not found in either side, return original
     DebugUtils.debugWarning(
-        "Target clan $normalizedTargetTag not found in either clan or opponent position");
+      "Target clan $normalizedTargetTag not found in either clan or opponent position",
+    );
     return this;
   }
 }

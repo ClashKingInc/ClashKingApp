@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -8,6 +8,8 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
   @override
   ForgotPasswordPageState createState() => ForgotPasswordPageState();
 }
@@ -60,8 +62,9 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final logoUrl =
-        (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
+    final logoUrl = (isDarkMode
+        ? ImageAssets.darkModeLogo
+        : ImageAssets.lightModeLogo);
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
@@ -80,7 +83,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   child: SizedBox(
                     height: 100,
                     width: 100,
-                    child: CachedNetworkImage(
+                    child: MobileWebImage(
                       errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: logoUrl,
                     ),
@@ -94,9 +97,9 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   Text(
                     AppLocalizations.of(context)!.authPasswordForgot,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
 
@@ -125,10 +128,12 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             textInputAction: TextInputAction.done,
                             enabled: !_isLoading,
                             decoration: InputDecoration(
-                              labelText:
-                                  AppLocalizations.of(context)!.authEmail,
-                              hintText:
-                                  AppLocalizations.of(context)!.authEmailHint,
+                              labelText: AppLocalizations.of(
+                                context,
+                              )!.authEmail,
+                              hintText: AppLocalizations.of(
+                                context,
+                              )!.authEmailHint,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -136,13 +141,16 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return AppLocalizations.of(context)!
-                                    .authEmailRequired;
+                                return AppLocalizations.of(
+                                  context,
+                                )!.authEmailRequired;
                               }
-                              if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                                  .hasMatch(value)) {
-                                return AppLocalizations.of(context)!
-                                    .authEmailInvalid;
+                              if (!RegExp(
+                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                              ).hasMatch(value)) {
+                                return AppLocalizations.of(
+                                  context,
+                                )!.authEmailInvalid;
                               }
                               return null;
                             },
@@ -156,13 +164,16 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             width: double.infinity,
                             height: 56,
                             child: ElevatedButton(
-                              onPressed:
-                                  _isLoading ? null : _requestPasswordReset,
+                              onPressed: _isLoading
+                                  ? null
+                                  : _requestPasswordReset,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                foregroundColor:
-                                    Theme.of(context).colorScheme.onPrimary,
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                                foregroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -175,12 +186,14 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         strokeWidth: 2,
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
-                                                Colors.white),
+                                              Colors.white,
+                                            ),
                                       ),
                                     )
                                   : Text(
-                                      AppLocalizations.of(context)!
-                                          .authPasswordResetSend,
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.authPasswordResetSend,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -199,8 +212,9 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 child: Text(
                                   AppLocalizations.of(context)!.authBackToLogin,
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -219,10 +233,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       decoration: BoxDecoration(
                         color: Colors.green.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.green,
-                          width: 1,
-                        ),
+                        border: Border.all(color: Colors.green, width: 1),
                       ),
                       child: Column(
                         children: [
@@ -234,9 +245,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           const SizedBox(height: 16),
                           Text(
                             AppLocalizations.of(context)!.authPasswordResetSent,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
+                            style: Theme.of(context).textTheme.headlineSmall
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green.shade700,
@@ -245,14 +254,11 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            AppLocalizations.of(context)!
-                                .authPasswordResetSentDescription,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: Colors.green.shade700,
-                                ),
+                            AppLocalizations.of(
+                              context,
+                            )!.authPasswordResetSentDescription,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: Colors.green.shade700),
                             textAlign: TextAlign.center,
                           ),
 
@@ -267,7 +273,8 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (context) => ResetPasswordPage(
-                                        email: _emailController.text.trim()),
+                                      email: _emailController.text.trim(),
+                                    ),
                                   ),
                                 );
                               },
@@ -279,8 +286,9 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                               ),
                               child: Text(
-                                AppLocalizations.of(context)!
-                                    .authPasswordResetContinue,
+                                AppLocalizations.of(
+                                  context,
+                                )!.authPasswordResetContinue,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,

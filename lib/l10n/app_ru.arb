@@ -3,20 +3,20 @@
   "appTitle": "ClashKing",
   "appDescription": "Ваш идеальный спутник Clash of Clans для отслеживания статистики, управления кланами и анализа производительности.",
   "generalLoading": "Загрузка...",
-  "loadingVillages": "Loading your villages...",
-  "loadingClanData": "Fetching clan data...",
-  "loadingWarStats": "Analyzing war stats...",
-  "loadingLegendsData": "Preparing legends data...",
-  "loadingCapitalRaids": "Loading capital raids...",
-  "loadingAlmostReady": "Almost ready...",
-  "accountVerificationTitle": "Verify Account",
-  "accountVerified": "Verified",
-  "accountVerify": "Verify",
-  "accountVerificationSuccess": "Account verified successfully!",
+  "loadingVillages": "Загрузка ваших деревень...",
+  "loadingClanData": "Получение данных клана...",
+  "loadingWarStats": "Анализ статистики войны...",
+  "loadingLegendsData": "Подготовка данных Легенд...",
+  "loadingCapitalRaids": "Загрузка рейдов столицы...",
+  "loadingAlmostReady": "Почти готово...",
+  "accountVerificationTitle": "Подтверждение аккаунта",
+  "accountVerified": "Подтверждён",
+  "accountVerify": "Подтвердить",
+  "accountVerificationSuccess": "Аккаунт успешно подтверждён!",
   "generalRetry": "Повторить",
-  "generalRetrying": "Retrying...",
+  "generalRetrying": "Повторная попытка...",
   "generalTryAgain": "Попробовать снова",
-  "generalReset": "Reset",
+  "generalReset": "Сбросить",
   "generalCancel": "Отмена",
   "generalOk": "OK",
   "@generalOk": {
@@ -28,7 +28,7 @@
   "generalSettings": "Настройки",
   "generalCopiedToClipboard": "Скопировано в буфер обмена",
   "generalComingSoon": "Скоро!",
-  "generalLastRefresh": "Last refresh: {time}",
+  "generalLastRefresh": "Последнее обновление: {time}",
   "@generalLastRefresh": {
     "description": "Last refresh time indicator",
     "placeholders": {
@@ -38,7 +38,7 @@
       }
     }
   },
-  "generalRefreshFailed": "Refresh failed: {error}",
+  "generalRefreshFailed": "Не удалось обновить: {error}",
   "@generalRefreshFailed": {
     "description": "Error message when refresh fails",
     "placeholders": {
@@ -52,12 +52,12 @@
   "@generalAll": {
     "description": "all items"
   },
-  "generalAllTime": "All Time",
+  "generalAllTime": "За всё время",
   "@generalAllTime": {
     "description": "All time period"
   },
-  "generalOthers": "Others",
-  "generalCompleted": "completed",
+  "generalOthers": "Другие",
+  "generalCompleted": "завершено",
   "generalTotal": "Всего",
   "generalBest": "Лучший",
   "@generalBest": {
@@ -99,57 +99,57 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Внимание",
-  "generalUnknown": "Unknown",
+  "generalUnknown": "Неизвестно",
   "generalNoDataAvailable": "Данные отсутствуют.",
-  "generalNoFilteredResults": "No results match your filters",
+  "generalNoFilteredResults": "Нет результатов, соответствующих фильтрам",
   "@generalNoFilteredResults": {
     "description": "Message when applied filters return no results"
   },
-  "generalAdjustFilters": "Try adjusting your filter criteria or clear filters to see all data.",
+  "generalAdjustFilters": "Попробуйте изменить параметры фильтра или очистить фильтры, чтобы увидеть все данные.",
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalClearFilters": "Clear Filters",
+  "generalClearFilters": "Очистить фильтры",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
   },
-  "presetsSaved": "Saved Presets",
+  "presetsSaved": "Сохранённые пресеты",
   "@presetsSaved": {
     "description": "Header for saved filter presets section"
   },
-  "presetsSave": "Save",
+  "presetsSave": "Сохранить",
   "@presetsSave": {
     "description": "Button to save current filter as preset"
   },
-  "presetsSaveTitle": "Save Filter Preset",
+  "presetsSaveTitle": "Сохранить пресет фильтров",
   "@presetsSaveTitle": {
     "description": "Title for save preset dialog"
   },
-  "presetsName": "Preset Name",
+  "presetsName": "Название пресета",
   "@presetsName": {
     "description": "Label for preset name input"
   },
-  "presetsNameHint": "Enter a name for this preset",
+  "presetsNameHint": "Введите название этого пресета",
   "@presetsNameHint": {
     "description": "Hint text for preset name input"
   },
-  "presetsSuggestions": "Suggestions:",
+  "presetsSuggestions": "Предложения:",
   "@presetsSuggestions": {
     "description": "Label for name suggestions section"
   },
-  "presetsApplyFirst": "Apply some filters before saving as preset",
+  "presetsApplyFirst": "Примените фильтры перед сохранением пресета",
   "@presetsApplyFirst": {
     "description": "Message when trying to save without active filters"
   },
-  "presetsNameRequired": "Please enter a name",
+  "presetsNameRequired": "Введите название",
   "@presetsNameRequired": {
     "description": "Error when preset name is empty"
   },
-  "presetsNameExists": "A preset with this name already exists",
+  "presetsNameExists": "Пресет с таким названием уже существует",
   "@presetsNameExists": {
     "description": "Error when preset name is duplicate"
   },
-  "presetsSaveSuccess": "Preset \"{name}\" saved successfully",
+  "presetsSaveSuccess": "Пресет «{name}» успешно сохранён",
   "@presetsSaveSuccess": {
     "description": "Success message when preset is saved",
     "placeholders": {
@@ -159,27 +159,27 @@
       }
     }
   },
-  "presetsSaveError": "Failed to save preset",
+  "presetsSaveError": "Не удалось сохранить пресет",
   "@presetsSaveError": {
     "description": "Error message when preset save fails"
   },
-  "presetsApply": "Apply Preset",
+  "presetsApply": "Применить пресет",
   "@presetsApply": {
     "description": "Context menu option to apply preset"
   },
-  "presetsRename": "Rename",
+  "presetsRename": "Переименовать",
   "@presetsRename": {
     "description": "Context menu option to rename preset"
   },
-  "presetsDelete": "Delete",
+  "presetsDelete": "Удалить",
   "@presetsDelete": {
     "description": "Context menu option to delete preset"
   },
-  "presetsRenameTitle": "Rename Preset",
+  "presetsRenameTitle": "Переименовать пресет",
   "@presetsRenameTitle": {
     "description": "Title for rename preset dialog"
   },
-  "presetsRenameSuccess": "Preset renamed to \"{name}\"",
+  "presetsRenameSuccess": "Пресет переименован в «{name}»",
   "@presetsRenameSuccess": {
     "description": "Success message when preset is renamed",
     "placeholders": {
@@ -189,15 +189,15 @@
       }
     }
   },
-  "presetsRenameError": "Failed to rename preset",
+  "presetsRenameError": "Не удалось переименовать пресет",
   "@presetsRenameError": {
     "description": "Error message when preset rename fails"
   },
-  "presetsDeleteTitle": "Delete Preset",
+  "presetsDeleteTitle": "Удалить пресет",
   "@presetsDeleteTitle": {
     "description": "Title for delete preset dialog"
   },
-  "presetsDeleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "presetsDeleteConfirm": "Вы уверены, что хотите удалить «{name}»?",
   "@presetsDeleteConfirm": {
     "description": "Confirmation message for preset deletion",
     "placeholders": {
@@ -207,7 +207,7 @@
       }
     }
   },
-  "presetsDeleteSuccess": "Preset \"{name}\" deleted",
+  "presetsDeleteSuccess": "Пресет «{name}» удалён",
   "@presetsDeleteSuccess": {
     "description": "Success message when preset is deleted",
     "placeholders": {
@@ -217,11 +217,11 @@
       }
     }
   },
-  "presetsDeleteError": "Failed to delete preset",
+  "presetsDeleteError": "Не удалось удалить пресет",
   "@presetsDeleteError": {
     "description": "Error message when preset deletion fails"
   },
-  "generalCharts": "Charts",
+  "generalCharts": "Графики",
   "authSignUp": "Регистрация",
   "authLogin": "Вход",
   "authLogout": "Выход",
@@ -238,114 +238,114 @@
   "authDiscordContinue": "Продолжить с Discord",
   "authDiscordDescription": "Синхронизируйте свои данные с ClashKing Bot и раскройте весь потенциал ClashKing!",
   "authEmail": "Email",
-  "authEmailHint": "Enter your email address",
+  "authEmailHint": "Введите адрес электронной почты",
   "authEmailDescription": "Используйте электронную почту, если вы не можете получить доступ к Discord или предпочитаете функции только приложения",
   "authEmailRequired": "Пожалуйста, введите ваш email",
   "authEmailInvalid": "Пожалуйста, введите действительный email",
   "authPasswordLabel": "Пароль",
-  "authPasswordHint": "Enter your password",
+  "authPasswordHint": "Введите пароль",
   "authPasswordConfirm": "Подтвердите пароль",
   "authPasswordRequired": "Пожалуйста, введите ваш пароль",
   "authPasswordConfirmRequired": "Пожалуйста, подтвердите ваш пароль",
   "authPasswordMismatch": "Пароли не совпадают",
   "authPasswordTooShort": "Пароль должен содержать не менее 8 символов",
-  "authPasswordRequirements": "Password must contain:\n• Uppercase letter\n• Lowercase letter\n• Number\n• Special character",
-  "authPasswordHeader": "Password must contain:",
-  "authPasswordUppercase": "Uppercase letter",
-  "authPasswordLowercase": "Lowercase letter",
-  "authPasswordNumber": "Number",
-  "authPasswordSpecial": "Special character",
-  "authPasswordInvalid": "Password does not meet requirements",
+  "authPasswordRequirements": "Пароль должен содержать:\n• Заглавную букву\n• Строчную букву\n• Цифру\n• Специальный символ",
+  "authPasswordHeader": "Пароль должен содержать:",
+  "authPasswordUppercase": "Заглавную букву",
+  "authPasswordLowercase": "Строчную букву",
+  "authPasswordNumber": "Цифру",
+  "authPasswordSpecial": "Специальный символ",
+  "authPasswordInvalid": "Пароль не соответствует требованиям",
   "authPasswordForgot": "Забыли пароль?",
-  "authPasswordForgotDescription": "Enter your email address and we'll send you a 6-digit code to reset your password.",
-  "authPasswordResetSend": "Send Reset Code",
-  "authPasswordResetSent": "Code Sent!",
-  "authPasswordResetSentDescription": "We've sent a 6-digit reset code to your email address. Please check your inbox and use the code to reset your password.",
-  "authPasswordReset": "Reset Password",
-  "authPasswordResetDescription": "Enter your email, the 6-digit code from the email, and your new password below.",
-  "authPasswordNew": "New Password",
-  "authPasswordConfirmHint": "Re-enter your new password",
-  "authPasswordResetSuccess": "Password reset successful! You can now log in.",
-  "authPasswordResetContinue": "Continue to Reset Password",
-  "authPasswordResetCode": "Reset Code",
-  "authPasswordResetCodeHint": "Enter the 6-digit code from your email",
-  "authPasswordResetCodeRequired": "Please enter the reset code",
-  "authPasswordResetCodeInvalid": "Please enter a valid 6-digit code",
-  "authBackToLogin": "Back to Login",
+  "authPasswordForgotDescription": "Введите адрес электронной почты, и мы отправим 6-значный код для сброса пароля.",
+  "authPasswordResetSend": "Отправить код сброса",
+  "authPasswordResetSent": "Код отправлен!",
+  "authPasswordResetSentDescription": "Мы отправили 6-значный код сброса на ваш адрес электронной почты. Проверьте входящие и используйте код для сброса пароля.",
+  "authPasswordReset": "Сбросить пароль",
+  "authPasswordResetDescription": "Введите email, 6-значный код из письма и новый пароль ниже.",
+  "authPasswordNew": "Новый пароль",
+  "authPasswordConfirmHint": "Введите новый пароль ещё раз",
+  "authPasswordResetSuccess": "Пароль успешно сброшен! Теперь вы можете войти.",
+  "authPasswordResetContinue": "Перейти к сбросу пароля",
+  "authPasswordResetCode": "Код сброса",
+  "authPasswordResetCodeHint": "Введите 6-значный код из письма",
+  "authPasswordResetCodeRequired": "Введите код сброса",
+  "authPasswordResetCodeInvalid": "Введите действительный 6-значный код",
+  "authBackToLogin": "Назад ко входу",
   "authUsernameLabel": "Имя пользователя",
   "authUsernameRequired": "Пожалуйста, введите имя пользователя",
   "authUsernameTooShort": "Имя пользователя должно содержать не менее 3 символов",
-  "authUsernameTooLong": "Username must be no more than 30 characters",
+  "authUsernameTooLong": "Имя пользователя должно быть не длиннее 30 символов",
   "authErrorConnection": "Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и попробуйте снова.",
   "authErrorConnectionRelaunch": "Произошла ошибка. Пожалуйста, проверьте ваше интернет-соединение и перезапустите приложение.",
-  "authErrorEmailAlreadyRegistered": "This email is already registered. Please try logging in instead.",
-  "authErrorEmailAlreadyPending": "A verification email was already sent to this address. Please check your email or try resending.",
-  "authErrorEmailInvalidFormat": "Please enter a valid email address.",
-  "authErrorPasswordWeak": "Password is too weak. Please use a stronger password.",
-  "authErrorUsernameInvalid": "Username is invalid. Please use only letters, numbers, and underscores.",
-  "authErrorRegistrationFailed": "Registration failed. Please try again later.",
-  "authErrorEmailSendFailed": "Failed to send verification email. Please try again later.",
-  "authErrorRateLimited": "Too many attempts. Please wait a moment and try again.",
-  "authErrorServerUnavailable": "Server is temporarily unavailable. Please try again later.",
-  "authAccountManagement": "Add, remove, and reorder your Clash of Clans accounts here. Verify your accounts with a token to access all features.",
-  "authAccountConnected": "Connected Accounts",
-  "authAccountConnectedStatus": "Connected",
-  "authAccountNotConnected": "Not connected",
-  "authAccountEmailAndPassword": "Email & Password",
-  "authAccountSecured": "Your account is secured with multiple authentication methods",
-  "authAccountLinkEmail": "Link Email Account",
-  "authAccountAddEmailAuth": "Add email & password authentication to your account for additional security.",
-  "authAccountEmailLinkedSuccess": "Email account successfully linked!",
-  "authEmailVerificationTitle": "Verify Email",
-  "authEmailVerificationCheckEmail": "Check Your Email",
-  "authEmailVerificationSentTo": "We've sent a verification email to:",
-  "authEmailVerificationResend": "Resend Verification Email",
-  "authEmailVerificationResendSuccess": "Verification email resent successfully! Please check your email.",
-  "authEmailVerificationExpired": "Verification expired. Please register again.",
-  "authEmailVerificationAlreadyVerified": "This email is already verified. Please try logging in instead.",
-  "authEmailVerificationNoToken": "No pending verification found. Please register first.",
-  "authEmailVerificationExpiredResend": "Verification expired. Please go back to register again.",
-  "authEmailVerificationVerifying": "Verifying your email...",
-  "authEmailVerificationCodeInstructions": "Enter the 6-digit code sent to your email:",
-  "authEmailVerificationCodeRequired": "Please enter the 6-digit verification code",
-  "authEmailVerificationCodeInvalid": "Invalid or expired code. Please check your code or resend verification email.",
-  "authEmailVerificationVerify": "Verify Code",
-  "helpTitle": "Need help?",
-  "helpJoinDiscord": "Join Discord",
-  "helpEmailUs": "Email Us",
+  "authErrorEmailAlreadyRegistered": "Этот email уже зарегистрирован. Попробуйте войти.",
+  "authErrorEmailAlreadyPending": "Письмо подтверждения уже отправлено на этот адрес. Проверьте почту или попробуйте отправить повторно.",
+  "authErrorEmailInvalidFormat": "Введите действительный адрес электронной почты.",
+  "authErrorPasswordWeak": "Пароль слишком слабый. Используйте более надёжный пароль.",
+  "authErrorUsernameInvalid": "Недопустимое имя пользователя. Используйте только буквы, цифры и подчёркивания.",
+  "authErrorRegistrationFailed": "Регистрация не удалась. Попробуйте позже.",
+  "authErrorEmailSendFailed": "Не удалось отправить письмо подтверждения. Попробуйте позже.",
+  "authErrorRateLimited": "Слишком много попыток. Подождите немного и попробуйте снова.",
+  "authErrorServerUnavailable": "Сервер временно недоступен. Попробуйте позже.",
+  "authAccountManagement": "Здесь можно добавлять, удалять и менять порядок аккаунтов Clash of Clans. Подтвердите аккаунты токеном, чтобы получить доступ ко всем функциям.",
+  "authAccountConnected": "Подключённые аккаунты",
+  "authAccountConnectedStatus": "Подключён",
+  "authAccountNotConnected": "Не подключён",
+  "authAccountEmailAndPassword": "Email и пароль",
+  "authAccountSecured": "Ваш аккаунт защищён несколькими способами аутентификации",
+  "authAccountLinkEmail": "Привязать email-аккаунт",
+  "authAccountAddEmailAuth": "Добавьте вход по email и паролю для дополнительной безопасности аккаунта.",
+  "authAccountEmailLinkedSuccess": "Email-аккаунт успешно привязан!",
+  "authEmailVerificationTitle": "Подтверждение email",
+  "authEmailVerificationCheckEmail": "Проверьте почту",
+  "authEmailVerificationSentTo": "Мы отправили письмо подтверждения на:",
+  "authEmailVerificationResend": "Отправить письмо подтверждения повторно",
+  "authEmailVerificationResendSuccess": "Письмо подтверждения отправлено повторно! Проверьте почту.",
+  "authEmailVerificationExpired": "Срок подтверждения истёк. Зарегистрируйтесь снова.",
+  "authEmailVerificationAlreadyVerified": "Этот email уже подтверждён. Попробуйте войти.",
+  "authEmailVerificationNoToken": "Ожидающее подтверждение не найдено. Сначала зарегистрируйтесь.",
+  "authEmailVerificationExpiredResend": "Срок подтверждения истёк. Вернитесь к регистрации.",
+  "authEmailVerificationVerifying": "Подтверждаем ваш email...",
+  "authEmailVerificationCodeInstructions": "Введите 6-значный код, отправленный на ваш email:",
+  "authEmailVerificationCodeRequired": "Введите 6-значный код подтверждения",
+  "authEmailVerificationCodeInvalid": "Недействительный или просроченный код. Проверьте код или отправьте письмо подтверждения повторно.",
+  "authEmailVerificationVerify": "Подтвердить код",
+  "helpTitle": "Нужна помощь?",
+  "helpJoinDiscord": "Присоединиться к Discord",
+  "helpEmailUs": "Написать нам",
   "accountsWelcome": "Добро пожаловать!",
   "accountsWelcomeMessage": "Пожалуйста, добавьте один или несколько аккаунтов Clash of Clans в свой профиль. Вы сможете добавлять или удалять аккаунты позже.",
-  "accountsManageTitle": "Manage your accounts",
-  "accountsNoneFound": "No account linked to your profile found",
-  "accountsPlayerTag": "Player Tag (#ABC123)",
+  "accountsManageTitle": "Управление аккаунтами",
+  "accountsNoneFound": "Аккаунты, привязанные к вашему профилю, не найдены",
+  "accountsPlayerTag": "Тег игрока (#ABC123)",
   "accountsEnterPlayerTag": "Введите тег игрока",
   "accountsAdd": "Добавить аккаунт",
-  "accountsAddInstruction": "Tap the + button to add your account",
+  "accountsAddInstruction": "Нажмите кнопку +, чтобы добавить аккаунт",
   "accountsApiToken": "Аккаунт API Токен",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
-  "accountsApiTokenLocation": "Settings > More Settings > API Token",
-  "accountsOpenMoreSettings": "Open More Settings",
-  "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
-  "accountsFillAllFields": "Please fill all fields.",
+  "accountsEnterApiToken": "Введите API-токен аккаунта, чтобы подтвердить, что он ваш. Его можно найти в Clash of Clans:",
+  "accountsApiTokenLocation": "Настройки > Дополнительные настройки > API-токен",
+  "accountsOpenMoreSettings": "Открыть дополнительные настройки",
+  "accountsCouldNotOpenClash": "Не удалось открыть Clash of Clans. Откройте его вручную.",
+  "accountsFillAllFields": "Заполните все поля.",
   "accountsErrorTagNotExists": "Введенный тег игрока не существует.",
   "accountsErrorAlreadyLinked": "Тег игрока уже связан с кем-то.",
   "accountsErrorAlreadyLinkedToYou": "Тег игрока уже привязан к вам.",
   "accountsErrorWrongApiToken": "Тег игрока уже привязан к вм.",
-  "accountsErrorFailedToAdd": "Failed to add the account. Please try again later.",
-  "accountsErrorFailedToUpdateOrder": "Failed to update the order of accounts.",
-  "errorTitle": "Oops! Our servers might have taken a fireball to the face! We're casting a healing spell... Try again in a moment.",
-  "errorSubtitle": "If the issue persists, check our Discord Server to see if we're aware of it.",
-  "errorNetworkTitle": "Connection Problem",
-  "errorNetworkMessage": "We're having trouble connecting to our servers. This could be due to your internet connection or an issue on our end. Please check your connection and try again.",
+  "accountsErrorFailedToAdd": "Не удалось добавить аккаунт. Попробуйте позже.",
+  "accountsErrorFailedToUpdateOrder": "Не удалось обновить порядок аккаунтов.",
+  "errorTitle": "Упс! Похоже, наши серверы получили фаерболом в лицо! Мы уже накладываем исцеляющее заклинание... Попробуйте ещё раз через минуту.",
+  "errorSubtitle": "Если проблема не исчезнет, проверьте наш Discord-сервер — возможно, мы уже знаем о ней.",
+  "errorNetworkTitle": "Проблема с подключением",
+  "errorNetworkMessage": "Не удаётся подключиться к нашим серверам. Причина может быть в вашем интернет-соединении или на нашей стороне. Проверьте подключение и попробуйте снова.",
   "errorLoadingVersion": "Ошибка загрузки версии",
   "@errorLoadingVersion": {
     "description": "Error message when the app version cannot be loaded"
   },
-  "errorCannotOpenLink": "We can't open this link.",
+  "errorCannotOpenLink": "Мы не можем открыть эту ссылку.",
   "errorExitAppToOpenClash": "Вам следует выйти из приложения, чтобы открыть Clash of Clans.",
   "playerSearchTitle": "Найти игрока",
   "playerSearchPlaceholder": "Имя или тег игрока",
-  "playerLastActive": "Last active: {date}",
+  "playerLastActive": "Последняя активность: {date}",
   "@playerLastActive": {
     "placeholders": {
       "date": {
@@ -353,7 +353,7 @@
       }
     }
   },
-  "playerNotTracked": "This player is not tracked. Data may be inaccurate.",
+  "playerNotTracked": "Этот игрок не отслеживается. Данные могут быть неточными.",
   "playerClanDescription": "Ваш клан — «{clan}» ({tag}).",
   "@playerClanDescription": {
     "placeholders": {
@@ -395,7 +395,7 @@
       }
     }
   },
-  "playerTrophiesDescription": "You have {trophies} trophies. You're currently in {league}.",
+  "playerTrophiesDescription": "У вас {trophies} трофеев. Сейчас вы в лиге {league}.",
   "@playerTrophiesDescription": {
     "placeholders": {
       "trophies": {
@@ -406,7 +406,7 @@
       }
     }
   },
-  "playerTrophiesUnrankedDescription": "You have {trophies} trophies. You are not ranked in any league.",
+  "playerTrophiesUnrankedDescription": "У вас {trophies} трофеев. Вы не входите ни в одну лигу.",
   "@playerTrophiesUnrankedDescription": {
     "placeholders": {
       "trophies": {
@@ -414,7 +414,7 @@
       }
     }
   },
-  "playerTownHallLevelDescription": "Your Town Hall level is {level}.",
+  "playerTownHallLevelDescription": "Уровень вашей Ратуши — {level}.",
   "@playerTownHallLevelDescription": {
     "placeholders": {
       "level": {
@@ -422,7 +422,7 @@
       }
     }
   },
-  "playerBuilderBaseDescription": "Your Builder Hall level is {level} and you have {trophies} trophies.",
+  "playerBuilderBaseDescription": "Уровень вашего Дома строителя — {level}, у вас {trophies} трофеев.",
   "@playerBuilderBaseDescription": {
     "placeholders": {
       "level": {
@@ -437,8 +437,8 @@
   "gameBaseBuilder": "Деревня Строителя",
   "gameClanCapital": "Столица клана",
   "gameTownHall": "ТХ",
-  "gameTownHallLevel": "TH Level",
-  "gameTownHallLevelNumber": "Town Hall {level}",
+  "gameTownHallLevel": "Уровень ТХ",
+  "gameTownHallLevelNumber": "Ратуша {level}",
   "@gameTownHallLevelNumber": {
     "placeholders": {
       "level": {
@@ -446,7 +446,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "ТХ{level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -454,13 +454,13 @@
       }
     }
   },
-  "gameExpLevel": "Experience Level",
-  "gameTrophies": "Trophies",
-  "gameBuilderBaseTrophies": "BB Trophies",
-  "gameDonations": "Donations",
+  "gameExpLevel": "Уровень опыта",
+  "gameTrophies": "Трофеи",
+  "gameBuilderBaseTrophies": "Трофеи ДС",
+  "gameDonations": "Пожертвования",
   "gameDonationsReceived": "Donations Received",
-  "gameDonationsRatio": "Donation Ratio",
-  "gameLevel": "Level: {level}/{maxLevel}",
+  "gameDonationsRatio": "Соотношение пожертвований",
+  "gameLevel": "Уровень: {level}/{maxLevel}",
   "@gameLevel": {
     "placeholders": {
       "level": {
@@ -473,36 +473,36 @@
   },
   "gameHeroes": "Герои",
   "gameEquipment": "Снаряжение",
-  "gameHeroesEquipments": "Hero equipments",
+  "gameHeroesEquipments": "Снаряжение героев",
   "gameTroops": "Войны",
-  "gameActiveSuperTroops": "Active Super Troops",
+  "gameActiveSuperTroops": "Активные супер-войска",
   "gamePets": "Животные",
   "gameSiegeMachines": "Осадные машины",
   "gameSpells": "Заклинания",
   "gameAchievements": "Список достижений",
-  "gameClanGames": "Clan Games",
-  "gameSeasonPass": "Season Pass",
+  "gameClanGames": "Клановые игры",
+  "gameSeasonPass": "Сезонный пропуск",
   "gameCreatorCode": "Код Создателя: ClashKing",
-  "gameCreatorCodeDescription": "Support us for free!",
-  "gameCreatorCodeDialogTitle": "Support ClashKing",
-  "gameCreatorCodeDialogDescription": "When you use our creator code, you help fund development, keep the app and bot free for everyone, and support the addition of new features.\n\nWe receive 5% of your in-game purchases at no extra cost to you — just enter \"ClashKing\" in the shop of any Supercell game.\n\nThank you for your support!",
-  "gameCreatorCodeDialogButton": "Use Creator Code",
-  "clanTitle": "Clan",
+  "gameCreatorCodeDescription": "Поддержите нас бесплатно!",
+  "gameCreatorCodeDialogTitle": "Поддержать ClashKing",
+  "gameCreatorCodeDialogDescription": "Когда вы используете наш код автора, вы помогаете финансировать разработку, сохранять приложение и бота бесплатными для всех и добавлять новые функции.\n\nМы получаем 5% от ваших внутриигровых покупок без дополнительных затрат для вас — просто введите «ClashKing» в магазине любой игры Supercell.\n\nСпасибо за поддержку!",
+  "gameCreatorCodeDialogButton": "Использовать код автора",
+  "clanTitle": "Клан",
   "clanSearchTitle": "Найти клан",
-  "clanSearchPlaceholder": "Clan's name",
+  "clanSearchPlaceholder": "Название клана",
   "clanNone": "Без клана",
   "clanJoinToUnlock": "Присоединитесь к Клану для разблокировки новых функций.",
-  "clanMembers": "Members",
+  "clanMembers": "Участники",
   "clanMinimumMembers": "Минимум участников",
   "clanMaximumMembers": "Максимум участников",
   "clanLocation": "Расположение",
   "clanMinimumPoints": "Минимальные очки клана",
   "clanMinimumLevel": "Минимальный уровень клана",
-  "clanInviteOnly": "Invite Only",
+  "clanInviteOnly": "Только по приглашению",
   "@clanInviteOnly": {
     "description": "Clan is invite only"
   },
-  "clanOpened": "Opened",
+  "clanOpened": "Открыт",
   "@clanOpened": {
     "description": "Clan is opened"
   },
@@ -510,11 +510,11 @@
   "clanRoleCoLeader": "Соруководитель",
   "clanRoleElder": "Старейшина",
   "clanRoleMember": "Участник",
-  "clanWarFrequencyAlways": "Always",
-  "clanWarFrequencyNever": "Never",
-  "clanWarFrequencyOncePerWeek": "1/week",
-  "clanWarFrequencyMoreThanOncePerWeek": "More than 1/week",
-  "clanWarFrequencyRarely": "Rarely",
+  "clanWarFrequencyAlways": "Всегда",
+  "clanWarFrequencyNever": "Никогда",
+  "clanWarFrequencyOncePerWeek": "1 раз в неделю",
+  "clanWarFrequencyMoreThanOncePerWeek": "Более 1 раза в неделю",
+  "clanWarFrequencyRarely": "Редко",
   "timeHourIndicator": "ч",
   "timeDaysAgo": "{days} дн. назад",
   "@timeDaysAgo": {
@@ -568,8 +568,8 @@
   "@timeJustNow": {
     "description": "Indicates something happened just now"
   },
-  "timeEndedJustNow": "Ended just now",
-  "timeEndedMinutesAgo": "Ended {minutes} minutes ago",
+  "timeEndedJustNow": "Только что завершилось",
+  "timeEndedMinutesAgo": "Завершилось {minutes} мин. назад",
   "@timeEndedMinutesAgo": {
     "placeholders": {
       "minutes": {
@@ -577,7 +577,7 @@
       }
     }
   },
-  "timeEndedHoursAgo": "Ended {hours} hours ago",
+  "timeEndedHoursAgo": "Завершилось {hours} ч. назад",
   "@timeEndedHoursAgo": {
     "placeholders": {
       "hours": {
@@ -585,7 +585,7 @@
       }
     }
   },
-  "timeEndedDaysAgo": "Ended {days} days ago",
+  "timeEndedDaysAgo": "Завершилось {days} дн. назад",
   "@timeEndedDaysAgo": {
     "placeholders": {
       "days": {
@@ -593,7 +593,7 @@
       }
     }
   },
-  "timeStartsIn": "Starts in {time}",
+  "timeStartsIn": "Начнётся через {time}",
   "@timeStartsIn": {
     "placeholders": {
       "time": {
@@ -601,7 +601,7 @@
       }
     }
   },
-  "timeStartsAt": "Starts at {time}",
+  "timeStartsAt": "Начнётся в {time}",
   "@timeStartsAt": {
     "placeholders": {
       "time": {
@@ -609,7 +609,7 @@
       }
     }
   },
-  "timeEndsIn": "Ends in {time}",
+  "timeEndsIn": "Закончится через {time}",
   "@timeEndsIn": {
     "placeholders": {
       "time": {
@@ -617,7 +617,7 @@
       }
     }
   },
-  "timeEndsAt": "Ends at {time}",
+  "timeEndsAt": "Закончится в {time}",
   "@timeEndsAt": {
     "placeholders": {
       "time": {
@@ -626,9 +626,9 @@
     }
   },
   "legendsTitle": "Inaccurate data?",
-  "legendsNotInLeague": "Not in Legend League",
-  "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
-  "legendsStartDescription": "You started the day with {trophies} trophies.",
+  "legendsNotInLeague": "Не в Легендарной лиге",
+  "legendsNoDataToday": "Вы не в Легендарной лиге, но прошлые сезоны доступны.",
+  "legendsStartDescription": "Вы начали день с {trophies} трофеями.",
   "@legendsStartDescription": {
     "placeholders": {
       "trophies": {
@@ -636,7 +636,7 @@
       }
     }
   },
-  "legendsNoRankLocalDescription": "You are currently not ranked ({country}) with {trophies} trophies.",
+  "legendsNoRankLocalDescription": "Сейчас у вас нет места в рейтинге ({country}) с {trophies} трофеями.",
   "@legendsNoRankLocalDescription": {
     "placeholders": {
       "country": {
@@ -647,7 +647,7 @@
       }
     }
   },
-  "legendsRankLocalDescription": "You are currently ranked {rank} ({country}) with {trophies} trophies.",
+  "legendsRankLocalDescription": "Сейчас вы на месте {rank} ({country}) с {trophies} трофеями.",
   "@legendsRankLocalDescription": {
     "placeholders": {
       "rank": {
@@ -661,7 +661,7 @@
       }
     }
   },
-  "legendsGainDescription": "You gained {trophies} trophies for now.",
+  "legendsGainDescription": "На данный момент вы получили {trophies} трофеев.",
   "@legendsGainDescription": {
     "placeholders": {
       "trophies": {
@@ -669,7 +669,7 @@
       }
     }
   },
-  "legendsLossDescription": "You lost {trophies} trophies for now.",
+  "legendsLossDescription": "На данный момент вы потеряли {trophies} трофеев.",
   "@legendsLossDescription": {
     "placeholders": {
       "trophies": {
@@ -677,7 +677,7 @@
       }
     }
   },
-  "legendsNoGlobalRankDescription": "You are currently not ranked globally with {trophies} trophies.",
+  "legendsNoGlobalRankDescription": "Сейчас у вас нет места в мировом рейтинге с {trophies} трофеями.",
   "@legendsNoGlobalRankDescription": {
     "placeholders": {
       "trophies": {
@@ -685,7 +685,7 @@
       }
     }
   },
-  "legendsGlobalRankDescription": "You are currently ranked {rank} globally with {trophies} trophies.",
+  "legendsGlobalRankDescription": "Сейчас вы на месте {rank} в мире с {trophies} трофеями.",
   "@legendsGlobalRankDescription": {
     "placeholders": {
       "rank": {
@@ -697,35 +697,35 @@
     }
   },
   "legendsNoRank": "Нет рейтингов",
-  "legendsBestTrophies": "Best Trophies",
-  "legendsMostAttacks": "Most Attacks",
+  "legendsBestTrophies": "Лучшие трофеи",
+  "legendsMostAttacks": "Больше всего атак",
   "legendsLastSeason": "Последний сезон",
-  "legendsBestRank": "Best Global Rank",
-  "legendsTrophiesBySeason": "Trophies by season",
+  "legendsBestRank": "Лучшее место в мире",
+  "legendsTrophiesBySeason": "Трофеи по сезонам",
   "legendsEosTrophies": "Трофеи конца сезона",
-  "legendsEosDetails": "End Of Season Details",
-  "legendsInaccurateTitle": "Inaccurate data?",
-  "legendsInaccurateIntro": "Due to limitations of the Clash of Clans API, our data might not always be perfectly accurate. Here's why:\n",
-  "legendsInaccurateApiDelayTitle": "1. API Delay: ",
-  "legendsInaccurateApiDelayBody": "The API can take up to 5 minutes to update, causing a lag in reflecting real-time trophy changes.\n",
-  "legendsInaccurateConcurrentTitle": "2. Concurrent Changes: \n",
-  "legendsInaccurateMultipleAttacksTitle": "- Multiple Attacks/Defenses: ",
-  "legendsInaccurateMultipleAttacksBody": "If multiple attacks or defenses happen in quick succession, the API might show combined results (e.g., +68 or -68).\n",
-  "legendsInaccurateSimultaneousTitle": "- Simultaneous Attack and Defense: ",
-  "legendsInaccurateSimultaneousBody": "If an attack and defense occur at the same time, you might see a mixed result (e.g., +4).\n",
-  "legendsInaccurateNetGainTitle": "3. Net Gain/Loss: ",
-  "legendsInaccurateNetGainBody": "Despite timing issues, the overall net gain or loss for the day is accurate. ",
-  "legendsInaccurateConclusion": "These limitations are common across all tools using the Clash of Clans API. We sadly can't fix that as it is in Supercell's hands. We do our best to compensate for these limits and provide results as close to reality as possible. Thank you for understanding!",
+  "legendsEosDetails": "Детали конца сезона",
+  "legendsInaccurateTitle": "Неточные данные?",
+  "legendsInaccurateIntro": "Из-за ограничений API Clash of Clans наши данные не всегда могут быть идеально точными. Вот почему:\n",
+  "legendsInaccurateApiDelayTitle": "1. Задержка API: ",
+  "legendsInaccurateApiDelayBody": "API может обновляться до 5 минут, поэтому изменения трофеев в реальном времени отображаются с задержкой.\n",
+  "legendsInaccurateConcurrentTitle": "2. Одновременные изменения: \n",
+  "legendsInaccurateMultipleAttacksTitle": "- Несколько атак/защит: ",
+  "legendsInaccurateMultipleAttacksBody": "Если несколько атак или защит происходят быстро подряд, API может показать объединённый результат (например, +68 или -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- Одновременная атака и защита: ",
+  "legendsInaccurateSimultaneousBody": "Если атака и защита происходят одновременно, вы можете увидеть смешанный результат (например, +4).\n",
+  "legendsInaccurateNetGainTitle": "3. Чистый прирост/потеря: ",
+  "legendsInaccurateNetGainBody": "Несмотря на проблемы со временем, общий чистый прирост или потеря за день точны. ",
+  "legendsInaccurateConclusion": "Эти ограничения встречаются во всех инструментах, использующих API Clash of Clans. К сожалению, мы не можем это исправить, потому что это зависит от Supercell. Мы делаем всё возможное, чтобы компенсировать эти ограничения и давать результаты, максимально близкие к реальности. Спасибо за понимание!",
   "statsSeasonStats": "Статистика сезона",
   "statsByDay": "За день",
   "@statsByDay": {
     "description": "Shows stats by day"
   },
-  "statsBySeason": "By Season",
+  "statsBySeason": "По сезонам",
   "@statsBySeason": {
     "description": "Shows stats by season"
   },
-  "statsDayIndex": "Day {index}",
+  "statsDayIndex": "День {index}",
   "@statsDayIndex": {
     "placeholders": {
       "index": {
@@ -733,7 +733,7 @@
       }
     }
   },
-  "statsIndexDays": "{index} days",
+  "statsIndexDays": "{index} дн.",
   "@statsIndexDays": {
     "placeholders": {
       "index": {
@@ -741,7 +741,7 @@
       }
     }
   },
-  "statsSeasonDate": "{date} season",
+  "statsSeasonDate": "Сезон {date}",
   "@statsSeasonDate": {
     "description": "Example: August 2024 season",
     "placeholders": {
@@ -750,23 +750,23 @@
       }
     }
   },
-  "statsAllTownHalls": "All Town Halls",
-  "statsMembers": "Members Stats",
-  "todoTitle": "To-do list",
-  "todoExplanationTitle": "Task Calculation",
-  "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
-  "todoExplanationLegendsTitle": "Legend League:",
-  "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "todoExplanationClanWarsTitle": "Clan Wars:",
-  "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
-  "todoExplanationCwlTitle": "Clan War League:",
-  "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
-  "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
-  "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
+  "statsAllTownHalls": "Все Ратуши",
+  "statsMembers": "Статистика участников",
+  "todoTitle": "Список дел",
+  "todoExplanationTitle": "Расчёт задач",
+  "todoExplanationIntro": "Процент выполнения задач рассчитывается на основе следующих активностей с заданными весами:",
+  "todoExplanationLegendsTitle": "Легендарная лига:",
+  "todoExplanationLegends": "Вес 8 очков на аккаунт, 1 атака = 1 очко.",
+  "todoExplanationRaidsTitle": "Рейды:",
+  "todoExplanationRaids": "Вес 5 очков на аккаунт (или 6, если последняя атака разблокирована), 1 атака = 1 очко.",
+  "todoExplanationClanWarsTitle": "Войны кланов:",
+  "todoExplanationClanWars": "Вес 2 очка на аккаунт, 1 атака = 1 очко.",
+  "todoExplanationCwlTitle": "Лига войн кланов:",
+  "todoExplanationCwl": "Вес 1 очко на аккаунт, 1 атака = 1 очко. CWL нельзя отслеживать, если игрок не находится в своём клане лиги.",
+  "todoExplanationPassAndGamesTitle": "Сезонный пропуск и Клановые игры:",
+  "todoExplanationPassAndGames": "Вес 2 очка за каждое на аккаунт. Соотношение основано на числе оставшихся дней (1 месяц для пропуска и 6 дней для игр). Зелёный = успеваете завершить пропуск или игры, красный = отстаёте от графика.",
   "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
-  "todoAccountsNumber": "{number} accounts",
+  "todoAccountsNumber": "{number} аккаунтов",
   "@todoAccountsNumber": {
     "placeholders": {
       "number": {
@@ -775,7 +775,7 @@
     },
     "description": "Number of accounts (ex: 4 accounts)"
   },
-  "todoAccountsNumberActive": "{number} active accounts",
+  "todoAccountsNumberActive": "{number} активных аккаунтов",
   "@todoAccountsNumberActive": {
     "placeholders": {
       "number": {
@@ -783,7 +783,7 @@
       }
     }
   },
-  "todoAccountsNumberInactive": "{number} inactive accounts",
+  "todoAccountsNumberInactive": "{number} неактивных аккаунтов",
   "@todoAccountsNumberInactive": {
     "placeholders": {
       "number": {
@@ -791,11 +791,11 @@
       }
     }
   },
-  "todoAccountsActive": "Active accounts",
-  "todoAccountsInactive": "Inactive accounts",
-  "todoAccountsNoInactive": "No inactive accounts.",
-  "todoAccountsNoActive": "No active accounts.",
-  "todoAttacksLeftDescription": "You have {attacks} attack(s) left ({type}).",
+  "todoAccountsActive": "Активные аккаунты",
+  "todoAccountsInactive": "Неактивные аккаунты",
+  "todoAccountsNoInactive": "Нет неактивных аккаунтов.",
+  "todoAccountsNoActive": "Нет активных аккаунтов.",
+  "todoAttacksLeftDescription": "У вас осталось атак: {attacks} ({type}).",
   "@todoAttacksLeftDescription": {
     "placeholders": {
       "attacks": {
@@ -806,7 +806,7 @@
       }
     }
   },
-  "todoDefensesLeftDescription": "You have {defenses} defense(s) left ({type}).",
+  "todoDefensesLeftDescription": "У вас осталось защит: {defenses} ({type}).",
   "@todoDefensesLeftDescription": {
     "placeholders": {
       "defenses": {
@@ -817,7 +817,7 @@
       }
     }
   },
-  "todoNoAttacksLeftDescription": "Congratulations, you have done all your attacks ({type})!",
+  "todoNoAttacksLeftDescription": "Поздравляем, вы выполнили все атаки ({type})!",
   "@todoNoAttacksLeftDescription": {
     "placeholders": {
       "type": {
@@ -825,7 +825,7 @@
       }
     }
   },
-  "todoPointsLeftDescription": "You have {points} points left to get today to be in time for the end of the event ({type}).",
+  "todoPointsLeftDescription": "Вам осталось набрать {points} очков сегодня, чтобы успеть к концу события ({type}).",
   "@todoPointsLeftDescription": {
     "placeholders": {
       "points": {
@@ -836,7 +836,7 @@
       }
     }
   },
-  "todoPointsLeftDescriptionNoPoints": "Congratulations, you are on time to get the maximum rewards at the end of the event ({type})!",
+  "todoPointsLeftDescriptionNoPoints": "Поздравляем, вы идёте в графике для получения максимальных наград к концу события ({type})!",
   "@todoPointsLeftDescriptionNoPoints": {
     "placeholders": {
       "type": {
@@ -844,13 +844,13 @@
       }
     }
   },
-  "warTitle": "War",
-  "warFrequency": "War frequency",
-  "warParticipation": "War Participation",
-  "warLeague": "War/League",
-  "warHistory": "War History",
-  "warLog": "War Log",
-  "warLogClosed": "War log closed.",
+  "warTitle": "Война",
+  "warFrequency": "Частота войн",
+  "warParticipation": "Участие в войне",
+  "warLeague": "Война/Лига",
+  "warHistory": "История войн",
+  "warLog": "Журнал войн",
+  "warLogClosed": "Журнал войн {clan} закрыт.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -858,9 +858,9 @@
       }
     }
   },
-  "warStats": "War Stats",
+  "warStats": "Статистика войны",
   "warOngoing": "Ongoing war",
-  "warIsNotInWar": "{clan} is not in war.",
+  "warIsNotInWar": "{clan} не участвует в войне.",
   "@warIsNotInWar": {
     "placeholders": {
       "clan": {
@@ -868,14 +868,14 @@
       }
     }
   },
-  "warAskForWar": "Contact the leader or a co-leader to start a war.",
-  "warAskForWarLogOpening": "Contact a leader or a co-leader to open the war log.",
-  "warEnded": "War ended",
-  "warInWar": "In War",
+  "warAskForWar": "Свяжитесь с лидером или соруководителем, чтобы начать войну.",
+  "warAskForWarLogOpening": "Свяжитесь с лидером или соруководителем, чтобы открыть журнал войн.",
+  "warEnded": "Война завершена",
+  "warInWar": "В войне",
   "@warInWar": {
     "description": "War state: active"
   },
-  "warPreparation": "Preparation",
+  "warPreparation": "Подготовка",
   "warPerfectWar": "Идеальная война",
   "warVictory": "Победа",
   "warDefeat": "Поражение",
@@ -883,12 +883,12 @@
   "@warDraw": {
     "description": "War ended in a draw"
   },
-  "warTeamSize": "Team size",
-  "warMyTeam": "My team",
-  "warEnemiesTeam": "Enemies",
-  "warClanDraw": "The two clans are tied",
-  "warStateOfTheWar": "State of the war",
-  "warStarsNeededToTakeTheLead": "{clan} still need {star} more star(s) or {stars2} star(s) and {percent}% to take the lead.",
+  "warTeamSize": "Размер команды",
+  "warMyTeam": "Моя команда",
+  "warEnemiesTeam": "Противники",
+  "warClanDraw": "Оба клана идут вничью",
+  "warStateOfTheWar": "Состояние войны",
+  "warStarsNeededToTakeTheLead": "{clan} всё ещё нужно {star} звёзд(ы) или {stars2} звёзд(ы) и {percent}%, чтобы выйти вперёд.",
   "@warStarsNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -905,7 +905,7 @@
       }
     }
   },
-  "warStarsAndPercentNeededToTakeTheLead": "{clan} still need {percent}% or 1 more star to take the lead",
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} всё ещё нужно {percent}% или ещё 1 звезда, чтобы выйти вперёд",
   "@warStarsAndPercentNeededToTakeTheLead": {
     "placeholders": {
       "clan": {
@@ -916,8 +916,8 @@
       }
     }
   },
-  "warNotStarted": "War hasn't started yet",
-  "warWonByStars": "{clanName} won the war!",
+  "warNotStarted": "Война ещё не началась",
+  "warWonByStars": "{clanName} выиграл войну!",
   "@warWonByStars": {
     "placeholders": {
       "clanName": {
@@ -925,7 +925,7 @@
       }
     }
   },
-  "warLostByStars": "{clanName} lost the war",
+  "warLostByStars": "{clanName} проиграл войну",
   "@warLostByStars": {
     "placeholders": {
       "clanName": {
@@ -933,7 +933,7 @@
       }
     }
   },
-  "warWonByDestruction": "{clanName} won by destruction!",
+  "warWonByDestruction": "{clanName} выиграл по разрушению!",
   "@warWonByDestruction": {
     "placeholders": {
       "clanName": {
@@ -941,7 +941,7 @@
       }
     }
   },
-  "warLostByDestruction": "{clanName} lost by destruction",
+  "warLostByDestruction": "{clanName} проиграл по разрушению",
   "@warLostByDestruction": {
     "placeholders": {
       "clanName": {
@@ -949,8 +949,8 @@
       }
     }
   },
-  "warPerfectDraw": "Perfect draw",
-  "warCanTieNeedsStars": "{clanName} can tie but needs {stars} stars",
+  "warPerfectDraw": "Идеальная ничья",
+  "warCanTieNeedsStars": "{clanName} может сравнять счёт, но нужно звёзд: {stars}",
   "@warCanTieNeedsStars": {
     "placeholders": {
       "clanName": {
@@ -961,7 +961,7 @@
       }
     }
   },
-  "warCannotCatchUp": "{clanName} cannot catch up on stars",
+  "warCannotCatchUp": "{clanName} уже не может догнать по звёздам",
   "@warCannotCatchUp": {
     "placeholders": {
       "clanName": {
@@ -973,9 +973,9 @@
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
   },
-  "warNoDataAvailableForThisWar": "No data available for this war",
-  "warCalculatorFast": "Fast calculator",
-  "warCalculatorAnswer": "To achieve a destruction rate of {percentNeeded}%, a total of {result}% is needed.",
+  "warNoDataAvailableForThisWar": "Нет данных для этой войны",
+  "warCalculatorFast": "Быстрый калькулятор",
+  "warCalculatorAnswer": "Чтобы достичь процента разрушения {percentNeeded}%, нужен общий результат {result}%.",
   "@warCalculatorAnswer": {
     "placeholders": {
       "percentNeeded": {
@@ -986,17 +986,17 @@
       }
     }
   },
-  "warCalculatorNeededOverall": "% Needed overall",
-  "warCalculatorCalculate": "Calculate",
-  "warAttacksTitle": "Attacks",
-  "warAttacksNone": "No attack yet",
+  "warCalculatorNeededOverall": "% нужно всего",
+  "warCalculatorCalculate": "Рассчитать",
+  "warAttacksTitle": "Атаки",
+  "warAttacksNone": "Атак пока нет",
   "@warAttacksNone": {
     "description": "No attack yet in war"
   },
-  "warAttacksBest": "Best attacks",
-  "warAttacksCount": "Attack Count",
-  "warAttacksMissed": "Missed Attacks",
-  "warAttacksNumber": "You attacked {number_time} time(s) during the last {number_war} wars.",
+  "warAttacksBest": "Лучшие атаки",
+  "warAttacksCount": "Количество атак",
+  "warAttacksMissed": "Пропущенные атаки",
+  "warAttacksNumber": "Вы атаковали {number_time} раз(а) за последние {number_war} войн.",
   "@warAttacksNumber": {
     "placeholders": {
       "number_time": {
@@ -1007,7 +1007,7 @@
       }
     }
   },
-  "warAttacksAverageStars": "You had an average of {stars} stars per war.",
+  "warAttacksAverageStars": "В среднем у вас было {stars} звёзд за войну.",
   "@warAttacksAverageStars": {
     "placeholders": {
       "stars": {
@@ -1015,7 +1015,7 @@
       }
     }
   },
-  "warAttacksAverageDestruction": "You had an average of {percent}% destruction rate per war.",
+  "warAttacksAverageDestruction": "В среднем у вас было {percent}% разрушения за войну.",
   "@warAttacksAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1023,13 +1023,13 @@
       }
     }
   },
-  "warDefensesTitle": "Defenses",
-  "warDefensesNone": "No defense yet",
+  "warDefensesTitle": "Защиты",
+  "warDefensesNone": "Защит пока нет",
   "@warDefensesNone": {
     "description": "No defense yet in war"
   },
-  "warDefensesBest": "Best defenses",
-  "warDefensesBestOutOf": "Best defense (out of {number})",
+  "warDefensesBest": "Лучшие защиты",
+  "warDefensesBestOutOf": "Лучшая защита (из {number})",
   "@warDefensesBestOutOf": {
     "placeholders": {
       "number": {
@@ -1038,7 +1038,7 @@
     },
     "description": "Best war defense (out of 3 defenses)"
   },
-  "warDefensesNumber": "You defended {number_time} time(s) during the last {number_war} wars.",
+  "warDefensesNumber": "Вы защищались {number_time} раз(а) за последние {number_war} войн.",
   "@warDefensesNumber": {
     "placeholders": {
       "number_time": {
@@ -1049,7 +1049,7 @@
       }
     }
   },
-  "warDefensesAverageStars": "You had an average of {stars} stars per defense.",
+  "warDefensesAverageStars": "В среднем против вас получали {stars} звёзд за защиту.",
   "@warDefensesAverageStars": {
     "placeholders": {
       "stars": {
@@ -1057,7 +1057,7 @@
       }
     }
   },
-  "warDefensesAverageDestruction": "You had an average of {percent}% destruction rate per defense.",
+  "warDefensesAverageDestruction": "В среднем против вас получали {percent}% разрушения за защиту.",
   "@warDefensesAverageDestruction": {
     "placeholders": {
       "percent": {
@@ -1065,24 +1065,24 @@
       }
     }
   },
-  "warStarsTitle": "Stars",
-  "warStarsAverage": "Average stars",
-  "warStarsNumber": "Number of stars",
-  "warStarsOne": "1 star",
-  "warStarsTwo": "2 stars",
-  "warStarsThree": "3 stars",
-  "warStarsZero": "0 Star",
-  "warStarsBestPerformance": "Best performance",
+  "warStarsTitle": "Звёзды",
+  "warStarsAverage": "Среднее число звёзд",
+  "warStarsNumber": "Количество звёзд",
+  "warStarsOne": "1 звезда",
+  "warStarsTwo": "2 звезды",
+  "warStarsThree": "3 звезды",
+  "warStarsZero": "0 звёзд",
+  "warStarsBestPerformance": "Лучший результат",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
   },
-  "warDestructionTitle": "Destruction",
-  "warDestructionAverage": "Average destruction",
-  "warDestructionRate": "Destruction rate",
+  "warDestructionTitle": "Разрушение",
+  "warDestructionAverage": "Среднее разрушение",
+  "warDestructionRate": "Процент разрушения",
   "@warDestructionRate": {
     "description": "Percentage of destruction in war"
   },
-  "warHistoryWinsDescription": "Your clan won {wins} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryWinsDescription": "Ваш клан выиграл {wins} войн ({percent}%) из последних 50 войн.",
   "@warHistoryWinsDescription": {
     "placeholders": {
       "wins": {
@@ -1093,7 +1093,7 @@
       }
     }
   },
-  "warHistoryLossesDescription": "Your clan lost {losses} wars ({percent}%) out of the last 50 wars.",
+  "warHistoryLossesDescription": "Ваш клан проиграл {losses} войн ({percent}%) из последних 50 войн.",
   "@warHistoryLossesDescription": {
     "placeholders": {
       "losses": {
@@ -1104,7 +1104,7 @@
       }
     }
   },
-  "warHistoryDrawsDescription": "Your clan had {draws} draws ({percent}%) out of the last 50 wars.",
+  "warHistoryDrawsDescription": "У вашего клана было ничьих: {draws} ({percent}%) из последних 50 войн.",
   "@warHistoryDrawsDescription": {
     "placeholders": {
       "draws": {
@@ -1115,7 +1115,7 @@
       }
     }
   },
-  "warHistoryAverageMembersDescription": "Your clan has an average of {members} members participating out of the last 50 wars.",
+  "warHistoryAverageMembersDescription": "В среднем у вашего клана участвовало {members} участников за последние 50 войн.",
   "@warHistoryAverageMembersDescription": {
     "placeholders": {
       "members": {
@@ -1123,7 +1123,7 @@
       }
     }
   },
-  "warHistoryAverageWarStarsDescription": "Your clan had an average of {stars} stars per war from the last 50 wars. It represents {percent} of the total stars.",
+  "warHistoryAverageWarStarsDescription": "В среднем ваш клан набирал {stars} звёзд за войну за последние 50 войн. Это составляет {percent} от общего числа звёзд.",
   "@warHistoryAverageWarStarsDescription": {
     "placeholders": {
       "stars": {
@@ -1134,7 +1134,7 @@
       }
     }
   },
-  "warHistoryAverageHitRateDescription": "Your clan had an average of {percent}% destruction rate from the last 50 wars.",
+  "warHistoryAverageHitRateDescription": "В среднем у вашего клана было {percent}% разрушения за последние 50 войн.",
   "@warHistoryAverageHitRateDescription": {
     "placeholders": {
       "percent": {
@@ -1142,28 +1142,28 @@
       }
     }
   },
-  "warPositionMap": "Map Position",
+  "warPositionMap": "Позиция на карте",
   "@warPositionMap": {
     "description": "Map position in war"
   },
-  "warPositionAbbr": "Pos",
+  "warPositionAbbr": "Поз.",
   "@warPositionAbbr": {
     "description": "Abbreviation for map position"
   },
-  "warPositionOrder": "Order",
+  "warPositionOrder": "Порядок",
   "@warPositionOrder": {
     "description": "Order of the player in the clan"
   },
-  "warOpponentTownhall": "Opp TH",
+  "warOpponentTownhall": "ТХ соперника",
   "@warOpponentTownhall": {
     "description": "Abbreviation for opponent's town hall level"
   },
-  "warOpponentLowerTownhall": "Lower TH",
-  "warOpponentUpperTownhall": "Upper TH",
-  "warOpponentEqualThLevel": "Equal TH",
-  "warOpponentSelectMembersThLevel": "Members TH Level",
-  "warOpponentSelectOpponentsThLevel": "Opponents TH Level",
-  "warFiltersLastXwars": "Last {number} wars",
+  "warOpponentLowerTownhall": "ТХ ниже",
+  "warOpponentUpperTownhall": "ТХ выше",
+  "warOpponentEqualThLevel": "Равный ТХ",
+  "warOpponentSelectMembersThLevel": "Уровень ТХ участников",
+  "warOpponentSelectOpponentsThLevel": "Уровень ТХ соперников",
+  "warFiltersLastXwars": "Последние {number} войн",
   "@warFiltersLastXwars": {
     "description": "Example: Shows the last 25 wars",
     "placeholders": {
@@ -1172,37 +1172,37 @@
       }
     }
   },
-  "warFiltersFriendly": "Friendly",
+  "warFiltersFriendly": "Дружеская",
   "@warFiltersFriendly": {
     "description": "Friendly war"
   },
-  "warFiltersRandom": "Random",
+  "warFiltersRandom": "Случайная",
   "@warFiltersRandom": {
     "description": "Random/basic war (not friendly or cwl)"
   },
-  "warVisibilityToggleTownHall": "Hide/Show stats from former TH levels",
+  "warVisibilityToggleTownHall": "Скрыть/показать статистику прошлых уровней ТХ",
   "@warVisibilityToggleTownHall": {
     "description": "For example, hide stats from TH15 and below if the player is now TH16"
   },
-  "warEventsTitle": "Events",
+  "warEventsTitle": "События",
   "@warEventsTitle": {
     "description": "War events"
   },
-  "warEventsNewest": "Newest",
-  "warEventsOldest": "Oldest",
-  "warStatusReady": "Opted In",
+  "warEventsNewest": "Сначала новые",
+  "warEventsOldest": "Сначала старые",
+  "warStatusReady": "Участвует",
   "@warStatusReady": {
     "description": "Opted In for war"
   },
-  "warStatusUnready": "Opted Out",
+  "warStatusUnready": "Не участвует",
   "@warStatusUnready": {
     "description": "Opted Out for war"
   },
-  "warStatusMissed": "Missed",
+  "warStatusMissed": "Пропущено",
   "@warStatusMissed": {
     "description": "Missed attacks"
   },
-  "warStatusMissedInfo": "Missed: {number}",
+  "warStatusMissedInfo": "Пропущено: {number}",
   "@warStatusMissedInfo": {
     "description": "Number of missed attacks",
     "placeholders": {
@@ -1211,19 +1211,19 @@
       }
     }
   },
-  "warAbbreviationAvg": "Avg",
+  "warAbbreviationAvg": "Ср.",
   "@warAbbreviationAvg": {
     "description": "Abbreviation for average"
   },
-  "warAbbreviationAvgPercentage": "Avg %",
+  "warAbbreviationAvgPercentage": "Ср. %",
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
   "cwlTitle": "CWL",
-  "cwlClanWarLeague": "Clan War League",
-  "cwlOngoing": "Ongoing CWL",
-  "cwlRounds": "Rounds",
-  "cwlRoundNumber": "Round {number}",
+  "cwlClanWarLeague": "Лига войн кланов",
+  "cwlOngoing": "Текущая CWL",
+  "cwlRounds": "Раунды",
+  "cwlRoundNumber": "Раунд {number}",
   "@cwlRoundNumber": {
     "placeholders": {
       "number": {
@@ -1239,7 +1239,7 @@
       }
     }
   },
-  "cwlRank": "Your clan is currently ranked {rank}.",
+  "cwlRank": "Ваш клан сейчас на месте {rank}.",
   "@cwlRank": {
     "placeholders": {
       "rank": {
@@ -1247,7 +1247,7 @@
       }
     }
   },
-  "cwlStars": "Your clan has a total of {stars} stars.",
+  "cwlStars": "Всего у вашего клана {stars} звёзд.",
   "@cwlStars": {
     "placeholders": {
       "stars": {
@@ -1255,7 +1255,7 @@
       }
     }
   },
-  "cwlDestructionPercentage": "Your clan has a total destruction rate of {percent}%.",
+  "cwlDestructionPercentage": "Общий процент разрушения вашего клана — {percent}%.",
   "@cwlDestructionPercentage": {
     "placeholders": {
       "percent": {
@@ -1263,7 +1263,7 @@
       }
     }
   },
-  "cwlTotalAttacks": "Your clan has a total of {attacks} attacks out of {totalAttacks} possible attacks.",
+  "cwlTotalAttacks": "У вашего клана всего {attacks} атак из {totalAttacks} возможных.",
   "@cwlTotalAttacks": {
     "placeholders": {
       "attacks": {
@@ -1274,20 +1274,20 @@
       }
     }
   },
-  "joinLeaveTitle": "Join/Leave Logs (Current Season)",
-  "joinLeaveJoin": "Join",
-  "joinLeaveLeave": "Leave",
-  "joinLeaveJoins": "Joins",
-  "joinLeaveLeaves": "Leaves",
-  "joinLeaveUniquePlayers": "Unique Players",
-  "joinLeaveMovingPlayers": "Moving Players",
-  "joinLeaveMostMovingPlayers": "Most Moving Players",
-  "joinLeaveStillInClan": "Still in Clan",
-  "joinLeaveLeftForever": "Left Forever",
-  "joinLeaveRejoinedPlayers": "Rejoined Players",
-  "joinLeaveAvgTimeJoinLeave": "Avg Join/Leave Time",
-  "joinLeavePeakHour": "Most Active Hour",
-  "joinLeaveNumberDescription": "{number} leave events occurred during the current season ({date}).",
+  "joinLeaveTitle": "Журнал входов/выходов (текущий сезон)",
+  "joinLeaveJoin": "Вход",
+  "joinLeaveLeave": "Выход",
+  "joinLeaveJoins": "Входы",
+  "joinLeaveLeaves": "Выходы",
+  "joinLeaveUniquePlayers": "Уникальные игроки",
+  "joinLeaveMovingPlayers": "Переходящие игроки",
+  "joinLeaveMostMovingPlayers": "Самые часто переходящие игроки",
+  "joinLeaveStillInClan": "Всё ещё в клане",
+  "joinLeaveLeftForever": "Ушли навсегда",
+  "joinLeaveRejoinedPlayers": "Вернувшиеся игроки",
+  "joinLeaveAvgTimeJoinLeave": "Среднее время входа/выхода",
+  "joinLeavePeakHour": "Самый активный час",
+  "joinLeaveNumberDescription": "За текущий сезон ({date}) произошло {number} событий выхода.",
   "@joinLeaveNumberDescription": {
     "placeholders": {
       "number": {
@@ -1298,7 +1298,7 @@
       }
     }
   },
-  "joinLeaveJoinNumberDescription": "{number} join events occurred during the current season ({date}).",
+  "joinLeaveJoinNumberDescription": "За текущий сезон ({date}) произошло {number} событий входа.",
   "@joinLeaveJoinNumberDescription": {
     "placeholders": {
       "number": {
@@ -1309,7 +1309,7 @@
       }
     }
   },
-  "joinLeaveMovingNumberDescription": "{number} player(s) left and rejoined the clan during the current season ({date}).",
+  "joinLeaveMovingNumberDescription": "За текущий сезон ({date}) {number} игрок(ов) покинули клан и вернулись.",
   "@joinLeaveMovingNumberDescription": {
     "description": "Number of players who left and rejoined the clan during the current season.",
     "placeholders": {
@@ -1321,7 +1321,7 @@
       }
     }
   },
-  "joinLeaveUniqueNumberDescription": "{number} unique player(s) joined/left the clan during the current season ({date}).",
+  "joinLeaveUniqueNumberDescription": "За текущий сезон ({date}) {number} уникальных игрок(ов) входили/выходили из клана.",
   "@joinLeaveUniqueNumberDescription": {
     "description": "Number of unique players who joined/left the clan during the current season.",
     "placeholders": {
@@ -1333,7 +1333,7 @@
       }
     }
   },
-  "joinLeaveStillInClanNumberDescription": "{number} player(s) joined and are still in the clan.",
+  "joinLeaveStillInClanNumberDescription": "{number} игрок(ов) вступили и всё ещё находятся в клане.",
   "@joinLeaveStillInClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1341,7 +1341,7 @@
       }
     }
   },
-  "joinLeaveLeftClanNumberDescription": "{number} player(s) joined, then left the clan and never rejoined.",
+  "joinLeaveLeftClanNumberDescription": "{number} игрок(ов) вступили, затем покинули клан и больше не возвращались.",
   "@joinLeaveLeftClanNumberDescription": {
     "placeholders": {
       "number": {
@@ -1352,7 +1352,7 @@
   "@joinLeaveTitle": {
     "description": "Logs of players joining or leaving the clan."
   },
-  "joinLeaveLeftOnAt": "Left on {date} at {time}.",
+  "joinLeaveLeftOnAt": "Покинул {date} в {time}.",
   "@joinLeaveLeftOnAt": {
     "description": "[The player] left the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1364,7 +1364,7 @@
       }
     }
   },
-  "joinLeaveJoinedOnAt": "Joined on {date} at {time}.",
+  "joinLeaveJoinedOnAt": "Вступил {date} в {time}.",
   "@joinLeaveJoinedOnAt": {
     "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
     "placeholders": {
@@ -1376,17 +1376,17 @@
       }
     }
   },
-  "raidsTitle": "Raids",
-  "raidsLast": "Last raids",
-  "raidsOngoing": "Ongoing raids",
-  "raidsDistrictsDestroyed": "Districts destroyed",
-  "raidsCompleted": "Raids completed",
+  "raidsTitle": "Рейды",
+  "raidsLast": "Последние рейды",
+  "raidsOngoing": "Текущие рейды",
+  "raidsDistrictsDestroyed": "Разрушено районов",
+  "raidsCompleted": "Рейды завершены",
   "searchNoResult": "Нет результатов.",
-  "maintenanceTitle": "Maintenance",
-  "maintenanceDescription": "Clash of Clans is currently under maintenance, so we can't access the API. Please check back later.",
-  "downloadTooltip": "Download CWL summary",
-  "downloadInProgress": "Downloading file... It can take a few seconds...",
-  "downloadSuccess": "File saved successfully in {path}",
+  "maintenanceTitle": "Техническое обслуживание",
+  "maintenanceDescription": "В Clash of Clans сейчас техническое обслуживание, поэтому мы не можем получить доступ к API. Загляните позже.",
+  "downloadTooltip": "Скачать сводку CWL",
+  "downloadInProgress": "Загрузка файла... Это может занять несколько секунд...",
+  "downloadSuccess": "Файл успешно сохранён в {path}",
   "@downloadSuccess": {
     "placeholders": {
       "path": {
@@ -1394,19 +1394,19 @@
       }
     }
   },
-  "downloadError": "Failed to download file",
+  "downloadError": "Не удалось скачать файл",
   "dashboardTitle": "Панель управления",
-  "toolsTitle": "Tools",
-  "navigationTeam": "Teams",
-  "navigationStatistics": "Statistics",
+  "toolsTitle": "Инструменты",
+  "navigationTeam": "Команды",
+  "navigationStatistics": "Статистика",
   "versionDevice": "Версия и устройство",
   "@versionDevice": {
     "description": "Version of the app and device information"
   },
-  "settingsLicenses": "Open Source Licenses",
-  "settingsLicensesSubtitle": "View licenses for third-party libraries",
-  "settingsPrivacyPolicy": "Privacy Policy",
-  "settingsPrivacyPolicySubtitle": "How we handle your data",
+  "settingsLicenses": "Лицензии открытого исходного кода",
+  "settingsLicensesSubtitle": "Посмотреть лицензии сторонних библиотек",
+  "settingsPrivacyPolicy": "Политика конфиденциальности",
+  "settingsPrivacyPolicySubtitle": "Как мы обрабатываем ваши данные",
   "betaFeature": "Бета-Функция",
   "betaLabel": "Бета",
   "betaDescription": "Эта функция в настоящее время находится в стадии бета-тестирования, она может содержать некоторые ошибки или быть неполной. Мы активно работаем над улучшениями и приветствуем ваши отзывы. Пожалуйста, делитесь своими идеями и сообщайте о любых проблемах на нашем сервере Дискорд, чтобы помочь нам сделать его лучше.",
@@ -1429,62 +1429,62 @@
   "faqUseCodeClashKing": "Используйте код \"ClashKing\"",
   "faqSupportUsOnPatreon": "Поддержать нас в Patreon",
   "faqRateTheApp": "Предложить особенности",
-  "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
-  "faqBotFeatureTracking": "Player & Clan Tracking",
-  "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
-  "faqBotFeatureWars": "War Management",
-  "faqBotFeatureWarsDesc": "Track war performance, analyze attacks, and get war notifications",
-  "faqBotFeatureNotifications": "Smart Notifications",
-  "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
-  "faqBotFeatureCommands": "Powerful Commands",
-  "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
+  "faqWhatCanBotDo": "Что умеет Discord-бот ClashKing?",
+  "faqWhatCanBotDoAnswer": "Discord-бот ClashKing помогает управлять кланом прямо из Discord с помощью подробных инструментов отслеживания, автоматических уведомлений и бесшовной интеграции с этим приложением. Он создан для лидеров и участников кланов, которые хотят оставаться на связи и всё держать в порядке:",
+  "faqInviteBotToServer": "Пригласить бота на сервер",
+  "faqBotFeatureTracking": "Отслеживание игроков и кланов",
+  "faqBotFeatureTrackingDesc": "Добавляйте и отслеживайте несколько кланов и игроков с обновлениями в реальном времени",
+  "faqBotFeatureWars": "Управление войнами",
+  "faqBotFeatureWarsDesc": "Отслеживайте результаты войн, анализируйте атаки и получайте уведомления о войнах",
+  "faqBotFeatureNotifications": "Умные уведомления",
+  "faqBotFeatureNotificationsDesc": "Получайте оповещения о пожертвованиях, военных атаках и важных событиях клана",
+  "faqBotFeatureCommands": "Мощные команды",
+  "faqBotFeatureCommandsDesc": "Используйте slash-команды для быстрого доступа к статистике игроков, информации о войне и многому другому",
   "faqNeedHelp": "Мне нужна помощь или я хотел бы внести предложение. Как я могу связаться с вами?",
   "faqNeedHelpAnswer": "Вы можете присоединиться к нашему Discord-серверу, чтобы попросить о помощи или оставить отзыв, или вы можете написать нам по адресу devs@clashk.ing. Пожалуйста, пишите только на английском или французском языке.",
   "faqSendEmail": "Отправить e-mail",
   "faqJoinDiscord": "Присоединяйтесь к нашему Discord серверу",
   "faqCannotOpenMailClient": "По некоторым причинам мы не можем открыть ваш почтовый клиент. Мы скопировали адрес электронной почты для вас. Вы можете написать письмо и вставить адрес в поле получателя.",
-  "faqTroubleshooting": "Troubleshooting",
-  "faqTroubleshootingDataTitle": "Why is my data not syncing?",
-  "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
-  "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
-  "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
-  "faqTroubleshootingCrashTitle": "Why does the app crash?",
-  "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
-  "faqTroubleshootingCrashSolution1": "Close the app and restart it",
-  "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
-  "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
-  "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
-  "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
-  "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
-  "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
-  "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
-  "faqTroubleshootingSolutions": "Solutions:",
-  "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
-  "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
-  "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
-  "faqFeaturesClanTitle": "Clan Management",
-  "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
-  "faqFeaturesWarTitle": "War Tracking",
-  "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
-  "faqFeaturesCwlTitle": "CWL Analytics",
-  "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
-  "faqSearchHint": "Search FAQ...",
-  "faqSectionGettingStarted": "Getting Started & About",
-  "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
-  "faqWaysToSupport": "Ways to support us:",
+  "faqTroubleshooting": "Устранение неполадок",
+  "faqTroubleshootingDataTitle": "Почему мои данные не синхронизируются?",
+  "faqTroubleshootingDataDescription": "Данные игрока или клана выглядят устаревшими",
+  "faqTroubleshootingDataSolution1": "Потяните страницу вниз, чтобы обновить её",
+  "faqTroubleshootingDataSolution2": "Проверьте, отслеживается ли ваш клан (см. выше)",
+  "faqTroubleshootingDataSolution3": "Подождите несколько минут и попробуйте снова: API может обновляться с задержкой",
+  "faqTroubleshootingCrashTitle": "Почему приложение вылетает?",
+  "faqTroubleshootingCrashDescription": "Приложение неожиданно закрывается или зависает",
+  "faqTroubleshootingCrashSolution1": "Закройте приложение и запустите его снова",
+  "faqTroubleshootingCrashSolution2": "Обновите приложение до последней версии",
+  "faqTroubleshootingCrashSolution3": "Очистите кэш и данные приложения (Android) или переустановите приложение",
+  "faqTroubleshootingCrashSolution4": "Освободите место в памяти устройства",
+  "faqContactSupport": "Если проблема не исчезнет, обратитесь в поддержку (см. последний раздел)",
+  "faqTroubleshootingAccountTitle": "Почему я не могу подтвердить аккаунт?",
+  "faqTroubleshootingAccountDescription": "Проблемы с привязкой аккаунта Clash of Clans",
+  "faqTroubleshootingAccountSolution1": "Убедитесь, что используете правильный тег игрока, начинающийся с #",
+  "faqTroubleshootingAccountSolution2": "Если аккаунт уже кажется привязанным, используйте API-токен из настроек Clash of Clans",
+  "faqTroubleshootingSolutions": "Решения:",
+  "faqWhatIsClashKingProject": "Что такое проект ClashKing?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing — это open-source проект статистики Clash of Clans и управления кланами, созданный увлечёнными игроками для сообщества. Мы развиваем его как побочный проект параллельно с основной работой, потому что любим игру. Мы предлагаем мобильное приложение, Discord-бота и бесплатный API, которые вместе дают лучший опыт Clash of Clans. Проект полностью финансируется пожертвованиями пользователей и использованием кода автора Supercell — без рекламы и премиум-функций!",
+  "faqViewOnGitHub": "Посмотреть на GitHub",
+  "faqFeaturesGuide": "Что умеет приложение ClashKing?",
+  "faqFeaturesGuideDescription": "Выведите свой опыт Clash of Clans на новый уровень! Приложение ClashKing даёт красивый и быстрый доступ ко всей вашей статистике и данным клана — идеально для игроков без Discord и для тех, кто предпочитает удобный мобильный опыт:",
+  "faqAppDevelopmentNotice": "Мы активно разрабатываем новые функции, чтобы сделать приложение ещё лучше. Ваши отзывы помогают нам улучшаться!",
+  "faqFeaturesPlayerTitle": "Статистика игрока",
+  "faqFeaturesPlayerDescription": "Отслеживайте прогресс, достижения и результаты в Легендарной лиге",
+  "faqFeaturesClanTitle": "Управление кланом",
+  "faqFeaturesClanDescription": "Следите за участниками клана, пожертвованиями и общим состоянием клана",
+  "faqFeaturesWarTitle": "Отслеживание войн",
+  "faqFeaturesWarDescription": "Анализируйте результаты войн, стратегии атак и процент побед",
+  "faqFeaturesLegendsTitle": "Неточные данные?",
+  "faqFeaturesLegendsDescription": "Ежедневное отслеживание трофеев и статистика конца сезона",
+  "faqFeaturesCwlTitle": "Аналитика CWL",
+  "faqFeaturesCwlDescription": "Результаты Лиги войн кланов и вклад участников",
+  "faqSearchHint": "Поиск в FAQ...",
+  "faqSectionGettingStarted": "Начало работы и о проекте",
+  "faqSectionSupportAndContact": "Поддержка и контакты",
+  "faqTranslationIssue": "Перевод отсутствует или неверен?",
+  "faqTranslationIssueAnswer": "Переводы делают пользователи приложения, такие же как вы! Мы (разработчики) предоставляем только французский и английский переводы. Если вы нашли отсутствующий или неверный перевод, вы можете помочь его улучшить. Не стесняйтесь связаться с нами в Discord или по email, если хотите помочь. У нас есть отдельный Discord-канал для переводчиков, где можно задавать вопросы и получать помощь.",
+  "faqWaysToSupport": "Способы поддержать нас:",
   "translationHelpUsTranslate": "Помогите нам с переводом",
   "translationSuggestFeatures": "Предложить особенности",
   "translationThankYou": "Спасибо!",
@@ -1492,27 +1492,27 @@
   "translationHelpTranslateContent": "Вы можете помочь нам перевести приложение на Crowdin. Если ваш язык недоступен на Crowdin, смело запрашивайте его на нашем сервере Discord. Большое спасибо за вашу помощь!",
   "translationHelpTranslateButton": "Помогите с переводом на Crowdin",
   "translationCurrentTranslators": "Текущие Переводчики",
-  "filtersTimeFilters": "Time Filters",
+  "filtersTimeFilters": "Фильтры времени",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
   },
-  "filtersWarSettings": "War Settings",
+  "filtersWarSettings": "Настройки войны",
   "@filtersWarSettings": {
     "description": "War settings filters section title"
   },
-  "filtersPerformance": "Performance",
+  "filtersPerformance": "Эффективность",
   "@filtersPerformance": {
     "description": "Performance filters section title"
   },
-  "filtersAdvanced": "Advanced",
+  "filtersAdvanced": "Расширенные",
   "@filtersAdvanced": {
     "description": "Advanced filters section title"
   },
-  "filtersNoFiltersActive": "No filters active",
+  "filtersNoFiltersActive": "Нет активных фильтров",
   "@filtersNoFiltersActive": {
     "description": "Text shown when no filters are applied in a section"
   },
-  "filtersShowingDefaultData": "Showing last {count} wars (default)",
+  "filtersShowingDefaultData": "Показаны последние {count} войн (по умолчанию)",
   "@filtersShowingDefaultData": {
     "description": "Text shown in filter bandeau when no filters are applied",
     "placeholders": {
@@ -1522,115 +1522,115 @@
       }
     }
   },
-  "filtersQuickFilters": "Quick Filters",
+  "filtersQuickFilters": "Быстрые фильтры",
   "@filtersQuickFilters": {
     "description": "Quick preset filters section title"
   },
-  "filtersLast30Days": "Last 30 Days",
+  "filtersLast30Days": "Последние 30 дней",
   "@filtersLast30Days": {
     "description": "Preset filter for last 30 days"
   },
-  "filters3StarOnly": "3-Star Only",
+  "filters3StarOnly": "Только 3 звезды",
   "@filters3StarOnly": {
     "description": "Preset filter for 3-star attacks only"
   },
-  "filtersFreshAttacks": "Fresh Attacks",
+  "filtersFreshAttacks": "Первые атаки",
   "@filtersFreshAttacks": {
     "description": "Preset filter for fresh attacks only"
   },
-  "filtersSeason": "Season",
+  "filtersSeason": "Сезон",
   "@filtersSeason": {
     "description": "Season filter subsection title"
   },
-  "filtersDateRange": "Date Range",
+  "filtersDateRange": "Диапазон дат",
   "@filtersDateRange": {
     "description": "Date range filter subsection title"
   },
-  "filtersWarType": "War Type",
+  "filtersWarType": "Тип войны",
   "@filtersWarType": {
     "description": "War type filter subsection title"
   },
-  "filtersTownHall": "Town Hall",
+  "filtersTownHall": "Ратуша",
   "@filtersTownHall": {
     "description": "Town hall filter subsection title"
   },
-  "filtersAttackerTh": "Attacker TH",
+  "filtersAttackerTh": "ТХ атакующего",
   "@filtersAttackerTh": {
     "description": "Attacker town hall filter label"
   },
-  "filtersDefenderTh": "Defender TH",
+  "filtersDefenderTh": "ТХ защитника",
   "@filtersDefenderTh": {
     "description": "Defender town hall filter label"
   },
-  "filtersSameTownHallOnly": "Same Town Hall Only",
+  "filtersSameTownHallOnly": "Только одинаковый ТХ",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
-  "filtersDestructionPercentage": "Destruction Percentage",
+  "filtersDestructionPercentage": "Процент разрушения",
   "@filtersDestructionPercentage": {
     "description": "Destruction percentage filter subsection title"
   },
-  "filtersOptions": "Options",
+  "filtersOptions": "Параметры",
   "@filtersOptions": {
     "description": "Options filter subsection title"
   },
-  "filtersFreshAttacksOnly": "Fresh Attacks Only",
+  "filtersFreshAttacksOnly": "Только первые атаки",
   "@filtersFreshAttacksOnly": {
     "description": "Fresh attacks only filter option"
   },
-  "filtersResultLimit": "Result Limit",
+  "filtersResultLimit": "Лимит результатов",
   "@filtersResultLimit": {
     "description": "Result limit filter label"
   },
-  "filtersMinPosition": "Min Position",
+  "filtersMinPosition": "Мин. позиция",
   "@filtersMinPosition": {
     "description": "Minimum map position filter label"
   },
-  "filtersMaxPosition": "Max Position",
+  "filtersMaxPosition": "Макс. позиция",
   "@filtersMaxPosition": {
     "description": "Maximum map position filter label"
   },
-  "filtersStartDate": "Start Date",
+  "filtersStartDate": "Дата начала",
   "@filtersStartDate": {
     "description": "Start date filter label"
   },
-  "filtersEndDate": "End Date",
+  "filtersEndDate": "Дата окончания",
   "@filtersEndDate": {
     "description": "End date filter label"
   },
-  "filtersYear": "Year",
+  "filtersYear": "Год",
   "@filtersYear": {
     "description": "Year selector label"
   },
-  "filtersMonth": "Month",
+  "filtersMonth": "Месяц",
   "@filtersMonth": {
     "description": "Month selector label"
   },
-  "filtersSelectYear": "Select Year",
+  "filtersSelectYear": "Выберите год",
   "@filtersSelectYear": {
     "description": "Year picker dialog title"
   },
-  "filtersAllWars": "All Wars",
+  "filtersAllWars": "Все войны",
   "@filtersAllWars": {
     "description": "All wars filter option"
   },
-  "chartsAttackPerformance": "Attack Performance by TH Level",
+  "chartsAttackPerformance": "Эффективность атак по уровню ТХ",
   "@chartsAttackPerformance": {
     "description": "Attack performance chart title"
   },
-  "chartsDefensePerformance": "Defense Performance by TH Level",
+  "chartsDefensePerformance": "Эффективность защиты по уровню ТХ",
   "@chartsDefensePerformance": {
     "description": "Defense performance chart title"
   },
-  "chartsRowsYourTh": "Rows: Your TH | Columns: Opponent TH",
+  "chartsRowsYourTh": "Строки: ваш ТХ | Столбцы: ТХ соперника",
   "@chartsRowsYourTh": {
     "description": "Heatmap chart axis explanation"
   },
-  "chartsGood": "Good",
+  "chartsGood": "Хорошо",
   "@chartsGood": {
     "description": "Good performance legend label"
   },
-  "chartsExcellent": "Excellent",
+  "chartsExcellent": "Отлично",
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
@@ -1638,143 +1638,143 @@
   "@chartsNoData": {
     "description": "No data available indicator"
   },
-  "performanceAnalysisSuggestions": "Performance Insights",
+  "performanceAnalysisSuggestions": "Инсайты эффективности",
   "@performanceAnalysisSuggestions": {
     "description": "Section title for statistical performance analysis suggestions"
   },
-  "performanceAnalysisTooltip": "Filter suggestions based on your star statistics to highlight performance patterns",
+  "performanceAnalysisTooltip": "Предложения фильтров на основе вашей статистики звёзд, чтобы выделить закономерности эффективности",
   "@performanceAnalysisTooltip": {
     "description": "Tooltip explaining that suggestions are based on statistical analysis"
   },
-  "generalExport": "Export",
+  "generalExport": "Экспорт",
   "@generalExport": {
     "description": "Export button label"
   },
-  "exportTitle": "Export War Statistics",
+  "exportTitle": "Экспорт статистики войны",
   "@exportTitle": {
     "description": "Title for export bottom sheet dialog"
   },
-  "exportSuccess": "Export successful!",
+  "exportSuccess": "Экспорт выполнен!",
   "@exportSuccess": {
     "description": "Success message for completed export"
   },
-  "exportDialogDesc": "This will download your war statistics as an Excel file with multiple sheets including overall stats, detailed attacks, and TH analysis.",
+  "exportDialogDesc": "Будет скачан Excel-файл со статистикой войн и несколькими листами, включая общую статистику, подробные атаки и анализ ТХ.",
   "@exportDialogDesc": {
     "description": "Description text for export dialog"
   },
-  "exportGenerating": "Generating export...",
+  "exportGenerating": "Создание экспорта...",
   "@exportGenerating": {
     "description": "Loading message while generating export"
   },
-  "exportClanWarStatsComingSoon": "Export feature coming soon for clan war stats",
+  "exportClanWarStatsComingSoon": "Экспорт статистики войн клана скоро появится",
   "@exportClanWarStatsComingSoon": {
     "description": "Message shown when clan war stats export is not yet available"
   },
-  "filtersNoneApplied": "No filters applied",
+  "filtersNoneApplied": "Фильтры не применены",
   "@filtersNoneApplied": {
     "description": "Text shown when no filters are active"
   },
-  "warAttacksFailedToLoadPlayer": "Failed to load player data",
+  "warAttacksFailedToLoadPlayer": "Не удалось загрузить данные игрока",
   "@warAttacksFailedToLoadPlayer": {
     "description": "Error message when player profile fails to load"
   },
-  "deepLinkInvalidPlayer": "Invalid player link.",
+  "deepLinkInvalidPlayer": "Недействительная ссылка игрока.",
   "@deepLinkInvalidPlayer": {
     "description": "Shown when a player deep link does not include a valid tag"
   },
-  "deepLinkInvalidClan": "Invalid clan link.",
+  "deepLinkInvalidClan": "Недействительная ссылка клана.",
   "@deepLinkInvalidClan": {
     "description": "Shown when a clan deep link does not include a valid tag"
   },
-  "deepLinkFailedToOpenPlayer": "Failed to open player.",
+  "deepLinkFailedToOpenPlayer": "Не удалось открыть игрока.",
   "@deepLinkFailedToOpenPlayer": {
     "description": "Shown when a player deep link target could not be loaded"
   },
-  "deepLinkFailedToOpenClan": "Failed to open clan.",
+  "deepLinkFailedToOpenClan": "Не удалось открыть клан.",
   "@deepLinkFailedToOpenClan": {
     "description": "Shown when a clan deep link target could not be loaded"
   },
-  "deepLinkUnknown": "Unknown deep link.",
+  "deepLinkUnknown": "Неизвестная deep link-ссылка.",
   "@deepLinkUnknown": {
     "description": "Shown when the app receives a deep link it does not understand"
   },
-  "warAttacksDetailsTitle": "Attack Details",
+  "warAttacksDetailsTitle": "Детали атаки",
   "@warAttacksDetailsTitle": {
     "description": "Title for attack details modal"
   },
-  "warAttacksDetailsAttackOrder": "Attack Order",
+  "warAttacksDetailsAttackOrder": "Порядок атаки",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsAttacker": "Attacker",
+  "warAttacksDetailsAttacker": "Атакующий",
   "@warAttacksDetailsAttacker": {
     "description": "Label for attacker section in attack details"
   },
-  "warAttacksDetailsDefender": "Defender",
+  "warAttacksDetailsDefender": "Защитник",
   "@warAttacksDetailsDefender": {
     "description": "Label for defender section in attack details"
   },
-  "warAttacksDetailsName": "Name",
+  "warAttacksDetailsName": "Имя",
   "@warAttacksDetailsName": {
     "description": "Label for player name in attack details"
   },
-  "warDataState": "State",
+  "warDataState": "Состояние",
   "@warDataState": {
     "description": "Label for war state"
   },
-  "warDataAttacksPerMember": "Attacks Per Member",
+  "warDataAttacksPerMember": "Атак на участника",
   "@warDataAttacksPerMember": {
     "description": "Label for attacks per member"
   },
-  "warDataStartTime": "War Start",
+  "warDataStartTime": "Начало войны",
   "@warDataStartTime": {
     "description": "Label for war start time"
   },
-  "warDataEndTime": "War End",
+  "warDataEndTime": "Конец войны",
   "@warDataEndTime": {
     "description": "Label for war end time"
   },
-  "warDataClanLevel": "Clan Level",
+  "warDataClanLevel": "Уровень клана",
   "@warDataClanLevel": {
     "description": "Label for clan level"
   },
-  "warDataTotalStars": "Total Stars",
+  "warDataTotalStars": "Всего звёзд",
   "@warDataTotalStars": {
     "description": "Label for total stars earned"
   },
-  "warDataDestructionPercentage": "Destruction %",
+  "warDataDestructionPercentage": "Разрушение %",
   "@warDataDestructionPercentage": {
     "description": "Label for destruction percentage"
   },
-  "warInformationTitle": "War Information",
+  "warInformationTitle": "Информация о войне",
   "@warInformationTitle": {
     "description": "Title for war information section in attack details"
   },
-  "warResultsTitle": "War Results",
+  "warResultsTitle": "Результаты войны",
   "@warResultsTitle": {
     "description": "Title for war results section showing clan vs opponent"
   },
-  "warPlayersTitle": "Players",
+  "warPlayersTitle": "Игроки",
   "@warPlayersTitle": {
     "description": "Title for players section showing attacker and defender info"
   },
-  "performanceAnalysisFailedAttacks": "Failed Attacks (0-1 Stars)",
+  "performanceAnalysisFailedAttacks": "Неудачные атаки (0–1 звезда)",
   "@performanceAnalysisFailedAttacks": {
     "description": "Performance analysis preset for failed attacks"
   },
-  "performanceAnalysisFailedAttacksDesc": "Shows attacks that failed to get 2+ stars",
+  "performanceAnalysisFailedAttacksDesc": "Показывает атаки, в которых не удалось получить 2+ звезды",
   "@performanceAnalysisFailedAttacksDesc": {
     "description": "Description for failed attacks analysis"
   },
-  "performanceAnalysisMissedPerfects": "Missed Perfect Attacks",
+  "performanceAnalysisMissedPerfects": "Упущенные идеальные атаки",
   "@performanceAnalysisMissedPerfects": {
     "description": "Performance analysis preset for missed perfect attacks"
   },
-  "performanceAnalysisMissedPerfectsDesc": "Shows attacks that got 2 stars - potential perfect opportunities",
+  "performanceAnalysisMissedPerfectsDesc": "Показывает атаки на 2 звезды — потенциальные возможности для идеальной атаки",
   "@performanceAnalysisMissedPerfectsDesc": {
     "description": "Description for missed perfect attacks analysis"
   },
-  "performanceAnalysisThAttackIssues": "Low Stars vs TH{thLevel}",
+  "performanceAnalysisThAttackIssues": "Мало звёзд против ТХ{thLevel}",
   "@performanceAnalysisThAttackIssues": {
     "description": "Performance analysis preset for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1784,7 +1784,7 @@
       }
     }
   },
-  "performanceAnalysisThAttackIssuesDesc": "Shows attacks with low star count against TH{thLevel}",
+  "performanceAnalysisThAttackIssuesDesc": "Показывает атаки с малым числом звёзд против ТХ{thLevel}",
   "@performanceAnalysisThAttackIssuesDesc": {
     "description": "Description for low-star attacks against specific TH levels",
     "placeholders": {
@@ -1794,7 +1794,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssues": "Vulnerable to TH{thLevel}",
+  "performanceAnalysisThDefenseIssues": "Уязвимость к ТХ{thLevel}",
   "@performanceAnalysisThDefenseIssues": {
     "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1804,7 +1804,7 @@
       }
     }
   },
-  "performanceAnalysisThDefenseIssuesDesc": "Shows when TH{thLevel} attackers get high stars against you",
+  "performanceAnalysisThDefenseIssuesDesc": "Показывает случаи, когда атакующие ТХ{thLevel} получают против вас много звёзд",
   "@performanceAnalysisThDefenseIssuesDesc": {
     "description": "Description for defensive vulnerabilities to specific TH levels",
     "placeholders": {
@@ -1814,91 +1814,91 @@
       }
     }
   },
-  "performanceAnalysisCwlIssues": "CWL Low Performance",
+  "performanceAnalysisCwlIssues": "Низкая эффективность в CWL",
   "@performanceAnalysisCwlIssues": {
     "description": "Performance analysis preset for low CWL performance"
   },
-  "performanceAnalysisCwlIssuesDesc": "Shows CWL attacks with lower star average than regular wars",
+  "performanceAnalysisCwlIssuesDesc": "Показывает атаки CWL со средним числом звёзд ниже, чем в обычных войнах",
   "@performanceAnalysisCwlIssuesDesc": {
     "description": "Description for low CWL performance analysis"
   },
-  "performanceAnalysisRandomWarIssues": "Random War Low Performance",
+  "performanceAnalysisRandomWarIssues": "Низкая эффективность в случайных войнах",
   "@performanceAnalysisRandomWarIssues": {
     "description": "Performance analysis preset for low random war performance"
   },
-  "performanceAnalysisRandomWarIssuesDesc": "Shows random war attacks with lower star average than CWL",
+  "performanceAnalysisRandomWarIssuesDesc": "Показывает атаки случайных войн со средним числом звёзд ниже, чем в CWL",
   "@performanceAnalysisRandomWarIssuesDesc": {
     "description": "Description for low random war performance analysis"
   },
-  "performanceAnalysisFreshOnly": "Fresh Attack Analysis",
+  "performanceAnalysisFreshOnly": "Анализ первых атак",
   "@performanceAnalysisFreshOnly": {
     "description": "Performance analysis preset for fresh attacks only"
   },
-  "performanceAnalysisFreshOnlyDesc": "Analyzes performance on fresh bases only",
+  "performanceAnalysisFreshOnlyDesc": "Анализирует эффективность только на нетронутых базах",
   "@performanceAnalysisFreshOnlyDesc": {
     "description": "Description for fresh attack analysis"
   },
-  "performanceAnalysisRecentPerformance": "Recent Performance (30 Days)",
+  "performanceAnalysisRecentPerformance": "Недавняя эффективность (30 дней)",
   "@performanceAnalysisRecentPerformance": {
     "description": "Performance analysis preset for recent performance"
   },
-  "performanceAnalysisRecentPerformanceDesc": "Shows recent performance to identify current trends",
+  "performanceAnalysisRecentPerformanceDesc": "Показывает недавние результаты, чтобы выявить текущие тренды",
   "@performanceAnalysisRecentPerformanceDesc": {
     "description": "Description for recent performance analysis"
   },
-  "performanceAnalysisHighStakes": "High-Stakes Attacks",
+  "performanceAnalysisHighStakes": "Атаки с высокой ценностью",
   "@performanceAnalysisHighStakes": {
     "description": "Performance analysis preset for high-stakes attacks"
   },
-  "performanceAnalysisHighStakesDesc": "Shows attacks from top 5 war positions",
+  "performanceAnalysisHighStakesDesc": "Показывает атаки с топ-5 позиций войны",
   "@performanceAnalysisHighStakesDesc": {
     "description": "Description for high-stakes attacks analysis"
   },
-  "performanceAnalysisCleanupCrew": "Cleanup Attacks",
+  "performanceAnalysisCleanupCrew": "Добивающие атаки",
   "@performanceAnalysisCleanupCrew": {
     "description": "Performance analysis preset for cleanup attacks"
   },
-  "performanceAnalysisCleanupCrewDesc": "Shows attacks from lower war positions",
+  "performanceAnalysisCleanupCrewDesc": "Показывает атаки с нижних позиций войны",
   "@performanceAnalysisCleanupCrewDesc": {
     "description": "Description for cleanup attacks analysis"
   },
-  "performanceRatingNeedsImprovement": "Needs Improvement",
+  "performanceRatingNeedsImprovement": "Нужно улучшить",
   "@performanceRatingNeedsImprovement": {
     "description": "Needs improvement performance rating"
   },
-  "performanceStrengthHighThreeStarRate": "High Three-Star Rate",
+  "performanceStrengthHighThreeStarRate": "Высокий процент трёх звёзд",
   "@performanceStrengthHighThreeStarRate": {
     "description": "Strength area: high three-star rate"
   },
-  "performanceStrengthHighDestruction": "High Destruction",
+  "performanceStrengthHighDestruction": "Высокое разрушение",
   "@performanceStrengthHighDestruction": {
     "description": "Strength area: high destruction percentage"
   },
-  "performanceStrengthConsistentPerformance": "Consistent Performance",
+  "performanceStrengthConsistentPerformance": "Стабильные результаты",
   "@performanceStrengthConsistentPerformance": {
     "description": "Strength area: consistent performance"
   },
-  "performanceImprovementThreeStarConsistency": "Three-Star Consistency",
+  "performanceImprovementThreeStarConsistency": "Стабильность трёх звёзд",
   "@performanceImprovementThreeStarConsistency": {
     "description": "Improvement area: three-star consistency"
   },
-  "performanceImprovementOverallStarPerformance": "Overall Star Performance",
+  "performanceImprovementOverallStarPerformance": "Общая результативность по звёздам",
   "@performanceImprovementOverallStarPerformance": {
     "description": "Improvement area: overall star performance"
   },
-  "presetSuggestionCwlOnly": "CWL Only",
+  "presetSuggestionCwlOnly": "Только CWL",
   "@presetSuggestionCwlOnly": {
     "description": "Preset suggestion for CWL wars only"
   },
-  "presetSuggestionRandomWars": "Random Wars",
+  "presetSuggestionRandomWars": "Случайные войны",
   "@presetSuggestionRandomWars": {
     "description": "Preset suggestion for random wars"
   },
-  "presetSuggestionFriendlyWars": "Friendly Wars",
+  "presetSuggestionFriendlyWars": "Дружеские войны",
   "@presetSuggestionFriendlyWars": {
     "description": "Preset suggestion for friendly wars"
   },
-  "presetSuggestionStarOnly": "{count} Star Only",
+  "presetSuggestionStarOnly": "Только {count} зв.",
   "@presetSuggestionStarOnly": {
     "description": "Preset suggestion for specific star count",
     "placeholders": {
@@ -1907,15 +1907,15 @@
       }
     }
   },
-  "presetSuggestionPerfectAttacks": "Perfect Attacks",
+  "presetSuggestionPerfectAttacks": "Идеальные атаки",
   "@presetSuggestionPerfectAttacks": {
     "description": "Preset suggestion for perfect attacks"
   },
-  "presetSuggestionFailedAttacks": "Failed Attacks",
+  "presetSuggestionFailedAttacks": "Неудачные атаки",
   "@presetSuggestionFailedAttacks": {
     "description": "Preset suggestion for failed attacks"
   },
-  "presetSuggestionThOnly": "TH{level} Only",
+  "presetSuggestionThOnly": "Только ТХ{level}",
   "@presetSuggestionThOnly": {
     "description": "Preset suggestion for specific town hall level",
     "placeholders": {
@@ -1924,46 +1924,46 @@
       }
     }
   },
-  "presetSuggestionLastWeek": "Last Week",
+  "presetSuggestionLastWeek": "Прошлая неделя",
   "@presetSuggestionLastWeek": {
     "description": "Preset suggestion for last week timeframe"
   },
-  "presetSuggestionLastMonth": "Last Month",
+  "presetSuggestionLastMonth": "Прошлый месяц",
   "@presetSuggestionLastMonth": {
     "description": "Preset suggestion for last month timeframe"
   },
-  "presetSuggestionMyPreset": "My Preset",
+  "presetSuggestionMyPreset": "Мой пресет",
   "@presetSuggestionMyPreset": {
     "description": "Default preset suggestion"
   },
-  "presetSuggestionCustomFilter": "Custom Filter",
+  "presetSuggestionCustomFilter": "Пользовательский фильтр",
   "@presetSuggestionCustomFilter": {
     "description": "Default custom filter suggestion"
   },
-  "presetSuggestionRecentFilter": "Recent Filter",
+  "presetSuggestionRecentFilter": "Недавний фильтр",
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
   "generalError": "Error",
-  "generalSuccess": "Success",
-  "generalFailed": "Failed",
-  "generalMinimum": "Minimum",
-  "generalMaximum": "Maximum",
-  "generalHigh": "High",
-  "generalLow": "Low",
-  "generalPoor": "Poor",
-  "generalOpen": "Open",
-  "generalClosed": "Closed",
-  "generalAvailable": "Available",
-  "authErrorUserCancelledDiscordLogin": "User cancelled Discord login.",
-  "authErrorDiscordLoginFailed": "Discord login failed. Please try again.",
-  "authErrorEmailLoginFailed": "Email login failed. Please check your credentials.",
-  "authErrorEmailNotVerified": "Your email address is not verified. Please check your email and enter the verification code.",
-  "authErrorEmailVerificationFailed": "Email verification failed. The token may be invalid or expired.",
-  "authErrorDiscordLinkFailed": "Failed to link Discord account. It may already be linked to another account.",
-  "authErrorEmailLinkFailed": "Failed to link email account. Email may already be in use.",
-  "authErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
-  "apiErrorInvalidJsonResponse": "Something went wrong. Please try again.",
+  "generalSuccess": "Успешно",
+  "generalFailed": "Не удалось",
+  "generalMinimum": "Минимум",
+  "generalMaximum": "Максимум",
+  "generalHigh": "Высокий",
+  "generalLow": "Низкий",
+  "generalPoor": "Плохо",
+  "generalOpen": "Открыть",
+  "generalClosed": "Закрыто",
+  "generalAvailable": "Доступно",
+  "authErrorUserCancelledDiscordLogin": "Пользователь отменил вход через Discord.",
+  "authErrorDiscordLoginFailed": "Не удалось войти через Discord. Попробуйте снова.",
+  "authErrorEmailLoginFailed": "Не удалось войти по email. Проверьте данные для входа.",
+  "authErrorEmailNotVerified": "Ваш адрес электронной почты не подтверждён. Проверьте почту и введите код подтверждения.",
+  "authErrorEmailVerificationFailed": "Не удалось подтвердить email. Токен может быть недействительным или просроченным.",
+  "authErrorDiscordLinkFailed": "Не удалось привязать Discord-аккаунт. Возможно, он уже привязан к другому аккаунту.",
+  "authErrorEmailLinkFailed": "Не удалось привязать email-аккаунт. Возможно, этот email уже используется.",
+  "authErrorUserNotAuthenticated": "Пользователь не аутентифицирован. Войдите снова.",
+  "apiErrorInvalidJsonResponse": "Что-то пошло не так. Попробуйте снова.",
   "@apiErrorInvalidJsonResponse": {
     "description": "Error when API returns invalid JSON",
     "placeholders": {
@@ -1973,7 +1973,7 @@
       }
     }
   },
-  "apiErrorBadRequest": "Something went wrong. Please check your input.",
+  "apiErrorBadRequest": "Что-то пошло не так. Проверьте введённые данные.",
   "@apiErrorBadRequest": {
     "description": "API bad request error",
     "placeholders": {
@@ -1987,7 +1987,7 @@
       }
     }
   },
-  "apiErrorUnauthorized": "You are not authorized. Please log in again.",
+  "apiErrorUnauthorized": "Вы не авторизованы. Войдите снова.",
   "@apiErrorUnauthorized": {
     "description": "API unauthorized error",
     "placeholders": {
@@ -1997,7 +1997,7 @@
       }
     }
   },
-  "apiErrorForbidden": "You don't have permission to perform this action.",
+  "apiErrorForbidden": "У вас нет разрешения выполнить это действие.",
   "@apiErrorForbidden": {
     "description": "API forbidden error",
     "placeholders": {
@@ -2007,7 +2007,7 @@
       }
     }
   },
-  "apiErrorNotFound": "We couldn't find what you were looking for.",
+  "apiErrorNotFound": "Мы не смогли найти то, что вы искали.",
   "@apiErrorNotFound": {
     "description": "API not found error",
     "placeholders": {
@@ -2017,7 +2017,7 @@
       }
     }
   },
-  "apiErrorRateLimit": "Too many requests. Please try again later.",
+  "apiErrorRateLimit": "Слишком много запросов. Попробуйте позже.",
   "@apiErrorRateLimit": {
     "description": "API rate limit error",
     "placeholders": {
@@ -2027,7 +2027,7 @@
       }
     }
   },
-  "apiErrorServer": "The server is temporarily unavailable. Please try again shortly.",
+  "apiErrorServer": "Сервер временно недоступен. Попробуйте немного позже.",
   "@apiErrorServer": {
     "description": "API server error",
     "placeholders": {
@@ -2041,7 +2041,7 @@
       }
     }
   },
-  "apiErrorGeneric": "An unexpected error occurred. Please try again.",
+  "apiErrorGeneric": "Произошла непредвиденная ошибка. Попробуйте снова.",
   "@apiErrorGeneric": {
     "description": "Generic API error",
     "placeholders": {
@@ -2055,10 +2055,10 @@
       }
     }
   },
-  "apiErrorNetworkConnection": "No internet connection. Please check your network and try again.",
-  "apiErrorTimeout": "Request timed out. Please try again.",
-  "apiErrorInvalidFormat": "Invalid response format. Please try again.",
-  "apiErrorOperationFailed": "We couldn't complete your request. Please try again.",
+  "apiErrorNetworkConnection": "Нет подключения к интернету. Проверьте сеть и попробуйте снова.",
+  "apiErrorTimeout": "Время ожидания запроса истекло. Попробуйте снова.",
+  "apiErrorInvalidFormat": "Недействительный формат ответа. Попробуйте снова.",
+  "apiErrorOperationFailed": "Не удалось выполнить запрос. Попробуйте снова.",
   "@apiErrorOperationFailed": {
     "description": "Generic operation failed error",
     "placeholders": {
@@ -2068,7 +2068,7 @@
       }
     }
   },
-  "apiErrorNetworkOperation": "You seems to be offline. Please check your connection and try again.",
+  "apiErrorNetworkOperation": "Похоже, вы офлайн. Проверьте подключение и попробуйте снова.",
   "@apiErrorNetworkOperation": {
     "description": "Network error during specific operation",
     "placeholders": {
@@ -2078,7 +2078,7 @@
       }
     }
   },
-  "apiErrorTimeoutOperation": "The request took too long. Please try again.",
+  "apiErrorTimeoutOperation": "Запрос занял слишком много времени. Попробуйте снова.",
   "@apiErrorTimeoutOperation": {
     "description": "Timeout error during specific operation",
     "placeholders": {
@@ -2088,7 +2088,7 @@
       }
     }
   },
-  "apiErrorDataFormatOperation": "Something went wrong while processing the data. Please try again.",
+  "apiErrorDataFormatOperation": "Что-то пошло не так при обработке данных. Попробуйте снова.",
   "@apiErrorDataFormatOperation": {
     "description": "Data format error during specific operation",
     "placeholders": {
@@ -2098,7 +2098,7 @@
       }
     }
   },
-  "apiErrorConfigLoadFailed": "We couldn’t load the app settings (error {statusCode}). Please try again.",
+  "apiErrorConfigLoadFailed": "Не удалось загрузить настройки приложения (ошибка {statusCode}). Попробуйте снова.",
   "@apiErrorConfigLoadFailed": {
     "description": "Error loading app config",
     "placeholders": {
@@ -2108,7 +2108,7 @@
       }
     }
   },
-  "apiErrorConfigException": "Error when loading configuration from the server",
+  "apiErrorConfigException": "Ошибка при загрузке конфигурации с сервера",
   "@apiErrorConfigException": {
     "description": "Exception while loading config",
     "placeholders": {
@@ -2118,20 +2118,840 @@
       }
     }
   },
-  "gameItemHousingSpace": "Housing Space",
-  "gameItemAttackSpeed": "Attack Speed",
-  "gameItemAttackRange": "Attack Range",
-  "gameItemMovementSpeed": "Movement Speed",
-  "gameItemUpgradeResource": "Upgrade Resource",
-  "gameItemRarity": "Rarity",
-  "gameItemHero": "Hero",
+  "gameItemHousingSpace": "Занимаемое место",
+  "gameItemAttackSpeed": "Скорость атаки",
+  "gameItemAttackRange": "Дальность атаки",
+  "gameItemMovementSpeed": "Скорость передвижения",
+  "gameItemUpgradeResource": "Ресурс улучшения",
+  "gameItemRarity": "Редкость",
+  "gameItemHero": "Герой",
   "gameItemDps": "DPS",
   "gameItemHitpoints": "HP",
-  "gameItemHealOnActivation": "Heal",
-  "gameItemTargets": "Targets",
-  "gameItemTargetsGround": "Ground",
-  "gameItemTargetsAir": "Air",
-  "gameItemFlying": "Flying",
-  "gameItemUpgradeCost": "Upgrade cost",
-  "gameItemUpgradeTime": "Upgrade time"
+  "gameItemHealOnActivation": "Лечение",
+  "gameItemTargets": "Цели",
+  "gameItemTargetsGround": "Земля",
+  "gameItemTargetsAir": "Воздух",
+  "gameItemFlying": "Летающий",
+  "gameItemUpgradeCost": "Стоимость улучшения",
+  "gameItemUpgradeTime": "Время улучшения",
+  "generalExpand": "Расширять",
+  "generalCollapse": "Крах",
+  "generalBookmark": "Закладка",
+  "generalRemoveBookmark": "Удалить закладку",
+  "gameLeague": "Лига",
+  "clanMembersSearchPlaceholder": "Поиск участников",
+  "clanMembersShowTotals": "Показать итоги клана",
+  "clanMembersHideTotals": "Скрыть итоги клана",
+  "clanMembersReceivedShort": "Полученный",
+  "clanMembersAverageTh": "Среднее число чехов",
+  "warLogSearchPlaceholder": "Поиск войн",
+  "warStatsSearchPlaceholder": "Поиск игроков",
+  "warStatsCurrentTownHall": "мой ТД",
+  "warStatsLast50": "Последние 50",
+  "warStatsWars": "Войны",
+  "warStatsSelectSeason": "Выберите сезон военной статистики",
+  "warAnalysisToWin": "Чтобы выиграть",
+  "warAnalysisToLose": "Потерять",
+  "warAnalysisNoAttacksLeft": "Нападений не осталось",
+  "warAnalysisScenario": "{attacks} атакует влево -> нужны звезды {stars} / {percent}% за атаку",
+  "warAnalysisImpossibleScenario": "{attacks} атакует влево -> невозможно (звезды {stars} / {percent}% за атаку)",
+  "warAttacksSuccessful": "Успешные атаки",
+  "warAttacksFailed": "Неудачные атаки",
+  "warAttacksMissedShort": "Пропущенный",
+  "cwlHistoryTitle": "История CWL",
+  "clanJoinLeaveTab": "Присоединиться/Выйти",
+  "clanRankingsTab": "Рейтинги",
+  "clanRankingsSeason": "Сезон",
+  "clanRankingsSelectSeason": "Выберите рейтинговый сезон",
+  "clanRankingsFilterActivity": "Активность",
+  "clanRankingsFilterWar": "Война",
+  "clanRankingsFilterPoints": "Очки",
+  "cwlHistoryPreviewBadge": "Предварительный просмотр",
+  "cwlHistoryPreviewSubtitle": "Макет {clan} до исправления конечной точки CWL.",
+  "cwlHistoryEmptyTitle": "Истории CWL пока нет",
+  "cwlHistoryEmptyBody": "Этот клан еще не участвовал в сезоне Лиги Войн Кланов.",
+  "cwlRankTitle": "Классифицировать",
+  "cwlWarsPlayedTitle": "Войны сыграны",
+  "playerWarStarsTitle": "Звезды войны",
+  "playerWarPreferenceTitle": "Военный преф.",
+  "playerDonatedTitle": "Пожертвовано",
+  "playerReceivedTitle": "Полученный",
+  "playerCapitalTitle": "Капитал",
+  "playerExpLevelTitle": "Эксп. уровень",
+  "clanWarWinsTitle": "Война побеждает",
+  "clanWinStreakTitle": "Победная серия",
+  "clanBuilderBaseTitle": "База застройщиков",
+  "clanTypeTitle": "Тип",
+  "clanWarFrequencyTitle": "Войны",
+  "clanMinTownHallTitle": "Мин. ТД",
+  "clanMinTrophiesTitle": "Мин. трофеи",
+  "clanCapitalHallTitle": "Столичный зал",
+  "clanDistrictsTitle": "Районы",
+  "legendsCountryTitle": "Страна",
+  "legendsLocalRankTitle": "Местный ранг",
+  "legendsGlobalRankTitle": "Глобальный рейтинг",
+  "warWinsTitle": "Победы",
+  "warLossesTitle": "Потери",
+  "warDrawsTitle": "Ничьи",
+  "capitalRaidStatusOngoing": "Непрерывный",
+  "capitalRaidStatusEnded": "Закончено",
+  "capitalRaidLoot": "Лут",
+  "capitalRaidRewards": "Награды",
+  "capitalRaidPreviousWeek": "Предыдущая неделя",
+  "capitalRaidNextWeek": "На следующей неделе",
+  "capitalRaidFilterAttacked": "Атакованный",
+  "capitalRaidFilterNotAttacked": "Не атакован",
+  "capitalRaidFilterLinked": "Связанные аккаунты",
+  "capitalRaidEmptyTitle": "Нет данных о рейде столицы",
+  "capitalRaidEmptyBody": "История рейдов появится здесь, как только будут отслежены выходные рейдов на столицу этого клана.",
+  "capitalRaidEstimated": "Оцененный",
+  "capitalRaidEstimatedTooltip": "Пока не официально: оценки основаны на журналах атак и защиты за эту неделю. Supercell публикует реальное количество медалей после завершения рейда.",
+  "capitalRaidTrophyPrediction": "Прогнозируемые трофеи",
+  "capitalRaidTrophyPredictionTooltip": "Предполагаемые трофеи Столичной лиги после этого рейда, основанные на результатах на этой неделе. Не официально.",
+  "capitalRaidProjectedLoot": "Прогнозируемая добыча",
+  "capitalRaidOneshots": "Одиночные выстрелы",
+  "capitalRaidFails": "Не удалось",
+  "capitalDetailsOffense": "Нарушение",
+  "capitalDetailsDefense": "Оборона",
+  "capitalDistrictsSection": "Районы",
+  "capitalOpponentsSection": "Оппоненты",
+  "capitalAvgAttacksPerDistrict": "Среднее количество атак/район",
+  "capitalAvgLootPerAttack": "Среднее количество добычи/атаки",
+  "capitalHistorySection": "История рейдов",
+  "capitalHistoryWeeksTracked": "Недели отслеживаются",
+  "capitalAvgLootPerWeek": "Средняя добыча в неделю",
+  "capitalAvgAttacksPerWeek": "Среднее число атак в неделю",
+  "capitalBestRaid": "Лучший рейд",
+  "capitalWorstRaid": "Худший рейд",
+  "capitalHistoryChartTitle": "Еженедельный тренд",
+  "warAttacksDetailsDuration": "Продолжительность",
+  "gameItemRemainingToTownHallMax": "До ТН макс.",
+  "gameItemRemainingToGlobalMax": "До глобального максимума",
+  "gameItemLevelsLeft": "Уровень {count} остался(а)",
+  "gameItemOverview": "Обзор",
+  "gameItemStats": "Статистика",
+  "gameItemNextUpgrade": "Следующее обновление",
+  "gameItemUpgradePlan": "План обновления",
+  "gameItemUpgradeDataUnavailable": "Данные обновления недоступны",
+  "notifScopeAllAccounts": "Все аккаунты",
+  "notifScopeSelected": "Выбрано",
+  "settingsPreferences": "Предпочтения",
+  "settingsNotificationsTitle": "Уведомления",
+  "settingsNotificationsSubtitle": "Выбирайте оповещения и отправляйте предварительные просмотры локальных тестов.",
+  "settingsLiveActivityTest": "Тест на живую активность",
+  "settingsLiveActivityStart": "Начать тестовую деятельность",
+  "settingsLiveActivityStartSubtitle": "Показывает предварительный просмотр локальной войны кланов.",
+  "settingsLiveActivityUpdate": "Обновить счет",
+  "settingsLiveActivityUpdateSubtitle": "Увеличивает счет фальшивой войны.",
+  "settingsLiveActivityEnd": "Завершить тестовое действие",
+  "settingsLiveActivityEndSubtitle": "Удаляет локальный предварительный просмотр.",
+  "settingsSupport": "Поддерживать",
+  "settingsAbout": "О",
+  "settingsAccount": "Счет",
+  "settingsSignedIn": "Вошёл в систему",
+  "settingsAppearance": "Появление",
+  "settingsThemeSystem": "Система",
+  "settingsThemeMatchDevice": "Сопоставить это устройство",
+  "settingsThemeLight": "Свет",
+  "settingsThemeDark": "Темный",
+  "settingsThemeSelected": "Выбрано",
+  "notifNoAccountsLoadedYet": "Связанные аккаунты пока не загружены.",
+  "notifNoAccountsSelected": "Аккаунты не выбраны",
+  "notifAccountsSelected": "Выбраны аккаунты {count}.",
+  "notifSelectedAccounts": "Выбранные аккаунты",
+  "searchRecent": "Недавний",
+  "searchTabPlayers": "Игроки",
+  "searchTabClans": "Кланы",
+  "searchFilters": "Фильтры",
+  "searchClear": "Прозрачный",
+  "warStatsRefreshSuccess": "Данные успешно обновлены",
+  "warStatsRefreshFailed": "Не удалось обновить данные: {error}.",
+  "warStatsFilterFailed": "Не удалось загрузить отфильтрованные данные: {error}.",
+  "warStatsExportFailed": "Не удалось экспортировать: {error}.",
+  "exportLabelPlayer": "Игрок",
+  "exportLabelFormat": "Формат",
+  "exportLabelExcel": "Excel (.xlsx)",
+  "exportLabelIncludes": "Включает",
+  "exportLabelContent": "Статистика, атаки, анализ TH",
+  "accountNoUserData": "Нет доступных пользовательских данных",
+  "accountsMenuTitle": "Счета",
+  "searchErrorPlayerLoadFailed": "Не удалось загрузить данные игрока.",
+  "searchErrorClanLoadFailed": "Не удалось загрузить данные клана.",
+  "todoNoMatchingAccounts": "Нет подходящих аккаунтов",
+  "todoNoConfiguredAccounts": "Аккаунты дел не настроены",
+  "todoNoLinkedAccounts": "Нет связанных аккаунтов",
+  "todoNoAccountsNeedAction": "Ни один аккаунт не требует действий",
+  "todoNoCompletedAccounts": "Нет заполненных аккаунтов",
+  "todoNoBookmarkedAccounts": "Нет аккаунтов в закладках",
+  "todoTryAnotherSearchOrFilter": "Попробуйте другой поиск или фильтр.",
+  "clanJoinLeaveNoDataTitle": "Нет данных о присоединении/выходе",
+  "clanJoinLeaveNoDataBody": "Здесь отображаются недавние перемещения состава, когда загружаются данные отслеживания.",
+  "clanJoinLeaveNoRecentMovementTitle": "Нет недавнего движения",
+  "clanJoinLeaveNoRecentMovementBody": "Сводка загружена, но список событий пуст.",
+  "capitalRaidMembersAttackLogFallback": "Список участников на эти рейдовые выходные не возвращается. Вместо этого отображается статистика журнала атак.",
+  "capitalRaidMembersNoPlayerData": "Данные об игроках за эти рейдовые выходные не возвращаются. API включает только общие данные по округам и противникам.",
+  "capitalRaidMembersNoIndividualData": "Для этого рейда нет списка игроков или отдельных атак.",
+  "dashboardNoLinkedAccountsTitle": "Нет связанных аккаунтов",
+  "dashboardNoLinkedAccountsBody": "Свяжите учетную запись Clash, чтобы видеть здесь атаки, события и активность.",
+  "dashboardNothingPinnedTitle": "Еще ничего не закреплено",
+  "dashboardNothingPinnedBody": "Откройте вкладку «Игроки», разверните параметры карточки и включите «Показывать дела на главной странице», чтобы закрепить здесь учетную запись.",
+  "playersNoBookmarkedTitle": "Игроков в закладках пока нет",
+  "playersNoBookmarkedBody": "Откройте профиль игрока и сохраните его на будущее.",
+  "playersNoLinkedBody": "Управляйте учетными записями с экрана настройки учетной записи.",
+  "navigationHome": "Дом",
+  "drawerFollowers": "Последователи",
+  "drawerFollowersHelp": "Люди, которые добавили в закладки одну из ваших подтвержденных связанных учетных записей.",
+  "drawerPopular": "Популярный",
+  "drawerCalculators": "Калькуляторы",
+  "drawerSubscription": "Подписка",
+  "drawerUpgradeTracker": "Обновление трекера",
+  "drawerBasesArmies": "Базы и армии",
+  "drawerGameAssets": "Игровые ресурсы",
+  "drawerManageAccounts": "Управление учетными записями",
+  "playersLinked": "Связано",
+  "playersBookmarked": "В закладках",
+  "searchGlobalHint": "Поиск игроков или кланов",
+  "tooltipDecreaseMinimumMembers": "Уменьшить минимальное количество участников",
+  "tooltipIncreaseMinimumMembers": "Увеличить минимальное количество участников",
+  "tooltipDecreaseMaximumMembers": "Уменьшить максимальное количество участников",
+  "tooltipIncreaseMaximumMembers": "Увеличить максимальное количество участников",
+  "tooltipDecreaseMinimumClanPoints": "Уменьшение минимального количества очков клана",
+  "tooltipIncreaseMinimumClanPoints": "Увеличение минимального количества очков клана",
+  "tooltipDecreaseMinimumClanLevel": "Уменьшение минимального уровня клана",
+  "tooltipIncreaseMinimumClanLevel": "Увеличение минимального уровня клана",
+  "tooltipShowChart": "Показать диаграмму",
+  "tooltipShowTable": "Показать таблицу",
+  "tooltipDismissMessage": "Закрыть сообщение",
+  "tooltipShowPassword": "Показать пароль",
+  "tooltipHidePassword": "Скрыть пароль",
+  "tooltipRemoveAccount": "Удалить аккаунт",
+  "popularPlayersTitle": "Игроки",
+  "popularClansTitle": "Кланы",
+  "popularWarsCwlTitle": "Войны и CWL",
+  "popularTitle": "Популярный",
+  "popularSubtitle": "Закладки, связанные аккаунты и активные войны.",
+  "popularEmptyTitle": "Популярных товаров пока нет",
+  "popularEmptyBody": "Добавьте игроков и кланы в закладки или свяжите аккаунты, чтобы разместить это сообщение.",
+  "calculatorsTitle": "Калькуляторы",
+  "calculatorsSubtitle": "Руда, взрывное землетрясение и землетрясение огненного шара.",
+  "calculatorOre": "руда",
+  "calculatorZapQuake": "Землетрясение",
+  "calculatorFireball": "Огненный шар",
+  "upgradeTrackerTitle": "Обновление трекера",
+  "upgradeTrackerSubtitle": "Оставшаяся стоимость и время обновления.",
+  "linkedAccountLabel": "Связанный аккаунт",
+  "noLinkedPlayersLoadedTitle": "Связанные игроки не загружены",
+  "noLinkedPlayersLoadedBody": "Добавьте или обновите связанные учетные записи, чтобы увидеть общее количество обновлений.",
+  "playerOptionNotificationsTitle": "Уведомления",
+  "playerOptionNotificationsSubtitle": "Получайте оповещения для этого аккаунта.",
+  "playerOptionShowTodoHomeTitle": "Показать дела на главной странице",
+  "playerOptionShowTodoHomeSubtitle": "Закрепите карточку дел этого аккаунта на главной вкладке.",
+  "playerOptionShowTodoPageTitle": "Показать на странице дел",
+  "playerOptionShowTodoPageSubtitle": "Включите эту учетную запись в полный список дел.",
+  "playerOptionShowWarTabTitle": "Показать на вкладке «Война»",
+  "playerOptionShowWarTabSubtitle": "Включите клан этого аккаунта во вкладку «Война».",
+  "searchCancel": "Отмена",
+  "bookmarkPlayerLoadFailed": "Не удалось загрузить плеер, добавленный в закладки.",
+  "warNoLinkedOrBookmarked": "Нет связанных или добавленных в закладки войн кланов для отображения.",
+  "warWidgetRefreshData": "Обновить данные войны",
+  "warWidgetNoData": "Данных о войне нет.",
+  "warWidgetLastUpdated": "Последнее обновление: {time}",
+  "todoEventClanGames": "Клановые игры",
+  "todoEventCwl": "КВЛ",
+  "todoEventSeasonEnds": "Сезон заканчивается",
+  "todoEventLeagueReset": "Сброс лиги",
+  "todoEventRaidWeekend": "Рейдовые выходные",
+  "todoMagicDispatch": "Волшебная отправка",
+  "todoMagicDispatchDescription": "Нажмите, чтобы увидеть последнее обновление ClashKing.",
+  "todoUseCodeClashKing": "Используйте код ClashKing",
+  "todoUseCodeClashKingDescription": "Поддержите проект в Supercell Store",
+  "todoLegendAttacks": "Легендарные атаки",
+  "todoWarAttacks": "Военные атаки",
+  "todoCwlAttacks": "CWL-атаки",
+  "todoRaidAttacks": "Рейдовые атаки",
+  "gameSeasonPassShort": "Проходить",
+  "todoMockMaxedMainName": "Максед Главный",
+  "todoMockMaxedMainSubtitle": "TH17 · все активно",
+  "todoMockMaxedMainStatus": "Активен сейчас · полный ежедневный контрольный список",
+  "todoMockLegend5Left": "сегодня осталось 5",
+  "todoMockWar1Left": "1 остался",
+  "todoMockCwl1LeftRound": "1 покинул этот раунд",
+  "todoMockClanGames2700Left": "Осталось 2,7 тыс. очков",
+  "todoMockRaid4Left": "4 осталось",
+  "todoMockPass850Left": "осталось 850 баллов",
+  "todoMockWarAltName": "Военный альтернативный вариант",
+  "todoMockWarAltSubtitle": "TH15 · сосредоточена на войне",
+  "todoMockWarAltStatus": "Активен 18 м назад · война и рейды требуют внимания",
+  "todoMockWar2Left": "2 осталось",
+  "todoMockClanGames900Left": "осталось 900 баллов",
+  "todoMockRaid1Left": "1 остался",
+  "todoMockLegendPushName": "Легенда толчок",
+  "todoMockLegendPushSubtitle": "TH16 · ежедневные атаки",
+  "todoMockLegendPushStatus": "Активен 1 час назад · легенды и прогресс прохождения",
+  "todoMockLegend2Left": "2 осталось сегодня",
+  "todoMockOnPace": "в темпе",
+  "todoMockCaughtUpName": "догнал",
+  "todoMockCaughtUpSubtitle": "TH14 · нет открытых задач",
+  "todoMockCaughtUpStatus": "Активен сегодня · никаких действий не требуется",
+  "notifChooseAlerts": "Выберите оповещения",
+  "notifLeagueDefenseDescription": "Результаты защиты с атакующим, звёздами, процентом и контекстом лиги.",
+  "notifWarAttackOptionsDescription": "Результаты атак в войне, оповещения о защите и параметры ленты атак 5v5.",
+  "notifWarAlertsDescription": "Подбор войны, начало дня битвы и завершение войны.",
+  "notifWarRemindersDescription": "Пользовательские напоминания перед окончанием войны.",
+  "notifDefensesAgainstYourBase": "Защиты против вашей базы",
+  "notifDefensesAgainstYourBaseDescription": "Только удары, где этот аккаунт защищается.",
+  "notifAllAttacks": "Все атаки",
+  "notifAllAttacksDescription": "Каждый удар только в войнах 5v5.",
+  "notifThirtyMinutes": "30 минут",
+  "notifFifteenMinutes": "15 минут",
+  "notifSendTestNotification": "Отправить тестовое уведомление",
+  "notifScheduledMessage": "Запланировано: {title}",
+  "generalStartDate": "Дата начала",
+  "generalEndDate": "Дата окончания",
+  "warFiltersAllWars": "Все войны",
+  "warFiltersRandomWars": "Случайные войны",
+  "warFiltersCwlWars": "Войны CWL",
+  "warFiltersFriendlyWars": "Дружеские войны",
+  "warType": "Тип войны",
+  "warFiltersAnyTownHall": "Любой ТХ",
+  "gameTownHallLevelShort": "ТХ{level}",
+  "warAttackerTownHall": "ТХ атакующего",
+  "warDefenderTownHall": "ТХ защитника",
+  "warStatsFilterSameTownHallOnly": "Только одинаковая Ратуша",
+  "warStatsFilterSameTownHallDescription": "Показывать только атаки, где у атакующего и защитника одинаковый уровень ТХ",
+  "generalAny": "Любой",
+  "warStarsWithIcon": "{stars} ⭐",
+  "warStatsFilterMinStars": "Мин. звёзд",
+  "warStatsFilterMaxStars": "Макс. звёзд",
+  "warStatsFilterMinDestructionPercent": "Мин. разрушение %",
+  "warStatsFilterMaxDestructionPercent": "Макс. разрушение %",
+  "warStatsFilterMinPosition": "Мин. позиция",
+  "warStatsFilterMaxPosition": "Макс. позиция",
+  "warStatsFilterFreshAttacksOnly": "Только первые атаки",
+  "warStatsFilterFreshAttacksDescription": "Показывать только первые атаки по каждой базе",
+  "warStatsFilterResultLimit": "Лимит результатов",
+  "generalResultsCount": "{count} результатов",
+  "notifEventsDescription": "Клановые игры, CWL, рейдовые выходные и сезонные события.",
+  "notifAnnouncementsDescription": "Баннеры в приложении и будущие push-оповещения об обновлениях ClashKing.",
+  "notifUpgradeFinishesDescription": "Войска, герои, питомцы, заклинания, снаряжение и здания.",
+  "notifSupportReminderDescription": "Ежемесячное напоминание поддержать ClashKing.",
+  "notifDevicePushSetup": "Настройка push-уведомлений устройства",
+  "notifAccountScope": "Область аккаунта",
+  "notifTestNotification": "Тестовое уведомление",
+  "settingsAppIcon": "Иконка приложения",
+  "settingsChanging": "Изменение...",
+  "settingsAddWarWidget": "Добавить виджет войны",
+  "settingsWarWidgetLinkClanFirst": "Сначала привяжите аккаунт в клане",
+  "settingsWarWidgetClanCount": "Доступно кланов: {count}",
+  "generalDiscord": "Discord",
+  "settingsDiscordConnectedSubtitle": "Аккаунты, привязанные к боту, и данные Discord",
+  "settingsDiscordSyncSubtitle": "Синхронизация аккаунтов, привязанных к боту, и данных Discord",
+  "settingsConnected": "Подключено",
+  "settingsClashKingAccount": "Аккаунт ClashKing",
+  "settingsEmailConnectedSubtitle": "Вход по email подключён",
+  "settingsEmailRecoverySubtitle": "Добавьте вход по email для восстановления аккаунта",
+  "settingsFeatureRequestsTitle": "Запросы функций",
+  "playerOpenInGame": "Открыть в игре",
+  "playerBookmarkRemove": "Удалить закладку игрока",
+  "playerBookmarkAdd": "Добавить игрока в закладки",
+  "playerBestTrophies": "Лучшие трофеи",
+  "clanLoadFailed": "Не удалось загрузить клан.",
+  "gameItemLevels": "Уровни",
+  "resourceDarkElixir": "Тёмный эликсир",
+  "resourceBuilderElixir": "Эликсир строителя",
+  "resourceBuilderGold": "Золото строителя",
+  "resourceElixir": "Elixir",
+  "resourceGold": "Золото",
+  "resourceGlowyOre": "Сияющая руда",
+  "resourceStarryOre": "Звёздная руда",
+  "resourceShinyOre": "Блестящая руда",
+  "resourceGeneric": "Ресурс",
+  "seasonStatsGoldGrabbed": "Добыто золота",
+  "seasonStatsActivity": "Активность",
+  "seasonStatsAttackWins": "Победы в атаке",
+  "seasonStatsTrophies": "Трофеи сезона",
+  "todoSearchAccountsHint": "Поиск аккаунтов",
+  "generalClearSearch": "Очистить поиск",
+  "clanCapitalAvgRewards": "Средние награды",
+  "clanCapitalAvgDistrictsPerWeek": "Средн. районов/неделю",
+  "clanCapitalTopAttackers": "Лучшие атакующие",
+  "clanCapitalPlayersTracked": "Отслеживается игроков: {count}",
+  "clanCapitalDefenseOverTime": "Защита со временем",
+  "clanCapitalDistrictsTracked": "Отслеживается районов: {count}",
+  "clanCapitalSelectedRaid": "Выбранный рейд",
+  "generalSummary": "Сводка",
+  "generalBreakdown": "Разбивка",
+  "clanPointsTitle": "Очки клана",
+  "clanBuilderBasePoints": "Очки базы строителя",
+  "clanType": "Тип клана",
+  "clanRequiredTownHall": "Требуемая Ратуша",
+  "clanRequiredTownHallOnly": "Только {level}+",
+  "clanCapitalPoints": "Очки столицы",
+  "todoAllAccounts": "Все аккаунты",
+  "todoCombinedAcrossAccounts": "Общий список дел по вашим аккаунтам",
+  "todoPreviewAccount": "Предпросмотр аккаунта",
+  "todoLastActiveUnavailable": "Последняя активность недоступна",
+  "todoActiveRelative": "Активен {time}",
+  "@todoActiveRelative": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todoCompleteLower": "завершено",
+  "todoPointsLeftShort": "осталось очков: {points}",
+  "@todoPointsLeftShort": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "todoItemsLeftShort": "осталось: {count}",
+  "@todoItemsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAllCaughtUpForNow": "Пока всё выполнено",
+  "todoEventEndsIn": "Заканчивается через {duration}",
+  "@todoEventEndsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoEventStartsIn": "Начинается через {duration}",
+  "@todoEventStartsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoRemainingUpgradeTooltip": "Нажмите, чтобы увидеть оставшуюся стоимость и время улучшения",
+  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFurySubtitle": "Пролистайте обновление июня 2026",
+  "sideRankingsTitle": "Рейтинги",
+  "sideRankingsSubtitle": "Официальные таблицы лидеров и эндпоинты ClashKing.",
+  "sideRankingsLoadError": "Не удалось загрузить официальные рейтинги.",
+  "sideRankingsEmptyTitle": "Рейтинги не вернулись",
+  "sideRankingsEmptyBody": "Попробуйте другую таблицу лидеров или локацию.",
+  "sideRankingsMockups": "Макеты ClashKing",
+  "sideStatsTitle": "Статистика",
+  "sideStatsSubtitle": "Статистика таблиц лидеров из официальных поверхностей Clash API.",
+  "sideStatsLoadError": "Не удалось загрузить статистику таблицы лидеров.",
+  "sideTopScore": "Лучший результат",
+  "sideTop200Avg": "Среднее топ-200",
+  "sideBasesArmiesTitle": "Базы и армии",
+  "sideBasesArmiesSubtitle": "Макеты и ссылки на армии, сохранённые в Discord.",
+  "sideBotSyncTarget": "Цель синхронизации бота",
+  "sideBotSyncTargetBody": "Бот уже сохраняет базы и армии в профиль Discord. Эта страница готова для синхронизированных данных.",
+  "sideSavedBases": "Сохранённые базы",
+  "sideWarBaseSlots": "Слоты военных баз",
+  "sideWarBaseSlotsBody": "Ратуша, тип базы, ссылка и последнее обновление.",
+  "sideLegendBaseSlots": "Слоты легендарных баз",
+  "sideLegendBaseSlotsBody": "Быстрое копирование и привязка к аккаунту.",
+  "sideSavedArmies": "Сохранённые армии",
+  "sideArmyLinks": "Ссылки на армии",
+  "sideArmyLinksBody": "Состав, заклинания, осадные машины, заметки и ссылка для обмена.",
+  "sideGameAssetsTitle": "Игровые ресурсы",
+  "sideGameAssetsSubtitle": "Размещённые ассеты ClashKing, сгруппированные по папкам.",
+  "sideNoLinkedPlayersTitle": "Привязанные игроки не загружены",
+  "sideNoLinkedPlayersBody": "Добавьте или обновите привязанные аккаунты, чтобы предварительно заполнить данные лиги.",
+  "sideReadyNow": "Готово сейчас",
+  "sideDays": "{count} дн.",
+  "@sideDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideOreLeft": "осталось: {shiny} блестящей, {glowy} сияющей, {starry} звёздной",
+  "@sideOreLeft": {
+    "placeholders": {
+      "shiny": {
+        "type": "String"
+      },
+      "glowy": {
+        "type": "String"
+      },
+      "starry": {
+        "type": "String"
+      }
+    }
+  },
+  "sideShinyOre": "Блестящая руда",
+  "sideGlowyOre": "Сияющая руда",
+  "sideStarryOre": "Звёздная руда",
+  "sideDailyBonusAdjustment": "Корректировка ежедневного бонуса",
+  "sideExtraShiny": "Доп. блестящая",
+  "sideExtraGlowy": "Доп. сияющая",
+  "sideExtraStarry": "Доп. звёздная",
+  "sideZapQuakeTitle": "{zaps} молний + 1 землетрясение",
+  "@sideZapQuakeTitle": {
+    "placeholders": {
+      "zaps": {
+        "type": "int"
+      }
+    }
+  },
+  "sideZapQuakeSubtitle": "{quakeDamage} урона землетрясением, {lightningDamage} за молнию",
+  "@sideZapQuakeSubtitle": {
+    "placeholders": {
+      "quakeDamage": {
+        "type": "String"
+      },
+      "lightningDamage": {
+        "type": "String"
+      }
+    }
+  },
+  "sideBuildingHp": "HP здания",
+  "sideLightningLevel": "Уровень молнии",
+  "sideEarthquakeLevel": "Уровень землетрясения",
+  "sideWithoutEarthquake": "Без землетрясения",
+  "sideLightningCount": "{count} молний",
+  "@sideLightningCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideFireballQuakeTitle": "Огненный шар + 1 землетрясение",
+  "sideAddSupportDamage": "Добавить дополнительный урон",
+  "sideFireballQuakeSubtitle": "{fireballDamage} урона огненным шаром, {hpLeft} HP осталось после землетрясения",
+  "@sideFireballQuakeSubtitle": {
+    "placeholders": {
+      "fireballDamage": {
+        "type": "String"
+      },
+      "hpLeft": {
+        "type": "String"
+      }
+    }
+  },
+  "sideFireballLevel": "Уровень огненного шара",
+  "sideQuakePressure": "Давление землетрясения",
+  "sideQuakeSpellCount": "{count} закл. землетрясения",
+  "@sideQuakeSpellCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideLocation": "Локация",
+  "sideFilter": "Фильтр",
+  "sideRefresh": "Обновить",
+  "sideOfficialClashLeaderboard": "Официальная таблица лидеров Clash",
+  "sideAllTownHallsShort": "Все ТХ",
+  "sideOwned": "Имеется",
+  "sideTarget": "Цель",
+  "sideDailyValue": "в день {value}",
+  "@sideDailyValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "sideDecrease": "Уменьшить",
+  "sideIncrease": "Увеличить",
+  "sideLevel": "Уровень {level}",
+  "@sideLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "sidePopularPlayers": "Игроки",
+  "sidePopularClans": "Кланы",
+  "sidePopularWarsCwl": "Войны и CWL",
+  "rankingPlayerTrophies": "Трофеи игроков",
+  "rankingPlayerTrophiesHeading": "Рейтинг игроков по трофеям",
+  "rankingPlayerBuilder": "База строителя игроков",
+  "rankingPlayerBuilderHeading": "Рейтинг игроков по базе строителя",
+  "rankingClanTrophies": "Трофеи кланов",
+  "rankingClanTrophiesHeading": "Рейтинг кланов по трофеям",
+  "rankingClanBuilder": "База строителя кланов",
+  "rankingClanBuilderHeading": "Рейтинг кланов по базе строителя",
+  "rankingClanCapital": "Столица клана",
+  "rankingClanCapitalHeading": "Рейтинг столицы кланов",
+  "assetFolderTroops": "Войска",
+  "assetFolderSpells": "Заклинания",
+  "assetFolderHeroes": "Герои",
+  "assetFolderEquipment": "Снаряжение",
+  "assetFolderLeagues": "Лиги",
+  "assetFolderResources": "Ресурсы",
+  "assetFolderStickers": "Стикеры",
+  "upgradeSectionHeroes": "Герои",
+  "upgradeSectionTroops": "Войска",
+  "upgradeSectionSpells": "Заклинания",
+  "upgradeSectionPets": "Питомцы",
+  "upgradeSectionEquipment": "Снаряжение",
+  "sideMockupSource": "Источник",
+  "sideMockupMode": "Режим",
+  "sideMockupPreview": "Предпросмотр",
+  "sideMockupRows": "Строки",
+  "sideMockupRowsValue": "5 макетов",
+  "endpointLeagueTop200": "Топ-200 лиги",
+  "endpointLeagueTop200Preview": "Легендарная лига · 5 742 трофея",
+  "endpointTownhallTop200": "Топ-200 Ратуш",
+  "endpointTownhallTop200Preview": "ТХ17 · Глобальная доска игроков",
+  "endpointClanDonations": "Пожертвования клана",
+  "endpointClanDonationsPreview": "США · недельные итоги кланов",
+  "endpointClanWarWins": "Победы клана в войнах",
+  "endpointClanWarWinsPreview": "Международно · победы в войнах за всё время",
+  "endpointTop200ArmyUsage": "Использование армий топ-200",
+  "endpointTop200ArmyUsagePreview": "Журналы боёв · использование войск и заклинаний",
+  "endpointStateTop200": "Топ-200",
+  "endpointStateWeekly": "Еженедельно",
+  "endpointStateWins": "Победы",
+  "endpointStateUsage": "Использование",
+  "notifGroupBattles": "Битвы",
+  "notifGroupReminders": "Напоминания",
+  "notifGroupSupport": "Поддержка",
+  "notifGroupProgress": "Прогресс",
+  "notifLeagueDefense": "Защита в лиге",
+  "notifLeagueDefenseResult": "Результат защиты в лиге",
+  "notifLeagueTriple": "Три звезды в лиге",
+  "notifLeagueAttackBody": "Lord Clasher атаковал {player} • {percent}% • {stars} звёзд • {league}",
+  "@notifLeagueAttackBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarDefense": "Защита в войне",
+  "notifWarAttackOnTh": "Атака в войне на ТХ{th}",
+  "@notifWarAttackOnTh": {
+    "placeholders": {
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarDefenseBody": "{opponentClan} атаковал {player} • {percent}% • {stars} звёзд • защита {clan}",
+  "@notifWarDefenseBody": {
+    "placeholders": {
+      "opponentClan": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarFeed5v5": "Лента войны 5v5",
+  "notifWarAttackResult": "Результат атаки в войне",
+  "notifWarAttackResultBody": "{clan} атаковал Pine Riders ТХ{th} • 100% • 3 звезды",
+  "@notifWarAttackResultBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarMatched": "Война подобрана",
+  "notifWarMatchedBody": "{clan} подобран против Pine Riders. День подготовки начался.",
+  "@notifWarMatchedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarStarted": "Война началась",
+  "notifBattleDayStarted": "День битвы начался",
+  "notifWarStartedBody": "{clan} против Pine Riders уже идёт. Удачи.",
+  "@notifWarStartedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarEnded": "Война завершена",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Итоговые результаты доступны.",
+  "@notifWarEndedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarReminder1h": "Напоминание о войне: 1 ч",
+  "notifWarReminder30m": "Напоминание о войне: 30 мин",
+  "notifWarReminder15m": "Напоминание о войне: 15 мин",
+  "notifOneHourLeft": "Остался 1 час",
+  "notifThirtyMinutesLeft": "Осталось 30 минут",
+  "notifFifteenMinutesLeft": "Осталось 15 минут",
+  "notifRemainingWarAttacksBody": "У {player} остались атаки в войне. {time}.",
+  "@notifRemainingWarAttacksBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notifStarted": "{name} началось",
+  "@notifStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifClanGamesPointsBody": "{clan} может начать зарабатывать очки {name}.",
+  "@notifClanGamesPointsBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCwlPreparationBody": "{clan} может начать подготовку к Лиге войн кланов.",
+  "@notifCwlPreparationBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRaidWeekendBody": "{clan} может начать атаки в рейдах столицы.",
+  "@notifRaidWeekendBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSeasonStart": "Начало сезона",
+  "notifNewSeasonStarted": "Новый сезон начался",
+  "notifSeasonStartedBody": "Сезон {league} начался для {player}.",
+  "@notifSeasonStartedBody": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSpecialEvent": "Особое событие",
+  "notifNewEventLive": "Новое событие уже доступно",
+  "notifNewClashEventBody": "Доступно новое событие Clash.",
+  "notifSupportClashKing": "Поддержать ClashKing",
+  "notifMonthlySupportBody": "Ежемесячная поддержка помогает сохранять ClashKing доступным и улучшать его. Спасибо.",
+  "notifUpgradeFinished": "Улучшение завершено",
+  "notifUpgradeReadyTitle": "{name} готово",
+  "@notifUpgradeReadyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUpgradeCompleteBody": "Уровень {level} завершён для {player}. Улучшение завершено.",
+  "@notifUpgradeCompleteBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "clanSearchLoadFailed": "Не удалось загрузить данные клана: {error}",
+  "@clanSearchLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appIconDefault": "По умолчанию",
+  "appIconChristmas": "Рождество",
+  "appIconBlackWhite": "Чёрно-белая",
+  "appIconDarkMode": "Тёмный режим",
+  "generalMembersCount": "{count} участников",
+  "@generalMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "generalBookmarked": "добавлено в закладки",
+  "clanLevelValue": "уровень {level}",
+  "@clanLevelValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRankShort": "Место {rank}",
+  "@cwlRankShort": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRoundShort": "Раунд {round}",
+  "@cwlRoundShort": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTownHallShortLevel": "TH{level}",
+  "@gameTownHallShortLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "faqSupercellFanContentPolicyLink": "Политика фан-контента Supercell"
 }

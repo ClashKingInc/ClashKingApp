@@ -11,7 +11,7 @@ String convertToTimeAgo(int timestamp, context) {
   if (diff.inDays >= 1) {
     return '${diff.inDays == 1 ? AppLocalizations.of(context)?.timeDayAgo(diff.inDays) : AppLocalizations.of(context)?.timeDaysAgo(diff.inDays)}';
   } else if (diff.inHours >= 1) {
-    return '${diff.inHours == 1 ? AppLocalizations.of(context)?.timeHourAgo(diff.inHours) : AppLocalizations.of(context)?.timeHoursAgo(diff.inHours, )}';
+    return '${diff.inHours == 1 ? AppLocalizations.of(context)?.timeHourAgo(diff.inHours) : AppLocalizations.of(context)?.timeHoursAgo(diff.inHours)}';
   } else if (diff.inMinutes >= 1) {
     return '${diff.inMinutes == 1 ? AppLocalizations.of(context)?.timeMinuteAgo(diff.inMinutes) : AppLocalizations.of(context)?.timeMinutesAgo(diff.inMinutes)}';
   } else {
@@ -31,26 +31,33 @@ DateTime findSeasonStartDate(DateTime date) {
 
   int daysToLastMondayOfCurrentMonth =
       (lastDayCurrentMonth.weekday - DateTime.monday + 7) % 7;
-  DateTime lastMondayOfCurrentMonth = lastDayCurrentMonth
-      .subtract(Duration(days: daysToLastMondayOfCurrentMonth));
+  DateTime lastMondayOfCurrentMonth = lastDayCurrentMonth.subtract(
+    Duration(days: daysToLastMondayOfCurrentMonth),
+  );
 
   // Si la date est avant le dernier lundi, alors il faut aller chercher le dernier lundi du mois précédent
   if (date.isBefore(lastMondayOfCurrentMonth)) {
     DateTime lastDayPreviousMonth = (month == 1)
         ? DateTime.utc(year - 1, 12, 31)
-        : DateTime.utc(year, month - 1, 1)
-            .add(Duration(days: DateTime(year, month, 0).day - 1));
+        : DateTime.utc(
+            year,
+            month - 1,
+            1,
+          ).add(Duration(days: DateTime(year, month, 0).day - 1));
     int daysToLastMondayOfPreviousMonth =
         (lastDayPreviousMonth.weekday - DateTime.monday + 7) % 7;
-    return lastDayPreviousMonth
-        .subtract(Duration(days: daysToLastMondayOfPreviousMonth));
+    return lastDayPreviousMonth.subtract(
+      Duration(days: daysToLastMondayOfPreviousMonth),
+    );
   }
 
   return lastMondayOfCurrentMonth;
 }
 
 List<FlSpot> convertToContinuousScale(
-    Map<String, String> seasonData, DateTime seasonStart) {
+  Map<String, String> seasonData,
+  DateTime seasonStart,
+) {
   List<FlSpot> spots = [];
 
   int index = 0;
@@ -68,16 +75,24 @@ List<FlSpot> convertToContinuousScale(
 }
 
 List<DateTime> findSeasonStartEndDate(DateTime currentDate) {
-  DateTime seasonStart =
-      findLastMondayOfMonth(currentDate.year, currentDate.month);
+  DateTime seasonStart = findLastMondayOfMonth(
+    currentDate.year,
+    currentDate.month,
+  );
 
-  DateTime seasonEnd =
-      findLastMondayOfMonth(currentDate.year, currentDate.month + 1);
+  DateTime seasonEnd = findLastMondayOfMonth(
+    currentDate.year,
+    currentDate.month + 1,
+  );
   if (currentDate.isBefore(seasonStart) || currentDate == seasonStart) {
-    seasonStart =
-        findLastMondayOfMonth(currentDate.year, currentDate.month - 1);
-    seasonEnd = findLastMondayOfMonth(currentDate.year, currentDate.month)
-        .subtract(Duration(days: 1));
+    seasonStart = findLastMondayOfMonth(
+      currentDate.year,
+      currentDate.month - 1,
+    );
+    seasonEnd = findLastMondayOfMonth(
+      currentDate.year,
+      currentDate.month,
+    ).subtract(Duration(days: 1));
   }
   return [seasonStart, seasonEnd];
 }
@@ -99,7 +114,10 @@ DateTime getLastMonthWithSeasonData(Map<String, PlayerLegendDay> seasonData) {
     int monthInt = int.parse(parts[0]);
     int dayInt = int.parse(parts[1]);
     return DateTime(
-        DateTime.now().year, monthInt, dayInt); // Assuming current year
+      DateTime.now().year,
+      monthInt,
+      dayInt,
+    ); // Assuming current year
   }).toList();
 
   // Sort the dates in descending order

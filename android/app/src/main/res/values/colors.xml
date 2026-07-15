@@ -2,4 +2,5 @@
     <color name="widget_background">#FFFFFF</color>
     <color name="widget_text">#000000</color>
 	<color name="ic_launcher_background">#FFFFFF</color>
+    <color name="notification_accent">#D90709</color>
 </resources>

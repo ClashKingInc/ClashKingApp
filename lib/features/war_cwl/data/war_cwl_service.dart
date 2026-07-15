@@ -8,13 +8,16 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 
 class WarCwlService extends ChangeNotifier {
   WarCwlService({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService.shared;
 
   final ApiService _apiService;
   final Map<String, WarCwl> summaries = {};
 
-  Future<void> loadAllWarData(List<String> clanTags,
-      {bool notify = true, bool throwOnError = false}) async {
+  Future<void> loadAllWarData(
+    List<String> clanTags, {
+    bool notify = true,
+    bool throwOnError = false,
+  }) async {
     if (clanTags.isEmpty) return;
 
     if (notify) {
@@ -30,13 +33,15 @@ class WarCwlService extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data =
-            jsonDecode(ApiService.decodeResponseBody(response))['items'];
+        final List<dynamic> data = jsonDecode(
+          ApiService.decodeResponseBody(response),
+        )['items'];
         for (final summary in data) {
           final warSummary = WarCwl.fromJson(summary, null);
           summaries[warSummary.tag] = warSummary;
           DebugUtils.debugSuccess(
-              "Loaded war data for clan: ${warSummary.tag}");
+            "Loaded war data for clan: ${warSummary.tag}",
+          );
         }
         if (notify) {
           notifyListeners();
@@ -68,7 +73,8 @@ class WarCwlService extends ChangeNotifier {
           final warSummary = WarCwl.fromJson(warItem, null);
           summaries[warSummary.tag] = warSummary;
           DebugUtils.debugSuccess(
-              "Processed bulk war data for clan: ${warSummary.tag}");
+            "Processed bulk war data for clan: ${warSummary.tag}",
+          );
         }
       } catch (e) {
         DebugUtils.debugError(" Error processing bulk war data item: $e");
@@ -76,7 +82,8 @@ class WarCwlService extends ChangeNotifier {
     }
 
     DebugUtils.debugSuccess(
-        "Processed all bulk war data, total summaries: ${summaries.length}");
+      "Processed all bulk war data, total summaries: ${summaries.length}",
+    );
     if (notify) {
       notifyListeners();
     }
@@ -87,7 +94,7 @@ class WarCwlService extends ChangeNotifier {
   }
 
   static Future<WarInfo?> fetchWarDataFromTime(String tag, DateTime end) async {
-    final apiService = ApiService();
+    final apiService = ApiService.shared;
     String endTime = end.toIso8601String();
     endTime = endTime.replaceAll('-', '').replaceAll(':', '');
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class BetaLabel extends StatelessWidget {
+  const BetaLabel({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -22,18 +24,18 @@ class BetaLabel extends StatelessWidget {
               ),
             ],
           ),
-          child: Text(AppLocalizations.of(context)!.betaLabel,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+          child: Text(
+            AppLocalizations.of(context)!.betaLabel,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
   }
 }
-
-
 
 void showBetaPopup(BuildContext context) {
   showDialog(
@@ -44,7 +46,7 @@ void showBetaPopup(BuildContext context) {
         content: Text(AppLocalizations.of(context)!.betaDescription),
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: Text(AppLocalizations.of(context)!.generalOk),
             onPressed: () {
               Navigator.of(context).pop();
             },

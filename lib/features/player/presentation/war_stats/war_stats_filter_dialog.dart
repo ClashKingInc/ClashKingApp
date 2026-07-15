@@ -70,10 +70,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   @override
   void initState() {
     super.initState();
-    // Default the dialog to show "All" (10000) limit, even if initial filter uses 50
-    _filter = widget.initialFilter.copyWith(
-      limit: widget.initialFilter.limit == 50 ? 1000 : widget.initialFilter.limit,
-    );
+    _filter = widget.initialFilter;
     _minMapPositionController = TextEditingController(
       text: _filter.minMapPosition?.toString() ?? '',
     );
@@ -98,7 +95,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       'random':
           _filter.warTypes?.contains('random') ?? (_filter.warType == 'random'),
       'cwl': _filter.warTypes?.contains('cwl') ?? (_filter.warType == 'cwl'),
-      'friendly': _filter.warTypes?.contains('friendly') ??
+      'friendly':
+          _filter.warTypes?.contains('friendly') ??
           (_filter.warType == 'friendly'),
     };
 
@@ -121,7 +119,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     // Performance suggestions will be generated in didChangeDependencies
 
     // Initialize All Time state based on current filter
-    _isAllTimeSelected = _filter.startDate == null &&
+    _isAllTimeSelected =
+        _filter.startDate == null &&
         _filter.endDate == null &&
         _filter.season == null;
   }
@@ -129,7 +128,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
+
     // Generate performance analysis suggestions
     if (widget.warStats != null && _performanceSuggestions.isEmpty) {
       _performanceSuggestions = PerformanceAnalysisService.analyzePerformance(
@@ -217,14 +216,14 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
     final result = await showDialog<String>(
       context: context,
-      builder: (context) => _SavePresetDialog(
-        filter: _filter,
-      ),
+      builder: (context) => _SavePresetDialog(filter: _filter),
     );
-    
+
     // Only show success message and reload if preset was actually saved
     if (result != null && mounted) {
-      _showInlineSuccess(AppLocalizations.of(context)!.presetsSaveSuccess(result));
+      _showInlineSuccess(
+        AppLocalizations.of(context)!.presetsSaveSuccess(result),
+      );
       await _loadSavedPresets();
     }
   }
@@ -320,8 +319,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
       // Reset destruction range and limit
       _filter = _filter.copyWith(
-        minDestruction: null, 
-        maxDestruction: null, 
+        minDestruction: null,
+        maxDestruction: null,
         limit: null,
         startDate: null,
         endDate: null,
@@ -354,10 +353,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 ),
                 border: Border(
                   bottom: BorderSide(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .outline
-                        .withValues(alpha: 0.2),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.2),
                   ),
                 ),
               ),
@@ -373,12 +371,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     AppLocalizations.of(context)?.generalFilters ??
                         'War Stats Filters',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const Spacer(),
                   IconButton(
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).closeButtonTooltip,
                     icon: Icon(
                       Icons.close,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -397,28 +398,38 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Inline message display
-                    if (_inlineMessage != null) 
+                    if (_inlineMessage != null)
                       Container(
                         width: double.infinity,
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: _isInlineError 
-                              ? Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.8)
-                              : Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.8),
+                          color: _isInlineError
+                              ? Theme.of(context).colorScheme.errorContainer
+                                    .withValues(alpha: 0.8)
+                              : Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest
+                                    .withValues(alpha: 0.8),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: _isInlineError 
-                                ? Theme.of(context).colorScheme.error.withValues(alpha: 0.5)
-                                : Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                            color: _isInlineError
+                                ? Theme.of(
+                                    context,
+                                  ).colorScheme.error.withValues(alpha: 0.5)
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.5),
                             width: 1,
                           ),
                         ),
                         child: Row(
                           children: [
                             Icon(
-                              _isInlineError ? Icons.error_outline : Icons.check_circle_outline,
-                              color: _isInlineError 
+                              _isInlineError
+                                  ? Icons.error_outline
+                                  : Icons.check_circle_outline,
+                              color: _isInlineError
                                   ? Theme.of(context).colorScheme.error
                                   : Theme.of(context).colorScheme.primary,
                               size: 20,
@@ -427,19 +438,27 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                             Expanded(
                               child: Text(
                                 _inlineMessage!,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: _isInlineError 
-                                      ? Theme.of(context).colorScheme.onErrorContainer
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: _isInlineError
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.onErrorContainer
+                                          : Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                               ),
                             ),
                             IconButton(
+                              tooltip: AppLocalizations.of(
+                                context,
+                              )!.tooltipDismissMessage,
                               onPressed: _clearInlineMessage,
                               icon: Icon(
                                 Icons.close,
-                                color: _isInlineError 
+                                color: _isInlineError
                                     ? Theme.of(context).colorScheme.error
                                     : Theme.of(context).colorScheme.primary,
                                 size: 18,
@@ -458,7 +477,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // Time Filters Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersTimeFilters ??
+                      title:
+                          AppLocalizations.of(context)?.filtersTimeFilters ??
                           'Time Filters',
                       icon: Icons.schedule,
                       isExpanded: _isTimeFiltersExpanded,
@@ -470,13 +490,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       child: Column(
                         children: [
                           _buildSubsectionTitle(
-                              AppLocalizations.of(context)?.filtersSeason ??
-                                  'Season'),
+                            AppLocalizations.of(context)?.filtersSeason ??
+                                'Season',
+                          ),
                           _buildSeasonSelector(),
                           const SizedBox(height: 16),
                           _buildSubsectionTitle(
-                              AppLocalizations.of(context)?.filtersDateRange ??
-                                  'Date Range'),
+                            AppLocalizations.of(context)?.filtersDateRange ??
+                                'Date Range',
+                          ),
                           _buildDateRangePicker(),
                         ],
                       ),
@@ -484,7 +506,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // War Settings Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersWarSettings ??
+                      title:
+                          AppLocalizations.of(context)?.filtersWarSettings ??
                           'War Settings',
                       icon: Icons.military_tech,
                       isExpanded: _isWarSettingsExpanded,
@@ -496,13 +519,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       child: Column(
                         children: [
                           _buildSubsectionTitle(
-                              AppLocalizations.of(context)?.filtersWarType ??
-                                  'War Type'),
+                            AppLocalizations.of(context)?.filtersWarType ??
+                                'War Type',
+                          ),
                           _buildWarTypeDropdown(),
                           const SizedBox(height: 16),
                           _buildSubsectionTitle(
-                              AppLocalizations.of(context)?.filtersTownHall ??
-                                  'Town Hall'),
+                            AppLocalizations.of(context)?.filtersTownHall ??
+                                'Town Hall',
+                          ),
                           _buildTownHallFilters(),
                         ],
                       ),
@@ -510,7 +535,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // Performance Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersPerformance ??
+                      title:
+                          AppLocalizations.of(context)?.filtersPerformance ??
                           'Performance',
                       icon: Icons.star,
                       isExpanded: _isPerformanceExpanded,
@@ -524,7 +550,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
 
                     // Advanced Card (Collapsible)
                     _buildCollapsibleSectionCard(
-                      title: AppLocalizations.of(context)?.filtersAdvanced ??
+                      title:
+                          AppLocalizations.of(context)?.filtersAdvanced ??
                           'Advanced',
                       icon: Icons.settings,
                       isExpanded: _isAdvancedExpanded,
@@ -536,13 +563,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       child: Column(
                         children: [
                           _buildSubsectionTitle(
-                              AppLocalizations.of(context)?.warPositionMap ??
-                                  'Map Position'),
+                            AppLocalizations.of(context)?.warPositionMap ??
+                                'Map Position',
+                          ),
                           _buildMapPositionFilters(),
                           const SizedBox(height: 16),
                           _buildSubsectionTitle(
-                              AppLocalizations.of(context)?.filtersOptions ??
-                                  'Options'),
+                            AppLocalizations.of(context)?.filtersOptions ??
+                                'Options',
+                          ),
                           _buildAdvancedOptions(),
                         ],
                       ),
@@ -559,11 +588,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            AppLocalizations.of(context)!
-                                .performanceAnalysisSuggestions,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
+                            AppLocalizations.of(
+                              context,
+                            )!.performanceAnalysisSuggestions,
+                            style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.tertiary,
                                 ),
@@ -575,17 +603,26 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text(AppLocalizations.of(context)!
-                                        .performanceAnalysisSuggestions),
-                                    content: Text(AppLocalizations.of(context)!
-                                        .performanceAnalysisTooltip),
+                                    title: Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.performanceAnalysisSuggestions,
+                                    ),
+                                    content: Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.performanceAnalysisTooltip,
+                                    ),
                                     actions: [
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(),
-                                        child: Text(AppLocalizations.of(context)
-                                                ?.generalOk ??
-                                            'OK'),
+                                        child: Text(
+                                          AppLocalizations.of(
+                                                context,
+                                              )?.generalOk ??
+                                              'OK',
+                                        ),
                                       ),
                                     ],
                                   );
@@ -598,10 +635,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                               child: Icon(
                                 Icons.info_outline,
                                 size: 14,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withValues(alpha: 0.6),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.6),
                               ),
                             ),
                           ),
@@ -612,8 +648,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         spacing: 8,
                         runSpacing: 8,
                         children: _performanceSuggestions
-                            .map((suggestion) =>
-                                _buildPerformanceSuggestionChip(suggestion))
+                            .map(
+                              (suggestion) =>
+                                  _buildPerformanceSuggestionChip(suggestion),
+                            )
                             .toList(),
                       ),
                     ],
@@ -629,10 +667,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 color: Theme.of(context).colorScheme.surface,
                 border: Border(
                   top: BorderSide(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .outline
-                        .withValues(alpha: 0.2),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.2),
                   ),
                 ),
               ),
@@ -646,8 +683,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         onPressed: _resetFilters,
                         icon: const Icon(Icons.refresh, size: 18),
                         label: Text(
-                            AppLocalizations.of(context)?.generalReset ??
-                                'Reset'),
+                          AppLocalizations.of(context)?.generalReset ?? 'Reset',
+                        ),
                       ),
                       const Spacer(),
                     ],
@@ -660,8 +697,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       TextButton(
                         onPressed: () => Navigator.pop(context),
                         child: Text(
-                            AppLocalizations.of(context)?.generalCancel ??
-                                'Cancel'),
+                          AppLocalizations.of(context)?.generalCancel ??
+                              'Cancel',
+                        ),
                       ),
                       const SizedBox(width: 8),
                       ElevatedButton.icon(
@@ -689,10 +727,16 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                               .toList();
 
                           // Update filter with all selections
-                          final DateTime? finalStartDate = _isAllTimeSelected ? null : _filter.startDate;
-                          final DateTime? finalEndDate = _isAllTimeSelected ? null : _filter.endDate;
-                          final String? finalSeason = _isAllTimeSelected ? null : selectedSeason;
-                          
+                          final DateTime? finalStartDate = _isAllTimeSelected
+                              ? null
+                              : _filter.startDate;
+                          final DateTime? finalEndDate = _isAllTimeSelected
+                              ? null
+                              : _filter.endDate;
+                          final String? finalSeason = _isAllTimeSelected
+                              ? null
+                              : selectedSeason;
+
                           final updatedFilter = _filter.copyWith(
                             season: finalSeason,
                             startDate: finalStartDate,
@@ -706,20 +750,22 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                             enemyTownHalls: selectedDefenderTH.isNotEmpty
                                 ? selectedDefenderTH
                                 : null,
-                            warTypes: selectedWarTypes.isNotEmpty &&
+                            warTypes:
+                                selectedWarTypes.isNotEmpty &&
                                     !selectedWarTypes.contains('all')
                                 ? selectedWarTypes
                                 : null,
-                            allowedStars:
-                                selectedStars.isNotEmpty ? selectedStars : null,
+                            allowedStars: selectedStars.isNotEmpty
+                                ? selectedStars
+                                : null,
                             minDestruction: _filter.minDestruction,
                             maxDestruction: _filter.maxDestruction,
-                            minMapPosition: _minMapPositionController
-                                    .text.isNotEmpty
+                            minMapPosition:
+                                _minMapPositionController.text.isNotEmpty
                                 ? int.tryParse(_minMapPositionController.text)
                                 : null,
-                            maxMapPosition: _maxMapPositionController
-                                    .text.isNotEmpty
+                            maxMapPosition:
+                                _maxMapPositionController.text.isNotEmpty
                                 ? int.tryParse(_maxMapPositionController.text)
                                 : null,
                             limit: _filter.limit,
@@ -730,9 +776,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         },
                         icon: const Icon(Icons.check, size: 18),
                         label: Text(
-                            AppLocalizations.of(context)?.generalApply ??
-                                'Apply',
-                            style: Theme.of(context).textTheme.labelLarge),
+                          AppLocalizations.of(context)?.generalApply ?? 'Apply',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                       ),
                     ],
                   ),
@@ -760,9 +806,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     : () async {
                         final picked = await showDatePicker(
                           context: context,
-                          initialDate: _filter.startDate ??
-                              DateTime.now()
-                                  .subtract(const Duration(days: 180)),
+                          initialDate:
+                              _filter.startDate ??
+                              DateTime.now().subtract(
+                                const Duration(days: 180),
+                              ),
                           firstDate: DateTime(2020),
                           lastDate: DateTime.now(),
                         );
@@ -781,10 +829,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Theme.of(context).colorScheme.outline.withValues(
-                            alpha: (isAllTime || selectedSeason != null)
-                                ? 0.1
-                                : 0.3)),
+                      color: Theme.of(context).colorScheme.outline.withValues(
+                        alpha: (isAllTime || selectedSeason != null)
+                            ? 0.1
+                            : 0.3,
+                      ),
+                    ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -795,10 +845,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           Icon(
                             Icons.event,
                             color: isAllTime
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withValues(alpha: 0.5)
+                                ? Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.5)
                                 : Theme.of(context).colorScheme.primary,
                             size: 16,
                           ),
@@ -806,18 +855,16 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           Text(
                             AppLocalizations.of(context)?.filtersStartDate ??
                                 'Start Date',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
+                                  color: Theme.of(context).colorScheme.onSurface
                                       .withValues(
-                                          alpha: (isAllTime ||
-                                                  selectedSeason != null)
-                                              ? 0.4
-                                              : 0.8),
+                                        alpha:
+                                            (isAllTime ||
+                                                selectedSeason != null)
+                                            ? 0.4
+                                            : 0.8,
+                                      ),
                                 ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -827,25 +874,26 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       Text(
                         isAllTime
                             ? (AppLocalizations.of(context)?.generalAll ??
-                                'All Time')
+                                  'All Time')
                             : (selectedSeason != null
-                                ? (AppLocalizations.of(context)
-                                        ?.filtersSeason ??
-                                    'Season Selected')
-                                : (_filter.startDate != null
-                                        ? _formatDate(_filter.startDate!) :
-                                    (AppLocalizations.of(context)
-                                            ?.generalNotSet ??
-                                        'Not set'))),
+                                  ? (AppLocalizations.of(
+                                          context,
+                                        )?.filtersSeason ??
+                                        'Season Selected')
+                                  : (_filter.startDate != null
+                                        ? _formatDate(_filter.startDate!)
+                                        : (AppLocalizations.of(
+                                                context,
+                                              )?.generalNotSet ??
+                                              'Not set'))),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: isAllTime
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withValues(alpha: 0.6)
-                                  : null,
-                            ),
+                          fontWeight: FontWeight.w500,
+                          color: isAllTime
+                              ? Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.6)
+                              : null,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -880,10 +928,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Theme.of(context).colorScheme.outline.withValues(
-                            alpha: (isAllTime || selectedSeason != null)
-                                ? 0.1
-                                : 0.3)),
+                      color: Theme.of(context).colorScheme.outline.withValues(
+                        alpha: (isAllTime || selectedSeason != null)
+                            ? 0.1
+                            : 0.3,
+                      ),
+                    ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -894,10 +944,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           Icon(
                             Icons.event,
                             color: isAllTime
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withValues(alpha: 0.5)
+                                ? Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.5)
                                 : Theme.of(context).colorScheme.primary,
                             size: 16,
                           ),
@@ -905,18 +954,16 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                           Text(
                             AppLocalizations.of(context)?.filtersEndDate ??
                                 'End Date',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
+                                  color: Theme.of(context).colorScheme.onSurface
                                       .withValues(
-                                          alpha: (isAllTime ||
-                                                  selectedSeason != null)
-                                              ? 0.4
-                                              : 0.8),
+                                        alpha:
+                                            (isAllTime ||
+                                                selectedSeason != null)
+                                            ? 0.4
+                                            : 0.8,
+                                      ),
                                 ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -926,25 +973,26 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       Text(
                         isAllTime
                             ? (AppLocalizations.of(context)?.generalAll ??
-                                'All Time')
+                                  'All Time')
                             : (selectedSeason != null
-                                ? (AppLocalizations.of(context)
-                                        ?.filtersSeason ??
-                                    'Season Selected')
-                                : (_filter.endDate != null
-                                        ? _formatDate(_filter.endDate!) :
-                                    (AppLocalizations.of(context)
-                                            ?.generalNotSet ??
-                                        'Not set'))),
+                                  ? (AppLocalizations.of(
+                                          context,
+                                        )?.filtersSeason ??
+                                        'Season Selected')
+                                  : (_filter.endDate != null
+                                        ? _formatDate(_filter.endDate!)
+                                        : (AppLocalizations.of(
+                                                context,
+                                              )?.generalNotSet ??
+                                              'Not set'))),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: isAllTime
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withValues(alpha: 0.6)
-                                  : null,
-                            ),
+                          fontWeight: FontWeight.w500,
+                          color: isAllTime
+                              ? Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.6)
+                              : null,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -986,12 +1034,14 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 selectedMonth = null;
               });
               _limitController.text = '1000';
-              _updateFilter(_filter.copyWith(
-                startDate: DateTime.now().subtract(const Duration(days: 180)),
-                endDate: DateTime.now(),
-                season: null,
-                limit: 1000, // Set back to default limit
-              ));
+              _updateFilter(
+                _filter.copyWith(
+                  startDate: DateTime.now().subtract(const Duration(days: 180)),
+                  endDate: DateTime.now(),
+                  season: null,
+                  limit: 1000, // Set back to default limit
+                ),
+              );
             }
           },
           child: Row(
@@ -999,7 +1049,6 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Checkbox(
                 value: isAllTime,
                 onChanged: (value) {
-
                   if (value == true) {
                     // When checking, clear dates and season for all time
                     setState(() {
@@ -1009,15 +1058,17 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       selectedMonth = null;
                     });
                     _limitController.text = '';
-                    _updateFilter(_filter.copyWith(
-                      startDate: null,
-                      endDate: null,
-                      season: null,
-                      limit: 10000, // Set to "All" when All Time is selected
-                      clearStartDate: true,
-                      clearEndDate: true,
-                      clearSeason: true,
-                    ));
+                    _updateFilter(
+                      _filter.copyWith(
+                        startDate: null,
+                        endDate: null,
+                        season: null,
+                        limit: 10000, // Set to "All" when All Time is selected
+                        clearStartDate: true,
+                        clearEndDate: true,
+                        clearSeason: true,
+                      ),
+                    );
                   } else if (value == false) {
                     // When unchecking, set to default date range (last 180 days)
                     setState(() {
@@ -1027,13 +1078,16 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                       selectedMonth = null;
                     });
                     _limitController.text = '1000';
-                    _updateFilter(_filter.copyWith(
-                      startDate:
-                          DateTime.now().subtract(const Duration(days: 180)),
-                      endDate: DateTime.now(),
-                      season: null,
-                      limit: 1000, // Set back to default limit
-                    ));
+                    _updateFilter(
+                      _filter.copyWith(
+                        startDate: DateTime.now().subtract(
+                          const Duration(days: 180),
+                        ),
+                        endDate: DateTime.now(),
+                        season: null,
+                        limit: 1000, // Set back to default limit
+                      ),
+                    );
                   }
                 },
               ),
@@ -1041,9 +1095,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Expanded(
                 child: Text(
                   AppLocalizations.of(context)?.generalAllTime ?? 'All Time',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                   softWrap: true,
                 ),
               ),
@@ -1059,22 +1113,22 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       {
         'value': 'all',
         'label': AppLocalizations.of(context)!.filtersAllWars,
-        'icon': Icons.all_inclusive
+        'icon': Icons.all_inclusive,
       },
       {
         'value': 'random',
         'label': AppLocalizations.of(context)!.warFiltersRandom,
-        'icon': Icons.shuffle
+        'icon': Icons.shuffle,
       },
       {
         'value': 'cwl',
         'label': AppLocalizations.of(context)!.cwlTitle,
-        'icon': Icons.emoji_events
+        'icon': Icons.emoji_events,
       },
       {
         'value': 'friendly',
         'label': AppLocalizations.of(context)!.warFiltersFriendly,
-        'icon': Icons.handshake
+        'icon': Icons.handshake,
       },
     ];
 
@@ -1133,9 +1187,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       children: [
         Text(
           AppLocalizations.of(context)?.filtersAttackerTh ?? 'Attacker TH',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 8),
@@ -1145,8 +1199,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           children: attackerThSelection.keys.map((thLevel) {
             return FilterChip(
               showCheckmark: false,
-              selectedColor:
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
+              selectedColor: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.6),
               labelPadding: const EdgeInsets.all(0),
               label: MobileWebImage(
                 imageUrl: ImageAssets.townHall(thLevel),
@@ -1164,9 +1219,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         const SizedBox(height: 16),
         Text(
           AppLocalizations.of(context)?.filtersDefenderTh ?? 'Defender TH',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 8),
@@ -1176,8 +1231,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           children: defenderThSelection.keys.map((thLevel) {
             return FilterChip(
               showCheckmark: false,
-              selectedColor:
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
+              selectedColor: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.6),
               labelPadding: const EdgeInsets.all(0),
               label: MobileWebImage(
                 imageUrl: ImageAssets.townHall(thLevel),
@@ -1206,9 +1262,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               child: Text(
                 AppLocalizations.of(context)?.filtersSameTownHallOnly ??
                     'Same Town Hall Only',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -1224,9 +1280,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         // Stars filter with chips
         Text(
           AppLocalizations.of(context)?.warStarsTitle ?? 'Stars',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -1259,9 +1315,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         Text(
           AppLocalizations.of(context)?.filtersDestructionPercentage ??
               'Destruction Percentage',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 8),
         RangeSlider(
@@ -1278,10 +1334,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           ),
           onChanged: (RangeValues values) {
             setState(() {
-              _updateFilter(_filter.copyWith(
-                minDestruction: values.start,
-                maxDestruction: values.end,
-              ));
+              _updateFilter(
+                _filter.copyWith(
+                  minDestruction: values.start,
+                  maxDestruction: values.end,
+                ),
+              );
             });
           },
         ),
@@ -1312,12 +1370,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Text(
                 'Min',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.7),
-                    ),
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 4),
               TextField(
@@ -1325,9 +1382,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                 ),
               ),
             ],
@@ -1341,12 +1401,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Text(
                 'Max',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.7),
-                    ),
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 4),
               TextField(
@@ -1354,9 +1413,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                 ),
               ),
             ],
@@ -1392,14 +1454,17 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: isDisabled ? 0.1 : 0.3)),
+            color: Theme.of(
+              context,
+            ).colorScheme.outline.withValues(alpha: isDisabled ? 0.1 : 0.3),
+          ),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
             Icon(
               Icons.calendar_today,
-              color: isDisabled 
+              color: isDisabled
                   ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
                   : Theme.of(context).colorScheme.primary,
               size: 20,
@@ -1412,22 +1477,23 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   Text(
                     AppLocalizations.of(context)?.filtersSeason ?? 'Season',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: isDisabled ? 0.4 : 0.8),
-                        ),
+                      color: Theme.of(context).colorScheme.onSurface.withValues(
+                        alpha: isDisabled ? 0.4 : 0.8,
+                      ),
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     displayText,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: isDisabled 
-                              ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6)
-                              : null,
-                        ),
+                      fontWeight: FontWeight.w500,
+                      color: isDisabled
+                          ? Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.6)
+                          : null,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -1435,10 +1501,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             ),
             Icon(
               Icons.arrow_drop_down,
-              color: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withValues(alpha: isDisabled ? 0.3 : 0.7),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: isDisabled ? 0.3 : 0.7),
             ),
           ],
         ),
@@ -1487,8 +1552,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                 child: ListView(
                                   children: [
                                     ListTile(
-                                      title: Text(AppLocalizations.of(context)!
-                                          .generalAll),
+                                      title: Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.generalAll,
+                                      ),
                                       selected: selectedYear == null,
                                       onTap: () {
                                         setState(() {
@@ -1496,28 +1564,37 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                           selectedYear = null;
                                           _updateSeasonString();
                                           // Clear date range when selecting season
-                                          _updateFilter(_filter.copyWith(
-                                              startDate: null, endDate: null));
+                                          _updateFilter(
+                                            _filter.copyWith(
+                                              startDate: null,
+                                              endDate: null,
+                                            ),
+                                          );
                                         });
                                         setModalState(() {});
                                       },
                                     ),
-                                    ...years.map((year) => ListTile(
-                                          title: Text(year.toString()),
-                                          selected: selectedYear == year,
-                                          onTap: () {
-                                            setState(() {
-                                              _isAllTimeSelected = false;
-                                              selectedYear = year;
-                                              _updateSeasonString();
-                                              // Clear date range when selecting season
-                                              _updateFilter(_filter.copyWith(
-                                                  startDate: null,
-                                                  endDate: null));
-                                            });
-                                            setModalState(() {});
-                                          },
-                                        )),
+                                    ...years.map(
+                                      (year) => ListTile(
+                                        title: Text(year.toString()),
+                                        selected: selectedYear == year,
+                                        onTap: () {
+                                          setState(() {
+                                            _isAllTimeSelected = false;
+                                            selectedYear = year;
+                                            _updateSeasonString();
+                                            // Clear date range when selecting season
+                                            _updateFilter(
+                                              _filter.copyWith(
+                                                startDate: null,
+                                                endDate: null,
+                                              ),
+                                            );
+                                          });
+                                          setModalState(() {});
+                                        },
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -1526,10 +1603,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         ),
                         Container(
                           width: 1,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .outline
-                              .withValues(alpha: 0.3),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.outline.withValues(alpha: 0.3),
                         ),
                         // Month Selection
                         Expanded(
@@ -1547,8 +1623,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                 child: ListView(
                                   children: [
                                     ListTile(
-                                      title: Text(AppLocalizations.of(context)!
-                                          .generalAll),
+                                      title: Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.generalAll,
+                                      ),
                                       selected: selectedMonth == null,
                                       onTap: () {
                                         setState(() {
@@ -1556,28 +1635,37 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                           selectedMonth = null;
                                           _updateSeasonString();
                                           // Clear date range when selecting season
-                                          _updateFilter(_filter.copyWith(
-                                              startDate: null, endDate: null));
+                                          _updateFilter(
+                                            _filter.copyWith(
+                                              startDate: null,
+                                              endDate: null,
+                                            ),
+                                          );
                                         });
                                         setModalState(() {});
                                       },
                                     ),
-                                    ...months.entries.map((entry) => ListTile(
-                                          title: Text(entry.value),
-                                          selected: selectedMonth == entry.key,
-                                          onTap: () {
-                                            setState(() {
-                                              _isAllTimeSelected = false;
-                                              selectedMonth = entry.key;
-                                              _updateSeasonString();
-                                              // Clear date range when selecting season
-                                              _updateFilter(_filter.copyWith(
-                                                  startDate: null,
-                                                  endDate: null));
-                                            });
-                                            setModalState(() {});
-                                          },
-                                        )),
+                                    ...months.entries.map(
+                                      (entry) => ListTile(
+                                        title: Text(entry.value),
+                                        selected: selectedMonth == entry.key,
+                                        onTap: () {
+                                          setState(() {
+                                            _isAllTimeSelected = false;
+                                            selectedMonth = entry.key;
+                                            _updateSeasonString();
+                                            // Clear date range when selecting season
+                                            _updateFilter(
+                                              _filter.copyWith(
+                                                startDate: null,
+                                                endDate: null,
+                                              ),
+                                            );
+                                          });
+                                          setModalState(() {});
+                                        },
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -1595,14 +1683,16 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         TextButton(
                           onPressed: () => Navigator.pop(context),
                           child: Text(
-                              AppLocalizations.of(context)?.generalCancel ??
-                                  'Cancel'),
+                            AppLocalizations.of(context)?.generalCancel ??
+                                'Cancel',
+                          ),
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton(
                           onPressed: () => Navigator.pop(context),
                           child: Text(
-                              AppLocalizations.of(context)?.generalOk ?? 'OK'),
+                            AppLocalizations.of(context)?.generalOk ?? 'OK',
+                          ),
                         ),
                       ],
                     ),
@@ -1644,8 +1734,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
   }
 
   Map<int, String> _generateMonths() {
-    final dateFormat =
-        DateFormat.MMMM(Localizations.localeOf(context).languageCode);
+    final dateFormat = DateFormat.MMMM(
+      Localizations.localeOf(context).languageCode,
+    );
     return {
       1: dateFormat.format(DateTime(2024, 1, 1)),
       2: dateFormat.format(DateTime(2024, 2, 1)),
@@ -1680,9 +1771,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               child: Text(
                 AppLocalizations.of(context)?.filtersFreshAttacksOnly ??
                     'Fresh Attacks Only',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                 softWrap: true,
               ),
             ),
@@ -1698,15 +1789,17 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 Text(
                   AppLocalizations.of(context)?.filtersResultLimit ??
                       'Result Limit',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
@@ -1714,9 +1807,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   child: Text(
                     '${_filter.limit}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -1754,8 +1847,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     child: Text(
                       AppLocalizations.of(context)?.generalAll ?? 'All Results',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
+                        fontWeight: FontWeight.w500,
+                      ),
                       softWrap: true,
                     ),
                   ),
@@ -1772,21 +1865,26 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                     child: TextField(
                       controller: _limitController,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)?.filtersResultLimit ?? 'Result Limit',
+                        labelText:
+                            AppLocalizations.of(context)?.filtersResultLimit ??
+                            'Result Limit',
                         hintText: '1000',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                       ),
                       keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       onChanged: (value) {
                         if (value.isNotEmpty) {
                           final intValue = int.tryParse(value);
-                          if (intValue != null && intValue >= 1 && intValue <= 9999) {
+                          if (intValue != null &&
+                              intValue >= 1 &&
+                              intValue <= 9999) {
                             _updateFilter(_filter.copyWith(limit: intValue));
                           }
                         }
@@ -1822,32 +1920,32 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       {
         'label': AppLocalizations.of(context)!.filtersLast30Days,
         'icon': Icons.schedule,
-        'preset': 'last30days'
+        'preset': 'last30days',
       },
       {
         'label': AppLocalizations.of(context)!.filters3StarOnly,
         'icon': Icons.star,
-        'preset': '3star'
+        'preset': '3star',
       },
       {
         'label': AppLocalizations.of(context)!.cwlTitle,
         'icon': Icons.emoji_events,
-        'preset': 'cwl'
+        'preset': 'cwl',
       },
       {
         'label': AppLocalizations.of(context)!.warFiltersRandom,
         'icon': Icons.shuffle,
-        'preset': 'random'
+        'preset': 'random',
       },
       {
         'label': AppLocalizations.of(context)!.warFiltersFriendly,
         'icon': Icons.handshake,
-        'preset': 'friendly'
+        'preset': 'friendly',
       },
       {
         'label': AppLocalizations.of(context)!.filtersFreshAttacks,
         'icon': Icons.new_releases,
-        'preset': 'fresh'
+        'preset': 'fresh',
       },
     ];
 
@@ -1867,22 +1965,27 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               AppLocalizations.of(context)?.filtersQuickFilters ??
                   'Quick Filters',
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             const Spacer(),
             // Save Current Filter Button
             if (_filter.hasActiveFilters())
               TextButton.icon(
                 onPressed: _showSavePresetDialog,
-                icon: Icon(Icons.bookmark_add,
-                    size: 16, color: Theme.of(context).colorScheme.primary),
+                icon: Icon(
+                  Icons.bookmark_add,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 label: Text(AppLocalizations.of(context)!.presetsSave),
                 style: TextButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.primary,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
@@ -1895,8 +1998,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children:
-              builtInPresets.map((preset) => _buildPresetChip(preset)).toList(),
+          children: builtInPresets
+              .map((preset) => _buildPresetChip(preset))
+              .toList(),
         ),
 
         // Saved Presets Section
@@ -1913,9 +2017,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               Text(
                 AppLocalizations.of(context)!.presetsSaved,
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
             ],
           ),
@@ -1958,34 +2062,41 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       case 'last30days':
         // Check if we have a 30-day range ending around today
         if (_filter.startDate != null && _filter.endDate != null) {
-          final daysDiff =
-              _filter.endDate!.difference(_filter.startDate!).inDays;
-          final daysFromToday =
-              DateTime.now().difference(_filter.endDate!).inDays.abs();
+          final daysDiff = _filter.endDate!
+              .difference(_filter.startDate!)
+              .inDays;
+          final daysFromToday = DateTime.now()
+              .difference(_filter.endDate!)
+              .inDays
+              .abs();
           // Consider active if it's approximately 30 days range and ends within 2 days of today
           isActive = daysDiff >= 28 && daysDiff <= 32 && daysFromToday <= 2;
         }
         break;
       case '3star':
-        isActive = starSelection[3] == true &&
+        isActive =
+            starSelection[3] == true &&
             starSelection[0] == false &&
             starSelection[1] == false &&
             starSelection[2] == false;
         break;
       case 'cwl':
-        isActive = warTypeSelection['cwl'] == true &&
+        isActive =
+            warTypeSelection['cwl'] == true &&
             warTypeSelection['all'] == false &&
             warTypeSelection['random'] == false &&
             warTypeSelection['friendly'] == false;
         break;
       case 'random':
-        isActive = warTypeSelection['random'] == true &&
+        isActive =
+            warTypeSelection['random'] == true &&
             warTypeSelection['all'] == false &&
             warTypeSelection['cwl'] == false &&
             warTypeSelection['friendly'] == false;
         break;
       case 'friendly':
-        isActive = warTypeSelection['friendly'] == true &&
+        isActive =
+            warTypeSelection['friendly'] == true &&
             warTypeSelection['all'] == false &&
             warTypeSelection['random'] == false &&
             warTypeSelection['cwl'] == false;
@@ -2030,11 +2141,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             Text(
               preset['label'],
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                    color: isActive
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : null,
-                  ),
+                fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                color: isActive
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : null,
+              ),
             ),
           ],
         ),
@@ -2089,11 +2200,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 child: Text(
                   preset.name,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                        color: isActive
-                            ? Theme.of(context).colorScheme.onSecondary
-                            : Theme.of(context).colorScheme.onSecondaryContainer,
-                      ),
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                    color: isActive
+                        ? Theme.of(context).colorScheme.onSecondary
+                        : Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
                   maxLines: null,
                   softWrap: true,
                 ),
@@ -2133,10 +2244,9 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             border: Border.all(
               color: isActive
                   ? Theme.of(context).colorScheme.tertiary
-                  : Theme.of(context)
-                      .colorScheme
-                      .tertiary
-                      .withValues(alpha: 0.4),
+                  : Theme.of(
+                      context,
+                    ).colorScheme.tertiary.withValues(alpha: 0.4),
               width: isActive ? 2 : 1,
             ),
           ),
@@ -2157,12 +2267,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                   child: Text(
                     suggestion.name,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight:
-                              isActive ? FontWeight.bold : FontWeight.w500,
-                          color: isActive
-                              ? Theme.of(context).colorScheme.onTertiary
-                              : Theme.of(context).colorScheme.onTertiaryContainer,
-                        ),
+                      fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                      color: isActive
+                          ? Theme.of(context).colorScheme.onTertiary
+                          : Theme.of(context).colorScheme.onTertiaryContainer,
+                    ),
                     maxLines: null,
                     softWrap: true,
                   ),
@@ -2185,8 +2294,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: Icon(Icons.play_arrow,
-                  color: Theme.of(context).colorScheme.primary),
+              leading: Icon(
+                Icons.play_arrow,
+                color: Theme.of(context).colorScheme.primary,
+              ),
               title: Text(AppLocalizations.of(context)!.presetsApply),
               onTap: () {
                 Navigator.pop(context);
@@ -2199,8 +2310,10 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.edit,
-                  color: Theme.of(context).colorScheme.secondary),
+              leading: Icon(
+                Icons.edit,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               title: Text(AppLocalizations.of(context)!.presetsRename),
               onTap: () {
                 Navigator.pop(context);
@@ -2208,10 +2321,14 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.delete,
-                  color: Theme.of(context).colorScheme.error),
-              title: Text(AppLocalizations.of(context)!.presetsDelete,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              leading: Icon(
+                Icons.delete,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              title: Text(
+                AppLocalizations.of(context)!.presetsDelete,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _showDeletePresetDialog(preset);
@@ -2251,27 +2368,36 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 return;
               }
 
-              if (await FilterPresetService.instance
-                      .presetNameExists(newName, excludeId: preset.id) &&
+              if (await FilterPresetService.instance.presetNameExists(
+                    newName,
+                    excludeId: preset.id,
+                  ) &&
                   context.mounted) {
-                _showInlineError(AppLocalizations.of(context)!.presetsNameExists);
+                _showInlineError(
+                  AppLocalizations.of(context)!.presetsNameExists,
+                );
                 return;
               }
 
               final updatedPreset = preset.copyWith(name: newName);
-              final success = await FilterPresetService.instance
-                  .updatePreset(updatedPreset);
+              final success = await FilterPresetService.instance.updatePreset(
+                updatedPreset,
+              );
 
               if (context.mounted) {
                 Navigator.pop(context);
               }
 
               if (success && context.mounted) {
-                _showInlineSuccess(AppLocalizations.of(context)!.presetsRenameSuccess(newName));
+                _showInlineSuccess(
+                  AppLocalizations.of(context)!.presetsRenameSuccess(newName),
+                );
                 await _loadSavedPresets();
               } else {
                 if (context.mounted) {
-                  _showInlineError(AppLocalizations.of(context)!.presetsRenameError);
+                  _showInlineError(
+                    AppLocalizations.of(context)!.presetsRenameError,
+                  );
                 }
               }
             },
@@ -2289,7 +2415,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.presetsDeleteTitle),
         content: Text(
-            AppLocalizations.of(context)!.presetsDeleteConfirm(preset.name)),
+          AppLocalizations.of(context)!.presetsDeleteConfirm(preset.name),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -2297,19 +2424,26 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           ),
           ElevatedButton(
             onPressed: () async {
-              final success =
-                  await FilterPresetService.instance.deletePreset(preset.id);
+              final success = await FilterPresetService.instance.deletePreset(
+                preset.id,
+              );
 
               if (context.mounted) {
                 Navigator.pop(context);
               }
 
               if (success && context.mounted) {
-                _showInlineSuccess(AppLocalizations.of(context)!.presetsDeleteSuccess(preset.name));
+                _showInlineSuccess(
+                  AppLocalizations.of(
+                    context,
+                  )!.presetsDeleteSuccess(preset.name),
+                );
                 await _loadSavedPresets();
               } else {
                 if (context.mounted) {
-                  _showInlineError(AppLocalizations.of(context)!.presetsDeleteError);
+                  _showInlineError(
+                    AppLocalizations.of(context)!.presetsDeleteError,
+                  );
                 }
               }
             },
@@ -2348,7 +2482,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             'all': true,
             'random': false,
             'cwl': false,
-            'friendly': false
+            'friendly': false,
           };
           break;
         case 'stars':
@@ -2356,7 +2490,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           break;
         case 'destruction':
           _updateFilter(
-              _filter.copyWith(minDestruction: null, maxDestruction: null));
+            _filter.copyWith(minDestruction: null, maxDestruction: null),
+          );
           break;
         case 'fresh':
           _updateFilter(_filter.copyWith(freshAttacksOnly: null));
@@ -2372,10 +2507,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     setState(() {
       switch (preset) {
         case 'last30days':
-          _updateFilter(_filter.copyWith(
-            startDate: DateTime.now().subtract(const Duration(days: 30)),
-            endDate: DateTime.now(),
-          ));
+          _updateFilter(
+            _filter.copyWith(
+              startDate: DateTime.now().subtract(const Duration(days: 30)),
+              endDate: DateTime.now(),
+            ),
+          );
           break;
         case '3star':
           starSelection = {0: false, 1: false, 2: false, 3: true};
@@ -2385,7 +2522,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             'all': false,
             'random': false,
             'cwl': true,
-            'friendly': false
+            'friendly': false,
           };
           break;
         case 'random':
@@ -2393,7 +2530,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             'all': false,
             'random': true,
             'cwl': false,
-            'friendly': false
+            'friendly': false,
           };
           break;
         case 'friendly':
@@ -2401,7 +2538,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             'all': false,
             'random': false,
             'cwl': false,
-            'friendly': true
+            'friendly': true,
           };
           break;
         case 'fresh':
@@ -2415,9 +2552,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
     setState(() {
       switch (preset) {
         case 'last30days':
-          _updateFilter(_filter.copyWith(
+          _updateFilter(
+            _filter.copyWith(
               startDate: DateTime.now().subtract(const Duration(days: 180)),
-              endDate: DateTime.now()));
+              endDate: DateTime.now(),
+            ),
+          );
           break;
         case '3star':
           starSelection = {0: false, 1: false, 2: false, 3: false};
@@ -2429,7 +2569,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
             'all': true,
             'random': false,
             'cwl': false,
-            'friendly': false
+            'friendly': false,
           };
           break;
         case 'fresh':
@@ -2463,8 +2603,11 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    Icon(icon,
-                        size: 20, color: Theme.of(context).colorScheme.primary),
+                    Icon(
+                      icon,
+                      size: 20,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Column(
@@ -2472,27 +2615,23 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                         children: [
                           Text(
                             title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           if (!isExpanded) ...[
                             const SizedBox(height: 4),
                             Builder(
                               builder: (context) {
-                                final sectionFilters =
-                                    _getSectionActiveFilters(title);
+                                final sectionFilters = _getSectionActiveFilters(
+                                  title,
+                                );
                                 if (sectionFilters.isEmpty) {
                                   return Text(
-                                    AppLocalizations.of(context)
-                                            ?.filtersNoFiltersActive ??
+                                    AppLocalizations.of(
+                                          context,
+                                        )?.filtersNoFiltersActive ??
                                         'No filters active',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
+                                    style: Theme.of(context).textTheme.bodySmall
                                         ?.copyWith(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -2507,13 +2646,16 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
                                     children: sectionFilters.map((filter) {
                                       return Container(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 6, vertical: 2),
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondaryContainer,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.secondaryContainer,
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -2588,11 +2730,8 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
       child: Text(
         title,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withValues(alpha: 0.8),
-            ),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
+        ),
       ),
     );
   }
@@ -2632,14 +2771,14 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'startDate',
           'text':
-              '${AppLocalizations.of(context)?.filtersStartDate ?? 'From'} $start'
+              '${AppLocalizations.of(context)?.filtersStartDate ?? 'From'} $start',
         });
       } else if (_filter.endDate != null) {
         final end = _formatDate(_filter.endDate!);
         filters.add({
           'type': 'endDate',
           'text':
-              '${AppLocalizations.of(context)?.filtersEndDate ?? 'Until'} $end'
+              '${AppLocalizations.of(context)?.filtersEndDate ?? 'Until'} $end',
         });
       }
     } else if (sectionTitle == warSettings) {
@@ -2653,7 +2792,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           filters.add({
             'type': 'warType',
             'text':
-                '$selectedTypes ${AppLocalizations.of(context)?.filtersWarType ?? 'wars'}'
+                '$selectedTypes ${AppLocalizations.of(context)?.filtersWarType ?? 'wars'}',
           });
         }
       }
@@ -2665,7 +2804,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'attackerTH',
           'text':
-              '${AppLocalizations.of(context)?.filtersAttackerTh ?? 'Attacker TH'}$selectedTH'
+              '${AppLocalizations.of(context)?.filtersAttackerTh ?? 'Attacker TH'}$selectedTH',
         });
       }
       if (defenderThSelection.values.any((selected) => selected)) {
@@ -2676,14 +2815,15 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'defenderTH',
           'text':
-              '${AppLocalizations.of(context)?.filtersDefenderTh ?? 'Defender TH'}$selectedTH'
+              '${AppLocalizations.of(context)?.filtersDefenderTh ?? 'Defender TH'}$selectedTH',
         });
       }
       if (_filter.sameTownHall == true) {
         filters.add({
           'type': 'sameTH',
-          'text': AppLocalizations.of(context)?.filtersSameTownHallOnly ??
-              'Same TH only'
+          'text':
+              AppLocalizations.of(context)?.filtersSameTownHallOnly ??
+              'Same TH only',
         });
       }
     } else if (sectionTitle == performance) {
@@ -2695,7 +2835,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'stars',
           'text':
-              '$selectedStars ${AppLocalizations.of(context)?.warStarsTitle ?? '⭐'}'
+              '$selectedStars ${AppLocalizations.of(context)?.warStarsTitle ?? '⭐'}',
         });
       }
       if ((_filter.minDestruction != null && _filter.minDestruction! > 0) ||
@@ -2705,15 +2845,16 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'destruction',
           'text':
-              '${min.toInt()}-${max.toInt()}% ${AppLocalizations.of(context)?.filtersDestructionPercentage ?? 'destruction'}'
+              '${min.toInt()}-${max.toInt()}% ${AppLocalizations.of(context)?.filtersDestructionPercentage ?? 'destruction'}',
         });
       }
     } else if (sectionTitle == advanced) {
       if (_filter.freshAttacksOnly == true) {
         filters.add({
           'type': 'fresh',
-          'text': AppLocalizations.of(context)?.filtersFreshAttacksOnly ??
-              'Fresh attacks only'
+          'text':
+              AppLocalizations.of(context)?.filtersFreshAttacksOnly ??
+              'Fresh attacks only',
         });
       }
       if (_minMapPositionController.text.isNotEmpty ||
@@ -2727,7 +2868,7 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
         filters.add({
           'type': 'mapPosition',
           'text':
-              '${AppLocalizations.of(context)?.warPositionMap ?? 'Position'} $min-$max'
+              '${AppLocalizations.of(context)?.warPositionMap ?? 'Position'} $min-$max',
         });
       }
     }
@@ -2931,10 +3072,7 @@ class StarFilterChip extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        constraints: const BoxConstraints(
-          minWidth: 48,
-          minHeight: 48,
-        ),
+        constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.secondaryContainer
@@ -2971,9 +3109,7 @@ class StarFilterChip extends StatelessWidget {
 class _SavePresetDialog extends StatefulWidget {
   final WarStatsFilter filter;
 
-  const _SavePresetDialog({
-    required this.filter,
-  });
+  const _SavePresetDialog({required this.filter});
 
   @override
   State<_SavePresetDialog> createState() => _SavePresetDialogState();
@@ -3003,14 +3139,14 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
 
   Future<void> _savePreset() async {
     final name = _nameController.text.trim();
-    
+
     _clearError();
-    
+
     if (name.isEmpty) {
       _showError(AppLocalizations.of(context)!.presetsNameRequired);
       return;
     }
-    
+
     if (await FilterPresetService.instance.presetNameExists(name) && mounted) {
       if (!context.mounted) return;
       _showError(AppLocalizations.of(context)!.presetsNameExists);
@@ -3021,7 +3157,7 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
       name: name,
       filter: widget.filter,
     );
-    
+
     if (success && mounted) {
       Navigator.pop(context, name); // Return the preset name
     } else {
@@ -3032,7 +3168,9 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final suggestions = FilterPresetService.getPresetNameSuggestions(widget.filter);
+    final suggestions = FilterPresetService.getPresetNameSuggestions(
+      widget.filter,
+    );
 
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.presetsSaveTitle),
@@ -3067,10 +3205,9 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.presetsSuggestions,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 8),
@@ -3085,18 +3222,19 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
                           suggestion,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondaryContainer,
                         side: BorderSide(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .outline
-                              .withValues(alpha: 0.2),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.outline.withValues(alpha: 0.2),
                         ),
-                        labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
+                        labelStyle: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSecondaryContainer,
                             ),
                         onPressed: () {
                           _nameController.text = suggestion;
@@ -3128,9 +3266,7 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
 class _RenamePresetDialog extends StatefulWidget {
   final FilterPreset preset;
 
-  const _RenamePresetDialog({
-    required this.preset,
-  });
+  const _RenamePresetDialog({required this.preset});
 
   @override
   State<_RenamePresetDialog> createState() => _RenamePresetDialogState();
@@ -3183,14 +3319,19 @@ class _RenamePresetDialogState extends State<_RenamePresetDialog> {
       return;
     }
 
-    if (await FilterPresetService.instance.presetNameExists(newName, excludeId: widget.preset.id) &&
+    if (await FilterPresetService.instance.presetNameExists(
+          newName,
+          excludeId: widget.preset.id,
+        ) &&
         mounted) {
       _showInlineError(AppLocalizations.of(context)!.presetsNameExists);
       return;
     }
 
     final updatedPreset = widget.preset.copyWith(name: newName);
-    final success = await FilterPresetService.instance.updatePreset(updatedPreset);
+    final success = await FilterPresetService.instance.updatePreset(
+      updatedPreset,
+    );
 
     if (mounted) {
       if (success) {
@@ -3209,28 +3350,37 @@ class _RenamePresetDialogState extends State<_RenamePresetDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Inline message display
-          if (_inlineMessage != null) 
+          if (_inlineMessage != null)
             Container(
               width: double.infinity,
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: _isInlineError 
-                    ? Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.8)
-                    : Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.8),
+                color: _isInlineError
+                    ? Theme.of(
+                        context,
+                      ).colorScheme.errorContainer.withValues(alpha: 0.8)
+                    : Theme.of(context).colorScheme.surfaceContainerHighest
+                          .withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: _isInlineError 
-                      ? Theme.of(context).colorScheme.error.withValues(alpha: 0.5)
-                      : Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                  color: _isInlineError
+                      ? Theme.of(
+                          context,
+                        ).colorScheme.error.withValues(alpha: 0.5)
+                      : Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.5),
                   width: 1,
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
-                    _isInlineError ? Icons.error_outline : Icons.check_circle_outline,
-                    color: _isInlineError 
+                    _isInlineError
+                        ? Icons.error_outline
+                        : Icons.check_circle_outline,
+                    color: _isInlineError
                         ? Theme.of(context).colorScheme.error
                         : Theme.of(context).colorScheme.primary,
                     size: 20,
@@ -3240,7 +3390,7 @@ class _RenamePresetDialogState extends State<_RenamePresetDialog> {
                     child: Text(
                       _inlineMessage!,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: _isInlineError 
+                        color: _isInlineError
                             ? Theme.of(context).colorScheme.onErrorContainer
                             : Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.w500,
@@ -3248,10 +3398,13 @@ class _RenamePresetDialogState extends State<_RenamePresetDialog> {
                     ),
                   ),
                   IconButton(
+                    tooltip: AppLocalizations.of(
+                      context,
+                    )!.tooltipDismissMessage,
                     onPressed: _clearInlineMessage,
                     icon: Icon(
                       Icons.close,
-                      color: _isInlineError 
+                      color: _isInlineError
                           ? Theme.of(context).colorScheme.error
                           : Theme.of(context).colorScheme.primary,
                       size: 18,

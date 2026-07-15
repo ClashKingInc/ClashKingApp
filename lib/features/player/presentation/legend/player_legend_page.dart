@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/player/presentation/legend/widgets/player_
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_history_eos_list.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_chart.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_list.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:intl/intl.dart';
@@ -73,11 +74,12 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
   Widget build(BuildContext context) {
     final legends = widget.player.legendsBySeason;
     if (legends == null) {
-      return Center(
-        child: Text(
-          AppLocalizations.of(context)?.generalNoDataAvailable ??
-              'No data available',
-        ),
+      return AppEmptyState(
+        title: AppLocalizations.of(context)!.generalNoDataAvailable,
+        icon: Icons.history_toggle_off_rounded,
+        padding: const EdgeInsets.fromLTRB(16, 48, 16, 0),
+        stickerHeight: 200,
+        stickerWidth: 160,
       );
     }
 
@@ -90,13 +92,6 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
             children: [
               LegendHeaderCard(player: widget.player),
               ScrollableTab(
-                tabBarDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                labelColor: Theme.of(context).colorScheme.onSurface,
-                labelPadding: EdgeInsets.zero,
-                labelStyle: Theme.of(context).textTheme.bodyLarge,
-                unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
                 onTap: (_) => setState(() {}),
                 tabs: [
                   Tab(
@@ -124,6 +119,13 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                             children: [
                               const SizedBox(width: 16),
                               IconButton(
+                                tooltip: showBySeasonTable
+                                    ? AppLocalizations.of(
+                                        context,
+                                      )!.tooltipShowChart
+                                    : AppLocalizations.of(
+                                        context,
+                                      )!.tooltipShowTable,
                                 icon: Icon(
                                   showBySeasonTable
                                       ? Icons.bar_chart
@@ -143,6 +145,9 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                                 width: 30,
                                 height: 30,
                                 child: IconButton(
+                                  tooltip: MaterialLocalizations.of(
+                                    context,
+                                  ).previousMonthTooltip,
                                   icon: Icon(
                                     Icons.arrow_back,
                                     color: Theme.of(
@@ -164,6 +169,9 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                                 width: 30,
                                 height: 30,
                                 child: IconButton(
+                                  tooltip: MaterialLocalizations.of(
+                                    context,
+                                  ).nextMonthTooltip,
                                   icon: Icon(
                                     Icons.arrow_forward,
                                     color: Theme.of(
@@ -199,6 +207,11 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
                         children: [
                           const SizedBox(width: 16),
                           IconButton(
+                            tooltip: showHistoryTable
+                                ? AppLocalizations.of(context)!.tooltipShowChart
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.tooltipShowTable,
                             icon: Icon(
                               showHistoryTable
                                   ? Icons.bar_chart

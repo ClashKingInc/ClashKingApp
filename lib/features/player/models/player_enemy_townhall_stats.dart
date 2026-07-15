@@ -26,8 +26,8 @@ class EnemyTownhallStats {
     final newCount = count + other.count;
     averageDestruction = newCount > 0
         ? ((averageDestruction * count) +
-                (other.averageDestruction * other.count)) /
-            newCount
+                  (other.averageDestruction * other.count)) /
+              newCount
         : 0.0;
     count = newCount;
 

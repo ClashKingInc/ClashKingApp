@@ -19,10 +19,40 @@ FutureOr<void> backgroundCallback(Uri? data) async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
+
+  static final ColorScheme _darkColorScheme = ColorScheme.fromSeed(
+    seedColor: const Color(0xFF0B0B0C),
+    primary: const Color(0xFFD90709),
+    secondary: const Color.fromARGB(255, 2, 108, 194),
+    tertiary: Colors.grey,
+    surface: const Color(0xFF0B0B0C),
+    error: const Color.fromARGB(255, 255, 0, 0),
+    onPrimary: const Color(0xFFFFFFFF),
+    onSecondary: const Color(0xFFFFFFFF),
+    onSurface: const Color(0xFFFFFFFF),
+    onError: const Color(0xFFFFFFFF),
+    brightness: Brightness.dark,
+  );
+
+  static final ColorScheme _lightColorScheme = ColorScheme.fromSeed(
+    seedColor: const Color(0xFFFFFFFF),
+    primary: const Color(0xFFBF0000),
+    secondary: const Color.fromARGB(255, 3, 82, 147),
+    tertiary: const Color(0xFF757575),
+    surface: const Color(0xFFFFFFFF),
+    error: const Color(0xFFB00020),
+    onPrimary: const Color(0xFFFFFFFF),
+    onSecondary: const Color(0xFFFFFFFF),
+    onSurface: const Color(0xFF000000),
+    onError: const Color(0xFFFFFFFF),
+    brightness: Brightness.light,
+  );
 
   static final ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
     scaffoldBackgroundColor: const Color(0xFF030304),
+    scrollbarTheme: _hiddenScrollbarTheme,
     datePickerTheme: DatePickerThemeData(
       backgroundColor: const Color(0xFF0B0B0C),
       surfaceTintColor: Colors.transparent,
@@ -32,14 +62,28 @@ class MyApp extends StatelessWidget {
       yearForegroundColor: WidgetStateProperty.all(Colors.white),
       todayForegroundColor: WidgetStateProperty.all(Colors.white),
     ),
-    cardTheme: const CardThemeData(
+    cardTheme: CardThemeData(
       surfaceTintColor: Colors.transparent,
-      color: Color(0xFF151516),
-      elevation: 2.0,
+      // Exact same material as the home to-do panels: surface shade,
+      // radius 28, hairline outlineVariant border, no shadow.
+      color: const Color(0xFF0B0B0C),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(28),
+        side: BorderSide(
+          color: _darkColorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
     ),
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: Color(0xFF151516),
       contentTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: Color(0xFF030304),
+      modalBackgroundColor: Color(0xFF030304),
+      surfaceTintColor: Colors.transparent,
+      dragHandleColor: Color(0xFF68686C),
     ),
     canvasColor: Colors.transparent,
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -79,19 +123,7 @@ class MyApp extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
     ),
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF0B0B0C),
-      primary: const Color(0xFFD90709),
-      secondary: const Color.fromARGB(255, 2, 108, 194),
-      tertiary: Colors.grey,
-      surface: const Color(0xFF0B0B0C),
-      error: const Color.fromARGB(255, 255, 0, 0),
-      onPrimary: const Color(0xFFFFFFFF),
-      onSecondary: const Color(0xFFFFFFFF),
-      onSurface: const Color(0xFFFFFFFF),
-      onError: const Color(0xFFFFFFFF),
-      brightness: Brightness.dark,
-    ),
+    colorScheme: _darkColorScheme,
     brightness: Brightness.dark,
     textTheme: const TextTheme(
       bodyLarge: TextStyle(
@@ -154,6 +186,7 @@ class MyApp extends StatelessWidget {
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: const Color.fromARGB(255, 244, 244, 244),
+    scrollbarTheme: _hiddenScrollbarTheme,
     datePickerTheme: DatePickerThemeData(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
@@ -166,7 +199,13 @@ class MyApp extends StatelessWidget {
     cardTheme: CardThemeData(
       surfaceTintColor: Colors.transparent,
       color: const Color(0xFFFFFFFF).withAlpha(255),
-      elevation: 2.0,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(28),
+        side: BorderSide(
+          color: _lightColorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
     ),
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: Colors.white,
@@ -211,19 +250,7 @@ class MyApp extends StatelessWidget {
     ),
     canvasColor: Colors.transparent,
     brightness: Brightness.light,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFFFFFFFF),
-      primary: const Color(0xFFBF0000),
-      secondary: const Color.fromARGB(255, 3, 82, 147),
-      tertiary: const Color(0xFF757575),
-      surface: const Color(0xFFFFFFFF),
-      error: const Color(0xFFB00020),
-      onPrimary: const Color(0xFFFFFFFF),
-      onSecondary: const Color(0xFFFFFFFF),
-      onSurface: const Color(0xFF000000),
-      onError: const Color(0xFFFFFFFF),
-      brightness: Brightness.light,
-    ),
+    colorScheme: _lightColorScheme,
     textTheme: const TextTheme(
       bodyLarge: TextStyle(
         color: Colors.black,
@@ -280,6 +307,13 @@ class MyApp extends StatelessWidget {
         fontWeight: FontWeight.w500,
       ),
     ),
+  );
+
+  static final ScrollbarThemeData _hiddenScrollbarTheme = ScrollbarThemeData(
+    thumbVisibility: WidgetStateProperty.all(false),
+    trackVisibility: WidgetStateProperty.all(false),
+    thickness: WidgetStateProperty.all(0),
+    radius: Radius.zero,
   );
 
   @override

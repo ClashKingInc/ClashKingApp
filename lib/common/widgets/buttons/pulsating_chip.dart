@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class PulsatingChip extends StatefulWidget {
   final Widget child;
 
-  PulsatingChip({required this.child});
+  const PulsatingChip({super.key, required this.child});
 
   @override
   PulsatingChipState createState() => PulsatingChipState();
 }
 
-class PulsatingChipState extends State<PulsatingChip> with SingleTickerProviderStateMixin {
+class PulsatingChipState extends State<PulsatingChip>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -18,7 +19,19 @@ class PulsatingChipState extends State<PulsatingChip> with SingleTickerProviderS
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    )..repeat(reverse: true);
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _controller
+        ..stop()
+        ..value = 0;
+    } else if (!_controller.isAnimating) {
+      _controller.repeat(reverse: true);
+    }
   }
 
   @override
@@ -37,7 +50,9 @@ class PulsatingChipState extends State<PulsatingChip> with SingleTickerProviderS
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha : _controller.value * 0.9),
+                color: Theme.of(context).scaffoldBackgroundColor.withValues(
+                  alpha: _controller.value * 0.9,
+                ),
                 spreadRadius: 0,
                 blurRadius: 7,
               ),

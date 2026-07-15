@@ -71,7 +71,9 @@ void main() {
       final json = {
         'items': List.generate(
           5,
-          (i) => _makeWarItem(endTime: '2022${(i + 1).toString().padLeft(2, '0')}01T000000.000Z'),
+          (i) => _makeWarItem(
+            endTime: '2022${(i + 1).toString().padLeft(2, '0')}01T000000.000Z',
+          ),
         ),
       };
       final log = ClanWarLog.fromJson(json, '#CLAN');

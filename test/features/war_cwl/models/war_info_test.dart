@@ -41,12 +41,12 @@ WarClan _makeClan(
 }
 
 WarAttack _makeAttack({int stars = 3, int dest = 100}) => WarAttack(
-      attackerTag: '#ATK',
-      defenderTag: '#DEF',
-      stars: stars,
-      destructionPercentage: dest,
-      order: 1,
-    );
+  attackerTag: '#ATK',
+  defenderTag: '#DEF',
+  stars: stars,
+  destructionPercentage: dest,
+  order: 1,
+);
 
 void main() {
   group('WarInfo.fromJson', () {
@@ -94,6 +94,38 @@ void main() {
     test('returns unknown warType when both warType and type are absent', () {
       final info = WarInfo.fromJson({'state': 'inWar'});
       expect(info.warType, 'unknown');
+    });
+  });
+
+  group('WarInfo.effectiveAttacksPerMember', () {
+    test('forces one attack for CWL even when API sends two', () {
+      final info = WarInfo.fromJson({
+        'state': 'inWar',
+        'teamSize': 15,
+        'attacksPerMember': 2,
+        'warType': 'cwl',
+      });
+
+      expect(info.isClanWarLeague, isTrue);
+      expect(info.effectiveAttacksPerMember, 1);
+    });
+
+    test('keeps regular war attacks per member', () {
+      final info = WarInfo.fromJson({
+        'state': 'inWar',
+        'teamSize': 15,
+        'attacksPerMember': 2,
+        'warType': 'classic',
+      });
+
+      expect(info.isClanWarLeague, isFalse);
+      expect(info.effectiveAttacksPerMember, 2);
+    });
+
+    test('defaults missing attacks per member to one', () {
+      final info = WarInfo.fromJson({'state': 'inWar', 'teamSize': 15});
+
+      expect(info.effectiveAttacksPerMember, 1);
     });
   });
 
@@ -145,9 +177,10 @@ void main() {
     setUp(() {
       info = WarInfo(
         state: 'inWar',
-        clan: _makeClan('#CLAN', members: [
-          _makeMember('#P1', name: 'Charlie', th: 15, pos: 3),
-        ]),
+        clan: _makeClan(
+          '#CLAN',
+          members: [_makeMember('#P1', name: 'Charlie', th: 15, pos: 3)],
+        ),
         opponent: _makeClan('#OPP'),
       );
     });
@@ -183,12 +216,18 @@ void main() {
     setUp(() {
       info = WarInfo(
         state: 'inWar',
-        clan: _makeClan('#CLAN', members: [
-          _makeMember('#P1', attacks: [_makeAttack(), _makeAttack()]),
-        ]),
-        opponent: _makeClan('#OPP', members: [
-          _makeMember('#P2', attacks: [_makeAttack()]),
-        ]),
+        clan: _makeClan(
+          '#CLAN',
+          members: [
+            _makeMember('#P1', attacks: [_makeAttack(), _makeAttack()]),
+          ],
+        ),
+        opponent: _makeClan(
+          '#OPP',
+          members: [
+            _makeMember('#P2', attacks: [_makeAttack()]),
+          ],
+        ),
       );
     });
 

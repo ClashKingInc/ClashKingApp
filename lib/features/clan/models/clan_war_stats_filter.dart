@@ -40,12 +40,11 @@ class ClanWarStatsFilter {
   });
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {
-      'limit': limit,
-      'same_th': sameTownHall,
-    };
-    
-    if (warTypes != null && warTypes!.isNotEmpty && !warTypes!.contains('all')) {
+    final Map<String, dynamic> data = {'limit': limit, 'same_th': sameTownHall};
+
+    if (warTypes != null &&
+        warTypes!.isNotEmpty &&
+        !warTypes!.contains('all')) {
       data['type'] = warTypes;
     } else if (warType != "all") {
       data['type'] = warType;
@@ -141,7 +140,9 @@ class ClanWarStatsFilter {
   /// Default filter for mobile app
   static ClanWarStatsFilter defaultFilter() {
     return ClanWarStatsFilter(
-      startDate: DateTime.now().subtract(const Duration(days: 180)), // 6 months ago
+      startDate: DateTime.now().subtract(
+        const Duration(days: 180),
+      ), // 6 months ago
       endDate: DateTime.now(),
       warType: "all",
       limit: 50,
@@ -170,7 +171,7 @@ class ClanWarStatsFilter {
   /// Get filter summary text
   String getFilterSummary() {
     List<String> filters = [];
-    
+
     if (ownTownHalls != null && ownTownHalls!.isNotEmpty) {
       if (ownTownHalls!.length == 1) {
         filters.add("TH${ownTownHalls!.first} attacks");
@@ -180,7 +181,7 @@ class ClanWarStatsFilter {
     } else if (ownTownHall != null) {
       filters.add("TH$ownTownHall attacks");
     }
-    
+
     if (enemyTownHalls != null && enemyTownHalls!.isNotEmpty) {
       if (enemyTownHalls!.length == 1) {
         filters.add("vs TH${enemyTownHalls!.first}");
@@ -190,9 +191,9 @@ class ClanWarStatsFilter {
     } else if (enemyTownHall != null) {
       filters.add("vs TH$enemyTownHall");
     }
-    
+
     if (sameTownHall) filters.add("Same TH only");
-    
+
     if (warTypes != null && warTypes!.isNotEmpty) {
       if (warTypes!.length == 1) {
         filters.add("${warTypes!.first.toUpperCase()} wars");
@@ -202,9 +203,9 @@ class ClanWarStatsFilter {
     } else if (warType != "all") {
       filters.add("${warType.toUpperCase()} wars");
     }
-    
+
     if (freshAttacksOnly == true) filters.add("Fresh attacks only");
-    
+
     if (allowedStars != null && allowedStars!.isNotEmpty) {
       if (allowedStars!.length == 1) {
         filters.add("${allowedStars!.first} ⭐ only");
@@ -220,17 +221,19 @@ class ClanWarStatsFilter {
         filters.add("≤$maxStars stars");
       }
     }
-    
+
     if (minDestruction != null || maxDestruction != null) {
       if (minDestruction != null && maxDestruction != null) {
-        filters.add("${minDestruction!.toStringAsFixed(0)}-${maxDestruction!.toStringAsFixed(0)}% destruction");
+        filters.add(
+          "${minDestruction!.toStringAsFixed(0)}-${maxDestruction!.toStringAsFixed(0)}% destruction",
+        );
       } else if (minDestruction != null) {
         filters.add("${minDestruction!.toStringAsFixed(0)}%+ destruction");
       } else {
         filters.add("≤${maxDestruction!.toStringAsFixed(0)}% destruction");
       }
     }
-    
+
     return filters.isEmpty ? "No filters applied" : filters.join(", ");
   }
 }

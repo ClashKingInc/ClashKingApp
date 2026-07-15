@@ -14,17 +14,21 @@ void main() {
   final enGbFile = File(enGbPath);
 
   if (!enFile.existsSync()) {
-    DebugUtils.debugError(' The base en.arb file does not exist. Please check the file path.');
+    DebugUtils.debugError(
+      ' The base en.arb file does not exist. Please check the file path.',
+    );
     return;
   }
 
   // Decode the JSON content of each ARB file
   final enJson = json.decode(enFile.readAsStringSync()) as Map<String, dynamic>;
   final enUsJson = enUsFile.existsSync()
-      ? (json.decode(enUsFile.readAsStringSync()) as Map<dynamic, dynamic>).cast<String, dynamic>()
+      ? (json.decode(enUsFile.readAsStringSync()) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>()
       : <String, dynamic>{};
   final enGbJson = enGbFile.existsSync()
-      ? (json.decode(enGbFile.readAsStringSync()) as Map<dynamic, dynamic>).cast<String, dynamic>()
+      ? (json.decode(enGbFile.readAsStringSync()) as Map<dynamic, dynamic>)
+            .cast<String, dynamic>()
       : <String, dynamic>{};
 
   // Function to update a specific ARB file

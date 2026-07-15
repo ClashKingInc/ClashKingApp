@@ -71,7 +71,8 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-          AppLocalizations.of(context)?.generalFilters ?? 'Clan War Filters'),
+        AppLocalizations.of(context)?.generalFilters ?? 'Clan War Filters',
+      ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -123,28 +124,31 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
           child: Text(AppLocalizations.of(context)?.generalCancel ?? 'Cancel'),
         ),
         ElevatedButton(
-            onPressed: () {
-              // Update filter with text field values
-              final updatedFilter = _filter.copyWith(
-                minDestruction: _minDestructionController.text.isNotEmpty
-                    ? double.tryParse(_minDestructionController.text)
-                    : null,
-                maxDestruction: _maxDestructionController.text.isNotEmpty
-                    ? double.tryParse(_maxDestructionController.text)
-                    : null,
-                minMapPosition: _minMapPositionController.text.isNotEmpty
-                    ? int.tryParse(_minMapPositionController.text)
-                    : null,
-                maxMapPosition: _maxMapPositionController.text.isNotEmpty
-                    ? int.tryParse(_maxMapPositionController.text)
-                    : null,
-              );
+          onPressed: () {
+            // Update filter with text field values
+            final updatedFilter = _filter.copyWith(
+              minDestruction: _minDestructionController.text.isNotEmpty
+                  ? double.tryParse(_minDestructionController.text)
+                  : null,
+              maxDestruction: _maxDestructionController.text.isNotEmpty
+                  ? double.tryParse(_maxDestructionController.text)
+                  : null,
+              minMapPosition: _minMapPositionController.text.isNotEmpty
+                  ? int.tryParse(_minMapPositionController.text)
+                  : null,
+              maxMapPosition: _maxMapPositionController.text.isNotEmpty
+                  ? int.tryParse(_maxMapPositionController.text)
+                  : null,
+            );
 
-              widget.onApply(updatedFilter);
-              Navigator.pop(context);
-            },
-            child: Text(AppLocalizations.of(context)?.generalApply ?? 'Apply',
-                style: Theme.of(context).textTheme.labelSmall)),
+            widget.onApply(updatedFilter);
+            Navigator.pop(context);
+          },
+          child: Text(
+            AppLocalizations.of(context)?.generalApply ?? 'Apply',
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+        ),
       ],
     );
   }
@@ -154,25 +158,28 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }
 
   Widget _buildDateRangePicker() {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
         ListTile(
-          title: Text('Start Date'),
-          subtitle:
-              Text(_filter.startDate?.toString().split(' ')[0] ?? 'Not set'),
+          title: Text(loc.generalStartDate),
+          subtitle: Text(
+            _filter.startDate?.toString().split(' ')[0] ?? loc.generalNotSet,
+          ),
           trailing: const Icon(Icons.calendar_today),
           onTap: () async {
             final picked = await showDatePicker(
               context: context,
-              initialDate: _filter.startDate ??
+              initialDate:
+                  _filter.startDate ??
                   DateTime.now().subtract(const Duration(days: 180)),
               firstDate: DateTime(2020),
               lastDate: DateTime.now(),
@@ -183,9 +190,10 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
           },
         ),
         ListTile(
-          title: Text('End Date'),
-          subtitle:
-              Text(_filter.endDate?.toString().split(' ')[0] ?? 'Not set'),
+          title: Text(loc.generalEndDate),
+          subtitle: Text(
+            _filter.endDate?.toString().split(' ')[0] ?? loc.generalNotSet,
+          ),
           trailing: const Icon(Icons.calendar_today),
           onTap: () async {
             final picked = await showDatePicker(
@@ -204,27 +212,35 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
   }
 
   Widget _buildWarTypeDropdown() {
+    final loc = AppLocalizations.of(context)!;
     return DropdownButtonFormField<String>(
       initialValue: _filter.warType,
-      items: const [
-        DropdownMenuItem(value: 'all', child: Text('All Wars')),
-        DropdownMenuItem(value: 'random', child: Text('Random Wars')),
-        DropdownMenuItem(value: 'cwl', child: Text('CWL Wars')),
-        DropdownMenuItem(value: 'friendly', child: Text('Friendly Wars')),
+      items: [
+        DropdownMenuItem(value: 'all', child: Text(loc.warFiltersAllWars)),
+        DropdownMenuItem(
+          value: 'random',
+          child: Text(loc.warFiltersRandomWars),
+        ),
+        DropdownMenuItem(value: 'cwl', child: Text(loc.warFiltersCwlWars)),
+        DropdownMenuItem(
+          value: 'friendly',
+          child: Text(loc.warFiltersFriendlyWars),
+        ),
       ],
       onChanged: (value) {
         if (value != null) {
           _updateFilter(_filter.copyWith(warType: value));
         }
       },
-      decoration: const InputDecoration(
-        labelText: 'War Type',
+      decoration: InputDecoration(
+        labelText: loc.warType,
         border: OutlineInputBorder(),
       ),
     );
   }
 
   Widget _buildTownHallFilters() {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
         Row(
@@ -233,15 +249,22 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
               child: DropdownButtonFormField<int?>(
                 initialValue: _filter.ownTownHall,
                 items: [
-                  const DropdownMenuItem(value: null, child: Text('Any TH')),
+                  DropdownMenuItem(
+                    value: null,
+                    child: Text(loc.warFiltersAnyTownHall),
+                  ),
                   ...List.generate(16, (i) => i + 1).map(
-                      (th) => DropdownMenuItem(value: th, child: Text('TH$th')))
+                    (th) => DropdownMenuItem(
+                      value: th,
+                      child: Text(loc.gameTownHallLevelShort(th)),
+                    ),
+                  ),
                 ],
                 onChanged: (value) {
                   _updateFilter(_filter.copyWith(ownTownHall: value));
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Attacker TH',
+                decoration: InputDecoration(
+                  labelText: loc.warAttackerTownHall,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -251,15 +274,22 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
               child: DropdownButtonFormField<int?>(
                 initialValue: _filter.enemyTownHall,
                 items: [
-                  const DropdownMenuItem(value: null, child: Text('Any TH')),
+                  DropdownMenuItem(
+                    value: null,
+                    child: Text(loc.warFiltersAnyTownHall),
+                  ),
                   ...List.generate(16, (i) => i + 1).map(
-                      (th) => DropdownMenuItem(value: th, child: Text('TH$th')))
+                    (th) => DropdownMenuItem(
+                      value: th,
+                      child: Text(loc.gameTownHallLevelShort(th)),
+                    ),
+                  ),
                 ],
                 onChanged: (value) {
                   _updateFilter(_filter.copyWith(enemyTownHall: value));
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Defender TH',
+                decoration: InputDecoration(
+                  labelText: loc.warDefenderTownHall,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -268,9 +298,8 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
         ),
         const SizedBox(height: 12),
         CheckboxListTile(
-          title: const Text('Same Town Hall Only'),
-          subtitle: const Text(
-              'Only show attacks where attacker and defender have the same TH level'),
+          title: Text(loc.warStatsFilterSameTownHallOnly),
+          subtitle: Text(loc.warStatsFilterSameTownHallDescription),
           value: _filter.sameTownHall,
           onChanged: (value) {
             _updateFilter(_filter.copyWith(sameTownHall: value ?? false));
@@ -281,6 +310,7 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
   }
 
   Widget _buildPerformanceFilters() {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
         // Stars filter
@@ -290,15 +320,19 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
               child: DropdownButtonFormField<int?>(
                 initialValue: _filter.minStars,
                 items: [
-                  const DropdownMenuItem(value: null, child: Text('Any')),
-                  ...List.generate(4, (i) => i).map((stars) =>
-                      DropdownMenuItem(value: stars, child: Text('$stars ⭐')))
+                  DropdownMenuItem(value: null, child: Text(loc.generalAny)),
+                  ...List.generate(4, (i) => i).map(
+                    (stars) => DropdownMenuItem(
+                      value: stars,
+                      child: Text(loc.warStarsWithIcon(stars)),
+                    ),
+                  ),
                 ],
                 onChanged: (value) {
                   _updateFilter(_filter.copyWith(minStars: value));
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Min Stars',
+                decoration: InputDecoration(
+                  labelText: loc.warStatsFilterMinStars,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -308,15 +342,19 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
               child: DropdownButtonFormField<int?>(
                 initialValue: _filter.maxStars,
                 items: [
-                  const DropdownMenuItem(value: null, child: Text('Any')),
-                  ...List.generate(4, (i) => i).map((stars) =>
-                      DropdownMenuItem(value: stars, child: Text('$stars ⭐')))
+                  DropdownMenuItem(value: null, child: Text(loc.generalAny)),
+                  ...List.generate(4, (i) => i).map(
+                    (stars) => DropdownMenuItem(
+                      value: stars,
+                      child: Text(loc.warStarsWithIcon(stars)),
+                    ),
+                  ),
                 ],
                 onChanged: (value) {
                   _updateFilter(_filter.copyWith(maxStars: value));
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Max Stars',
+                decoration: InputDecoration(
+                  labelText: loc.warStatsFilterMaxStars,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -331,8 +369,8 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
               child: TextField(
                 controller: _minDestructionController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Min Destruction %',
+                decoration: InputDecoration(
+                  labelText: loc.warStatsFilterMinDestructionPercent,
                   border: OutlineInputBorder(),
                   suffixText: '%',
                 ),
@@ -343,8 +381,8 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
               child: TextField(
                 controller: _maxDestructionController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Max Destruction %',
+                decoration: InputDecoration(
+                  labelText: loc.warStatsFilterMaxDestructionPercent,
                   border: OutlineInputBorder(),
                   suffixText: '%',
                 ),
@@ -357,14 +395,15 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
   }
 
   Widget _buildMapPositionFilters() {
+    final loc = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
           child: TextField(
             controller: _minMapPositionController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Min Position',
+            decoration: InputDecoration(
+              labelText: loc.warStatsFilterMinPosition,
               border: OutlineInputBorder(),
             ),
           ),
@@ -374,8 +413,8 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
           child: TextField(
             controller: _maxMapPositionController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Max Position',
+            decoration: InputDecoration(
+              labelText: loc.warStatsFilterMaxPosition,
               border: OutlineInputBorder(),
             ),
           ),
@@ -385,19 +424,20 @@ class _ClanWarStatsFilterDialogState extends State<ClanWarStatsFilterDialog> {
   }
 
   Widget _buildAdvancedOptions() {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       children: [
         CheckboxListTile(
-          title: const Text('Fresh Attacks Only'),
-          subtitle: const Text('Only show first attacks on each base'),
+          title: Text(loc.warStatsFilterFreshAttacksOnly),
+          subtitle: Text(loc.warStatsFilterFreshAttacksDescription),
           value: _filter.freshAttacksOnly ?? false,
           onChanged: (value) {
             _updateFilter(_filter.copyWith(freshAttacksOnly: value));
           },
         ),
         ListTile(
-          title: const Text('Result Limit'),
-          subtitle: Text('${_filter.limit} results'),
+          title: Text(loc.warStatsFilterResultLimit),
+          subtitle: Text(loc.generalResultsCount(_filter.limit)),
           trailing: SizedBox(
             width: 100,
             child: Slider(

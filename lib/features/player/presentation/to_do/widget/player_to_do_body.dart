@@ -1,97 +1,61 @@
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_body_card.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-class PlayerToDoBody extends StatefulWidget {
+class PlayerToDoBody extends StatelessWidget {
   final List<Player> players;
   final Map<String, WarMemberPresence> memberPresenceMap;
-  final Map<String, String> filterOptions;
-  final bool active;
+  final String emptyText;
 
-  PlayerToDoBody({
+  const PlayerToDoBody({
     super.key,
-    required this.filterOptions,
-    required this.active,
     required this.players,
     required this.memberPresenceMap,
+    required this.emptyText,
   });
 
   @override
-  PlayerToDoBodyState createState() => PlayerToDoBodyState();
+  Widget build(BuildContext context) {
+    final visiblePlayers = players.toList(growable: false)
+      ..sort((a, b) => b.lastOnline.compareTo(a.lastOnline));
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          if (visiblePlayers.isEmpty)
+            _EmptyTodoCard(text: emptyText)
+          else
+            ...visiblePlayers.map(
+              (player) => PlayerToDoBodyCard(
+                player: player,
+                member:
+                    memberPresenceMap[player.tag] ?? WarMemberPresence.empty(),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
-class PlayerToDoBodyState extends State<PlayerToDoBody> {
-  List<Widget> _buildCards() {
-    final today = DateTime.now();
-    final threshold = today.subtract(const Duration(days: 14));
-    final List<Widget> cards = [];
+class _EmptyTodoCard extends StatelessWidget {
+  final String text;
 
-    for (var player in widget.players) {
-      final isActive = player.lastOnline.isAfter(threshold);
-      final member =
-          widget.memberPresenceMap[player.tag] ?? WarMemberPresence.empty();
-
-      if ((widget.active && isActive) || (!widget.active && !isActive)) {
-        cards.add(
-          PlayerToDoBodyCard(
-            player: player,
-            member: member,
-          ),
-        );
-      }
-    }
-
-    return cards;
-  }
+  const _EmptyTodoCard({required this.text});
 
   @override
   Widget build(BuildContext context) {
-    final cards = _buildCards();
-
-    return Column(
-      children: [
-        const SizedBox(height: 8),
-        if (cards.isEmpty && !widget.active)
-          _emptyCard(
-            context,
-            AppLocalizations.of(context)!.todoAccountsNoActive,
-            'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_7.png',
-          )
-        else if (cards.isEmpty && widget.active)
-          _emptyCard(
-            context,
-            AppLocalizations.of(context)!.todoAccountsNoInactive,
-            'https://assets.clashk.ing/stickers/Villager_BB_Master_Builder_4.png',
-          )
-        else
-          ...cards,
-      ],
-    );
-  }
-
-  Widget _emptyCard(BuildContext context, String text, String imageUrl) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Text(text),
-              const SizedBox(height: 10),
-              CachedNetworkImage(
-                imageUrl: imageUrl,
-                width: 200,
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return AppEmptyState(
+      title: text,
+      body: AppLocalizations.of(context)!.todoTryAnotherSearchOrFilter,
+      icon: Icons.search_off_rounded,
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 18),
+      stickerHeight: 140,
+      stickerWidth: 112,
     );
   }
 }

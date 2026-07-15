@@ -17,15 +17,19 @@ class ConfirmLogoutDialog extends StatelessWidget {
       content: Text(AppLocalizations.of(context)!.authConfirmLogout),
       actions: <Widget>[
         TextButton(
-          child: Text(AppLocalizations.of(context)!.generalCancel,
-              style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(
+            AppLocalizations.of(context)!.generalCancel,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text(AppLocalizations.of(context)!.generalOk,
-              style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(
+            AppLocalizations.of(context)!.generalOk,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
             onConfirm();

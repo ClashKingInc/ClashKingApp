@@ -23,7 +23,8 @@ class WarStatsView extends StatelessWidget {
 
   /// Groups the [EnemyTownhallStats] by defender town hall level
   Map<String, List<EnemyTownhallStats>> groupByDefenderTh(
-      Map<String, EnemyTownhallStats> data) {
+    Map<String, EnemyTownhallStats> data,
+  ) {
     final Map<String, List<EnemyTownhallStats>> grouped = {};
     for (final entry in data.entries) {
       final parts = entry.key.split("vs");
@@ -48,10 +49,11 @@ class WarStatsView extends StatelessWidget {
       totalStars += stars * count;
       totalDestruction += destruction * count;
       totalCount += count;
-      
+
       // Merge star counts
       for (final entry in stat.starsCount.entries) {
-        mergedStarsCount[entry.key] = (mergedStarsCount[entry.key] ?? 0) + entry.value;
+        mergedStarsCount[entry.key] =
+            (mergedStarsCount[entry.key] ?? 0) + entry.value;
       }
     }
 
@@ -68,11 +70,6 @@ class WarStatsView extends StatelessWidget {
     final stats = warStats?.getStatsForTypes(filterTypes);
 
     final Locale userLocale = Localizations.localeOf(context);
-    String formattedStartDate = DateFormat.yMd(userLocale.toString())
-        .format(DateTime.fromMillisecondsSinceEpoch(1000));
-    String formattedEndDate = DateFormat.yMd(userLocale.toString())
-        .format(DateTime.fromMillisecondsSinceEpoch(1000));
-
 
     final groupedAttackStats = groupByDefenderTh(stats!.byEnemyTownhall);
     final groupedDefenseStats = groupByDefenderTh(stats.byEnemyTownhallDef);
@@ -81,140 +78,110 @@ class WarStatsView extends StatelessWidget {
     final allThLevels = <String>{};
     allThLevels.addAll(groupedAttackStats.keys);
     allThLevels.addAll(groupedDefenseStats.keys);
-    
-    final sortedEntries = allThLevels.map((thLevel) => MapEntry(thLevel, groupedAttackStats[thLevel] ?? [])).toList()
-      ..sort((a, b) => int.parse(b.key).compareTo(int.parse(a.key)));
+
+    final sortedEntries =
+        allThLevels
+            .map(
+              (thLevel) => MapEntry(thLevel, groupedAttackStats[thLevel] ?? []),
+            )
+            .toList()
+          ..sort((a, b) => int.parse(b.key).compareTo(int.parse(a.key)));
 
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Text(AppLocalizations.of(context)!.statsAllTownHalls,
-                      style: Theme.of(context).textTheme.titleSmall),
-                  if (filterTypes.contains("dateRange"))
-                    Text("($formattedStartDate - $formattedEndDate)",
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  if (filterTypes.contains("lastXWars"))
-                    Text(AppLocalizations.of(context)!.warFiltersLastXwars(warDataLimit),
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  if (filterTypes.contains("season"))
-                    Text(
-                        AppLocalizations.of(context)!.statsSeasonDate(
-                            DateFormat.yMMMM(userLocale.toString())
-                                .format(currentSeasonDate)),
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  const SizedBox(height: 16),
-                  _buildStatRows(context, stats),
-                ],
-              ),
-            ),
-          ),
+        _WarStatsCollapsibleSection(
+          title: AppLocalizations.of(context)!.statsAllTownHalls,
+          initiallyExpanded: true,
+          attackCount: stats.totalAttacks,
+          defenseCount: stats.totalDefenses,
+          subtitle: _buildFilterSubtitle(context, userLocale),
+          childBuilder: (context) => _buildStatRows(context, stats),
         ),
         ...sortedEntries.map((entry) {
           final thLevel = entry.key;
-          final attackStats = entry.value.isNotEmpty ? mergeStats(entry.value) : null;
+          final attackStats = entry.value.isNotEmpty
+              ? mergeStats(entry.value)
+              : null;
           final defenseStats = groupedDefenseStats[thLevel] != null
               ? mergeStats(groupedDefenseStats[thLevel]!)
               : null;
 
           final defTh = int.tryParse(thLevel);
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MobileWebImage(
-                          imageUrl: ImageAssets.townHall(defTh ?? 1),
-                          width: 30,
-                          height: 30,
-                        ),
-                        SizedBox(width: 8),
-                        Text(AppLocalizations.of(context)!
-                            .gameTownHallLevelNumber(defTh ?? 1)),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: attackStats != null
-                                ? EnhancedStatCard(
-                                    title: AppLocalizations.of(context)!.warAttacksTitle,
-                                    stars: attackStats.averageStars,
-                                    destruction: attackStats.averageDestruction,
-                                    count: attackStats.count,
-                                    isAttack: true,
-                                    starsBreakdown: attackStats.starsCount,
-                                  )
-                                : Container(
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: Colors.grey[300]!.withValues(alpha: 0.3)),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        AppLocalizations.of(context)!.warAttacksNone,
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+          return _WarStatsCollapsibleSection(
+            title: AppLocalizations.of(
+              context,
+            )!.gameTownHallLevelNumber(defTh ?? 1),
+            imageUrl: ImageAssets.townHall(defTh ?? 1),
+            attackCount: attackStats?.count ?? 0,
+            defenseCount: defenseStats?.count ?? 0,
+            childBuilder: (context) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: attackStats != null
+                        ? EnhancedStatCard(
+                            title: AppLocalizations.of(
+                              context,
+                            )!.warAttacksTitle,
+                            stars: attackStats.averageStars,
+                            destruction: attackStats.averageDestruction,
+                            count: attackStats.count,
+                            isAttack: true,
+                            starsBreakdown: attackStats.starsCount,
+                          )
+                        : _EmptyWarStatsCard(
+                            label: AppLocalizations.of(context)!.warAttacksNone,
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: defenseStats != null
-                                ? EnhancedStatCard(
-                                    title: AppLocalizations.of(context)!.warDefensesTitle,
-                                    stars: defenseStats.averageStars,
-                                    destruction: defenseStats.averageDestruction,
-                                    count: defenseStats.count,
-                                    isAttack: false,
-                                    starsBreakdown: defenseStats.starsCount,
-                                  )
-                                : Container(
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: Colors.grey[300]!.withValues(alpha: 0.3)),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        AppLocalizations.of(context)!.warDefensesNone,
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: defenseStats != null
+                        ? EnhancedStatCard(
+                            title: AppLocalizations.of(
+                              context,
+                            )!.warDefensesTitle,
+                            stars: defenseStats.averageStars,
+                            destruction: defenseStats.averageDestruction,
+                            count: defenseStats.count,
+                            isAttack: false,
+                            starsBreakdown: defenseStats.starsCount,
+                          )
+                        : _EmptyWarStatsCard(
+                            label: AppLocalizations.of(
+                              context,
+                            )!.warDefensesNone,
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
         }),
       ],
     );
+  }
+
+  String? _buildFilterSubtitle(BuildContext context, Locale userLocale) {
+    if (filterTypes.contains("dateRange")) {
+      final formattedStartDate = DateFormat.yMd(
+        userLocale.toString(),
+      ).format(DateTime.fromMillisecondsSinceEpoch(1000));
+      final formattedEndDate = DateFormat.yMd(
+        userLocale.toString(),
+      ).format(DateTime.fromMillisecondsSinceEpoch(1000));
+      return "$formattedStartDate - $formattedEndDate";
+    }
+    if (filterTypes.contains("lastXWars")) {
+      return AppLocalizations.of(context)!.warFiltersLastXwars(warDataLimit);
+    }
+    if (filterTypes.contains("season")) {
+      return AppLocalizations.of(context)!.statsSeasonDate(
+        DateFormat.yMMMM(userLocale.toString()).format(currentSeasonDate),
+      );
+    }
+    return null;
   }
 
   Widget _buildStatRows(BuildContext context, PlayerWarTypeStats stats) {
@@ -246,6 +213,236 @@ class WarStatsView extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _WarStatsCollapsibleSection extends StatefulWidget {
+  final String title;
+  final String? subtitle;
+  final String? imageUrl;
+  final int attackCount;
+  final int defenseCount;
+  final WidgetBuilder childBuilder;
+  final bool initiallyExpanded;
+
+  const _WarStatsCollapsibleSection({
+    required this.title,
+    required this.childBuilder,
+    required this.attackCount,
+    required this.defenseCount,
+    this.subtitle,
+    this.imageUrl,
+    this.initiallyExpanded = false,
+  });
+
+  @override
+  State<_WarStatsCollapsibleSection> createState() =>
+      _WarStatsCollapsibleSectionState();
+}
+
+class _WarStatsCollapsibleSectionState
+    extends State<_WarStatsCollapsibleSection> {
+  late bool _expanded;
+
+  @override
+  void initState() {
+    super.initState();
+    _expanded = widget.initiallyExpanded;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return RepaintBoundary(
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        decoration: BoxDecoration(
+          color:
+              Theme.of(context).cardTheme.color ??
+              Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => setState(() => _expanded = !_expanded),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
+                    children: [
+                      AnimatedRotation(
+                        turns: _expanded ? 0.25 : 0,
+                        duration: const Duration(milliseconds: 160),
+                        child: Icon(
+                          Icons.chevron_right_rounded,
+                          size: 22,
+                          color: colorScheme.onSurface.withValues(alpha: 0.72),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      if (widget.imageUrl != null) ...[
+                        MobileWebImage(
+                          imageUrl: widget.imageUrl!,
+                          width: 30,
+                          height: 30,
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            if (widget.subtitle != null) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                widget.subtitle!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      _WarSectionSummary(
+                        attackCount: widget.attackCount,
+                        defenseCount: widget.defenseCount,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (_expanded) ...[
+                const SizedBox(height: 12),
+                RepaintBoundary(child: widget.childBuilder(context)),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WarSectionSummary extends StatelessWidget {
+  final int attackCount;
+  final int defenseCount;
+
+  const _WarSectionSummary({
+    required this.attackCount,
+    required this.defenseCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      alignment: WrapAlignment.end,
+      children: [
+        _WarSummaryPill(
+          imageUrl: ImageAssets.sword,
+          value: attackCount,
+          tooltip: AppLocalizations.of(context)!.warAttacksTitle,
+        ),
+        _WarSummaryPill(
+          imageUrl: ImageAssets.shield,
+          value: defenseCount,
+          tooltip: AppLocalizations.of(context)!.warDefensesTitle,
+        ),
+      ],
+    );
+  }
+}
+
+class _WarSummaryPill extends StatelessWidget {
+  final String imageUrl;
+  final int value;
+  final String tooltip;
+
+  const _WarSummaryPill({
+    required this.imageUrl,
+    required this.value,
+    required this.tooltip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Tooltip(
+      message: tooltip,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MobileWebImage(imageUrl: imageUrl, width: 15, height: 15),
+            const SizedBox(width: 4),
+            Text(
+              value.toString(),
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyWarStatsCard extends StatelessWidget {
+  final String label;
+
+  const _EmptyWarStatsCard({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.20),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+        ),
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
+        ),
       ),
     );
   }

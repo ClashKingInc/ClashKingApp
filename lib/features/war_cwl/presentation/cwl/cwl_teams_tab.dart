@@ -19,12 +19,15 @@ class CwlTeamsTab extends StatefulWidget {
 class CwlTeamsTabState extends State<CwlTeamsTab> {
   late String sortBy = 'stars';
   final Map<String, GlobalKey> _cardKeys = {};
+  final Set<String> _expandedFullStats = {};
 
-  bool showFullStats = false;
-
-  void toggleShowStats(GlobalKey<State<StatefulWidget>> key) {
+  void toggleShowStats(String clanTag, GlobalKey<State<StatefulWidget>> key) {
     setState(() {
-      showFullStats = !showFullStats;
+      if (_expandedFullStats.contains(clanTag)) {
+        _expandedFullStats.remove(clanTag);
+      } else {
+        _expandedFullStats.add(clanTag);
+      }
       Future.delayed(Duration(milliseconds: 200), () {
         final context = key.currentContext;
         if (context != null && context.mounted) {
@@ -46,8 +49,11 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
     if (sortBy == 'stars') {
       clans.sort((a, b) => b.stars.compareTo(a.stars));
     } else if (sortBy == 'percentage') {
-      clans.sort((a, b) => b.destructionPercentageInflicted
-          .compareTo(a.destructionPercentageInflicted));
+      clans.sort(
+        (a, b) => b.destructionPercentageInflicted.compareTo(
+          a.destructionPercentageInflicted,
+        ),
+      );
     } else if (sortBy == 'townHallLevel') {
       List<int> thPriorityOrder = List.generate(20, (i) => 20 - i);
       clans.sort((a, b) {
@@ -77,12 +83,14 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
       clans.sort((a, b) => b.defStars.compareTo(a.defStars));
     } else if (sortBy == 'defDestruction') {
       clans.sort(
-          (a, b) => b.destructionPercentage.compareTo(a.destructionPercentage));
+        (a, b) => b.destructionPercentage.compareTo(a.destructionPercentage),
+      );
     } else if (sortBy == 'defAverageStars') {
       clans.sort((a, b) => b.defAverageStars.compareTo(a.defAverageStars));
     } else if (sortBy == 'defAverageDestruction') {
       clans.sort(
-          (a, b) => b.defAverageDestruction.compareTo(a.defAverageDestruction));
+        (a, b) => b.defAverageDestruction.compareTo(a.defAverageDestruction),
+      );
     } else if (sortBy == 'def0stars') {
       clans.sort((a, b) => b.zeroStarDef.compareTo(a.zeroStarDef));
     } else if (sortBy == 'def1stars') {
@@ -96,70 +104,93 @@ class CwlTeamsTabState extends State<CwlTeamsTab> {
     return Column(
       children: [
         const SizedBox(height: 12),
-        FilterDropdown(
-            sortBy: sortBy,
-            updateSortBy: (newValue) {
-              setState(() {
-                sortBy = newValue;
-              });
-            },
-            sortByOptions: {
-              generateDoubleIcons(
-                  16, ImageAssets.sword, ImageAssets.builderBaseStar): 'stars',
-              generateDoubleIcons(16, ImageAssets.sword, ImageAssets.hitrate):
-                  'percentage',
-              generateDoubleImageIconsWithText(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: FilterDropdown(
+              sortBy: sortBy,
+              updateSortBy: (newValue) {
+                setState(() {
+                  sortBy = newValue;
+                });
+              },
+              maxWidth: 130,
+              sortByOptions: {
+                generateDoubleIcons(
+                  16,
+                  ImageAssets.sword,
+                  ImageAssets.builderBaseStar,
+                ): 'stars',
+                generateDoubleIcons(16, ImageAssets.sword, ImageAssets.hitrate):
+                    'percentage',
+                generateDoubleImageIconsWithText(
                   16,
                   ImageAssets.sword,
                   ImageAssets.townHall(17),
-                  AppLocalizations.of(context)!.gameTownHallLevel): 'townHallLevel',
-              generateImageIconWithText(16, ImageAssets.sword,
-                  AppLocalizations.of(context)!.warAttacksMissed): 'missedAttacks',
-              generateDoubleImageIconsWithText(
+                  AppLocalizations.of(context)!.gameTownHallLevel,
+                ): 'townHallLevel',
+                generateImageIconWithText(
+                  16,
+                  ImageAssets.sword,
+                  AppLocalizations.of(context)!.warAttacksMissed,
+                ): 'missedAttacks',
+                generateDoubleImageIconsWithText(
                   16,
                   ImageAssets.sword,
                   ImageAssets.builderBaseStar,
-                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})"): 'averageStars',
-              generateStarsWithIconBefore(3, 16, ImageAssets.sword): '3stars',
-              generateStarsWithIconBefore(2, 16, ImageAssets.sword): '2stars',
-              generateStarsWithIconBefore(1, 16, ImageAssets.sword): '1stars',
-              generateStarsWithIconBefore(0, 16, ImageAssets.sword): '0stars',
-              generateDoubleIcons(16, ImageAssets.shieldWithArrow,
-                  ImageAssets.builderBaseStar): 'defStars',
-              generateDoubleIcons(
-                      16, ImageAssets.shieldWithArrow, ImageAssets.hitrate):
-                  'defDestruction',
-              generateDoubleImageIconsWithText(
+                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
+                ): 'averageStars',
+                generateStarsWithIconBefore(3, 16, ImageAssets.sword): '3stars',
+                generateStarsWithIconBefore(2, 16, ImageAssets.sword): '2stars',
+                generateStarsWithIconBefore(1, 16, ImageAssets.sword): '1stars',
+                generateStarsWithIconBefore(0, 16, ImageAssets.sword): '0stars',
+                generateDoubleIcons(
                   16,
                   ImageAssets.shieldWithArrow,
                   ImageAssets.builderBaseStar,
-                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})"): 'defAverageStars',
-              generateDoubleImageIconsWithText(
-                      16,
-                      ImageAssets.shieldWithArrow,
-                      ImageAssets.hitrate,
-                      "(${AppLocalizations.of(context)!.warAbbreviationAvg})"):
-                  'defAverageDestruction',
-              generateStarsWithIconBefore(3, 16, ImageAssets.shieldWithArrow):
-                  'def3stars',
-              generateStarsWithIconBefore(2, 16, ImageAssets.shieldWithArrow):
-                  'def2stars',
-              generateStarsWithIconBefore(1, 16, ImageAssets.shieldWithArrow):
-                  'def1stars',
-              generateStarsWithIconBefore(0, 16, ImageAssets.shieldWithArrow):
-                  'def0stars',
-            }),
+                ): 'defStars',
+                generateDoubleIcons(
+                  16,
+                  ImageAssets.shieldWithArrow,
+                  ImageAssets.hitrate,
+                ): 'defDestruction',
+                generateDoubleImageIconsWithText(
+                  16,
+                  ImageAssets.shieldWithArrow,
+                  ImageAssets.builderBaseStar,
+                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
+                ): 'defAverageStars',
+                generateDoubleImageIconsWithText(
+                  16,
+                  ImageAssets.shieldWithArrow,
+                  ImageAssets.hitrate,
+                  "(${AppLocalizations.of(context)!.warAbbreviationAvg})",
+                ): 'defAverageDestruction',
+                generateStarsWithIconBefore(3, 16, ImageAssets.shieldWithArrow):
+                    'def3stars',
+                generateStarsWithIconBefore(2, 16, ImageAssets.shieldWithArrow):
+                    'def2stars',
+                generateStarsWithIconBefore(1, 16, ImageAssets.shieldWithArrow):
+                    'def1stars',
+                generateStarsWithIconBefore(0, 16, ImageAssets.shieldWithArrow):
+                    'def0stars',
+              },
+            ),
+          ),
+        ),
         const SizedBox(height: 12),
         ...clans.map((clan) {
           final key = _cardKeys.putIfAbsent(clan.tag, () => GlobalKey());
           return CwlTeamCard(
-              clan: clan,
-              warCwl: widget.warCwl,
-              showFullStats: showFullStats,
-              onToggleFullStats: () {
-                toggleShowStats(key);
-              });
-        })
+            clan: clan,
+            warCwl: widget.warCwl,
+            showFullStats: _expandedFullStats.contains(clan.tag),
+            onToggleFullStats: () {
+              toggleShowStats(clan.tag, key);
+            },
+          );
+        }),
       ],
     );
   }

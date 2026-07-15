@@ -5,11 +5,8 @@ import 'package:intl/intl.dart';
 
 class LastRefreshIndicator extends StatefulWidget {
   final DateTime? lastRefresh;
-  
-  const LastRefreshIndicator({
-    super.key,
-    required this.lastRefresh,
-  });
+
+  const LastRefreshIndicator({super.key, required this.lastRefresh});
 
   @override
   State<LastRefreshIndicator> createState() => _LastRefreshIndicatorState();
@@ -52,7 +49,7 @@ class _LastRefreshIndicatorState extends State<LastRefreshIndicator> {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
     final localizations = AppLocalizations.of(context)!;
-    
+
     if (difference.inMinutes < 1) {
       return localizations.timeJustNow;
     } else if (difference.inMinutes < 60) {
@@ -71,7 +68,7 @@ class _LastRefreshIndicatorState extends State<LastRefreshIndicator> {
     }
 
     final formattedTime = _formatRefreshTime(widget.lastRefresh!, context);
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
@@ -80,13 +77,17 @@ class _LastRefreshIndicatorState extends State<LastRefreshIndicator> {
           Icon(
             Icons.refresh,
             size: 12,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.6),
           ),
           const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context)!.generalLastRefresh(formattedTime),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],

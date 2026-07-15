@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -16,17 +18,20 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
   late AnimationController _pulseController;
   late AnimationController _textController;
   late Animation<double> _textOpacityAnimation;
+  Timer? _textCycleTimer;
 
   List<String> get _loadingTexts => [
-        AppLocalizations.of(context)!.loadingVillages,
-        AppLocalizations.of(context)!.loadingClanData,
-        AppLocalizations.of(context)!.loadingWarStats,
-        AppLocalizations.of(context)!.loadingLegendsData,
-        AppLocalizations.of(context)!.loadingCapitalRaids,
-        AppLocalizations.of(context)!.loadingAlmostReady,
-      ];
+    AppLocalizations.of(context)!.loadingVillages,
+    AppLocalizations.of(context)!.loadingClanData,
+    AppLocalizations.of(context)!.loadingWarStats,
+    AppLocalizations.of(context)!.loadingLegendsData,
+    AppLocalizations.of(context)!.loadingCapitalRaids,
+    AppLocalizations.of(context)!.loadingAlmostReady,
+  ];
 
   int _currentTextIndex = 0;
+  bool _reduceMotion = false;
+  bool _animationsStarted = false;
 
   @override
   void initState() {
@@ -49,35 +54,52 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    _textOpacityAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _textController,
-      curve: Curves.easeInOut,
-    ));
+    _textOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _textController, curve: Curves.easeInOut),
+    );
+  }
 
-    // Start animations
-    // _rotationController.repeat(); // Disabled rotation
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    if (_reduceMotion == reduceMotion && _animationsStarted) return;
+    _reduceMotion = reduceMotion;
+
+    if (reduceMotion) {
+      _animationsStarted = false;
+      _textCycleTimer?.cancel();
+      _pulseController.stop();
+      _textController
+        ..stop()
+        ..value = 1;
+      return;
+    }
+
     _pulseController.repeat(reverse: true);
-    _textController.forward();
-
-    // Cycle through loading texts
-    _startTextCycle();
+    if (!_animationsStarted) {
+      _animationsStarted = true;
+      _startTextCycle();
+    }
   }
 
   void _startTextCycle() {
     // Start with the first text immediately visible
     _textController.forward();
-    Future.delayed(const Duration(milliseconds: 800), () {
-      if (mounted) {
+    _scheduleTextCycle();
+  }
+
+  void _scheduleTextCycle() {
+    _textCycleTimer?.cancel();
+    _textCycleTimer = Timer(const Duration(milliseconds: 800), () {
+      if (mounted && !_reduceMotion) {
         _cycleText();
       }
     });
   }
 
   void _cycleText() {
-    if (!mounted) return;
+    if (!mounted || _reduceMotion) return;
 
     _textController.reverse().then((_) {
       if (mounted) {
@@ -86,12 +108,8 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
         });
         _textController.forward().then((_) {
           // Only continue cycling if we haven't reached the last text
-          if (_currentTextIndex < _loadingTexts.length - 1) {
-            Future.delayed(const Duration(milliseconds: 800), () {
-              if (mounted) {
-                _cycleText();
-              }
-            });
+          if (!_reduceMotion && _currentTextIndex < _loadingTexts.length - 1) {
+            _scheduleTextCycle();
           }
         });
       }
@@ -100,6 +118,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
   @override
   void dispose() {
+    _textCycleTimer?.cancel();
     _rotationController.dispose();
     _pulseController.dispose();
     _textController.dispose();
@@ -108,6 +127,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
@@ -116,27 +136,34 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
           children: [
             // Static Logo
             SizedBox(
+              key: const Key('startup-mark'),
               width: 80,
               height: 80,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: MobileWebImage(
-                    imageUrl: Theme.of(context).brightness == Brightness.dark
-                        ? ImageAssets.darkModeLogo
-                        : ImageAssets.lightModeLogo),
+                  imageUrl: Theme.of(context).brightness == Brightness.dark
+                      ? ImageAssets.darkModeLogo
+                      : ImageAssets.lightModeLogo,
+                ),
               ),
             ),
 
             const SizedBox(height: 30),
 
             // App Text Logo
-            SizedBox(
-              height: 35,
-              child: MobileWebImage(
+            FractionallySizedBox(
+              key: const Key('startup-wordmark'),
+              widthFactor: 0.82,
+              child: AspectRatio(
+                aspectRatio: 3806 / 558,
+                child: MobileWebImage(
                   imageUrl: Theme.of(context).brightness == Brightness.dark
                       ? ImageAssets.darkModeTextLogo
                       : ImageAssets.lightModeTextLogo,
-                  fit: BoxFit.contain),
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
 
             const SizedBox(height: 200),
@@ -150,11 +177,10 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
                   child: Text(
                     _loadingTexts[_currentTextIndex],
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.7),
-                        ),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 );
@@ -169,7 +195,9 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
               children: List.generate(6, (index) {
                 final isActive = index <= _currentTextIndex;
                 return AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
+                  duration: reduceMotion
+                      ? Duration.zero
+                      : const Duration(milliseconds: 200),
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   width: isActive ? 20 : 8,
                   height: 8,
@@ -177,10 +205,9 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
                     borderRadius: BorderRadius.circular(4),
                     color: isActive
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.3),
+                        : Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.3),
                   ),
                 );
               }),

@@ -8,12 +8,16 @@ class CapitalHistoryItems {
   CapitalHistoryItems({required this.items, required this.clanTag, this.stats});
 
   factory CapitalHistoryItems.fromJson(
-      Map<String, dynamic> json, String clanTag, {Map<String, dynamic>? statsData}) {
+    Map<String, dynamic> json,
+    String clanTag, {
+    Map<String, dynamic>? statsData,
+  }) {
     try {
       return CapitalHistoryItems(
-        items: json['history'] != null 
+        items: json['history'] != null
             ? List<CapitalHistoryItem>.from(
-                json['history'].map((x) => CapitalHistoryItem.fromJson(x)))
+                json['history'].map((x) => CapitalHistoryItem.fromJson(x)),
+              )
             : [],
         clanTag: clanTag,
         stats: statsData != null ? CapitalStats.fromJson(statsData) : null,
@@ -41,6 +45,7 @@ class CapitalHistoryItem {
   int defensiveReward;
   List<RaidMember>? members;
   List<RaidAttackLog>? attackLog;
+  List<RaidAttackLog>? defenseLog;
 
   CapitalHistoryItem({
     required this.state,
@@ -54,6 +59,7 @@ class CapitalHistoryItem {
     required this.defensiveReward,
     required this.members,
     required this.attackLog,
+    this.defenseLog,
   });
 
   factory CapitalHistoryItem.fromJson(Map<String, dynamic> json) {
@@ -64,16 +70,24 @@ class CapitalHistoryItem {
       capitalTotalLoot: (json['capitalTotalLoot'] as num?)?.toInt() ?? 0,
       raidsCompleted: (json['raidsCompleted'] as num?)?.toInt() ?? 0,
       totalAttacks: (json['totalAttacks'] as num?)?.toInt() ?? 0,
-      enemyDistrictsDestroyed: (json['enemyDistrictsDestroyed'] as num?)?.toInt() ?? 0,
+      enemyDistrictsDestroyed:
+          (json['enemyDistrictsDestroyed'] as num?)?.toInt() ?? 0,
       offensiveReward: (json['offensiveReward'] as num?)?.toInt() ?? 0,
       defensiveReward: (json['defensiveReward'] as num?)?.toInt() ?? 0,
       members: json['members'] != null
           ? List<RaidMember>.from(
-              json['members'].map((x) => RaidMember.fromJson(x)))
+              json['members'].map((x) => RaidMember.fromJson(x)),
+            )
           : [],
       attackLog: json['attackLog'] != null
           ? List<RaidAttackLog>.from(
-              json['attackLog'].map((x) => RaidAttackLog.fromJson(x)))
+              json['attackLog'].map((x) => RaidAttackLog.fromJson(x)),
+            )
+          : [],
+      defenseLog: json['defenseLog'] != null
+          ? List<RaidAttackLog>.from(
+              json['defenseLog'].map((x) => RaidAttackLog.fromJson(x)),
+            )
           : [],
     );
   }
@@ -103,7 +117,8 @@ class RaidMember {
       attacks: (json['attacks'] as num?)?.toInt() ?? 0,
       attackLimit: (json['attackLimit'] as num?)?.toInt() ?? 0,
       bonusAttackLimit: (json['bonusAttackLimit'] as num?)?.toInt() ?? 0,
-      capitalResourcesLooted: (json['capitalResourcesLooted'] as num?)?.toInt() ?? 0,
+      capitalResourcesLooted:
+          (json['capitalResourcesLooted'] as num?)?.toInt() ?? 0,
     );
   }
 }
@@ -125,12 +140,17 @@ class RaidAttackLog {
 
   factory RaidAttackLog.fromJson(Map<String, dynamic> json) {
     return RaidAttackLog(
-      defender: RaidDefender.fromJson(json['defender'] ?? {}),
+      // attackLog entries key the opponent as "defender"; defenseLog
+      // entries (same shape, reused for this class) key it as "attacker".
+      defender: RaidDefender.fromJson(
+        json['defender'] ?? json['attacker'] ?? {},
+      ),
       attackCount: (json['attackCount'] as num?)?.toInt() ?? 0,
       districtCount: (json['districtCount'] as num?)?.toInt() ?? 0,
       districtsDestroyed: (json['districtsDestroyed'] as num?)?.toInt() ?? 0,
       districts: List<District>.from(
-          json['districts'].map((x) => District.fromJson(x))),
+        json['districts'].map((x) => District.fromJson(x)),
+      ),
     );
   }
 }
@@ -268,11 +288,18 @@ class CapitalStats {
       avgLootPerWeek: (json['avgLootPerWeek'] as num?)?.toDouble() ?? 0.0,
       avgAttacksPerWeek: (json['avgAttacksPerWeek'] as num?)?.toDouble() ?? 0.0,
       avgAttacksPerRaid: (json['avgAttacksPerRaid'] as num?)?.toDouble() ?? 0.0,
-      avgAttacksPerDistrict: (json['avgAttacksPerDistrict'] as num?)?.toDouble() ?? 0.0,
-      avgOffensiveRewards: (json['avgOffensiveRewards'] as num?)?.toDouble() ?? 0.0,
-      avgDefensiveRewards: (json['avgDefensiveRewards'] as num?)?.toDouble() ?? 0.0,
-      bestRaid: json['bestRaid'] != null ? CapitalRaidSummary.fromJson(json['bestRaid']) : null,
-      worstRaid: json['worstRaid'] != null ? CapitalRaidSummary.fromJson(json['worstRaid']) : null,
+      avgAttacksPerDistrict:
+          (json['avgAttacksPerDistrict'] as num?)?.toDouble() ?? 0.0,
+      avgOffensiveRewards:
+          (json['avgOffensiveRewards'] as num?)?.toDouble() ?? 0.0,
+      avgDefensiveRewards:
+          (json['avgDefensiveRewards'] as num?)?.toDouble() ?? 0.0,
+      bestRaid: json['bestRaid'] != null
+          ? CapitalRaidSummary.fromJson(json['bestRaid'])
+          : null,
+      worstRaid: json['worstRaid'] != null
+          ? CapitalRaidSummary.fromJson(json['worstRaid'])
+          : null,
     );
   }
 }
@@ -307,7 +334,8 @@ class CapitalRaidSummary {
       totalAttacks: json['totalAttacks'] ?? 0,
       enemyDistrictsDestroyed: json['enemyDistrictsDestroyed'] ?? 0,
       avgAttacksPerRaid: (json['avgAttacksPerRaid'] as num?)?.toDouble() ?? 0.0,
-      avgAttacksPerDistrict: (json['avgAttacksPerDistrict'] as num?)?.toDouble() ?? 0.0,
+      avgAttacksPerDistrict:
+          (json['avgAttacksPerDistrict'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }

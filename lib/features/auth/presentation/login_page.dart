@@ -1,9 +1,10 @@
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
-import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dart';
@@ -11,11 +12,12 @@ import 'package:clashkingapp/features/auth/presentation/email_verification_page.
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/account_bootstrap_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -32,6 +34,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late TabController _tabController;
+  int _selectedAuthTab = 0;
   bool _isLoading = false;
 
   // Email form controllers
@@ -44,6 +47,11 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (mounted && _selectedAuthTab != _tabController.index) {
+        setState(() => _selectedAuthTab = _tabController.index);
+      }
+    });
 
     // Pre-fill email if provided
     if (widget.prefillEmail != null) {
@@ -53,8 +61,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context)!
-                  .authErrorEmailAlreadyRegistered),
+              content: Text(
+                AppLocalizations.of(context)!.authErrorEmailAlreadyRegistered,
+              ),
               backgroundColor: Colors.orange,
               duration: Duration(seconds: 3),
             ),
@@ -116,9 +125,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         if (e is EmailVerificationRequiredException) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => EmailVerificationPage(
-                email: _emailController.text.trim(),
-              ),
+              builder: (context) =>
+                  EmailVerificationPage(email: _emailController.text.trim()),
             ),
           );
         } else {
@@ -154,8 +162,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final logoUrl =
-        (isDarkMode ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo);
+    final logoUrl = (isDarkMode
+        ? ImageAssets.darkModeLogo
+        : ImageAssets.lightModeLogo);
     final textLogoUrl = (isDarkMode
         ? ImageAssets.darkModeTextLogo
         : ImageAssets.lightModeTextLogo);
@@ -164,8 +173,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
-            constraints:
-                BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
             child: Padding(
               padding: EdgeInsets.all(24),
               child: Column(
@@ -177,7 +187,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       SizedBox(
                         height: 80,
                         width: 80,
-                        child: CachedNetworkImage(
+                        child: MobileWebImage(
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                           imageUrl: logoUrl,
@@ -186,7 +196,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       SizedBox(height: 12),
                       SizedBox(
                         width: 160,
-                        child: CachedNetworkImage(
+                        child: MobileWebImage(
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                           imageUrl: textLogoUrl,
@@ -201,7 +211,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   Text(
                     AppLocalizations.of(context)!.appDescription,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     textAlign: TextAlign.center,
                   ),
 
@@ -226,47 +237,26 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       child: Column(
                         children: [
                           // Tab Bar
-                          TabBar(
-                            controller: _tabController,
-                            labelColor: Theme.of(context).colorScheme.primary,
-                            unselectedLabelColor:
-                                Theme.of(context).colorScheme.onSurface,
-                            indicator: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: LiquidGlassSegmentedControl<int>(
+                              values: const [0, 1],
+                              labels: [
+                                AppLocalizations.of(context)!.authDiscordTitle,
+                                AppLocalizations.of(context)!.authEmail,
+                              ],
+                              selected: _selectedAuthTab,
+                              height: 44,
+                              onChanged: (index) {
+                                setState(() => _selectedAuthTab = index);
+                                _tabController.animateTo(index);
+                              },
                             ),
-                            indicatorPadding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
-                            dividerColor: Colors.transparent,
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                            unselectedLabelStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                            ),
-                            tabs: [
-                              Tab(
-                                icon: Icon(Icons.discord, size: 20),
-                                text: AppLocalizations.of(context)!
-                                    .authDiscordTitle,
-                                height: 50,
-                              ),
-                              Tab(
-                                icon: Icon(Icons.email_outlined, size: 20),
-                                text: AppLocalizations.of(context)!.authEmail,
-                                height: 50,
-                              ),
-                            ],
                           ),
 
                           // Tab Content
                           Container(
-                            height: 320,
+                            height: 328,
                             padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                             child: TabBarView(
                               controller: _tabController,
@@ -284,7 +274,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     ),
                   ),
 
-                  SizedBox(height: 16),
+                  SizedBox(height: 12),
 
                   // Help Section
                   Column(
@@ -292,7 +282,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       Text(
                         AppLocalizations.of(context)!.helpTitle,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface),
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
                       SizedBox(height: 8),
                       Row(
@@ -300,7 +291,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         children: [
                           TextButton.icon(
                             onPressed: () async => launchUrl(
-                                Uri.parse('https://discord.gg/clashking')),
+                              Uri.parse('https://discord.gg/clashking'),
+                            ),
                             icon: Icon(
                               Icons.discord,
                               size: 16,
@@ -308,25 +300,27 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             ),
                             label: Text(
                               AppLocalizations.of(context)!.helpJoinDiscord,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
+                              style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                             ),
                           ),
                           SizedBox(width: 8),
                           TextButton.icon(
                             onPressed: () async => launchUrl(
                               Uri.parse(
-                                  'mailto:devs@clashk.ing?subject=ClashKing App Support'),
+                                'mailto:devs@clashk.ing?subject=ClashKing App Support',
+                              ),
                             ),
                             icon: Icon(
                               Icons.email_outlined,
@@ -335,18 +329,19 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             ),
                             label: Text(
                               AppLocalizations.of(context)!.helpEmailUs,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
+                              style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                             ),
                           ),
                         ],
@@ -371,26 +366,21 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 12),
-              Icon(
-                Icons.discord,
-                size: 48,
-                color: Color(0xFF5865F2),
-              ),
+              Icon(Icons.discord, size: 48, color: Color(0xFF5865F2)),
               SizedBox(height: 12),
               Text(
                 AppLocalizations.of(context)!.authDiscordSignIn,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 6),
               Text(
                 AppLocalizations.of(context)!.authDiscordDescription,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -426,7 +416,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       Text(
                         AppLocalizations.of(context)!.authDiscordContinue,
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -452,7 +444,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   Text(
                     AppLocalizations.of(context)!.authEmailDescription,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     textAlign: TextAlign.center,
                   ),
 
@@ -468,8 +461,10 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
                       isDense: true,
                     ),
                     validator: (value) {
@@ -477,8 +472,8 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         return AppLocalizations.of(context)!.authEmailRequired;
                       }
                       if (!RegExp(
-                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                          .hasMatch(value)) {
+                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                      ).hasMatch(value)) {
                         return AppLocalizations.of(context)!.authEmailInvalid;
                       }
                       return null;
@@ -492,29 +487,38 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      labelText:
-                          AppLocalizations.of(context)!.authPasswordLabel,
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.authPasswordLabel,
                       prefixIcon: Icon(Icons.lock_outline, size: 20),
                       suffixIcon: IconButton(
+                        tooltip: _obscurePassword
+                            ? AppLocalizations.of(context)!.tooltipShowPassword
+                            : AppLocalizations.of(context)!.tooltipHidePassword,
                         icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            size: 20),
+                          _obscurePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          size: 20,
+                        ),
                         onPressed: () => setState(
-                            () => _obscurePassword = !_obscurePassword),
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
                       isDense: true,
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context)!
-                            .authPasswordRequired;
+                        return AppLocalizations.of(
+                          context,
+                        )!.authPasswordRequired;
                       }
                       return null;
                     },
@@ -529,12 +533,15 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => RegisterPage()),
+                              builder: (context) => RegisterPage(),
+                            ),
                           );
                         },
                         style: TextButton.styleFrom(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 2,
+                          ),
                         ),
                         child: Text(
                           AppLocalizations.of(context)!.authSignUp,
@@ -554,8 +561,10 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           );
                         },
                         style: TextButton.styleFrom(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 2,
+                          ),
                         ),
                         child: Text(
                           AppLocalizations.of(context)!.authPasswordForgot,
@@ -596,8 +605,10 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     )
                   : Text(
                       AppLocalizations.of(context)!.authLogin,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
             ),
           ),
@@ -615,6 +626,7 @@ class _PostAuthLoadingScreen extends StatefulWidget {
 }
 
 class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
+  static const _accountBootstrap = AccountBootstrapService();
   bool _isInitializing = true;
 
   @override
@@ -624,17 +636,23 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
   }
 
   Future<void> _initPostAuth() async {
-    final accessToken = await TokenService().getAccessToken();
-    if (accessToken != null && mounted) {
+    if (mounted) {
       final cocService = context.read<CocAccountService>();
       final playerService = context.read<PlayerService>();
       final clanService = context.read<ClanService>();
       final warCwlService = context.read<WarCwlService>();
+      final authService = context.read<AuthService>();
+      final bookmarkService = context.read<BookmarkService>();
 
       try {
-        // Load the selected tag from SharedPreferences first
-        await cocService.loadSelectedTag();
-        await cocService.loadApiData(playerService, clanService, warCwlService);
+        await _accountBootstrap.initialize(
+          userId: authService.currentUser?.userId,
+          cocAccounts: cocService,
+          bookmarks: bookmarkService,
+          players: playerService,
+          clans: clanService,
+          wars: warCwlService,
+        );
       } catch (e) {
         if (mounted) {
           _showPostAuthFailure(e);
@@ -666,9 +684,7 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
           isNetworkError: isNetworkError(error),
           onRetry: () async {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => _PostAuthLoadingScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => _PostAuthLoadingScreen()),
             );
           },
         ),
@@ -687,9 +703,9 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
           // ❌ No account → Go to add account page
           nextPage = AddCocAccountPage();
         }
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => nextPage),
-        );
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (_) => nextPage));
       }
     });
   }

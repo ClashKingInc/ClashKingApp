@@ -35,7 +35,8 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  AppLocalizations.of(context)?.legendsEosTrophies ?? "EOS Trophies",
+                  AppLocalizations.of(context)?.legendsEosTrophies ??
+                      "EOS Trophies",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),
@@ -55,15 +56,17 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                             reservedSize: 50,
                             getTitlesWidget: (value, meta) {
                               final date = DateTime.fromMillisecondsSinceEpoch(
-                                  value.toInt());
+                                value.toInt(),
+                              );
                               return Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: Transform.rotate(
                                   angle: -0.8,
                                   child: Text(
                                     DateFormat('MM/yy').format(date),
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelSmall,
                                   ),
                                 ),
                               );
@@ -75,11 +78,15 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                             showTitles: true,
                             reservedSize: 50,
                             interval: SpotData.getYAxisInterval(
-                                chartData.minY, chartData.maxY),
+                              chartData.minY,
+                              chartData.maxY,
+                            ),
                             getTitlesWidget: (value, meta) {
                               return Text(
-                                NumberFormat('#,###', locale.toString())
-                                    .format(value.toInt()),
+                                NumberFormat(
+                                  '#,###',
+                                  locale.toString(),
+                                ).format(value.toInt()),
                                 style: Theme.of(context).textTheme.bodySmall,
                               );
                             },
@@ -109,10 +116,9 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                           dotData: FlDotData(show: true),
                           belowBarData: BarAreaData(
                             show: true,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.2),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withValues(alpha: 0.2),
                           ),
                         ),
                       ],
@@ -126,7 +132,8 @@ class PlayerLegendHistoryEosChart extends StatelessWidget {
                               Theme.of(context).colorScheme.primary,
                           getTooltipItems: (spots) => spots.map((spot) {
                             final date = DateTime.fromMillisecondsSinceEpoch(
-                                spot.x.toInt());
+                              spot.x.toInt(),
+                            );
                             return LineTooltipItem(
                               '${dateFormat.format(date)} : ${spot.y.toInt()}',
                               const TextStyle(color: Colors.white),

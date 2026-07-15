@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
@@ -14,6 +15,11 @@ class FakeApiService extends ApiService {
   final Map<String, http.Response> postStubs = {};
   final Map<String, http.Response> putStubs = {};
   final Map<String, http.Response> deleteStubs = {};
+  final Map<String, Object?> lastPostBodies = {};
+  final Map<String, Object?> lastPutBodies = {};
+  final Map<String, Object?> lastDeleteBodies = {};
+  final Map<String, Map<String, String>?> lastGetHeaders = {};
+  final Map<String, int> getCallCounts = {};
 
   /// If set, the next call to the corresponding method for [endpoint] will
   /// throw this exception instead of returning a stubbed response.
@@ -27,9 +33,15 @@ class FakeApiService extends ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
   }) async {
+    lastGetHeaders[endpoint] = extraHeaders;
+    getCallCounts.update(endpoint, (count) => count + 1, ifAbsent: () => 1);
     if (throwOnGet.containsKey(endpoint)) throw throwOnGet[endpoint]!;
-    return getStubs[endpoint] ?? http.Response('{}', 200);
+    if (getStubs.containsKey(endpoint)) return getStubs[endpoint]!;
+    return _derivedProxyGet(endpoint) ??
+        getStubs[''] ??
+        http.Response('{}', 200);
   }
 
   @override
@@ -39,7 +51,9 @@ class FakeApiService extends ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
   }) async {
+    lastPostBodies[endpoint] = body;
     if (throwOnPost.containsKey(endpoint)) throw throwOnPost[endpoint]!;
     return postStubs[endpoint] ?? http.Response('{}', 200);
   }
@@ -51,7 +65,9 @@ class FakeApiService extends ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
   }) async {
+    lastPutBodies[endpoint] = body;
     return putStubs[endpoint] ?? http.Response('{}', 200);
   }
 
@@ -62,9 +78,77 @@ class FakeApiService extends ApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
   }) async {
+    lastDeleteBodies[endpoint] = body;
     if (throwOnDelete.containsKey(endpoint)) throw throwOnDelete[endpoint]!;
     return deleteStubs[endpoint] ?? http.Response('{}', 200);
+  }
+
+  http.Response? _derivedProxyGet(String endpoint) {
+    if (endpoint.startsWith('/players/')) {
+      return _itemFromBatchStub(
+        endpoint,
+        batchEndpoint: '/players',
+        collectionKey: 'items',
+      );
+    }
+
+    if (endpoint.startsWith('/clans/')) {
+      if (endpoint.contains('/capitalraidseasons') ||
+          endpoint.contains('/warlog')) {
+        return null;
+      }
+
+      final oldDetailsStub =
+          getStubs['/clan/${_encodedTagFromProxyEndpoint(endpoint)}/details'];
+      if (oldDetailsStub != null) {
+        return oldDetailsStub;
+      }
+
+      return _itemFromBatchStub(
+        endpoint,
+        batchEndpoint: '/clans/details',
+        collectionKey: 'items',
+      );
+    }
+
+    return null;
+  }
+
+  http.Response? _itemFromBatchStub(
+    String endpoint, {
+    required String batchEndpoint,
+    required String collectionKey,
+  }) {
+    final batchResponse = postStubs[batchEndpoint];
+    if (batchResponse == null) return null;
+    if (batchResponse.statusCode != 200) {
+      return http.Response(batchResponse.body, batchResponse.statusCode);
+    }
+
+    final tag = _tagFromProxyEndpoint(endpoint);
+    final decoded = jsonDecode(batchResponse.body);
+    if (decoded is! Map<String, dynamic>) return http.Response('{}', 200);
+    final items = decoded[collectionKey];
+    if (items is! List) return http.Response('{}', 200);
+    final item = items.whereType<Map<String, dynamic>>().firstWhere(
+      (item) => item['tag'] == tag,
+      orElse: () => <String, dynamic>{},
+    );
+    return http.Response(jsonEncode(item), 200);
+  }
+
+  String _tagFromProxyEndpoint(String endpoint) {
+    final parts = endpoint.split('/');
+    if (parts.length < 3) return '';
+    return Uri.decodeComponent(parts[2]);
+  }
+
+  String _encodedTagFromProxyEndpoint(String endpoint) {
+    final parts = endpoint.split('/');
+    if (parts.length < 3) return '';
+    return parts[2];
   }
 }
 
@@ -105,6 +189,7 @@ class NetworkErrorApiService extends FakeApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
   }) async {
     throw const SocketException('Network unreachable');
   }
@@ -116,6 +201,7 @@ class NetworkErrorApiService extends FakeApiService {
     bool requiresAuth = false,
     String? url,
     Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
   }) async {
     throw const SocketException('Network unreachable');
   }

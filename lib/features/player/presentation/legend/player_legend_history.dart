@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
@@ -7,32 +7,30 @@ import 'package:intl/intl.dart';
 import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
 
 class PlayerLegendHistory extends StatelessWidget {
-  const PlayerLegendHistory({
-    super.key,
-    required this.player,
-  });
+  const PlayerLegendHistory({super.key, required this.player});
 
   final Player player;
 
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
   Widget buildSeasonInfo(
-      PlayerLegendRanking? season, BuildContext context, String title) {
+    PlayerLegendRanking? season,
+    BuildContext context,
+    String title,
+  ) {
     if (season == null) {
       return SizedBox.shrink();
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Text(
-          title,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(title, style: Theme.of(context).textTheme.bodySmall),
         Text(
           capitalize(
             DateFormat(
-                    'MMMM yyyy', Localizations.localeOf(context).languageCode)
-                .format(
+              'MMMM yyyy',
+              Localizations.localeOf(context).languageCode,
+            ).format(
               DateTime(
                 int.parse(season.season.split('-')[0]),
                 int.parse(season.season.split('-')[1]),
@@ -51,7 +49,7 @@ class PlayerLegendHistory extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   Center(
-                    child: CachedNetworkImage(
+                    child: MobileWebImage(
                       errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.legendBlazonBordersNoPadding,
                       height: 80,
@@ -60,13 +58,13 @@ class PlayerLegendHistory extends StatelessWidget {
                   Align(
                     alignment: const Alignment(0, -0.1),
                     child: Text(
-                      NumberFormat('#,###',
-                              Localizations.localeOf(context).toString())
-                          .format(season.rank),
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium!
-                          .copyWith(color: Colors.white),
+                      NumberFormat(
+                        '#,###',
+                        Localizations.localeOf(context).toString(),
+                      ).format(season.rank),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelMedium!.copyWith(color: Colors.white),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -79,32 +77,34 @@ class PlayerLegendHistory extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: [
-                    CachedNetworkImage(
+                    MobileWebImage(
                       errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.bestTrophies,
                       height: 20,
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      NumberFormat('#,###',
-                              Localizations.localeOf(context).toString())
-                          .format(season.trophies),
+                      NumberFormat(
+                        '#,###',
+                        Localizations.localeOf(context).toString(),
+                      ).format(season.trophies),
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    CachedNetworkImage(
+                    MobileWebImage(
                       errorWidget: (context, url, error) => Icon(Icons.error),
                       imageUrl: ImageAssets.sword,
                       height: 20,
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      NumberFormat('#,###',
-                              Localizations.localeOf(context).toString())
-                          .format(season.attackWins),
+                      NumberFormat(
+                        '#,###',
+                        Localizations.localeOf(context).toString(),
+                      ).format(season.attackWins),
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   ],
@@ -128,36 +128,44 @@ class PlayerLegendHistory extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                    child: buildSeasonInfo(
-                        player.getLastSeason(),
-                        context,
-                        AppLocalizations.of(context)?.legendsLastSeason ??
-                            "Last Season")),
+                  child: buildSeasonInfo(
+                    player.getLastSeason(),
+                    context,
+                    AppLocalizations.of(context)?.legendsLastSeason ??
+                        "Last Season",
+                  ),
+                ),
                 const SizedBox(width: 16),
                 Expanded(
-                    child: buildSeasonInfo(
-                        player.getBestGlobalRankSeason(),
-                        context,
-                        AppLocalizations.of(context)?.legendsBestRank ??
-                            "Best Global Rank")),
+                  child: buildSeasonInfo(
+                    player.getBestGlobalRankSeason(),
+                    context,
+                    AppLocalizations.of(context)?.legendsBestRank ??
+                        "Best Global Rank",
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
-                    child: buildSeasonInfo(
-                        player.getBestTrophiesSeason(),
-                        context,
-                        AppLocalizations.of(context)?.legendsBestTrophies ??
-                            "Best Trophies")),
+                  child: buildSeasonInfo(
+                    player.getBestTrophiesSeason(),
+                    context,
+                    AppLocalizations.of(context)?.legendsBestTrophies ??
+                        "Best Trophies",
+                  ),
+                ),
                 const SizedBox(width: 16),
                 Expanded(
-                    child: buildSeasonInfo(
-                        player.getBestAttackWinsSeason(),
-                        context,
-                        AppLocalizations.of(context)?.legendsMostAttacks ??
-                            "Most Attacks")),
+                  child: buildSeasonInfo(
+                    player.getBestAttackWinsSeason(),
+                    context,
+                    AppLocalizations.of(context)?.legendsMostAttacks ??
+                        "Most Attacks",
+                  ),
+                ),
               ],
             ),
           ],

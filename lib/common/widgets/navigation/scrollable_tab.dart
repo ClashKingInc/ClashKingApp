@@ -10,6 +10,7 @@ class ScrollableTab extends StatefulWidget {
   final List<Widget> tabs;
   final List<Widget> children;
   final bool scrollable;
+  final TabAlignment? tabAlignment;
 
   const ScrollableTab({
     super.key,
@@ -20,6 +21,7 @@ class ScrollableTab extends StatefulWidget {
     this.unselectedLabelColor,
     this.onTap,
     this.scrollable = false,
+    this.tabAlignment,
     required this.tabs,
     required this.children,
   }) : assert(tabs.length == children.length);
@@ -31,9 +33,20 @@ class ScrollableTab extends StatefulWidget {
 class _ScrollableTabState extends State<ScrollableTab> {
   int _selectedIndex = 0;
 
+  void _selectIndex(int index) {
+    if (index < 0 || index >= widget.tabs.length || index == _selectedIndex) {
+      return;
+    }
+    setState(() => _selectedIndex = index);
+    widget.onTap?.call(index);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return DefaultTabController(
+      key: ValueKey(_selectedIndex),
       length: widget.tabs.length,
       initialIndex: _selectedIndex,
       child: Column(
@@ -41,24 +54,49 @@ class _ScrollableTabState extends State<ScrollableTab> {
         mainAxisSize: MainAxisSize.min,
         children: [
           DecoratedBox(
-            decoration: widget.tabBarDecoration ?? const BoxDecoration(),
+            decoration:
+                widget.tabBarDecoration ??
+                BoxDecoration(color: colorScheme.surface),
             child: TabBar(
               isScrollable: widget.scrollable,
-              tabAlignment: widget.scrollable
-                  ? TabAlignment.start
-                  : TabAlignment.fill,
-              labelColor: widget.labelColor,
-              labelPadding: widget.labelPadding,
-              labelStyle: widget.labelStyle,
-              unselectedLabelColor: widget.unselectedLabelColor,
+              tabAlignment:
+                  widget.tabAlignment ??
+                  (widget.scrollable ? TabAlignment.start : TabAlignment.fill),
+              labelColor: widget.labelColor ?? colorScheme.onSurface,
+              labelPadding:
+                  widget.labelPadding ??
+                  const EdgeInsets.symmetric(horizontal: 10),
+              labelStyle:
+                  widget.labelStyle ??
+                  Theme.of(
+                    context,
+                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+              unselectedLabelColor:
+                  widget.unselectedLabelColor ?? colorScheme.onSurface,
+              indicatorColor: colorScheme.primary,
+              indicatorWeight: 2.5,
+              indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
+              splashFactory: NoSplash.splashFactory,
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
               tabs: widget.tabs,
               onTap: (index) {
-                setState(() => _selectedIndex = index);
-                widget.onTap?.call(index);
+                _selectIndex(index);
               },
             ),
           ),
-          widget.children[_selectedIndex],
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onHorizontalDragEnd: (details) {
+              final velocity = details.primaryVelocity ?? 0;
+              if (velocity < -220) {
+                _selectIndex(_selectedIndex + 1);
+              } else if (velocity > 220) {
+                _selectIndex(_selectedIndex - 1);
+              }
+            },
+            child: widget.children[_selectedIndex],
+          ),
         ],
       ),
     );

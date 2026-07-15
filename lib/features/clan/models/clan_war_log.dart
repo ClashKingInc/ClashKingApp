@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
-import 'package:http/http.dart' as http;
 
 class ClanWarLog {
   final List<WarLogDetails> items;
@@ -41,15 +40,19 @@ class ClanWarLog {
   factory ClanWarLog.fromJson(Map<String, dynamic> json, String clanTag) {
     var itemList = json['items'] != null
         ? (json['items'] as List)
-            .where((itemJson) {
-              // Extract the endTime and parse it to DateTime
-              DateTime endTime = DateTime.parse(itemJson['endTime']);
-              // Keep items where the endTime is in 2022 or later
-              return endTime.year >= 2022;
-            })
-            .map((itemJson) => WarLogDetails.fromJson(
-                itemJson as Map<String, dynamic>, clanTag))
-            .toList()
+              .where((itemJson) {
+                // Extract the endTime and parse it to DateTime
+                DateTime endTime = DateTime.parse(itemJson['endTime']);
+                // Keep items where the endTime is in 2022 or later
+                return endTime.year >= 2022;
+              })
+              .map(
+                (itemJson) => WarLogDetails.fromJson(
+                  itemJson as Map<String, dynamic>,
+                  clanTag,
+                ),
+              )
+              .toList()
         : [];
     return ClanWarLog(items: itemList.cast<WarLogDetails>(), clanTag: clanTag);
   }
@@ -186,15 +189,17 @@ class ClanDetails {
 
 class WarLogService {
   static Future<ClanWarLog> fetchWarLogData(String tag) async {
-    final response = await http.get(Uri.parse(
-        '${ApiService.proxyUrl}/clans/${tag.replaceAll('#', '%23')}/warlog'));
+    final response = await ApiService.shared.proxyGet(
+      '/clans/${Uri.encodeComponent(tag)}/warlog',
+    );
 
     if (response.statusCode == 200) {
-      String body = utf8.decode(response.bodyBytes);
+      String body = ApiService.decodeResponseBody(response);
       Map<String, dynamic> jsonBody = json.decode(body);
       ClanWarLog warLog = ClanWarLog.fromJson(jsonBody, tag);
-      warLog.warLogStats =
-          await WarLogStatsService.analyzeWarLogs(warLog.items);
+      warLog.warLogStats = await WarLogStatsService.analyzeWarLogs(
+        warLog.items,
+      );
       return warLog;
     } else if (response.statusCode == 403) {
       return ClanWarLog(items: [], clanTag: tag);
@@ -205,7 +210,8 @@ class WarLogService {
 }
 
 class WarLogStatsService {
-  static Future<WarLogStats> analyzeWarLogs(List<WarLogDetails> warLogs) async { // NOSONAR
+  static Future<WarLogStats> analyzeWarLogs(List<WarLogDetails> warLogs) async {
+    // NOSONAR
     int totalWins = 0;
     int totalLosses = 0;
     int totalTies = 0;
@@ -244,21 +250,27 @@ class WarLogStatsService {
     }
 
     double averageMembers = totalWars > 0 ? totalMembers / totalWars : 0;
-    double averageClanDestruction =
-        totalWars > 0 ? clanTotalDestruction / totalWars : 0;
-    double averageClanStarsPerMember =
-        totalMembers > 0 ? clanTotalStars / totalMembers : 0;
-    double averageOpponentDestruction =
-        totalWars > 0 ? opponentTotalDestruction / totalWars : 0;
-    double averageOpponentStarsPerMember =
-        totalMembers > 0 ? opponentTotalStars / totalMembers : 0;
-    double averageClanStarsPercentage =
-        maxPossibleStars > 0 ? (clanTotalStars / maxPossibleStars) * 100 : 0;
+    double averageClanDestruction = totalWars > 0
+        ? clanTotalDestruction / totalWars
+        : 0;
+    double averageClanStarsPerMember = totalMembers > 0
+        ? clanTotalStars / totalMembers
+        : 0;
+    double averageOpponentDestruction = totalWars > 0
+        ? opponentTotalDestruction / totalWars
+        : 0;
+    double averageOpponentStarsPerMember = totalMembers > 0
+        ? opponentTotalStars / totalMembers
+        : 0;
+    double averageClanStarsPercentage = maxPossibleStars > 0
+        ? (clanTotalStars / maxPossibleStars) * 100
+        : 0;
     double averageOpponentStarsPercentage = maxPossibleStars > 0
         ? (opponentTotalStars / maxPossibleStars) * 100
         : 0;
-    double averageAttacksPerMember =
-        totalMembers > 0 ? totalAttacks / totalMembers : 0;
+    double averageAttacksPerMember = totalMembers > 0
+        ? totalAttacks / totalMembers
+        : 0;
     double winPercentage = totalWars > 0 ? (totalWins / totalWars) * 100 : 0;
     double lossPercentage = totalWars > 0 ? (totalLosses / totalWars) * 100 : 0;
     double tiePercentage = totalWars > 0 ? (totalTies / totalWars) * 100 : 0;
@@ -271,25 +283,33 @@ class WarLogStatsService {
       totalTies: totalTies,
       totalWars: totalWars,
       averageMembers: int.parse(averageMembers.toStringAsFixed(0)),
-      averageClanDestruction:
-          double.parse(averageClanDestruction.toStringAsFixed(0)),
-      averageClanStarsPerMember:
-          double.parse(averageClanStarsPerMember.toStringAsFixed(1)),
-      averageOpponentDestruction:
-          double.parse(averageOpponentDestruction.toStringAsFixed(0)),
-      averageOpponentStarsPerMember:
-          double.parse(averageOpponentStarsPerMember.toStringAsFixed(1)),
-      averageClanStarsPercentage:
-          double.parse(averageClanStarsPercentage.toStringAsFixed(1)),
-      averageOpponentStarsPercentage:
-          double.parse(averageOpponentStarsPercentage.toStringAsFixed(1)),
-      averageAttacksPerMember:
-          double.parse(averageAttacksPerMember.toStringAsFixed(1)),
+      averageClanDestruction: double.parse(
+        averageClanDestruction.toStringAsFixed(0),
+      ),
+      averageClanStarsPerMember: double.parse(
+        averageClanStarsPerMember.toStringAsFixed(1),
+      ),
+      averageOpponentDestruction: double.parse(
+        averageOpponentDestruction.toStringAsFixed(0),
+      ),
+      averageOpponentStarsPerMember: double.parse(
+        averageOpponentStarsPerMember.toStringAsFixed(1),
+      ),
+      averageClanStarsPercentage: double.parse(
+        averageClanStarsPercentage.toStringAsFixed(1),
+      ),
+      averageOpponentStarsPercentage: double.parse(
+        averageOpponentStarsPercentage.toStringAsFixed(1),
+      ),
+      averageAttacksPerMember: double.parse(
+        averageAttacksPerMember.toStringAsFixed(1),
+      ),
       winPercentage: winPercentage.toStringAsFixed(0),
       lossPercentage: lossPercentage.toStringAsFixed(0),
       tiePercentage: tiePercentage.toStringAsFixed(0),
-      averageDestructionDifference:
-          double.parse(averageDestructionDifference.toStringAsFixed(1)),
+      averageDestructionDifference: double.parse(
+        averageDestructionDifference.toStringAsFixed(1),
+      ),
     );
   }
 }

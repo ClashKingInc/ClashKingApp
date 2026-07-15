@@ -10,7 +10,11 @@ class ErrorPage extends StatefulWidget {
   final Future<void> Function() onRetry;
   final bool isNetworkError;
 
-  ErrorPage({super.key, required this.onRetry, this.isNetworkError = false});
+  const ErrorPage({
+    super.key,
+    required this.onRetry,
+    this.isNetworkError = false,
+  });
 
   @override
   State<ErrorPage> createState() => _ErrorPageState();
@@ -27,7 +31,9 @@ class _ErrorPageState extends State<ErrorPage> {
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.8),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height * 0.8,
+            ),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -49,9 +55,14 @@ class _ErrorPageState extends State<ErrorPage> {
                             height: 180,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.1),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .errorContainer
+                                  .withValues(alpha: 0.1),
                               border: Border.all(
-                                color: Theme.of(context).colorScheme.error.withValues(alpha: 0.2),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.error.withValues(alpha: 0.2),
                                 width: 2,
                               ),
                             ),
@@ -88,12 +99,12 @@ class _ErrorPageState extends State<ErrorPage> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Error Title with better typography
                   Text(
-                    widget.isNetworkError 
+                    widget.isNetworkError
                         ? AppLocalizations.of(context)!.errorNetworkTitle
                         : AppLocalizations.of(context)!.errorTitle,
                     textAlign: TextAlign.center,
@@ -102,9 +113,9 @@ class _ErrorPageState extends State<ErrorPage> {
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // Simple network error message
                   if (widget.isNetworkError)
                     Padding(
@@ -117,71 +128,86 @@ class _ErrorPageState extends State<ErrorPage> {
                         ),
                       ),
                     ),
-                  
+
                   const SizedBox(height: 40),
-                  
+
                   // Enhanced Retry Button with loading state
                   Container(
                     width: double.infinity,
                     constraints: const BoxConstraints(maxWidth: 300),
                     child: ElevatedButton.icon(
-                      onPressed: _isRetrying ? null : () async {
-                        setState(() {
-                          _isRetrying = true;
-                        });
-                        
-                        // Add a small delay for visual feedback
-                        await Future.delayed(const Duration(milliseconds: 300));
-                        
-                        try {
-                          await widget.onRetry();
-                        } catch (retryError) {
-                          // Handle retry failures - show feedback but stay on error page
-                          DebugUtils.debugError("Retry failed: $retryError");
-                        } finally {
-                          if (mounted) {
-                            setState(() {
-                              _isRetrying = false;
-                            });
-                          }
-                        }
-                      },
+                      onPressed: _isRetrying
+                          ? null
+                          : () async {
+                              setState(() {
+                                _isRetrying = true;
+                              });
+
+                              // Add a small delay for visual feedback
+                              await Future.delayed(
+                                const Duration(milliseconds: 300),
+                              );
+
+                              try {
+                                await widget.onRetry();
+                              } catch (retryError) {
+                                // Handle retry failures - show feedback but stay on error page
+                                DebugUtils.debugError(
+                                  "Retry failed: $retryError",
+                                );
+                              } finally {
+                                if (mounted) {
+                                  setState(() {
+                                    _isRetrying = false;
+                                  });
+                                }
+                              }
+                            },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _isRetrying 
-                            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)
+                        backgroundColor: _isRetrying
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.7)
                             : Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 24,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         elevation: _isRetrying ? 1 : 3,
                       ),
-                      icon: _isRetrying 
+                      icon: _isRetrying
                           ? SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             )
                           : const Icon(Icons.refresh, size: 20),
                       label: Text(
-                        _isRetrying 
+                        _isRetrying
                             ? AppLocalizations.of(context)!.generalRetrying
                             : AppLocalizations.of(context)!.generalRetry,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: _isRetrying ? Colors.white.withValues(alpha: 0.8) : Colors.white,
+                          color: _isRetrying
+                              ? Colors.white.withValues(alpha: 0.8)
+                              : Colors.white,
                         ),
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Error subtitle with Discord link
                   Column(
                     children: [
@@ -195,7 +221,8 @@ class _ErrorPageState extends State<ErrorPage> {
                       const SizedBox(height: 8),
                       TextButton.icon(
                         onPressed: () async => launchUrl(
-                            Uri.parse('https://discord.gg/clashking')),
+                          Uri.parse('https://discord.gg/clashking'),
+                        ),
                         icon: Icon(
                           Icons.discord,
                           size: 16,
@@ -203,9 +230,7 @@ class _ErrorPageState extends State<ErrorPage> {
                         ),
                         label: Text(
                           AppLocalizations.of(context)!.helpJoinDiscord,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
+                          style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.w500,
@@ -213,12 +238,13 @@ class _ErrorPageState extends State<ErrorPage> {
                         ),
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  
                 ],
               ),
             ),

@@ -1,5 +1,10 @@
 import 'dart:async';
+import 'package:clashkingapp/core/config/observability_config.dart';
+import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -13,6 +18,8 @@ import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/app/my_app.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
@@ -30,7 +37,7 @@ void callbackDispatcher() {
   AndroidWorkmanagerService.instance.executeTask((task, inputData) async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
-      await ApiService.loadConfig();
+      await _initializeObservabilityForCurrentIsolate();
 
       // Handle different background tasks
       if (task == 'simplePeriodicTask') {
@@ -42,7 +49,12 @@ void callbackDispatcher() {
       }
 
       return Future.value(true);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      ErrorReporter.captureException(
+        e,
+        stackTrace: stackTrace,
+        operation: 'widget.background',
+      );
       DebugUtils.debugError(" Background task error: $e");
       return Future.value(false);
     }
@@ -65,11 +77,12 @@ void _initializeDeepLinks() {
       DeepLinkHandler.queueDeepLink(uri);
       DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
         DebugUtils.debugError(" Deep link handling error: $err");
-        Sentry.captureException(err);
+        ErrorReporter.captureException(err, operation: 'deep_link.running');
       });
     },
     onError: (err) {
       DebugUtils.debugError(" Deep link error: $err");
+      ErrorReporter.captureException(err, operation: 'deep_link.stream');
     },
   );
 
@@ -82,74 +95,107 @@ void _initializeDeepLinks() {
           DeepLinkHandler.queueDeepLink(uri);
           DeepLinkHandler.tryHandlePendingDeepLink().catchError((err) {
             DebugUtils.debugError(" Deep link handling error: $err");
-            Sentry.captureException(err);
+            ErrorReporter.captureException(err, operation: 'deep_link.initial');
           });
         }
       })
       .catchError((err) {
         DebugUtils.debugError(" Initial deep link error: $err");
+        ErrorReporter.captureException(err, operation: 'deep_link.initial');
       });
 }
 
 Future<void> main() async {
-  // Load config from backend first (HTTP only, no binding needed)
-  await ApiService.loadConfig();
+  // Initialize Flutter binding BEFORE Sentry
+  WidgetsFlutterBinding.ensureInitialized();
+  PushNotificationService.registerBackgroundHandler();
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = ApiService.sentryDsn ?? '';
-      options.tracesSampleRate = 1.0;
-      options.debug = false;
-      options.replay.sessionSampleRate = 1.0;
-      options.replay.onErrorSampleRate = 1.0;
-    },
-    appRunner: () async {
-      // Initialize binding in the same zone as runApp to avoid zone mismatch warning
-      WidgetsFlutterBinding.ensureInitialized();
+  if (!ObservabilityConfig.isEnabled) {
+    await _startClashKingApp();
+    return;
+  }
 
-      if (!kIsWeb) {
-        if (defaultTargetPlatform == TargetPlatform.iOS) {
-          await HomeWidget.setAppGroupId('group.com.clashking.apps');
-        }
-        if (defaultTargetPlatform == TargetPlatform.android) {
-          await AndroidWorkmanagerService.instance.initialize(
-            callbackDispatcher,
-          );
-        }
-        // Initialize war widget service for background callbacks
-        WarWidgetService.initialize();
-        // Override with the app-level callback (handles widget taps → WarWidgetSyncService)
-        HomeWidget.registerInteractivityCallback(backgroundCallback);
-      }
+  final packageInfo = await PackageInfo.fromPlatform();
 
-      await Future.wait([
-        GameDataService.loadGameData().then(
-          (_) => DebugUtils.debugSuccess("GameDataService OK"),
-        ),
-      ]);
+  await SentryFlutter.init((options) {
+    _configureObservabilityOptions(options, packageInfo);
+  }, appRunner: _startClashKingApp);
+}
 
-      FlutterNativeSplash.remove();
+Future<void> _initializeObservabilityForCurrentIsolate() async {
+  if (!ObservabilityConfig.isEnabled || Sentry.isEnabled) return;
 
-      // Initialize deep link listening
-      _initializeDeepLinks();
+  final packageInfo = await PackageInfo.fromPlatform();
+  await SentryFlutter.init((options) {
+    _configureObservabilityOptions(options, packageInfo);
+  });
+}
 
-      runApp(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-            ChangeNotifierProvider(create: (_) => MyAppState()),
-            ChangeNotifierProvider(create: (_) => AuthService()),
-            ChangeNotifierProvider(create: (_) => CocAccountService()),
-            ChangeNotifierProvider(create: (_) => PlayerService()),
-            ChangeNotifierProvider(create: (_) => ClanService()),
-            ChangeNotifierProvider(create: (_) => WarCwlService()),
-            Provider(create: (_) => ApiService()),
-            Provider(create: (_) => UserService()),
-            Provider(create: (_) => TokenService()),
-          ],
-          child: MyApp(),
-        ),
-      );
-    },
+void _configureObservabilityOptions(
+  SentryFlutterOptions options,
+  PackageInfo packageInfo,
+) {
+  options.dsn = ObservabilityConfig.dsn;
+  options.environment = ObservabilityConfig.environment;
+  options.release = '${packageInfo.packageName}@${packageInfo.version}';
+  options.dist = packageInfo.buildNumber;
+  options.debug = false;
+  options.sendDefaultPii = false;
+  options.tracesSampleRate = ObservabilityConfig.tracesSampleRate;
+  options.replay.sessionSampleRate =
+      ObservabilityConfig.replaySessionSampleRate;
+  options.replay.onErrorSampleRate =
+      ObservabilityConfig.replayOnErrorSampleRate;
+}
+
+Future<void> _startClashKingApp() async {
+  // Pre-warm the shared Flutter glass shader before first use.
+  await LiquidGlassWidgets.initialize();
+  unawaited(PushNotificationService.instance.initialize());
+
+  if (!kIsWeb) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await HomeWidget.setAppGroupId('group.com.clashking.apps');
+    }
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await AndroidWorkmanagerService.instance.initialize(callbackDispatcher);
+    }
+    // Initialize war widget service for background callbacks
+    WarWidgetService.initialize();
+    // Override with the app-level callback (handles widget taps → WarWidgetSyncService)
+    HomeWidget.registerInteractivityCallback(backgroundCallback);
+  }
+
+  await Future.wait([
+    GameDataService.loadGameData().then(
+      (_) => DebugUtils.debugSuccess("GameDataService OK"),
+    ),
+  ]);
+
+  FlutterNativeSplash.remove();
+
+  // Initialize deep link listening
+  _initializeDeepLinks();
+
+  runApp(
+    LiquidGlassWidgets.wrap(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+          ChangeNotifierProvider(create: (_) => MyAppState()),
+          ChangeNotifierProvider(create: (_) => AuthService()),
+          ChangeNotifierProvider(create: (_) => CocAccountService()),
+          ChangeNotifierProvider(create: (_) => PlayerService()),
+          ChangeNotifierProvider(create: (_) => ClanService()),
+          ChangeNotifierProvider(create: (_) => WarCwlService()),
+          ChangeNotifierProvider(create: (_) => BookmarkService()),
+          ChangeNotifierProvider(create: (_) => PlayerCardPreferencesService()),
+          Provider.value(value: ApiService.shared),
+          Provider(create: (_) => UserService()),
+          Provider.value(value: TokenService.shared),
+        ],
+        child: MyApp(),
+      ),
+    ),
   );
 }

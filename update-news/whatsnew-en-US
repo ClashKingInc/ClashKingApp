@@ -1,9 +1,98 @@
+- Admin announcements now open the exact published post when their push notification is tapped
+- Announcement pushes now respect each device's notification preferences
+- Interactive update stories and pinned home announcements can now be published from the admin panel
+- Added a Posts archive in the side menu for current and previous ClashKing announcements
+- Improved accessibility with reduced-motion support, larger header actions, localized navigation, and clearer empty-state actions
+- Shared stat chips, tiles, and segmented controls now provide more consistent styling and screen-reader support
+- Added push notification setup for device permissions, FCM token registration, and foreground alerts
+- Clan Capital Members now clearly explains older raid weekends when the API omits player-level member and attack data
+- Clan Capital Members now has a History mode aggregating member loot and attacks across loaded raid weekends
+- Clan Capital Summary now uses raid medal imagery and CWL-style flat full-stat tiles instead of summary chips
+- Clan Capital Breakdown now focuses on district and opponent analysis without repeating member rows
+- Clan Capital page is reorganized into Summary, Members, Breakdown, and History tabs for clearer raid analysis
+- Clan Capital player stats now show Town Hall context when raid participants still match current clan members
+- Clan Capital history now includes multi-raid overview stats, top attackers, and defense-over-time district rows
+- Clan Capital breakdown now adds player attack quality stats and district defense performance stats from raid logs
+- Android segmented controls now animate the selected pill with a smooth sliding transition
+- Page tab titles now share the same clean Player-style underline treatment across Player, Clan, Capital, CWL, War, and Legend screens
+- Android segmented controls such as Linked and Bookmarked now use the same softer custom pill style as the bottom navigation
+- Clan Capital UI now better matches the app design system with cleaner tabs, shared stat colors, and a calmer expandable history section
 What’s new
+- Player profile tabs now match the cleaner War tab styling while keeping player icons readable
+- To Do page filter dropdown now matches the compact width used by clan-style dropdowns
+- Android bottom navigation keeps the liquid glass effect with a softer border and no bright white outline
+- Reworked liquid glass rendering across the app (bottom nav, search bars, headers, filters) for a sharper, less washed-out look in both light and dark mode
+- Player item upgrade popup now removes the colored side accent and uses flatter CWL-style upgrade stats with ClashKing resource assets
+- Capital history chart now uses ClashKing asset icons, removes the colored side accent, and can show estimated Capital trophy trends
+- Capital page now shows a weekly loot/medals bar chart alongside its multi-week trend stats
+- Capital page now shows multi-week trends (best/worst raid, weekly averages) computed from already-loaded raid history
+- Capital page opponent rows now expand to show which member attacked which district and for how much destruction
+- Capital page district breakdown now shows a hit-rate histogram (districts destroyed in 1/2/3+ attacks)
+- Capital page raid overview now includes the offense/defense district and opponent breakdown directly, plus one-shot/fail counts
+- Capital page now projects total loot and predicts Capital League trophy change during an ongoing raid weekend
+- Capital page now estimates raid medals for the ongoing raid weekend from this week's attack/defense logs, flagged as an estimate until Supercell publishes the real reward
+- Capital page now matches the clan detail hero header/tabs style with Raids and Members tabs and no nested cards
+- Rankings page now uses clan-style chips and leaderboard rows
+- ClashKing leaderboard endpoints now show mockup previews instead of unloaded rows
+- Popular page now matches the clan-style chips and entity rows
+- Aligned clan detail member, war log, join/leave, and war stats filters
+- CWL detail header now combines rank, stars, and destruction while keeping round progress beside missed attacks
+- CWL rounds now put the preparation round first, use a single ClashKing asset badge per round, and only open the active round by default
+- CWL members and teams now expand full stats per card instead of opening every card at once
+- CWL Teams full stats now group attacks/defenses into clearer bordered sections with a star breakdown strip
+- CWL Teams sort dropdown now matches the compact width used by Members and Clan tabs
+- CWL Teams and Members full stats toggles now appear as right-aligned inline actions instead of nested pills
+- War events now restore the previous directional arrow ribbons while keeping allies/enemies readable
+- War attack details now use a clan-style bottom sheet with a cleaner result header and inline attacker/defender stats
+- War event attack numbers now sit at the start of each row and arrows fill the event row
+- War event 100% attacks now turn green only when they come from your clan
+- War event empty states now sit inline instead of inside a card
+- War detail Team and Events tabs now include search bars for quickly finding players or attacks
+- War Team tab now puts the side switcher before search and filters
+- War Team empty attack and defense slots now match the real row layout without repeated text
+- War Team empty attack and defense slots now show the player's Town Hall as a muted placeholder
+- War statistics now show the fast calculator inline above metrics and restore the war state analysis
+- War state analysis now shows a compact per-attack win or loss-risk scenario
+- War calculator now uses a cleaner neutral layout with the calculator action aligned to the right
+- War calculator fields now avoid clipping long labels on narrow screens
+- CWL round chip in war headers now sits centered in the top bar and opens the league page reliably
+- War headers now avoid redundant state and team-size chips in the hero
+- Player profile redesign: hero header with stats panel, in-game style tabs, swipe between tabs following your finger
+- Player profile now shows builder base league, best trophies, capital gold and clearer given/received donations
+- Achievements tab: sub-tabs with completion counts, pending achievements listed first
+- Season History: clearer stat tiles and a fixed dropdown that was invisible on Android
+- Item grids (heroes, troops...) now adapt to any screen size; completion badges show a progress ring
+- Android now renders real liquid glass bars (refraction, specular light) matching the iOS look
+- The home to-do card now shows real account data, an all-accounts summary page, and sizes to its content
+- All cards now share the same dark material and hairline border across every tab
+- Player profile: new Season History tab and restyled sections, chips and progress bars
+- Home event banner: correct logo per theme, tinted tiles, page dots, events sorted by next deadline
+- The to-do page got a redesign: hero header with a liquid glass stats panel, cleaner account cards
+- The to-do page now matches the clan detail header style and highlights the accounts that need action first
+- Player cards now expand with options to enable notifications and pin an account’s to-do card to the home tab
+- Player card options can now include or hide each account from the full to-do page
+- The to-do page now has account search, status filters, and sorts accounts by recent activity
+- Bookmarked players pinned from player card options are now included in the detailed to-do view
+- The home tab now shows a single to-do card that combines the remaining tasks across all the accounts you pinned
+- The account menu can now be swiped open from further inside the screen, fixing accidental app exits on Samsung devices
 - Tapping a troop, spell, hero, equipment or pet now shows a detailed popup with description and stats (housing space, attack speed, range, movement speed, upgrade resource, hero and rarity for equipment)
 - Item popup now shows DPS, HP/Heal at current level, targeting type (Ground/Air/Flying), and next-level upgrade cost & time
+- Player item popups now match the clan-style glass panels, chips, and rounded stat rows
+- Player item popups now show remaining levels, cost, and time to TH/global max
+- Player item popups now prioritize upgrade info first and keep detailed stats collapsed by default
+- Upgrade Tracker now summarizes remaining upgrade levels, resources, and time per linked account
+- Current Town Hall max detection now uses the global max at the latest Town Hall, fixing TH18 hero max indicators
 - Player item sections now show two progress percentages: current TH max-level completion and overall max-level completion
 - Town-hall-maxed items now have a bronze border indicator
 - Player league chips now show the league name instead of raw trophy counts
+- Player profile header now shows clan identity more consistently with clan detail headers
+- Player profile now shows War Stats before Achievements
+- War detail now has a clearer hero header plus redesigned statistics, events, and team sections
+- War stats now use clan-style filter chips, top-level attack/defense tabs, simplified grouped war details, smoother scrolling, and improved missed-count styling
+- Fixed War Stats default loading so it shows the latest 50 wars instead of a season/date-limited view
+- CWL war details now correctly count one attack per member and show win-path effort per remaining attack
+- The War tab now presents account attack status without nested cards and includes opted-in bookmarked player accounts
+- Fixed the CWL round banner shape on War tab cards
 - Player item icons now resolve directly from ClashKing assets instead of app-data image URLs
 - Seasonal event troops and spells are now hidden consistently in player progression lists
 - Fixed missing player profile images for heroes, troops, spells, pets, and equipment
@@ -14,3 +103,11 @@ What’s new
 - Some minor library updates
 - Fixed bulk account loading timeouts during startup
 - Improved war and clan parsing for incomplete API payloads
+- Improved clan detail tabs with CWL history previews and safer loading states
+- Improved clan detail filters, ranking season previews, and member donation stats
+- Fixed Windows builds by avoiding incompatible fallback liquid glass shaders
+- Improved player item details, To Do summaries, clan Join/Leave empty states, and image loading consistency
+- Notification settings now request system push permission before registering this device for alerts
+- Notification settings now let each alert target different linked accounts
+- Notification settings now make pause state and account audience rules clearer
+- Fixed distorted images when cached inside square or fixed-size layouts

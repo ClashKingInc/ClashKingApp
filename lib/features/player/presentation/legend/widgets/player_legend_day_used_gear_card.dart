@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/models/player_equipment.dart';
@@ -27,7 +27,8 @@ class LegendUsedGearCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                AppLocalizations.of(context)?.gameHeroesEquipments ?? "Heroes Equipments",
+                AppLocalizations.of(context)?.gameHeroesEquipments ??
+                    "Heroes Equipments",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 10),
@@ -43,9 +44,9 @@ class LegendUsedGearCard extends StatelessWidget {
                     children: [
                       Stack(
                         children: [
-                          CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),
+                          MobileWebImage(
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                             imageUrl: gear.imageUrl,
                             width: 40,
                             height: 40,
@@ -57,7 +58,9 @@ class LegendUsedGearCard extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
-                                color: isMaxLevel ? const Color(0xFFD4AF37) : Colors.black.withValues(alpha : 0.7),
+                                color: isMaxLevel
+                                    ? const Color(0xFFD4AF37)
+                                    : Colors.black.withValues(alpha: 0.7),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
@@ -73,8 +76,10 @@ class LegendUsedGearCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      Text("x$count",
-                          style: Theme.of(context).textTheme.labelSmall),
+                      Text(
+                        "x$count",
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
                     ],
                   );
                 }).toList(),

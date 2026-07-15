@@ -1,0 +1,196 @@
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+
+/// Standard search field + sort dropdown row for list-style tabs (clan
+/// members, war log, war stats, capital raid members...). The stable card
+/// search field plus compact [FilterDropdown] combo used by every
+/// searchable/sortable list in the app.
+class ClanTabSearchSortBar extends StatelessWidget {
+  final TextEditingController controller;
+  final String query;
+  final String hintText;
+  final String sortBy;
+  final ValueChanged<String> updateSortBy;
+  final Map<String, String> sortByOptions;
+  final double maxSortWidth;
+  final EdgeInsetsGeometry padding;
+  final Widget? leading;
+  final Widget? trailing;
+
+  const ClanTabSearchSortBar({
+    super.key,
+    required this.controller,
+    required this.query,
+    required this.hintText,
+    required this.sortBy,
+    required this.updateSortBy,
+    required this.sortByOptions,
+    this.maxSortWidth = 140,
+    this.padding = const EdgeInsets.fromLTRB(16, 0, 16, 8),
+    this.leading,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: padding,
+      child: Row(
+        children: [
+          if (leading != null) ...[leading!, const SizedBox(width: 10)],
+          Expanded(
+            child: SizedBox(
+              height: 44,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  NativeLiquidGlassBar(
+                    height: 44,
+                    cornerRadius: 22,
+                    borderOpacity:
+                        Theme.of(context).brightness == Brightness.dark
+                        ? 0.22
+                        : 0.30,
+                    shadowOpacity:
+                        Theme.of(context).brightness == Brightness.dark
+                        ? 0.22
+                        : 0.08,
+                  ),
+                  TextField(
+                    controller: controller,
+                    textInputAction: TextInputAction.search,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      hintStyle: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(color: colorScheme.onSurfaceVariant),
+                      isDense: true,
+                      prefixIcon: Icon(
+                        Icons.search_rounded,
+                        size: 20,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 40,
+                        minHeight: 44,
+                      ),
+                      suffixIcon: query.isNotEmpty
+                          ? IconButton(
+                              tooltip: AppLocalizations.of(
+                                context,
+                              )!.searchClear,
+                              icon: Icon(
+                                Icons.close_rounded,
+                                size: 18,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                              onPressed: controller.clear,
+                            )
+                          : null,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          FilterDropdown(
+            sortBy: sortBy,
+            updateSortBy: updateSortBy,
+            sortByOptions: sortByOptions,
+            maxWidth: maxSortWidth,
+          ),
+          if (trailing != null) ...[const SizedBox(width: 10), trailing!],
+        ],
+      ),
+    );
+  }
+}
+
+class AppSearchField extends StatelessWidget {
+  const AppSearchField({
+    super.key,
+    required this.controller,
+    required this.query,
+    required this.hintText,
+    required this.onChanged,
+  });
+
+  final TextEditingController controller;
+  final String query;
+  final String hintText;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      height: 48,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(
+                  alpha: AppOpacity.border,
+                ),
+              ),
+            ),
+          ),
+          TextField(
+            controller: controller,
+            scrollPadding: EdgeInsets.zero,
+            onChanged: onChanged,
+            textInputAction: TextInputAction.search,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+              isDense: true,
+              prefixIcon: Icon(
+                Icons.search_rounded,
+                size: 20,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 42,
+                minHeight: 48,
+              ),
+              suffixIcon: query.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.close_rounded,
+                        size: 18,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      onPressed: () {
+                        controller.clear();
+                        onChanged('');
+                      },
+                    )
+                  : null,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

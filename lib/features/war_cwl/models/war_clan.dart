@@ -39,7 +39,8 @@ class WarClan {
         stars: (data['stars'] as num?)?.toInt() ?? 0,
         destructionPercentage:
             (data['destructionPercentage'] as num?)?.toDouble() ?? 0.0,
-        members: (data['members'] as List<dynamic>?)
+        members:
+            (data['members'] as List<dynamic>?)
                 ?.whereType<Map>()
                 .map((e) => WarMember.fromJson(Map<String, dynamic>.from(e)))
                 .toList() ??
@@ -124,4 +125,3 @@ Map<String, dynamic>? _asMap(dynamic value) {
   }
   return null;
 }
-

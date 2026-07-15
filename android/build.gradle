@@ -1,27 +1,7 @@
-buildscript {
-    ext.kotlin_version = '2.3.20'
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:9.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
-    }
-    // Pin glance-appwidget to a version that doesn't require compileSdk 37.
-    // glance-appwidget 1.3+ requires API 37 which AGP 9.1.0 can't handle.
-    configurations.all {
-        resolutionStrategy {
-            force 'androidx.glance:glance:1.1.1'
-            force 'androidx.glance:glance-appwidget:1.1.1'
-        }
     }
 }
 

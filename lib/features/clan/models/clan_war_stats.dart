@@ -7,8 +7,11 @@ class ClanWarStats {
   final String clanTag;
   final List<ClanWarStatsData> wars;
 
-  ClanWarStats(
-      {required this.players, required this.clanTag, required this.wars});
+  ClanWarStats({
+    required this.players,
+    required this.clanTag,
+    required this.wars,
+  });
 
   factory ClanWarStats.fromJson(Map<String, dynamic> item) {
     try {
@@ -19,17 +22,13 @@ class ClanWarStats {
         clanTag: item["clan_tag"],
         wars: item['wars'] != null
             ? (item['wars'] as List<dynamic>? ?? [])
-                .map((m) => ClanWarStatsData.fromJson(m))
-                .toList()
+                  .map((m) => ClanWarStatsData.fromJson(m))
+                  .toList()
             : [],
       );
     } catch (e) {
       DebugUtils.debugError(' Error parsing ClanWarStats: $e');
-      return ClanWarStats(
-        players: [],
-        clanTag: "",
-        wars: [],
-      );
+      return ClanWarStats(players: [], clanTag: "", wars: []);
     }
   }
 }
@@ -38,13 +37,9 @@ class ClanWarStatsData {
   final WarInfo warDetails;
   final List<WarMemberData> membersData;
 
-  ClanWarStatsData({
-    required this.warDetails,
-    required this.membersData,
-  });
+  ClanWarStatsData({required this.warDetails, required this.membersData});
 
-  factory ClanWarStatsData.fromJson(
-      Map<String, dynamic> json) {
+  factory ClanWarStatsData.fromJson(Map<String, dynamic> json) {
     try {
       final warDetails = WarInfo.fromJson(json['war_data']);
       final members = json['members'] as List<dynamic>? ?? [];
@@ -55,10 +50,7 @@ class ClanWarStatsData {
       );
     } catch (e) {
       DebugUtils.debugError(' Error parsing ClanWarStatsData: $e');
-      return ClanWarStatsData(
-        warDetails: WarInfo.empty(),
-        membersData: [],
-      );
+      return ClanWarStatsData(warDetails: WarInfo.empty(), membersData: []);
     }
   }
 }

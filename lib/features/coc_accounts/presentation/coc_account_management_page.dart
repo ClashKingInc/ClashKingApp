@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -18,6 +18,10 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 
 class AddCocAccountPage extends StatefulWidget {
+  const AddCocAccountPage({super.key, this.refreshOnExit = true});
+
+  final bool refreshOnExit;
+
   @override
   AddCocAccountPageState createState() => AddCocAccountPageState();
 }
@@ -97,9 +101,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     // Navigate to the home page
     if (mounted) {
       Navigator.of(context).pop();
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => const MyHomePage()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const MyHomePage()),
+      );
     }
   }
 
@@ -119,9 +123,13 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     return PopScope(
       // During first-connection this page may be the root route — allow
       // immediate pop so the system back gesture / back arrow always works.
-      canPop: _isFirstConnection,
+      canPop: _isFirstConnection || !widget.refreshOnExit,
       onPopInvokedWithResult: (didPop, _) async {
         if (didPop) {
+          unawaited(_persistAccountOrder(cocService));
+          return;
+        }
+        if (!widget.refreshOnExit) {
           unawaited(_persistAccountOrder(cocService));
           return;
         }
@@ -153,7 +161,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         SizedBox(
                           height: 70,
                           width: 70,
-                          child: CachedNetworkImage(
+                          child: MobileWebImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                             imageUrl: logoUrl,
@@ -162,7 +170,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                         const SizedBox(height: 16),
                         SizedBox(
                           width: 150,
-                          child: CachedNetworkImage(
+                          child: MobileWebImage(
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                             imageUrl: textLogoUrl,
@@ -208,6 +216,12 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                               children: [
                                 TextField(
                                   controller: _playerTagController,
+                                  textInputAction: TextInputAction.done,
+                                  onSubmitted: (_) {
+                                    if (!_isAddingLoading) {
+                                      _addAccount();
+                                    }
+                                  },
                                   decoration: InputDecoration(
                                     labelText: AppLocalizations.of(
                                       context,
@@ -320,7 +334,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                             leading: CircleAvatar(
                                               backgroundColor:
                                                   Colors.transparent,
-                                              child: CachedNetworkImage(
+                                              child: MobileWebImage(
                                                 errorWidget:
                                                     (context, url, error) =>
                                                         Icon(Icons.error),
@@ -475,6 +489,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                                 ),
                                                 // Delete button with confirmation
                                                 IconButton(
+                                                  tooltip: AppLocalizations.of(
+                                                    context,
+                                                  )!.tooltipRemoveAccount,
                                                   icon:
                                                       _deletingPlayerTag == // NOSONAR
                                                           _tempUserAccounts[index]["player_tag"]
@@ -573,13 +590,18 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   }
 
   Future<void> _addAccount() async {
+    if (_isAddingLoading) return;
+
     setState(() {
       _isAddingLoading = true;
       _errorMessage = "";
     });
 
-    final playerTag = _playerTagController.text.trim();
-    if (playerTag.isEmpty) {
+    final playerTagInput = _playerTagController.text.trim().toUpperCase();
+    final playerTag = playerTagInput.startsWith('#')
+        ? playerTagInput
+        : '#$playerTagInput';
+    if (playerTagInput.isEmpty) {
       setState(() {
         _errorMessage = AppLocalizations.of(context)!.accountsEnterPlayerTag;
         _isAddingLoading = false;
@@ -651,21 +673,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
 
     if (response["account"] == null) return;
 
-    // Get the new account data
-    final newAccount = {
-      "player_tag": response["account"]["tag"],
-      "name": response["account"]["name"],
-      "townHallLevel": response["account"]["townHallLevel"] ?? 1,
-      "is_verified":
-          response["account"]["is_verified"] ??
-          false, // Default false for security
-    };
-
-    // Add the account to the local list
     setState(() {
       _isAddingLoading = false;
       _errorMessage = "";
-      context.read<CocAccountService>().addLocalAccount(newAccount);
       _syncTempAccountsWithPlayerService();
     });
 

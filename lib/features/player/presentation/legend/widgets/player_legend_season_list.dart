@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_legend_day.dart';
@@ -45,16 +45,19 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
       int compare;
       switch (_sortCriterion) {
         case 'attacks':
-          compare = a.value.trophiesGainedTotal
-              .compareTo(b.value.trophiesGainedTotal);
+          compare = a.value.trophiesGainedTotal.compareTo(
+            b.value.trophiesGainedTotal,
+          );
           break;
         case 'defenses':
-          compare =
-              a.value.trophiesLostTotal.compareTo(b.value.trophiesLostTotal);
+          compare = a.value.trophiesLostTotal.compareTo(
+            b.value.trophiesLostTotal,
+          );
           break;
         case 'trophies':
-          compare =
-              (a.value.endTrophies ?? 0).compareTo(b.value.endTrophies ?? 0);
+          compare = (a.value.endTrophies ?? 0).compareTo(
+            b.value.endTrophies ?? 0,
+          );
           break;
         case 'date':
         default:
@@ -91,7 +94,9 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                   _buildSortHeader('attacks', ImageAssets.sword),
                   _buildSortHeader('defenses', ImageAssets.shieldWithArrow),
                   _buildSortHeader(
-                      'trophies', ImageAssets.legendBlazonBordersNoPadding),
+                    'trophies',
+                    ImageAssets.legendBlazonBordersNoPadding,
+                  ),
                 ],
               ),
               const Divider(),
@@ -112,23 +117,28 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
           if (icon is IconData)
             Icon(icon)
           else if (icon is String)
-            CachedNetworkImage(
-  
-  errorWidget: (context, url, error) => Icon(Icons.error),imageUrl: icon, height: 20),
+            MobileWebImage(
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              imageUrl: icon,
+              height: 20,
+            ),
           const SizedBox(width: 4),
           Icon(
             _sortCriterion == criterion
                 ? (_isAscending ? Icons.expand_less : Icons.expand_more)
                 : Icons.unfold_more,
             size: 16,
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDayRow(BuildContext context,
-      MapEntry<String, PlayerLegendDay> entry, DateFormat formatter) {
+  Widget _buildDayRow(
+    BuildContext context,
+    MapEntry<String, PlayerLegendDay> entry,
+    DateFormat formatter,
+  ) {
     final day = entry.value;
     final dayKey = entry.key;
     final isSelected = _selectedDay == dayKey;
@@ -140,14 +150,19 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
               setState(() => _selectedDay = isSelected ? null : dayKey),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 12,
+              runSpacing: 8,
               children: [
                 Row(
                   children: [
                     Text(formatter.format(DateTime.parse(dayKey))),
-                    Icon(isSelected ? Icons.expand_less : Icons.expand_more,
-                        size: 16),
+                    Icon(
+                      isSelected ? Icons.expand_less : Icons.expand_more,
+                      size: 16,
+                    ),
                   ],
                 ),
                 RichText(
@@ -158,9 +173,10 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                       WidgetSpan(
                         child: Transform.translate(
                           offset: const Offset(2, -6),
-                          child: Text("(${day.totalAttacks})",
-                              textScaler: TextScaler.linear(0.7),
-                              style: Theme.of(context).textTheme.labelSmall),
+                          child: Text(
+                            "(${day.totalAttacks})",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
                         ),
                       ),
                     ],
@@ -174,9 +190,10 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                       WidgetSpan(
                         child: Transform.translate(
                           offset: const Offset(2, -6),
-                          child: Text("(${day.totalDefenses})",
-                              textScaler: TextScaler.linear(0.7),
-                              style: Theme.of(context).textTheme.labelSmall),
+                          child: Text(
+                            "(${day.totalDefenses})",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
                         ),
                       ),
                     ],
@@ -187,9 +204,11 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                     style: Theme.of(context).textTheme.bodyMedium,
                     children: [
                       TextSpan(
-                          text: NumberFormat('#,###',
-                                  Localizations.localeOf(context).toString())
-                              .format(day.endTrophies ?? 0)),
+                        text: NumberFormat(
+                          '#,###',
+                          Localizations.localeOf(context).toString(),
+                        ).format(day.endTrophies ?? 0),
+                      ),
                       WidgetSpan(
                         child: Transform.translate(
                           offset: const Offset(2, -6),
@@ -197,16 +216,13 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                             day.trophiesTotal > 0
                                 ? "(+${day.trophiesTotal})"
                                 : "(${day.trophiesTotal})",
-                            textScaler: TextScaler.linear(0.7),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
+                            style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(
                                   color: day.trophiesTotal > 0
                                       ? Colors.green
                                       : (day.trophiesTotal < 0
-                                          ? Colors.red
-                                          : null),
+                                            ? Colors.red
+                                            : null),
                                 ),
                           ),
                         ),
@@ -219,8 +235,9 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
           ),
         ),
         AnimatedCrossFade(
-          crossFadeState:
-              isSelected ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          crossFadeState: isSelected
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
           duration: const Duration(milliseconds: 300),
           firstChild: Divider(height: 1, indent: 16, endIndent: 16),
           secondChild: Padding(
@@ -235,7 +252,8 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                     Expanded(
                       child: PlayerLegendOffenseDefense(
                         title:
-                            AppLocalizations.of(context)?.warAttacksTitle ?? "Attacks",
+                            AppLocalizations.of(context)?.warAttacksTitle ??
+                            "Attacks",
                         list: day.newAttacks,
                         context: context,
                         sum: day.trophiesGainedTotal,
@@ -248,7 +266,8 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                     ),
                     Expanded(
                       child: PlayerLegendOffenseDefense(
-                        title: AppLocalizations.of(context)?.warDefensesTitle ??
+                        title:
+                            AppLocalizations.of(context)?.warDefensesTitle ??
                             "Defenses",
                         list: day.newDefenses,
                         context: context,
@@ -267,12 +286,13 @@ class _PlayerLegendSeasonListState extends State<PlayerLegendSeasonList> {
                   Divider(height: 1, indent: 32, endIndent: 32),
                   SizedBox(height: 12),
                   PlayerLegendSeasonUsedGear(
-                      context: context,
-                      gears: day
-                          .gearCountsFlatFromProfile(widget.player.equipments)
-                          .values
-                          .toList(),
-                      usageCount: day.usageCount),
+                    context: context,
+                    gears: day
+                        .gearCountsFlatFromProfile(widget.player.equipments)
+                        .values
+                        .toList(),
+                    usageCount: day.usageCount,
+                  ),
                 ],
                 SizedBox(height: 16),
                 Divider(height: 1, indent: 16, endIndent: 16),

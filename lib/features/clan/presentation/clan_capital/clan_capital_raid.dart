@@ -1,486 +1,303 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/features/clan/models/clan.dart';
-import 'package:clashkingapp/features/clan/models/clan_member.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/core/utils/capital_raid_analytics.dart';
+import 'package:clashkingapp/core/utils/raid_medal_predictor.dart';
+import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
-import 'package:provider/provider.dart';
 
-class ClanCapitalRaid extends StatefulWidget {
-  final Clan clanInfo;
+/// Raid overview for the currently selected week: a single flat summary
+/// panel (no nested Card) with the reward/loot headline and a
+/// ClanSummaryChip row, matching the language already used by the clan
+/// and CWL detail tabs instead of the page's old elevated Card stack.
+class CapitalRaidsTab extends StatelessWidget {
+  final CapitalHistoryItem raid;
+  final int clanCapitalPoints;
 
-  const ClanCapitalRaid({super.key, required this.clanInfo});
-
-  @override
-  ClanCapitalRaidState createState() => ClanCapitalRaidState();
-}
-
-class ClanCapitalRaidState extends State<ClanCapitalRaid> {
-  String filterBy = "all";
-  bool filterAccountActive = false;
-  int week = 0;
-
-  void incrementRaid() {
-    setState(() {
-      if (week > 0) {
-        week--;
-      }
-    });
-  }
-
-  void decrementRaid() {
-    setState(() {
-      if (week < widget.clanInfo.clanCapitalRaid!.items.length - 1) {
-        week++;
-      }
-    });
-  }
+  const CapitalRaidsTab({
+    super.key,
+    required this.raid,
+    required this.clanCapitalPoints,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final cocService = context.watch<CocAccountService>();
-    final activeUserTags = cocService.getAccountTags();
-    CapitalHistoryItem raid = widget.clanInfo.clanCapitalRaid!.items[week];
-
+    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     final locale = Localizations.localeOf(context).toString();
-    List<ClanMember> nonParticipants = getNonParticipatingMembers(raid);
+    final formatter = NumberFormat('#,###', locale);
+    final isOngoing = raid.state == 'ongoing';
+    // The defensive-reward formula can dip below zero in edge cases (very
+    // small housing space vs. heavy looting) — clamp for display, the
+    // predictor itself stays a faithful, testable port of the source
+    // algorithm.
+    final estimatedReward =
+        RaidMedalPredictor.predictOffensiveReward(raid.attackLog ?? []) +
+        RaidMedalPredictor.predictDefensiveReward(raid.defenseLog ?? []);
+    final totalReward = isOngoing
+        ? (estimatedReward < 0 ? 0 : estimatedReward)
+        : 6 * raid.offensiveReward + raid.defensiveReward;
+    final projectedLoot = CapitalRaidAnalytics.projectedTotalLoot(raid);
+    final trophyPrediction = isOngoing
+        ? CapitalRaidAnalytics.predictTrophyChange(raid, clanCapitalPoints)
+        : null;
 
-    bool isOngoing = raid.state == 'ongoing';
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 8, right: 8, top: 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: Icon(
-                    filterBy == "all"
-                        ? LucideIcons.list
-                        : filterBy == "done"
-                            ? LucideIcons.check
-                            : LucideIcons.x,
-                    color: Theme.of(context).colorScheme.tertiary),
-                onPressed: () {
-                  setState(() {
-                    switch (filterBy) {
-                      case "all":
-                        filterBy = "done";
-                        break;
-                      case "done":
-                        filterBy = "notDone";
-                        break;
-                      default:
-                        filterBy = "all";
-                    }
-                  });
-                },
-                tooltip: 'Filter Remaining Attacks',
-              ),
-              SizedBox(
-                width: 30,
-                height: 30,
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back,
-                      color: Theme.of(context).colorScheme.onSurface, size: 16),
-                  onPressed: decrementRaid,
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(
+                  alpha: AppOpacity.border,
                 ),
-              ),
-              Text(
-                DateFormat('dd MMMM yyyy',
-                        Localizations.localeOf(context).languageCode)
-                    .format(raid.startTime),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              SizedBox(
-                width: 30,
-                height: 30,
-                child: IconButton(
-                  icon: Icon(Icons.arrow_forward,
-                      color: Theme.of(context).colorScheme.onSurface, size: 16),
-                  onPressed: incrementRaid,
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.link,
-                  color: filterAccountActive ? Colors.green : Colors.grey,
-                ),
-                onPressed: () {
-                  setState(() {
-                    filterAccountActive = !filterAccountActive;
-                  });
-                },
-                tooltip: 'Filter Active Users',
-              ),
-            ],
-          ),
-        ),
-        buildLastRaids(raid, locale, isOngoing),
-        if ((filterBy == "all" || filterBy == "done") && week == 0)
-          buildLastRaidsMembers(raid, activeUserTags, filterAccountActive),
-        if ((filterBy == "all" || filterBy == "notDone") && isOngoing)
-          ...buildNonParticipantWidgets(
-              nonParticipants, activeUserTags, filterAccountActive)
-        else
-          SizedBox.shrink(),
-        SizedBox(height: 10),
-      ],
-    );
-  }
-
-  List<ClanMember> getNonParticipatingMembers(CapitalHistoryItem firstRaid) {
-    List<ClanMember> nonParticipants = [];
-    Set<String> raidParticipantTags = widget.clanInfo.clanCapitalRaid!.items
-        .expand((item) => item.members!.map((member) => member.tag))
-        .toSet();
-
-    for (var member in widget.clanInfo.memberList) {
-      if (!raidParticipantTags.contains(member.tag)) {
-        nonParticipants.add(member);
-      }
-    }
-    return nonParticipants;
-  }
-
-  List<Widget> buildNonParticipantWidgets(List<ClanMember> nonParticipants,
-      List<String> activeUserTags, bool filterAccountActive) {
-    return nonParticipants
-        .where((member) =>
-            !filterAccountActive || activeUserTags.contains(member.tag))
-        .map((member) {
-      return Card(
-        margin: EdgeInsets.only(left: 12, right: 12, bottom: 4, top: 4),
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.red, width: 2),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 40,
-                width: 40,
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.capitalVacantHouse,
-                ),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      member.name,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      member.tag,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(Icons.close, color: Colors.red),
-            ],
-          ),
-        ),
-      );
-    }).toList();
-  }
-
-  Widget buildLastRaids(dynamic firstRaid, locale, isOngoing) {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: Card(
-            margin: EdgeInsets.only(left: 12, right: 12, bottom: 4, top: 4),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            elevation: 4,
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        isOngoing
-                            ? AppLocalizations.of(context)!.raidsOngoing
-                            : AppLocalizations.of(context)!.raidsLast,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      SizedBox(width: 4),
-                      isOngoing
-                          ? MobileWebImage(
-                              height: 24,
-                              width: 24,
-                              imageUrl: ImageAssets.swordGif,
-                            )
-                          : SizedBox.shrink(),
-                    ],
-                  ),
-                  Text(
-                    "(${DateFormat.yMMMd(locale).format(firstRaid.startTime)} - ${DateFormat.yMMMd(locale).format(firstRaid.endTime)})",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  SizedBox(height: 8),
-                  Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 32,
-                                    width: 32,
-                                    child: MobileWebImage(
-                                      imageUrl: ImageAssets.capitalGold,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    isOngoing
-                                        ? AppLocalizations.of(context)!
-                                            .generalComingSoon
-                                        : '${6 * firstRaid.offensiveReward + firstRaid.defensiveReward}',
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      )),
-                  SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: MobileWebImage(
-                                      imageUrl: ImageAssets.raidAttacks,
-                                    ),
-                                  ),
-                                  SizedBox(width: 2),
-                                  Text(
-                                    "${NumberFormat('#,###', Localizations.localeOf(context).toString()).format(firstRaid.raidsCompleted)} ${AppLocalizations.of(context)!.raidsCompleted}",
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(NumberFormat(
-                                          '#,###',
-                                          Localizations.localeOf(context)
-                                              .toString())
-                                      .format(firstRaid.capitalTotalLoot)),
-                                  SizedBox(width: 2),
-                                  SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: MobileWebImage(
-                                        imageUrl: ImageAssets.capitalGold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  ClipRect(
-                                    child: Transform.scale(
-                                      scale: 1.3,
-                                      child: MobileWebImage(
-                                          height: 24,
-                                          width: 24,
-                                          fit: BoxFit.cover,
-                                          imageUrl: ImageAssets.capitalHall(5)),
-                                    ),
-                                  ),
-                                  SizedBox(width: 2),
-                                  Text(
-                                      "${firstRaid.enemyDistrictsDestroyed} ${AppLocalizations.of(context)!.raidsDistrictsDestroyed}"),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("${firstRaid.totalAttacks}"),
-                                  SizedBox(width: 2),
-                                  ClipRect(
-                                    child: Transform.scale(
-                                      scale: 0.8,
-                                      child: MobileWebImage(
-                                          height: 24,
-                                          width: 24,
-                                          fit: BoxFit.cover,
-                                          imageUrl:
-                                              ImageAssets.capitalThickSwords),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget buildLastRaidsMembers(CapitalHistoryItem firstRaid,
-      List<String> activeUserTags, bool filterAccountActive) {
-    return Column(
-      children: [
-        SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: [
-              Text(
-                "${AppLocalizations.of(context)!.clanMembers} (${firstRaid.members?.length ?? 0}/50)",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              SizedBox(height: 10),
-              ...buildMemberWidgets(
-                  firstRaid.members ?? [], activeUserTags, filterAccountActive)
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<Widget> buildMemberWidgets(List<RaidMember> raidMembers,
-      List<String> activeUserTags, bool filterAccountActive) {
-    raidMembers.sort(
-        (a, b) => b.capitalResourcesLooted.compareTo(a.capitalResourcesLooted));
-
-    return raidMembers
-        .where((member) =>
-            !filterAccountActive || activeUserTags.contains(member.tag))
-        .map((member) {
-      bool isInDiscord = activeUserTags.contains(member.tag);
-
-      return Card(
-        margin: EdgeInsets.only(left: 12, right: 12, bottom: 4, top: 4),
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: isInDiscord ? Colors.green : Colors.transparent,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 40,
-                width: 40,
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.capitalClanHouse,
-                ),
-              ),
-              SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Text(
-                      member.name,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                      overflow: TextOverflow.ellipsis,
+                    MobileWebImage(
+                      imageUrl: ImageAssets.raidMedal,
+                      width: 34,
+                      height: 34,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              formatter.format(totalReward),
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    height: 1,
+                                  ),
+                            ),
+                          ),
+                          if (isOngoing) ...[
+                            const SizedBox(width: 6),
+                            _EstimatedBadge(
+                              tooltip: loc.capitalRaidEstimatedTooltip,
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                     Text(
-                      member.tag,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Colors.grey),
+                      loc.capitalRaidRewards,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '${member.attacks}/${member.attackLimit + member.bonusAttackLimit}',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  Text(
-                    NumberFormat(
-                            '#,###', Localizations.localeOf(context).toString())
-                        .format(member.capitalResourcesLooted),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-              SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: MobileWebImage(
-                      imageUrl: ImageAssets.raidAttacks,
+                const SizedBox(height: 14),
+                _CapitalFullStatsGrid(
+                  stats: [
+                    _CapitalFullStat(
+                      label: loc.raidsCompleted,
+                      value: formatter.format(raid.raidsCompleted),
+                      icon: Icon(
+                        Icons.checklist_rounded,
+                        size: 18,
+                        color: colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: MobileWebImage(
-                      imageUrl: ImageAssets.capitalGold,
+                    _CapitalFullStat(
+                      label: loc.raidsDistrictsDestroyed,
+                      value: formatter.format(raid.enemyDistrictsDestroyed),
+                      icon: Icon(
+                        Icons.domain_rounded,
+                        size: 18,
+                        color: StatColors.capitalDistrict,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    _CapitalFullStat(
+                      label: loc.warAttacksTitle,
+                      value: formatter.format(raid.totalAttacks),
+                      icon: Icon(
+                        Icons.bolt_rounded,
+                        size: 18,
+                        color: StatColors.capitalAttack,
+                      ),
+                    ),
+                    _CapitalFullStat(
+                      label: loc.capitalRaidLoot,
+                      value: formatter.format(raid.capitalTotalLoot),
+                      icon: MobileWebImage(
+                        imageUrl: ImageAssets.capitalGold,
+                        width: 18,
+                        height: 18,
+                      ),
+                    ),
+                    if (projectedLoot != null)
+                      _CapitalFullStat(
+                        label: loc.capitalRaidProjectedLoot,
+                        value: formatter.format(projectedLoot),
+                        icon: Icon(
+                          Icons.trending_up_rounded,
+                          size: 18,
+                          color: StatColors.capitalProjected,
+                        ),
+                      ),
+                    if (trophyPrediction != null)
+                      _CapitalFullStat(
+                        label: loc.capitalRaidTrophyPrediction,
+                        value:
+                            '${formatter.format(trophyPrediction.predictedPoints)} '
+                            '(${trophyPrediction.change >= 0 ? '+' : ''}${formatter.format(trophyPrediction.change)})',
+                        tooltip: loc.capitalRaidTrophyPredictionTooltip,
+                        icon: Icon(
+                          trophyPrediction.change >= 0
+                              ? Icons.arrow_upward_rounded
+                              : Icons.arrow_downward_rounded,
+                          size: 18,
+                          color: trophyPrediction.change >= 0
+                              ? StatColors.win
+                              : StatColors.loss,
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      );
-    }).toList();
+      ],
+    );
+  }
+}
+
+class _CapitalFullStatsGrid extends StatelessWidget {
+  final List<_CapitalFullStat> stats;
+
+  const _CapitalFullStatsGrid({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: stats.map((stat) => _CapitalFlatStat(stat: stat)).toList(),
+    );
+  }
+}
+
+class _CapitalFlatStat extends StatelessWidget {
+  final _CapitalFullStat stat;
+
+  const _CapitalFlatStat({required this.stat});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final child = SizedBox(
+      width: 66,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(child: stat.icon),
+          const SizedBox(height: 4),
+          Text(
+            stat.label,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            stat.value,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+
+    return stat.tooltip == null
+        ? child
+        : Tooltip(message: stat.tooltip!, child: child);
+  }
+}
+
+class _CapitalFullStat {
+  final String label;
+  final String value;
+  final Widget icon;
+  final String? tooltip;
+
+  const _CapitalFullStat({
+    required this.label,
+    required this.value,
+    required this.icon,
+    this.tooltip,
+  });
+}
+
+/// Flags a value as a client-side estimate (not yet published by
+/// Supercell) rather than final data, so users don't mistake the
+/// predicted medal count for the real end-of-raid reward.
+class _EstimatedBadge extends StatelessWidget {
+  final String tooltip;
+
+  const _EstimatedBadge({required this.tooltip});
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Tooltip(
+      message: tooltip,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+        decoration: BoxDecoration(
+          color: colorScheme.tertiary.withValues(alpha: 0.14),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+            color: colorScheme.tertiary.withValues(alpha: 0.32),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.auto_graph_rounded,
+              size: 12,
+              color: colorScheme.tertiary,
+            ),
+            const SizedBox(width: 3),
+            Text(
+              loc.capitalRaidEstimated,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: colorScheme.tertiary,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

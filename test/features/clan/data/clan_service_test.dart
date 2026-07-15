@@ -67,7 +67,7 @@ void main() {
           'items': [
             _clanJson('#CLAN1', name: 'Alpha'),
             _clanJson('#CLAN2', name: 'Bravo'),
-          ]
+          ],
         }),
         200,
       );
@@ -101,8 +101,7 @@ void main() {
   group('ClanService — loadAllClanData (FakeApiService, errors)', () {
     test('resets isLoading to false on 500', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/clans/details'] =
-          http.Response('error', 500);
+      fakeApi.postStubs['/clans/details'] = http.Response('error', 500);
       final service = ClanService(apiService: fakeApi);
       await service.loadAllClanData(['#CLAN1']);
       expect(service.isLoading, isFalse);
@@ -110,8 +109,7 @@ void main() {
 
     test('throws on 503 when throwOnError = true', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/clans/details'] =
-          http.Response('error', 503);
+      fakeApi.postStubs['/clans/details'] = http.Response('error', 503);
       final service = ClanService(apiService: fakeApi);
       await expectLater(
         () => service.loadAllClanData(['#CLAN1'], throwOnError: true),
@@ -120,8 +118,7 @@ void main() {
     });
 
     test('does not throw on network error when throwOnError = false', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       await expectLater(
         () => service.loadAllClanData(['#CLAN1']),
         returnsNormally,
@@ -129,8 +126,7 @@ void main() {
     });
 
     test('throws on network error when throwOnError = true', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       await expectLater(
         () => service.loadAllClanData(['#CLAN1'], throwOnError: true),
         throwsA(anything),
@@ -161,8 +157,7 @@ void main() {
     });
 
     test('returns empty list on error without throwOnError', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       final result = await service.loadClanWarStatsData(['#CLAN1']);
       expect(result, isEmpty);
     });
@@ -185,34 +180,33 @@ void main() {
       final encodedTag = Uri.encodeComponent('#CLAN1');
       fakeApi.getStubs['/clan/$encodedTag/join-leave?current_season=true'] =
           http.Response(
-        jsonEncode({'items': [], 'timestamp_start': 0, 'timestamp_end': 0}),
-        200,
-      );
+            jsonEncode({'items': [], 'timestamp_start': 0, 'timestamp_end': 0}),
+            200,
+          );
       fakeApi.getStubs['/clan/$encodedTag/join-leave/stats?current_season=true'] =
           http.Response(
-        jsonEncode({
-          'stats': {
-            'total_events': 0,
-            'total_joins': 0,
-            'total_leaves': 0,
-            'unique_players': 0,
-            'moving_players': 0,
-            'players_still_in_clan': 0,
-            'players_left_forever': 0,
-            'rejoined_players': 0,
-            'most_moving_players': [],
-          }
-        }),
-        200,
-      );
+            jsonEncode({
+              'stats': {
+                'total_events': 0,
+                'total_joins': 0,
+                'total_leaves': 0,
+                'unique_players': 0,
+                'moving_players': 0,
+                'players_still_in_clan': 0,
+                'players_left_forever': 0,
+                'rejoined_players': 0,
+                'most_moving_players': [],
+              },
+            }),
+            200,
+          );
       final service = ClanService(apiService: fakeApi);
       final result = await service.loadClanJoinLeaveData(['#CLAN1']);
       expect(result, isNotEmpty);
     });
 
     test('sets isLoading to false after error', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       await service.loadClanJoinLeaveData(['#CLAN1']);
       expect(service.isLoading, isFalse);
     });
@@ -226,7 +220,9 @@ void main() {
     test('links WarCwl to matching Clan by tag', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
@@ -246,7 +242,9 @@ void main() {
     test('does nothing for non-matching tag', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
@@ -272,7 +270,9 @@ void main() {
     test('assigns empty JoinLeave when no matching entry', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
@@ -303,8 +303,7 @@ void main() {
     });
 
     test('returns empty list on network error without throwOnError', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       final result = await service.loadWarLogData(['#CLAN1']);
       expect(result, isEmpty);
     });
@@ -318,7 +317,9 @@ void main() {
     test('assigns empty ClanWarLog when no matching entry', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
@@ -330,7 +331,9 @@ void main() {
     test('links correct warLog to clan', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
@@ -349,7 +352,9 @@ void main() {
     test('does not throw when warStatsList is empty', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
@@ -401,6 +406,43 @@ void main() {
       expect(cachedClan.name, 'Cached');
     });
 
+    test('coalesces concurrent requests for the same clan', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/clan/%23CLAN1/details'] = http.Response(
+        jsonEncode(_clanJson('#CLAN1')),
+        200,
+      );
+      final service = ClanService(apiService: fakeApi);
+
+      final clans = await Future.wait([
+        service.loadClanData('#CLAN1'),
+        service.loadClanData('#CLAN1'),
+      ]);
+
+      expect(clans.map((clan) => clan.tag), everyElement('#CLAN1'));
+      expect(fakeApi.getCallCounts['/clans/%23CLAN1'], 1);
+    });
+
+    test('tracking headers force one tracked detail refresh', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/clan/%23CLAN1/details'] = http.Response(
+        jsonEncode(_clanJson('#CLAN1')),
+        200,
+      );
+      final service = ClanService(apiService: fakeApi);
+      await service.loadClanData('#CLAN1');
+
+      await service.loadClanData(
+        '#CLAN1',
+        extraHeaders: const {'x-ck-user-id': 'user-1'},
+      );
+
+      expect(fakeApi.getCallCounts['/clans/%23CLAN1'], 2);
+      expect(fakeApi.lastGetHeaders['/clans/%23CLAN1'], const {
+        'x-ck-user-id': 'user-1',
+      });
+    });
+
     test('sets isLoading to false after success', () async {
       final fakeApi = FakeApiService();
       fakeApi.getStubs['/clan/%23CLAN1/details'] = http.Response(
@@ -414,8 +456,10 @@ void main() {
 
     test('throws and resets isLoading on non-200 response', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/clan/%23CLAN1/details'] =
-          http.Response('Not Found', 404);
+      fakeApi.getStubs['/clan/%23CLAN1/details'] = http.Response(
+        'Not Found',
+        404,
+      );
       final service = ClanService(apiService: fakeApi);
       await expectLater(
         () => service.loadClanData('#CLAN1'),
@@ -425,8 +469,7 @@ void main() {
     });
 
     test('throws on network error', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       await expectLater(
         () => service.loadClanData('#CLAN1'),
         throwsA(anything),
@@ -461,8 +504,7 @@ void main() {
         jsonEncode(_clanJson('#CLAN1')),
         200,
       );
-      fakeApi.throwOnPost['/war/clans/warhits'] =
-          Exception('war stats error');
+      fakeApi.throwOnPost['/war/clans/warhits'] = Exception('war stats error');
       final service = ClanService(apiService: fakeApi);
       final clan = await service.getClanAndWarData('#CLAN1');
       expect(clan.tag, '#CLAN1');
@@ -482,42 +524,38 @@ void main() {
 
     test('returns CapitalHistoryItems on 200 with items', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs[''] = http.Response(
-        jsonEncode({'items': []}),
-        200,
-      );
+      fakeApi.getStubs[''] = http.Response(jsonEncode({'items': []}), 200);
       final service = ClanService(apiService: fakeApi);
       final result = await service.loadCapitalData(['#CLAN1'], 5);
       expect(result, hasLength(1));
       expect(result.first.clanTag, '#CLAN1');
     });
 
-    test('returns empty list for single tag when response has no items key',
-        () async {
-      final fakeApi = FakeApiService();
-      fakeApi.getStubs[''] = http.Response(jsonEncode({}), 200);
-      final service = ClanService(apiService: fakeApi);
-      final result = await service.loadCapitalData(['#CLAN1'], 5);
-      expect(result, isEmpty);
-    });
+    test(
+      'returns empty list for single tag when response has no items key',
+      () async {
+        final fakeApi = FakeApiService();
+        fakeApi.getStubs[''] = http.Response(jsonEncode({}), 200);
+        final service = ClanService(apiService: fakeApi);
+        final result = await service.loadCapitalData(['#CLAN1'], 5);
+        expect(result, isEmpty);
+      },
+    );
 
     test('returns empty list on network error without throwOnError', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       final result = await service.loadCapitalData(['#CLAN1'], 5);
       expect(result, isEmpty);
     });
 
     test('sets isLoading to false after network error', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       await service.loadCapitalData(['#CLAN1'], 5);
       expect(service.isLoading, isFalse);
     });
 
     test('throws on network error when throwOnError = true', () async {
-      final service =
-          ClanService(apiService: NetworkErrorApiService());
+      final service = ClanService(apiService: NetworkErrorApiService());
       await expectLater(
         () => service.loadCapitalData(['#CLAN1'], 5, throwOnError: true),
         throwsA(anything),
@@ -533,7 +571,9 @@ void main() {
     test('assigns empty CapitalHistoryItems when no matching entry', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
       final service = ClanService(apiService: fakeApi);
@@ -545,13 +585,12 @@ void main() {
     test('links capital history to matching clan', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
-        jsonEncode({'items': [_clanJson('#CLAN1')]}),
+        jsonEncode({
+          'items': [_clanJson('#CLAN1')],
+        }),
         200,
       );
-      fakeApi.getStubs[''] = http.Response(
-        jsonEncode({'items': []}),
-        200,
-      );
+      fakeApi.getStubs[''] = http.Response(jsonEncode({'items': []}), 200);
       final service = ClanService(apiService: fakeApi);
       await service.loadAllClanData(['#CLAN1']);
       await service.loadCapitalData(['#CLAN1'], 5);
@@ -565,25 +604,21 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('ClanService — loadWarLogData (200 success)', () {
-    test('returns ClanWarLog with correct clanTag on 200 with empty items',
-        () async {
-      final fakeApi = FakeApiService();
-      fakeApi.getStubs[''] = http.Response(
-        jsonEncode({'items': []}),
-        200,
-      );
-      final service = ClanService(apiService: fakeApi);
-      final result = await service.loadWarLogData(['#CLAN1']);
-      expect(result, hasLength(1));
-      expect(result.first.clanTag, '#CLAN1');
-    });
+    test(
+      'returns ClanWarLog with correct clanTag on 200 with empty items',
+      () async {
+        final fakeApi = FakeApiService();
+        fakeApi.getStubs[''] = http.Response(jsonEncode({'items': []}), 200);
+        final service = ClanService(apiService: fakeApi);
+        final result = await service.loadWarLogData(['#CLAN1']);
+        expect(result, hasLength(1));
+        expect(result.first.clanTag, '#CLAN1');
+      },
+    );
 
     test('populates warLogList on 200', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs[''] = http.Response(
-        jsonEncode({'items': []}),
-        200,
-      );
+      fakeApi.getStubs[''] = http.Response(jsonEncode({'items': []}), 200);
       final service = ClanService(apiService: fakeApi);
       await service.loadWarLogData(['#CLAN1']);
       expect(service.warLogList, hasLength(1));
@@ -600,13 +635,8 @@ void main() {
       fakeApi.postStubs['/war/clans/warhits'] = http.Response(
         jsonEncode({
           'items': [
-            {
-              'tag': '#CLAN1',
-              'clan_tag': '#CLAN1',
-              'players': [],
-              'wars': [],
-            }
-          ]
+            {'tag': '#CLAN1', 'clan_tag': '#CLAN1', 'players': [], 'wars': []},
+          ],
         }),
         200,
       );
@@ -638,13 +668,8 @@ void main() {
       fakeApi.postStubs['/war/clans/warhits'] = http.Response(
         jsonEncode({
           'items': [
-            {
-              'tag': '#OTHER',
-              'clan_tag': '#OTHER',
-              'players': [],
-              'wars': [],
-            }
-          ]
+            {'tag': '#OTHER', 'clan_tag': '#OTHER', 'players': [], 'wars': []},
+          ],
         }),
         200,
       );
@@ -658,8 +683,7 @@ void main() {
 
     test('throws on non-200 response', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/war/clans/warhits'] =
-          http.Response('error', 503);
+      fakeApi.postStubs['/war/clans/warhits'] = http.Response('error', 503);
       final service = ClanService(apiService: fakeApi);
       await expectLater(
         () => service.loadClanWarStatsWithFilter(
@@ -682,7 +706,7 @@ void main() {
         {
           'clan_details': {
             '#CLAN1': {'tag': '#CLAN1', 'name': 'Bulk Clan'},
-          }
+          },
         },
         ['#CLAN1'],
       );
@@ -711,8 +735,8 @@ void main() {
                 'most_moving_players': [],
               },
               'join_leave_list': [],
-            }
-          }
+            },
+          },
         },
         ['#CLAN1'],
       );
@@ -725,8 +749,8 @@ void main() {
       await service.processBulkClanData(
         {
           'capital_data': [
-            {'clan_tag': '#CLAN1', 'history': [], 'stats': null}
-          ]
+            {'clan_tag': '#CLAN1', 'history': [], 'stats': null},
+          ],
         },
         ['#CLAN1'],
       );
@@ -739,8 +763,8 @@ void main() {
       await service.processBulkClanData(
         {
           'war_log_data': [
-            {'clan_tag': '#CLAN1', 'items': []}
-          ]
+            {'clan_tag': '#CLAN1', 'items': []},
+          ],
         },
         ['#CLAN1'],
       );
@@ -753,8 +777,8 @@ void main() {
       await service.processBulkClanData(
         {
           'clan_war_stats': [
-            {'clan_tag': '#CLAN1', 'players': [], 'wars': []}
-          ]
+            {'clan_tag': '#CLAN1', 'players': [], 'wars': []},
+          ],
         },
         ['#CLAN1'],
       );
@@ -779,4 +803,3 @@ void main() {
     });
   });
 }
-

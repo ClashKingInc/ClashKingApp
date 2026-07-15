@@ -71,9 +71,11 @@ class PlayerLegendSeason {
 
     final int dayOfSeasonValue;
     if (json['season_start'] != null) {
-      final daysPassed = DateTime.now()
+      final daysPassed =
+          DateTime.now()
               .difference(DateTime.parse(json['season_start']))
-              .inDays + 1;
+              .inDays +
+          1;
       final duration = json['season_duration'] ?? 0;
       dayOfSeasonValue = daysPassed > duration ? duration : daysPassed;
     } else {
@@ -81,8 +83,12 @@ class PlayerLegendSeason {
     }
 
     return PlayerLegendSeason(
-      start: json['season_start'] != null ? DateTime.parse(json['season_start']) : DateTime(1970),
-      end:   json['season_end']   != null ? DateTime.parse(json['season_end'])   : DateTime(1970),
+      start: json['season_start'] != null
+          ? DateTime.parse(json['season_start'])
+          : DateTime(1970),
+      end: json['season_end'] != null
+          ? DateTime.parse(json['season_end'])
+          : DateTime(1970),
       duration: json['season_duration'] ?? 0,
       daysInLegend: json['season_days_in_legend'] ?? 0,
       dayOfSeason: dayOfSeasonValue,
@@ -90,38 +96,44 @@ class PlayerLegendSeason {
       trophiesGainedTotal: json['season_trophies_gained_total'] ?? 0,
       trophiesLostTotal: json['season_trophies_lost_total'] ?? 0,
       trophiesNet: json['season_trophies_net'] ?? 0,
-      trophiesNetRevised: 5000 - ((json['season_trophies_net_revised'] ?? 0) as num).toInt(),
+      trophiesNetRevised:
+          5000 - ((json['season_trophies_net_revised'] ?? 0) as num).toInt(),
       totalAttacks: json['season_total_attacks'] ?? 0,
       totalDefenses: json['season_total_defenses'] ?? 0,
       avgGainedPerAttack:
           (json['season_average_trophies_gained_per_attack'] ?? 0).toDouble(),
-      avgLostPerDefense:
-          (json['season_average_trophies_lost_per_defense'] ?? 0).toDouble(),
+      avgLostPerDefense: (json['season_average_trophies_lost_per_defense'] ?? 0)
+          .toDouble(),
       totalPossible: json['season_total_attacks_defenses_possible'] ?? 0,
       gainedLostPossible: json['season_total_gained_lost_possible'] ?? 0,
       gainedRatio: (json['season_trophies_gained_ratio'] ?? 0).toDouble(),
       lostRatio: (json['season_trophies_lost_ratio'] ?? 0).toDouble(),
       attackRatio: (json['season_total_attacks_ratio'] ?? 0).toDouble(),
       defenseRatio: (json['season_total_defenses_ratio'] ?? 0).toDouble(),
-      days: (json['days'] as Map<String, dynamic>?)?.map(
+      days:
+          (json['days'] as Map<String, dynamic>?)?.map(
             (key, value) => MapEntry(key, PlayerLegendDay.fromJson(value)),
           ) ??
           {},
       attackStarsDistribution: Map<int, int>.from(
-        (json['season_stars_distribution_attacks'] ?? {})
-            .map((key, value) => MapEntry(int.parse(key), value)),
+        (json['season_stars_distribution_attacks'] ?? {}).map(
+          (key, value) => MapEntry(int.parse(key), value),
+        ),
       ),
       defenseStarsDistribution: Map<int, int>.from(
-        (json['season_stars_distribution_defenses'] ?? {})
-            .map((key, value) => MapEntry(int.parse(key), value)),
+        (json['season_stars_distribution_defenses'] ?? {}).map(
+          (key, value) => MapEntry(int.parse(key), value),
+        ),
       ),
       attackStarsDistributionPercentages: Map<int, double>.from(
-        attackPercentJson
-            .map((key, value) => MapEntry(int.parse(key), value.toDouble())),
+        attackPercentJson.map(
+          (key, value) => MapEntry(int.parse(key), value.toDouble()),
+        ),
       ),
       defenseStarsDistributionPercentages: Map<int, double>.from(
-        defensePercentJson
-            .map((key, value) => MapEntry(int.parse(key), value.toDouble())),
+        defensePercentJson.map(
+          (key, value) => MapEntry(int.parse(key), value.toDouble()),
+        ),
       ),
     );
   }

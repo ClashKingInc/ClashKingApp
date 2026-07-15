@@ -6,7 +6,6 @@ import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -33,7 +32,7 @@ Map<int, int> countStars(List<WarMember> members) {
 
 List<Widget> generateStars(int numberOfStars, double size) {
   return List<Widget>.generate(3, (index) {
-    return CachedNetworkImage(
+    return MobileWebImage(
       errorWidget: (context, url, error) => Icon(Icons.error),
       imageUrl: index < numberOfStars
           ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
@@ -45,9 +44,12 @@ List<Widget> generateStars(int numberOfStars, double size) {
 }
 
 List<Widget> generateStarsWithIconBefore(
-    int numberOfStars, double size, String iconUrl) {
+  int numberOfStars,
+  double size,
+  String iconUrl,
+) {
   return [
-    CachedNetworkImage(
+    MobileWebImage(
       imageUrl: iconUrl,
       width: size,
       height: size,
@@ -55,79 +57,70 @@ List<Widget> generateStarsWithIconBefore(
     ),
     const SizedBox(width: 4),
     ...List.generate(
-        3,
-        (index) => CachedNetworkImage(
-              imageUrl: index < numberOfStars
-                  ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
-                  : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",
-              width: size,
-              height: size,
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            )),
+      3,
+      (index) => MobileWebImage(
+        imageUrl: index < numberOfStars
+            ? "https://assets.clashk.ing/icons/Icon_BB_Star.png"
+            : "https://assets.clashk.ing/icons/Icon_BB_Empty_Star.png",
+        width: size,
+        height: size,
+        errorWidget: (context, url, error) => const Icon(Icons.error),
+      ),
+    ),
   ];
 }
 
 List<Widget> generateDoubleIcons(
-    double size, String iconUrl1, String iconUrl2) {
+  double size,
+  String iconUrl1,
+  String iconUrl2,
+) {
   return [
-    MobileWebImage(
-      imageUrl: iconUrl1,
-      width: size,
-      height: size,
-    ),
+    MobileWebImage(imageUrl: iconUrl1, width: size, height: size),
     const SizedBox(width: 4),
-    MobileWebImage(
-      imageUrl: iconUrl2,
-      width: size,
-      height: size,
-    ),
+    MobileWebImage(imageUrl: iconUrl2, width: size, height: size),
   ];
 }
 
 List<Widget> generateDoubleImageIconsWithText(
-    double size, String iconUrl1, String iconUrl2, String text) {
+  double size,
+  String iconUrl1,
+  String iconUrl2,
+  String text,
+) {
   return [
-    MobileWebImage(
-      imageUrl: iconUrl1,
-      width: size,
-      height: size,
-    ),
+    MobileWebImage(imageUrl: iconUrl1, width: size, height: size),
     const SizedBox(width: 4),
-    MobileWebImage(
-      imageUrl: iconUrl2,
-      width: size,
-      height: size,
-    ),
+    MobileWebImage(imageUrl: iconUrl2, width: size, height: size),
     const SizedBox(width: 4),
-    Text(text),
+    Flexible(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis)),
   ];
 }
 
 List<Widget> generateImageIconWithText(
-    double size, String iconUrl, String text) {
+  double size,
+  String iconUrl,
+  String text,
+) {
   return [
-    MobileWebImage(
-      imageUrl: iconUrl,
-      width: size,
-      height: size,
-    ),
+    MobileWebImage(imageUrl: iconUrl, width: size, height: size),
     const SizedBox(width: 4),
-    Text(text),
+    Flexible(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis)),
   ];
 }
 
 List<Widget> generateDoubleIconsWithText(
-    double size, String iconUrl, IconData icon2, String text) {
+  double size,
+  String iconUrl,
+  IconData icon2,
+  String text,
+) {
   return [
-    MobileWebImage(
-      imageUrl: iconUrl,
-      width: size,
-      height: size,
-    ),
+    MobileWebImage(imageUrl: iconUrl, width: size, height: size),
     const SizedBox(width: 4),
     Icon(icon2),
     const SizedBox(width: 4),
-    Text(text),
+    Flexible(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis)),
   ];
 }
 
@@ -135,12 +128,15 @@ List<Widget> generateIconWithText(double size, IconData icon, String text) {
   return [
     Icon(icon),
     const SizedBox(width: 4),
-    Text(text),
+    Flexible(child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis)),
   ];
 }
 
 Widget timeLeft(
-    WarInfo currentWarInfo, BuildContext context, TextStyle? style) {
+  WarInfo currentWarInfo,
+  BuildContext context,
+  TextStyle? style,
+) {
   String hourIndicator = AppLocalizations.of(context)?.timeHourIndicator ?? ":";
   DateTime now = DateTime.now();
   Duration difference = Duration.zero;
@@ -177,21 +173,29 @@ Widget timeLeft(
 }
 
 String getPlayerNameByTag(String defenderTag, List<PlayerTab> playerTab) {
-  PlayerTab? player = playerTab.firstWhere((p) => p.tag == defenderTag,
-      orElse: () => PlayerTab('', 'Inconnu', 0, 0));
+  PlayerTab? player = playerTab.firstWhere(
+    (p) => p.tag == defenderTag,
+    orElse: () => PlayerTab('', 'Inconnu', 0, 0),
+  );
   return player.name;
 }
 
 String getPlayerTownhallByTag(String defenderTag, List<PlayerTab> playerTab) {
-  PlayerTab? player = playerTab.firstWhere((p) => p.tag == defenderTag,
-      orElse: () => PlayerTab('', 'Inconnu', 0, 0));
+  PlayerTab? player = playerTab.firstWhere(
+    (p) => p.tag == defenderTag,
+    orElse: () => PlayerTab('', 'Inconnu', 0, 0),
+  );
   return player.townhallLevel.toString();
 }
 
 String getPlayerMapPositionByTag(
-    String defenderTag, List<PlayerTab> playerTab) {
-  PlayerTab? player = playerTab.firstWhere((p) => p.tag == defenderTag,
-      orElse: () => PlayerTab('', 'Inconnu', 0, 0));
+  String defenderTag,
+  List<PlayerTab> playerTab,
+) {
+  PlayerTab? player = playerTab.firstWhere(
+    (p) => p.tag == defenderTag,
+    orElse: () => PlayerTab('', 'Inconnu', 0, 0),
+  );
   return player.mapPosition.toString();
 }
 
@@ -228,14 +232,18 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
 
   int logCount = warLogs.length;
   double averageMembers = logCount > 0 ? totalMembers / logCount : 0;
-  double averageClanDestruction =
-      logCount > 0 ? clanTotalDestruction / logCount : 0;
-  double averageClanStarsPerMember =
-      totalMembers > 0 ? clanTotalStars / totalMembers : 0;
-  double averageOpponentDestruction =
-      logCount > 0 ? opponentTotalDestruction / logCount : 0;
-  double averageOpponentStarsPerMember =
-      totalMembers > 0 ? opponentTotalStars / totalMembers : 0;
+  double averageClanDestruction = logCount > 0
+      ? clanTotalDestruction / logCount
+      : 0;
+  double averageClanStarsPerMember = totalMembers > 0
+      ? clanTotalStars / totalMembers
+      : 0;
+  double averageOpponentDestruction = logCount > 0
+      ? opponentTotalDestruction / logCount
+      : 0;
+  double averageOpponentStarsPerMember = totalMembers > 0
+      ? opponentTotalStars / totalMembers
+      : 0;
 
   return {
     'totalWins': totalWins.toString(),
@@ -245,8 +253,8 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
     'averageClanDestruction': averageClanDestruction.toStringAsFixed(0),
     'averageClanStarsPerMember': averageClanStarsPerMember.toStringAsFixed(1),
     'averageOpponentDestruction': averageOpponentDestruction.toStringAsFixed(0),
-    'averageOpponentStarsPerMember':
-        averageOpponentStarsPerMember.toStringAsFixed(1)
+    'averageOpponentStarsPerMember': averageOpponentStarsPerMember
+        .toStringAsFixed(1),
   };
 }
 
@@ -314,7 +322,8 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
 
 Future<String?> fetchWarOpponentTag(String clanTag) async {
   final response = await http.get(
-      Uri.parse('https://api.clashking.xyz/war/${clanTag.substring(1)}/basic'));
+    Uri.parse('https://api.clashking.xyz/war/${clanTag.substring(1)}/basic'),
+  );
 
   if (response.statusCode == 200) {
     String body = utf8.decode(response.bodyBytes);
@@ -336,7 +345,8 @@ Future<String?> fetchWarOpponentTag(String clanTag) async {
     return null;
   } else {
     Sentry.captureMessage(
-        'Failed to load $clanTag war opponent tag with status code: ${response.statusCode}');
+      'Failed to load $clanTag war opponent tag with status code: ${response.statusCode}',
+    );
     return null;
   }
 }
