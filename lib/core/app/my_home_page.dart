@@ -14,6 +14,7 @@ import 'package:clashkingapp/features/pages/data/announcement_story_cache_servic
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/pages/presentation/players_page.dart';
+import 'package:clashkingapp/features/pages/presentation/posts_page.dart';
 import 'package:clashkingapp/features/pages/presentation/search_page.dart';
 import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
@@ -38,8 +39,7 @@ class MyHomePageState extends State<MyHomePage> {
   late PageController _pageController;
   late final AnnouncementService _announcementService;
   late final AnnouncementPresentationService _announcementPresentationService;
-  late final AppAnnouncement _openingAnnouncement;
-  late final Future<String?> _openingStoryFile;
+  late final Future<AppAnnouncement?> _openingAnnouncement;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -48,10 +48,7 @@ class MyHomePageState extends State<MyHomePage> {
     _pageController = PageController(initialPage: _selectedIndex);
     _announcementService = AnnouncementService();
     _announcementPresentationService = AnnouncementPresentationService();
-    _openingAnnouncement = _announcementService.getOpeningAnnouncement();
-    _openingStoryFile = AnnouncementStoryCacheService().prepare(
-      _openingAnnouncement,
-    );
+    _openingAnnouncement = _announcementService.getActiveAnnouncement();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await DeepLinkHandler.tryHandlePendingDeepLink(context);
       await _showOpeningAnnouncement();
@@ -63,12 +60,16 @@ class MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    if (!await _announcementPresentationService.shouldPresent(
-      _openingAnnouncement,
-    )) {
+    final openingAnnouncement = await _openingAnnouncement;
+    if (openingAnnouncement == null ||
+        !await _announcementPresentationService.shouldPresent(
+          openingAnnouncement,
+        )) {
       return;
     }
-    final storyFilePath = await _openingStoryFile;
+    final storyFilePath = await AnnouncementStoryCacheService().prepare(
+      openingAnnouncement,
+    );
     if (storyFilePath == null) {
       return;
     }
@@ -78,10 +79,10 @@ class MyHomePageState extends State<MyHomePage> {
 
     await showAnnouncementStoryDialog(
       context,
-      announcement: _openingAnnouncement,
+      announcement: openingAnnouncement,
       preparedFilePath: storyFilePath,
     );
-    await _announcementPresentationService.markDismissed(_openingAnnouncement);
+    await _announcementPresentationService.markDismissed(openingAnnouncement);
   }
 
   @override
@@ -475,7 +476,7 @@ class _AccountMenuDrawer extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: Padding(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(20, 12, 16, 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,6 +536,16 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
+                    _DrawerMenuItem(
+                      icon: Icons.article_outlined,
+                      label: l10n.postsTitle,
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PostsPage(),
+                        ),
+                      ),
+                    ),
                     _DrawerMenuItem(
                       icon: Icons.trending_up_rounded,
                       label: l10n.drawerPopular,

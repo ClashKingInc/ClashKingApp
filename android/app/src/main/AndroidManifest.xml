@@ -13,6 +13,14 @@
         android:label="ClashKing"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        <!-- Android notification small icons must be a white-on-transparent
+             silhouette. Using the full launcher icon produces a white square. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_clashking" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_accent" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -3,6 +3,14 @@ import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const testAnnouncement = AppAnnouncement(
+  id: 'announcement-1',
+  version: '2',
+  title: 'Test update',
+  subtitle: 'Test story',
+  storyUrl: 'https://example.com/story.html',
+);
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -14,7 +22,7 @@ void main() {
     'shows an announcement until its ID and version are dismissed',
     () async {
       final service = AnnouncementPresentationService();
-      const announcement = AppAnnouncement.animeFury;
+      const announcement = testAnnouncement;
 
       expect(await service.shouldPresent(announcement), isTrue);
 
@@ -28,9 +36,9 @@ void main() {
     'a new announcement version is shown after an earlier version',
     () async {
       final service = AnnouncementPresentationService();
-      const versionOne = AppAnnouncement.animeFury;
+      const versionOne = testAnnouncement;
       const versionTwo = AppAnnouncement(
-        id: 'anime-fury-june-2026',
+        id: 'announcement-1',
         version: '3',
         title: 'Anime Fury',
         subtitle: 'Updated story',
@@ -48,6 +56,6 @@ void main() {
     });
     final service = AnnouncementPresentationService();
 
-    expect(await service.shouldPresent(AppAnnouncement.animeFury), isFalse);
+    expect(await service.shouldPresent(testAnnouncement), isFalse);
   });
 }

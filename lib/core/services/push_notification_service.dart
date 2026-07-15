@@ -7,6 +7,10 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/firebase_options.dart';
+import 'package:clashkingapp/features/pages/data/announcement_service.dart';
+import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
+import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
+import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -383,7 +387,7 @@ class PushNotificationService {
           channelDescription: _channelDescription,
           importance: Importance.high,
           priority: Priority.high,
-          icon: '@mipmap/launcher_icon',
+          icon: '@drawable/ic_stat_clashking',
         ),
         iOS: DarwinNotificationDetails(
           presentAlert: true,
@@ -406,7 +410,7 @@ class PushNotificationService {
     if (_localNotificationsReady) return;
 
     const initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/launcher_icon'),
+      android: AndroidInitializationSettings('@drawable/ic_stat_clashking'),
       iOS: DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
@@ -488,6 +492,13 @@ class PushNotificationService {
   }
 
   void _handleDataNavigation(Map<String, dynamic> data) {
+    if (data['type']?.toString() == 'admin_post') {
+      final postID = data['post_id']?.toString();
+      if (postID != null && postID.isNotEmpty) {
+        unawaited(_openAdminPost(postID));
+        return;
+      }
+    }
     final route = data['route']?.toString();
     if (route == null || route.isEmpty) return;
 
@@ -498,6 +509,46 @@ class PushNotificationService {
     ScaffoldMessenger.maybeOf(
       context,
     )?.showSnackBar(SnackBar(content: Text('Notification opened: $route')));
+  }
+
+  Future<void> _openAdminPost(String postID) async {
+    final announcement = await AnnouncementService().getAnnouncement(postID);
+    if (announcement == null) {
+      DebugUtils.debugWarning('Push post could not be loaded: $postID');
+      return;
+    }
+    var navigator = globalNavigatorKey.currentState;
+    for (var attempt = 0; navigator == null && attempt < 20; attempt++) {
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+      navigator = globalNavigatorKey.currentState;
+    }
+    if (navigator == null) return;
+    if (announcement.storyUrl?.isNotEmpty == true) {
+      final preparedFilePath = await AnnouncementStoryCacheService().prepare(
+        announcement,
+      );
+      if (preparedFilePath == null) {
+        DebugUtils.debugWarning('Push story could not be prepared: $postID');
+        return;
+      }
+      final storyContext = globalNavigatorKey.currentContext;
+      if (storyContext == null || !storyContext.mounted) return;
+      await showAnnouncementStoryDialog(
+        storyContext,
+        announcement: announcement,
+        preparedFilePath: preparedFilePath,
+      );
+      return;
+    }
+    await navigator.push(
+      MaterialPageRoute<void>(
+        builder: (_) => AnnouncementWebViewPage(
+          title: announcement.title,
+          html: announcement.body,
+          url: announcement.htmlUrl,
+        ),
+      ),
+    );
   }
 
   PushNotificationSetupResult _setResult(PushNotificationSetupResult result) {

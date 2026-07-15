@@ -275,6 +275,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     }
     await PushNotificationService.instance.savePreferences({
       'enabled': _notificationsEnabled,
+      'enabled_types': _enabledTypes.map(_notificationTypeKey).toList(),
+      'war_attack_modes': _warAttackModes.toList(),
+      'event_types': _eventTypes.map(_notificationTypeKey).toList(),
+      'reminder_timings': _warReminderTimings.toList(),
+      'account_scope': _accountScope == _NotificationAccountScope.selected
+          ? 'selected'
+          : 'all',
+      'selected_accounts': _selectedAccounts.toList(),
+      'selected_town_halls': _selectedTownHalls.toList(),
+      'selected_clan_tags': _selectedClanTags.toList(),
       'subscriptions': subscriptions,
     });
   }
