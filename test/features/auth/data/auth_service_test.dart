@@ -581,4 +581,60 @@ void main() {
       );
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // linkDiscordWithCode (OAuth-code flow)
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — linkDiscordWithCode', () {
+    test('links and re-authenticates on success', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/link-discord-code'] = http.Response('{}', 200);
+      // linkDiscordWithCode calls initializeAuth(), which fetches /auth/me.
+      fakeApi.getStubs['/auth/me'] = http.Response(
+        jsonEncode(userJson()),
+        200,
+      );
+      final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
+      final service = AuthService(
+        apiService: fakeApi,
+        tokenService: fakeToken,
+        discordAuthCodeProvider: () async =>
+            {'code': 'auth_code', 'code_verifier': 'verifier'},
+      );
+
+      await service.linkDiscordWithCode();
+      expect(service.isAuthenticated, isTrue);
+    });
+
+    test('throws when the OAuth flow is cancelled (null code)', () async {
+      final service = AuthService(
+        apiService: FakeApiService(),
+        tokenService: FakeTokenService(fakeToken: null),
+        discordAuthCodeProvider: () async => null,
+      );
+
+      await expectLater(
+        () => service.linkDiscordWithCode(),
+        throwsA(isA<Exception>()),
+      );
+    });
+
+    test('throws localized Exception on API error', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/link-discord-code'] =
+          http.Response('forbidden', 403);
+      final service = AuthService(
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+        discordAuthCodeProvider: () async =>
+            {'code': 'auth_code', 'code_verifier': 'verifier'},
+      );
+
+      await expectLater(
+        () => service.linkDiscordWithCode(),
+        throwsA(isA<Exception>()),
+      );
+    });
+  });
 }

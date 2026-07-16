@@ -29,6 +29,36 @@ class AccountManagementPageState extends State<AccountManagementPage> {
     super.dispose();
   }
 
+  Future<void> _linkDiscordAccount() async {
+    setState(() => _isLoading = true);
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    try {
+      await authService.linkDiscordWithCode();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.authAccountDiscordLinkedSuccess),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+
+    if (mounted) setState(() => _isLoading = false);
+  }
+
   Future<void> _linkEmailAccount() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -77,7 +107,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.authAccountManagement),
+        title: Text(AppLocalizations.of(context)!.authAccountConnected),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -109,6 +139,8 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                 SizedBox(height: 32),
 
                 // Link Accounts Section
+                if (!user.hasDiscordAuth) _buildLinkDiscordSection(),
+
                 if (!user.hasEmailAuth) _buildLinkEmailSection(),
               ],
             ),
@@ -260,6 +292,49 @@ class AccountManagementPageState extends State<AccountManagementPage> {
             ),
           ),
         ],
+      ],
+    );
+  }
+
+  Widget _buildLinkDiscordSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.authAccountLinkDiscord,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          AppLocalizations.of(context)!.authAccountAddDiscordAuth,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.grey[600],
+              ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: _isLoading ? null : _linkDiscordAccount,
+            icon: const Icon(Icons.discord),
+            label: Text(
+              AppLocalizations.of(context)!.authAccountLinkDiscord,
+              style: const TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF5865F2),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 32),
       ],
     );
   }

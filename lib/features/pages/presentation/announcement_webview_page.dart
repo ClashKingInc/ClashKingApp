@@ -1,6 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+NavigationDecision announcementNavigationDecision({
+  required String requestedUrl,
+  String? initialUrl,
+  bool loadsLocalFile = false,
+}) {
+  final requestedUri = Uri.tryParse(requestedUrl);
+  if (requestedUri == null) {
+    return NavigationDecision.prevent;
+  }
+
+  if (requestedUri.scheme == 'about' || requestedUri.scheme == 'data') {
+    return NavigationDecision.navigate;
+  }
+
+  if (loadsLocalFile && requestedUri.scheme == 'file') {
+    return NavigationDecision.navigate;
+  }
+
+  final initialUri = initialUrl == null ? null : Uri.tryParse(initialUrl);
+  if (requestedUri.scheme == 'https' &&
+      initialUri?.scheme == 'https' &&
+      requestedUri.origin == initialUri?.origin) {
+    return NavigationDecision.navigate;
+  }
+
+  return NavigationDecision.prevent;
+}
+
+String? announcementStoryMessageFromNavigation({
+  required String requestedUrl,
+  required bool isTrustedLocalStory,
+}) {
+  if (!isTrustedLocalStory) {
+    return null;
+  }
+  final uri = Uri.tryParse(requestedUrl);
+  if (uri?.scheme != 'clashking-story' || uri?.host != 'message') {
+    return null;
+  }
+  return uri?.queryParameters['payload'];
+}
+
+const _announcementStoryBridgeJavaScript = '''
+window.AnnouncementStory = Object.freeze({
+  postMessage: function(message) {
+    window.location.href = 'clashking-story://message?payload=' +
+      encodeURIComponent(String(message));
+  }
+});
+''';
+
 class AnnouncementWebViewPage extends StatefulWidget {
   const AnnouncementWebViewPage({
     super.key,
@@ -63,6 +114,30 @@ class _AnnouncementWebViewState extends State<AnnouncementWebView> {
   late final WebViewController _controller;
   var _loadingProgress = 0;
 
+  bool get _isTrustedLocalStory {
+    final filePath = widget.filePath;
+    return filePath != null &&
+        filePath.isNotEmpty &&
+        widget.javaScriptChannelName == 'AnnouncementStory' &&
+        widget.onJavaScriptMessage != null;
+  }
+
+  NavigationDecision _handleNavigationRequest(NavigationRequest request) {
+    final storyMessage = announcementStoryMessageFromNavigation(
+      requestedUrl: request.url,
+      isTrustedLocalStory: _isTrustedLocalStory,
+    );
+    if (storyMessage != null) {
+      widget.onJavaScriptMessage?.call(storyMessage);
+      return NavigationDecision.prevent;
+    }
+    return announcementNavigationDecision(
+      requestedUrl: request.url,
+      initialUrl: widget.url,
+      loadsLocalFile: widget.filePath?.isNotEmpty ?? false,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -76,7 +151,13 @@ class _AnnouncementWebViewState extends State<AnnouncementWebView> {
               setState(() => _loadingProgress = progress);
             }
           },
+          onNavigationRequest: _handleNavigationRequest,
           onPageFinished: (url) async {
+            if (_isTrustedLocalStory) {
+              await _controller.runJavaScript(
+                _announcementStoryBridgeJavaScript,
+              );
+            }
             final javaScript = widget.pageFinishedJavaScript;
             if (javaScript != null && javaScript.isNotEmpty) {
               await _controller.runJavaScript(javaScript);

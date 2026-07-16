@@ -9,6 +9,7 @@ District _district({
   required int destructionPercent,
   int totalLooted = 0,
   int attackCount = 0,
+  List<Attack> attacks = const [],
 }) {
   return District(
     id: id,
@@ -18,7 +19,7 @@ District _district({
     stars: 0,
     attackCount: attackCount,
     totalLooted: totalLooted,
-    attacks: const [],
+    attacks: attacks,
   );
 }
 
@@ -244,6 +245,128 @@ void main() {
 
       expect(efficiency.oneshots, 1);
       expect(efficiency.fails, 2);
+    });
+  });
+
+  group('playerAttackStats', () {
+    test('aggregates attackers, detects perfect hits, and sorts by hits', () {
+      final log = [
+        _entry(
+          attackCount: 4,
+          districts: [
+            _district(
+              id: 1,
+              name: 'District One',
+              districtHallLevel: 1,
+              destructionPercent: 100,
+              attacks: [
+                Attack(
+                  tag: '#ONE',
+                  name: 'One',
+                  destructionPercent: 100,
+                  stars: 2,
+                ),
+                Attack(
+                  tag: '#ONE',
+                  name: 'One',
+                  destructionPercent: 70,
+                  stars: 3,
+                ),
+                Attack(
+                  tag: '',
+                  name: 'No Tag',
+                  destructionPercent: 60,
+                  stars: 1,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ];
+
+      final stats = CapitalRaidAnalytics.playerAttackStats(log);
+
+      expect(stats.map((stat) => stat.name), ['One', 'No Tag']);
+      expect(stats.first.attacks, 2);
+      expect(stats.first.stars, 5);
+      expect(stats.first.perfectHits, 2);
+      expect(stats.first.avgStars, 2.5);
+      expect(stats.first.avgDestruction, 85);
+      expect(stats.last.perfectHits, 0);
+    });
+
+    test('returns an empty list when districts contain no attacks', () {
+      final log = [
+        _entry(
+          attackCount: 0,
+          districts: [
+            _district(
+              id: 1,
+              name: 'Empty',
+              districtHallLevel: 1,
+              destructionPercent: 0,
+            ),
+          ],
+        ),
+      ];
+
+      expect(CapitalRaidAnalytics.playerAttackStats(log), isEmpty);
+    });
+  });
+
+  group('districtDefenseStats', () {
+    test('aggregates districts and prioritizes defenses that held', () {
+      final log = [
+        _entry(
+          attackCount: 5,
+          districts: [
+            _district(
+              id: 1,
+              name: 'Strong District',
+              districtHallLevel: 2,
+              destructionPercent: 70,
+              totalLooted: 400,
+              attackCount: 2,
+            ),
+            _district(
+              id: 2,
+              name: 'Destroyed District',
+              districtHallLevel: 2,
+              destructionPercent: 100,
+              totalLooted: 800,
+              attackCount: 3,
+            ),
+          ],
+        ),
+        _entry(
+          attackCount: 1,
+          districts: [
+            _district(
+              id: 1,
+              name: 'Strong District',
+              districtHallLevel: 2,
+              destructionPercent: 50,
+              totalLooted: 200,
+              attackCount: 1,
+            ),
+          ],
+        ),
+      ];
+
+      final stats = CapitalRaidAnalytics.districtDefenseStats(log);
+
+      expect(stats.map((stat) => stat.name), [
+        'Strong District',
+        'Destroyed District',
+      ]);
+      expect(stats.first.defenses, 2);
+      expect(stats.first.held, 2);
+      expect(stats.first.destroyed, 0);
+      expect(stats.first.attacksTaken, 3);
+      expect(stats.first.lootLost, 600);
+      expect(stats.first.avgAttacksTaken, 1.5);
+      expect(stats.first.avgDestruction, 60);
+      expect(stats.last.destroyed, 1);
     });
   });
 

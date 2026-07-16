@@ -74,7 +74,10 @@ dependencies:
   audio_session: ^0.2.2
   uuid: ^4.5.1
   clashking_design_system:
-    path: ../clashking-devkit/design/packages/flutter
+    git:
+      url: https://github.com/ClashKingInc/DevKit.git
+      ref: 894855f1ee21400973fc80ba3c66c2c008b209c4
+      path: design/packages/flutter
   firebase_core: ^4.11.0
   firebase_messaging: ^16.4.1
   flutter_local_notifications: ^22.0.1

@@ -60,6 +60,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install CocoaPods dependencies
+        working-directory: ios
+        run: pod install
+
       - name: Analyze project
         run: flutter analyze
 
