@@ -7,6 +7,8 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -237,6 +239,9 @@ class _RankingsPageState extends State<RankingsPage> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final showPreviews = context.watch<MyAppState>().isFeatureEnabled(
+      AppFeatureFlags.leaderboardPreviews,
+    );
     return _SidePageScaffold(
       title: loc.sideRankingsTitle,
       subtitle: loc.sideRankingsSubtitle,
@@ -313,13 +318,15 @@ class _RankingsPageState extends State<RankingsPage> {
               );
             },
           ),
-          const SizedBox(height: 24),
-          _SectionHeader(title: loc.sideRankingsMockups),
-          const _EndpointMockupSummary(),
-          const SizedBox(height: 8),
-          ..._clashKingLeaderboardOptions.map(
-            (option) => _EndpointPreview(option: option),
-          ),
+          if (showPreviews) ...[
+            const SizedBox(height: 24),
+            _SectionHeader(title: loc.sideRankingsMockups),
+            const _EndpointMockupSummary(),
+            const SizedBox(height: 8),
+            ..._clashKingLeaderboardOptions.map(
+              (option) => _EndpointPreview(option: option),
+            ),
+          ],
         ],
       ),
     );

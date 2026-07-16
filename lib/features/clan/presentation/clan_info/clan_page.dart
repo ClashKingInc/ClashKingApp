@@ -21,6 +21,8 @@ import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 
 /// Clan detail screen: hero header + tabs for Members / War Log /
 /// Join-Leave / Statistics / CWL History — content that used to live
@@ -41,7 +43,6 @@ class ClanInfoScreen extends StatefulWidget {
 }
 
 class _ClanInfoScreenState extends State<ClanInfoScreen> {
-  static const int _tabCount = 6;
   late int selectedTab;
 
   // Shared between the War Log and Statistics tabs so toggling a war
@@ -60,11 +61,11 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
   @override
   void initState() {
     super.initState();
-    selectedTab = widget.initialTab.clamp(0, _tabCount - 1);
+    selectedTab = widget.initialTab.clamp(0, 5);
   }
 
-  void _selectTab(int index) {
-    final bounded = index.clamp(0, _tabCount - 1);
+  void _selectTab(int index, int tabCount) {
+    final bounded = index.clamp(0, tabCount - 1);
     if (bounded == selectedTab) return;
     setState(() => selectedTab = bounded);
   }
@@ -72,10 +73,11 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
   void _handleTabSwipe(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
     if (velocity.abs() < 240) return;
+    final tabCount = _visibleTabs(context).length;
     if (velocity < 0) {
-      _selectTab(selectedTab + 1);
+      _selectTab(selectedTab + 1, tabCount);
     } else {
-      _selectTab(selectedTab - 1);
+      _selectTab(selectedTab - 1, tabCount);
     }
   }
 
@@ -89,6 +91,8 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final visibleTabs = _visibleTabs(context);
+    final activeIndex = selectedTab.clamp(0, visibleTabs.length - 1);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
@@ -107,55 +111,47 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                 children: [
                   const SizedBox(height: 10),
                   InfoProfileTabs(
-                    selectedIndex: selectedTab,
-                    onTabSelected: _selectTab,
-                    tabs: [
-                      InfoProfileTabData(
-                        label: AppLocalizations.of(context)!.clanMembers,
-                        icon: Icons.groups_rounded,
-                      ),
-                      InfoProfileTabData(
-                        label: AppLocalizations.of(context)!.warLog,
-                        imageUrl: ImageAssets.war,
-                      ),
-                      InfoProfileTabData(
-                        label: AppLocalizations.of(context)!.clanJoinLeaveTab,
-                        icon: Icons.swap_horiz_rounded,
-                      ),
-                      InfoProfileTabData(
-                        label: AppLocalizations.of(context)!.warStats,
-                        icon: Icons.bar_chart_rounded,
-                      ),
-                      InfoProfileTabData(
-                        label: AppLocalizations.of(context)!.clanRankingsTab,
-                        icon: Icons.leaderboard_rounded,
-                      ),
-                      InfoProfileTabData(
-                        label: AppLocalizations.of(context)!.cwlHistoryTitle,
-                        icon: Icons.emoji_events_rounded,
-                      ),
-                    ],
+                    selectedIndex: activeIndex,
+                    onTabSelected: (index) =>
+                        _selectTab(index, visibleTabs.length),
+                    tabs: visibleTabs
+                        .map((tab) => tab.data(AppLocalizations.of(context)!))
+                        .toList(growable: false),
                   ),
                 ],
               ),
             ),
           ],
           body: KeyedSubtree(
-            key: ValueKey(selectedTab),
-            child: _buildSelectedTab(context),
+            key: ValueKey(visibleTabs[activeIndex]),
+            child: _buildSelectedTab(context, visibleTabs[activeIndex]),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSelectedTab(BuildContext context) {
-    if (selectedTab == 0) {
+  List<_ClanInfoTab> _visibleTabs(BuildContext context) {
+    final appState = context.watch<MyAppState>();
+    return [
+      _ClanInfoTab.members,
+      _ClanInfoTab.warLog,
+      _ClanInfoTab.joinLeave,
+      _ClanInfoTab.statistics,
+      if (appState.isFeatureEnabled(AppFeatureFlags.clanRankingsPreview))
+        _ClanInfoTab.rankings,
+      if (appState.isFeatureEnabled(AppFeatureFlags.cwlHistoryPreview))
+        _ClanInfoTab.cwlHistory,
+    ];
+  }
+
+  Widget _buildSelectedTab(BuildContext context, _ClanInfoTab tab) {
+    if (tab == _ClanInfoTab.members) {
       return ClanMembers(clanInfo: widget.clanInfo);
     }
 
-    final content = switch (selectedTab) {
-      1 => _ClanWarLogTab(
+    final content = switch (tab) {
+      _ClanInfoTab.warLog => _ClanWarLogTab(
         clan: widget.clanInfo,
         isCWLChecked: isCWLChecked,
         isRandomChecked: isRandomChecked,
@@ -167,8 +163,10 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
         onFriendlyChanged: () =>
             setState(() => isFriendlyChecked = !isFriendlyChecked),
       ),
-      2 => _ClanJoinLeaveTab(joinLeave: widget.clanInfo.joinLeave),
-      3 => _ClanStatisticsTab(
+      _ClanInfoTab.joinLeave => _ClanJoinLeaveTab(
+        joinLeave: widget.clanInfo.joinLeave,
+      ),
+      _ClanInfoTab.statistics => _ClanStatisticsTab(
         clan: widget.clanInfo,
         isCWLChecked: isCWLChecked,
         isRandomChecked: isRandomChecked,
@@ -181,8 +179,9 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
             setState(() => isFriendlyChecked = !isFriendlyChecked),
         onResetWarTypes: _resetWarTypeFilters,
       ),
-      4 => _ClanRankingsTab(clanInfo: widget.clanInfo),
-      _ => _ClanCwlHistoryTab(clan: widget.clanInfo),
+      _ClanInfoTab.rankings => _ClanRankingsTab(clanInfo: widget.clanInfo),
+      _ClanInfoTab.cwlHistory => _ClanCwlHistoryTab(clan: widget.clanInfo),
+      _ClanInfoTab.members => const SizedBox.shrink(),
     };
 
     return SingleChildScrollView(
@@ -192,6 +191,44 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
       child: content,
     );
   }
+}
+
+enum _ClanInfoTab {
+  members,
+  warLog,
+  joinLeave,
+  statistics,
+  rankings,
+  cwlHistory,
+}
+
+extension on _ClanInfoTab {
+  InfoProfileTabData data(AppLocalizations l10n) => switch (this) {
+    _ClanInfoTab.members => InfoProfileTabData(
+      label: l10n.clanMembers,
+      icon: Icons.groups_rounded,
+    ),
+    _ClanInfoTab.warLog => InfoProfileTabData(
+      label: l10n.warLog,
+      imageUrl: ImageAssets.war,
+    ),
+    _ClanInfoTab.joinLeave => InfoProfileTabData(
+      label: l10n.clanJoinLeaveTab,
+      icon: Icons.swap_horiz_rounded,
+    ),
+    _ClanInfoTab.statistics => InfoProfileTabData(
+      label: l10n.warStats,
+      icon: Icons.bar_chart_rounded,
+    ),
+    _ClanInfoTab.rankings => InfoProfileTabData(
+      label: l10n.clanRankingsTab,
+      icon: Icons.leaderboard_rounded,
+    ),
+    _ClanInfoTab.cwlHistory => InfoProfileTabData(
+      label: l10n.cwlHistoryTitle,
+      icon: Icons.emoji_events_rounded,
+    ),
+  };
 }
 
 class _NoImplicitScrollPhysics extends ScrollPhysics {

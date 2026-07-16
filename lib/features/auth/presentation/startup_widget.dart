@@ -7,6 +7,8 @@ import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/core/services/push_notification_service.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
@@ -40,10 +42,15 @@ class StartupWidgetState extends State<StartupWidget> {
 
   Future<void> _initAuth() async {
     final authService = context.read<AuthService>();
+    final appState = context.read<MyAppState>();
     final gameDataLoad = GameDataService.loadFreshGameData();
 
     try {
-      await Future.wait([authService.initializeAuth(), gameDataLoad]);
+      await Future.wait([
+        authService.initializeAuth(),
+        gameDataLoad,
+        appState.featureFlagsReady,
+      ]);
     } catch (e) {
       if (isNetworkError(e) || isMaintenanceError(e)) {
         if (mounted) _showInitializationFailure(e);
@@ -71,9 +78,12 @@ class StartupWidgetState extends State<StartupWidget> {
           clans: clanService,
           wars: warService,
         );
-        unawaited(
-          PushNotificationService.instance.registerCurrentDeviceToken(),
-        );
+        if (appState.isFeatureEnabled(AppFeatureFlags.notifications)) {
+          await PushNotificationService.instance.initialize();
+          unawaited(
+            PushNotificationService.instance.registerCurrentDeviceToken(),
+          );
+        }
       } catch (e, stackTrace) {
         ErrorReporter.captureException(
           e,

@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:flutter/foundation.dart';
 
@@ -27,13 +28,14 @@ class AnnouncementService {
 
   Future<List<AppAnnouncement>> getActiveAnnouncements() async {
     try {
+      final locale = await GameDataService.resolvePreferredLocale();
       final target = switch (defaultTargetPlatform) {
         TargetPlatform.iOS => 'ios',
         TargetPlatform.android => 'android',
         _ => 'all',
       };
       final response = await _apiService.get(
-        '/app/announcements/active?target=$target',
+        '/app/announcements/active?target=$target&locale=${Uri.encodeQueryComponent(locale.languageCode)}',
         requiresAuth: false,
       );
       final items = response['items'];
@@ -65,8 +67,9 @@ class AnnouncementService {
   Future<AppAnnouncement?> getAnnouncement(String id) async {
     if (id.trim().isEmpty) return null;
     try {
+      final locale = await GameDataService.resolvePreferredLocale();
       final response = await _apiService.get(
-        '/app/announcements/${Uri.encodeComponent(id)}',
+        '/app/announcements/${Uri.encodeComponent(id)}?locale=${Uri.encodeQueryComponent(locale.languageCode)}',
         requiresAuth: false,
       );
       final item = response['item'];
@@ -87,13 +90,14 @@ class AnnouncementService {
     int limit = 20,
     int offset = 0,
   }) async {
+    final locale = await GameDataService.resolvePreferredLocale();
     final target = switch (defaultTargetPlatform) {
       TargetPlatform.iOS => 'ios',
       TargetPlatform.android => 'android',
       _ => 'all',
     };
     final response = await _apiService.get(
-      '/app/posts?target=$target&limit=$limit&offset=$offset',
+      '/app/posts?target=$target&limit=$limit&offset=$offset&locale=${Uri.encodeQueryComponent(locale.languageCode)}',
       requiresAuth: false,
     );
     final rawItems = response['items'];

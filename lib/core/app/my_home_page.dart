@@ -5,6 +5,8 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
@@ -57,6 +59,11 @@ class MyHomePageState extends State<MyHomePage> {
 
   Future<void> _showOpeningAnnouncement() async {
     if (!mounted || ModalRoute.of(context)?.isCurrent != true) {
+      return;
+    }
+    if (!context.read<MyAppState>().isFeatureEnabled(
+      AppFeatureFlags.homeAnnouncements,
+    )) {
       return;
     }
 
@@ -461,6 +468,7 @@ class _AccountMenuDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final authService = context.watch<AuthService>();
+    final appState = context.watch<MyAppState>();
     final l10n = AppLocalizations.of(context)!;
     final user = authService.currentUser;
     final displayName = user?.username ?? 'ClashKing';
@@ -536,96 +544,111 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    _DrawerMenuItem(
-                      icon: Icons.article_outlined,
-                      label: l10n.postsTitle,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PostsPage(),
+                    if (appState.isFeatureEnabled(AppFeatureFlags.posts))
+                      _DrawerMenuItem(
+                        icon: Icons.article_outlined,
+                        label: l10n.postsTitle,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PostsPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.trending_up_rounded,
-                      label: l10n.drawerPopular,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PopularPage(),
+                    if (appState.isFeatureEnabled(
+                      AppFeatureFlags.popularInsights,
+                    ))
+                      _DrawerMenuItem(
+                        icon: Icons.trending_up_rounded,
+                        label: l10n.drawerPopular,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PopularPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.leaderboard_outlined,
-                      label: l10n.clanRankingsTab,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RankingsPage(),
+                    if (appState.isFeatureEnabled(AppFeatureFlags.leaderboards))
+                      _DrawerMenuItem(
+                        icon: Icons.leaderboard_outlined,
+                        label: l10n.clanRankingsTab,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RankingsPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.bar_chart_rounded,
-                      label: l10n.generalStats,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const StatsPage(),
+                    if (appState.isFeatureEnabled(AppFeatureFlags.globalStats))
+                      _DrawerMenuItem(
+                        icon: Icons.bar_chart_rounded,
+                        label: l10n.generalStats,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const StatsPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.calculate_outlined,
-                      label: l10n.drawerCalculators,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CalculatorsPage(),
+                    if (appState.isFeatureEnabled(AppFeatureFlags.calculators))
+                      _DrawerMenuItem(
+                        icon: Icons.calculate_outlined,
+                        label: l10n.drawerCalculators,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CalculatorsPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.workspace_premium_outlined,
-                      label: l10n.drawerSubscription,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const _SubscriptionPage(),
+                    if (appState.isFeatureEnabled(
+                      AppFeatureFlags.subscriptionSupport,
+                    ))
+                      _DrawerMenuItem(
+                        icon: Icons.workspace_premium_outlined,
+                        label: l10n.drawerSubscription,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const _SubscriptionPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.construction_rounded,
-                      label: l10n.drawerUpgradeTracker,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UpgradeTrackerPage(),
+                    if (appState.isFeatureEnabled(
+                      AppFeatureFlags.upgradeTracker,
+                    ))
+                      _DrawerMenuItem(
+                        icon: Icons.construction_rounded,
+                        label: l10n.drawerUpgradeTracker,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UpgradeTrackerPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.grid_view_rounded,
-                      label: l10n.drawerBasesArmies,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BasesArmiesPage(),
+                    if (appState.isFeatureEnabled(AppFeatureFlags.basesArmies))
+                      _DrawerMenuItem(
+                        icon: Icons.grid_view_rounded,
+                        label: l10n.drawerBasesArmies,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BasesArmiesPage(),
+                          ),
                         ),
                       ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.inventory_2_outlined,
-                      label: l10n.drawerGameAssets,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const GameAssetsPage(),
+                    if (appState.isFeatureEnabled(AppFeatureFlags.gameAssets))
+                      _DrawerMenuItem(
+                        icon: Icons.inventory_2_outlined,
+                        label: l10n.drawerGameAssets,
+                        onTap: () => _pushAndClose(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const GameAssetsPage(),
+                          ),
                         ),
                       ),
-                    ),
                     _DrawerMenuItem(
                       icon: Icons.manage_accounts_outlined,
                       label: l10n.drawerManageAccounts,

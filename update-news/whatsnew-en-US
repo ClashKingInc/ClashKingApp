@@ -1,3 +1,5 @@
+- Added safer remote rollouts for posts, notifications, rankings, widgets, upgrade tracking, and experimental features
+- Hidden unfinished subscription, account connection, bases/armies, and fabricated ranking previews until they are ready
 - Admin announcements now open the exact published post when their push notification is tapped
 - Announcement pushes now respect each device's notification preferences
 - Interactive update stories and pinned home announcements can now be published from the admin panel

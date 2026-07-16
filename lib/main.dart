@@ -151,8 +151,6 @@ void _configureObservabilityOptions(
 Future<void> _startClashKingApp() async {
   // Pre-warm the shared Flutter glass shader before first use.
   await LiquidGlassWidgets.initialize();
-  unawaited(PushNotificationService.instance.initialize());
-
   if (!kIsWeb) {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await HomeWidget.setAppGroupId('group.com.clashking.apps');
