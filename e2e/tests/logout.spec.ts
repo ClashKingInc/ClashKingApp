@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { hasFlutterSemantics, enableFlutterSemantics } from './helpers';
+import { authSegment, clickAuthSegment, hasFlutterSemantics, enableFlutterSemantics } from './helpers';
 
 // This spec runs with saved auth state (chromium-auth project).
 // It tests the logout flow available from the top app bar.
@@ -92,11 +92,7 @@ test.describe('Logout', () => {
     );
 
     // Confirm the login page is shown
-    await expect(
-      page.getByText(/Discord/i)
-        .or(page.getByRole('tab', { name: /discord/i }))
-        .first()
-    ).toBeAttached({ timeout: 5_000 });
+    await expect(authSegment(page, /discord/i)).toBeAttached({ timeout: 5_000 });
   });
 
   test('after logout, local auth state is cleared (login button visible)', async ({ page }) => {
@@ -114,7 +110,7 @@ test.describe('Logout', () => {
 
     // Switch to Email tab and verify Login button is visible (user is now unauthenticated)
     await page.waitForTimeout(2_000);
-    await page.getByRole('tab', { name: /email/i }).click({ timeout: 8_000 });
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     await expect(

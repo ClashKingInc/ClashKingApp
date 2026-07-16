@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './helpers';
+import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './helpers';
 
 async function openForgotPassword(page: any) {
   await page.goto('/');
@@ -7,7 +7,7 @@ async function openForgotPassword(page: any) {
   await enableFlutterSemantics(page);
 
   // Switch to Email tab
-  await page.getByRole('tab', { name: /email/i }).click();
+  await clickAuthSegment(page, /email/i);
   await page.waitForTimeout(500);
 
   // Click "Forgot password?" link
@@ -144,10 +144,6 @@ test.describe('Forgot password page', () => {
     await backBtn.click();
     await page.waitForTimeout(600);
 
-    await expect(
-      page.getByRole('tab', { name: /email/i })
-        .or(page.locator('flt-semantics[aria-label*="Email" i]'))
-        .first()
-    ).toBeAttached({ timeout: 8_000 });
+    await expect(authSegment(page, /email/i)).toBeAttached({ timeout: 8_000 });
   });
 });
