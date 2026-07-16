@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 /** Wait until Flutter finishes its initial frame render */
 export async function waitForFlutter(page: Page) {
@@ -74,6 +74,39 @@ export async function enableFlutterSemantics(page: Page) {
 export async function hasFlutterSemantics(page: Page): Promise<boolean> {
   const count = await page.locator('flt-semantics').count();
   return count > 0;
+}
+
+/**
+ * Locate an auth segmented-control item.
+ *
+ * The login UI used to expose Material tabs, but it now renders a custom
+ * LiquidGlass segmented control. Flutter web may expose those segments as
+ * buttons or plain semantics nodes depending on renderer/accessibility state,
+ * so tests should not hard-code ARIA tab roles for this control.
+ */
+export function authSegment(page: Page, name: RegExp): Locator {
+  const exactName = /email/i.test(name.source)
+    ? /^email$/i
+    : /discord/i.test(name.source)
+      ? /^discord$/i
+      : name;
+
+  return page
+    .getByRole('tab', { name: exactName })
+    .or(page.getByRole('button', { name: exactName }))
+    .or(page.locator('flt-semantics').filter({ hasText: exactName }))
+    .first();
+}
+
+export async function clickAuthSegment(page: Page, name: RegExp) {
+  const segment = authSegment(page, name);
+  await segment.waitFor({ state: 'attached', timeout: 8_000 });
+  const box = await segment.boundingBox();
+  if (box) {
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    return;
+  }
+  await segment.click({ timeout: 8_000, force: true });
 }
 
 /**

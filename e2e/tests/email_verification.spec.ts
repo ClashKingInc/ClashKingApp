@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { enableFlutterSemantics, hasFlutterSemantics } from './helpers';
+import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics } from './helpers';
 
 // Reaches EmailVerificationPage by registering a fresh throwaway account.
 // Each test creates one unique account (timestamp-based email) — expected in a test env.
@@ -19,10 +19,8 @@ async function registerAndNavigateToVerification(page: any): Promise<string | nu
     // enableFlutterSemantics calls waitForFlutter internally — no need to call it separately
     await enableFlutterSemantics(page);
 
-    // Switch to Email tab — explicit waitFor prevents 30 s default action timeout
-    const emailTab = page.getByRole('tab', { name: /email/i });
-    await emailTab.waitFor({ state: 'attached', timeout: 8_000 });
-    await emailTab.click({ timeout: 8_000 });
+    // Switch to Email auth segment — explicit waitFor prevents 30 s default action timeout
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(400);
 
     // Navigate to Register page
@@ -195,11 +193,7 @@ test.describe('Email verification page', () => {
     await backBtn.click({ timeout: 8_000 });
     await page.waitForTimeout(800);
 
-    // Login page: Discord/Email tabs visible
-    await expect(
-      page.getByRole('tab', { name: /email/i })
-        .or(page.locator('flt-semantics[aria-label*="Email" i]'))
-        .first()
-    ).toBeAttached({ timeout: 8_000 });
+    // Login page: Discord/Email auth segments visible
+    await expect(authSegment(page, /email/i)).toBeAttached({ timeout: 8_000 });
   });
 });
