@@ -15,7 +15,6 @@ class MyAppState extends ChangeNotifier {
        _featureFlagService = featureFlagService ?? RemoteFeatureFlagService() {
     _loadLanguage();
     featureFlagsReady = _loadFeatureFlags();
-    _warWidgetSyncService.registerPeriodicRefresh();
   }
 
   final WarWidgetSyncService _warWidgetSyncService;
@@ -28,14 +27,23 @@ class MyAppState extends ChangeNotifier {
   bool isFeatureEnabled(String key, {bool? fallback}) => _featureFlagService
       .isEnabled(key, fallback: fallback ?? AppFeatureFlags.defaultValue(key));
 
+  bool get _warWidgetsEnabled => isFeatureEnabled(AppFeatureFlags.warWidgets);
+
+  void registerWarWidgetRefreshIfEnabled() {
+    if (_warWidgetsEnabled) {
+      _warWidgetSyncService.registerPeriodicRefresh();
+    }
+  }
+
   Future<void> _loadFeatureFlags() async {
     try {
       await _featureFlagService.refresh();
-      notifyListeners();
     } catch (_) {
       // Remote configuration is fail-open for existing features. A temporary
       // backend issue must never remove an established app surface.
     }
+
+    notifyListeners();
   }
 
   /* Language management */
@@ -106,16 +114,19 @@ class MyAppState extends ChangeNotifier {
 
   // Initialize the app from the background
   Future<void> initializeFromBackground(Uri data) async {
+    if (!_warWidgetsEnabled) return;
     await _warWidgetSyncService.initializeFromBackground(data);
   }
 
   // Update the war widget
   Future<void> updateWarWidget() async {
+    if (!_warWidgetsEnabled) return;
     await _warWidgetSyncService.updateWarWidget();
   }
 
   // Update the widgets
   Future<void> updateWidgets() async {
+    if (!_warWidgetsEnabled) return;
     await _warWidgetSyncService.updateWidgets();
   }
 }

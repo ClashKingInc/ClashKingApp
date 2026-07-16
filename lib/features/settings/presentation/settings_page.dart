@@ -61,14 +61,21 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     final notificationsEnabled = appState.isFeatureEnabled(
       AppFeatureFlags.notifications,
     );
+    final warWidgetsEnabled = appState.isFeatureEnabled(
+      AppFeatureFlags.warWidgets,
+    );
     final hasDiscord =
         widget.user.hasDiscordAuth || widget.user.avatarUrl.isNotEmpty;
     final hasEmail = widget.user.hasEmailAuth;
-    final widgetClans = WarWidgetService.clanOptionsFromProfiles(
-      context.watch<PlayerService>().profiles,
-      bookmarkedClans: context.watch<BookmarkService>().clans,
-    );
-    _scheduleWarWidgetClanCache(widgetClans);
+    final widgetClans = warWidgetsEnabled
+        ? WarWidgetService.clanOptionsFromProfiles(
+            context.watch<PlayerService>().profiles,
+            bookmarkedClans: context.watch<BookmarkService>().clans,
+          )
+        : const <WarWidgetClanOption>[];
+    if (warWidgetsEnabled) {
+      _scheduleWarWidgetClanCache(widgetClans);
+    }
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -136,7 +143,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                     );
                   },
                 ),
-              if (appState.isFeatureEnabled(AppFeatureFlags.warWidgets))
+              if (warWidgetsEnabled)
                 _SettingsTile(
                   icon: LucideIcons.panelTop,
                   title: l10n.settingsAddWarWidget,

@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/api_config.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
@@ -22,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -507,6 +510,7 @@ class PushNotificationService {
 
   void _handleDataNavigation(Map<String, dynamic> data) {
     if (data['type']?.toString() == 'admin_post') {
+      if (!_canOpenFeatureRoute('admin_post', AppFeatureFlags.posts)) return;
       final postID = data['post_id']?.toString();
       if (postID != null && postID.isNotEmpty) {
         unawaited(_openAdminPost(postID));
@@ -544,6 +548,7 @@ class PushNotificationService {
         );
         return;
       case '/posts':
+        if (!_canOpenFeatureRoute(route, AppFeatureFlags.posts)) return;
         await navigator.push(
           MaterialPageRoute<void>(builder: (_) => const PostsPage()),
         );
@@ -556,12 +561,35 @@ class PushNotificationService {
         );
         return;
       case '/upgrade-tracker':
+        if (!_canOpenFeatureRoute(route, AppFeatureFlags.upgradeTracker)) {
+          return;
+        }
         await navigator.push(
           MaterialPageRoute<void>(builder: (_) => const UpgradeTrackerPage()),
         );
         return;
       default:
         DebugUtils.debugWarning('Unsupported push route: $route');
+    }
+  }
+
+  bool _canOpenFeatureRoute(String route, String featureFlag) {
+    if (_isFeatureEnabled(featureFlag)) return true;
+    DebugUtils.debugWarning(
+      'Push route blocked by feature flag: $route ($featureFlag)',
+    );
+    return false;
+  }
+
+  bool _isFeatureEnabled(String key) {
+    final context = globalNavigatorKey.currentContext;
+    if (context == null || !context.mounted) {
+      return AppFeatureFlags.defaultValue(key);
+    }
+    try {
+      return context.read<MyAppState>().isFeatureEnabled(key);
+    } on ProviderNotFoundException {
+      return AppFeatureFlags.defaultValue(key);
     }
   }
 

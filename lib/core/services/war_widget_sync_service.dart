@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/services/android_workmanager_service.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/services/remote_feature_flag_service.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
@@ -11,6 +13,21 @@ const String _widgetAppGroup = 'group.com.clashking.apps';
 
 class WarWidgetSyncService {
   const WarWidgetSyncService();
+
+  static Future<bool> areWarWidgetsEnabled({
+    RemoteFeatureFlagService? featureFlagService,
+  }) async {
+    final service = featureFlagService ?? RemoteFeatureFlagService();
+    try {
+      await service.refresh();
+    } catch (_) {
+      // Established widget behavior fails open if remote config is unavailable.
+    }
+    return service.isEnabled(
+      AppFeatureFlags.warWidgets,
+      fallback: AppFeatureFlags.defaultValue(AppFeatureFlags.warWidgets),
+    );
+  }
 
   void registerPeriodicRefresh() {
     if (!kIsWeb && Platform.isAndroid) {
