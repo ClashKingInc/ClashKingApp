@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './helpers';
+import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './helpers';
 
 test.describe('Login page — UI', () => {
   test.beforeEach(async ({ page }) => {
@@ -8,22 +8,21 @@ test.describe('Login page — UI', () => {
     await enableFlutterSemantics(page);
   });
 
-  test('shows Discord and Email tabs', async ({ page }) => {
+  test('shows Discord and Email auth segments', async ({ page }) => {
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    await expect(page.getByRole('tab', { name: /discord/i })).toBeVisible();
-    await expect(page.getByRole('tab', { name: /email/i })).toBeVisible();
+    await expect(authSegment(page, /discord/i)).toBeAttached();
+    await expect(authSegment(page, /email/i)).toBeAttached();
   });
 
-  test('Discord tab is selected by default', async ({ page }) => {
+  test('Discord auth segment is selected by default', async ({ page }) => {
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    await expect(page.getByRole('tab', { name: /discord/i }))
-      .toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('button', { name: /continue with discord/i })).toBeVisible();
   });
 
   test('Email tab shows email input, password input and Login button', async ({ page }) => {
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
 
-    await page.getByRole('tab', { name: /email/i }).click();
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     // Flutter creates real <input> elements in the accessibility layer
@@ -35,7 +34,7 @@ test.describe('Login page — UI', () => {
   test('Forgot password and Sign up links are visible on Email tab', async ({ page }) => {
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
 
-    await page.getByRole('tab', { name: /email/i }).click();
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     // These TextButtons may be below the fold inside the 320px tab container.
@@ -53,7 +52,7 @@ test.describe('Login page — UI', () => {
   test('submitting empty form stays on login page', async ({ page }) => {
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
 
-    await page.getByRole('tab', { name: /email/i }).click();
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     await page.getByRole('button', { name: 'Login', exact: true }).click();
@@ -70,7 +69,7 @@ test.describe('Login page — UI', () => {
     const password = process.env.TEST_PASSWORD;
     if (!email || !password) test.skip(true, 'TEST_EMAIL / TEST_PASSWORD not set');
 
-    await page.getByRole('tab', { name: /email/i }).click();
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     const emailInput = page.getByRole('textbox', { name: 'Email' });
@@ -102,7 +101,7 @@ test.describe('Login page — UI', () => {
     const email = process.env.TEST_EMAIL;
     if (!email) test.skip(true, 'TEST_EMAIL not set');
 
-    await page.getByRole('tab', { name: /email/i }).click();
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     const emailInput = page.getByRole('textbox', { name: 'Email' });
@@ -129,7 +128,7 @@ test.describe('Login page — UI', () => {
   test('malformed email in login form is caught by client-side validation', async ({ page }) => {
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
 
-    await page.getByRole('tab', { name: /email/i }).click();
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     const emailInput = page.getByRole('textbox', { name: 'Email' });

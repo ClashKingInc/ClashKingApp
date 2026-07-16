@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './helpers';
+import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './helpers';
 
 async function openRegisterPage(page: any) {
   await page.goto('/');
@@ -7,7 +7,7 @@ async function openRegisterPage(page: any) {
   await enableFlutterSemantics(page);
 
   // Switch to Email tab on the login page
-  await page.getByRole('tab', { name: /email/i }).click();
+  await clickAuthSegment(page, /email/i);
   await page.waitForTimeout(500);
 
   // Click the "Sign up" TextButton
@@ -116,11 +116,7 @@ test.describe('Register page', () => {
     await page.waitForTimeout(600);
 
     // Back on login page — Email tab should be visible
-    await expect(
-      page.getByRole('tab', { name: /email/i })
-        .or(page.locator('flt-semantics[aria-label*="Email" i]'))
-        .first()
-    ).toBeAttached({ timeout: 8_000 });
+    await expect(authSegment(page, /email/i)).toBeAttached({ timeout: 8_000 });
   });
 
   // §3.8 — password missing uppercase
@@ -233,8 +229,8 @@ test.describe('Register page', () => {
     await page.waitForTimeout(6_000);
 
     const onLoginPage =
-      (await page.getByRole('tab', { name: /email/i }).count()) > 0 ||
-      (await page.getByRole('tab', { name: /discord/i }).count()) > 0;
+      (await authSegment(page, /email/i).count()) > 0 ||
+      (await authSegment(page, /discord/i).count()) > 0;
 
     const hasError =
       (await page.locator('flt-semantics[aria-label*="already" i]').count()) > 0 ||

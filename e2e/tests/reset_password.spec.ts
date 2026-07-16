@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { enableFlutterSemantics, hasFlutterSemantics } from './helpers';
+import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics } from './helpers';
 
 // Navigates to ResetPasswordPage via the forgot-password flow.
 // Requires TEST_EMAIL to be set — all tests skip gracefully otherwise.
@@ -18,10 +18,8 @@ async function navigateToResetPage(page: any): Promise<boolean> {
     // enableFlutterSemantics calls waitForFlutter internally — no need to call it separately
     await enableFlutterSemantics(page);
 
-    // Switch to Email tab — explicit waitFor caps the timeout at 8 s instead of 30 s default
-    const emailTab = page.getByRole('tab', { name: /email/i });
-    await emailTab.waitFor({ state: 'attached', timeout: 8_000 });
-    await emailTab.click({ timeout: 8_000 });
+    // Switch to Email auth segment — explicit waitFor caps the timeout at 8 s instead of 30 s default
+    await clickAuthSegment(page, /email/i);
     await page.waitForTimeout(500);
 
     // Open forgot password page
@@ -249,11 +247,7 @@ test.describe('Reset password page', () => {
     await backBtn.click({ timeout: 8_000 });
     await page.waitForTimeout(800);
 
-    // Login page: Email/Discord tabs should appear
-    await expect(
-      page.getByRole('tab', { name: /email/i })
-        .or(page.locator('flt-semantics[aria-label*="Email" i]'))
-        .first()
-    ).toBeAttached({ timeout: 8_000 });
+    // Login page: Email/Discord auth segments should appear
+    await expect(authSegment(page, /email/i)).toBeAttached({ timeout: 8_000 });
   });
 });
