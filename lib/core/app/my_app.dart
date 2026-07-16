@@ -13,9 +13,9 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 @pragma("vm:entry-point")
 FutureOr<void> backgroundCallback(Uri? data) async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (data != null) {
-    await const WarWidgetSyncService().initializeFromBackground(data);
-  }
+  if (data == null) return;
+  if (!await WarWidgetSyncService.areWarWidgetsEnabled()) return;
+  await const WarWidgetSyncService().initializeFromBackground(data);
 }
 
 class MyApp extends StatelessWidget {

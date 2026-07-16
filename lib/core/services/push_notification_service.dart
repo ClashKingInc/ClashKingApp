@@ -2,21 +2,29 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:clashkingapp/core/app/my_app_state.dart';
+import 'package:clashkingapp/core/config/api_config.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/firebase_options.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
 import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
+import 'package:clashkingapp/features/pages/presentation/posts_page.dart';
+import 'package:clashkingapp/features/pages/presentation/search_page.dart';
+import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -70,6 +78,15 @@ class PushNotificationService {
   static const _pushApiV2BaseOverride = String.fromEnvironment(
     'CK_PUSH_API_V2_BASE_URL',
   );
+
+  static String get _pushEnvironment {
+    if (_pushApiV2BaseOverride.isNotEmpty ||
+        ApiConfig.environment == ApiEnvironment.local) {
+      return 'sandbox';
+    }
+    return 'production';
+  }
+
   static void registerBackgroundHandler() {
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -273,7 +290,7 @@ class PushNotificationService {
       'device_id': await tokenService.getDeviceId(),
       'provider': 'fcm',
       'platform': Platform.operatingSystem,
-      'environment': _pushApiV2BaseOverride.isEmpty ? 'production' : 'sandbox',
+      'environment': _pushEnvironment,
       'app_version': packageInfo.version,
       'build_number': packageInfo.buildNumber,
       'os_version': Platform.operatingSystemVersion,
@@ -322,7 +339,7 @@ class PushNotificationService {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
     final payload = <String, dynamic>{
       'device_id': await TokenService().getDeviceId(),
-      'environment': _pushApiV2BaseOverride.isEmpty ? 'production' : 'sandbox',
+      'environment': _pushEnvironment,
       'locale': PlatformDispatcher.instance.locale.toLanguageTag(),
       'timezone': DateTime.now().timeZoneName,
       'enabled_types': <String>[],
@@ -493,6 +510,7 @@ class PushNotificationService {
 
   void _handleDataNavigation(Map<String, dynamic> data) {
     if (data['type']?.toString() == 'admin_post') {
+      if (!_canOpenFeatureRoute('admin_post', AppFeatureFlags.posts)) return;
       final postID = data['post_id']?.toString();
       if (postID != null && postID.isNotEmpty) {
         unawaited(_openAdminPost(postID));
@@ -501,9 +519,78 @@ class PushNotificationService {
     }
     final route = data['route']?.toString();
     if (route == null || route.isEmpty) return;
+    unawaited(_openRoute(route));
+  }
 
-    // Route handling will be expanded when backend payload contracts are final.
-    DebugUtils.debugInfo('Push route not handled yet: $route');
+  Future<void> _openRoute(String route) async {
+    var navigator = globalNavigatorKey.currentState;
+    for (var attempt = 0; navigator == null && attempt < 20; attempt++) {
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+      navigator = globalNavigatorKey.currentState;
+    }
+    if (navigator == null) return;
+
+    switch (route) {
+      case '/support-creator':
+      case '/settings/support':
+        final context = globalNavigatorKey.currentContext;
+        if (context == null || !context.mounted) return;
+        final languageCode = Localizations.localeOf(
+          context,
+        ).languageCode.toLowerCase();
+        final url = Uri.https('link.clashofclans.com', '/$languageCode', {
+          'action': 'SupportCreator',
+          'id': 'Clashking',
+        });
+        await showDialog<void>(
+          context: context,
+          builder: (_) => OpenClashDialog(url: url),
+        );
+        return;
+      case '/posts':
+        if (!_canOpenFeatureRoute(route, AppFeatureFlags.posts)) return;
+        await navigator.push(
+          MaterialPageRoute<void>(builder: (_) => const PostsPage()),
+        );
+        return;
+      case '/search':
+        await navigator.push(
+          MaterialPageRoute<void>(
+            builder: (_) => const SearchPage(overlay: true, autofocus: true),
+          ),
+        );
+        return;
+      case '/upgrade-tracker':
+        if (!_canOpenFeatureRoute(route, AppFeatureFlags.upgradeTracker)) {
+          return;
+        }
+        await navigator.push(
+          MaterialPageRoute<void>(builder: (_) => const UpgradeTrackerPage()),
+        );
+        return;
+      default:
+        DebugUtils.debugWarning('Unsupported push route: $route');
+    }
+  }
+
+  bool _canOpenFeatureRoute(String route, String featureFlag) {
+    if (_isFeatureEnabled(featureFlag)) return true;
+    DebugUtils.debugWarning(
+      'Push route blocked by feature flag: $route ($featureFlag)',
+    );
+    return false;
+  }
+
+  bool _isFeatureEnabled(String key) {
+    final context = globalNavigatorKey.currentContext;
+    if (context == null || !context.mounted) {
+      return AppFeatureFlags.defaultValue(key);
+    }
+    try {
+      return context.read<MyAppState>().isFeatureEnabled(key);
+    } on ProviderNotFoundException {
+      return AppFeatureFlags.defaultValue(key);
+    }
   }
 
   Future<void> _openAdminPost(String postID) async {

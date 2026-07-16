@@ -3,6 +3,7 @@ import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/services/app_icon_service.dart';
@@ -56,14 +57,25 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
+    final appState = context.watch<MyAppState>();
+    final notificationsEnabled = appState.isFeatureEnabled(
+      AppFeatureFlags.notifications,
+    );
+    final warWidgetsEnabled = appState.isFeatureEnabled(
+      AppFeatureFlags.warWidgets,
+    );
     final hasDiscord =
         widget.user.hasDiscordAuth || widget.user.avatarUrl.isNotEmpty;
     final hasEmail = widget.user.hasEmailAuth;
-    final widgetClans = WarWidgetService.clanOptionsFromProfiles(
-      context.watch<PlayerService>().profiles,
-      bookmarkedClans: context.watch<BookmarkService>().clans,
-    );
-    _scheduleWarWidgetClanCache(widgetClans);
+    final widgetClans = warWidgetsEnabled
+        ? WarWidgetService.clanOptionsFromProfiles(
+            context.watch<PlayerService>().profiles,
+            bookmarkedClans: context.watch<BookmarkService>().clans,
+          )
+        : const <WarWidgetClanOption>[];
+    if (warWidgetsEnabled) {
+      _scheduleWarWidgetClanCache(widgetClans);
+    }
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -118,26 +130,28 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                             .labelFor(context),
                   onTap: _isChangingAppIcon ? null : _showAppIconSelection,
                 ),
-              _SettingsTile(
-                icon: LucideIcons.bellRing,
-                title: l10n.settingsNotificationsTitle,
-                subtitle: l10n.settingsNotificationsSubtitle,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationSettingsPage(),
-                    ),
-                  );
-                },
-              ),
-              _SettingsTile(
-                icon: LucideIcons.panelTop,
-                title: l10n.settingsAddWarWidget,
-                subtitle: widgetClans.isEmpty
-                    ? l10n.settingsWarWidgetLinkClanFirst
-                    : l10n.settingsWarWidgetClanCount(widgetClans.length),
-                onTap: () => _showWarWidgetSheet(widgetClans),
-              ),
+              if (notificationsEnabled)
+                _SettingsTile(
+                  icon: LucideIcons.bellRing,
+                  title: l10n.settingsNotificationsTitle,
+                  subtitle: l10n.settingsNotificationsSubtitle,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationSettingsPage(),
+                      ),
+                    );
+                  },
+                ),
+              if (warWidgetsEnabled)
+                _SettingsTile(
+                  icon: LucideIcons.panelTop,
+                  title: l10n.settingsAddWarWidget,
+                  subtitle: widgetClans.isEmpty
+                      ? l10n.settingsWarWidgetLinkClanFirst
+                      : l10n.settingsWarWidgetClanCount(widgetClans.length),
+                  onTap: () => _showWarWidgetSheet(widgetClans),
+                ),
             ],
           ),
           if (kDebugMode && LiveActivityDebugService.isSupportedPlatform)
@@ -188,15 +202,18 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   );
                 },
               ),
-              _SettingsTile(
-                icon: Icons.featured_play_list_outlined,
-                title: l10n.translationSuggestFeatures,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => FeatureRequests()),
-                  );
-                },
-              ),
+              if (appState.isFeatureEnabled(AppFeatureFlags.featureRequests))
+                _SettingsTile(
+                  icon: Icons.featured_play_list_outlined,
+                  title: l10n.translationSuggestFeatures,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => FeatureRequests(),
+                      ),
+                    );
+                  },
+                ),
               _SettingsTile(
                 icon: Icons.discord,
                 title: l10n.faqJoinDiscord,
@@ -232,32 +249,36 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           _SettingsSection(
             title: l10n.settingsAccount,
             children: [
-              _SettingsTile(
-                icon: Icons.discord,
-                title: l10n.generalDiscord,
-                subtitle: hasDiscord
-                    ? l10n.settingsDiscordConnectedSubtitle
-                    : l10n.settingsDiscordSyncSubtitle,
-                trailingText: hasDiscord ? l10n.settingsConnected : null,
-                onTap: hasDiscord
-                    ? () => _showConnectionPlaceholder('Disconnect Discord')
-                    : () => _showConnectionPlaceholder('Connect Discord'),
-              ),
-              _SettingsTile(
-                icon: Icons.alternate_email,
-                title: l10n.settingsClashKingAccount,
-                subtitle: hasEmail
-                    ? l10n.settingsEmailConnectedSubtitle
-                    : l10n.settingsEmailRecoverySubtitle,
-                trailingText: hasEmail ? l10n.settingsConnected : null,
-                onTap: hasEmail
-                    ? () => _showConnectionPlaceholder(
-                        'Disconnect ClashKing account',
-                      )
-                    : () => _showConnectionPlaceholder(
-                        'Connect ClashKing account',
-                      ),
-              ),
+              if (appState.isFeatureEnabled(
+                AppFeatureFlags.accountConnections,
+              )) ...[
+                _SettingsTile(
+                  icon: Icons.discord,
+                  title: l10n.generalDiscord,
+                  subtitle: hasDiscord
+                      ? l10n.settingsDiscordConnectedSubtitle
+                      : l10n.settingsDiscordSyncSubtitle,
+                  trailingText: hasDiscord ? l10n.settingsConnected : null,
+                  onTap: hasDiscord
+                      ? () => _showConnectionPlaceholder('Disconnect Discord')
+                      : () => _showConnectionPlaceholder('Connect Discord'),
+                ),
+                _SettingsTile(
+                  icon: Icons.alternate_email,
+                  title: l10n.settingsClashKingAccount,
+                  subtitle: hasEmail
+                      ? l10n.settingsEmailConnectedSubtitle
+                      : l10n.settingsEmailRecoverySubtitle,
+                  trailingText: hasEmail ? l10n.settingsConnected : null,
+                  onTap: hasEmail
+                      ? () => _showConnectionPlaceholder(
+                          'Disconnect ClashKing account',
+                        )
+                      : () => _showConnectionPlaceholder(
+                          'Connect ClashKing account',
+                        ),
+                ),
+              ],
               _SettingsTile(
                 icon: Icons.alternate_email,
                 title: widget.user.email ?? widget.user.username,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/config/observability_config.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
@@ -41,9 +42,17 @@ void callbackDispatcher() {
 
       // Handle different background tasks
       if (task == 'simplePeriodicTask') {
+        if (!await WarWidgetSyncService.areWarWidgetsEnabled()) {
+          DebugUtils.debugInfo('War widget background refresh skipped.');
+          return Future.value(true);
+        }
         // Regular periodic widget update
         await const WarWidgetSyncService().updateWarWidget();
       } else if (task == 'refreshWarWidget') {
+        if (!await WarWidgetSyncService.areWarWidgetsEnabled()) {
+          DebugUtils.debugInfo('War widget manual refresh skipped.');
+          return Future.value(true);
+        }
         // Manual refresh from widget button
         await WarWidgetService.handleWidgetRefresh();
       }
@@ -151,14 +160,19 @@ void _configureObservabilityOptions(
 Future<void> _startClashKingApp() async {
   // Pre-warm the shared Flutter glass shader before first use.
   await LiquidGlassWidgets.initialize();
-  unawaited(PushNotificationService.instance.initialize());
+  final appState = MyAppState();
+  await appState.featureFlagsReady;
 
-  if (!kIsWeb) {
+  final warWidgetsEnabled = appState.isFeatureEnabled(
+    AppFeatureFlags.warWidgets,
+  );
+  if (!kIsWeb && warWidgetsEnabled) {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await HomeWidget.setAppGroupId('group.com.clashking.apps');
     }
     if (defaultTargetPlatform == TargetPlatform.android) {
       await AndroidWorkmanagerService.instance.initialize(callbackDispatcher);
+      appState.registerWarWidgetRefreshIfEnabled();
     }
     // Initialize war widget service for background callbacks
     WarWidgetService.initialize();
@@ -182,7 +196,7 @@ Future<void> _startClashKingApp() async {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-          ChangeNotifierProvider(create: (_) => MyAppState()),
+          ChangeNotifierProvider.value(value: appState),
           ChangeNotifierProvider(create: (_) => AuthService()),
           ChangeNotifierProvider(create: (_) => CocAccountService()),
           ChangeNotifierProvider(create: (_) => PlayerService()),

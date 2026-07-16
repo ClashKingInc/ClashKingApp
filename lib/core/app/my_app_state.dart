@@ -2,20 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/core/services/war_widget_sync_service.dart';
+import 'package:clashkingapp/core/services/remote_feature_flag_service.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 
 class MyAppState extends ChangeNotifier {
-  MyAppState({WarWidgetSyncService? warWidgetSyncService})
-    : _warWidgetSyncService =
-          warWidgetSyncService ?? const WarWidgetSyncService() {
+  MyAppState({
+    WarWidgetSyncService? warWidgetSyncService,
+    RemoteFeatureFlagService? featureFlagService,
+  }) : _warWidgetSyncService =
+           warWidgetSyncService ?? const WarWidgetSyncService(),
+       _featureFlagService = featureFlagService ?? RemoteFeatureFlagService() {
     _loadLanguage();
-    _warWidgetSyncService.registerPeriodicRefresh();
+    featureFlagsReady = _loadFeatureFlags();
   }
 
   final WarWidgetSyncService _warWidgetSyncService;
+  final RemoteFeatureFlagService _featureFlagService;
+  late final Future<void> featureFlagsReady;
   Locale _locale = Locale('en'); // Default language is English
   Locale get locale => _locale; // Getter for the locale
   bool isLoading = false; // Loading state of the app
+
+  bool isFeatureEnabled(String key, {bool? fallback}) => _featureFlagService
+      .isEnabled(key, fallback: fallback ?? AppFeatureFlags.defaultValue(key));
+
+  bool get _warWidgetsEnabled => isFeatureEnabled(AppFeatureFlags.warWidgets);
+
+  void registerWarWidgetRefreshIfEnabled() {
+    if (_warWidgetsEnabled) {
+      _warWidgetSyncService.registerPeriodicRefresh();
+    }
+  }
+
+  Future<void> _loadFeatureFlags() async {
+    try {
+      await _featureFlagService.refresh();
+    } catch (_) {
+      // Remote configuration is fail-open for existing features. A temporary
+      // backend issue must never remove an established app surface.
+    }
+
+    notifyListeners();
+  }
 
   /* Language management */
 
@@ -85,16 +114,19 @@ class MyAppState extends ChangeNotifier {
 
   // Initialize the app from the background
   Future<void> initializeFromBackground(Uri data) async {
+    if (!_warWidgetsEnabled) return;
     await _warWidgetSyncService.initializeFromBackground(data);
   }
 
   // Update the war widget
   Future<void> updateWarWidget() async {
+    if (!_warWidgetsEnabled) return;
     await _warWidgetSyncService.updateWarWidget();
   }
 
   // Update the widgets
   Future<void> updateWidgets() async {
+    if (!_warWidgetsEnabled) return;
     await _warWidgetSyncService.updateWidgets();
   }
 }
