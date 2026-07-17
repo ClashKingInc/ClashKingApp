@@ -397,6 +397,25 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  Future<Map<String, dynamic>> requestDataExport() async {
+    return _apiService.post(
+      '/auth/export',
+      const <String, String>{},
+      requiresAuth: true,
+    );
+  }
+
+  Future<void> deleteAccount() async {
+    final response = await _apiService.deleteResponse(
+      '/auth/me',
+      requiresAuth: true,
+    );
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception('Account deletion request failed.');
+    }
+    await signOut();
+  }
+
   Future<void> logout() async {
     await signOut();
   }

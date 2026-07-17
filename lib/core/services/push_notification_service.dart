@@ -370,6 +370,44 @@ class PushNotificationService {
     }
   }
 
+  Future<bool> unregisterCurrentDeviceToken() async {
+    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(_tokenPrefsKey);
+    final payload = <String, dynamic>{
+      'device_id': await TokenService().getDeviceId(),
+      'provider': 'fcm',
+      'platform': Platform.operatingSystem,
+      'environment': _pushEnvironment,
+      if (token != null && token.isNotEmpty) 'token': token,
+    };
+
+    try {
+      final url = _pushApiV2BaseOverride.isEmpty
+          ? null
+          : '$_pushApiV2BaseOverride$_deviceEndpoint';
+      final response = await ApiService().deleteResponse(
+        _deviceEndpoint,
+        body: payload,
+        requiresAuth: true,
+        url: url,
+      );
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        await Future.wait([
+          prefs.remove(_tokenPrefsKey),
+          prefs.remove(_lastRegistrationPrefsKey),
+        ]);
+        await FirebaseMessaging.instance.deleteToken();
+        return true;
+      }
+    } catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+      DebugUtils.debugWarning('Push device unregister skipped: $error');
+    }
+    return false;
+  }
+
   Future<String?> cachedToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_tokenPrefsKey);

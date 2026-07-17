@@ -784,6 +784,10 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     unawaited(_savePreferences());
     if (value) {
       unawaited(_ensurePushConfiguredForEnabledAlert());
+    } else {
+      unawaited(
+        PushNotificationService.instance.unregisterCurrentDeviceToken(),
+      );
     }
   }
 
