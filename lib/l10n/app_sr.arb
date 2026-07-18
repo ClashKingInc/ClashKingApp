@@ -296,6 +296,9 @@
   "authAccountLinkEmail": "Poveži email nalog",
   "authAccountAddEmailAuth": "Dodajte autentifikaciju emailom i lozinkom radi dodatne bezbednosti naloga.",
   "authAccountEmailLinkedSuccess": "Email nalog je uspešno povezan!",
+  "authAccountLinkDiscord": "Link Discord Account",
+  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
+  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
   "authEmailVerificationTitle": "Verifikujte email",
   "authEmailVerificationCheckEmail": "Proverite email",
   "authEmailVerificationSentTo": "Poslali smo verifikacioni email na:",
@@ -2134,824 +2137,200 @@
   "gameItemFlying": "Leteće",
   "gameItemUpgradeCost": "Cena nadogradnje",
   "gameItemUpgradeTime": "Vreme nadogradnje",
-  "generalExpand": "Прошири",
-  "generalCollapse": "Скупи",
-  "generalBookmark": "Обележивач",
-  "generalRemoveBookmark": "Уклони обележивач",
-  "gameLeague": "Леагуе",
-  "clanMembersSearchPlaceholder": "Претражи чланове",
-  "clanMembersShowTotals": "Прикажи укупне вредности клана",
-  "clanMembersHideTotals": "Сакриј укупне вредности клана",
-  "clanMembersReceivedShort": "Примљено",
-  "clanMembersAverageTh": "Авг ТХ",
-  "warLogSearchPlaceholder": "Сеарцх варс",
-  "warStatsSearchPlaceholder": "Тражи играче",
-  "warStatsCurrentTownHall": "Ми ТХ",
-  "warStatsLast50": "Последњих 50",
-  "warStatsWars": "Ратови",
-  "warStatsSelectSeason": "Изаберите сезону ратне статистике",
-  "warAnalysisToWin": "Да победи",
-  "warAnalysisToLose": "Да изгубим",
-  "warAnalysisNoAttacksLeft": "Нема више напада",
-  "warAnalysisScenario": "Преостало је {attacks} напада -> потребно је {stars} звездица / {percent}% по нападу",
-  "warAnalysisImpossibleScenario": "Преостало је {attacks} напада -> немогуће ({stars} звездица / {percent}% по нападу)",
-  "warAttacksSuccessful": "Успешни напади",
-  "warAttacksFailed": "Неуспели напади",
-  "warAttacksMissedShort": "Пропуштено",
-  "cwlHistoryTitle": "CWL историја",
-  "clanJoinLeaveTab": "Придружи се/напусти",
-  "clanRankingsTab": "Ранкингс",
-  "clanRankingsSeason": "Сезона",
-  "clanRankingsSelectSeason": "Изаберите сезону рангирања",
-  "clanRankingsFilterActivity": "Активност",
-  "clanRankingsFilterWar": "Рат",
-  "clanRankingsFilterPoints": "Поени",
-  "cwlHistoryPreviewBadge": "Преглед",
-  "cwlHistoryPreviewSubtitle": "Макета за {clan} док се CWL endpoint не поправи",
-  "cwlHistoryEmptyTitle": "Још увек нема историје ЦВЛ-а",
-  "cwlHistoryEmptyBody": "Овај клан још увек није учествовао у сезони Лиге кланова.",
-  "cwlRankTitle": "Ранг",
-  "cwlWarsPlayedTitle": "Играли су се ратови",
-  "playerWarStarsTitle": "Ратне звезде",
-  "playerWarPreferenceTitle": "Ратни преф.",
-  "playerDonatedTitle": "Донатед",
-  "playerReceivedTitle": "Примљено",
-  "playerCapitalTitle": "Капитал",
-  "playerExpLevelTitle": "Екп. ниво",
-  "clanWarWinsTitle": "Рат побеђује",
-  "clanWinStreakTitle": "Победнички низ",
-  "clanBuilderBaseTitle": "База градитеља",
-  "clanTypeTitle": "Тип",
-  "clanWarFrequencyTitle": "Ратови",
-  "clanMinTownHallTitle": "Мин. ТХ",
-  "clanMinTrophiesTitle": "Мин. трофеји",
-  "clanCapitalHallTitle": "Цапитал Халл",
-  "clanDistrictsTitle": "Окрузи",
-  "legendsCountryTitle": "Држава",
-  "legendsLocalRankTitle": "Локални ранг",
-  "legendsGlobalRankTitle": "Глобални ранг",
-  "warWinsTitle": "Побеђује",
-  "warLossesTitle": "Губици",
-  "warDrawsTitle": "Дравс",
-  "capitalRaidStatusOngoing": "У току",
-  "capitalRaidStatusEnded": "Завршено",
-  "capitalRaidLoot": "Лоот",
-  "capitalRaidRewards": "Награде",
-  "capitalRaidPreviousWeek": "Претходна недеља",
-  "capitalRaidNextWeek": "Следеће недеље",
-  "capitalRaidFilterAttacked": "Нападнут",
-  "capitalRaidFilterNotAttacked": "Није нападнут",
-  "capitalRaidFilterLinked": "Повезани налози",
-  "capitalRaidEmptyTitle": "Нема података о нападима на престоницу",
-  "capitalRaidEmptyBody": "Историја напада ће се појавити овде када се буду пратили викенди напада на престоницу овог клана.",
-  "capitalRaidEstimated": "Процењено",
-  "capitalRaidEstimatedTooltip": "Још није званично: процењено на основу овонедељних дневника напада и одбране. Суперцелл објављује прави број медаља када се рација заврши.",
-  "capitalRaidTrophyPrediction": "Предвиђени трофеји",
-  "capitalRaidTrophyPredictionTooltip": "Процењени трофеји Капитал лиге након овог напада, на основу досадашњег учинка ове недеље. Није званично.",
-  "capitalRaidProjectedLoot": "Пројектовани плен",
-  "capitalRaidOneshots": "Оне-схотс",
-  "capitalRaidFails": "Фаилс",
-  "capitalDetailsOffense": "Прекршај",
-  "capitalDetailsDefense": "Одбрана",
-  "capitalDistrictsSection": "Окрузи",
-  "capitalOpponentsSection": "Противници",
-  "capitalAvgAttacksPerDistrict": "Просечан број напада/област",
-  "capitalAvgLootPerAttack": "Просечан плен/напад",
-  "capitalHistorySection": "Историја рације",
-  "capitalHistoryWeeksTracked": "Недеље праћене",
-  "capitalAvgLootPerWeek": "Просечан плен/седмично",
-  "capitalAvgAttacksPerWeek": "Просечан број напада недељно",
-  "capitalBestRaid": "Најбољи напад",
-  "capitalWorstRaid": "Најгори напад",
-  "capitalHistoryChartTitle": "Недељни тренд",
-  "warAttacksDetailsDuration": "Трајање",
-  "gameItemRemainingToTownHallMax": "До ТХ мак",
-  "gameItemRemainingToGlobalMax": "До глобалног макс",
-  "gameItemLevelsLeft": "Преостало нивоа: {count}",
-  "gameItemOverview": "Преглед",
-  "gameItemStats": "Статс",
-  "gameItemNextUpgrade": "Следећа надоградња",
-  "gameItemUpgradePlan": "План надоградње",
-  "gameItemUpgradeDataUnavailable": "Подаци за надоградњу нису доступни",
   "notifScopeAllAccounts": "Сви рачуни",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
   "notifScopeSelected": "Изабрано",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Преференцес",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Обавештења",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Одаберите упозорења и пошаљите локалне прегледе тестова.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsLiveActivityTest": "Тест активности уживо",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
   "settingsLiveActivityStart": "Започните тестну активност",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
   "settingsLiveActivityStartSubtitle": "Приказује локални преглед рата кланова.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
   "settingsLiveActivityUpdate": "Ажурирај резултат",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
   "settingsLiveActivityUpdateSubtitle": "Унапредује лажни ратни резултат.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
   "settingsLiveActivityEnd": "Завршите тестну активност",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
   "settingsLiveActivityEndSubtitle": "Уклања локални преглед.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
   "settingsSupport": "Подршка",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "Абоут",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Рачун",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Пријављени",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Изглед",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Систем",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Ускладите овај уређај",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Светлост",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Дарк",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Изабрано",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Још увек нема учитаних повезаних налога.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Није изабран ниједан налог",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "Изабрано налога: {count}",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifSelectedAccounts": "Изабрани налози",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
   "searchRecent": "Недавно",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Играчи",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Кланови",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchFilters": "Филтери",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "searchClear": "Јасно",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Подаци су успешно освежени",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Освежавање података није успело: {error}",
-  "warStatsFilterFailed": "Учитавање филтрираних података није успело: {error}",
-  "warStatsExportFailed": "Извоз није успео: {error}",
-  "exportLabelPlayer": "Плаиер",
-  "exportLabelFormat": "Формат",
-  "exportLabelExcel": "Екцел (.клск)",
-  "exportLabelIncludes": "Укључује",
-  "exportLabelContent": "Статистика, напади, ТХ анализа",
-  "accountNoUserData": "Нема доступних корисничких података",
-  "accountsMenuTitle": "Рачуни",
-  "searchErrorPlayerLoadFailed": "Учитавање података играча није успело.",
-  "searchErrorClanLoadFailed": "Учитавање података клана није успело.",
-  "todoNoMatchingAccounts": "Нема одговарајућих налога",
-  "todoNoConfiguredAccounts": "Ниједан налог за обавезе није конфигурисан",
-  "todoNoLinkedAccounts": "Нема повезаних налога",
-  "todoNoAccountsNeedAction": "Ниједан налог не захтева радњу",
-  "todoNoCompletedAccounts": "Нема завршених налога",
-  "todoNoBookmarkedAccounts": "Нема обележених налога",
-  "todoTryAnotherSearchOrFilter": "Пробајте другу претрагу или филтер.",
-  "clanJoinLeaveNoDataTitle": "Нема података за придруживање/напуштање",
-  "clanJoinLeaveNoDataBody": "Недавно кретање списка се појављује овде када се учитавају подаци за праћење.",
-  "clanJoinLeaveNoRecentMovementTitle": "Нема недавног покрета",
-  "clanJoinLeaveNoRecentMovementBody": "Резиме је учитан, али листа догађаја је празна.",
-  "capitalRaidMembersAttackLogFallback": "Листа чланова се не враћа за овај викенд рације. Уместо тога, приказује се статистика евиденције напада.",
-  "capitalRaidMembersNoPlayerData": "Подаци на нивоу играча се не враћају за овај викенд напада. АПИ укључује само зброј округа и противника.",
-  "capitalRaidMembersNoIndividualData": "Нема доступних листа играча или појединачних напада за овај напад.",
-  "dashboardNoLinkedAccountsTitle": "Нема повезаних налога",
-  "dashboardNoLinkedAccountsBody": "Повежите Цласх налог да бисте видели нападе, догађаје и активности овде.",
-  "dashboardNothingPinnedTitle": "Још ништа није закачено",
-  "dashboardNothingPinnedBody": "Отворите картицу Играчи, проширите опције картице и укључите „Прикажи обавезе код куће“ да бисте закачили налог овде.",
-  "playersNoBookmarkedTitle": "Још нема обележених играча",
-  "playersNoBookmarkedBody": "Отворите профил играча и сачувајте га за касније.",
-  "playersNoLinkedBody": "Управљајте налозима са екрана за подешавање налога.",
-  "navigationHome": "Хоме",
-  "drawerFollowers": "Фолловерс",
-  "drawerFollowersHelp": "Људи који су обележили један од ваших верификованих повезаних налога.",
-  "drawerPopular": "Популарно",
-  "drawerCalculators": "Калкулатори",
-  "drawerSubscription": "Претплата",
-  "drawerUpgradeTracker": "Упграде Трацкер",
-  "drawerBasesArmies": "базе и војске",
-  "drawerGameAssets": "Гаме Ассетс",
-  "drawerManageAccounts": "Управљајте налозима",
-  "playersLinked": "Повезано",
-  "playersBookmarked": "Боокмаркед",
-  "searchGlobalHint": "Претражите играче или кланове",
-  "tooltipDecreaseMinimumMembers": "Смањите минимум чланова",
-  "tooltipIncreaseMinimumMembers": "Повећајте минимум чланова",
-  "tooltipDecreaseMaximumMembers": "Смањите максималан број чланова",
-  "tooltipIncreaseMaximumMembers": "Повећајте максимум чланова",
-  "tooltipDecreaseMinimumClanPoints": "Смањите минималне бодове клана",
-  "tooltipIncreaseMinimumClanPoints": "Повећајте минималне бодове клана",
-  "tooltipDecreaseMinimumClanLevel": "Смањите минимални ниво клана",
-  "tooltipIncreaseMinimumClanLevel": "Повећајте минимални ниво клана",
-  "tooltipShowChart": "Прикажи графикон",
-  "tooltipShowTable": "Прикажи табелу",
-  "tooltipDismissMessage": "Одбаци поруку",
-  "tooltipShowPassword": "Прикажи лозинку",
-  "tooltipHidePassword": "Сакриј лозинку",
-  "tooltipRemoveAccount": "Уклони налог",
-  "popularPlayersTitle": "Играчи",
-  "popularClansTitle": "Кланови",
-  "popularWarsCwlTitle": "Варс & ЦВЛ",
-  "popularTitle": "Популарно",
-  "popularSubtitle": "Обележивачи, повезани налози и активни ратови.",
-  "popularEmptyTitle": "Још увек нема популарних ставки",
-  "popularEmptyBody": "Означите играче и кланове или повежите налоге да бисте поставили ово.",
-  "calculatorsTitle": "Калкулатори",
-  "calculatorsSubtitle": "Руда, потрес и потрес ватрене кугле.",
-  "calculatorOre": "Оре",
-  "calculatorZapQuake": "Зап куаке",
-  "calculatorFireball": "Фиребалл",
-  "upgradeTrackerTitle": "Упграде Трацкер",
-  "upgradeTrackerSubtitle": "Преостали трошкови и време надоградње.",
-  "linkedAccountLabel": "Повезани налог",
-  "noLinkedPlayersLoadedTitle": "Нема учитаних повезаних играча",
-  "noLinkedPlayersLoadedBody": "Додајте или освежите повезане налоге да бисте видели укупне надоградње.",
-  "playerOptionNotificationsTitle": "Обавештења",
-  "playerOptionNotificationsSubtitle": "Добијајте обавештења за овај налог.",
-  "playerOptionShowTodoHomeTitle": "Покажите обавезе код куће",
-  "playerOptionShowTodoHomeSubtitle": "Закачите картицу обавеза овог налога на почетну картицу.",
-  "playerOptionShowTodoPageTitle": "Прикажи на страници са обавезама",
-  "playerOptionShowTodoPageSubtitle": "Укључите овај налог у комплетну листу обавеза.",
-  "playerOptionShowWarTabTitle": "Прикажи на картици Рат",
-  "playerOptionShowWarTabSubtitle": "Укључите клан овог налога у картицу Рат.",
-  "searchCancel": "Откажи",
-  "bookmarkPlayerLoadFailed": "Учитавање обележеног плејера није успело.",
-  "warNoLinkedOrBookmarked": "Нема повезаних или обележених ратова кланова за приказ.",
-  "warWidgetRefreshData": "Освежите ратне податке",
-  "warWidgetNoData": "Нема доступних ратних података",
-  "warWidgetLastUpdated": "Последње ажурирано: {time}",
-  "todoEventClanGames": "Кланске игре",
-  "todoEventCwl": "ЦВЛ",
-  "todoEventSeasonEnds": "Сезона се завршава",
-  "todoEventLeagueReset": "Ресетовање лиге",
-  "todoEventRaidWeekend": "Раид Веекенд",
-  "todoMagicDispatch": "Магиц Диспатцх",
-  "todoMagicDispatchDescription": "Додирните за најновије ажурирање ЦласхКинг-а",
-  "todoUseCodeClashKing": "Користите код ЦласхКинг",
-  "todoUseCodeClashKingDescription": "Подржите пројекат у продавници Суперцелл",
-  "todoLegendAttacks": "Легенда напада",
-  "todoWarAttacks": "Ратни напади",
-  "todoCwlAttacks": "ЦВЛ напади",
-  "todoRaidAttacks": "Раид напади",
-  "gameSeasonPassShort": "Пасс",
-  "todoMockMaxedMainName": "Макед Маин",
-  "todoMockMaxedMainSubtitle": "ТХ17 · све активно",
-  "todoMockMaxedMainStatus": "Активан сада · пуна дневна контролна листа",
-  "todoMockLegend5Left": "5 је отишло данас",
-  "todoMockWar1Left": "1 остало",
-  "todoMockCwl1LeftRound": "1 је напустио ову рунду",
-  "todoMockClanGames2700Left": "Остало је 2,7 хиљада поена",
-  "todoMockRaid4Left": "4 лијево",
-  "todoMockPass850Left": "Остало је 850 поена",
-  "todoMockWarAltName": "Вар Алт",
-  "todoMockWarAltSubtitle": "ТХ15 · фокусиран на рат",
-  "todoMockWarAltStatus": "Активан пре 18 милиона · рат и рације захтевају пажњу",
-  "todoMockWar2Left": "2 лево",
-  "todoMockClanGames900Left": "Остало је 900 поена",
-  "todoMockRaid1Left": "1 остало",
-  "todoMockLegendPushName": "Легенд Пусх",
-  "todoMockLegendPushSubtitle": "ТХ16 · дневни напади",
-  "todoMockLegendPushStatus": "Активан пре 1 сат · напредовање легенди и пролаза",
-  "todoMockLegend2Left": "2 су отишли ​​данас",
-  "todoMockOnPace": "на темпо",
-  "todoMockCaughtUpName": "Цаугхт Уп",
-  "todoMockCaughtUpSubtitle": "ТХ14 · нема отворених задатака",
-  "todoMockCaughtUpStatus": "Активан данас · није потребна акција",
-  "notifChooseAlerts": "Izaberi upozorenja",
-  "notifLeagueDefenseDescription": "Rezultati odbrane sa napadačem, zvezdicama, procentom i kontekstom lige.",
-  "notifWarAttackOptionsDescription": "Rezultati ratnih napada, upozorenja odbrane i 5v5 tok napada.",
-  "notifWarAlertsDescription": "Rat pronađen, dan borbe počeo i rat završen.",
-  "notifWarRemindersDescription": "Prilagođeni podsetnici pre kraja rata.",
-  "notifDefensesAgainstYourBase": "Odbrane protiv tvoje baze",
-  "notifDefensesAgainstYourBaseDescription": "Samo udarci u kojima se ovaj nalog brani.",
-  "notifAllAttacks": "Svi napadi",
-  "notifAllAttacksDescription": "Svaki udarac samo u 5v5 ratovima.",
-  "notifThirtyMinutes": "30 minuta",
-  "notifFifteenMinutes": "15 minuta",
-  "notifSendTestNotification": "Pošalji test obaveštenje",
-  "notifScheduledMessage": "Zakazano: {title}",
-  "generalStartDate": "Datum početka",
-  "generalEndDate": "Datum završetka",
-  "warFiltersAllWars": "Svi ratovi",
-  "warFiltersRandomWars": "Nasumični ratovi",
-  "warFiltersCwlWars": "CWL ratovi",
-  "warFiltersFriendlyWars": "Prijateljski ratovi",
-  "warType": "Tip rata",
-  "warFiltersAnyTownHall": "Bilo koji TH",
-  "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "TH napadača",
-  "warDefenderTownHall": "TH branioca",
-  "warStatsFilterSameTownHallOnly": "Samo ista Gradska većnica",
-  "warStatsFilterSameTownHallDescription": "Prikaži samo napade gde napadač i branilac imaju isti TH nivo",
-  "generalAny": "Bilo koji",
-  "warStarsWithIcon": "{stars} ⭐",
-  "warStatsFilterMinStars": "Min. zvezdica",
-  "warStatsFilterMaxStars": "Maks. zvezdica",
-  "warStatsFilterMinDestructionPercent": "Min. uništenje %",
-  "warStatsFilterMaxDestructionPercent": "Maks. uništenje %",
-  "warStatsFilterMinPosition": "Min. pozicija",
-  "warStatsFilterMaxPosition": "Maks. pozicija",
-  "warStatsFilterFreshAttacksOnly": "Samo prvi napadi",
-  "warStatsFilterFreshAttacksDescription": "Prikaži samo prve napade na svaku bazu",
-  "warStatsFilterResultLimit": "Ograničenje rezultata",
-  "generalResultsCount": "{count} rezultata",
-  "notifEventsDescription": "Igre klana, CWL, Raid vikend i sezonski događaji.",
-  "notifAnnouncementsDescription": "Baneri u aplikaciji i buduća push obaveštenja za ClashKing ažuriranja.",
-  "notifUpgradeFinishesDescription": "Trupe, heroji, ljubimci, čarolije, oprema i zgrade.",
-  "notifSupportReminderDescription": "Mesečni podsetnik da podržiš ClashKing.",
-  "notifDevicePushSetup": "Podešavanje push obaveštenja uređaja",
-  "notifAccountScope": "Opseg naloga",
-  "notifTestNotification": "Test obaveštenje",
-  "settingsAppIcon": "Ikonica aplikacije",
-  "settingsChanging": "Menja se...",
-  "settingsAddWarWidget": "Dodaj ratni vidžet",
-  "settingsWarWidgetLinkClanFirst": "Prvo poveži nalog u klanu",
-  "settingsWarWidgetClanCount": "{count} klan(ova) dostupno",
-  "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Nalozi povezani sa botom i Discord podaci",
-  "settingsDiscordSyncSubtitle": "Sinhronizuj naloge povezane sa botom i Discord podatke",
-  "settingsConnected": "Povezano",
-  "settingsClashKingAccount": "ClashKing nalog",
-  "settingsEmailConnectedSubtitle": "Prijava e-poštom je povezana",
-  "settingsEmailRecoverySubtitle": "Dodaj prijavu e-poštom za oporavak naloga",
-  "settingsFeatureRequestsTitle": "Zahtevi za funkcije",
-  "playerOpenInGame": "Otvori u igri",
-  "playerBookmarkRemove": "Ukloni obeleživač igrača",
-  "playerBookmarkAdd": "Obeleži igrača",
-  "playerBestTrophies": "Najbolji trofeji",
-  "clanLoadFailed": "Učitavanje klana nije uspelo.",
-  "gameItemLevels": "Nivoi",
-  "resourceDarkElixir": "Tamni eliksir",
-  "resourceBuilderElixir": "Graditeljski eliksir",
-  "resourceBuilderGold": "Graditeljsko zlato",
-  "resourceElixir": "Elixir",
-  "resourceGold": "Zlato",
-  "resourceGlowyOre": "Sjajna ruda",
-  "resourceStarryOre": "Zvezdana ruda",
-  "resourceShinyOre": "Blistava ruda",
-  "resourceGeneric": "Resurs",
-  "seasonStatsGoldGrabbed": "Zlato opljačkano",
-  "seasonStatsActivity": "Aktivnost",
-  "seasonStatsAttackWins": "Pobede u napadu",
-  "seasonStatsTrophies": "Sezonski trofeji",
-  "todoSearchAccountsHint": "Pretraži naloge",
-  "generalClearSearch": "Obriši pretragu",
-  "clanCapitalAvgRewards": "Prosečne nagrade",
-  "clanCapitalAvgDistrictsPerWeek": "Prosečni distrikti/nedelja",
-  "clanCapitalTopAttackers": "Najbolji napadači",
-  "clanCapitalPlayersTracked": "Prati se {count} igrača",
-  "clanCapitalDefenseOverTime": "Odbrana kroz vreme",
-  "clanCapitalDistrictsTracked": "Prati se {count} distrikta",
-  "clanCapitalSelectedRaid": "Izabrani raid",
-  "generalSummary": "Sažetak",
-  "generalBreakdown": "Raščlamba",
-  "clanPointsTitle": "Poeni klana",
-  "clanBuilderBasePoints": "Poeni graditeljske baze",
-  "clanType": "Tip klana",
-  "clanRequiredTownHall": "Potrebna Gradska većnica",
-  "clanRequiredTownHallOnly": "Samo {level}+",
-  "clanCapitalPoints": "Poeni prestonice",
-  "todoAllAccounts": "Svi nalozi",
-  "todoCombinedAcrossAccounts": "Kombinovani zadaci preko tvojih naloga",
-  "todoPreviewAccount": "Pregled naloga",
-  "todoLastActiveUnavailable": "Poslednja aktivnost nije dostupna",
-  "todoActiveRelative": "Aktivan {time}",
-  "@todoActiveRelative": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "todoCompleteLower": "završeno",
-  "todoPointsLeftShort": "preostalo {points} poena",
-  "@todoPointsLeftShort": {
-    "placeholders": {
-      "points": {
-        "type": "String"
-      }
-    }
-  },
-  "todoItemsLeftShort": "preostalo {count}",
-  "@todoItemsLeftShort": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAllCaughtUpForNow": "Za sada je sve završeno",
-  "todoEventEndsIn": "Završava se za {duration}",
-  "@todoEventEndsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoEventStartsIn": "Počinje za {duration}",
-  "@todoEventStartsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoRemainingUpgradeTooltip": "Dodirni za preostalu cenu i vreme nadogradnje",
-  "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Dodirni za pregled ažuriranja iz juna 2026",
-  "sideRankingsTitle": "Rang liste",
-  "sideRankingsSubtitle": "Zvanične rang liste plus ClashKing endpointi.",
-  "sideRankingsLoadError": "Učitavanje zvaničnih rang lista nije uspelo.",
-  "sideRankingsEmptyTitle": "Nema vraćenih rang lista",
-  "sideRankingsEmptyBody": "Probaj drugu rang listu ili lokaciju.",
-  "sideRankingsMockups": "ClashKing makete",
-  "sideStatsTitle": "Statistika",
-  "sideStatsSubtitle": "Statistika rang liste sa zvaničnih Clash API površina.",
-  "sideStatsLoadError": "Učitavanje statistike rang liste nije uspelo.",
-  "sideTopScore": "Najbolji rezultat",
-  "sideTop200Avg": "Prosek Top 200",
-  "sideBasesArmiesTitle": "Baze i vojske",
-  "sideBasesArmiesSubtitle": "Layout-i sačuvani na Discord-u i linkovi vojski.",
-  "sideBotSyncTarget": "Cilj sinhronizacije bota",
-  "sideBotSyncTargetBody": "Bot već čuva baze i vojske u Discord profilu. Ova stranica je spremna za taj sinhronizovani paket podataka.",
-  "sideSavedBases": "Sačuvane baze",
-  "sideWarBaseSlots": "Slotovi ratnih baza",
-  "sideWarBaseSlotsBody": "Gradska većnica, tip baze, link i poslednje ažuriranje.",
-  "sideLegendBaseSlots": "Slotovi legend baza",
-  "sideLegendBaseSlotsBody": "Brzo kopiranje plus povezivanje naloga.",
-  "sideSavedArmies": "Sačuvane vojske",
-  "sideArmyLinks": "Linkovi vojski",
-  "sideArmyLinksBody": "Sastav, čarolije, opsada, beleške i link za deljenje.",
-  "sideGameAssetsTitle": "Resursi igre",
-  "sideGameAssetsSubtitle": "Hostovani ClashKing resursi, grupisani po folderu.",
-  "sideNoLinkedPlayersTitle": "Nema učitanih povezanih igrača",
-  "sideNoLinkedPlayersBody": "Dodaj ili osveži povezane naloge za unapred popunjene liga podatke.",
-  "sideReadyNow": "Spremno sada",
-  "sideDays": "{count} dana",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "preostalo {shiny} blistave, {glowy} sjajne, {starry} zvezdane rude",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Blistava ruda",
-  "sideGlowyOre": "Sjajna ruda",
-  "sideStarryOre": "Zvezdana ruda",
-  "sideDailyBonusAdjustment": "Podešavanje dnevnog bonusa",
-  "sideExtraShiny": "Dodatna blistava",
-  "sideExtraGlowy": "Dodatna sjajna",
-  "sideExtraStarry": "Dodatna zvezdana",
-  "sideZapQuakeTitle": "{zaps} munja + 1 zemljotres",
-  "@sideZapQuakeTitle": {
-    "placeholders": {
-      "zaps": {
-        "type": "int"
-      }
-    }
-  },
-  "sideZapQuakeSubtitle": "{quakeDamage} štete od zemljotresa, {lightningDamage} po munji",
-  "@sideZapQuakeSubtitle": {
-    "placeholders": {
-      "quakeDamage": {
-        "type": "String"
-      },
-      "lightningDamage": {
-        "type": "String"
-      }
-    }
-  },
-  "sideBuildingHp": "HP zgrade",
-  "sideLightningLevel": "Nivo munje",
-  "sideEarthquakeLevel": "Nivo zemljotresa",
-  "sideWithoutEarthquake": "Bez zemljotresa",
-  "sideLightningCount": "{count} munja",
-  "@sideLightningCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideFireballQuakeTitle": "Vatrena kugla + 1 zemljotres",
-  "sideAddSupportDamage": "Dodaj pomoćnu štetu",
-  "sideFireballQuakeSubtitle": "{fireballDamage} štete vatrene kugle, {hpLeft} HP preostalo posle zemljotresa",
-  "@sideFireballQuakeSubtitle": {
-    "placeholders": {
-      "fireballDamage": {
-        "type": "String"
-      },
-      "hpLeft": {
-        "type": "String"
-      }
-    }
-  },
-  "sideFireballLevel": "Nivo vatrene kugle",
-  "sideQuakePressure": "Pritisak zemljotresa",
-  "sideQuakeSpellCount": "{count} čarolija zemljotresa",
-  "@sideQuakeSpellCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideLocation": "Lokacija",
-  "sideFilter": "Filteri",
-  "sideRefresh": "Osveži",
-  "sideOfficialClashLeaderboard": "Zvanična Clash rang lista",
-  "sideAllTownHallsShort": "Svi TH",
-  "sideOwned": "Posedovano",
-  "sideTarget": "Meta",
-  "sideDailyValue": "dnevno {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "sideDecrease": "Smanji",
-  "sideIncrease": "Povećaj",
-  "sideLevel": "Nivo {level}",
-  "@sideLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "sidePopularPlayers": "Igrači",
-  "sidePopularClans": "Klanovi",
-  "sidePopularWarsCwl": "Ratovi i CWL",
-  "rankingPlayerTrophies": "Trofeji igrača",
-  "rankingPlayerTrophiesHeading": "Rang lista trofeja igrača",
-  "rankingPlayerBuilder": "Graditelj igrača",
-  "rankingPlayerBuilderHeading": "Rang lista graditeljske baze igrača",
-  "rankingClanTrophies": "Trofeji klanova",
-  "rankingClanTrophiesHeading": "Rang lista trofeja klanova",
-  "rankingClanBuilder": "Graditelj klanova",
-  "rankingClanBuilderHeading": "Rang lista graditeljske baze klanova",
-  "rankingClanCapital": "Prestonica klana",
-  "rankingClanCapitalHeading": "Rang lista Prestonice klana",
-  "assetFolderTroops": "Trupe",
-  "assetFolderSpells": "Čarolije",
-  "assetFolderHeroes": "Heroji",
-  "assetFolderEquipment": "Oprema",
-  "assetFolderLeagues": "Lige",
-  "assetFolderResources": "Resursi",
-  "assetFolderStickers": "Nalepnice",
-  "upgradeSectionHeroes": "Heroji",
-  "upgradeSectionTroops": "Trupe",
-  "upgradeSectionSpells": "Čarolije",
-  "upgradeSectionPets": "Ljubimci",
-  "upgradeSectionEquipment": "Oprema",
-  "sideMockupSource": "Izvor",
-  "sideMockupMode": "Režim",
-  "sideMockupPreview": "Pregled",
-  "sideMockupRows": "Redovi",
-  "sideMockupRowsValue": "5 maketa",
-  "endpointLeagueTop200": "Liga Top 200",
-  "endpointLeagueTop200Preview": "Legenda liga · 5.742 trofeja",
-  "endpointTownhallTop200": "Gradska većnica Top 200",
-  "endpointTownhallTop200Preview": "TH17 · Globalna tabla igrača",
-  "endpointClanDonations": "Donacije klana",
-  "endpointClanDonationsPreview": "Sjedinjene Države · nedeljni totals klanova",
-  "endpointClanWarWins": "Pobede u klanskim ratovima",
-  "endpointClanWarWinsPreview": "Međunarodno · pobede u ratovima svih vremena",
-  "endpointTop200ArmyUsage": "Korišćenje vojski Top 200",
-  "endpointTop200ArmyUsagePreview": "Dnevnici bitaka · korišćenje trupa i čarolija",
-  "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Nedeljno",
-  "endpointStateWins": "Pobede",
-  "endpointStateUsage": "Korišćenje",
-  "notifGroupBattles": "Bitke",
-  "notifGroupReminders": "Podsetnici",
-  "notifGroupSupport": "Podrška",
-  "notifGroupProgress": "Napredak",
-  "notifLeagueDefense": "Liga odbrana",
-  "notifLeagueDefenseResult": "Rezultat liga odbrane",
-  "notifLeagueTriple": "Liga trojka",
-  "notifLeagueAttackBody": "Lord Clasher je napao {player} • {percent}% • {stars} zvezdica • {league}",
-  "@notifLeagueAttackBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "league": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarDefense": "Ratna odbrana",
-  "notifWarAttackOnTh": "Ratni napad na TH{th}",
-  "@notifWarAttackOnTh": {
-    "placeholders": {
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarDefenseBody": "{opponentClan} je napao {player} • {percent}% • {stars} zvezdica • odbrana {clan}",
-  "@notifWarDefenseBody": {
-    "placeholders": {
-      "opponentClan": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarFeed5v5": "5v5 ratni tok",
-  "notifWarAttackResult": "Rezultat ratnog napada",
-  "notifWarAttackResultBody": "{clan} je napao Pine Riders TH{th} • 100% • 3 zvezdice",
-  "@notifWarAttackResultBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarMatched": "Rat pronađen",
-  "notifWarMatchedBody": "{clan} je uparen sa Pine Riders. Dan pripreme je počeo.",
-  "@notifWarMatchedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarStarted": "Rat je počeo",
-  "notifBattleDayStarted": "Dan borbe je počeo",
-  "notifWarStartedBody": "{clan} protiv Pine Riders je uživo. Srećno.",
-  "@notifWarStartedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarEnded": "Rat je završen",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Konačni rezultati su dostupni.",
-  "@notifWarEndedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarReminder1h": "Podsetnik za rat: 1 h",
-  "notifWarReminder30m": "Podsetnik za rat: 30 min",
-  "notifWarReminder15m": "Podsetnik za rat: 15 min",
-  "notifOneHourLeft": "Preostao 1 sat",
-  "notifThirtyMinutesLeft": "Preostalo 30 minuta",
-  "notifFifteenMinutesLeft": "Preostalo 15 minuta",
-  "notifRemainingWarAttacksBody": "{player} ima preostale ratne napade. {time}.",
-  "@notifRemainingWarAttacksBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "notifStarted": "{name} je počelo",
-  "@notifStarted": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifClanGamesPointsBody": "{clan} može početi da osvaja {name} poene.",
-  "@notifClanGamesPointsBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifCwlPreparationBody": "{clan} može početi pripremu za Ligu klanskih ratova.",
-  "@notifCwlPreparationBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifRaidWeekendBody": "{clan} može početi napade na prestonički raid.",
-  "@notifRaidWeekendBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSeasonStart": "Početak sezone",
-  "notifNewSeasonStarted": "Nova sezona je počela",
-  "notifSeasonStartedBody": "Sezona {league} je počela za {player}.",
-  "@notifSeasonStartedBody": {
-    "placeholders": {
-      "league": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSpecialEvent": "Specijalni događaj",
-  "notifNewEventLive": "Novi događaj je uživo",
-  "notifNewClashEventBody": "Novi Clash događaj je dostupan.",
-  "notifSupportClashKing": "Podrži ClashKing",
-  "notifMonthlySupportBody": "Mesečna podrška pomaže da ClashKing ostane dostupan i da se poboljšava. Hvala.",
-  "notifUpgradeFinished": "Nadogradnja završena",
-  "notifUpgradeReadyTitle": "{name} je spremno",
-  "@notifUpgradeReadyTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifUpgradeCompleteBody": "Nivo {level} je završen za {player}. Nadogradnja završena.",
-  "@notifUpgradeCompleteBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "clanSearchLoadFailed": "Učitavanje podataka klana nije uspelo: {error}",
-  "@clanSearchLoadFailed": {
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
     "placeholders": {
       "error": {
         "type": "String"
       }
     }
   },
-  "appIconDefault": "Podrazumevano",
-  "appIconChristmas": "Božić",
-  "appIconBlackWhite": "Crno-belo",
-  "appIconDarkMode": "Tamni režim",
-  "generalMembersCount": "{count} članova",
-  "@generalMembersCount": {
+  "warStatsFilterFailed": "Учитавање филтрираних података није успело: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "generalBookmarked": "obeleženo",
-  "clanLevelValue": "nivo {level}",
-  "@clanLevelValue": {
+  "warStatsExportFailed": "Извоз није успео: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
     "placeholders": {
-      "level": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "cwlRankShort": "Rang {rank}",
-  "@cwlRankShort": {
-    "placeholders": {
-      "rank": {
-        "type": "int"
-      }
-    }
+  "exportLabelPlayer": "Плаиер",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
   },
-  "cwlRoundShort": "Runda {round}",
-  "@cwlRoundShort": {
-    "placeholders": {
-      "round": {
-        "type": "int"
-      }
-    }
+  "exportLabelFormat": "Формат",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
   },
-  "gameTownHallShortLevel": "TH{level}",
-  "@gameTownHallShortLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
+  "exportLabelExcel": "Екцел (.клск)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
   },
-  "faqSupercellFanContentPolicyLink": "Supercell politika sadržaja fanova"
+  "exportLabelIncludes": "Укључује",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "Статистика, напади, ТХ анализа",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "Нема доступних корисничких података",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "Рачуни",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "Учитавање података играча није успело.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "Учитавање података клана није успело.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  }
 }
