@@ -78,7 +78,8 @@ class StartupWidgetState extends State<StartupWidget> {
           clans: clanService,
           wars: warService,
         );
-        if (appState.isFeatureEnabled(AppFeatureFlags.notifications)) {
+        if (appState.isFeatureEnabled(AppFeatureFlags.notifications) &&
+            await PushNotificationService.instance.areNotificationsEnabled()) {
           await PushNotificationService.instance.initialize();
           unawaited(
             PushNotificationService.instance.registerCurrentDeviceToken(),

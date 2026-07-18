@@ -70,13 +70,14 @@ dependencies:
   flutter_native_splash: ^2.4.7
   path_provider: ^2.1.6
   share_plus: ^13.2.0
+  flutter_file_saver: ^0.10.0
   flutter_soloud: ^4.0.12
   audio_session: ^0.2.2
   uuid: ^4.5.1
   clashking_design_system:
     git:
       url: https://github.com/ClashKingInc/DevKit.git
-      ref: 894855f1ee21400973fc80ba3c66c2c008b209c4
+      ref: main
       path: design/packages/flutter
   firebase_core: ^4.11.0
   firebase_messaging: ^16.4.1

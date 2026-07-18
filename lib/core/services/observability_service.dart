@@ -11,17 +11,7 @@ class ObservabilityService {
     }
 
     await Sentry.configureScope((scope) async {
-      await scope.setUser(
-        SentryUser(
-          id: user.userId,
-          username: user.username.isEmpty ? null : user.username,
-          data: {
-            'auth_methods': user.authMethods,
-            'has_email_auth': user.hasEmailAuth,
-            'has_discord_auth': user.hasDiscordAuth,
-          },
-        ),
-      );
+      await scope.setUser(SentryUser(id: user.userId));
     });
   }
 
@@ -31,14 +21,9 @@ class ObservabilityService {
     });
   }
 
-  static Future<void> setSelectedPlayerTag(String? playerTag) async {
-    final normalized = playerTag?.trim();
+  static Future<void> setSelectedPlayerTag(String? _) async {
     await Sentry.configureScope((scope) {
-      if (normalized == null || normalized.isEmpty) {
-        scope.removeContexts('selected_player');
-      } else {
-        scope.setContexts('selected_player', {'tag': normalized});
-      }
+      scope.removeContexts('selected_player');
     });
   }
 }

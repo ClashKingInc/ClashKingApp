@@ -18,6 +18,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:clashkingapp/features/settings/presentation/notification_settings_page.dart';
+import 'package:clashkingapp/features/settings/presentation/privacy_controls_page.dart';
 import 'package:clashkingapp/features/settings/presentation/translation_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/l10n/locale.dart';
@@ -237,9 +238,10 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                 title: l10n.settingsPrivacyPolicy,
                 subtitle: l10n.settingsPrivacyPolicySubtitle,
                 onTap: () {
-                  launchUrl(
-                    Uri.parse('https://clashk.ing/'),
-                    mode: LaunchMode.externalApplication,
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PrivacyControlsPage(),
+                    ),
                   );
                 },
               ),

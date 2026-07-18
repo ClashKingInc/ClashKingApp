@@ -181,8 +181,8 @@ packages:
     dependency: "direct main"
     description:
       path: "design/packages/flutter"
-      ref: "894855f1ee21400973fc80ba3c66c2c008b209c4"
-      resolved-ref: "894855f1ee21400973fc80ba3c66c2c008b209c4"
+      ref: main
+      resolved-ref: "0d97bbb14d269e2bd4e4c6b267ac9162f896ab67"
       url: "https://github.com/ClashKingInc/DevKit.git"
     source: git
     version: "0.2.0"
@@ -460,6 +460,54 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_file_manager_android:
+    dependency: transitive
+    description:
+      name: flutter_file_manager_android
+      sha256: "94c0254990f47e528acff0dad11d43dcd81369c47dd2773bb2431770f057afdc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  flutter_file_manager_ios:
+    dependency: transitive
+    description:
+      name: flutter_file_manager_ios
+      sha256: "442549e5b6dff152fb38a6120a64febefa55fbbe59aaf43411888cf18cbb6bd9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  flutter_file_manager_macos:
+    dependency: transitive
+    description:
+      name: flutter_file_manager_macos
+      sha256: ceb3da499bdf7741ae2d06658cef42f250b154b594e786284b9744a9161dbfdf
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  flutter_file_manager_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_file_manager_platform_interface
+      sha256: "7a0b81a429ff81e02305a1876d101b832161887420b861b27a9f118f0de4b5df"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
+  flutter_file_manager_web:
+    dependency: transitive
+    description:
+      name: flutter_file_manager_web
+      sha256: b1be154e2d48da92bf19fea74e7f18f1a531a33885d751f91ca40092477176a9
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  flutter_file_saver:
+    dependency: "direct main"
+    description:
+      name: flutter_file_saver
+      sha256: e84694efeef35cb4a8e5ff1394d3f298619546a64698207d279ba7a3b25b6620
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.0"
   flutter_gif:
     dependency: "direct main"
     description:

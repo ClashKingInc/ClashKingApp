@@ -97,6 +97,8 @@ class PushNotificationService {
   static const _preferencesEndpoint = '/notifications/preferences';
   static const _tokenPrefsKey = 'push_fcm_token';
   static const _lastRegistrationPrefsKey = 'push_last_registration_token';
+  static const notificationsEnabledPrefsKey =
+      'notif_settings_notifications_enabled';
   static const _channelId = 'clashking_push';
   static const _channelName = 'ClashKing alerts';
   static const _channelDescription =
@@ -276,6 +278,13 @@ class PushNotificationService {
   }
 
   Future<void> registerCurrentDeviceToken({String? token}) async {
+    if (!await areNotificationsEnabled()) {
+      DebugUtils.debugInfo(
+        'Push registration skipped: notifications disabled.',
+      );
+      return;
+    }
+
     final resolvedToken = token ?? await cachedToken();
     if (resolvedToken == null || resolvedToken.isEmpty) {
       DebugUtils.debugWarning('Push registration skipped: no FCM token.');
@@ -370,9 +379,65 @@ class PushNotificationService {
     }
   }
 
+  Future<bool> unregisterCurrentDeviceToken() async {
+    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
+
+    final prefs = await SharedPreferences.getInstance();
+    final payload = <String, dynamic>{
+      'device_id': await TokenService().getDeviceId(),
+      'provider': 'fcm',
+      'platform': Platform.operatingSystem,
+      'environment': _pushEnvironment,
+    };
+
+    try {
+      final url = _pushApiV2BaseOverride.isEmpty
+          ? null
+          : '$_pushApiV2BaseOverride$_deviceEndpoint';
+      final response = await ApiService().deleteResponse(
+        _deviceEndpoint,
+        body: payload,
+        requiresAuth: true,
+        url: url,
+      );
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        await _clearCurrentDeviceToken(prefs);
+        return true;
+      }
+    } catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+      DebugUtils.debugWarning('Push device unregister skipped: $error');
+    }
+    await _clearCurrentDeviceToken(prefs);
+    return false;
+  }
+
+  Future<void> _clearCurrentDeviceToken(SharedPreferences prefs) async {
+    await Future.wait([
+      prefs.remove(_tokenPrefsKey),
+      prefs.remove(_lastRegistrationPrefsKey),
+    ]);
+    _setResult(
+      const PushNotificationSetupResult(
+        state: PushNotificationSetupState.tokenUnavailable,
+      ),
+    );
+    try {
+      await FirebaseMessaging.instance.deleteToken();
+    } catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+      DebugUtils.debugWarning('FCM token cleanup skipped: $error');
+    }
+  }
+
   Future<String?> cachedToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_tokenPrefsKey);
+  }
+
+  Future<bool> areNotificationsEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(notificationsEnabledPrefsKey) ?? true;
   }
 
   Future<String?> tokenPreview() async {
@@ -473,8 +538,7 @@ class PushNotificationService {
       token,
     ) {
       DebugUtils.debugInfo('Push token refreshed.');
-      unawaited(_cacheToken(token));
-      unawaited(registerCurrentDeviceToken(token: token));
+      unawaited(_handleTokenRefresh(token));
     });
 
     unawaited(
@@ -489,6 +553,17 @@ class PushNotificationService {
   Future<void> _cacheToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenPrefsKey, token);
+  }
+
+  Future<void> _handleTokenRefresh(String token) async {
+    if (!await areNotificationsEnabled()) {
+      DebugUtils.debugInfo(
+        'Push token refresh ignored: notifications disabled.',
+      );
+      return;
+    }
+    await _cacheToken(token);
+    await registerCurrentDeviceToken(token: token);
   }
 
   void _handlePayload(String? payload) {
