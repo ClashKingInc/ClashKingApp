@@ -1,19 +1,31 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:clashkingapp/core/utils/privacy_export_saver.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+typedef PrivacyExportSaver =
+    Future<void> Function({required String fileName, required String data});
+
 class PrivacyControlsPage extends StatefulWidget {
-  const PrivacyControlsPage({super.key});
+  const PrivacyControlsPage({super.key, this.saveExport = _savePrivacyExport});
+
+  final PrivacyExportSaver saveExport;
 
   @override
   State<PrivacyControlsPage> createState() => _PrivacyControlsPageState();
+}
+
+Future<void> _savePrivacyExport({
+  required String fileName,
+  required String data,
+}) {
+  return FlutterFileSaver().writeFileAsString(fileName: fileName, data: data);
 }
 
 class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
@@ -176,7 +188,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
     }
 
     try {
-      await savePrivacyExport(fileName: fileName, data: data);
+      await widget.saveExport(fileName: fileName, data: data);
       _showSnack('Your data export has been saved.');
     } catch (_) {
       await _contactSupport();
