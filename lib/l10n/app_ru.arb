@@ -296,6 +296,9 @@
   "authAccountLinkEmail": "Привязать email-аккаунт",
   "authAccountAddEmailAuth": "Добавьте вход по email и паролю для дополнительной безопасности аккаунта.",
   "authAccountEmailLinkedSuccess": "Email-аккаунт успешно привязан!",
+  "authAccountLinkDiscord": "Link Discord Account",
+  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
+  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
   "authEmailVerificationTitle": "Подтверждение email",
   "authEmailVerificationCheckEmail": "Проверьте почту",
   "authEmailVerificationSentTo": "Мы отправили письмо подтверждения на:",
@@ -2134,824 +2137,200 @@
   "gameItemFlying": "Летающий",
   "gameItemUpgradeCost": "Стоимость улучшения",
   "gameItemUpgradeTime": "Время улучшения",
-  "generalExpand": "Расширять",
-  "generalCollapse": "Крах",
-  "generalBookmark": "Закладка",
-  "generalRemoveBookmark": "Удалить закладку",
-  "gameLeague": "Лига",
-  "clanMembersSearchPlaceholder": "Поиск участников",
-  "clanMembersShowTotals": "Показать итоги клана",
-  "clanMembersHideTotals": "Скрыть итоги клана",
-  "clanMembersReceivedShort": "Полученный",
-  "clanMembersAverageTh": "Среднее число чехов",
-  "warLogSearchPlaceholder": "Поиск войн",
-  "warStatsSearchPlaceholder": "Поиск игроков",
-  "warStatsCurrentTownHall": "мой ТД",
-  "warStatsLast50": "Последние 50",
-  "warStatsWars": "Войны",
-  "warStatsSelectSeason": "Выберите сезон военной статистики",
-  "warAnalysisToWin": "Чтобы выиграть",
-  "warAnalysisToLose": "Потерять",
-  "warAnalysisNoAttacksLeft": "Нападений не осталось",
-  "warAnalysisScenario": "{attacks} атакует влево -> нужны звезды {stars} / {percent}% за атаку",
-  "warAnalysisImpossibleScenario": "{attacks} атакует влево -> невозможно (звезды {stars} / {percent}% за атаку)",
-  "warAttacksSuccessful": "Успешные атаки",
-  "warAttacksFailed": "Неудачные атаки",
-  "warAttacksMissedShort": "Пропущенный",
-  "cwlHistoryTitle": "История CWL",
-  "clanJoinLeaveTab": "Присоединиться/Выйти",
-  "clanRankingsTab": "Рейтинги",
-  "clanRankingsSeason": "Сезон",
-  "clanRankingsSelectSeason": "Выберите рейтинговый сезон",
-  "clanRankingsFilterActivity": "Активность",
-  "clanRankingsFilterWar": "Война",
-  "clanRankingsFilterPoints": "Очки",
-  "cwlHistoryPreviewBadge": "Предварительный просмотр",
-  "cwlHistoryPreviewSubtitle": "Макет {clan} до исправления конечной точки CWL.",
-  "cwlHistoryEmptyTitle": "Истории CWL пока нет",
-  "cwlHistoryEmptyBody": "Этот клан еще не участвовал в сезоне Лиги Войн Кланов.",
-  "cwlRankTitle": "Классифицировать",
-  "cwlWarsPlayedTitle": "Войны сыграны",
-  "playerWarStarsTitle": "Звезды войны",
-  "playerWarPreferenceTitle": "Военный преф.",
-  "playerDonatedTitle": "Пожертвовано",
-  "playerReceivedTitle": "Полученный",
-  "playerCapitalTitle": "Капитал",
-  "playerExpLevelTitle": "Эксп. уровень",
-  "clanWarWinsTitle": "Война побеждает",
-  "clanWinStreakTitle": "Победная серия",
-  "clanBuilderBaseTitle": "База застройщиков",
-  "clanTypeTitle": "Тип",
-  "clanWarFrequencyTitle": "Войны",
-  "clanMinTownHallTitle": "Мин. ТД",
-  "clanMinTrophiesTitle": "Мин. трофеи",
-  "clanCapitalHallTitle": "Столичный зал",
-  "clanDistrictsTitle": "Районы",
-  "legendsCountryTitle": "Страна",
-  "legendsLocalRankTitle": "Местный ранг",
-  "legendsGlobalRankTitle": "Глобальный рейтинг",
-  "warWinsTitle": "Победы",
-  "warLossesTitle": "Потери",
-  "warDrawsTitle": "Ничьи",
-  "capitalRaidStatusOngoing": "Непрерывный",
-  "capitalRaidStatusEnded": "Закончено",
-  "capitalRaidLoot": "Лут",
-  "capitalRaidRewards": "Награды",
-  "capitalRaidPreviousWeek": "Предыдущая неделя",
-  "capitalRaidNextWeek": "На следующей неделе",
-  "capitalRaidFilterAttacked": "Атакованный",
-  "capitalRaidFilterNotAttacked": "Не атакован",
-  "capitalRaidFilterLinked": "Связанные аккаунты",
-  "capitalRaidEmptyTitle": "Нет данных о рейде столицы",
-  "capitalRaidEmptyBody": "История рейдов появится здесь, как только будут отслежены выходные рейдов на столицу этого клана.",
-  "capitalRaidEstimated": "Оцененный",
-  "capitalRaidEstimatedTooltip": "Пока не официально: оценки основаны на журналах атак и защиты за эту неделю. Supercell публикует реальное количество медалей после завершения рейда.",
-  "capitalRaidTrophyPrediction": "Прогнозируемые трофеи",
-  "capitalRaidTrophyPredictionTooltip": "Предполагаемые трофеи Столичной лиги после этого рейда, основанные на результатах на этой неделе. Не официально.",
-  "capitalRaidProjectedLoot": "Прогнозируемая добыча",
-  "capitalRaidOneshots": "Одиночные выстрелы",
-  "capitalRaidFails": "Не удалось",
-  "capitalDetailsOffense": "Нарушение",
-  "capitalDetailsDefense": "Оборона",
-  "capitalDistrictsSection": "Районы",
-  "capitalOpponentsSection": "Оппоненты",
-  "capitalAvgAttacksPerDistrict": "Среднее количество атак/район",
-  "capitalAvgLootPerAttack": "Среднее количество добычи/атаки",
-  "capitalHistorySection": "История рейдов",
-  "capitalHistoryWeeksTracked": "Недели отслеживаются",
-  "capitalAvgLootPerWeek": "Средняя добыча в неделю",
-  "capitalAvgAttacksPerWeek": "Среднее число атак в неделю",
-  "capitalBestRaid": "Лучший рейд",
-  "capitalWorstRaid": "Худший рейд",
-  "capitalHistoryChartTitle": "Еженедельный тренд",
-  "warAttacksDetailsDuration": "Продолжительность",
-  "gameItemRemainingToTownHallMax": "До ТН макс.",
-  "gameItemRemainingToGlobalMax": "До глобального максимума",
-  "gameItemLevelsLeft": "Уровень {count} остался(а)",
-  "gameItemOverview": "Обзор",
-  "gameItemStats": "Статистика",
-  "gameItemNextUpgrade": "Следующее обновление",
-  "gameItemUpgradePlan": "План обновления",
-  "gameItemUpgradeDataUnavailable": "Данные обновления недоступны",
   "notifScopeAllAccounts": "Все аккаунты",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
   "notifScopeSelected": "Выбрано",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Предпочтения",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Уведомления",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Выбирайте оповещения и отправляйте предварительные просмотры локальных тестов.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsLiveActivityTest": "Тест на живую активность",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
   "settingsLiveActivityStart": "Начать тестовую деятельность",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
   "settingsLiveActivityStartSubtitle": "Показывает предварительный просмотр локальной войны кланов.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
   "settingsLiveActivityUpdate": "Обновить счет",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
   "settingsLiveActivityUpdateSubtitle": "Увеличивает счет фальшивой войны.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
   "settingsLiveActivityEnd": "Завершить тестовое действие",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
   "settingsLiveActivityEndSubtitle": "Удаляет локальный предварительный просмотр.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
   "settingsSupport": "Поддерживать",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "О",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Счет",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Вошёл в систему",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Появление",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Система",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Сопоставить это устройство",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Свет",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Темный",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Выбрано",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Связанные аккаунты пока не загружены.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Аккаунты не выбраны",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "Выбраны аккаунты {count}.",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifSelectedAccounts": "Выбранные аккаунты",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
   "searchRecent": "Недавний",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Игроки",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Кланы",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchFilters": "Фильтры",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "searchClear": "Прозрачный",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Данные успешно обновлены",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Не удалось обновить данные: {error}.",
-  "warStatsFilterFailed": "Не удалось загрузить отфильтрованные данные: {error}.",
-  "warStatsExportFailed": "Не удалось экспортировать: {error}.",
-  "exportLabelPlayer": "Игрок",
-  "exportLabelFormat": "Формат",
-  "exportLabelExcel": "Excel (.xlsx)",
-  "exportLabelIncludes": "Включает",
-  "exportLabelContent": "Статистика, атаки, анализ TH",
-  "accountNoUserData": "Нет доступных пользовательских данных",
-  "accountsMenuTitle": "Счета",
-  "searchErrorPlayerLoadFailed": "Не удалось загрузить данные игрока.",
-  "searchErrorClanLoadFailed": "Не удалось загрузить данные клана.",
-  "todoNoMatchingAccounts": "Нет подходящих аккаунтов",
-  "todoNoConfiguredAccounts": "Аккаунты дел не настроены",
-  "todoNoLinkedAccounts": "Нет связанных аккаунтов",
-  "todoNoAccountsNeedAction": "Ни один аккаунт не требует действий",
-  "todoNoCompletedAccounts": "Нет заполненных аккаунтов",
-  "todoNoBookmarkedAccounts": "Нет аккаунтов в закладках",
-  "todoTryAnotherSearchOrFilter": "Попробуйте другой поиск или фильтр.",
-  "clanJoinLeaveNoDataTitle": "Нет данных о присоединении/выходе",
-  "clanJoinLeaveNoDataBody": "Здесь отображаются недавние перемещения состава, когда загружаются данные отслеживания.",
-  "clanJoinLeaveNoRecentMovementTitle": "Нет недавнего движения",
-  "clanJoinLeaveNoRecentMovementBody": "Сводка загружена, но список событий пуст.",
-  "capitalRaidMembersAttackLogFallback": "Список участников на эти рейдовые выходные не возвращается. Вместо этого отображается статистика журнала атак.",
-  "capitalRaidMembersNoPlayerData": "Данные об игроках за эти рейдовые выходные не возвращаются. API включает только общие данные по округам и противникам.",
-  "capitalRaidMembersNoIndividualData": "Для этого рейда нет списка игроков или отдельных атак.",
-  "dashboardNoLinkedAccountsTitle": "Нет связанных аккаунтов",
-  "dashboardNoLinkedAccountsBody": "Свяжите учетную запись Clash, чтобы видеть здесь атаки, события и активность.",
-  "dashboardNothingPinnedTitle": "Еще ничего не закреплено",
-  "dashboardNothingPinnedBody": "Откройте вкладку «Игроки», разверните параметры карточки и включите «Показывать дела на главной странице», чтобы закрепить здесь учетную запись.",
-  "playersNoBookmarkedTitle": "Игроков в закладках пока нет",
-  "playersNoBookmarkedBody": "Откройте профиль игрока и сохраните его на будущее.",
-  "playersNoLinkedBody": "Управляйте учетными записями с экрана настройки учетной записи.",
-  "navigationHome": "Дом",
-  "drawerFollowers": "Последователи",
-  "drawerFollowersHelp": "Люди, которые добавили в закладки одну из ваших подтвержденных связанных учетных записей.",
-  "drawerPopular": "Популярный",
-  "drawerCalculators": "Калькуляторы",
-  "drawerSubscription": "Подписка",
-  "drawerUpgradeTracker": "Обновление трекера",
-  "drawerBasesArmies": "Базы и армии",
-  "drawerGameAssets": "Игровые ресурсы",
-  "drawerManageAccounts": "Управление учетными записями",
-  "playersLinked": "Связано",
-  "playersBookmarked": "В закладках",
-  "searchGlobalHint": "Поиск игроков или кланов",
-  "tooltipDecreaseMinimumMembers": "Уменьшить минимальное количество участников",
-  "tooltipIncreaseMinimumMembers": "Увеличить минимальное количество участников",
-  "tooltipDecreaseMaximumMembers": "Уменьшить максимальное количество участников",
-  "tooltipIncreaseMaximumMembers": "Увеличить максимальное количество участников",
-  "tooltipDecreaseMinimumClanPoints": "Уменьшение минимального количества очков клана",
-  "tooltipIncreaseMinimumClanPoints": "Увеличение минимального количества очков клана",
-  "tooltipDecreaseMinimumClanLevel": "Уменьшение минимального уровня клана",
-  "tooltipIncreaseMinimumClanLevel": "Увеличение минимального уровня клана",
-  "tooltipShowChart": "Показать диаграмму",
-  "tooltipShowTable": "Показать таблицу",
-  "tooltipDismissMessage": "Закрыть сообщение",
-  "tooltipShowPassword": "Показать пароль",
-  "tooltipHidePassword": "Скрыть пароль",
-  "tooltipRemoveAccount": "Удалить аккаунт",
-  "popularPlayersTitle": "Игроки",
-  "popularClansTitle": "Кланы",
-  "popularWarsCwlTitle": "Войны и CWL",
-  "popularTitle": "Популярный",
-  "popularSubtitle": "Закладки, связанные аккаунты и активные войны.",
-  "popularEmptyTitle": "Популярных товаров пока нет",
-  "popularEmptyBody": "Добавьте игроков и кланы в закладки или свяжите аккаунты, чтобы разместить это сообщение.",
-  "calculatorsTitle": "Калькуляторы",
-  "calculatorsSubtitle": "Руда, взрывное землетрясение и землетрясение огненного шара.",
-  "calculatorOre": "руда",
-  "calculatorZapQuake": "Землетрясение",
-  "calculatorFireball": "Огненный шар",
-  "upgradeTrackerTitle": "Обновление трекера",
-  "upgradeTrackerSubtitle": "Оставшаяся стоимость и время обновления.",
-  "linkedAccountLabel": "Связанный аккаунт",
-  "noLinkedPlayersLoadedTitle": "Связанные игроки не загружены",
-  "noLinkedPlayersLoadedBody": "Добавьте или обновите связанные учетные записи, чтобы увидеть общее количество обновлений.",
-  "playerOptionNotificationsTitle": "Уведомления",
-  "playerOptionNotificationsSubtitle": "Получайте оповещения для этого аккаунта.",
-  "playerOptionShowTodoHomeTitle": "Показать дела на главной странице",
-  "playerOptionShowTodoHomeSubtitle": "Закрепите карточку дел этого аккаунта на главной вкладке.",
-  "playerOptionShowTodoPageTitle": "Показать на странице дел",
-  "playerOptionShowTodoPageSubtitle": "Включите эту учетную запись в полный список дел.",
-  "playerOptionShowWarTabTitle": "Показать на вкладке «Война»",
-  "playerOptionShowWarTabSubtitle": "Включите клан этого аккаунта во вкладку «Война».",
-  "searchCancel": "Отмена",
-  "bookmarkPlayerLoadFailed": "Не удалось загрузить плеер, добавленный в закладки.",
-  "warNoLinkedOrBookmarked": "Нет связанных или добавленных в закладки войн кланов для отображения.",
-  "warWidgetRefreshData": "Обновить данные войны",
-  "warWidgetNoData": "Данных о войне нет.",
-  "warWidgetLastUpdated": "Последнее обновление: {time}",
-  "todoEventClanGames": "Клановые игры",
-  "todoEventCwl": "КВЛ",
-  "todoEventSeasonEnds": "Сезон заканчивается",
-  "todoEventLeagueReset": "Сброс лиги",
-  "todoEventRaidWeekend": "Рейдовые выходные",
-  "todoMagicDispatch": "Волшебная отправка",
-  "todoMagicDispatchDescription": "Нажмите, чтобы увидеть последнее обновление ClashKing.",
-  "todoUseCodeClashKing": "Используйте код ClashKing",
-  "todoUseCodeClashKingDescription": "Поддержите проект в Supercell Store",
-  "todoLegendAttacks": "Легендарные атаки",
-  "todoWarAttacks": "Военные атаки",
-  "todoCwlAttacks": "CWL-атаки",
-  "todoRaidAttacks": "Рейдовые атаки",
-  "gameSeasonPassShort": "Проходить",
-  "todoMockMaxedMainName": "Максед Главный",
-  "todoMockMaxedMainSubtitle": "TH17 · все активно",
-  "todoMockMaxedMainStatus": "Активен сейчас · полный ежедневный контрольный список",
-  "todoMockLegend5Left": "сегодня осталось 5",
-  "todoMockWar1Left": "1 остался",
-  "todoMockCwl1LeftRound": "1 покинул этот раунд",
-  "todoMockClanGames2700Left": "Осталось 2,7 тыс. очков",
-  "todoMockRaid4Left": "4 осталось",
-  "todoMockPass850Left": "осталось 850 баллов",
-  "todoMockWarAltName": "Военный альтернативный вариант",
-  "todoMockWarAltSubtitle": "TH15 · сосредоточена на войне",
-  "todoMockWarAltStatus": "Активен 18 м назад · война и рейды требуют внимания",
-  "todoMockWar2Left": "2 осталось",
-  "todoMockClanGames900Left": "осталось 900 баллов",
-  "todoMockRaid1Left": "1 остался",
-  "todoMockLegendPushName": "Легенда толчок",
-  "todoMockLegendPushSubtitle": "TH16 · ежедневные атаки",
-  "todoMockLegendPushStatus": "Активен 1 час назад · легенды и прогресс прохождения",
-  "todoMockLegend2Left": "2 осталось сегодня",
-  "todoMockOnPace": "в темпе",
-  "todoMockCaughtUpName": "догнал",
-  "todoMockCaughtUpSubtitle": "TH14 · нет открытых задач",
-  "todoMockCaughtUpStatus": "Активен сегодня · никаких действий не требуется",
-  "notifChooseAlerts": "Выберите оповещения",
-  "notifLeagueDefenseDescription": "Результаты защиты с атакующим, звёздами, процентом и контекстом лиги.",
-  "notifWarAttackOptionsDescription": "Результаты атак в войне, оповещения о защите и параметры ленты атак 5v5.",
-  "notifWarAlertsDescription": "Подбор войны, начало дня битвы и завершение войны.",
-  "notifWarRemindersDescription": "Пользовательские напоминания перед окончанием войны.",
-  "notifDefensesAgainstYourBase": "Защиты против вашей базы",
-  "notifDefensesAgainstYourBaseDescription": "Только удары, где этот аккаунт защищается.",
-  "notifAllAttacks": "Все атаки",
-  "notifAllAttacksDescription": "Каждый удар только в войнах 5v5.",
-  "notifThirtyMinutes": "30 минут",
-  "notifFifteenMinutes": "15 минут",
-  "notifSendTestNotification": "Отправить тестовое уведомление",
-  "notifScheduledMessage": "Запланировано: {title}",
-  "generalStartDate": "Дата начала",
-  "generalEndDate": "Дата окончания",
-  "warFiltersAllWars": "Все войны",
-  "warFiltersRandomWars": "Случайные войны",
-  "warFiltersCwlWars": "Войны CWL",
-  "warFiltersFriendlyWars": "Дружеские войны",
-  "warType": "Тип войны",
-  "warFiltersAnyTownHall": "Любой ТХ",
-  "gameTownHallLevelShort": "ТХ{level}",
-  "warAttackerTownHall": "ТХ атакующего",
-  "warDefenderTownHall": "ТХ защитника",
-  "warStatsFilterSameTownHallOnly": "Только одинаковая Ратуша",
-  "warStatsFilterSameTownHallDescription": "Показывать только атаки, где у атакующего и защитника одинаковый уровень ТХ",
-  "generalAny": "Любой",
-  "warStarsWithIcon": "{stars} ⭐",
-  "warStatsFilterMinStars": "Мин. звёзд",
-  "warStatsFilterMaxStars": "Макс. звёзд",
-  "warStatsFilterMinDestructionPercent": "Мин. разрушение %",
-  "warStatsFilterMaxDestructionPercent": "Макс. разрушение %",
-  "warStatsFilterMinPosition": "Мин. позиция",
-  "warStatsFilterMaxPosition": "Макс. позиция",
-  "warStatsFilterFreshAttacksOnly": "Только первые атаки",
-  "warStatsFilterFreshAttacksDescription": "Показывать только первые атаки по каждой базе",
-  "warStatsFilterResultLimit": "Лимит результатов",
-  "generalResultsCount": "{count} результатов",
-  "notifEventsDescription": "Клановые игры, CWL, рейдовые выходные и сезонные события.",
-  "notifAnnouncementsDescription": "Баннеры в приложении и будущие push-оповещения об обновлениях ClashKing.",
-  "notifUpgradeFinishesDescription": "Войска, герои, питомцы, заклинания, снаряжение и здания.",
-  "notifSupportReminderDescription": "Ежемесячное напоминание поддержать ClashKing.",
-  "notifDevicePushSetup": "Настройка push-уведомлений устройства",
-  "notifAccountScope": "Область аккаунта",
-  "notifTestNotification": "Тестовое уведомление",
-  "settingsAppIcon": "Иконка приложения",
-  "settingsChanging": "Изменение...",
-  "settingsAddWarWidget": "Добавить виджет войны",
-  "settingsWarWidgetLinkClanFirst": "Сначала привяжите аккаунт в клане",
-  "settingsWarWidgetClanCount": "Доступно кланов: {count}",
-  "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Аккаунты, привязанные к боту, и данные Discord",
-  "settingsDiscordSyncSubtitle": "Синхронизация аккаунтов, привязанных к боту, и данных Discord",
-  "settingsConnected": "Подключено",
-  "settingsClashKingAccount": "Аккаунт ClashKing",
-  "settingsEmailConnectedSubtitle": "Вход по email подключён",
-  "settingsEmailRecoverySubtitle": "Добавьте вход по email для восстановления аккаунта",
-  "settingsFeatureRequestsTitle": "Запросы функций",
-  "playerOpenInGame": "Открыть в игре",
-  "playerBookmarkRemove": "Удалить закладку игрока",
-  "playerBookmarkAdd": "Добавить игрока в закладки",
-  "playerBestTrophies": "Лучшие трофеи",
-  "clanLoadFailed": "Не удалось загрузить клан.",
-  "gameItemLevels": "Уровни",
-  "resourceDarkElixir": "Тёмный эликсир",
-  "resourceBuilderElixir": "Эликсир строителя",
-  "resourceBuilderGold": "Золото строителя",
-  "resourceElixir": "Elixir",
-  "resourceGold": "Золото",
-  "resourceGlowyOre": "Сияющая руда",
-  "resourceStarryOre": "Звёздная руда",
-  "resourceShinyOre": "Блестящая руда",
-  "resourceGeneric": "Ресурс",
-  "seasonStatsGoldGrabbed": "Добыто золота",
-  "seasonStatsActivity": "Активность",
-  "seasonStatsAttackWins": "Победы в атаке",
-  "seasonStatsTrophies": "Трофеи сезона",
-  "todoSearchAccountsHint": "Поиск аккаунтов",
-  "generalClearSearch": "Очистить поиск",
-  "clanCapitalAvgRewards": "Средние награды",
-  "clanCapitalAvgDistrictsPerWeek": "Средн. районов/неделю",
-  "clanCapitalTopAttackers": "Лучшие атакующие",
-  "clanCapitalPlayersTracked": "Отслеживается игроков: {count}",
-  "clanCapitalDefenseOverTime": "Защита со временем",
-  "clanCapitalDistrictsTracked": "Отслеживается районов: {count}",
-  "clanCapitalSelectedRaid": "Выбранный рейд",
-  "generalSummary": "Сводка",
-  "generalBreakdown": "Разбивка",
-  "clanPointsTitle": "Очки клана",
-  "clanBuilderBasePoints": "Очки базы строителя",
-  "clanType": "Тип клана",
-  "clanRequiredTownHall": "Требуемая Ратуша",
-  "clanRequiredTownHallOnly": "Только {level}+",
-  "clanCapitalPoints": "Очки столицы",
-  "todoAllAccounts": "Все аккаунты",
-  "todoCombinedAcrossAccounts": "Общий список дел по вашим аккаунтам",
-  "todoPreviewAccount": "Предпросмотр аккаунта",
-  "todoLastActiveUnavailable": "Последняя активность недоступна",
-  "todoActiveRelative": "Активен {time}",
-  "@todoActiveRelative": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "todoCompleteLower": "завершено",
-  "todoPointsLeftShort": "осталось очков: {points}",
-  "@todoPointsLeftShort": {
-    "placeholders": {
-      "points": {
-        "type": "String"
-      }
-    }
-  },
-  "todoItemsLeftShort": "осталось: {count}",
-  "@todoItemsLeftShort": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAllCaughtUpForNow": "Пока всё выполнено",
-  "todoEventEndsIn": "Заканчивается через {duration}",
-  "@todoEventEndsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoEventStartsIn": "Начинается через {duration}",
-  "@todoEventStartsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoRemainingUpgradeTooltip": "Нажмите, чтобы увидеть оставшуюся стоимость и время улучшения",
-  "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Пролистайте обновление июня 2026",
-  "sideRankingsTitle": "Рейтинги",
-  "sideRankingsSubtitle": "Официальные таблицы лидеров и эндпоинты ClashKing.",
-  "sideRankingsLoadError": "Не удалось загрузить официальные рейтинги.",
-  "sideRankingsEmptyTitle": "Рейтинги не вернулись",
-  "sideRankingsEmptyBody": "Попробуйте другую таблицу лидеров или локацию.",
-  "sideRankingsMockups": "Макеты ClashKing",
-  "sideStatsTitle": "Статистика",
-  "sideStatsSubtitle": "Статистика таблиц лидеров из официальных поверхностей Clash API.",
-  "sideStatsLoadError": "Не удалось загрузить статистику таблицы лидеров.",
-  "sideTopScore": "Лучший результат",
-  "sideTop200Avg": "Среднее топ-200",
-  "sideBasesArmiesTitle": "Базы и армии",
-  "sideBasesArmiesSubtitle": "Макеты и ссылки на армии, сохранённые в Discord.",
-  "sideBotSyncTarget": "Цель синхронизации бота",
-  "sideBotSyncTargetBody": "Бот уже сохраняет базы и армии в профиль Discord. Эта страница готова для синхронизированных данных.",
-  "sideSavedBases": "Сохранённые базы",
-  "sideWarBaseSlots": "Слоты военных баз",
-  "sideWarBaseSlotsBody": "Ратуша, тип базы, ссылка и последнее обновление.",
-  "sideLegendBaseSlots": "Слоты легендарных баз",
-  "sideLegendBaseSlotsBody": "Быстрое копирование и привязка к аккаунту.",
-  "sideSavedArmies": "Сохранённые армии",
-  "sideArmyLinks": "Ссылки на армии",
-  "sideArmyLinksBody": "Состав, заклинания, осадные машины, заметки и ссылка для обмена.",
-  "sideGameAssetsTitle": "Игровые ресурсы",
-  "sideGameAssetsSubtitle": "Размещённые ассеты ClashKing, сгруппированные по папкам.",
-  "sideNoLinkedPlayersTitle": "Привязанные игроки не загружены",
-  "sideNoLinkedPlayersBody": "Добавьте или обновите привязанные аккаунты, чтобы предварительно заполнить данные лиги.",
-  "sideReadyNow": "Готово сейчас",
-  "sideDays": "{count} дн.",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "осталось: {shiny} блестящей, {glowy} сияющей, {starry} звёздной",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Блестящая руда",
-  "sideGlowyOre": "Сияющая руда",
-  "sideStarryOre": "Звёздная руда",
-  "sideDailyBonusAdjustment": "Корректировка ежедневного бонуса",
-  "sideExtraShiny": "Доп. блестящая",
-  "sideExtraGlowy": "Доп. сияющая",
-  "sideExtraStarry": "Доп. звёздная",
-  "sideZapQuakeTitle": "{zaps} молний + 1 землетрясение",
-  "@sideZapQuakeTitle": {
-    "placeholders": {
-      "zaps": {
-        "type": "int"
-      }
-    }
-  },
-  "sideZapQuakeSubtitle": "{quakeDamage} урона землетрясением, {lightningDamage} за молнию",
-  "@sideZapQuakeSubtitle": {
-    "placeholders": {
-      "quakeDamage": {
-        "type": "String"
-      },
-      "lightningDamage": {
-        "type": "String"
-      }
-    }
-  },
-  "sideBuildingHp": "HP здания",
-  "sideLightningLevel": "Уровень молнии",
-  "sideEarthquakeLevel": "Уровень землетрясения",
-  "sideWithoutEarthquake": "Без землетрясения",
-  "sideLightningCount": "{count} молний",
-  "@sideLightningCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideFireballQuakeTitle": "Огненный шар + 1 землетрясение",
-  "sideAddSupportDamage": "Добавить дополнительный урон",
-  "sideFireballQuakeSubtitle": "{fireballDamage} урона огненным шаром, {hpLeft} HP осталось после землетрясения",
-  "@sideFireballQuakeSubtitle": {
-    "placeholders": {
-      "fireballDamage": {
-        "type": "String"
-      },
-      "hpLeft": {
-        "type": "String"
-      }
-    }
-  },
-  "sideFireballLevel": "Уровень огненного шара",
-  "sideQuakePressure": "Давление землетрясения",
-  "sideQuakeSpellCount": "{count} закл. землетрясения",
-  "@sideQuakeSpellCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideLocation": "Локация",
-  "sideFilter": "Фильтр",
-  "sideRefresh": "Обновить",
-  "sideOfficialClashLeaderboard": "Официальная таблица лидеров Clash",
-  "sideAllTownHallsShort": "Все ТХ",
-  "sideOwned": "Имеется",
-  "sideTarget": "Цель",
-  "sideDailyValue": "в день {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "sideDecrease": "Уменьшить",
-  "sideIncrease": "Увеличить",
-  "sideLevel": "Уровень {level}",
-  "@sideLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "sidePopularPlayers": "Игроки",
-  "sidePopularClans": "Кланы",
-  "sidePopularWarsCwl": "Войны и CWL",
-  "rankingPlayerTrophies": "Трофеи игроков",
-  "rankingPlayerTrophiesHeading": "Рейтинг игроков по трофеям",
-  "rankingPlayerBuilder": "База строителя игроков",
-  "rankingPlayerBuilderHeading": "Рейтинг игроков по базе строителя",
-  "rankingClanTrophies": "Трофеи кланов",
-  "rankingClanTrophiesHeading": "Рейтинг кланов по трофеям",
-  "rankingClanBuilder": "База строителя кланов",
-  "rankingClanBuilderHeading": "Рейтинг кланов по базе строителя",
-  "rankingClanCapital": "Столица клана",
-  "rankingClanCapitalHeading": "Рейтинг столицы кланов",
-  "assetFolderTroops": "Войска",
-  "assetFolderSpells": "Заклинания",
-  "assetFolderHeroes": "Герои",
-  "assetFolderEquipment": "Снаряжение",
-  "assetFolderLeagues": "Лиги",
-  "assetFolderResources": "Ресурсы",
-  "assetFolderStickers": "Стикеры",
-  "upgradeSectionHeroes": "Герои",
-  "upgradeSectionTroops": "Войска",
-  "upgradeSectionSpells": "Заклинания",
-  "upgradeSectionPets": "Питомцы",
-  "upgradeSectionEquipment": "Снаряжение",
-  "sideMockupSource": "Источник",
-  "sideMockupMode": "Режим",
-  "sideMockupPreview": "Предпросмотр",
-  "sideMockupRows": "Строки",
-  "sideMockupRowsValue": "5 макетов",
-  "endpointLeagueTop200": "Топ-200 лиги",
-  "endpointLeagueTop200Preview": "Легендарная лига · 5 742 трофея",
-  "endpointTownhallTop200": "Топ-200 Ратуш",
-  "endpointTownhallTop200Preview": "ТХ17 · Глобальная доска игроков",
-  "endpointClanDonations": "Пожертвования клана",
-  "endpointClanDonationsPreview": "США · недельные итоги кланов",
-  "endpointClanWarWins": "Победы клана в войнах",
-  "endpointClanWarWinsPreview": "Международно · победы в войнах за всё время",
-  "endpointTop200ArmyUsage": "Использование армий топ-200",
-  "endpointTop200ArmyUsagePreview": "Журналы боёв · использование войск и заклинаний",
-  "endpointStateTop200": "Топ-200",
-  "endpointStateWeekly": "Еженедельно",
-  "endpointStateWins": "Победы",
-  "endpointStateUsage": "Использование",
-  "notifGroupBattles": "Битвы",
-  "notifGroupReminders": "Напоминания",
-  "notifGroupSupport": "Поддержка",
-  "notifGroupProgress": "Прогресс",
-  "notifLeagueDefense": "Защита в лиге",
-  "notifLeagueDefenseResult": "Результат защиты в лиге",
-  "notifLeagueTriple": "Три звезды в лиге",
-  "notifLeagueAttackBody": "Lord Clasher атаковал {player} • {percent}% • {stars} звёзд • {league}",
-  "@notifLeagueAttackBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "league": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarDefense": "Защита в войне",
-  "notifWarAttackOnTh": "Атака в войне на ТХ{th}",
-  "@notifWarAttackOnTh": {
-    "placeholders": {
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarDefenseBody": "{opponentClan} атаковал {player} • {percent}% • {stars} звёзд • защита {clan}",
-  "@notifWarDefenseBody": {
-    "placeholders": {
-      "opponentClan": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarFeed5v5": "Лента войны 5v5",
-  "notifWarAttackResult": "Результат атаки в войне",
-  "notifWarAttackResultBody": "{clan} атаковал Pine Riders ТХ{th} • 100% • 3 звезды",
-  "@notifWarAttackResultBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarMatched": "Война подобрана",
-  "notifWarMatchedBody": "{clan} подобран против Pine Riders. День подготовки начался.",
-  "@notifWarMatchedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarStarted": "Война началась",
-  "notifBattleDayStarted": "День битвы начался",
-  "notifWarStartedBody": "{clan} против Pine Riders уже идёт. Удачи.",
-  "@notifWarStartedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarEnded": "Война завершена",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Итоговые результаты доступны.",
-  "@notifWarEndedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarReminder1h": "Напоминание о войне: 1 ч",
-  "notifWarReminder30m": "Напоминание о войне: 30 мин",
-  "notifWarReminder15m": "Напоминание о войне: 15 мин",
-  "notifOneHourLeft": "Остался 1 час",
-  "notifThirtyMinutesLeft": "Осталось 30 минут",
-  "notifFifteenMinutesLeft": "Осталось 15 минут",
-  "notifRemainingWarAttacksBody": "У {player} остались атаки в войне. {time}.",
-  "@notifRemainingWarAttacksBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "notifStarted": "{name} началось",
-  "@notifStarted": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifClanGamesPointsBody": "{clan} может начать зарабатывать очки {name}.",
-  "@notifClanGamesPointsBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifCwlPreparationBody": "{clan} может начать подготовку к Лиге войн кланов.",
-  "@notifCwlPreparationBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifRaidWeekendBody": "{clan} может начать атаки в рейдах столицы.",
-  "@notifRaidWeekendBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSeasonStart": "Начало сезона",
-  "notifNewSeasonStarted": "Новый сезон начался",
-  "notifSeasonStartedBody": "Сезон {league} начался для {player}.",
-  "@notifSeasonStartedBody": {
-    "placeholders": {
-      "league": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSpecialEvent": "Особое событие",
-  "notifNewEventLive": "Новое событие уже доступно",
-  "notifNewClashEventBody": "Доступно новое событие Clash.",
-  "notifSupportClashKing": "Поддержать ClashKing",
-  "notifMonthlySupportBody": "Ежемесячная поддержка помогает сохранять ClashKing доступным и улучшать его. Спасибо.",
-  "notifUpgradeFinished": "Улучшение завершено",
-  "notifUpgradeReadyTitle": "{name} готово",
-  "@notifUpgradeReadyTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifUpgradeCompleteBody": "Уровень {level} завершён для {player}. Улучшение завершено.",
-  "@notifUpgradeCompleteBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "clanSearchLoadFailed": "Не удалось загрузить данные клана: {error}",
-  "@clanSearchLoadFailed": {
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
     "placeholders": {
       "error": {
         "type": "String"
       }
     }
   },
-  "appIconDefault": "По умолчанию",
-  "appIconChristmas": "Рождество",
-  "appIconBlackWhite": "Чёрно-белая",
-  "appIconDarkMode": "Тёмный режим",
-  "generalMembersCount": "{count} участников",
-  "@generalMembersCount": {
+  "warStatsFilterFailed": "Не удалось загрузить отфильтрованные данные: {error}.",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "generalBookmarked": "добавлено в закладки",
-  "clanLevelValue": "уровень {level}",
-  "@clanLevelValue": {
+  "warStatsExportFailed": "Не удалось экспортировать: {error}.",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
     "placeholders": {
-      "level": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "cwlRankShort": "Место {rank}",
-  "@cwlRankShort": {
-    "placeholders": {
-      "rank": {
-        "type": "int"
-      }
-    }
+  "exportLabelPlayer": "Игрок",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
   },
-  "cwlRoundShort": "Раунд {round}",
-  "@cwlRoundShort": {
-    "placeholders": {
-      "round": {
-        "type": "int"
-      }
-    }
+  "exportLabelFormat": "Формат",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
   },
-  "gameTownHallShortLevel": "TH{level}",
-  "@gameTownHallShortLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
+  "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
   },
-  "faqSupercellFanContentPolicyLink": "Политика фан-контента Supercell"
+  "exportLabelIncludes": "Включает",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "Статистика, атаки, анализ TH",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "Нет доступных пользовательских данных",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "Счета",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "Не удалось загрузить данные игрока.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "Не удалось загрузить данные клана.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  }
 }
