@@ -296,6 +296,9 @@
   "authAccountLinkEmail": "メールアカウントを連携",
   "authAccountAddEmailAuth": "追加のセキュリティとしてメールとパスワード認証をアカウントに追加します。",
   "authAccountEmailLinkedSuccess": "メールアカウントを連携しました！",
+  "authAccountLinkDiscord": "Link Discord Account",
+  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
+  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
   "authEmailVerificationTitle": "メール確認",
   "authEmailVerificationCheckEmail": "メールを確認してください",
   "authEmailVerificationSentTo": "確認メールを次の宛先に送信しました:",
@@ -2134,824 +2137,200 @@
   "gameItemFlying": "飛行",
   "gameItemUpgradeCost": "アップグレード費用",
   "gameItemUpgradeTime": "アップグレード時間",
-  "generalExpand": "拡大する",
-  "generalCollapse": "崩壊",
-  "generalBookmark": "ブックマーク",
-  "generalRemoveBookmark": "ブックマークを削除する",
-  "gameLeague": "リーグ",
-  "clanMembersSearchPlaceholder": "メンバーを検索する",
-  "clanMembersShowTotals": "クランの合計を表示する",
-  "clanMembersHideTotals": "クランの合計を非表示にする",
-  "clanMembersReceivedShort": "受け取った",
-  "clanMembersAverageTh": "平均TH",
-  "warLogSearchPlaceholder": "探索戦争",
-  "warStatsSearchPlaceholder": "選手を検索する",
-  "warStatsCurrentTownHall": "私のTH",
-  "warStatsLast50": "過去50件",
-  "warStatsWars": "戦争",
-  "warStatsSelectSeason": "戦争統計シーズンを選択してください",
-  "warAnalysisToWin": "勝つために",
-  "warAnalysisToLose": "負ける",
-  "warAnalysisNoAttacksLeft": "残りの攻撃はありません",
-  "warAnalysisScenario": "残り {attacks} 攻撃 -> 攻撃ごとに {stars} スター / {percent}% が必要",
-  "warAnalysisImpossibleScenario": "{attacks} 攻撃が残っています -> 不可能 (攻撃ごとに {stars} スター / {percent}%)",
-  "warAttacksSuccessful": "成功した攻撃",
-  "warAttacksFailed": "失敗した攻撃",
-  "warAttacksMissedShort": "逃した",
-  "cwlHistoryTitle": "CWLの歴史",
-  "clanJoinLeaveTab": "参加/脱退",
-  "clanRankingsTab": "ランキング",
-  "clanRankingsSeason": "季節",
-  "clanRankingsSelectSeason": "ランキングシーズンを選択してください",
-  "clanRankingsFilterActivity": "活動",
-  "clanRankingsFilterWar": "戦争",
-  "clanRankingsFilterPoints": "ポイント",
-  "cwlHistoryPreviewBadge": "プレビュー",
-  "cwlHistoryPreviewSubtitle": "CWL エンドポイントが修正されるまでの {clan} モックアップ",
-  "cwlHistoryEmptyTitle": "CWL 履歴はまだありません",
-  "cwlHistoryEmptyBody": "このクランはまだクラン対戦リーグシーズンに参加していません。",
-  "cwlRankTitle": "ランク",
-  "cwlWarsPlayedTitle": "行われた戦争",
-  "playerWarStarsTitle": "戦争のスター",
-  "playerWarPreferenceTitle": "戦争県",
-  "playerDonatedTitle": "寄付しました",
-  "playerReceivedTitle": "受け取った",
-  "playerCapitalTitle": "資本",
-  "playerExpLevelTitle": "経験値レベル",
-  "clanWarWinsTitle": "戦争の勝利",
-  "clanWinStreakTitle": "連勝",
-  "clanBuilderBaseTitle": "ビルダーベース",
-  "clanTypeTitle": "タイプ",
-  "clanWarFrequencyTitle": "戦争",
-  "clanMinTownHallTitle": "分。 TH",
-  "clanMinTrophiesTitle": "分。トロフィー",
-  "clanCapitalHallTitle": "キャピタルホール",
-  "clanDistrictsTitle": "地区",
-  "legendsCountryTitle": "国",
-  "legendsLocalRankTitle": "ローカルランク",
-  "legendsGlobalRankTitle": "グローバルランク",
-  "warWinsTitle": "勝利",
-  "warLossesTitle": "損失",
-  "warDrawsTitle": "ドロー",
-  "capitalRaidStatusOngoing": "進行中",
-  "capitalRaidStatusEnded": "終了しました",
-  "capitalRaidLoot": "戦利品",
-  "capitalRaidRewards": "報酬",
-  "capitalRaidPreviousWeek": "前の週",
-  "capitalRaidNextWeek": "来週",
-  "capitalRaidFilterAttacked": "攻撃されました",
-  "capitalRaidFilterNotAttacked": "攻撃されていない",
-  "capitalRaidFilterLinked": "リンクされたアカウント",
-  "capitalRaidEmptyTitle": "首都襲撃データなし",
-  "capitalRaidEmptyBody": "このクランの首都襲撃の週末が追跡されると、襲撃履歴がここに表示されます。",
-  "capitalRaidEstimated": "推定",
-  "capitalRaidEstimatedTooltip": "まだ公式ではありません: 今週の攻撃と防御のログから推定されます。 Supercell はレイド終了後に実際のメダル数を公開します。",
-  "capitalRaidTrophyPrediction": "予想されるトロフィー",
-  "capitalRaidTrophyPredictionTooltip": "今週のこれまでのパフォーマンスに基づいて、このレイド後のキャピタル リーグのトロフィーを推定します。公式ではありません。",
-  "capitalRaidProjectedLoot": "計画された戦利品",
-  "capitalRaidOneshots": "ワンショット",
-  "capitalRaidFails": "失敗する",
-  "capitalDetailsOffense": "オフェンス",
-  "capitalDetailsDefense": "防衛",
-  "capitalDistrictsSection": "地区",
-  "capitalOpponentsSection": "対戦相手",
-  "capitalAvgAttacksPerDistrict": "地区あたりの平均攻撃数",
-  "capitalAvgLootPerAttack": "平均戦利品/攻撃",
-  "capitalHistorySection": "レイド履歴",
-  "capitalHistoryWeeksTracked": "追跡された週数",
-  "capitalAvgLootPerWeek": "週あたりの平均戦利品",
-  "capitalAvgAttacksPerWeek": "週あたりの平均攻撃数",
-  "capitalBestRaid": "ベストレイド",
-  "capitalWorstRaid": "最悪の襲撃",
-  "capitalHistoryChartTitle": "週間トレンド",
-  "warAttacksDetailsDuration": "間隔",
-  "gameItemRemainingToTownHallMax": "THmaxまで",
-  "gameItemRemainingToGlobalMax": "グローバルマックスまで",
-  "gameItemLevelsLeft": "{count} レベルが残っています",
-  "gameItemOverview": "概要",
-  "gameItemStats": "統計",
-  "gameItemNextUpgrade": "次のアップグレード",
-  "gameItemUpgradePlan": "アップグレードプラン",
-  "gameItemUpgradeDataUnavailable": "アップグレードデータが利用不可",
   "notifScopeAllAccounts": "すべてのアカウント",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
   "notifScopeSelected": "選択済み",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "設定",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "通知",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "アラートを選択し、ローカル テスト プレビューを送信します。",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsLiveActivityTest": "ライブアクティビティテスト",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
   "settingsLiveActivityStart": "テストアクティビティを開始する",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
   "settingsLiveActivityStartSubtitle": "ローカルのクラン対戦プレビューを表示します。",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
   "settingsLiveActivityUpdate": "スコアを更新する",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
   "settingsLiveActivityUpdateSubtitle": "偽の戦争スコアを進めます。",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
   "settingsLiveActivityEnd": "テストアクティビティを終了する",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
   "settingsLiveActivityEndSubtitle": "ローカル プレビューを削除します。",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
   "settingsSupport": "サポート",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "について",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "アカウント",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "サインインしました",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "外観",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "システム",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "このデバイスと一致する",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "ライト",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "暗い",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "選択済み",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "リンクされたアカウントはまだ読み込まれていません。",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "アカウントが選択されていません",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "{count} アカウントが選択されました",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifSelectedAccounts": "選択したアカウント",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
   "searchRecent": "最近の",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "選手",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "クラン",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchFilters": "フィルター",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "searchClear": "クリア",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "データは正常に更新されました",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "データの更新に失敗しました: {error}",
-  "warStatsFilterFailed": "フィルタリングされたデータのロードに失敗しました: {error}",
-  "warStatsExportFailed": "エクスポートに失敗しました: {error}",
-  "exportLabelPlayer": "プレーヤー",
-  "exportLabelFormat": "形式",
-  "exportLabelExcel": "エクセル(.xlsx)",
-  "exportLabelIncludes": "含まれるもの",
-  "exportLabelContent": "ステータス、攻撃、TH分析",
-  "accountNoUserData": "利用可能なユーザーデータがありません",
-  "accountsMenuTitle": "アカウント",
-  "searchErrorPlayerLoadFailed": "プレイヤーデータの読み込みに失敗しました。",
-  "searchErrorClanLoadFailed": "クランデータのロードに失敗しました。",
-  "todoNoMatchingAccounts": "一致するアカウントはありません",
-  "todoNoConfiguredAccounts": "To Do アカウントが設定されていません",
-  "todoNoLinkedAccounts": "リンクされたアカウントはありません",
-  "todoNoAccountsNeedAction": "アクションが必要なアカウントはありません",
-  "todoNoCompletedAccounts": "完了したアカウントはありません",
-  "todoNoBookmarkedAccounts": "ブックマークされたアカウントはありません",
-  "todoTryAnotherSearchOrFilter": "別の検索またはフィルタを試してください。",
-  "clanJoinLeaveNoDataTitle": "参加/離脱データなし",
-  "clanJoinLeaveNoDataBody": "追跡データがロードされると、最近の名簿の動きがここに表示されます。",
-  "clanJoinLeaveNoRecentMovementTitle": "最近の動きはありません",
-  "clanJoinLeaveNoRecentMovementBody": "概要はロードされますが、イベント リストは空です。",
-  "capitalRaidMembersAttackLogFallback": "このレイドウィークエンドではメンバーリストは返されません。代わりに攻撃ログの統計を表示します。",
-  "capitalRaidMembersNoPlayerData": "このレイド週末では、プレイヤーレベルのデータは返されません。 API には地区と対戦相手の合計のみが含まれます。",
-  "capitalRaidMembersNoIndividualData": "このレイドではプレイヤーリストや個別の攻撃は利用できません。",
-  "dashboardNoLinkedAccountsTitle": "リンクされたアカウントはありません",
-  "dashboardNoLinkedAccountsBody": "ここで Clash アカウントをリンクすると、攻撃、イベント、アクティビティが表示されます。",
-  "dashboardNothingPinnedTitle": "まだ何も固定されていません",
-  "dashboardNothingPinnedBody": "[プレーヤー] タブを開き、カードのオプションを展開し、[ホームに To-Do を表示] をオンにして、ここでアカウントを固定します。",
-  "playersNoBookmarkedTitle": "ブックマークされたプレイヤーはまだいません",
-  "playersNoBookmarkedBody": "プレーヤーのプロフィールを開いて、後で使用できるように保存します。",
-  "playersNoLinkedBody": "アカウント設定画面からアカウントを管理します。",
-  "navigationHome": "家",
-  "drawerFollowers": "フォロワー",
-  "drawerFollowersHelp": "確認済みのリンクされたアカウントのいずれかをブックマークした人。",
-  "drawerPopular": "人気のある",
-  "drawerCalculators": "電卓",
-  "drawerSubscription": "サブスクリプション",
-  "drawerUpgradeTracker": "アップグレードトラッカー",
-  "drawerBasesArmies": "基地と軍隊",
-  "drawerGameAssets": "ゲームアセット",
-  "drawerManageAccounts": "アカウントの管理",
-  "playersLinked": "リンク済み",
-  "playersBookmarked": "ブックマーク済み",
-  "searchGlobalHint": "プレイヤーまたはクランを検索する",
-  "tooltipDecreaseMinimumMembers": "最低メンバーを減らす",
-  "tooltipIncreaseMinimumMembers": "最低メンバーを増やす",
-  "tooltipDecreaseMaximumMembers": "最大メンバーを減らす",
-  "tooltipIncreaseMaximumMembers": "最大メンバーを増やす",
-  "tooltipDecreaseMinimumClanPoints": "最低クランポイントを減らす",
-  "tooltipIncreaseMinimumClanPoints": "最低クランポイントを増やす",
-  "tooltipDecreaseMinimumClanLevel": "クランの最低レベルを下げる",
-  "tooltipIncreaseMinimumClanLevel": "クランの最低レベルを上げる",
-  "tooltipShowChart": "チャートを表示",
-  "tooltipShowTable": "テーブルを表示",
-  "tooltipDismissMessage": "メッセージを閉じる",
-  "tooltipShowPassword": "パスワードを表示",
-  "tooltipHidePassword": "パスワードを隠す",
-  "tooltipRemoveAccount": "アカウントを削除する",
-  "popularPlayersTitle": "選手",
-  "popularClansTitle": "クラン",
-  "popularWarsCwlTitle": "戦争とCWL",
-  "popularTitle": "人気のある",
-  "popularSubtitle": "ブックマーク、リンクされたアカウント、およびアクティブな戦争。",
-  "popularEmptyTitle": "人気商品はまだありません",
-  "popularEmptyBody": "プレイヤーとクランをブックマークするか、アカウントをリンクしてこれをシードします。",
-  "calculatorsTitle": "電卓",
-  "calculatorsSubtitle": "鉱石、ザップ震、火球震。",
-  "calculatorOre": "鉱石",
-  "calculatorZapQuake": "ザップ地震",
-  "calculatorFireball": "火の玉",
-  "upgradeTrackerTitle": "アップグレードトラッカー",
-  "upgradeTrackerSubtitle": "残りのアップグレードのコストと時間。",
-  "linkedAccountLabel": "リンクされたアカウント",
-  "noLinkedPlayersLoadedTitle": "リンクされたプレーヤーがロードされていません",
-  "noLinkedPlayersLoadedBody": "リンクされたアカウントを追加または更新して、アップグレードの合計を確認します。",
-  "playerOptionNotificationsTitle": "通知",
-  "playerOptionNotificationsSubtitle": "このアカウントのアラートを受け取ります。",
-  "playerOptionShowTodoHomeTitle": "自宅でやるべきことを表示する",
-  "playerOptionShowTodoHomeSubtitle": "このアカウントの To Do カードをホーム タブに固定します。",
-  "playerOptionShowTodoPageTitle": "ToDoページに表示",
-  "playerOptionShowTodoPageSubtitle": "このアカウントを完全な To-Do リストに含めてください。",
-  "playerOptionShowWarTabTitle": "「戦争」タブに表示",
-  "playerOptionShowWarTabSubtitle": "このアカウントのクランを「戦争」タブに含めます。",
-  "searchCancel": "キャンセル",
-  "bookmarkPlayerLoadFailed": "ブックマークされたプレーヤーのロードに失敗しました。",
-  "warNoLinkedOrBookmarked": "リンクまたはブックマークされたクラン対戦は表示されません。",
-  "warWidgetRefreshData": "戦争データを更新する",
-  "warWidgetNoData": "入手可能な戦争データはありません",
-  "warWidgetLastUpdated": "最終更新日: {time}",
-  "todoEventClanGames": "クランゲーム",
-  "todoEventCwl": "CWL",
-  "todoEventSeasonEnds": "シーズン終了",
-  "todoEventLeagueReset": "リーグリセット",
-  "todoEventRaidWeekend": "レイドウィークエンド",
-  "todoMagicDispatch": "魔法の派遣",
-  "todoMagicDispatchDescription": "タップして ClashKing の最新アップデートを確認してください",
-  "todoUseCodeClashKing": "コード ClashKing を使用する",
-  "todoUseCodeClashKingDescription": "Supercell Store でプロジェクトをサポートしてください",
-  "todoLegendAttacks": "レジェンドの攻撃",
-  "todoWarAttacks": "戦争攻撃",
-  "todoCwlAttacks": "CWL攻撃",
-  "todoRaidAttacks": "襲撃攻撃",
-  "gameSeasonPassShort": "合格",
-  "todoMockMaxedMainName": "マックスメイン",
-  "todoMockMaxedMainSubtitle": "TH17 · アクティブなものすべて",
-  "todoMockMaxedMainStatus": "現在アクティブです · 完全な毎日のチェックリスト",
-  "todoMockLegend5Left": "本日残り5個",
-  "todoMockWar1Left": "残り1個",
-  "todoMockCwl1LeftRound": "このラウンド残り 1 人",
-  "todoMockClanGames2700Left": "残り 2.7,000 ポイント",
-  "todoMockRaid4Left": "残り4個",
-  "todoMockPass850Left": "残り 850 ポイント",
-  "todoMockWarAltName": "戦争代替",
-  "todoMockWarAltSubtitle": "TH15 · 戦争中心",
-  "todoMockWarAltStatus": "18 分前にアクティブ · 戦争と襲撃には注意が必要です",
-  "todoMockWar2Left": "残り2個",
-  "todoMockClanGames900Left": "残り900ポイント",
-  "todoMockRaid1Left": "残り1個",
-  "todoMockLegendPushName": "レジェンドプッシュ",
-  "todoMockLegendPushSubtitle": "TH16・毎日の攻撃",
-  "todoMockLegendPushStatus": "1 時間前にアクティブ · レジェンドとパスの進行状況",
-  "todoMockLegend2Left": "本日残り2個",
-  "todoMockOnPace": "順調に",
-  "todoMockCaughtUpName": "追いついた",
-  "todoMockCaughtUpSubtitle": "TH14 · 開いているタスクはありません",
-  "todoMockCaughtUpStatus": "今日はアクティブです。アクションは必要ありません",
-  "notifChooseAlerts": "アラートの選択",
-  "notifLeagueDefenseDescription": "攻撃者、スター、パーセンテージ、リーグの状況を含む守備結果。",
-  "notifWarAttackOptionsDescription": "戦争攻撃の結果、防御アラート、および 5v5 攻撃フィードのオプション。",
-  "notifWarAlertsDescription": "戦争が始まり、戦闘の日が始まり、戦争が終わりました。",
-  "notifWarRemindersDescription": "戦争が終わる前のカスタムリマインダー。",
-  "notifDefensesAgainstYourBase": "基地に対する防御",
-  "notifDefensesAgainstYourBaseDescription": "このアカウントが防御しているところのみにヒットします。",
-  "notifAllAttacks": "すべての攻撃",
-  "notifAllAttacksDescription": "すべてのヒットは 5 対 5 の戦争でのみ発生します。",
-  "notifThirtyMinutes": "30分",
-  "notifFifteenMinutes": "15分",
-  "notifSendTestNotification": "テスト通知を送信する",
-  "notifScheduledMessage": "予定: {title}",
-  "generalStartDate": "開始日",
-  "generalEndDate": "終了日",
-  "warFiltersAllWars": "すべての戦争",
-  "warFiltersRandomWars": "ランダムウォーズ",
-  "warFiltersCwlWars": "CWLウォーズ",
-  "warFiltersFriendlyWars": "フレンドリーウォーズ",
-  "warType": "戦争タイプ",
-  "warFiltersAnyTownHall": "任意のTH",
-  "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "アタッカーTH",
-  "warDefenderTownHall": "ディフェンダーTH",
-  "warStatsFilterSameTownHallOnly": "同じ市庁舎のみ",
-  "warStatsFilterSameTownHallDescription": "攻撃者と防御者のTHレベルが同じ場合の攻撃のみを表示します",
-  "generalAny": "どれでも",
-  "warStarsWithIcon": "{stars} ⭐",
-  "warStatsFilterMinStars": "最小スター",
-  "warStatsFilterMaxStars": "マックススターズ",
-  "warStatsFilterMinDestructionPercent": "最小破壊率",
-  "warStatsFilterMaxDestructionPercent": "最大破壊率",
-  "warStatsFilterMinPosition": "最小位置",
-  "warStatsFilterMaxPosition": "最大位置",
-  "warStatsFilterFreshAttacksOnly": "フレッシュアタックのみ",
-  "warStatsFilterFreshAttacksDescription": "各拠点の最初の攻撃のみを表示",
-  "warStatsFilterResultLimit": "結果の制限",
-  "generalResultsCount": "{count}の結果",
-  "notifEventsDescription": "クランゲーム、CWL、レイド週末、シーズンイベント。",
-  "notifAnnouncementsDescription": "アプリ内バナーとClashKing更新の今後のプッシュ通知。",
-  "notifUpgradeFinishesDescription": "ユニット、ヒーロー、ペット、呪文、装備、建物。",
-  "notifSupportReminderDescription": "ClashKingを支援する月次リマインダー。",
-  "notifDevicePushSetup": "端末プッシュ設定",
-  "notifAccountScope": "アカウント範囲",
-  "notifTestNotification": "テスト通知",
-  "settingsAppIcon": "アプリアイコン",
-  "settingsChanging": "変更中...",
-  "settingsAddWarWidget": "対戦ウィジェットを追加",
-  "settingsWarWidgetLinkClanFirst": "まずクラン内のアカウントを連携してください",
-  "settingsWarWidgetClanCount": "{count}個のクランが利用可能",
-  "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "ボット連携アカウントとDiscordデータ",
-  "settingsDiscordSyncSubtitle": "ボット連携アカウントとDiscordデータを同期",
-  "settingsConnected": "接続済み",
-  "settingsClashKingAccount": "ClashKingアカウント",
-  "settingsEmailConnectedSubtitle": "メールログインが接続されています",
-  "settingsEmailRecoverySubtitle": "アカウント復旧用にメールログインを追加",
-  "settingsFeatureRequestsTitle": "機能リクエスト",
-  "playerOpenInGame": "ゲーム内で開く",
-  "playerBookmarkRemove": "プレイヤーのブックマークを削除",
-  "playerBookmarkAdd": "プレイヤーをブックマーク",
-  "playerBestTrophies": "最高トロフィー",
-  "clanLoadFailed": "クランの読み込みに失敗しました。",
-  "gameItemLevels": "レベル",
-  "resourceDarkElixir": "ダークエリクサー",
-  "resourceBuilderElixir": "大工エリクサー",
-  "resourceBuilderGold": "大工ゴールド",
-  "resourceElixir": "Elixir",
-  "resourceGold": "ゴールド",
-  "resourceGlowyOre": "グロー鉱石",
-  "resourceStarryOre": "スター鉱石",
-  "resourceShinyOre": "シャイニー鉱石",
-  "resourceGeneric": "資源",
-  "seasonStatsGoldGrabbed": "奪ったゴールド",
-  "seasonStatsActivity": "アクティビティ",
-  "seasonStatsAttackWins": "攻撃勝利",
-  "seasonStatsTrophies": "シーズントロフィー",
-  "todoSearchAccountsHint": "アカウントを検索",
-  "generalClearSearch": "検索をクリア",
-  "clanCapitalAvgRewards": "平均報酬",
-  "clanCapitalAvgDistrictsPerWeek": "平均地区/週",
-  "clanCapitalTopAttackers": "上位攻撃者",
-  "clanCapitalPlayersTracked": "{count}人のプレイヤーを追跡中",
-  "clanCapitalDefenseOverTime": "時間別防衛",
-  "clanCapitalDistrictsTracked": "{count}地区を追跡中",
-  "clanCapitalSelectedRaid": "選択中のレイド",
-  "generalSummary": "概要",
-  "generalBreakdown": "内訳",
-  "clanPointsTitle": "クランポイント",
-  "clanBuilderBasePoints": "大工の拠点ポイント",
-  "clanType": "クランタイプ",
-  "clanRequiredTownHall": "必要タウンホール",
-  "clanRequiredTownHallOnly": "{level}+のみ",
-  "clanCapitalPoints": "クランの都ポイント",
-  "todoAllAccounts": "すべてのアカウント",
-  "todoCombinedAcrossAccounts": "あなたのアカウント全体の統合To-do",
-  "todoPreviewAccount": "プレビューアカウント",
-  "todoLastActiveUnavailable": "最終アクティブは利用できません",
-  "todoActiveRelative": "{time}アクティブ",
-  "@todoActiveRelative": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "todoCompleteLower": "完了",
-  "todoPointsLeftShort": "残り{points}ポイント",
-  "@todoPointsLeftShort": {
-    "placeholders": {
-      "points": {
-        "type": "String"
-      }
-    }
-  },
-  "todoItemsLeftShort": "残り{count}",
-  "@todoItemsLeftShort": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAllCaughtUpForNow": "今のところすべて完了",
-  "todoEventEndsIn": "{duration}後に終了",
-  "@todoEventEndsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoEventStartsIn": "{duration}後に開始",
-  "@todoEventStartsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoRemainingUpgradeTooltip": "タップして残りのアップグレード費用と時間を表示",
-  "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "タップして2026年6月アップデートを見る",
-  "sideRankingsTitle": "ランキング",
-  "sideRankingsSubtitle": "公式リーダーボードとClashKingエンドポイント。",
-  "sideRankingsLoadError": "公式ランキングを読み込めませんでした。",
-  "sideRankingsEmptyTitle": "ランキングが返されませんでした",
-  "sideRankingsEmptyBody": "別のリーダーボードまたは場所を試してください。",
-  "sideRankingsMockups": "ClashKingモックアップ",
-  "sideStatsTitle": "統計",
-  "sideStatsSubtitle": "公式Clash API面からのリーダーボード統計。",
-  "sideStatsLoadError": "リーダーボード統計を読み込めませんでした。",
-  "sideTopScore": "最高スコア",
-  "sideTop200Avg": "Top 200平均",
-  "sideBasesArmiesTitle": "基地と編成",
-  "sideBasesArmiesSubtitle": "Discordに保存されたレイアウトと編成リンク。",
-  "sideBotSyncTarget": "ボット同期先",
-  "sideBotSyncTargetBody": "ボットはすでに基地と編成をDiscordプロフィールに保存しています。このページはその同期データに対応する準備ができています。",
-  "sideSavedBases": "保存済み基地",
-  "sideWarBaseSlots": "対戦基地スロット",
-  "sideWarBaseSlotsBody": "タウンホール、基地タイプ、リンク、最終更新。",
-  "sideLegendBaseSlots": "レジェンド基地スロット",
-  "sideLegendBaseSlotsBody": "クイックコピーとアカウント紐付け。",
-  "sideSavedArmies": "保存済み編成",
-  "sideArmyLinks": "編成リンク",
-  "sideArmyLinksBody": "構成、呪文、突破兵器、メモ、共有リンク。",
-  "sideGameAssetsTitle": "ゲーム素材",
-  "sideGameAssetsSubtitle": "フォルダーごとに分類されたホスト済みClashKing素材。",
-  "sideNoLinkedPlayersTitle": "連携済みプレイヤーが読み込まれていません",
-  "sideNoLinkedPlayersBody": "リーグデータを事前入力するには、連携済みアカウントを追加または更新してください。",
-  "sideReadyNow": "今すぐ準備完了",
-  "sideDays": "{count}日",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "残り シャイニー{shiny}、グロー{glowy}、スター{starry}",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "シャイニー鉱石",
-  "sideGlowyOre": "グロー鉱石",
-  "sideStarryOre": "スター鉱石",
-  "sideDailyBonusAdjustment": "デイリーボーナス調整",
-  "sideExtraShiny": "追加シャイニー",
-  "sideExtraGlowy": "追加グロー",
-  "sideExtraStarry": "追加スター",
-  "sideZapQuakeTitle": "ライトニング{zaps}個 + アースクエイク1個",
-  "@sideZapQuakeTitle": {
-    "placeholders": {
-      "zaps": {
-        "type": "int"
-      }
-    }
-  },
-  "sideZapQuakeSubtitle": "アースクエイクダメージ {quakeDamage}、ライトニング1個あたり {lightningDamage}",
-  "@sideZapQuakeSubtitle": {
-    "placeholders": {
-      "quakeDamage": {
-        "type": "String"
-      },
-      "lightningDamage": {
-        "type": "String"
-      }
-    }
-  },
-  "sideBuildingHp": "建物HP",
-  "sideLightningLevel": "ライトニングレベル",
-  "sideEarthquakeLevel": "アースクエイクレベル",
-  "sideWithoutEarthquake": "アースクエイクなし",
-  "sideLightningCount": "ライトニング{count}個",
-  "@sideLightningCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideFireballQuakeTitle": "ファイアボール + アースクエイク1個",
-  "sideAddSupportDamage": "サポートダメージを追加",
-  "sideFireballQuakeSubtitle": "ファイアボールダメージ {fireballDamage}、アースクエイク後の残りHP {hpLeft}",
-  "@sideFireballQuakeSubtitle": {
-    "placeholders": {
-      "fireballDamage": {
-        "type": "String"
-      },
-      "hpLeft": {
-        "type": "String"
-      }
-    }
-  },
-  "sideFireballLevel": "ファイアボールレベル",
-  "sideQuakePressure": "アースクエイク圧力",
-  "sideQuakeSpellCount": "アースクエイク呪文 {count}個",
-  "@sideQuakeSpellCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideLocation": "場所",
-  "sideFilter": "フィルター",
-  "sideRefresh": "更新",
-  "sideOfficialClashLeaderboard": "公式Clashリーダーボード",
-  "sideAllTownHallsShort": "すべてのTH",
-  "sideOwned": "所有済み",
-  "sideTarget": "目標",
-  "sideDailyValue": "毎日 {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "sideDecrease": "減らす",
-  "sideIncrease": "増やす",
-  "sideLevel": "レベル {level}",
-  "@sideLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "sidePopularPlayers": "プレイヤー",
-  "sidePopularClans": "クラン",
-  "sidePopularWarsCwl": "対戦とCWL",
-  "rankingPlayerTrophies": "プレイヤートロフィー",
-  "rankingPlayerTrophiesHeading": "プレイヤートロフィーランキング",
-  "rankingPlayerBuilder": "プレイヤー大工",
-  "rankingPlayerBuilderHeading": "プレイヤー大工の拠点ランキング",
-  "rankingClanTrophies": "クラントロフィー",
-  "rankingClanTrophiesHeading": "クラントロフィーランキング",
-  "rankingClanBuilder": "クラン大工",
-  "rankingClanBuilderHeading": "クラン大工の拠点ランキング",
-  "rankingClanCapital": "クランの都",
-  "rankingClanCapitalHeading": "クランの都ランキング",
-  "assetFolderTroops": "ユニット",
-  "assetFolderSpells": "呪文",
-  "assetFolderHeroes": "ヒーロー",
-  "assetFolderEquipment": "装備",
-  "assetFolderLeagues": "リーグ",
-  "assetFolderResources": "資源",
-  "assetFolderStickers": "ステッカー",
-  "upgradeSectionHeroes": "ヒーロー",
-  "upgradeSectionTroops": "ユニット",
-  "upgradeSectionSpells": "呪文",
-  "upgradeSectionPets": "ペット",
-  "upgradeSectionEquipment": "装備",
-  "sideMockupSource": "ソース",
-  "sideMockupMode": "モード",
-  "sideMockupPreview": "プレビュー",
-  "sideMockupRows": "行",
-  "sideMockupRowsValue": "5件のモックアップ",
-  "endpointLeagueTop200": "リーグTop 200",
-  "endpointLeagueTop200Preview": "レジェンドリーグ · 5,742トロフィー",
-  "endpointTownhallTop200": "タウンホールTop 200",
-  "endpointTownhallTop200Preview": "TH17 · グローバルプレイヤーボード",
-  "endpointClanDonations": "クラン寄付",
-  "endpointClanDonationsPreview": "アメリカ合衆国 · 週次クラン合計",
-  "endpointClanWarWins": "クラン対戦勝利",
-  "endpointClanWarWinsPreview": "インターナショナル · 全期間の対戦勝利",
-  "endpointTop200ArmyUsage": "Top 200編成使用率",
-  "endpointTop200ArmyUsagePreview": "バトルログ · ユニットと呪文の使用率",
-  "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "週間",
-  "endpointStateWins": "勝利",
-  "endpointStateUsage": "使用率",
-  "notifGroupBattles": "バトル",
-  "notifGroupReminders": "リマインダー",
-  "notifGroupSupport": "サポート",
-  "notifGroupProgress": "進行状況",
-  "notifLeagueDefense": "リーグ防衛",
-  "notifLeagueDefenseResult": "リーグ防衛結果",
-  "notifLeagueTriple": "リーグ3つ星",
-  "notifLeagueAttackBody": "Lord Clasherが{player}を攻撃 • {percent}% • {stars}星 • {league}",
-  "@notifLeagueAttackBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "league": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarDefense": "対戦防衛",
-  "notifWarAttackOnTh": "TH{th}への対戦攻撃",
-  "@notifWarAttackOnTh": {
-    "placeholders": {
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarDefenseBody": "{opponentClan}が{player}を攻撃 • {percent}% • {stars}星 • {clan}防衛",
-  "@notifWarDefenseBody": {
-    "placeholders": {
-      "opponentClan": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarFeed5v5": "5v5対戦フィード",
-  "notifWarAttackResult": "対戦攻撃結果",
-  "notifWarAttackResultBody": "{clan}がPine Riders TH{th}を攻撃 • 100% • 3星",
-  "@notifWarAttackResultBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarMatched": "対戦がマッチしました",
-  "notifWarMatchedBody": "{clan}がPine Ridersとマッチしました。準備日が始まりました。",
-  "@notifWarMatchedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarStarted": "対戦開始",
-  "notifBattleDayStarted": "戦闘日開始",
-  "notifWarStartedBody": "{clan} vs Pine Ridersが開始されました。幸運を。",
-  "@notifWarStartedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarEnded": "対戦終了",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders。最終結果が利用可能です。",
-  "@notifWarEndedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarReminder1h": "対戦リマインダー: 1時間",
-  "notifWarReminder30m": "対戦リマインダー: 30分",
-  "notifWarReminder15m": "対戦リマインダー: 15分",
-  "notifOneHourLeft": "残り1時間",
-  "notifThirtyMinutesLeft": "残り30分",
-  "notifFifteenMinutesLeft": "残り15分",
-  "notifRemainingWarAttacksBody": "{player}には対戦攻撃が残っています。{time}。",
-  "@notifRemainingWarAttacksBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "notifStarted": "{name}が開始しました",
-  "@notifStarted": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifClanGamesPointsBody": "{clan}は{name}ポイントを獲得し始められます。",
-  "@notifClanGamesPointsBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifCwlPreparationBody": "{clan}はクラン対戦リーグの準備を開始できます。",
-  "@notifCwlPreparationBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifRaidWeekendBody": "{clan}はクランの都レイド攻撃を開始できます。",
-  "@notifRaidWeekendBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSeasonStart": "シーズン開始",
-  "notifNewSeasonStarted": "新シーズンが開始しました",
-  "notifSeasonStartedBody": "{player}の{league}シーズンが開始しました。",
-  "@notifSeasonStartedBody": {
-    "placeholders": {
-      "league": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSpecialEvent": "特別イベント",
-  "notifNewEventLive": "新しいイベントが開催中",
-  "notifNewClashEventBody": "新しいClashイベントが利用可能です。",
-  "notifSupportClashKing": "ClashKingをサポート",
-  "notifMonthlySupportBody": "毎月のサポートはClashKingの提供と改善に役立ちます。ありがとうございます。",
-  "notifUpgradeFinished": "アップグレード完了",
-  "notifUpgradeReadyTitle": "{name}の準備ができました",
-  "@notifUpgradeReadyTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifUpgradeCompleteBody": "{player}のレベル{level}が完了しました。アップグレード完了。",
-  "@notifUpgradeCompleteBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "clanSearchLoadFailed": "クランデータの読み込みに失敗しました: {error}",
-  "@clanSearchLoadFailed": {
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
     "placeholders": {
       "error": {
         "type": "String"
       }
     }
   },
-  "appIconDefault": "デフォルト",
-  "appIconChristmas": "クリスマス",
-  "appIconBlackWhite": "白黒",
-  "appIconDarkMode": "ダークモード",
-  "generalMembersCount": "{count}人のメンバー",
-  "@generalMembersCount": {
+  "warStatsFilterFailed": "フィルタリングされたデータのロードに失敗しました: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "generalBookmarked": "ブックマーク済み",
-  "clanLevelValue": "レベル {level}",
-  "@clanLevelValue": {
+  "warStatsExportFailed": "エクスポートに失敗しました: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
     "placeholders": {
-      "level": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "cwlRankShort": "順位 {rank}",
-  "@cwlRankShort": {
-    "placeholders": {
-      "rank": {
-        "type": "int"
-      }
-    }
+  "exportLabelPlayer": "プレーヤー",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
   },
-  "cwlRoundShort": "ラウンド {round}",
-  "@cwlRoundShort": {
-    "placeholders": {
-      "round": {
-        "type": "int"
-      }
-    }
+  "exportLabelFormat": "形式",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
   },
-  "gameTownHallShortLevel": "TH{level}",
-  "@gameTownHallShortLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
+  "exportLabelExcel": "エクセル(.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
   },
-  "faqSupercellFanContentPolicyLink": "Supercellファンコンテンツポリシー"
+  "exportLabelIncludes": "含まれるもの",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "ステータス、攻撃、TH分析",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "利用可能なユーザーデータがありません",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "アカウント",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "プレイヤーデータの読み込みに失敗しました。",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "クランデータのロードに失敗しました。",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  }
 }
