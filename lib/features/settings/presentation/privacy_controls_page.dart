@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/auth/presentation/login_page.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -136,6 +138,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
 
   Future<void> _confirmDeletion() async {
     final authService = context.read<AuthService>();
+    final cocAccountService = context.read<CocAccountService>();
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -161,8 +164,11 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
     try {
       await authService.deleteAccount();
       if (!mounted) return;
-      Navigator.of(context).pop();
-      _showSnack('Account deletion requested.');
+      cocAccountService.clearAccountData();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute<void>(builder: (_) => const LoginPage()),
+        (_) => false,
+      );
     } catch (_) {
       await _contactSupport();
       _showSnack(

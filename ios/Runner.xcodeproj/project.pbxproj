@@ -24,6 +24,7 @@
 		9A675714ABAFB7C9BEEC31DE /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054D30A0554238A3C7EB5E8A /* Pods_Runner.framework */; };
 		A2B64D9F7CE14B7D8F5A2B41 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A2B64D9E7CE14B7D8F5A2B41 /* PrivacyInfo.xcprivacy */; };
 		D5DE647240321F99039942E8 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8040D707CD9DBBB4887858DA /* Pods_RunnerTests.framework */; };
+		D4C0A11A7F2E4C43B3F19A01 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D4C0A11A7F2E4C43B3F19A02 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,7 @@
 		AE3F04A64263CBA122A97C3B /* Runner.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		C38D3F5414C7066A0EBE0C3C /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		C46F666A08397DF7912E16DF /* WarWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WarWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4C0A11A7F2E4C43B3F19A02 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F90C4DE9360D57C8352F6FD8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,6 +141,7 @@
 				99E223143FC70BD5897F9C2C /* WarWidget.swift */,
 				F90C4DE9360D57C8352F6FD8 /* Info.plist */,
 				4F456D6968423C7C52694F65 /* WarWidget.entitlements */,
+				D4C0A11A7F2E4C43B3F19A02 /* PrivacyInfo.xcprivacy */,
 			);
 			path = WarWidget;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4C0A11A7F2E4C43B3F19A01 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -95,8 +95,12 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   void initState() {
     super.initState();
-    unawaited(_loadPreferences());
-    unawaited(_loadPushState());
+    unawaited(_initializeSettings());
+  }
+
+  Future<void> _initializeSettings() async {
+    await _loadPreferences();
+    await _loadPushState();
   }
 
   Future<void> _loadPreferences() async {
@@ -105,7 +109,8 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     setState(() {
       final enabledList = prefs.getStringList('${_kPrefsPrefix}enabled_types');
       _notificationsEnabled =
-          prefs.getBool('${_kPrefsPrefix}notifications_enabled') ?? true;
+          prefs.getBool(PushNotificationService.notificationsEnabledPrefsKey) ??
+          true;
       if (enabledList != null) {
         _enabledTypes
           ..clear()
@@ -202,7 +207,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     final prefs = await SharedPreferences.getInstance();
     await Future.wait([
       prefs.setBool(
-        '${_kPrefsPrefix}notifications_enabled',
+        PushNotificationService.notificationsEnabledPrefsKey,
         _notificationsEnabled,
       ),
       prefs.setStringList(
@@ -332,7 +337,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   };
 
   Future<void> _loadPushState() async {
-    final result = await PushNotificationService.instance.initialize();
+    final result = _notificationsEnabled
+        ? await PushNotificationService.instance.initialize()
+        : PushNotificationService.instance.lastResult;
     final tokenPreview = await PushNotificationService.instance.tokenPreview();
     if (!mounted) return;
     setState(() {
@@ -777,17 +784,24 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     }
   }
 
-  void _setNotificationsEnabled(bool value) {
+  Future<void> _setNotificationsEnabled(bool value) async {
     setState(() {
       _notificationsEnabled = value;
     });
-    unawaited(_savePreferences());
+    await _savePreferences();
     if (value) {
-      unawaited(_ensurePushConfiguredForEnabledAlert());
+      await _ensurePushConfiguredForEnabledAlert();
     } else {
-      unawaited(
-        PushNotificationService.instance.unregisterCurrentDeviceToken(),
-      );
+      final unregistered = await PushNotificationService.instance
+          .unregisterCurrentDeviceToken();
+      if (!mounted || !unregistered) return;
+      final tokenPreview = await PushNotificationService.instance
+          .tokenPreview();
+      if (!mounted) return;
+      setState(() {
+        _pushSetupResult = PushNotificationService.instance.lastResult;
+        _pushTokenPreview = tokenPreview;
+      });
     }
   }
 
