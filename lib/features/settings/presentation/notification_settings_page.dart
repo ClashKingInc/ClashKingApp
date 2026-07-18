@@ -794,7 +794,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     } else {
       final unregistered = await PushNotificationService.instance
           .unregisterCurrentDeviceToken();
-      if (!mounted || !unregistered) return;
+      if (!mounted) return;
       final tokenPreview = await PushNotificationService.instance
           .tokenPreview();
       if (!mounted) return;
@@ -802,6 +802,15 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         _pushSetupResult = PushNotificationService.instance.lastResult;
         _pushTokenPreview = tokenPreview;
       });
+      if (!unregistered) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Notifications are paused on this device. Server sync did not finish.',
+            ),
+          ),
+        );
+      }
     }
   }
 

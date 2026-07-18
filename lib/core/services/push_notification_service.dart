@@ -401,28 +401,33 @@ class PushNotificationService {
         url: url,
       );
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        await Future.wait([
-          prefs.remove(_tokenPrefsKey),
-          prefs.remove(_lastRegistrationPrefsKey),
-        ]);
-        _setResult(
-          const PushNotificationSetupResult(
-            state: PushNotificationSetupState.tokenUnavailable,
-          ),
-        );
-        try {
-          await FirebaseMessaging.instance.deleteToken();
-        } catch (error, stackTrace) {
-          await Sentry.captureException(error, stackTrace: stackTrace);
-          DebugUtils.debugWarning('FCM token cleanup skipped: $error');
-        }
+        await _clearCurrentDeviceToken(prefs);
         return true;
       }
     } catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       DebugUtils.debugWarning('Push device unregister skipped: $error');
     }
+    await _clearCurrentDeviceToken(prefs);
     return false;
+  }
+
+  Future<void> _clearCurrentDeviceToken(SharedPreferences prefs) async {
+    await Future.wait([
+      prefs.remove(_tokenPrefsKey),
+      prefs.remove(_lastRegistrationPrefsKey),
+    ]);
+    _setResult(
+      const PushNotificationSetupResult(
+        state: PushNotificationSetupState.tokenUnavailable,
+      ),
+    );
+    try {
+      await FirebaseMessaging.instance.deleteToken();
+    } catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+      DebugUtils.debugWarning('FCM token cleanup skipped: $error');
+    }
   }
 
   Future<String?> cachedToken() async {
