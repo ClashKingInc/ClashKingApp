@@ -16,7 +16,7 @@ This app is a general-audience Clash of Clans companion app intended for Google 
 
 - Added `PrivacyControlsPage` in Settings so privacy policy, access/export, correction/restriction support, account deletion, and children/family notices are available in-app.
 - Added client methods for privacy API contracts:
-  - `POST /v2/auth/export`
+  - `GET /v2/auth/export`
   - `DELETE /v2/auth/me`
   - `DELETE /v2/notifications/devices`
 - Added a mailto fallback for rights requests until backend privacy endpoints are deployed.

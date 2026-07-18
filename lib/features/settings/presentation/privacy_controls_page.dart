@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:clashkingapp/core/utils/privacy_export_saver.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,6 +30,8 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
 
   var _isExporting = false;
   var _isDeleting = false;
+  String? _pendingExportFileName;
+  String? _pendingExportData;
 
   @override
   Widget build(BuildContext context) {
@@ -66,16 +68,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
             title: 'Access or export your data',
             body:
                 'Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.',
-            action: FilledButton.icon(
-              onPressed: _isExporting ? null : _requestExport,
-              icon: _isExporting
-                  ? const SizedBox.square(
-                      dimension: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.file_download_outlined),
-              label: const Text('Download export'),
-            ),
+            action: _buildExportAction(),
           ),
           _PrivacyCard(
             icon: Icons.edit_note_outlined,
@@ -120,6 +113,34 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
     );
   }
 
+  Widget _buildExportAction() {
+    final hasPreparedExport =
+        _pendingExportFileName != null && _pendingExportData != null;
+
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        FilledButton.icon(
+          onPressed: _isExporting ? null : _requestExport,
+          icon: _isExporting
+              ? const SizedBox.square(
+                  dimension: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.file_download_outlined),
+          label: Text(hasPreparedExport ? 'Refresh export' : 'Prepare export'),
+        ),
+        if (hasPreparedExport)
+          FilledButton.tonalIcon(
+            onPressed: _savePreparedExport,
+            icon: const Icon(Icons.save_alt_outlined),
+            label: const Text('Save export'),
+          ),
+      ],
+    );
+  }
+
   Future<void> _requestExport() async {
     setState(() => _isExporting = true);
     try {
@@ -128,11 +149,14 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
         ':',
         '-',
       );
-      await FlutterFileSaver().writeFileAsString(
-        fileName: 'clashking-data-$timestamp.json',
-        data: const JsonEncoder.withIndent('  ').convert(response),
-      );
-      _showSnack('Your data export has been saved.');
+      if (!mounted) return;
+      setState(() {
+        _pendingExportFileName = 'clashking-data-$timestamp.json';
+        _pendingExportData = const JsonEncoder.withIndent(
+          '  ',
+        ).convert(response);
+      });
+      _showSnack('Your data export is ready to save.');
     } catch (_) {
       await _contactSupport();
       _showSnack(
@@ -140,6 +164,25 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
       );
     } finally {
       if (mounted) setState(() => _isExporting = false);
+    }
+  }
+
+  Future<void> _savePreparedExport() async {
+    final fileName = _pendingExportFileName;
+    final data = _pendingExportData;
+    if (fileName == null || data == null) {
+      _showSnack('Prepare your export before saving it.');
+      return;
+    }
+
+    try {
+      await savePrivacyExport(fileName: fileName, data: data);
+      _showSnack('Your data export has been saved.');
+    } catch (_) {
+      await _contactSupport();
+      _showSnack(
+        'The data export could not be saved. A privacy email has been prepared instead.',
+      );
     }
   }
 
