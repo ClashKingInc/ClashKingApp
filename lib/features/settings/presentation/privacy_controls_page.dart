@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyControlsPage extends StatefulWidget {
@@ -67,7 +65,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
             icon: Icons.file_download_outlined,
             title: 'Access or export your data',
             body:
-                'Request a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.',
+                'Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.',
             action: FilledButton.icon(
               onPressed: _isExporting ? null : _requestExport,
               icon: _isExporting
@@ -76,7 +74,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.file_download_outlined),
-              label: const Text('Request export'),
+              label: const Text('Download export'),
             ),
           ),
           _PrivacyCard(
@@ -126,24 +124,15 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
     setState(() => _isExporting = true);
     try {
       final response = await context.read<AuthService>().requestDataExport();
-      final directory = await getTemporaryDirectory();
       final timestamp = DateTime.now().toUtc().toIso8601String().replaceAll(
         ':',
         '-',
       );
-      final file = File('${directory.path}/clashking-data-$timestamp.json');
-      await file.writeAsString(
-        const JsonEncoder.withIndent('  ').convert(response),
-        flush: true,
+      await FlutterFileSaver().writeFileAsString(
+        fileName: 'clashking-data-$timestamp.json',
+        data: const JsonEncoder.withIndent('  ').convert(response),
       );
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(file.path, mimeType: 'application/json')],
-          subject: 'ClashKing data export',
-          text: 'Your ClashKing account data export.',
-        ),
-      );
-      _showSnack('Your data export is ready.');
+      _showSnack('Your data export has been saved.');
     } catch (_) {
       await _contactSupport();
       _showSnack(
