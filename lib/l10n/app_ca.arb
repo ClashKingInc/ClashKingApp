@@ -296,6 +296,9 @@
   "authAccountLinkEmail": "Enllaça un compte de correu",
   "authAccountAddEmailAuth": "Afegeix autenticació amb correu i contrasenya al teu compte per a més seguretat.",
   "authAccountEmailLinkedSuccess": "Compte de correu enllaçat correctament!",
+  "authAccountLinkDiscord": "Link Discord Account",
+  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
+  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
   "authEmailVerificationTitle": "Verifica el correu",
   "authEmailVerificationCheckEmail": "Revisa el correu",
   "authEmailVerificationSentTo": "Hem enviat un correu de verificació a:",
@@ -2134,824 +2137,200 @@
   "gameItemFlying": "Volador",
   "gameItemUpgradeCost": "Cost de millora",
   "gameItemUpgradeTime": "Temps de millora",
-  "generalExpand": "Ampliar",
-  "generalCollapse": "Col·lapse",
-  "generalBookmark": "Marcador",
-  "generalRemoveBookmark": "Elimina el marcador",
-  "gameLeague": "Lliga",
-  "clanMembersSearchPlaceholder": "Cerca membres",
-  "clanMembersShowTotals": "Mostra els totals del clan",
-  "clanMembersHideTotals": "Amaga els totals del clan",
-  "clanMembersReceivedShort": "Rebut",
-  "clanMembersAverageTh": "Mitjana TH",
-  "warLogSearchPlaceholder": "Guerres de recerca",
-  "warStatsSearchPlaceholder": "Cerca jugadors",
-  "warStatsCurrentTownHall": "El meu TH",
-  "warStatsLast50": "Últims 50",
-  "warStatsWars": "Guerres",
-  "warStatsSelectSeason": "Seleccioneu la temporada d'estadístiques de guerra",
-  "warAnalysisToWin": "Per guanyar",
-  "warAnalysisToLose": "Per perdre",
-  "warAnalysisNoAttacksLeft": "No queden atacs",
-  "warAnalysisScenario": "Els atacs {attacks} queden -> necessiten estrelles {stars} / {percent}% per atac",
-  "warAnalysisImpossibleScenario": "Els atacs {attacks} queden -> impossible (estrelles {stars} / {percent}% per atac)",
-  "warAttacksSuccessful": "Atacs amb èxit",
-  "warAttacksFailed": "Atacs fallits",
-  "warAttacksMissedShort": "Faltat",
-  "cwlHistoryTitle": "Història de CWL",
-  "clanJoinLeaveTab": "Unir-se/abandonar",
-  "clanRankingsTab": "Classificacions",
-  "clanRankingsSeason": "Temporada",
-  "clanRankingsSelectSeason": "Seleccioneu la temporada de classificació",
-  "clanRankingsFilterActivity": "Activitat",
-  "clanRankingsFilterWar": "Guerra",
-  "clanRankingsFilterPoints": "Punts",
-  "cwlHistoryPreviewBadge": "Vista prèvia",
-  "cwlHistoryPreviewSubtitle": "Maqueta {clan} fins que es solucioni el punt final CWL",
-  "cwlHistoryEmptyTitle": "Encara no hi ha historial de CWL",
-  "cwlHistoryEmptyBody": "Aquest clan encara no ha participat en una temporada de la Lliga de Guerra de clans.",
-  "cwlRankTitle": "Classificació",
-  "cwlWarsPlayedTitle": "Es van jugar guerres",
-  "playerWarStarsTitle": "Estrelles de guerra",
-  "playerWarPreferenceTitle": "Pref. de guerra.",
-  "playerDonatedTitle": "Donat",
-  "playerReceivedTitle": "Rebut",
-  "playerCapitalTitle": "Capital del clan",
-  "playerExpLevelTitle": "Exp. nivell",
-  "clanWarWinsTitle": "La guerra guanya",
-  "clanWinStreakTitle": "Ratxa de victòries",
-  "clanBuilderBaseTitle": "Base del constructor",
-  "clanTypeTitle": "Tipus",
-  "clanWarFrequencyTitle": "Guerres",
-  "clanMinTownHallTitle": "Aj. mín.",
-  "clanMinTrophiesTitle": "Min. trofeus",
-  "clanCapitalHallTitle": "Sala Capital",
-  "clanDistrictsTitle": "Districtes",
-  "legendsCountryTitle": "País",
-  "legendsLocalRankTitle": "Grau local",
-  "legendsGlobalRankTitle": "Classificació global",
-  "warWinsTitle": "Guanya",
-  "warLossesTitle": "Pèrdues",
-  "warDrawsTitle": "Empates",
-  "capitalRaidStatusOngoing": "En curs",
-  "capitalRaidStatusEnded": "S'ha acabat",
-  "capitalRaidLoot": "Botí",
-  "capitalRaidRewards": "Recompenses",
-  "capitalRaidPreviousWeek": "Setmana anterior",
-  "capitalRaidNextWeek": "La setmana vinent",
-  "capitalRaidFilterAttacked": "Atacat",
-  "capitalRaidFilterNotAttacked": "No atacat",
-  "capitalRaidFilterLinked": "Comptes enllaçats",
-  "capitalRaidEmptyTitle": "No hi ha dades d'atac de capital",
-  "capitalRaidEmptyBody": "L'historial de les incursions apareixerà aquí un cop es faci un seguiment dels caps de setmana de les incursions a la capital d'aquest clan.",
-  "capitalRaidEstimated": "Estimat",
-  "capitalRaidEstimatedTooltip": "Encara no és oficial: estimat a partir dels registres d'atac i defensa d'aquesta setmana. Supercell publica el recompte real de medalles un cop finalitza el raid.",
-  "capitalRaidTrophyPrediction": "Trofeus pronosticats",
-  "capitalRaidTrophyPredictionTooltip": "Trofeus estimats de la Capital League després d'aquesta incursió, basats en l'actuació d'aquesta setmana fins ara. No oficial.",
-  "capitalRaidProjectedLoot": "Botí projectat",
-  "capitalRaidOneshots": "Un cop",
-  "capitalRaidFails": "Falla",
-  "capitalDetailsOffense": "Delicte",
-  "capitalDetailsDefense": "Defensa",
-  "capitalDistrictsSection": "Districtes",
-  "capitalOpponentsSection": "Opositors",
-  "capitalAvgAttacksPerDistrict": "Mitjana d'atacs/districte",
-  "capitalAvgLootPerAttack": "Mitjana de botí/atac",
-  "capitalHistorySection": "Història de la incursió",
-  "capitalHistoryWeeksTracked": "Setmanes rastrejades",
-  "capitalAvgLootPerWeek": "Mitjana de botí/setmana",
-  "capitalAvgAttacksPerWeek": "Mitjana d'atacs/setmana",
-  "capitalBestRaid": "El millor raid",
-  "capitalWorstRaid": "La pitjor incursió",
-  "capitalHistoryChartTitle": "Tendència setmanal",
-  "warAttacksDetailsDuration": "Durada",
-  "gameItemRemainingToTownHallMax": "Fins a TH màx",
-  "gameItemRemainingToGlobalMax": "Fins al màxim global",
-  "gameItemLevelsLeft": "Nivell(s) {count} restant",
-  "gameItemOverview": "Visió general",
-  "gameItemStats": "Estadístiques",
-  "gameItemNextUpgrade": "Propera actualització",
-  "gameItemUpgradePlan": "Pla d'actualització",
-  "gameItemUpgradeDataUnavailable": "Les dades de l'actualització no estan disponibles",
   "notifScopeAllAccounts": "Tots els comptes",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
   "notifScopeSelected": "Seleccionat",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Preferències",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Notificacions",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Trieu alertes i envieu previsualitzacions locals de proves.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsLiveActivityTest": "Prova d'activitats en directe",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
   "settingsLiveActivityStart": "Inicia l'activitat de prova",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
   "settingsLiveActivityStartSubtitle": "Mostra una vista prèvia de la guerra de clans local.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
   "settingsLiveActivityUpdate": "Actualitzar la puntuació",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
   "settingsLiveActivityUpdateSubtitle": "Avança la puntuació de guerra falsa.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
   "settingsLiveActivityEnd": "Finalitzar l'activitat de prova",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
   "settingsLiveActivityEndSubtitle": "Elimina la previsualització local.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
   "settingsSupport": "Suport",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "Sobre",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Compte",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Inicia sessió",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Aparença",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Sistema",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Coincideix amb aquest dispositiu",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Llum",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Fosc",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Seleccionat",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Encara no s'ha carregat cap compte enllaçat.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "No s'ha seleccionat cap compte",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "Comptes {count} seleccionats",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifSelectedAccounts": "Comptes seleccionats",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
   "searchRecent": "Cerques recents",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Jugadors",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Cerca de clans",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchFilters": "Filtres",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "searchClear": "Clar",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Les dades s'han actualitzat correctament",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "No s'han pogut actualitzar les dades: {error}",
-  "warStatsFilterFailed": "No s'han pogut carregar les dades filtrades: {error}",
-  "warStatsExportFailed": "Ha fallat l'exportació: {error}",
-  "exportLabelPlayer": "Jugador",
-  "exportLabelFormat": "Format d’exportació",
-  "exportLabelExcel": "Excel (.xlsx)",
-  "exportLabelIncludes": "Inclou",
-  "exportLabelContent": "Estadístiques, atacs, anàlisi TH",
-  "accountNoUserData": "No hi ha dades d'usuari disponibles",
-  "accountsMenuTitle": "Comptes",
-  "searchErrorPlayerLoadFailed": "No s'han pogut carregar les dades del reproductor.",
-  "searchErrorClanLoadFailed": "No s'han pogut carregar les dades del clan.",
-  "todoNoMatchingAccounts": "No hi ha cap compte coincident",
-  "todoNoConfiguredAccounts": "No s'ha configurat cap compte de tasques pendents",
-  "todoNoLinkedAccounts": "No hi ha cap compte enllaçat",
-  "todoNoAccountsNeedAction": "Cap compte necessita acció",
-  "todoNoCompletedAccounts": "No hi ha cap compte completat",
-  "todoNoBookmarkedAccounts": "No hi ha comptes marcats",
-  "todoTryAnotherSearchOrFilter": "Prova una altra cerca o filtre.",
-  "clanJoinLeaveNoDataTitle": "No hi ha dades d'unió/abandonament",
-  "clanJoinLeaveNoDataBody": "El moviment recent de la llista apareix aquí quan es carreguen les dades de seguiment.",
-  "clanJoinLeaveNoRecentMovementTitle": "Cap moviment recent",
-  "clanJoinLeaveNoRecentMovementBody": "S'ha carregat el resum, però la llista d'esdeveniments està buida.",
-  "capitalRaidMembersAttackLogFallback": "La llista de membres no es retorna per a aquest cap de setmana de raid. Es mostren les estadístiques del registre d'atacs.",
-  "capitalRaidMembersNoPlayerData": "No es retornen dades a nivell de jugador per a aquest cap de setmana de raid. L'API només inclou els totals de districte i oponent.",
-  "capitalRaidMembersNoIndividualData": "No hi ha cap llista de jugadors ni atacs individuals disponibles per a aquesta incursió.",
-  "dashboardNoLinkedAccountsTitle": "No hi ha cap compte enllaçat",
-  "dashboardNoLinkedAccountsBody": "Enllaça un compte de Clash per veure atacs, esdeveniments i activitats aquí.",
-  "dashboardNothingPinnedTitle": "Encara no s'ha fixat res",
-  "dashboardNothingPinnedBody": "Obriu la pestanya Jugadors, amplieu les opcions d'una targeta i activeu \"Mostra tasques pendents a casa\" per fixar un compte aquí.",
-  "playersNoBookmarkedTitle": "Encara no hi ha jugadors marcats",
-  "playersNoBookmarkedBody": "Obriu un perfil de jugador i deseu-lo per a més tard.",
-  "playersNoLinkedBody": "Gestioneu els comptes des de la pantalla de configuració del compte.",
-  "navigationHome": "Casa",
-  "drawerFollowers": "Seguidors",
-  "drawerFollowersHelp": "Persones que han marcat un dels vostres comptes enllaçats verificats.",
-  "drawerPopular": "Populars",
-  "drawerCalculators": "Calculadores",
-  "drawerSubscription": "Subscripció",
-  "drawerUpgradeTracker": "Actualitza el rastrejador",
-  "drawerBasesArmies": "Bases i Exèrcits",
-  "drawerGameAssets": "Actius del joc",
-  "drawerManageAccounts": "Gestionar comptes",
-  "playersLinked": "Enllaçat",
-  "playersBookmarked": "Marcat com a favorits",
-  "searchGlobalHint": "Cerca jugadors o clans",
-  "tooltipDecreaseMinimumMembers": "Disminuir el mínim de membres",
-  "tooltipIncreaseMinimumMembers": "Augmentar el mínim de membres",
-  "tooltipDecreaseMaximumMembers": "Disminuir el màxim de membres",
-  "tooltipIncreaseMaximumMembers": "Augmentar el màxim de membres",
-  "tooltipDecreaseMinimumClanPoints": "Disminueix els punts mínims de clan",
-  "tooltipIncreaseMinimumClanPoints": "Augmenta els punts mínims de clan",
-  "tooltipDecreaseMinimumClanLevel": "Disminueix el nivell mínim de clan",
-  "tooltipIncreaseMinimumClanLevel": "Augmenta el nivell mínim de clan",
-  "tooltipShowChart": "Mostra el gràfic",
-  "tooltipShowTable": "Mostra la taula",
-  "tooltipDismissMessage": "Ignora el missatge",
-  "tooltipShowPassword": "Mostra la contrasenya",
-  "tooltipHidePassword": "Amaga la contrasenya",
-  "tooltipRemoveAccount": "Elimina el compte",
-  "popularPlayersTitle": "Jugadors",
-  "popularClansTitle": "Clans populars",
-  "popularWarsCwlTitle": "Guerres i CWL",
-  "popularTitle": "Contingut popular",
-  "popularSubtitle": "Adreces d'interès, comptes enllaçats i guerres actives.",
-  "popularEmptyTitle": "Encara no hi ha articles populars",
-  "popularEmptyBody": "Afegiu jugadors i clans a les adreces d'interès o enllaceu comptes per iniciar-ho.",
-  "calculatorsTitle": "Calculadores",
-  "calculatorsSubtitle": "Mineral, terratrèmol zap i terratrèmol de bola de foc.",
-  "calculatorOre": "mineral",
-  "calculatorZapQuake": "Sisme Zap",
-  "calculatorFireball": "Bola de foc",
-  "upgradeTrackerTitle": "Actualitza el rastrejador",
-  "upgradeTrackerSubtitle": "Cost i temps d'actualització restants.",
-  "linkedAccountLabel": "Compte enllaçat",
-  "noLinkedPlayersLoadedTitle": "No s'ha carregat cap jugador enllaçat",
-  "noLinkedPlayersLoadedBody": "Afegiu o actualitzeu els comptes enllaçats per veure els totals de les actualitzacions.",
-  "playerOptionNotificationsTitle": "Notificacions",
-  "playerOptionNotificationsSubtitle": "Rep alertes per a aquest compte.",
-  "playerOptionShowTodoHomeTitle": "Mostra tasques pendents a casa",
-  "playerOptionShowTodoHomeSubtitle": "Fixeu la targeta de tasques pendents d'aquest compte a la pestanya d'inici.",
-  "playerOptionShowTodoPageTitle": "Mostra a la pàgina de tasques pendents",
-  "playerOptionShowTodoPageSubtitle": "Inclou aquest compte a la llista completa de tasques pendents.",
-  "playerOptionShowWarTabTitle": "Mostra a la pestanya Guerra",
-  "playerOptionShowWarTabSubtitle": "Inclou el clan d'aquest compte a la pestanya Guerra.",
-  "searchCancel": "Cancel·la",
-  "bookmarkPlayerLoadFailed": "No s'ha pogut carregar el reproductor marcat amb les adreces d'interès.",
-  "warNoLinkedOrBookmarked": "No hi ha guerres de clans enllaçades ni marcades per mostrar.",
-  "warWidgetRefreshData": "Actualitza les dades de guerra",
-  "warWidgetNoData": "No hi ha dades de guerra disponibles",
-  "warWidgetLastUpdated": "Última actualització: {time}",
-  "todoEventClanGames": "Jocs de clans",
-  "todoEventCwl": "CWL",
-  "todoEventSeasonEnds": "S'acaba la temporada",
-  "todoEventLeagueReset": "Reinici de la lliga",
-  "todoEventRaidWeekend": "Cap de setmana de raid",
-  "todoMagicDispatch": "Despatx màgic",
-  "todoMagicDispatchDescription": "Toca per obtenir l'última actualització de ClashKing",
-  "todoUseCodeClashKing": "Utilitzeu el codi ClashKing",
-  "todoUseCodeClashKingDescription": "Donar suport al projecte a la Supercell Store",
-  "todoLegendAttacks": "Atacs de llegenda",
-  "todoWarAttacks": "Atacs de guerra",
-  "todoCwlAttacks": "Atacs de CWL",
-  "todoRaidAttacks": "Atacs de raid",
-  "gameSeasonPassShort": "Passar",
-  "todoMockMaxedMainName": "Principal màxim",
-  "todoMockMaxedMainSubtitle": "TH17 · tot actiu",
-  "todoMockMaxedMainStatus": "Actiu ara · llista de verificació diària completa",
-  "todoMockLegend5Left": "Avui en queden 5",
-  "todoMockWar1Left": "1 queda",
-  "todoMockCwl1LeftRound": "1 ha sortit d'aquesta ronda",
-  "todoMockClanGames2700Left": "Queden 2,7 mil punts",
-  "todoMockRaid4Left": "4 en queden",
-  "todoMockPass850Left": "Queden 850 punts",
-  "todoMockWarAltName": "Guerra Alt",
-  "todoMockWarAltSubtitle": "TH15 · centrat en la guerra",
-  "todoMockWarAltStatus": "Actiu fa 18 m · La guerra i les incursions necessiten atenció",
-  "todoMockWar2Left": "2 en queden",
-  "todoMockClanGames900Left": "Queden 900 punts",
-  "todoMockRaid1Left": "1 queda",
-  "todoMockLegendPushName": "Pujada a Llegenda",
-  "todoMockLegendPushSubtitle": "TH16 · atacs diaris",
-  "todoMockLegendPushStatus": "Actiu fa 1h · llegendes i progrés de passada",
-  "todoMockLegend2Left": "Avui en queden 2",
-  "todoMockOnPace": "al ritme",
-  "todoMockCaughtUpName": "Atrapat",
-  "todoMockCaughtUpSubtitle": "TH14 · sense tasques obertes",
-  "todoMockCaughtUpStatus": "Actiu avui · no cal acció",
-  "notifChooseAlerts": "Trieu alertes",
-  "notifLeagueDefenseDescription": "Resultats de la defensa amb atacant, estrelles, percentatge i context de lliga.",
-  "notifWarAttackOptionsDescription": "Resultats d'atac de guerra, alertes de defensa i opcions d'alimentació d'atac 5v5.",
-  "notifWarAlertsDescription": "La guerra va coincidir, va començar el dia de la batalla i va acabar la guerra.",
-  "notifWarRemindersDescription": "Recordatoris personalitzats abans que acabi la guerra.",
-  "notifDefensesAgainstYourBase": "Defenses contra la teva base",
-  "notifDefensesAgainstYourBaseDescription": "Només les visites on es defensa aquest compte.",
-  "notifAllAttacks": "Tots els atacs",
-  "notifAllAttacksDescription": "Cada cop només en guerres 5v5.",
-  "notifThirtyMinutes": "30 minuts",
-  "notifFifteenMinutes": "15 minuts",
-  "notifSendTestNotification": "Envia una notificació de prova",
-  "notifScheduledMessage": "Programat: {title}",
-  "generalStartDate": "Data d'inici",
-  "generalEndDate": "Data de finalització",
-  "warFiltersAllWars": "Totes les guerres",
-  "warFiltersRandomWars": "Guerres aleatòries",
-  "warFiltersCwlWars": "Guerres CWL",
-  "warFiltersFriendlyWars": "Guerres amigues",
-  "warType": "Tipus de guerra",
-  "warFiltersAnyTownHall": "Qualsevol TH",
-  "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "L'atacant TH",
-  "warDefenderTownHall": "Defensa TH",
-  "warStatsFilterSameTownHallOnly": "Només el mateix Ajuntament",
-  "warStatsFilterSameTownHallDescription": "Mostra només els atacs on atacant i defensor tenen el mateix nivell TH",
-  "generalAny": "Qualsevol",
-  "warStarsWithIcon": "{stars} ⭐",
-  "warStatsFilterMinStars": "Estrelles mínimes",
-  "warStatsFilterMaxStars": "Estrelles màximes",
-  "warStatsFilterMinDestructionPercent": "% destrucció mínima",
-  "warStatsFilterMaxDestructionPercent": "% destrucció màxima",
-  "warStatsFilterMinPosition": "Posició mínima",
-  "warStatsFilterMaxPosition": "Posició màxima",
-  "warStatsFilterFreshAttacksOnly": "Només atacs nous",
-  "warStatsFilterFreshAttacksDescription": "Mostra només els primers atacs a cada base",
-  "warStatsFilterResultLimit": "Límit de resultats",
-  "generalResultsCount": "Resultats de {count}",
-  "notifEventsDescription": "Jocs del clan, CWL, cap de setmana d'incursions i esdeveniments de temporada.",
-  "notifAnnouncementsDescription": "Bàners dins l'app i futurs avisos push per a actualitzacions de ClashKing.",
-  "notifUpgradeFinishesDescription": "Tropes, herois, mascotes, encanteris, equipament i edificis.",
-  "notifSupportReminderDescription": "Recordatori mensual per donar suport a ClashKing.",
-  "notifDevicePushSetup": "Configuració de notificacions push del dispositiu",
-  "notifAccountScope": "Abast del compte",
-  "notifTestNotification": "Notificació de prova",
-  "settingsAppIcon": "Icona de l'app",
-  "settingsChanging": "S'està canviant...",
-  "settingsAddWarWidget": "Afegeix el widget de guerra",
-  "settingsWarWidgetLinkClanFirst": "Enllaça primer un compte d'un clan",
-  "settingsWarWidgetClanCount": "{count} clan(s) disponibles",
-  "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Comptes enllaçats al bot i dades de Discord",
-  "settingsDiscordSyncSubtitle": "Sincronitza comptes enllaçats al bot i dades de Discord",
-  "settingsConnected": "Connectat",
-  "settingsClashKingAccount": "Compte de ClashKing",
-  "settingsEmailConnectedSubtitle": "L'inici de sessió amb correu està connectat",
-  "settingsEmailRecoverySubtitle": "Afegeix inici de sessió amb correu per recuperar el compte",
-  "settingsFeatureRequestsTitle": "Peticions de funcions",
-  "playerOpenInGame": "Obre al joc",
-  "playerBookmarkRemove": "Elimina el favorit del jugador",
-  "playerBookmarkAdd": "Afegeix el jugador als favorits",
-  "playerBestTrophies": "Millors trofeus",
-  "clanLoadFailed": "No s'ha pogut carregar el clan.",
-  "gameItemLevels": "Nivells",
-  "resourceDarkElixir": "Elixir fosc",
-  "resourceBuilderElixir": "Elixir del Constructor",
-  "resourceBuilderGold": "Or del Constructor",
-  "resourceElixir": "Elixir",
-  "resourceGold": "Or",
-  "resourceGlowyOre": "Mineral brillant",
-  "resourceStarryOre": "Mineral estel·lar",
-  "resourceShinyOre": "Mineral lluent",
-  "resourceGeneric": "Recurs",
-  "seasonStatsGoldGrabbed": "Or aconseguit",
-  "seasonStatsActivity": "Activitat",
-  "seasonStatsAttackWins": "Victòries d'atac",
-  "seasonStatsTrophies": "Trofeus de temporada",
-  "todoSearchAccountsHint": "Cerca comptes",
-  "generalClearSearch": "Esborra la cerca",
-  "clanCapitalAvgRewards": "Recompenses mitjanes",
-  "clanCapitalAvgDistrictsPerWeek": "Districtes mitjans/setmana",
-  "clanCapitalTopAttackers": "Millors atacants",
-  "clanCapitalPlayersTracked": "{count} jugadors seguits",
-  "clanCapitalDefenseOverTime": "Defensa al llarg del temps",
-  "clanCapitalDistrictsTracked": "{count} districtes seguits",
-  "clanCapitalSelectedRaid": "Incursió seleccionada",
-  "generalSummary": "Resum",
-  "generalBreakdown": "Desglossament",
-  "clanPointsTitle": "Punts del clan",
-  "clanBuilderBasePoints": "Punts de la base del Constructor",
-  "clanType": "Tipus de clan",
-  "clanRequiredTownHall": "Ajuntament requerit",
-  "clanRequiredTownHallOnly": "Només {level}+",
-  "clanCapitalPoints": "Punts de capital",
-  "todoAllAccounts": "Tots els comptes",
-  "todoCombinedAcrossAccounts": "Tasques combinades de tots els teus comptes",
-  "todoPreviewAccount": "Compte de previsualització",
-  "todoLastActiveUnavailable": "Darrera activitat no disponible",
-  "todoActiveRelative": "Actiu {time}",
-  "@todoActiveRelative": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "todoCompleteLower": "complet",
-  "todoPointsLeftShort": "{points} punts restants",
-  "@todoPointsLeftShort": {
-    "placeholders": {
-      "points": {
-        "type": "String"
-      }
-    }
-  },
-  "todoItemsLeftShort": "{count} restants",
-  "@todoItemsLeftShort": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAllCaughtUpForNow": "Tot al dia de moment",
-  "todoEventEndsIn": "Acaba d'aquí a {duration}",
-  "@todoEventEndsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoEventStartsIn": "Comença d'aquí a {duration}",
-  "@todoEventStartsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoRemainingUpgradeTooltip": "Toca per veure el cost i el temps de millora restants",
-  "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Toca per recórrer l'actualització de juny de 2026",
-  "sideRankingsTitle": "Classificacions",
-  "sideRankingsSubtitle": "Classificacions oficials i endpoints de ClashKing.",
-  "sideRankingsLoadError": "No s'han pogut carregar les classificacions oficials.",
-  "sideRankingsEmptyTitle": "No s'ha retornat cap classificació",
-  "sideRankingsEmptyBody": "Prova una altra classificació o ubicació.",
-  "sideRankingsMockups": "Maquetes de ClashKing",
-  "sideStatsTitle": "Estadístiques",
-  "sideStatsSubtitle": "Estadístiques de classificació de les superfícies oficials de l'API de Clash.",
-  "sideStatsLoadError": "No s'han pogut carregar les estadístiques de classificació.",
-  "sideTopScore": "Puntuació màxima",
-  "sideTop200Avg": "Mitjana top 200",
-  "sideBasesArmiesTitle": "Bases i exèrcits",
-  "sideBasesArmiesSubtitle": "Dissenys desats a Discord i enllaços d'exèrcits.",
-  "sideBotSyncTarget": "Objectiu de sincronització del bot",
-  "sideBotSyncTargetBody": "El bot ja desa bases i exèrcits al perfil de Discord. Aquesta pàgina està preparada per a aquestes dades sincronitzades.",
-  "sideSavedBases": "Bases desades",
-  "sideWarBaseSlots": "Espais de base de guerra",
-  "sideWarBaseSlotsBody": "Ajuntament, tipus de base, enllaç i darrera actualització.",
-  "sideLegendBaseSlots": "Espais de base de Llegenda",
-  "sideLegendBaseSlotsBody": "Còpia ràpida i associació amb el compte.",
-  "sideSavedArmies": "Exèrcits desats",
-  "sideArmyLinks": "Enllaços d'exèrcit",
-  "sideArmyLinksBody": "Composició, encanteris, setge, notes i enllaç per compartir.",
-  "sideGameAssetsTitle": "Recursos del joc",
-  "sideGameAssetsSubtitle": "Recursos allotjats de ClashKing, agrupats per carpeta.",
-  "sideNoLinkedPlayersTitle": "No s'han carregat jugadors enllaçats",
-  "sideNoLinkedPlayersBody": "Afegeix o actualitza comptes enllaçats per emplenar prèviament les dades de lliga.",
-  "sideReadyNow": "A punt ara",
-  "sideDays": "{count} dies",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "queden {shiny} lluent, {glowy} brillant, {starry} estel·lar",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Mineral lluent",
-  "sideGlowyOre": "Mineral brillant",
-  "sideStarryOre": "Mineral estel·lar",
-  "sideDailyBonusAdjustment": "Ajust del bonus diari",
-  "sideExtraShiny": "Lluent extra",
-  "sideExtraGlowy": "Brillant extra",
-  "sideExtraStarry": "Estel·lar extra",
-  "sideZapQuakeTitle": "{zaps} llamps + 1 terratrèmol",
-  "@sideZapQuakeTitle": {
-    "placeholders": {
-      "zaps": {
-        "type": "int"
-      }
-    }
-  },
-  "sideZapQuakeSubtitle": "{quakeDamage} de dany de terratrèmol, {lightningDamage} per llamp",
-  "@sideZapQuakeSubtitle": {
-    "placeholders": {
-      "quakeDamage": {
-        "type": "String"
-      },
-      "lightningDamage": {
-        "type": "String"
-      }
-    }
-  },
-  "sideBuildingHp": "PV de l'edifici",
-  "sideLightningLevel": "Nivell de llamp",
-  "sideEarthquakeLevel": "Nivell de terratrèmol",
-  "sideWithoutEarthquake": "Sense terratrèmol",
-  "sideLightningCount": "{count} llamps",
-  "@sideLightningCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideFireballQuakeTitle": "Bola de foc + 1 terratrèmol",
-  "sideAddSupportDamage": "Afegeix dany de suport",
-  "sideFireballQuakeSubtitle": "{fireballDamage} de dany de bola de foc, {hpLeft} PV restants després del terratrèmol",
-  "@sideFireballQuakeSubtitle": {
-    "placeholders": {
-      "fireballDamage": {
-        "type": "String"
-      },
-      "hpLeft": {
-        "type": "String"
-      }
-    }
-  },
-  "sideFireballLevel": "Nivell de bola de foc",
-  "sideQuakePressure": "Pressió de terratrèmol",
-  "sideQuakeSpellCount": "{count} encanteri(s) de terratrèmol",
-  "@sideQuakeSpellCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideLocation": "Ubicació",
-  "sideFilter": "Filtre",
-  "sideRefresh": "Actualitza",
-  "sideOfficialClashLeaderboard": "Classificació oficial de Clash",
-  "sideAllTownHallsShort": "Tots els Aj.",
-  "sideOwned": "Tingut",
-  "sideTarget": "Objectiu",
-  "sideDailyValue": "diari {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "sideDecrease": "Redueix",
-  "sideIncrease": "Augmenta",
-  "sideLevel": "Nivell {level}",
-  "@sideLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "sidePopularPlayers": "Jugadors",
-  "sidePopularClans": "Clans populars",
-  "sidePopularWarsCwl": "Guerres i CWL",
-  "rankingPlayerTrophies": "Trofeus de jugador",
-  "rankingPlayerTrophiesHeading": "Classificació de trofeus de jugadors",
-  "rankingPlayerBuilder": "Constructor del jugador",
-  "rankingPlayerBuilderHeading": "Classificació de jugadors de la base del Constructor",
-  "rankingClanTrophies": "Trofeus del clan",
-  "rankingClanTrophiesHeading": "Classificació de trofeus de clans",
-  "rankingClanBuilder": "Constructor del clan",
-  "rankingClanBuilderHeading": "Classificació de clans de la base del Constructor",
-  "rankingClanCapital": "Capital del clan",
-  "rankingClanCapitalHeading": "Classificació de la capital del clan",
-  "assetFolderTroops": "Tropes",
-  "assetFolderSpells": "Encanteris",
-  "assetFolderHeroes": "Herois",
-  "assetFolderEquipment": "Equipament",
-  "assetFolderLeagues": "Lligues",
-  "assetFolderResources": "Recursos",
-  "assetFolderStickers": "Adhesius",
-  "upgradeSectionHeroes": "Herois",
-  "upgradeSectionTroops": "Tropes",
-  "upgradeSectionSpells": "Encanteris",
-  "upgradeSectionPets": "Mascotes",
-  "upgradeSectionEquipment": "Equipament",
-  "sideMockupSource": "Font",
-  "sideMockupMode": "Modalitat",
-  "sideMockupPreview": "Previsualització",
-  "sideMockupRows": "Files",
-  "sideMockupRowsValue": "5 maquetes",
-  "endpointLeagueTop200": "Top 200 de lliga",
-  "endpointLeagueTop200Preview": "Lliga de Llegendes · 5.742 trofeus",
-  "endpointTownhallTop200": "Top 200 d'Ajuntament",
-  "endpointTownhallTop200Preview": "Ajuntament 17 · classificació global de jugadors",
-  "endpointClanDonations": "Donacions del clan",
-  "endpointClanDonationsPreview": "Estats Units · totals setmanals del clan",
-  "endpointClanWarWins": "Victòries de guerra de clan",
-  "endpointClanWarWinsPreview": "Internacional · victòries de guerra històriques",
-  "endpointTop200ArmyUsage": "Ús d'exèrcits del top 200",
-  "endpointTop200ArmyUsagePreview": "Registres de batalla · ús de tropes i encanteris",
-  "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Setmanal",
-  "endpointStateWins": "Victòries",
-  "endpointStateUsage": "Ús",
-  "notifGroupBattles": "Batalles",
-  "notifGroupReminders": "Recordatoris",
-  "notifGroupSupport": "Suport",
-  "notifGroupProgress": "Progrés",
-  "notifLeagueDefense": "Defensa de lliga",
-  "notifLeagueDefenseResult": "Resultat de defensa de lliga",
-  "notifLeagueTriple": "Triple de lliga",
-  "notifLeagueAttackBody": "Lord Clasher ha atacat {player} • {percent}% • {stars} estrelles • {league}",
-  "@notifLeagueAttackBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "league": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarDefense": "Defensa de guerra",
-  "notifWarAttackOnTh": "Atac de guerra a Ajuntament {th}",
-  "@notifWarAttackOnTh": {
-    "placeholders": {
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarDefenseBody": "{opponentClan} ha atacat {player} • {percent}% • {stars} estrelles • defensa de {clan}",
-  "@notifWarDefenseBody": {
-    "placeholders": {
-      "opponentClan": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarFeed5v5": "Fil de guerra 5v5",
-  "notifWarAttackResult": "Resultat d'atac de guerra",
-  "notifWarAttackResultBody": "{clan} ha atacat Pine Riders Ajuntament {th} • 100% • 3 estrelles",
-  "@notifWarAttackResultBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarMatched": "Guerra aparellada",
-  "notifWarMatchedBody": "{clan} ha estat aparellat amb Pine Riders. Ha començat el dia de preparació.",
-  "@notifWarMatchedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarStarted": "Guerra iniciada",
-  "notifBattleDayStarted": "Dia de batalla iniciat",
-  "notifWarStartedBody": "{clan} contra Pine Riders és en directe. Bona sort.",
-  "@notifWarStartedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarEnded": "Guerra acabada",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Els resultats finals estan disponibles.",
-  "@notifWarEndedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarReminder1h": "Recordatori de guerra: 1 h",
-  "notifWarReminder30m": "Recordatori de guerra: 30 min",
-  "notifWarReminder15m": "Recordatori de guerra: 15 min",
-  "notifOneHourLeft": "Queda 1 hora",
-  "notifThirtyMinutesLeft": "Queden 30 minuts",
-  "notifFifteenMinutesLeft": "Queden 15 minuts",
-  "notifRemainingWarAttacksBody": "{player} té atacs de guerra restants. {time}.",
-  "@notifRemainingWarAttacksBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "notifStarted": "{name} ha començat",
-  "@notifStarted": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifClanGamesPointsBody": "{clan} pot començar a guanyar punts de {name}.",
-  "@notifClanGamesPointsBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifCwlPreparationBody": "{clan} pot començar la preparació de la Lliga de Guerra de Clans.",
-  "@notifCwlPreparationBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifRaidWeekendBody": "{clan} pot començar els atacs d'incursió de la Capital.",
-  "@notifRaidWeekendBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSeasonStart": "Inici de temporada",
-  "notifNewSeasonStarted": "Nova temporada iniciada",
-  "notifSeasonStartedBody": "La temporada de {league} ha començat per a {player}.",
-  "@notifSeasonStartedBody": {
-    "placeholders": {
-      "league": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSpecialEvent": "Esdeveniment especial",
-  "notifNewEventLive": "Hi ha un nou esdeveniment actiu",
-  "notifNewClashEventBody": "Hi ha un nou esdeveniment de Clash disponible.",
-  "notifSupportClashKing": "Dona suport a ClashKing",
-  "notifMonthlySupportBody": "El suport mensual ajuda a mantenir ClashKing disponible i a millorar-lo. Gràcies.",
-  "notifUpgradeFinished": "Millora acabada",
-  "notifUpgradeReadyTitle": "{name} està a punt",
-  "@notifUpgradeReadyTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifUpgradeCompleteBody": "El nivell {level} ha acabat per a {player}. Millora completada.",
-  "@notifUpgradeCompleteBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "clanSearchLoadFailed": "No s'han pogut carregar les dades del clan: {error}",
-  "@clanSearchLoadFailed": {
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
     "placeholders": {
       "error": {
         "type": "String"
       }
     }
   },
-  "appIconDefault": "Per defecte",
-  "appIconChristmas": "Nadal",
-  "appIconBlackWhite": "Negre i blanc",
-  "appIconDarkMode": "Mode fosc",
-  "generalMembersCount": "{count} membres",
-  "@generalMembersCount": {
+  "warStatsFilterFailed": "No s'han pogut carregar les dades filtrades: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "generalBookmarked": "desat als favorits",
-  "clanLevelValue": "nivell {level}",
-  "@clanLevelValue": {
+  "warStatsExportFailed": "Ha fallat l'exportació: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
     "placeholders": {
-      "level": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "cwlRankShort": "Posició {rank}",
-  "@cwlRankShort": {
-    "placeholders": {
-      "rank": {
-        "type": "int"
-      }
-    }
+  "exportLabelPlayer": "Jugador",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
   },
-  "cwlRoundShort": "Ronda {round}",
-  "@cwlRoundShort": {
-    "placeholders": {
-      "round": {
-        "type": "int"
-      }
-    }
+  "exportLabelFormat": "Format d’exportació",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
   },
-  "gameTownHallShortLevel": "TH{level}",
-  "@gameTownHallShortLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
+  "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
   },
-  "faqSupercellFanContentPolicyLink": "Política de contingut de fans de Supercell"
+  "exportLabelIncludes": "Inclou",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "Estadístiques, atacs, anàlisi TH",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "No hi ha dades d'usuari disponibles",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "Comptes",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "No s'han pogut carregar les dades del reproductor.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "No s'han pogut carregar les dades del clan.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  }
 }
