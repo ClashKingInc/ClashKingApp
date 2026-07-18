@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyControlsPage extends StatefulWidget {
@@ -122,14 +126,28 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
     setState(() => _isExporting = true);
     try {
       final response = await context.read<AuthService>().requestDataExport();
-      final message =
-          response['message']?.toString() ??
-          'Data export requested. Check your email or contact support if you do not receive instructions.';
-      _showSnack(message);
+      final directory = await getTemporaryDirectory();
+      final timestamp = DateTime.now().toUtc().toIso8601String().replaceAll(
+        ':',
+        '-',
+      );
+      final file = File('${directory.path}/clashking-data-$timestamp.json');
+      await file.writeAsString(
+        const JsonEncoder.withIndent('  ').convert(response),
+        flush: true,
+      );
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: 'application/json')],
+          subject: 'ClashKing data export',
+          text: 'Your ClashKing account data export.',
+        ),
+      );
+      _showSnack('Your data export is ready.');
     } catch (_) {
       await _contactSupport();
       _showSnack(
-        'The export endpoint is not available in this build. A privacy email has been prepared instead.',
+        'The data export could not be created. A privacy email has been prepared instead.',
       );
     } finally {
       if (mounted) setState(() => _isExporting = false);

@@ -398,11 +398,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> requestDataExport() async {
-    return _apiService.post(
-      '/auth/export',
-      const <String, String>{},
-      requiresAuth: true,
-    );
+    return _apiService.get('/auth/export', requiresAuth: true);
   }
 
   Future<void> deleteAccount() async {
