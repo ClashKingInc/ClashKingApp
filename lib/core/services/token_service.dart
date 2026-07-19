@@ -110,7 +110,7 @@ class TokenService {
           return null;
         }
 
-        await _secureStorage.write(key: _accessTokenKey, value: newAccessToken);
+        await _persistAccessToken(newAccessToken);
         _cachedAccessToken = newAccessToken;
         _tokensLoaded = true;
 
@@ -138,6 +138,8 @@ class TokenService {
       await Future.wait([
         prefs.setString(_accessTokenKey, accessToken),
         prefs.setString(_refreshTokenKey, refreshToken),
+        _secureStorage.delete(key: _accessTokenKey),
+        _secureStorage.delete(key: _refreshTokenKey),
       ]);
       _cachedAccessToken = accessToken;
       _cachedRefreshToken = refreshToken;
@@ -167,6 +169,8 @@ class TokenService {
       await Future.wait([
         prefs.remove(_accessTokenKey),
         prefs.remove(_refreshTokenKey),
+        _secureStorage.delete(key: _accessTokenKey),
+        _secureStorage.delete(key: _refreshTokenKey),
       ]);
       return;
     }
@@ -301,10 +305,27 @@ class TokenService {
   Future<(String?, String?)> _readTokens() async {
     if (kIsWeb) {
       final prefs = await SharedPreferences.getInstance();
-      return (
-        prefs.getString(_accessTokenKey),
-        prefs.getString(_refreshTokenKey),
-      );
+      var accessToken = prefs.getString(_accessTokenKey);
+      var refreshToken = prefs.getString(_refreshTokenKey);
+      if (accessToken != null && refreshToken != null) {
+        return (accessToken, refreshToken);
+      }
+
+      final legacyTokens = await Future.wait([
+        _secureStorage.read(key: _accessTokenKey),
+        _secureStorage.read(key: _refreshTokenKey),
+      ]);
+      accessToken ??= legacyTokens[0];
+      refreshToken ??= legacyTokens[1];
+
+      await Future.wait([
+        if (accessToken != null) prefs.setString(_accessTokenKey, accessToken),
+        if (refreshToken != null)
+          prefs.setString(_refreshTokenKey, refreshToken),
+        _secureStorage.delete(key: _accessTokenKey),
+        _secureStorage.delete(key: _refreshTokenKey),
+      ]);
+      return (accessToken, refreshToken);
     }
 
     final storedTokens = await Future.wait([
@@ -341,5 +362,16 @@ class TokenService {
     }
 
     return (accessToken, refreshToken);
+  }
+
+  Future<void> _persistAccessToken(String accessToken) async {
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_accessTokenKey, accessToken);
+      await _secureStorage.delete(key: _accessTokenKey);
+      return;
+    }
+
+    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
   }
 }

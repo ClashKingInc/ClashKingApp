@@ -83,6 +83,8 @@ void main() {
       expect(tokens, everyElement(refreshedToken));
       expect(refreshRequests, 1);
       expect(tokenService.deviceIdReads, 1);
+      const storage = FlutterSecureStorage();
+      expect(await storage.read(key: 'access_token'), refreshedToken);
     });
   });
 }
