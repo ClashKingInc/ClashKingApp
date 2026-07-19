@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -8,6 +9,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -147,94 +149,99 @@ class ClanWarLog extends StatelessWidget {
     List<WarInfo> warLogData,
     String clanTag,
   ) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(height: 2),
-          Center(
-            child: Column(
-              children: List<Widget>.generate(warLogData.length, (index) {
-                final war = warLogData[index];
-                final navigator = Navigator.of(context);
+    Widget buildWarLogCard(BuildContext context, int index) {
+      final war = warLogData[index];
+      final navigator = Navigator.of(context);
 
-                return _WarLogEntryCard(
-                  war: war,
-                  clanTag: clanTag,
-                  timeLabel: formatWarTime(
-                    war.endTime ?? DateTime.now(),
-                    context,
+      return _WarLogEntryCard(
+        war: war,
+        clanTag: clanTag,
+        timeLabel: formatWarTime(war.endTime ?? DateTime.now(), context),
+        expEarned: _findExpEarned(clan, war, clanTag),
+        onTap: () async {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Center(child: CircularProgressIndicator());
+            },
+          );
+          try {
+            final currentWarInfo = await WarCwlService.fetchWarDataFromTime(
+              clan.tag,
+              war.endTime ?? DateTime.now(),
+            );
+            if (!context.mounted) return;
+            navigator.pop();
+            if (currentWarInfo == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Center(
+                    child: Text(
+                      AppLocalizations.of(
+                            context,
+                          )?.warNoDataAvailableForThisWar ??
+                          'No data available for this war',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
                   ),
-                  expEarned: _findExpEarned(clan, war, clanTag),
-                  onTap: () async {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return Center(child: CircularProgressIndicator());
-                      },
-                    );
-                    try {
-                      final currentWarInfo =
-                          await WarCwlService.fetchWarDataFromTime(
-                            clan.tag,
-                            war.endTime ?? DateTime.now(),
-                          );
-                      if (!context.mounted) return;
-                      navigator.pop();
-                      if (currentWarInfo == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Center(
-                              child: Text(
-                                AppLocalizations.of(
-                                      context,
-                                    )?.warNoDataAvailableForThisWar ??
-                                    'No data available for this war',
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                            duration: Duration(seconds: 1),
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.surface,
-                          ),
-                        );
-                        return;
-                      }
-                      navigator.push(
-                        MaterialPageRoute(
-                          builder: (context) => WarScreen(war: currentWarInfo),
-                        ),
-                      );
-                    } catch (error, stackTrace) {
-                      Sentry.captureException(error, stackTrace: stackTrace);
-                      if (!context.mounted) return;
-                      navigator.pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Center(
-                            child: Text(
-                              AppLocalizations.of(
-                                    context,
-                                  )?.warNoDataAvailableForThisWar ??
-                                  'No data available for this war',
-                            ),
-                          ),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    }
-                  },
-                );
-              }),
-            ),
-          ),
-        ],
+                  duration: Duration(seconds: 1),
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                ),
+              );
+              return;
+            }
+            navigator.push(
+              MaterialPageRoute(
+                builder: (context) => WarScreen(war: currentWarInfo),
+              ),
+            );
+          } catch (error, stackTrace) {
+            Sentry.captureException(error, stackTrace: stackTrace);
+            if (!context.mounted) return;
+            navigator.pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Center(
+                  child: Text(
+                    AppLocalizations.of(
+                          context,
+                        )?.warNoDataAvailableForThisWar ??
+                        'No data available for this war',
+                  ),
+                ),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        },
+      );
+    }
+
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 2),
+        child: isDesktopWeb
+            ? ResponsiveCardGrid(
+                itemCount: warLogData.length,
+                minItemWidth: 520,
+                maxColumns: 2,
+                spacing: 10,
+                itemBuilder: buildWarLogCard,
+              )
+            : Column(
+                children: [
+                  for (var index = 0; index < warLogData.length; index++) ...[
+                    buildWarLogCard(context, index),
+                    if (index < warLogData.length - 1)
+                      const SizedBox(height: 6),
+                  ],
+                ],
+              ),
       ),
     );
   }

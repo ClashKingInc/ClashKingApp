@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/shapes/left_pointing_triangle.dart';
 import 'package:clashkingapp/common/widgets/shapes/right_pointing_triangle.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
 class WarEventsTab extends StatefulWidget {
@@ -108,6 +110,7 @@ class _WarEventsTabState extends State<WarEventsTab> {
     }
 
     final attacks = getAttacks();
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -142,6 +145,18 @@ class _WarEventsTabState extends State<WarEventsTab> {
           const SizedBox(height: 10),
           if (attacks.isEmpty)
             _EmptyEvents(message: loc.generalNoDataAvailable)
+          else if (isDesktopWeb)
+            ResponsiveCardGrid(
+              itemCount: attacks.length,
+              minItemWidth: 560,
+              maxColumns: 2,
+              spacing: 10,
+              itemBuilder: (context, index) => _AttackEventRow(
+                item: attacks[index],
+                isFromClan: attacks[index].clanTag == clan.tag,
+                warInfo: widget.warInfo,
+              ),
+            )
           else
             Column(
               children: [

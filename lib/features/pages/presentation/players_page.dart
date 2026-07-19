@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
@@ -12,6 +13,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:provider/provider.dart';
@@ -75,128 +77,142 @@ class _PlayersPageState extends State<PlayersPage> {
         ? linkedPlayers.length
         : bookmarkedPlayers.length;
     final l10n = AppLocalizations.of(context)!;
-    final horizontalPadding = ((MediaQuery.sizeOf(context).width - 840) / 2)
-        .clamp(16.0, double.infinity)
-        .toDouble();
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final bottomPadding = isDesktopWeb
+        ? 32.0
+        : MediaQuery.paddingOf(context).bottom + 96;
 
-    return Scaffold(
-      body: CustomScrollView(
-        scrollCacheExtent: const ScrollCacheExtent.pixels(800),
-        slivers: [
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(
-              horizontalPadding,
-              8,
-              horizontalPadding,
-              14,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: LiquidGlassSegmentedControl<_PlayerRosterMode>(
-                values: const [
-                  _PlayerRosterMode.linked,
-                  _PlayerRosterMode.bookmarked,
-                ],
-                labels: [l10n.playersLinked, l10n.playersBookmarked],
-                selected: _mode,
-                color: Theme.of(context).colorScheme.onSurface,
-                onChanged: (value) => setState(() => _mode = value),
-              ),
+    Widget buildRosterCard(BuildContext context, int index) {
+      if (showingLinked) {
+        final player = linkedPlayers[index];
+        return _PlayerDataCard(
+          player: player,
+          showActivity: true,
+          statusIcon: Icons.verified_user_rounded,
+          statusColor: Theme.of(context).colorScheme.primary,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PlayerScreen(selectedPlayer: player),
             ),
           ),
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(
-              horizontalPadding,
-              0,
-              horizontalPadding,
-              MediaQuery.paddingOf(context).bottom + 96,
+        );
+      }
+
+      final bookmark = bookmarkedPlayers[index];
+      final hydratedPlayer = profilesByTag[_normalizeTag(bookmark.tag)];
+      if (hydratedPlayer != null) {
+        return _PlayerDataCard(
+          player: hydratedPlayer,
+          showActivity: false,
+          statusIcon: Icons.bookmark_rounded,
+          statusColor: Theme.of(context).colorScheme.onSurfaceVariant,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  PlayerScreen(selectedPlayer: hydratedPlayer),
             ),
-            sliver: itemCount == 0
-                ? SliverToBoxAdapter(
-                    child: _EmptyRosterMessage(
-                      title: showingLinked
-                          ? AppLocalizations.of(
-                              context,
-                            )!.dashboardNoLinkedAccountsTitle
-                          : AppLocalizations.of(
-                              context,
-                            )!.playersNoBookmarkedTitle,
-                      subtitle: showingLinked
-                          ? AppLocalizations.of(context)!.playersNoLinkedBody
-                          : AppLocalizations.of(
-                              context,
-                            )!.playersNoBookmarkedBody,
-                      icon: showingLinked
-                          ? Icons.account_circle_outlined
-                          : Icons.bookmark_border_rounded,
-                      actionLabel: showingLinked
-                          ? l10n.drawerManageAccounts
-                          : null,
-                      onAction: showingLinked
-                          ? () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => const AddCocAccountPage(
-                                  refreshOnExit: false,
-                                ),
-                              ),
-                            )
-                          : null,
-                    ),
-                  )
-                : SliverList.separated(
-                    itemCount: itemCount,
-                    separatorBuilder: (_, _) => const SizedBox(height: 10),
-                    itemBuilder: (context, index) {
-                      if (showingLinked) {
-                        final player = linkedPlayers[index];
-                        return _PlayerDataCard(
-                          player: player,
-                          showActivity: true,
-                          statusIcon: Icons.verified_user_rounded,
-                          statusColor: Theme.of(context).colorScheme.primary,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PlayerScreen(selectedPlayer: player),
-                            ),
-                          ),
-                        );
-                      }
+          ),
+        );
+      }
 
-                      final bookmark = bookmarkedPlayers[index];
-                      final hydratedPlayer =
-                          profilesByTag[_normalizeTag(bookmark.tag)];
-                      if (hydratedPlayer != null) {
-                        return _PlayerDataCard(
-                          player: hydratedPlayer,
-                          showActivity: false,
-                          statusIcon: Icons.bookmark_rounded,
-                          statusColor: Theme.of(
-                            context,
-                          ).colorScheme.onSurfaceVariant,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PlayerScreen(selectedPlayer: hydratedPlayer),
-                            ),
-                          ),
-                        );
-                      }
+      return _BookmarkedPlayerCard(
+        player: bookmark,
+        onTap: () =>
+            _openBookmarkedPlayer(context, playerService, bookmark.tag),
+      );
+    }
 
-                      return _BookmarkedPlayerCard(
-                        player: bookmark,
-                        onTap: () => _openBookmarkedPlayer(
-                          context,
-                          playerService,
-                          bookmark.tag,
-                        ),
-                      );
-                    },
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxContentWidth = isDesktopWeb ? 1320.0 : 840.0;
+        final horizontalPadding = ((constraints.maxWidth - maxContentWidth) / 2)
+            .clamp(16.0, double.infinity)
+            .toDouble();
+
+        return Scaffold(
+          body: CustomScrollView(
+            scrollCacheExtent: const ScrollCacheExtent.pixels(800),
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  8,
+                  horizontalPadding,
+                  14,
+                ),
+                sliver: SliverToBoxAdapter(
+                  child: LiquidGlassSegmentedControl<_PlayerRosterMode>(
+                    values: const [
+                      _PlayerRosterMode.linked,
+                      _PlayerRosterMode.bookmarked,
+                    ],
+                    labels: [l10n.playersLinked, l10n.playersBookmarked],
+                    selected: _mode,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    onChanged: (value) => setState(() => _mode = value),
                   ),
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  0,
+                  horizontalPadding,
+                  bottomPadding,
+                ),
+                sliver: itemCount == 0
+                    ? SliverToBoxAdapter(
+                        child: _EmptyRosterMessage(
+                          title: showingLinked
+                              ? AppLocalizations.of(
+                                  context,
+                                )!.dashboardNoLinkedAccountsTitle
+                              : AppLocalizations.of(
+                                  context,
+                                )!.playersNoBookmarkedTitle,
+                          subtitle: showingLinked
+                              ? AppLocalizations.of(
+                                  context,
+                                )!.playersNoLinkedBody
+                              : AppLocalizations.of(
+                                  context,
+                                )!.playersNoBookmarkedBody,
+                          icon: showingLinked
+                              ? Icons.account_circle_outlined
+                              : Icons.bookmark_border_rounded,
+                          actionLabel: showingLinked
+                              ? l10n.drawerManageAccounts
+                              : null,
+                          onAction: showingLinked
+                              ? () => Navigator.of(context).push(
+                                  MaterialPageRoute<void>(
+                                    builder: (_) => const AddCocAccountPage(
+                                      refreshOnExit: false,
+                                    ),
+                                  ),
+                                )
+                              : null,
+                        ),
+                      )
+                    : isDesktopWeb
+                    ? SliverToBoxAdapter(
+                        child: ResponsiveCardGrid(
+                          itemCount: itemCount,
+                          itemBuilder: buildRosterCard,
+                        ),
+                      )
+                    : SliverList.separated(
+                        itemCount: itemCount,
+                        separatorBuilder: (_, _) => const SizedBox(height: 10),
+                        itemBuilder: buildRosterCard,
+                      ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

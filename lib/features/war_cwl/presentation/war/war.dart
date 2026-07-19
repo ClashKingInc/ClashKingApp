@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:flutter/foundation.dart';
 
 class WarScreen extends StatefulWidget {
   final WarInfo war;
@@ -283,147 +284,160 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
       filterMembers(rawMembers, filterBy),
       _teamSearchQuery,
     );
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            WarHeader(
-              warInfo: widget.war,
-              cwlRoundNumber: widget.cwlRoundNumber,
-              onOpenCwl: widget.cwlScreenBuilder == null
-                  ? null
-                  : () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: widget.cwlScreenBuilder!),
-                    ),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: isDesktopWeb ? 1320 : double.infinity,
             ),
-            ScrollableTab(
-              onTap: (value) {},
-              tabs: [
-                Tab(text: AppLocalizations.of(context)!.navigationStatistics),
-                Tab(text: AppLocalizations.of(context)!.warEventsTitle),
-                Tab(text: AppLocalizations.of(context)!.navigationTeam),
-              ],
+            child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
-                  child: WarStatisticsTab(warInfo: widget.war),
+                WarHeader(
+                  warInfo: widget.war,
+                  cwlRoundNumber: widget.cwlRoundNumber,
+                  onOpenCwl: widget.cwlScreenBuilder == null
+                      ? null
+                      : () => Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: widget.cwlScreenBuilder!),
+                        ),
                 ),
-                WarEventsTab(warInfo: widget.war),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
-                  child: Column(
-                    children: [
-                      LiquidGlassSegmentedControl<int>(
-                        values: const [1, 2],
-                        labels: [
-                          AppLocalizations.of(context)!.warMyTeam,
-                          AppLocalizations.of(context)!.warEnemiesTeam,
-                        ],
-                        selected: _currentSegment,
-                        height: 44,
-                        color: Theme.of(context).colorScheme.primary,
-                        onChanged: (v) {
-                          setState(() {
-                            _currentSegment = v;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
+                ScrollableTab(
+                  onTap: (value) {},
+                  tabs: [
+                    Tab(
+                      text: AppLocalizations.of(context)!.navigationStatistics,
+                    ),
+                    Tab(text: AppLocalizations.of(context)!.warEventsTitle),
+                    Tab(text: AppLocalizations.of(context)!.navigationTeam),
+                  ],
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
+                      child: WarStatisticsTab(warInfo: widget.war),
+                    ),
+                    WarEventsTab(warInfo: widget.war),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: WarSearchField(
-                              controller: _teamSearchController,
-                              query: _teamSearchQuery,
-                              hintText: AppLocalizations.of(
-                                context,
-                              )!.playerSearchPlaceholder,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          FilterDropdown(
-                            sortBy: filterBy,
-                            updateSortBy: (value) {
+                          LiquidGlassSegmentedControl<int>(
+                            values: const [1, 2],
+                            labels: [
+                              AppLocalizations.of(context)!.warMyTeam,
+                              AppLocalizations.of(context)!.warEnemiesTeam,
+                            ],
+                            selected: _currentSegment,
+                            height: 44,
+                            color: Theme.of(context).colorScheme.primary,
+                            onChanged: (v) {
                               setState(() {
-                                filterBy = value;
+                                _currentSegment = v;
                               });
                             },
-                            maxWidth: 132,
-                            sortByOptions: {
-                              AppLocalizations.of(context)!.warPositionMap:
-                                  'all',
-                              AppLocalizations.of(context)!.warAttacksTitle:
-                                  'rattacks',
-                              AppLocalizations.of(context)!.warDefensesTitle:
-                                  'rdefenses',
-                              AppLocalizations.of(context)!.warAttacksBest:
-                                  'bestAttacks',
-                              AppLocalizations.of(context)!.warDefensesBest:
-                                  'bestDefenses',
-                              AppLocalizations.of(
-                                context,
-                              )!.warStarsBestPerformance: 'bestPerformance',
-                              AppLocalizations.of(context)!.warAttacksNone:
-                                  'noattacks',
-                              AppLocalizations.of(context)!.warDefensesNone:
-                                  'nodefenses',
-                              generateStarsWithIconBefore(
-                                3,
-                                16,
-                                ImageAssets.sword,
-                              ): '3stars',
-                              generateStarsWithIconBefore(
-                                2,
-                                16,
-                                ImageAssets.sword,
-                              ): '2stars',
-                              generateStarsWithIconBefore(
-                                1,
-                                16,
-                                ImageAssets.sword,
-                              ): '1star',
-                              generateStarsWithIconBefore(
-                                0,
-                                16,
-                                ImageAssets.sword,
-                              ): '0star',
-                              generateStarsWithIconBefore(
-                                3,
-                                16,
-                                ImageAssets.shieldWithArrow,
-                              ): 'def_3stars',
-                              generateStarsWithIconBefore(
-                                2,
-                                16,
-                                ImageAssets.shieldWithArrow,
-                              ): 'def_2stars',
-                              generateStarsWithIconBefore(
-                                1,
-                                16,
-                                ImageAssets.shieldWithArrow,
-                              ): 'def_1star',
-                              generateStarsWithIconBefore(
-                                0,
-                                16,
-                                ImageAssets.shieldWithArrow,
-                              ): 'def_0star',
-                            },
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: WarSearchField(
+                                  controller: _teamSearchController,
+                                  query: _teamSearchQuery,
+                                  hintText: AppLocalizations.of(
+                                    context,
+                                  )!.playerSearchPlaceholder,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              FilterDropdown(
+                                sortBy: filterBy,
+                                updateSortBy: (value) {
+                                  setState(() {
+                                    filterBy = value;
+                                  });
+                                },
+                                maxWidth: 132,
+                                sortByOptions: {
+                                  AppLocalizations.of(context)!.warPositionMap:
+                                      'all',
+                                  AppLocalizations.of(context)!.warAttacksTitle:
+                                      'rattacks',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.warDefensesTitle: 'rdefenses',
+                                  AppLocalizations.of(context)!.warAttacksBest:
+                                      'bestAttacks',
+                                  AppLocalizations.of(context)!.warDefensesBest:
+                                      'bestDefenses',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.warStarsBestPerformance: 'bestPerformance',
+                                  AppLocalizations.of(context)!.warAttacksNone:
+                                      'noattacks',
+                                  AppLocalizations.of(context)!.warDefensesNone:
+                                      'nodefenses',
+                                  generateStarsWithIconBefore(
+                                    3,
+                                    16,
+                                    ImageAssets.sword,
+                                  ): '3stars',
+                                  generateStarsWithIconBefore(
+                                    2,
+                                    16,
+                                    ImageAssets.sword,
+                                  ): '2stars',
+                                  generateStarsWithIconBefore(
+                                    1,
+                                    16,
+                                    ImageAssets.sword,
+                                  ): '1star',
+                                  generateStarsWithIconBefore(
+                                    0,
+                                    16,
+                                    ImageAssets.sword,
+                                  ): '0star',
+                                  generateStarsWithIconBefore(
+                                    3,
+                                    16,
+                                    ImageAssets.shieldWithArrow,
+                                  ): 'def_3stars',
+                                  generateStarsWithIconBefore(
+                                    2,
+                                    16,
+                                    ImageAssets.shieldWithArrow,
+                                  ): 'def_2stars',
+                                  generateStarsWithIconBefore(
+                                    1,
+                                    16,
+                                    ImageAssets.shieldWithArrow,
+                                  ): 'def_1star',
+                                  generateStarsWithIconBefore(
+                                    0,
+                                    16,
+                                    ImageAssets.shieldWithArrow,
+                                  ): 'def_0star',
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          WarTeamTab(
+                            members: filteredMembers,
+                            warInfo: widget.war,
+                            attacksPerMember:
+                                widget.war.effectiveAttacksPerMember,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      WarTeamTab(
-                        members: filteredMembers,
-                        warInfo: widget.war,
-                        attacksPerMember: widget.war.effectiveAttacksPerMember,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

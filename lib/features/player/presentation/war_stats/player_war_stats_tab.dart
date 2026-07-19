@@ -3,6 +3,7 @@ import 'package:clashkingapp/features/player/presentation/war_stats/widgets/enha
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player_enemy_townhall_stats.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -86,81 +87,87 @@ class WarStatsView extends StatelessWidget {
             )
             .toList()
           ..sort((a, b) => int.parse(b.key).compareTo(int.parse(a.key)));
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final sectionMargin = isDesktopWeb
+        ? EdgeInsets.zero
+        : const EdgeInsets.symmetric(horizontal: 8, vertical: 5);
+    final sections = <Widget>[
+      _WarStatsCollapsibleSection(
+        title: AppLocalizations.of(context)!.statsAllTownHalls,
+        initiallyExpanded: true,
+        attackCount: stats.totalAttacks,
+        defenseCount: stats.totalDefenses,
+        subtitle: _buildFilterSubtitle(context, userLocale),
+        margin: sectionMargin,
+        childBuilder: (context) => _buildStatRows(context, stats),
+      ),
+      ...sortedEntries.map((entry) {
+        final thLevel = entry.key;
+        final attackStats = entry.value.isNotEmpty
+            ? mergeStats(entry.value)
+            : null;
+        final defenseStats = groupedDefenseStats[thLevel] != null
+            ? mergeStats(groupedDefenseStats[thLevel]!)
+            : null;
 
-    return Column(
-      children: <Widget>[
-        _WarStatsCollapsibleSection(
-          title: AppLocalizations.of(context)!.statsAllTownHalls,
-          initiallyExpanded: true,
-          attackCount: stats.totalAttacks,
-          defenseCount: stats.totalDefenses,
-          subtitle: _buildFilterSubtitle(context, userLocale),
-          childBuilder: (context) => _buildStatRows(context, stats),
-        ),
-        ...sortedEntries.map((entry) {
-          final thLevel = entry.key;
-          final attackStats = entry.value.isNotEmpty
-              ? mergeStats(entry.value)
-              : null;
-          final defenseStats = groupedDefenseStats[thLevel] != null
-              ? mergeStats(groupedDefenseStats[thLevel]!)
-              : null;
+        final defTh = int.tryParse(thLevel);
 
-          final defTh = int.tryParse(thLevel);
-
-          return _WarStatsCollapsibleSection(
-            title: AppLocalizations.of(
-              context,
-            )!.gameTownHallLevelNumber(defTh ?? 1),
-            imageUrl: ImageAssets.townHall(defTh ?? 1),
-            attackCount: attackStats?.count ?? 0,
-            defenseCount: defenseStats?.count ?? 0,
-            childBuilder: (context) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: attackStats != null
-                        ? EnhancedStatCard(
-                            title: AppLocalizations.of(
-                              context,
-                            )!.warAttacksTitle,
-                            stars: attackStats.averageStars,
-                            destruction: attackStats.averageDestruction,
-                            count: attackStats.count,
-                            isAttack: true,
-                            starsBreakdown: attackStats.starsCount,
-                          )
-                        : _EmptyWarStatsCard(
-                            label: AppLocalizations.of(context)!.warAttacksNone,
-                          ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: defenseStats != null
-                        ? EnhancedStatCard(
-                            title: AppLocalizations.of(
-                              context,
-                            )!.warDefensesTitle,
-                            stars: defenseStats.averageStars,
-                            destruction: defenseStats.averageDestruction,
-                            count: defenseStats.count,
-                            isAttack: false,
-                            starsBreakdown: defenseStats.starsCount,
-                          )
-                        : _EmptyWarStatsCard(
-                            label: AppLocalizations.of(
-                              context,
-                            )!.warDefensesNone,
-                          ),
-                  ),
-                ],
-              ),
+        return _WarStatsCollapsibleSection(
+          title: AppLocalizations.of(
+            context,
+          )!.gameTownHallLevelNumber(defTh ?? 1),
+          imageUrl: ImageAssets.townHall(defTh ?? 1),
+          attackCount: attackStats?.count ?? 0,
+          defenseCount: defenseStats?.count ?? 0,
+          margin: sectionMargin,
+          childBuilder: (context) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: attackStats != null
+                      ? EnhancedStatCard(
+                          title: AppLocalizations.of(context)!.warAttacksTitle,
+                          stars: attackStats.averageStars,
+                          destruction: attackStats.averageDestruction,
+                          count: attackStats.count,
+                          isAttack: true,
+                          starsBreakdown: attackStats.starsCount,
+                        )
+                      : _EmptyWarStatsCard(
+                          label: AppLocalizations.of(context)!.warAttacksNone,
+                        ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: defenseStats != null
+                      ? EnhancedStatCard(
+                          title: AppLocalizations.of(context)!.warDefensesTitle,
+                          stars: defenseStats.averageStars,
+                          destruction: defenseStats.averageDestruction,
+                          count: defenseStats.count,
+                          isAttack: false,
+                          starsBreakdown: defenseStats.starsCount,
+                        )
+                      : _EmptyWarStatsCard(
+                          label: AppLocalizations.of(context)!.warDefensesNone,
+                        ),
+                ),
+              ],
             ),
-          );
-        }),
-      ],
-    );
+          ),
+        );
+      }),
+    ];
+
+    if (isDesktopWeb) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: _WarStatsSectionGrid(children: sections),
+      );
+    }
+
+    return Column(children: sections);
   }
 
   String? _buildFilterSubtitle(BuildContext context, Locale userLocale) {
@@ -218,6 +225,65 @@ class WarStatsView extends StatelessWidget {
   }
 }
 
+class _WarStatsSectionGrid extends StatelessWidget {
+  const _WarStatsSectionGrid({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    if (children.isEmpty) return const SizedBox.shrink();
+    if (children.length == 1) return children.first;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 820) {
+          return Column(
+            children: [
+              for (var index = 0; index < children.length; index++) ...[
+                children[index],
+                if (index < children.length - 1) const SizedBox(height: 10),
+              ],
+            ],
+          );
+        }
+
+        final columns = [<Widget>[], <Widget>[]];
+        for (var index = 0; index < children.length; index++) {
+          columns[index.isEven ? 0 : 1].add(children[index]);
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _WarStatsSectionColumn(children: columns[0])),
+            const SizedBox(width: 10),
+            Expanded(child: _WarStatsSectionColumn(children: columns[1])),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _WarStatsSectionColumn extends StatelessWidget {
+  const _WarStatsSectionColumn({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (var index = 0; index < children.length; index++) ...[
+          children[index],
+          if (index < children.length - 1) const SizedBox(height: 10),
+        ],
+      ],
+    );
+  }
+}
+
 class _WarStatsCollapsibleSection extends StatefulWidget {
   final String title;
   final String? subtitle;
@@ -226,6 +292,7 @@ class _WarStatsCollapsibleSection extends StatefulWidget {
   final int defenseCount;
   final WidgetBuilder childBuilder;
   final bool initiallyExpanded;
+  final EdgeInsetsGeometry margin;
 
   const _WarStatsCollapsibleSection({
     required this.title,
@@ -235,6 +302,7 @@ class _WarStatsCollapsibleSection extends StatefulWidget {
     this.subtitle,
     this.imageUrl,
     this.initiallyExpanded = false,
+    this.margin = const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
   });
 
   @override
@@ -259,7 +327,7 @@ class _WarStatsCollapsibleSectionState
     return RepaintBoundary(
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        margin: widget.margin,
         decoration: BoxDecoration(
           color:
               Theme.of(context).cardTheme.color ??

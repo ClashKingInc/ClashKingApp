@@ -39,6 +39,11 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _trackerContentGutter = 16.0;
+const _trackerDesktopBreakpoint = 900.0;
+const _trackerDesktopMaxWidth = 1180.0;
+
+bool _isTrackerDesktop(BuildContext context) =>
+    kIsWeb && MediaQuery.sizeOf(context).width >= _trackerDesktopBreakpoint;
 
 class UpgradeTrackerPage extends StatefulWidget {
   const UpgradeTrackerPage({super.key});
@@ -568,28 +573,33 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         )
         .firstOrNull;
     final snapshot = _snapshot;
+    final isDesktop = _isTrackerDesktop(context);
     if (_loading || _error != null || snapshot == null) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            selectedAccount?.name ?? l10n.upgradeTrackerChooseAccount,
-          ),
-          actions: [
-            IconButton(
-              tooltip: l10n.upgradeTrackerSwitchAccount(
-                selectedAccount?.name ?? l10n.upgradeTrackerChooseAccount,
+        appBar: isDesktop
+            ? null
+            : AppBar(
+                title: Text(
+                  selectedAccount?.name ?? l10n.upgradeTrackerChooseAccount,
+                ),
+                actions: [
+                  IconButton(
+                    tooltip: l10n.upgradeTrackerSwitchAccount(
+                      selectedAccount?.name ?? l10n.upgradeTrackerChooseAccount,
+                    ),
+                    onPressed: () => _showAccountPicker(uniqueAccounts),
+                    icon: const Icon(Icons.switch_account_rounded),
+                  ),
+                  IconButton(
+                    tooltip: l10n.upgradeTrackerPasteJson,
+                    onPressed: _importSnapshot,
+                    icon: const Icon(Icons.content_paste_rounded),
+                  ),
+                ],
               ),
-              onPressed: () => _showAccountPicker(uniqueAccounts),
-              icon: const Icon(Icons.switch_account_rounded),
-            ),
-            IconButton(
-              tooltip: l10n.upgradeTrackerPasteJson,
-              onPressed: _importSnapshot,
-              icon: const Icon(Icons.content_paste_rounded),
-            ),
-          ],
-        ),
-        body: _buildBody(),
+        body: isDesktop
+            ? _buildDesktopEmptyShell(uniqueAccounts, selectedAccount)
+            : _buildBody(),
       );
     }
     return Scaffold(
@@ -670,6 +680,90 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           ),
         ],
         body: _buildBody(),
+      ),
+    );
+  }
+
+  Widget _buildDesktopEmptyShell(
+    List<_TrackerAccountOption> accounts,
+    _TrackerAccountOption? selectedAccount,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final scheme = Theme.of(context).colorScheme;
+    final subtitle = selectedAccount == null
+        ? l10n.upgradeTrackerChooseAccount
+        : [
+            selectedAccount.name,
+            if (selectedAccount.subtitle.isNotEmpty) selectedAccount.subtitle,
+          ].join(' · ');
+
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _trackerDesktopMaxWidth),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 18),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: scheme.primaryContainer.withValues(alpha: 0.72),
+                        borderRadius: BorderRadius.circular(CKRadius.control),
+                      ),
+                      child: Icon(
+                        Icons.construction_rounded,
+                        color: scheme.onPrimaryContainer,
+                      ),
+                    ),
+                    const SizedBox(width: CKSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.upgradeTrackerTitle,
+                            style: CKTypography.of(
+                              context,
+                              CKTextRole.screenTitle,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: CKTypography.of(
+                              context,
+                              CKTextRole.metadata,
+                            ).copyWith(color: scheme.onSurfaceVariant),
+                          ),
+                        ],
+                      ),
+                    ),
+                    OutlinedButton.icon(
+                      onPressed: () => _showAccountPicker(accounts),
+                      icon: const Icon(Icons.switch_account_rounded),
+                      label: Text(l10n.upgradeTrackerChooseAccount),
+                    ),
+                    const SizedBox(width: CKSpacing.sm),
+                    FilledButton.icon(
+                      onPressed: _importSnapshot,
+                      icon: const Icon(Icons.content_paste_rounded),
+                      label: Text(l10n.upgradeTrackerPasteJson),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: CKSpacing.xl),
+                Expanded(child: _buildBody()),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -951,7 +1045,10 @@ class _TrackerInfoHeader extends StatelessWidget {
         .itemsFor(village: village)
         .where((item) => snapshot.remainingActiveSeconds(item) > 0)
         .length;
-    final headerHeight = MediaQuery.paddingOf(context).top + 276;
+    final isDesktop = _isTrackerDesktop(context);
+    final headerHeight =
+        MediaQuery.paddingOf(context).top + (isDesktop ? 214.0 : 276.0);
+    final sidePadding = isDesktop ? 24.0 : 12.0;
 
     return Stack(
       children: [
@@ -964,7 +1061,7 @@ class _TrackerInfoHeader extends StatelessWidget {
             children: [
               SizedBox(height: MediaQuery.paddingOf(context).top),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: EdgeInsets.symmetric(horizontal: sidePadding),
                 child: Row(
                   children: [
                     HeaderIconButton(
@@ -1032,8 +1129,8 @@ class _TrackerInfoHeader extends StatelessWidget {
                         imageUrl: selectedTab == 4
                             ? ImageAssets.townHall(snapshot.townHallLevel)
                             : hallImage,
-                        width: 70,
-                        height: 70,
+                        width: isDesktop ? 58 : 70,
+                        height: isDesktop ? 58 : 70,
                       ),
                       const SizedBox(height: 3),
                       Row(
@@ -1047,7 +1144,7 @@ class _TrackerInfoHeader extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleLarge
                                   ?.copyWith(
                                     color: Colors.white,
-                                    fontSize: 26,
+                                    fontSize: isDesktop ? 24 : 26,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -1086,7 +1183,12 @@ class _TrackerInfoHeader extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                padding: EdgeInsets.fromLTRB(
+                  isDesktop ? 24 : 16,
+                  0,
+                  isDesktop ? 24 : 16,
+                  isDesktop ? 12 : 10,
+                ),
                 child: ValueListenableBuilder<List<UpgradePlanLane>>(
                   valueListenable: lanes,
                   builder: (context, planLanes, _) {
@@ -1144,14 +1246,16 @@ class _TrackerInfoHeader extends StatelessWidget {
                           Expanded(
                             flex: values.length == 4 && index == 3 ? 2 : 1,
                             child: Container(
-                              height: 52,
+                              height: isDesktop ? 48 : 52,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.black.withValues(alpha: 0.34),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(
+                                  isDesktop ? 12 : 16,
+                                ),
                                 border: Border.all(
                                   color: Colors.white.withValues(alpha: 0.12),
                                 ),
@@ -1283,6 +1387,8 @@ class _TrackerCollapsibleCard extends StatelessWidget {
     required this.onSummaryTap,
     required this.child,
     this.showContent = true,
+    this.surfaceWhenExpanded = false,
+    this.margin = const EdgeInsets.only(bottom: 10),
   });
 
   final String title;
@@ -1294,6 +1400,8 @@ class _TrackerCollapsibleCard extends StatelessWidget {
   final VoidCallback onSummaryTap;
   final Widget child;
   final bool showContent;
+  final bool surfaceWhenExpanded;
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
@@ -1304,9 +1412,9 @@ class _TrackerCollapsibleCard extends StatelessWidget {
       trailing: SectionProgressBadge(progress: completion, onTap: onSummaryTap),
       expanded: expanded,
       onToggle: onToggle,
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: margin,
       showContent: showContent,
-      surfaceWhenExpanded: false,
+      surfaceWhenExpanded: surfaceWhenExpanded,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: CKSpacing.sm,
         vertical: CKSpacing.xs,
@@ -1408,6 +1516,12 @@ class _UpgradesTabState extends State<_UpgradesTab> {
     final l10n = AppLocalizations.of(context)!;
     final village = widget.village;
     final hasActive = _activeItems.isNotEmpty;
+    final isDesktop = _isTrackerDesktop(context);
+    final data = _viewData;
+    if (isDesktop) {
+      return _buildDesktopGrid(l10n, village, hasActive, data);
+    }
+
     final slivers = <Widget>[];
     if (hasActive) {
       slivers.add(
@@ -1496,7 +1610,6 @@ class _UpgradesTabState extends State<_UpgradesTab> {
       ),
     );
 
-    final data = _viewData;
     if (data.visibleItems.isEmpty) {
       slivers.add(
         SliverFillRemaining(
@@ -1635,30 +1748,349 @@ class _UpgradesTabState extends State<_UpgradesTab> {
     return CustomScrollView(slivers: slivers);
   }
 
-  Widget _upgradeGridSliver(List<UpgradeTrackerItem> items) => SliverPadding(
-    padding: EdgeInsets.fromLTRB(
-      _trackerContentGutter,
-      0,
-      _trackerContentGutter,
-      12,
-    ),
-    sliver: SliverGrid.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: MediaQuery.sizeOf(context).width < 600 ? 5 : 8,
-        mainAxisSpacing: 6,
-        crossAxisSpacing: 6,
+  Widget _buildDesktopGrid(
+    AppLocalizations l10n,
+    UpgradeVillage village,
+    bool hasActive,
+    _UpgradeVillageViewData data,
+  ) {
+    final visibleGroups = data.groups
+        .where((group) => _matchesUpgradeGroupFilter(group, _groupFilter))
+        .toList(growable: false);
+
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
+          sliver: SliverToBoxAdapter(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: _trackerDesktopMaxWidth,
+                ),
+                child: Column(
+                  children: [
+                    if (hasActive) ...[
+                      ValueListenableBuilder<DateTime>(
+                        valueListenable: widget.clock,
+                        builder: (context, now, _) {
+                          final active = widget.snapshot
+                              .itemsFor(village: village)
+                              .where(
+                                (item) =>
+                                    widget.snapshot.remainingActiveSeconds(
+                                      item,
+                                      now: now,
+                                    ) >
+                                    0,
+                              )
+                              .toList(growable: false);
+                          return CKSectionPanel(
+                            padding: const EdgeInsets.all(CKSpacing.md),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _SectionHeading(
+                                  title: 'In progress',
+                                  trailing: '${active.length} active',
+                                ),
+                                ...active.map(
+                                  (item) => _ActiveUpgradeRow(
+                                    snapshot: widget.snapshot,
+                                    item: item,
+                                    now: now,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppSearchField(
+                            controller: _searchController,
+                            query: _query,
+                            hintText: l10n.upgradeTrackerSearchUpgrades,
+                            onChanged: _setQuery,
+                          ),
+                        ),
+                        const SizedBox(width: CKSpacing.sm),
+                        FilterDropdown(
+                          sortBy: _groupFilter,
+                          maxWidth: 136,
+                          sortByOptions: const {
+                            'All': 'all',
+                            'Buildings': 'buildings',
+                            'Heroes': 'heroes',
+                            'Research': 'research',
+                            'Other': 'other',
+                          },
+                          updateSortBy: (value) =>
+                              setState(() => _groupFilter = value),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    if (data.visibleItems.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 88),
+                        child: Text(l10n.upgradeTrackerNoMatchingItems),
+                      )
+                    else
+                      _DesktopUpgradeGroupGrid(
+                        children: [
+                          for (final group in visibleGroups)
+                            _buildDesktopGroupCard(l10n, village, group),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopGroupCard(
+    AppLocalizations l10n,
+    UpgradeVillage village,
+    _UpgradeGroup group,
+  ) {
+    final items = _viewData.itemsByGroup[group]!;
+    final summary = _viewData.summaryByGroup[group]!;
+    final key = '${village.name}-${group.name}';
+    final expanded = _expandedGroups.contains(key);
+    final title = _upgradeGroupLabelForVillage(group, village);
+
+    return _TrackerCollapsibleCard(
+      title: title,
+      countLabel:
+          '${l10n.upgradeTrackerLevelsLeft(summary.levelsRemaining)} · ${l10n.upgradeTrackerItemCount(items.length)}',
+      imageUrl: _groupImage(widget.snapshot, group, village),
+      completion: summary.completion,
+      expanded: expanded,
+      onToggle: () => setState(() {
+        expanded ? _expandedGroups.remove(key) : _expandedGroups.add(key);
+      }),
+      onSummaryTap: () => _showUpgradeSectionSummary(context, title, summary),
+      surfaceWhenExpanded: true,
+      margin: EdgeInsets.zero,
+      child: _buildDesktopGroupContent(group, items),
+    );
+  }
+
+  Widget _buildDesktopGroupContent(
+    _UpgradeGroup group,
+    List<UpgradeTrackerItem> items,
+  ) {
+    if (group == _UpgradeGroup.laboratory) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final category in <(String, List<UpgradeTrackerItem>)>[
+            (
+              'Troops',
+              items
+                  .where(
+                    (item) =>
+                        item.category == UpgradeCategory.troops ||
+                        item.category == UpgradeCategory.darkTroops,
+                  )
+                  .toList(growable: false),
+            ),
+            (
+              'Spells',
+              items
+                  .where((item) => item.category == UpgradeCategory.spells)
+                  .toList(growable: false),
+            ),
+            (
+              'Siege Machines',
+              items
+                  .where((item) => item.category == UpgradeCategory.sieges)
+                  .toList(growable: false),
+            ),
+          ])
+            if (category.$2.isNotEmpty) ...[
+              _DesktopUpgradeSubheading(label: category.$1),
+              _upgradeIconWrap(category.$2),
+              const SizedBox(height: 10),
+            ],
+        ],
+      );
+    }
+
+    if (group == _UpgradeGroup.equipment) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final heroGroup in _equipmentHeroGroups(items)) ...[
+            _DesktopUpgradeSubheading(
+              label: heroGroup.$1,
+              imageUrl: ImageAssets.getHeroImage(heroGroup.$1),
+            ),
+            _upgradeIconWrap(heroGroup.$2),
+            const SizedBox(height: 10),
+          ],
+        ],
+      );
+    }
+
+    return _upgradeIconWrap(items);
+  }
+
+  Widget _upgradeIconWrap(List<UpgradeTrackerItem> items) {
+    const tileSize = 54.0;
+    const spacing = 8.0;
+    return LayoutBuilder(
+      builder: (context, constraints) => SizedBox(
+        width: constraints.maxWidth,
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            for (final item in items)
+              SizedBox.square(
+                dimension: tileSize,
+                child: _UpgradeIconTile(
+                  snapshot: widget.snapshot,
+                  item: item,
+                  clock: _activeItems.contains(item) ? widget.clock : null,
+                ),
+              ),
+          ],
+        ),
       ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return _UpgradeIconTile(
-          snapshot: widget.snapshot,
-          item: item,
-          clock: _activeItems.contains(item) ? widget.clock : null,
+    );
+  }
+
+  Widget _upgradeGridSliver(List<UpgradeTrackerItem> items) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isDesktop = _isTrackerDesktop(context);
+    if (isDesktop) {
+      const tileSize = 54.0;
+      const spacing = 8.0;
+      return SliverPadding(
+        padding: const EdgeInsets.fromLTRB(
+          _trackerContentGutter,
+          0,
+          _trackerContentGutter,
+          12,
+        ),
+        sliver: SliverToBoxAdapter(
+          child: LayoutBuilder(
+            builder: (context, constraints) => SizedBox(
+              width: constraints.maxWidth,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: spacing,
+                runSpacing: spacing,
+                children: [
+                  for (final item in items)
+                    SizedBox.square(
+                      dimension: tileSize,
+                      child: _UpgradeIconTile(
+                        snapshot: widget.snapshot,
+                        item: item,
+                        clock: _activeItems.contains(item)
+                            ? widget.clock
+                            : null,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    final crossAxisCount = width < 600 ? 5 : 8;
+
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(
+        _trackerContentGutter,
+        0,
+        _trackerContentGutter,
+        12,
+      ),
+      sliver: SliverGrid.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          mainAxisSpacing: 6,
+          crossAxisSpacing: 6,
+        ),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return _UpgradeIconTile(
+            snapshot: widget.snapshot,
+            item: item,
+            clock: _activeItems.contains(item) ? widget.clock : null,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _DesktopUpgradeGroupGrid extends StatelessWidget {
+  const _DesktopUpgradeGroupGrid({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 12.0;
+        final columns = constraints.maxWidth >= 860 ? 2 : 1;
+        final itemWidth =
+            (constraints.maxWidth - spacing * (columns - 1)) / columns;
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            for (final child in children)
+              SizedBox(width: itemWidth, child: child),
+          ],
         );
       },
-    ),
-  );
+    );
+  }
+}
+
+class _DesktopUpgradeSubheading extends StatelessWidget {
+  const _DesktopUpgradeSubheading({required this.label, this.imageUrl});
+
+  final String label;
+  final String? imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (imageUrl case final imageUrl?) ...[
+            _AspectSafeImage(imageUrl: imageUrl, width: 22, height: 22),
+            const SizedBox(width: CKSpacing.xs),
+          ],
+          Text(label, style: CKTypography.of(context, CKTextRole.rowTitle)),
+        ],
+      ),
+    );
+  }
 }
 
 class _UpgradeVillageViewData {
@@ -2182,6 +2614,10 @@ class _PlanTabState extends State<_PlanTab> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isTrackerDesktop(context)) {
+      return _buildDesktop(context);
+    }
+
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -2195,60 +2631,7 @@ class _PlanTabState extends State<_PlanTab> {
         ),
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 36,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: _PlanVillageFilter.values
-                        .map(
-                          (value) => _FilterChip(
-                            label: _planVillageFilterLabel(value),
-                            selected: _villageFilter == value,
-                            onTap: () =>
-                                _updateFilters(() => _villageFilter = value),
-                          ),
-                        )
-                        .toList(growable: false),
-                  ),
-                ),
-                SizedBox(
-                  height: 36,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: _PlanQueueFilter.values
-                        .map(
-                          (value) => _FilterChip(
-                            label: _planQueueFilterLabel(value),
-                            selected: _queueFilter == value,
-                            onTap: () =>
-                                _updateFilters(() => _queueFilter = value),
-                          ),
-                        )
-                        .toList(growable: false),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: FilterDropdown(
-                    sortBy: _planSort.name,
-                    maxWidth: 160,
-                    sortByOptions: {
-                      for (final value in _PlanSort.values)
-                        _planSortLabel(value): value.name,
-                    },
-                    updateSortBy: (value) => _updateFilters(
-                      () => _planSort = _PlanSort.values.byName(value),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          sliver: SliverToBoxAdapter(child: _buildMobileFilters()),
         ),
         if (_groups.isEmpty)
           const SliverFillRemaining(
@@ -2270,6 +2653,166 @@ class _PlanTabState extends State<_PlanTab> {
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildDesktop(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(24, 10, 24, 12),
+          sliver: SliverToBoxAdapter(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: _trackerDesktopMaxWidth,
+                ),
+                child: Column(
+                  children: [
+                    _LootOutlookCard(
+                      lanes: widget.planData.allLanes,
+                      startsAt: widget.planData.startsAt,
+                    ),
+                    const SizedBox(height: CKSpacing.md),
+                    _buildDesktopFilters(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (_groups.isEmpty)
+          const SliverFillRemaining(
+            hasScrollBody: false,
+            child: _TrackerEmptyState(
+              icon: Icons.task_alt_rounded,
+              title: 'No matching upgrades',
+              body: 'Try another village or queue.',
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+            sliver: SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: _trackerDesktopMaxWidth,
+                  ),
+                  child: _DesktopUpgradeGroupGrid(
+                    children: [
+                      for (final group in _groups)
+                        _PlannedUpgradeCard(group: group),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildMobileFilters() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 36,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: _PlanVillageFilter.values
+                .map(
+                  (value) => _FilterChip(
+                    label: _planVillageFilterLabel(value),
+                    selected: _villageFilter == value,
+                    onTap: () => _updateFilters(() => _villageFilter = value),
+                  ),
+                )
+                .toList(growable: false),
+          ),
+        ),
+        SizedBox(
+          height: 36,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: _PlanQueueFilter.values
+                .map(
+                  (value) => _FilterChip(
+                    label: _planQueueFilterLabel(value),
+                    selected: _queueFilter == value,
+                    onTap: () => _updateFilters(() => _queueFilter = value),
+                  ),
+                )
+                .toList(growable: false),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Align(alignment: Alignment.centerRight, child: _buildSortDropdown()),
+      ],
+    );
+  }
+
+  Widget _buildDesktopFilters() {
+    return CKSectionPanel(
+      padding: const EdgeInsets.all(CKSpacing.md),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  spacing: CKSpacing.xs,
+                  runSpacing: CKSpacing.xs,
+                  children: _PlanVillageFilter.values
+                      .map(
+                        (value) => _FilterChip(
+                          label: _planVillageFilterLabel(value),
+                          selected: _villageFilter == value,
+                          onTap: () =>
+                              _updateFilters(() => _villageFilter = value),
+                        ),
+                      )
+                      .toList(growable: false),
+                ),
+                const SizedBox(height: CKSpacing.sm),
+                Wrap(
+                  spacing: CKSpacing.xs,
+                  runSpacing: CKSpacing.xs,
+                  children: _PlanQueueFilter.values
+                      .map(
+                        (value) => _FilterChip(
+                          label: _planQueueFilterLabel(value),
+                          selected: _queueFilter == value,
+                          onTap: () =>
+                              _updateFilters(() => _queueFilter = value),
+                        ),
+                      )
+                      .toList(growable: false),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: CKSpacing.md),
+          _buildSortDropdown(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSortDropdown() {
+    return FilterDropdown(
+      sortBy: _planSort.name,
+      maxWidth: 160,
+      sortByOptions: {
+        for (final value in _PlanSort.values) _planSortLabel(value): value.name,
+      },
+      updateSortBy: (value) =>
+          _updateFilters(() => _planSort = _PlanSort.values.byName(value)),
     );
   }
 }
@@ -3331,6 +3874,99 @@ class _PlannedUpgradeRow extends StatelessWidget {
   }
 }
 
+class _PlannedUpgradeCard extends StatelessWidget {
+  const _PlannedUpgradeCard({required this.group});
+
+  final _PlannedUpgradeGroup group;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final upgrade = group.first;
+    final item = upgrade.item;
+    final duration = _duration(
+      group.endsAt.difference(group.startsAt).inSeconds,
+    );
+
+    return InkWell(
+      onTap: () => showUpgradeDetails(context, item),
+      borderRadius: BorderRadius.circular(CKRadius.card),
+      child: Container(
+        padding: const EdgeInsets.all(CKSpacing.md),
+        decoration: BoxDecoration(
+          color: scheme.surfaceContainerHighest.withValues(alpha: 0.22),
+          borderRadius: BorderRadius.circular(CKRadius.card),
+          border: Border.all(color: scheme.outlineVariant),
+        ),
+        child: Row(
+          children: [
+            _AspectSafeImage(imageUrl: item.imageUrl, width: 56, height: 48),
+            const SizedBox(width: CKSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${item.name}${group.count > 1 ? ' ×${group.count}' : ''}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: CKTypography.of(context, CKTextRole.rowTitle),
+                        ),
+                      ),
+                      const SizedBox(width: CKSpacing.sm),
+                      _Pill(text: duration),
+                    ],
+                  ),
+                  const SizedBox(height: CKSpacing.xs),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text:
+                              'Level ${upgrade.step.targetLevel - 1} → ${upgrade.step.targetLevel} · ${DateFormat.MMMd().format(group.startsAt)}',
+                        ),
+                        if (group.isOngoing)
+                          TextSpan(
+                            text: ' · Upgrading now',
+                            style: const TextStyle(
+                              color: CKUpgradeColors.completion,
+                            ),
+                          ),
+                      ],
+                    ),
+                    style: CKTypography.of(context, CKTextRole.metadata)
+                        .copyWith(
+                          color: scheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (group.costs.isNotEmpty) ...[
+                    const SizedBox(height: CKSpacing.xs),
+                    Wrap(
+                      spacing: 5,
+                      runSpacing: 4,
+                      children: group.costs
+                          .map(
+                            (cost) => _ResourcePill(cost: cost, compact: true),
+                          )
+                          .toList(growable: false),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 enum _PlanVillageFilter { all, home, builderBase }
 
 enum _PlanQueueFilter { all, builders, laboratory, pets, walls }
@@ -3658,6 +4294,10 @@ class _CollectionTabState extends State<_CollectionTab> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    if (_isTrackerDesktop(context)) {
+      return _buildDesktop(context, l10n);
+    }
+
     final slivers = <Widget>[
       SliverPadding(
         padding: const EdgeInsets.fromLTRB(
@@ -3855,6 +4495,186 @@ class _CollectionTabState extends State<_CollectionTab> {
     slivers.add(const SliverToBoxAdapter(child: SizedBox(height: 28)));
     return CustomScrollView(slivers: slivers);
   }
+
+  Widget _buildDesktop(BuildContext context, AppLocalizations l10n) {
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(24, 10, 24, 14),
+          sliver: SliverToBoxAdapter(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: _trackerDesktopMaxWidth,
+                ),
+                child: _buildFilterPanel(l10n),
+              ),
+            ),
+          ),
+        ),
+        if (_sections.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: _TrackerEmptyState(
+              icon: Icons.collections_bookmark_rounded,
+              title: l10n.upgradeTrackerNoMatchingItems,
+              body: l10n.upgradeTrackerSearchCollection,
+            ),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+            sliver: SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: _trackerDesktopMaxWidth,
+                  ),
+                  child: _DesktopUpgradeGroupGrid(
+                    children: [
+                      for (final section in _sections)
+                        _buildDesktopSection(context, l10n, section),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildFilterPanel(AppLocalizations l10n) {
+    return CKSectionPanel(
+      padding: const EdgeInsets.all(CKSpacing.md),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: AppSearchField(
+                  controller: _searchController,
+                  query: _query,
+                  hintText: l10n.upgradeTrackerSearchCollection,
+                  onChanged: (value) => _update(() => _query = value),
+                ),
+              ),
+              const SizedBox(width: CKSpacing.sm),
+              IconButton.filledTonal(
+                tooltip: _showFilters
+                    ? l10n.upgradeTrackerHideFilters
+                    : l10n.upgradeTrackerShowFilters,
+                onPressed: () => setState(() => _showFilters = !_showFilters),
+                icon: Icon(
+                  _showFilters
+                      ? Icons.filter_list_off_rounded
+                      : Icons.filter_list_rounded,
+                ),
+              ),
+            ],
+          ),
+          AnimatedSize(
+            duration: CKMotion.durationOf(context, CKMotion.standard),
+            curve: CKMotion.standardCurve,
+            alignment: Alignment.topCenter,
+            child: !_showFilters
+                ? const SizedBox(width: double.infinity)
+                : Padding(
+                    padding: const EdgeInsets.only(top: CKSpacing.sm),
+                    child: Column(
+                      children: [
+                        CKSegmentedControl<_CollectionFilter>(
+                          values: _CollectionFilter.values,
+                          labels: [
+                            l10n.upgradeTrackerFilterAll,
+                            l10n.upgradeTrackerFilterOwned,
+                            l10n.upgradeTrackerFilterMissing,
+                          ],
+                          selected: _filter,
+                          density: CKControlDensity.compact,
+                          onChanged: (value) => _update(() => _filter = value),
+                        ),
+                        const SizedBox(height: CKSpacing.sm),
+                        Row(
+                          children: [
+                            if (_supportsVillage)
+                              Expanded(
+                                child: CKSegmentedControl<UpgradeVillage?>(
+                                  values: const [
+                                    null,
+                                    UpgradeVillage.home,
+                                    UpgradeVillage.builderBase,
+                                  ],
+                                  labels: [
+                                    l10n.upgradeTrackerFilterAll,
+                                    l10n.upgradeTrackerHomeVillage,
+                                    l10n.upgradeTrackerBuilderBase,
+                                  ],
+                                  selected: _village,
+                                  density: CKControlDensity.compact,
+                                  onChanged: (value) =>
+                                      _update(() => _village = value),
+                                ),
+                              ),
+                            if (_supportsVillage)
+                              const SizedBox(width: CKSpacing.sm),
+                            FilterDropdown(
+                              sortBy: _sort.name,
+                              maxWidth: 140,
+                              sortByOptions: const {
+                                'Name A–Z': 'nameAscending',
+                                'Name Z–A': 'nameDescending',
+                                'Newest': 'newest',
+                                'Oldest': 'oldest',
+                              },
+                              updateSortBy: (value) => _update(
+                                () => _sort = _CollectionSort.values.byName(
+                                  value,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopSection(
+    BuildContext context,
+    AppLocalizations l10n,
+    _CollectionSectionViewData section,
+  ) {
+    final expanded = _expanded.contains(section.type);
+    final title = _collectionLabel(section.type);
+    return _TrackerCollapsibleCard(
+      title: title,
+      imageUrl: section.preview.imageUrl,
+      completion: section.owned / section.scoped.length,
+      countLabel: l10n.upgradeTrackerOwnedCount(
+        section.owned,
+        section.scoped.length,
+      ),
+      expanded: expanded,
+      onToggle: () => setState(() {
+        expanded ? _expanded.remove(section.type) : _expanded.add(section.type);
+      }),
+      onSummaryTap: () =>
+          _showCollectionSectionSummary(context, title, items: section.scoped),
+      margin: EdgeInsets.zero,
+      surfaceWhenExpanded: true,
+      child: _CollectionTileGrid(
+        section: section,
+        emptyLabel: l10n.upgradeTrackerNoMatchingItems,
+      ),
+    );
+  }
 }
 
 class _CollectionSectionViewData {
@@ -3871,6 +4691,45 @@ class _CollectionSectionViewData {
   final List<UpgradeCollectionItem> visible;
   final int owned;
   final UpgradeCollectionItem preview;
+}
+
+class _CollectionTileGrid extends StatelessWidget {
+  const _CollectionTileGrid({required this.section, required this.emptyLabel});
+
+  final _CollectionSectionViewData section;
+  final String emptyLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    if (section.visible.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(CKSpacing.lg),
+        child: Center(child: Text(emptyLabel, textAlign: TextAlign.center)),
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isScenery = section.type == UpgradeCollectionType.sceneries;
+        final columns = isScenery
+            ? math.max(2, math.min(4, (constraints.maxWidth / 220).floor()))
+            : math.max(3, math.min(6, (constraints.maxWidth / 116).floor()));
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 10,
+            childAspectRatio: isScenery ? 1.18 : 0.88,
+          ),
+          itemCount: section.visible.length,
+          itemBuilder: (context, index) =>
+              _CollectionTile(item: section.visible[index]),
+        );
+      },
+    );
+  }
 }
 
 class _CollectionTile extends StatelessWidget {
@@ -5048,98 +5907,120 @@ class _TrackerEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(CKSpacing.xl),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 440),
-          child: CKSectionPanel(
-            padding: const EdgeInsets.all(CKSpacing.xl),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+    final media = stickerUrl != null
+        ? MobileWebImage(
+            imageUrl: stickerUrl!,
+            width: 132,
+            height: 116,
+            fit: BoxFit.contain,
+          )
+        : Icon(icon, size: 52, color: scheme.onSurfaceVariant);
+
+    Widget details({required bool centered}) => Column(
+      crossAxisAlignment: centered
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          textAlign: centered ? TextAlign.center : TextAlign.start,
+          style: CKTypography.of(context, CKTextRole.sectionTitle),
+        ),
+        const SizedBox(height: CKSpacing.sm),
+        Text(
+          body,
+          textAlign: centered ? TextAlign.center : TextAlign.start,
+          style: CKTypography.of(
+            context,
+            CKTextRole.body,
+          ).copyWith(color: scheme.onSurfaceVariant),
+        ),
+        if (detail != null) ...[
+          const SizedBox(height: CKSpacing.md),
+          Container(
+            padding: const EdgeInsets.all(CKSpacing.md),
+            decoration: BoxDecoration(
+              color: scheme.surfaceContainerHighest.withValues(alpha: 0.32),
+              borderRadius: BorderRadius.circular(CKRadius.control),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (stickerUrl != null)
-                  MobileWebImage(
-                    imageUrl: stickerUrl!,
-                    width: 118,
-                    height: 104,
-                    fit: BoxFit.contain,
-                  )
-                else
-                  Icon(icon, size: 48, color: scheme.onSurfaceVariant),
-                const SizedBox(height: CKSpacing.lg),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: CKTypography.of(context, CKTextRole.sectionTitle),
+                Icon(
+                  Icons.info_outline_rounded,
+                  size: 20,
+                  color: scheme.onSurfaceVariant,
                 ),
-                const SizedBox(height: CKSpacing.sm),
-                Text(
-                  body,
-                  textAlign: TextAlign.center,
-                  style: CKTypography.of(
-                    context,
-                    CKTextRole.body,
-                  ).copyWith(color: scheme.onSurfaceVariant),
+                const SizedBox(width: CKSpacing.sm),
+                Expanded(
+                  child: Text(
+                    detail!,
+                    style: CKTypography.of(
+                      context,
+                      CKTextRole.metadata,
+                    ).copyWith(color: scheme.onSurfaceVariant),
+                  ),
                 ),
-                if (detail != null) ...[
-                  const SizedBox(height: CKSpacing.md),
-                  Container(
-                    padding: const EdgeInsets.all(CKSpacing.md),
-                    decoration: BoxDecoration(
-                      color: scheme.surfaceContainerHighest.withValues(
-                        alpha: 0.32,
-                      ),
-                      borderRadius: BorderRadius.circular(CKRadius.control),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.info_outline_rounded,
-                          size: 20,
-                          color: scheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: CKSpacing.sm),
-                        Expanded(
-                          child: Text(
-                            detail!,
-                            style: CKTypography.of(
-                              context,
-                              CKTextRole.metadata,
-                            ).copyWith(color: scheme.onSurfaceVariant),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-                if (actionLabel != null && onAction != null) ...[
-                  const SizedBox(height: CKSpacing.lg),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton.icon(
-                      onPressed: onAction,
-                      icon: const Icon(Icons.content_paste_rounded),
-                      label: Text(actionLabel!),
-                    ),
-                  ),
-                ],
-                if (secondaryActionLabel != null &&
-                    onSecondaryAction != null) ...[
-                  const SizedBox(height: CKSpacing.sm),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton.icon(
-                      onPressed: onSecondaryAction,
-                      icon: const Icon(Icons.open_in_new_rounded),
-                      label: Text(secondaryActionLabel!),
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
+        ],
+        if (actionLabel != null && onAction != null) ...[
+          const SizedBox(height: CKSpacing.lg),
+          SizedBox(
+            width: centered ? double.infinity : 260,
+            child: FilledButton.icon(
+              onPressed: onAction,
+              icon: const Icon(Icons.content_paste_rounded),
+              label: Text(actionLabel!),
+            ),
+          ),
+        ],
+        if (secondaryActionLabel != null && onSecondaryAction != null) ...[
+          const SizedBox(height: CKSpacing.sm),
+          SizedBox(
+            width: centered ? double.infinity : 260,
+            child: TextButton.icon(
+              onPressed: onSecondaryAction,
+              icon: const Icon(Icons.open_in_new_rounded),
+              label: Text(secondaryActionLabel!),
+            ),
+          ),
+        ],
+      ],
+    );
+
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(CKSpacing.xl),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final useWideState =
+                _isTrackerDesktop(context) && constraints.maxWidth >= 720;
+            return ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: useWideState ? 760 : 440),
+              child: CKSectionPanel(
+                padding: const EdgeInsets.all(CKSpacing.xl),
+                child: useWideState
+                    ? Row(
+                        children: [
+                          SizedBox(width: 170, child: Center(child: media)),
+                          const SizedBox(width: CKSpacing.xl),
+                          Expanded(child: details(centered: false)),
+                        ],
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          media,
+                          const SizedBox(height: CKSpacing.lg),
+                          details(centered: true),
+                        ],
+                      ),
+              ),
+            );
+          },
         ),
       ),
     );

@@ -92,218 +92,221 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
           fontSize: 28,
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 2, 16, 28),
-        children: [
-          _ProfileHeader(user: widget.user),
-          const SizedBox(height: 14),
-          _SettingsSection(
-            title: l10n.settingsPreferences,
-            children: [
-              _SettingsTile(
-                icon: Icons.language,
-                title: l10n.settingsLanguage,
-                subtitle: l10n.settingsSelectLanguage,
-                onTap: () => _showLanguageSelection(context),
-              ),
-              Consumer<ThemeNotifier>(
-                builder: (context, themeNotifier, child) {
-                  return _SettingsTile(
-                    icon: LucideIcons.sunMoon,
-                    title: l10n.settingsToggleTheme,
-                    trailingText: _themeModeLabel(
-                      context,
-                      themeNotifier.themeMode,
-                    ),
-                    onTap: () =>
-                        _showThemeModeSelection(context, themeNotifier),
-                  );
-                },
-              ),
-              if (_supportsAlternateIcons)
+      body: _SettingsResponsiveList(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 2, 16, 28),
+          children: [
+            _ProfileHeader(user: widget.user),
+            const SizedBox(height: 14),
+            _SettingsSection(
+              title: l10n.settingsPreferences,
+              children: [
                 _SettingsTile(
-                  icon: LucideIcons.image,
-                  title: l10n.settingsAppIcon,
-                  trailingText: _isChangingAppIcon
-                      ? l10n.settingsChanging
-                      : _appIconService
-                            .optionForName(_selectedAppIconName)
-                            .labelFor(context),
-                  onTap: _isChangingAppIcon ? null : _showAppIconSelection,
+                  icon: Icons.language,
+                  title: l10n.settingsLanguage,
+                  subtitle: l10n.settingsSelectLanguage,
+                  onTap: () => _showLanguageSelection(context),
                 ),
-              if (notificationsEnabled)
+                Consumer<ThemeNotifier>(
+                  builder: (context, themeNotifier, child) {
+                    return _SettingsTile(
+                      icon: LucideIcons.sunMoon,
+                      title: l10n.settingsToggleTheme,
+                      trailingText: _themeModeLabel(
+                        context,
+                        themeNotifier.themeMode,
+                      ),
+                      onTap: () =>
+                          _showThemeModeSelection(context, themeNotifier),
+                    );
+                  },
+                ),
+                if (_supportsAlternateIcons)
+                  _SettingsTile(
+                    icon: LucideIcons.image,
+                    title: l10n.settingsAppIcon,
+                    trailingText: _isChangingAppIcon
+                        ? l10n.settingsChanging
+                        : _appIconService
+                              .optionForName(_selectedAppIconName)
+                              .labelFor(context),
+                    onTap: _isChangingAppIcon ? null : _showAppIconSelection,
+                  ),
+                if (notificationsEnabled)
+                  _SettingsTile(
+                    icon: LucideIcons.bellRing,
+                    title: l10n.settingsNotificationsTitle,
+                    subtitle: l10n.settingsNotificationsSubtitle,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const NotificationSettingsPage(),
+                        ),
+                      );
+                    },
+                  ),
+                if (warWidgetsEnabled)
+                  _SettingsTile(
+                    icon: LucideIcons.panelTop,
+                    title: l10n.settingsAddWarWidget,
+                    subtitle: widgetClans.isEmpty
+                        ? l10n.settingsWarWidgetLinkClanFirst
+                        : l10n.settingsWarWidgetClanCount(widgetClans.length),
+                    onTap: () => _showWarWidgetSheet(widgetClans),
+                  ),
+              ],
+            ),
+            if (kDebugMode && LiveActivityDebugService.isSupportedPlatform)
+              _SettingsSection(
+                title: l10n.settingsLiveActivityTest,
+                children: [
+                  _SettingsTile(
+                    icon: LucideIcons.radio,
+                    title: l10n.settingsLiveActivityStart,
+                    subtitle: l10n.settingsLiveActivityStartSubtitle,
+                    onTap: () => _runLiveActivityAction('start'),
+                  ),
+                  _SettingsTile(
+                    icon: LucideIcons.refreshCw,
+                    title: l10n.settingsLiveActivityUpdate,
+                    subtitle: l10n.settingsLiveActivityUpdateSubtitle,
+                    onTap: () => _runLiveActivityAction('update'),
+                  ),
+                  _SettingsTile(
+                    icon: LucideIcons.circleStop,
+                    title: l10n.settingsLiveActivityEnd,
+                    subtitle: l10n.settingsLiveActivityEndSubtitle,
+                    onTap: () => _runLiveActivityAction('end'),
+                  ),
+                ],
+              ),
+            _SettingsSection(
+              title: l10n.settingsSupport,
+              children: [
                 _SettingsTile(
-                  icon: LucideIcons.bellRing,
-                  title: l10n.settingsNotificationsTitle,
-                  subtitle: l10n.settingsNotificationsSubtitle,
+                  icon: Icons.question_answer_outlined,
+                  title: l10n.faqTitle,
+                  subtitle: l10n.faqSubtitle,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => FaqScreen()),
+                    );
+                  },
+                ),
+                _SettingsTile(
+                  icon: Icons.translate,
+                  title: l10n.translationHelpUsTranslate,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const NotificationSettingsPage(),
+                        builder: (context) => TranslationScreen(),
                       ),
                     );
                   },
                 ),
-              if (warWidgetsEnabled)
+                if (appState.isFeatureEnabled(AppFeatureFlags.featureRequests))
+                  _SettingsTile(
+                    icon: Icons.featured_play_list_outlined,
+                    title: l10n.translationSuggestFeatures,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => FeatureRequests(),
+                        ),
+                      );
+                    },
+                  ),
                 _SettingsTile(
-                  icon: LucideIcons.panelTop,
-                  title: l10n.settingsAddWarWidget,
-                  subtitle: widgetClans.isEmpty
-                      ? l10n.settingsWarWidgetLinkClanFirst
-                      : l10n.settingsWarWidgetClanCount(widgetClans.length),
-                  onTap: () => _showWarWidgetSheet(widgetClans),
-                ),
-            ],
-          ),
-          if (kDebugMode && LiveActivityDebugService.isSupportedPlatform)
-            _SettingsSection(
-              title: l10n.settingsLiveActivityTest,
-              children: [
-                _SettingsTile(
-                  icon: LucideIcons.radio,
-                  title: l10n.settingsLiveActivityStart,
-                  subtitle: l10n.settingsLiveActivityStartSubtitle,
-                  onTap: () => _runLiveActivityAction('start'),
-                ),
-                _SettingsTile(
-                  icon: LucideIcons.refreshCw,
-                  title: l10n.settingsLiveActivityUpdate,
-                  subtitle: l10n.settingsLiveActivityUpdateSubtitle,
-                  onTap: () => _runLiveActivityAction('update'),
-                ),
-                _SettingsTile(
-                  icon: LucideIcons.circleStop,
-                  title: l10n.settingsLiveActivityEnd,
-                  subtitle: l10n.settingsLiveActivityEndSubtitle,
-                  onTap: () => _runLiveActivityAction('end'),
+                  icon: Icons.discord,
+                  title: l10n.faqJoinDiscord,
+                  onTap: () {
+                    launchUrl(Uri.parse('https://discord.gg/clashking'));
+                  },
                 ),
               ],
             ),
-          _SettingsSection(
-            title: l10n.settingsSupport,
-            children: [
-              _SettingsTile(
-                icon: Icons.question_answer_outlined,
-                title: l10n.faqTitle,
-                subtitle: l10n.faqSubtitle,
-                onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (context) => FaqScreen()));
-                },
-              ),
-              _SettingsTile(
-                icon: Icons.translate,
-                title: l10n.translationHelpUsTranslate,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => TranslationScreen(),
-                    ),
-                  );
-                },
-              ),
-              if (appState.isFeatureEnabled(AppFeatureFlags.featureRequests))
+            _SettingsSection(
+              title: l10n.settingsAbout,
+              children: [
                 _SettingsTile(
-                  icon: Icons.featured_play_list_outlined,
-                  title: l10n.translationSuggestFeatures,
+                  icon: Icons.article_outlined,
+                  title: l10n.settingsLicenses,
+                  subtitle: l10n.settingsLicensesSubtitle,
+                  onTap: _showLicenses,
+                ),
+                _SettingsTile(
+                  icon: Icons.privacy_tip_outlined,
+                  title: l10n.settingsPrivacyPolicy,
+                  subtitle: l10n.settingsPrivacyPolicySubtitle,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => FeatureRequests(),
+                        builder: (context) => const PrivacyControlsPage(),
                       ),
                     );
                   },
                 ),
-              _SettingsTile(
-                icon: Icons.discord,
-                title: l10n.faqJoinDiscord,
-                onTap: () {
-                  launchUrl(Uri.parse('https://discord.gg/clashking'));
-                },
-              ),
-            ],
-          ),
-          _SettingsSection(
-            title: l10n.settingsAbout,
-            children: [
-              _SettingsTile(
-                icon: Icons.article_outlined,
-                title: l10n.settingsLicenses,
-                subtitle: l10n.settingsLicensesSubtitle,
-                onTap: _showLicenses,
-              ),
-              _SettingsTile(
-                icon: Icons.privacy_tip_outlined,
-                title: l10n.settingsPrivacyPolicy,
-                subtitle: l10n.settingsPrivacyPolicySubtitle,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const PrivacyControlsPage(),
-                    ),
-                  );
-                },
-              ),
-              _VersionSettingsTile(),
-            ],
-          ),
-          _SettingsSection(
-            title: l10n.settingsAccount,
-            children: [
-              if (appState.isFeatureEnabled(
-                AppFeatureFlags.accountConnections,
-              )) ...[
-                _SettingsTile(
-                  icon: Icons.discord,
-                  title: l10n.generalDiscord,
-                  subtitle: hasDiscord
-                      ? l10n.settingsDiscordConnectedSubtitle
-                      : l10n.settingsDiscordSyncSubtitle,
-                  trailingText: hasDiscord ? l10n.settingsConnected : null,
-                  onTap: hasDiscord
-                      ? () => _showConnectionPlaceholder('Disconnect Discord')
-                      : () => _showConnectionPlaceholder('Connect Discord'),
-                ),
+                _VersionSettingsTile(),
+              ],
+            ),
+            _SettingsSection(
+              title: l10n.settingsAccount,
+              children: [
+                if (appState.isFeatureEnabled(
+                  AppFeatureFlags.accountConnections,
+                )) ...[
+                  _SettingsTile(
+                    icon: Icons.discord,
+                    title: l10n.generalDiscord,
+                    subtitle: hasDiscord
+                        ? l10n.settingsDiscordConnectedSubtitle
+                        : l10n.settingsDiscordSyncSubtitle,
+                    trailingText: hasDiscord ? l10n.settingsConnected : null,
+                    onTap: hasDiscord
+                        ? () => _showConnectionPlaceholder('Disconnect Discord')
+                        : () => _showConnectionPlaceholder('Connect Discord'),
+                  ),
+                  _SettingsTile(
+                    icon: Icons.alternate_email,
+                    title: l10n.settingsClashKingAccount,
+                    subtitle: hasEmail
+                        ? l10n.settingsEmailConnectedSubtitle
+                        : l10n.settingsEmailRecoverySubtitle,
+                    trailingText: hasEmail ? l10n.settingsConnected : null,
+                    onTap: hasEmail
+                        ? () => _showConnectionPlaceholder(
+                            'Disconnect ClashKing account',
+                          )
+                        : () => _showConnectionPlaceholder(
+                            'Connect ClashKing account',
+                          ),
+                  ),
+                ],
                 _SettingsTile(
                   icon: Icons.alternate_email,
-                  title: l10n.settingsClashKingAccount,
-                  subtitle: hasEmail
-                      ? l10n.settingsEmailConnectedSubtitle
-                      : l10n.settingsEmailRecoverySubtitle,
-                  trailingText: hasEmail ? l10n.settingsConnected : null,
-                  onTap: hasEmail
-                      ? () => _showConnectionPlaceholder(
-                          'Disconnect ClashKing account',
-                        )
-                      : () => _showConnectionPlaceholder(
-                          'Connect ClashKing account',
-                        ),
+                  title: widget.user.email ?? widget.user.username,
+                  subtitle: widget.user.email == null
+                      ? l10n.settingsSignedIn
+                      : l10n.authEmail,
+                  showChevron: false,
+                ),
+                _SettingsTile(
+                  icon: Icons.logout,
+                  title: l10n.authLogout,
+                  destructive: true,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          ConfirmLogoutDialog(onConfirm: _logOut),
+                    );
+                  },
                 ),
               ],
-              _SettingsTile(
-                icon: Icons.alternate_email,
-                title: widget.user.email ?? widget.user.username,
-                subtitle: widget.user.email == null
-                    ? l10n.settingsSignedIn
-                    : l10n.authEmail,
-                showChevron: false,
-              ),
-              _SettingsTile(
-                icon: Icons.logout,
-                title: l10n.authLogout,
-                destructive: true,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) =>
-                        ConfirmLogoutDialog(onConfirm: _logOut),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -698,6 +701,34 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     );
     DebugUtils.debugSuccess(
       'SettingsInfoScreen: All service data cleared successfully.',
+    );
+  }
+}
+
+class _SettingsResponsiveList extends StatelessWidget {
+  const _SettingsResponsiveList({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isDesktopWeb = kIsWeb && constraints.maxWidth >= 900;
+        if (!isDesktopWeb) return child;
+
+        final contentWidth = (constraints.maxWidth - 48)
+            .clamp(0.0, 760.0)
+            .toDouble();
+        return Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            width: contentWidth,
+            height: constraints.maxHeight,
+            child: child,
+          ),
+        );
+      },
     );
   }
 }

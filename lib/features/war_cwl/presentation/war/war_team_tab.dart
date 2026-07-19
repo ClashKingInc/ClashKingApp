@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
     show generateStars;
@@ -10,6 +11,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_attack_details_sheet.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class WarTeamTab extends StatelessWidget {
@@ -29,6 +31,21 @@ class WarTeamTab extends StatelessWidget {
     if (members.isEmpty) {
       return _TeamEmptyState(
         message: AppLocalizations.of(context)!.generalNoDataAvailable,
+      );
+    }
+
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    if (isDesktopWeb) {
+      return ResponsiveCardGrid(
+        itemCount: members.length,
+        minItemWidth: 380,
+        maxColumns: 2,
+        spacing: 10,
+        itemBuilder: (context, index) => _TeamMemberRow(
+          member: members[index],
+          attacksPerMember: attacksPerMember,
+          warInfo: warInfo,
+        ),
       );
     }
 

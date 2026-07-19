@@ -20,10 +20,15 @@ import 'package:clashkingapp/features/player/models/player_item.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 const _pagePadding = EdgeInsets.fromLTRB(16, 12, 16, 28);
+const _sidePageDesktopBreakpoint = 900.0;
+
+bool _isSidePageDesktop(BuildContext context) =>
+    kIsWeb && MediaQuery.sizeOf(context).width >= _sidePageDesktopBreakpoint;
 
 class PopularPage extends StatelessWidget {
   const PopularPage({super.key});
@@ -213,7 +218,7 @@ class _RankingsPageState extends State<RankingsPage> {
 
   Future<List<_RankingEntry>> _load() async {
     final response = await _apiService.proxyGet(
-      '/locations/${_location.id}/rankings/${_type.path}?limit=200',
+      '/locations/${_location.apiPath}/rankings/${_type.path}?limit=200',
     );
     if (response.statusCode != 200) {
       throw Exception('Failed to load rankings (${response.statusCode})');
@@ -354,7 +359,7 @@ class _StatsPageState extends State<StatsPage> {
 
   Future<List<_RankingEntry>> _load() async {
     final response = await _apiService.proxyGet(
-      '/locations/${_location.id}/rankings/${_type.path}?limit=200',
+      '/locations/${_location.apiPath}/rankings/${_type.path}?limit=200',
     );
     if (response.statusCode != 200) {
       throw Exception('Failed to load official stats (${response.statusCode})');
@@ -1057,7 +1062,11 @@ class _GameAssetsPageState extends State<GameAssetsPage> {
           LayoutBuilder(
             builder: (context, constraints) {
               final width = constraints.maxWidth;
-              final crossAxisCount = width > 760
+              final crossAxisCount = width > 1080
+                  ? 6
+                  : width > 880
+                  ? 5
+                  : width > 680
                   ? 4
                   : width > 480
                   ? 3
@@ -1235,9 +1244,8 @@ class _OreCalculatorState extends State<_OreCalculator> {
       _daysLeft(_starryTarget - _starryOwned, dailyStarry),
     ].reduce(math.max);
 
-    return ListView(
-      padding: _pagePadding,
-      children: [
+    return _CalculatorResponsiveLayout(
+      lead: [
         if (players.isNotEmpty)
           DropdownButtonFormField<String>(
             initialValue: selected?.tag,
@@ -1267,6 +1275,8 @@ class _OreCalculatorState extends State<_OreCalculator> {
             _formatInt(math.max(0, _starryTarget - _starryOwned)),
           ),
         ),
+      ],
+      controls: [
         const SizedBox(height: 18),
         _NumberRow(
           label: loc.sideShinyOre,
@@ -1354,9 +1364,8 @@ class _ZapQuakeCalculatorState extends State<_ZapQuakeCalculator> {
     final zaps = (afterQuake / lightning).ceil();
     final noQuakeZaps = (_buildingHp / lightning).ceil();
 
-    return ListView(
-      padding: _pagePadding,
-      children: [
+    return _CalculatorResponsiveLayout(
+      lead: [
         _CalculatorResult(
           title: loc.sideZapQuakeTitle(zaps),
           subtitle: loc.sideZapQuakeSubtitle(
@@ -1364,6 +1373,13 @@ class _ZapQuakeCalculatorState extends State<_ZapQuakeCalculator> {
             _formatInt(lightning),
           ),
         ),
+        const SizedBox(height: 12),
+        _MetricPanel(
+          label: loc.sideWithoutEarthquake,
+          value: loc.sideLightningCount(noQuakeZaps),
+        ),
+      ],
+      controls: [
         const SizedBox(height: 16),
         _CompactStepper(
           label: loc.sideBuildingHp,
@@ -1385,11 +1401,6 @@ class _ZapQuakeCalculatorState extends State<_ZapQuakeCalculator> {
           min: 1,
           max: 5,
           onChanged: (value) => setState(() => _quakeLevel = value),
-        ),
-        const SizedBox(height: 12),
-        _MetricPanel(
-          label: loc.sideWithoutEarthquake,
-          value: loc.sideLightningCount(noQuakeZaps),
         ),
       ],
     );
@@ -1421,9 +1432,8 @@ class _FireballQuakeCalculatorState extends State<_FireballQuakeCalculator> {
         ? 1
         : math.min(4, (remaining / math.max(1, quakeDamage)).ceil() + 1);
 
-    return ListView(
-      padding: _pagePadding,
-      children: [
+    return _CalculatorResponsiveLayout(
+      lead: [
         _CalculatorResult(
           title: remaining == 0
               ? loc.sideFireballQuakeTitle
@@ -1433,6 +1443,13 @@ class _FireballQuakeCalculatorState extends State<_FireballQuakeCalculator> {
             _formatInt(math.max(0, remaining)),
           ),
         ),
+        const SizedBox(height: 12),
+        _MetricPanel(
+          label: loc.sideQuakePressure,
+          value: loc.sideQuakeSpellCount(quakesNeeded),
+        ),
+      ],
+      controls: [
         const SizedBox(height: 16),
         _CompactStepper(
           label: loc.sideBuildingHp,
@@ -1455,10 +1472,59 @@ class _FireballQuakeCalculatorState extends State<_FireballQuakeCalculator> {
           max: 5,
           onChanged: (value) => setState(() => _quakeLevel = value),
         ),
-        const SizedBox(height: 12),
-        _MetricPanel(
-          label: loc.sideQuakePressure,
-          value: loc.sideQuakeSpellCount(quakesNeeded),
+      ],
+    );
+  }
+}
+
+class _CalculatorResponsiveLayout extends StatelessWidget {
+  const _CalculatorResponsiveLayout({
+    required this.lead,
+    required this.controls,
+  });
+
+  final List<Widget> lead;
+  final List<Widget> controls;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isSidePageDesktop(context)) {
+      return ListView(padding: _pagePadding, children: [...lead, ...controls]);
+    }
+
+    return ListView(
+      padding: _pagePadding,
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final useColumns = constraints.maxWidth >= 760;
+            if (!useColumns) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [...lead, ...controls],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: lead,
+                  ),
+                ),
+                const SizedBox(width: 18),
+                Expanded(
+                  flex: 6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: controls,
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ],
     );
@@ -1481,6 +1547,22 @@ class _SidePageScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDesktopWeb = _isSidePageDesktop(context);
+
+    PreferredSizeWidget? constrainedBottom() {
+      final value = bottom;
+      if (value == null || !isDesktopWeb) return value;
+      return PreferredSize(
+        preferredSize: value.preferredSize,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: value,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -1500,9 +1582,19 @@ class _SidePageScaffold extends StatelessWidget {
             ),
           ],
         ),
-        bottom: bottom,
+        bottom: constrainedBottom(),
       ),
-      body: child,
+      body: isDesktopWeb
+          ? LayoutBuilder(
+              builder: (context, constraints) => Center(
+                child: SizedBox(
+                  width: math.min(constraints.maxWidth, 1200),
+                  height: constraints.maxHeight,
+                  child: child,
+                ),
+              ),
+            )
+          : child,
     );
   }
 }
@@ -2854,6 +2946,8 @@ class _LocationOption {
 
   final int id;
   final String name;
+
+  String get apiPath => id == 32000000 ? 'global' : '$id';
 }
 
 enum _OfficialRankingType {

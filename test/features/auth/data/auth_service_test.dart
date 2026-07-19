@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -73,6 +74,25 @@ void main() {
       service.addListener(() => notified = true);
       await service.initializeAuth();
       expect(notified, isTrue);
+    });
+  });
+
+  group('AuthService — initializeAuth (local environment)', () {
+    test('uses the API development user without a stored token', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
+      final service = AuthService(
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+        environment: ApiEnvironment.local,
+      );
+
+      await service.initializeAuth();
+
+      expect(service.isAuthenticated, isTrue);
+      expect(service.currentUser?.username, 'TestUser');
+      expect(service.accessToken, isNull);
+      expect(fakeApi.getCallCounts['/auth/me'], 1);
     });
   });
 
@@ -591,16 +611,15 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/auth/link-discord-code'] = http.Response('{}', 200);
       // linkDiscordWithCode calls initializeAuth(), which fetches /auth/me.
-      fakeApi.getStubs['/auth/me'] = http.Response(
-        jsonEncode(userJson()),
-        200,
-      );
+      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
       final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
       final service = AuthService(
         apiService: fakeApi,
         tokenService: fakeToken,
-        discordAuthCodeProvider: () async =>
-            {'code': 'auth_code', 'code_verifier': 'verifier'},
+        discordAuthCodeProvider: () async => {
+          'code': 'auth_code',
+          'code_verifier': 'verifier',
+        },
       );
 
       await service.linkDiscordWithCode();
@@ -622,13 +641,17 @@ void main() {
 
     test('throws localized Exception on API error', () async {
       final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-discord-code'] =
-          http.Response('forbidden', 403);
+      fakeApi.postStubs['/auth/link-discord-code'] = http.Response(
+        'forbidden',
+        403,
+      );
       final service = AuthService(
         apiService: fakeApi,
         tokenService: FakeTokenService(fakeToken: null),
-        discordAuthCodeProvider: () async =>
-            {'code': 'auth_code', 'code_verifier': 'verifier'},
+        discordAuthCodeProvider: () async => {
+          'code': 'auth_code',
+          'code_verifier': 'verifier',
+        },
       );
 
       await expectLater(

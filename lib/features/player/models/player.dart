@@ -656,9 +656,11 @@ class Player {
 
   String getLastOnlineText(BuildContext context) {
     final now = DateTime.now().toUtc();
-    final diff = now.difference(lastOnline);
-
     final loc = AppLocalizations.of(context)!;
+    if (lastOnline == DateTime.utc(1970, 1, 1) || lastOnline.isAfter(now)) {
+      return loc.todoLastActiveUnavailable;
+    }
+    final diff = now.difference(lastOnline);
 
     if (diff.inSeconds < 60) {
       return loc.timeJustNow;

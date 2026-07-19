@@ -5,8 +5,13 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 
 class PlayerSuperTroopSection extends StatelessWidget {
   final List<PlayerSuperTroop> superTroops;
+  final EdgeInsetsGeometry margin;
 
-  const PlayerSuperTroopSection({super.key, required this.superTroops});
+  const PlayerSuperTroopSection({
+    super.key,
+    required this.superTroops,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class PlayerSuperTroopSection extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        margin: margin,
         decoration: BoxDecoration(
           color:
               Theme.of(context).cardTheme.color ??

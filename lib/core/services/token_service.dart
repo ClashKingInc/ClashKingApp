@@ -134,6 +134,17 @@ class TokenService {
 
   Future<void> saveTokens(String accessToken, String refreshToken) async {
     final prefs = await SharedPreferences.getInstance();
+    if (kIsWeb) {
+      await Future.wait([
+        prefs.setString(_accessTokenKey, accessToken),
+        prefs.setString(_refreshTokenKey, refreshToken),
+      ]);
+      _cachedAccessToken = accessToken;
+      _cachedRefreshToken = refreshToken;
+      _tokensLoaded = true;
+      return;
+    }
+
     await Future.wait([
       _secureStorage.write(key: _accessTokenKey, value: accessToken),
       _secureStorage.write(key: _refreshTokenKey, value: refreshToken),
@@ -152,6 +163,14 @@ class TokenService {
     _tokenLoad = null;
     _refreshInFlight = null;
     final prefs = await SharedPreferences.getInstance();
+    if (kIsWeb) {
+      await Future.wait([
+        prefs.remove(_accessTokenKey),
+        prefs.remove(_refreshTokenKey),
+      ]);
+      return;
+    }
+
     await Future.wait([
       _secureStorage.delete(key: _accessTokenKey),
       _secureStorage.delete(key: _refreshTokenKey),
@@ -280,6 +299,14 @@ class TokenService {
   }
 
   Future<(String?, String?)> _readTokens() async {
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      return (
+        prefs.getString(_accessTokenKey),
+        prefs.getString(_refreshTokenKey),
+      );
+    }
+
     final storedTokens = await Future.wait([
       _secureStorage.read(key: _accessTokenKey),
       _secureStorage.read(key: _refreshTokenKey),

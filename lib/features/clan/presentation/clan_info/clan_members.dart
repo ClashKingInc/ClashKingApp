@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -11,6 +12,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -61,6 +63,7 @@ class ClanMembersState extends State<ClanMembers> {
     final numberFormat = NumberFormat.decimalPattern(
       Localizations.localeOf(context).toString(),
     );
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
     final cocService = context.watch<CocAccountService>();
     final activeUserTags = cocService.getAccountTags();
@@ -158,8 +161,126 @@ class ClanMembersState extends State<ClanMembers> {
       }
     });
 
-    return Column(
-      mainAxisSize: MainAxisSize.max,
+    Widget buildMemberCard(BuildContext context, int memberIndex) {
+      final index = memberIndex + 1;
+      final member = members[memberIndex];
+      final isLinked = activeUserTags.contains(member.tag);
+
+      return GestureDetector(
+        onTap: () async {
+          final navigator = Navigator.of(context);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => const Center(child: CircularProgressIndicator()),
+          );
+
+          try {
+            final Player selectedPlayer = await context
+                .read<PlayerService>()
+                .getPlayerAndClanData(member.tag);
+
+            navigator.pop();
+            navigator.push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    PlayerScreen(selectedPlayer: selectedPlayer),
+              ),
+            );
+          } catch (e) {
+            navigator.pop();
+
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.generalRefreshFailed(e.toString()),
+                  ),
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+            }
+          }
+        },
+        child: Container(
+          margin: isDesktopWeb
+              ? EdgeInsets.zero
+              : const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          decoration: BoxDecoration(
+            color:
+                Theme.of(context).cardTheme.color ??
+                Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isLinked
+                  ? Colors.green.withValues(alpha: 0.7)
+                  : colorScheme.outlineVariant.withValues(alpha: 0.32),
+            ),
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 19,
+                child: Text(
+                  index.toString(),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 7),
+              MobileWebImage(
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                imageUrl: ImageAssets.townHall(member.townHallLevel),
+                width: 38,
+              ),
+              const SizedBox(width: 9),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            member.name,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 1),
+                          Text(
+                            _localizedRole(context, member.role),
+                            style: Theme.of(context).textTheme.labelMedium
+                                ?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    _SortValueChip(member: member, sortBy: currentFilter),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return ListView(
+      padding: EdgeInsets.only(
+        bottom: 16 + MediaQuery.paddingOf(context).bottom,
+      ),
       children: [
         ClanTabSearchSortBar(
           controller: _searchController,
@@ -234,129 +355,22 @@ class ClanMembersState extends State<ClanMembers> {
                 : Icons.groups_2_outlined,
             padding: EdgeInsets.zero,
           )
-        else ...[
-          ...members.asMap().entries.map((entry) {
-            int index = entry.key + 1;
-            ClanMember member = entry.value;
-            final isLinked = activeUserTags.contains(member.tag);
-
-            return GestureDetector(
-              onTap: () async {
-                final navigator = Navigator.of(context);
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) =>
-                      const Center(child: CircularProgressIndicator()),
-                );
-
-                try {
-                  final Player selectedPlayer = await context
-                      .read<PlayerService>()
-                      .getPlayerAndClanData(member.tag);
-
-                  navigator.pop();
-                  navigator.push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          PlayerScreen(selectedPlayer: selectedPlayer),
-                    ),
-                  );
-                } catch (e) {
-                  // Dismiss loading dialog
-                  navigator.pop();
-
-                  // Show error message
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.generalRefreshFailed(e.toString()),
-                        ),
-                        duration: const Duration(seconds: 3),
-                      ),
-                    );
-                  }
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).cardTheme.color ??
-                      Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isLinked
-                        ? Colors.green.withValues(alpha: 0.7)
-                        : colorScheme.outlineVariant.withValues(alpha: 0.32),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 19,
-                      child: Text(
-                        index.toString(),
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
-                    ),
-                    const SizedBox(width: 7),
-                    MobileWebImage(
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      imageUrl: ImageAssets.townHall(member.townHallLevel),
-                      width: 38,
-                    ),
-                    const SizedBox(width: 9),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  member.name,
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.w800),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 1),
-                                Text(
-                                  _localizedRole(context, member.role),
-                                  style: Theme.of(context).textTheme.labelMedium
-                                      ?.copyWith(
-                                        color: colorScheme.onSurfaceVariant,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          _SortValueChip(member: member, sortBy: currentFilter),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-        ],
+        else if (isDesktopWeb)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ResponsiveCardGrid(
+              itemCount: members.length,
+              minItemWidth: 340,
+              maxColumns: 3,
+              spacing: 10,
+              itemBuilder: buildMemberCard,
+            ),
+          )
+        else
+          ...List.generate(
+            members.length,
+            (index) => buildMemberCard(context, index),
+          ),
       ],
     );
   }

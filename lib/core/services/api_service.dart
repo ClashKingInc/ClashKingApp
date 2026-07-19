@@ -11,9 +11,13 @@ import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ApiService {
-  ApiService({http.Client? client, TokenService? tokenService})
-    : _client = client ?? http.Client(),
-      _tokenService = tokenService ?? TokenService.shared;
+  ApiService({
+    http.Client? client,
+    TokenService? tokenService,
+    ApiEnvironment? environment,
+  }) : _client = client ?? http.Client(),
+       _tokenService = tokenService ?? TokenService.shared,
+       _environment = environment ?? ApiConfig.environment;
 
   static final ApiService shared = ApiService(
     tokenService: TokenService.shared,
@@ -23,13 +27,14 @@ class ApiService {
   static String get apiUrlV2 => ApiConfig.apiUrlV2;
   static const String assetUrl = "https://assets.clashk.ing";
   static String get proxyUrl => ApiConfig.proxyUrl;
-  static const String cocAssetsUrl = "https://coc-assets.clashk.ing";
+  static const String cocAssetsUrl = "https://assets-proxy.clashk.ing";
   static const String bunnyUrl = "https://cdn.clashk.ing";
   static const String discordUrl = "https://discord.gg/clashking";
   static const Duration _defaultTimeout = Duration(seconds: 15);
 
   final http.Client _client;
   final TokenService _tokenService;
+  final ApiEnvironment _environment;
 
   static AppLocalizations? _currentL10n() {
     final context = globalNavigatorKey.currentContext;
@@ -349,7 +354,7 @@ class ApiService {
 
     if (requiresAuth) {
       final token = await _tokenService.getAccessToken();
-      if (token == null) {
+      if (token == null && _environment != ApiEnvironment.local) {
         throw UnauthorizedException(
           _localized(
             'User is not authenticated.',
@@ -357,7 +362,7 @@ class ApiService {
           ),
         );
       }
-      headers['Authorization'] = 'Bearer $token';
+      if (token != null) headers['Authorization'] = 'Bearer $token';
     }
 
     if (extraHeaders != null) {

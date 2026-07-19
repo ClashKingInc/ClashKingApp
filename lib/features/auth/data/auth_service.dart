@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/functions/functions.dart';
+import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/utils/discord_auth_helper.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -14,14 +15,17 @@ class AuthService extends ChangeNotifier {
   AuthService({
     ApiService? apiService,
     TokenService? tokenService,
+    ApiEnvironment? environment,
     Future<Map<String, String>?> Function()? discordAuthCodeProvider,
   }) : _apiService = apiService ?? ApiService.shared,
        _tokenService = tokenService ?? TokenService.shared,
+       _environment = environment ?? ApiConfig.environment,
        _discordAuthCodeProvider =
            discordAuthCodeProvider ?? DiscordAuthHelper.getDiscordAuthCode;
 
   final ApiService _apiService;
   final TokenService _tokenService;
+  final ApiEnvironment _environment;
   final Future<Map<String, String>?> Function() _discordAuthCodeProvider;
   String? _accessToken;
   bool _isAuthenticated = false;
@@ -51,6 +55,16 @@ class AuthService extends ChangeNotifier {
 
   Future<void> initializeAuth() async {
     await deletePrefs('auth_local_mode');
+
+    if (_environment == ApiEnvironment.local) {
+      final response = await _apiService.get('/auth/me', requiresAuth: false);
+      _currentUser = User.fromJson(response);
+      _accessToken = null;
+      _isAuthenticated = true;
+      await ObservabilityService.setAuthenticatedUser(_currentUser);
+      notifyListeners();
+      return;
+    }
 
     _accessToken = await _tokenService.getAccessToken();
     if (_accessToken != null) {

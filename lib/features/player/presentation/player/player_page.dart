@@ -2,7 +2,9 @@ import 'package:clashkingapp/features/player/presentation/player/player_super_tr
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_achievement.dart';
@@ -27,6 +29,9 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class PlayerScreenState extends State<PlayerScreen> {
+  static const double _desktopBreakpoint = 900;
+  static const double _desktopMaxContentWidth = 1320;
+
   late int selectedTab = widget.initialTab;
 
   @override
@@ -122,40 +127,76 @@ class PlayerScreenState extends State<PlayerScreen> {
 
   List<Widget> _buildPlayerSlivers(Player player) {
     final loc = AppLocalizations.of(context)!;
+    final isDesktopWeb = _isDesktopWeb(context);
+    final margin = isDesktopWeb
+        ? EdgeInsets.zero
+        : const EdgeInsets.symmetric(horizontal: 16, vertical: 5);
+    final sections = <Widget>[
+      if (player.superTroops.any((troop) => troop.superTroopIsActive))
+        PlayerSuperTroopSection(
+          superTroops: player.superTroops,
+          margin: margin,
+        ),
+      if (player.heroes.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gameHeroes,
+          items: player.heroes,
+          townHallLevel: player.townHallLevel,
+          initiallyExpanded: true,
+          margin: margin,
+        ),
+      if (player.equipments.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gameEquipment,
+          items: player.equipments,
+          townHallLevel: player.townHallLevel,
+          initiallyExpanded: true,
+          margin: margin,
+        ),
+      if (player.troops.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gameTroops,
+          items: player.troops,
+          townHallLevel: player.townHallLevel,
+          margin: margin,
+        ),
+      if (player.spells.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gameSpells,
+          items: player.spells,
+          townHallLevel: player.townHallLevel,
+          margin: margin,
+        ),
+      if (player.siegeMachines.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gameSiegeMachines,
+          items: player.siegeMachines,
+          townHallLevel: player.townHallLevel,
+          margin: margin,
+        ),
+      if (player.pets.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gamePets,
+          items: player.pets,
+          townHallLevel: player.townHallLevel,
+          margin: margin,
+        ),
+    ];
+    if (isDesktopWeb) {
+      return [
+        SliverToBoxAdapter(
+          child: _CenteredDesktopContent(
+            child: _PlayerSectionGrid(children: sections),
+          ),
+        ),
+      ];
+    }
+
     final builders = <Widget Function()>[
       () => const SizedBox(height: 10),
-      () => PlayerSuperTroopSection(superTroops: player.superTroops),
-      () => PlayerItemSection(
-        title: loc.gameHeroes,
-        items: player.heroes,
-        townHallLevel: player.townHallLevel,
-        initiallyExpanded: true,
-      ),
-      () => PlayerItemSection(
-        title: loc.gameEquipment,
-        items: player.equipments,
-        townHallLevel: player.townHallLevel,
-        initiallyExpanded: true,
-      ),
-      () => PlayerItemSection(
-        title: loc.gameTroops,
-        items: player.troops,
-        townHallLevel: player.townHallLevel,
-      ),
-      () => PlayerItemSection(
-        title: loc.gameSpells,
-        items: player.spells,
-        townHallLevel: player.townHallLevel,
-      ),
-      () => PlayerItemSection(
-        title: loc.gameSiegeMachines,
-        items: player.siegeMachines,
-        townHallLevel: player.townHallLevel,
-      ),
-      () => PlayerItemSection(
-        title: loc.gamePets,
-        items: player.pets,
-        townHallLevel: player.townHallLevel,
+      ...sections.map(
+        (section) =>
+            () => section,
       ),
       () => const SizedBox(height: 10),
     ];
@@ -169,18 +210,42 @@ class PlayerScreenState extends State<PlayerScreen> {
 
   List<Widget> _buildBuilderSlivers(Player player) {
     final loc = AppLocalizations.of(context)!;
+    final isDesktopWeb = _isDesktopWeb(context);
+    final margin = isDesktopWeb
+        ? EdgeInsets.zero
+        : const EdgeInsets.symmetric(horizontal: 16, vertical: 5);
+    final sections = <Widget>[
+      if (player.bbHeroes.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gameHeroes,
+          items: player.bbHeroes,
+          townHallLevel: player.builderHallLevel,
+          initiallyExpanded: true,
+          margin: margin,
+        ),
+      if (player.bbTroops.isNotEmpty)
+        PlayerItemSection(
+          title: loc.gameTroops,
+          items: player.bbTroops,
+          townHallLevel: player.builderHallLevel,
+          margin: margin,
+        ),
+    ];
+    if (isDesktopWeb) {
+      return [
+        SliverToBoxAdapter(
+          child: _CenteredDesktopContent(
+            child: _PlayerSectionGrid(children: sections),
+          ),
+        ),
+      ];
+    }
+
     final builders = <Widget Function()>[
       () => const SizedBox(height: 10),
-      () => PlayerItemSection(
-        title: loc.gameHeroes,
-        items: player.bbHeroes,
-        townHallLevel: player.builderHallLevel,
-        initiallyExpanded: true,
-      ),
-      () => PlayerItemSection(
-        title: loc.gameTroops,
-        items: player.bbTroops,
-        townHallLevel: player.builderHallLevel,
+      ...sections.map(
+        (section) =>
+            () => section,
       ),
       () => const SizedBox(height: 10),
     ];
@@ -194,6 +259,90 @@ class PlayerScreenState extends State<PlayerScreen> {
 
   Widget _buildAchievementContent(Player player) {
     return _AchievementsTab(player: player);
+  }
+
+  bool _isDesktopWeb(BuildContext context) {
+    return kIsWeb && MediaQuery.sizeOf(context).width >= _desktopBreakpoint;
+  }
+}
+
+class _CenteredDesktopContent extends StatelessWidget {
+  const _CenteredDesktopContent({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: PlayerScreenState._desktopMaxContentWidth,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class _PlayerSectionGrid extends StatelessWidget {
+  const _PlayerSectionGrid({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    if (children.isEmpty) return const SizedBox.shrink();
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 820 || children.length == 1) {
+          return Column(
+            children: [
+              for (var index = 0; index < children.length; index++) ...[
+                children[index],
+                if (index < children.length - 1) const SizedBox(height: 12),
+              ],
+            ],
+          );
+        }
+
+        final columns = [<Widget>[], <Widget>[]];
+        for (var index = 0; index < children.length; index++) {
+          columns[index.isEven ? 0 : 1].add(children[index]);
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _PlayerSectionColumn(children: columns[0])),
+            const SizedBox(width: 12),
+            Expanded(child: _PlayerSectionColumn(children: columns[1])),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PlayerSectionColumn extends StatelessWidget {
+  const _PlayerSectionColumn({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (var index = 0; index < children.length; index++) ...[
+          children[index],
+          if (index < children.length - 1) const SizedBox(height: 12),
+        ],
+      ],
+    );
   }
 }
 
@@ -229,12 +378,12 @@ class _AchievementsTabState extends State<_AchievementsTab> {
     final othersDone = others.where(_isAchievementComplete).length;
     final homeLabel = AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base';
     final othersLabel = AppLocalizations.of(context)?.generalOthers ?? 'Others';
-
-    return Column(
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final content = Column(
       children: [
         const SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: isDesktopWeb ? 0 : 16),
           child: LiquidGlassSegmentedControl<int>(
             values: const [0, 1],
             labels: [
@@ -246,7 +395,7 @@ class _AchievementsTabState extends State<_AchievementsTab> {
             height: 44,
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 10),
         _AchievementSection(
           key: ValueKey(isHome),
           title: isHome ? homeLabel : othersLabel,
@@ -257,9 +406,28 @@ class _AchievementsTabState extends State<_AchievementsTab> {
           initiallyExpanded: true,
           collapsible: false,
           showHeader: false,
+          margin: isDesktopWeb
+              ? EdgeInsets.zero
+              : const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          gridTiles: isDesktopWeb,
         ),
         const SizedBox(height: 10),
       ],
+    );
+
+    if (!isDesktopWeb) return content;
+
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: PlayerScreenState._desktopMaxContentWidth,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: content,
+        ),
+      ),
     );
   }
 }
@@ -271,6 +439,8 @@ class _AchievementSection extends StatefulWidget {
   final bool initiallyExpanded;
   final bool collapsible;
   final bool showHeader;
+  final EdgeInsetsGeometry margin;
+  final bool gridTiles;
 
   const _AchievementSection({
     super.key,
@@ -280,6 +450,8 @@ class _AchievementSection extends StatefulWidget {
     this.initiallyExpanded = false,
     this.collapsible = true,
     this.showHeader = true,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+    this.gridTiles = false,
   });
 
   @override
@@ -305,10 +477,22 @@ class _AchievementSectionState extends State<_AchievementSection> {
     final total = widget.achievements.length;
     final ratio = completed / total;
     final allComplete = completed >= total;
+    final sortedAchievements = [
+      ...widget.achievements.where((a) => !_isAchievementComplete(a)),
+      ...widget.achievements.where(_isAchievementComplete),
+    ];
+    final achievementTiles = sortedAchievements
+        .map(
+          (achievement) => _AchievementTile(
+            achievement: achievement,
+            margin: widget.gridTiles ? EdgeInsets.zero : null,
+          ),
+        )
+        .toList(growable: false);
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      margin: widget.margin,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
@@ -407,17 +591,16 @@ class _AchievementSectionState extends State<_AchievementSection> {
             ),
           if (_expanded) ...[
             if (widget.showHeader) const SizedBox(height: 12),
-            // Pending achievements first, completed ones at the bottom.
-            ...widget.achievements
-                .where((a) => !_isAchievementComplete(a))
-                .map(
-                  (achievement) => _AchievementTile(achievement: achievement),
-                ),
-            ...widget.achievements
-                .where(_isAchievementComplete)
-                .map(
-                  (achievement) => _AchievementTile(achievement: achievement),
-                ),
+            if (widget.gridTiles)
+              ResponsiveCardGrid(
+                itemCount: achievementTiles.length,
+                minItemWidth: 360,
+                maxColumns: 3,
+                spacing: 10,
+                itemBuilder: (_, index) => achievementTiles[index],
+              )
+            else
+              ...achievementTiles,
           ],
         ],
       ),
@@ -436,8 +619,9 @@ bool _isAchievementComplete(PlayerAchievement achievement) {
 
 class _AchievementTile extends StatelessWidget {
   final PlayerAchievement achievement;
+  final EdgeInsetsGeometry? margin;
 
-  const _AchievementTile({required this.achievement});
+  const _AchievementTile({required this.achievement, this.margin});
 
   @override
   Widget build(BuildContext context) {
@@ -451,7 +635,7 @@ class _AchievementTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: margin ?? const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: complete

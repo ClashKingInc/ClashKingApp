@@ -2,6 +2,7 @@ import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:flutter/foundation.dart';
@@ -310,6 +311,7 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
     final events = _filteredEvents(
       data.joinLeaveList.take(30).toList(growable: false),
     );
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -399,7 +401,22 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
               icon: Icons.history_toggle_off_rounded,
             )
           else
-            ...events.map((event) => _JoinLeaveEventCard(event: event)),
+            isDesktopWeb
+                ? ResponsiveCardGrid(
+                    itemCount: events.length,
+                    minItemWidth: 340,
+                    maxColumns: 3,
+                    spacing: 10,
+                    itemBuilder: (_, index) => _JoinLeaveEventCard(
+                      event: events[index],
+                      margin: EdgeInsets.zero,
+                    ),
+                  )
+                : Column(
+                    children: events
+                        .map((event) => _JoinLeaveEventCard(event: event))
+                        .toList(growable: false),
+                  ),
         ],
       ),
     );
@@ -408,8 +425,12 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
 
 class _JoinLeaveEventCard extends StatelessWidget {
   final JoinLeaveEvent event;
+  final EdgeInsetsGeometry margin;
 
-  const _JoinLeaveEventCard({required this.event});
+  const _JoinLeaveEventCard({
+    required this.event,
+    this.margin = const EdgeInsets.only(bottom: 8),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -418,7 +439,7 @@ class _JoinLeaveEventCard extends StatelessWidget {
     final accent = joined ? Colors.green : Colors.redAccent;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: margin,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
@@ -636,6 +657,7 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
         : rankings
               .where((ranking) => ranking.category == _selectedRankingFilter)
               .toList(growable: false);
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
@@ -701,12 +723,28 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
             ],
           ),
           const SizedBox(height: 12),
-          ...visibleRankings.map(
-            (ranking) => _RankingPreviewCard(
-              ranking: ranking,
-              countryCode: widget.clanInfo.location?.countryCode,
-            ),
-          ),
+          isDesktopWeb
+              ? ResponsiveCardGrid(
+                  itemCount: visibleRankings.length,
+                  minItemWidth: 340,
+                  maxColumns: 3,
+                  spacing: 10,
+                  itemBuilder: (_, index) => _RankingPreviewCard(
+                    ranking: visibleRankings[index],
+                    countryCode: widget.clanInfo.location?.countryCode,
+                    margin: EdgeInsets.zero,
+                  ),
+                )
+              : Column(
+                  children: visibleRankings
+                      .map(
+                        (ranking) => _RankingPreviewCard(
+                          ranking: ranking,
+                          countryCode: widget.clanInfo.location?.countryCode,
+                        ),
+                      )
+                      .toList(growable: false),
+                ),
         ],
       ),
     );
@@ -740,8 +778,13 @@ class _RankingPreview {
 class _RankingPreviewCard extends StatelessWidget {
   final _RankingPreview ranking;
   final String? countryCode;
+  final EdgeInsetsGeometry margin;
 
-  const _RankingPreviewCard({required this.ranking, required this.countryCode});
+  const _RankingPreviewCard({
+    required this.ranking,
+    required this.countryCode,
+    this.margin = const EdgeInsets.only(bottom: 8),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -753,7 +796,7 @@ class _RankingPreviewCard extends StatelessWidget {
         : decimalFormat.format(ranking.value);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: margin,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
@@ -1746,6 +1789,8 @@ class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+
     // TODO: Replace this mockup with getCwlRankingHistory(widget.clan.tag)
     // once the CWL history endpoint is fixed.
     return Padding(
@@ -1754,7 +1799,22 @@ class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
         children: [
           _CwlHistoryPreviewNotice(clan: widget.clan),
           const SizedBox(height: 10),
-          ..._mockEntries.map((entry) => _CwlSeasonMockupCard(entry: entry)),
+          isDesktopWeb
+              ? ResponsiveCardGrid(
+                  itemCount: _mockEntries.length,
+                  minItemWidth: 420,
+                  maxColumns: 2,
+                  spacing: 10,
+                  itemBuilder: (_, index) => _CwlSeasonMockupCard(
+                    entry: _mockEntries[index],
+                    padding: EdgeInsets.zero,
+                  ),
+                )
+              : Column(
+                  children: _mockEntries
+                      .map((entry) => _CwlSeasonMockupCard(entry: entry))
+                      .toList(growable: false),
+                ),
         ],
       ),
     );
@@ -1823,8 +1883,12 @@ class _CwlHistoryPreviewNotice extends StatelessWidget {
 
 class _CwlSeasonMockupCard extends StatelessWidget {
   final CwlRankingHistoryEntry entry;
+  final EdgeInsetsGeometry padding;
 
-  const _CwlSeasonMockupCard({required this.entry});
+  const _CwlSeasonMockupCard({
+    required this.entry,
+    this.padding = const EdgeInsets.only(bottom: 10),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1833,7 +1897,7 @@ class _CwlSeasonMockupCard extends StatelessWidget {
     final accent = _CwlLeagueAccent.forLeague(leagueName);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: padding,
       child: GlassPanel(
         width: double.infinity,
         height: 74,

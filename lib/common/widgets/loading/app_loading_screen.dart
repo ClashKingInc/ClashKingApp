@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -128,6 +129,16 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
   @override
   Widget build(BuildContext context) {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final screenSize = MediaQuery.sizeOf(context);
+    final isDesktopWeb = kIsWeb && screenSize.width >= 900;
+    final logoSize = isDesktopWeb ? 56.0 : 80.0;
+    final wordmarkWidth = isDesktopWeb
+        ? screenSize.width.clamp(0.0, 260.0)
+        : screenSize.width * 0.82;
+    final wordmarkGap = isDesktopWeb ? 16.0 : 30.0;
+    final loadingGap = isDesktopWeb ? 72.0 : 200.0;
+    final progressDotHeight = isDesktopWeb ? 6.0 : 8.0;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
@@ -137,8 +148,8 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
             // Static Logo
             SizedBox(
               key: const Key('startup-mark'),
-              width: 80,
-              height: 80,
+              width: logoSize,
+              height: logoSize,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: MobileWebImage(
@@ -149,12 +160,12 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
               ),
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: wordmarkGap),
 
             // App Text Logo
-            FractionallySizedBox(
+            SizedBox(
               key: const Key('startup-wordmark'),
-              widthFactor: 0.82,
+              width: wordmarkWidth,
               child: AspectRatio(
                 aspectRatio: 3806 / 558,
                 child: MobileWebImage(
@@ -166,7 +177,7 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
               ),
             ),
 
-            const SizedBox(height: 200),
+            SizedBox(height: loadingGap),
 
             // Animated Loading Text
             AnimatedBuilder(
@@ -199,10 +210,12 @@ class _AppLoadingScreenState extends State<AppLoadingScreen>
                       ? Duration.zero
                       : const Duration(milliseconds: 200),
                   margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: isActive ? 20 : 8,
-                  height: 8,
+                  width: isActive
+                      ? (isDesktopWeb ? 18 : 20)
+                      : progressDotHeight,
+                  height: progressDotHeight,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(progressDotHeight / 2),
                     color: isActive
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(

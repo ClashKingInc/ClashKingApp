@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -219,7 +220,8 @@ class MobileWebImage extends StatelessWidget {
     final candidates = <String>[];
     final resolved = _resolvedImages[resolutionKey];
     final retryBefore = DateTime.now().subtract(_failureTtl);
-    for (final candidate in [?resolved, requested, ...fallbacks]) {
+    for (final rawCandidate in [?resolved, requested, ...fallbacks]) {
+      final candidate = ApiService.cocAssetsProxyUrl(rawCandidate);
       final failedAt = _failedImages[candidate];
       if (failedAt != null && failedAt.isBefore(retryBefore)) {
         _failedImages.remove(candidate);

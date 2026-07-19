@@ -13,6 +13,7 @@ import 'package:clashkingapp/features/player/data/player_item_utils.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 
 const String _resourceGold = '${ImageAssets.baseUrl}/resources/gold.webp';
 const String _resourceElixir = '${ImageAssets.baseUrl}/resources/elixir.webp';
@@ -34,6 +35,7 @@ class PlayerItemSection extends StatefulWidget {
   final List<PlayerItem> items;
   final int townHallLevel;
   final bool initiallyExpanded;
+  final EdgeInsetsGeometry margin;
 
   const PlayerItemSection({
     super.key,
@@ -41,6 +43,7 @@ class PlayerItemSection extends StatefulWidget {
     required this.items,
     required this.townHallLevel,
     this.initiallyExpanded = false,
+    this.margin = const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
   });
 
   @override
@@ -86,6 +89,7 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) return const SizedBox.shrink();
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
     return CollapsibleItemSection(
       title: title,
@@ -99,8 +103,11 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
               summary: _remainingSummary,
               townHallLevel: townHallLevel,
             ),
+      margin: widget.margin,
       child: CompactItemGrid(
         itemCount: _sortedItems.length,
+        alignment: isDesktopWeb ? WrapAlignment.center : WrapAlignment.start,
+        maxTileSize: isDesktopWeb ? 54 : null,
         itemBuilder: (context, index, size) =>
             _buildItemTile(context, _sortedItems[index], size),
       ),

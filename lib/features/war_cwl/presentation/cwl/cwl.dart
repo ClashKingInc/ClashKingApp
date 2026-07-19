@@ -7,6 +7,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_members_tab.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_rounds_tab.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl_teams_tab.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -536,6 +537,8 @@ class _Identity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final badgeSize = isDesktopWeb ? 116.0 : 94.0;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -547,7 +550,7 @@ class _Identity extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox.square(
-                  dimension: 94,
+                  dimension: badgeSize,
                   child: MobileWebImage(imageUrl: clanInfo.badgeUrls.large),
                 ),
                 const SizedBox(height: 2),
