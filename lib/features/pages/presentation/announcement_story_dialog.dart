@@ -2,15 +2,50 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 enum AnnouncementStoryResult { closed, completed }
 
 bool supportsEmbeddedAnnouncementStories({required bool isWeb}) => !isWeb;
+
+Uri? announcementStoryWebUri(AppAnnouncement announcement) {
+  for (final candidate in [announcement.storyUrl, announcement.htmlUrl]) {
+    final uri = Uri.tryParse(candidate ?? '');
+    if (uri != null && uri.scheme == 'https' && uri.host.isNotEmpty) {
+      return uri;
+    }
+  }
+  return null;
+}
+
+Future<AnnouncementStoryResult?> openAnnouncementStory(
+  BuildContext context, {
+  required AppAnnouncement announcement,
+}) async {
+  if (kIsWeb) {
+    final uri = announcementStoryWebUri(announcement);
+    if (uri != null) {
+      await launchUrl(uri, webOnlyWindowName: '_blank');
+    }
+    return null;
+  }
+
+  final preparedFilePath = await AnnouncementStoryCacheService().prepare(
+    announcement,
+  );
+  if (!context.mounted || preparedFilePath == null) return null;
+  return showAnnouncementStoryDialog(
+    context,
+    announcement: announcement,
+    preparedFilePath: preparedFilePath,
+  );
+}
 
 Future<AnnouncementStoryResult?> showAnnouncementStoryDialog(
   BuildContext context, {

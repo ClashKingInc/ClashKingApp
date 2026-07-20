@@ -5,7 +5,6 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
-import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
@@ -1161,17 +1160,7 @@ VoidCallback? _bannerItemOnTap(BuildContext context, _BannerItem item) {
   return () async {
     if (hasStory) {
       final announcement = item.announcement!;
-      final storyFilePath = await AnnouncementStoryCacheService().prepare(
-        announcement,
-      );
-      if (!context.mounted || storyFilePath == null) {
-        return;
-      }
-      await showAnnouncementStoryDialog(
-        context,
-        announcement: announcement,
-        preparedFilePath: storyFilePath,
-      );
+      await openAnnouncementStory(context, announcement: announcement);
       return;
     }
     Navigator.of(context).push(
@@ -1517,16 +1506,7 @@ class _BannerTileState extends State<_BannerTile>
         : () async {
             if (hasStory) {
               final announcement = item.announcement!;
-              final storyFilePath = await AnnouncementStoryCacheService()
-                  .prepare(announcement);
-              if (!context.mounted || storyFilePath == null) {
-                return;
-              }
-              await showAnnouncementStoryDialog(
-                context,
-                announcement: announcement,
-                preparedFilePath: storyFilePath,
-              );
+              await openAnnouncementStory(context, announcement: announcement);
               return;
             }
             Navigator.of(context).push(

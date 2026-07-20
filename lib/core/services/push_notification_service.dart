@@ -12,7 +12,6 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/firebase_options.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
-import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
 import 'package:clashkingapp/features/pages/presentation/posts_page.dart';
@@ -681,20 +680,9 @@ class PushNotificationService {
     }
     if (navigator == null) return;
     if (announcement.storyUrl?.isNotEmpty == true) {
-      final preparedFilePath = await AnnouncementStoryCacheService().prepare(
-        announcement,
-      );
-      if (preparedFilePath == null) {
-        DebugUtils.debugWarning('Push story could not be prepared: $postID');
-        return;
-      }
       final storyContext = globalNavigatorKey.currentContext;
       if (storyContext == null || !storyContext.mounted) return;
-      await showAnnouncementStoryDialog(
-        storyContext,
-        announcement: announcement,
-        preparedFilePath: preparedFilePath,
-      );
+      await openAnnouncementStory(storyContext, announcement: announcement);
       return;
     }
     await navigator.push(
