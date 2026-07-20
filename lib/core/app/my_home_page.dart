@@ -37,6 +37,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
+  static const _mainPages = <Widget>[
+    DashboardPage(),
+    PlayersPage(),
+    ClanPage(),
+    WarCwlPage(),
+  ];
+
   int _selectedIndex = 0;
   late PageController _pageController;
   late final AnnouncementService _announcementService;
@@ -193,16 +200,13 @@ class MyHomePageState extends State<MyHomePage> {
         onSearchTap: _openSearchOverlay,
         onProfileTap: () => _scaffoldKey.currentState?.openDrawer(),
       ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        children: const [
-          DashboardPage(),
-          PlayersPage(),
-          ClanPage(),
-          WarCwlPage(),
-        ],
-      ),
+      body: kIsWeb
+          ? IndexedStack(index: _selectedIndex, children: _mainPages)
+          : PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              children: _mainPages,
+            ),
       bottomNavigationBar: usesNativeGlassPlatform
           ? _NativeIOSTabBar(
               selectedIndex: _selectedIndex,
