@@ -12,7 +12,6 @@ import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_mana
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/pages/data/announcement_presentation_service.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
-import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/pages/presentation/players_page.dart';
@@ -61,7 +60,9 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _showOpeningAnnouncement() async {
-    if (!mounted || ModalRoute.of(context)?.isCurrent != true) {
+    if (!mounted ||
+        !supportsEmbeddedAnnouncementStories(isWeb: kIsWeb) ||
+        ModalRoute.of(context)?.isCurrent != true) {
       return;
     }
     if (!context.read<MyAppState>().isFeatureEnabled(
@@ -77,21 +78,16 @@ class MyHomePageState extends State<MyHomePage> {
         )) {
       return;
     }
-    final storyFilePath = await AnnouncementStoryCacheService().prepare(
-      openingAnnouncement,
-    );
-    if (storyFilePath == null) {
-      return;
-    }
     if (!mounted || ModalRoute.of(context)?.isCurrent != true) {
       return;
     }
 
-    await showAnnouncementStoryDialog(
+    final displayed = await openAnnouncementStory(
       context,
       announcement: openingAnnouncement,
-      preparedFilePath: storyFilePath,
+      canDisplay: () => mounted && ModalRoute.of(context)?.isCurrent == true,
     );
+    if (!displayed) return;
     await _announcementPresentationService.markDismissed(openingAnnouncement);
   }
 

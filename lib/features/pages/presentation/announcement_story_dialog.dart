@@ -2,18 +2,62 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 enum AnnouncementStoryResult { closed, completed }
+
+bool supportsEmbeddedAnnouncementStories({required bool isWeb}) => !isWeb;
+
+Uri? announcementStoryWebUri(AppAnnouncement announcement) {
+  for (final candidate in [announcement.storyUrl, announcement.htmlUrl]) {
+    final uri = Uri.tryParse(candidate ?? '');
+    if (uri != null && uri.scheme == 'https' && uri.host.isNotEmpty) {
+      return uri;
+    }
+  }
+  return null;
+}
+
+Future<bool> openAnnouncementStory(
+  BuildContext context, {
+  required AppAnnouncement announcement,
+  bool Function()? canDisplay,
+}) async {
+  if (kIsWeb) {
+    final uri = announcementStoryWebUri(announcement);
+    return uri != null && await launchUrl(uri, webOnlyWindowName: '_blank');
+  }
+
+  final preparedFilePath = await AnnouncementStoryCacheService().prepare(
+    announcement,
+  );
+  if (!context.mounted ||
+      preparedFilePath == null ||
+      (canDisplay != null && !canDisplay())) {
+    return false;
+  }
+  await showAnnouncementStoryDialog(
+    context,
+    announcement: announcement,
+    preparedFilePath: preparedFilePath,
+  );
+  return true;
+}
 
 Future<AnnouncementStoryResult?> showAnnouncementStoryDialog(
   BuildContext context, {
   required AppAnnouncement announcement,
   required String preparedFilePath,
 }) {
+  if (!supportsEmbeddedAnnouncementStories(isWeb: kIsWeb)) {
+    return Future.value(null);
+  }
   return showGeneralDialog<AnnouncementStoryResult>(
     context: context,
     useRootNavigator: true,

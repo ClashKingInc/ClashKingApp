@@ -1,7 +1,6 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
-import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
@@ -161,13 +160,7 @@ class _PostArchiveCard extends StatelessWidget {
 
   Future<void> _open(BuildContext context) async {
     if (post.isStory) {
-      final path = await AnnouncementStoryCacheService().prepare(post);
-      if (!context.mounted || path == null) return;
-      await showAnnouncementStoryDialog(
-        context,
-        announcement: post,
-        preparedFilePath: path,
-      );
+      await openAnnouncementStory(context, announcement: post);
       return;
     }
     if (!context.mounted) return;
