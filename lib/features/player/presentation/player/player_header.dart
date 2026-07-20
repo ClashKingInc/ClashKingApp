@@ -1042,6 +1042,7 @@ class _PlayerClanIdentityLineState extends State<_PlayerClanIdentityLine> {
 
     showDialog(
       context: context,
+      useRootNavigator: false,
       barrierDismissible: false,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );

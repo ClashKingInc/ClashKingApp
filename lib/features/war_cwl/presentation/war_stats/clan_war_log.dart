@@ -161,6 +161,7 @@ class ClanWarLog extends StatelessWidget {
         onTap: () async {
           showDialog(
             context: context,
+            useRootNavigator: false,
             barrierDismissible: false,
             builder: (BuildContext context) {
               return Center(child: CircularProgressIndicator());

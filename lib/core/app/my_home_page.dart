@@ -357,11 +357,7 @@ class _DesktopSecondaryShell extends StatelessWidget {
               width: 1,
               color: colorScheme.outlineVariant.withValues(alpha: 0.28),
             ),
-            Expanded(
-              child: Navigator(
-                onGenerateRoute: (_) => _instantDesktopRoute(pageBuilder),
-              ),
-            ),
+            Expanded(child: Builder(builder: pageBuilder)),
           ],
         ),
       ),

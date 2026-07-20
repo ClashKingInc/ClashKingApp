@@ -31,6 +31,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
           final navigator = Navigator.of(context);
           showDialog(
             context: context,
+            useRootNavigator: false,
             barrierDismissible: false,
             builder: (BuildContext context) {
               return Center(child: CircularProgressIndicator());

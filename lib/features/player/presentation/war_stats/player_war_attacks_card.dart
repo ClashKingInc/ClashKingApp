@@ -362,6 +362,7 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
 
     showDialog(
       context: context,
+      useRootNavigator: false,
       barrierDismissible: false,
       builder: (_) => const Center(child: CircularProgressIndicator()),
     );

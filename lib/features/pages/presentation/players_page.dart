@@ -231,6 +231,7 @@ class _PlayersPageState extends State<PlayersPage> {
     final navigator = Navigator.of(context);
     showDialog(
       context: context,
+      useRootNavigator: false,
       barrierDismissible: false,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );

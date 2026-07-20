@@ -143,6 +143,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         if (context.mounted) {
           showDialog(
             context: context,
+            useRootNavigator: false,
             barrierDismissible: false,
             builder: (_) => const Center(child: CircularProgressIndicator()),
           );
@@ -591,6 +592,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                           : () async {
                               showDialog(
                                 context: context,
+                                useRootNavigator: false,
                                 barrierDismissible: false,
                                 builder: (_) => const Center(
                                   child: CircularProgressIndicator(),

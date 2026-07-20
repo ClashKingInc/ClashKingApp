@@ -171,6 +171,7 @@ class ClanMembersState extends State<ClanMembers> {
           final navigator = Navigator.of(context);
           showDialog(
             context: context,
+            useRootNavigator: false,
             barrierDismissible: false,
             builder: (_) => const Center(child: CircularProgressIndicator()),
           );
