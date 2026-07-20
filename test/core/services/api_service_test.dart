@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ void main() {
     test('cocAssetsProxyUrl rewrites clashofclans.com URLs', () {
       const input = 'https://api-assets.clashofclans.com/leagues/256/image.png';
       final result = ApiService.cocAssetsProxyUrl(input);
-      expect(result, startsWith('https://coc-assets.clashk.ing/'));
+      expect(result, startsWith('https://assets-proxy.clashk.ing/'));
       expect(result, isNot(contains('clashofclans.com')));
     });
 
@@ -266,6 +267,24 @@ void main() {
           requiresAuth: false,
         );
         expect(response.statusCode, 200);
+      });
+
+      test('local authenticated request can omit the access token', () async {
+        http.Request? captured;
+        final client = MockClient((request) async {
+          captured = request;
+          return http.Response('{"ok":true}', 200);
+        });
+        final service = ApiService(
+          client: client,
+          tokenService: FakeTokenService(fakeToken: null),
+          environment: ApiEnvironment.local,
+        );
+
+        final response = await service.getResponse('/test', requiresAuth: true);
+
+        expect(response.statusCode, 200);
+        expect(captured?.headers.containsKey('Authorization'), isFalse);
       });
 
       test('POST with Map body encodes JSON', () async {

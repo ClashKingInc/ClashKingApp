@@ -277,6 +277,7 @@ class _SearchPageState extends State<SearchPage> {
     final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
+      useRootNavigator: false,
       barrierDismissible: false,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );
@@ -318,6 +319,7 @@ class _SearchPageState extends State<SearchPage> {
     final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
+      useRootNavigator: false,
       barrierDismissible: false,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );

@@ -12,6 +12,7 @@ import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class WarHeader extends StatefulWidget {
@@ -49,7 +50,9 @@ class _WarHeaderState extends State<WarHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final imageHeight = MediaQuery.of(context).padding.top + 500;
+    final media = MediaQuery.of(context);
+    final isDesktopWeb = kIsWeb && media.size.width >= 900;
+    final imageHeight = media.padding.top + (isDesktopWeb ? 340 : 500);
     final loc = AppLocalizations.of(context)!;
     final roundLabel = widget.cwlRoundNumber == null
         ? null
@@ -107,7 +110,7 @@ class _WarHeaderState extends State<WarHeader> {
         ),
         Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).padding.top),
+            SizedBox(height: media.padding.top),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: SizedBox(
@@ -145,15 +148,30 @@ class _WarHeaderState extends State<WarHeader> {
                 ),
               ),
             ),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: _WarIdentityPanel(
-                warInfo: widget.warInfo,
-                onOpenClan: _openClan,
+            if (isDesktopWeb)
+              SizedBox(
+                height: 214,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: _WarIdentityPanel(
+                      warInfo: widget.warInfo,
+                      onOpenClan: _openClan,
+                    ),
+                  ),
+                ),
+              )
+            else ...[
+              const SizedBox(height: 6),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: _WarIdentityPanel(
+                  warInfo: widget.warInfo,
+                  onOpenClan: _openClan,
+                ),
               ),
-            ),
-            const SizedBox(height: 14),
+              const SizedBox(height: 14),
+            ],
           ],
         ),
       ],
@@ -220,6 +238,7 @@ class _WarScoreboardPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
     final clan = warInfo.clan;
     final opponent = warInfo.opponent;
     final score = '${clan?.stars ?? 0} - ${opponent?.stars ?? 0}';
@@ -239,7 +258,7 @@ class _WarScoreboardPanel extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: isDesktopWeb ? 10 : 6),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -251,8 +270,8 @@ class _WarScoreboardPanel extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: _WarScoreCore(score: score),
+              padding: EdgeInsets.symmetric(horizontal: isDesktopWeb ? 18 : 10),
+              child: _WarScoreCore(score: score, desktop: isDesktopWeb),
             ),
             Expanded(
               child: _WarBattleSide(
@@ -300,19 +319,24 @@ class _WarBattleSide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final badgeSize = isDesktopWeb
+        ? (isLeading ? 116.0 : 108.0)
+        : (isLeading ? 76.0 : 70.0);
+    final imagePadding = isDesktopWeb ? 2.0 : 3.0;
     final content = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          width: isLeading ? 76 : 70,
-          height: isLeading ? 76 : 70,
+          width: badgeSize,
+          height: badgeSize,
           child: Padding(
-            padding: const EdgeInsets.all(3),
+            padding: EdgeInsets.all(imagePadding),
             child: MobileWebImage(imageUrl: clan?.badgeUrls.large ?? ''),
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: isDesktopWeb ? 7 : 5),
         Text(
           clan?.name ?? '',
           maxLines: 1,
@@ -320,6 +344,7 @@ class _WarBattleSide extends StatelessWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: Colors.white,
+            fontSize: isDesktopWeb ? 16 : null,
             fontWeight: isLeading ? FontWeight.w900 : FontWeight.w700,
             height: 1.02,
           ),
@@ -387,15 +412,20 @@ class _CopyableWarClanTag extends StatelessWidget {
 
 class _WarScoreCore extends StatelessWidget {
   final String score;
+  final bool desktop;
 
-  const _WarScoreCore({required this.score});
+  const _WarScoreCore({required this.score, required this.desktop});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MobileWebImage(imageUrl: ImageAssets.war, width: 32, height: 32),
-        const SizedBox(height: 6),
+        MobileWebImage(
+          imageUrl: ImageAssets.war,
+          width: desktop ? 38 : 32,
+          height: desktop ? 38 : 32,
+        ),
+        SizedBox(height: desktop ? 8 : 6),
         Text(
           score,
           maxLines: 1,
@@ -403,7 +433,7 @@ class _WarScoreCore extends StatelessWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: Colors.white,
-            fontSize: 30,
+            fontSize: desktop ? 34 : 30,
             fontWeight: FontWeight.w900,
             height: 1,
           ),

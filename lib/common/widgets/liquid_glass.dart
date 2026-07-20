@@ -358,13 +358,22 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
       );
     }
 
-    return CKSegmentedControl<T>(
-      values: values,
-      labels: labels,
-      selected: selected,
-      onChanged: onChanged,
-      height: height,
-      color: resolvedColor,
+    final theme = Theme.of(context);
+    final readableLabelStyle = (theme.textTheme.labelLarge ?? const TextStyle())
+        .copyWith(fontSize: 14);
+
+    return Theme(
+      data: theme.copyWith(
+        textTheme: theme.textTheme.copyWith(labelSmall: readableLabelStyle),
+      ),
+      child: CKSegmentedControl<T>(
+        values: values,
+        labels: labels,
+        selected: selected,
+        onChanged: onChanged,
+        height: height,
+        color: resolvedColor,
+      ),
     );
   }
 }
@@ -379,8 +388,7 @@ typedef LiquidGlassBar = NativeLiquidGlassBar;
 typedef LiquidGlassTabItem = NativeLiquidGlassTabItem;
 typedef LiquidGlassTabBar = NativeLiquidGlassTabBar;
 typedef LiquidGlassIconButton = NativeLiquidGlassIconButton;
-typedef LiquidGlassSegmentedControl<T> =
-    NativeLiquidGlassSegmentedControl<T>;
+typedef LiquidGlassSegmentedControl<T> = NativeLiquidGlassSegmentedControl<T>;
 
 bool get supportsLiquidGlass => supportsNativeLiquidGlass;
 

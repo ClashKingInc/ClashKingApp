@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_attack.dart';
@@ -10,6 +11,7 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -135,9 +137,32 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
       return _buildEmpty(context);
     }
 
+    final visibleEntries = _entries.take(_visibleEntryCount).toList();
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+
+    if (isDesktopWeb) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: ResponsiveCardGrid(
+          itemCount: visibleEntries.length,
+          minItemWidth: 420,
+          maxColumns: 2,
+          spacing: 10,
+          itemBuilder: (context, index) {
+            final entry = visibleEntries[index];
+            return _buildEnhancedAttackCard(
+              context,
+              entry.attack,
+              entry.war,
+              margin: EdgeInsets.zero,
+            );
+          },
+        ),
+      );
+    }
+
     return Column(
-      children: _entries
-          .take(_visibleEntryCount)
+      children: visibleEntries
           .map(
             (entry) =>
                 _buildEnhancedAttackCard(context, entry.attack, entry.war),
@@ -149,8 +174,9 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
   Widget _buildEnhancedAttackCard(
     BuildContext context,
     WarAttack attack,
-    PlayerWarStatsData war,
-  ) {
+    PlayerWarStatsData war, {
+    EdgeInsetsGeometry margin = const EdgeInsets.symmetric(horizontal: 8),
+  }) {
     final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final isAttackCard = widget.type == "attacks";
@@ -178,7 +204,7 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
     ];
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      margin: margin,
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -336,6 +362,7 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
 
     showDialog(
       context: context,
+      useRootNavigator: false,
       barrierDismissible: false,
       builder: (_) => const Center(child: CircularProgressIndicator()),
     );

@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/coc_accounts/data/account_bootstrap_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -168,6 +169,12 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final textLogoUrl = (isDarkMode
         ? ImageAssets.darkModeTextLogo
         : ImageAssets.lightModeTextLogo);
+    final size = MediaQuery.sizeOf(context);
+    final isDesktopWeb = kIsWeb && size.width >= 900;
+
+    if (isDesktopWeb) {
+      return _buildDesktopLayout(context, logoUrl, textLogoUrl);
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -182,27 +189,10 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo Section
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: MobileWebImage(
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          imageUrl: logoUrl,
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      SizedBox(
-                        width: 160,
-                        child: MobileWebImage(
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          imageUrl: textLogoUrl,
-                        ),
-                      ),
-                    ],
+                  _LoginBrandLockup(
+                    logoUrl: logoUrl,
+                    textLogoUrl: textLogoUrl,
+                    centered: true,
                   ),
 
                   SizedBox(height: 16),
@@ -219,139 +209,184 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   SizedBox(height: 24),
 
                   // Auth Tabs
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 700),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                            spreadRadius: -4,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          // Tab Bar
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: LiquidGlassSegmentedControl<int>(
-                              values: const [0, 1],
-                              labels: [
-                                AppLocalizations.of(context)!.authDiscordTitle,
-                                AppLocalizations.of(context)!.authEmail,
-                              ],
-                              selected: _selectedAuthTab,
-                              height: 44,
-                              onChanged: (index) {
-                                setState(() => _selectedAuthTab = index);
-                                _tabController.animateTo(index);
-                              },
-                            ),
-                          ),
-
-                          // Tab Content
-                          Container(
-                            height: 328,
-                            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-                            child: TabBarView(
-                              controller: _tabController,
-                              children: [
-                                // Discord Tab
-                                _buildDiscordTab(),
-
-                                // Email Tab
-                                _buildEmailTab(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  _buildAuthPanel(context, maxWidth: 700, contentHeight: 328),
 
                   SizedBox(height: 12),
 
                   // Help Section
-                  Column(
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.helpTitle,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () async => launchUrl(
-                              Uri.parse('https://discord.gg/clashking'),
-                            ),
-                            icon: Icon(
-                              Icons.discord,
-                              size: 16,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            label: Text(
-                              AppLocalizations.of(context)!.helpJoinDiscord,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          TextButton.icon(
-                            onPressed: () async => launchUrl(
-                              Uri.parse(
-                                'mailto:devs@clashk.ing?subject=ClashKing App Support',
-                              ),
-                            ),
-                            icon: Icon(
-                              Icons.email_outlined,
-                              size: 16,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            label: Text(
-                              AppLocalizations.of(context)!.helpEmailUs,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  _LoginHelpLinks(centered: true),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout(
+    BuildContext context,
+    String logoUrl,
+    String textLogoUrl,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      body: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Container(
+                height: double.infinity,
+                padding: const EdgeInsets.fromLTRB(56, 48, 48, 48),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.28,
+                  ),
+                  border: Border(
+                    right: BorderSide(
+                      color: colorScheme.outlineVariant.withValues(alpha: 0.26),
+                    ),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _LoginBrandLockup(
+                      logoUrl: logoUrl,
+                      textLogoUrl: textLogoUrl,
+                      centered: false,
+                    ),
+                    const Spacer(),
+                    Text(
+                      AppLocalizations.of(context)!.appDescription,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.w800,
+                            height: 1.16,
+                          ),
+                    ),
+                    const SizedBox(height: 18),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        _LoginSignalChip(
+                          icon: Icons.home_outlined,
+                          label: AppLocalizations.of(context)!.navigationHome,
+                        ),
+                        _LoginSignalChip(
+                          icon: Icons.person_outline_rounded,
+                          label: AppLocalizations.of(context)!.searchTabPlayers,
+                        ),
+                        _LoginSignalChip(
+                          icon: Icons.groups_outlined,
+                          label: AppLocalizations.of(context)!.clanTitle,
+                        ),
+                        _LoginSignalChip(
+                          icon: Icons.shield_outlined,
+                          label: AppLocalizations.of(context)!.warTitle,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 6,
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 56,
+                    vertical: 40,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.authDiscordSignIn,
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          AppLocalizations.of(context)!.authDiscordDescription,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: colorScheme.onSurfaceVariant),
+                        ),
+                        const SizedBox(height: 22),
+                        _buildAuthPanel(
+                          context,
+                          maxWidth: 520,
+                          contentHeight: 316,
+                        ),
+                        const SizedBox(height: 18),
+                        _LoginHelpLinks(centered: false),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAuthPanel(
+    BuildContext context, {
+    required double maxWidth,
+    required double contentHeight,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: Card(
+        margin: EdgeInsets.zero,
+        color: Theme.of(context).cardColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+          ),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: LiquidGlassSegmentedControl<int>(
+                values: const [0, 1],
+                labels: [
+                  AppLocalizations.of(context)!.authDiscordTitle,
+                  AppLocalizations.of(context)!.authEmail,
+                ],
+                selected: _selectedAuthTab,
+                height: 44,
+                onChanged: (index) {
+                  setState(() => _selectedAuthTab = index);
+                  _tabController.animateTo(index);
+                },
+              ),
+            ),
+            SizedBox(
+              height: contentHeight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [_buildDiscordTab(), _buildEmailTab()],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -616,6 +651,153 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           SizedBox(height: 8),
         ],
       ),
+    );
+  }
+}
+
+class _LoginBrandLockup extends StatelessWidget {
+  const _LoginBrandLockup({
+    required this.logoUrl,
+    required this.textLogoUrl,
+    required this.centered,
+  });
+
+  final String logoUrl;
+  final String textLogoUrl;
+  final bool centered;
+
+  @override
+  Widget build(BuildContext context) {
+    final logo = SizedBox(
+      height: centered ? 80 : 64,
+      width: centered ? 80 : 64,
+      child: MobileWebImage(
+        imageUrl: logoUrl,
+        errorWidget: (context, url, error) => const Icon(Icons.error),
+      ),
+    );
+    final textLogo = SizedBox(
+      width: centered ? 160 : 184,
+      child: MobileWebImage(
+        imageUrl: textLogoUrl,
+        errorWidget: (context, url, error) => Text(
+          'ClashKing',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w900,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ),
+    );
+
+    if (centered) {
+      return Column(children: [logo, const SizedBox(height: 12), textLogo]);
+    }
+
+    return Row(children: [logo, const SizedBox(width: 14), textLogo]);
+  }
+}
+
+class _LoginSignalChip extends StatelessWidget {
+  const _LoginSignalChip({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: colorScheme.primary),
+            const SizedBox(width: 7),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoginHelpLinks extends StatelessWidget {
+  const _LoginHelpLinks({required this.centered});
+
+  final bool centered;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final children = [
+      TextButton.icon(
+        onPressed: () async =>
+            launchUrl(Uri.parse('https://discord.gg/clashking')),
+        icon: Icon(Icons.discord, size: 16, color: colorScheme.primary),
+        label: Text(
+          AppLocalizations.of(context)!.helpJoinDiscord,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        ),
+      ),
+      TextButton.icon(
+        onPressed: () async => launchUrl(
+          Uri.parse('mailto:devs@clashk.ing?subject=ClashKing App Support'),
+        ),
+        icon: Icon(Icons.email_outlined, size: 16, color: colorScheme.primary),
+        label: Text(
+          AppLocalizations.of(context)!.helpEmailUs,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        ),
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: centered
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.helpTitle,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          alignment: centered ? WrapAlignment.center : WrapAlignment.start,
+          spacing: 8,
+          runSpacing: 4,
+          children: children,
+        ),
+      ],
     );
   }
 }

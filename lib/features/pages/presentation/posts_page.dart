@@ -1,10 +1,12 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
 import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_story_dialog.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PostsPage extends StatefulWidget {
@@ -60,68 +62,93 @@ class _PostsPageState extends State<PostsPage> {
     final loc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(loc.postsTitle)),
-      body: RefreshIndicator(
-        onRefresh: () => _load(reset: true),
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-              sliver: SliverList.list(
-                children: [
-                  Text(
-                    loc.postsDescription,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktopWeb = kIsWeb && constraints.maxWidth >= 900;
+          final horizontalPadding = ((constraints.maxWidth - 1200) / 2)
+              .clamp(16.0, double.infinity)
+              .toDouble();
+          return RefreshIndicator(
+            onRefresh: () => _load(reset: true),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    16,
+                    horizontalPadding,
+                    32,
                   ),
-                  const SizedBox(height: 16),
-                  if (_posts.isEmpty && _loading)
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(32),
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  else if (_posts.isEmpty && _error != null)
-                    _PostsMessage(
-                      icon: Icons.cloud_off_rounded,
-                      title: loc.postsLoadFailed,
-                      actionLabel: loc.generalRetry,
-                      onAction: () => _load(reset: true),
-                    )
-                  else if (_posts.isEmpty)
-                    _PostsMessage(
-                      icon: Icons.article_outlined,
-                      title: loc.postsEmpty,
-                    )
-                  else ...[
-                    for (final post in _posts) ...[
-                      _PostArchiveCard(post: post),
-                      const SizedBox(height: 14),
-                    ],
-                    if (_error != null)
-                      _PostsMessage(
-                        icon: Icons.sync_problem_rounded,
-                        title: loc.postsLoadFailed,
-                        actionLabel: loc.generalRetry,
-                        onAction: _load,
-                      )
-                    else if (_hasMore)
-                      Center(
-                        child: FilledButton.tonal(
-                          onPressed: _loading ? null : _load,
-                          child: Text(
-                            _loading ? loc.generalLoading : loc.postsLoadMore,
-                          ),
+                  sliver: SliverList.list(
+                    children: [
+                      Text(
+                        loc.postsDescription,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
-                  ],
-                ],
-              ),
+                      const SizedBox(height: 16),
+                      if (_posts.isEmpty && _loading)
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(32),
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      else if (_posts.isEmpty && _error != null)
+                        _PostsMessage(
+                          icon: Icons.cloud_off_rounded,
+                          title: loc.postsLoadFailed,
+                          actionLabel: loc.generalRetry,
+                          onAction: () => _load(reset: true),
+                        )
+                      else if (_posts.isEmpty)
+                        _PostsMessage(
+                          icon: Icons.article_outlined,
+                          title: loc.postsEmpty,
+                        )
+                      else ...[
+                        if (isDesktopWeb)
+                          ResponsiveCardGrid(
+                            itemCount: _posts.length,
+                            minItemWidth: 360,
+                            maxColumns: 2,
+                            spacing: 16,
+                            itemBuilder: (_, index) =>
+                                _PostArchiveCard(post: _posts[index]),
+                          )
+                        else
+                          for (final post in _posts) ...[
+                            _PostArchiveCard(post: post),
+                            const SizedBox(height: 14),
+                          ],
+                        if (_error != null)
+                          _PostsMessage(
+                            icon: Icons.sync_problem_rounded,
+                            title: loc.postsLoadFailed,
+                            actionLabel: loc.generalRetry,
+                            onAction: _load,
+                          )
+                        else if (_hasMore)
+                          Center(
+                            child: FilledButton.tonal(
+                              onPressed: _loading ? null : _load,
+                              child: Text(
+                                _loading
+                                    ? loc.generalLoading
+                                    : loc.postsLoadMore,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

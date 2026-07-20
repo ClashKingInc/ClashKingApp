@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
@@ -14,6 +15,7 @@ import 'package:clashkingapp/features/pages/widgets/clan_no_clan_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:intl/intl.dart';
@@ -75,52 +77,81 @@ class _ClanPageState extends State<ClanPage> {
           ),
         );
     final clans = [...linkedCards, ...bookmarkCards];
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final bottomPadding = isDesktopWeb
+        ? 32.0
+        : MediaQuery.paddingOf(context).bottom + 96;
 
-    return Scaffold(
-      body: RefreshIndicator(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        onRefresh: () => _refresh(
-          context,
-          cocService,
-          playerService,
-          clanService,
-          warCwlService,
-        ),
-        child: CustomScrollView(
-          scrollCacheExtent: const ScrollCacheExtent.pixels(800),
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverToBoxAdapter(
-                child: LastRefreshIndicator(
-                  lastRefresh: cocService.lastRefresh,
-                ),
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final horizontalPadding =
+            ((constraints.maxWidth - (isDesktopWeb ? 1320.0 : 840.0)) / 2)
+                .clamp(16.0, double.infinity)
+                .toDouble();
+
+        return Scaffold(
+          body: RefreshIndicator(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            onRefresh: () => _refresh(
+              context,
+              cocService,
+              playerService,
+              clanService,
+              warCwlService,
             ),
-            SliverPadding(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                8,
-                16,
-                MediaQuery.paddingOf(context).bottom + 96,
-              ),
-              sliver: clans.isEmpty
-                  ? SliverToBoxAdapter(child: Card(child: NoClanCard()))
-                  : SliverList.separated(
-                      itemCount: clans.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 10),
-                      itemBuilder: (context, index) {
-                        final item = clans[index];
-                        return _ClanCard(
-                          item: item,
-                          onOpen: () => _openClan(context, clanService, item),
-                        );
-                      },
+            child: CustomScrollView(
+              scrollCacheExtent: const ScrollCacheExtent.pixels(800),
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                  sliver: SliverToBoxAdapter(
+                    child: LastRefreshIndicator(
+                      lastRefresh: cocService.lastRefresh,
                     ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    8,
+                    horizontalPadding,
+                    bottomPadding,
+                  ),
+                  sliver: clans.isEmpty
+                      ? SliverToBoxAdapter(child: Card(child: NoClanCard()))
+                      : isDesktopWeb
+                      ? SliverToBoxAdapter(
+                          child: ResponsiveCardGrid(
+                            itemCount: clans.length,
+                            itemBuilder: (context, index) {
+                              final item = clans[index];
+                              return _ClanCard(
+                                item: item,
+                                onOpen: () =>
+                                    _openClan(context, clanService, item),
+                              );
+                            },
+                          ),
+                        )
+                      : SliverList.separated(
+                          itemCount: clans.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) {
+                            final item = clans[index];
+                            return _ClanCard(
+                              item: item,
+                              onOpen: () =>
+                                  _openClan(context, clanService, item),
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

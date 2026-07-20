@@ -45,14 +45,16 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
           final navigator = Navigator.of(context);
           showDialog(
             context: context,
+            useRootNavigator: false,
             barrierDismissible: false,
             builder: (context) {
               return const Center(child: CircularProgressIndicator());
             },
           );
 
-          final Player player =
-              await PlayerService().getPlayerAndClanData(widget.player['tag']);
+          final Player player = await PlayerService().getPlayerAndClanData(
+            widget.player['tag'],
+          );
 
           navigator.pop();
           navigator.push(

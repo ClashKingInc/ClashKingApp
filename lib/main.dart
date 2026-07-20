@@ -126,6 +126,14 @@ Future<void> main() async {
 
   final packageInfo = await PackageInfo.fromPlatform();
 
+  if (kIsWeb) {
+    await SentryFlutter.init((options) {
+      _configureObservabilityOptions(options, packageInfo);
+    });
+    await _startClashKingApp();
+    return;
+  }
+
   await SentryFlutter.init((options) {
     _configureObservabilityOptions(options, packageInfo);
   }, appRunner: _startClashKingApp);
@@ -159,9 +167,13 @@ void _configureObservabilityOptions(
 
 Future<void> _startClashKingApp() async {
   // Pre-warm the shared Flutter glass shader before first use.
-  await LiquidGlassWidgets.initialize();
+  if (!kIsWeb) {
+    await LiquidGlassWidgets.initialize();
+  }
   final appState = MyAppState();
-  await appState.featureFlagsReady;
+  if (!kIsWeb) {
+    await appState.featureFlagsReady;
+  }
 
   final warWidgetsEnabled = appState.isFeatureEnabled(
     AppFeatureFlags.warWidgets,
@@ -180,11 +192,19 @@ Future<void> _startClashKingApp() async {
     HomeWidget.registerInteractivityCallback(backgroundCallback);
   }
 
-  await Future.wait([
-    GameDataService.loadGameData().then(
-      (_) => DebugUtils.debugSuccess("GameDataService OK"),
-    ),
-  ]);
+  if (kIsWeb) {
+    unawaited(
+      GameDataService.loadGameData().then(
+        (_) => DebugUtils.debugSuccess("GameDataService OK"),
+      ),
+    );
+  } else {
+    await Future.wait([
+      GameDataService.loadGameData().then(
+        (_) => DebugUtils.debugSuccess("GameDataService OK"),
+      ),
+    ]);
+  }
 
   FlutterNativeSplash.remove();
 
@@ -212,4 +232,8 @@ Future<void> _startClashKingApp() async {
       ),
     ),
   );
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    FlutterNativeSplash.remove();
+  });
 }

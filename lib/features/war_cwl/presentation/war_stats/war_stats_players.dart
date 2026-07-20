@@ -1,5 +1,6 @@
 // Fichier : war_stats_page.dart
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/war_functions.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
@@ -7,6 +8,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:provider/provider.dart';
@@ -58,184 +60,191 @@ class ClanWarStatsPlayers extends StatelessWidget {
         })
         .toList(growable: false);
 
+    Widget buildPlayerCard(BuildContext context, int entryIndex) {
+      final index = entryIndex + 1;
+      final member = visiblePlayers[entryIndex];
+      final memberWarStats = member.getStatsForTypes(
+        selectedTypes,
+        attackerThFilter: attackerThFilter,
+        defenderThFilter: defenderThFilter,
+        equalThSelected: equalThSelected,
+      );
+
+      final starsCount = showUppedTownHall
+          ? memberWarStats.starsCount
+          : (memberWarStats.getStarsCountAgainstTh(member.townhallLevel));
+
+      final totalAttacks = starsCount.values.fold<int>(
+        0,
+        (previousValue, element) => previousValue + element,
+      );
+
+      return GestureDetector(
+        onTap: () async {
+          final navigator = Navigator.of(context);
+          showDialog(
+            context: context,
+            useRootNavigator: false,
+            barrierDismissible: false,
+            builder: (_) => const Center(child: CircularProgressIndicator()),
+          );
+          try {
+            final player = await context
+                .read<PlayerService>()
+                .getPlayerAndClanData(member.tag);
+            if (!context.mounted) return;
+            navigator.pop();
+            navigator.push(
+              MaterialPageRoute(
+                builder: (_) => PlayerScreen(selectedPlayer: player),
+              ),
+            );
+          } catch (e) {
+            if (context.mounted) {
+              navigator.pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context)!.warAttacksFailedToLoadPlayer,
+                  ),
+                ),
+              );
+            }
+          }
+        },
+        child: Container(
+          margin: kIsWeb && MediaQuery.sizeOf(context).width >= 900
+              ? EdgeInsets.zero
+              : const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color:
+                Theme.of(context).cardTheme.color ??
+                Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: Theme.of(
+                context,
+              ).colorScheme.outlineVariant.withValues(alpha: 0.28),
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                    child: Text(
+                      index.toString(),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 7),
+                  MobileWebImage(
+                    imageUrl: ImageAssets.townHall(member.townhallLevel),
+                    height: 38,
+                    width: 38,
+                  ),
+                  const SizedBox(width: 9),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          member.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          member.tag,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _WarStatsMiniMetric(
+                        imageUrl: ImageAssets.warClan,
+                        value: totalAttacks.toString(),
+                      ),
+                      const SizedBox(height: 5),
+                      _WarStatsMiniMetric(
+                        imageUrl: ImageAssets.brokenSword,
+                        value: memberWarStats.missedAttacks.toString(),
+                        color: Colors.redAccent,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  _WarStatsMiniMetric(
+                    icon: Icons.percent_rounded,
+                    value:
+                        '${memberWarStats.averageDestruction.toStringAsFixed(1)}%',
+                    color: Colors.teal,
+                    prominent: true,
+                  ),
+                  _WarStatsMiniMetric(
+                    icon: Icons.star_rounded,
+                    value: memberWarStats.averageStars.toStringAsFixed(2),
+                    color: Colors.amber.shade700,
+                    prominent: true,
+                  ),
+                  for (var stars = 0; stars <= 3; stars++)
+                    _StarRateBadge(
+                      stars: stars,
+                      count: starsCount[stars.toString()] ?? 0,
+                      totalAttacks: totalAttacks,
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+
     return Column(
       children: [
         if (visiblePlayers.isNotEmpty)
-          ...visiblePlayers.asMap().entries.map((entry) {
-            final index = entry.key + 1;
-            final member = entry.value;
-            final memberWarStats = member.getStatsForTypes(
-              selectedTypes,
-              attackerThFilter: attackerThFilter,
-              defenderThFilter: defenderThFilter,
-              equalThSelected: equalThSelected,
-            );
-
-            final starsCount = showUppedTownHall
-                ? memberWarStats.starsCount
-                : (memberWarStats.getStarsCountAgainstTh(member.townhallLevel));
-
-            final totalAttacks = starsCount.values.fold<int>(
-              0,
-              (previousValue, element) => previousValue + element,
-            );
-
-            if (totalAttacks == 0) {
-              return SizedBox.shrink();
-            }
-
-            return GestureDetector(
-              onTap: () async {
-                final navigator = Navigator.of(context);
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) =>
-                      const Center(child: CircularProgressIndicator()),
-                );
-                try {
-                  final player = await context
-                      .read<PlayerService>()
-                      .getPlayerAndClanData(member.tag);
-                  if (!context.mounted) return;
-                  navigator.pop();
-                  navigator.push(
-                    MaterialPageRoute(
-                      builder: (_) => PlayerScreen(selectedPlayer: player),
-                    ),
-                  );
-                } catch (e) {
-                  if (context.mounted) {
-                    navigator.pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.warAttacksFailedToLoadPlayer,
-                        ),
-                      ),
-                    );
-                  }
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).cardTheme.color ??
-                      Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.outlineVariant.withValues(alpha: 0.28),
+          isDesktopWeb
+              ? ResponsiveCardGrid(
+                  itemCount: visiblePlayers.length,
+                  minItemWidth: 360,
+                  maxColumns: 3,
+                  spacing: 10,
+                  itemBuilder: buildPlayerCard,
+                )
+              : Column(
+                  children: List.generate(
+                    visiblePlayers.length,
+                    (index) => buildPlayerCard(context, index),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 20,
-                          child: Text(
-                            index.toString(),
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                          ),
-                        ),
-                        const SizedBox(width: 7),
-                        MobileWebImage(
-                          imageUrl: ImageAssets.townHall(member.townhallLevel),
-                          height: 38,
-                          width: 38,
-                        ),
-                        const SizedBox(width: 9),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                member.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.w800),
-                              ),
-                              const SizedBox(height: 1),
-                              Text(
-                                member.tag,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.labelMedium
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            _WarStatsMiniMetric(
-                              imageUrl: ImageAssets.warClan,
-                              value: totalAttacks.toString(),
-                            ),
-                            const SizedBox(height: 5),
-                            _WarStatsMiniMetric(
-                              imageUrl: ImageAssets.brokenSword,
-                              value: memberWarStats.missedAttacks.toString(),
-                              color: Colors.redAccent,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: [
-                        _WarStatsMiniMetric(
-                          icon: Icons.percent_rounded,
-                          value:
-                              '${memberWarStats.averageDestruction.toStringAsFixed(1)}%',
-                          color: Colors.teal,
-                          prominent: true,
-                        ),
-                        _WarStatsMiniMetric(
-                          icon: Icons.star_rounded,
-                          value: memberWarStats.averageStars.toStringAsFixed(2),
-                          color: Colors.amber.shade700,
-                          prominent: true,
-                        ),
-                        for (var stars = 0; stars <= 3; stars++)
-                          _StarRateBadge(
-                            stars: stars,
-                            count: starsCount[stars.toString()] ?? 0,
-                            totalAttacks: totalAttacks,
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          })
+                )
         else
           AppEmptyState(
             title: AppLocalizations.of(context)!.generalNoFilteredResults,

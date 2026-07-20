@@ -5,6 +5,7 @@ import 'package:clashkingapp/features/pages/widgets/home_todo_card.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,53 +37,66 @@ class DashboardPage extends StatelessWidget {
         })
         .toList(growable: false);
     final todoPlayers = [...linkedPlayers, ...pinnedBookmarkedPlayers];
-    final horizontalPadding = ((MediaQuery.sizeOf(context).width - 840) / 2)
-        .clamp(16.0, double.infinity)
-        .toDouble();
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final bottomPadding = isDesktopWeb
+        ? 32.0
+        : MediaQuery.paddingOf(context).bottom + 96;
 
     return Scaffold(
       body: SafeArea(
         bottom: false,
-        child: ListView(
-          padding: EdgeInsets.fromLTRB(
-            horizontalPadding,
-            12,
-            horizontalPadding,
-            MediaQuery.paddingOf(context).bottom + 96,
-          ),
-          children: [
-            const HomeEventBanner(),
-            const SizedBox(height: 16),
-            if (players.isEmpty)
-              _EmptyDashboard(
-                title: AppLocalizations.of(
-                  context,
-                )!.dashboardNoLinkedAccountsTitle,
-                message: AppLocalizations.of(
-                  context,
-                )!.dashboardNoLinkedAccountsBody,
-                icon: Icons.account_circle_outlined,
-                actionLabel: AppLocalizations.of(context)!.drawerManageAccounts,
-                onAction: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) =>
-                        const AddCocAccountPage(refreshOnExit: false),
-                  ),
-                ),
-              )
-            else if (pinnedPlayers.isEmpty)
-              _EmptyDashboard(
-                title: AppLocalizations.of(
-                  context,
-                )!.dashboardNothingPinnedTitle,
-                message: AppLocalizations.of(
-                  context,
-                )!.dashboardNothingPinnedBody,
-                icon: Icons.push_pin_outlined,
-              )
-            else
-              HomeTodoCard(players: pinnedPlayers, allPlayers: todoPlayers),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxContentWidth = isDesktopWeb ? 1320.0 : 840.0;
+            final horizontalPadding =
+                ((constraints.maxWidth - maxContentWidth) / 2)
+                    .clamp(16.0, double.infinity)
+                    .toDouble();
+
+            return ListView(
+              padding: EdgeInsets.fromLTRB(
+                horizontalPadding,
+                12,
+                horizontalPadding,
+                bottomPadding,
+              ),
+              children: [
+                const HomeEventBanner(),
+                SizedBox(height: isDesktopWeb ? 24 : 16),
+                if (players.isEmpty)
+                  _EmptyDashboard(
+                    title: AppLocalizations.of(
+                      context,
+                    )!.dashboardNoLinkedAccountsTitle,
+                    message: AppLocalizations.of(
+                      context,
+                    )!.dashboardNoLinkedAccountsBody,
+                    icon: Icons.account_circle_outlined,
+                    actionLabel: AppLocalizations.of(
+                      context,
+                    )!.drawerManageAccounts,
+                    onAction: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) =>
+                            const AddCocAccountPage(refreshOnExit: false),
+                      ),
+                    ),
+                  )
+                else if (pinnedPlayers.isEmpty)
+                  _EmptyDashboard(
+                    title: AppLocalizations.of(
+                      context,
+                    )!.dashboardNothingPinnedTitle,
+                    message: AppLocalizations.of(
+                      context,
+                    )!.dashboardNothingPinnedBody,
+                    icon: Icons.push_pin_outlined,
+                  )
+                else
+                  HomeTodoCard(players: pinnedPlayers, allPlayers: todoPlayers),
+              ],
+            );
+          },
         ),
       ),
     );

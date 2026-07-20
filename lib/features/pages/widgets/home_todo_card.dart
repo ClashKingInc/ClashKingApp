@@ -14,11 +14,33 @@ import 'package:clashkingapp/features/player/presentation/to_do/player_to_do_pag
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 const bool _showTodoMockups = false;
+const double _homePagerDesktopBreakpoint = 900;
+
+bool _usesDesktopHomePager(BuildContext context) =>
+    kIsWeb && MediaQuery.sizeOf(context).width >= _homePagerDesktopBreakpoint;
+
+void _animateHomePagerTo(
+  BuildContext context,
+  PageController controller,
+  int page,
+) {
+  if (!controller.hasClients) return;
+  if (CKMotion.animationsDisabled(context)) {
+    controller.jumpToPage(page);
+    return;
+  }
+  controller.animateToPage(
+    page,
+    duration: CKMotion.fast,
+    curve: CKMotion.standardCurve,
+  );
+}
 
 class HomeEventBanner extends StatefulWidget {
   const HomeEventBanner({super.key});
@@ -48,6 +70,13 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
 
   int _index = 0;
 
+  void _showBannerPage(int count, int page) {
+    if (count <= 0) return;
+    final next = page % count;
+    setState(() => _index = next);
+    _animateHomePagerTo(context, _controller, next);
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -62,27 +91,71 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
           announcements: snapshot.data ?? const [],
         );
 
+        final useDesktopPager = _usesDesktopHomePager(context);
+        if (useDesktopPager) {
+          final featured = items.firstWhere(
+            (item) => item.sortKey == null && item.announcement == null,
+            orElse: () => items.first,
+          );
+          final eventItems = items
+              .where((item) => !identical(item, featured))
+              .toList(growable: false);
+          return _HomeEventsDesktopGrid(featured: featured, items: eventItems);
+        }
+
+        final pageView = SizedBox(
+          height: 64,
+          child: PageView.builder(
+            controller: _controller,
+            onPageChanged: (index) => setState(() => _index = index),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 180),
+                child: _BannerTile(
+                  key: ValueKey(items[index].title),
+                  item: items[index],
+                ),
+              );
+            },
+          ),
+        );
+
         return Column(
           children: [
-            SizedBox(
-              height: 64,
-              child: PageView.builder(
-                controller: _controller,
-                onPageChanged: (index) => setState(() => _index = index),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 180),
-                    child: _BannerTile(
-                      key: ValueKey(items[index].title),
-                      item: items[index],
-                    ),
-                  );
-                },
-              ),
-            ),
+            pageView,
             const SizedBox(height: 8),
-            _PageDots(count: items.length, index: _index),
+            if (useDesktopPager && items.length > 1)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _PageDots(
+                    count: items.length,
+                    index: _index,
+                    onDotTap: (index) => _showBannerPage(items.length, index),
+                  ),
+                  const SizedBox(width: 12),
+                  _PagerArrowButton(
+                    icon: Icons.chevron_left_rounded,
+                    tooltip: 'Previous card',
+                    onPressed: () => _showBannerPage(
+                      items.length,
+                      (_index - 1 + items.length) % items.length,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  _PagerArrowButton(
+                    icon: Icons.chevron_right_rounded,
+                    tooltip: 'Next card',
+                    onPressed: () => _showBannerPage(
+                      items.length,
+                      (_index + 1) % items.length,
+                    ),
+                  ),
+                ],
+              )
+            else
+              _PageDots(count: items.length, index: _index),
           ],
         );
       },
@@ -128,6 +201,13 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
     super.dispose();
   }
 
+  void _showTodoPage(int count, int page) {
+    if (count <= 0) return;
+    final next = page % count;
+    setState(() => _index = next);
+    _animateHomePagerTo(context, _controller, next);
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
@@ -169,6 +249,23 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
         ? 64.0
         : maxRows * 38.0 + (maxRows - 1) * 7.0;
     final height = 116.0 + barsHeight;
+    final useDesktopPager = _usesDesktopHomePager(context);
+
+    if (useDesktopPager) {
+      return _HomeTodoDesktopGrid(
+        itemCount: itemCount,
+        hasSummaryPage: hasSummaryPage,
+        itemHeight: height,
+        itemBuilder: (context, index) => _buildTodoPanel(
+          context,
+          index,
+          mockups,
+          hasSummaryPage,
+          summaries,
+          warCwlService,
+        ),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,36 +276,80 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
             controller: _controller,
             onPageChanged: (index) => setState(() => _index = index),
             itemCount: itemCount,
-            itemBuilder: (context, index) {
-              if (_showTodoMockups) {
-                return _TodoPreviewPanel(preview: mockups[index]);
-              }
-
-              if (hasSummaryPage && index == 0) {
-                return _AllAccountsPanel(
-                  accountCount: widget.players.length,
-                  summary: summaries[index],
-                  onTap: () => _openTodo(context, warCwlService!),
-                );
-              }
-
-              final player = widget.players[index - (hasSummaryPage ? 1 : 0)];
-
-              return _AccountTodoPanel(
-                player: player,
-                summary: summaries[index],
-                onTap: () => _openTodo(context, warCwlService!),
-              );
-            },
+            itemBuilder: (context, index) => _buildTodoPanel(
+              context,
+              index,
+              mockups,
+              hasSummaryPage,
+              summaries,
+              warCwlService,
+            ),
           ),
         ),
         if (itemCount > 1) ...[
           const SizedBox(height: 10),
-          Center(
-            child: _PageDots(count: itemCount, index: _index),
-          ),
+          if (useDesktopPager)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _PageDots(
+                  count: itemCount,
+                  index: _index,
+                  onDotTap: (index) => _showTodoPage(itemCount, index),
+                ),
+                const SizedBox(width: 12),
+                _PagerArrowButton(
+                  icon: Icons.chevron_left_rounded,
+                  tooltip: 'Previous card',
+                  onPressed: () => _showTodoPage(
+                    itemCount,
+                    (_index - 1 + itemCount) % itemCount,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                _PagerArrowButton(
+                  icon: Icons.chevron_right_rounded,
+                  tooltip: 'Next card',
+                  onPressed: () =>
+                      _showTodoPage(itemCount, (_index + 1) % itemCount),
+                ),
+              ],
+            )
+          else
+            Center(
+              child: _PageDots(count: itemCount, index: _index),
+            ),
         ],
       ],
+    );
+  }
+
+  Widget _buildTodoPanel(
+    BuildContext context,
+    int index,
+    List<_TodoPreview> mockups,
+    bool hasSummaryPage,
+    List<_TodoSummary> summaries,
+    WarCwlService? warCwlService,
+  ) {
+    if (_showTodoMockups) {
+      return _TodoPreviewPanel(preview: mockups[index]);
+    }
+
+    if (hasSummaryPage && index == 0) {
+      return _AllAccountsPanel(
+        accountCount: widget.players.length,
+        summary: summaries[index],
+        onTap: () => _openTodo(context, warCwlService!),
+      );
+    }
+
+    final player = widget.players[index - (hasSummaryPage ? 1 : 0)];
+
+    return _AccountTodoPanel(
+      player: player,
+      summary: summaries[index],
+      onTap: () => _openTodo(context, warCwlService!),
     );
   }
 
@@ -254,6 +395,67 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
   }
 }
 
+class _HomeTodoDesktopGrid extends StatelessWidget {
+  const _HomeTodoDesktopGrid({
+    required this.itemCount,
+    required this.hasSummaryPage,
+    required this.itemHeight,
+    required this.itemBuilder,
+  });
+
+  final int itemCount;
+  final bool hasSummaryPage;
+  final double itemHeight;
+  final IndexedWidgetBuilder itemBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    const gap = 12.0;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final firstGridIndex = hasSummaryPage ? 1 : 0;
+        final gridCount = itemCount - firstGridIndex;
+        final columns = constraints.maxWidth >= 1240 && gridCount >= 3
+            ? 3
+            : constraints.maxWidth >= 760 && gridCount >= 2
+            ? 2
+            : 1;
+        final cardWidth =
+            (constraints.maxWidth - gap * (columns - 1)) / columns;
+
+        final children = <Widget>[
+          if (hasSummaryPage)
+            SizedBox(
+              height: itemHeight,
+              width: constraints.maxWidth,
+              child: itemBuilder(context, 0),
+            ),
+          if (hasSummaryPage && gridCount > 0) const SizedBox(height: gap),
+          if (gridCount > 0)
+            Wrap(
+              spacing: gap,
+              runSpacing: gap,
+              children: [
+                for (var index = firstGridIndex; index < itemCount; index++)
+                  SizedBox(
+                    width: cardWidth,
+                    height: itemHeight,
+                    child: itemBuilder(context, index),
+                  ),
+              ],
+            ),
+        ];
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: children,
+        );
+      },
+    );
+  }
+}
+
 class _TodoPreviewPanel extends StatelessWidget {
   const _TodoPreviewPanel({required this.preview});
 
@@ -262,6 +464,9 @@ class _TodoPreviewPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDesktop = _usesDesktopHomePager(context);
+    final ringSize = isDesktop ? 54.0 : 46.0;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1),
       child: DecoratedBox(
@@ -276,11 +481,14 @@ class _TodoPreviewPanel extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: isDesktop
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Expanded(child: _PreviewHeader(preview: preview)),
-                  _TodoRing(summary: preview.summary, size: 46),
+                  _TodoRing(summary: preview.summary, size: ringSize),
                 ],
               ),
               const SizedBox(height: 8),
@@ -317,6 +525,8 @@ class _AccountTodoPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDesktop = _usesDesktopHomePager(context);
+    final ringSize = isDesktop ? 54.0 : 46.0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1),
@@ -336,11 +546,14 @@ class _AccountTodoPanel extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: isDesktop
+                  ? MainAxisAlignment.center
+                  : MainAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Expanded(child: _AccountHeader(player: player)),
-                    _TodoRing(summary: summary, size: 46),
+                    _TodoRing(summary: summary, size: ringSize),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -391,22 +604,25 @@ class _AllAccountsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDesktop = _usesDesktopHomePager(context);
+    final iconSize = isDesktop ? 42.0 : 30.0;
+    final ringSize = isDesktop ? 54.0 : 46.0;
 
     final header = Row(
       children: [
         SizedBox.square(
-          dimension: 30,
+          dimension: iconSize,
           child: MobileWebImage(
             imageUrl: ImageAssets.iconBuilderPotion,
             fit: BoxFit.contain,
             errorWidget: (context, url, error) => Icon(
               Icons.checklist_rounded,
-              size: 24,
+              size: isDesktop ? 30 : 24,
               color: colorScheme.onSurfaceVariant,
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: isDesktop ? 12 : 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,11 +666,14 @@ class _AllAccountsPanel extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: isDesktop
+                  ? MainAxisAlignment.center
+                  : MainAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Expanded(child: header),
-                    _TodoRing(summary: summary, size: 46),
+                    _TodoRing(summary: summary, size: ringSize),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -499,11 +718,13 @@ class _AccountHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDesktop = _usesDesktopHomePager(context);
+    final iconSize = isDesktop ? 42.0 : 30.0;
 
     return Row(
       children: [
         SizedBox.square(
-          dimension: 30,
+          dimension: iconSize,
           child: MobileWebImage(
             imageUrl: player.townHallPic,
             fit: BoxFit.contain,
@@ -515,15 +736,16 @@ class _AccountHeader extends StatelessWidget {
               child: Center(
                 child: Text(
                   '${player.townHallLevel}',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w900),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    fontSize: isDesktop ? 14 : null,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: isDesktop ? 12 : 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -559,11 +781,13 @@ class _PreviewHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDesktop = _usesDesktopHomePager(context);
+    final iconSize = isDesktop ? 42.0 : 30.0;
 
     return Row(
       children: [
         SizedBox.square(
-          dimension: 30,
+          dimension: iconSize,
           child: MobileWebImage(
             imageUrl: preview.avatarUrl,
             fit: BoxFit.contain,
@@ -575,14 +799,14 @@ class _PreviewHeader extends StatelessWidget {
               child: Center(
                 child: Icon(
                   Icons.person_rounded,
-                  size: 18,
+                  size: isDesktop ? 24 : 18,
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: isDesktop ? 12 : 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -839,10 +1063,11 @@ class _CaughtUp extends StatelessWidget {
 }
 
 class _PageDots extends StatelessWidget {
-  const _PageDots({required this.count, required this.index});
+  const _PageDots({required this.count, required this.index, this.onDotTap});
 
   final int count;
   final int index;
+  final ValueChanged<int>? onDotTap;
 
   @override
   Widget build(BuildContext context) {
@@ -852,7 +1077,7 @@ class _PageDots extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(count, (dotIndex) {
         final selected = dotIndex == index;
-        return AnimatedContainer(
+        final dot = AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           width: selected ? 18 : 7,
           height: 7,
@@ -864,7 +1089,352 @@ class _PageDots extends StatelessWidget {
             borderRadius: BorderRadius.circular(999),
           ),
         );
+
+        if (onDotTap == null) return dot;
+        return Tooltip(
+          message: 'Card ${dotIndex + 1}',
+          child: InkResponse(
+            radius: 14,
+            onTap: () => onDotTap!(dotIndex),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
+              child: dot,
+            ),
+          ),
+        );
       }),
+    );
+  }
+}
+
+class _PagerArrowButton extends StatelessWidget {
+  const _PagerArrowButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.72),
+        shape: const CircleBorder(),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: SizedBox.square(
+            dimension: 34,
+            child: Icon(icon, size: 22, color: colorScheme.onSurface),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Color _bannerAccentColor(BuildContext context, _BannerItem item) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  final sourceHsl = HSLColor.fromColor(item.color);
+  return isDark
+      ? sourceHsl
+            .withSaturation(math.max(sourceHsl.saturation, 0.78))
+            .withLightness(math.max(sourceHsl.lightness, 0.56))
+            .toColor()
+      : item.color;
+}
+
+VoidCallback? _bannerItemOnTap(BuildContext context, _BannerItem item) {
+  final hasStory = item.announcement?.storyUrl?.isNotEmpty ?? false;
+  final hasArticle =
+      hasStory ||
+      item.html != null ||
+      (item.htmlUrl != null && item.htmlUrl!.trim().isNotEmpty);
+  if (!hasArticle) return null;
+
+  return () async {
+    if (hasStory) {
+      final announcement = item.announcement!;
+      final storyFilePath = await AnnouncementStoryCacheService().prepare(
+        announcement,
+      );
+      if (!context.mounted || storyFilePath == null) {
+        return;
+      }
+      await showAnnouncementStoryDialog(
+        context,
+        announcement: announcement,
+        preparedFilePath: storyFilePath,
+      );
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => AnnouncementWebViewPage(
+          title: item.title,
+          html: item.html,
+          url: item.htmlUrl,
+        ),
+      ),
+    );
+  };
+}
+
+class _HomeEventsDesktopGrid extends StatelessWidget {
+  const _HomeEventsDesktopGrid({required this.featured, required this.items});
+
+  final _BannerItem featured;
+  final List<_BannerItem> items;
+
+  @override
+  Widget build(BuildContext context) {
+    const gap = 8.0;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = constraints.maxWidth >= 920
+            ? math.min(items.length, 5)
+            : constraints.maxWidth >= 620
+            ? math.min(items.length, 3)
+            : math.min(items.length, 2);
+        final cardWidth =
+            (constraints.maxWidth - gap * (columns - 1)) / columns;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _HomeFeaturedBannerCard(item: featured),
+            if (items.isNotEmpty) ...[
+              const SizedBox(height: gap),
+              Wrap(
+                spacing: gap,
+                runSpacing: gap,
+                children: [
+                  for (final item in items.take(8))
+                    SizedBox(
+                      width: cardWidth,
+                      height: 62,
+                      child: _HomeEventGridCard(item: item),
+                    ),
+                ],
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _HomeFeaturedBannerCard extends StatelessWidget {
+  const _HomeFeaturedBannerCard({required this.item});
+
+  final _BannerItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentColor = _bannerAccentColor(context, item);
+    final onTap = _bannerItemOnTap(context, item);
+
+    return Semantics(
+      button: onTap != null,
+      label: '${item.title}, ${item.subtitle}',
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(22),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Ink(
+            height: 94,
+            decoration: BoxDecoration(
+              color: accentColor.withValues(alpha: isDark ? 0.22 : 0.12),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(
+                color: accentColor.withValues(alpha: isDark ? 0.62 : 0.44),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              child: Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface.withValues(alpha: 0.76),
+                      shape: BoxShape.circle,
+                    ),
+                    child: SizedBox.square(
+                      dimension: 58,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: MobileWebImage(
+                          imageUrl: item.imageUrl,
+                          fit: BoxFit.contain,
+                          errorWidget: (context, url, error) => Icon(
+                            item.fallbackIcon,
+                            color: accentColor,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          item.subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (onTap != null) ...[
+                    const SizedBox(width: 12),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 17,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeEventGridCard extends StatelessWidget {
+  const _HomeEventGridCard({required this.item});
+
+  final _BannerItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentColor = _bannerAccentColor(context, item);
+    final onTap = _bannerItemOnTap(context, item);
+
+    return Semantics(
+      button: onTap != null,
+      label: '${item.title}, ${item.subtitle}',
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(14),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Ink(
+            decoration: BoxDecoration(
+              color: item.highlighted
+                  ? CKColors.warGold.withValues(alpha: isDark ? 0.18 : 0.10)
+                  : colorScheme.surface.withValues(alpha: isDark ? 0.74 : 0.92),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: accentColor.withValues(
+                  alpha: item.highlighted
+                      ? (isDark ? 0.58 : 0.46)
+                      : (isDark ? 0.32 : 0.20),
+                ),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: accentColor.withValues(
+                        alpha: isDark ? 0.20 : 0.12,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: SizedBox.square(
+                      dimension: 34,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: MobileWebImage(
+                          imageUrl: item.imageUrl,
+                          fit: BoxFit.contain,
+                          errorWidget: (context, url, error) => Icon(
+                            item.fallbackIcon,
+                            color: accentColor,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          item.subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (onTap != null) ...[
+                    const SizedBox(width: 5),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 13,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

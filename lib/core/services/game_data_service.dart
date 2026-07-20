@@ -57,6 +57,7 @@ class GameDataService {
 
   static Future<void> loadFreshGameData({Locale? locale}) async {
     await loadGameData(locale: locale);
+    if (kIsWeb) return;
     await refreshStaticDataIfChanged();
   }
 
@@ -128,6 +129,10 @@ class GameDataService {
     _CachedJsonAsset asset,
     Uri uri,
   ) async {
+    if (kIsWeb) {
+      return _downloadJsonAssetForWeb(asset, uri);
+    }
+
     final file = await _cacheFile(asset.fileName);
     final prefs = await SharedPreferences.getInstance();
     final cacheExists = await file.exists();
@@ -158,6 +163,26 @@ class GameDataService {
     }
 
     return _downloadJsonAsset(asset, uri, file, prefs, null, maxRetries: 1);
+  }
+
+  static Future<Map<String, dynamic>> _downloadJsonAssetForWeb(
+    _CachedJsonAsset asset,
+    Uri uri,
+  ) async {
+    final response = await http
+        .get(uri, headers: {'User-Agent': _userAgent})
+        .timeout(const Duration(seconds: 5));
+
+    if (response.statusCode != 200) {
+      throw StateError("HTTP ${response.statusCode} for ${asset.label}");
+    }
+
+    final body = utf8.decode(response.bodyBytes, allowMalformed: true);
+    final decoded = jsonDecode(body);
+    if (decoded is! Map) {
+      throw FormatException("${asset.label} is not a JSON object");
+    }
+    return Map<String, dynamic>.from(decoded);
   }
 
   static bool _cacheNeedsRefresh(String? cachedAt) {

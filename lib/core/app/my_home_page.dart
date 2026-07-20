@@ -22,6 +22,7 @@ import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/app_bar/app_bar.dart';
@@ -43,6 +44,8 @@ class MyHomePageState extends State<MyHomePage> {
   late final AnnouncementPresentationService _announcementPresentationService;
   late final Future<AppAnnouncement?> _openingAnnouncement;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<NavigatorState> _desktopContentNavigatorKey =
+      GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -103,6 +106,9 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   void _onItemTapped(int index) {
+    _desktopContentNavigatorKey.currentState?.popUntil(
+      (route) => route.isFirst,
+    );
     if (_selectedIndex != index) {
       setState(() => _selectedIndex = index);
     }
@@ -118,6 +124,17 @@ class MyHomePageState extends State<MyHomePage> {
         curve: CKMotion.standardCurve,
       );
     }
+  }
+
+  void _schedulePageControllerSync() {
+    final expectedIndex = _selectedIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_pageController.hasClients) return;
+      final currentIndex = _pageController.page?.round();
+      if (currentIndex != expectedIndex) {
+        _pageController.jumpToPage(expectedIndex);
+      }
+    });
   }
 
   void _openSearchOverlay() {
@@ -153,6 +170,18 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _schedulePageControllerSync();
+    if (_usesDesktopWebLayout(context)) {
+      return _DesktopWebHomeShell(
+        selectedIndex: _selectedIndex,
+        pageController: _pageController,
+        contentNavigatorKey: _desktopContentNavigatorKey,
+        onItemTapped: _onItemTapped,
+        onPageChanged: _onPageChanged,
+        onSearchTap: _openSearchOverlay,
+      );
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       extendBody: true,
@@ -191,6 +220,681 @@ class MyHomePageState extends State<MyHomePage> {
   }
 }
 
+bool _usesDesktopWebLayout(BuildContext context) =>
+    kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+
+Route<void> _instantDesktopRoute(WidgetBuilder builder) {
+  return PageRouteBuilder<void>(
+    transitionDuration: Duration.zero,
+    reverseTransitionDuration: Duration.zero,
+    pageBuilder: (context, animation, secondaryAnimation) => builder(context),
+  );
+}
+
+class _DesktopWebHomeShell extends StatelessWidget {
+  const _DesktopWebHomeShell({
+    required this.selectedIndex,
+    required this.pageController,
+    required this.contentNavigatorKey,
+    required this.onItemTapped,
+    required this.onPageChanged,
+    required this.onSearchTap,
+  });
+
+  final int selectedIndex;
+  final PageController pageController;
+  final GlobalKey<NavigatorState> contentNavigatorKey;
+  final ValueChanged<int> onItemTapped;
+  final ValueChanged<int> onPageChanged;
+  final VoidCallback onSearchTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final pageTitles = [
+      l10n.navigationHome,
+      l10n.searchTabPlayers,
+      l10n.searchTabClans,
+      l10n.warTitle,
+    ];
+
+    void openDesktopPage(String label, WidgetBuilder builder) {
+      Navigator.of(context).push(
+        _instantDesktopRoute(
+          (_) => _DesktopSecondaryShell(
+            selectedUtility: label,
+            pageBuilder: builder,
+            onItemTapped: onItemTapped,
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: SafeArea(
+        child: Row(
+          children: [
+            _DesktopSidebar(
+              selectedIndex: selectedIndex,
+              onItemTapped: onItemTapped,
+            ),
+            VerticalDivider(
+              width: 1,
+              color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  _DesktopHeader(
+                    title: pageTitles[selectedIndex],
+                    searchHint: l10n.searchGlobalHint,
+                    onSearchTap: onSearchTap,
+                    manageAccountsTooltip: l10n.drawerManageAccounts,
+                    onManageAccountsTap: () => openDesktopPage(
+                      l10n.drawerManageAccounts,
+                      (_) => const AddCocAccountPage(refreshOnExit: false),
+                    ),
+                  ),
+                  Expanded(
+                    child: Navigator(
+                      key: contentNavigatorKey,
+                      onGenerateRoute: (_) => _instantDesktopRoute(
+                        (_) => PageView(
+                          controller: pageController,
+                          onPageChanged: onPageChanged,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: const [
+                            DashboardPage(),
+                            PlayersPage(),
+                            ClanPage(),
+                            WarCwlPage(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopSecondaryShell extends StatelessWidget {
+  const _DesktopSecondaryShell({
+    required this.selectedUtility,
+    required this.pageBuilder,
+    required this.onItemTapped,
+  });
+
+  final String selectedUtility;
+  final WidgetBuilder pageBuilder;
+  final ValueChanged<int> onItemTapped;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: SafeArea(
+        child: Row(
+          children: [
+            _DesktopSidebar(
+              selectedIndex: -1,
+              selectedUtility: selectedUtility,
+              replaceUtilityRoute: true,
+              onItemTapped: (index) {
+                Navigator.of(context).pop();
+                onItemTapped(index);
+              },
+            ),
+            VerticalDivider(
+              width: 1,
+              color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+            ),
+            Expanded(child: Builder(builder: pageBuilder)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopHeader extends StatelessWidget {
+  const _DesktopHeader({
+    required this.title,
+    required this.searchHint,
+    required this.onSearchTap,
+    required this.manageAccountsTooltip,
+    required this.onManageAccountsTap,
+  });
+
+  final String title;
+  final String searchHint;
+  final VoidCallback onSearchTap;
+  final String manageAccountsTooltip;
+  final VoidCallback onManageAccountsTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    Widget actions() => Row(
+      children: [
+        Expanded(
+          child: _DesktopSearchButton(hint: searchHint, onTap: onSearchTap),
+        ),
+        const SizedBox(width: 12),
+        _DesktopQuickAction(
+          tooltip: manageAccountsTooltip,
+          icon: Icons.person_add_alt_1_outlined,
+          onTap: onManageAccountsTap,
+        ),
+      ],
+    );
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.2),
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 15),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final titleWidget = Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w800,
+              ),
+            );
+
+            if (constraints.maxWidth < 820) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [titleWidget, const SizedBox(height: 12), actions()],
+              );
+            }
+
+            return Row(
+              children: [
+                Expanded(child: titleWidget),
+                const SizedBox(width: 24),
+                SizedBox(width: 520, child: actions()),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopSidebar extends StatelessWidget {
+  const _DesktopSidebar({
+    required this.selectedIndex,
+    required this.onItemTapped,
+    this.selectedUtility,
+    this.replaceUtilityRoute = false,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onItemTapped;
+  final String? selectedUtility;
+  final bool replaceUtilityRoute;
+
+  @override
+  Widget build(BuildContext context) {
+    final authService = context.watch<AuthService>();
+    final appState = context.watch<MyAppState>();
+    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final user = authService.currentUser;
+
+    void openUtility(String label, WidgetBuilder builder) {
+      final route = _instantDesktopRoute(
+        (_) => _DesktopSecondaryShell(
+          selectedUtility: label,
+          pageBuilder: builder,
+          onItemTapped: onItemTapped,
+        ),
+      );
+      if (replaceUtilityRoute) {
+        Navigator.of(context).pushReplacement(route);
+      } else {
+        Navigator.of(context).push(route);
+      }
+    }
+
+    final navItems = [
+      _DesktopNavItem(
+        icon: Icons.home_outlined,
+        selectedIcon: Icons.home_rounded,
+        label: l10n.navigationHome,
+      ),
+      _DesktopNavItem(
+        icon: Icons.person_outline_rounded,
+        selectedIcon: Icons.person_rounded,
+        label: l10n.searchTabPlayers,
+      ),
+      _DesktopNavItem(
+        icon: Icons.groups_outlined,
+        selectedIcon: Icons.groups,
+        label: l10n.searchTabClans,
+      ),
+      _DesktopNavItem(
+        icon: CustomIcons.swordCross,
+        selectedIcon: CustomIcons.swordCross,
+        label: l10n.warTitle,
+      ),
+    ];
+
+    return SizedBox(
+      width: 264,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.58),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  _DrawerAvatar(imageUrl: user?.avatarUrl ?? ''),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user?.username ?? 'ClashKing',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          'ClashKing web',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              for (var index = 0; index < navItems.length; index++)
+                _DesktopNavButton(
+                  item: navItems[index],
+                  selected: selectedIndex == index,
+                  onTap: () => onItemTapped(index),
+                ),
+              const SizedBox(height: 18),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Divider(
+                        color: colorScheme.outlineVariant.withValues(
+                          alpha: 0.34,
+                        ),
+                      ),
+                      if (appState.isFeatureEnabled(AppFeatureFlags.posts))
+                        _DesktopUtilityButton(
+                          icon: Icons.article_outlined,
+                          label: l10n.postsTitle,
+                          selected: selectedUtility == l10n.postsTitle,
+                          onTap: () => openUtility(
+                            l10n.postsTitle,
+                            (_) => const PostsPage(),
+                          ),
+                        ),
+                      if (appState.isFeatureEnabled(
+                        AppFeatureFlags.leaderboards,
+                      ))
+                        _DesktopUtilityButton(
+                          icon: Icons.leaderboard_outlined,
+                          label: l10n.clanRankingsTab,
+                          selected: selectedUtility == l10n.clanRankingsTab,
+                          onTap: () => openUtility(
+                            l10n.clanRankingsTab,
+                            (_) => const RankingsPage(),
+                          ),
+                        ),
+                      if (appState.isFeatureEnabled(
+                        AppFeatureFlags.globalStats,
+                      ))
+                        _DesktopUtilityButton(
+                          icon: Icons.bar_chart_rounded,
+                          label: l10n.generalStats,
+                          selected: selectedUtility == l10n.generalStats,
+                          onTap: () => openUtility(
+                            l10n.generalStats,
+                            (_) => const StatsPage(),
+                          ),
+                        ),
+                      if (appState.isFeatureEnabled(
+                        AppFeatureFlags.calculators,
+                      ))
+                        _DesktopUtilityButton(
+                          icon: Icons.calculate_outlined,
+                          label: l10n.drawerCalculators,
+                          selected: selectedUtility == l10n.drawerCalculators,
+                          onTap: () => openUtility(
+                            l10n.drawerCalculators,
+                            (_) => const CalculatorsPage(),
+                          ),
+                        ),
+                      if (appState.isFeatureEnabled(
+                        AppFeatureFlags.upgradeTracker,
+                      ))
+                        _DesktopUtilityButton(
+                          icon: Icons.construction_rounded,
+                          label: l10n.drawerUpgradeTracker,
+                          selected:
+                              selectedUtility == l10n.drawerUpgradeTracker,
+                          onTap: () => openUtility(
+                            l10n.drawerUpgradeTracker,
+                            (_) => const UpgradeTrackerPage(),
+                          ),
+                        ),
+                      if (appState.isFeatureEnabled(AppFeatureFlags.gameAssets))
+                        _DesktopUtilityButton(
+                          icon: Icons.inventory_2_outlined,
+                          label: l10n.drawerGameAssets,
+                          selected: selectedUtility == l10n.drawerGameAssets,
+                          onTap: () => openUtility(
+                            l10n.drawerGameAssets,
+                            (_) => const GameAssetsPage(),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Divider(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.34),
+              ),
+              _DesktopUtilityButton(
+                icon: Icons.manage_accounts_outlined,
+                label: l10n.drawerManageAccounts,
+                selected: selectedUtility == l10n.drawerManageAccounts,
+                onTap: () => openUtility(
+                  l10n.drawerManageAccounts,
+                  (_) => const AddCocAccountPage(refreshOnExit: false),
+                ),
+              ),
+              _DesktopUtilityButton(
+                icon: Icons.settings_outlined,
+                label: l10n.generalSettings,
+                selected: selectedUtility == l10n.generalSettings,
+                onTap: user == null
+                    ? null
+                    : () => openUtility(
+                        l10n.generalSettings,
+                        (_) => SettingsInfoScreen(user: user),
+                      ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopNavItem {
+  const _DesktopNavItem({
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+}
+
+class _DesktopNavButton extends StatelessWidget {
+  const _DesktopNavButton({
+    required this.item,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _DesktopNavItem item;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final foreground = selected ? colorScheme.primary : colorScheme.onSurface;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 7),
+      child: Semantics(
+        button: true,
+        selected: selected,
+        label: item.label,
+        child: Material(
+          color: selected
+              ? colorScheme.primaryContainer.withValues(alpha: 0.22)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+              child: Row(
+                children: [
+                  Icon(
+                    selected ? item.selectedIcon : item.icon,
+                    color: foreground,
+                    size: 21,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      item.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: foreground,
+                        fontWeight: selected
+                            ? FontWeight.w800
+                            : FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopUtilityButton extends StatelessWidget {
+  const _DesktopUtilityButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.selected = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final foreground = selected ? colorScheme.primary : colorScheme.onSurface;
+    return Material(
+      color: selected
+          ? colorScheme.primaryContainer.withValues(alpha: 0.22)
+          : Colors.transparent,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 19,
+                color: onTap == null
+                    ? colorScheme.onSurfaceVariant.withValues(alpha: 0.44)
+                    : selected
+                    ? colorScheme.primary
+                    : colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: onTap == null
+                        ? colorScheme.onSurfaceVariant.withValues(alpha: 0.44)
+                        : foreground,
+                    fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopSearchButton extends StatelessWidget {
+  const _DesktopSearchButton({required this.hint, required this.onTap});
+
+  final String hint;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 760),
+        child: Material(
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
+          borderRadius: BorderRadius.circular(16),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: onTap,
+            child: Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.34),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search_rounded,
+                    size: 20,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      hint,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopQuickAction extends StatelessWidget {
+  const _DesktopQuickAction({
+    required this.tooltip,
+    required this.icon,
+    required this.onTap,
+  });
+
+  final String tooltip;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.42),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.34),
+          ),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onTap,
+          child: SizedBox.square(
+            dimension: 50,
+            child: Icon(icon, color: colorScheme.onSurface),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Android fallback for the app-level floating tab bar.
 ///
 /// Keep this custom instead of using the liquid glass background on Android:
@@ -224,7 +928,7 @@ class _AndroidFloatingTabBar extends StatelessWidget {
       _AndroidTabItem(
         icon: Icons.groups_outlined,
         selectedIcon: Icons.groups,
-        label: l10n.clanTitle,
+        label: l10n.searchTabClans,
       ),
       _AndroidTabItem(
         icon: CustomIcons.swordCross,
@@ -379,7 +1083,7 @@ class _NativeIOSTabBar extends StatelessWidget {
               NativeLiquidGlassTabItem(
                 icon: Icons.groups_outlined,
                 selectedIcon: Icons.groups,
-                label: l10n.clanTitle,
+                label: l10n.searchTabClans,
                 selectedItemColor: colorScheme.primary,
               ),
               NativeLiquidGlassTabItem(
@@ -421,7 +1125,7 @@ class _NativeIOSTabBar extends StatelessWidget {
                       onTap: () => onItemTapped(1),
                     ),
                     _NavHitTarget(
-                      label: l10n.clanTitle,
+                      label: l10n.searchTabClans,
                       onTap: () => onItemTapped(2),
                     ),
                     _NavHitTarget(

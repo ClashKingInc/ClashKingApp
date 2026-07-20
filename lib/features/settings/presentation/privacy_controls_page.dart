@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,67 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final cards = [
+      _PrivacyCard(
+        icon: Icons.privacy_tip_outlined,
+        title: 'Privacy policy',
+        body:
+            'Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.',
+        action: FilledButton.tonalIcon(
+          onPressed: () => launchUrl(
+            _privacyPolicyUri,
+            mode: LaunchMode.externalApplication,
+          ),
+          icon: const Icon(Icons.open_in_new),
+          label: const Text('Open policy'),
+        ),
+      ),
+      _PrivacyCard(
+        icon: Icons.file_download_outlined,
+        title: 'Access or export your data',
+        body:
+            'Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.',
+        action: _buildExportAction(),
+      ),
+      _PrivacyCard(
+        icon: Icons.edit_note_outlined,
+        title: 'Correct or limit data',
+        body:
+            'Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.',
+        action: FilledButton.tonalIcon(
+          onPressed: _contactSupport,
+          icon: const Icon(Icons.email_outlined),
+          label: const Text('Contact support'),
+        ),
+      ),
+      _PrivacyCard(
+        icon: Icons.delete_forever_outlined,
+        title: 'Delete your ClashKing account',
+        body:
+            'This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.',
+        action: FilledButton.icon(
+          style: FilledButton.styleFrom(
+            backgroundColor: colorScheme.error,
+            foregroundColor: colorScheme.onError,
+          ),
+          onPressed: _isDeleting ? null : _confirmDeletion,
+          icon: _isDeleting
+              ? const SizedBox.square(
+                  dimension: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.delete_forever_outlined),
+          label: const Text('Delete account'),
+        ),
+      ),
+      const _PrivacyCard(
+        icon: Icons.child_care_outlined,
+        title: 'Children and families',
+        body:
+            'ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.',
+        action: null,
+      ),
+    ];
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -58,69 +120,43 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
         surfaceTintColor: Colors.transparent,
         scrolledUnderElevation: 0,
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 6, 16, 28),
-        children: [
-          _PrivacyCard(
-            icon: Icons.privacy_tip_outlined,
-            title: 'Privacy policy',
-            body:
-                'Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.',
-            action: FilledButton.tonalIcon(
-              onPressed: () => launchUrl(
-                _privacyPolicyUri,
-                mode: LaunchMode.externalApplication,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktopWeb = kIsWeb && constraints.maxWidth >= 900;
+          if (!isDesktopWeb) {
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 28),
+              children: cards,
+            );
+          }
+
+          final contentWidth = (constraints.maxWidth - 48)
+              .clamp(0.0, 1100.0)
+              .toDouble();
+          final columns = contentWidth >= 780 ? 2 : 1;
+          final cardWidth = columns == 2
+              ? (contentWidth - 16) / 2
+              : contentWidth;
+
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(24, 12, 24, 36),
+            children: [
+              Center(
+                child: SizedBox(
+                  width: contentWidth,
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: [
+                      for (final card in cards)
+                        SizedBox(width: cardWidth, child: card),
+                    ],
+                  ),
+                ),
               ),
-              icon: const Icon(Icons.open_in_new),
-              label: const Text('Open policy'),
-            ),
-          ),
-          _PrivacyCard(
-            icon: Icons.file_download_outlined,
-            title: 'Access or export your data',
-            body:
-                'Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.',
-            action: _buildExportAction(),
-          ),
-          _PrivacyCard(
-            icon: Icons.edit_note_outlined,
-            title: 'Correct or limit data',
-            body:
-                'Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.',
-            action: FilledButton.tonalIcon(
-              onPressed: _contactSupport,
-              icon: const Icon(Icons.email_outlined),
-              label: const Text('Contact support'),
-            ),
-          ),
-          _PrivacyCard(
-            icon: Icons.delete_forever_outlined,
-            title: 'Delete your ClashKing account',
-            body:
-                'This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.',
-            action: FilledButton.icon(
-              style: FilledButton.styleFrom(
-                backgroundColor: colorScheme.error,
-                foregroundColor: colorScheme.onError,
-              ),
-              onPressed: _isDeleting ? null : _confirmDeletion,
-              icon: _isDeleting
-                  ? const SizedBox.square(
-                      dimension: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.delete_forever_outlined),
-              label: const Text('Delete account'),
-            ),
-          ),
-          _PrivacyCard(
-            icon: Icons.child_care_outlined,
-            title: 'Children and families',
-            body:
-                'ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.',
-            action: null,
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

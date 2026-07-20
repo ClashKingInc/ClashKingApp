@@ -31,6 +31,19 @@
   <link rel="manifest" href="manifest.json">
 
   <script>
+    if (window.location.pathname === '/auth/callback') {
+      const code = new URLSearchParams(window.location.search).get('code');
+      if (window.opener && code) {
+        window.opener.postMessage(
+          { type: 'discord-auth', code },
+          window.location.origin
+        );
+        window.close();
+      }
+    }
+  </script>
+
+  <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = {{flutter_service_worker_version}};
   </script>

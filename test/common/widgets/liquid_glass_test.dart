@@ -85,4 +85,37 @@ void main() {
     await tester.tap(find.text('Two'));
     expect(selected, 1);
   });
+
+  testWidgets('segmented control keeps readable labels on non-iOS platforms', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 240,
+            child: LiquidGlassSegmentedControl<int>(
+              values: const [0, 1],
+              labels: const ['Linked', 'Bookmarked'],
+              selected: 0,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final style = tester
+        .widget<AnimatedDefaultTextStyle>(
+          find
+              .ancestor(
+                of: find.text('Linked'),
+                matching: find.byType(AnimatedDefaultTextStyle),
+              )
+              .first,
+        )
+        .style;
+
+    expect(style.fontSize, 14);
+  });
 }

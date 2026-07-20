@@ -9,6 +9,7 @@ import 'package:clashkingapp/features/clan/models/clan_league.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_capital/clan_capital_page.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +51,10 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
   /// Hero header: backdrop image, floating actions, identity row, and clan
   /// summary content.
   Widget _buildHero(BuildContext context) {
-    final imageHeight = MediaQuery.of(context).padding.top + 500;
+    final media = MediaQuery.of(context);
+    final isDesktopWeb = kIsWeb && media.size.width >= 900;
+    final imageHeight = media.padding.top + (isDesktopWeb ? 292 : 500);
+    final headerMaxWidth = isDesktopWeb ? 1120.0 : double.infinity;
 
     return Stack(
       children: [
@@ -106,23 +110,40 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
         ),
         Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).padding.top),
+            SizedBox(height: media.padding.top),
             if (widget.showTopActions)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: _buildTopActions(context),
+              Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: headerMaxWidth),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isDesktopWeb ? 20 : 12,
+                    ),
+                    child: _buildTopActions(context),
+                  ),
+                ),
               )
             else
               const SizedBox(height: 48),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: _buildIdentity(context),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 11, bottom: 8),
-              child: _buildStatsPanel(context),
-            ),
+            if (isDesktopWeb)
+              _DesktopClanHeaderPanel(
+                descriptionExpanded: _descriptionExpanded,
+                onDescriptionToggle: () => setState(
+                  () => _descriptionExpanded = !_descriptionExpanded,
+                ),
+                maxWidth: headerMaxWidth,
+              )
+            else ...[
+              const SizedBox(height: 6),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: _buildIdentity(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 11, bottom: 8),
+                child: _buildStatsPanel(context),
+              ),
+            ],
           ],
         ),
       ],
@@ -133,7 +154,12 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
     return ClanInfoHeaderActions(clanInfo: clanInfo);
   }
 
-  Widget _buildIdentity(BuildContext context) {
+  Widget _buildIdentity(
+    BuildContext context, {
+    bool compact = false,
+    bool horizontal = false,
+    VoidCallback? onDescriptionToggle,
+  }) {
     final location = clanInfo.location;
     final flagUrl = location?.countryCode != null
         ? ImageAssets.flag(location!.countryCode!)
@@ -142,6 +168,77 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        final desktopHorizontal = compact && horizontal;
+        final badgeSize = desktopHorizontal ? 104.0 : (compact ? 82.0 : 94.0);
+        final badge = MobileWebImage(
+          imageUrl: clanInfo.badgeUrls.large,
+          width: badgeSize,
+          height: badgeSize,
+          fit: BoxFit.contain,
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        );
+        final name = Text(
+          clanInfo.name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: horizontal ? TextAlign.start : TextAlign.center,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: Colors.white,
+            fontSize: desktopHorizontal ? 26 : (compact ? 24 : 26),
+            fontWeight: FontWeight.w700,
+            height: 1.02,
+          ),
+        );
+        final meta = _ClanMetaLine(
+          locationName: location?.name,
+          flagUrl: flagUrl,
+          labels: clanInfo.labels.take(3),
+          hasDescription: hasDescription,
+          expanded: _descriptionExpanded,
+          alignment: horizontal
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.center,
+          onDescriptionToggle:
+              onDescriptionToggle ??
+              () =>
+                  setState(() => _descriptionExpanded = !_descriptionExpanded),
+        );
+
+        if (horizontal) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              badge,
+              SizedBox(width: desktopHorizontal ? 18 : 16),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    name,
+                    const SizedBox(height: 3),
+                    _CopyableClanTag(
+                      tag: clanInfo.tag,
+                      alignment: TextAlign.start,
+                    ),
+                    if (location?.name != null ||
+                        clanInfo.labels.isNotEmpty ||
+                        hasDescription)
+                      meta,
+                    if (_descriptionExpanded && hasDescription) ...[
+                      const SizedBox(height: 6),
+                      _ExpandableDescription(
+                        description: clanInfo.description.trim(),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
+
         return Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: constraints.maxWidth),
@@ -149,89 +246,15 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                MobileWebImage(
-                  imageUrl: clanInfo.badgeUrls.large,
-                  width: 94,
-                  height: 94,
-                  fit: BoxFit.contain,
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
+                badge,
                 const SizedBox(height: 2),
-                Text(
-                  clanInfo.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  // Always white: the gradient scrim now fades to a fixed
-                  // black in both themes, so this always sits on a
-                  // darkened photo.
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.w700,
-                    height: 1.02,
-                  ),
-                ),
+                name,
                 const SizedBox(height: 2),
                 _CopyableClanTag(tag: clanInfo.tag),
                 if (location?.name != null ||
                     clanInfo.labels.isNotEmpty ||
                     hasDescription)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (location?.name != null) ...[
-                        if (flagUrl != null) ...[
-                          MobileWebImage(
-                            imageUrl: flagUrl,
-                            width: 16,
-                            height: 16,
-                          ),
-                          const SizedBox(width: 4),
-                        ],
-                        Flexible(
-                          child: Text(
-                            location!.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.05,
-                                ),
-                          ),
-                        ),
-                      ],
-                      if (clanInfo.labels.isNotEmpty) ...[
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: location?.name != null ? 7 : 0,
-                            right: 7,
-                          ),
-                          child: Text(
-                            '|',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Colors.white.withValues(alpha: 0.30),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ),
-                        _ClanLabelIcons(labels: clanInfo.labels.take(3)),
-                      ],
-                      if (hasDescription) ...[
-                        const SizedBox(width: 4),
-                        _DescriptionToggleDots(
-                          expanded: _descriptionExpanded,
-                          onTap: () => setState(
-                            () => _descriptionExpanded = !_descriptionExpanded,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
+                  meta,
               ],
             ),
           ),
@@ -240,7 +263,30 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
     );
   }
 
-  Widget _buildStatsPanel(BuildContext context) {
+  Widget _buildStatsPanel(BuildContext context, {bool compact = false}) {
+    final description = clanInfo.description.trim();
+
+    return Column(
+      mainAxisSize: compact ? MainAxisSize.min : MainAxisSize.max,
+      children: [
+        if (description.isNotEmpty && _descriptionExpanded) ...[
+          Padding(
+            padding: EdgeInsets.only(
+              left: compact ? 0 : 20,
+              right: compact ? 0 : 19,
+            ),
+            child: _ExpandableDescription(description: description),
+          ),
+          const SizedBox(height: 8),
+        ],
+        _buildLeagueTiles(context, compact: compact),
+        const SizedBox(height: 8),
+        _buildQuickStats(context, compact: compact),
+      ],
+    );
+  }
+
+  Widget _buildLeagueTiles(BuildContext context, {bool compact = false}) {
     final loc = AppLocalizations.of(context)!;
     final warLeagueName = clanInfo.warLeague?.name ?? 'Unranked';
     final warLeagueUrl = ImageAssets.getWarLeagueImage(warLeagueName);
@@ -249,105 +295,107 @@ class _ClanInfoHeaderCardState extends State<ClanInfoHeaderCard> {
     final capitalLeagueUrl = capitalLeague == null
         ? ImageAssets.capitalTrophy
         : ImageAssets.getCapitalLeagueImage(capitalLeague.name);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: compact ? 0 : 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: CompactLeagueTile(
+              leagueName: _compactLeagueName(warLeagueName),
+              subtitle: loc.cwlTitle,
+              leagueUrl: warLeagueUrl,
+              onTap: clanInfo.warCwl?.leagueInfo?.clans.isNotEmpty == true
+                  ? () => openClanCwl(context, clanInfo)
+                  : null,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: CompactLeagueTile(
+              leagueName: _compactLeagueName(capitalLeagueName),
+              subtitle: _plainNumber(clanInfo.clanCapitalPoints),
+              subtitleIconUrl: ImageAssets.capitalTrophy,
+              leagueUrl: capitalLeagueUrl,
+              onTap: () => openClanCapital(context, clanInfo),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickStats(
+    BuildContext context, {
+    bool compact = false,
+    bool combineRows = false,
+  }) {
+    final loc = AppLocalizations.of(context)!;
     final typeLabel = switch (clanInfo.type) {
       'inviteOnly' => loc.clanInviteOnly,
       'open' => loc.clanOpened,
       'closed' => loc.generalClosed,
       _ => clanInfo.type,
     };
-    final compactWarLeague = _compactLeagueName(warLeagueName);
-    final compactCapitalLeague = _compactLeagueName(capitalLeagueName);
-    final description = clanInfo.description.trim();
     const familyLabel = 'Family-friendly';
+    final primaryChips = [
+      _ClanQuickChip(
+        value: _plainNumber(clanInfo.clanPoints),
+        imageUrl: ImageAssets.trophies,
+        tooltip: loc.clanPointsTitle,
+      ),
+      _ClanQuickChip(
+        value: '${clanInfo.members}/50',
+        icon: Icons.groups_rounded,
+        tooltip: loc.clanMembers,
+      ),
+      _ClanQuickChip(
+        value: _plainNumber(clanInfo.clanBuilderBasePoints),
+        imageUrl: ImageAssets.builderBaseTrophy,
+        tooltip: loc.clanBuilderBasePoints,
+      ),
+    ];
+    final secondaryChips = [
+      _ClanQuickChip(
+        value: typeLabel,
+        icon: Icons.mail_rounded,
+        tooltip: loc.clanType,
+      ),
+      if (clanInfo.requiredTownhallLevel > 0)
+        _ClanQuickChip(
+          value: loc.clanRequiredTownHallOnly(clanInfo.requiredTownhallLevel),
+          imageUrl: ImageAssets.townHall(clanInfo.requiredTownhallLevel),
+          tooltip: loc.clanRequiredTownHall,
+        ),
+      if (clanInfo.isFamilyFriendly)
+        const _ClanQuickChip(
+          value: familyLabel,
+          icon: Icons.family_restroom_rounded,
+          tooltip: familyLabel,
+        ),
+    ];
+
+    if (combineRows) {
+      return Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 7,
+        runSpacing: 7,
+        children: [...primaryChips, ...secondaryChips],
+      );
+    }
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        if (description.isNotEmpty && _descriptionExpanded) ...[
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 19),
-            child: _ExpandableDescription(description: description),
-          ),
-          const SizedBox(height: 8),
-        ],
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: CompactLeagueTile(
-                  leagueName: compactWarLeague,
-                  subtitle: loc.cwlTitle,
-                  leagueUrl: warLeagueUrl,
-                  onTap: clanInfo.warCwl?.leagueInfo?.clans.isNotEmpty == true
-                      ? () => openClanCwl(context, clanInfo)
-                      : null,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: CompactLeagueTile(
-                  leagueName: compactCapitalLeague,
-                  subtitle: _plainNumber(clanInfo.clanCapitalPoints),
-                  subtitleIconUrl: ImageAssets.capitalTrophy,
-                  leagueUrl: capitalLeagueUrl,
-                  onTap: () => openClanCapital(context, clanInfo),
-                ),
-              ),
-            ],
-          ),
+          padding: EdgeInsets.symmetric(horizontal: compact ? 0 : 16),
+          child: _ClanChipRows(children: primaryChips),
         ),
         const SizedBox(height: 8),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _ClanChipRows(
-            children: [
-              _ClanQuickChip(
-                value: _plainNumber(clanInfo.clanPoints),
-                imageUrl: ImageAssets.trophies,
-                tooltip: loc.clanPointsTitle,
-              ),
-              _ClanQuickChip(
-                value: '${clanInfo.members}/50',
-                icon: Icons.groups_rounded,
-                tooltip: loc.clanMembers,
-              ),
-              _ClanQuickChip(
-                value: _plainNumber(clanInfo.clanBuilderBasePoints),
-                imageUrl: ImageAssets.builderBaseTrophy,
-                tooltip: loc.clanBuilderBasePoints,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _ClanChipRows(
-            children: [
-              _ClanQuickChip(
-                value: typeLabel,
-                icon: Icons.mail_rounded,
-                tooltip: loc.clanType,
-              ),
-              if (clanInfo.requiredTownhallLevel > 0)
-                _ClanQuickChip(
-                  value: loc.clanRequiredTownHallOnly(
-                    clanInfo.requiredTownhallLevel,
-                  ),
-                  imageUrl: ImageAssets.townHall(
-                    clanInfo.requiredTownhallLevel,
-                  ),
-                  tooltip: loc.clanRequiredTownHall,
-                ),
-              if (clanInfo.isFamilyFriendly)
-                const _ClanQuickChip(
-                  value: familyLabel,
-                  icon: Icons.family_restroom_rounded,
-                  tooltip: familyLabel,
-                ),
-            ],
-          ),
+          padding: EdgeInsets.symmetric(horizontal: compact ? 0 : 16),
+          child: _ClanChipRows(children: secondaryChips),
         ),
       ],
     );
@@ -480,10 +528,92 @@ class ClanInfoHeaderActions extends StatelessWidget {
   }
 }
 
+class _DesktopClanHeaderPanel extends StatelessWidget {
+  final bool descriptionExpanded;
+  final VoidCallback onDescriptionToggle;
+  final double maxWidth;
+
+  const _DesktopClanHeaderPanel({
+    required this.descriptionExpanded,
+    required this.onDescriptionToggle,
+    required this.maxWidth,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final state = context.findAncestorStateOfType<_ClanInfoHeaderCardState>();
+    if (state == null) return const SizedBox.shrink();
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: SizedBox(
+          height: descriptionExpanded ? 230 : 166,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 370),
+                          child: state._buildIdentity(
+                            context,
+                            compact: true,
+                            horizontal: true,
+                            onDescriptionToggle: onDescriptionToggle,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 52),
+                    Expanded(
+                      flex: 6,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 590),
+                          child: state._buildLeagueTiles(
+                            context,
+                            compact: true,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 920),
+                  child: state._buildQuickStats(
+                    context,
+                    compact: true,
+                    combineRows: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _CopyableClanTag extends StatelessWidget {
   final String tag;
+  final TextAlign alignment;
 
-  const _CopyableClanTag({required this.tag});
+  const _CopyableClanTag({
+    required this.tag,
+    this.alignment = TextAlign.center,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -505,6 +635,7 @@ class _CopyableClanTag extends StatelessWidget {
           tag,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+          textAlign: alignment,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: Colors.white.withValues(alpha: 0.62),
             fontSize: 15,
@@ -513,6 +644,78 @@ class _CopyableClanTag extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ClanMetaLine extends StatelessWidget {
+  final String? locationName;
+  final String? flagUrl;
+  final Iterable<ClanLeague> labels;
+  final bool hasDescription;
+  final bool expanded;
+  final MainAxisAlignment alignment;
+  final VoidCallback onDescriptionToggle;
+
+  const _ClanMetaLine({
+    required this.locationName,
+    required this.flagUrl,
+    required this.labels,
+    required this.hasDescription,
+    required this.expanded,
+    required this.alignment,
+    required this.onDescriptionToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final hasLocation = locationName != null && locationName!.isNotEmpty;
+    final labelList = labels.toList(growable: false);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: alignment,
+      children: [
+        if (hasLocation) ...[
+          if (flagUrl != null) ...[
+            MobileWebImage(imageUrl: flagUrl!, width: 16, height: 16),
+            const SizedBox(width: 4),
+          ],
+          Flexible(
+            child: Text(
+              locationName!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                height: 1.05,
+              ),
+            ),
+          ),
+        ],
+        if (labelList.isNotEmpty) ...[
+          Padding(
+            padding: EdgeInsets.only(left: hasLocation ? 7 : 0, right: 7),
+            child: Text(
+              '|',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.white.withValues(alpha: 0.30),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          _ClanLabelIcons(labels: labelList),
+        ],
+        if (hasDescription) ...[
+          const SizedBox(width: 4),
+          _DescriptionToggleDots(
+            expanded: expanded,
+            onTap: onDescriptionToggle,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -582,8 +785,12 @@ class _DescriptionToggleDots extends StatelessWidget {
 
 class _ExpandableDescription extends StatelessWidget {
   final String description;
+  final TextAlign textAlign;
 
-  const _ExpandableDescription({required this.description});
+  const _ExpandableDescription({
+    required this.description,
+    this.textAlign = TextAlign.center,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -595,7 +802,7 @@ class _ExpandableDescription extends StatelessWidget {
 
     return Text(
       description,
-      textAlign: TextAlign.center,
+      textAlign: textAlign,
       softWrap: true,
       style: textStyle,
     );

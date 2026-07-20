@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
     show countStars;
@@ -8,6 +9,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_calculator_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class WarStatisticsTab extends StatefulWidget {
@@ -45,6 +47,100 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
     final maxAttacks = teamSize * attacksPerPlayer;
     final clanStarCounts = countStars(clan.members);
     final opponentStarCounts = countStars(opponent.members);
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final statPanels = <Widget>[
+      _WarSectionPanel(
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _SectionHeader(label: loc.navigationStatistics),
+              const SizedBox(height: 12),
+              _ComparisonMetric(
+                label: loc.warStarsTitle,
+                leftValue: '${clan.stars}/$maxStars',
+                rightValue: '${opponent.stars}/$maxStars',
+                leftProgress: _safeRatio(clan.stars, maxStars),
+                rightProgress: _safeRatio(opponent.stars, maxStars),
+                iconUrl: ImageAssets.attackStar,
+                leftColor: _leaderColor(
+                  clan.stars.toDouble(),
+                  opponent.stars.toDouble(),
+                ),
+                rightColor: _leaderColor(
+                  opponent.stars.toDouble(),
+                  clan.stars.toDouble(),
+                ),
+              ),
+              const SizedBox(height: 14),
+              _ComparisonMetric(
+                label: loc.warDestructionRate,
+                leftValue: '${clan.destructionPercentage.toStringAsFixed(2)}%',
+                rightValue:
+                    '${opponent.destructionPercentage.toStringAsFixed(2)}%',
+                leftProgress: _safeRatio(clan.destructionPercentage, 100),
+                rightProgress: _safeRatio(opponent.destructionPercentage, 100),
+                icon: Icons.percent_rounded,
+                leftColor: _leaderColor(
+                  clan.destructionPercentage,
+                  opponent.destructionPercentage,
+                ),
+                rightColor: _leaderColor(
+                  opponent.destructionPercentage,
+                  clan.destructionPercentage,
+                ),
+              ),
+              const SizedBox(height: 14),
+              _ComparisonMetric(
+                label: loc.warAttacksTitle,
+                leftValue: '${clan.attacks}/$maxAttacks',
+                rightValue: '${opponent.attacks}/$maxAttacks',
+                leftProgress: _safeRatio(clan.attacks, maxAttacks),
+                rightProgress: _safeRatio(opponent.attacks, maxAttacks),
+                iconUrl: ImageAssets.sword,
+                leftColor: StatColors.win,
+                rightColor: StatColors.loss,
+              ),
+            ],
+          ),
+        ),
+      ),
+      _WarSectionPanel(
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _SectionTitle(label: loc.warStarsNumber),
+              const SizedBox(height: 12),
+              _StarsBreakdown(
+                clan: clan,
+                opponent: opponent,
+                clanCounts: clanStarCounts,
+                opponentCounts: opponentStarCounts,
+              ),
+            ],
+          ),
+        ),
+      ),
+      if (_shouldShowWarAnalysis(warInfo))
+        _WarSectionPanel(
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: _WarAnalysis(
+              title: loc.warStateOfTheWar,
+              scenario: _warScenario(
+                context,
+                clan,
+                opponent,
+                maxAttacks,
+                teamSize,
+              ),
+            ),
+          ),
+        ),
+    ];
 
     return Column(
       children: [
@@ -74,103 +170,19 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
               : const SizedBox.shrink(key: ValueKey('war-calculator-empty')),
         ),
         const SizedBox(height: 10),
-        _WarSectionPanel(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _SectionHeader(label: loc.navigationStatistics),
-                const SizedBox(height: 12),
-                _ComparisonMetric(
-                  label: loc.warStarsTitle,
-                  leftValue: '${clan.stars}/$maxStars',
-                  rightValue: '${opponent.stars}/$maxStars',
-                  leftProgress: _safeRatio(clan.stars, maxStars),
-                  rightProgress: _safeRatio(opponent.stars, maxStars),
-                  iconUrl: ImageAssets.attackStar,
-                  leftColor: _leaderColor(
-                    clan.stars.toDouble(),
-                    opponent.stars.toDouble(),
-                  ),
-                  rightColor: _leaderColor(
-                    opponent.stars.toDouble(),
-                    clan.stars.toDouble(),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                _ComparisonMetric(
-                  label: loc.warDestructionRate,
-                  leftValue:
-                      '${clan.destructionPercentage.toStringAsFixed(2)}%',
-                  rightValue:
-                      '${opponent.destructionPercentage.toStringAsFixed(2)}%',
-                  leftProgress: _safeRatio(clan.destructionPercentage, 100),
-                  rightProgress: _safeRatio(
-                    opponent.destructionPercentage,
-                    100,
-                  ),
-                  icon: Icons.percent_rounded,
-                  leftColor: _leaderColor(
-                    clan.destructionPercentage,
-                    opponent.destructionPercentage,
-                  ),
-                  rightColor: _leaderColor(
-                    opponent.destructionPercentage,
-                    clan.destructionPercentage,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                _ComparisonMetric(
-                  label: loc.warAttacksTitle,
-                  leftValue: '${clan.attacks}/$maxAttacks',
-                  rightValue: '${opponent.attacks}/$maxAttacks',
-                  leftProgress: _safeRatio(clan.attacks, maxAttacks),
-                  rightProgress: _safeRatio(opponent.attacks, maxAttacks),
-                  iconUrl: ImageAssets.sword,
-                  leftColor: StatColors.win,
-                  rightColor: StatColors.loss,
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        _WarSectionPanel(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _SectionTitle(label: loc.warStarsNumber),
-                const SizedBox(height: 12),
-                _StarsBreakdown(
-                  clan: clan,
-                  opponent: opponent,
-                  clanCounts: clanStarCounts,
-                  opponentCounts: opponentStarCounts,
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (_shouldShowWarAnalysis(warInfo)) ...[
-          const SizedBox(height: 10),
-          _WarSectionPanel(
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: _WarAnalysis(
-                title: loc.warStateOfTheWar,
-                scenario: _warScenario(
-                  context,
-                  clan,
-                  opponent,
-                  maxAttacks,
-                  teamSize,
-                ),
-              ),
-            ),
-          ),
+        if (isDesktopWeb)
+          ResponsiveCardGrid(
+            itemCount: statPanels.length,
+            minItemWidth: 420,
+            maxColumns: 2,
+            spacing: 10,
+            itemBuilder: (_, index) => statPanels[index],
+          )
+        else ...[
+          for (var index = 0; index < statPanels.length; index++) ...[
+            statPanels[index],
+            if (index < statPanels.length - 1) const SizedBox(height: 10),
+          ],
         ],
       ],
     );

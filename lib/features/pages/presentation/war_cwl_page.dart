@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
@@ -21,6 +22,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:provider/provider.dart';
@@ -174,48 +176,70 @@ class _WarCwlPageState extends State<WarCwlPage> {
             summary: warCwlService.getWarCwlByTag(tag),
           ),
     ]..sort((a, b) => a.sortWeight.compareTo(b.sortWeight));
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final bottomPadding = isDesktopWeb
+        ? 32.0
+        : MediaQuery.paddingOf(context).bottom + 96;
 
-    return Scaffold(
-      body: RefreshIndicator(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        onRefresh: () => _refresh(
-          context,
-          cocService,
-          playerService,
-          clanService,
-          warCwlService,
-          extraWarClanTags,
-        ),
-        child: CustomScrollView(
-          scrollCacheExtent: const ScrollCacheExtent.pixels(800),
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverToBoxAdapter(
-                child: LastRefreshIndicator(
-                  lastRefresh: cocService.lastRefresh,
-                ),
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final horizontalPadding =
+            ((constraints.maxWidth - (isDesktopWeb ? 1320.0 : 840.0)) / 2)
+                .clamp(16.0, double.infinity)
+                .toDouble();
+
+        return Scaffold(
+          body: RefreshIndicator(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            onRefresh: () => _refresh(
+              context,
+              cocService,
+              playerService,
+              clanService,
+              warCwlService,
+              extraWarClanTags,
             ),
-            SliverPadding(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                8,
-                16,
-                MediaQuery.paddingOf(context).bottom + 96,
-              ),
-              sliver: items.isEmpty
-                  ? const SliverToBoxAdapter(child: _EmptyWarMessage())
-                  : SliverList.separated(
-                      itemCount: items.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 10),
-                      itemBuilder: (context, index) =>
-                          _WarListCard(item: items[index]),
+            child: CustomScrollView(
+              scrollCacheExtent: const ScrollCacheExtent.pixels(800),
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                  sliver: SliverToBoxAdapter(
+                    child: LastRefreshIndicator(
+                      lastRefresh: cocService.lastRefresh,
                     ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    8,
+                    horizontalPadding,
+                    bottomPadding,
+                  ),
+                  sliver: items.isEmpty
+                      ? const SliverToBoxAdapter(child: _EmptyWarMessage())
+                      : isDesktopWeb
+                      ? SliverToBoxAdapter(
+                          child: ResponsiveCardGrid(
+                            itemCount: items.length,
+                            itemBuilder: (context, index) =>
+                                _WarListCard(item: items[index]),
+                          ),
+                        )
+                      : SliverList.separated(
+                          itemCount: items.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) =>
+                              _WarListCard(item: items[index]),
+                        ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

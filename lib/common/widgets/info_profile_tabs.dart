@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class InfoProfileTabData {
@@ -68,16 +69,17 @@ class _InfoProfileTabsState extends State<InfoProfileTabs>
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
     return DecoratedBox(
       decoration: BoxDecoration(color: scheme.surface),
       child: SizedBox(
         height: 50,
         child: TabBar(
           controller: _controller,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+          isScrollable: !isDesktopWeb,
+          tabAlignment: isDesktopWeb ? TabAlignment.fill : TabAlignment.start,
+          padding: EdgeInsets.symmetric(horizontal: isDesktopWeb ? 0 : 6),
+          labelPadding: EdgeInsets.symmetric(horizontal: isDesktopWeb ? 0 : 10),
           labelColor: scheme.onSurface,
           unselectedLabelColor: scheme.onSurface,
           indicatorColor: scheme.primary,
@@ -112,29 +114,36 @@ class _InfoProfileTab extends StatelessWidget {
     final foreground = scheme.onSurface.withValues(alpha: selected ? 1 : 0.64);
     return Tab(
       height: 48,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (data.imageUrl case final imageUrl?)
-            MobileWebImage(imageUrl: imageUrl, width: 18, height: 18)
-          else
-            Icon(
-              data.icon ?? Icons.circle_rounded,
-              size: 18,
-              color: foreground,
+      child: Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (data.imageUrl case final imageUrl?)
+              MobileWebImage(imageUrl: imageUrl, width: 18, height: 18)
+            else
+              Icon(
+                data.icon ?? Icons.circle_rounded,
+                size: 18,
+                color: foreground,
+              ),
+            const SizedBox(width: 5),
+            Flexible(
+              child: Text(
+                data.label,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: foreground,
+                  fontSize: 13,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                ),
+              ),
             ),
-          const SizedBox(width: 5),
-          Text(
-            data.label,
-            maxLines: 1,
-            softWrap: false,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: foreground,
-              fontSize: 13,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

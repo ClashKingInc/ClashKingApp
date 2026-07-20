@@ -162,6 +162,8 @@ class CompactItemGrid extends StatelessWidget {
     required this.itemBuilder,
     this.spacing = 8,
     this.minTileSize = 54,
+    this.maxTileSize,
+    this.alignment = WrapAlignment.start,
   });
 
   final int itemCount;
@@ -169,6 +171,8 @@ class CompactItemGrid extends StatelessWidget {
   itemBuilder;
   final double spacing;
   final double minTileSize;
+  final double? maxTileSize;
+  final WrapAlignment alignment;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -177,14 +181,21 @@ class CompactItemGrid extends StatelessWidget {
           ((constraints.maxWidth + spacing) / (minTileSize + spacing))
               .floor()
               .clamp(1, 999);
-      final tileSize =
+      final expandedTileSize =
           (constraints.maxWidth - (columns - 1) * spacing) / columns;
-      return Wrap(
-        spacing: spacing,
-        runSpacing: spacing,
-        children: List.generate(
-          itemCount,
-          (index) => itemBuilder(context, index, tileSize),
+      final tileSize = maxTileSize == null
+          ? expandedTileSize
+          : expandedTileSize.clamp(minTileSize, maxTileSize!);
+      return SizedBox(
+        width: constraints.maxWidth,
+        child: Wrap(
+          alignment: alignment,
+          spacing: spacing,
+          runSpacing: spacing,
+          children: List.generate(
+            itemCount,
+            (index) => itemBuilder(context, index, tileSize),
+          ),
         ),
       );
     },
