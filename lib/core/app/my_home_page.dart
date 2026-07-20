@@ -82,7 +82,11 @@ class MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    await openAnnouncementStory(context, announcement: openingAnnouncement);
+    final displayed = await openAnnouncementStory(
+      context,
+      announcement: openingAnnouncement,
+    );
+    if (!displayed) return;
     await _announcementPresentationService.markDismissed(openingAnnouncement);
   }
 

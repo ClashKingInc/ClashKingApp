@@ -24,27 +24,25 @@ Uri? announcementStoryWebUri(AppAnnouncement announcement) {
   return null;
 }
 
-Future<AnnouncementStoryResult?> openAnnouncementStory(
+Future<bool> openAnnouncementStory(
   BuildContext context, {
   required AppAnnouncement announcement,
 }) async {
   if (kIsWeb) {
     final uri = announcementStoryWebUri(announcement);
-    if (uri != null) {
-      await launchUrl(uri, webOnlyWindowName: '_blank');
-    }
-    return null;
+    return uri != null && await launchUrl(uri, webOnlyWindowName: '_blank');
   }
 
   final preparedFilePath = await AnnouncementStoryCacheService().prepare(
     announcement,
   );
-  if (!context.mounted || preparedFilePath == null) return null;
-  return showAnnouncementStoryDialog(
+  if (!context.mounted || preparedFilePath == null) return false;
+  await showAnnouncementStoryDialog(
     context,
     announcement: announcement,
     preparedFilePath: preparedFilePath,
   );
+  return true;
 }
 
 Future<AnnouncementStoryResult?> showAnnouncementStoryDialog(
