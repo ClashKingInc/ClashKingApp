@@ -4,16 +4,22 @@ import 'dart:math' as math;
 
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 enum AnnouncementStoryResult { closed, completed }
+
+bool supportsEmbeddedAnnouncementStories({required bool isWeb}) => !isWeb;
 
 Future<AnnouncementStoryResult?> showAnnouncementStoryDialog(
   BuildContext context, {
   required AppAnnouncement announcement,
   required String preparedFilePath,
 }) {
+  if (!supportsEmbeddedAnnouncementStories(isWeb: kIsWeb)) {
+    return Future.value(null);
+  }
   return showGeneralDialog<AnnouncementStoryResult>(
     context: context,
     useRootNavigator: true,

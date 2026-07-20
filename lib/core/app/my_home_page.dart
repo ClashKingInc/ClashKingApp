@@ -61,7 +61,9 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _showOpeningAnnouncement() async {
-    if (!mounted || ModalRoute.of(context)?.isCurrent != true) {
+    if (!mounted ||
+        !supportsEmbeddedAnnouncementStories(isWeb: kIsWeb) ||
+        ModalRoute.of(context)?.isCurrent != true) {
       return;
     }
     if (!context.read<MyAppState>().isFeatureEnabled(

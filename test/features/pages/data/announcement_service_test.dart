@@ -2,11 +2,34 @@ import 'dart:convert';
 
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 void main() {
+  test('web requests announcements for all platforms', () {
+    expect(
+      announcementTarget(isWeb: true, platform: TargetPlatform.android),
+      'all',
+    );
+    expect(
+      announcementTarget(isWeb: true, platform: TargetPlatform.iOS),
+      'all',
+    );
+  });
+
+  test('native requests announcements for its platform', () {
+    expect(
+      announcementTarget(isWeb: false, platform: TargetPlatform.android),
+      'android',
+    );
+    expect(
+      announcementTarget(isWeb: false, platform: TargetPlatform.iOS),
+      'ios',
+    );
+  });
+
   test('loads a paginated archive of current and past posts', () async {
     final client = MockClient((request) async {
       expect(request.url.path, endsWith('/app/posts'));

@@ -29,11 +29,10 @@ class AnnouncementService {
   Future<List<AppAnnouncement>> getActiveAnnouncements() async {
     try {
       final locale = await GameDataService.resolvePreferredLocale();
-      final target = switch (defaultTargetPlatform) {
-        TargetPlatform.iOS => 'ios',
-        TargetPlatform.android => 'android',
-        _ => 'all',
-      };
+      final target = announcementTarget(
+        isWeb: kIsWeb,
+        platform: defaultTargetPlatform,
+      );
       final response = await _apiService.get(
         '/app/announcements/active?target=$target&locale=${Uri.encodeQueryComponent(locale.languageCode)}',
         requiresAuth: false,
@@ -91,11 +90,10 @@ class AnnouncementService {
     int offset = 0,
   }) async {
     final locale = await GameDataService.resolvePreferredLocale();
-    final target = switch (defaultTargetPlatform) {
-      TargetPlatform.iOS => 'ios',
-      TargetPlatform.android => 'android',
-      _ => 'all',
-    };
+    final target = announcementTarget(
+      isWeb: kIsWeb,
+      platform: defaultTargetPlatform,
+    );
     final response = await _apiService.get(
       '/app/posts?target=$target&limit=$limit&offset=$offset&locale=${Uri.encodeQueryComponent(locale.languageCode)}',
       requiresAuth: false,
@@ -119,4 +117,16 @@ class AnnouncementService {
           (response['next_offset'] as num?)?.toInt() ?? offset + items.length,
     );
   }
+}
+
+String announcementTarget({
+  required bool isWeb,
+  required TargetPlatform platform,
+}) {
+  if (isWeb) return 'all';
+  return switch (platform) {
+    TargetPlatform.iOS => 'ios',
+    TargetPlatform.android => 'android',
+    _ => 'all',
+  };
 }
