@@ -296,6 +296,9 @@
   "authAccountLinkEmail": "Asociază un cont de e-mail",
   "authAccountAddEmailAuth": "Adaugă autentificare prin e-mail și parolă la contul tău pentru securitate suplimentară.",
   "authAccountEmailLinkedSuccess": "Contul de e-mail a fost asociat cu succes!",
+  "authAccountLinkDiscord": "Link Discord Account",
+  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
+  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
   "authEmailVerificationTitle": "Verifică e-mailul",
   "authEmailVerificationCheckEmail": "Verifică-ți e-mailul",
   "authEmailVerificationSentTo": "Am trimis un e-mail de verificare către:",
@@ -2134,824 +2137,200 @@
   "gameItemFlying": "Zburător",
   "gameItemUpgradeCost": "Cost de îmbunătățire",
   "gameItemUpgradeTime": "Timp de îmbunătățire",
-  "generalExpand": "Extinde",
-  "generalCollapse": "Colaps",
-  "generalBookmark": "Marcaj",
-  "generalRemoveBookmark": "Eliminați marcajul",
-  "gameLeague": "Ligă",
-  "clanMembersSearchPlaceholder": "Căutați membri",
-  "clanMembersShowTotals": "Arată totalurile clanului",
-  "clanMembersHideTotals": "Ascunde totalurile clanului",
-  "clanMembersReceivedShort": "Primit",
-  "clanMembersAverageTh": "TH medie",
-  "warLogSearchPlaceholder": "Războaie de căutare",
-  "warStatsSearchPlaceholder": "Căutați jucători",
-  "warStatsCurrentTownHall": "TH-ul meu",
-  "warStatsLast50": "Ultimele 50",
-  "warStatsWars": "Războaie",
-  "warStatsSelectSeason": "Selectați sezonul cu statistici de război",
-  "warAnalysisToWin": "Pentru a câștiga",
-  "warAnalysisToLose": "A pierde",
-  "warAnalysisNoAttacksLeft": "Nu au mai rămas atacuri",
-  "warAnalysisScenario": "{attacks} atacuri rămase -> au nevoie de stele {stars} / {percent}% per atac",
-  "warAnalysisImpossibleScenario": "{attacks} atacuri rămase -> imposibil ({stars} stele / {percent}% per atac)",
-  "warAttacksSuccessful": "Atacurile reușite",
-  "warAttacksFailed": "Atacurile eșuate",
-  "warAttacksMissedShort": "ratat",
-  "cwlHistoryTitle": "Istoria CWL",
-  "clanJoinLeaveTab": "Alăturați-vă/Părăsiți",
-  "clanRankingsTab": "Clasamente",
-  "clanRankingsSeason": "Sezon",
-  "clanRankingsSelectSeason": "Selectați sezonul de clasare",
-  "clanRankingsFilterActivity": "Activitate",
-  "clanRankingsFilterWar": "Război",
-  "clanRankingsFilterPoints": "Puncte",
-  "cwlHistoryPreviewBadge": "Previzualizare",
-  "cwlHistoryPreviewSubtitle": "Macheta {clan} până când punctul final CWL este fixat",
-  "cwlHistoryEmptyTitle": "Încă nu există istoric CWL",
-  "cwlHistoryEmptyBody": "Acest clan nu a participat încă la un sezon al Ligii Războiului Clanurilor.",
-  "cwlRankTitle": "Rang",
-  "cwlWarsPlayedTitle": "S-au jucat războaie",
-  "playerWarStarsTitle": "Stele de război",
-  "playerWarPreferenceTitle": "Pref. de război",
-  "playerDonatedTitle": "Donat",
-  "playerReceivedTitle": "Primit",
-  "playerCapitalTitle": "Capitală",
-  "playerExpLevelTitle": "Exp. nivel",
-  "clanWarWinsTitle": "Războiul învinge",
-  "clanWinStreakTitle": "Seria de victorii",
-  "clanBuilderBaseTitle": "Baza constructorului",
-  "clanTypeTitle": "Tip",
-  "clanWarFrequencyTitle": "Războaie",
-  "clanMinTownHallTitle": "Primărie min.",
-  "clanMinTrophiesTitle": "Min. trofee",
-  "clanCapitalHallTitle": "Sala Capitalei",
-  "clanDistrictsTitle": "Districte",
-  "legendsCountryTitle": "Ţară",
-  "legendsLocalRankTitle": "Rang local",
-  "legendsGlobalRankTitle": "Rang global",
-  "warWinsTitle": "Câștigă",
-  "warLossesTitle": "Pierderi",
-  "warDrawsTitle": "Remiză",
-  "capitalRaidStatusOngoing": "În curs de desfășurare",
-  "capitalRaidStatusEnded": "Încheiat",
-  "capitalRaidLoot": "Pradă",
-  "capitalRaidRewards": "Recompense",
-  "capitalRaidPreviousWeek": "Săptămâna anterioară",
-  "capitalRaidNextWeek": "Săptămâna viitoare",
-  "capitalRaidFilterAttacked": "Atacat",
-  "capitalRaidFilterNotAttacked": "Nu atacat",
-  "capitalRaidFilterLinked": "Conturi conectate",
-  "capitalRaidEmptyTitle": "Nu există date privind raidurile de capital",
-  "capitalRaidEmptyBody": "Istoricul raidurilor va apărea aici odată ce weekendurile de raid capitale ale acestui clan vor fi urmărite.",
-  "capitalRaidEstimated": "Estimată",
-  "capitalRaidEstimatedTooltip": "Nu este încă oficial: estimat din jurnalele de atac și apărare din această săptămână. Supercell publică numărul real de medalii odată ce raidul se termină.",
-  "capitalRaidTrophyPrediction": "Trofee prezise",
-  "capitalRaidTrophyPredictionTooltip": "Estimarea trofeelor ​​Capital League după acest raid, pe baza performanței din această săptămână de până acum. Nu este oficial.",
-  "capitalRaidProjectedLoot": "Pradă proiectată",
-  "capitalRaidOneshots": "One-shot",
-  "capitalRaidFails": "Eșuează",
-  "capitalDetailsOffense": "Ofensa",
-  "capitalDetailsDefense": "Apărare",
-  "capitalDistrictsSection": "Districte",
-  "capitalOpponentsSection": "Adversarii",
-  "capitalAvgAttacksPerDistrict": "Avg atacuri/district",
-  "capitalAvgLootPerAttack": "Mediu pradă/atac",
-  "capitalHistorySection": "Istoria raidurilor",
-  "capitalHistoryWeeksTracked": "Săptămâni urmărite",
-  "capitalAvgLootPerWeek": "Pradă medie/săptămână",
-  "capitalAvgAttacksPerWeek": "Mediu atacuri/săptămână",
-  "capitalBestRaid": "Cel mai bun raid",
-  "capitalWorstRaid": "Cel mai rău raid",
-  "capitalHistoryChartTitle": "Tendință săptămânală",
-  "warAttacksDetailsDuration": "Durată",
-  "gameItemRemainingToTownHallMax": "Până la TH max",
-  "gameItemRemainingToGlobalMax": "Până la max",
-  "gameItemLevelsLeft": "{count} nivel(e) rămas(e).",
-  "gameItemOverview": "Prezentare generală",
-  "gameItemStats": "Statistici",
-  "gameItemNextUpgrade": "Următorul upgrade",
-  "gameItemUpgradePlan": "Plan de upgrade",
-  "gameItemUpgradeDataUnavailable": "Datele de upgrade nu sunt disponibile",
   "notifScopeAllAccounts": "Toate conturile",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
   "notifScopeSelected": "Selectat",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Preferințe",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Notificări",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Alegeți alerte și trimiteți previzualizările testelor locale.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsLiveActivityTest": "Test de activitate live",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
   "settingsLiveActivityStart": "Începeți activitatea de testare",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
   "settingsLiveActivityStartSubtitle": "Afișează o previzualizare locală a războiului între clanuri.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
   "settingsLiveActivityUpdate": "Actualizați scorul",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
   "settingsLiveActivityUpdateSubtitle": "Avansează scorul de război fals.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
   "settingsLiveActivityEnd": "Încheiați activitatea de testare",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
   "settingsLiveActivityEndSubtitle": "Elimină previzualizarea locală.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
   "settingsSupport": "Sprijin",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "Despre",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Cont",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Conectat",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Aspect",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Sistem",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Potriviți acest dispozitiv",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Aprinde",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Întuneric",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Selectat",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Încă nu s-a încărcat niciun cont conectat.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Niciun cont selectat",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "Conturi {count} selectate",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifSelectedAccounts": "Conturi selectate",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
   "searchRecent": "Recente",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Jucători",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Clanuri",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchFilters": "Filtre",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "searchClear": "Clar",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Datele au fost reîmprospătate",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Nu s-au reîmprospătat datele: {error}",
-  "warStatsFilterFailed": "Nu s-au încărcat datele filtrate: {error}",
-  "warStatsExportFailed": "Export eșuat: {error}",
-  "exportLabelPlayer": "Jucător",
-  "exportLabelFormat": "Format fișier",
-  "exportLabelExcel": "Excel (.xlsx)",
-  "exportLabelIncludes": "Include",
-  "exportLabelContent": "Statistici, atacuri, analiză TH",
-  "accountNoUserData": "Nu sunt disponibile date despre utilizator",
-  "accountsMenuTitle": "Conturi",
-  "searchErrorPlayerLoadFailed": "Nu s-au încărcat datele jucătorului.",
-  "searchErrorClanLoadFailed": "Nu s-au încărcat datele clanului.",
-  "todoNoMatchingAccounts": "Nu există conturi care se potrivesc",
-  "todoNoConfiguredAccounts": "Nu au fost configurate conturi de rezolvat",
-  "todoNoLinkedAccounts": "Nu există conturi conectate",
-  "todoNoAccountsNeedAction": "Niciun cont nu necesită acțiune",
-  "todoNoCompletedAccounts": "Nu există conturi finalizate",
-  "todoNoBookmarkedAccounts": "Fără conturi marcate",
-  "todoTryAnotherSearchOrFilter": "Încercați o altă căutare sau filtru.",
-  "clanJoinLeaveNoDataTitle": "Nu există date de alăturare/de părere",
-  "clanJoinLeaveNoDataBody": "Mișcarea recentă a listei apare aici când sunt încărcate datele de urmărire.",
-  "clanJoinLeaveNoRecentMovementTitle": "Nicio mișcare recentă",
-  "clanJoinLeaveNoRecentMovementBody": "Rezumatul este încărcat, dar lista de evenimente este goală.",
-  "capitalRaidMembersAttackLogFallback": "Lista de membri nu este returnată pentru acest weekend de raid. Se afișează în schimb statisticile jurnalului de atacuri.",
-  "capitalRaidMembersNoPlayerData": "Nu sunt returnate date la nivel de jucător pentru acest weekend de raid. API-ul include doar totalurile districtuale și ale adversarului.",
-  "capitalRaidMembersNoIndividualData": "Nu există nicio listă de jucători sau atacuri individuale disponibile pentru acest raid.",
-  "dashboardNoLinkedAccountsTitle": "Nu există conturi conectate",
-  "dashboardNoLinkedAccountsBody": "Conectați un cont Clash pentru a vedea atacurile, evenimentele și activitatea aici.",
-  "dashboardNothingPinnedTitle": "Nimic fixat încă",
-  "dashboardNothingPinnedBody": "Deschideți fila Jucători, extindeți opțiunile unui card și activați „Afișați activități de făcut pe acasă” pentru a fixa un cont aici.",
-  "playersNoBookmarkedTitle": "Niciun jucător marcat încă",
-  "playersNoBookmarkedBody": "Deschideți un profil de jucător și salvați-l pentru mai târziu.",
-  "playersNoLinkedBody": "Gestionați conturile din ecranul de configurare a contului.",
-  "navigationHome": "Acasă",
-  "drawerFollowers": "Urmaritori",
-  "drawerFollowersHelp": "Persoane care au marcat unul dintre conturile dvs. conectate verificate.",
-  "drawerPopular": "Populare",
-  "drawerCalculators": "Calculatoare",
-  "drawerSubscription": "Abonament",
-  "drawerUpgradeTracker": "Tracker îmbunătățiri",
-  "drawerBasesArmies": "Baze și armate",
-  "drawerGameAssets": "Activele jocului",
-  "drawerManageAccounts": "Gestionați Conturile",
-  "playersLinked": "Legat",
-  "playersBookmarked": "Marcat",
-  "searchGlobalHint": "Căutați jucători sau clanuri",
-  "tooltipDecreaseMinimumMembers": "Reduceți numărul minim de membri",
-  "tooltipIncreaseMinimumMembers": "Creșteți numărul minim de membri",
-  "tooltipDecreaseMaximumMembers": "Reduceți numărul maxim de membri",
-  "tooltipIncreaseMaximumMembers": "Creșteți numărul maxim de membri",
-  "tooltipDecreaseMinimumClanPoints": "Reduceți punctele minime de clan",
-  "tooltipIncreaseMinimumClanPoints": "Creșteți punctele minime de clan",
-  "tooltipDecreaseMinimumClanLevel": "Reduceți nivelul minim de clan",
-  "tooltipIncreaseMinimumClanLevel": "Creșteți nivelul minim de clan",
-  "tooltipShowChart": "Arată diagrama",
-  "tooltipShowTable": "Arată tabelul",
-  "tooltipDismissMessage": "Închideți mesajul",
-  "tooltipShowPassword": "Afișați parola",
-  "tooltipHidePassword": "Ascunde parola",
-  "tooltipRemoveAccount": "Eliminați contul",
-  "popularPlayersTitle": "Jucători",
-  "popularClansTitle": "Clanuri",
-  "popularWarsCwlTitle": "Războaie și CWL",
-  "popularTitle": "Populare",
-  "popularSubtitle": "Marcaje, conturi conectate și războaie active.",
-  "popularEmptyTitle": "Nu există încă articole populare",
-  "popularEmptyBody": "Marcați jucători și clanuri sau conectați conturi pentru a genera acest lucru.",
-  "calculatorsTitle": "Calculatoare",
-  "calculatorsSubtitle": "Minereu, cutremur zap și cutremur minge de foc.",
-  "calculatorOre": "Minereu",
-  "calculatorZapQuake": "Cutremur Zap",
-  "calculatorFireball": "Bolid",
-  "upgradeTrackerTitle": "Tracker îmbunătățiri",
-  "upgradeTrackerSubtitle": "Costul și timpul de actualizare rămas.",
-  "linkedAccountLabel": "Cont conectat",
-  "noLinkedPlayersLoadedTitle": "Nu s-au încărcat jucători conectați",
-  "noLinkedPlayersLoadedBody": "Adăugați sau reîmprospătați conturile conectate pentru a vedea totalurile de upgrade.",
-  "playerOptionNotificationsTitle": "Notificări",
-  "playerOptionNotificationsSubtitle": "Primiți alerte pentru acest cont.",
-  "playerOptionShowTodoHomeTitle": "Arată lucruri de făcut acasă",
-  "playerOptionShowTodoHomeSubtitle": "Fixați cardul de lucru al acestui cont în fila Acasă.",
-  "playerOptionShowTodoPageTitle": "Afișați pe pagina de activități",
-  "playerOptionShowTodoPageSubtitle": "Includeți acest cont în lista completă de activități.",
-  "playerOptionShowWarTabTitle": "Afișați în fila Război",
-  "playerOptionShowWarTabSubtitle": "Includeți clanul acestui cont în fila Război.",
-  "searchCancel": "Anula",
-  "bookmarkPlayerLoadFailed": "Nu s-a putut încărca playerul marcat.",
-  "warNoLinkedOrBookmarked": "Nu există războaie de clan legate sau marcate de marcat de afișat.",
-  "warWidgetRefreshData": "Actualizează datele de război",
-  "warWidgetNoData": "Nu sunt disponibile date de război",
-  "warWidgetLastUpdated": "Ultima actualizare: {time}",
-  "todoEventClanGames": "Jocuri de clan",
-  "todoEventCwl": "CWL",
-  "todoEventSeasonEnds": "Se termină sezonul",
-  "todoEventLeagueReset": "Resetarea ligii",
-  "todoEventRaidWeekend": "Weekend de raid",
-  "todoMagicDispatch": "Expediere magică",
-  "todoMagicDispatchDescription": "Atingeți pentru cea mai recentă actualizare ClashKing",
-  "todoUseCodeClashKing": "Utilizați codul ClashKing",
-  "todoUseCodeClashKingDescription": "Susține proiectul în Magazinul Supercell",
-  "todoLegendAttacks": "Atacurile de legendă",
-  "todoWarAttacks": "Atacurile de război",
-  "todoCwlAttacks": "Atacurile CWL",
-  "todoRaidAttacks": "Atacurile raid",
-  "gameSeasonPassShort": "Pasa",
-  "todoMockMaxedMainName": "Cont principal maxat",
-  "todoMockMaxedMainSubtitle": "TH17 · totul activ",
-  "todoMockMaxedMainStatus": "Activ acum · listă de verificare zilnică completă",
-  "todoMockLegend5Left": "Au mai rămas 5 astăzi",
-  "todoMockWar1Left": "1 ramas",
-  "todoMockCwl1LeftRound": "Am plecat din această rundă",
-  "todoMockClanGames2700Left": "Au mai rămas 2,7 mii de puncte",
-  "todoMockRaid4Left": "4 au rămas",
-  "todoMockPass850Left": "Au mai rămas 850 de puncte",
-  "todoMockWarAltName": "Război Alt",
-  "todoMockWarAltSubtitle": "TH15 · axat pe război",
-  "todoMockWarAltStatus": "Activ acum 18 m · războiul și raidurile au nevoie de atenție",
-  "todoMockWar2Left": "2 au ramas",
-  "todoMockClanGames900Left": "Au mai rămas 900 de puncte",
-  "todoMockRaid1Left": "1 ramas",
-  "todoMockLegendPushName": "Push legendă",
-  "todoMockLegendPushSubtitle": "TH16 · atacuri zilnice",
-  "todoMockLegendPushStatus": "Activ acum 1 oră · legende și progrese de trecere",
-  "todoMockLegend2Left": "Au mai rămas 2 astăzi",
-  "todoMockOnPace": "în ritm",
-  "todoMockCaughtUpName": "Prins din urmă",
-  "todoMockCaughtUpSubtitle": "TH14 · fără sarcini deschise",
-  "todoMockCaughtUpStatus": "Activ astăzi · nu este necesară nicio acțiune",
-  "notifChooseAlerts": "Alege alertele",
-  "notifLeagueDefenseDescription": "Rezultate de apărare cu atacator, stele, procent și context de ligă.",
-  "notifWarAttackOptionsDescription": "Rezultate ale atacurilor de război, alerte de apărare și feed de atacuri 5v5.",
-  "notifWarAlertsDescription": "Război găsit, ziua de luptă începută și război încheiat.",
-  "notifWarRemindersDescription": "Mementouri personalizate înainte de sfârșitul războiului.",
-  "notifDefensesAgainstYourBase": "Apărări împotriva bazei tale",
-  "notifDefensesAgainstYourBaseDescription": "Doar loviturile în care acest cont apără.",
-  "notifAllAttacks": "Toate atacurile",
-  "notifAllAttacksDescription": "Fiecare lovitură doar în războaie 5v5.",
-  "notifThirtyMinutes": "30 de minute",
-  "notifFifteenMinutes": "15 minute",
-  "notifSendTestNotification": "Trimite notificare de test",
-  "notifScheduledMessage": "Programat: {title}",
-  "generalStartDate": "Data de început",
-  "generalEndDate": "Data de sfârșit",
-  "warFiltersAllWars": "Toate războaiele",
-  "warFiltersRandomWars": "Războaie aleatorii",
-  "warFiltersCwlWars": "Războaie CWL",
-  "warFiltersFriendlyWars": "Războaie amicale",
-  "warType": "Tip de război",
-  "warFiltersAnyTownHall": "Orice TH",
-  "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "TH atacator",
-  "warDefenderTownHall": "TH apărător",
-  "warStatsFilterSameTownHallOnly": "Doar aceeași Primărie",
-  "warStatsFilterSameTownHallDescription": "Afișează doar atacurile în care atacatorul și apărătorul au același nivel TH",
-  "generalAny": "Oricare",
-  "warStarsWithIcon": "{stars} ⭐",
-  "warStatsFilterMinStars": "Stele minime",
-  "warStatsFilterMaxStars": "Stele maxime",
-  "warStatsFilterMinDestructionPercent": "Distrugere minimă %",
-  "warStatsFilterMaxDestructionPercent": "Distrugere maximă %",
-  "warStatsFilterMinPosition": "Poziție minimă",
-  "warStatsFilterMaxPosition": "Poziție maximă",
-  "warStatsFilterFreshAttacksOnly": "Doar atacuri fresh",
-  "warStatsFilterFreshAttacksDescription": "Afișează doar primele atacuri pe fiecare bază",
-  "warStatsFilterResultLimit": "Limită de rezultate",
-  "generalResultsCount": "{count} rezultate",
-  "notifEventsDescription": "Jocurile clanului, CWL, Weekend de raid și evenimente de sezon.",
-  "notifAnnouncementsDescription": "Bannere în aplicație și viitoare alerte push pentru actualizări ClashKing.",
-  "notifUpgradeFinishesDescription": "Trupe, eroi, animale, vrăji, echipamente și clădiri.",
-  "notifSupportReminderDescription": "Memento lunar pentru a susține ClashKing.",
-  "notifDevicePushSetup": "Configurare push pe dispozitiv",
-  "notifAccountScope": "Domeniul contului",
-  "notifTestNotification": "Notificare de test",
-  "settingsAppIcon": "Pictograma aplicației",
-  "settingsChanging": "Se schimbă...",
-  "settingsAddWarWidget": "Adaugă widget de război",
-  "settingsWarWidgetLinkClanFirst": "Conectează mai întâi un cont dintr-un clan",
-  "settingsWarWidgetClanCount": "{count} clan(uri) disponibile",
-  "generalDiscord": "Discord",
-  "settingsDiscordConnectedSubtitle": "Conturi conectate la bot și date Discord",
-  "settingsDiscordSyncSubtitle": "Sincronizează conturile conectate la bot și datele Discord",
-  "settingsConnected": "Conectat",
-  "settingsClashKingAccount": "Cont ClashKing",
-  "settingsEmailConnectedSubtitle": "Autentificarea prin e-mail este conectată",
-  "settingsEmailRecoverySubtitle": "Adaugă autentificare prin e-mail pentru recuperarea contului",
-  "settingsFeatureRequestsTitle": "Cereri de funcții",
-  "playerOpenInGame": "Deschide în joc",
-  "playerBookmarkRemove": "Elimină marcajul jucătorului",
-  "playerBookmarkAdd": "Marchează jucătorul",
-  "playerBestTrophies": "Cele mai bune trofee",
-  "clanLoadFailed": "Nu s-a putut încărca clanul.",
-  "gameItemLevels": "Niveluri",
-  "resourceDarkElixir": "Elixir întunecat",
-  "resourceBuilderElixir": "Elixir de constructor",
-  "resourceBuilderGold": "Aur de constructor",
-  "resourceElixir": "Elixir",
-  "resourceGold": "Aur",
-  "resourceGlowyOre": "Minereu strălucitor",
-  "resourceStarryOre": "Minereu stelar",
-  "resourceShinyOre": "Minereu lucios",
-  "resourceGeneric": "Resursă",
-  "seasonStatsGoldGrabbed": "Aur capturat",
-  "seasonStatsActivity": "Activitate",
-  "seasonStatsAttackWins": "Victorii în atac",
-  "seasonStatsTrophies": "Trofee de sezon",
-  "todoSearchAccountsHint": "Caută conturi",
-  "generalClearSearch": "Șterge căutarea",
-  "clanCapitalAvgRewards": "Recompense medii",
-  "clanCapitalAvgDistrictsPerWeek": "Districte medii/săptămână",
-  "clanCapitalTopAttackers": "Cei mai buni atacatori",
-  "clanCapitalPlayersTracked": "{count} jucători urmăriți",
-  "clanCapitalDefenseOverTime": "Apărare în timp",
-  "clanCapitalDistrictsTracked": "{count} districte urmărite",
-  "clanCapitalSelectedRaid": "Raid selectat",
-  "generalSummary": "Rezumat",
-  "generalBreakdown": "Detaliere",
-  "clanPointsTitle": "Puncte clan",
-  "clanBuilderBasePoints": "Puncte bază constructor",
-  "clanType": "Tip de clan",
-  "clanRequiredTownHall": "Primărie necesară",
-  "clanRequiredTownHallOnly": "Doar {level}+",
-  "clanCapitalPoints": "Puncte capitală",
-  "todoAllAccounts": "Toate conturile",
-  "todoCombinedAcrossAccounts": "To-do combinat pentru conturile tale",
-  "todoPreviewAccount": "Cont de previzualizare",
-  "todoLastActiveUnavailable": "Ultima activitate indisponibilă",
-  "todoActiveRelative": "Activ {time}",
-  "@todoActiveRelative": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "todoCompleteLower": "finalizat",
-  "todoPointsLeftShort": "{points} puncte rămase",
-  "@todoPointsLeftShort": {
-    "placeholders": {
-      "points": {
-        "type": "String"
-      }
-    }
-  },
-  "todoItemsLeftShort": "{count} rămase",
-  "@todoItemsLeftShort": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAllCaughtUpForNow": "Totul este la zi pentru moment",
-  "todoEventEndsIn": "Se termină în {duration}",
-  "@todoEventEndsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoEventStartsIn": "Începe în {duration}",
-  "@todoEventStartsIn": {
-    "placeholders": {
-      "duration": {
-        "type": "String"
-      }
-    }
-  },
-  "todoRemainingUpgradeTooltip": "Atinge pentru costul și timpul de îmbunătățire rămase",
-  "announcementAnimeFuryTitle": "Anime Fury",
-  "announcementAnimeFurySubtitle": "Atinge pentru a parcurge actualizarea din iunie 2026",
-  "sideRankingsTitle": "Clasamente",
-  "sideRankingsSubtitle": "Clasamente oficiale plus endpoint-uri ClashKing.",
-  "sideRankingsLoadError": "Nu s-au putut încărca clasamentele oficiale.",
-  "sideRankingsEmptyTitle": "Nu s-a returnat niciun clasament",
-  "sideRankingsEmptyBody": "Încearcă alt clasament sau altă locație.",
-  "sideRankingsMockups": "Mockup-uri ClashKing",
-  "sideStatsTitle": "Statistici",
-  "sideStatsSubtitle": "Statistici de clasament din suprafețele oficiale Clash API.",
-  "sideStatsLoadError": "Nu s-au putut încărca statisticile de clasament.",
-  "sideTopScore": "Cel mai bun scor",
-  "sideTop200Avg": "Media Top 200",
-  "sideBasesArmiesTitle": "Baze și armate",
-  "sideBasesArmiesSubtitle": "Layout-uri salvate pe Discord și linkuri de armate.",
-  "sideBotSyncTarget": "Ținta sincronizării botului",
-  "sideBotSyncTargetBody": "Botul salvează deja baze și armate în profilul Discord. Această pagină este pregătită pentru acel set de date sincronizat.",
-  "sideSavedBases": "Baze salvate",
-  "sideWarBaseSlots": "Sloturi baze de război",
-  "sideWarBaseSlotsBody": "Primărie, tip de bază, link și ultima actualizare.",
-  "sideLegendBaseSlots": "Sloturi baze legendă",
-  "sideLegendBaseSlotsBody": "Copiere rapidă plus asociere cu contul.",
-  "sideSavedArmies": "Armate salvate",
-  "sideArmyLinks": "Linkuri de armate",
-  "sideArmyLinksBody": "Compoziție, vrăji, asediu, notițe și link de partajare.",
-  "sideGameAssetsTitle": "Asset-uri joc",
-  "sideGameAssetsSubtitle": "Asset-uri ClashKing găzduite, grupate după folder.",
-  "sideNoLinkedPlayersTitle": "Nu s-au încărcat jucători conectați",
-  "sideNoLinkedPlayersBody": "Adaugă sau reîmprospătează conturile conectate pentru a precompleta datele de ligă.",
-  "sideReadyNow": "Gata acum",
-  "sideDays": "{count} zile",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "au rămas {shiny} lucios, {glowy} strălucitor, {starry} stelar",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Minereu lucios",
-  "sideGlowyOre": "Minereu strălucitor",
-  "sideStarryOre": "Minereu stelar",
-  "sideDailyBonusAdjustment": "Ajustare bonus zilnic",
-  "sideExtraShiny": "Lucios extra",
-  "sideExtraGlowy": "Strălucitor extra",
-  "sideExtraStarry": "Stelar extra",
-  "sideZapQuakeTitle": "{zaps} fulgere + 1 cutremur",
-  "@sideZapQuakeTitle": {
-    "placeholders": {
-      "zaps": {
-        "type": "int"
-      }
-    }
-  },
-  "sideZapQuakeSubtitle": "{quakeDamage} daune de cutremur, {lightningDamage} per fulger",
-  "@sideZapQuakeSubtitle": {
-    "placeholders": {
-      "quakeDamage": {
-        "type": "String"
-      },
-      "lightningDamage": {
-        "type": "String"
-      }
-    }
-  },
-  "sideBuildingHp": "PV clădire",
-  "sideLightningLevel": "Nivel fulger",
-  "sideEarthquakeLevel": "Nivel cutremur",
-  "sideWithoutEarthquake": "Fără cutremur",
-  "sideLightningCount": "{count} fulgere",
-  "@sideLightningCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideFireballQuakeTitle": "Minge de foc + 1 cutremur",
-  "sideAddSupportDamage": "Adaugă daune de suport",
-  "sideFireballQuakeSubtitle": "{fireballDamage} daune de minge de foc, {hpLeft} PV rămase după cutremur",
-  "@sideFireballQuakeSubtitle": {
-    "placeholders": {
-      "fireballDamage": {
-        "type": "String"
-      },
-      "hpLeft": {
-        "type": "String"
-      }
-    }
-  },
-  "sideFireballLevel": "Nivel minge de foc",
-  "sideQuakePressure": "Presiune cutremur",
-  "sideQuakeSpellCount": "{count} vrajă/vrăji de cutremur",
-  "@sideQuakeSpellCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideLocation": "Locație",
-  "sideFilter": "Filtru",
-  "sideRefresh": "Reîmprospătează",
-  "sideOfficialClashLeaderboard": "Clasament oficial Clash",
-  "sideAllTownHallsShort": "Toate TH",
-  "sideOwned": "Deținut",
-  "sideTarget": "Țintă",
-  "sideDailyValue": "zilnic {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "sideDecrease": "Scade",
-  "sideIncrease": "Crește",
-  "sideLevel": "Nivel {level}",
-  "@sideLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "sidePopularPlayers": "Jucători",
-  "sidePopularClans": "Clanuri",
-  "sidePopularWarsCwl": "Războaie și CWL",
-  "rankingPlayerTrophies": "Trofee jucători",
-  "rankingPlayerTrophiesHeading": "Clasament trofee jucători",
-  "rankingPlayerBuilder": "Constructor jucători",
-  "rankingPlayerBuilderHeading": "Clasament bază constructor jucători",
-  "rankingClanTrophies": "Trofee clanuri",
-  "rankingClanTrophiesHeading": "Clasament trofee clanuri",
-  "rankingClanBuilder": "Constructor clanuri",
-  "rankingClanBuilderHeading": "Clasament bază constructor clanuri",
-  "rankingClanCapital": "Capitală clan",
-  "rankingClanCapitalHeading": "Clasament Capitală Clan",
-  "assetFolderTroops": "Trupe",
-  "assetFolderSpells": "Vrăji",
-  "assetFolderHeroes": "Eroi",
-  "assetFolderEquipment": "Echipament",
-  "assetFolderLeagues": "Ligi",
-  "assetFolderResources": "Resurse",
-  "assetFolderStickers": "Stickere",
-  "upgradeSectionHeroes": "Eroi",
-  "upgradeSectionTroops": "Trupe",
-  "upgradeSectionSpells": "Vrăji",
-  "upgradeSectionPets": "Animale",
-  "upgradeSectionEquipment": "Echipament",
-  "sideMockupSource": "Sursă",
-  "sideMockupMode": "Mod",
-  "sideMockupPreview": "Previzualizare",
-  "sideMockupRows": "Rânduri",
-  "sideMockupRowsValue": "5 mockup-uri",
-  "endpointLeagueTop200": "Top 200 ligă",
-  "endpointLeagueTop200Preview": "Liga Legendă · 5.742 trofee",
-  "endpointTownhallTop200": "Top 200 Primării",
-  "endpointTownhallTop200Preview": "TH17 · Clasament global jucători",
-  "endpointClanDonations": "Donații clan",
-  "endpointClanDonationsPreview": "Statele Unite · totaluri săptămânale clan",
-  "endpointClanWarWins": "Victorii război clan",
-  "endpointClanWarWinsPreview": "Internațional · victorii de război all-time",
-  "endpointTop200ArmyUsage": "Utilizare armate Top 200",
-  "endpointTop200ArmyUsagePreview": "Jurnale de luptă · utilizare trupe și vrăji",
-  "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Săptămânal",
-  "endpointStateWins": "Victorii",
-  "endpointStateUsage": "Utilizare",
-  "notifGroupBattles": "Bătălii",
-  "notifGroupReminders": "Mementouri",
-  "notifGroupSupport": "Suport",
-  "notifGroupProgress": "Progres",
-  "notifLeagueDefense": "Apărare ligă",
-  "notifLeagueDefenseResult": "Rezultat apărare ligă",
-  "notifLeagueTriple": "Triple în ligă",
-  "notifLeagueAttackBody": "Lord Clasher a atacat {player} • {percent}% • {stars} stele • {league}",
-  "@notifLeagueAttackBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "league": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarDefense": "Apărare război",
-  "notifWarAttackOnTh": "Atac de război pe TH{th}",
-  "@notifWarAttackOnTh": {
-    "placeholders": {
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarDefenseBody": "{opponentClan} a atacat {player} • {percent}% • {stars} stele • apărarea {clan}",
-  "@notifWarDefenseBody": {
-    "placeholders": {
-      "opponentClan": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "int"
-      },
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarFeed5v5": "Feed război 5v5",
-  "notifWarAttackResult": "Rezultat atac de război",
-  "notifWarAttackResultBody": "{clan} a atacat Pine Riders TH{th} • 100% • 3 stele",
-  "@notifWarAttackResultBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "th": {
-        "type": "int"
-      }
-    }
-  },
-  "notifWarMatched": "Război găsit",
-  "notifWarMatchedBody": "{clan} a fost potrivit cu Pine Riders. Ziua de pregătire a început.",
-  "@notifWarMatchedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarStarted": "Războiul a început",
-  "notifBattleDayStarted": "Ziua de luptă a început",
-  "notifWarStartedBody": "{clan} vs Pine Riders este live. Mult noroc.",
-  "@notifWarStartedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarEnded": "Războiul s-a încheiat",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Rezultatele finale sunt disponibile.",
-  "@notifWarEndedBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifWarReminder1h": "Memento război: 1 h",
-  "notifWarReminder30m": "Memento război: 30 min",
-  "notifWarReminder15m": "Memento război: 15 min",
-  "notifOneHourLeft": "A mai rămas 1 oră",
-  "notifThirtyMinutesLeft": "Au mai rămas 30 de minute",
-  "notifFifteenMinutesLeft": "Au mai rămas 15 minute",
-  "notifRemainingWarAttacksBody": "{player} mai are atacuri de război. {time}.",
-  "@notifRemainingWarAttacksBody": {
-    "placeholders": {
-      "player": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "notifStarted": "{name} a început",
-  "@notifStarted": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifClanGamesPointsBody": "{clan} poate începe să câștige puncte {name}.",
-  "@notifClanGamesPointsBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      },
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifCwlPreparationBody": "{clan} poate începe pregătirea pentru Liga Războaielor de Clan.",
-  "@notifCwlPreparationBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifRaidWeekendBody": "{clan} poate începe atacurile de Raid al Capitalei.",
-  "@notifRaidWeekendBody": {
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSeasonStart": "Început de sezon",
-  "notifNewSeasonStarted": "A început un sezon nou",
-  "notifSeasonStartedBody": "Sezonul {league} a început pentru {player}.",
-  "@notifSeasonStartedBody": {
-    "placeholders": {
-      "league": {
-        "type": "String"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "notifSpecialEvent": "Eveniment special",
-  "notifNewEventLive": "Un eveniment nou este live",
-  "notifNewClashEventBody": "Un nou eveniment Clash este disponibil.",
-  "notifSupportClashKing": "Susține ClashKing",
-  "notifMonthlySupportBody": "Susținerea lunară ajută ClashKing să rămână disponibil și să se îmbunătățească. Mulțumim.",
-  "notifUpgradeFinished": "Îmbunătățire finalizată",
-  "notifUpgradeReadyTitle": "{name} este gata",
-  "@notifUpgradeReadyTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notifUpgradeCompleteBody": "Nivelul {level} s-a finalizat pentru {player}. Îmbunătățire completă.",
-  "@notifUpgradeCompleteBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      },
-      "player": {
-        "type": "String"
-      }
-    }
-  },
-  "clanSearchLoadFailed": "Nu s-au putut încărca datele clanului: {error}",
-  "@clanSearchLoadFailed": {
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
     "placeholders": {
       "error": {
         "type": "String"
       }
     }
   },
-  "appIconDefault": "Implicit",
-  "appIconChristmas": "Crăciun",
-  "appIconBlackWhite": "Alb-negru",
-  "appIconDarkMode": "Mod întunecat",
-  "generalMembersCount": "{count} membri",
-  "@generalMembersCount": {
+  "warStatsFilterFailed": "Nu s-au încărcat datele filtrate: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
     "placeholders": {
-      "count": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "generalBookmarked": "marcat",
-  "clanLevelValue": "nivel {level}",
-  "@clanLevelValue": {
+  "warStatsExportFailed": "Export eșuat: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
     "placeholders": {
-      "level": {
-        "type": "int"
+      "error": {
+        "type": "String"
       }
     }
   },
-  "cwlRankShort": "Rang {rank}",
-  "@cwlRankShort": {
-    "placeholders": {
-      "rank": {
-        "type": "int"
-      }
-    }
+  "exportLabelPlayer": "Jucător",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
   },
-  "cwlRoundShort": "Runda {round}",
-  "@cwlRoundShort": {
-    "placeholders": {
-      "round": {
-        "type": "int"
-      }
-    }
+  "exportLabelFormat": "Format fișier",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
   },
-  "gameTownHallShortLevel": "TH{level}",
-  "@gameTownHallShortLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
+  "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
   },
-  "faqSupercellFanContentPolicyLink": "Politica Supercell privind conținutul fanilor"
+  "exportLabelIncludes": "Include",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "Statistici, atacuri, analiză TH",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "Nu sunt disponibile date despre utilizator",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "Conturi",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "Nu s-au încărcat datele jucătorului.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "Nu s-au încărcat datele clanului.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  }
 }
