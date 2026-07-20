@@ -84,6 +84,33 @@ class NativeLiquidGlassBar extends StatelessWidget {
           );
         }
 
+        // The shader's backdrop layer can escape its clip on mobile browsers
+        // and blur the entire route below the app header.
+        if (kIsWeb) {
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              color: glassTint.withValues(alpha: isDark ? 0.94 : 0.90),
+              borderRadius: BorderRadius.circular(cornerRadius),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(
+                  alpha: selected
+                      ? effectiveBorderOpacity.clamp(0.42, 1.0)
+                      : effectiveBorderOpacity,
+                ),
+                width: 0.8,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: effectiveShadowOpacity),
+                  blurRadius: 12,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: SizedBox(width: resolvedWidth, height: resolvedHeight),
+          );
+        }
+
         return DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(cornerRadius),
