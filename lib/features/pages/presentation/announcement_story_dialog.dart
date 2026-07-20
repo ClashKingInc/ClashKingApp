@@ -27,6 +27,7 @@ Uri? announcementStoryWebUri(AppAnnouncement announcement) {
 Future<bool> openAnnouncementStory(
   BuildContext context, {
   required AppAnnouncement announcement,
+  bool Function()? canDisplay,
 }) async {
   if (kIsWeb) {
     final uri = announcementStoryWebUri(announcement);
@@ -36,7 +37,11 @@ Future<bool> openAnnouncementStory(
   final preparedFilePath = await AnnouncementStoryCacheService().prepare(
     announcement,
   );
-  if (!context.mounted || preparedFilePath == null) return false;
+  if (!context.mounted ||
+      preparedFilePath == null ||
+      (canDisplay != null && !canDisplay())) {
+    return false;
+  }
   await showAnnouncementStoryDialog(
     context,
     announcement: announcement,

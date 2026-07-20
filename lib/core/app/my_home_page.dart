@@ -85,6 +85,7 @@ class MyHomePageState extends State<MyHomePage> {
     final displayed = await openAnnouncementStory(
       context,
       announcement: openingAnnouncement,
+      canDisplay: () => mounted && ModalRoute.of(context)?.isCurrent == true,
     );
     if (!displayed) return;
     await _announcementPresentationService.markDismissed(openingAnnouncement);
