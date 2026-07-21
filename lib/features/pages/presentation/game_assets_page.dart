@@ -107,6 +107,7 @@ class _GameAssetsPageState extends State<GameAssetsPage> {
               category: selectedCategory,
               refreshing: _loading,
               onRefresh: () => _load(forceRefresh: true),
+              imageBuilder: widget.imageBuilder,
             ),
           ),
           SliverToBoxAdapter(
@@ -119,7 +120,7 @@ class _GameAssetsPageState extends State<GameAssetsPage> {
                 for (final category in categories)
                   InfoProfileTabData(
                     label: formatGameAssetCategory(category.id),
-                    icon: _categoryIcon(category.id),
+                    imageUrl: category.representativeAsset.url.toString(),
                   ),
               ],
             ),
@@ -187,17 +188,22 @@ class _GameAssetsHeader extends StatelessWidget {
     required this.category,
     required this.refreshing,
     required this.onRefresh,
+    this.imageBuilder,
   });
 
   final GameAssetCategory category;
   final bool refreshing;
   final VoidCallback onRefresh;
+  final GameAssetImageBuilder? imageBuilder;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final isDesktop = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
     final height = MediaQuery.paddingOf(context).top + (isDesktop ? 184 : 204);
+    final buildImage =
+        imageBuilder ??
+        (context, asset, fit) => GameAssetImage(asset: asset, fit: fit);
     return Stack(
       children: [
         Positioned.fill(
@@ -246,10 +252,14 @@ class _GameAssetsHeader extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          _categoryIcon(category.id),
-                          color: Colors.white,
-                          size: 54,
+                        SizedBox.square(
+                          key: const ValueKey('game-assets-header-image'),
+                          dimension: 54,
+                          child: buildImage(
+                            context,
+                            category.representativeAsset,
+                            BoxFit.contain,
+                          ),
                         ),
                         const SizedBox(height: 5),
                         Text(
@@ -714,23 +724,4 @@ String formatGameAssetResultCount(
   return count == 1
       ? loc.gameAssetsOneResult
       : loc.gameAssetsResultCount(formatGameAssetCount(count, locale));
-}
-
-IconData _categoryIcon(String category) {
-  return switch (category) {
-    'buildings' || 'traps' => Icons.account_balance_outlined,
-    'capital-base' || 'capital_house_parts' => Icons.location_city_outlined,
-    'country-flags' => Icons.flag_outlined,
-    'decorations' || 'obstacles' => Icons.park_outlined,
-    'equipment' || 'magic_items' => Icons.auto_fix_high_outlined,
-    'heroes' || 'skins' => Icons.person_outline_rounded,
-    'leagues' ||
-    'player_labels' ||
-    'clan_labels' => Icons.military_tech_outlined,
-    'pets' || 'guardians' => Icons.pets_outlined,
-    'sceneries' || 'landscape' => Icons.landscape_outlined,
-    'spells' || 'magic_snacks' => Icons.bolt_outlined,
-    'troops' => Icons.groups_outlined,
-    _ => Icons.image_outlined,
-  };
 }

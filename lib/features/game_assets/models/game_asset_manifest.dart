@@ -145,6 +145,11 @@ class GameAssetCategory {
 
   int get count => assets.length;
 
+  GameAsset get representativeAsset => assets.firstWhere(
+    (asset) => asset.extension != 'svg',
+    orElse: () => assets.first,
+  );
+
   List<String> get extensions {
     final values = assets.map((asset) => asset.extension).toSet().toList()
       ..sort();

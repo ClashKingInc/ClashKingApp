@@ -120,6 +120,30 @@ void main() {
 
     expect(asset.tileDisplayName, 'Archer Tower · Level 17');
   });
+
+  test('category representative icons prefer renderable raster assets', () {
+    final category = GameAssetCategory(
+      id: 'troops',
+      assets: [
+        GameAsset(
+          path: 'troops/archer.svg',
+          category: 'troops',
+          displayName: 'Archer',
+          extension: 'svg',
+          url: Uri.parse('https://assets.clashk.ing/troops/archer.svg'),
+        ),
+        GameAsset(
+          path: 'troops/barbarian.webp',
+          category: 'troops',
+          displayName: 'Barbarian',
+          extension: 'webp',
+          url: Uri.parse('https://assets.clashk.ing/troops/barbarian.webp'),
+        ),
+      ],
+    );
+
+    expect(category.representativeAsset.displayName, 'Barbarian');
+  });
 }
 
 Map<String, dynamic> _assetJson({
