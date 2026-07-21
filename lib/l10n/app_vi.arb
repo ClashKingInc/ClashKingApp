@@ -2301,7 +2301,6 @@
   "navigationHome": "Trang chủ",
   "drawerFollowers": "Người theo dõi",
   "drawerFollowersHelp": "Những người đã đánh dấu một trong các tài khoản được liên kết đã được xác minh của bạn.",
-  "drawerPopular": "Phổ biến",
   "drawerCalculators": "Máy tính",
   "drawerSubscription": "Đăng ký",
   "drawerUpgradeTracker": "Trình theo dõi nâng cấp",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Hiển thị mật khẩu",
   "tooltipHidePassword": "Ẩn mật khẩu",
   "tooltipRemoveAccount": "Xóa tài khoản",
-  "popularPlayersTitle": "Người chơi",
-  "popularClansTitle": "Gia tộc",
-  "popularWarsCwlTitle": "Chiến tranh & CWL",
-  "popularTitle": "Phổ biến",
-  "popularSubtitle": "Dấu trang, tài khoản được liên kết và các cuộc chiến đang diễn ra.",
-  "popularEmptyTitle": "Chưa có mặt hàng phổ biến nào",
-  "popularEmptyBody": "Đánh dấu người chơi và bang hội hoặc liên kết các tài khoản để tạo điều kiện này.",
   "calculatorsTitle": "Máy tính",
-  "calculatorsSubtitle": "Trận động đất quặng, trận động đất và trận động đất cầu lửa.",
-  "calculatorOre": "Quặng",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Trận động đất Zap",
   "calculatorFireball": "Quả cầu lửa",
   "upgradeTrackerTitle": "Trình theo dõi nâng cấp",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Thử bảng xếp hạng hoặc vị trí khác.",
   "sideRankingsMockups": "Mockup ClashKing",
   "sideStatsTitle": "Thống kê",
-  "sideStatsSubtitle": "Thống kê bảng xếp hạng từ các bề mặt Clash API chính thức.",
-  "sideStatsLoadError": "Không thể tải thống kê bảng xếp hạng.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Điểm cao nhất",
   "sideTop200Avg": "Trung bình Top 200",
   "sideBasesArmiesTitle": "Căn cứ & đội hình",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Thành phần, phép, máy công thành, ghi chú và liên kết chia sẻ.",
   "sideGameAssetsTitle": "Tài nguyên trò chơi",
   "sideGameAssetsSubtitle": "Tài nguyên ClashKing được lưu trữ, nhóm theo thư mục.",
-  "sideNoLinkedPlayersTitle": "Chưa tải người chơi đã liên kết",
-  "sideNoLinkedPlayersBody": "Thêm hoặc làm mới tài khoản đã liên kết để điền sẵn dữ liệu giải đấu.",
-  "sideReadyNow": "Sẵn sàng ngay",
-  "sideDays": "{count} ngày",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "còn {shiny} lấp lánh, {glowy} phát sáng, {starry} sao",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Quặng lấp lánh",
-  "sideGlowyOre": "Quặng phát sáng",
-  "sideStarryOre": "Quặng sao",
-  "sideDailyBonusAdjustment": "Điều chỉnh thưởng hằng ngày",
-  "sideExtraShiny": "Lấp lánh thêm",
-  "sideExtraGlowy": "Phát sáng thêm",
-  "sideExtraStarry": "Sao thêm",
   "sideZapQuakeTitle": "{zaps} sét + 1 động đất",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Làm mới",
   "sideOfficialClashLeaderboard": "Bảng xếp hạng Clash chính thức",
   "sideAllTownHallsShort": "Tất cả TH",
-  "sideOwned": "Đã sở hữu",
-  "sideTarget": "Mục tiêu",
-  "sideDailyValue": "hằng ngày {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Giảm",
   "sideIncrease": "Tăng",
   "sideLevel": "Cấp {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Người chơi",
-  "sidePopularClans": "Hội",
-  "sidePopularWarsCwl": "Chiến tranh & CWL",
   "rankingPlayerTrophies": "Cúp người chơi",
   "rankingPlayerTrophiesHeading": "Xếp hạng cúp người chơi",
   "rankingPlayerBuilder": "Thợ xây người chơi",

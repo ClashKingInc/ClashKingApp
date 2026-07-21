@@ -2301,7 +2301,6 @@
   "navigationHome": "Lar",
   "drawerFollowers": "Seguidores",
   "drawerFollowersHelp": "Pessoas que adicionaram uma de suas contas vinculadas verificadas aos favoritos.",
-  "drawerPopular": "Populares",
   "drawerCalculators": "Calculadoras",
   "drawerSubscription": "Subscrição",
   "drawerUpgradeTracker": "Rastreador de atualização",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Mostrar senha",
   "tooltipHidePassword": "Ocultar senha",
   "tooltipRemoveAccount": "Remover conta",
-  "popularPlayersTitle": "Jogadores",
-  "popularClansTitle": "Clãs",
-  "popularWarsCwlTitle": "Guerras e CWL",
-  "popularTitle": "Populares",
-  "popularSubtitle": "Marcadores, contas vinculadas e guerras ativas.",
-  "popularEmptyTitle": "Nenhum item popular ainda",
-  "popularEmptyBody": "Marque jogadores e clãs ou vincule contas para propagar isso.",
   "calculatorsTitle": "Calculadoras",
-  "calculatorsSubtitle": "Minério, terremoto zap e terremoto bola de fogo.",
-  "calculatorOre": "Minério",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Terremoto Zap",
   "calculatorFireball": "Bola de fogo",
   "upgradeTrackerTitle": "Rastreador de atualização",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Experimenta outra classificação ou localização.",
   "sideRankingsMockups": "Mockups ClashKing",
   "sideStatsTitle": "Estatísticas",
-  "sideStatsSubtitle": "Estatísticas das classificações a partir das superfícies oficiais da API Clash.",
-  "sideStatsLoadError": "Não foi possível carregar as estatísticas da classificação.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Melhor pontuação",
   "sideTop200Avg": "Média Top 200",
   "sideBasesArmiesTitle": "Bases e armadas",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Composição, feitiços, cerco, notas e link de partilha.",
   "sideGameAssetsTitle": "Assets do jogo",
   "sideGameAssetsSubtitle": "Assets ClashKing alojados, agrupados por pasta.",
-  "sideNoLinkedPlayersTitle": "Nenhum jogador associado carregado",
-  "sideNoLinkedPlayersBody": "Adiciona ou atualiza contas associadas para preencher dados de liga.",
-  "sideReadyNow": "Pronto agora",
-  "sideDays": "{count} dias",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "faltam {shiny} reluzente, {glowy} brilhante, {starry} estrelado",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Minério reluzente",
-  "sideGlowyOre": "Minério brilhante",
-  "sideStarryOre": "Minério estrelado",
-  "sideDailyBonusAdjustment": "Ajuste do bónus diário",
-  "sideExtraShiny": "Reluzente extra",
-  "sideExtraGlowy": "Brilhante extra",
-  "sideExtraStarry": "Estrelado extra",
   "sideZapQuakeTitle": "{zaps} relâmpagos + 1 terremoto",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Atualizar",
   "sideOfficialClashLeaderboard": "Classificação oficial Clash",
   "sideAllTownHallsShort": "Todos os CV",
-  "sideOwned": "Possuído",
-  "sideTarget": "Alvo",
-  "sideDailyValue": "diário {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Diminuir",
   "sideIncrease": "Aumentar",
   "sideLevel": "Nível {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Jogadores",
-  "sidePopularClans": "Clãs",
-  "sidePopularWarsCwl": "Guerras e CWL",
   "rankingPlayerTrophies": "Troféus de jogadores",
   "rankingPlayerTrophiesHeading": "Classificação de troféus dos jogadores",
   "rankingPlayerBuilder": "Construtor dos jogadores",

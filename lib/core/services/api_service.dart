@@ -80,6 +80,19 @@ class ApiService {
     return _expectMapResponse(response, endpoint);
   }
 
+  Future<Map<String, dynamic>> query(
+    String endpoint,
+    Object body, {
+    bool requiresAuth = false,
+  }) async {
+    final response = await queryResponse(
+      endpoint,
+      body: body,
+      requiresAuth: requiresAuth,
+    );
+    return _expectMapResponse(response, endpoint);
+  }
+
   Future<http.Response> getResponse(
     String endpoint, {
     bool requiresAuth = false,
@@ -107,6 +120,30 @@ class ApiService {
   }) async {
     return _requestResponse(
       'POST',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+
+  /// Sends an RFC 9110 QUERY request with a JSON body.
+  ///
+  /// QUERY is intentionally separate from GET: the Home activity contract
+  /// carries an account-scoped selection object and has no POST compatibility
+  /// route.
+  Future<http.Response> queryResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
+  }) async {
+    return _requestResponse(
+      'QUERY',
       endpoint: endpoint,
       url: url,
       body: body,
@@ -312,6 +349,24 @@ class ApiService {
           final response = await _client
               .get(resolvedUri, headers: headers)
               .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
+        case 'QUERY':
+          final request = http.Request(method, resolvedUri)
+            ..headers.addAll(headers);
+          if (requestBody != null) {
+            request.body = requestBody.toString();
+          }
+          final streamedResponse = await _client.send(request).timeout(timeout);
+          final response = await http.Response.fromStream(
+            streamedResponse,
+          ).timeout(timeout);
           stopwatch.stop();
           _recordHttpBreadcrumb(
             method,

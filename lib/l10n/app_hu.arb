@@ -2301,7 +2301,6 @@
   "navigationHome": "Otthon",
   "drawerFollowers": "Követők",
   "drawerFollowersHelp": "Azok az emberek, akik könyvjelzővel látták el valamelyik igazolt összekapcsolt fiókját.",
-  "drawerPopular": "Népszerű",
   "drawerCalculators": "Számológépek",
   "drawerSubscription": "Előfizetés",
   "drawerUpgradeTracker": "Frissítse a Trackert",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Jelszó megjelenítése",
   "tooltipHidePassword": "Jelszó elrejtése",
   "tooltipRemoveAccount": "Fiók eltávolítása",
-  "popularPlayersTitle": "Játékosok",
-  "popularClansTitle": "klánok",
-  "popularWarsCwlTitle": "Háborúk és CWL",
-  "popularTitle": "Népszerű",
-  "popularSubtitle": "Könyvjelzők, összekapcsolt fiókok és aktív háborúk.",
-  "popularEmptyTitle": "Még nincsenek népszerű termékek",
-  "popularEmptyBody": "Jelölje meg a játékosokat és a klánokat a könyvjelzők között, vagy kapcsolja össze a fiókokat az oltáshoz.",
   "calculatorsTitle": "Számológépek",
-  "calculatorsSubtitle": "Érc, zap rengés és tűzgömb rengés.",
-  "calculatorOre": "Érc",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap rengés",
   "calculatorFireball": "Tűzgömb",
   "upgradeTrackerTitle": "Frissítse a Trackert",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Próbálj másik ranglistát vagy helyet.",
   "sideRankingsMockups": "ClashKing makettek",
   "sideStatsTitle": "Statisztikák",
-  "sideStatsSubtitle": "Ranglista-statisztikák a hivatalos Clash API felületekről.",
-  "sideStatsLoadError": "Nem sikerült betölteni a ranglista-statisztikákat.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Legjobb pontszám",
   "sideTop200Avg": "Top 200 átlag",
   "sideBasesArmiesTitle": "Bázisok és seregek",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Összeállítás, varázslatok, ostromgép, jegyzetek és megosztási link.",
   "sideGameAssetsTitle": "Játékeszközök",
   "sideGameAssetsSubtitle": "Hostolt ClashKing eszközök mappák szerint csoportosítva.",
-  "sideNoLinkedPlayersTitle": "Nincsenek betöltött kapcsolt játékosok",
-  "sideNoLinkedPlayersBody": "Adj hozzá vagy frissíts kapcsolt fiókokat a ligaadatok előkitöltéséhez.",
-  "sideReadyNow": "Most kész",
-  "sideDays": "{count} nap",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} fényes, {glowy} ragyogó, {starry} csillagos érc maradt",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Fényes érc",
-  "sideGlowyOre": "Ragyogó érc",
-  "sideStarryOre": "Csillagos érc",
-  "sideDailyBonusAdjustment": "Napi bónusz módosítása",
-  "sideExtraShiny": "Extra fényes",
-  "sideExtraGlowy": "Extra ragyogó",
-  "sideExtraStarry": "Extra csillagos",
   "sideZapQuakeTitle": "{zaps} villám + 1 földrengés",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Frissítés",
   "sideOfficialClashLeaderboard": "Hivatalos Clash ranglista",
   "sideAllTownHallsShort": "Minden TH",
-  "sideOwned": "Birtokolt",
-  "sideTarget": "Cél",
-  "sideDailyValue": "napi {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Csökkentés",
   "sideIncrease": "Növelés",
   "sideLevel": "Szint {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Játékosok",
-  "sidePopularClans": "Klánok",
-  "sidePopularWarsCwl": "Háborúk és CWL",
   "rankingPlayerTrophies": "Játékos trófeák",
   "rankingPlayerTrophiesHeading": "Játékos trófeák ranglistája",
   "rankingPlayerBuilder": "Játékos építő",

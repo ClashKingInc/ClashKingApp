@@ -2301,7 +2301,6 @@
   "navigationHome": "Heim",
   "drawerFollowers": "Anhänger",
   "drawerFollowersHelp": "Personen, die eines Ihrer verifizierten verknüpften Konten mit einem Lesezeichen versehen haben.",
-  "drawerPopular": "Beliebt",
   "drawerCalculators": "Taschenrechner",
   "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Upgrade-Tracker",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Passwort anzeigen",
   "tooltipHidePassword": "Passwort verbergen",
   "tooltipRemoveAccount": "Konto entfernen",
-  "popularPlayersTitle": "Spieler",
-  "popularClansTitle": "Beliebte Clans",
-  "popularWarsCwlTitle": "Kriege & CWL",
-  "popularTitle": "Beliebt",
-  "popularSubtitle": "Lesezeichen, verknüpfte Konten und aktive Kriege.",
-  "popularEmptyTitle": "Noch keine beliebten Artikel",
-  "popularEmptyBody": "Setzen Sie ein Lesezeichen für Spieler und Clans oder verknüpfen Sie Konten, um dies zu erreichen.",
   "calculatorsTitle": "Taschenrechner",
-  "calculatorsSubtitle": "Erz, Zap-Beben und Feuerball-Beben.",
-  "calculatorOre": "Erz",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap-Beben",
   "calculatorFireball": "Feuerball",
   "upgradeTrackerTitle": "Upgrade-Tracker",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Versuche eine andere Bestenliste oder einen anderen Standort.",
   "sideRankingsMockups": "ClashKing-Mockups",
   "sideStatsTitle": "Statistiken",
-  "sideStatsSubtitle": "Bestenlistenstatistiken aus offiziellen Clash-API-Quellen.",
-  "sideStatsLoadError": "Bestenlistenstatistiken konnten nicht geladen werden.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Höchstwert",
   "sideTop200Avg": "Top-200-Durchschnitt",
   "sideBasesArmiesTitle": "Basen & Armeen",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Zusammensetzung, Zauber, Belagerung, Notizen und Freigabelink.",
   "sideGameAssetsTitle": "Spiel-Assets",
   "sideGameAssetsSubtitle": "Gehostete ClashKing-Assets, nach Ordner gruppiert.",
-  "sideNoLinkedPlayersTitle": "Keine verknüpften Spieler geladen",
-  "sideNoLinkedPlayersBody": "Füge verknüpfte Konten hinzu oder aktualisiere sie, um Ligadaten vorab auszufüllen.",
-  "sideReadyNow": "Jetzt bereit",
-  "sideDays": "{count} Tage",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} Glanz-, {glowy} Glüh-, {starry} Sternen-Erz übrig",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Glanz-Erz",
-  "sideGlowyOre": "Glüh-Erz",
-  "sideStarryOre": "Sternen-Erz",
-  "sideDailyBonusAdjustment": "Anpassung des Tagesbonus",
-  "sideExtraShiny": "Extra Glanz",
-  "sideExtraGlowy": "Extra Glüh",
-  "sideExtraStarry": "Extra Sternen",
   "sideZapQuakeTitle": "{zaps} Blitz + 1 Erdbeben",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Aktualisieren",
   "sideOfficialClashLeaderboard": "Offizielle Clash-Bestenliste",
   "sideAllTownHallsShort": "Alle RH",
-  "sideOwned": "Besessen",
-  "sideTarget": "Ziel",
-  "sideDailyValue": "täglich {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Verringern",
   "sideIncrease": "Erhöhen",
   "sideLevel": "Stufe {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Spieler",
-  "sidePopularClans": "Beliebte Clans",
-  "sidePopularWarsCwl": "Kriege & CWL",
   "rankingPlayerTrophies": "Spielertrophäen",
   "rankingPlayerTrophiesHeading": "Rangliste der Spielertrophäen",
   "rankingPlayerBuilder": "Spieler-Baumeister",

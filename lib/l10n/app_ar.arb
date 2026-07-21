@@ -2301,7 +2301,6 @@
   "navigationHome": "بيت",
   "drawerFollowers": "المتابعون",
   "drawerFollowersHelp": "الأشخاص الذين وضعوا إشارة مرجعية على أحد حساباتك المرتبطة التي تم التحقق منها.",
-  "drawerPopular": "شائع",
   "drawerCalculators": "الآلات الحاسبة",
   "drawerSubscription": "الاشتراك",
   "drawerUpgradeTracker": "ترقية المقتفي",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "إظهار كلمة المرور",
   "tooltipHidePassword": "إخفاء كلمة المرور",
   "tooltipRemoveAccount": "إزالة الحساب",
-  "popularPlayersTitle": "اللاعبين",
-  "popularClansTitle": "العشائر",
-  "popularWarsCwlTitle": "الحروب وCWL",
-  "popularTitle": "شائع",
-  "popularSubtitle": "الإشارات المرجعية والحسابات المرتبطة والحروب النشطة.",
-  "popularEmptyTitle": "لا توجد عناصر شعبية حتى الآن",
-  "popularEmptyBody": "قم بوضع إشارة مرجعية على اللاعبين والعشائر أو قم بربط الحسابات لتأسيس هذا.",
   "calculatorsTitle": "الآلات الحاسبة",
-  "calculatorsSubtitle": "خام، زلزال انطلق، وزلزال كرة نارية.",
-  "calculatorOre": "خام",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "زلزال زاب",
   "calculatorFireball": "كرة نارية",
   "upgradeTrackerTitle": "ترقية المقتفي",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "جرّب لوحة صدارة أو موقعًا آخر.",
   "sideRankingsMockups": "نماذج ClashKing",
   "sideStatsTitle": "الإحصاءات",
-  "sideStatsSubtitle": "إحصاءات لوحات الصدارة من واجهات Clash API الرسمية.",
-  "sideStatsLoadError": "تعذر تحميل إحصاءات لوحة الصدارة.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "أعلى نتيجة",
   "sideTop200Avg": "متوسط أفضل 200",
   "sideBasesArmiesTitle": "القواعد والجيوش",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "التشكيلة، التعاويذ، الحصار، الملاحظات، ورابط المشاركة.",
   "sideGameAssetsTitle": "أصول اللعبة",
   "sideGameAssetsSubtitle": "أصول ClashKing المستضافة، مجمّعة حسب المجلد.",
-  "sideNoLinkedPlayersTitle": "لم يتم تحميل لاعبين مرتبطين",
-  "sideNoLinkedPlayersBody": "أضف الحسابات المرتبطة أو حدّثها لملء بيانات الدوري مسبقًا.",
-  "sideReadyNow": "جاهز الآن",
-  "sideDays": "{count} أيام",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "تبقى {shiny} لامع، {glowy} متوهج، {starry} نجمي",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "خام لامع",
-  "sideGlowyOre": "خام متوهج",
-  "sideStarryOre": "خام نجمي",
-  "sideDailyBonusAdjustment": "تعديل المكافأة اليومية",
-  "sideExtraShiny": "لامع إضافي",
-  "sideExtraGlowy": "متوهج إضافي",
-  "sideExtraStarry": "نجمي إضافي",
   "sideZapQuakeTitle": "{zaps} برق + زلزال واحد",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "تحديث",
   "sideOfficialClashLeaderboard": "لوحة صدارة Clash الرسمية",
   "sideAllTownHallsShort": "كل القاعات",
-  "sideOwned": "مملوك",
-  "sideTarget": "الهدف",
-  "sideDailyValue": "يوميًا {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "إنقاص",
   "sideIncrease": "زيادة",
   "sideLevel": "المستوى {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "اللاعبون",
-  "sidePopularClans": "القبائل",
-  "sidePopularWarsCwl": "الحروب وCWL",
   "rankingPlayerTrophies": "كؤوس اللاعبين",
   "rankingPlayerTrophiesHeading": "تصنيف كؤوس اللاعبين",
   "rankingPlayerBuilder": "بنّاء اللاعب",

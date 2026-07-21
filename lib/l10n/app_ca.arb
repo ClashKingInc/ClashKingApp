@@ -2301,7 +2301,6 @@
   "navigationHome": "Casa",
   "drawerFollowers": "Seguidors",
   "drawerFollowersHelp": "Persones que han marcat un dels vostres comptes enllaçats verificats.",
-  "drawerPopular": "Populars",
   "drawerCalculators": "Calculadores",
   "drawerSubscription": "Subscripció",
   "drawerUpgradeTracker": "Actualitza el rastrejador",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Mostra la contrasenya",
   "tooltipHidePassword": "Amaga la contrasenya",
   "tooltipRemoveAccount": "Elimina el compte",
-  "popularPlayersTitle": "Jugadors",
-  "popularClansTitle": "Clans populars",
-  "popularWarsCwlTitle": "Guerres i CWL",
-  "popularTitle": "Contingut popular",
-  "popularSubtitle": "Adreces d'interès, comptes enllaçats i guerres actives.",
-  "popularEmptyTitle": "Encara no hi ha articles populars",
-  "popularEmptyBody": "Afegiu jugadors i clans a les adreces d'interès o enllaceu comptes per iniciar-ho.",
   "calculatorsTitle": "Calculadores",
-  "calculatorsSubtitle": "Mineral, terratrèmol zap i terratrèmol de bola de foc.",
-  "calculatorOre": "mineral",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Sisme Zap",
   "calculatorFireball": "Bola de foc",
   "upgradeTrackerTitle": "Actualitza el rastrejador",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Prova una altra classificació o ubicació.",
   "sideRankingsMockups": "Maquetes de ClashKing",
   "sideStatsTitle": "Estadístiques",
-  "sideStatsSubtitle": "Estadístiques de classificació de les superfícies oficials de l'API de Clash.",
-  "sideStatsLoadError": "No s'han pogut carregar les estadístiques de classificació.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Puntuació màxima",
   "sideTop200Avg": "Mitjana top 200",
   "sideBasesArmiesTitle": "Bases i exèrcits",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Composició, encanteris, setge, notes i enllaç per compartir.",
   "sideGameAssetsTitle": "Recursos del joc",
   "sideGameAssetsSubtitle": "Recursos allotjats de ClashKing, agrupats per carpeta.",
-  "sideNoLinkedPlayersTitle": "No s'han carregat jugadors enllaçats",
-  "sideNoLinkedPlayersBody": "Afegeix o actualitza comptes enllaçats per emplenar prèviament les dades de lliga.",
-  "sideReadyNow": "A punt ara",
-  "sideDays": "{count} dies",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "queden {shiny} lluent, {glowy} brillant, {starry} estel·lar",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Mineral lluent",
-  "sideGlowyOre": "Mineral brillant",
-  "sideStarryOre": "Mineral estel·lar",
-  "sideDailyBonusAdjustment": "Ajust del bonus diari",
-  "sideExtraShiny": "Lluent extra",
-  "sideExtraGlowy": "Brillant extra",
-  "sideExtraStarry": "Estel·lar extra",
   "sideZapQuakeTitle": "{zaps} llamps + 1 terratrèmol",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Actualitza",
   "sideOfficialClashLeaderboard": "Classificació oficial de Clash",
   "sideAllTownHallsShort": "Tots els Aj.",
-  "sideOwned": "Tingut",
-  "sideTarget": "Objectiu",
-  "sideDailyValue": "diari {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Redueix",
   "sideIncrease": "Augmenta",
   "sideLevel": "Nivell {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Jugadors",
-  "sidePopularClans": "Clans populars",
-  "sidePopularWarsCwl": "Guerres i CWL",
   "rankingPlayerTrophies": "Trofeus de jugador",
   "rankingPlayerTrophiesHeading": "Classificació de trofeus de jugadors",
   "rankingPlayerBuilder": "Constructor del jugador",

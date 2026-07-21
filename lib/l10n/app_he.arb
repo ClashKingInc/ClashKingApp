@@ -2301,7 +2301,6 @@
   "navigationHome": "בַּיִת",
   "drawerFollowers": "עוקבים",
   "drawerFollowersHelp": "אנשים שסימנו אחד מהחשבונות המאומתים המקושרים שלך.",
-  "drawerPopular": "פּוֹפּוּלָרִי",
   "drawerCalculators": "מחשבונים",
   "drawerSubscription": "מִנוּי",
   "drawerUpgradeTracker": "שדרוג Tracker",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "הצג סיסמה",
   "tooltipHidePassword": "הסתר את הסיסמה",
   "tooltipRemoveAccount": "הסר חשבון",
-  "popularPlayersTitle": "שחקנים",
-  "popularClansTitle": "שבטים",
-  "popularWarsCwlTitle": "מלחמות ו-CWL",
-  "popularTitle": "פּוֹפּוּלָרִי",
-  "popularSubtitle": "סימניות, חשבונות מקושרים ומלחמות פעילות.",
-  "popularEmptyTitle": "עדיין אין פריטים פופולריים",
-  "popularEmptyBody": "סמן שחקנים ושבטים או קשר חשבונות כדי לראות זאת.",
   "calculatorsTitle": "מחשבונים",
-  "calculatorsSubtitle": "עפרה, רעידת זאפ ורעידת כדור אש.",
-  "calculatorOre": "בֶּצֶר",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "רעידת זאפ",
   "calculatorFireball": "כדור אש",
   "upgradeTrackerTitle": "שדרוג Tracker",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "נסה לוח דירוג או מיקום אחר.",
   "sideRankingsMockups": "מוקאפ ClashKing",
   "sideStatsTitle": "סטטיסטיקות",
-  "sideStatsSubtitle": "סטטיסטיקות לוח דירוג ממשטחי Clash API רשמיים.",
-  "sideStatsLoadError": "לא ניתן לטעון סטטיסטיקות דירוג.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "הציון הגבוה ביותר",
   "sideTop200Avg": "ממוצע Top 200",
   "sideBasesArmiesTitle": "בסיסים וצבאות",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "הרכב, שיקויים, מצור, הערות וקישור שיתוף.",
   "sideGameAssetsTitle": "נכסי משחק",
   "sideGameAssetsSubtitle": "נכסי ClashKing מאוחסנים, מקובצים לפי תיקייה.",
-  "sideNoLinkedPlayersTitle": "לא נטענו שחקנים מקושרים",
-  "sideNoLinkedPlayersBody": "הוסף או רענן חשבונות מקושרים כדי למלא מראש נתוני ליגה.",
-  "sideReadyNow": "מוכן עכשיו",
-  "sideDays": "{count} ימים",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "נותרו {shiny} נוצצת, {glowy} זוהרת, {starry} כוכבים",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "עפרה נוצצת",
-  "sideGlowyOre": "עפרה זוהרת",
-  "sideStarryOre": "עפרת כוכבים",
-  "sideDailyBonusAdjustment": "התאמת בונוס יומי",
-  "sideExtraShiny": "נוצצת נוספת",
-  "sideExtraGlowy": "זוהרת נוספת",
-  "sideExtraStarry": "כוכבים נוספת",
   "sideZapQuakeTitle": "{zaps} ברקים + רעידת אדמה אחת",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "רענן",
   "sideOfficialClashLeaderboard": "לוח דירוג Clash רשמי",
   "sideAllTownHallsShort": "כל ה-TH",
-  "sideOwned": "בבעלות",
-  "sideTarget": "יעד",
-  "sideDailyValue": "יומי {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "הפחת",
   "sideIncrease": "הגדל",
   "sideLevel": "רמה {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "שחקנים",
-  "sidePopularClans": "קלאנים",
-  "sidePopularWarsCwl": "מלחמות ו-CWL",
   "rankingPlayerTrophies": "גביעי שחקנים",
   "rankingPlayerTrophiesHeading": "דירוג גביעי שחקנים",
   "rankingPlayerBuilder": "שחקני בסיס הבנאי",

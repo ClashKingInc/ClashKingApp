@@ -2301,7 +2301,6 @@
   "navigationHome": "Ev",
   "drawerFollowers": "Takipçiler",
   "drawerFollowersHelp": "Doğrulanmış bağlı hesaplarınızdan birine yer işareti koyan kişiler.",
-  "drawerPopular": "Popüler",
   "drawerCalculators": "Hesap makineleri",
   "drawerSubscription": "Abonelik",
   "drawerUpgradeTracker": "Yükseltme Takipçisi",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Şifreyi göster",
   "tooltipHidePassword": "Şifreyi gizle",
   "tooltipRemoveAccount": "Hesabı kaldır",
-  "popularPlayersTitle": "Oyuncular",
-  "popularClansTitle": "Klanlar",
-  "popularWarsCwlTitle": "Savaşlar ve CWL",
-  "popularTitle": "Popüler",
-  "popularSubtitle": "Yer imleri, bağlantılı hesaplar ve aktif savaşlar.",
-  "popularEmptyTitle": "Henüz popüler öğe yok",
-  "popularEmptyBody": "Bunu tohumlamak için oyuncuları ve klanları işaretleyin veya hesapları bağlayın.",
   "calculatorsTitle": "Hesap makineleri",
-  "calculatorsSubtitle": "Cevher, zap depremi ve ateş topu depremi.",
-  "calculatorOre": "cevher",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap depremi",
   "calculatorFireball": "Ateş topu",
   "upgradeTrackerTitle": "Yükseltme Takipçisi",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Başka bir lider tablosu veya konum dene.",
   "sideRankingsMockups": "ClashKing mockup’ları",
   "sideStatsTitle": "İstatistikler",
-  "sideStatsSubtitle": "Resmi Clash API yüzeylerinden lider tablosu istatistikleri.",
-  "sideStatsLoadError": "Lider tablosu istatistikleri yüklenemedi.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "En yüksek skor",
   "sideTop200Avg": "Top 200 ort.",
   "sideBasesArmiesTitle": "Üsler ve ordular",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Kompozisyon, büyüler, kuşatma, notlar ve paylaşım bağlantısı.",
   "sideGameAssetsTitle": "Oyun varlıkları",
   "sideGameAssetsSubtitle": "Klasöre göre gruplanmış barındırılan ClashKing varlıkları.",
-  "sideNoLinkedPlayersTitle": "Bağlı oyuncu yüklenmedi",
-  "sideNoLinkedPlayersBody": "Lig verilerini önceden doldurmak için bağlı hesap ekle veya yenile.",
-  "sideReadyNow": "Şimdi hazır",
-  "sideDays": "{count} gün",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} parlak, {glowy} ışıldayan, {starry} yıldızlı cevher kaldı",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Parlak cevher",
-  "sideGlowyOre": "Işıldayan cevher",
-  "sideStarryOre": "Yıldızlı cevher",
-  "sideDailyBonusAdjustment": "Günlük bonus ayarı",
-  "sideExtraShiny": "Ekstra parlak",
-  "sideExtraGlowy": "Ekstra ışıldayan",
-  "sideExtraStarry": "Ekstra yıldızlı",
   "sideZapQuakeTitle": "{zaps} yıldırım + 1 deprem",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Yenile",
   "sideOfficialClashLeaderboard": "Resmi Clash lider tablosu",
   "sideAllTownHallsShort": "Tüm BB",
-  "sideOwned": "Sahip olunan",
-  "sideTarget": "Hedef",
-  "sideDailyValue": "günlük {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Azalt",
   "sideIncrease": "Artır",
   "sideLevel": "Seviye {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Oyuncular",
-  "sidePopularClans": "Klanlar",
-  "sidePopularWarsCwl": "Savaşlar ve CWL",
   "rankingPlayerTrophies": "Oyuncu kupaları",
   "rankingPlayerTrophiesHeading": "Oyuncu Kupaları Sıralaması",
   "rankingPlayerBuilder": "Oyuncu inşaatçı",

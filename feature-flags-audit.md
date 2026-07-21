@@ -17,11 +17,9 @@ Audit date: 2026-07-15. Scope: Flutter navigation, startup services, remote cont
 | `notifications` | Firebase initialization, device registration, notification settings | on | Operational kill switch; established feature |
 | `posts` | Posts archive navigation | on | Remote content dependency |
 | `home_announcements` | Automatic featured story presentation | on | Remotely-authored interruptive UI |
-| `popular_insights` | Locally-derived Popular screen | off | Heuristic score is not genuine global popularity |
 | `leaderboards` | Official proxy-backed rankings | on | External proxy/API dependency |
-| `leaderboard_previews` | Unfinished endpoint mockups under rankings | off | Preview-only content |
 | `global_stats` | Proxy-backed aggregate ranking statistics | on | External proxy/API dependency |
-| `calculators` | Ore, ZapQuake, and Fireball calculators | on | Complex formulas can be remotely withdrawn |
+| `calculators` | ZapQuake and Fireball calculators | on | Complex formulas can be remotely withdrawn |
 | `subscription_support` | `$1.99/month` support placeholder | off | No purchase flow exists |
 | `upgrade_tracker` | Upgrade tracker and remote game-data parsing | on | Large, fast-moving feature with external data assumptions |
 | `bases_armies` | Discord-synced bases/armies placeholder | off | No synchronized payload is implemented |
@@ -57,5 +55,4 @@ Audit date: 2026-07-15. Scope: Flutter navigation, startup services, remote cont
 - Restore CWL history only after the endpoint returns verified season data.
 - Implement store purchase and restore flows before enabling subscription support.
 - Implement Discord bases/armies payload synchronization before enabling that entry.
-- Replace Popular's local bookmark-weighted heuristic with tracked aggregate signals or rename the feature clearly.
 - Implement real account connect/disconnect actions before enabling account connections.

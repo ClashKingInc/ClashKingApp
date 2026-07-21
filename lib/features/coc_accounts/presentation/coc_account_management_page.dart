@@ -43,7 +43,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DeepLinkHandler.tryHandlePendingDeepLink(context);
     });
-    if (cocService.cocAccounts.isEmpty) {
+    if (!cocService.hasVerifiedAccounts) {
       setState(() {
         _isFirstConnection = true;
       });
@@ -99,7 +99,20 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       return;
     }
 
-    // Navigate to the home page
+    if (!cocService.hasVerifiedAccounts) {
+      if (mounted) {
+        Navigator.of(context).pop();
+        setState(() {
+          _errorMessage = AppLocalizations.of(
+            context,
+          )!.homeVerifiedAccountRequiredBody;
+          _isFirstConnection = true;
+        });
+      }
+      return;
+    }
+
+    // Navigate to the home page only after a verified link exists.
     if (mounted) {
       Navigator.of(context).pop();
       Navigator.of(context).pushReplacement(
@@ -777,6 +790,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final playerService = context.read<PlayerService>();
     final cocService = context.read<CocAccountService>();
     setState(() {
+      _isFirstConnection = !cocService.hasVerifiedAccounts;
       _tempUserAccounts = cocService.cocAccounts.map((account) {
         String playerTag = account["player_tag"];
 

@@ -78,8 +78,7 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen> {
           final tag = _normalizeTag(player.tag);
           final isCurrentAccount =
               myAccountTags.contains(tag) || bookmarkedTags.contains(tag);
-          return isCurrentAccount &&
-              playerPrefs.isTodoOnHomeEnabled(player.tag);
+          return isCurrentAccount && playerPrefs.isShownInTodoPage(player.tag);
         })
         .toList(growable: false);
     final searchedPlayers = todoPagePlayers

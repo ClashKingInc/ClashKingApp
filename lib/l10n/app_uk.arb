@@ -2301,7 +2301,6 @@
   "navigationHome": "додому",
   "drawerFollowers": "Послідовники",
   "drawerFollowersHelp": "Люди, які зробили закладку для одного з ваших перевірених пов’язаних облікових записів.",
-  "drawerPopular": "Популярний",
   "drawerCalculators": "Калькулятори",
   "drawerSubscription": "Підписка",
   "drawerUpgradeTracker": "Відстеження оновлень",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Показати пароль",
   "tooltipHidePassword": "Приховати пароль",
   "tooltipRemoveAccount": "Видалити обліковий запис",
-  "popularPlayersTitle": "Гравці",
-  "popularClansTitle": "Клани",
-  "popularWarsCwlTitle": "Війни та CWL",
-  "popularTitle": "Популярний",
-  "popularSubtitle": "Закладки, зв'язані облікові записи та активні війни.",
-  "popularEmptyTitle": "Популярних товарів ще немає",
-  "popularEmptyBody": "Додайте гравців і клани в закладки або зв’яжіть облікові записи, щоб створити це.",
   "calculatorsTitle": "Калькулятори",
-  "calculatorsSubtitle": "Землетрус в Оре, Зап і вогненна куля.",
-  "calculatorOre": "Руда",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Зап землетрус",
   "calculatorFireball": "вогняна куля",
   "upgradeTrackerTitle": "Відстеження оновлень",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Спробуйте іншу таблицю лідерів або локацію.",
   "sideRankingsMockups": "Макети ClashKing",
   "sideStatsTitle": "Статистика",
-  "sideStatsSubtitle": "Статистика таблиць лідерів з офіційних поверхонь Clash API.",
-  "sideStatsLoadError": "Не вдалося завантажити статистику таблиці лідерів.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Найкращий результат",
   "sideTop200Avg": "Середнє Top 200",
   "sideBasesArmiesTitle": "Бази та армії",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Склад, закляття, облогова машина, нотатки й посилання для поширення.",
   "sideGameAssetsTitle": "Ігрові ресурси",
   "sideGameAssetsSubtitle": "Розміщені ресурси ClashKing, згруповані за папками.",
-  "sideNoLinkedPlayersTitle": "Прив’язаних гравців не завантажено",
-  "sideNoLinkedPlayersBody": "Додайте або оновіть прив’язані акаунти, щоб попередньо заповнити дані ліги.",
-  "sideReadyNow": "Готово зараз",
-  "sideDays": "{count} дн.",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "залишилось: {shiny} блискучої, {glowy} сяйливої, {starry} зоряної",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Блискуча руда",
-  "sideGlowyOre": "Сяйлива руда",
-  "sideStarryOre": "Зоряна руда",
-  "sideDailyBonusAdjustment": "Коригування щоденного бонусу",
-  "sideExtraShiny": "Додаткова блискуча",
-  "sideExtraGlowy": "Додаткова сяйлива",
-  "sideExtraStarry": "Додаткова зоряна",
   "sideZapQuakeTitle": "{zaps} блискавок + 1 землетрус",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Оновити",
   "sideOfficialClashLeaderboard": "Офіційна таблиця лідерів Clash",
   "sideAllTownHallsShort": "Усі ратуші",
-  "sideOwned": "Є у вас",
-  "sideTarget": "Ціль",
-  "sideDailyValue": "щодня {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Зменшити",
   "sideIncrease": "Збільшити",
   "sideLevel": "Рівень {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Гравці",
-  "sidePopularClans": "Клани",
-  "sidePopularWarsCwl": "Війни та Ліга війн кланів",
   "rankingPlayerTrophies": "Трофеї гравців",
   "rankingPlayerTrophiesHeading": "Рейтинг гравців за трофеями",
   "rankingPlayerBuilder": "Гравці: будівельник",

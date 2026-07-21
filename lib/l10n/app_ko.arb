@@ -2301,7 +2301,6 @@
   "navigationHome": "집",
   "drawerFollowers": "추종자",
   "drawerFollowersHelp": "확인된 연결 계정 중 하나를 북마크한 사람들입니다.",
-  "drawerPopular": "인기 있는",
   "drawerCalculators": "계산기",
   "drawerSubscription": "신청",
   "drawerUpgradeTracker": "업그레이드 추적기",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "비밀번호 표시",
   "tooltipHidePassword": "비밀번호 숨기기",
   "tooltipRemoveAccount": "계정 삭제",
-  "popularPlayersTitle": "플레이어",
-  "popularClansTitle": "클랜",
-  "popularWarsCwlTitle": "전쟁과 CWL",
-  "popularTitle": "인기 있는",
-  "popularSubtitle": "북마크, 연결된 계정, 진행 중인 전쟁.",
-  "popularEmptyTitle": "아직 인기상품이 없습니다",
-  "popularEmptyBody": "플레이어와 클랜을 북마크하거나 계정을 연결하여 시드하세요.",
   "calculatorsTitle": "계산기",
-  "calculatorsSubtitle": "광석, Zap 지진 및 불 덩어리 지진.",
-  "calculatorOre": "광석",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "잽 지진",
   "calculatorFireball": "화구",
   "upgradeTrackerTitle": "업그레이드 추적기",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "다른 리더보드나 위치를 시도하세요.",
   "sideRankingsMockups": "ClashKing 목업",
   "sideStatsTitle": "통계",
-  "sideStatsSubtitle": "공식 Clash API 화면의 리더보드 통계.",
-  "sideStatsLoadError": "리더보드 통계를 불러올 수 없습니다.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "최고 점수",
   "sideTop200Avg": "상위 200 평균",
   "sideBasesArmiesTitle": "기지 및 군대",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "구성, 마법, 시즈, 메모, 공유 링크.",
   "sideGameAssetsTitle": "게임 에셋",
   "sideGameAssetsSubtitle": "폴더별로 묶인 호스팅 ClashKing 에셋.",
-  "sideNoLinkedPlayersTitle": "연결된 플레이어를 불러오지 않았습니다",
-  "sideNoLinkedPlayersBody": "리그 데이터를 미리 채우려면 연결 계정을 추가하거나 새로고침하세요.",
-  "sideReadyNow": "지금 준비됨",
-  "sideDays": "{count}일",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "빛나는 광석 {shiny}, 반짝 광석 {glowy}, 별빛 광석 {starry} 남음",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "빛나는 광석",
-  "sideGlowyOre": "반짝 광석",
-  "sideStarryOre": "별빛 광석",
-  "sideDailyBonusAdjustment": "일일 보너스 조정",
-  "sideExtraShiny": "추가 빛나는 광석",
-  "sideExtraGlowy": "추가 반짝 광석",
-  "sideExtraStarry": "추가 별빛 광석",
   "sideZapQuakeTitle": "번개 {zaps}개 + 지진 1개",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "새로고침",
   "sideOfficialClashLeaderboard": "공식 Clash 리더보드",
   "sideAllTownHallsShort": "모든 TH",
-  "sideOwned": "보유",
-  "sideTarget": "목표",
-  "sideDailyValue": "일일 {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "감소",
   "sideIncrease": "증가",
   "sideLevel": "레벨 {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "플레이어",
-  "sidePopularClans": "클랜",
-  "sidePopularWarsCwl": "전쟁 및 CWL",
   "rankingPlayerTrophies": "플레이어 트로피",
   "rankingPlayerTrophiesHeading": "플레이어 트로피 순위",
   "rankingPlayerBuilder": "플레이어 장인",

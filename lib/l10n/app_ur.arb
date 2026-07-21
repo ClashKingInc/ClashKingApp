@@ -2301,7 +2301,6 @@
   "navigationHome": "گھر",
   "drawerFollowers": "پیروکار",
   "drawerFollowersHelp": "وہ لوگ جنہوں نے آپ کے تصدیق شدہ لنک کردہ اکاؤنٹس میں سے ایک کو بک مارک کیا۔",
-  "drawerPopular": "مقبول",
   "drawerCalculators": "کیلکولیٹر",
   "drawerSubscription": "رکنیت",
   "drawerUpgradeTracker": "ٹریکر کو اپ گریڈ کریں۔",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "پاس ورڈ دکھائیں۔",
   "tooltipHidePassword": "پاس ورڈ چھپائیں۔",
   "tooltipRemoveAccount": "اکاؤنٹ ہٹا دیں۔",
-  "popularPlayersTitle": "کھلاڑی",
-  "popularClansTitle": "قبیلے",
-  "popularWarsCwlTitle": "جنگیں اور سی ڈبلیو ایل",
-  "popularTitle": "مقبول",
-  "popularSubtitle": "بک مارکس، منسلک اکاؤنٹس، اور فعال جنگیں.",
-  "popularEmptyTitle": "ابھی تک کوئی مشہور آئٹم نہیں ہے۔",
-  "popularEmptyBody": "کھلاڑیوں اور قبیلوں کو بُک مارک کریں یا اسے سیڈ کرنے کے لیے اکاؤنٹس کو لنک کریں۔",
   "calculatorsTitle": "کیلکولیٹر",
-  "calculatorsSubtitle": "ایسک، زپ زلزلہ، اور فائر بال کا زلزلہ۔",
-  "calculatorOre": "کچ دھات",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "زپ زلزلہ",
   "calculatorFireball": "آگ کا گولہ",
   "upgradeTrackerTitle": "ٹریکر کو اپ گریڈ کریں۔",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "کوئی دوسرا لیڈر بورڈ یا مقام آزمائیں۔",
   "sideRankingsMockups": "ClashKing موک اَپس",
   "sideStatsTitle": "اعدادوشمار",
-  "sideStatsSubtitle": "آفیشل Clash API ذرائع سے لیڈر بورڈ اعدادوشمار۔",
-  "sideStatsLoadError": "لیڈر بورڈ اعدادوشمار لوڈ نہیں ہو سکے۔",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "ٹاپ اسکور",
   "sideTop200Avg": "ٹاپ 200 اوسط",
   "sideBasesArmiesTitle": "بیسز اور آرميز",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "کمپوزیشن، اسپیلز، سیج، نوٹس، اور شیئر لنک۔",
   "sideGameAssetsTitle": "گیم اثاثے",
   "sideGameAssetsSubtitle": "Hosted ClashKing اثاثے، فولڈر کے لحاظ سے گروپ شدہ۔",
-  "sideNoLinkedPlayersTitle": "کوئی لنکڈ پلیئر لوڈ نہیں",
-  "sideNoLinkedPlayersBody": "لیگ ڈیٹا پہلے سے بھرنے کے لیے لنکڈ اکاؤنٹس شامل یا ریفریش کریں۔",
-  "sideReadyNow": "اب تیار",
-  "sideDays": "{count} دن",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} شائنی، {glowy} گلوئی، {starry} اسٹاری باقی",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "شائنی اور",
-  "sideGlowyOre": "گلوئی اور",
-  "sideStarryOre": "اسٹاری اور",
-  "sideDailyBonusAdjustment": "روزانہ بونس ایڈجسٹمنٹ",
-  "sideExtraShiny": "اضافی شائنی",
-  "sideExtraGlowy": "اضافی گلوئی",
-  "sideExtraStarry": "اضافی اسٹاری",
   "sideZapQuakeTitle": "{zaps} لائٹننگ + 1 کوئیک",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "ریفریش",
   "sideOfficialClashLeaderboard": "آفیشل Clash لیڈر بورڈ",
   "sideAllTownHallsShort": "تمام TH",
-  "sideOwned": "ملکیت میں",
-  "sideTarget": "ہدف",
-  "sideDailyValue": "روزانہ {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "کم کریں",
   "sideIncrease": "بڑھائیں",
   "sideLevel": "سطح {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "کھلاڑی",
-  "sidePopularClans": "کلینز",
-  "sidePopularWarsCwl": "وارز اور CWL",
   "rankingPlayerTrophies": "کھلاڑیوں کی ٹرافیاں",
   "rankingPlayerTrophiesHeading": "کھلاڑیوں کی ٹرافی رینکنگ",
   "rankingPlayerBuilder": "کھلاڑی بلڈر",

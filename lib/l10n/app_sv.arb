@@ -2301,7 +2301,6 @@
   "navigationHome": "Hem",
   "drawerFollowers": "Följare",
   "drawerFollowersHelp": "Personer som bokmärkt ett av dina verifierade länkade konton.",
-  "drawerPopular": "Populär",
   "drawerCalculators": "Miniräknare",
   "drawerSubscription": "Prenumeration",
   "drawerUpgradeTracker": "Uppgradera Tracker",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Visa lösenord",
   "tooltipHidePassword": "Dölj lösenord",
   "tooltipRemoveAccount": "Ta bort konto",
-  "popularPlayersTitle": "Spelare",
-  "popularClansTitle": "Klaner",
-  "popularWarsCwlTitle": "Krig och CWL",
-  "popularTitle": "Populär",
-  "popularSubtitle": "Bokmärken, länkade konton och aktiva krig.",
-  "popularEmptyTitle": "Inga populära föremål ännu",
-  "popularEmptyBody": "Bokmärk spelare och klaner eller länka konton för att se detta.",
   "calculatorsTitle": "Miniräknare",
-  "calculatorsSubtitle": "Malm, zap quake och fireball quake.",
-  "calculatorOre": "Malm",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap jordbävning",
   "calculatorFireball": "Eldkula",
   "upgradeTrackerTitle": "Uppgradera Tracker",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Prova en annan topplista eller plats.",
   "sideRankingsMockups": "ClashKing-mockups",
   "sideStatsTitle": "Statistik",
-  "sideStatsSubtitle": "Toppliste-statistik från officiella Clash API-ytor.",
-  "sideStatsLoadError": "Kunde inte läsa in topplistestatistik.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Bästa poäng",
   "sideTop200Avg": "Top 200-snitt",
   "sideBasesArmiesTitle": "Baser och arméer",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Sammansättning, besvärjelser, belägring, anteckningar och delningslänk.",
   "sideGameAssetsTitle": "Spelresurser",
   "sideGameAssetsSubtitle": "Hostade ClashKing-resurser, grupperade efter mapp.",
-  "sideNoLinkedPlayersTitle": "Inga länkade spelare inlästa",
-  "sideNoLinkedPlayersBody": "Lägg till eller uppdatera länkade konton för att förifylla ligadata.",
-  "sideReadyNow": "Klar nu",
-  "sideDays": "{count} dagar",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} skinande, {glowy} glödande, {starry} stjärnmalm kvar",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Skinande malm",
-  "sideGlowyOre": "Glödande malm",
-  "sideStarryOre": "Stjärnmalm",
-  "sideDailyBonusAdjustment": "Justering av daglig bonus",
-  "sideExtraShiny": "Extra skinande",
-  "sideExtraGlowy": "Extra glödande",
-  "sideExtraStarry": "Extra stjärnmalm",
   "sideZapQuakeTitle": "{zaps} blixtar + 1 jordbävning",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Uppdatera",
   "sideOfficialClashLeaderboard": "Officiell Clash-topplista",
   "sideAllTownHallsShort": "Alla RH",
-  "sideOwned": "Ägd",
-  "sideTarget": "Mål",
-  "sideDailyValue": "dagligen {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Minska",
   "sideIncrease": "Öka",
   "sideLevel": "Nivå {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Spelare",
-  "sidePopularClans": "Klaner",
-  "sidePopularWarsCwl": "Krig och CWL",
   "rankingPlayerTrophies": "Spelartroféer",
   "rankingPlayerTrophiesHeading": "Rankning för spelartroféer",
   "rankingPlayerBuilder": "Spelarbyggare",

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_parser.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
@@ -8,20 +9,55 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UpgradeTrackerRepository {
   UpgradeTrackerRepository({
     UpgradeTrackerParser parser = const UpgradeTrackerParser(),
+    ApiService? apiService,
     // Retained for callers created before freshness moved to app startup.
     bool checkStaticDataFreshness = false,
-  }) : _parser = parser;
+  }) : _parser = parser,
+       _apiService = apiService ?? ApiService.shared;
 
   static const _snapshotPrefix = 'upgrade_tracker_snapshot_v1_';
   static const _snapshotIndexKey = 'upgrade_tracker_snapshot_index_v1';
   static const _preferencesPrefix = 'upgrade_tracker_preferences_v2_';
 
   final UpgradeTrackerParser _parser;
+  final ApiService _apiService;
   final Map<String, UpgradeTrackerSnapshot> _snapshotCache = {};
+  String? _remoteAccountId;
+  Set<String> _verifiedRemoteTags = const {};
+
+  void configureRemote({
+    required String? accountId,
+    required Iterable<String> verifiedPlayerTags,
+  }) {
+    final normalizedId = accountId?.trim();
+    _remoteAccountId = normalizedId == null || normalizedId.isEmpty
+        ? null
+        : normalizedId;
+    _verifiedRemoteTags = verifiedPlayerTags
+        .map(normalizeTag)
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
+  }
 
   Future<UpgradeTrackerSnapshot?> load(String playerTag) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
+    if (_remoteAccountId != null && _verifiedRemoteTags.contains(normalized)) {
+      try {
+        final remote = await _loadRemoteSnapshot(normalized);
+        if (remote != null) {
+          final parsed = _parser.parse(remote);
+          await _saveRawSnapshotLocally(
+            normalized,
+            remote,
+            parsedSnapshot: parsed,
+          );
+          return parsed;
+        }
+      } catch (_) {
+        // The on-device copy remains a deliberate offline fallback.
+      }
+    }
     final cached = _snapshotCache[normalized];
     if (cached != null) return cached;
     final prefs = await SharedPreferences.getInstance();
@@ -46,6 +82,19 @@ class UpgradeTrackerRepository {
     if (normalized.isEmpty) {
       throw const FormatException('Account JSON must include a player tag');
     }
+    await _replaceRemoteSnapshot(normalized, snapshot);
+    await _saveRawSnapshotLocally(
+      normalized,
+      snapshot,
+      parsedSnapshot: parsedSnapshot,
+    );
+  }
+
+  Future<void> _saveRawSnapshotLocally(
+    String normalized,
+    Map<String, dynamic> snapshot, {
+    UpgradeTrackerSnapshot? parsedSnapshot,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('$_snapshotPrefix$normalized', jsonEncode(snapshot));
     final parsed = parsedSnapshot ?? _parser.parse(snapshot);
@@ -147,10 +196,29 @@ class UpgradeTrackerRepository {
   }
 
   Future<Map<String, dynamic>?> loadPlanPreferences(String playerTag) async {
+    final normalized = normalizeTag(playerTag);
+    if (_remoteAccountId != null && _verifiedRemoteTags.contains(normalized)) {
+      try {
+        final response = await _apiService.getResponse(
+          _remoteEndpoint(normalized, 'upgrade-preferences'),
+          requiresAuth: true,
+        );
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+          if (decoded is Map && decoded['preferences'] is Map) {
+            final remote = Map<String, dynamic>.from(
+              decoded['preferences'] as Map,
+            );
+            await _savePlanPreferencesLocally(normalized, remote);
+            return remote;
+          }
+        }
+      } catch (_) {
+        // Fall through to the last on-device preferences.
+      }
+    }
     final prefs = await SharedPreferences.getInstance();
-    final encoded = prefs.getString(
-      '$_preferencesPrefix${normalizeTag(playerTag)}',
-    );
+    final encoded = prefs.getString('$_preferencesPrefix$normalized');
     if (encoded == null) return null;
     final decoded = jsonDecode(encoded);
     return decoded is Map ? Map<String, dynamic>.from(decoded) : null;
@@ -162,15 +230,73 @@ class UpgradeTrackerRepository {
     required String strategy,
     UpgradePlanPreferences preferences = const UpgradePlanPreferences(),
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      '$_preferencesPrefix${normalizeTag(playerTag)}',
-      jsonEncode({
-        'gold_pass_percent': goldPassPercent,
-        'strategy': strategy,
-        'heuristics': preferences.toJson(),
-      }),
+    final normalized = normalizeTag(playerTag);
+    final value = <String, dynamic>{
+      'gold_pass_percent': goldPassPercent,
+      'strategy': strategy,
+      'heuristics': preferences.toJson(),
+    };
+    final accountId = _remoteAccountId;
+    if (accountId != null) {
+      _requireVerifiedRemoteTag(normalized);
+      final response = await _apiService.patchResponse(
+        _remoteEndpoint(normalized, 'upgrade-preferences'),
+        body: {'preferences': value},
+        requiresAuth: true,
+      );
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw StateError(
+          'Could not save upgrade preferences (${response.statusCode})',
+        );
+      }
+    }
+    await _savePlanPreferencesLocally(normalized, value);
+  }
+
+  Future<Map<String, dynamic>?> _loadRemoteSnapshot(String normalized) async {
+    final response = await _apiService.getResponse(
+      _remoteEndpoint(normalized, 'upgrades'),
+      requiresAuth: true,
     );
+    if (response.statusCode < 200 || response.statusCode >= 300) return null;
+    final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+    if (decoded is! Map || decoded['data'] is! Map) return null;
+    final data = Map<String, dynamic>.from(decoded['data'] as Map);
+    return data.isEmpty ? null : data;
+  }
+
+  Future<void> _replaceRemoteSnapshot(
+    String normalized,
+    Map<String, dynamic> snapshot,
+  ) async {
+    final accountId = _remoteAccountId;
+    if (accountId == null) return;
+    _requireVerifiedRemoteTag(normalized);
+    final response = await _apiService.putResponse(
+      _remoteEndpoint(normalized, 'upgrades'),
+      body: {'data': snapshot},
+      requiresAuth: true,
+    );
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw StateError('Could not save upgrade data (${response.statusCode})');
+    }
+  }
+
+  Future<void> _savePlanPreferencesLocally(
+    String normalized,
+    Map<String, dynamic> value,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('$_preferencesPrefix$normalized', jsonEncode(value));
+  }
+
+  String _remoteEndpoint(String playerTag, String resource) =>
+      '/links/${Uri.encodeComponent(_remoteAccountId!)}/${Uri.encodeComponent(playerTag)}/$resource';
+
+  void _requireVerifiedRemoteTag(String tag) {
+    if (!_verifiedRemoteTags.contains(tag)) {
+      throw StateError('Upgrade data is limited to verified linked accounts');
+    }
   }
 
   static String normalizeTag(String value) {

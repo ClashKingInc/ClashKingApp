@@ -28,7 +28,7 @@ class InfoProfileTabs extends StatefulWidget {
 }
 
 class _InfoProfileTabsState extends State<InfoProfileTabs>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late TabController _controller;
 
   @override

@@ -135,7 +135,7 @@ class StartupWidgetState extends State<StartupWidget> {
     Future.microtask(() {
       Widget nextPage;
       if (authService.canUseApp && mounted) {
-        if (context.read<CocAccountService>().cocAccounts.isNotEmpty) {
+        if (context.read<CocAccountService>().hasVerifiedAccounts) {
           nextPage = MyHomePage();
         } else {
           nextPage = AddCocAccountPage();

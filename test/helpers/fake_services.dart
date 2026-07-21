@@ -7,16 +7,18 @@ import 'package:http/http.dart' as http;
 /// A testable [ApiService] that bypasses HTTP and [FlutterSecureStorage]
 /// entirely by returning preset [http.Response] objects for each endpoint.
 ///
-/// Only the four low-level `*Response` methods are overridden so that the
+/// Only the low-level `*Response` methods are overridden so that the
 /// inherited `get()` / `post()` wrappers still run `_handleResponse`, keeping
 /// status-code handling logic under coverage.
 class FakeApiService extends ApiService {
   final Map<String, http.Response> getStubs = {};
   final Map<String, http.Response> postStubs = {};
+  final Map<String, http.Response> queryStubs = {};
   final Map<String, http.Response> putStubs = {};
   final Map<String, http.Response> patchStubs = {};
   final Map<String, http.Response> deleteStubs = {};
   final Map<String, Object?> lastPostBodies = {};
+  final Map<String, Object?> lastQueryBodies = {};
   final Map<String, Object?> lastPutBodies = {};
   final Map<String, Object?> lastPatchBodies = {};
   final Map<String, Object?> lastDeleteBodies = {};
@@ -27,6 +29,7 @@ class FakeApiService extends ApiService {
   /// throw this exception instead of returning a stubbed response.
   final Map<String, Exception> throwOnGet = {};
   final Map<String, Exception> throwOnPost = {};
+  final Map<String, Exception> throwOnQuery = {};
   final Map<String, Exception> throwOnPatch = {};
   final Map<String, Exception> throwOnDelete = {};
 
@@ -59,6 +62,20 @@ class FakeApiService extends ApiService {
     lastPostBodies[endpoint] = body;
     if (throwOnPost.containsKey(endpoint)) throw throwOnPost[endpoint]!;
     return postStubs[endpoint] ?? http.Response('{}', 200);
+  }
+
+  @override
+  Future<http.Response> queryResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) async {
+    lastQueryBodies[endpoint] = body;
+    if (throwOnQuery.containsKey(endpoint)) throw throwOnQuery[endpoint]!;
+    return queryStubs[endpoint] ?? http.Response('{"items":[]}', 200);
   }
 
   @override

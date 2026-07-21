@@ -2301,7 +2301,6 @@
   "navigationHome": "Acasă",
   "drawerFollowers": "Urmaritori",
   "drawerFollowersHelp": "Persoane care au marcat unul dintre conturile dvs. conectate verificate.",
-  "drawerPopular": "Populare",
   "drawerCalculators": "Calculatoare",
   "drawerSubscription": "Abonament",
   "drawerUpgradeTracker": "Tracker îmbunătățiri",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Afișați parola",
   "tooltipHidePassword": "Ascunde parola",
   "tooltipRemoveAccount": "Eliminați contul",
-  "popularPlayersTitle": "Jucători",
-  "popularClansTitle": "Clanuri",
-  "popularWarsCwlTitle": "Războaie și CWL",
-  "popularTitle": "Populare",
-  "popularSubtitle": "Marcaje, conturi conectate și războaie active.",
-  "popularEmptyTitle": "Nu există încă articole populare",
-  "popularEmptyBody": "Marcați jucători și clanuri sau conectați conturi pentru a genera acest lucru.",
   "calculatorsTitle": "Calculatoare",
-  "calculatorsSubtitle": "Minereu, cutremur zap și cutremur minge de foc.",
-  "calculatorOre": "Minereu",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Cutremur Zap",
   "calculatorFireball": "Bolid",
   "upgradeTrackerTitle": "Tracker îmbunătățiri",
@@ -2543,8 +2534,8 @@
   "sideRankingsEmptyBody": "Încearcă alt clasament sau altă locație.",
   "sideRankingsMockups": "Mockup-uri ClashKing",
   "sideStatsTitle": "Statistici",
-  "sideStatsSubtitle": "Statistici de clasament din suprafețele oficiale Clash API.",
-  "sideStatsLoadError": "Nu s-au putut încărca statisticile de clasament.",
+  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsLoadError": "Could not load battle intelligence.",
   "sideTopScore": "Cel mai bun scor",
   "sideTop200Avg": "Media Top 200",
   "sideBasesArmiesTitle": "Baze și armate",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Compoziție, vrăji, asediu, notițe și link de partajare.",
   "sideGameAssetsTitle": "Asset-uri joc",
   "sideGameAssetsSubtitle": "Asset-uri ClashKing găzduite, grupate după folder.",
-  "sideNoLinkedPlayersTitle": "Nu s-au încărcat jucători conectați",
-  "sideNoLinkedPlayersBody": "Adaugă sau reîmprospătează conturile conectate pentru a precompleta datele de ligă.",
-  "sideReadyNow": "Gata acum",
-  "sideDays": "{count} zile",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "au rămas {shiny} lucios, {glowy} strălucitor, {starry} stelar",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Minereu lucios",
-  "sideGlowyOre": "Minereu strălucitor",
-  "sideStarryOre": "Minereu stelar",
-  "sideDailyBonusAdjustment": "Ajustare bonus zilnic",
-  "sideExtraShiny": "Lucios extra",
-  "sideExtraGlowy": "Strălucitor extra",
-  "sideExtraStarry": "Stelar extra",
   "sideZapQuakeTitle": "{zaps} fulgere + 1 cutremur",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Reîmprospătează",
   "sideOfficialClashLeaderboard": "Clasament oficial Clash",
   "sideAllTownHallsShort": "Toate TH",
-  "sideOwned": "Deținut",
-  "sideTarget": "Țintă",
-  "sideDailyValue": "zilnic {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Scade",
   "sideIncrease": "Crește",
   "sideLevel": "Nivel {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Jucători",
-  "sidePopularClans": "Clanuri",
-  "sidePopularWarsCwl": "Războaie și CWL",
   "rankingPlayerTrophies": "Trofee jucători",
   "rankingPlayerTrophiesHeading": "Clasament trofee jucători",
   "rankingPlayerBuilder": "Constructor jucători",

@@ -70,6 +70,28 @@ void main() {
     });
   });
 
+  group('CocAccountService — verified account gate', () {
+    test('requires at least one verified link', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#P1', 'is_verified': false},
+        {'player_tag': '#P2', 'is_verified': true},
+      ]);
+
+      expect(service.hasVerifiedAccounts, isTrue);
+      expect(service.verifiedAccounts, [
+        {'hidden': false, 'player_tag': '#P2', 'is_verified': true},
+      ]);
+    });
+
+    test('does not treat an unverified link as onboarded', () async {
+      final service = await serviceWithAccounts([
+        {'player_tag': '#P1', 'is_verified': false},
+      ]);
+
+      expect(service.hasVerifiedAccounts, isFalse);
+    });
+  });
+
   group('CocAccountService — clearAccountData', () {
     test('resets all fields to defaults', () async {
       final service = await serviceWithAccounts([
