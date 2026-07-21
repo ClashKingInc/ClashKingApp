@@ -19,7 +19,7 @@ enum RankingBoard {
     source: RankingSource.official,
     supportsLocation: true,
     supportsHistory: true,
-    iconUrl: ImageAssets.builderBaseStar,
+    iconUrl: ImageAssets.builderBaseTrophy,
   ),
   playerTownHall(
     audience: RankingAudience.players,
@@ -33,7 +33,7 @@ enum RankingBoard {
     source: RankingSource.clashKing,
     supportsLocation: false,
     supportsHistory: true,
-    iconUrl: ImageAssets.legendBlazon,
+    iconUrl: ImageAssets.legendLeagueOne,
   ),
   clanHome(
     audience: RankingAudience.clans,
@@ -47,7 +47,7 @@ enum RankingBoard {
     source: RankingSource.official,
     supportsLocation: true,
     supportsHistory: true,
-    iconUrl: ImageAssets.builderBaseStar,
+    iconUrl: ImageAssets.builderBaseTrophy,
   ),
   clanCapital(
     audience: RankingAudience.clans,
@@ -153,9 +153,9 @@ class RankingLeagueOption {
   });
 
   static const legendOne = RankingLeagueOption(
-    id: 105000034,
+    id: 105000036,
     name: 'Legend I',
-    iconUrl: ImageAssets.legendBlazon,
+    iconUrl: ImageAssets.legendLeagueOne,
   );
 
   final int id;
@@ -250,9 +250,13 @@ class RankingEntry {
 
     final leagueIcon =
         _nestedString(json['leagueTier'], 'iconUrls.medium') ??
-        _nestedString(json['league'], 'iconUrls.medium') ??
+        _nestedString(json['leagueTier'], 'iconUrls.large') ??
         _nestedString(json['leagueTier'], 'iconUrls.small') ??
-        _nestedString(json['league'], 'iconUrls.small');
+        _nestedString(json['leagueTier'], 'badge') ??
+        _nestedString(json['league'], 'iconUrls.medium') ??
+        _nestedString(json['league'], 'iconUrls.large') ??
+        _nestedString(json['league'], 'iconUrls.small') ??
+        _nestedString(json['league'], 'badge');
     final badgeUrl =
         _nestedString(json['badgeUrls'], 'medium') ??
         _nestedString(json['badge_urls'], 'medium') ??
@@ -260,11 +264,9 @@ class RankingEntry {
     final selectedRankedLeagueIcon = board == RankingBoard.playerRanked
         ? (rankedLeagueIconUrl ?? board.iconUrl)
         : null;
-    final playerImageUrl =
-        selectedRankedLeagueIcon ??
-        (townHall > 0
-            ? ImageAssets.townHall(townHall)
-            : (leagueIcon ?? board.iconUrl));
+    final playerImageUrl = townHall > 0
+        ? ImageAssets.townHall(townHall)
+        : (selectedRankedLeagueIcon ?? leagueIcon ?? board.iconUrl);
     final imageUrl = board.isClan
         ? (badgeUrl.isEmpty ? ImageAssets.clanCastle : badgeUrl)
         : playerImageUrl;

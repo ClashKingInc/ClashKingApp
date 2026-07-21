@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/rankings/models/ranking_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -36,6 +37,11 @@ void main() {
   });
 
   group('RankingEntry', () {
+    test('uses the Builder Base trophy for Builder Base boards', () {
+      expect(RankingBoard.playerBuilder.iconUrl, ImageAssets.builderBaseTrophy);
+      expect(RankingBoard.clanBuilder.iconUrl, ImageAssets.builderBaseTrophy);
+    });
+
     test('decodes official player ranking fields', () {
       final entry = RankingEntry.fromJson({
         'tag': '#PLAYER',
@@ -54,6 +60,26 @@ void main() {
       expect(entry.score, 6012);
       expect(entry.movement, '+6');
       expect(entry.imageUrl, 'https://example.com/league.png');
+    });
+
+    test('prefers every official leagueTier size over legacy league icons', () {
+      final entry = RankingEntry.fromJson({
+        'tag': '#PLAYER',
+        'name': 'Player One',
+        'rank': 1,
+        'trophies': 5492,
+        'league': {
+          'name': 'Legend League',
+          'iconUrls': {'medium': 'https://example.com/legacy-purple.png'},
+        },
+        'leagueTier': {
+          'name': 'Legend I',
+          'iconUrls': {'small': 'https://example.com/legend-one.png'},
+        },
+      }, RankingBoard.playerHome);
+
+      expect(entry.imageUrl, 'https://example.com/legend-one.png');
+      expect(entry.metricImageUrl, 'https://example.com/legend-one.png');
     });
 
     test('decodes ClashKing snake-case clan fields', () {
@@ -86,6 +112,41 @@ void main() {
       );
 
       expect(entry.imageUrl, 'https://example.com/legend-one.png');
+      expect(entry.metricImageUrl, 'https://example.com/legend-one.png');
+    });
+
+    test('uses townhall as the primary image on ranked rows', () {
+      final entry = RankingEntry.fromJson(
+        {
+          'tag': '#PLAYER',
+          'name': 'Ranked Player',
+          'placement': 1,
+          'townhall_level': 18,
+          'league_trophies': 724,
+        },
+        RankingBoard.playerRanked,
+        rankedLeagueIconUrl: 'https://example.com/pekka-23.png',
+      );
+
+      expect(entry.imageUrl, ImageAssets.townHall(18));
+      expect(entry.metricImageUrl, 'https://example.com/pekka-23.png');
+    });
+
+    test('uses the cached league badge for townhall ranking metrics', () {
+      final entry = RankingEntry.fromJson({
+        'tag': '#PLAYER',
+        'name': 'Townhall Player',
+        'rank': 1,
+        'townhall_level': 18,
+        'trophies': 5513,
+        'league': {
+          'id': 105000036,
+          'name': 'Legend I',
+          'badge': 'https://example.com/legend-one.png',
+        },
+      }, RankingBoard.playerTownHall);
+
+      expect(entry.imageUrl, ImageAssets.townHall(18));
       expect(entry.metricImageUrl, 'https://example.com/legend-one.png');
     });
   });

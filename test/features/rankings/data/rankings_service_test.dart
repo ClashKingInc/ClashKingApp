@@ -115,7 +115,7 @@ void main() {
 
   test('applies the selected tier badge to ranked leaderboard rows', () async {
     final api = FakeApiService();
-    const endpoint = '/leaderboard/league/105000034?limit=500';
+    const endpoint = '/leaderboard/league/105000036?limit=500';
     api.getStubs[endpoint] = http.Response(
       jsonEncode({
         'items': [
@@ -134,7 +134,7 @@ void main() {
     );
 
     const selectedLeague = RankingLeagueOption(
-      id: 105000034,
+      id: 105000036,
       name: 'Legend I',
       iconUrl: 'legend-one',
     );
