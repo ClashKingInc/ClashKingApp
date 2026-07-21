@@ -210,25 +210,6 @@ class ApiService {
     );
   }
 
-  Future<http.Response> queryResponse(
-    String endpoint, {
-    Object? body,
-    bool requiresAuth = false,
-    String? url,
-    Duration timeout = _defaultTimeout,
-    Map<String, String>? extraHeaders,
-  }) async {
-    return _requestResponse(
-      'QUERY',
-      endpoint: endpoint,
-      url: url,
-      body: body,
-      requiresAuth: requiresAuth,
-      timeout: timeout,
-      extraHeaders: extraHeaders,
-    );
-  }
-
   Future<http.Response> proxyGet(
     String pathAndQuery, {
     Duration timeout = _defaultTimeout,
@@ -383,7 +364,9 @@ class ApiService {
             request.body = requestBody.toString();
           }
           final streamedResponse = await _client.send(request).timeout(timeout);
-          final response = await http.Response.fromStream(streamedResponse);
+          final response = await http.Response.fromStream(
+            streamedResponse,
+          ).timeout(timeout);
           stopwatch.stop();
           _recordHttpBreadcrumb(
             method,
@@ -432,24 +415,6 @@ class ApiService {
           final response = await _client
               .delete(resolvedUri, headers: headers, body: requestBody)
               .timeout(timeout);
-          stopwatch.stop();
-          _recordHttpBreadcrumb(
-            method,
-            resolvedUri,
-            response,
-            stopwatch.elapsed,
-          );
-          return response;
-        case 'QUERY':
-          final request = http.Request(method, resolvedUri);
-          request.headers.addAll(headers);
-          if (requestBody != null) {
-            request.body = requestBody.toString();
-          }
-          final streamedResponse = await _client.send(request).timeout(timeout);
-          final response = await http.Response.fromStream(
-            streamedResponse,
-          ).timeout(timeout);
           stopwatch.stop();
           _recordHttpBreadcrumb(
             method,
