@@ -15,9 +15,11 @@ class FakeApiService extends ApiService {
   final Map<String, http.Response> postStubs = {};
   final Map<String, http.Response> putStubs = {};
   final Map<String, http.Response> deleteStubs = {};
+  final Map<String, http.Response> queryStubs = {};
   final Map<String, Object?> lastPostBodies = {};
   final Map<String, Object?> lastPutBodies = {};
   final Map<String, Object?> lastDeleteBodies = {};
+  final Map<String, Object?> lastQueryBodies = {};
   final Map<String, Map<String, String>?> lastGetHeaders = {};
   final Map<String, int> getCallCounts = {};
 
@@ -26,6 +28,7 @@ class FakeApiService extends ApiService {
   final Map<String, Exception> throwOnGet = {};
   final Map<String, Exception> throwOnPost = {};
   final Map<String, Exception> throwOnDelete = {};
+  final Map<String, Exception> throwOnQuery = {};
 
   @override
   Future<http.Response> getResponse(
@@ -83,6 +86,20 @@ class FakeApiService extends ApiService {
     lastDeleteBodies[endpoint] = body;
     if (throwOnDelete.containsKey(endpoint)) throw throwOnDelete[endpoint]!;
     return deleteStubs[endpoint] ?? http.Response('{}', 200);
+  }
+
+  @override
+  Future<http.Response> queryResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) async {
+    lastQueryBodies[endpoint] = body;
+    if (throwOnQuery.containsKey(endpoint)) throw throwOnQuery[endpoint]!;
+    return queryStubs[endpoint] ?? http.Response('{}', 200);
   }
 
   http.Response? _derivedProxyGet(String endpoint) {
