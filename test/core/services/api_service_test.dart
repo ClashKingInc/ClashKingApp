@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:clashkingapp/core/config/api_config.dart';
@@ -29,6 +30,28 @@ void main() {
       const input = 'https://example.com/image.png';
       expect(ApiService.cocAssetsProxyUrl(input), input);
     });
+  });
+
+  test('QUERY sends JSON with the RFC method', () async {
+    late http.Request captured;
+    final client = MockClient((request) async {
+      captured = request;
+      return http.Response('{"ok":true}', 200);
+    });
+    final service = ApiService(
+      client: client,
+      tokenService: FakeTokenService(),
+      environment: ApiEnvironment.local,
+    );
+
+    final result = await service.query('/stats/armies', {
+      'minimum_sample_size': 100,
+    });
+
+    expect(captured.method, 'QUERY');
+    expect(captured.headers['content-type'], 'application/json');
+    expect(jsonDecode(captured.body), {'minimum_sample_size': 100});
+    expect(result['ok'], isTrue);
   });
 
   group('ApiService — getErrorMessage', () {

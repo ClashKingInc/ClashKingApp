@@ -80,6 +80,19 @@ class ApiService {
     return _expectMapResponse(response, endpoint);
   }
 
+  Future<Map<String, dynamic>> query(
+    String endpoint,
+    Object body, {
+    bool requiresAuth = false,
+  }) async {
+    final response = await queryResponse(
+      endpoint,
+      body: body,
+      requiresAuth: requiresAuth,
+    );
+    return _expectMapResponse(response, endpoint);
+  }
+
   Future<http.Response> getResponse(
     String endpoint, {
     bool requiresAuth = false,
@@ -188,6 +201,25 @@ class ApiService {
   }) async {
     return _requestResponse(
       'DELETE',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+
+  Future<http.Response> queryResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
+  }) async {
+    return _requestResponse(
+      'QUERY',
       endpoint: endpoint,
       url: url,
       body: body,
@@ -400,6 +432,24 @@ class ApiService {
           final response = await _client
               .delete(resolvedUri, headers: headers, body: requestBody)
               .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
+        case 'QUERY':
+          final request = http.Request(method, resolvedUri);
+          request.headers.addAll(headers);
+          if (requestBody != null) {
+            request.body = requestBody.toString();
+          }
+          final streamedResponse = await _client.send(request).timeout(timeout);
+          final response = await http.Response.fromStream(
+            streamedResponse,
+          ).timeout(timeout);
           stopwatch.stop();
           _recordHttpBreadcrumb(
             method,
