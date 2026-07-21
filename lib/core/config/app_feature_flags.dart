@@ -6,7 +6,6 @@ abstract final class AppFeatureFlags {
   static const notifications = 'notifications';
   static const posts = 'posts';
   static const homeAnnouncements = 'home_announcements';
-  static const popularInsights = 'popular_insights';
   static const leaderboards = 'leaderboards';
   static const leaderboardPreviews = 'leaderboard_previews';
   static const globalStats = 'global_stats';
@@ -25,7 +24,6 @@ abstract final class AppFeatureFlags {
     notifications: true,
     posts: true,
     homeAnnouncements: true,
-    popularInsights: false,
     leaderboards: true,
     leaderboardPreviews: false,
     globalStats: true,

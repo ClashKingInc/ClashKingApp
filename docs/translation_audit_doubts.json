@@ -2009,10 +2009,6 @@
       "value": "Upgrade Tracker"
     },
     {
-      "key": "popularClansTitle",
-      "value": "Clans"
-    },
-    {
       "key": "upgradeTrackerTitle",
       "value": "Upgrade Tracker"
     },
@@ -2405,54 +2401,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -2525,18 +2473,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -2547,18 +2483,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -5951,54 +5875,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -6071,18 +5947,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -6093,18 +5957,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -9281,18 +9133,6 @@
       "value": "Format"
     },
     {
-      "key": "drawerPopular",
-      "value": "Popular"
-    },
-    {
-      "key": "popularClansTitle",
-      "value": "Clans"
-    },
-    {
-      "key": "popularTitle",
-      "value": "Popular"
-    },
-    {
       "key": "todoMockLegendPushName",
       "value": "Legend Push"
     },
@@ -9689,54 +9529,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -9809,18 +9601,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -9831,18 +9611,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -11931,54 +11699,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -12051,18 +11771,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -12073,18 +11781,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -14173,54 +13869,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -14293,18 +13941,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -14315,18 +13951,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -14879,10 +14503,6 @@
       "value": "Format"
     },
     {
-      "key": "popularClansTitle",
-      "value": "Clans"
-    },
-    {
       "key": "gameTownHallLevelShort",
       "value": "TH{level}"
     },
@@ -15267,54 +14887,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -15387,18 +14959,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -15409,18 +14969,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -17989,14 +17537,6 @@
       "value": "Clans"
     },
     {
-      "key": "popularClansTitle",
-      "value": "Clans"
-    },
-    {
-      "key": "popularWarsCwlTitle",
-      "value": "Wars & CWL"
-    },
-    {
       "key": "todoMockMaxedMainName",
       "value": "Maxed Main"
     },
@@ -18405,54 +17945,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -18525,18 +18017,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -18547,18 +18027,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -20895,14 +20363,6 @@
       "value": "Upgrade time"
     },
     {
-      "key": "drawerPopular",
-      "value": "Popular"
-    },
-    {
-      "key": "popularTitle",
-      "value": "Popular"
-    },
-    {
       "key": "gameTownHallLevelShort",
       "value": "TH{level}"
     },
@@ -21287,54 +20747,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -21407,18 +20819,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -21429,18 +20829,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -23777,14 +23165,6 @@
       "value": "Upgrade time"
     },
     {
-      "key": "drawerPopular",
-      "value": "Popular"
-    },
-    {
-      "key": "popularTitle",
-      "value": "Popular"
-    },
-    {
       "key": "gameTownHallLevelShort",
       "value": "TH{level}"
     },
@@ -24169,54 +23549,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -24289,18 +23621,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -24311,18 +23631,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -26143,10 +25451,6 @@
       "value": "Upgrade time"
     },
     {
-      "key": "popularWarsCwlTitle",
-      "value": "Wars & CWL"
-    },
-    {
       "key": "todoMagicDispatch",
       "value": "Magic Dispatch"
     },
@@ -26555,54 +25859,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -26675,18 +25931,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -26697,18 +25941,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -27265,10 +26497,6 @@
       "value": "Format"
     },
     {
-      "key": "popularClansTitle",
-      "value": "Clans"
-    },
-    {
       "key": "calculatorZapQuake",
       "value": "Zap quake"
     },
@@ -27307,10 +26535,6 @@
     {
       "key": "sideStatsTitle",
       "value": "Stats"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
     },
     {
       "key": "assetFolderStickers",
@@ -30575,54 +29799,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -30695,18 +29871,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -30717,18 +29881,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -33225,54 +32377,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -33345,18 +32449,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -33367,18 +32459,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -35795,10 +34875,6 @@
       "value": "Preferences"
     },
     {
-      "key": "popularWarsCwlTitle",
-      "value": "Wars & CWL"
-    },
-    {
       "key": "todoMagicDispatch",
       "value": "Magic Dispatch"
     },
@@ -36211,54 +35287,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -36331,18 +35359,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -36353,18 +35369,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -38549,54 +37553,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -38669,18 +37625,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -38691,18 +37635,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -42263,54 +41195,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -42383,18 +41267,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -42405,18 +41277,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -45977,54 +44837,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -46097,18 +44909,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -46119,18 +44919,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -46751,10 +45539,6 @@
       "value": "Home"
     },
     {
-      "key": "popularClansTitle",
-      "value": "Clans"
-    },
-    {
       "key": "calculatorZapQuake",
       "value": "Zap quake"
     },
@@ -46871,54 +45655,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -46987,24 +45723,8 @@
       "value": "All TH"
     },
     {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -50373,54 +49093,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -50493,18 +49165,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -50515,18 +49175,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -51991,54 +50639,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -52111,18 +50711,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -52133,18 +50721,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -53885,14 +52461,6 @@
       "value": "Upgrade time"
     },
     {
-      "key": "drawerPopular",
-      "value": "Popular"
-    },
-    {
-      "key": "popularTitle",
-      "value": "Popular"
-    },
-    {
       "key": "notifChooseAlerts",
       "value": "Choose alerts"
     },
@@ -54421,54 +52989,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -54541,18 +53061,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -54563,18 +53071,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -57651,16 +56147,8 @@
       "value": "Format"
     },
     {
-      "key": "drawerPopular",
-      "value": "Popular"
-    },
-    {
       "key": "drawerUpgradeTracker",
       "value": "Upgrade Tracker"
-    },
-    {
-      "key": "popularTitle",
-      "value": "Popular"
     },
     {
       "key": "upgradeTrackerTitle",
@@ -58203,54 +56691,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -58323,18 +56763,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -58345,18 +56773,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -61493,54 +59909,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -61613,18 +59981,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -61635,18 +59991,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -65227,54 +63571,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -65347,18 +63643,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -65369,18 +63653,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -69109,54 +67381,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -69229,18 +67453,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -69251,18 +67463,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -70259,54 +68459,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -70379,18 +68531,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -70401,18 +68541,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -73053,54 +71181,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -73173,18 +71253,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -73195,18 +71263,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -75567,54 +73623,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -75687,18 +73695,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -75709,18 +73705,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -79425,54 +77409,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -79545,18 +77481,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -79567,18 +77491,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",
@@ -82179,54 +80091,6 @@
       "value": "Hosted ClashKing assets, grouped by folder."
     },
     {
-      "key": "sideNoLinkedPlayersTitle",
-      "value": "No linked players loaded"
-    },
-    {
-      "key": "sideNoLinkedPlayersBody",
-      "value": "Add or refresh linked accounts to prefill league data."
-    },
-    {
-      "key": "sideReadyNow",
-      "value": "Ready now"
-    },
-    {
-      "key": "sideDays",
-      "value": "{count} days"
-    },
-    {
-      "key": "sideOreLeft",
-      "value": "{shiny} shiny, {glowy} glowy, {starry} starry left"
-    },
-    {
-      "key": "sideShinyOre",
-      "value": "Shiny ore"
-    },
-    {
-      "key": "sideGlowyOre",
-      "value": "Glowy ore"
-    },
-    {
-      "key": "sideStarryOre",
-      "value": "Starry ore"
-    },
-    {
-      "key": "sideDailyBonusAdjustment",
-      "value": "Daily bonus adjustment"
-    },
-    {
-      "key": "sideExtraShiny",
-      "value": "Extra shiny"
-    },
-    {
-      "key": "sideExtraGlowy",
-      "value": "Extra glowy"
-    },
-    {
-      "key": "sideExtraStarry",
-      "value": "Extra starry"
-    },
-    {
       "key": "sideZapQuakeTitle",
       "value": "{zaps} lightning + 1 quake"
     },
@@ -82299,18 +80163,6 @@
       "value": "All TH"
     },
     {
-      "key": "sideOwned",
-      "value": "Owned"
-    },
-    {
-      "key": "sideTarget",
-      "value": "Target"
-    },
-    {
-      "key": "sideDailyValue",
-      "value": "daily {value}"
-    },
-    {
       "key": "sideDecrease",
       "value": "Decrease"
     },
@@ -82321,18 +80173,6 @@
     {
       "key": "sideLevel",
       "value": "Level {level}"
-    },
-    {
-      "key": "sidePopularPlayers",
-      "value": "Players"
-    },
-    {
-      "key": "sidePopularClans",
-      "value": "Clans"
-    },
-    {
-      "key": "sidePopularWarsCwl",
-      "value": "Wars & CWL"
     },
     {
       "key": "rankingPlayerTrophies",

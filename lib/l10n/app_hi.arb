@@ -2301,7 +2301,6 @@
   "navigationHome": "घर",
   "drawerFollowers": "समर्थक",
   "drawerFollowersHelp": "वे लोग जिन्होंने आपके सत्यापित लिंक किए गए खातों में से किसी एक को बुकमार्क किया है।",
-  "drawerPopular": "लोकप्रिय",
   "drawerCalculators": "कैलकुलेटर",
   "drawerSubscription": "सदस्यता",
   "drawerUpgradeTracker": "ट्रैकर को अपग्रेड करें",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "पासवर्ड दिखाए",
   "tooltipHidePassword": "पासवर्ड छिपाएं",
   "tooltipRemoveAccount": "खाता हटाएँ",
-  "popularPlayersTitle": "खिलाड़ी",
-  "popularClansTitle": "कुलों",
-  "popularWarsCwlTitle": "युद्ध और सीडब्ल्यूएल",
-  "popularTitle": "लोकप्रिय",
-  "popularSubtitle": "बुकमार्क, लिंक किए गए खाते और सक्रिय युद्ध।",
-  "popularEmptyTitle": "अभी तक कोई लोकप्रिय आइटम नहीं",
-  "popularEmptyBody": "इसे सीड करने के लिए खिलाड़ियों और कुलों को बुकमार्क करें या खातों को लिंक करें।",
   "calculatorsTitle": "कैलकुलेटर",
-  "calculatorsSubtitle": "अयस्क, जैप भूकंप, और आग का गोला भूकंप।",
-  "calculatorOre": "अयस्क",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "जैप भूकंप",
   "calculatorFireball": "आग का गोला",
   "upgradeTrackerTitle": "ट्रैकर को अपग्रेड करें",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "कंपोज़िशन, स्पेल, सीज, नोट्स और शेयर लिंक।",
   "sideGameAssetsTitle": "गेम एसेट्स",
   "sideGameAssetsSubtitle": "ClashKing पर होस्ट किए गए एसेट्स, फ़ोल्डर के अनुसार समूहित।",
-  "sideNoLinkedPlayersTitle": "कोई लिंक्ड खिलाड़ी लोड नहीं हुआ",
-  "sideNoLinkedPlayersBody": "लीग डेटा पहले से भरने के लिए लिंक्ड खाते जोड़ें या रीफ़्रेश करें।",
-  "sideReadyNow": "अभी तैयार",
-  "sideDays": "{count} दिन",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} शाइनी, {glowy} ग्लोवी, {starry} स्टारी बाकी",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "शाइनी अयस्क",
-  "sideGlowyOre": "ग्लोवी अयस्क",
-  "sideStarryOre": "स्टारी अयस्क",
-  "sideDailyBonusAdjustment": "दैनिक बोनस समायोजन",
-  "sideExtraShiny": "अतिरिक्त शाइनी",
-  "sideExtraGlowy": "अतिरिक्त ग्लोवी",
-  "sideExtraStarry": "अतिरिक्त स्टारी",
   "sideZapQuakeTitle": "{zaps} लाइटनिंग + 1 क्वेक",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "रीफ़्रेश",
   "sideOfficialClashLeaderboard": "आधिकारिक Clash लीडरबोर्ड",
   "sideAllTownHallsShort": "सभी TH",
-  "sideOwned": "स्वामित्व",
-  "sideTarget": "लक्ष्य",
-  "sideDailyValue": "दैनिक {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "घटाएँ",
   "sideIncrease": "बढ़ाएँ",
   "sideLevel": "स्तर {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "खिलाड़ी",
-  "sidePopularClans": "क्लैन",
-  "sidePopularWarsCwl": "वॉर और CWL",
   "rankingPlayerTrophies": "प्लेयर ट्रॉफियाँ",
   "rankingPlayerTrophiesHeading": "प्लेयर ट्रॉफी रैंकिंग",
   "rankingPlayerBuilder": "प्लेयर बिल्डर",

@@ -2158,7 +2158,6 @@
   "navigationHome": "Startpagina",
   "drawerFollowers": "Volgers",
   "drawerFollowersHelp": "Mensen die een van je geverifieerde gekoppelde accounts als favoriet hebben opgeslagen.",
-  "drawerPopular": "Populair",
   "drawerCalculators": "Rekenmachines",
   "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Upgrade-tracker",
@@ -2325,16 +2324,8 @@
   "accountsMenuTitle": "Accountbeheer",
   "searchErrorPlayerLoadFailed": "Spelergegevens laden mislukt.",
   "searchErrorClanLoadFailed": "Clangegevens laden mislukt.",
-  "popularPlayersTitle": "Spelers",
-  "popularClansTitle": "Populaire clans",
-  "popularWarsCwlTitle": "Oorlogen & CWL",
-  "popularTitle": "Populair",
-  "popularSubtitle": "Bladwijzers, gekoppelde accounts en actieve oorlogen.",
-  "popularEmptyTitle": "Nog geen populaire items",
-  "popularEmptyBody": "Voeg spelers en clans toe aan bladwijzers of koppel accounts om dit te vullen.",
   "calculatorsTitle": "Rekenhulpen",
-  "calculatorsSubtitle": "Erts, zap quake en fireball quake.",
-  "calculatorOre": "Erts",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Bliksem + aardbeving",
   "calculatorFireball": "Vuurbal",
   "upgradeTrackerTitle": "Upgrade-tracker",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Samenstelling, spreuken, belegering, notities en deellink.",
   "sideGameAssetsTitle": "Game-assets",
   "sideGameAssetsSubtitle": "Gehoste ClashKing-assets, gegroepeerd per map.",
-  "sideNoLinkedPlayersTitle": "Geen gekoppelde spelers geladen",
-  "sideNoLinkedPlayersBody": "Voeg gekoppelde accounts toe of vernieuw ze om competitiegegevens vooraf in te vullen.",
-  "sideReadyNow": "Nu klaar",
-  "sideDays": "{count} dagen",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} glinsterend, {glowy} gloeiend, {starry} sterachtig over",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Glinstererts",
-  "sideGlowyOre": "Gloei-erts",
-  "sideStarryOre": "Sterrenerts",
-  "sideDailyBonusAdjustment": "Aanpassing dagelijkse bonus",
-  "sideExtraShiny": "Extra glinsterend",
-  "sideExtraGlowy": "Extra gloeiend",
-  "sideExtraStarry": "Extra sterachtig",
   "sideZapQuakeTitle": "{zaps} bliksem + 1 aardbeving",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Vernieuwen",
   "sideOfficialClashLeaderboard": "Officieel Clash-klassement",
   "sideAllTownHallsShort": "Alle TH",
-  "sideOwned": "In bezit",
-  "sideTarget": "Doel",
-  "sideDailyValue": "dagelijks {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Verlagen",
   "sideIncrease": "Verhogen",
   "sideLevel": "Niveau {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Spelers",
-  "sidePopularClans": "Populaire clans",
-  "sidePopularWarsCwl": "Oorlogen & CWL",
   "rankingPlayerTrophies": "Spelertrofeeën",
   "rankingPlayerTrophiesHeading": "Ranglijst spelertrofeeën",
   "rankingPlayerBuilder": "Speler-bouwersbasis",

@@ -2301,7 +2301,6 @@
   "navigationHome": "Hjem",
   "drawerFollowers": "Tilhængere",
   "drawerFollowersHelp": "Personer, der har bogmærket en af ​​dine bekræftede linkede konti.",
-  "drawerPopular": "Populær",
   "drawerCalculators": "Lommeregnere",
   "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Opgrader Tracker",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Vis adgangskode",
   "tooltipHidePassword": "Skjul adgangskode",
   "tooltipRemoveAccount": "Fjern konto",
-  "popularPlayersTitle": "Spillere",
-  "popularClansTitle": "Klaner",
-  "popularWarsCwlTitle": "Krige og CWL",
-  "popularTitle": "Populær",
-  "popularSubtitle": "Bogmærker, linkede konti og aktive krige.",
-  "popularEmptyTitle": "Ingen populære varer endnu",
-  "popularEmptyBody": "Bogmærk spillere og klaner eller link konti for at se dette.",
   "calculatorsTitle": "Lommeregnere",
-  "calculatorsSubtitle": "Malm, zap quake og fireball quake.",
-  "calculatorOre": "Malm",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap skælv",
   "calculatorFireball": "Ildkugle",
   "upgradeTrackerTitle": "Opgrader Tracker",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Sammensætning, besværgelser, belejring, noter og delingslink.",
   "sideGameAssetsTitle": "Spilressourcer",
   "sideGameAssetsSubtitle": "Hostede ClashKing-ressourcer, grupperet efter mappe.",
-  "sideNoLinkedPlayersTitle": "Ingen linkede spillere indlæst",
-  "sideNoLinkedPlayersBody": "Tilføj eller opdater linkede konti for at forudfylde ligadata.",
-  "sideReadyNow": "Klar nu",
-  "sideDays": "{count} dage",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} skinnende, {glowy} glødende, {starry} stjerne-malm tilbage",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Skinnende malm",
-  "sideGlowyOre": "Glødende malm",
-  "sideStarryOre": "Stjernemalm",
-  "sideDailyBonusAdjustment": "Justering af daglig bonus",
-  "sideExtraShiny": "Ekstra skinnende",
-  "sideExtraGlowy": "Ekstra glødende",
-  "sideExtraStarry": "Ekstra stjerne",
   "sideZapQuakeTitle": "{zaps} lyn + 1 jordskælv",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Opdater",
   "sideOfficialClashLeaderboard": "Officiel Clash-rangliste",
   "sideAllTownHallsShort": "Alle TH",
-  "sideOwned": "Ejet",
-  "sideTarget": "Mål",
-  "sideDailyValue": "dagligt {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Sænk",
   "sideIncrease": "Hæv",
   "sideLevel": "Niveau {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Spillere",
-  "sidePopularClans": "Klaner",
-  "sidePopularWarsCwl": "Krige og CWL",
   "rankingPlayerTrophies": "Spillertrofæer",
   "rankingPlayerTrophiesHeading": "Rangliste for spillertrofæer",
   "rankingPlayerBuilder": "Spillerbygger",

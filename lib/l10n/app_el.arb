@@ -2301,7 +2301,6 @@
   "navigationHome": "Σπίτι",
   "drawerFollowers": "Οπαδοί",
   "drawerFollowersHelp": "Άτομα που πρόσθεσαν σελιδοδείκτη σε έναν από τους επαληθευμένους συνδεδεμένους λογαριασμούς σας.",
-  "drawerPopular": "Δημοφιλής",
   "drawerCalculators": "Αριθμομηχανές",
   "drawerSubscription": "Συνδρομή",
   "drawerUpgradeTracker": "Αναβάθμιση Tracker",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Εμφάνιση κωδικού πρόσβασης",
   "tooltipHidePassword": "Απόκρυψη κωδικού πρόσβασης",
   "tooltipRemoveAccount": "Κατάργηση λογαριασμού",
-  "popularPlayersTitle": "Παίκτες",
-  "popularClansTitle": "Clan",
-  "popularWarsCwlTitle": "Πόλεμοι & CWL",
-  "popularTitle": "Δημοφιλής",
-  "popularSubtitle": "Σελιδοδείκτες, συνδεδεμένοι λογαριασμοί και ενεργοί πόλεμοι.",
-  "popularEmptyTitle": "Δεν υπάρχουν ακόμη δημοφιλή αντικείμενα",
-  "popularEmptyBody": "Προσθέστε σελιδοδείκτες σε παίκτες και φυλές ή συνδέστε λογαριασμούς για να το εμφανίσετε.",
   "calculatorsTitle": "Αριθμομηχανές",
-  "calculatorsSubtitle": "Ore, zap quake και fireball quake.",
-  "calculatorOre": "Μετάλλευμα",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Ζαπ σεισμός",
   "calculatorFireball": "βολίδα",
   "upgradeTrackerTitle": "Αναβάθμιση Tracker",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Σύνθεση, ξόρκια, siege, σημειώσεις και σύνδεσμος κοινοποίησης.",
   "sideGameAssetsTitle": "Assets παιχνιδιού",
   "sideGameAssetsSubtitle": "Φιλοξενούμενα assets του ClashKing, ομαδοποιημένα ανά φάκελο.",
-  "sideNoLinkedPlayersTitle": "Δεν φορτώθηκαν συνδεδεμένοι παίκτες",
-  "sideNoLinkedPlayersBody": "Πρόσθεσε ή ανανέωσε συνδεδεμένους λογαριασμούς για προσυμπλήρωση δεδομένων λίγκας.",
-  "sideReadyNow": "Έτοιμο τώρα",
-  "sideDays": "{count} ημέρες",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "απομένουν {shiny} shiny, {glowy} glowy, {starry} starry",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Λαμπερό μετάλλευμα",
-  "sideGlowyOre": "Φωτεινό μετάλλευμα",
-  "sideStarryOre": "Αστερόσκονη μεταλλεύματος",
-  "sideDailyBonusAdjustment": "Προσαρμογή ημερήσιου bonus",
-  "sideExtraShiny": "Επιπλέον shiny",
-  "sideExtraGlowy": "Επιπλέον glowy",
-  "sideExtraStarry": "Επιπλέον starry",
   "sideZapQuakeTitle": "{zaps} αστραπές + 1 σεισμός",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Ανανέωση",
   "sideOfficialClashLeaderboard": "Επίσημος πίνακας κατάταξης Clash",
   "sideAllTownHallsShort": "Όλα τα TH",
-  "sideOwned": "Κατέχεται",
-  "sideTarget": "Στόχος",
-  "sideDailyValue": "ημερήσια {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Μείωση",
   "sideIncrease": "Αύξηση",
   "sideLevel": "Επίπεδο {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Παίκτες",
-  "sidePopularClans": "Clan",
-  "sidePopularWarsCwl": "Πόλεμοι & CWL",
   "rankingPlayerTrophies": "Τρόπαια παίκτη",
   "rankingPlayerTrophiesHeading": "Κατάταξη τροπαίων παικτών",
   "rankingPlayerBuilder": "Builder παίκτη",

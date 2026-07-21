@@ -2301,7 +2301,6 @@
   "navigationHome": "Domov",
   "drawerFollowers": "Následovníci",
   "drawerFollowersHelp": "Lidé, kteří si přidali do záložek jeden z vašich ověřených propojených účtů.",
-  "drawerPopular": "Populární",
   "drawerCalculators": "Kalkulačky",
   "drawerSubscription": "Předplatné",
   "drawerUpgradeTracker": "Sledování vylepšení",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Zobrazit heslo",
   "tooltipHidePassword": "Skrýt heslo",
   "tooltipRemoveAccount": "Odebrat účet",
-  "popularPlayersTitle": "Hráči",
-  "popularClansTitle": "Klany",
-  "popularWarsCwlTitle": "Války a CWL",
-  "popularTitle": "Populární",
-  "popularSubtitle": "Záložky, propojené účty a aktivní války.",
-  "popularEmptyTitle": "Zatím žádné oblíbené položky",
-  "popularEmptyBody": "Přidejte si hráče a klany do záložek nebo propojte účty, abyste to mohli zasít.",
   "calculatorsTitle": "Kalkulačky",
-  "calculatorsSubtitle": "Rudé, přerušované zemětřesení a zemětřesení ohnivé koule.",
-  "calculatorOre": "Ruda",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap zemětřesení",
   "calculatorFireball": "Ohnivá koule",
   "upgradeTrackerTitle": "Sledování vylepšení",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Složení, kouzla, obléhací stroj, poznámky a odkaz ke sdílení.",
   "sideGameAssetsTitle": "Herní assety",
   "sideGameAssetsSubtitle": "Hostované assety ClashKing seskupené podle složek.",
-  "sideNoLinkedPlayersTitle": "Nebyli načteni žádní propojení hráči",
-  "sideNoLinkedPlayersBody": "Přidej nebo aktualizuj propojené účty pro předvyplnění ligových dat.",
-  "sideReadyNow": "Připraveno nyní",
-  "sideDays": "{count} dní",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "Zbývá {shiny} lesklé, {glowy} svítivé, {starry} hvězdné rudy",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Lesklá ruda",
-  "sideGlowyOre": "Svítivá ruda",
-  "sideStarryOre": "Hvězdná ruda",
-  "sideDailyBonusAdjustment": "Úprava denního bonusu",
-  "sideExtraShiny": "Extra lesklá",
-  "sideExtraGlowy": "Extra svítivá",
-  "sideExtraStarry": "Extra hvězdná",
   "sideZapQuakeTitle": "{zaps} blesků + 1 zemětřesení",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Aktualizovat",
   "sideOfficialClashLeaderboard": "Oficiální žebříček Clash",
   "sideAllTownHallsShort": "Všechny TH",
-  "sideOwned": "Vlastněno",
-  "sideTarget": "Cíl",
-  "sideDailyValue": "denně {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Snížit",
   "sideIncrease": "Zvýšit",
   "sideLevel": "Úroveň {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Hráči",
-  "sidePopularClans": "Klany",
-  "sidePopularWarsCwl": "Války a CWL",
   "rankingPlayerTrophies": "Trofeje hráčů",
   "rankingPlayerTrophiesHeading": "Žebříček trofejí hráčů",
   "rankingPlayerBuilder": "Stavitelská základna hráčů",

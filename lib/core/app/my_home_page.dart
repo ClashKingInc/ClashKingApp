@@ -1259,19 +1259,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                           ),
                         ),
                       ),
-                    if (appState.isFeatureEnabled(
-                      AppFeatureFlags.popularInsights,
-                    ))
-                      _DrawerMenuItem(
-                        icon: Icons.trending_up_rounded,
-                        label: l10n.drawerPopular,
-                        onTap: () => _pushAndClose(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PopularPage(),
-                          ),
-                        ),
-                      ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.leaderboards))
                       _DrawerMenuItem(
                         icon: Icons.leaderboard_outlined,

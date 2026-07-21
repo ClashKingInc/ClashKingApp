@@ -5,10 +5,6 @@ void main() {
   group('AppFeatureFlags defaults', () {
     test('fails closed for preview and incomplete surfaces', () {
       expect(
-        AppFeatureFlags.defaultValue(AppFeatureFlags.popularInsights),
-        isFalse,
-      );
-      expect(
         AppFeatureFlags.defaultValue(AppFeatureFlags.leaderboardPreviews),
         isFalse,
       );
@@ -57,6 +53,10 @@ void main() {
 
     test('unknown keys retain the legacy fail-open behavior', () {
       expect(AppFeatureFlags.defaultValue('future_existing_feature'), isTrue);
+    });
+
+    test('removed features are absent from the app flag registry', () {
+      expect(AppFeatureFlags.defaults, isNot(contains('popular_insights')));
     });
   });
 }

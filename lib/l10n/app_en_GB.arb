@@ -2301,7 +2301,6 @@
   "navigationHome": "Home",
   "drawerFollowers": "Followers",
   "drawerFollowersHelp": "People who bookmarked one of your verified linked accounts.",
-  "drawerPopular": "Popular",
   "drawerCalculators": "Calculators",
   "drawerSubscription": "Subscription",
   "drawerUpgradeTracker": "Upgrade Tracker",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Show password",
   "tooltipHidePassword": "Hide password",
   "tooltipRemoveAccount": "Remove account",
-  "popularPlayersTitle": "Players",
-  "popularClansTitle": "Clans",
-  "popularWarsCwlTitle": "Wars & CWL",
-  "popularTitle": "Popular",
-  "popularSubtitle": "Bookmarks, linked accounts, and active wars.",
-  "popularEmptyTitle": "No popular items yet",
-  "popularEmptyBody": "Bookmark players and clans or link accounts to seed this.",
   "calculatorsTitle": "Calculators",
-  "calculatorsSubtitle": "Ore, zap quake, and fireball quake.",
-  "calculatorOre": "Ore",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap quake",
   "calculatorFireball": "Fireball",
   "upgradeTrackerTitle": "Upgrade Tracker",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
   "sideGameAssetsTitle": "Game Assets",
   "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
-  "sideNoLinkedPlayersTitle": "No linked players loaded",
-  "sideNoLinkedPlayersBody": "Add or refresh linked accounts to prefill league data.",
-  "sideReadyNow": "Ready now",
-  "sideDays": "{count} days",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "{shiny} shiny, {glowy} glowy, {starry} starry left",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Shiny ore",
-  "sideGlowyOre": "Glowy ore",
-  "sideStarryOre": "Starry ore",
-  "sideDailyBonusAdjustment": "Daily bonus adjustment",
-  "sideExtraShiny": "Extra shiny",
-  "sideExtraGlowy": "Extra glowy",
-  "sideExtraStarry": "Extra starry",
   "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Refresh",
   "sideOfficialClashLeaderboard": "Official Clash leaderboard",
   "sideAllTownHallsShort": "All TH",
-  "sideOwned": "Owned",
-  "sideTarget": "Target",
-  "sideDailyValue": "daily {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Decrease",
   "sideIncrease": "Increase",
   "sideLevel": "Level {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Players",
-  "sidePopularClans": "Clans",
-  "sidePopularWarsCwl": "Wars & CWL",
   "rankingPlayerTrophies": "Player trophies",
   "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
   "rankingPlayerBuilder": "Player builder",

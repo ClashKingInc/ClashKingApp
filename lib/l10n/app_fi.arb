@@ -2301,7 +2301,6 @@
   "navigationHome": "Kotiin",
   "drawerFollowers": "Seuraajat",
   "drawerFollowersHelp": "Ihmiset, jotka lisäsivät yhden vahvistetuista linkitetyistä tileistäsi kirjanmerkkeihin.",
-  "drawerPopular": "Suosittu",
   "drawerCalculators": "Laskimet",
   "drawerSubscription": "Tilaus",
   "drawerUpgradeTracker": "Päivitä Tracker",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Näytä salasana",
   "tooltipHidePassword": "Piilota salasana",
   "tooltipRemoveAccount": "Poista tili",
-  "popularPlayersTitle": "Pelaajat",
-  "popularClansTitle": "Klaanit",
-  "popularWarsCwlTitle": "Sodat ja CWL",
-  "popularTitle": "Suosittu",
-  "popularSubtitle": "Kirjanmerkit, linkitetyt tilit ja aktiiviset sodat.",
-  "popularEmptyTitle": "Ei vielä suosittuja tuotteita",
-  "popularEmptyBody": "Merkitse pelaajat ja klaanit kirjanmerkkeihin tai linkitä tilejä tämän siementämiseksi.",
   "calculatorsTitle": "Laskimet",
-  "calculatorsSubtitle": "Malmi-, zap-järistys ja tulipallojäristys.",
-  "calculatorOre": "Malmi",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap-järistys",
   "calculatorFireball": "Tulipallo",
   "upgradeTrackerTitle": "Päivitä Tracker",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Kokoonpano, loitsut, piirityskone, muistiinpanot ja jakolinkki.",
   "sideGameAssetsTitle": "Peliassetit",
   "sideGameAssetsSubtitle": "Hostatut ClashKing-assetit kansioittain ryhmiteltynä.",
-  "sideNoLinkedPlayersTitle": "Linkitettyjä pelaajia ei ladattu",
-  "sideNoLinkedPlayersBody": "Lisää tai päivitä linkitetyt tilit liigan datan esitäyttöä varten.",
-  "sideReadyNow": "Valmis nyt",
-  "sideDays": "{count} päivää",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "jäljellä {shiny} kiiltävää, {glowy} hohtavaa, {starry} tähtimalmia",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Kiiltävä malmi",
-  "sideGlowyOre": "Hohtava malmi",
-  "sideStarryOre": "Tähtimalmi",
-  "sideDailyBonusAdjustment": "Päivittäisen bonuksen säätö",
-  "sideExtraShiny": "Lisäkiiltävä",
-  "sideExtraGlowy": "Lisähohtava",
-  "sideExtraStarry": "Lisätähtimalmi",
   "sideZapQuakeTitle": "{zaps} salamaa + 1 maanjäristys",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Päivitä",
   "sideOfficialClashLeaderboard": "Virallinen Clash-tulostaulukko",
   "sideAllTownHallsShort": "Kaikki KT:t",
-  "sideOwned": "Omistettu",
-  "sideTarget": "Kohde",
-  "sideDailyValue": "päivittäin {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Vähennä",
   "sideIncrease": "Lisää",
   "sideLevel": "Taso {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Pelaajat",
-  "sidePopularClans": "Klaanit",
-  "sidePopularWarsCwl": "Sodat ja CWL",
   "rankingPlayerTrophies": "Pelaajien pokaalit",
   "rankingPlayerTrophiesHeading": "Pelaajien pokaalisijoitus",
   "rankingPlayerBuilder": "Pelaajien rakentajatukikohta",

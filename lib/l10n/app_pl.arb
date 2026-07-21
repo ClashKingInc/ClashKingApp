@@ -2301,7 +2301,6 @@
   "navigationHome": "Dom",
   "drawerFollowers": "Świta",
   "drawerFollowersHelp": "Osoby, które dodały do ​​zakładek jedno z Twoich zweryfikowanych połączonych kont.",
-  "drawerPopular": "Popularny",
   "drawerCalculators": "Kalkulatory",
   "drawerSubscription": "Prenumerata",
   "drawerUpgradeTracker": "Uaktualnij moduł śledzący",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Pokaż hasło",
   "tooltipHidePassword": "Ukryj hasło",
   "tooltipRemoveAccount": "Usuń konto",
-  "popularPlayersTitle": "Gracze",
-  "popularClansTitle": "Klany",
-  "popularWarsCwlTitle": "Wojny i CWL",
-  "popularTitle": "Popularny",
-  "popularSubtitle": "Zakładki, połączone konta i aktywne wojny.",
-  "popularEmptyTitle": "Nie ma jeszcze popularnych produktów",
-  "popularEmptyBody": "Dodaj do zakładek graczy i klany lub połącz konta, aby to rozstawić.",
   "calculatorsTitle": "Kalkulatory",
-  "calculatorsSubtitle": "Ruda, trzęsienie zap i trzęsienie kuli ognia.",
-  "calculatorOre": "Ruda",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Trzęsienie ziemi",
   "calculatorFireball": "Piorun kulisty",
   "upgradeTrackerTitle": "Uaktualnij moduł śledzący",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Kompozycja, zaklęcia, machina oblężnicza, notatki i link do udostępnienia.",
   "sideGameAssetsTitle": "Zasoby gry",
   "sideGameAssetsSubtitle": "Hostowane zasoby ClashKing pogrupowane według folderów.",
-  "sideNoLinkedPlayersTitle": "Nie załadowano połączonych graczy",
-  "sideNoLinkedPlayersBody": "Dodaj lub odśwież połączone konta, aby wstępnie uzupełnić dane ligi.",
-  "sideReadyNow": "Gotowe teraz",
-  "sideDays": "{count} dni",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "Pozostało: {shiny} błyszczącej, {glowy} świecącej, {starry} gwiezdnej rudy",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Błyszcząca ruda",
-  "sideGlowyOre": "Świecąca ruda",
-  "sideStarryOre": "Gwiezdna ruda",
-  "sideDailyBonusAdjustment": "Korekta dziennego bonusu",
-  "sideExtraShiny": "Dodatkowa błyszcząca",
-  "sideExtraGlowy": "Dodatkowa świecąca",
-  "sideExtraStarry": "Dodatkowa gwiezdna",
   "sideZapQuakeTitle": "{zaps} błyskawic + 1 trzęsienie",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Odśwież",
   "sideOfficialClashLeaderboard": "Oficjalny ranking Clash",
   "sideAllTownHallsShort": "Wszystkie TH",
-  "sideOwned": "Posiadane",
-  "sideTarget": "Cel",
-  "sideDailyValue": "dziennie {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Zmniejsz",
   "sideIncrease": "Zwiększ",
   "sideLevel": "Poziom {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Gracze",
-  "sidePopularClans": "Klany",
-  "sidePopularWarsCwl": "Wojny i CWL",
   "rankingPlayerTrophies": "Trofea graczy",
   "rankingPlayerTrophiesHeading": "Ranking trofeów graczy",
   "rankingPlayerBuilder": "Gracz budowniczy",

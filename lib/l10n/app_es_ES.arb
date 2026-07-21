@@ -2301,7 +2301,6 @@
   "navigationHome": "Hogar",
   "drawerFollowers": "Seguidores",
   "drawerFollowersHelp": "Personas que agregaron a favoritos una de sus cuentas vinculadas verificadas.",
-  "drawerPopular": "Populares",
   "drawerCalculators": "Calculadoras",
   "drawerSubscription": "Suscripción",
   "drawerUpgradeTracker": "Rastreador de actualizaciones",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Mostrar contraseña",
   "tooltipHidePassword": "Ocultar contraseña",
   "tooltipRemoveAccount": "Eliminar cuenta",
-  "popularPlayersTitle": "Jugadores",
-  "popularClansTitle": "clanes",
-  "popularWarsCwlTitle": "Guerras y CWL",
-  "popularTitle": "Populares",
-  "popularSubtitle": "Marcadores, cuentas vinculadas y guerras activas.",
-  "popularEmptyTitle": "Aún no hay artículos populares",
-  "popularEmptyBody": "Añade jugadores y clanes a favoritos o vincula cuentas para iniciar esto.",
   "calculatorsTitle": "Calculadoras",
-  "calculatorsSubtitle": "Mineral, terremoto de descarga eléctrica y terremoto de bola de fuego.",
-  "calculatorOre": "Mineral",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "terremoto",
   "calculatorFireball": "bola de fuego",
   "upgradeTrackerTitle": "Rastreador de actualizaciones",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Composición, hechizos, máquina de asedio, notas y enlace para compartir.",
   "sideGameAssetsTitle": "Recursos del juego",
   "sideGameAssetsSubtitle": "Recursos alojados de ClashKing, agrupados por carpeta.",
-  "sideNoLinkedPlayersTitle": "No hay jugadores vinculados cargados",
-  "sideNoLinkedPlayersBody": "Añade o actualiza cuentas vinculadas para rellenar previamente los datos de liga.",
-  "sideReadyNow": "Listo ahora",
-  "sideDays": "{count} días",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "Quedan {shiny} brillante, {glowy} luminoso, {starry} estelar",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Mineral brillante",
-  "sideGlowyOre": "Mineral luminoso",
-  "sideStarryOre": "Mineral estelar",
-  "sideDailyBonusAdjustment": "Ajuste de bonificación diaria",
-  "sideExtraShiny": "Brillante extra",
-  "sideExtraGlowy": "Luminoso extra",
-  "sideExtraStarry": "Estelar extra",
   "sideZapQuakeTitle": "{zaps} rayos + 1 terremoto",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Actualizar",
   "sideOfficialClashLeaderboard": "Clasificación oficial de Clash",
   "sideAllTownHallsShort": "Todos los TH",
-  "sideOwned": "Propio",
-  "sideTarget": "Objetivo",
-  "sideDailyValue": "diario {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Disminuir",
   "sideIncrease": "Aumentar",
   "sideLevel": "Nivel {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Jugadores",
-  "sidePopularClans": "Clanes",
-  "sidePopularWarsCwl": "Guerras y CWL",
   "rankingPlayerTrophies": "Trofeos de jugador",
   "rankingPlayerTrophiesHeading": "Clasificación de trofeos de jugadores",
   "rankingPlayerBuilder": "Constructor de jugador",

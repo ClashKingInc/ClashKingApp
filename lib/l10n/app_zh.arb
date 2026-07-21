@@ -2301,7 +2301,6 @@
   "navigationHome": "家",
   "drawerFollowers": "追随者",
   "drawerFollowersHelp": "为您已验证的关联帐户之一添加书签的人。",
-  "drawerPopular": "受欢迎的",
   "drawerCalculators": "计算器",
   "drawerSubscription": "订阅",
   "drawerUpgradeTracker": "升级追踪器",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "显示密码",
   "tooltipHidePassword": "隐藏密码",
   "tooltipRemoveAccount": "删除帐户",
-  "popularPlayersTitle": "玩家",
-  "popularClansTitle": "氏族",
-  "popularWarsCwlTitle": "战争与CWL",
-  "popularTitle": "受欢迎的",
-  "popularSubtitle": "书签、链接帐户和正在进行的战争。",
-  "popularEmptyTitle": "还没有热门商品",
-  "popularEmptyBody": "为玩家和部落添加书签或链接帐户以播种此内容。",
   "calculatorsTitle": "计算器",
-  "calculatorsSubtitle": "矿石、闪电地震和火球地震。",
-  "calculatorOre": "矿石",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "电击地震",
   "calculatorFireball": "火球术",
   "upgradeTrackerTitle": "升级追踪器",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "配置、法术、攻城机器、备注和分享链接。",
   "sideGameAssetsTitle": "游戏素材",
   "sideGameAssetsSubtitle": "托管的 ClashKing 素材，按文件夹分组。",
-  "sideNoLinkedPlayersTitle": "未加载关联玩家",
-  "sideNoLinkedPlayersBody": "添加或刷新已关联账号，以预填联赛数据。",
-  "sideReadyNow": "现在就绪",
-  "sideDays": "{count} 天",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "剩余 {shiny} 闪亮、{glowy} 璀璨、{starry} 星辉",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "闪亮矿石",
-  "sideGlowyOre": "璀璨矿石",
-  "sideStarryOre": "星辉矿石",
-  "sideDailyBonusAdjustment": "每日奖励调整",
-  "sideExtraShiny": "额外闪亮",
-  "sideExtraGlowy": "额外璀璨",
-  "sideExtraStarry": "额外星辉",
   "sideZapQuakeTitle": "{zaps} 个闪电 + 1 个地震",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "刷新",
   "sideOfficialClashLeaderboard": "官方 Clash 排行榜",
   "sideAllTownHallsShort": "所有 TH",
-  "sideOwned": "已拥有",
-  "sideTarget": "目标",
-  "sideDailyValue": "每日 {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "减少",
   "sideIncrease": "增加",
   "sideLevel": "等级 {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "玩家",
-  "sidePopularClans": "部落",
-  "sidePopularWarsCwl": "部落战与 CWL",
   "rankingPlayerTrophies": "玩家奖杯",
   "rankingPlayerTrophiesHeading": "玩家奖杯排行榜",
   "rankingPlayerBuilder": "玩家建筑大师",

@@ -2301,7 +2301,6 @@
   "navigationHome": "家",
   "drawerFollowers": "フォロワー",
   "drawerFollowersHelp": "確認済みのリンクされたアカウントのいずれかをブックマークした人。",
-  "drawerPopular": "人気のある",
   "drawerCalculators": "電卓",
   "drawerSubscription": "サブスクリプション",
   "drawerUpgradeTracker": "アップグレードトラッカー",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "パスワードを表示",
   "tooltipHidePassword": "パスワードを隠す",
   "tooltipRemoveAccount": "アカウントを削除する",
-  "popularPlayersTitle": "選手",
-  "popularClansTitle": "クラン",
-  "popularWarsCwlTitle": "戦争とCWL",
-  "popularTitle": "人気のある",
-  "popularSubtitle": "ブックマーク、リンクされたアカウント、およびアクティブな戦争。",
-  "popularEmptyTitle": "人気商品はまだありません",
-  "popularEmptyBody": "プレイヤーとクランをブックマークするか、アカウントをリンクしてこれをシードします。",
   "calculatorsTitle": "電卓",
-  "calculatorsSubtitle": "鉱石、ザップ震、火球震。",
-  "calculatorOre": "鉱石",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "ザップ地震",
   "calculatorFireball": "火の玉",
   "upgradeTrackerTitle": "アップグレードトラッカー",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "構成、呪文、突破兵器、メモ、共有リンク。",
   "sideGameAssetsTitle": "ゲーム素材",
   "sideGameAssetsSubtitle": "フォルダーごとに分類されたホスト済みClashKing素材。",
-  "sideNoLinkedPlayersTitle": "連携済みプレイヤーが読み込まれていません",
-  "sideNoLinkedPlayersBody": "リーグデータを事前入力するには、連携済みアカウントを追加または更新してください。",
-  "sideReadyNow": "今すぐ準備完了",
-  "sideDays": "{count}日",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "残り シャイニー{shiny}、グロー{glowy}、スター{starry}",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "シャイニー鉱石",
-  "sideGlowyOre": "グロー鉱石",
-  "sideStarryOre": "スター鉱石",
-  "sideDailyBonusAdjustment": "デイリーボーナス調整",
-  "sideExtraShiny": "追加シャイニー",
-  "sideExtraGlowy": "追加グロー",
-  "sideExtraStarry": "追加スター",
   "sideZapQuakeTitle": "ライトニング{zaps}個 + アースクエイク1個",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "更新",
   "sideOfficialClashLeaderboard": "公式Clashリーダーボード",
   "sideAllTownHallsShort": "すべてのTH",
-  "sideOwned": "所有済み",
-  "sideTarget": "目標",
-  "sideDailyValue": "毎日 {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "減らす",
   "sideIncrease": "増やす",
   "sideLevel": "レベル {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "プレイヤー",
-  "sidePopularClans": "クラン",
-  "sidePopularWarsCwl": "対戦とCWL",
   "rankingPlayerTrophies": "プレイヤートロフィー",
   "rankingPlayerTrophiesHeading": "プレイヤートロフィーランキング",
   "rankingPlayerBuilder": "プレイヤー大工",

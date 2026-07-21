@@ -2301,7 +2301,6 @@
   "navigationHome": "Хоме",
   "drawerFollowers": "Фолловерс",
   "drawerFollowersHelp": "Људи који су обележили један од ваших верификованих повезаних налога.",
-  "drawerPopular": "Популарно",
   "drawerCalculators": "Калкулатори",
   "drawerSubscription": "Претплата",
   "drawerUpgradeTracker": "Упграде Трацкер",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Прикажи лозинку",
   "tooltipHidePassword": "Сакриј лозинку",
   "tooltipRemoveAccount": "Уклони налог",
-  "popularPlayersTitle": "Играчи",
-  "popularClansTitle": "Кланови",
-  "popularWarsCwlTitle": "Варс & ЦВЛ",
-  "popularTitle": "Популарно",
-  "popularSubtitle": "Обележивачи, повезани налози и активни ратови.",
-  "popularEmptyTitle": "Још увек нема популарних ставки",
-  "popularEmptyBody": "Означите играче и кланове или повежите налоге да бисте поставили ово.",
   "calculatorsTitle": "Калкулатори",
-  "calculatorsSubtitle": "Руда, потрес и потрес ватрене кугле.",
-  "calculatorOre": "Оре",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Зап куаке",
   "calculatorFireball": "Фиребалл",
   "upgradeTrackerTitle": "Упграде Трацкер",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Sastav, čarolije, opsada, beleške i link za deljenje.",
   "sideGameAssetsTitle": "Resursi igre",
   "sideGameAssetsSubtitle": "Hostovani ClashKing resursi, grupisani po folderu.",
-  "sideNoLinkedPlayersTitle": "Nema učitanih povezanih igrača",
-  "sideNoLinkedPlayersBody": "Dodaj ili osveži povezane naloge za unapred popunjene liga podatke.",
-  "sideReadyNow": "Spremno sada",
-  "sideDays": "{count} dana",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "preostalo {shiny} blistave, {glowy} sjajne, {starry} zvezdane rude",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Blistava ruda",
-  "sideGlowyOre": "Sjajna ruda",
-  "sideStarryOre": "Zvezdana ruda",
-  "sideDailyBonusAdjustment": "Podešavanje dnevnog bonusa",
-  "sideExtraShiny": "Dodatna blistava",
-  "sideExtraGlowy": "Dodatna sjajna",
-  "sideExtraStarry": "Dodatna zvezdana",
   "sideZapQuakeTitle": "{zaps} munja + 1 zemljotres",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Osveži",
   "sideOfficialClashLeaderboard": "Zvanična Clash rang lista",
   "sideAllTownHallsShort": "Svi TH",
-  "sideOwned": "Posedovano",
-  "sideTarget": "Meta",
-  "sideDailyValue": "dnevno {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Smanji",
   "sideIncrease": "Povećaj",
   "sideLevel": "Nivo {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Igrači",
-  "sidePopularClans": "Klanovi",
-  "sidePopularWarsCwl": "Ratovi i CWL",
   "rankingPlayerTrophies": "Trofeji igrača",
   "rankingPlayerTrophiesHeading": "Rang lista trofeja igrača",
   "rankingPlayerBuilder": "Graditelj igrača",

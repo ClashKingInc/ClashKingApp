@@ -2301,7 +2301,6 @@
   "navigationHome": "Дом",
   "drawerFollowers": "Последователи",
   "drawerFollowersHelp": "Люди, которые добавили в закладки одну из ваших подтвержденных связанных учетных записей.",
-  "drawerPopular": "Популярный",
   "drawerCalculators": "Калькуляторы",
   "drawerSubscription": "Подписка",
   "drawerUpgradeTracker": "Обновление трекера",
@@ -2325,16 +2324,8 @@
   "tooltipShowPassword": "Показать пароль",
   "tooltipHidePassword": "Скрыть пароль",
   "tooltipRemoveAccount": "Удалить аккаунт",
-  "popularPlayersTitle": "Игроки",
-  "popularClansTitle": "Кланы",
-  "popularWarsCwlTitle": "Войны и CWL",
-  "popularTitle": "Популярный",
-  "popularSubtitle": "Закладки, связанные аккаунты и активные войны.",
-  "popularEmptyTitle": "Популярных товаров пока нет",
-  "popularEmptyBody": "Добавьте игроков и кланы в закладки или свяжите аккаунты, чтобы разместить это сообщение.",
   "calculatorsTitle": "Калькуляторы",
-  "calculatorsSubtitle": "Руда, взрывное землетрясение и землетрясение огненного шара.",
-  "calculatorOre": "руда",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Землетрясение",
   "calculatorFireball": "Огненный шар",
   "upgradeTrackerTitle": "Обновление трекера",
@@ -2561,38 +2552,6 @@
   "sideArmyLinksBody": "Состав, заклинания, осадные машины, заметки и ссылка для обмена.",
   "sideGameAssetsTitle": "Игровые ресурсы",
   "sideGameAssetsSubtitle": "Размещённые ассеты ClashKing, сгруппированные по папкам.",
-  "sideNoLinkedPlayersTitle": "Привязанные игроки не загружены",
-  "sideNoLinkedPlayersBody": "Добавьте или обновите привязанные аккаунты, чтобы предварительно заполнить данные лиги.",
-  "sideReadyNow": "Готово сейчас",
-  "sideDays": "{count} дн.",
-  "@sideDays": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "sideOreLeft": "осталось: {shiny} блестящей, {glowy} сияющей, {starry} звёздной",
-  "@sideOreLeft": {
-    "placeholders": {
-      "shiny": {
-        "type": "String"
-      },
-      "glowy": {
-        "type": "String"
-      },
-      "starry": {
-        "type": "String"
-      }
-    }
-  },
-  "sideShinyOre": "Блестящая руда",
-  "sideGlowyOre": "Сияющая руда",
-  "sideStarryOre": "Звёздная руда",
-  "sideDailyBonusAdjustment": "Корректировка ежедневного бонуса",
-  "sideExtraShiny": "Доп. блестящая",
-  "sideExtraGlowy": "Доп. сияющая",
-  "sideExtraStarry": "Доп. звёздная",
   "sideZapQuakeTitle": "{zaps} молний + 1 землетрясение",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2652,16 +2611,6 @@
   "sideRefresh": "Обновить",
   "sideOfficialClashLeaderboard": "Официальная таблица лидеров Clash",
   "sideAllTownHallsShort": "Все ТХ",
-  "sideOwned": "Имеется",
-  "sideTarget": "Цель",
-  "sideDailyValue": "в день {value}",
-  "@sideDailyValue": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "sideDecrease": "Уменьшить",
   "sideIncrease": "Увеличить",
   "sideLevel": "Уровень {level}",
@@ -2672,9 +2621,6 @@
       }
     }
   },
-  "sidePopularPlayers": "Игроки",
-  "sidePopularClans": "Кланы",
-  "sidePopularWarsCwl": "Войны и CWL",
   "rankingPlayerTrophies": "Трофеи игроков",
   "rankingPlayerTrophiesHeading": "Рейтинг игроков по трофеям",
   "rankingPlayerBuilder": "База строителя игроков",
