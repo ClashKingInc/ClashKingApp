@@ -18,7 +18,6 @@ Audit date: 2026-07-15. Scope: Flutter navigation, startup services, remote cont
 | `posts` | Posts archive navigation | on | Remote content dependency |
 | `home_announcements` | Automatic featured story presentation | on | Remotely-authored interruptive UI |
 | `leaderboards` | Official proxy-backed rankings | on | External proxy/API dependency |
-| `leaderboard_previews` | Unfinished endpoint mockups under rankings | off | Preview-only content |
 | `global_stats` | Proxy-backed aggregate ranking statistics | on | External proxy/API dependency |
 | `calculators` | ZapQuake and Fireball calculators | on | Complex formulas can be remotely withdrawn |
 | `subscription_support` | `$1.99/month` support placeholder | off | No purchase flow exists |
