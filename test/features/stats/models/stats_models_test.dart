@@ -95,4 +95,17 @@ void main() {
       isFalse,
     );
   });
+
+  test('decodes grouped count keys without losing null buckets', () {
+    final counts = decodeStatsGroupedCounts({
+      'items': [
+        {'townhall_level': 18, 'count': 200},
+        {'townhall_level': null, 'count': 3},
+      ],
+    }, 'townhall_level');
+
+    expect(counts.first.id, 18);
+    expect(counts.first.count, 200);
+    expect(counts.last.id, isNull);
+  });
 }

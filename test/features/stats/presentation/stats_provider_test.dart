@@ -47,6 +47,24 @@ void main() {
     expect(repository.lastRankedQuery?.townHallLevel, 17);
     expect(repository.lastRankedQuery?.rankedLeagueTierId, 1);
   });
+
+  test('audience switch selects and loads its first subpage', () async {
+    final repository = _FakeStatsRepository();
+    final provider = StatsProvider(
+      repository: repository,
+      now: () => DateTime(2026, 7, 20),
+    );
+
+    provider.selectAudience(StatsAudience.world);
+    await _settle();
+
+    expect(provider.audience, StatsAudience.world);
+    expect(provider.section, StatsSection.overview);
+    expect(
+      provider.stateFor(StatsSection.overview).status,
+      StatsLoadStatus.data,
+    );
+  });
 }
 
 Future<void> _settle() => Future<void>.delayed(Duration.zero);

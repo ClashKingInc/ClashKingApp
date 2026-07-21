@@ -36,7 +36,8 @@ class StatsProvider extends ChangeNotifier {
   final Map<StatsSection, StatsLoadState> _states = {};
   final Map<StatsSection, int> _requestVersions = {};
 
-  StatsSection _section = StatsSection.overview;
+  StatsAudience _audience = StatsAudience.battle;
+  StatsSection _section = StatsSection.ranked;
   late StatsDateFilter _dates;
 
   int? armiesTownHall;
@@ -64,6 +65,7 @@ class StatsProvider extends ChangeNotifier {
   int rankedTownHall = 18;
   int rankedLeagueTier = 1;
 
+  StatsAudience get audience => _audience;
   StatsSection get section => _section;
   StatsDateFilter get dates => _dates;
   StatsLoadState stateFor(StatsSection value) =>
@@ -81,6 +83,16 @@ class StatsProvider extends ChangeNotifier {
     _section = value;
     notifyListeners();
     if (stateFor(value).status == StatsLoadStatus.idle) load(value);
+  }
+
+  void selectAudience(StatsAudience value) {
+    if (_audience == value) return;
+    _audience = value;
+    _section = value == StatsAudience.battle
+        ? StatsSection.ranked
+        : StatsSection.overview;
+    notifyListeners();
+    if (stateFor(_section).status == StatsLoadStatus.idle) load(_section);
   }
 
   Future<void> setDates(DateTime start, DateTime end) async {
@@ -231,6 +243,8 @@ class StatsProvider extends ChangeNotifier {
 
   Future<Object> _load(StatsSection target) => switch (target) {
     StatsSection.overview => _repository.loadOverview(_dates),
+    StatsSection.players => _repository.loadPlayerCounts(),
+    StatsSection.clans => _repository.loadClanCounts(),
     StatsSection.armies => _repository.loadArmies(
       StatsArmiesQuery(
         filters: StatsBattleFilters(
@@ -286,6 +300,14 @@ class StatsProvider extends ChangeNotifier {
     StatsArmiesResponse value => value.items.isEmpty,
     StatsItemsResponse value => value.items.isEmpty,
     StatsPerformanceResponse value => !value.metrics.available,
+    StatsPlayerCountsResponse value =>
+      value.townHalls.isEmpty &&
+          value.builderHalls.isEmpty &&
+          value.leagueTiers.isEmpty,
+    StatsClanCountsResponse value =>
+      value.locations.isEmpty &&
+          value.cwlLeagues.isEmpty &&
+          value.capitalLeagues.isEmpty,
     _ => false,
   };
 

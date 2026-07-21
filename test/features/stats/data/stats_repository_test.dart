@@ -58,6 +58,43 @@ void main() {
     expect(api.getCallCounts[endpoint], 1);
     expect(result.ranked.available, isFalse);
   });
+
+  test(
+    'player population combines the three canonical counts endpoints',
+    () async {
+      final api = FakeApiService();
+      api.getStubs['/counts/players/town-halls'] = http.Response(
+        jsonEncode({
+          'items': [
+            {'townhall_level': 18, 'count': 120},
+          ],
+        }),
+        200,
+      );
+      api.getStubs['/counts/players/builder-halls'] = http.Response(
+        jsonEncode({
+          'items': [
+            {'builderhall_level': 10, 'count': 80},
+          ],
+        }),
+        200,
+      );
+      api.getStubs['/counts/players/league-tiers'] = http.Response(
+        jsonEncode({
+          'items': [
+            {'league_tier_id': 105000035, 'count': 40},
+          ],
+        }),
+        200,
+      );
+
+      final result = await StatsRepository(apiService: api).loadPlayerCounts();
+
+      expect(result.townHalls.single.id, 18);
+      expect(result.builderHalls.single.count, 80);
+      expect(result.leagueTiers.single.id, 105000035);
+    },
+  );
 }
 
 Map<String, dynamic> _metricsJson() => {

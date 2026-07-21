@@ -1,4 +1,6 @@
-enum StatsSection { overview, armies, items, war, cwl, ranked }
+enum StatsAudience { battle, world }
+
+enum StatsSection { ranked, armies, items, war, cwl, overview, players, clans }
 
 enum StatsItemType { troop, spell, hero, pet, equipment }
 
@@ -328,6 +330,52 @@ class StatsGlobalCounts {
       warsStored: _int(map['wars_stored']),
     );
   }
+}
+
+class StatsGroupedCount {
+  const StatsGroupedCount({required this.id, required this.count});
+
+  final int? id;
+  final int count;
+
+  factory StatsGroupedCount.fromJson(Object? json, String key) {
+    final map = _map(json);
+    return StatsGroupedCount(
+      id: map[key] == null ? null : _int(map[key]),
+      count: _int(map['count']),
+    );
+  }
+}
+
+class StatsPlayerCountsResponse {
+  const StatsPlayerCountsResponse({
+    required this.townHalls,
+    required this.builderHalls,
+    required this.leagueTiers,
+  });
+
+  final List<StatsGroupedCount> townHalls;
+  final List<StatsGroupedCount> builderHalls;
+  final List<StatsGroupedCount> leagueTiers;
+}
+
+class StatsClanCountsResponse {
+  const StatsClanCountsResponse({
+    required this.locations,
+    required this.cwlLeagues,
+    required this.capitalLeagues,
+  });
+
+  final List<StatsGroupedCount> locations;
+  final List<StatsGroupedCount> cwlLeagues;
+  final List<StatsGroupedCount> capitalLeagues;
+}
+
+List<StatsGroupedCount> decodeStatsGroupedCounts(Object? json, String key) {
+  final map = _map(json);
+  return _list(map['items'])
+      .map((item) => StatsGroupedCount.fromJson(item, key))
+      .toList(growable: false);
 }
 
 class StatsOverviewResponse {

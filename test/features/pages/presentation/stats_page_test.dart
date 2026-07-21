@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Stats is battle intelligence with six mobile subpages', (
-    tester,
-  ) async {
+  testWidgets('Stats uses Battle and World header subpages', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -29,18 +27,27 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.text('Battle Intelligence from aggregated battlelogs.'),
+      find.text('Explore battle performance and the world we track.'),
       findsOneWidget,
     );
-    expect(find.text('Overview'), findsOneWidget);
+    expect(find.text('Battle'), findsOneWidget);
+    expect(find.text('World'), findsOneWidget);
+    expect(find.text('Meta'), findsOneWidget);
     expect(find.text('Armies'), findsOneWidget);
     expect(find.text('Items'), findsOneWidget);
     expect(find.text('War'), findsWidgets);
     expect(find.text('CWL'), findsWidgets);
-    expect(find.text('Ranked'), findsWidgets);
     expect(find.text('Top score'), findsNothing);
+
+    await tester.tap(find.text('World'));
+    await tester.pumpAndSettle();
+    expect(find.text('Overview'), findsOneWidget);
+    expect(find.text('Players'), findsWidgets);
+    expect(find.text('Clans'), findsWidgets);
     expect(find.text('Global counts'), findsOneWidget);
 
+    await tester.tap(find.text('Battle'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Armies'));
     await tester.pumpAndSettle();
     expect(find.text('Search exact compositions'), findsOneWidget);
@@ -49,6 +56,14 @@ void main() {
 }
 
 class _WidgetStatsRepository extends StatsRepository {
+  @override
+  Future<StatsPerformanceResponse> loadRanked(StatsRankedQuery request) async =>
+      const StatsPerformanceResponse(
+        dateRange: StatsDateRange(start: null, end: null),
+        metrics: _widgetMetrics,
+        breakdowns: [],
+      );
+
   @override
   Future<StatsOverviewResponse> loadOverview(StatsDateFilter dates) async =>
       const StatsOverviewResponse(
@@ -73,6 +88,22 @@ class _WidgetStatsRepository extends StatsRepository {
         dateRange: StatsDateRange(start: null, end: null),
         items: [],
         count: 0,
+      );
+
+  @override
+  Future<StatsPlayerCountsResponse> loadPlayerCounts() async =>
+      const StatsPlayerCountsResponse(
+        townHalls: [StatsGroupedCount(id: 18, count: 100)],
+        builderHalls: [StatsGroupedCount(id: 10, count: 50)],
+        leagueTiers: [StatsGroupedCount(id: 105000035, count: 25)],
+      );
+
+  @override
+  Future<StatsClanCountsResponse> loadClanCounts() async =>
+      const StatsClanCountsResponse(
+        locations: [StatsGroupedCount(id: 32000000, count: 10)],
+        cwlLeagues: [StatsGroupedCount(id: 48000017, count: 8)],
+        capitalLeagues: [StatsGroupedCount(id: 85000018, count: 7)],
       );
 }
 

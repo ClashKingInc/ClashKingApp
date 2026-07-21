@@ -21,6 +21,35 @@ class StatsRepository {
     return StatsOverviewResponse.fromJson(json);
   }
 
+  Future<StatsPlayerCountsResponse> loadPlayerCounts() async {
+    final responses = await Future.wait([
+      _apiService.get('/counts/players/town-halls', requiresAuth: false),
+      _apiService.get('/counts/players/builder-halls', requiresAuth: false),
+      _apiService.get('/counts/players/league-tiers', requiresAuth: false),
+    ]);
+    return StatsPlayerCountsResponse(
+      townHalls: decodeStatsGroupedCounts(responses[0], 'townhall_level'),
+      builderHalls: decodeStatsGroupedCounts(responses[1], 'builderhall_level'),
+      leagueTiers: decodeStatsGroupedCounts(responses[2], 'league_tier_id'),
+    );
+  }
+
+  Future<StatsClanCountsResponse> loadClanCounts() async {
+    final responses = await Future.wait([
+      _apiService.get('/counts/clans/locations', requiresAuth: false),
+      _apiService.get('/counts/clans/cwl-leagues', requiresAuth: false),
+      _apiService.get('/counts/clans/capital-leagues', requiresAuth: false),
+    ]);
+    return StatsClanCountsResponse(
+      locations: decodeStatsGroupedCounts(responses[0], 'location_id'),
+      cwlLeagues: decodeStatsGroupedCounts(responses[1], 'cwl_league_id'),
+      capitalLeagues: decodeStatsGroupedCounts(
+        responses[2],
+        'capital_league_id',
+      ),
+    );
+  }
+
   Future<StatsArmiesResponse> loadArmies(StatsArmiesQuery request) async {
     final json = await _apiService.query(
       '/stats/armies',

@@ -1,10 +1,16 @@
 import 'dart:math' as math;
 
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/stats/models/stats_models.dart';
 import 'package:clashkingapp/features/stats/presentation/stats_provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -48,59 +54,204 @@ class _StatsPageContentState extends State<_StatsPageContent> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
     final provider = context.watch<StatsProvider>();
-    return SidePageScaffold(
-      title: loc.sideStatsTitle,
-      subtitle: loc.sideStatsSubtitle,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-            child: Column(
-              children: [
-                SidePageHorizontalSelector<StatsSection>(
-                  values: StatsSection.values,
-                  selected: provider.section,
-                  labelBuilder: (section) => _sectionLabel(loc, section),
-                  onSelected: provider.selectSection,
-                ),
-                const SizedBox(height: 10),
-                _DateRangeControl(provider: provider),
+    final sections = _sectionsFor(provider.audience);
+    final selectedIndex = sections
+        .indexOf(provider.section)
+        .clamp(0, sections.length - 1);
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverToBoxAdapter(child: _StatsHeader(provider: provider)),
+          SliverToBoxAdapter(
+            child: InfoProfileTabs(
+              selectedIndex: selectedIndex,
+              alwaysScrollable: true,
+              onTabSelected: (index) => provider.selectSection(sections[index]),
+              tabs: [
+                for (final section in sections)
+                  InfoProfileTabData(
+                    label: _sectionLabel(
+                      AppLocalizations.of(context)!,
+                      section,
+                    ),
+                    imageUrl: _sectionImage(section),
+                  ),
               ],
             ),
           ),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 180),
-              child: KeyedSubtree(
-                key: ValueKey(provider.section),
-                child: switch (provider.section) {
-                  StatsSection.overview => const _OverviewSection(),
-                  StatsSection.armies => const _ArmiesSection(),
-                  StatsSection.items => const _ItemsSection(),
-                  StatsSection.war => const _WarSection(),
-                  StatsSection.cwl => const _CwlSection(),
-                  StatsSection.ranked => const _RankedSection(),
-                },
+        ],
+        body: Column(
+          children: [
+            if (provider.audience == StatsAudience.battle)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: _DateRangeControl(provider: provider),
+              ),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 180),
+                child: KeyedSubtree(
+                  key: ValueKey(provider.section),
+                  child: switch (provider.section) {
+                    StatsSection.overview => const _OverviewSection(),
+                    StatsSection.players => const _PlayersSection(),
+                    StatsSection.clans => const _ClansSection(),
+                    StatsSection.armies => const _ArmiesSection(),
+                    StatsSection.items => const _ItemsSection(),
+                    StatsSection.war => const _WarSection(),
+                    StatsSection.cwl => const _CwlSection(),
+                    StatsSection.ranked => const _RankedSection(),
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
+const _battleSections = [
+  StatsSection.ranked,
+  StatsSection.armies,
+  StatsSection.items,
+  StatsSection.war,
+  StatsSection.cwl,
+];
+
+const _worldSections = [
+  StatsSection.overview,
+  StatsSection.players,
+  StatsSection.clans,
+];
+
+List<StatsSection> _sectionsFor(StatsAudience audience) =>
+    audience == StatsAudience.battle ? _battleSections : _worldSections;
+
 String _sectionLabel(AppLocalizations loc, StatsSection section) =>
     switch (section) {
       StatsSection.overview => loc.statsOverview,
+      StatsSection.players => loc.statsPlayers,
+      StatsSection.clans => loc.statsClans,
       StatsSection.armies => loc.statsArmies,
       StatsSection.items => loc.statsItems,
       StatsSection.war => loc.statsWar,
       StatsSection.cwl => loc.statsCwl,
-      StatsSection.ranked => loc.statsRanked,
+      StatsSection.ranked => loc.statsMeta,
     };
+
+String _sectionImage(StatsSection section) => switch (section) {
+  StatsSection.ranked => ImageAssets.hitrate,
+  StatsSection.armies => ImageAssets.getTroopImage('Super Bowler'),
+  StatsSection.items => ImageAssets.getGearImage('Eternal Tome'),
+  StatsSection.war => ImageAssets.war,
+  StatsSection.cwl => ImageAssets.getWarLeagueImage('Champion League I'),
+  StatsSection.overview => ImageAssets.darkModeLogo,
+  StatsSection.players => ImageAssets.townHall(18),
+  StatsSection.clans => ImageAssets.clanCastle,
+};
+
+class _StatsHeader extends StatelessWidget {
+  const _StatsHeader({required this.provider});
+
+  final StatsProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final height = MediaQuery.paddingOf(context).top + 246;
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: InfoHeroBackdrop(
+            imageUrl: ImageAssets.playerWarStatsPageBackground,
+            height: height,
+          ),
+        ),
+        SizedBox(
+          height: height,
+          child: SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 14),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      HeaderIconButton(
+                        icon: Icons.arrow_back_rounded,
+                        iconColor: Colors.white,
+                        tooltip: MaterialLocalizations.of(
+                          context,
+                        ).backButtonTooltip,
+                        onTap: () => Navigator.of(context).pop(),
+                        showBackground: false,
+                      ),
+                      const Spacer(),
+                      HeaderIconButton(
+                        icon: Icons.refresh_rounded,
+                        iconColor: Colors.white,
+                        tooltip: loc.sideRefresh,
+                        onTap: provider.refresh,
+                        showBackground: false,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MobileWebImage(
+                          imageUrl: _sectionImage(provider.section),
+                          width: 58,
+                          height: 58,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          loc.sideStatsTitle,
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                        Text(
+                          loc.statsHeaderSubtitle,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.78),
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520),
+                    child: LiquidGlassSegmentedControl<StatsAudience>(
+                      height: 46,
+                      values: StatsAudience.values,
+                      labels: [loc.statsBattle, loc.statsWorld],
+                      selected: provider.audience,
+                      color: Colors.white,
+                      onChanged: provider.selectAudience,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 class _DateRangeControl extends StatelessWidget {
   const _DateRangeControl({required this.provider});
@@ -194,12 +345,14 @@ class _SectionFrame extends StatelessWidget {
     required this.builder,
     this.emptyTitle,
     this.emptyBody,
+    this.prefix,
   });
 
   final StatsSection section;
   final Widget Function(Object data) builder;
   final String? emptyTitle;
   final String? emptyBody;
+  final Widget? prefix;
 
   @override
   Widget build(BuildContext context) {
@@ -210,13 +363,17 @@ class _SectionFrame extends StatelessWidget {
     if (state.status == StatsLoadStatus.loading && state.data == null) {
       return ListView(
         padding: sidePagePadding,
-        children: const [SidePageLoadingRows()],
+        children: [
+          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
+          const SidePageLoadingRows(),
+        ],
       );
     }
     if (state.status == StatsLoadStatus.error && state.data == null) {
       return ListView(
         padding: sidePagePadding,
         children: [
+          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
           SidePageErrorPanel(
             message: loc.sideStatsLoadError,
             detail: ApiService.getErrorMessage(state.error),
@@ -229,6 +386,7 @@ class _SectionFrame extends StatelessWidget {
       return ListView(
         padding: sidePagePadding,
         children: [
+          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
           SidePageEmptyState(
             icon: Icons.query_stats_rounded,
             title: emptyTitle ?? loc.statsNoDataTitle,
@@ -244,6 +402,7 @@ class _SectionFrame extends StatelessWidget {
       child: ListView(
         padding: sidePagePadding,
         children: [
+          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
           if (state.isRefreshing) const LinearProgressIndicator(minHeight: 2),
           if (state.error != null && data != null) ...[
             _InlineNotice(
@@ -288,12 +447,12 @@ class _OverviewSection extends StatelessWidget {
           children: [
             SidePageSectionHeader(title: loc.statsGlobalCounts),
             _CountsGrid(counts: overview.counts),
-            const SizedBox(height: 20),
-            _MetricsCard(title: loc.statsRanked, metrics: overview.ranked),
             const SizedBox(height: 12),
-            _MetricsCard(title: loc.statsWar, metrics: overview.war),
-            const SizedBox(height: 12),
-            _MetricsCard(title: loc.statsCwl, metrics: overview.cwl),
+            _PreviewPanel(
+              title: loc.statsWarsOverTime,
+              body: loc.statsWarsOverTimePreview,
+              points: const [42, 51, 48, 62, 71, 69, 76, 84, 79, 91],
+            ),
           ],
         );
       },
@@ -338,6 +497,414 @@ class _CountsGrid extends StatelessWidget {
               .toList(),
         );
       },
+    );
+  }
+}
+
+class _PlayersSection extends StatelessWidget {
+  const _PlayersSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return _SectionFrame(
+      section: StatsSection.players,
+      builder: (data) {
+        final counts = data as StatsPlayerCountsResponse;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _DistributionCard(
+              title: loc.statsTownHallDistribution,
+              subtitle: loc.statsTrackedPlayers,
+              values: counts.townHalls,
+              labelBuilder: (id) => 'TH${id ?? '?'}',
+              color: const Color(0xFFFF9F43),
+            ),
+            const SizedBox(height: 12),
+            _DistributionCard(
+              title: loc.statsLeagueDistribution,
+              subtitle: loc.statsTrackedPlayers,
+              values: counts.leagueTiers,
+              labelBuilder: _leagueTierLabel,
+              color: const Color(0xFF8B5CF6),
+            ),
+            const SizedBox(height: 12),
+            _DistributionCard(
+              title: loc.statsBuilderHallDistribution,
+              subtitle: loc.statsTrackedPlayers,
+              values: counts.builderHalls,
+              labelBuilder: (id) => 'BH${id ?? '?'}',
+              color: const Color(0xFF38BDF8),
+            ),
+            const SizedBox(height: 12),
+            _PreviewPanel(
+              title: loc.statsEquipmentAdoption,
+              body: loc.statsEquipmentAdoptionPreview,
+              points: const [18, 31, 47, 63, 78, 69, 42],
+            ),
+            const SizedBox(height: 12),
+            _PreviewPanel(
+              title: loc.statsExperienceDistribution,
+              body: loc.statsExperienceDistributionPreview,
+              points: const [8, 19, 38, 72, 56, 29, 12],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ClansSection extends StatelessWidget {
+  const _ClansSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return _SectionFrame(
+      section: StatsSection.clans,
+      builder: (data) {
+        final counts = data as StatsClanCountsResponse;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _DistributionCard(
+              title: loc.statsCwlLeagueDistribution,
+              subtitle: loc.statsTrackedClans,
+              values: counts.cwlLeagues,
+              labelBuilder: (id) => _cwlLeagues[id] ?? '${id ?? '?'}',
+              color: const Color(0xFFFF5D8F),
+            ),
+            const SizedBox(height: 12),
+            _DistributionCard(
+              title: loc.statsCapitalLeagueDistribution,
+              subtitle: loc.statsTrackedClans,
+              values: counts.capitalLeagues,
+              labelBuilder: (id) => loc.statsLeagueId(id ?? 0),
+              color: const Color(0xFF2DD4BF),
+            ),
+            const SizedBox(height: 12),
+            _CountsSummaryCard(
+              title: loc.statsTrackedLocations,
+              value: counts.locations.where((item) => item.id != null).length,
+              subtitle: loc.statsLocationCountHelp,
+            ),
+            const SizedBox(height: 12),
+            _PreviewPanel(
+              title: loc.statsCwlRosterSizes,
+              body: loc.statsCwlRosterSizesPreview,
+              points: const [64, 36],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _DistributionCard extends StatelessWidget {
+  const _DistributionCard({
+    required this.title,
+    required this.subtitle,
+    required this.values,
+    required this.labelBuilder,
+    required this.color,
+  });
+
+  final String title;
+  final String subtitle;
+  final List<StatsGroupedCount> values;
+  final String Function(int? id) labelBuilder;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final sorted = [...values]
+      ..sort((left, right) => (left.id ?? -1).compareTo(right.id ?? -1));
+    final visible = sorted.length > 18
+        ? sorted.sublist(sorted.length - 18)
+        : sorted;
+    return _SurfaceCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 18),
+          SizedBox(
+            height: 190,
+            child: _CountBarChart(
+              values: visible,
+              labels: visible.map((item) => labelBuilder(item.id)).toList(),
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CountBarChart extends StatelessWidget {
+  const _CountBarChart({
+    required this.values,
+    required this.labels,
+    required this.color,
+  });
+
+  final List<StatsGroupedCount> values;
+  final List<String> labels;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final maxCount = values.fold<int>(
+      1,
+      (current, item) => math.max(current, item.count),
+    );
+    return BarChart(
+      BarChartData(
+        maxY: maxCount * 1.12,
+        alignment: BarChartAlignment.spaceAround,
+        gridData: FlGridData(
+          drawVerticalLine: false,
+          getDrawingHorizontalLine: (_) => FlLine(
+            color: scheme.outlineVariant.withValues(alpha: 0.28),
+            strokeWidth: 1,
+          ),
+        ),
+        borderData: FlBorderData(show: false),
+        barTouchData: BarTouchData(
+          touchTooltipData: BarTouchTooltipData(
+            getTooltipColor: (_) => scheme.inverseSurface,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) =>
+                BarTooltipItem(
+                  '${labels[groupIndex]}\n${_compact(rod.toY.toInt())}',
+                  TextStyle(
+                    color: scheme.onInverseSurface,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+          ),
+        ),
+        titlesData: FlTitlesData(
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 38,
+              getTitlesWidget: (value, meta) => Text(
+                _compact(value.toInt()),
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 30,
+              getTitlesWidget: (value, meta) {
+                final index = value.toInt();
+                if (index < 0 || index >= labels.length) {
+                  return const SizedBox.shrink();
+                }
+                final step = labels.length > 9 ? 2 : 1;
+                if (index % step != 0 && index != labels.length - 1) {
+                  return const SizedBox.shrink();
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(top: 7),
+                  child: Text(
+                    labels[index],
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        barGroups: [
+          for (var index = 0; index < values.length; index++)
+            BarChartGroupData(
+              x: index,
+              barRods: [
+                BarChartRodData(
+                  toY: values[index].count.toDouble(),
+                  width: values.length > 12 ? 8 : 14,
+                  color: color,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(5),
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOutCubic,
+    );
+  }
+}
+
+class _PreviewPanel extends StatelessWidget {
+  const _PreviewPanel({
+    required this.title,
+    required this.body,
+    required this.points,
+  });
+
+  final String title;
+  final String body;
+  final List<double> points;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return _SurfaceCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              _PreviewBadge(label: AppLocalizations.of(context)!.statsPreview),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            body,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            height: 76,
+            child: _MiniPreviewBars(values: points, color: scheme.primary),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CountsSummaryCard extends StatelessWidget {
+  const _CountsSummaryCard({
+    required this.title,
+    required this.value,
+    required this.subtitle,
+  });
+
+  final String title;
+  final int value;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) => _SurfaceCard(
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.labelLarge),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          NumberFormat.decimalPattern().format(value),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+        ),
+      ],
+    ),
+  );
+}
+
+class _PreviewBadge extends StatelessWidget {
+  const _PreviewBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.tertiaryContainer,
+      borderRadius: BorderRadius.circular(99),
+    ),
+    child: Text(
+      label,
+      style: Theme.of(
+        context,
+      ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w900),
+    ),
+  );
+}
+
+class _MiniPreviewBars extends StatelessWidget {
+  const _MiniPreviewBars({required this.values, required this.color});
+
+  final List<double> values;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final maxValue = values.fold<double>(1, math.max);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        for (final value in values)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 3),
+              child: FractionallySizedBox(
+                heightFactor: value / maxValue,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.72),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(6),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -393,14 +960,239 @@ class _ArmiesSectionState extends State<_ArmiesSection> {
                 );
               }
               return Column(
-                children: filtered
-                    .map((army) => _ArmyCard(army: army))
-                    .toList(),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const _ArmyStrategyPanel(),
+                  const SizedBox(height: 12),
+                  _ArmyMetaChart(armies: filtered),
+                  const SizedBox(height: 12),
+                  SidePageSectionHeader(title: loc.statsExactLoadouts),
+                  ...filtered.map((army) => _ArmyCard(army: army)),
+                ],
               );
             },
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ArmyStrategyPanel extends StatelessWidget {
+  const _ArmyStrategyPanel();
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final examples = [
+      (
+        loc.statsQueenCharge,
+        loc.statsQueenChargeRule,
+        ImageAssets.getHeroImage('Archer Queen'),
+      ),
+      (
+        loc.statsSuperBowlerCore,
+        loc.statsSuperBowlerRule,
+        ImageAssets.getTroopImage('Super Bowler'),
+      ),
+      (
+        loc.statsRootRiderCore,
+        loc.statsRootRiderRule,
+        ImageAssets.getTroopImage('Root Rider'),
+      ),
+    ];
+    return _SurfaceCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  loc.statsStrategyLenses,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              _PreviewBadge(label: loc.statsPreview),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            loc.statsStrategyLensesBody,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (final example in examples)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 9),
+              child: Row(
+                children: [
+                  MobileWebImage(imageUrl: example.$3, width: 36, height: 36),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          example.$1,
+                          style: const TextStyle(fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          example.$2,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          _InlineNotice(
+            icon: Icons.hub_outlined,
+            text: loc.statsPatternDiscoveryBody,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ArmyMetaChart extends StatelessWidget {
+  const _ArmyMetaChart({required this.armies});
+
+  final List<StatsArmyResult> armies;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final scheme = Theme.of(context).colorScheme;
+    final visible = armies.take(30).toList(growable: false);
+    return _SurfaceCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            loc.statsUsageVsThreeStar,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          Text(
+            loc.statsTapPointForLoadout,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            height: 220,
+            child: LineChart(
+              LineChartData(
+                minX: 0,
+                maxX: math.max(
+                  1,
+                  visible
+                          .map(
+                            (army) =>
+                                _asPercentValue(army.metrics.usageRate ?? 0),
+                          )
+                          .fold<double>(0, math.max) *
+                      1.12,
+                ),
+                minY: 0,
+                maxY: 100,
+                gridData: FlGridData(
+                  getDrawingHorizontalLine: (_) => FlLine(
+                    color: scheme.outlineVariant.withValues(alpha: 0.28),
+                  ),
+                  getDrawingVerticalLine: (_) => FlLine(
+                    color: scheme.outlineVariant.withValues(alpha: 0.2),
+                  ),
+                ),
+                borderData: FlBorderData(show: false),
+                titlesData: FlTitlesData(
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  leftTitles: AxisTitles(
+                    axisNameWidget: Text(loc.statsThreeStarRate),
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 36,
+                      getTitlesWidget: (value, meta) => Text(
+                        '${value.toInt()}%',
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameWidget: Text(loc.statsUsage),
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 30,
+                      getTitlesWidget: (value, meta) => Text(
+                        '${value.toStringAsFixed(0)}%',
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ),
+                  ),
+                ),
+                lineTouchData: LineTouchData(
+                  touchTooltipData: LineTouchTooltipData(
+                    getTooltipColor: (_) => scheme.inverseSurface,
+                    getTooltipItems: (spots) => spots.map((spot) {
+                      final army = visible[spot.barIndex];
+                      final core = army.armyCounts.entries
+                          .take(2)
+                          .map((entry) => '${entry.value}× ${entry.key}')
+                          .join(' · ');
+                      return LineTooltipItem(
+                        '$core\n${_percent(spot.x)} usage · ${_percent(spot.y)} 3★',
+                        TextStyle(
+                          color: scheme.onInverseSurface,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                lineBarsData: [
+                  for (final army in visible)
+                    LineChartBarData(
+                      spots: [
+                        FlSpot(
+                          _asPercentValue(army.metrics.usageRate ?? 0),
+                          _asPercentValue(army.metrics.threeStarRate),
+                        ),
+                      ],
+                      color: Colors.transparent,
+                      barWidth: 0,
+                      dotData: FlDotData(
+                        show: true,
+                        getDotPainter: (spot, percent, bar, index) =>
+                            FlDotCirclePainter(
+                              radius: 5,
+                              color: scheme.primary,
+                              strokeWidth: 2,
+                              strokeColor: scheme.surface,
+                            ),
+                      ),
+                    ),
+                ],
+              ),
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -420,6 +1212,51 @@ class _ArmyCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (army.armyCounts.isNotEmpty) ...[
+            SizedBox(
+              height: 44,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: math.min(army.armyCounts.length, 8),
+                separatorBuilder: (_, _) => const SizedBox(width: 5),
+                itemBuilder: (context, index) {
+                  final entry = army.armyCounts.entries.elementAt(index);
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      MobileWebImage(
+                        imageUrl: ImageAssets.getTroopImage(entry.key),
+                        width: 40,
+                        height: 40,
+                      ),
+                      Positioned(
+                        right: -2,
+                        bottom: -1,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.inverseSurface,
+                            borderRadius: BorderRadius.circular(99),
+                          ),
+                          child: Text(
+                            '${entry.value}',
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onInverseSurface,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 9),
+          ],
           Text(
             loc.statsExactComposition,
             style: Theme.of(
@@ -499,10 +1336,17 @@ class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              loc.generalFilters,
+              loc.statsCustomLens,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              loc.statsCustomLensBody,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 14),
             _TownHallField(
@@ -1156,44 +2000,35 @@ class _PerformancePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-          child: controls,
-        ),
-        Expanded(
-          child: _SectionFrame(
-            section: section,
-            builder: (data) {
-              final response = data as StatsPerformanceResponse;
-              final loc = AppLocalizations.of(context)!;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _MetricsCard(
-                    title: loc.statsPerformance,
-                    metrics: response.metrics,
+    return _SectionFrame(
+      section: section,
+      prefix: controls,
+      builder: (data) {
+        final response = data as StatsPerformanceResponse;
+        final loc = AppLocalizations.of(context)!;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _MetricsCard(
+              title: loc.statsPerformance,
+              metrics: response.metrics,
+            ),
+            if (response.breakdowns.isNotEmpty) ...[
+              const SizedBox(height: 18),
+              SidePageSectionHeader(title: loc.statsSeasonBreakdown),
+              ...response.breakdowns.map(
+                (breakdown) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _MetricsCard(
+                    title: breakdown.key,
+                    metrics: breakdown.metrics,
                   ),
-                  if (response.breakdowns.isNotEmpty) ...[
-                    const SizedBox(height: 18),
-                    SidePageSectionHeader(title: loc.statsSeasonBreakdown),
-                    ...response.breakdowns.map(
-                      (breakdown) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: _MetricsCard(
-                          title: breakdown.key,
-                          metrics: breakdown.metrics,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              );
-            },
-          ),
-        ),
-      ],
+                ),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }
@@ -1300,7 +2135,7 @@ class _StarRates extends StatelessWidget {
               SizedBox(width: 28, child: Text('$index★')),
               Expanded(
                 child: LinearProgressIndicator(
-                  value: rates[index].clamp(0, 100) / 100,
+                  value: _asPercentValue(rates[index]).clamp(0, 100) / 100,
                   minHeight: 7,
                   borderRadius: BorderRadius.circular(99),
                   color: colors[index],
@@ -1326,68 +2161,112 @@ class _TrendChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final spots = [
+      for (var index = 0; index < points.length; index++)
+        FlSpot(index.toDouble(), _asPercentValue(points[index].threeStarRate)),
+    ];
     return Semantics(
       label:
           '${AppLocalizations.of(context)!.statsDailyTrend}: '
           '${points.length}',
       child: SizedBox(
-        height: 92,
+        height: 150,
         width: double.infinity,
-        child: CustomPaint(
-          painter: _TrendPainter(
-            values: points.map((point) => point.threeStarRate).toList(),
-            color: Theme.of(context).colorScheme.primary,
-            gridColor: Theme.of(context).colorScheme.outlineVariant,
+        child: LineChart(
+          LineChartData(
+            minX: 0,
+            maxX: math.max(1.0, (points.length - 1).toDouble()),
+            minY: 0,
+            maxY: 100,
+            borderData: FlBorderData(show: false),
+            gridData: FlGridData(
+              drawVerticalLine: false,
+              getDrawingHorizontalLine: (_) =>
+                  FlLine(color: scheme.outlineVariant.withValues(alpha: 0.3)),
+            ),
+            titlesData: FlTitlesData(
+              topTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              rightTitles: const AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 34,
+                  interval: 25,
+                  getTitlesWidget: (value, meta) => Text(
+                    '${value.toInt()}%',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ),
+              ),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 24,
+                  interval: math.max(1, (points.length / 4).floor()).toDouble(),
+                  getTitlesWidget: (value, meta) {
+                    final index = value.toInt();
+                    if (index < 0 || index >= points.length) {
+                      return const SizedBox.shrink();
+                    }
+                    final date = DateTime.tryParse(points[index].date);
+                    return Text(
+                      date == null ? '' : DateFormat.Md().format(date),
+                      style: Theme.of(context).textTheme.labelSmall,
+                    );
+                  },
+                ),
+              ),
+            ),
+            lineTouchData: LineTouchData(
+              touchTooltipData: LineTouchTooltipData(
+                getTooltipColor: (_) => scheme.inverseSurface,
+                getTooltipItems: (spots) => spots
+                    .map(
+                      (spot) => LineTooltipItem(
+                        '${points[spot.x.toInt()].date}\n${_percent(spot.y)}',
+                        TextStyle(
+                          color: scheme.onInverseSurface,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            lineBarsData: [
+              LineChartBarData(
+                spots: spots,
+                isCurved: true,
+                curveSmoothness: 0.28,
+                color: scheme.primary,
+                barWidth: 3,
+                isStrokeCapRound: true,
+                dotData: FlDotData(show: points.length <= 14),
+                belowBarData: BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      scheme.primary.withValues(alpha: 0.28),
+                      scheme.primary.withValues(alpha: 0.01),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
         ),
       ),
     );
   }
-}
-
-class _TrendPainter extends CustomPainter {
-  const _TrendPainter({
-    required this.values,
-    required this.color,
-    required this.gridColor,
-  });
-
-  final List<double> values;
-  final Color color;
-  final Color gridColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final grid = Paint()..color = gridColor.withValues(alpha: 0.5);
-    for (var i = 0; i <= 2; i++) {
-      final y = size.height * i / 2;
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
-    }
-    if (values.isEmpty) return;
-    final path = Path();
-    for (var i = 0; i < values.length; i++) {
-      final x = values.length == 1 ? 0.0 : size.width * i / (values.length - 1);
-      final y = size.height * (1 - values[i].clamp(0, 100) / 100);
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    }
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = color
-        ..strokeWidth = 3
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _TrendPainter oldDelegate) =>
-      oldDelegate.values != values || oldDelegate.color != color;
 }
 
 class _SearchAndFilter extends StatelessWidget {
@@ -1415,10 +2294,10 @@ class _SearchAndFilter extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        IconButton.filledTonal(
-          tooltip: AppLocalizations.of(context)!.generalFilters,
+        FilledButton.tonalIcon(
           onPressed: onFilter,
           icon: const Icon(Icons.tune_rounded),
+          label: Text(AppLocalizations.of(context)!.statsCustomLens),
         ),
       ],
     );
@@ -1630,9 +2509,21 @@ class _InlineNotice extends StatelessWidget {
 }
 
 String _percent(double value) {
-  final normalized = value.abs() <= 1 && value != 0 ? value * 100 : value;
+  final normalized = _asPercentValue(value);
   return '${normalized.toStringAsFixed(normalized >= 10 ? 1 : 2)}%';
 }
+
+double _asPercentValue(double value) =>
+    value.abs() <= 1 && value != 0 ? value * 100 : value;
+
+String _leagueTierLabel(int? id) => switch (id) {
+  105000036 => 'LL1',
+  105000035 => 'LL2',
+  105000034 => 'LL3',
+  final value? when value >= 105000010 => 'L${value - 105000010}',
+  final value? => '$value',
+  null => '—',
+};
 
 String _compact(int value) => NumberFormat.compact().format(value);
 
