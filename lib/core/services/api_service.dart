@@ -116,6 +116,30 @@ class ApiService {
     );
   }
 
+  /// Sends an RFC 9110 QUERY request with a JSON body.
+  ///
+  /// QUERY is intentionally separate from GET: the Home activity contract
+  /// carries an account-scoped selection object and has no POST compatibility
+  /// route.
+  Future<http.Response> queryResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
+  }) async {
+    return _requestResponse(
+      'QUERY',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+
   Future<http.Response> putResponse(
     String endpoint, {
     Object? body,
@@ -126,6 +150,25 @@ class ApiService {
   }) async {
     return _requestResponse(
       'PUT',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+
+  Future<http.Response> patchResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
+  }) async {
+    return _requestResponse(
+      'PATCH',
       endpoint: endpoint,
       url: url,
       body: body,
@@ -301,6 +344,22 @@ class ApiService {
             stopwatch.elapsed,
           );
           return response;
+        case 'QUERY':
+          final request = http.Request(method, resolvedUri)
+            ..headers.addAll(headers);
+          if (requestBody != null) {
+            request.body = requestBody.toString();
+          }
+          final streamedResponse = await _client.send(request).timeout(timeout);
+          final response = await http.Response.fromStream(streamedResponse);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
         case 'POST':
           final response = await _client
               .post(resolvedUri, headers: headers, body: requestBody)
@@ -316,6 +375,18 @@ class ApiService {
         case 'PUT':
           final response = await _client
               .put(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
+        case 'PATCH':
+          final response = await _client
+              .patch(resolvedUri, headers: headers, body: requestBody)
               .timeout(timeout);
           stopwatch.stop();
           _recordHttpBreadcrumb(

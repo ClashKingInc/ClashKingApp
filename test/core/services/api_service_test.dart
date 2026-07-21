@@ -336,6 +336,44 @@ void main() {
         expect(response.statusCode, 200);
       });
 
+      test('QUERY sends the RFC method and JSON body', () async {
+        http.Request? captured;
+        final client = MockClient((request) async {
+          captured = request;
+          return http.Response('{"items":[]}', 200);
+        });
+        final service = ApiService(client: client);
+
+        await service.queryResponse(
+          '/home/activity',
+          body: {
+            'account_id': 'user-1',
+            'mappings': [
+              {'player_tag': '#ABC', 'clan_tag': null},
+            ],
+            'limit': 25,
+          },
+        );
+
+        expect(captured?.method, 'QUERY');
+        expect(captured?.body, contains('"limit":25'));
+        expect(captured?.headers['Content-Type'], contains('application/json'));
+      });
+
+      test('PATCH sends a JSON body', () async {
+        http.Request? captured;
+        final client = MockClient((request) async {
+          captured = request;
+          return http.Response('{}', 200);
+        });
+        final service = ApiService(client: client);
+
+        await service.patchResponse('/test', body: {'enabled': true});
+
+        expect(captured?.method, 'PATCH');
+        expect(captured?.body, '{"enabled":true}');
+      });
+
       test('DELETE 200 returns response', () async {
         final client = MockClient((_) async => http.Response('{}', 200));
         final service = ApiService(client: client);

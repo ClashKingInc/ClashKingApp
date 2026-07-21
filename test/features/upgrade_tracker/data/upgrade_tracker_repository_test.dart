@@ -4,6 +4,9 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../helpers/fake_services.dart';
 
 void main() {
   setUp(() {
@@ -91,5 +94,73 @@ void main() {
     final draft = await repository.loadPlanPreferences('test');
     expect(draft?['gold_pass_percent'], 20);
     expect(draft?['strategy'], 'shortest');
+  });
+
+  test('replaces whole upgrade JSON for verified remote accounts', () async {
+    final api = FakeApiService();
+    const endpoint = '/links/user-1/%23TEST/upgrades';
+    api.putStubs[endpoint] = http.Response(
+      '{"player_tag":"#TEST","data":{},"updated_at":null}',
+      200,
+    );
+    final repository = UpgradeTrackerRepository(apiService: api);
+    repository.configureRemote(
+      accountId: 'user-1',
+      verifiedPlayerTags: const {'#TEST'},
+    );
+    final snapshot = {
+      'tag': '#TEST',
+      'buildings': [
+        {'data': 1, 'lvl': 18},
+      ],
+    };
+
+    await repository.saveRawSnapshot('#TEST', snapshot);
+
+    expect(api.lastPutBodies[endpoint], {'data': snapshot});
+  });
+
+  test(
+    'patches whole preference object for verified remote accounts',
+    () async {
+      final api = FakeApiService();
+      const endpoint = '/links/user-1/%23TEST/upgrade-preferences';
+      api.patchStubs[endpoint] = http.Response(
+        '{"player_tag":"#TEST","preferences":{},"updated_at":null}',
+        200,
+      );
+      final repository = UpgradeTrackerRepository(apiService: api);
+      repository.configureRemote(
+        accountId: 'user-1',
+        verifiedPlayerTags: const {'#TEST'},
+      );
+
+      await repository.savePlanPreferences(
+        '#TEST',
+        goldPassPercent: 20,
+        strategy: 'balanced',
+      );
+
+      expect(
+        api.lastPatchBodies[endpoint],
+        containsPair('preferences', containsPair('gold_pass_percent', 20)),
+      );
+    },
+  );
+
+  test('rejects remote upgrade writes for unverified accounts', () async {
+    final repository = UpgradeTrackerRepository(apiService: FakeApiService());
+    repository.configureRemote(
+      accountId: 'user-1',
+      verifiedPlayerTags: const {'#OTHER'},
+    );
+
+    await expectLater(
+      () => repository.saveRawSnapshot('#TEST', {
+        'tag': '#TEST',
+        'buildings': <Object>[],
+      }),
+      throwsStateError,
+    );
   });
 }

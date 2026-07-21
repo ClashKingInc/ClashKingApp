@@ -585,18 +585,6 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                               prefs.setNotificationsEnabled(tag, value),
                         ),
                         _PlayerOptionSwitch(
-                          icon: Icons.checklist_rounded,
-                          title: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowTodoHomeTitle,
-                          subtitle: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowTodoHomeSubtitle,
-                          value: options.showTodoOnHome,
-                          onChanged: (value) =>
-                              prefs.setShowTodoOnHome(tag, value),
-                        ),
-                        _PlayerOptionSwitch(
                           icon: Icons.fact_check_outlined,
                           title: AppLocalizations.of(
                             context,

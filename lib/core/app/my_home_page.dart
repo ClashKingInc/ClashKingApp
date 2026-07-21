@@ -9,6 +9,7 @@ import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/pages/data/announcement_presentation_service.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
@@ -52,6 +53,7 @@ class MyHomePageState extends State<MyHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<NavigatorState> _desktopContentNavigatorKey =
       GlobalKey<NavigatorState>();
+  bool _redirectingToVerification = false;
 
   @override
   void initState() {
@@ -171,8 +173,27 @@ class MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _redirectToAccountVerification() {
+    if (_redirectingToVerification) return;
+    _redirectingToVerification = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(
+          builder: (_) => const AddCocAccountPage(refreshOnExit: false),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!context.watch<CocAccountService>().hasVerifiedAccounts) {
+      _redirectToAccountVerification();
+      return const Scaffold(
+        body: SafeArea(child: Center(child: CircularProgressIndicator())),
+      );
+    }
     _schedulePageControllerSync();
     if (_usesDesktopWebLayout(context)) {
       return _DesktopWebHomeShell(

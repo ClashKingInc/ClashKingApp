@@ -36,6 +36,10 @@ class CocAccountService extends ChangeNotifier {
   DateTime? _lastRefresh;
   ValueNotifier<String?> selectedTagNotifier = ValueNotifier(null);
   List<Map<String, dynamic>> get cocAccounts => _cocAccounts;
+  List<Map<String, dynamic>> get verifiedAccounts => _cocAccounts
+      .where((account) => account['is_verified'] == true)
+      .toList(growable: false);
+  bool get hasVerifiedAccounts => verifiedAccounts.isNotEmpty;
   bool get isLoading => _isLoading;
   String? get selectedTag => _selectedTag;
   DateTime? get lastRefresh => _lastRefresh;

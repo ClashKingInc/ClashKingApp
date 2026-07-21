@@ -14,6 +14,7 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/data/player_item_utils.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
@@ -151,7 +152,15 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     super.didChangeDependencies();
     if (_initialized) return;
     _initialized = true;
-    final linkedTags = context.read<CocAccountService>().accounts;
+    final cocAccounts = context.read<CocAccountService>();
+    final linkedTags = cocAccounts.verifiedAccounts
+        .map((account) => account['player_tag']?.toString() ?? '')
+        .where((tag) => tag.isNotEmpty)
+        .toList(growable: false);
+    _repository.configureRemote(
+      accountId: context.read<AuthService>().currentUser?.userId,
+      verifiedPlayerTags: linkedTags,
+    );
     final initial = linkedTags.firstOrNull;
     unawaited(_loadSnapshotMetadata());
     if (initial == null) {
@@ -488,7 +497,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   }
 
   List<_TrackerAccountOption> _linkedAccountOptions() {
-    final linked = context.read<CocAccountService>().cocAccounts;
+    final linked = context.read<CocAccountService>().verifiedAccounts;
     final profiles = context.read<PlayerService>().profiles;
     final profilesByTag = {
       for (final player in profiles)
@@ -546,6 +555,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
             account['name'],
             account['townHallLevel'],
             account['builderHallLevel'],
+            account['is_verified'],
           ),
         ),
       ),
@@ -556,6 +566,13 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           (player) =>
               Object.hash(player.tag, player.name, player.townHallLevel),
         ),
+      ),
+    );
+    final cocAccounts = context.read<CocAccountService>();
+    _repository.configureRemote(
+      accountId: context.read<AuthService>().currentUser?.userId,
+      verifiedPlayerTags: cocAccounts.verifiedAccounts.map(
+        (account) => account['player_tag']?.toString() ?? '',
       ),
     );
     final linkedAccounts = _linkedAccountOptions();

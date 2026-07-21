@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/home/data/home_dashboard_controller.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -219,6 +220,7 @@ Future<void> _startClashKingApp() async {
           ChangeNotifierProvider.value(value: appState),
           ChangeNotifierProvider(create: (_) => AuthService()),
           ChangeNotifierProvider(create: (_) => CocAccountService()),
+          ChangeNotifierProvider(create: (_) => HomeDashboardController()),
           ChangeNotifierProvider(create: (_) => PlayerService()),
           ChangeNotifierProvider(create: (_) => ClanService()),
           ChangeNotifierProvider(create: (_) => WarCwlService()),

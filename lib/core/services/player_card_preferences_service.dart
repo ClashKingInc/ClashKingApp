@@ -7,36 +7,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Per-player card options stored locally on the device.
 ///
 /// These are the toggles revealed under each player card (notifications,
-/// show the to-do card on the home dashboard, show this account's clan
-/// in the War tab, show this account in the full to-do page).
+/// show this account's clan in the War tab, and show this account in the full
+/// to-do page). Home always includes every verified account in fixed order.
 class PlayerCardOptions {
   const PlayerCardOptions({
     this.notificationsEnabled = false,
-    this.showTodoOnHome = false,
     this.showInWarTab = true,
     this.showInTodoPage = true,
   });
 
   final bool notificationsEnabled;
-  final bool showTodoOnHome;
   final bool showInWarTab;
   final bool showInTodoPage;
 
-  bool get isDefault =>
-      !notificationsEnabled &&
-      !showTodoOnHome &&
-      showInWarTab &&
-      showInTodoPage;
+  bool get isDefault => !notificationsEnabled && showInWarTab && showInTodoPage;
 
   PlayerCardOptions copyWith({
     bool? notificationsEnabled,
-    bool? showTodoOnHome,
     bool? showInWarTab,
     bool? showInTodoPage,
   }) {
     return PlayerCardOptions(
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
-      showTodoOnHome: showTodoOnHome ?? this.showTodoOnHome,
       showInWarTab: showInWarTab ?? this.showInWarTab,
       showInTodoPage: showInTodoPage ?? this.showInTodoPage,
     );
@@ -44,7 +36,6 @@ class PlayerCardOptions {
 
   Map<String, dynamic> toJson() => {
     'notifications': notificationsEnabled,
-    'todoHome': showTodoOnHome,
     'warTab': showInWarTab,
     'todoPage': showInTodoPage,
   };
@@ -52,7 +43,6 @@ class PlayerCardOptions {
   factory PlayerCardOptions.fromJson(Map<String, dynamic> json) {
     return PlayerCardOptions(
       notificationsEnabled: json['notifications'] == true,
-      showTodoOnHome: json['todoHome'] == true,
       showInWarTab: json['warTab'] != false,
       showInTodoPage: json['todoPage'] != false,
     );
@@ -60,8 +50,7 @@ class PlayerCardOptions {
 }
 
 /// Persists the per-player card options (keyed by the normalized player tag)
-/// and notifies listeners so the players list and the home dashboard stay in
-/// sync when a toggle changes.
+/// and notifies listeners so account-scoped views stay in sync.
 class PlayerCardPreferencesService extends ChangeNotifier {
   static const String _prefsKey = 'player_card_options_v1';
 
@@ -80,17 +69,9 @@ class PlayerCardPreferencesService extends ChangeNotifier {
   PlayerCardOptions optionsFor(String tag) =>
       _optionsByTag[_normalizeTag(tag)] ?? const PlayerCardOptions();
 
-  bool isTodoOnHomeEnabled(String tag) => optionsFor(tag).showTodoOnHome;
-
   bool isShownInWarTab(String tag) => optionsFor(tag).showInWarTab;
 
   bool isShownInTodoPage(String tag) => optionsFor(tag).showInTodoPage;
-
-  /// Normalized tags whose to-do card should be shown on the home dashboard.
-  Set<String> get todoOnHomeTags => _optionsByTag.entries
-      .where((entry) => entry.value.showTodoOnHome)
-      .map((entry) => entry.key)
-      .toSet();
 
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -119,10 +100,6 @@ class PlayerCardPreferencesService extends ChangeNotifier {
       tag,
       (options) => options.copyWith(notificationsEnabled: value),
     );
-  }
-
-  Future<void> setShowTodoOnHome(String tag, bool value) {
-    return _update(tag, (options) => options.copyWith(showTodoOnHome: value));
   }
 
   Future<void> setShowInWarTab(String tag, bool value) {
