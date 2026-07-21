@@ -154,13 +154,11 @@ void main() {
 
     await provider.selectBoard(RankingBoard.playerTownHall);
     await tester.pumpAndSettle();
-    expect(find.text('TH18'), findsNothing);
-    expect(find.text('Town Hall'), findsWidgets);
+    expect(find.text('TH18'), findsOneWidget);
 
     await provider.selectBoard(RankingBoard.playerRanked);
     await tester.pumpAndSettle();
-    expect(find.text('Legend League 2'), findsNothing);
-    expect(find.text('Ranked League'), findsWidgets);
+    expect(find.text('Legend League 2'), findsOneWidget);
 
     await provider.selectLeague(RankingLeagueOption.legendThree);
     await tester.pumpAndSettle();

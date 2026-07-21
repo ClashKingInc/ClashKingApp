@@ -36,8 +36,6 @@ class RankingsProvider extends ChangeNotifier {
   late RankingLeagueOption selectedLeague;
   late DateTime historyDate;
   int townHallLevel = 18;
-  bool hasSelectedTownHallFilter = false;
-  bool hasSelectedLeagueFilter = false;
   RankingResult? result;
   Object? error;
   Object? locationError;
@@ -172,29 +170,15 @@ class RankingsProvider extends ChangeNotifier {
   }
 
   Future<void> selectTownHall(int value) async {
-    if (townHallLevel == value) {
-      if (!hasSelectedTownHallFilter) {
-        hasSelectedTownHallFilter = true;
-        notifyListeners();
-      }
-      return;
-    }
+    if (townHallLevel == value) return;
     townHallLevel = value;
-    hasSelectedTownHallFilter = true;
     notifyListeners();
     await reload();
   }
 
   Future<void> selectLeague(RankingLeagueOption value) async {
-    if (selectedLeague.id == value.id) {
-      if (!hasSelectedLeagueFilter) {
-        hasSelectedLeagueFilter = true;
-        notifyListeners();
-      }
-      return;
-    }
+    if (selectedLeague.id == value.id) return;
     selectedLeague = value;
-    hasSelectedLeagueFilter = true;
     notifyListeners();
     await reload();
   }

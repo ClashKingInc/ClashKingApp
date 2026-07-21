@@ -74,26 +74,6 @@ void main() {
     expect(service.queries.length, 10);
   });
 
-  test(
-    'marks default filter values visible after explicit selection',
-    () async {
-      final service = _RecordingRankingsService();
-      final provider = RankingsProvider(
-        service: service,
-        leagueOptions: const [RankingLeagueOption.legendTwo],
-        clock: () => DateTime(2026, 7, 20),
-      );
-
-      await provider.initialize();
-      await provider.selectTownHall(18);
-      await provider.selectLeague(RankingLeagueOption.legendTwo);
-
-      expect(provider.hasSelectedTownHallFilter, isTrue);
-      expect(provider.hasSelectedLeagueFilter, isTrue);
-      expect(service.queries, hasLength(1));
-    },
-  );
-
   test('surfaces a clear empty history result without an error', () async {
     final service = _RecordingRankingsService(empty: true);
     final provider = RankingsProvider(

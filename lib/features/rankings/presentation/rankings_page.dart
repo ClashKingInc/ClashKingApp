@@ -517,9 +517,7 @@ class _RankingControls extends StatelessWidget {
       controls.add(
         _OpaqueFilterButton(
           label: l10n.sideFilter,
-          value: provider.hasSelectedTownHallFilter
-              ? 'TH${provider.townHallLevel}'
-              : l10n.rankingsTownHall,
+          value: 'TH${provider.townHallLevel}',
           imageUrl: ImageAssets.townHall(provider.townHallLevel),
           icon: Icons.home_work_outlined,
           onTap: onOpenTownHallPicker,
@@ -530,9 +528,7 @@ class _RankingControls extends StatelessWidget {
       controls.add(
         _OpaqueFilterButton(
           label: l10n.sideFilter,
-          value: provider.hasSelectedLeagueFilter
-              ? provider.selectedLeague.name
-              : l10n.rankingsRankedLeague,
+          value: provider.selectedLeague.name,
           imageUrl: provider.selectedLeague.iconUrl,
           icon: Icons.emoji_events_outlined,
           onTap: onOpenLeaguePicker,
