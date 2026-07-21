@@ -21,9 +21,7 @@ void main() {
     );
   }
 
-  testWidgets('landing page has categories but no global search', (
-    tester,
-  ) async {
+  testWidgets('uses a hero header and category subpages', (tester) async {
     final repository = _FakeRepository([_manifest]);
 
     await pumpLocalized(
@@ -35,21 +33,32 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(
-      find.byKey(const ValueKey('game-assets-categories')),
-      findsOneWidget,
-    );
-    expect(find.byKey(const ValueKey('game-assets-search')), findsNothing);
+    expect(find.text('Game Assets'), findsOneWidget);
+    expect(find.byType(NestedScrollView), findsOneWidget);
+    expect(find.byKey(const ValueKey('game-assets-search')), findsOneWidget);
     expect(find.text('Buildings'), findsOneWidget);
     expect(find.text('Troops'), findsOneWidget);
-
-    await tester.tap(
-      find.byKey(const ValueKey('game-asset-category-buildings')),
+    expect(tester.widget<TabBar>(find.byType(TabBar)).isScrollable, isTrue);
+    expect(find.text('Cannon · Level 1'), findsOneWidget);
+    expect(
+      find.text('buildings/home-village/cannon/level_1.webp'),
+      findsNothing,
     );
+
+    final grid = tester.widget<GridView>(
+      find.byKey(const ValueKey('game-assets-grid')),
+    );
+    expect(
+      (grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount)
+          .crossAxisCount,
+      3,
+    );
+
+    await tester.tap(find.text('Troops'));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('game-assets-search')), findsOneWidget);
-    expect(find.text('2 images'), findsOneWidget);
+    expect(find.text('Wizard'), findsOneWidget);
   });
 
   testWidgets('error retry and empty manifest states are visible', (
@@ -172,8 +181,16 @@ final _manifest = GameAssetManifest(
   version: 1,
   assets: [
     _asset('troops/wizard.webp', 'Wizard', category: 'troops'),
-    _asset('buildings/cannon.webp', 'Cannon', category: 'buildings'),
-    _asset('buildings/archer_tower.png', 'Archer Tower', category: 'buildings'),
+    _asset(
+      'buildings/home-village/cannon/level_1.webp',
+      'level 1',
+      category: 'buildings',
+    ),
+    _asset(
+      'buildings/home-village/archer_tower/level_1.png',
+      'level 1',
+      category: 'buildings',
+    ),
   ],
 );
 

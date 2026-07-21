@@ -121,6 +121,15 @@ class GameAsset {
 
   String get fileName => Uri.decodeComponent(url.pathSegments.last);
 
+  String get tileDisplayName {
+    if (category != 'buildings') return displayName;
+    final segments = path.split('/');
+    if (segments.length < 4) return displayName;
+    final buildingName = formatGameAssetCategory(segments[segments.length - 2]);
+    final levelName = formatGameAssetCategory(displayName);
+    return '$buildingName · $levelName';
+  }
+
   bool matches(String query) {
     final normalized = query.trim().toLowerCase();
     return normalized.isEmpty || _searchText.contains(normalized);

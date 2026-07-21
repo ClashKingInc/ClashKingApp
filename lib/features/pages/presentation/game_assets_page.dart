@@ -1,11 +1,15 @@
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/game_assets/data/game_asset_actions.dart';
 import 'package:clashkingapp/features/game_assets/data/game_asset_manifest_service.dart';
 import 'package:clashkingapp/features/game_assets/models/game_asset_manifest.dart';
 import 'package:clashkingapp/features/game_assets/presentation/game_asset_image.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import 'side_page_components.dart';
@@ -31,6 +35,7 @@ class _GameAssetsPageState extends State<GameAssetsPage> {
   GameAssetManifest? _manifest;
   Object? _error;
   var _loading = true;
+  String? _selectedCategoryID;
 
   @override
   void initState() {
@@ -59,6 +64,11 @@ class _GameAssetsPageState extends State<GameAssetsPage> {
       if (!mounted) return;
       setState(() {
         _manifest = manifest;
+        final categories = manifest.categories;
+        if (categories.isNotEmpty &&
+            !categories.any((category) => category.id == _selectedCategoryID)) {
+          _selectedCategoryID = categories.first.id;
+        }
         _loading = false;
       });
     } catch (error) {
@@ -73,10 +83,56 @@ class _GameAssetsPageState extends State<GameAssetsPage> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    return SidePageScaffold(
-      title: loc.sideGameAssetsTitle,
-      subtitle: loc.sideGameAssetsSubtitle,
-      child: _buildBody(context, loc),
+    final categories = _manifest?.categories ?? const <GameAssetCategory>[];
+    if (_loading && _manifest == null ||
+        _error != null && _manifest == null ||
+        categories.isEmpty) {
+      return SidePageScaffold(
+        title: loc.sideGameAssetsTitle,
+        subtitle: loc.sideGameAssetsSubtitle,
+        child: _buildBody(context, loc),
+      );
+    }
+
+    final selectedIndex = categories
+        .indexWhere((category) => category.id == _selectedCategoryID)
+        .clamp(0, categories.length - 1);
+    final selectedCategory = categories[selectedIndex];
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverToBoxAdapter(
+            child: _GameAssetsHeader(
+              category: selectedCategory,
+              refreshing: _loading,
+              onRefresh: () => _load(forceRefresh: true),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: InfoProfileTabs(
+              selectedIndex: selectedIndex,
+              alwaysScrollable: true,
+              onTabSelected: (index) =>
+                  setState(() => _selectedCategoryID = categories[index].id),
+              tabs: [
+                for (final category in categories)
+                  InfoProfileTabData(
+                    label: formatGameAssetCategory(category.id),
+                    icon: _categoryIcon(category.id),
+                  ),
+              ],
+            ),
+          ),
+        ],
+        body: GameAssetCategoryPage(
+          key: ValueKey('game-asset-subpage-${selectedCategory.id}'),
+          category: selectedCategory,
+          actions: widget.actions,
+          imageBuilder: widget.imageBuilder,
+          embedded: true,
+        ),
+      ),
     );
   }
 
@@ -122,91 +178,108 @@ class _GameAssetsPageState extends State<GameAssetsPage> {
       );
     }
 
-    return ListView.separated(
-      key: const ValueKey('game-assets-categories'),
-      padding: sidePagePadding,
-      itemCount: categories.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 10),
-      itemBuilder: (context, index) {
-        final category = categories[index];
-        return _GameAssetCategoryTile(
-          category: category,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => GameAssetCategoryPage(
-                category: category,
-                actions: widget.actions,
-                imageBuilder: widget.imageBuilder,
-              ),
-            ),
-          ),
-        );
-      },
-    );
+    return const SizedBox.shrink();
   }
 }
 
-class _GameAssetCategoryTile extends StatelessWidget {
-  const _GameAssetCategoryTile({required this.category, required this.onTap});
+class _GameAssetsHeader extends StatelessWidget {
+  const _GameAssetsHeader({
+    required this.category,
+    required this.refreshing,
+    required this.onRefresh,
+  });
 
   final GameAssetCategory category;
-  final VoidCallback onTap;
+  final bool refreshing;
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
-    final label = formatGameAssetCategory(category.id);
-
-    return Material(
-      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.34),
-      borderRadius: BorderRadius.circular(16),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        key: ValueKey('game-asset-category-${category.id}'),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: colorScheme.primaryContainer,
-                foregroundColor: colorScheme.onPrimaryContainer,
-                child: Icon(_categoryIcon(category.id), size: 21),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      formatGameAssetImageCount(
-                        loc,
-                        category.count,
-                        Localizations.localeOf(context),
-                      ),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ],
+    final isDesktop = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final height = MediaQuery.paddingOf(context).top + (isDesktop ? 184 : 204);
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: InfoHeroBackdrop(
+            imageUrl: ImageAssets.homeBaseBackground,
+            height: height,
           ),
         ),
-      ),
+        SizedBox(
+          height: height,
+          child: SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                isDesktop ? 24 : 12,
+                0,
+                isDesktop ? 24 : 12,
+                14,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      HeaderIconButton(
+                        icon: Icons.arrow_back_rounded,
+                        iconColor: Colors.white,
+                        tooltip: MaterialLocalizations.of(
+                          context,
+                        ).backButtonTooltip,
+                        onTap: () => Navigator.of(context).pop(),
+                        showBackground: false,
+                      ),
+                      const Spacer(),
+                      HeaderIconButton(
+                        icon: refreshing
+                            ? Icons.hourglass_top_rounded
+                            : Icons.refresh_rounded,
+                        iconColor: Colors.white,
+                        tooltip: loc.sideRefresh,
+                        onTap: refreshing ? () {} : onRefresh,
+                        showBackground: false,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _categoryIcon(category.id),
+                          color: Colors.white,
+                          size: 54,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          loc.sideGameAssetsTitle,
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                        Text(
+                          loc.sideGameAssetsSubtitle,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.78),
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -217,11 +290,13 @@ class GameAssetCategoryPage extends StatefulWidget {
     required this.category,
     this.actions,
     this.imageBuilder,
+    this.embedded = false,
   });
 
   final GameAssetCategory category;
   final GameAssetActions? actions;
   final GameAssetImageBuilder? imageBuilder;
+  final bool embedded;
 
   @override
   State<GameAssetCategoryPage> createState() => _GameAssetCategoryPageState();
@@ -255,77 +330,70 @@ class _GameAssetCategoryPageState extends State<GameAssetCategoryPage> {
       extension: _extension,
     );
 
-    return SidePageScaffold(
-      title: categoryName,
-      subtitle: formatGameAssetImageCount(
-        loc,
-        widget.category.count,
-        Localizations.localeOf(context),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: AppSearchField(
-                    key: const ValueKey('game-assets-search'),
-                    controller: _searchController,
-                    query: _query,
-                    hintText: loc.gameAssetsSearchHint,
-                    onChanged: (value) => setState(() => _query = value),
-                  ),
+    final content = Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+          child: Row(
+            children: [
+              Expanded(
+                child: AppSearchField(
+                  key: const ValueKey('game-assets-search'),
+                  controller: _searchController,
+                  query: _query,
+                  hintText: loc.gameAssetsSearchHint,
+                  onChanged: (value) => setState(() => _query = value),
                 ),
-                const SizedBox(width: 10),
-                FilterDropdown(
-                  sortBy: _extension,
-                  updateSortBy: (value) => setState(() => _extension = value),
-                  sortByOptions: {
-                    loc.gameAssetsAllFormats: '',
-                    for (final extension in widget.category.extensions)
-                      extension.toUpperCase(): extension,
-                  },
-                  maxWidth: 132,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 10),
+              FilterDropdown(
+                sortBy: _extension,
+                updateSortBy: (value) => setState(() => _extension = value),
+                sortByOptions: {
+                  loc.gameAssetsAllFormats: '',
+                  for (final extension in widget.category.extensions)
+                    extension.toUpperCase(): extension,
+                },
+                maxWidth: 132,
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Text(
-                formatGameAssetResultCount(
-                  loc,
-                  filteredAssets.length,
-                  Localizations.localeOf(context),
-                ),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              formatGameAssetResultCount(
+                loc,
+                filteredAssets.length,
+                Localizations.localeOf(context),
+              ),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
           ),
-          Expanded(
-            child: filteredAssets.isEmpty
-                ? SingleChildScrollView(
-                    child: SidePageEmptyState(
-                      icon: Icons.search_off_rounded,
-                      title: loc.gameAssetsNoResultsTitle,
-                      body: loc.gameAssetsNoResultsBody,
-                    ),
-                  )
-                : GridView.builder(
+        ),
+        Expanded(
+          child: filteredAssets.isEmpty
+              ? SingleChildScrollView(
+                  child: SidePageEmptyState(
+                    icon: Icons.search_off_rounded,
+                    title: loc.gameAssetsNoResultsTitle,
+                    body: loc.gameAssetsNoResultsBody,
+                  ),
+                )
+              : LayoutBuilder(
+                  builder: (context, constraints) => GridView.builder(
                     key: const ValueKey('game-assets-grid'),
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 210,
-                          mainAxisExtent: 230,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                        ),
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 28),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: constraints.maxWidth >= 600 ? 4 : 3,
+                      mainAxisExtent: 154,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
                     itemCount: filteredAssets.length,
                     itemBuilder: (context, index) => _GameAssetTile(
                       asset: filteredAssets[index],
@@ -333,9 +401,20 @@ class _GameAssetCategoryPageState extends State<GameAssetCategoryPage> {
                       imageBuilder: widget.imageBuilder,
                     ),
                   ),
-          ),
-        ],
+                ),
+        ),
+      ],
+    );
+
+    if (widget.embedded) return content;
+    return SidePageScaffold(
+      title: categoryName,
+      subtitle: formatGameAssetImageCount(
+        loc,
+        widget.category.count,
+        Localizations.localeOf(context),
       ),
+      child: content,
     );
   }
 }
@@ -405,21 +484,12 @@ class _GameAssetTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 9),
                 Text(
-                  asset.displayName,
-                  maxLines: 1,
+                  asset.tileDisplayName,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(
                     context,
                   ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  asset.path,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
                 ),
               ],
             ),

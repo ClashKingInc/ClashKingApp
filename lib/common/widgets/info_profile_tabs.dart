@@ -17,11 +17,13 @@ class InfoProfileTabs extends StatefulWidget {
     required this.tabs,
     required this.selectedIndex,
     required this.onTabSelected,
+    this.alwaysScrollable = false,
   });
 
   final List<InfoProfileTabData> tabs;
   final int selectedIndex;
   final ValueChanged<int> onTabSelected;
+  final bool alwaysScrollable;
 
   @override
   State<InfoProfileTabs> createState() => _InfoProfileTabsState();
@@ -70,16 +72,17 @@ class _InfoProfileTabsState extends State<InfoProfileTabs>
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final isScrollable = widget.alwaysScrollable || !isDesktopWeb;
     return DecoratedBox(
       decoration: BoxDecoration(color: scheme.surface),
       child: SizedBox(
         height: 50,
         child: TabBar(
           controller: _controller,
-          isScrollable: !isDesktopWeb,
-          tabAlignment: isDesktopWeb ? TabAlignment.fill : TabAlignment.start,
-          padding: EdgeInsets.symmetric(horizontal: isDesktopWeb ? 0 : 6),
-          labelPadding: EdgeInsets.symmetric(horizontal: isDesktopWeb ? 0 : 10),
+          isScrollable: isScrollable,
+          tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
+          padding: EdgeInsets.symmetric(horizontal: isScrollable ? 6 : 0),
+          labelPadding: EdgeInsets.symmetric(horizontal: isScrollable ? 10 : 0),
           labelColor: scheme.onSurface,
           unselectedLabelColor: scheme.onSurface,
           indicatorColor: scheme.primary,

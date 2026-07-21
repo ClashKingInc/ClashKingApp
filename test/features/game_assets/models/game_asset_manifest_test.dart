@@ -106,6 +106,20 @@ void main() {
     );
     expect(filterGameAssets(assets, query: 'missing'), isEmpty);
   });
+
+  test('building tiles include the building name with the level', () {
+    final asset = GameAsset(
+      path: 'buildings/home-village/archer_tower/level_17.webp',
+      category: 'buildings',
+      displayName: 'level 17',
+      extension: 'webp',
+      url: Uri.parse(
+        'https://assets.clashk.ing/buildings/home-village/archer_tower/level_17.webp',
+      ),
+    );
+
+    expect(asset.tileDisplayName, 'Archer Tower · Level 17');
+  });
 }
 
 Map<String, dynamic> _assetJson({
