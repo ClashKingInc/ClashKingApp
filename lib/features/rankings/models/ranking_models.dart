@@ -155,8 +155,20 @@ class RankingLeagueOption {
 
   static const legendOne = RankingLeagueOption(
     id: 105000036,
-    name: 'Legend I',
+    name: 'Legend League 1',
     iconUrl: ImageAssets.legendLeagueOne,
+  );
+
+  static const legendTwo = RankingLeagueOption(
+    id: 105000035,
+    name: 'Legend League 2',
+    iconUrl: ImageAssets.legendLeagueTwo,
+  );
+
+  static const legendThree = RankingLeagueOption(
+    id: 105000034,
+    name: 'Legend League 3',
+    iconUrl: ImageAssets.legendLeagueThree,
   );
 
   final int id;
@@ -245,12 +257,13 @@ class RankingEntry {
     final clanTag =
         _nestedString(json['clan'], 'tag') ??
         _firstString(json, const ['clan_tag', 'clanTag']);
-    final subtitleParts = <String>[
-      if (clanName.isNotEmpty) clanName,
-      if (clanTag.isNotEmpty && clanTag != tag) clanTag,
-      if (board.isClan && clanName.isEmpty && clanTag.isEmpty && tag.isNotEmpty)
-        tag,
-    ];
+    final subtitleParts = board.isClan
+        ? <String>[
+            if (clanName.isNotEmpty) clanName,
+            if (clanTag.isNotEmpty && clanTag != tag) clanTag,
+            if (clanName.isEmpty && clanTag.isEmpty && tag.isNotEmpty) tag,
+          ]
+        : <String>[if (clanName.isNotEmpty) clanName];
     final includedClanBadge =
         _nestedString(json['clan'], 'badge') ??
         _nestedString(json['clan'], 'badgeUrls.medium') ??
@@ -271,6 +284,9 @@ class RankingEntry {
         _nestedString(json['league'], 'iconUrls.large') ??
         _nestedString(json['league'], 'iconUrls.small') ??
         _nestedString(json['league'], 'badge');
+    final builderBaseLeagueIcon = board == RankingBoard.playerBuilder
+        ? ImageAssets.getBuilderBaseLeagueImage(json['builderBaseLeague'])
+        : null;
     final badgeUrl =
         _nestedString(json['badgeUrls'], 'medium') ??
         _nestedString(json['badge_urls'], 'medium') ??
@@ -278,7 +294,9 @@ class RankingEntry {
     final selectedRankedLeagueIcon = board == RankingBoard.playerRanked
         ? (rankedLeagueIconUrl ?? board.iconUrl)
         : null;
-    final playerImageUrl = townHall > 0
+    final playerImageUrl = board == RankingBoard.playerBuilder
+        ? (builderBaseLeagueIcon ?? board.iconUrl)
+        : townHall > 0
         ? ImageAssets.townHall(townHall)
         : (selectedRankedLeagueIcon ?? leagueIcon ?? board.iconUrl);
     final imageUrl = board.isClan
@@ -293,7 +311,11 @@ class RankingEntry {
       rank: _firstInt(json, const ['rank', 'placement']),
       previousRank: _firstInt(json, const ['previousRank', 'previous_rank']),
       tag: tag,
-      name: _firstString(json, const ['name', 'player_name', 'clan_name'], tag),
+      name: _firstString(json, const [
+        'name',
+        'player_name',
+        'clan_name',
+      ], board.isClan ? tag : ''),
       subtitle: subtitleParts.join(' · '),
       score: _scoreFor(json, board),
       imageUrl: imageUrl,

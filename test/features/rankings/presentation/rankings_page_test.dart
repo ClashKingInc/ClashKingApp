@@ -91,7 +91,10 @@ void main() {
     final service = _WidgetRankingsService();
     final provider = RankingsProvider(
       service: service,
-      leagueOptions: const [RankingLeagueOption.legendOne],
+      leagueOptions: const [
+        RankingLeagueOption.legendTwo,
+        RankingLeagueOption.legendThree,
+      ],
       clock: () => DateTime(2026, 7, 20),
     );
 
@@ -104,6 +107,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('Rankings of the Top Players & Clans'), findsOneWidget);
     expect(find.text('Player result'), findsOneWidget);
     expect(service.queries.last.board, RankingBoard.playerHome);
 
@@ -128,7 +132,10 @@ void main() {
   ) async {
     final provider = RankingsProvider(
       service: _WidgetRankingsService(),
-      leagueOptions: const [RankingLeagueOption.legendOne],
+      leagueOptions: const [
+        RankingLeagueOption.legendTwo,
+        RankingLeagueOption.legendThree,
+      ],
       clock: () => DateTime(2026, 7, 20),
     );
 
@@ -144,6 +151,25 @@ void main() {
     expect(find.text('Source'), findsNothing);
     expect(find.text('Results'), findsNothing);
     expect(find.text('TH18 · Legend I'), findsNothing);
+
+    await provider.selectBoard(RankingBoard.playerTownHall);
+    await tester.pumpAndSettle();
+    expect(find.text('TH18'), findsNothing);
+    expect(find.text('Town Hall'), findsWidgets);
+
+    await provider.selectBoard(RankingBoard.playerRanked);
+    await tester.pumpAndSettle();
+    expect(find.text('Legend League 2'), findsNothing);
+    expect(find.text('Ranked League'), findsWidgets);
+
+    await provider.selectLeague(RankingLeagueOption.legendThree);
+    await tester.pumpAndSettle();
+    expect(find.text('Legend League 3'), findsOneWidget);
+
+    await provider.selectBoard(RankingBoard.playerTownHall);
+    await provider.selectTownHall(17);
+    await tester.pumpAndSettle();
+    expect(find.text('TH17'), findsOneWidget);
   });
 }
 
@@ -173,7 +199,7 @@ class _WidgetRankingsService extends RankingsService {
           previousRank: 1,
           tag: isClan ? '#CLAN' : '#PLAYER',
           name: isClan ? 'Clan result' : 'Player result',
-          subtitle: isClan ? '#CLAN' : '#PLAYER',
+          subtitle: isClan ? '#CLAN' : '',
           score: 6000,
           imageUrl: query.board.iconUrl,
           metricImageUrl: query.board.iconUrl,

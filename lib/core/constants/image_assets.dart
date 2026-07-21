@@ -196,6 +196,10 @@ class ImageAssets {
       "$baseUrl/icons/Icon_HV_League_Legend_3_Border_No_Padding.png";
   static const String legendLeagueOne =
       "$baseUrl/leagues/league-tier/legend_league_1.webp";
+  static const String legendLeagueTwo =
+      "$baseUrl/leagues/league-tier/legend_league_2.webp";
+  static const String legendLeagueThree =
+      "$baseUrl/leagues/league-tier/legend_league_3.webp";
   static String flag(String countryCode) =>
       "$baseUrl/country-flags/${countryCode.toLowerCase()}.png";
   static const String planet = "$baseUrl/icons/Icon_HV_Planet.png";

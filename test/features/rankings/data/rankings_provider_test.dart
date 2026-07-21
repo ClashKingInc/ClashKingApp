@@ -1,18 +1,45 @@
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/rankings/data/rankings_provider.dart';
 import 'package:clashkingapp/features/rankings/data/rankings_service.dart';
 import 'package:clashkingapp/features/rankings/models/ranking_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('offers every ranked league except Legend League 1', () {
+    GameDataService.playerLeagueData['leagues'] = {
+      'Legend 1': {'_id': 105000036, 'name': 'Legend League'},
+      'Legend 2': {'_id': 105000035, 'name': 'Legend League'},
+      'Legend 3': {'_id': 105000034, 'name': 'Legend League'},
+      'Pekka 23': {'_id': 105000033, 'name': 'P.E.K.K.A League 23'},
+      'Dragon 22': {'_id': 105000032, 'name': 'Dragon League 22'},
+    };
+    addTearDown(GameDataService.playerLeagueData.clear);
+
+    final options = rankingLeagueOptionsFromGameData();
+
+    expect(options.map((option) => option.id), [
+      105000035,
+      105000034,
+      105000033,
+      105000032,
+    ]);
+    expect(options.map((option) => option.name), [
+      'Legend League 2',
+      'Legend League 3',
+      'P.E.K.K.A League 23',
+      'Dragon League 22',
+    ]);
+  });
+
   test('every board and filter change issues a new request', () async {
     final service = _RecordingRankingsService();
     final provider = RankingsProvider(
       service: service,
       leagueOptions: const [
-        RankingLeagueOption.legendOne,
+        RankingLeagueOption.legendTwo,
         RankingLeagueOption(
-          id: 105000033,
-          name: 'Legend II',
+          id: 105000034,
+          name: 'Legend League 3',
           iconUrl: 'legend-2',
         ),
       ],
@@ -38,7 +65,7 @@ void main() {
 
     await provider.selectBoard(RankingBoard.playerRanked);
     await provider.selectLeague(provider.leagueOptions.last);
-    expect(service.queries.last.leagueTier.id, 105000033);
+    expect(service.queries.last.leagueTier.id, 105000034);
 
     await provider.selectAudience(RankingAudience.clans);
     await provider.selectBoard(RankingBoard.clanDonations);
@@ -47,11 +74,31 @@ void main() {
     expect(service.queries.length, 10);
   });
 
+  test(
+    'marks default filter values visible after explicit selection',
+    () async {
+      final service = _RecordingRankingsService();
+      final provider = RankingsProvider(
+        service: service,
+        leagueOptions: const [RankingLeagueOption.legendTwo],
+        clock: () => DateTime(2026, 7, 20),
+      );
+
+      await provider.initialize();
+      await provider.selectTownHall(18);
+      await provider.selectLeague(RankingLeagueOption.legendTwo);
+
+      expect(provider.hasSelectedTownHallFilter, isTrue);
+      expect(provider.hasSelectedLeagueFilter, isTrue);
+      expect(service.queries, hasLength(1));
+    },
+  );
+
   test('surfaces a clear empty history result without an error', () async {
     final service = _RecordingRankingsService(empty: true);
     final provider = RankingsProvider(
       service: service,
-      leagueOptions: const [RankingLeagueOption.legendOne],
+      leagueOptions: const [RankingLeagueOption.legendTwo],
       clock: () => DateTime(2026, 7, 20),
     );
 
@@ -96,7 +143,7 @@ class _RecordingRankingsService extends RankingsService {
                 previousRank: 2,
                 tag: query.board.isClan ? '#CLAN' : '#PLAYER',
                 name: query.board.isClan ? 'Clan One' : 'Player One',
-                subtitle: query.board.isClan ? '#CLAN' : '#PLAYER',
+                subtitle: query.board.isClan ? '#CLAN' : '',
                 score: 6000,
                 imageUrl: query.board.iconUrl,
                 metricImageUrl: query.board.iconUrl,

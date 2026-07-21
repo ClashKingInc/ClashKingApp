@@ -113,43 +113,54 @@ void main() {
     expect(historyResult.entries, isEmpty);
   });
 
-  test('applies the selected tier badge to ranked leaderboard rows', () async {
-    final api = FakeApiService();
-    const endpoint = '/leaderboard/league/105000036?limit=500';
-    api.getStubs[endpoint] = http.Response(
-      jsonEncode({
-        'items': [
-          {
-            'tag': '#RANKED',
-            'name': 'Ranked Player',
-            'placement': 1,
-            'league_trophies': 900,
-            'league': {
-              'iconUrls': {'medium': 'legacy-purple'},
+  test(
+    'applies the selected tier badge and cached clan to ranked rows',
+    () async {
+      final api = FakeApiService();
+      const endpoint = '/leaderboard/league/105000036?limit=500';
+      api.getStubs[endpoint] = http.Response(
+        jsonEncode({
+          'items': [
+            {
+              'tag': '#RANKED',
+              'name': 'Ranked Player',
+              'placement': 1,
+              'league_trophies': 900,
+              'league': {
+                'iconUrls': {'medium': 'legacy-purple'},
+              },
+              'clan': {
+                'tag': '#CLAN',
+                'name': 'Ranked Clan',
+                'badge': 'ranked-clan.png',
+              },
             },
-          },
-        ],
-      }),
-      200,
-    );
+          ],
+        }),
+        200,
+      );
 
-    const selectedLeague = RankingLeagueOption(
-      id: 105000036,
-      name: 'Legend I',
-      iconUrl: 'legend-one',
-    );
-    final result = await RankingsService(apiService: api).fetchRankings(
-      RankingQuery(
-        board: RankingBoard.playerRanked,
-        location: const RankingLocation.worldwide(),
-        period: RankingPeriod.current,
-        historyDate: DateTime(2026, 7, 20),
-        townHallLevel: 18,
-        leagueTier: selectedLeague,
-      ),
-    );
+      const selectedLeague = RankingLeagueOption(
+        id: 105000036,
+        name: 'Legend I',
+        iconUrl: 'legend-one',
+      );
+      final result = await RankingsService(apiService: api).fetchRankings(
+        RankingQuery(
+          board: RankingBoard.playerRanked,
+          location: const RankingLocation.worldwide(),
+          period: RankingPeriod.current,
+          historyDate: DateTime(2026, 7, 20),
+          townHallLevel: 18,
+          leagueTier: selectedLeague,
+        ),
+      );
 
-    expect(result.entries.single.imageUrl, selectedLeague.iconUrl);
-    expect(result.entries.single.metricImageUrl, selectedLeague.iconUrl);
-  });
+      expect(result.entries.single.imageUrl, selectedLeague.iconUrl);
+      expect(result.entries.single.metricImageUrl, selectedLeague.iconUrl);
+      expect(result.entries.single.subtitle, 'Ranked Clan');
+      expect(result.entries.single.clanBadgeUrl, 'ranked-clan.png');
+      expect(result.entries.single.subtitle, isNot(contains('#')));
+    },
+  );
 }

@@ -2528,7 +2528,7 @@
   "announcementAnimeFuryTitle": "Anime Fury",
   "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
   "sideRankingsTitle": "Rankings",
-  "sideRankingsSubtitle": "Official leaderboards plus ClashKing endpoints.",
+  "sideRankingsSubtitle": "Rankings of the Top Players & Clans",
   "sideRankingsLoadError": "Could not load official rankings.",
   "sideRankingsEmptyTitle": "No rankings returned",
   "sideRankingsEmptyBody": "Try another leaderboard or location.",

@@ -36,6 +36,8 @@ class RankingsProvider extends ChangeNotifier {
   late RankingLeagueOption selectedLeague;
   late DateTime historyDate;
   int townHallLevel = 18;
+  bool hasSelectedTownHallFilter = false;
+  bool hasSelectedLeagueFilter = false;
   RankingResult? result;
   Object? error;
   Object? locationError;
@@ -170,15 +172,29 @@ class RankingsProvider extends ChangeNotifier {
   }
 
   Future<void> selectTownHall(int value) async {
-    if (townHallLevel == value) return;
+    if (townHallLevel == value) {
+      if (!hasSelectedTownHallFilter) {
+        hasSelectedTownHallFilter = true;
+        notifyListeners();
+      }
+      return;
+    }
     townHallLevel = value;
+    hasSelectedTownHallFilter = true;
     notifyListeners();
     await reload();
   }
 
   Future<void> selectLeague(RankingLeagueOption value) async {
-    if (selectedLeague.id == value.id) return;
+    if (selectedLeague.id == value.id) {
+      if (!hasSelectedLeagueFilter) {
+        hasSelectedLeagueFilter = true;
+        notifyListeners();
+      }
+      return;
+    }
     selectedLeague = value;
+    hasSelectedLeagueFilter = true;
     notifyListeners();
     await reload();
   }
@@ -186,30 +202,44 @@ class RankingsProvider extends ChangeNotifier {
 
 List<RankingLeagueOption> rankingLeagueOptionsFromGameData() {
   final rawLeagues = GameDataService.playerLeagueData['leagues'];
-  if (rawLeagues is! Map) return const [RankingLeagueOption.legendOne];
-  final options = <RankingLeagueOption>[];
+  if (rawLeagues is! Map) {
+    return const [
+      RankingLeagueOption.legendTwo,
+      RankingLeagueOption.legendThree,
+    ];
+  }
+
+  final optionsByID = <int, RankingLeagueOption>{};
   for (final entry in rawLeagues.entries) {
     final raw = entry.value;
     if (raw is! Map) continue;
     final id = _intValue(raw['_id'] ?? raw['id']);
-    final name = raw['name']?.toString().trim() ?? entry.key.toString();
-    if (id == null || id < 105000000 || name.isEmpty) continue;
-    options.add(
-      RankingLeagueOption(
-        id: id,
-        name: name,
-        iconUrl: ImageAssets.getLeagueImage(name),
-      ),
+    if (id == null ||
+        id < 105000000 ||
+        id == RankingLeagueOption.legendOne.id) {
+      continue;
+    }
+    final rawName = raw['name']?.toString().trim() ?? entry.key.toString();
+    final name = switch (id) {
+      105000035 => 'Legend League 2',
+      105000034 => 'Legend League 3',
+      _ => rawName,
+    };
+    if (name.isEmpty) continue;
+    optionsByID[id] = RankingLeagueOption(
+      id: id,
+      name: name,
+      iconUrl: ImageAssets.getLeagueImage(name),
     );
   }
-  if (options.isEmpty) return const [RankingLeagueOption.legendOne];
-  options.sort((a, b) => b.id.compareTo(a.id));
-  final legendOneIndex = options.indexWhere(
-    (option) => option.name.toLowerCase() == 'legend i',
-  );
-  if (legendOneIndex > 0) {
-    final legendOne = options.removeAt(legendOneIndex);
-    options.insert(0, legendOne);
+
+  final options = optionsByID.values.toList(growable: false)
+    ..sort((a, b) => b.id.compareTo(a.id));
+  if (options.isEmpty) {
+    return const [
+      RankingLeagueOption.legendTwo,
+      RankingLeagueOption.legendThree,
+    ];
   }
   return options;
 }

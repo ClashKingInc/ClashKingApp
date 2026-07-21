@@ -57,11 +57,28 @@ void main() {
       }, RankingBoard.playerHome);
 
       expect(entry.audience, RankingAudience.players);
-      expect(entry.subtitle, 'Clan One · #CLAN');
+      expect(entry.subtitle, 'Clan One');
       expect(entry.clanBadgeUrl, '${ApiConfig.apiUrlV2}/clan/%23CLAN/badge');
       expect(entry.score, 6012);
       expect(entry.movement, '+6');
       expect(entry.imageUrl, 'https://example.com/league.png');
+    });
+
+    test('maps the Builder Base league name to its badge beside names', () {
+      final entry = RankingEntry.fromJson({
+        'tag': '#PLAYER',
+        'name': 'Builder Player',
+        'rank': 1,
+        'builderBaseTrophies': 5000,
+        'builderBaseLeague': {'id': 44000005, 'name': 'Copper League III'},
+      }, RankingBoard.playerBuilder);
+
+      expect(
+        entry.imageUrl,
+        'https://assets.clashk.ing/leagues/builder-base/copper_league_3.png',
+      );
+      expect(entry.metricImageUrl, ImageAssets.builderBaseTrophy);
+      expect(entry.subtitle, isEmpty);
     });
 
     test('prefers every official leagueTier size over legacy league icons', () {
@@ -168,7 +185,8 @@ void main() {
           },
         }, RankingBoard.playerTownHall);
 
-        expect(entry.subtitle, 'Clan One · #CLAN');
+        expect(entry.subtitle, 'Clan One');
+        expect(entry.subtitle, isNot(contains('#CLAN')));
         expect(entry.subtitle, isNot(contains('#PLAYER')));
         expect(entry.clanBadgeUrl, 'https://example.com/clan.png');
       },
@@ -184,6 +202,17 @@ void main() {
 
       expect(entry.subtitle, isEmpty);
       expect(entry.clanBadgeUrl, isEmpty);
+    });
+
+    test('never falls back to a player tag as the visible name', () {
+      final entry = RankingEntry.fromJson({
+        'tag': '#PLAYER',
+        'rank': 1,
+        'trophies': 5000,
+      }, RankingBoard.playerHome);
+
+      expect(entry.name, isEmpty);
+      expect(entry.subtitle, isEmpty);
     });
   });
 }
