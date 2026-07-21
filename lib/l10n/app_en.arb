@@ -2782,6 +2782,51 @@
   "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
   "sideGameAssetsTitle": "Game Assets",
   "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
+  "gameAssetsLoadError": "Could not load game assets",
+  "gameAssetsEmptyTitle": "No game assets available",
+  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
+  "gameAssetsOneImage": "1 image",
+  "gameAssetsImageCount": "{count} images",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Search this category",
+  "gameAssetsAllFormats": "All formats",
+  "gameAssetsOneResult": "1 result",
+  "gameAssetsResultCount": "{count} results",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "No matching images",
+  "gameAssetsNoResultsBody": "Try another search or file format.",
+  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
+  "gameAssetsCopyUrl": "Copy URL",
+  "gameAssetsCopyPath": "Copy path",
+  "gameAssetsUrlCopied": "Asset URL copied",
+  "gameAssetsPathCopied": "Asset path copied",
+  "gameAssetsCopyError": "Could not copy the asset details.",
+  "gameAssetsShare": "Share",
+  "gameAssetsShareError": "Could not share this asset.",
+  "gameAssetsSave": "Save",
+  "gameAssetsSaving": "Saving...",
+  "gameAssetsSaved": "Asset saved.",
+  "gameAssetsSavedTo": "Asset saved to {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Could not save this asset.",
   "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
   "@sideZapQuakeTitle": {
     "placeholders": {
