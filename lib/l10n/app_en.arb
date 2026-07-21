@@ -2555,9 +2555,100 @@
   "tooltipHidePassword": "Hide password",
   "tooltipRemoveAccount": "Remove account",
   "calculatorsTitle": "Calculators",
-  "calculatorsSubtitle": "Zap quake and fireball quake.",
+  "calculatorsSubtitle": "Plan damage against current building levels.",
   "calculatorZapQuake": "Zap quake",
   "calculatorFireball": "Fireball",
+  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
+  "damageNoStaticDataTitle": "Damage data is unavailable",
+  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
+  "damageTownHall": "Town Hall",
+  "damageVerifiedAccountPrefill": "Verified account preset",
+  "damageOverridesStayLocal": "Changes here do not update the player account.",
+  "damageTargets": "Buildings",
+  "damageAddBuilding": "Add building",
+  "damageRemoveBuilding": "Remove building",
+  "damageNoTargetsBody": "Add at least one building to compare results.",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Search buildings",
+  "damageNoBuildingsFound": "No buildings found",
+  "damageTryAnotherSearch": "Try another name or Town Hall level.",
+  "damageAttackStack": "Manual attack stack",
+  "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
+  "damageCount": "Count",
+  "damagePerUse": "{damage} damage per use",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Lightning",
+  "damageSourceEarthquake": "Earthquake",
+  "damageSourceGiantArrow": "Giant Arrow",
+  "damageSourceFireball": "Fireball",
+  "damageSourceFlameFlinger": "Flame Flinger hit",
+  "damageSourceBalloonDeath": "Balloon death damage",
+  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
+  "damageResults": "Results",
+  "damageDestroyed": "Destroyed",
+  "damageSurvives": "Survives",
+  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Zap Quake optimizer",
+  "damageSpellCapacity": "Spell capacity",
+  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
+  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
+  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
+  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "Upgrade Tracker",
   "upgradeTrackerSubtitle": "Remaining upgrade cost and time.",
   "linkedAccountLabel": "Linked account",
