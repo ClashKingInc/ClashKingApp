@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/config/api_config.dart';
 
 enum RankingAudience { players, clans }
 
@@ -205,6 +206,7 @@ class RankingEntry {
     required this.imageUrl,
     required this.metricImageUrl,
     required this.townHallLevel,
+    this.clanBadgeUrl = '',
   });
 
   final RankingAudience audience;
@@ -217,6 +219,7 @@ class RankingEntry {
   final String imageUrl;
   final String metricImageUrl;
   final int townHallLevel;
+  final String clanBadgeUrl;
 
   String get movement {
     if (previousRank <= 0 || rank <= 0) return '=';
@@ -245,8 +248,19 @@ class RankingEntry {
     final subtitleParts = <String>[
       if (clanName.isNotEmpty) clanName,
       if (clanTag.isNotEmpty && clanTag != tag) clanTag,
-      if (clanName.isEmpty && clanTag.isEmpty && tag.isNotEmpty) tag,
+      if (board.isClan && clanName.isEmpty && clanTag.isEmpty && tag.isNotEmpty)
+        tag,
     ];
+    final includedClanBadge =
+        _nestedString(json['clan'], 'badge') ??
+        _nestedString(json['clan'], 'badgeUrls.medium') ??
+        _nestedString(json['clan'], 'badge_urls.medium') ??
+        _firstString(json, const ['clan_badge', 'clanBadge']);
+    final clanBadgeUrl = board.isClan || clanTag.isEmpty
+        ? ''
+        : board.source == RankingSource.official
+        ? '${ApiConfig.apiUrlV2}/clan/${Uri.encodeComponent(clanTag)}/badge'
+        : includedClanBadge;
 
     final leagueIcon =
         _nestedString(json['leagueTier'], 'iconUrls.medium') ??
@@ -285,6 +299,7 @@ class RankingEntry {
       imageUrl: imageUrl,
       metricImageUrl: metricImageUrl,
       townHallLevel: townHall,
+      clanBadgeUrl: clanBadgeUrl,
     );
   }
 }

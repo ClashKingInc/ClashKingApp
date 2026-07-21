@@ -1,3 +1,4 @@
+import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/rankings/models/ranking_models.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -57,6 +58,7 @@ void main() {
 
       expect(entry.audience, RankingAudience.players);
       expect(entry.subtitle, 'Clan One · #CLAN');
+      expect(entry.clanBadgeUrl, '${ApiConfig.apiUrlV2}/clan/%23CLAN/badge');
       expect(entry.score, 6012);
       expect(entry.movement, '+6');
       expect(entry.imageUrl, 'https://example.com/league.png');
@@ -148,6 +150,40 @@ void main() {
 
       expect(entry.imageUrl, ImageAssets.townHall(18));
       expect(entry.metricImageUrl, 'https://example.com/legend-one.png');
+    });
+
+    test(
+      'uses included clan badge and never shows player tag on CK boards',
+      () {
+        final entry = RankingEntry.fromJson({
+          'tag': '#PLAYER',
+          'name': 'Townhall Player',
+          'rank': 1,
+          'townhall_level': 18,
+          'trophies': 5513,
+          'clan': {
+            'tag': '#CLAN',
+            'name': 'Clan One',
+            'badge': 'https://example.com/clan.png',
+          },
+        }, RankingBoard.playerTownHall);
+
+        expect(entry.subtitle, 'Clan One · #CLAN');
+        expect(entry.subtitle, isNot(contains('#PLAYER')));
+        expect(entry.clanBadgeUrl, 'https://example.com/clan.png');
+      },
+    );
+
+    test('leaves subtitle empty for clanless player rankings', () {
+      final entry = RankingEntry.fromJson({
+        'tag': '#PLAYER',
+        'name': 'Clanless Player',
+        'rank': 1,
+        'trophies': 5000,
+      }, RankingBoard.playerHome);
+
+      expect(entry.subtitle, isEmpty);
+      expect(entry.clanBadgeUrl, isEmpty);
     });
   });
 }

@@ -789,13 +789,32 @@ class RankingRow extends StatelessWidget {
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      if (entry.subtitle.isNotEmpty)
-                        Text(
-                          entry.subtitle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(color: scheme.onSurfaceVariant),
+                      if (entry.subtitle.isNotEmpty ||
+                          entry.clanBadgeUrl.isNotEmpty)
+                        Row(
+                          children: [
+                            if (entry.clanBadgeUrl.isNotEmpty) ...[
+                              MobileWebImage(
+                                imageUrl: entry.clanBadgeUrl,
+                                width: 17,
+                                height: 17,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(width: 5),
+                            ],
+                            if (entry.subtitle.isNotEmpty)
+                              Expanded(
+                                child: Text(
+                                  entry.subtitle,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.labelMedium
+                                      ?.copyWith(
+                                        color: scheme.onSurfaceVariant,
+                                      ),
+                                ),
+                              ),
+                          ],
                         ),
                     ],
                   ),
