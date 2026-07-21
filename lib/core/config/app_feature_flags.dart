@@ -7,7 +7,6 @@ abstract final class AppFeatureFlags {
   static const posts = 'posts';
   static const homeAnnouncements = 'home_announcements';
   static const leaderboards = 'leaderboards';
-  static const leaderboardPreviews = 'leaderboard_previews';
   static const globalStats = 'global_stats';
   static const calculators = 'calculators';
   static const subscriptionSupport = 'subscription_support';
@@ -25,7 +24,6 @@ abstract final class AppFeatureFlags {
     posts: true,
     homeAnnouncements: true,
     leaderboards: true,
-    leaderboardPreviews: false,
     globalStats: true,
     calculators: true,
     subscriptionSupport: false,
