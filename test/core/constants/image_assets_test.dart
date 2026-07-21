@@ -29,23 +29,23 @@ void main() {
       );
       expect(
         ImageAssets.getLeagueImage('Legend League I'),
-        'https://assets.clashk.ing/leagues/league-tier/legend_league_1.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_1.png',
       );
       expect(
         ImageAssets.getLeagueImage('Legend League 2'),
-        'https://assets.clashk.ing/leagues/league-tier/legend_league_2.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_2.png',
       );
       expect(
         ImageAssets.getLeagueImage('Legend League III'),
-        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.png',
       );
       expect(
         ImageAssets.getLeagueImage('Legend III'),
-        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.png',
       );
       expect(
         ImageAssets.getLeagueImage('Legend 3'),
-        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.webp',
+        'https://assets.clashk.ing/leagues/league-tier/legend_league_3.png',
       );
     });
 
@@ -212,6 +212,10 @@ void main() {
       expect(
         ImageAssets.getBuilderBaseLeagueImage('Copper League III'),
         'https://assets.clashk.ing/leagues/builder-base/copper_league_3.png',
+      );
+      expect(
+        ImageAssets.getBuilderBaseLeagueImage('Diamond League'),
+        'https://assets.clashk.ing/leagues/builder-base/diamond_league.png',
       );
       expect(
         ImageAssets.builderWave,

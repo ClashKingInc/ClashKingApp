@@ -72,7 +72,7 @@ class ImageAssets {
         .trim();
     final tierNumber = _leagueTierNumber(tier);
     if (tierNumber < 1 || tierNumber > 3) return null;
-    return 'legend_league_$tierNumber.webp';
+    return 'legend_league_$tierNumber.png';
   }
 
   static String getWarLeagueImage(String leagueName) {
@@ -195,11 +195,11 @@ class ImageAssets {
   static const String legendBlazonBordersNoPadding =
       "$baseUrl/icons/Icon_HV_League_Legend_3_Border_No_Padding.png";
   static const String legendLeagueOne =
-      "$baseUrl/leagues/league-tier/legend_league_1.webp";
+      "$baseUrl/leagues/league-tier/legend_league_1.png";
   static const String legendLeagueTwo =
-      "$baseUrl/leagues/league-tier/legend_league_2.webp";
+      "$baseUrl/leagues/league-tier/legend_league_2.png";
   static const String legendLeagueThree =
-      "$baseUrl/leagues/league-tier/legend_league_3.webp";
+      "$baseUrl/leagues/league-tier/legend_league_3.png";
   static String flag(String countryCode) =>
       "$baseUrl/country-flags/${countryCode.toLowerCase()}.png";
   static const String planet = "$baseUrl/icons/Icon_HV_Planet.png";
