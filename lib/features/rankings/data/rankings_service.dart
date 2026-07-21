@@ -26,7 +26,10 @@ class RankingsService {
                   RankingLocation.fromJson(Map<String, dynamic>.from(item)),
             )
             .where(
-              (location) => location.id != null && location.name.isNotEmpty,
+              (location) =>
+                  location.id != null &&
+                  location.name.isNotEmpty &&
+                  location.hasValidCountryCode,
             )
             .toList(growable: false)
           ..sort((a, b) {
@@ -60,6 +63,9 @@ class RankingsService {
           (item) => RankingEntry.fromJson(
             Map<String, dynamic>.from(item),
             query.board,
+            rankedLeagueIconUrl: query.board == RankingBoard.playerRanked
+                ? query.leagueTier.iconUrl
+                : null,
           ),
         )
         .where((entry) => entry.tag.isNotEmpty)

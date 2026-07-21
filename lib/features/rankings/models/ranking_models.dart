@@ -225,7 +225,11 @@ class RankingEntry {
     return delta > 0 ? '+$delta' : '$delta';
   }
 
-  factory RankingEntry.fromJson(Map<String, dynamic> json, RankingBoard board) {
+  factory RankingEntry.fromJson(
+    Map<String, dynamic> json,
+    RankingBoard board, {
+    String? rankedLeagueIconUrl,
+  }) {
     final tag = _firstString(json, const ['tag', 'player_tag', 'clan_tag']);
     final townHall = _firstInt(json, const [
       'townHallLevel',
@@ -253,14 +257,20 @@ class RankingEntry {
         _nestedString(json['badgeUrls'], 'medium') ??
         _nestedString(json['badge_urls'], 'medium') ??
         _firstString(json, const ['badge_url']);
+    final selectedRankedLeagueIcon = board == RankingBoard.playerRanked
+        ? (rankedLeagueIconUrl ?? board.iconUrl)
+        : null;
+    final playerImageUrl =
+        selectedRankedLeagueIcon ??
+        (townHall > 0
+            ? ImageAssets.townHall(townHall)
+            : (leagueIcon ?? board.iconUrl));
     final imageUrl = board.isClan
         ? (badgeUrl.isEmpty ? ImageAssets.clanCastle : badgeUrl)
-        : townHall > 0
-        ? ImageAssets.townHall(townHall)
-        : (leagueIcon ?? board.iconUrl);
+        : playerImageUrl;
     final metricImageUrl = board.isClan
         ? board.iconUrl
-        : (leagueIcon ?? board.iconUrl);
+        : (selectedRankedLeagueIcon ?? leagueIcon ?? board.iconUrl);
 
     return RankingEntry(
       audience: board.audience,

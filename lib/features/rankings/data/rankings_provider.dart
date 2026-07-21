@@ -55,7 +55,13 @@ class RankingsProvider extends ChangeNotifier {
     locationError = null;
     notifyListeners();
     try {
-      locations = await _service.fetchLocations();
+      final fetchedLocations = await _service.fetchLocations();
+      locations = fetchedLocations
+          .where((item) => item.isWorldwide || item.hasValidCountryCode)
+          .toList(growable: false);
+      if (locations.isEmpty) {
+        locations = const [RankingLocation.worldwide()];
+      }
       location = locations.firstWhere(
         (item) => item.isWorldwide,
         orElse: () => locations.first,

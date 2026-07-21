@@ -61,8 +61,14 @@ void main() {
     );
     expect(material.color, isNot(Colors.transparent));
     expect(find.text('Worldwide'), findsOneWidget);
-    expect(find.text('Europe'), findsOneWidget);
+    expect(find.text('Europe'), findsNothing);
     expect(find.text('United States'), findsOneWidget);
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const Key('rankings-location-search')))
+          .autofocus,
+      isFalse,
+    );
 
     await tester.enterText(
       find.byKey(const Key('rankings-location-search')),
@@ -116,6 +122,29 @@ void main() {
     expect(service.queries.last.board, RankingBoard.clanDonations);
     expect(service.queries.last.location.isWorldwide, isFalse);
   });
+
+  testWidgets('does not show source, results, or fake filter chips', (
+    tester,
+  ) async {
+    final provider = RankingsProvider(
+      service: _WidgetRankingsService(),
+      leagueOptions: const [RankingLeagueOption.legendOne],
+      clock: () => DateTime(2026, 7, 20),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: RankingsPage(provider: provider),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Source'), findsNothing);
+    expect(find.text('Results'), findsNothing);
+    expect(find.text('TH18 · Legend I'), findsNothing);
+  });
 }
 
 class _WidgetRankingsService extends RankingsService {
@@ -124,7 +153,12 @@ class _WidgetRankingsService extends RankingsService {
   @override
   Future<List<RankingLocation>> fetchLocations() async => const [
     RankingLocation.worldwide(),
-    RankingLocation(id: 32000006, name: 'International', isCountry: false),
+    RankingLocation(
+      id: 32000007,
+      name: 'United States',
+      isCountry: true,
+      countryCode: 'US',
+    ),
   ];
 
   @override

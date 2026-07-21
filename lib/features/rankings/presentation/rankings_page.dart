@@ -413,21 +413,27 @@ class _RankingsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entries = provider.result?.entries ?? const <RankingEntry>[];
+    final hasFilters =
+        provider.board.supportsLocation ||
+        provider.board.supportsHistory ||
+        provider.board == RankingBoard.playerTownHall ||
+        provider.board == RankingBoard.playerRanked;
     return CustomScrollView(
       key: PageStorageKey(provider.board),
       slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
-          sliver: SliverToBoxAdapter(
-            child: _RankingControls(
-              provider: provider,
-              onOpenLocationPicker: onOpenLocationPicker,
-              onOpenTownHallPicker: onOpenTownHallPicker,
-              onOpenLeaguePicker: onOpenLeaguePicker,
-              onOpenHistoryDatePicker: onOpenHistoryDatePicker,
+        if (hasFilters)
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+            sliver: SliverToBoxAdapter(
+              child: _RankingControls(
+                provider: provider,
+                onOpenLocationPicker: onOpenLocationPicker,
+                onOpenTownHallPicker: onOpenTownHallPicker,
+                onOpenLeaguePicker: onOpenLeaguePicker,
+                onOpenHistoryDatePicker: onOpenHistoryDatePicker,
+              ),
             ),
           ),
-        ),
         if (provider.isLoading)
           const SliverToBoxAdapter(
             child: LinearProgressIndicator(minHeight: 2),
@@ -450,15 +456,9 @@ class _RankingsBody extends StatelessWidget {
           )
         else ...[
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-            sliver: SliverToBoxAdapter(
-              child: _RankingResultMeta(provider: provider),
-            ),
-          ),
-          SliverPadding(
             padding: EdgeInsets.fromLTRB(
               16,
-              0,
+              hasFilters ? 0 : 14,
               16,
               24 + MediaQuery.paddingOf(context).bottom,
             ),
@@ -683,53 +683,6 @@ class _OpaqueFilterButton extends StatelessWidget {
   }
 }
 
-class _RankingResultMeta extends StatelessWidget {
-  const _RankingResultMeta({required this.provider});
-
-  final RankingsProvider provider;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final result = provider.result!;
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        MetricChip(
-          label: l10n.rankingsSource,
-          value: result.source == RankingSource.official
-              ? l10n.rankingsOfficialSource
-              : 'ClashKing',
-          icon: result.source == RankingSource.official
-              ? Icons.verified_rounded
-              : Icons.query_stats_rounded,
-        ),
-        MetricChip(
-          label: l10n.rankingsResults,
-          value: l10n.rankingsTopCount(result.entries.length),
-          icon: Icons.format_list_numbered_rounded,
-        ),
-        if (provider.board == RankingBoard.playerHome &&
-            provider.period == RankingPeriod.current)
-          MetricChip(
-            label: l10n.sideFilter,
-            value: 'TH18 · Legend I',
-            imageUrl: ImageAssets.townHall(18),
-          ),
-        if (provider.period == RankingPeriod.history)
-          MetricChip(
-            label: l10n.rankingsSnapshotDate,
-            value: DateFormat.yMMMd(
-              Localizations.localeOf(context).toLanguageTag(),
-            ).format(provider.historyDate),
-            icon: Icons.history_rounded,
-          ),
-      ],
-    );
-  }
-}
-
 class _RankingEmptyState extends StatelessWidget {
   const _RankingEmptyState({required this.provider});
 
@@ -898,6 +851,10 @@ Future<RankingLocation?> showRankingLocationPicker(
       builder: (context, setState) {
         final query = controller.text.trim().toLowerCase();
         final filtered = locations
+            .where(
+              (location) =>
+                  location.isWorldwide || location.hasValidCountryCode,
+            )
             .where((location) {
               if (query.isEmpty || location.isWorldwide) return true;
               return location.name.toLowerCase().contains(query) ||
@@ -936,7 +893,7 @@ Future<RankingLocation?> showRankingLocationPicker(
                     TextField(
                       key: const Key('rankings-location-search'),
                       controller: controller,
-                      autofocus: true,
+                      autofocus: false,
                       textInputAction: TextInputAction.search,
                       onChanged: (_) => setState(() {}),
                       decoration: InputDecoration(

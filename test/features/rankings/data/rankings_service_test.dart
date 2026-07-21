@@ -28,13 +28,8 @@ void main() {
 
     final locations = await RankingsService(apiService: api).fetchLocations();
 
-    expect(locations.map((item) => item.name), [
-      'Worldwide',
-      'Europe',
-      'International',
-      'Afghanistan',
-    ]);
-    expect(locations[1].id, 32000000);
+    expect(locations.map((item) => item.name), ['Worldwide', 'Afghanistan']);
+    expect(locations[1].id, 32000007);
     expect(api.getCallCounts['/locations'], 1);
   });
 
@@ -116,5 +111,45 @@ void main() {
     expect(currentResult.limit, 500);
     expect(currentResult.entries.single.townHallLevel, 17);
     expect(historyResult.entries, isEmpty);
+  });
+
+  test('applies the selected tier badge to ranked leaderboard rows', () async {
+    final api = FakeApiService();
+    const endpoint = '/leaderboard/league/105000034?limit=500';
+    api.getStubs[endpoint] = http.Response(
+      jsonEncode({
+        'items': [
+          {
+            'tag': '#RANKED',
+            'name': 'Ranked Player',
+            'placement': 1,
+            'league_trophies': 900,
+            'league': {
+              'iconUrls': {'medium': 'legacy-purple'},
+            },
+          },
+        ],
+      }),
+      200,
+    );
+
+    const selectedLeague = RankingLeagueOption(
+      id: 105000034,
+      name: 'Legend I',
+      iconUrl: 'legend-one',
+    );
+    final result = await RankingsService(apiService: api).fetchRankings(
+      RankingQuery(
+        board: RankingBoard.playerRanked,
+        location: const RankingLocation.worldwide(),
+        period: RankingPeriod.current,
+        historyDate: DateTime(2026, 7, 20),
+        townHallLevel: 18,
+        leagueTier: selectedLeague,
+      ),
+    );
+
+    expect(result.entries.single.imageUrl, selectedLeague.iconUrl);
+    expect(result.entries.single.metricImageUrl, selectedLeague.iconUrl);
   });
 }

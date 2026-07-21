@@ -69,5 +69,24 @@ void main() {
       expect(entry.score, 19);
       expect(entry.imageUrl, 'https://example.com/badge.png');
     });
+
+    test('uses the selected ranked-tier badge for every ranked row', () {
+      final entry = RankingEntry.fromJson(
+        {
+          'tag': '#PLAYER',
+          'name': 'Ranked Player',
+          'placement': 5,
+          'league_trophies': 854,
+          'league': {
+            'iconUrls': {'medium': 'https://example.com/legacy-purple.png'},
+          },
+        },
+        RankingBoard.playerRanked,
+        rankedLeagueIconUrl: 'https://example.com/legend-one.png',
+      );
+
+      expect(entry.imageUrl, 'https://example.com/legend-one.png');
+      expect(entry.metricImageUrl, 'https://example.com/legend-one.png');
+    });
   });
 }
