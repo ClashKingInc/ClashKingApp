@@ -135,6 +135,25 @@ class ApiService {
     );
   }
 
+  Future<http.Response> patchResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = _defaultTimeout,
+    Map<String, String>? extraHeaders,
+  }) async {
+    return _requestResponse(
+      'PATCH',
+      endpoint: endpoint,
+      url: url,
+      body: body,
+      requiresAuth: requiresAuth,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+
   Future<http.Response> deleteResponse(
     String endpoint, {
     Object? body,
@@ -316,6 +335,18 @@ class ApiService {
         case 'PUT':
           final response = await _client
               .put(resolvedUri, headers: headers, body: requestBody)
+              .timeout(timeout);
+          stopwatch.stop();
+          _recordHttpBreadcrumb(
+            method,
+            resolvedUri,
+            response,
+            stopwatch.elapsed,
+          );
+          return response;
+        case 'PATCH':
+          final response = await _client
+              .patch(resolvedUri, headers: headers, body: requestBody)
               .timeout(timeout);
           stopwatch.stop();
           _recordHttpBreadcrumb(

@@ -14,9 +14,11 @@ class FakeApiService extends ApiService {
   final Map<String, http.Response> getStubs = {};
   final Map<String, http.Response> postStubs = {};
   final Map<String, http.Response> putStubs = {};
+  final Map<String, http.Response> patchStubs = {};
   final Map<String, http.Response> deleteStubs = {};
   final Map<String, Object?> lastPostBodies = {};
   final Map<String, Object?> lastPutBodies = {};
+  final Map<String, Object?> lastPatchBodies = {};
   final Map<String, Object?> lastDeleteBodies = {};
   final Map<String, Map<String, String>?> lastGetHeaders = {};
   final Map<String, int> getCallCounts = {};
@@ -25,6 +27,7 @@ class FakeApiService extends ApiService {
   /// throw this exception instead of returning a stubbed response.
   final Map<String, Exception> throwOnGet = {};
   final Map<String, Exception> throwOnPost = {};
+  final Map<String, Exception> throwOnPatch = {};
   final Map<String, Exception> throwOnDelete = {};
 
   @override
@@ -69,6 +72,20 @@ class FakeApiService extends ApiService {
   }) async {
     lastPutBodies[endpoint] = body;
     return putStubs[endpoint] ?? http.Response('{}', 200);
+  }
+
+  @override
+  Future<http.Response> patchResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) async {
+    lastPatchBodies[endpoint] = body;
+    if (throwOnPatch.containsKey(endpoint)) throw throwOnPatch[endpoint]!;
+    return patchStubs[endpoint] ?? http.Response('{}', 200);
   }
 
   @override

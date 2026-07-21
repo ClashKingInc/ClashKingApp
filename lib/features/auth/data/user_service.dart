@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/coc_accounts/models/coc_account_link.dart';
 
 class UserService {
   UserService({ApiService? apiService})
@@ -18,8 +19,8 @@ class UserService {
     if (response['items'] is List) {
       return (response['items'] as List)
           .whereType<Map<String, dynamic>>()
-          .map((account) => account['player_tag']?.toString())
-          .whereType<String>()
+          .map(CocAccountLink.fromJson)
+          .map((account) => account.playerTag)
           .toList();
     }
 

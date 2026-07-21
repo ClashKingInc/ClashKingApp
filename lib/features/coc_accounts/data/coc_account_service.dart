@@ -12,6 +12,7 @@ import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
+import 'package:clashkingapp/features/coc_accounts/models/coc_account_link.dart';
 
 class CocAccountService extends ChangeNotifier {
   static const String _msgNotAuthenticated = 'User not authenticated';
@@ -87,7 +88,16 @@ class CocAccountService extends ChangeNotifier {
         if (cocAccounts is! List) {
           throw const FormatException("Invalid CoC accounts payload");
         }
-        _cocAccounts = List<Map<String, dynamic>>.from(cocAccounts);
+        _cocAccounts = cocAccounts
+            .map((rawAccount) {
+              if (rawAccount is! Map) {
+                throw const FormatException('Invalid CoC account item');
+              }
+              return CocAccountLink.fromJson(
+                Map<String, dynamic>.from(rawAccount),
+              ).toJson();
+            })
+            .toList(growable: true);
         DebugUtils.debugInfo("🔍 Fetched accounts data: $_cocAccounts");
         // Verification status is now included in the API response
       } else {
@@ -209,7 +219,7 @@ class CocAccountService extends ChangeNotifier {
     account["name"] ??= "Unknown Player";
     account["townHallLevel"] ??= 1;
     account["is_verified"] ??= false;
-    return account;
+    return CocAccountLink.fromJson(account).toJson();
   }
 
   void _upsertAccount(Map<String, dynamic> account) {
@@ -245,6 +255,40 @@ class CocAccountService extends ChangeNotifier {
       }
     } catch (e) {
       ErrorReporter.captureException(e, operation: 'accounts.remove');
+    }
+  }
+
+  Future<void> updateAccountHidden(String playerTag, bool hidden) async {
+    final encodedPlayerTag = Uri.encodeComponent(playerTag);
+
+    try {
+      final response = await _apiService.patchResponse(
+        _linksEndpoint(encodedPlayerTag),
+        body: {'hidden': hidden},
+        requiresAuth: true,
+      );
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw HttpException(
+          'Failed to update account visibility (${response.statusCode})',
+          uri: response.request?.url,
+        );
+      }
+
+      final accountIndex = _cocAccounts.indexWhere(
+        (account) => account['player_tag'] == playerTag,
+      );
+      if (accountIndex != -1) {
+        _cocAccounts[accountIndex]['hidden'] = hidden;
+        _safeNotify();
+      }
+    } catch (exception, stackTrace) {
+      ErrorReporter.captureException(
+        exception,
+        stackTrace: stackTrace,
+        operation: 'accounts.visibility',
+      );
+      rethrow;
     }
   }
 
@@ -730,6 +774,17 @@ class CocAccountService extends ChangeNotifier {
       orElse: () => <String, dynamic>{},
     );
     return account["is_verified"] ?? false;
+  }
+
+  CocAccountLink? getAccountLink(String playerTag) {
+    final normalizedTag = playerTag.trim().toUpperCase();
+    for (final account in _cocAccounts) {
+      final accountTag = account['player_tag']?.toString().trim().toUpperCase();
+      if (accountTag == normalizedTag) {
+        return CocAccountLink.fromJson(account);
+      }
+    }
+    return null;
   }
 
   Map<String, dynamic> _decodeResponseMap(String responseBody) {

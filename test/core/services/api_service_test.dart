@@ -336,6 +336,24 @@ void main() {
         expect(response.statusCode, 200);
       });
 
+      test('PATCH with Map body uses PATCH and encodes JSON', () async {
+        http.Request? captured;
+        final client = MockClient((request) async {
+          captured = request;
+          return http.Response('{}', 200);
+        });
+        final service = ApiService(client: client);
+
+        await service.patchResponse(
+          '/test',
+          body: {'hidden': true},
+          requiresAuth: false,
+        );
+
+        expect(captured?.method, 'PATCH');
+        expect(captured?.body, '{"hidden":true}');
+      });
+
       test('DELETE 200 returns response', () async {
         final client = MockClient((_) async => http.Response('{}', 200));
         final service = ApiService(client: client);

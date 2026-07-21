@@ -73,9 +73,9 @@ void main() {
       fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
           'items': [
-            {'player_tag': '#ABC123'},
-            {'player_tag': '#DEF456'},
-            {'player_tag': '#GHI789'},
+            {'player_tag': '#ABC123', 'hidden': false},
+            {'player_tag': '#DEF456', 'hidden': true},
+            {'player_tag': '#GHI789', 'hidden': false},
           ],
         }),
         200,
@@ -91,7 +91,7 @@ void main() {
       fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
           'items': [
-            {'player_tag': '#ONLY1'},
+            {'player_tag': '#ONLY1', 'hidden': false},
           ],
         }),
         200,

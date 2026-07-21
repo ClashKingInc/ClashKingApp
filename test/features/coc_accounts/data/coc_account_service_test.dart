@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -19,7 +20,11 @@ Future<CocAccountService> serviceWithAccounts(
 }) async {
   final api = fakeApi ?? FakeApiService();
   api.getStubs[testLinksEndpoint] = http.Response(
-    jsonEncode({'items': accounts}),
+    jsonEncode({
+      'items': accounts
+          .map((account) => {'hidden': false, ...account})
+          .toList(),
+    }),
     200,
   );
   final service = CocAccountService(apiService: api, currentUserId: testUserId);
@@ -155,8 +160,8 @@ void main() {
       fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
           'items': [
-            {'player_tag': '#ABC123', 'name': 'TestPlayer'},
-            {'player_tag': '#DEF456', 'name': 'Other'},
+            {'player_tag': '#ABC123', 'name': 'TestPlayer', 'hidden': false},
+            {'player_tag': '#DEF456', 'name': 'Other', 'hidden': true},
           ],
         }),
         200,
@@ -168,6 +173,28 @@ void main() {
       await service.fetchCocAccounts();
       expect(service.cocAccounts, hasLength(2));
       expect(service.cocAccounts.first['player_tag'], '#ABC123');
+      expect(service.cocAccounts.last['hidden'], isTrue);
+    });
+
+    test('throws when an account is missing required hidden', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({
+          'items': [
+            {'player_tag': '#ABC123', 'is_verified': true},
+          ],
+        }),
+        200,
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        currentUserId: testUserId,
+      );
+
+      await expectLater(
+        service.fetchCocAccounts,
+        throwsA(isA<FormatException>()),
+      );
     });
 
     test('sets isLoading to false after success', () async {
@@ -236,7 +263,7 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.postStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
-          'account': {'player_tag': '#ABC', 'name': 'Test'},
+          'account': {'player_tag': '#ABC', 'name': 'Test', 'hidden': false},
         }),
         200,
       );
@@ -298,7 +325,7 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.postStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
-          'account': {'player_tag': '#ABC'},
+          'account': {'player_tag': '#ABC', 'hidden': false},
         }),
         200,
       );
@@ -397,6 +424,40 @@ void main() {
       service.addListener(() => notified = true);
       await service.removeCocAccount('#X');
       expect(notified, isTrue);
+    });
+  });
+
+  group('CocAccountService — updateAccountHidden', () {
+    test(
+      'PATCHes hidden and updates the matching account after success',
+      () async {
+        final fakeApi = FakeApiService();
+        final endpoint = '$testLinksEndpoint/${Uri.encodeComponent('#ABC')}';
+        fakeApi.patchStubs[endpoint] = http.Response('{}', 200);
+        final service = await serviceWithAccounts([
+          {'player_tag': '#ABC', 'is_verified': true, 'hidden': false},
+        ], fakeApi: fakeApi);
+
+        await service.updateAccountHidden('#ABC', true);
+
+        expect(fakeApi.lastPatchBodies[endpoint], {'hidden': true});
+        expect(service.getAccountLink('#ABC')?.hidden, isTrue);
+      },
+    );
+
+    test('keeps local state unchanged when PATCH is rejected', () async {
+      final fakeApi = FakeApiService();
+      final endpoint = '$testLinksEndpoint/${Uri.encodeComponent('#ABC')}';
+      fakeApi.patchStubs[endpoint] = http.Response('forbidden', 403);
+      final service = await serviceWithAccounts([
+        {'player_tag': '#ABC', 'is_verified': true, 'hidden': false},
+      ], fakeApi: fakeApi);
+
+      await expectLater(
+        () => service.updateAccountHidden('#ABC', true),
+        throwsA(isA<HttpException>()),
+      );
+      expect(service.getAccountLink('#ABC')?.hidden, isFalse);
     });
   });
 
@@ -872,7 +933,12 @@ void main() {
       fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
           'items': [
-            {'player_tag': '#ABC', 'name': 'Old Name', 'townHallLevel': 10},
+            {
+              'player_tag': '#ABC',
+              'name': 'Old Name',
+              'townHallLevel': 10,
+              'hidden': false,
+            },
           ],
         }),
         200,
@@ -961,7 +1027,7 @@ void main() {
       fakeApi.getStubs[testLinksEndpoint] = http.Response(
         jsonEncode({
           'items': [
-            {'player_tag': '#P1'},
+            {'player_tag': '#P1', 'hidden': false},
           ],
         }),
         200,

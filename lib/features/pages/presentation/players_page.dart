@@ -8,6 +8,7 @@ import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
+import 'package:clashkingapp/features/pages/widgets/account_visibility_option.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
@@ -85,9 +86,12 @@ class _PlayersPageState extends State<PlayersPage> {
     Widget buildRosterCard(BuildContext context, int index) {
       if (showingLinked) {
         final player = linkedPlayers[index];
+        final link = cocService.getAccountLink(player.tag);
         return _PlayerDataCard(
           player: player,
           showActivity: true,
+          isVerified: link?.isVerified ?? false,
+          hidden: link?.hidden ?? false,
           statusIcon: Icons.verified_user_rounded,
           statusColor: Theme.of(context).colorScheme.primary,
           onTap: () => Navigator.push(
@@ -261,6 +265,8 @@ class _PlayerDataCard extends StatefulWidget {
   const _PlayerDataCard({
     required this.player,
     required this.showActivity,
+    this.isVerified,
+    this.hidden,
     required this.statusIcon,
     required this.statusColor,
     required this.onTap,
@@ -268,6 +274,8 @@ class _PlayerDataCard extends StatefulWidget {
 
   final Player player;
   final bool showActivity;
+  final bool? isVerified;
+  final bool? hidden;
   final IconData statusIcon;
   final Color statusColor;
   final VoidCallback onTap;
@@ -278,6 +286,28 @@ class _PlayerDataCard extends StatefulWidget {
 
 class _PlayerDataCardState extends State<_PlayerDataCard> {
   bool _optionsExpanded = false;
+  bool _updatingVisibility = false;
+
+  Future<void> _toggleVisibility() async {
+    final hidden = widget.hidden;
+    if (hidden == null) return;
+    setState(() => _updatingVisibility = true);
+    try {
+      await context.read<CocAccountService>().updateAccountHidden(
+        widget.player.tag,
+        !hidden,
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Couldn’t update account visibility.')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _updatingVisibility = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -294,6 +324,10 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
       onTap: widget.onTap,
       footer: _PlayerCardOptionsFooter(
         tag: player.tag,
+        isVerified: widget.isVerified,
+        hidden: widget.hidden,
+        updatingVisibility: _updatingVisibility,
+        onToggleVisibility: _toggleVisibility,
         expanded: _optionsExpanded,
         onToggleExpanded: () =>
             setState(() => _optionsExpanded = !_optionsExpanded),
@@ -507,11 +541,19 @@ String _normalizeTag(String tag) => tag.trim().toUpperCase();
 class _PlayerCardOptionsFooter extends StatelessWidget {
   const _PlayerCardOptionsFooter({
     required this.tag,
+    required this.isVerified,
+    required this.hidden,
+    required this.updatingVisibility,
+    required this.onToggleVisibility,
     required this.expanded,
     required this.onToggleExpanded,
   });
 
   final String tag;
+  final bool? isVerified;
+  final bool? hidden;
+  final bool updatingVisibility;
+  final VoidCallback onToggleVisibility;
   final bool expanded;
   final VoidCallback onToggleExpanded;
 
@@ -620,6 +662,13 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                           onChanged: (value) =>
                               prefs.setShowInWarTab(tag, value),
                         ),
+                        if (isVerified != null && hidden != null)
+                          AccountVisibilityOption(
+                            hidden: hidden!,
+                            verified: isVerified!,
+                            updating: updatingVisibility,
+                            onPressed: onToggleVisibility,
+                          ),
                       ],
                     ),
                   )
