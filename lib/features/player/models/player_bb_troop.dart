@@ -38,9 +38,12 @@ class PlayerBuilderBaseTroop extends PlayerItem {
     bool? superTroopIsActive,
     Map<String, dynamic>? rawJson,
   }) {
+    final normalizedLevel = isUnlocked
+        ? _validBuilderBaseLevel(level, meta)
+        : level;
     return PlayerBuilderBaseTroop(
       name: name,
-      level: level,
+      level: normalizedLevel,
       maxLevel: maxLevel,
       isUnlocked: isUnlocked,
       superTroopIsActive: superTroopIsActive ?? false,
@@ -48,4 +51,21 @@ class PlayerBuilderBaseTroop extends PlayerItem {
       meta: meta,
     );
   }
+}
+
+int _validBuilderBaseLevel(int apiLevel, Map<String, dynamic>? meta) {
+  if (apiLevel <= 0) return apiLevel;
+  final levels = meta?['levels'];
+  if (levels is! List) return apiLevel;
+  final available = levels
+      .whereType<Map>()
+      .map((level) => level['level'])
+      .map((level) => level is num ? level.toInt() : int.tryParse('$level'))
+      .whereType<int>()
+      .where((level) => level > 0);
+  if (available.isEmpty) return apiLevel;
+  final minimum = available.reduce(
+    (lowest, level) => level < lowest ? level : lowest,
+  );
+  return apiLevel < minimum ? minimum : apiLevel;
 }
