@@ -39,17 +39,14 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   @override
   void initState() {
     super.initState();
-    final CocAccountService cocService = context.read<CocAccountService>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DeepLinkHandler.tryHandlePendingDeepLink(context);
     });
-    if (!cocService.hasVerifiedAccounts) {
-      setState(() {
-        _isFirstConnection = true;
-      });
-    } else {
-      _syncTempAccountsWithPlayerService();
-    }
+    // Always sync — it already sets _isFirstConnection from
+    // hasVerifiedAccounts itself. Skipping it when there were no verified
+    // accounts left _tempUserAccounts empty, so already-linked-but-
+    // unverified accounts silently vanished from the list below.
+    _syncTempAccountsWithPlayerService();
   }
 
   Future<void> _loadAllAccountData() async {
