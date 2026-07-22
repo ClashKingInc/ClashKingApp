@@ -33,43 +33,52 @@ class MainPageHeader extends StatelessWidget implements PreferredSizeWidget {
       bottom: false,
       child: SizedBox(
         height: 64,
-        child: Row(
-          children: [
-            _HeaderProfileButton(authService: authService, onTap: onProfileTap),
-            const SizedBox(width: 10),
-            Expanded(
-              child: searchHint == null
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(
-                                color: colorScheme.onSurface,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 24,
-                              ),
-                        ),
-                        if (subtitle != null)
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              _HeaderProfileButton(
+                authService: authService,
+                onTap: onProfileTap,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: searchHint == null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            subtitle!,
+                            title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelLarge
+                            style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontSize: 12,
+                                  color: colorScheme.onSurface,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 24,
                                 ),
                           ),
-                      ],
-                    )
-                  : _HeaderSearchButton(hint: searchHint!, onTap: onSearchTap),
-            ),
-          ],
+                          if (subtitle != null)
+                            Text(
+                              subtitle!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                    fontSize: 12,
+                                  ),
+                            ),
+                        ],
+                      )
+                    : _HeaderSearchButton(
+                        hint: searchHint!,
+                        onTap: onSearchTap,
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -87,6 +96,7 @@ class _HeaderProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      key: const ValueKey('main-page-header-profile'),
       button: true,
       label: 'Open profile menu',
       child: SizedBox.square(
@@ -151,6 +161,7 @@ class _HeaderSearchButton extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Semantics(
+      key: const ValueKey('main-page-header-search'),
       button: true,
       label: hint,
       child: Material(

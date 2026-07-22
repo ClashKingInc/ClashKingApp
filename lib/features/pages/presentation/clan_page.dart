@@ -28,6 +28,8 @@ class ClanPage extends StatefulWidget {
   State<ClanPage> createState() => _ClanPageState();
 }
 
+String clanMemberCapacityLabel(int members) => '$members/50';
+
 class _ClanPageState extends State<ClanPage> {
   final Set<String> _requestedBookmarkClanTags = {};
 
@@ -477,9 +479,7 @@ class _ClanBadgeWithMembers extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         _ClanIconChip(
-          label: AppLocalizations.of(
-            context,
-          )!.generalMembersCount(item.members),
+          label: clanMemberCapacityLabel(item.members),
           icon: Icons.people_alt_rounded,
         ),
       ],
