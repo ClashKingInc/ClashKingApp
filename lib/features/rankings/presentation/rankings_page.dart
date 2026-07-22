@@ -74,6 +74,7 @@ class _RankingsPageState extends State<RankingsPage> {
                     selectedIndex: selectedIndex,
                     onTabSelected: (index) =>
                         _provider.selectBoard(boards[index]),
+                    alwaysScrollable: true,
                     tabs: boards
                         .map(
                           (board) => InfoProfileTabData(

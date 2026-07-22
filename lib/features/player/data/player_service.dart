@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/player/models/player_ranked_league.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
@@ -250,6 +251,131 @@ class PlayerService extends ChangeNotifier {
       _safeNotify();
     }
   }
+
+  Future<RankedLeagueData> loadRankedLeagueData(String rawPlayerTag) async {
+    final playerTag = _canonicalTag(rawPlayerTag);
+    final encodedPlayerTag = Uri.encodeComponent(playerTag);
+    final playerResponse = await _apiService.proxyGet(
+      '/players/$encodedPlayerTag',
+    );
+    if (playerResponse.statusCode != 200) {
+      throw HttpException(
+        'Failed to fetch ranked player data (${playerResponse.statusCode})',
+        uri: playerResponse.request?.url,
+      );
+    }
+
+    final playerJson = _decodeMap(playerResponse);
+    // The player league object was renamed server-side from "league" to
+    // "leagueTier" — try the new key first, falling back to the old one.
+    final tierJson =
+        (playerJson['leagueTier'] ?? playerJson['league'])
+            as Map<String, dynamic>?;
+    final currentGroupTag = playerJson['currentLeagueGroupTag'] as String?;
+    final currentSeasonId = _jsonInt(playerJson['currentLeagueSeasonId']);
+    final previousGroupTag = playerJson['previousLeagueGroupTag'] as String?;
+    final previousSeasonId = _jsonInt(playerJson['previousLeagueSeasonId']);
+
+    final responses = await Future.wait([
+      _apiService.proxyGet('/players/$encodedPlayerTag/leaguehistory'),
+      _apiService.proxyGet('/leaguetiers'),
+      if (currentGroupTag != null && currentSeasonId > 0)
+        _apiService.proxyGet(
+          '/leaguegroup/${Uri.encodeComponent(currentGroupTag)}/$currentSeasonId'
+          '?playerTag=${Uri.encodeQueryComponent(playerTag)}',
+        ),
+      if (previousGroupTag != null && previousSeasonId > 0)
+        _apiService.proxyGet(
+          '/leaguegroup/${Uri.encodeComponent(previousGroupTag)}/$previousSeasonId'
+          '?playerTag=${Uri.encodeQueryComponent(playerTag)}',
+        ),
+    ]);
+
+    final historyJson = responses[0].statusCode == 200
+        ? _decodeMap(responses[0])
+        : const <String, dynamic>{};
+    final tiersJson = responses[1].statusCode == 200
+        ? _decodeMap(responses[1])
+        : const <String, dynamic>{};
+    final tiers = _parseLeagueTiers(tiersJson);
+
+    var responseIndex = 2;
+    final currentGroup = _decodeLeagueGroup(
+      responses,
+      currentGroupTag != null && currentSeasonId > 0 ? responseIndex : null,
+      tag: currentGroupTag,
+      seasonId: currentSeasonId,
+    );
+    if (currentGroupTag != null && currentSeasonId > 0) responseIndex++;
+
+    final previousGroup = _decodeLeagueGroup(
+      responses,
+      previousGroupTag != null && previousSeasonId > 0 ? responseIndex : null,
+      tag: previousGroupTag,
+      seasonId: previousSeasonId,
+    );
+
+    final history = _parseLeagueHistory(historyJson);
+
+    return RankedLeagueData(
+      playerTag: playerJson['tag'] as String? ?? playerTag,
+      playerName: playerJson['name'] as String? ?? '',
+      townHallLevel: _jsonInt(playerJson['townHallLevel']),
+      trophies: _jsonInt(playerJson['trophies']),
+      bestTrophies: _jsonInt(playerJson['bestTrophies']),
+      currentTier: tierJson == null
+          ? null
+          : RankedLeagueTier.fromJson(tierJson),
+      tiers: tiers,
+      history: history,
+      currentGroup: currentGroup,
+      previousGroup: previousGroup,
+    );
+  }
+
+  static Map<int, RankedLeagueTier> _parseLeagueTiers(
+    Map<String, dynamic> tiersJson,
+  ) {
+    final tiers = <int, RankedLeagueTier>{};
+    for (final item in tiersJson['items'] as List<dynamic>? ?? const []) {
+      if (item is! Map<String, dynamic>) continue;
+      final tier = RankedLeagueTier.fromJson(item);
+      tiers[tier.id] = tier;
+    }
+    return tiers;
+  }
+
+  RankedLeagueGroup? _decodeLeagueGroup(
+    List<dynamic> responses,
+    int? responseIndex, {
+    required String? tag,
+    required int seasonId,
+  }) {
+    if (responseIndex == null || tag == null) return null;
+    if (responses[responseIndex].statusCode != 200) return null;
+    return RankedLeagueGroup.fromJson(
+      _decodeMap(responses[responseIndex]),
+      tag: tag,
+      seasonId: seasonId,
+    );
+  }
+
+  static List<RankedLeagueHistoryEntry> _parseLeagueHistory(
+    Map<String, dynamic> historyJson,
+  ) {
+    return (historyJson['items'] as List<dynamic>? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .map(RankedLeagueHistoryEntry.fromJson)
+        .toList()
+      ..sort((a, b) => b.leagueSeasonId.compareTo(a.leagueSeasonId));
+  }
+
+  static Map<String, dynamic> _decodeMap(dynamic response) {
+    return jsonDecode(ApiService.decodeResponseBody(response))
+        as Map<String, dynamic>;
+  }
+
+  static int _jsonInt(Object? value) => value is num ? value.toInt() : 0;
 
   Future<Player> useOfficialPlayerData(Map<String, dynamic> data) async {
     final player = Player.fromJson(data);

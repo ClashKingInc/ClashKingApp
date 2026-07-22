@@ -115,6 +115,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
                     selectedIndex: activeIndex,
                     onTabSelected: (index) =>
                         _selectTab(index, visibleTabs.length),
+                    alwaysScrollable: true,
                     tabs: visibleTabs
                         .map((tab) => tab.data(AppLocalizations.of(context)!))
                         .toList(growable: false),

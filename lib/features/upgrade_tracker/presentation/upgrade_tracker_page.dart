@@ -671,6 +671,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
             child: InfoProfileTabs(
               selectedIndex: _section,
               onTabSelected: _selectSection,
+              alwaysScrollable: true,
               tabs: [
                 InfoProfileTabData(
                   label: l10n.upgradeTrackerHomeVillage,
