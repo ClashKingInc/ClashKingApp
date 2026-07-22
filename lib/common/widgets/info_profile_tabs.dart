@@ -1,5 +1,4 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class InfoProfileTabData {
@@ -71,8 +70,12 @@ class _InfoProfileTabsState extends State<InfoProfileTabs>
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
-    final isScrollable = widget.alwaysScrollable || !isDesktopWeb;
+    // Fill mode gives each tab an equal-width column with its label centered
+    // inside it, instead of bunching tabs together and centering the group.
+    // Screens with too many tabs to fit opt into scrolling explicitly via
+    // alwaysScrollable (game_assets_page, stats_page) rather than this
+    // defaulting to scrollable on every mobile screen.
+    final isScrollable = widget.alwaysScrollable;
     return DecoratedBox(
       decoration: BoxDecoration(color: scheme.surface),
       child: SizedBox(

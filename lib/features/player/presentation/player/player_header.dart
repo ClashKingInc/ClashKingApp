@@ -11,7 +11,7 @@ import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
-import 'package:clashkingapp/features/player/presentation/legend/player_legend_page.dart';
+import 'package:clashkingapp/features/player/presentation/ranked/player_ranked_league_page.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
@@ -448,7 +448,7 @@ class _PlayerHeaderLeagueTiles extends StatelessWidget {
               leagueUrl: isBuilderTab
                   ? _leagueIcon(player.builderBaseLeagueUrl)
                   : _leagueIcon(player.leagueUrl),
-              onTap: isBuilderTab ? null : () => _openLegend(context),
+              onTap: isBuilderTab ? null : () => _openRankedLeague(context),
             ),
           ),
           const SizedBox(width: 8),
@@ -466,7 +466,7 @@ class _PlayerHeaderLeagueTiles extends StatelessWidget {
               leagueUrl: isBuilderTab
                   ? _leagueIcon(player.leagueUrl)
                   : _leagueIcon(player.builderBaseLeagueUrl),
-              onTap: isBuilderTab ? () => _openLegend(context) : null,
+              onTap: isBuilderTab ? () => _openRankedLeague(context) : null,
             ),
           ),
         ],
@@ -474,11 +474,11 @@ class _PlayerHeaderLeagueTiles extends StatelessWidget {
     );
   }
 
-  void _openLegend(BuildContext context) {
+  void _openRankedLeague(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PlayerLegendScreen(player: player),
+        builder: (context) => PlayerRankedLeagueScreen(player: player),
       ),
     );
   }

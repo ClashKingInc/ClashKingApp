@@ -1,4 +1,5 @@
 - Added safer remote rollouts for posts, notifications, rankings, widgets, upgrade tracking, and experimental features
+- Rebuilt the Legend League page for the new weekly Ranked League groups, live standings, battle logs, and period history
 - Hidden unfinished subscription, account connection, bases/armies, and fabricated ranking previews until they are ready
 - Admin announcements now open the exact published post when their push notification is tapped
 - Announcement pushes now respect each device's notification preferences
