@@ -297,7 +297,7 @@ class StatsProvider extends ChangeNotifier {
   };
 
   bool _isEmpty(Object result) => switch (result) {
-    StatsArmiesResponse value => value.items.isEmpty,
+    StatsArmiesResponse _ => false,
     StatsItemsResponse value => value.items.isEmpty,
     StatsPerformanceResponse value => !value.metrics.available,
     StatsPlayerCountsResponse value =>
