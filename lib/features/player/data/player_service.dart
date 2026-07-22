@@ -293,43 +293,25 @@ class PlayerService extends ChangeNotifier {
     final tiersJson = responses[1].statusCode == 200
         ? _decodeMap(responses[1])
         : const <String, dynamic>{};
-    final tiers = <int, RankedLeagueTier>{};
-    for (final item in tiersJson['items'] as List<dynamic>? ?? const []) {
-      if (item is! Map<String, dynamic>) continue;
-      final tier = RankedLeagueTier.fromJson(item);
-      tiers[tier.id] = tier;
-    }
+    final tiers = _parseLeagueTiers(tiersJson);
 
-    RankedLeagueGroup? currentGroup;
     var responseIndex = 2;
-    if (currentGroupTag != null &&
-        currentSeasonId > 0 &&
-        responses[responseIndex].statusCode == 200) {
-      currentGroup = RankedLeagueGroup.fromJson(
-        _decodeMap(responses[responseIndex]),
-        tag: currentGroupTag,
-        seasonId: currentSeasonId,
-      );
-    }
+    final currentGroup = _decodeLeagueGroup(
+      responses,
+      currentGroupTag != null && currentSeasonId > 0 ? responseIndex : null,
+      tag: currentGroupTag,
+      seasonId: currentSeasonId,
+    );
     if (currentGroupTag != null && currentSeasonId > 0) responseIndex++;
 
-    RankedLeagueGroup? previousGroup;
-    if (previousGroupTag != null &&
-        previousSeasonId > 0 &&
-        responses[responseIndex].statusCode == 200) {
-      previousGroup = RankedLeagueGroup.fromJson(
-        _decodeMap(responses[responseIndex]),
-        tag: previousGroupTag,
-        seasonId: previousSeasonId,
-      );
-    }
+    final previousGroup = _decodeLeagueGroup(
+      responses,
+      previousGroupTag != null && previousSeasonId > 0 ? responseIndex : null,
+      tag: previousGroupTag,
+      seasonId: previousSeasonId,
+    );
 
-    final history =
-        (historyJson['items'] as List<dynamic>? ?? const [])
-            .whereType<Map<String, dynamic>>()
-            .map(RankedLeagueHistoryEntry.fromJson)
-            .toList()
-          ..sort((a, b) => b.leagueSeasonId.compareTo(a.leagueSeasonId));
+    final history = _parseLeagueHistory(historyJson);
 
     return RankedLeagueData(
       playerTag: playerJson['tag'] as String? ?? playerTag,
@@ -345,6 +327,43 @@ class PlayerService extends ChangeNotifier {
       currentGroup: currentGroup,
       previousGroup: previousGroup,
     );
+  }
+
+  static Map<int, RankedLeagueTier> _parseLeagueTiers(
+    Map<String, dynamic> tiersJson,
+  ) {
+    final tiers = <int, RankedLeagueTier>{};
+    for (final item in tiersJson['items'] as List<dynamic>? ?? const []) {
+      if (item is! Map<String, dynamic>) continue;
+      final tier = RankedLeagueTier.fromJson(item);
+      tiers[tier.id] = tier;
+    }
+    return tiers;
+  }
+
+  RankedLeagueGroup? _decodeLeagueGroup(
+    List<dynamic> responses,
+    int? responseIndex, {
+    required String? tag,
+    required int seasonId,
+  }) {
+    if (responseIndex == null || tag == null) return null;
+    if (responses[responseIndex].statusCode != 200) return null;
+    return RankedLeagueGroup.fromJson(
+      _decodeMap(responses[responseIndex]),
+      tag: tag,
+      seasonId: seasonId,
+    );
+  }
+
+  static List<RankedLeagueHistoryEntry> _parseLeagueHistory(
+    Map<String, dynamic> historyJson,
+  ) {
+    return (historyJson['items'] as List<dynamic>? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .map(RankedLeagueHistoryEntry.fromJson)
+        .toList()
+      ..sort((a, b) => b.leagueSeasonId.compareTo(a.leagueSeasonId));
   }
 
   static Map<String, dynamic> _decodeMap(dynamic response) {

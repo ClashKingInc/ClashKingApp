@@ -120,7 +120,10 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: RankedLeagueHeaderCard(player: widget.player, data: data),
+                child: RankedLeagueHeaderCard(
+                  player: widget.player,
+                  data: data,
+                ),
               ),
               // Once the header/tabs scroll past the top of the viewport,
               // they'd otherwise render under the (transparent) status bar —
@@ -159,16 +162,17 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
                               0 => _CurrentPeriodTab(
                                 data: data,
                                 period: selectedPeriod,
-                                onOlderSeason: selectedSeason < periods.length - 1
+                                onOlderSeason:
+                                    selectedSeason < periods.length - 1
                                     ? () => setState(
-                                        () =>
-                                            _selectedSeason = selectedSeason + 1,
+                                        () => _selectedSeason =
+                                            selectedSeason + 1,
                                       )
                                     : null,
                                 onNewerSeason: selectedSeason > 0
                                     ? () => setState(
-                                        () =>
-                                            _selectedSeason = selectedSeason - 1,
+                                        () => _selectedSeason =
+                                            selectedSeason - 1,
                                       )
                                     : null,
                                 showRanking: _showCurrentRanking,
@@ -428,34 +432,29 @@ class _HistoryTab extends StatelessWidget {
       byTier.putIfAbsent(tierId, () => []).add(period);
     }
 
-    final result = <_TierHighlights>[];
-    for (final list in byTier.values) {
-      final lastPeriod = list.reduce(
-        (a, b) => a.seasonId > b.seasonId ? a : b,
-      );
-      final ranked = list.where((period) => period.placement > 0).toList();
-      final bestRankPeriod = ranked.isEmpty
-          ? null
-          : ranked.reduce((a, b) => a.placement < b.placement ? a : b);
-      final bestTrophiesPeriod = list.reduce(
-        (a, b) => a.trophies > b.trophies ? a : b,
-      );
-      final mostAttacksPeriod = list.reduce(
-        (a, b) => a.attackCount > b.attackCount ? a : b,
-      );
-      result.add(
-        _TierHighlights(
-          tier: list.first.tier,
-          lastPeriod: lastPeriod,
-          bestRankPeriod: bestRankPeriod,
-          bestTrophiesPeriod: bestTrophiesPeriod,
-          mostAttacksPeriod: mostAttacksPeriod,
-        ),
-      );
-    }
+    return byTier.values.map(_buildTierHighlights).toList()
+      ..sort((a, b) => _tierLevel(b.tier).compareTo(_tierLevel(a.tier)));
+  }
 
-    result.sort((a, b) => _tierLevel(b.tier).compareTo(_tierLevel(a.tier)));
-    return result;
+  _TierHighlights _buildTierHighlights(List<_PeriodViewModel> list) {
+    final lastPeriod = list.reduce((a, b) => a.seasonId > b.seasonId ? a : b);
+    final ranked = list.where((period) => period.placement > 0).toList();
+    final bestRankPeriod = ranked.isEmpty
+        ? null
+        : ranked.reduce((a, b) => a.placement < b.placement ? a : b);
+    final bestTrophiesPeriod = list.reduce(
+      (a, b) => a.trophies > b.trophies ? a : b,
+    );
+    final mostAttacksPeriod = list.reduce(
+      (a, b) => a.attackCount > b.attackCount ? a : b,
+    );
+    return _TierHighlights(
+      tier: list.first.tier,
+      lastPeriod: lastPeriod,
+      bestRankPeriod: bestRankPeriod,
+      bestTrophiesPeriod: bestTrophiesPeriod,
+      mostAttacksPeriod: mostAttacksPeriod,
+    );
   }
 
   int _tierLevel(RankedLeagueTier? tier) {
@@ -950,7 +949,9 @@ class _OffenseDefenseCardState extends State<_OffenseDefenseCard> {
     final attackHeight = _attackKey.currentContext?.size?.height;
     final defenseHeight = _defenseKey.currentContext?.size?.height;
     if (attackHeight == null || defenseHeight == null) return;
-    final maxHeight = attackHeight > defenseHeight ? attackHeight : defenseHeight;
+    final maxHeight = attackHeight > defenseHeight
+        ? attackHeight
+        : defenseHeight;
     if (_matchedHeight != maxHeight) {
       setState(() => _matchedHeight = maxHeight);
     }
@@ -1070,47 +1071,14 @@ class _BattleSide extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Opacity(
-                    opacity: average == null ? 0.45 : 1,
-                    child: const _LegendAverageIcon(),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    average == null
-                        ? '-'
-                        : '$sign${average.abs().toStringAsFixed(1)}',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: average == null
-                          ? Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant.withValues(alpha: 0.56)
-                          : (isDefense ? StatColors.loss : StatColors.win),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
+              _AverageRow(average: average, sign: sign, isDefense: isDefense),
               const SizedBox(height: 8),
-              if (!hasDetails)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  child: Text(
-                    AppLocalizations.of(
-                      context,
-                    )!.rankedLeagueBattleDetailsUnavailable,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                )
-              else ...[
-                for (final battle in battles)
-                  _BattleLine(battle: battle, isDefense: isDefense),
-                for (var i = 0; i < (remaining ?? 0); i++)
-                  _EmptyBattleLine(isDefense: isDefense),
-              ],
+              _BattleRowsSection(
+                hasDetails: hasDetails,
+                battles: battles,
+                remaining: remaining ?? 0,
+                isDefense: isDefense,
+              ),
             ],
           ),
           Column(
@@ -1135,6 +1103,80 @@ class _BattleSide extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AverageRow extends StatelessWidget {
+  const _AverageRow({
+    required this.average,
+    required this.sign,
+    required this.isDefense,
+  });
+
+  final double? average;
+  final String sign;
+  final bool isDefense;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasAverage = average != null;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Opacity(
+          opacity: hasAverage ? 1 : 0.45,
+          child: const _LegendAverageIcon(),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          hasAverage ? '$sign${average!.abs().toStringAsFixed(1)}' : '-',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: hasAverage
+                ? (isDefense ? StatColors.loss : StatColors.win)
+                : Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.56),
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _BattleRowsSection extends StatelessWidget {
+  const _BattleRowsSection({
+    required this.hasDetails,
+    required this.battles,
+    required this.remaining,
+    required this.isDefense,
+  });
+
+  final bool hasDetails;
+  final List<RankedLeagueBattle> battles;
+  final int remaining;
+  final bool isDefense;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!hasDetails) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        child: Text(
+          AppLocalizations.of(context)!.rankedLeagueBattleDetailsUnavailable,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      );
+    }
+    return Column(
+      children: [
+        for (final battle in battles)
+          _BattleLine(battle: battle, isDefense: isDefense),
+        for (var i = 0; i < remaining; i++)
+          _EmptyBattleLine(isDefense: isDefense),
+      ],
     );
   }
 }
@@ -1286,9 +1328,7 @@ class _EmptyBattleLine extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         '-',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: muted,
                           fontWeight: FontWeight.w800,
                         ),
@@ -1570,10 +1610,7 @@ class _EndOfPeriodList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 6),
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 10,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
                 borderRadius: BorderRadius.circular(AppRadius.chip),
@@ -1902,15 +1939,20 @@ class _RankingRow extends StatelessWidget {
               SizedBox(
                 width: 30,
                 child: medalColor != null
-                    ? Icon(Icons.emoji_events_rounded, color: medalColor, size: 22)
+                    ? Icon(
+                        Icons.emoji_events_rounded,
+                        color: medalColor,
+                        size: 22,
+                      )
                     : Text(
                         '#$rank',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: highlighted
-                              ? Colors.green
-                              : colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: highlighted
+                                  ? Colors.green
+                                  : colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w800,
+                            ),
                       ),
               ),
               const SizedBox(width: 8),
@@ -1946,7 +1988,7 @@ class _RankingRow extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MobileWebImage(
+                  const MobileWebImage(
                     imageUrl: ImageAssets.trophies,
                     width: 18,
                     height: 18,
@@ -2023,4 +2065,3 @@ class _SurfaceCard extends StatelessWidget {
     );
   }
 }
-

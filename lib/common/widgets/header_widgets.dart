@@ -14,50 +14,68 @@ class InfoHeroBackdrop extends StatelessWidget {
     super.key,
     required this.imageUrl,
     required this.height,
+    this.additionalDarken = 0,
   });
 
   final String imageUrl;
   final double height;
 
+  /// Extra flat black darken (0-1) applied under the gradient, for hero
+  /// images bright enough that the gradient alone doesn't give white
+  /// overlay content enough contrast.
+  final double additionalDarken;
+
   @override
-  Widget build(BuildContext context) => ClipRect(
-    child: RepaintBoundary(
-      child: SizedBox(
-        height: height,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            MobileWebImage(
-              imageUrl: imageUrl,
-              fit: BoxFit.cover,
-              alignment: Alignment.bottomCenter,
-              errorWidget: (context, url, error) =>
-                  ColoredBox(color: Theme.of(context).colorScheme.surface),
-            ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: Theme.of(context).brightness == Brightness.dark
-                      ? const [
-                          Color.fromRGBO(0, 0, 0, 0.50),
-                          Color.fromRGBO(0, 0, 0, 0.72),
-                          Color.fromRGBO(0, 0, 0, 0.94),
-                        ]
-                      : const [
-                          Color.fromRGBO(0, 0, 0, 0.34),
-                          Color.fromRGBO(0, 0, 0, 0.52),
-                          Color.fromRGBO(0, 0, 0, 0.72),
-                        ],
+  Widget build(BuildContext context) {
+    Widget image = MobileWebImage(
+      imageUrl: imageUrl,
+      fit: BoxFit.cover,
+      alignment: Alignment.bottomCenter,
+      errorWidget: (context, url, error) =>
+          ColoredBox(color: Theme.of(context).colorScheme.surface),
+    );
+    if (additionalDarken > 0) {
+      image = ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          Colors.black.withValues(alpha: additionalDarken),
+          BlendMode.darken,
+        ),
+        child: image,
+      );
+    }
+    return ClipRect(
+      child: RepaintBoundary(
+        child: SizedBox(
+          height: height,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              image,
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: Theme.of(context).brightness == Brightness.dark
+                        ? const [
+                            Color.fromRGBO(0, 0, 0, 0.50),
+                            Color.fromRGBO(0, 0, 0, 0.72),
+                            Color.fromRGBO(0, 0, 0, 0.94),
+                          ]
+                        : const [
+                            Color.fromRGBO(0, 0, 0, 0.34),
+                            Color.fromRGBO(0, 0, 0, 0.52),
+                            Color.fromRGBO(0, 0, 0, 0.72),
+                          ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 /// Frosted round icon button floating over a hero header image. Every

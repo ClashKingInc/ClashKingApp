@@ -36,42 +36,10 @@ class RankedLeagueHeaderCard extends StatelessWidget {
           left: 0,
           right: 0,
           height: imageHeight,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withValues(alpha: 0.50),
-                  BlendMode.darken,
-                ),
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.homeBaseBackground,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.bottomCenter,
-                  errorWidget: (context, url, error) =>
-                      ColoredBox(color: Theme.of(context).colorScheme.surface),
-                ),
-              ),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: Theme.of(context).brightness == Brightness.dark
-                        ? const [
-                            Color.fromRGBO(0, 0, 0, 0.36),
-                            Color.fromRGBO(0, 0, 0, 0.64),
-                            Color.fromRGBO(0, 0, 0, 0.92),
-                          ]
-                        : const [
-                            Color.fromRGBO(0, 0, 0, 0.20),
-                            Color.fromRGBO(0, 0, 0, 0.40),
-                            Color.fromRGBO(0, 0, 0, 0.65),
-                          ],
-                  ),
-                ),
-              ),
-            ],
+          child: InfoHeroBackdrop(
+            imageUrl: ImageAssets.homeBaseBackground,
+            height: imageHeight,
+            additionalDarken: 0.50,
           ),
         ),
         Column(
