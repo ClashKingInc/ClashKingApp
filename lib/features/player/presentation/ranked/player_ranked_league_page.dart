@@ -432,8 +432,12 @@ class _HistoryTab extends StatelessWidget {
       byTier.putIfAbsent(tierId, () => []).add(period);
     }
 
+    // Higher tier IDs are always better, all the way up through Legend
+    // League's top sub-tiers — unlike each tier's display name, which isn't
+    // ordered consistently enough to sort by (e.g. "Legend League 1" outranks
+    // every numbered tier despite its trailing digit being small).
     return byTier.values.map(_buildTierHighlights).toList()
-      ..sort((a, b) => _tierLevel(b.tier).compareTo(_tierLevel(a.tier)));
+      ..sort((a, b) => (b.tier?.id ?? 0).compareTo(a.tier?.id ?? 0));
   }
 
   _TierHighlights _buildTierHighlights(List<_PeriodViewModel> list) {
@@ -455,11 +459,6 @@ class _HistoryTab extends StatelessWidget {
       bestTrophiesPeriod: bestTrophiesPeriod,
       mostAttacksPeriod: mostAttacksPeriod,
     );
-  }
-
-  int _tierLevel(RankedLeagueTier? tier) {
-    final match = RegExp(r'(\d+)$').firstMatch(tier?.name ?? '');
-    return int.tryParse(match?.group(1) ?? '') ?? tier?.id ?? 0;
   }
 }
 

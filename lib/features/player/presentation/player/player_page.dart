@@ -54,6 +54,7 @@ class PlayerScreenState extends State<PlayerScreen> {
               child: InfoProfileTabs(
                 selectedIndex: selectedTab,
                 onTabSelected: _selectTab,
+                alwaysScrollable: true,
                 tabs: [
                   InfoProfileTabData(
                     label:

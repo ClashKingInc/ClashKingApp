@@ -266,7 +266,11 @@ class PlayerService extends ChangeNotifier {
     }
 
     final playerJson = _decodeMap(playerResponse);
-    final tierJson = playerJson['leagueTier'] as Map<String, dynamic>?;
+    // The player league object was renamed server-side from "league" to
+    // "leagueTier" — try the new key first, falling back to the old one.
+    final tierJson =
+        (playerJson['leagueTier'] ?? playerJson['league'])
+            as Map<String, dynamic>?;
     final currentGroupTag = playerJson['currentLeagueGroupTag'] as String?;
     final currentSeasonId = _jsonInt(playerJson['currentLeagueSeasonId']);
     final previousGroupTag = playerJson['previousLeagueGroupTag'] as String?;
