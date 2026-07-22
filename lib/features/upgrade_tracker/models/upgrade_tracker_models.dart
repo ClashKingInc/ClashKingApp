@@ -85,6 +85,8 @@ class UpgradeTrackerItem {
     this.totalResourceWeight = 0,
     this.parentName,
     this.meta,
+    this.wardenWeight,
+    this.healerWeight,
   });
 
   final int id;
@@ -110,6 +112,8 @@ class UpgradeTrackerItem {
   final num totalResourceWeight;
   final String? parentName;
   final Map<String, dynamic>? meta;
+  final num? wardenWeight;
+  final num? healerWeight;
 
   bool get isComplete => currentLevel >= targetLevel;
   bool get isUnbuilt => currentLevel <= 0;

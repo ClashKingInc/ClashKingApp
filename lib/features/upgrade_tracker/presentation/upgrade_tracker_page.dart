@@ -8211,7 +8211,8 @@ void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
           GameDataService.localizedInfoForItem(meta).replaceAll(r'\n', ' '),
           2,
         );
-  var selectedLevel = item.currentLevel.clamp(1, item.targetLevel);
+  final minimumLevel = _minimumDetailLevel(item);
+  var selectedLevel = item.currentLevel.clamp(minimumLevel, item.targetLevel);
   final accent = switch (item.category) {
     UpgradeCategory.heroes ||
     UpgradeCategory.guardians => const Color(0xFFAA57E8),
@@ -8232,6 +8233,9 @@ void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
             : null;
         final selectedSteps = _upgradeStepsFromLevel(item, selectedLevel);
         final unlocks = _unlocksAtLevel(item, selectedLevel);
+        final hasWeightMetrics =
+            _supportsWeightMetrics(item.category) &&
+            (item.wardenWeight != null || item.healerWeight != null);
         return Dialog(
           insetPadding: const EdgeInsets.symmetric(
             horizontal: 18,
@@ -8397,10 +8401,10 @@ void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
                             ),
                             child: Slider(
                               value: selectedLevel.toDouble(),
-                              min: 1,
+                              min: minimumLevel.toDouble(),
                               max: item.targetLevel.toDouble(),
-                              divisions: item.targetLevel > 1
-                                  ? item.targetLevel - 1
+                              divisions: item.targetLevel > minimumLevel
+                                  ? item.targetLevel - minimumLevel
                                   : null,
                               label: 'Level $selectedLevel',
                               onChanged: item.targetLevel > 1
@@ -8457,11 +8461,27 @@ void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
                               value: selectedSteps.isEmpty ? 'Max' : 'None',
                               accent: accent,
                             ),
+                          if (_showsWardenThreshold(item.category) &&
+                              meta?['housing_space'] != null)
+                            Builder(
+                              builder: (context) => _TrackerDetailStatRow(
+                                key: const ValueKey('housing-space'),
+                                icon: Icons.home_outlined,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.gameItemHousingSpace,
+                                value: meta!['housing_space'].toString(),
+                                accent: accent,
+                              ),
+                            ),
+                          if (hasWeightMetrics)
+                            ..._weightMetricRows(item, accent),
                           if (selectedStats != null)
                             ..._trackerStatRows(
                               meta,
                               selectedStats,
                               nextStats,
+                              item.category,
                             ).map(
                               (stat) => _TrackerDetailStatRow(
                                 icon: stat.icon,
@@ -8483,6 +8503,76 @@ void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
     ),
   );
 }
+
+int _minimumDetailLevel(UpgradeTrackerItem item) {
+  final levels = item.meta?['levels'];
+  if (levels is! List) return 1;
+  final available = levels
+      .whereType<Map>()
+      .map((level) => level['level'])
+      .map((level) => level is num ? level.toInt() : int.tryParse('$level'))
+      .whereType<int>()
+      .where((level) => level > 0)
+      .toList(growable: false);
+  if (available.isEmpty) return 1;
+  return available.reduce((lowest, level) => level < lowest ? level : lowest);
+}
+
+int? wardenFollowThresholdCopies(num weight) =>
+    weight > 0 ? (20 / weight).ceil() : null;
+
+bool _supportsWeightMetrics(UpgradeCategory category) => const {
+  UpgradeCategory.troops,
+  UpgradeCategory.darkTroops,
+  UpgradeCategory.heroes,
+  UpgradeCategory.pets,
+}.contains(category);
+
+bool _showsWardenThreshold(UpgradeCategory category) => const {
+  UpgradeCategory.troops,
+  UpgradeCategory.darkTroops,
+}.contains(category);
+
+String _weightValue(num value) =>
+    value % 1 == 0 ? value.toInt().toString() : value.toString();
+
+List<Widget> _weightMetricRows(UpgradeTrackerItem item, Color accent) => [
+  if (item.wardenWeight case final weight?)
+    Builder(
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return _TrackerDetailStatRow(
+          key: const ValueKey('warden-weight'),
+          imageUrl: ImageAssets.getHeroImage('Grand Warden'),
+          label: l10n.gameItemWardenWeight,
+          value: _weightValue(weight),
+          tooltip: l10n.gameItemWardenWeightTooltip,
+          detail: _showsWardenThreshold(item.category)
+              ? weight > 0
+                    ? l10n.gameItemWardenThresholdCopies(
+                        wardenFollowThresholdCopies(weight)!,
+                      )
+                    : l10n.gameItemWardenNoThresholdContribution
+              : null,
+          accent: accent,
+        );
+      },
+    ),
+  if (item.healerWeight case final weight?)
+    Builder(
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return _TrackerDetailStatRow(
+          key: const ValueKey('healer-weight'),
+          imageUrl: ImageAssets.getTroopImage('Healer'),
+          label: l10n.gameItemHealerWeight,
+          value: _weightValue(weight),
+          tooltip: l10n.gameItemHealerWeightTooltip,
+          accent: accent,
+        );
+      },
+    ),
+];
 
 String _firstSentences(String value, int count) {
   final normalized = value.replaceAll(RegExp(r'\s+'), ' ').trim();
@@ -8572,6 +8662,7 @@ List<UpgradeStep> _upgradeStepsFromLevel(
   int selectedLevel,
 ) {
   final steps = <UpgradeStep>[];
+  final usesBuildFields = _usesBuildLevelFields(item.meta);
   for (var target = selectedLevel + 1; target <= item.targetLevel; target++) {
     final existing = item.steps
         .where((step) => step.targetLevel == target)
@@ -8580,10 +8671,11 @@ List<UpgradeStep> _upgradeStepsFromLevel(
       steps.add(existing);
       continue;
     }
-    final level = findLevelStats(item.meta, target);
+    final sourceLevel = usesBuildFields ? target : target - 1;
+    final level = findLevelStats(item.meta, sourceLevel);
     if (level == null) continue;
     final costs = <UpgradeCost>[];
-    final rawCost = level['upgrade_cost'] ?? level['build_cost'];
+    final rawCost = level[usesBuildFields ? 'build_cost' : 'upgrade_cost'];
     if (rawCost is Map) {
       for (final entry in rawCost.entries) {
         final amount = entry.value is num
@@ -8605,13 +8697,23 @@ List<UpgradeStep> _upgradeStepsFromLevel(
       UpgradeStep(
         targetLevel: target,
         seconds:
-            ((level['upgrade_time'] ?? level['build_time']) as num?)?.round() ??
+            (level[usesBuildFields ? 'build_time' : 'upgrade_time'] as num?)
+                ?.round() ??
             0,
         costs: costs,
       ),
     );
   }
   return steps;
+}
+
+bool _usesBuildLevelFields(Map<String, dynamic>? meta) {
+  final levels = meta?['levels'];
+  if (levels is! List) return false;
+  return levels.whereType<Map>().any(
+    (level) =>
+        level.containsKey('build_cost') || level.containsKey('build_time'),
+  );
 }
 
 typedef _UnlockItem = ({String name, String imageUrl, String? subtitle});
@@ -8758,6 +8860,7 @@ List<({IconData icon, String label, String value})> _trackerStatRows(
   Map<String, dynamic>? meta,
   Map<String, dynamic> level,
   Map<String, dynamic>? nextLevel,
+  UpgradeCategory category,
 ) {
   final rows = <({IconData icon, String label, String value})>[];
   String? tiles(Object? value) {
@@ -8813,8 +8916,11 @@ List<({IconData icon, String label, String value})> _trackerStatRows(
   add(
     Icons.my_location_rounded,
     'Attack range',
-    tiles(level['attack_range'] ?? meta?['attack_range']),
-    tiles(nextLevel?['attack_range'] ?? meta?['attack_range']),
+    _attackRangeTiles(level['attack_range'] ?? meta?['attack_range'], category),
+    _attackRangeTiles(
+      nextLevel?['attack_range'] ?? meta?['attack_range'],
+      category,
+    ),
     suffix: ' tiles',
   );
   add(
@@ -8900,18 +9006,44 @@ List<({IconData icon, String label, String value})> _trackerStatRows(
   return rows;
 }
 
+String? _attackRangeTiles(Object? value, UpgradeCategory category) {
+  final raw = value is num ? value : num.tryParse(value?.toString() ?? '');
+  if (raw == null) return null;
+  final divisor =
+      const {
+        UpgradeCategory.troops,
+        UpgradeCategory.darkTroops,
+        UpgradeCategory.heroes,
+        UpgradeCategory.pets,
+        UpgradeCategory.sieges,
+      }.contains(category)
+      ? 100
+      : 1000;
+  return (raw / divisor)
+      .toStringAsFixed(2)
+      .replaceFirst(RegExp(r'0+$'), '')
+      .replaceFirst(RegExp(r'\.$'), '');
+}
+
 class _TrackerDetailStatRow extends StatelessWidget {
   const _TrackerDetailStatRow({
-    required this.icon,
+    super.key,
+    this.icon,
+    this.imageUrl,
     required this.label,
     required this.value,
     required this.accent,
+    this.tooltip,
+    this.detail,
   });
 
-  final IconData icon;
+  final IconData? icon;
+  final String? imageUrl;
   final String label;
   final String value;
   final Color accent;
+  final String? tooltip;
+  final String? detail;
 
   @override
   Widget build(BuildContext context) {
@@ -8929,15 +9061,55 @@ class _TrackerDetailStatRow extends StatelessWidget {
               color: accent.withValues(alpha: 0.13),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 18, color: accent),
+            child: imageUrl != null
+                ? Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: MobileWebImage(imageUrl: imageUrl!),
+                  )
+                : Icon(icon, size: 18, color: accent),
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        label,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                    if (tooltip != null) ...[
+                      const SizedBox(width: 4),
+                      Tooltip(
+                        message: tooltip!,
+                        triggerMode: TooltipTriggerMode.tap,
+                        child: Icon(
+                          Icons.info_outline_rounded,
+                          size: 15,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                if (detail != null)
+                  Text(
+                    detail!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 9,
+                    ),
+                  ),
+              ],
             ),
           ),
           Column(

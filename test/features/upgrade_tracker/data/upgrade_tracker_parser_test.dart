@@ -61,6 +61,8 @@ void main() {
     final troop = snapshot.items.firstWhere((item) => item.name == 'Barbarian');
     expect(troop.steps.single.costs.single.amount, 8000000);
     expect(troop.steps.single.seconds, 345600);
+    expect(troop.wardenWeight, 0.5);
+    expect(troop.healerWeight, 0);
 
     final crafted = snapshot.items.firstWhere(
       (item) => item.category == UpgradeCategory.craftedDefenses,
@@ -85,6 +87,25 @@ void main() {
       4,
     );
     expect(snapshot.collections.where((item) => item.owned), hasLength(5));
+  });
+
+  test('keeps explicit zero weights distinct from missing weights', () {
+    final snapshot = parser.parse({
+      'units': [
+        {'data': 5, 'lvl': 11},
+        {'data': 14, 'lvl': 1},
+      ],
+    }, staticData: _bundle);
+
+    final weighted = snapshot.items.firstWhere(
+      (item) => item.name == 'Barbarian',
+    );
+    final missing = snapshot.items.firstWhere((item) => item.name == 'Archer');
+
+    expect(weighted.wardenWeight, 0.5);
+    expect(weighted.healerWeight, 0);
+    expect(missing.wardenWeight, isNull);
+    expect(missing.healerWeight, isNull);
   });
 
   test('applies durable reductions without prototype events', () {
@@ -381,6 +402,8 @@ final _bundle = <String, dynamic>{
       'village': 'home',
       'production_building': 'Laboratory',
       'upgrade_resource': 'Elixir',
+      'warden_weight': 0.5,
+      'healer_weight': 0,
       'levels': [
         {
           'level': 11,
@@ -394,6 +417,16 @@ final _bundle = <String, dynamic>{
           'upgrade_time': 0,
           'required_townhall': 16,
         },
+      ],
+    },
+    {
+      '_id': 14,
+      'name': 'Archer',
+      'village': 'home',
+      'production_building': 'Laboratory',
+      'upgrade_resource': 'Elixir',
+      'levels': [
+        {'level': 1, 'upgrade_cost': 0, 'upgrade_time': 0},
       ],
     },
   ],

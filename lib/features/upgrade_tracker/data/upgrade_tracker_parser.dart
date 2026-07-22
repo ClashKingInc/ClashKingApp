@@ -457,6 +457,8 @@ class UpgradeTrackerParser {
           completedUpgradeSeconds: timeTotals.completedSeconds,
           totalUpgradeSeconds: timeTotals.totalSeconds,
           meta: data,
+          wardenWeight: _optionalNum(data['warden_weight']),
+          healerWeight: _optionalNum(data['healer_weight']),
           progressBasis: resourceTotals == null
               ? UpgradeProgressBasis.time
               : UpgradeProgressBasis.resources,
@@ -893,6 +895,12 @@ class UpgradeTrackerParser {
   static int? _optionalInt(dynamic value) {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value.trim());
+    return null;
+  }
+
+  static num? _optionalNum(dynamic value) {
+    if (value is num) return value;
+    if (value is String) return num.tryParse(value.trim());
     return null;
   }
 

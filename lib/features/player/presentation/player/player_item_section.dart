@@ -1259,8 +1259,13 @@ UpgradeTrackerItem _upgradeDetailsItem(PlayerItem item) {
     completedUpgradeSeconds: 0,
     totalUpgradeSeconds: steps.fold(0, (total, step) => total + step.seconds),
     meta: meta,
+    wardenWeight: _optionalUpgradeDetailsNum(meta?['warden_weight']),
+    healerWeight: _optionalUpgradeDetailsNum(meta?['healer_weight']),
   );
 }
+
+num? _optionalUpgradeDetailsNum(Object? value) =>
+    value is num ? value : num.tryParse(value?.toString() ?? '');
 
 List<UpgradeCost> _upgradeDetailsCosts(dynamic value, String? fallback) {
   if (value is Map) {
