@@ -316,6 +316,7 @@ class _HomeCardCache<T> {
     required String signature,
     required Future<T> Function({required bool forceRefresh}) fetch,
     required void Function(T fresh) onFresh,
+    bool Function(T fresh, T cached)? shouldReplace,
   }) {
     final cached = _entries[signature];
     if (cached == null) {
@@ -328,6 +329,10 @@ class _HomeCardCache<T> {
     // (attacks done, rank moved) — this background check must hit the real
     // source, not just return the same cached value again.
     fetch(forceRefresh: true).then((fresh) {
+      // Both card loaders swallow per-account fetch errors and still return
+      // a "valid" but degraded summary — a transient endpoint failure must
+      // not blank out data the user was already looking at.
+      if (shouldReplace != null && !shouldReplace(fresh, cached)) return;
       _entries[signature] = fresh;
       onFresh(fresh);
     });
@@ -379,6 +384,8 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
           setState(() => _load = Future.value(fresh));
         }
       },
+      shouldReplace: (fresh, cached) =>
+          fresh.accounts.isNotEmpty || cached.accounts.isEmpty,
     );
   }
 
@@ -1169,6 +1176,8 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
           setState(() => _load = Future.value(fresh));
         }
       },
+      shouldReplace: (fresh, cached) =>
+          fresh.accounts.isNotEmpty || cached.accounts.isEmpty,
     );
   }
 
