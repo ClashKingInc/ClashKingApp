@@ -8941,8 +8941,13 @@ List<({IconData icon, String label, String value})> _trackerStatRows(
   add(
     Icons.directions_run_rounded,
     'Movement speed',
-    meta?['movement_speed'],
-    meta?['movement_speed'],
+    _usesUnitTileScaling(category)
+        ? formatUnitMovementSpeed(meta?['movement_speed'])
+        : meta?['movement_speed'],
+    _usesUnitTileScaling(category)
+        ? formatUnitMovementSpeed(meta?['movement_speed'])
+        : meta?['movement_speed'],
+    suffix: _usesUnitTileScaling(category) ? ' tiles/sec' : '',
   );
   add(Icons.bolt_rounded, 'DPS', level['dps'], nextLevel?['dps']);
   add(Icons.flash_on_rounded, 'Damage', level['damage'], nextLevel?['damage']);
@@ -9010,20 +9015,28 @@ List<({IconData icon, String label, String value})> _trackerStatRows(
 String? _attackRangeTiles(Object? value, UpgradeCategory category) {
   final raw = value is num ? value : num.tryParse(value?.toString() ?? '');
   if (raw == null) return null;
-  final divisor =
-      const {
-        UpgradeCategory.troops,
-        UpgradeCategory.darkTroops,
-        UpgradeCategory.heroes,
-        UpgradeCategory.pets,
-        UpgradeCategory.sieges,
-      }.contains(category)
-      ? 100
-      : 1000;
+  final divisor = _usesUnitTileScaling(category) ? 100 : 1000;
   return (raw / divisor)
       .toStringAsFixed(2)
       .replaceFirst(RegExp(r'0+$'), '')
       .replaceFirst(RegExp(r'\.$'), '');
+}
+
+bool _usesUnitTileScaling(UpgradeCategory category) => const {
+  UpgradeCategory.troops,
+  UpgradeCategory.darkTroops,
+  UpgradeCategory.heroes,
+  UpgradeCategory.pets,
+  UpgradeCategory.sieges,
+}.contains(category);
+
+String? formatUnitMovementSpeed(Object? value) {
+  final raw = value is num ? value : num.tryParse(value?.toString() ?? '');
+  if (raw == null) return null;
+  final rounded = ((raw / 100) * 10).round() / 10;
+  return rounded % 1 == 0
+      ? rounded.toInt().toString()
+      : rounded.toStringAsFixed(1);
 }
 
 class _TrackerDetailStatRow extends StatelessWidget {
