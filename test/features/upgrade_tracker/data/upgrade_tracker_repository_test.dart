@@ -163,4 +163,45 @@ void main() {
       throwsStateError,
     );
   });
+
+  test(
+    'clearCache resets remote config so a later load skips the remote endpoint',
+    () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/links/user1/%232J8V28GV0/upgrades'] = http.Response(
+        jsonEncode({
+          'data': {
+            'player': {'tag': '2j8v28gv0', 'name': 'Remote', 'buildings': []},
+          },
+        }),
+        200,
+      );
+      final repository = UpgradeTrackerRepository(
+        apiService: fakeApi,
+        checkStaticDataFreshness: false,
+      );
+      repository.configureRemote(
+        accountId: 'user1',
+        verifiedPlayerTags: const ['#2J8V28GV0'],
+      );
+
+      await repository.load('#2J8V28GV0');
+      expect(fakeApi.getCallCounts['/links/user1/%232J8V28GV0/upgrades'], 1);
+
+      repository.clearCache();
+
+      // Remote config was reset — a shared device's next account never
+      // reuses the previous account's remote link or in-memory snapshot.
+      await repository.load('#2J8V28GV0');
+      expect(fakeApi.getCallCounts['/links/user1/%232J8V28GV0/upgrades'], 1);
+    },
+  );
+
+  test('shared is a single reusable instance', () {
+    expect(
+      UpgradeTrackerRepository.shared,
+      same(UpgradeTrackerRepository.shared),
+    );
+    expect(() => UpgradeTrackerRepository.shared.clearCache(), returnsNormally);
+  });
 }
