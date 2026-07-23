@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
@@ -24,23 +26,6 @@ const double _homePagerDesktopBreakpoint = 900;
 
 bool _usesDesktopHomePager(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= _homePagerDesktopBreakpoint;
-
-void _animateHomePagerTo(
-  BuildContext context,
-  PageController controller,
-  int page,
-) {
-  if (!controller.hasClients) return;
-  if (CKMotion.animationsDisabled(context)) {
-    controller.jumpToPage(page);
-    return;
-  }
-  controller.animateToPage(
-    page,
-    duration: CKMotion.fast,
-    curve: CKMotion.standardCurve,
-  );
-}
 
 class HomeEventBanner extends StatefulWidget {
   const HomeEventBanner({super.key});
@@ -74,7 +59,7 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
     if (count <= 0) return;
     final next = page % count;
     setState(() => _index = next);
-    _animateHomePagerTo(context, _controller, next);
+    animatePagerTo(context, _controller, next);
   }
 
   @override
@@ -129,10 +114,11 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  _PageDots(
+                  PageDotsIndicator(
                     count: items.length,
                     index: _index,
                     onDotTap: (index) => _showBannerPage(items.length, index),
+                    tooltipForIndex: (index) => 'Card ${index + 1}',
                   ),
                   const SizedBox(width: 12),
                   _PagerArrowButton(
@@ -155,7 +141,7 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
                 ],
               )
             else
-              _PageDots(count: items.length, index: _index),
+              PageDotsIndicator(count: items.length, index: _index),
           ],
         );
       },
@@ -205,7 +191,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
     if (count <= 0) return;
     final next = page % count;
     setState(() => _index = next);
-    _animateHomePagerTo(context, _controller, next);
+    animatePagerTo(context, _controller, next);
   }
 
   @override
@@ -292,10 +278,11 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _PageDots(
+                PageDotsIndicator(
                   count: itemCount,
                   index: _index,
                   onDotTap: (index) => _showTodoPage(itemCount, index),
+                  tooltipForIndex: (index) => 'Card ${index + 1}',
                 ),
                 const SizedBox(width: 12),
                 _PagerArrowButton(
@@ -317,7 +304,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
             )
           else
             Center(
-              child: _PageDots(count: itemCount, index: _index),
+              child: PageDotsIndicator(count: itemCount, index: _index),
             ),
         ],
       ],
@@ -886,7 +873,7 @@ class _TodoRing extends StatelessWidget {
     return SizedBox.square(
       dimension: size,
       child: CustomPaint(
-        painter: _RingPainter(
+        painter: ProgressRingPainter(
           value: summary.ratio,
           color: summary.isDone ? Colors.green : colorScheme.primary,
           trackColor: colorScheme.surfaceContainerHighest,
@@ -1082,51 +1069,6 @@ class _CaughtUp extends StatelessWidget {
         color: colorScheme.onSurfaceVariant,
         fontWeight: FontWeight.w800,
       ),
-    );
-  }
-}
-
-class _PageDots extends StatelessWidget {
-  const _PageDots({required this.count, required this.index, this.onDotTap});
-
-  final int count;
-  final int index;
-  final ValueChanged<int>? onDotTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(count, (dotIndex) {
-        final selected = dotIndex == index;
-        final dot = AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          width: selected ? 18 : 7,
-          height: 7,
-          margin: const EdgeInsets.symmetric(horizontal: 2),
-          decoration: BoxDecoration(
-            color: selected
-                ? colorScheme.onSurface
-                : colorScheme.onSurface.withValues(alpha: 0.24),
-            borderRadius: BorderRadius.circular(999),
-          ),
-        );
-
-        if (onDotTap == null) return dot;
-        return Tooltip(
-          message: 'Card ${dotIndex + 1}',
-          child: InkResponse(
-            radius: 14,
-            onTap: () => onDotTap!(dotIndex),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
-              child: dot,
-            ),
-          ),
-        );
-      }),
     );
   }
 }
@@ -1664,52 +1606,6 @@ class _BannerTileState extends State<_BannerTile>
         ),
       ),
     );
-  }
-}
-
-class _RingPainter extends CustomPainter {
-  const _RingPainter({
-    required this.value,
-    required this.color,
-    required this.trackColor,
-  });
-
-  final double value;
-  final Color color;
-  final Color trackColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width * 0.15;
-    final rect =
-        Offset(strokeWidth / 2, strokeWidth / 2) &
-        Size(size.width - strokeWidth, size.height - strokeWidth);
-    final trackPaint = Paint()
-      ..color = trackColor
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
-    final valuePaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
-
-    canvas.drawArc(rect, -math.pi / 2, math.pi * 2, false, trackPaint);
-    canvas.drawArc(
-      rect,
-      -math.pi / 2,
-      math.pi * 2 * value.clamp(0, 1),
-      false,
-      valuePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _RingPainter oldDelegate) {
-    return oldDelegate.value != value ||
-        oldDelegate.color != color ||
-        oldDelegate.trackColor != trackColor;
   }
 }
 
