@@ -301,13 +301,39 @@ class HomeRankedCard extends StatefulWidget {
   State<HomeRankedCard> createState() => _HomeRankedCardState();
 }
 
+/// Stale-while-revalidate cache shared by the Home dashboard's Ranked
+/// League and Upgrade Tracker cards: shows the last known result for a
+/// given account-tag signature immediately (if any) while a fresh fetch
+/// runs in the background, so remounting the card (e.g. leaving and
+/// returning to Home) never re-flashes a loading state — the same way the
+/// to-do card's synchronous data never has a loading gap to begin with.
+class _HomeCardCache<T> {
+  final Map<String, T> _entries = {};
+
+  void invalidate(String signature) => _entries.remove(signature);
+
+  Future<T> reload({
+    required String signature,
+    required Future<T> Function() fetch,
+    required void Function(T fresh) onFresh,
+  }) {
+    final cached = _entries[signature];
+    if (cached == null) {
+      return fetch().then((fresh) {
+        _entries[signature] = fresh;
+        return fresh;
+      });
+    }
+    fetch().then((fresh) {
+      _entries[signature] = fresh;
+      onFresh(fresh);
+    });
+    return Future.value(cached);
+  }
+}
+
 class _HomeRankedCardState extends State<HomeRankedCard> {
-  // Keyed by account-tag signature, kept for the app session so remounting
-  // this card (e.g. leaving and returning to Home) can show the last known
-  // result immediately instead of flashing a loading state again, the same
-  // way the to-do card's synchronous data never has a loading gap to begin
-  // with.
-  static final Map<String, _RankedHomeSummary> _cache = {};
+  static final _cache = _HomeCardCache<_RankedHomeSummary>();
 
   Future<_RankedHomeSummary>? _load;
   String _signature = '';
@@ -342,18 +368,15 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
     final signature = widget.players.map((player) => player.tag).join('|');
     if (_load != null && signature == _signature) return;
     _signature = signature;
-    final cached = _cache[signature];
-    if (cached != null) {
-      _load = Future.value(cached);
-      _loadSummary().then((fresh) {
-        _cache[signature] = fresh;
+    _load = _cache.reload(
+      signature: signature,
+      fetch: _loadSummary,
+      onFresh: (fresh) {
         if (mounted && _signature == signature) {
           setState(() => _load = Future.value(fresh));
         }
-      });
-      return;
-    }
-    _load = _loadSummary()..then((fresh) => _cache[signature] = fresh);
+      },
+    );
   }
 
   Future<_RankedHomeSummary> _loadSummary() async {
@@ -1087,8 +1110,7 @@ class HomeUpgradeTrackerCard extends StatefulWidget {
 }
 
 class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
-  // See _HomeRankedCardState._cache — same stale-while-revalidate reasoning.
-  static final Map<String, _UpgradeHomeSummary> _cache = {};
+  static final _cache = _HomeCardCache<_UpgradeHomeSummary>();
 
   final _repository = UpgradeTrackerRepository.shared;
   Future<_UpgradeHomeSummary>? _load;
@@ -1126,18 +1148,15 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
         .join('|');
     if (_load != null && signature == _signature) return;
     _signature = signature;
-    final cached = _cache[signature];
-    if (cached != null) {
-      _load = Future.value(cached);
-      _loadSummary().then((fresh) {
-        _cache[signature] = fresh;
+    _load = _cache.reload(
+      signature: signature,
+      fetch: _loadSummary,
+      onFresh: (fresh) {
         if (mounted && _signature == signature) {
           setState(() => _load = Future.value(fresh));
         }
-      });
-      return;
-    }
-    _load = _loadSummary()..then((fresh) => _cache[signature] = fresh);
+      },
+    );
   }
 
   Future<_UpgradeHomeSummary> _loadSummary() async {
@@ -1181,8 +1200,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     // force a real reload instead of trusting the (possibly now stale)
     // cached summary.
     if (!mounted) return;
-    final signature = _signature;
-    _cache.remove(signature);
+    _cache.invalidate(_signature);
     _signature = '';
     _reloadIfNeeded();
     setState(() {});
