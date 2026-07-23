@@ -37,6 +37,17 @@ void clearHomeDashboardCaches() {
   _HomeUpgradeTrackerCardState._cache.clear();
 }
 
+/// Single entry point for every sign-out/account-deletion path: clears every
+/// account-scoped cache this session's Home dashboard work introduced
+/// (Ranked League, Upgrade Tracker, and the Home cards themselves), so a
+/// shared device's next signed-in account never sees a previous user's
+/// data. Call this from *every* logout path, not just one of them.
+void clearAccountScopedHomeCaches(PlayerService playerService) {
+  playerService.clearRankedLeagueCache();
+  UpgradeTrackerRepository.shared.clearCache();
+  clearHomeDashboardCaches();
+}
+
 /// Flat bordered shell for a non-paginated (loading/empty) home card state.
 class _HomeCardFrame extends StatelessWidget {
   const _HomeCardFrame({required this.child});
@@ -431,8 +442,12 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
           setState(() => _load = Future.value(fresh));
         }
       },
+      // A background revalidation that drops accounts (one endpoint failed
+      // transiently) must not overwrite the cached data those accounts'
+      // panels were showing — only accept results with as much data as
+      // what's already on screen.
       shouldReplace: (fresh, cached) =>
-          fresh.accounts.isNotEmpty || cached.accounts.isEmpty,
+          fresh.accounts.length >= cached.accounts.length,
     );
   }
 
@@ -1246,8 +1261,12 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
           setState(() => _load = Future.value(fresh));
         }
       },
+      // A background revalidation that drops accounts (one endpoint failed
+      // transiently) must not overwrite the cached data those accounts'
+      // panels were showing — only accept results with as much data as
+      // what's already on screen.
       shouldReplace: (fresh, cached) =>
-          fresh.accounts.isNotEmpty || cached.accounts.isEmpty,
+          fresh.accounts.length >= cached.accounts.length,
     );
   }
 
