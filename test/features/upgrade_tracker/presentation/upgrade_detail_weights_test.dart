@@ -13,6 +13,13 @@ void main() {
     expect(wardenFollowThresholdCopies(0), isNull);
   });
 
+  test('formats unit movement speed as tiles per second', () {
+    expect(formatUnitMovementSpeed(200), '2');
+    expect(formatUnitMovementSpeed(80), '0.8');
+    expect(formatUnitMovementSpeed(185), '1.9');
+    expect(formatUnitMovementSpeed(195), '2');
+  });
+
   testWidgets('shows explicit zero weights with game assets on a small phone', (
     tester,
   ) async {
@@ -141,6 +148,37 @@ void main() {
 
     expect(find.text('7 tiles'), findsOneWidget);
     expect(find.text('0.7 tiles'), findsNothing);
+  });
+
+  testWidgets('hero movement speed converts to tiles per second', (
+    tester,
+  ) async {
+    await _pumpDetailLauncher(
+      tester,
+      UpgradeTrackerItem(
+        id: 5,
+        name: 'Grand Warden',
+        imageUrl: ImageAssets.getHeroImage('Grand Warden'),
+        village: UpgradeVillage.home,
+        category: UpgradeCategory.heroes,
+        queue: UpgradeQueue.builders,
+        currentLevel: 1,
+        targetLevel: 1,
+        count: 1,
+        steps: const [],
+        completedUpgradeSeconds: 0,
+        totalUpgradeSeconds: 0,
+        meta: const {
+          'movement_speed': 200,
+          'levels': [
+            {'level': 1, 'hitpoints': 100},
+          ],
+        },
+      ),
+    );
+
+    expect(find.text('2 tiles/sec'), findsOneWidget);
+    expect(find.text('200'), findsNothing);
   });
 
   testWidgets('builder troop slider starts at its first real static level', (

@@ -41,7 +41,7 @@ Beyond these, screens commonly reach for plain `Colors.*` (`Colors.amber.shade70
 **Never hardcode `Colors.white`/`Colors.black` for text or icons that sit on a themed background — including hero headers.** It's tempting on a hero header, since the identity/back-button area sits on a photo darkened by a *fixed* `Colors.black.withValues(alpha: 0.50)` filter that looks the same in both themes — but the gradient scrim layered on top of that photo (`colorScheme.surface` at increasing alpha toward the bottom) is *not* theme-independent: `surface` is near-black in dark mode and near-white in light mode. Text placed where that gradient is already 60–90% opaque effectively sits on `colorScheme.surface`, not on the photo — hardcoded white text becomes white-on-near-white and disappears in light mode. Use `colorScheme.onSurface` (white in dark theme, black in light theme — same visual result in dark mode, correct contrast in light mode) for any text/icon inside a hero header's identity block, description, or stats-adjacent area. This was an actual bug (confirmed on-device) in all three hero headers before being fixed; watch for it if you copy the hero header pattern into a new screen.
 
 ### Typography
-Single `TextTheme` (`Roboto`, weight 500) shared by both themes, colored white in dark / black in light:
+Single `TextTheme` (`ClashKing`, using the bundled static SemiBold face) shared by both themes, colored white in dark / black in light. The first font release covers Basic Latin plus common smart quotes and dashes; Flutter falls back to the platform sans for unsupported localized characters.
 
 | Style | Size |
 | --- | --- |
