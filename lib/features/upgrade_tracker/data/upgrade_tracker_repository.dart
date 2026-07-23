@@ -71,39 +71,52 @@ class UpgradeTrackerRepository {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
     final generation = _cacheGeneration;
-    if (_remoteAccountId != null && _verifiedRemoteTags.contains(normalized)) {
-      try {
-        final remote = await _loadRemoteSnapshot(normalized);
-        if (remote != null) {
-          final parsed = _parser.parse(remote);
-          if (generation == _cacheGeneration) {
-            await _saveRawSnapshotLocally(
-              normalized,
-              remote,
-              parsedSnapshot: parsed,
-            );
-          }
-          return parsed;
-        }
-      } catch (_) {
-        // The on-device copy remains a deliberate offline fallback.
-      }
-    }
+    final remote = await _tryLoadRemoteSnapshot(normalized, generation);
+    if (remote != null) return remote;
     final cached = _snapshotCache[normalized];
     if (cached != null) return cached;
+    return _loadPersistedSnapshot(normalized, generation);
+  }
+
+  Future<UpgradeTrackerSnapshot?> _tryLoadRemoteSnapshot(
+    String normalized,
+    int generation,
+  ) async {
+    if (_remoteAccountId == null || !_verifiedRemoteTags.contains(normalized)) {
+      return null;
+    }
+    try {
+      final remote = await _loadRemoteSnapshot(normalized);
+      if (remote == null) return null;
+      final parsed = _parser.parse(remote);
+      if (generation == _cacheGeneration) {
+        await _saveRawSnapshotLocally(
+          normalized,
+          remote,
+          parsedSnapshot: parsed,
+        );
+      }
+      return parsed;
+    } catch (_) {
+      // The on-device copy remains a deliberate offline fallback.
+      return null;
+    }
+  }
+
+  Future<UpgradeTrackerSnapshot?> _loadPersistedSnapshot(
+    String normalized,
+    int generation,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString('$_snapshotPrefix$normalized');
-    if (saved != null) {
-      final decoded = jsonDecode(saved);
-      if (decoded is Map) {
-        final parsed = _parser.parse(Map<String, dynamic>.from(decoded));
-        if (generation == _cacheGeneration) {
-          _snapshotCache[normalized] = parsed;
-        }
-        return parsed;
-      }
+    if (saved == null) return null;
+    final decoded = jsonDecode(saved);
+    if (decoded is! Map) return null;
+    final parsed = _parser.parse(Map<String, dynamic>.from(decoded));
+    if (generation == _cacheGeneration) {
+      _snapshotCache[normalized] = parsed;
     }
-    return null;
+    return parsed;
   }
 
   Future<void> saveRawSnapshot(

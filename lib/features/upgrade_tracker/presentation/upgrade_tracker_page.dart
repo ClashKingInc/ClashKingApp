@@ -267,6 +267,12 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         ? null
         : await _repository.loadPlanPreferences(snapshot.tag);
     if (!mounted) return;
+    final goldPassPercent = _resolveGoldPassPercent(snapshot, draft);
+    final planPreferences = UpgradePlanPreferences.fromJson(
+      draft?['heuristics'] is Map
+          ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
+          : null,
+    );
     setState(() {
       _snapshot = snapshot;
       _loading = false;
@@ -274,24 +280,8 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(snapshot.tag)] =
             snapshot.capturedAt;
       }
-      final detectedGoldPass = snapshot == null
-          ? 0
-          : [
-              snapshot.boosts.builderCostReductionPercent,
-              snapshot.boosts.builderTimeReductionPercent,
-              snapshot.boosts.labCostReductionPercent,
-              snapshot.boosts.labTimeReductionPercent,
-            ].reduce((a, b) => a > b ? a : b);
-      final savedGoldPass = draft?['gold_pass_percent'];
-      final parsedGoldPass = savedGoldPass is num
-          ? savedGoldPass.toInt()
-          : int.tryParse(savedGoldPass?.toString() ?? '');
-      _goldPassPercent = (parsedGoldPass ?? detectedGoldPass).clamp(0, 100);
-      _planPreferences = UpgradePlanPreferences.fromJson(
-        draft?['heuristics'] is Map
-            ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
-            : null,
-      );
+      _goldPassPercent = goldPassPercent;
+      _planPreferences = planPreferences;
     });
     if (snapshot != null) {
       _rebuildPlanLanes(snapshot);
@@ -300,6 +290,25 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       _planLanes.value = const [];
     }
     _scheduleWidgetSync();
+  }
+
+  int _resolveGoldPassPercent(
+    UpgradeTrackerSnapshot? snapshot,
+    Map<String, dynamic>? draft,
+  ) {
+    final detectedGoldPass = snapshot == null
+        ? 0
+        : [
+            snapshot.boosts.builderCostReductionPercent,
+            snapshot.boosts.builderTimeReductionPercent,
+            snapshot.boosts.labCostReductionPercent,
+            snapshot.boosts.labTimeReductionPercent,
+          ].reduce((a, b) => a > b ? a : b);
+    final savedGoldPass = draft?['gold_pass_percent'];
+    final parsedGoldPass = savedGoldPass is num
+        ? savedGoldPass.toInt()
+        : int.tryParse(savedGoldPass?.toString() ?? '');
+    return (parsedGoldPass ?? detectedGoldPass).clamp(0, 100);
   }
 
   Future<void> _importSnapshot() async {
