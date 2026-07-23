@@ -710,13 +710,15 @@ class Player {
       );
     }
 
-    // `clan.warCwl.warInfo` is the only populated source of "this clan's
-    // current war" (the separate `warData` field is never assigned anywhere
-    // in the app) — it's used for both regular wars and CWL rounds, so
-    // `isInCwl` is what decides the label, not which field the data came
-    // from. Nulling this out for non-CWL clans (an earlier attempt at this
-    // fix) silently dropped War attacks entirely instead of relabeling them.
-    final currentWar = clan?.warCwl?.warInfo;
+    // `clan.warCwl.warInfo` is the primary source of "this clan's current
+    // war" — it's used for both regular wars and CWL rounds, so `isInCwl`
+    // is what decides the label, not which field the data came from.
+    // Nulling this out for non-CWL clans (an earlier attempt at this fix)
+    // silently dropped War attacks entirely instead of relabeling them.
+    // `warData` (populated straight from the player endpoint's
+    // `war_data.currentWarInfo`) is the fallback for players hydrated
+    // without a linked `clan.warCwl` — e.g. bookmarked/public accounts.
+    final currentWar = clan?.warCwl?.warInfo ?? warData;
     final isActuallyInCwl = clan?.warCwl?.isInCwl == true;
 
     if (currentWar != null &&

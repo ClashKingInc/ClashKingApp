@@ -588,11 +588,12 @@ class _TodoHeaderSummary {
         }
       }
 
-      // `clan.warCwl.warInfo` is the only populated source of "this clan's
-      // current war" (the separate `warData` field is never assigned
-      // anywhere in the app) — used for both regular wars and CWL rounds,
-      // so `isInCwl` decides which bucket/label it belongs to.
-      final currentWar = player.clan?.warCwl?.warInfo;
+      // `clan.warCwl.warInfo` is the primary source of "this clan's current
+      // war", used for both regular wars and CWL rounds — `isInCwl` decides
+      // which bucket/label it belongs to. `player.warData` (from the player
+      // endpoint directly) is the fallback for players hydrated without a
+      // linked `clan.warCwl` (e.g. bookmarked/public accounts).
+      final currentWar = player.clan?.warCwl?.warInfo ?? player.warData;
       final isActuallyInCwl = player.clan?.warCwl?.isInCwl == true;
       if (currentWar != null &&
           currentWar.state == 'inWar' &&

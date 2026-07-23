@@ -314,17 +314,20 @@ class _HomeCardCache<T> {
 
   Future<T> reload({
     required String signature,
-    required Future<T> Function() fetch,
+    required Future<T> Function({required bool forceRefresh}) fetch,
     required void Function(T fresh) onFresh,
   }) {
     final cached = _entries[signature];
     if (cached == null) {
-      return fetch().then((fresh) {
+      return fetch(forceRefresh: false).then((fresh) {
         _entries[signature] = fresh;
         return fresh;
       });
     }
-    fetch().then((fresh) {
+    // The account shown to the user may have changed since it was cached
+    // (attacks done, rank moved) — this background check must hit the real
+    // source, not just return the same cached value again.
+    fetch(forceRefresh: true).then((fresh) {
       _entries[signature] = fresh;
       onFresh(fresh);
     });
@@ -379,12 +382,15 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
     );
   }
 
-  Future<_RankedHomeSummary> _loadSummary() async {
+  Future<_RankedHomeSummary> _loadSummary({required bool forceRefresh}) async {
     final playerService = context.read<PlayerService>();
     final accounts = <_RankedHomeAccount>[];
     for (final player in widget.players) {
       try {
-        final data = await playerService.loadRankedLeagueData(player.tag);
+        final data = await playerService.loadRankedLeagueData(
+          player.tag,
+          forceRefresh: forceRefresh,
+        );
         if (data.currentTier == null && data.history.isEmpty) continue;
         accounts.add(_RankedHomeAccount.fromData(data, player: player));
       } catch (_) {
@@ -397,12 +403,19 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
     );
   }
 
-  void _openRankedLeague(Player player) {
-    Navigator.of(context).push(
+  Future<void> _openRankedLeague(Player player) async {
+    await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => PlayerRankedLeagueScreen(player: player),
       ),
     );
+    // The detail screen may have pulled fresher Ranked data — force a real
+    // reload instead of trusting the (possibly now stale) cached summary.
+    if (!mounted) return;
+    _cache.invalidate(_signature);
+    _signature = '';
+    _reloadIfNeeded();
+    setState(() {});
   }
 
   void _showPage(int count, int page) {
@@ -1159,7 +1172,10 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     );
   }
 
-  Future<_UpgradeHomeSummary> _loadSummary() async {
+  // forceRefresh is accepted for API parity with _HomeCardCache.reload;
+  // UpgradeTrackerRepository.load already re-fetches from remote whenever
+  // possible on every call, so there is nothing extra to force here.
+  Future<_UpgradeHomeSummary> _loadSummary({bool forceRefresh = false}) async {
     final cocService = context.read<CocAccountService>();
     _repository.configureRemote(
       accountId: context.read<AuthService>().currentUser?.userId,
