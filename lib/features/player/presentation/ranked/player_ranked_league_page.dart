@@ -2,6 +2,7 @@ import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -549,7 +550,7 @@ class _BestTierPagerState extends State<_BestTierPager> {
         if (highlights.length > 1) ...[
           const SizedBox(height: 10),
           Center(
-            child: _TierPageDots(
+            child: PageDotsIndicator(
               count: highlights.length,
               index: _index,
               onDotTap: _showPage,
@@ -738,50 +739,6 @@ class _CategoryStatRow extends StatelessWidget {
         const SizedBox(width: 4),
         Text(value, style: Theme.of(context).textTheme.labelMedium),
       ],
-    );
-  }
-}
-
-class _TierPageDots extends StatelessWidget {
-  const _TierPageDots({
-    required this.count,
-    required this.index,
-    this.onDotTap,
-  });
-
-  final int count;
-  final int index;
-  final ValueChanged<int>? onDotTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(count, (dotIndex) {
-        final selected = dotIndex == index;
-        final dot = AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          width: selected ? 18 : 7,
-          height: 7,
-          margin: const EdgeInsets.symmetric(horizontal: 2),
-          decoration: BoxDecoration(
-            color: selected
-                ? colorScheme.onSurface
-                : colorScheme.onSurface.withValues(alpha: 0.24),
-            borderRadius: BorderRadius.circular(999),
-          ),
-        );
-        if (onDotTap == null) return dot;
-        return InkResponse(
-          radius: 14,
-          onTap: () => onDotTap!(dotIndex),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
-            child: dot,
-          ),
-        );
-      }),
     );
   }
 }
