@@ -246,13 +246,13 @@ class DashboardPage extends StatelessWidget {
             return ListView(
               padding: EdgeInsets.fromLTRB(
                 horizontalPadding,
-                12,
+                0,
                 horizontalPadding,
                 bottomPadding,
               ),
               children: [
                 LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 const HomeEventBanner(),
                 SizedBox(height: isDesktopWeb ? 24 : 16),
                 ..._buildBody(
