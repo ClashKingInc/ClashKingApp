@@ -2194,6 +2194,8 @@
   "dashboardTodoHiddenBody": "Active l'une des options d'accueil (to-do, tracker d'amélioration, Ranked) pour un compte dans l'onglet Joueurs pour le voir ici.",
   "dashboardUpgradeTrackerNoData": "Ouvre le tracker pour importer ou actualiser les données d’amélioration.",
   "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {a besoin d’une mise à jour} other {ont besoin d’une mise à jour}}",
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {a des tâches à faire} other {ont des tâches à faire}}",
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {a des attaques restantes} other {ont des attaques restantes}}",
   "dashboardUpgradeTrackerAccounts": "{loaded}/{total} comptes suivis",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {

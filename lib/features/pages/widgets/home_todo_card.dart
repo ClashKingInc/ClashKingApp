@@ -340,6 +340,11 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       return _AllAccountsPanel(
         accountCount: widget.players.length,
         summary: summaries[index],
+        status: _todoAllAccountsStatus(
+          context,
+          widget.players,
+          summaries.sublist(1),
+        ),
         onTap: () => _openTodo(context, warCwlService!),
       );
     }
@@ -588,17 +593,46 @@ class _AccountTodoPanel extends StatelessWidget {
   }
 }
 
+/// Names the accounts that still have tasks left today, falling back to a
+/// generic combined label once every account is caught up.
+String _todoAllAccountsStatus(
+  BuildContext context,
+  List<Player> players,
+  List<_TodoSummary> perAccountSummaries,
+) {
+  final loc = AppLocalizations.of(context)!;
+  final incomplete = <Player>[];
+  for (var i = 0; i < players.length && i < perAccountSummaries.length; i++) {
+    if (!perAccountSummaries[i].isDone) incomplete.add(players[i]);
+  }
+  if (incomplete.isEmpty) return loc.todoCombinedAcrossAccounts;
+
+  final visibleNames = incomplete
+      .take(3)
+      .map((player) => player.name.trim())
+      .where((name) => name.isNotEmpty)
+      .toList(growable: false);
+  final remaining = incomplete.length - visibleNames.length;
+  final suffix = remaining > 0 ? ', +$remaining' : '';
+  final subject = visibleNames.isEmpty
+      ? loc.todoAccountsNumber(incomplete.length)
+      : '${visibleNames.join(', ')}$suffix';
+  return loc.todoAccountsHaveTasksLeft(subject, incomplete.length);
+}
+
 /// Leading page when several accounts are pinned: combined progress and
 /// per-category totals across all of them.
 class _AllAccountsPanel extends StatelessWidget {
   const _AllAccountsPanel({
     required this.accountCount,
     required this.summary,
+    required this.status,
     required this.onTap,
   });
 
   final int accountCount;
   final _TodoSummary summary;
+  final String status;
   final VoidCallback onTap;
 
   @override
@@ -681,9 +715,7 @@ class _AllAccountsPanel extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.todoCombinedAcrossAccounts,
+                        status,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(

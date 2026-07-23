@@ -607,7 +607,7 @@ class _RankedAllAccountsPanel extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        loc.dashboardRankedCombinedAcrossAccounts,
+                        _rankedSummaryStatus(context, summary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -1050,6 +1050,32 @@ String _rankedSummarySubtitle(
 ) {
   final loc = AppLocalizations.of(context)!;
   return loc.todoAccountsNumber(summary.accounts.length);
+}
+
+/// Names the accounts that still have ranked attacks left today, falling
+/// back to a generic combined label once every account is caught up.
+String _rankedSummaryStatus(BuildContext context, _RankedHomeSummary summary) {
+  final loc = AppLocalizations.of(context)!;
+  final incomplete = summary.accounts
+      .where((account) {
+        final maxBattles = account.maxBattles;
+        if (maxBattles == null) return false;
+        return account.attacksDone < maxBattles;
+      })
+      .toList(growable: false);
+  if (incomplete.isEmpty) return loc.dashboardRankedCombinedAcrossAccounts;
+
+  final visibleNames = incomplete
+      .take(3)
+      .map((account) => account.name.trim())
+      .where((name) => name.isNotEmpty)
+      .toList(growable: false);
+  final remaining = incomplete.length - visibleNames.length;
+  final suffix = remaining > 0 ? ', +$remaining' : '';
+  final subject = visibleNames.isEmpty
+      ? loc.todoAccountsNumber(incomplete.length)
+      : '${visibleNames.join(', ')}$suffix';
+  return loc.dashboardRankedAccountsHaveAttacksLeft(subject, incomplete.length);
 }
 
 class HomeUpgradeTrackerCard extends StatefulWidget {
