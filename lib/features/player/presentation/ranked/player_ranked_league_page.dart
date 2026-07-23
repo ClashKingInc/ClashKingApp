@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
@@ -38,19 +40,20 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   @override
   void initState() {
     super.initState();
-    _fetch();
+    _fetch(forceRefresh: false);
   }
 
   // Keeps the last-loaded data mounted across a refresh instead of tearing
   // down the hero header/tabs — the RefreshIndicator already provides the
   // reload affordance, so a full-screen loading swap would just be a flash.
-  // Always forces a real network fetch (never the Home dashboard's warm-up
-  // cache) since this detail screen must show authoritative current state.
-  Future<void> _fetch() async {
+  // Same philosophy applies to opening the screen itself: show a warmed
+  // cache instantly (no loading flash) and quietly revalidate in the
+  // background, rather than forcing every open through a spinner.
+  Future<void> _fetch({required bool forceRefresh}) async {
     try {
       final data = await context.read<PlayerService>().loadRankedLeagueData(
         widget.player.tag,
-        forceRefresh: true,
+        forceRefresh: forceRefresh,
       );
       if (!mounted) return;
       setState(() {
@@ -61,9 +64,28 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
       if (!mounted) return;
       setState(() => _loading = false);
     }
+    if (!forceRefresh) {
+      // The cached value just shown may already be stale (attacks done,
+      // rank moved since it was cached) — catch up silently instead of
+      // leaving the user looking at outdated numbers all session.
+      unawaited(_revalidate());
+    }
   }
 
-  Future<void> _refresh() => _fetch();
+  Future<void> _revalidate() async {
+    try {
+      final fresh = await context.read<PlayerService>().loadRankedLeagueData(
+        widget.player.tag,
+        forceRefresh: true,
+      );
+      if (!mounted) return;
+      setState(() => _data = fresh);
+    } catch (_) {
+      // Best-effort only; the initial fetch already surfaced any error.
+    }
+  }
+
+  Future<void> _refresh() => _fetch(forceRefresh: true);
 
   void _selectTab(int index) {
     final clamped = index.clamp(0, 1);

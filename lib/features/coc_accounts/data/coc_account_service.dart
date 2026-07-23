@@ -496,6 +496,28 @@ class CocAccountService extends ChangeNotifier {
       "🚀 Hydrating ${playerTags.length} players with parallel requests",
     );
 
+    // Best-effort warm-up for the Home dashboard's Ranked League and
+    // Upgrade Tracker cards — kicked off immediately, in parallel with
+    // everything below, since neither depends on the player/clan data this
+    // function fetches. Fired outside the awaited critical path so a slow
+    // per-account endpoint here never delays the startup loading screen;
+    // those cards just fall back to their own normal fetch if this hasn't
+    // finished by the time they mount. Starting it this early (rather than
+    // after the clan/war data resolves) gives it the most possible time to
+    // finish before Home ever renders.
+    UpgradeTrackerRepository.shared.configureRemote(
+      accountId: _currentUserId,
+      verifiedPlayerTags: verifiedAccounts.map(
+        (account) => account['player_tag']?.toString() ?? '',
+      ),
+    );
+    unawaited(playerService.prefetchRankedLeagueData(playerTags));
+    for (final tag in playerTags) {
+      unawaited(
+        UpgradeTrackerRepository.shared.load(tag).catchError((_) => null),
+      );
+    }
+
     final timer = Stopwatch()..start();
     final cachedClanTagsByPlayer = await _cachedClanTagsByPlayer(playerTags);
     final optimisticClanTags = {
@@ -543,24 +565,6 @@ class CocAccountService extends ChangeNotifier {
           warCwlService,
         ),
     ]);
-
-    // Best-effort warm-up for the Home dashboard's Ranked League and
-    // Upgrade Tracker cards — fired outside the awaited critical path so a
-    // slow per-account endpoint here never delays the startup loading
-    // screen; those cards just fall back to their own normal fetch if this
-    // hasn't finished by the time they mount.
-    UpgradeTrackerRepository.shared.configureRemote(
-      accountId: _currentUserId,
-      verifiedPlayerTags: verifiedAccounts.map(
-        (account) => account['player_tag']?.toString() ?? '',
-      ),
-    );
-    unawaited(playerService.prefetchRankedLeagueData(playerTags));
-    for (final tag in playerTags) {
-      unawaited(
-        UpgradeTrackerRepository.shared.load(tag).catchError((_) => null),
-      );
-    }
 
     final allClanTags = {
       ...optimisticClanTags,
