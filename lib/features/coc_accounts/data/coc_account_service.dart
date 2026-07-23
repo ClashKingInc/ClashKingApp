@@ -5,6 +5,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/observability_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
@@ -531,7 +532,17 @@ class CocAccountService extends ChangeNotifier {
         .where((tag) => tag.isNotEmpty)
         .toSet();
 
-    DebugUtils.debugApi("Parallel phase: load initial clan and war data");
+    UpgradeTrackerRepository.shared.configureRemote(
+      accountId: _currentUserId,
+      verifiedPlayerTags: verifiedAccounts.map(
+        (account) => account['player_tag']?.toString() ?? '',
+      ),
+    );
+
+    DebugUtils.debugApi(
+      "Parallel phase: load initial clan/war data and warm the Ranked "
+      "League + Upgrade Tracker caches for the Home dashboard",
+    );
     await Future.wait([
       optimisticClanLoad,
       if (missingClanTags.isNotEmpty)
@@ -541,6 +552,12 @@ class CocAccountService extends ChangeNotifier {
           clanService,
           warCwlService,
         ),
+      playerService.prefetchRankedLeagueData(playerTags),
+      ...playerTags.map(
+        (tag) => UpgradeTrackerRepository.shared.load(tag).catchError((_) {
+          return null;
+        }),
+      ),
     ]);
 
     final allClanTags = {

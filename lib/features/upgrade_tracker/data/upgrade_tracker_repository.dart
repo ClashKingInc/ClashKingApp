@@ -7,6 +7,10 @@ import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_mod
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpgradeTrackerRepository {
+  // Shared app-wide so accounts fetched once (e.g. at startup, or by the
+  // Home dashboard) stay warm in memory for every other screen.
+  static final UpgradeTrackerRepository shared = UpgradeTrackerRepository();
+
   UpgradeTrackerRepository({
     UpgradeTrackerParser parser = const UpgradeTrackerParser(),
     ApiService? apiService,

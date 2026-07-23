@@ -19,6 +19,7 @@ import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repos
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -110,6 +111,79 @@ class _HomeCardFrame extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         child: child,
       ),
+    );
+  }
+}
+
+/// Shimmer placeholder shaped like a loaded recap panel (avatar + title
+/// lines + trailing ring, a status line, then one or two metric-bar rows) —
+/// shown immediately while a card's data loads, instead of a spinner that
+/// would otherwise flash on every fast (typically cached) load.
+class _HomeCardSkeleton extends StatelessWidget {
+  const _HomeCardSkeleton({required this.barRows});
+
+  final int barRows;
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = BorderRadius.circular(8);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            SkeletonLoader(
+              width: 46,
+              height: 46,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SkeletonLoader(width: 120, height: 16, borderRadius: radius),
+                  const SizedBox(height: 6),
+                  SkeletonLoader(width: 70, height: 12, borderRadius: radius),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            SkeletonLoader(
+              width: 46,
+              height: 46,
+              borderRadius: BorderRadius.circular(23),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        SkeletonLoader(
+          width: double.infinity,
+          height: 14,
+          borderRadius: radius,
+        ),
+        const SizedBox(height: 10),
+        for (var i = 0; i < barRows; i++) ...[
+          if (i > 0) const SizedBox(height: 7),
+          Row(
+            children: [
+              Expanded(
+                child: SkeletonLoader(
+                  height: 46,
+                  borderRadius: BorderRadius.circular(AppRadius.control),
+                ),
+              ),
+              const SizedBox(width: 7),
+              Expanded(
+                child: SkeletonLoader(
+                  height: 46,
+                  borderRadius: BorderRadius.circular(AppRadius.control),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
     );
   }
 }
@@ -253,11 +327,17 @@ class HomeRankedCard extends StatefulWidget {
 }
 
 class _HomeRankedCardState extends State<HomeRankedCard> {
+  // Keyed by account-tag signature, kept for the app session so remounting
+  // this card (e.g. leaving and returning to Home) can show the last known
+  // result immediately instead of flashing a loading state again, the same
+  // way the to-do card's synchronous data never has a loading gap to begin
+  // with.
+  static final Map<String, _RankedHomeSummary> _cache = {};
+
   Future<_RankedHomeSummary>? _load;
   String _signature = '';
   late final PageController _controller;
   int _index = 0;
-  bool _showLoadingIndicator = false;
 
   @override
   void initState() {
@@ -287,16 +367,18 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
     final signature = widget.players.map((player) => player.tag).join('|');
     if (_load != null && signature == _signature) return;
     _signature = signature;
-    _showLoadingIndicator = false;
-    final load = _loadSummary();
-    _load = load;
-    // Only surface the spinner once a load is genuinely slow, so a fast
-    // (typically cached) response never flashes a loading state at all.
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted && _load == load) {
-        setState(() => _showLoadingIndicator = true);
-      }
-    });
+    final cached = _cache[signature];
+    if (cached != null) {
+      _load = Future.value(cached);
+      _loadSummary().then((fresh) {
+        _cache[signature] = fresh;
+        if (mounted && _signature == signature) {
+          setState(() => _load = Future.value(fresh));
+        }
+      });
+      return;
+    }
+    _load = _loadSummary()..then((fresh) => _cache[signature] = fresh);
   }
 
   Future<_RankedHomeSummary> _loadSummary() async {
@@ -340,8 +422,7 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
         final summary = snapshot.data;
         final loading = snapshot.connectionState == ConnectionState.waiting;
         if (loading) {
-          if (!_showLoadingIndicator) return const SizedBox.shrink();
-          return const _HomeCardFrame(child: _RankedHomeLoading());
+          return const _HomeCardFrame(child: _RankedHomeSkeleton());
         }
         if (summary == null || summary.accounts.isEmpty) {
           return _HomeCardFrame(
@@ -702,29 +783,12 @@ class _RankedHomeEmpty extends StatelessWidget {
   }
 }
 
-class _RankedHomeLoading extends StatelessWidget {
-  const _RankedHomeLoading();
+class _RankedHomeSkeleton extends StatelessWidget {
+  const _RankedHomeSkeleton();
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    return Row(
-      children: [
-        const SizedBox.square(
-          dimension: 42,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            loc.rankedLeagueTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
-          ),
-        ),
-      ],
-    );
+    return const _HomeCardSkeleton(barRows: 1);
   }
 }
 
@@ -1088,12 +1152,14 @@ class HomeUpgradeTrackerCard extends StatefulWidget {
 }
 
 class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
-  final _repository = UpgradeTrackerRepository();
+  // See _HomeRankedCardState._cache — same stale-while-revalidate reasoning.
+  static final Map<String, _UpgradeHomeSummary> _cache = {};
+
+  final _repository = UpgradeTrackerRepository.shared;
   Future<_UpgradeHomeSummary>? _load;
   String _signature = '';
   late final PageController _controller;
   int _index = 0;
-  bool _showLoadingIndicator = false;
 
   @override
   void initState() {
@@ -1125,14 +1191,18 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
         .join('|');
     if (_load != null && signature == _signature) return;
     _signature = signature;
-    _showLoadingIndicator = false;
-    final load = _loadSummary();
-    _load = load;
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted && _load == load) {
-        setState(() => _showLoadingIndicator = true);
-      }
-    });
+    final cached = _cache[signature];
+    if (cached != null) {
+      _load = Future.value(cached);
+      _loadSummary().then((fresh) {
+        _cache[signature] = fresh;
+        if (mounted && _signature == signature) {
+          setState(() => _load = Future.value(fresh));
+        }
+      });
+      return;
+    }
+    _load = _loadSummary()..then((fresh) => _cache[signature] = fresh);
   }
 
   Future<_UpgradeHomeSummary> _loadSummary() async {
@@ -1187,8 +1257,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
         final summary = snapshot.data;
         final loading = snapshot.connectionState == ConnectionState.waiting;
         if (loading) {
-          if (!_showLoadingIndicator) return const SizedBox.shrink();
-          return const _HomeCardFrame(child: _UpgradeHomeLoading());
+          return const _HomeCardFrame(child: _UpgradeHomeSkeleton());
         }
         if (summary == null) {
           return _HomeCardFrame(
@@ -1480,9 +1549,14 @@ class _UpgradeAllAccountsPanel extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const SizedBox.square(
+                    SizedBox.square(
                       dimension: 46,
-                      child: Icon(Icons.construction_rounded, size: 28),
+                      child: MobileWebImage(
+                        imageUrl: ImageAssets.builderWave,
+                        fit: BoxFit.contain,
+                        errorWidget: (_, _, _) =>
+                            const Icon(Icons.construction_rounded, size: 28),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -1630,14 +1704,12 @@ class _UpgradeEmptyContent extends StatelessWidget {
           children: [
             SizedBox.square(
               dimension: 46,
-              child: imageUrl == null
-                  ? const Icon(Icons.construction_rounded, size: 28)
-                  : MobileWebImage(
-                      imageUrl: imageUrl!,
-                      fit: BoxFit.contain,
-                      errorWidget: (_, _, _) =>
-                          const Icon(Icons.construction_rounded),
-                    ),
+              child: MobileWebImage(
+                imageUrl: imageUrl ?? ImageAssets.builderWave,
+                fit: BoxFit.contain,
+                errorWidget: (_, _, _) =>
+                    const Icon(Icons.construction_rounded, size: 28),
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -1716,29 +1788,12 @@ class _UpgradeEmptyContent extends StatelessWidget {
   }
 }
 
-class _UpgradeHomeLoading extends StatelessWidget {
-  const _UpgradeHomeLoading();
+class _UpgradeHomeSkeleton extends StatelessWidget {
+  const _UpgradeHomeSkeleton();
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    return Row(
-      children: [
-        const SizedBox.square(
-          dimension: 42,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            loc.drawerUpgradeTracker,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
-          ),
-        ),
-      ],
-    );
+    return const _HomeCardSkeleton(barRows: 2);
   }
 }
 

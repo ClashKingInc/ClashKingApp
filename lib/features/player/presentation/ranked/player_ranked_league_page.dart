@@ -43,10 +43,11 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   // Keeps the last-loaded data mounted across a refresh instead of tearing
   // down the hero header/tabs — the RefreshIndicator already provides the
   // reload affordance, so a full-screen loading swap would just be a flash.
-  Future<void> _fetch() async {
+  Future<void> _fetch({bool forceRefresh = false}) async {
     try {
       final data = await context.read<PlayerService>().loadRankedLeagueData(
         widget.player.tag,
+        forceRefresh: forceRefresh,
       );
       if (!mounted) return;
       setState(() {
@@ -59,7 +60,7 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
     }
   }
 
-  Future<void> _refresh() => _fetch();
+  Future<void> _refresh() => _fetch(forceRefresh: true);
 
   void _selectTab(int index) {
     final clamped = index.clamp(0, 1);

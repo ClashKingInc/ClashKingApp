@@ -54,7 +54,7 @@ class UpgradeTrackerPage extends StatefulWidget {
 }
 
 class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
-  final _repository = UpgradeTrackerRepository();
+  final _repository = UpgradeTrackerRepository.shared;
   final _widgetSync = const UpgradeWidgetSyncService();
   final _planLanes = ValueNotifier<List<UpgradePlanLane>>(const []);
   final _clock = ValueNotifier<DateTime>(DateTime.now());
