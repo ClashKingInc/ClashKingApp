@@ -270,15 +270,31 @@ class DashboardPage extends StatelessWidget {
         rankedPlayers.isEmpty) {
       return [_buildAllCardsHidden(context)];
     }
+    return _buildCards(
+      linkedPlayers: linkedPlayers,
+      todoPlayers: todoPlayers,
+      rankedPlayers: rankedPlayers,
+      upgradePlayers: upgradePlayers,
+      isDesktopWeb: isDesktopWeb,
+    );
+  }
+
+  List<Widget> _buildCards({
+    required List<Player> linkedPlayers,
+    required List<Player> todoPlayers,
+    required List<Player> rankedPlayers,
+    required List<Player> upgradePlayers,
+    required bool isDesktopWeb,
+  }) {
+    final spacer = SizedBox(height: isDesktopWeb ? 16 : 12);
     return [
       if (todoPlayers.isNotEmpty)
         HomeTodoCard(players: todoPlayers, allPlayers: linkedPlayers),
-      if (todoPlayers.isNotEmpty && rankedPlayers.isNotEmpty)
-        SizedBox(height: isDesktopWeb ? 16 : 12),
+      if (todoPlayers.isNotEmpty && rankedPlayers.isNotEmpty) spacer,
       if (rankedPlayers.isNotEmpty) HomeRankedCard(players: rankedPlayers),
       if ((todoPlayers.isNotEmpty || rankedPlayers.isNotEmpty) &&
           upgradePlayers.isNotEmpty)
-        SizedBox(height: isDesktopWeb ? 16 : 12),
+        spacer,
       if (upgradePlayers.isNotEmpty)
         HomeUpgradeTrackerCard(players: upgradePlayers),
     ];
@@ -818,7 +834,7 @@ class _RankedTrophyPill extends StatelessWidget {
               child: MobileWebImage(
                 imageUrl: ImageAssets.trophies,
                 fit: BoxFit.contain,
-                errorWidget: (_, _, _) => Icon(
+                errorWidget: (_, _, _) => const Icon(
                   Icons.emoji_events_rounded,
                   size: 16,
                   color: CKColors.warGold,
@@ -859,7 +875,11 @@ class _RankedBestRankPill extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.leaderboard_rounded, size: 16, color: CKColors.warGold),
+            const Icon(
+              Icons.leaderboard_rounded,
+              size: 16,
+              color: CKColors.warGold,
+            ),
             const SizedBox(width: 5),
             Text(
               '${loc.rankedLeagueBestGroupRank} #$rank',
