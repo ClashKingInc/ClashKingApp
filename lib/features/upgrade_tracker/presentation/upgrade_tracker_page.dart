@@ -217,53 +217,39 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   Future<void> _load(String tag) async {
     _ticker?.cancel();
     _ticker = null;
+    // A snapshot already warmed in memory (e.g. by the startup prefetch, or
+    // a previous visit to this tag) can render immediately; only fall back
+    // to a loading state when nothing is available yet to show.
+    final cached = _repository.peekCached(tag);
     setState(() {
       _selectedTag = tag;
-      _loading = true;
+      _loading = cached == null;
       _error = null;
       _planData = null;
     });
+    if (cached != null) {
+      await _applySnapshot(cached);
+      unawaited(_revalidate(tag));
+      return;
+    }
+    await _fetchAndApply(tag);
+  }
+
+  Future<void> _revalidate(String tag) async {
     try {
       final snapshot = await _repository.load(tag);
-      final draft = snapshot == null
-          ? null
-          : await _repository.loadPlanPreferences(snapshot.tag);
+      if (!mounted || snapshot == null || _selectedTag != tag) return;
+      await _applySnapshot(snapshot);
+    } catch (_) {
+      // Best-effort only; the cached snapshot already rendered.
+    }
+  }
+
+  Future<void> _fetchAndApply(String tag) async {
+    try {
+      final snapshot = await _repository.load(tag);
       if (!mounted) return;
-      setState(() {
-        _snapshot = snapshot;
-        _loading = false;
-        if (snapshot != null) {
-          _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(
-                snapshot.tag,
-              )] =
-              snapshot.capturedAt;
-        }
-        final detectedGoldPass = snapshot == null
-            ? 0
-            : [
-                snapshot.boosts.builderCostReductionPercent,
-                snapshot.boosts.builderTimeReductionPercent,
-                snapshot.boosts.labCostReductionPercent,
-                snapshot.boosts.labTimeReductionPercent,
-              ].reduce((a, b) => a > b ? a : b);
-        final savedGoldPass = draft?['gold_pass_percent'];
-        final parsedGoldPass = savedGoldPass is num
-            ? savedGoldPass.toInt()
-            : int.tryParse(savedGoldPass?.toString() ?? '');
-        _goldPassPercent = (parsedGoldPass ?? detectedGoldPass).clamp(0, 100);
-        _planPreferences = UpgradePlanPreferences.fromJson(
-          draft?['heuristics'] is Map
-              ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
-              : null,
-        );
-      });
-      if (snapshot != null) {
-        _rebuildPlanLanes(snapshot);
-        _scheduleClockTick();
-      } else {
-        _planLanes.value = const [];
-      }
-      _scheduleWidgetSync();
+      await _applySnapshot(snapshot);
     } catch (error) {
       if (!mounted) return;
       setState(() {
@@ -274,6 +260,46 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       });
       _planLanes.value = const [];
     }
+  }
+
+  Future<void> _applySnapshot(UpgradeTrackerSnapshot? snapshot) async {
+    final draft = snapshot == null
+        ? null
+        : await _repository.loadPlanPreferences(snapshot.tag);
+    if (!mounted) return;
+    setState(() {
+      _snapshot = snapshot;
+      _loading = false;
+      if (snapshot != null) {
+        _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(snapshot.tag)] =
+            snapshot.capturedAt;
+      }
+      final detectedGoldPass = snapshot == null
+          ? 0
+          : [
+              snapshot.boosts.builderCostReductionPercent,
+              snapshot.boosts.builderTimeReductionPercent,
+              snapshot.boosts.labCostReductionPercent,
+              snapshot.boosts.labTimeReductionPercent,
+            ].reduce((a, b) => a > b ? a : b);
+      final savedGoldPass = draft?['gold_pass_percent'];
+      final parsedGoldPass = savedGoldPass is num
+          ? savedGoldPass.toInt()
+          : int.tryParse(savedGoldPass?.toString() ?? '');
+      _goldPassPercent = (parsedGoldPass ?? detectedGoldPass).clamp(0, 100);
+      _planPreferences = UpgradePlanPreferences.fromJson(
+        draft?['heuristics'] is Map
+            ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
+            : null,
+      );
+    });
+    if (snapshot != null) {
+      _rebuildPlanLanes(snapshot);
+      _scheduleClockTick();
+    } else {
+      _planLanes.value = const [];
+    }
+    _scheduleWidgetSync();
   }
 
   Future<void> _importSnapshot() async {

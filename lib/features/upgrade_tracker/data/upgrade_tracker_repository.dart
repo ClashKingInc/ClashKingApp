@@ -59,6 +59,14 @@ class UpgradeTrackerRepository {
     _cacheGeneration++;
   }
 
+  /// Returns an already in-memory snapshot without touching the network or
+  /// disk, so callers can render instantly and revalidate in the background
+  /// (e.g. a snapshot warmed by the startup prefetch) instead of flashing a
+  /// loading state for data that's already sitting in memory.
+  UpgradeTrackerSnapshot? peekCached(String playerTag) {
+    return _snapshotCache[normalizeTag(playerTag)];
+  }
+
   Future<UpgradeTrackerSnapshot?> load(String playerTag) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
