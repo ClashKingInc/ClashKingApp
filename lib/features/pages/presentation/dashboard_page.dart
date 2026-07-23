@@ -28,6 +28,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+/// Drops the Home dashboard's in-memory Ranked League and Upgrade Tracker
+/// summaries — called on sign-out so a shared device's next account never
+/// briefly sees a previous user's cached card data before its own fetch
+/// completes.
+void clearHomeDashboardCaches() {
+  _HomeRankedCardState._cache.clear();
+  _HomeUpgradeTrackerCardState._cache.clear();
+}
+
 /// Flat bordered shell for a non-paginated (loading/empty) home card state.
 class _HomeCardFrame extends StatelessWidget {
   const _HomeCardFrame({required this.child});
@@ -348,6 +357,8 @@ class _HomeCardCache<T> {
 
   void invalidate(String signature) => _entries.remove(signature);
 
+  void clear() => _entries.clear();
+
   Future<T> reload({
     required String signature,
     required Future<T> Function({required bool forceRefresh}) fetch,
@@ -628,7 +639,7 @@ class _RankedAccountPanel extends StatelessWidget {
                 fallbackIcon: Icons.sports_kabaddi_rounded,
                 label: loc.rankedLeagueAttacks,
                 done: account.attacksDone,
-                total: account.maxBattles ?? math.max(account.attacksDone, 1),
+                total: account.maxBattles,
                 color: CKColors.lossRed,
               ),
               _RankedHomeMetricData(
@@ -636,7 +647,7 @@ class _RankedAccountPanel extends StatelessWidget {
                 fallbackIcon: Icons.shield_rounded,
                 label: loc.rankedLeagueDefenses,
                 done: account.defensesDone,
-                total: account.maxBattles ?? math.max(account.defensesDone, 1),
+                total: account.maxBattles,
                 color: CKColors.legendBlue,
               ),
             ],
@@ -909,10 +920,25 @@ class _RankedHomeMetricData {
   final IconData fallbackIcon;
   final String label;
   final int done;
-  final int total;
+
+  /// Null when the real limit isn't known yet — shown as a plain count
+  /// instead of a `done/total` ratio, since a nonzero count is not the
+  /// same as "fully done" when the actual limit is unknown.
+  final int? total;
   final Color color;
 
-  double get ratio => total <= 0 ? 0 : (done / total).clamp(0.0, 1.0);
+  bool get isDone => total != null && done >= total!;
+
+  double get ratio {
+    final total = this.total;
+    if (total == null || total <= 0) return 0;
+    return (done / total).clamp(0.0, 1.0);
+  }
+
+  String get valueLabel {
+    final total = this.total;
+    return total == null ? '$done' : '$done/$total';
+  }
 }
 
 class _RankedHomeMetricBars extends StatelessWidget {
@@ -959,7 +985,7 @@ class _RankedHomeMetricBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final fillColor = metric.done >= metric.total ? Colors.green : metric.color;
+    final fillColor = metric.isDone ? Colors.green : metric.color;
 
     return SizedBox(
       height: 38,
@@ -1010,8 +1036,7 @@ class _RankedHomeMetricBar extends StatelessWidget {
                     const SizedBox(width: 7),
                     Expanded(
                       child: Semantics(
-                        label:
-                            '${metric.label}, ${metric.done}/${metric.total}',
+                        label: '${metric.label}, ${metric.valueLabel}',
                         child: ExcludeSemantics(
                           child: Text(
                             metric.label,
@@ -1028,7 +1053,7 @@ class _RankedHomeMetricBar extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${metric.done}/${metric.total}',
+                      metric.valueLabel,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: fillColor,
                         fontWeight: FontWeight.w900,
@@ -1057,20 +1082,20 @@ class _RankedHomeSummary {
   int get totalAttacksDone =>
       accounts.fold(0, (sum, account) => sum + account.attacksDone);
 
-  int get totalAttacksMax => accounts.fold(
-    0,
-    (sum, account) =>
-        sum + (account.maxBattles ?? math.max(account.attacksDone, 1)),
-  );
+  // Null (unknown) if any account's real limit is unknown — adding a known
+  // count to an unknown one is not a meaningful total.
+  int? get totalAttacksMax {
+    if (accounts.any((account) => account.maxBattles == null)) return null;
+    return accounts.fold<int>(0, (sum, account) => sum + account.maxBattles!);
+  }
 
   int get totalDefensesDone =>
       accounts.fold(0, (sum, account) => sum + account.defensesDone);
 
-  int get totalDefensesMax => accounts.fold(
-    0,
-    (sum, account) =>
-        sum + (account.maxBattles ?? math.max(account.defensesDone, 1)),
-  );
+  int? get totalDefensesMax {
+    if (accounts.any((account) => account.maxBattles == null)) return null;
+    return accounts.fold<int>(0, (sum, account) => sum + account.maxBattles!);
+  }
 
   /// The best rank currently held among your accounts (not an all-time
   /// record), since that's what's actionable from a home recap card.

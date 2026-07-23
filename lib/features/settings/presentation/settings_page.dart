@@ -14,12 +14,14 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:clashkingapp/features/settings/presentation/notification_settings_page.dart';
 import 'package:clashkingapp/features/settings/presentation/privacy_controls_page.dart';
 import 'package:clashkingapp/features/settings/presentation/translation_page.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/l10n/locale.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
@@ -692,9 +694,15 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       context,
       listen: false,
     );
+    final playerService = Provider.of<PlayerService>(context, listen: false);
 
     await authService.logoutAndClearAllData();
     cocAccountService.clearAccountData();
+    // A shared device's next signed-in account must never briefly see the
+    // previous account's cached Ranked League / Upgrade Tracker data.
+    playerService.clearRankedLeagueCache();
+    UpgradeTrackerRepository.shared.clearCache();
+    clearHomeDashboardCaches();
 
     globalNavigatorKey.currentState?.pushReplacement(
       MaterialPageRoute(builder: (context) => LoginPage()),

@@ -43,6 +43,15 @@ class UpgradeTrackerRepository {
         .toSet();
   }
 
+  /// Drops the in-memory snapshot cache and remote config — called on
+  /// sign-out so a shared device's next account never sees a previous
+  /// user's cached upgrade data before its own fetch completes.
+  void clearCache() {
+    _snapshotCache.clear();
+    _remoteAccountId = null;
+    _verifiedRemoteTags = const {};
+  }
+
   Future<UpgradeTrackerSnapshot?> load(String playerTag) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);

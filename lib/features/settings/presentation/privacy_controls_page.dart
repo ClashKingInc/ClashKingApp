@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_saver/flutter_file_saver.dart';
@@ -237,6 +240,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
   Future<void> _confirmDeletion() async {
     final authService = context.read<AuthService>();
     final cocAccountService = context.read<CocAccountService>();
+    final playerService = context.read<PlayerService>();
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -263,6 +267,9 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
       await authService.deleteAccount();
       if (!mounted) return;
       cocAccountService.clearAccountData();
+      playerService.clearRankedLeagueCache();
+      UpgradeTrackerRepository.shared.clearCache();
+      clearHomeDashboardCaches();
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute<void>(builder: (_) => const LoginPage()),
         (_) => false,

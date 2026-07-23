@@ -254,6 +254,11 @@ class PlayerService extends ChangeNotifier {
 
   final Map<String, RankedLeagueData> _rankedLeagueCache = {};
 
+  /// Drops the in-memory Ranked League cache — called on sign-out so a
+  /// shared device's next account never sees a previous user's cached
+  /// Ranked data before its own fetch completes.
+  void clearRankedLeagueCache() => _rankedLeagueCache.clear();
+
   /// Warms the ranked league cache for several accounts in parallel — used
   /// at app startup so the Home dashboard's Ranked card never has to wait,
   /// the same way its base player profiles are already hydrated by then.
