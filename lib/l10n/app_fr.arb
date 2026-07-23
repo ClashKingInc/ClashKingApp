@@ -2190,6 +2190,37 @@
   "capitalRaidMembersNoIndividualData": "Aucune liste de joueurs ni attaque individuelle disponible pour ce raid.",
   "dashboardNoLinkedAccountsTitle": "Aucun compte lié",
   "dashboardNoLinkedAccountsBody": "Lie un compte Clash pour voir les attaques, événements et activités ici.",
+  "dashboardTodoHiddenTitle": "Aucun compte affiché ici",
+  "dashboardTodoHiddenBody": "Active l'une des options d'accueil (to-do, tracker d'amélioration, Ranked) pour un compte dans l'onglet Joueurs pour le voir ici.",
+  "dashboardUpgradeTrackerNoData": "Ouvre le tracker pour importer ou actualiser les données d’amélioration.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {a besoin d’une mise à jour} other {ont besoin d’une mise à jour}}",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} comptes suivis",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Estimés",
+  "dashboardUpgradeTrackerBuilders": "Ouvriers",
+  "dashboardUpgradeTrackerLab": "Labo",
+  "dashboardUpgradeTrackerPets": "Animaux",
+  "dashboardRankedNoData": "Ouvre Ranked League pour voir le classement de ce compte.",
+  "dashboardRankedAccounts": "{loaded}/{total} comptes suivis",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "dashboardNothingPinnedTitle": "Rien d’épinglé pour le moment",
   "dashboardNothingPinnedBody": "Ouvre l’onglet Joueurs, déplie les options d’une carte et active « Afficher la To Do sur l’accueil » pour épingler un compte ici.",
   "playersNoBookmarkedTitle": "Aucun joueur en favori pour le moment",
@@ -2361,6 +2392,10 @@
   "calculatorFireball": "Boule de feu",
   "upgradeTrackerTitle": "Suivi des améliorations",
   "upgradeTrackerSubtitle": "Coût et durée restants des améliorations.",
+  "upgradeTrackerUpdatedJustNow": "Mis à jour à l’instant",
+  "upgradeTrackerUpdatedMinutesAgo": "Mis à jour il y a {count} min",
+  "upgradeTrackerUpdatedHoursAgo": "Mis à jour il y a {count} h",
+  "upgradeTrackerUpdatedOn": "Mis à jour le {date}",
   "linkedAccountLabel": "Compte lié",
   "noLinkedPlayersLoadedTitle": "Aucun joueur lié chargé",
   "noLinkedPlayersLoadedBody": "Ajoute ou actualise les comptes liés pour voir les totaux d’amélioration.",
@@ -2370,6 +2405,15 @@
   "playerOptionShowTodoHomeSubtitle": "Épingle la carte To Do de ce compte sur l’onglet accueil.",
   "playerOptionShowTodoPageTitle": "Afficher sur la page To Do",
   "playerOptionShowTodoPageSubtitle": "Inclure ce compte dans la liste To Do complète.",
+  "playerOptionShowTodoPageVerifyFirst": "Vérifie ce compte pour l'afficher sur la page To Do.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Afficher le tracker sur l’accueil",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Épingle le résumé d’amélioration de ce compte sur l’accueil.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Vérifie ce compte pour afficher sa progression d’amélioration sur l’accueil.",
+  "playerOptionShowRankedHomeTitle": "Afficher Ranked sur l’accueil",
+  "playerOptionShowRankedHomeSubtitle": "Épingle le résumé Ranked League de ce compte sur l’accueil.",
+  "playerOptionShowRankedHomeVerifyFirst": "Vérifie ce compte pour afficher son résumé Ranked League sur l’accueil.",
+  "homeVerifyAccountAction": "Lier ou vérifier le compte",
+  "playerOptionVerifyAccountBody": "Ce compte n’est pas encore vérifié. Vérifie-le pour débloquer les options to-do, Ranked et Suivi des améliorations ci-dessous.",
   "playerOptionShowWarTabTitle": "Afficher dans l’onglet Guerre",
   "playerOptionShowWarTabSubtitle": "Inclure le clan de ce compte dans l’onglet Guerre.",
   "searchCancel": "Annuler",
@@ -2511,6 +2555,8 @@
   "clanCapitalPoints": "Points capitale",
   "todoAllAccounts": "Tous les comptes",
   "todoCombinedAcrossAccounts": "To-do combinée pour tes comptes",
+  "dashboardRankedCombinedAcrossAccounts": "Classement combiné pour tes comptes",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Suivi combiné pour tes comptes",
   "todoPreviewAccount": "Compte d’aperçu",
   "todoLastActiveUnavailable": "Dernière activité indisponible",
   "todoActiveRelative": "Actif {time}",

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
@@ -8,6 +9,7 @@ import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
+import 'package:clashkingapp/features/coc_accounts/presentation/widgets/account_verification_dialog.dart';
 import 'package:clashkingapp/features/pages/widgets/account_visibility_option.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
@@ -87,13 +89,21 @@ class _PlayersPageState extends State<PlayersPage> {
       if (showingLinked) {
         final player = linkedPlayers[index];
         final link = cocService.getAccountLink(player.tag);
+        final isVerified = link?.isVerified ?? false;
         return _PlayerDataCard(
           player: player,
           showActivity: true,
-          isVerified: link?.isVerified ?? false,
+          isVerified: isVerified,
           hidden: link?.hidden ?? false,
-          statusIcon: Icons.verified_user_rounded,
-          statusColor: Theme.of(context).colorScheme.primary,
+          statusIcon: isVerified
+              ? Icons.verified_user_rounded
+              : Icons.warning_outlined,
+          statusColor: isVerified
+              ? Theme.of(context).colorScheme.primary
+              : StatColors.capitalProjected,
+          onVerifyAccount: isVerified
+              ? null
+              : () => _showVerificationDialog(context, player),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -259,6 +269,22 @@ class _PlayersPageState extends State<PlayersPage> {
       );
     }
   }
+
+  Future<void> _showVerificationDialog(
+    BuildContext context,
+    Player player,
+  ) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AccountVerificationDialog(
+        playerTag: player.tag,
+        playerName: player.name,
+        playerTownHall: player.townHallLevel,
+      ),
+    );
+    if (result != true || !context.mounted) return;
+    await context.read<CocAccountService>().fetchCocAccounts();
+  }
 }
 
 class _PlayerDataCard extends StatefulWidget {
@@ -269,6 +295,7 @@ class _PlayerDataCard extends StatefulWidget {
     this.hidden,
     required this.statusIcon,
     required this.statusColor,
+    this.onVerifyAccount,
     required this.onTap,
   });
 
@@ -278,6 +305,7 @@ class _PlayerDataCard extends StatefulWidget {
   final bool? hidden;
   final IconData statusIcon;
   final Color statusColor;
+  final VoidCallback? onVerifyAccount;
   final VoidCallback onTap;
 
   @override
@@ -321,6 +349,7 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
       tag: player.tag,
       statusIcon: widget.statusIcon,
       statusColor: widget.statusColor,
+      onStatusTap: widget.onVerifyAccount,
       onTap: widget.onTap,
       footer: _PlayerCardOptionsFooter(
         tag: player.tag,
@@ -328,6 +357,7 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
         hidden: widget.hidden,
         updatingVisibility: _updatingVisibility,
         onToggleVisibility: _toggleVisibility,
+        onVerifyAccount: widget.onVerifyAccount,
         expanded: _optionsExpanded,
         onToggleExpanded: () =>
             setState(() => _optionsExpanded = !_optionsExpanded),
@@ -397,6 +427,7 @@ class _PlayerCardShell extends StatelessWidget {
     required this.statusColor,
     required this.chips,
     required this.onTap,
+    this.onStatusTap,
     this.footer,
   });
 
@@ -408,6 +439,7 @@ class _PlayerCardShell extends StatelessWidget {
   final Color statusColor;
   final List<_InfoChipData> chips;
   final VoidCallback onTap;
+  final VoidCallback? onStatusTap;
   final Widget? footer;
 
   @override
@@ -461,22 +493,32 @@ class _PlayerCardShell extends StatelessWidget {
                         Positioned(
                           right: -1,
                           top: 42,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).cardTheme.color,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: colorScheme.outlineVariant.withValues(
-                                  alpha: 0.4,
+                          child: Tooltip(
+                            message: onStatusTap == null
+                                ? ''
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.homeVerifyAccountAction,
+                            child: InkResponse(
+                              onTap: onStatusTap,
+                              radius: 18,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).cardTheme.color,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: colorScheme.outlineVariant
+                                        .withValues(alpha: 0.4),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(3),
-                              child: Icon(
-                                statusIcon,
-                                size: 14,
-                                color: statusColor,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3),
+                                  child: Icon(
+                                    statusIcon,
+                                    size: 14,
+                                    color: statusColor,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -545,6 +587,7 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
     required this.hidden,
     required this.updatingVisibility,
     required this.onToggleVisibility,
+    required this.onVerifyAccount,
     required this.expanded,
     required this.onToggleExpanded,
   });
@@ -554,6 +597,7 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
   final bool? hidden;
   final bool updatingVisibility;
   final VoidCallback onToggleVisibility;
+  final VoidCallback? onVerifyAccount;
   final bool expanded;
   final VoidCallback onToggleExpanded;
 
@@ -614,6 +658,18 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                     child: Column(
                       children: [
+                        if (isVerified == false && onVerifyAccount != null)
+                          _PlayerOptionAction(
+                            icon: Icons.warning_amber_rounded,
+                            title: AppLocalizations.of(
+                              context,
+                            )!.homeVerifyAccountAction,
+                            subtitle: AppLocalizations.of(
+                              context,
+                            )!.playerOptionVerifyAccountBody,
+                            color: StatColors.capitalProjected,
+                            onTap: onVerifyAccount!,
+                          ),
                         _PlayerOptionSwitch(
                           icon: Icons.notifications_outlined,
                           title: AppLocalizations.of(
@@ -631,12 +687,51 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                           title: AppLocalizations.of(
                             context,
                           )!.playerOptionShowTodoPageTitle,
-                          subtitle: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowTodoPageSubtitle,
+                          subtitle: isVerified == true
+                              ? AppLocalizations.of(
+                                  context,
+                                )!.playerOptionShowTodoPageSubtitle
+                              : AppLocalizations.of(
+                                  context,
+                                )!.playerOptionShowTodoPageVerifyFirst,
                           value: options.showInTodoPage,
+                          enabled: isVerified == true,
                           onChanged: (value) =>
                               prefs.setShowInTodoPage(tag, value),
+                        ),
+                        _PlayerOptionSwitch(
+                          icon: Icons.construction_rounded,
+                          title: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowUpgradeTrackerHomeTitle,
+                          subtitle: isVerified == true
+                              ? AppLocalizations.of(
+                                  context,
+                                )!.playerOptionShowUpgradeTrackerHomeSubtitle
+                              : AppLocalizations.of(
+                                  context,
+                                )!.playerOptionShowUpgradeTrackerHomeVerifyFirst,
+                          value: options.showUpgradeTrackerOnHome,
+                          enabled: isVerified == true,
+                          onChanged: (value) =>
+                              prefs.setShowUpgradeTrackerOnHome(tag, value),
+                        ),
+                        _PlayerOptionSwitch(
+                          icon: Icons.emoji_events_outlined,
+                          title: AppLocalizations.of(
+                            context,
+                          )!.playerOptionShowRankedHomeTitle,
+                          subtitle: isVerified == true
+                              ? AppLocalizations.of(
+                                  context,
+                                )!.playerOptionShowRankedHomeSubtitle
+                              : AppLocalizations.of(
+                                  context,
+                                )!.playerOptionShowRankedHomeVerifyFirst,
+                          value: options.showRankedOnHome,
+                          enabled: isVerified == true,
+                          onChanged: (value) =>
+                              prefs.setShowRankedOnHome(tag, value),
                         ),
                         _PlayerOptionSwitch(
                           icon: Icons.shield_moon_outlined,
@@ -668,36 +763,32 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
   }
 }
 
-class _PlayerOptionSwitch extends StatelessWidget {
-  const _PlayerOptionSwitch({
+class _PlayerOptionAction extends StatelessWidget {
+  const _PlayerOptionAction({
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.value,
-    required this.onChanged,
+    required this.color,
+    required this.onTap,
   });
 
   final IconData icon;
   final String title;
   final String subtitle;
-  final bool value;
-  final ValueChanged<bool> onChanged;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: () => onChanged(!value),
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         child: Row(
           children: [
-            SizedBox(
-              width: 30,
-              child: Icon(icon, size: 20, color: colorScheme.onSurfaceVariant),
-            ),
+            SizedBox(width: 30, child: Icon(icon, size: 20, color: color)),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -706,6 +797,7 @@ class _PlayerOptionSwitch extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -722,9 +814,83 @@ class _PlayerOptionSwitch extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PlayerOptionSwitch extends StatelessWidget {
+  const _PlayerOptionSwitch({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+    this.enabled = true,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final contentColor = enabled
+        ? colorScheme.onSurfaceVariant
+        : colorScheme.onSurfaceVariant.withValues(alpha: 0.45);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: enabled ? () => onChanged(!value) : null,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 30,
+              child: Icon(icon, size: 20, color: contentColor),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: enabled ? null : contentColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 1),
+                  Text(
+                    subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: contentColor),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
             Transform.scale(
               scale: 0.85,
-              child: Switch.adaptive(value: value, onChanged: onChanged),
+              child: Switch.adaptive(
+                value: value,
+                onChanged: enabled ? onChanged : null,
+              ),
             ),
           ],
         ),

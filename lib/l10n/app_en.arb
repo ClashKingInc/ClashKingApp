@@ -2552,6 +2552,47 @@
   "capitalRaidMembersNoIndividualData": "No player list or individual attacks available for this raid.",
   "dashboardNoLinkedAccountsTitle": "No linked accounts",
   "dashboardNoLinkedAccountsBody": "Link a Clash account to see attacks, events, and activity here.",
+  "dashboardTodoHiddenTitle": "No accounts shown here",
+  "dashboardTodoHiddenBody": "Turn on one of the home card options (to-do, Upgrade Tracker, Ranked) for an account in the Players tab to see it here.",
+  "dashboardUpgradeTrackerNoData": "Open the tracker to import or refresh upgrade data.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {needs an update} other {need an update}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts tracked",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Projected",
+  "dashboardUpgradeTrackerBuilders": "Builders",
+  "dashboardUpgradeTrackerLab": "Lab",
+  "dashboardUpgradeTrackerPets": "Pets",
+  "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
+  "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "No bookmarked players yet",
   "playersNoBookmarkedBody": "Open a player profile and save it for later.",
   "playersNoLinkedBody": "Manage accounts from the account setup screen.",
@@ -2685,6 +2726,13 @@
   "playerOptionNotificationsSubtitle": "Get alerts for this account.",
   "playerOptionShowTodoPageTitle": "Show on to-do page",
   "playerOptionShowTodoPageSubtitle": "Include this account in the full to-do list.",
+  "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Show Upgrade Tracker on Home",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Pin this account's upgrade summary on Home.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verify this account to show upgrade progress on Home.",
+  "playerOptionShowRankedHomeTitle": "Show Ranked on Home",
+  "playerOptionShowRankedHomeSubtitle": "Pin this account's Ranked League summary on Home.",
+  "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
   "playerOptionShowWarTabTitle": "Show in War tab",
   "playerOptionShowWarTabSubtitle": "Include this account’s clan in the War tab.",
   "searchCancel": "Cancel",
@@ -2826,6 +2874,8 @@
   "clanCapitalPoints": "Capital points",
   "todoAllAccounts": "All accounts",
   "todoCombinedAcrossAccounts": "Combined to-do across your accounts",
+  "dashboardRankedCombinedAcrossAccounts": "Combined ranking across your accounts",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Combined upgrade tracking across your accounts",
   "todoPreviewAccount": "Preview account",
   "todoLastActiveUnavailable": "Last active unavailable",
   "todoActiveRelative": "Active {time}",
@@ -3494,6 +3544,7 @@
   "homeVerifiedAccountRequiredTitle": "Verify a linked account",
   "homeVerifiedAccountRequiredBody": "Home needs at least one verified Clash account. Link an account or verify an existing link to continue.",
   "homeVerifyAccountAction": "Link or verify account",
+  "playerOptionVerifyAccountBody": "This account isn't verified yet. Verify it to unlock the to-do, Ranked, and Upgrade Tracker options below.",
   "homeUpcomingTitle": "Upcoming",
   "homeUpcomingSubtitle": "The next deadlines and upgrade completions across your accounts.",
   "homeCollapseSection": "Collapse section",

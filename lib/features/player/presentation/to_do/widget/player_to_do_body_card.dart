@@ -437,42 +437,34 @@ class _TodoTask {
       );
     }
 
-    final warData = player.warData;
-    if (warData != null &&
-        warData.state == 'inWar' &&
-        !_isSameWarAsCwl(player)) {
-      final total = warData.attacksPerMember ?? 0;
-      final done = warData.getAttacksDoneByPlayer(player.tag, player.clanTag);
-      tasks.add(
-        _TodoTask(
-          label: loc.warTitle,
-          value: '$done/$total',
-          imageUrl: ImageAssets.war,
-          color: StatColors.loss,
-          done: done >= total,
-        ),
-      );
-    }
-
-    final cwlWarInfo = player.clan?.warCwl?.warInfo;
-    if (cwlWarInfo != null &&
-        cwlWarInfo.state == 'inWar' &&
-        cwlWarInfo.isPlayerInWar(player.tag, player.clanTag)) {
-      final total = cwlWarInfo.attacksPerMember ?? 0;
-      final done = cwlWarInfo.getAttacksDoneByPlayer(
+    // `clan.warCwl.warInfo` is the only populated source of "this clan's
+    // current war" (the separate `warData` field is never assigned anywhere
+    // in the app) — used for both regular wars and CWL rounds, so `isInCwl`
+    // decides the label/icon, not which field the data came from.
+    final currentWar = player.clan?.warCwl?.warInfo;
+    final isActuallyInCwl = player.clan?.warCwl?.isInCwl == true;
+    if (currentWar != null &&
+        currentWar.state == 'inWar' &&
+        currentWar.isPlayerInWar(player.tag, player.clanTag)) {
+      final total = currentWar.attacksPerMember ?? (isActuallyInCwl ? 1 : 2);
+      final done = currentWar.getAttacksDoneByPlayer(
         player.tag,
         player.clanTag,
       );
       tasks.add(
         _TodoTask(
-          label: loc.cwlTitle,
+          label: isActuallyInCwl ? loc.cwlTitle : loc.warTitle,
           value: '$done/$total',
-          imageUrl: ImageAssets.cwlSwordsNoBorder,
-          color: const Color(0xFF8D63D9),
+          imageUrl: isActuallyInCwl
+              ? ImageAssets.cwlSwordsNoBorder
+              : ImageAssets.war,
+          color: isActuallyInCwl ? const Color(0xFF8D63D9) : StatColors.loss,
           done: done >= total,
         ),
       );
-    } else if (isInTimeFrameForCwl() && member.attacksAvailable > 0) {
+    } else if (isActuallyInCwl &&
+        isInTimeFrameForCwl() &&
+        member.attacksAvailable > 0) {
       tasks.add(
         _TodoTask(
           label: loc.cwlTitle,
@@ -525,18 +517,5 @@ class _TodoTask {
       return a.label.compareTo(b.label);
     });
     return tasks;
-  }
-
-  static bool _isSameWarAsCwl(Player player) {
-    if (player.warData == null || player.clan?.warCwl?.warInfo == null) {
-      return false;
-    }
-
-    final regularWar = player.warData!;
-    final cwlWar = player.clan!.warCwl!.warInfo;
-    return (regularWar.clan?.tag == cwlWar.clan?.tag &&
-            regularWar.opponent?.tag == cwlWar.opponent?.tag) ||
-        (regularWar.clan?.tag == cwlWar.opponent?.tag &&
-            regularWar.opponent?.tag == cwlWar.clan?.tag);
   }
 }

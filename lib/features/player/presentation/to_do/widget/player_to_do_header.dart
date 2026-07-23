@@ -635,24 +635,35 @@ class _TodoHeaderSummary {
         }
       }
 
-      final warData = player.warData;
-      if (warData != null &&
-          warData.state == 'inWar' &&
-          !_isSameWarAsCwl(player)) {
-        final total = warData.attacksPerMember ?? 0;
-        final done = warData.getAttacksDoneByPlayer(player.tag, player.clanTag);
+      // `clan.warCwl.warInfo` is the only populated source of "this clan's
+      // current war" (the separate `warData` field is never assigned
+      // anywhere in the app) — used for both regular wars and CWL rounds,
+      // so `isInCwl` decides which bucket/label it belongs to.
+      final currentWar = player.clan?.warCwl?.warInfo;
+      final isActuallyInCwl = player.clan?.warCwl?.isInCwl == true;
+      if (currentWar != null &&
+          currentWar.state == 'inWar' &&
+          currentWar.isPlayerInWar(player.tag, player.clanTag)) {
+        final total = currentWar.attacksPerMember ?? (isActuallyInCwl ? 1 : 2);
+        final done = currentWar.getAttacksDoneByPlayer(
+          player.tag,
+          player.clanTag,
+        );
         if (total > 0) {
-          warDone += done;
-          warTotal += total;
+          if (isActuallyInCwl) {
+            cwlDone += done;
+            cwlTotal += total;
+          } else {
+            warDone += done;
+            warTotal += total;
+          }
           if (done < total) {
             playerOpenTasks++;
           } else {
             completedTasks++;
           }
         }
-      }
-
-      if (presence.attacksAvailable > 0) {
+      } else if (isActuallyInCwl && presence.attacksAvailable > 0) {
         cwlDone += presence.attacksDone;
         cwlTotal += presence.attacksAvailable;
         if (presence.attacksDone < presence.attacksAvailable) {
@@ -675,8 +686,9 @@ class _TodoHeaderSummary {
       }
 
       if (isInTimeFrameForClanGames()) {
+        final required = requiredClanGamesPoints;
         clanGamesDone += player.currentClanGamesPoints;
-        clanGamesTotal += requiredClanGamesPoints;
+        clanGamesTotal += required > 0 ? required : 4000;
         if (player.clanGamesRatio < 1) {
           playerOpenTasks++;
         } else {
@@ -743,18 +755,5 @@ class _TodoHeaderSummary {
     WarMemberPresence presence,
   ) {
     return player.getTodoProgressMetrics(memberCwl: presence);
-  }
-
-  static bool _isSameWarAsCwl(Player player) {
-    if (player.warData == null || player.clan?.warCwl?.warInfo == null) {
-      return false;
-    }
-
-    final regularWar = player.warData!;
-    final cwlWar = player.clan!.warCwl!.warInfo;
-    return (regularWar.clan?.tag == cwlWar.clan?.tag &&
-            regularWar.opponent?.tag == cwlWar.opponent?.tag) ||
-        (regularWar.clan?.tag == cwlWar.opponent?.tag &&
-            regularWar.opponent?.tag == cwlWar.clan?.tag);
   }
 }

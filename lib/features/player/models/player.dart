@@ -710,37 +710,28 @@ class Player {
       );
     }
 
-    final regularWar = warData;
-    final cwlWar = clan?.warCwl?.warInfo;
-    final sameWarAsCwl =
-        regularWar != null &&
-        cwlWar != null &&
-        ((regularWar.clan?.tag == cwlWar.clan?.tag &&
-                regularWar.opponent?.tag == cwlWar.opponent?.tag) ||
-            (regularWar.clan?.tag == cwlWar.opponent?.tag &&
-                regularWar.opponent?.tag == cwlWar.clan?.tag));
+    // `clan.warCwl.warInfo` is the only populated source of "this clan's
+    // current war" (the separate `warData` field is never assigned anywhere
+    // in the app) — it's used for both regular wars and CWL rounds, so
+    // `isInCwl` is what decides the label, not which field the data came
+    // from. Nulling this out for non-CWL clans (an earlier attempt at this
+    // fix) silently dropped War attacks entirely instead of relabeling them.
+    final currentWar = clan?.warCwl?.warInfo;
+    final isActuallyInCwl = clan?.warCwl?.isInCwl == true;
 
-    if (regularWar != null && regularWar.state == 'inWar' && !sameWarAsCwl) {
+    if (currentWar != null &&
+        currentWar.state == 'inWar' &&
+        currentWar.isPlayerInWar(tag, clanTag)) {
       metrics.add(
         TodoProgressMetric(
-          label: 'war_attacks',
-          done: regularWar.getAttacksDoneByPlayer(tag, clanTag),
-          total: regularWar.attacksPerMember ?? 2,
+          label: isActuallyInCwl ? 'cwl_attacks' : 'war_attacks',
+          done: currentWar.getAttacksDoneByPlayer(tag, clanTag),
+          total: currentWar.attacksPerMember ?? (isActuallyInCwl ? 1 : 2),
         ),
       );
-    }
-
-    if (cwlWar != null &&
-        cwlWar.state == 'inWar' &&
-        cwlWar.isPlayerInWar(tag, clanTag)) {
-      metrics.add(
-        TodoProgressMetric(
-          label: 'cwl_attacks',
-          done: cwlWar.getAttacksDoneByPlayer(tag, clanTag),
-          total: cwlWar.attacksPerMember ?? 1,
-        ),
-      );
-    } else if (isInTimeFrameForCwl() && memberCwl.attacksAvailable > 0) {
+    } else if (isActuallyInCwl &&
+        isInTimeFrameForCwl() &&
+        memberCwl.attacksAvailable > 0) {
       metrics.add(
         TodoProgressMetric(
           label: 'cwl_attacks',
@@ -752,14 +743,18 @@ class Player {
 
     if (isInTimeFrameForClanGames()) {
       final required = requiredClanGamesPoints;
-      final ratio = required <= 0
-          ? 1.0
-          : (currentClanGamesPoints / required).clamp(0.0, 1.0);
+      final points = currentClanGamesPoints;
+      // requiredClanGamesPoints is 0 for the whole first day of Clan Games
+      // (before anyone could have scored anything) — fall back to the real
+      // 4000-point max instead of dividing by zero and falsely showing 0/0
+      // as "done".
+      final total = required > 0 ? required : 4000;
+      final ratio = (points / total).clamp(0.0, 1.0);
       metrics.add(
         TodoProgressMetric(
           label: 'clan_games',
-          done: currentClanGamesPoints,
-          total: required,
+          done: points,
+          total: total,
           progressDone: ratio * 2,
           progressTotal: 2,
         ),

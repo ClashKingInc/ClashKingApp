@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +82,15 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.accountVerificationTitle),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.card),
+      ),
+      title: Text(
+        AppLocalizations.of(context)!.accountVerificationTitle,
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+      ),
       content: SizedBox(
         width: double.maxFinite,
         child: SingleChildScrollView(
@@ -89,14 +98,13 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Player info display - simplified
+              // Player info display
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.surface.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(8),
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest
+                      .withValues(alpha: AppOpacity.fillMuted),
+                  borderRadius: BorderRadius.circular(AppRadius.chip),
                 ),
                 child: Row(
                   children: [
@@ -117,8 +125,10 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
                         children: [
                           Text(
                             widget.playerName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.titleSmall
-                                ?.copyWith(fontWeight: FontWeight.w600),
+                                ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                           const SizedBox(height: 2),
                           Text(
@@ -137,25 +147,29 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               // API Token instructions
               Text(
                 AppLocalizations.of(context)!.accountsEnterApiToken,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4),
               Text(
                 AppLocalizations.of(context)!.accountsApiTokenLocation,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 10),
 
-              // API Token input field - simplified
+              // API Token input field
               TextField(
                 controller: _apiTokenController,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.accountsApiToken,
-                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.vpn_key_outlined),
                   errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
                 ),
                 enabled: !_isVerifying,
@@ -166,7 +180,7 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
               // Direct link to get API token
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton.icon(
+                child: OutlinedButton.icon(
                   onPressed: () async {
                     try {
                       final uri = Uri.parse(
@@ -204,7 +218,7 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
                       }
                     }
                   },
-                  icon: const Icon(Icons.open_in_new, size: 16),
+                  icon: const Icon(Icons.open_in_new_rounded, size: 16),
                   label: Text(
                     AppLocalizations.of(context)!.accountsOpenMoreSettings,
                   ),

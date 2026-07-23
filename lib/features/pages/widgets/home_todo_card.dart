@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
@@ -604,7 +605,7 @@ class _AllAccountsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 42.0 : 30.0;
+    final iconSize = isDesktop ? 54.0 : 46.0;
     final ringSize = isDesktop ? 54.0 : 46.0;
 
     final header = Row(
@@ -627,7 +628,7 @@ class _AllAccountsPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.of(context)!.todoAllAccounts,
+                AppLocalizations.of(context)!.todoTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(
@@ -718,7 +719,7 @@ class _AccountHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 42.0 : 30.0;
+    final iconSize = isDesktop ? 54.0 : 46.0;
 
     return Row(
       children: [
@@ -750,7 +751,7 @@ class _AccountHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                player.name,
+                AppLocalizations.of(context)!.todoTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(
@@ -758,7 +759,9 @@ class _AccountHeader extends StatelessWidget {
                 ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               Text(
-                'TH${player.townHallLevel}',
+                player.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w700,
@@ -781,7 +784,7 @@ class _PreviewHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 42.0 : 30.0;
+    final iconSize = isDesktop ? 54.0 : 46.0;
 
     return Row(
       children: [
@@ -945,10 +948,10 @@ class _MetricBar extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: fillColor.withValues(alpha: isDark ? 0.28 : 0.34),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.control),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.control),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -968,31 +971,21 @@ class _MetricBar extends StatelessWidget {
                     _MetricIcon(metric: metric),
                     const SizedBox(width: 7),
                     Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
+                      child: Semantics(
+                        label: '${metric.label}, ${metric.detail}',
+                        child: ExcludeSemantics(
+                          child: Text(
                             metric.label,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.labelLarge
                                 ?.copyWith(
                                   color: colorScheme.onSurface,
                                   fontWeight: FontWeight.w900,
+                                  height: 1.1,
                                 ),
                           ),
-                          Text(
-                            metric.detail,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                     Text(

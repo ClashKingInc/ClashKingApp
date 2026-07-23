@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 class AppRadius {
   AppRadius._();
 
+  /// Small interactive controls — metric progress bars, buttons, inputs.
+  static const double control = CKRadius.control;
+
   /// Small "glass chip" family (chip.dart, stat_tile.dart) and flat list
   /// rows (member rows, district rows, opponent rows...).
   static const double chip = CKRadius.chip;
