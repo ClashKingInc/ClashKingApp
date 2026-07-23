@@ -115,6 +115,10 @@ flutter:
     - family: CustomIcons
       fonts:
         - asset: fonts/CustomIcons.ttf
+    - family: ClashKing
+      fonts:
+        - asset: fonts/clashking.ttf
+          weight: 600
 
   assets:
     - assets/icons/
