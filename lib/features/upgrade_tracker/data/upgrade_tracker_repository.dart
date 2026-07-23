@@ -28,6 +28,7 @@ class UpgradeTrackerRepository {
   final Map<String, UpgradeTrackerSnapshot> _snapshotCache = {};
   String? _remoteAccountId;
   Set<String> _verifiedRemoteTags = const {};
+  int _cacheGeneration = 0;
 
   void configureRemote({
     required String? accountId,
@@ -45,26 +46,35 @@ class UpgradeTrackerRepository {
 
   /// Drops the in-memory snapshot cache and remote config — called on
   /// sign-out so a shared device's next account never sees a previous
-  /// user's cached upgrade data before its own fetch completes.
+  /// user's cached upgrade data before its own fetch completes. Bumping
+  /// the generation also discards any fetch already in flight from the
+  /// signed-out session — e.g. a best-effort startup prefetch still
+  /// running when the user logs out — so it can no longer write the old
+  /// account's data back into memory or persisted preferences once it
+  /// resolves.
   void clearCache() {
     _snapshotCache.clear();
     _remoteAccountId = null;
     _verifiedRemoteTags = const {};
+    _cacheGeneration++;
   }
 
   Future<UpgradeTrackerSnapshot?> load(String playerTag) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
+    final generation = _cacheGeneration;
     if (_remoteAccountId != null && _verifiedRemoteTags.contains(normalized)) {
       try {
         final remote = await _loadRemoteSnapshot(normalized);
         if (remote != null) {
           final parsed = _parser.parse(remote);
-          await _saveRawSnapshotLocally(
-            normalized,
-            remote,
-            parsedSnapshot: parsed,
-          );
+          if (generation == _cacheGeneration) {
+            await _saveRawSnapshotLocally(
+              normalized,
+              remote,
+              parsedSnapshot: parsed,
+            );
+          }
           return parsed;
         }
       } catch (_) {
@@ -79,7 +89,9 @@ class UpgradeTrackerRepository {
       final decoded = jsonDecode(saved);
       if (decoded is Map) {
         final parsed = _parser.parse(Map<String, dynamic>.from(decoded));
-        _snapshotCache[normalized] = parsed;
+        if (generation == _cacheGeneration) {
+          _snapshotCache[normalized] = parsed;
+        }
         return parsed;
       }
     }

@@ -253,11 +253,19 @@ class PlayerService extends ChangeNotifier {
   }
 
   final Map<String, RankedLeagueData> _rankedLeagueCache = {};
+  int _rankedLeagueCacheGeneration = 0;
 
   /// Drops the in-memory Ranked League cache — called on sign-out so a
   /// shared device's next account never sees a previous user's cached
-  /// Ranked data before its own fetch completes.
-  void clearRankedLeagueCache() => _rankedLeagueCache.clear();
+  /// Ranked data before its own fetch completes. Bumping the generation
+  /// also discards any fetch already in flight from the signed-out
+  /// session — e.g. a best-effort startup prefetch still running when the
+  /// user logs out — so it can no longer write the old account's data
+  /// back into the cache once it resolves.
+  void clearRankedLeagueCache() {
+    _rankedLeagueCache.clear();
+    _rankedLeagueCacheGeneration++;
+  }
 
   /// Warms the ranked league cache for several accounts in parallel — used
   /// at app startup so the Home dashboard's Ranked card never has to wait,
@@ -285,8 +293,11 @@ class PlayerService extends ChangeNotifier {
       final cached = _rankedLeagueCache[playerTag];
       if (cached != null) return cached;
     }
+    final generation = _rankedLeagueCacheGeneration;
     final data = await _fetchRankedLeagueData(playerTag);
-    _rankedLeagueCache[playerTag] = data;
+    if (generation == _rankedLeagueCacheGeneration) {
+      _rankedLeagueCache[playerTag] = data;
+    }
     return data;
   }
 

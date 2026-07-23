@@ -96,6 +96,15 @@ class PlayerCardPreferencesService extends ChangeNotifier {
 
   bool isRankedShownOnHome(String tag) => optionsFor(tag).showRankedOnHome;
 
+  /// Drops the in-memory per-tag options — called on sign-out so a shared
+  /// device's next signed-in account never inherits the previous account's
+  /// "hidden from Home" choices for a tag it also happens to verify, even
+  /// though the persisted preferences were already cleared.
+  void clear() {
+    _optionsByTag.clear();
+    notifyListeners();
+  }
+
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_prefsKey);

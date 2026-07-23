@@ -42,10 +42,14 @@ void clearHomeDashboardCaches() {
 /// (Ranked League, Upgrade Tracker, and the Home cards themselves), so a
 /// shared device's next signed-in account never sees a previous user's
 /// data. Call this from *every* logout path, not just one of them.
-void clearAccountScopedHomeCaches(PlayerService playerService) {
+void clearAccountScopedHomeCaches(
+  PlayerService playerService, {
+  PlayerCardPreferencesService? cardPreferences,
+}) {
   playerService.clearRankedLeagueCache();
   UpgradeTrackerRepository.shared.clearCache();
   clearHomeDashboardCaches();
+  cardPreferences?.clear();
 }
 
 /// Flat bordered shell for a non-paginated (loading/empty) home card state.
@@ -494,6 +498,17 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
     animatePagerTo(context, _controller, next);
   }
 
+  // Filtering an account out of this card (e.g. from Players settings)
+  // while its page is showing would otherwise leave `_index` and the
+  // PageController pointing past the end of a now-shorter pager.
+  void _clampIndex(int itemCount) {
+    if (itemCount <= 0 || _index < itemCount) return;
+    _index = itemCount - 1;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _controller.hasClients) _controller.jumpToPage(_index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<_RankedHomeSummary>(
@@ -514,6 +529,7 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
         // pinned, matching the home to-do card's pattern.
         final hasSummaryPage = summary.accounts.length > 1;
         final itemCount = summary.accounts.length + (hasSummaryPage ? 1 : 0);
+        _clampIndex(itemCount);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1327,6 +1343,17 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     animatePagerTo(context, _controller, next);
   }
 
+  // Filtering an account out of this card (e.g. from Players settings)
+  // while its page is showing would otherwise leave `_index` and the
+  // PageController pointing past the end of a now-shorter pager.
+  void _clampIndex(int itemCount) {
+    if (itemCount <= 0 || _index < itemCount) return;
+    _index = itemCount - 1;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _controller.hasClients) _controller.jumpToPage(_index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<_UpgradeHomeSummary>(
@@ -1358,6 +1385,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
             child: _UpgradeHomeEmpty(configuredCount: widget.players.length),
           );
         }
+        _clampIndex(itemCount);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

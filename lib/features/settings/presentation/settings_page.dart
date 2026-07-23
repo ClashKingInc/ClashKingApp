@@ -9,6 +9,7 @@ import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/services/app_icon_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/live_activity_debug_service.dart';
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
@@ -694,10 +695,17 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       listen: false,
     );
     final playerService = Provider.of<PlayerService>(context, listen: false);
+    final cardPreferences = Provider.of<PlayerCardPreferencesService>(
+      context,
+      listen: false,
+    );
 
     await authService.logoutAndClearAllData();
     cocAccountService.clearAccountData();
-    clearAccountScopedHomeCaches(playerService);
+    clearAccountScopedHomeCaches(
+      playerService,
+      cardPreferences: cardPreferences,
+    );
 
     globalNavigatorKey.currentState?.pushReplacement(
       MaterialPageRoute(builder: (context) => LoginPage()),
