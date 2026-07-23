@@ -47,7 +47,12 @@ bool _isTrackerDesktop(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= _trackerDesktopBreakpoint;
 
 class UpgradeTrackerPage extends StatefulWidget {
-  const UpgradeTrackerPage({super.key});
+  const UpgradeTrackerPage({super.key, this.initialTag});
+
+  /// Opens directly on this account instead of the first linked one — used
+  /// when navigating in from a specific account's card/row elsewhere in the
+  /// app (e.g. a Home dashboard panel).
+  final String? initialTag;
 
   @override
   State<UpgradeTrackerPage> createState() => _UpgradeTrackerPageState();
@@ -161,7 +166,20 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       accountId: context.read<AuthService>().currentUser?.userId,
       verifiedPlayerTags: linkedTags,
     );
-    final initial = linkedTags.firstOrNull;
+    final normalizedRequestedTag = widget.initialTag == null
+        ? null
+        : UpgradeTrackerRepository.normalizeTag(widget.initialTag!);
+    final requested = normalizedRequestedTag == null
+        ? null
+        : linkedTags.firstWhere(
+            (tag) =>
+                UpgradeTrackerRepository.normalizeTag(tag) ==
+                normalizedRequestedTag,
+            orElse: () => '',
+          );
+    final initial = (requested != null && requested.isNotEmpty)
+        ? requested
+        : linkedTags.firstOrNull;
     unawaited(_loadSnapshotMetadata());
     if (initial == null) {
       setState(() => _loading = false);

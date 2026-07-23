@@ -532,17 +532,7 @@ class CocAccountService extends ChangeNotifier {
         .where((tag) => tag.isNotEmpty)
         .toSet();
 
-    UpgradeTrackerRepository.shared.configureRemote(
-      accountId: _currentUserId,
-      verifiedPlayerTags: verifiedAccounts.map(
-        (account) => account['player_tag']?.toString() ?? '',
-      ),
-    );
-
-    DebugUtils.debugApi(
-      "Parallel phase: load initial clan/war data and warm the Ranked "
-      "League + Upgrade Tracker caches for the Home dashboard",
-    );
+    DebugUtils.debugApi("Parallel phase: load initial clan and war data");
     await Future.wait([
       optimisticClanLoad,
       if (missingClanTags.isNotEmpty)
@@ -552,13 +542,25 @@ class CocAccountService extends ChangeNotifier {
           clanService,
           warCwlService,
         ),
-      playerService.prefetchRankedLeagueData(playerTags),
-      ...playerTags.map(
-        (tag) => UpgradeTrackerRepository.shared.load(tag).catchError((_) {
-          return null;
-        }),
-      ),
     ]);
+
+    // Best-effort warm-up for the Home dashboard's Ranked League and
+    // Upgrade Tracker cards — fired outside the awaited critical path so a
+    // slow per-account endpoint here never delays the startup loading
+    // screen; those cards just fall back to their own normal fetch if this
+    // hasn't finished by the time they mount.
+    UpgradeTrackerRepository.shared.configureRemote(
+      accountId: _currentUserId,
+      verifiedPlayerTags: verifiedAccounts.map(
+        (account) => account['player_tag']?.toString() ?? '',
+      ),
+    );
+    unawaited(playerService.prefetchRankedLeagueData(playerTags));
+    for (final tag in playerTags) {
+      unawaited(
+        UpgradeTrackerRepository.shared.load(tag).catchError((_) => null),
+      );
+    }
 
     final allClanTags = {
       ...optimisticClanTags,

@@ -1171,10 +1171,21 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     );
   }
 
-  void _openTracker() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => const UpgradeTrackerPage()));
+  Future<void> _openTracker([String? initialTag]) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => UpgradeTrackerPage(initialTag: initialTag),
+      ),
+    );
+    // The full tracker may have imported/refreshed data for this account —
+    // force a real reload instead of trusting the (possibly now stale)
+    // cached summary.
+    if (!mounted) return;
+    final signature = _signature;
+    _cache.remove(signature);
+    _signature = '';
+    _reloadIfNeeded();
+    setState(() {});
   }
 
   void _showPage(int count, int page) {
@@ -1229,19 +1240,22 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
                   if (hasSummaryPage && index == 0) {
                     return _UpgradeAllAccountsPanel(
                       summary: summary,
-                      onTap: _openTracker,
+                      onTap: () => _openTracker(summary.accounts.first.tag),
                     );
                   }
                   final localIndex = index - offset;
                   if (localIndex < accountCount) {
+                    final account = summary.accounts[localIndex];
                     return _UpgradeAccountPanel(
-                      account: summary.accounts[localIndex],
-                      onTap: _openTracker,
+                      account: account,
+                      onTap: () => _openTracker(account.tag),
                     );
                   }
+                  final player =
+                      summary.missingAccounts[localIndex - accountCount];
                   return _UpgradeMissingDataPanel(
-                    player: summary.missingAccounts[localIndex - accountCount],
-                    onTap: _openTracker,
+                    player: player,
+                    onTap: () => _openTracker(player.tag),
                   );
                 },
               ),
@@ -1896,6 +1910,7 @@ class _UpgradeHomeSummary {
 
 class _UpgradeHomeAccount {
   const _UpgradeHomeAccount({
+    required this.tag,
     required this.name,
     required this.hallImageUrl,
     required this.completion,
@@ -1912,6 +1927,7 @@ class _UpgradeHomeAccount {
     required this.capturedAt,
   });
 
+  final String tag;
   final String name;
   final String hallImageUrl;
   final double completion;
@@ -1989,6 +2005,7 @@ class _UpgradeHomeAccount {
     );
 
     return _UpgradeHomeAccount(
+      tag: snapshot.tag,
       name: snapshot.name,
       hallImageUrl: ImageAssets.townHall(snapshot.townHallLevel),
       completion: home.completion.clamp(0.0, 1.0),
