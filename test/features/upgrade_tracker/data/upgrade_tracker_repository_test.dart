@@ -197,6 +197,48 @@ void main() {
     },
   );
 
+  test('load uses warmed cache unless forceRefresh is requested', () async {
+    final fakeApi = FakeApiService();
+    const endpoint = '/links/user1/%232J8V28GV0/upgrades';
+    fakeApi.getStubs[endpoint] = http.Response(
+      jsonEncode({
+        'data': {
+          'tag': '#2J8V28GV0',
+          'name': 'Remote',
+          'buildings': <Object>[],
+        },
+      }),
+      200,
+    );
+    final repository = UpgradeTrackerRepository(
+      apiService: fakeApi,
+      checkStaticDataFreshness: false,
+    );
+    await repository.importSnapshotBytes(
+      utf8.encode(
+        jsonEncode({
+          'tag': '#2J8V28GV0',
+          'name': 'Local',
+          'buildings': [
+            {'data': 1, 'lvl': 18},
+          ],
+        }),
+      ),
+      allowedTags: const {'#2J8V28GV0'},
+    );
+    repository.configureRemote(
+      accountId: 'user1',
+      verifiedPlayerTags: const ['#2J8V28GV0'],
+    );
+
+    final cached = await repository.load('#2J8V28GV0');
+    final fresh = await repository.load('#2J8V28GV0', forceRefresh: true);
+
+    expect(cached?.name, 'Local');
+    expect(fresh?.name, 'Remote');
+    expect(fakeApi.getCallCounts[endpoint], 1);
+  });
+
   test('shared is a single reusable instance', () {
     expect(
       UpgradeTrackerRepository.shared,

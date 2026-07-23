@@ -67,10 +67,17 @@ class UpgradeTrackerRepository {
     return _snapshotCache[normalizeTag(playerTag)];
   }
 
-  Future<UpgradeTrackerSnapshot?> load(String playerTag) async {
+  Future<UpgradeTrackerSnapshot?> load(
+    String playerTag, {
+    bool forceRefresh = false,
+  }) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
     final generation = _cacheGeneration;
+    if (!forceRefresh) {
+      final cached = _snapshotCache[normalized];
+      if (cached != null) return cached;
+    }
     final remote = await _tryLoadRemoteSnapshot(normalized, generation);
     if (remote != null) return remote;
     final cached = _snapshotCache[normalized];

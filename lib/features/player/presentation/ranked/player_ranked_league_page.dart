@@ -1043,11 +1043,9 @@ class _BattleSide extends StatelessWidget {
                     ),
                   ),
                   if (battles.isNotEmpty)
-                    Text(
-                      ' ($sign${total.abs()})',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: isDefense ? StatColors.loss : StatColors.win,
-                      ),
+                    _TrophyDeltaSuperscript(
+                      value: '$sign${total.abs()}',
+                      isDefense: isDefense,
                     ),
                 ],
               ),
@@ -1083,6 +1081,34 @@ class _BattleSide extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TrophyDeltaSuperscript extends StatelessWidget {
+  const _TrophyDeltaSuperscript({required this.value, required this.isDefense});
+
+  final String value;
+  final bool isDefense;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isDefense ? StatColors.loss : StatColors.win;
+    return Transform.translate(
+      offset: const Offset(0, -4),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 1),
+        child: Text(
+          '($value)',
+          maxLines: 1,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: color,
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
+            height: 1,
+          ),
+        ),
       ),
     );
   }
@@ -1225,28 +1251,39 @@ class _BattleLine extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _BattleStars(stars: battle.stars),
-                    const SizedBox(width: 6),
-                    Text(
-                      '${battle.destructionPercentage.toStringAsFixed(0)}%',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _BattleStars(stars: battle.stars),
+                        const SizedBox(width: 6),
+                        _FixedPercentText(
+                          value:
+                              '${battle.destructionPercentage.toStringAsFixed(0)}%',
+                          reservedValue: '100%',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(width: 1),
+                        _TrophyDeltaSuperscript(
+                          value: signedTrophies,
+                          isDefense: isDefense,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 6),
-                    Text(
-                      signedTrophies,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: isDefense ? StatColors.loss : StatColors.win,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 if (time != null) ...[
                   const SizedBox(height: 2),
-                  Text(time, style: Theme.of(context).textTheme.labelSmall),
+                  Text(
+                    time,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
                 ],
               ],
             ),
@@ -1295,30 +1332,43 @@ class _EmptyBattleLine extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const _BattleStars(stars: 0),
-                      const SizedBox(width: 6),
-                      Text(
-                        '-%',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(color: muted),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const _BattleStars(stars: 0),
+                          const SizedBox(width: 6),
+                          _FixedPercentText(
+                            value: '-%',
+                            reservedValue: '100%',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(color: muted),
+                          ),
+                          const SizedBox(width: 1),
+                          Text(
+                            '(-)',
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: muted,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1,
+                                ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        '-',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: muted,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '-',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(
                       context,
                     ).textTheme.labelSmall?.copyWith(color: muted),
@@ -1329,6 +1379,34 @@ class _EmptyBattleLine extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FixedPercentText extends StatelessWidget {
+  const _FixedPercentText({
+    required this.value,
+    required this.reservedValue,
+    this.style,
+  });
+
+  final String value;
+  final String reservedValue;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    final direction = Directionality.of(context);
+    final effectiveStyle = DefaultTextStyle.of(context).style.merge(style);
+    final painter = TextPainter(
+      text: TextSpan(text: reservedValue, style: effectiveStyle),
+      textDirection: direction,
+      maxLines: 1,
+    )..layout();
+
+    return SizedBox(
+      width: painter.width,
+      child: Text(value, maxLines: 1, textAlign: TextAlign.right, style: style),
     );
   }
 }

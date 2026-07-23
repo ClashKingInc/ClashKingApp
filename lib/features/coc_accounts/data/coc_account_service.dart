@@ -401,6 +401,7 @@ class CocAccountService extends ChangeNotifier {
         clanService,
         warCwlService,
         bookmarkedClanTags: bookmarkedClanTags,
+        forceAuxiliaryRefresh: true,
       );
       _lastRefresh = DateTime.now();
       _safeNotify();
@@ -491,31 +492,28 @@ class CocAccountService extends ChangeNotifier {
     ClanService clanService,
     WarCwlService warCwlService, {
     List<String> bookmarkedClanTags = const [],
+    bool forceAuxiliaryRefresh = false,
   }) async {
     DebugUtils.debugInfo(
       "🚀 Hydrating ${playerTags.length} players with parallel requests",
     );
 
-    // Best-effort warm-up for the Home dashboard's Ranked League and
-    // Upgrade Tracker cards — kicked off immediately, in parallel with
-    // everything below, since neither depends on the player/clan data this
-    // function fetches. Fired outside the awaited critical path so a slow
-    // per-account endpoint here never delays the startup loading screen;
-    // those cards just fall back to their own normal fetch if this hasn't
-    // finished by the time they mount. Starting it this early (rather than
-    // after the clan/war data resolves) gives it the most possible time to
-    // finish before Home ever renders.
+    // At startup this stays outside the awaited critical path so slow
+    // per-account endpoints never delay the loading screen. Manual refresh
+    // forces and awaits it so lastRefresh covers the Home dashboard cards too.
     UpgradeTrackerRepository.shared.configureRemote(
       accountId: _currentUserId,
       verifiedPlayerTags: verifiedAccounts.map(
         (account) => account['player_tag']?.toString() ?? '',
       ),
     );
-    unawaited(playerService.prefetchRankedLeagueData(playerTags));
-    for (final tag in playerTags) {
-      unawaited(
-        UpgradeTrackerRepository.shared.load(tag).catchError((_) => null),
-      );
+    final homeDashboardWarmup = _warmHomeDashboardData(
+      playerTags,
+      playerService,
+      forceRefresh: forceAuxiliaryRefresh,
+    );
+    if (!forceAuxiliaryRefresh) {
+      unawaited(homeDashboardWarmup);
     }
 
     final timer = Stopwatch()..start();
@@ -566,6 +564,10 @@ class CocAccountService extends ChangeNotifier {
         ),
     ]);
 
+    if (forceAuxiliaryRefresh) {
+      await homeDashboardWarmup;
+    }
+
     final allClanTags = {
       ...optimisticClanTags,
       ...discoveredClanTags,
@@ -579,6 +581,29 @@ class CocAccountService extends ChangeNotifier {
     DebugUtils.debugSuccess(
       "All data linked successfully in ${timer.elapsedMilliseconds} ms",
     );
+  }
+
+  Future<void> _warmHomeDashboardData(
+    Iterable<String> playerTags,
+    PlayerService playerService, {
+    required bool forceRefresh,
+  }) async {
+    await Future.wait([
+      playerService.prefetchRankedLeagueData(
+        playerTags,
+        forceRefresh: forceRefresh,
+      ),
+      ...playerTags.map((tag) async {
+        try {
+          await UpgradeTrackerRepository.shared.load(
+            tag,
+            forceRefresh: forceRefresh,
+          );
+        } catch (_) {
+          // Best-effort warm-up only; card-level loads surface their own errors.
+        }
+      }),
+    ]);
   }
 
   Future<Map<String, String>> _cachedClanTagsByPlayer(

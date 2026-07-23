@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
@@ -18,6 +19,7 @@ import 'package:clashkingapp/features/player/presentation/ranked/player_ranked_l
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
@@ -36,6 +38,13 @@ import 'package:provider/provider.dart';
 void clearHomeDashboardCaches() {
   _HomeRankedCardState._cache.clear();
   _HomeUpgradeTrackerCardState._cache.clear();
+}
+
+int _homeManualRefreshGeneration = 0;
+
+void markHomeDashboardManualRefresh() {
+  clearHomeDashboardCaches();
+  _homeManualRefreshGeneration++;
 }
 
 /// Single entry point for every sign-out/account-deletion path: clears every
@@ -79,9 +88,6 @@ class _HomeCardFrame extends StatelessWidget {
   }
 }
 
-/// Same flat bordered shell as [_HomeCardFrame], but tappable — the shared
-/// shell for every recap/account panel page across the Ranked and Upgrade
-/// Tracker home cards.
 class _HomeCardTappablePanel extends StatelessWidget {
   const _HomeCardTappablePanel({required this.onTap, required this.child});
 
@@ -227,6 +233,7 @@ class DashboardPage extends StatelessWidget {
     final rankedPlayers = linkedPlayers
         .where((player) => cardPrefs.isRankedShownOnHome(player.tag))
         .toList(growable: false);
+    final homeRefreshGeneration = _homeManualRefreshGeneration;
     final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
     final bottomPadding = isDesktopWeb
         ? 32.0
@@ -243,33 +250,65 @@ class DashboardPage extends StatelessWidget {
                     .clamp(16.0, double.infinity)
                     .toDouble();
 
-            return ListView(
-              padding: EdgeInsets.fromLTRB(
-                horizontalPadding,
-                0,
-                horizontalPadding,
-                bottomPadding,
-              ),
-              children: [
-                LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
-                const SizedBox(height: 12),
-                const HomeEventBanner(),
-                SizedBox(height: isDesktopWeb ? 24 : 16),
-                ..._buildBody(
-                  context,
-                  isLoading: playerService.isLoading,
-                  linkedPlayers: linkedPlayers,
-                  todoPlayers: todoPlayers,
-                  rankedPlayers: rankedPlayers,
-                  upgradePlayers: upgradePlayers,
-                  isDesktopWeb: isDesktopWeb,
+            return RefreshIndicator(
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              onRefresh: () => _refresh(context),
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  0,
+                  horizontalPadding,
+                  bottomPadding,
                 ),
-              ],
+                children: [
+                  LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
+                  const SizedBox(height: 12),
+                  const HomeEventBanner(),
+                  SizedBox(height: isDesktopWeb ? 24 : 16),
+                  ..._buildBody(
+                    context,
+                    isLoading: playerService.isLoading,
+                    linkedPlayers: linkedPlayers,
+                    todoPlayers: todoPlayers,
+                    rankedPlayers: rankedPlayers,
+                    upgradePlayers: upgradePlayers,
+                    isDesktopWeb: isDesktopWeb,
+                    refreshGeneration: homeRefreshGeneration,
+                  ),
+                ],
+              ),
             );
           },
         ),
       ),
     );
+  }
+
+  Future<void> _refresh(BuildContext context) async {
+    try {
+      markHomeDashboardManualRefresh();
+      final cocService = context.read<CocAccountService>();
+      final playerTags = cocService.getAccountTags();
+      if (playerTags.isEmpty) return;
+      await cocService.refreshPageData(
+        playerTags,
+        context.read<PlayerService>(),
+        context.read<ClanService>(),
+        context.read<WarCwlService>(),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(
+              context,
+            )!.generalRefreshFailed(error.toString()),
+          ),
+        ),
+      );
+    }
   }
 
   List<Widget> _buildBody(
@@ -280,6 +319,7 @@ class DashboardPage extends StatelessWidget {
     required List<Player> rankedPlayers,
     required List<Player> upgradePlayers,
     required bool isDesktopWeb,
+    required int refreshGeneration,
   }) {
     if (isLoading && linkedPlayers.isEmpty) {
       return const [
@@ -303,6 +343,7 @@ class DashboardPage extends StatelessWidget {
       rankedPlayers: rankedPlayers,
       upgradePlayers: upgradePlayers,
       isDesktopWeb: isDesktopWeb,
+      refreshGeneration: refreshGeneration,
     );
   }
 
@@ -312,18 +353,26 @@ class DashboardPage extends StatelessWidget {
     required List<Player> rankedPlayers,
     required List<Player> upgradePlayers,
     required bool isDesktopWeb,
+    required int refreshGeneration,
   }) {
     final spacer = SizedBox(height: isDesktopWeb ? 16 : 12);
     return [
       if (todoPlayers.isNotEmpty)
         HomeTodoCard(players: todoPlayers, allPlayers: linkedPlayers),
       if (todoPlayers.isNotEmpty && rankedPlayers.isNotEmpty) spacer,
-      if (rankedPlayers.isNotEmpty) HomeRankedCard(players: rankedPlayers),
+      if (rankedPlayers.isNotEmpty)
+        HomeRankedCard(
+          players: rankedPlayers,
+          refreshGeneration: refreshGeneration,
+        ),
       if ((todoPlayers.isNotEmpty || rankedPlayers.isNotEmpty) &&
           upgradePlayers.isNotEmpty)
         spacer,
       if (upgradePlayers.isNotEmpty)
-        HomeUpgradeTrackerCard(players: upgradePlayers),
+        HomeUpgradeTrackerCard(
+          players: upgradePlayers,
+          refreshGeneration: refreshGeneration,
+        ),
     ];
   }
 
@@ -356,20 +405,22 @@ class DashboardPage extends StatelessWidget {
 }
 
 class HomeRankedCard extends StatefulWidget {
-  const HomeRankedCard({super.key, required this.players});
+  const HomeRankedCard({
+    super.key,
+    required this.players,
+    required this.refreshGeneration,
+  });
 
   final List<Player> players;
+  final int refreshGeneration;
 
   @override
   State<HomeRankedCard> createState() => _HomeRankedCardState();
 }
 
-/// Stale-while-revalidate cache shared by the Home dashboard's Ranked
-/// League and Upgrade Tracker cards: shows the last known result for a
-/// given account-tag signature immediately (if any) while a fresh fetch
-/// runs in the background, so remounting the card (e.g. leaving and
-/// returning to Home) never re-flashes a loading state — the same way the
-/// to-do card's synchronous data never has a loading gap to begin with.
+/// Cache shared by the Home dashboard's Ranked League and Upgrade Tracker
+/// cards: shows the last known result for a given account-tag signature
+/// immediately, and leaves network refreshes to explicit refresh flows.
 class _HomeCardCache<T> {
   final Map<String, T> _entries = {};
   // Bumped by clear() so a fetch already in flight from a signed-out
@@ -388,60 +439,17 @@ class _HomeCardCache<T> {
   Future<T> reload({
     required String signature,
     required Future<T> Function({required bool forceRefresh}) fetch,
-    required void Function(T fresh) onFresh,
-    bool Function(T fresh, T cached)? shouldReplace,
+    bool forceRefresh = false,
   }) {
     final generation = _generation;
     final cached = _entries[signature];
     if (cached == null) {
-      return fetch(forceRefresh: false).then((fresh) {
+      return fetch(forceRefresh: forceRefresh).then((fresh) {
         if (generation == _generation) _entries[signature] = fresh;
-        // The underlying service may have handed back its own stale cache
-        // (e.g. warmed by the startup prefetch) without hitting the
-        // network — force a real revalidation even on this first load so
-        // Home doesn't keep showing that stale snapshot indefinitely.
-        _revalidate(
-          generation: generation,
-          signature: signature,
-          fetch: fetch,
-          baseline: fresh,
-          onFresh: onFresh,
-          shouldReplace: shouldReplace,
-        );
         return fresh;
       });
     }
-    _revalidate(
-      generation: generation,
-      signature: signature,
-      fetch: fetch,
-      baseline: cached,
-      onFresh: onFresh,
-      shouldReplace: shouldReplace,
-    );
     return Future.value(cached);
-  }
-
-  // The account shown to the user may have changed since it was cached
-  // (attacks done, rank moved) — this background check must hit the real
-  // source, not just return the same cached value again.
-  void _revalidate({
-    required int generation,
-    required String signature,
-    required Future<T> Function({required bool forceRefresh}) fetch,
-    required T baseline,
-    required void Function(T fresh) onFresh,
-    bool Function(T fresh, T cached)? shouldReplace,
-  }) {
-    fetch(forceRefresh: true).then((fresh) {
-      if (generation != _generation) return;
-      // Both card loaders swallow per-account fetch errors and still return
-      // a "valid" but degraded summary — a transient endpoint failure must
-      // not blank out data the user was already looking at.
-      if (shouldReplace != null && !shouldReplace(fresh, baseline)) return;
-      _entries[signature] = fresh;
-      onFresh(fresh);
-    });
   }
 }
 
@@ -450,6 +458,7 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
 
   Future<_RankedHomeSummary>? _load;
   String _signature = '';
+  int? _refreshGeneration;
   late final PageController _controller;
   int _index = 0;
 
@@ -479,24 +488,15 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
 
   void _reloadIfNeeded() {
     final signature = widget.players.map((player) => player.tag).join('|');
-    if (_load != null && signature == _signature) return;
+    final refreshChanged = widget.refreshGeneration != _refreshGeneration;
+    if (_load != null && signature == _signature && !refreshChanged) return;
     _signature = signature;
+    final shouldForceRefresh = _load != null && refreshChanged;
+    _refreshGeneration = widget.refreshGeneration;
     _load = _cache.reload(
       signature: signature,
       fetch: _loadSummary,
-      onFresh: (fresh) {
-        if (mounted && _signature == signature) {
-          setState(() {
-            _load = Future.value(fresh);
-          });
-        }
-      },
-      // A background revalidation that drops accounts (one endpoint failed
-      // transiently) must not overwrite the cached data those accounts'
-      // panels were showing — only accept results with as much data as
-      // what's already on screen.
-      shouldReplace: (fresh, cached) =>
-          fresh.accounts.length >= cached.accounts.length,
+      forceRefresh: shouldForceRefresh,
     );
   }
 
@@ -527,8 +527,8 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
         builder: (_) => PlayerRankedLeagueScreen(player: player),
       ),
     );
-    // The detail screen may have pulled fresher Ranked data — force a real
-    // reload instead of trusting the (possibly now stale) cached summary.
+    // The detail screen may have pulled fresher Ranked data into
+    // PlayerService; recompute from local caches without forcing network.
     if (!mounted) return;
     _cache.invalidate(_signature);
     _signature = '';
@@ -561,7 +561,7 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
       builder: (context, snapshot) {
         final summary = snapshot.data;
         final loading = snapshot.connectionState == ConnectionState.waiting;
-        if (loading) {
+        if (loading && summary == null) {
           return const _HomeCardFrame(child: _RankedHomeSkeleton());
         }
         if (summary == null || summary.accounts.isEmpty) {
@@ -611,10 +611,7 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
     bool hasSummaryPage,
   ) {
     if (hasSummaryPage && index == 0) {
-      return _RankedAllAccountsPanel(
-        summary: summary,
-        onTap: () => _openRankedLeague(summary.accounts.first.player),
-      );
+      return _RankedAllAccountsPanel(summary: summary);
     }
     final account = summary.accounts[index - (hasSummaryPage ? 1 : 0)];
     return _RankedAccountPanel(
@@ -737,18 +734,16 @@ class _RankedAccountPanel extends StatelessWidget {
 /// Leading page when several accounts are pinned: combined attack/defense
 /// totals across all of them, same recipe as the home to-do card's summary.
 class _RankedAllAccountsPanel extends StatelessWidget {
-  const _RankedAllAccountsPanel({required this.summary, required this.onTap});
+  const _RankedAllAccountsPanel({required this.summary});
 
   final _RankedHomeSummary summary;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return _HomeCardTappablePanel(
-      onTap: onTap,
+    return _HomeCardFrame(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -805,11 +800,6 @@ class _RankedAllAccountsPanel extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 22,
-                color: colorScheme.onSurfaceVariant,
               ),
             ],
           ),
@@ -1267,9 +1257,14 @@ String _rankedSummaryStatus(BuildContext context, _RankedHomeSummary summary) {
 }
 
 class HomeUpgradeTrackerCard extends StatefulWidget {
-  const HomeUpgradeTrackerCard({super.key, required this.players});
+  const HomeUpgradeTrackerCard({
+    super.key,
+    required this.players,
+    required this.refreshGeneration,
+  });
 
   final List<Player> players;
+  final int refreshGeneration;
 
   @override
   State<HomeUpgradeTrackerCard> createState() => _HomeUpgradeTrackerCardState();
@@ -1281,6 +1276,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
   final _repository = UpgradeTrackerRepository.shared;
   Future<_UpgradeHomeSummary>? _load;
   String _signature = '';
+  int? _refreshGeneration;
   late final PageController _controller;
   int _index = 0;
 
@@ -1312,31 +1308,19 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     final signature = widget.players
         .map((player) => UpgradeTrackerRepository.normalizeTag(player.tag))
         .join('|');
-    if (_load != null && signature == _signature) return;
+    final refreshChanged = widget.refreshGeneration != _refreshGeneration;
+    if (_load != null && signature == _signature && !refreshChanged) return;
     _signature = signature;
+    final shouldForceRefresh = _load != null && refreshChanged;
+    _refreshGeneration = widget.refreshGeneration;
     _load = _cache.reload(
       signature: signature,
       fetch: _loadSummary,
-      onFresh: (fresh) {
-        if (mounted && _signature == signature) {
-          setState(() {
-            _load = Future.value(fresh);
-          });
-        }
-      },
-      // A background revalidation that drops accounts (one endpoint failed
-      // transiently) must not overwrite the cached data those accounts'
-      // panels were showing — only accept results with as much data as
-      // what's already on screen.
-      shouldReplace: (fresh, cached) =>
-          fresh.accounts.length >= cached.accounts.length,
+      forceRefresh: shouldForceRefresh,
     );
   }
 
-  // forceRefresh is accepted for API parity with _HomeCardCache.reload;
-  // UpgradeTrackerRepository.load already re-fetches from remote whenever
-  // possible on every call, so there is nothing extra to force here.
-  Future<_UpgradeHomeSummary> _loadSummary({bool forceRefresh = false}) async {
+  Future<_UpgradeHomeSummary> _loadSummary({required bool forceRefresh}) async {
     final cocService = context.read<CocAccountService>();
     _repository.configureRemote(
       accountId: context.read<AuthService>().currentUser?.userId,
@@ -1349,7 +1333,10 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     final missingAccounts = <Player>[];
     for (final player in widget.players) {
       try {
-        final snapshot = await _repository.load(player.tag);
+        final snapshot = await _repository.load(
+          player.tag,
+          forceRefresh: forceRefresh,
+        );
         if (snapshot == null) {
           missingAccounts.add(player);
           continue;
@@ -1373,9 +1360,8 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
         builder: (_) => UpgradeTrackerPage(initialTag: initialTag),
       ),
     );
-    // The full tracker may have imported/refreshed data for this account —
-    // force a real reload instead of trusting the (possibly now stale)
-    // cached summary.
+    // The full tracker may have imported/refreshed local data for this
+    // account; recompute from local caches without forcing network.
     if (!mounted) return;
     _cache.invalidate(_signature);
     _signature = '';
@@ -1408,7 +1394,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
       builder: (context, snapshot) {
         final summary = snapshot.data;
         final loading = snapshot.connectionState == ConnectionState.waiting;
-        if (loading) {
+        if (loading && summary == null) {
           return const _HomeCardFrame(child: _UpgradeHomeSkeleton());
         }
         if (summary == null) {
@@ -1476,10 +1462,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     required int offset,
   }) {
     if (hasSummaryPage && index == 0) {
-      return _UpgradeAllAccountsPanel(
-        summary: summary,
-        onTap: () => _openTracker(summary.accounts.first.tag),
-      );
+      return _UpgradeAllAccountsPanel(summary: summary);
     }
     final localIndex = index - offset;
     if (localIndex < accountCount) {
@@ -1636,6 +1619,7 @@ class _UpgradeMissingDataPanel extends StatelessWidget {
         subtitle: player.name,
         status: loc.dashboardUpgradeTrackerNoData,
         trailing: const _UpgradeProgressRing(value: 0, label: '0%'),
+        showChevron: true,
       ),
     );
   }
@@ -1644,10 +1628,9 @@ class _UpgradeMissingDataPanel extends StatelessWidget {
 /// Leading page when several accounts are pinned: combined completion,
 /// builders, lab and pets across all of them.
 class _UpgradeAllAccountsPanel extends StatelessWidget {
-  const _UpgradeAllAccountsPanel({required this.summary, required this.onTap});
+  const _UpgradeAllAccountsPanel({required this.summary});
 
   final _UpgradeHomeSummary summary;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -1655,8 +1638,7 @@ class _UpgradeAllAccountsPanel extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final progress = '${(summary.completion * 100).round()}%';
 
-    return _HomeCardTappablePanel(
-      onTap: onTap,
+    return _HomeCardFrame(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1712,11 +1694,6 @@ class _UpgradeAllAccountsPanel extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 22,
-                color: colorScheme.onSurfaceVariant,
               ),
             ],
           ),
@@ -1788,6 +1765,7 @@ class _UpgradeEmptyContent extends StatelessWidget {
     required this.subtitle,
     required this.status,
     required this.trailing,
+    this.showChevron = false,
   });
 
   final String? imageUrl;
@@ -1795,6 +1773,7 @@ class _UpgradeEmptyContent extends StatelessWidget {
   final String subtitle;
   final String status;
   final Widget trailing;
+  final bool showChevron;
 
   @override
   Widget build(BuildContext context) {
@@ -1856,11 +1835,12 @@ class _UpgradeEmptyContent extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(
-              Icons.chevron_right_rounded,
-              size: 22,
-              color: colorScheme.onSurfaceVariant,
-            ),
+            if (showChevron)
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 22,
+                color: colorScheme.onSurfaceVariant,
+              ),
           ],
         ),
         const SizedBox(height: 8),

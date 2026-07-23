@@ -228,16 +228,47 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       _planData = null;
     });
     if (cached != null) {
-      await _applySnapshot(cached);
-      unawaited(_revalidate(tag));
+      _applyCachedSnapshot(cached);
+      unawaited(_hydrateCachedSnapshot(tag, cached));
       return;
     }
     await _fetchAndApply(tag);
   }
 
+  Future<void> _hydrateCachedSnapshot(
+    String tag,
+    UpgradeTrackerSnapshot snapshot,
+  ) async {
+    await _applySnapshot(snapshot);
+    if (!mounted || _selectedTag != tag) return;
+    await _revalidate(tag);
+  }
+
+  void _applyCachedSnapshot(UpgradeTrackerSnapshot snapshot) {
+    final goldPassPercent = _resolveGoldPassPercent(snapshot, null);
+    const planPreferences = UpgradePlanPreferences();
+    final planData = _buildTrackerPlanData(
+      snapshot,
+      goldPassPercent: goldPassPercent,
+      preferences: planPreferences,
+    );
+    setState(() {
+      _snapshot = snapshot;
+      _loading = false;
+      _error = null;
+      _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(snapshot.tag)] =
+          snapshot.capturedAt;
+      _goldPassPercent = goldPassPercent;
+      _planPreferences = planPreferences;
+      _planData = planData;
+    });
+    _planLanes.value = planData.allLanes;
+    _scheduleClockTick();
+  }
+
   Future<void> _revalidate(String tag) async {
     try {
-      final snapshot = await _repository.load(tag);
+      final snapshot = await _repository.load(tag, forceRefresh: true);
       if (!mounted || snapshot == null || _selectedTag != tag) return;
       await _applySnapshot(snapshot);
     } catch (_) {

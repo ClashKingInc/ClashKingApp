@@ -8,13 +8,16 @@ import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/widgets/account_verification_dialog.dart';
+import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/pages/widgets/account_visibility_option.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
@@ -147,96 +150,128 @@ class _PlayersPageState extends State<PlayersPage> {
             .toDouble();
 
         return Scaffold(
-          body: CustomScrollView(
-            scrollCacheExtent: const ScrollCacheExtent.pixels(800),
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                sliver: SliverToBoxAdapter(
-                  child: LastRefreshIndicator(
-                    lastRefresh: cocService.lastRefresh,
+          body: RefreshIndicator(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            onRefresh: () => _refresh(context),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              scrollCacheExtent: const ScrollCacheExtent.pixels(800),
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                  sliver: SliverToBoxAdapter(
+                    child: LastRefreshIndicator(
+                      lastRefresh: cocService.lastRefresh,
+                    ),
                   ),
                 ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  8,
-                  horizontalPadding,
-                  14,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: LiquidGlassSegmentedControl<_PlayerRosterMode>(
-                    values: const [
-                      _PlayerRosterMode.linked,
-                      _PlayerRosterMode.bookmarked,
-                    ],
-                    labels: [l10n.playersLinked, l10n.playersBookmarked],
-                    selected: _mode,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    onChanged: (value) => setState(() => _mode = value),
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    8,
+                    horizontalPadding,
+                    14,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: LiquidGlassSegmentedControl<_PlayerRosterMode>(
+                      values: const [
+                        _PlayerRosterMode.linked,
+                        _PlayerRosterMode.bookmarked,
+                      ],
+                      labels: [l10n.playersLinked, l10n.playersBookmarked],
+                      selected: _mode,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      onChanged: (value) => setState(() => _mode = value),
+                    ),
                   ),
                 ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  0,
-                  horizontalPadding,
-                  bottomPadding,
-                ),
-                sliver: itemCount == 0
-                    ? SliverToBoxAdapter(
-                        child: _EmptyRosterMessage(
-                          title: showingLinked
-                              ? AppLocalizations.of(
-                                  context,
-                                )!.dashboardNoLinkedAccountsTitle
-                              : AppLocalizations.of(
-                                  context,
-                                )!.playersNoBookmarkedTitle,
-                          subtitle: showingLinked
-                              ? AppLocalizations.of(
-                                  context,
-                                )!.playersNoLinkedBody
-                              : AppLocalizations.of(
-                                  context,
-                                )!.playersNoBookmarkedBody,
-                          icon: showingLinked
-                              ? Icons.account_circle_outlined
-                              : Icons.bookmark_border_rounded,
-                          actionLabel: showingLinked
-                              ? l10n.drawerManageAccounts
-                              : null,
-                          onAction: showingLinked
-                              ? () => Navigator.of(context).push(
-                                  MaterialPageRoute<void>(
-                                    builder: (_) => const AddCocAccountPage(
-                                      refreshOnExit: false,
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontalPadding,
+                    0,
+                    horizontalPadding,
+                    bottomPadding,
+                  ),
+                  sliver: itemCount == 0
+                      ? SliverToBoxAdapter(
+                          child: _EmptyRosterMessage(
+                            title: showingLinked
+                                ? AppLocalizations.of(
+                                    context,
+                                  )!.dashboardNoLinkedAccountsTitle
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.playersNoBookmarkedTitle,
+                            subtitle: showingLinked
+                                ? AppLocalizations.of(
+                                    context,
+                                  )!.playersNoLinkedBody
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.playersNoBookmarkedBody,
+                            icon: showingLinked
+                                ? Icons.account_circle_outlined
+                                : Icons.bookmark_border_rounded,
+                            actionLabel: showingLinked
+                                ? l10n.drawerManageAccounts
+                                : null,
+                            onAction: showingLinked
+                                ? () => Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => const AddCocAccountPage(
+                                        refreshOnExit: false,
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : null,
-                        ),
-                      )
-                    : isDesktopWeb
-                    ? SliverToBoxAdapter(
-                        child: ResponsiveCardGrid(
+                                  )
+                                : null,
+                          ),
+                        )
+                      : isDesktopWeb
+                      ? SliverToBoxAdapter(
+                          child: ResponsiveCardGrid(
+                            itemCount: itemCount,
+                            itemBuilder: buildRosterCard,
+                          ),
+                        )
+                      : SliverList.separated(
                           itemCount: itemCount,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: 10),
                           itemBuilder: buildRosterCard,
                         ),
-                      )
-                    : SliverList.separated(
-                        itemCount: itemCount,
-                        separatorBuilder: (_, _) => const SizedBox(height: 10),
-                        itemBuilder: buildRosterCard,
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         );
       },
     );
+  }
+
+  Future<void> _refresh(BuildContext context) async {
+    try {
+      final cocService = context.read<CocAccountService>();
+      final playerTags = cocService.getAccountTags();
+      if (playerTags.isEmpty) return;
+      markHomeDashboardManualRefresh();
+      await cocService.refreshPageData(
+        playerTags,
+        context.read<PlayerService>(),
+        context.read<ClanService>(),
+        context.read<WarCwlService>(),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(
+              context,
+            )!.generalRefreshFailed(error.toString()),
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> _hydrateBookmarkedPlayers(

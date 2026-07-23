@@ -272,11 +272,14 @@ class PlayerService extends ChangeNotifier {
   /// the same way its base player profiles are already hydrated by then.
   /// Failures are swallowed per-account; callers that need a specific
   /// account's data still call [loadRankedLeagueData] directly.
-  Future<void> prefetchRankedLeagueData(Iterable<String> playerTags) async {
+  Future<void> prefetchRankedLeagueData(
+    Iterable<String> playerTags, {
+    bool forceRefresh = false,
+  }) async {
     await Future.wait(
       playerTags.map((tag) async {
         try {
-          await loadRankedLeagueData(tag);
+          await loadRankedLeagueData(tag, forceRefresh: forceRefresh);
         } catch (_) {
           // Best-effort warm-up only; the real load surfaces its own errors.
         }
