@@ -252,6 +252,7 @@ class DashboardPage extends StatelessWidget {
               ),
               children: [
                 LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
+                const SizedBox(height: 8),
                 const HomeEventBanner(),
                 SizedBox(height: isDesktopWeb ? 24 : 16),
                 ..._buildBody(
@@ -445,7 +446,9 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
       fetch: _loadSummary,
       onFresh: (fresh) {
         if (mounted && _signature == signature) {
-          setState(() => _load = Future.value(fresh));
+          setState(() {
+            _load = Future.value(fresh);
+          });
         }
       },
       // A background revalidation that drops accounts (one endpoint failed
@@ -1276,7 +1279,9 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
       fetch: _loadSummary,
       onFresh: (fresh) {
         if (mounted && _signature == signature) {
-          setState(() => _load = Future.value(fresh));
+          setState(() {
+            _load = Future.value(fresh);
+          });
         }
       },
       // A background revalidation that drops accounts (one endpoint failed

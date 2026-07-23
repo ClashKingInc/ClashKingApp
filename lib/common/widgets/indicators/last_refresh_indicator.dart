@@ -70,9 +70,9 @@ class _LastRefreshIndicatorState extends State<LastRefreshIndicator> {
     final formattedTime = _formatRefreshTime(widget.lastRefresh!, context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Icon(
             Icons.refresh,
