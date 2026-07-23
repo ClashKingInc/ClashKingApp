@@ -374,28 +374,49 @@ class _TodoTask {
     final loc = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
     final compact = NumberFormat.compact(locale: locale);
-    final tasks = <_TodoTask>[];
+    final tasks = <_TodoTask>[
+      ..._legendTask(loc, player),
+      ..._warTask(loc, player, member),
+      ..._clanGamesTask(loc, compact, player),
+      ..._raidTask(loc, player),
+      _seasonPassTask(loc, compact, player),
+    ];
 
-    if (player.league == 'Legend League' &&
-        player.currentLegendSeason?.currentDay != null) {
-      final done = player.currentLegendSeason?.currentDay?.totalAttacks ?? 0;
-      tasks.add(
-        _TodoTask(
-          label: loc.legendsTitle,
-          value: '$done/8',
-          imageUrl: ImageAssets.legendBlazonNoPadding,
-          color: const Color(0xFF4E7DF2),
-          done: done >= 8,
-        ),
-      );
+    tasks.sort((a, b) {
+      if (a.done != b.done) return a.done ? 1 : -1;
+      return a.label.compareTo(b.label);
+    });
+    return tasks;
+  }
+
+  static List<_TodoTask> _legendTask(AppLocalizations loc, Player player) {
+    if (player.league != 'Legend League' ||
+        player.currentLegendSeason?.currentDay == null) {
+      return const [];
     }
+    final done = player.currentLegendSeason?.currentDay?.totalAttacks ?? 0;
+    return [
+      _TodoTask(
+        label: loc.legendsTitle,
+        value: '$done/8',
+        imageUrl: ImageAssets.legendBlazonNoPadding,
+        color: const Color(0xFF4E7DF2),
+        done: done >= 8,
+      ),
+    ];
+  }
 
-    // `clan.warCwl.warInfo` is the primary source of "this clan's current
-    // war" — used for both regular wars and CWL rounds, so `isInCwl`
-    // decides the label/icon, not which field the data came from.
-    // `player.warData` (from the player endpoint directly) is the fallback
-    // for players hydrated without a linked `clan.warCwl` (e.g.
-    // bookmarked/public accounts).
+  // `clan.warCwl.warInfo` is the primary source of "this clan's current
+  // war" — used for both regular wars and CWL rounds, so `isInCwl` decides
+  // the label/icon, not which field the data came from. `player.warData`
+  // (from the player endpoint directly) is the fallback for players
+  // hydrated without a linked `clan.warCwl` (e.g. bookmarked/public
+  // accounts).
+  static List<_TodoTask> _warTask(
+    AppLocalizations loc,
+    Player player,
+    WarMemberPresence member,
+  ) {
     final currentWar = player.clan?.warCwl?.warInfo ?? player.warData;
     final isActuallyInCwl = player.clan?.warCwl?.isInCwl == true;
     if (currentWar != null &&
@@ -406,7 +427,7 @@ class _TodoTask {
         player.tag,
         player.clanTag,
       );
-      tasks.add(
+      return [
         _TodoTask(
           label: isActuallyInCwl ? loc.cwlTitle : loc.warTitle,
           value: '$done/$total',
@@ -416,11 +437,12 @@ class _TodoTask {
           color: isActuallyInCwl ? const Color(0xFF8D63D9) : StatColors.loss,
           done: done >= total,
         ),
-      );
-    } else if (isActuallyInCwl &&
+      ];
+    }
+    if (isActuallyInCwl &&
         isInTimeFrameForCwl() &&
         member.attacksAvailable > 0) {
-      tasks.add(
+      return [
         _TodoTask(
           label: loc.cwlTitle,
           value: '${member.attacksDone}/${member.attacksAvailable}',
@@ -428,49 +450,54 @@ class _TodoTask {
           color: const Color(0xFF8D63D9),
           done: member.attacksDone >= member.attacksAvailable,
         ),
-      );
+      ];
     }
+    return const [];
+  }
 
-    if (isInTimeFrameForClanGames()) {
-      tasks.add(
-        _TodoTask(
-          label: loc.gameClanGames,
-          value: compact.format(player.currentClanGamesPoints),
-          imageUrl: ImageAssets.clanGamesMedals,
-          color: StatColors.win,
-          done: player.clanGamesRatio >= 1,
-        ),
-      );
-    }
-
-    if (isInTimeFrameForRaid()) {
-      final done = player.raids?.attackDone ?? 0;
-      final total = player.raids?.attackLimit ?? 5;
-      tasks.add(
-        _TodoTask(
-          label: loc.raidsTitle,
-          value: '$done/$total',
-          imageUrl: ImageAssets.raidAttacks,
-          color: const Color(0xFF2A9FD6),
-          done: done >= total,
-        ),
-      );
-    }
-
-    tasks.add(
+  static List<_TodoTask> _clanGamesTask(
+    AppLocalizations loc,
+    NumberFormat compact,
+    Player player,
+  ) {
+    if (!isInTimeFrameForClanGames()) return const [];
+    return [
       _TodoTask(
-        label: AppLocalizations.of(context)!.gameSeasonPassShort,
-        value: compact.format(player.currentSeasonPoints),
-        imageUrl: ImageAssets.iconGoldPass,
-        color: StatColors.warStarGold,
-        done: player.seasonPassRatio >= 1,
+        label: loc.gameClanGames,
+        value: compact.format(player.currentClanGamesPoints),
+        imageUrl: ImageAssets.clanGamesMedals,
+        color: StatColors.win,
+        done: player.clanGamesRatio >= 1,
       ),
-    );
+    ];
+  }
 
-    tasks.sort((a, b) {
-      if (a.done != b.done) return a.done ? 1 : -1;
-      return a.label.compareTo(b.label);
-    });
-    return tasks;
+  static List<_TodoTask> _raidTask(AppLocalizations loc, Player player) {
+    if (!isInTimeFrameForRaid()) return const [];
+    final done = player.raids?.attackDone ?? 0;
+    final total = player.raids?.attackLimit ?? 5;
+    return [
+      _TodoTask(
+        label: loc.raidsTitle,
+        value: '$done/$total',
+        imageUrl: ImageAssets.raidAttacks,
+        color: const Color(0xFF2A9FD6),
+        done: done >= total,
+      ),
+    ];
+  }
+
+  static _TodoTask _seasonPassTask(
+    AppLocalizations loc,
+    NumberFormat compact,
+    Player player,
+  ) {
+    return _TodoTask(
+      label: loc.gameSeasonPassShort,
+      value: compact.format(player.currentSeasonPoints),
+      imageUrl: ImageAssets.iconGoldPass,
+      color: StatColors.warStarGold,
+      done: player.seasonPassRatio >= 1,
+    );
   }
 }

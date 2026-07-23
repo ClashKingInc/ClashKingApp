@@ -228,63 +228,83 @@ class DashboardPage extends StatelessWidget {
               children: [
                 const HomeEventBanner(),
                 SizedBox(height: isDesktopWeb ? 24 : 16),
-                if (playerService.isLoading && linkedPlayers.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 48),
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                else if (linkedPlayers.isEmpty)
-                  _EmptyDashboard(
-                    title: AppLocalizations.of(
-                      context,
-                    )!.dashboardNoLinkedAccountsTitle,
-                    message: AppLocalizations.of(
-                      context,
-                    )!.dashboardNoLinkedAccountsBody,
-                    icon: Icons.account_circle_outlined,
-                    actionLabel: AppLocalizations.of(
-                      context,
-                    )!.drawerManageAccounts,
-                    onAction: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) =>
-                            const AddCocAccountPage(refreshOnExit: false),
-                      ),
-                    ),
-                  )
-                else if (todoPlayers.isEmpty &&
-                    upgradePlayers.isEmpty &&
-                    rankedPlayers.isEmpty)
-                  _EmptyDashboard(
-                    title: AppLocalizations.of(
-                      context,
-                    )!.dashboardTodoHiddenTitle,
-                    message: AppLocalizations.of(
-                      context,
-                    )!.dashboardTodoHiddenBody,
-                    icon: Icons.visibility_off_outlined,
-                  )
-                else ...[
-                  if (todoPlayers.isNotEmpty)
-                    HomeTodoCard(
-                      players: todoPlayers,
-                      allPlayers: linkedPlayers,
-                    ),
-                  if (todoPlayers.isNotEmpty && rankedPlayers.isNotEmpty)
-                    SizedBox(height: isDesktopWeb ? 16 : 12),
-                  if (rankedPlayers.isNotEmpty)
-                    HomeRankedCard(players: rankedPlayers),
-                  if ((todoPlayers.isNotEmpty || rankedPlayers.isNotEmpty) &&
-                      upgradePlayers.isNotEmpty)
-                    SizedBox(height: isDesktopWeb ? 16 : 12),
-                  if (upgradePlayers.isNotEmpty)
-                    HomeUpgradeTrackerCard(players: upgradePlayers),
-                ],
+                ..._buildBody(
+                  context,
+                  isLoading: playerService.isLoading,
+                  linkedPlayers: linkedPlayers,
+                  todoPlayers: todoPlayers,
+                  rankedPlayers: rankedPlayers,
+                  upgradePlayers: upgradePlayers,
+                  isDesktopWeb: isDesktopWeb,
+                ),
               ],
             );
           },
         ),
       ),
+    );
+  }
+
+  List<Widget> _buildBody(
+    BuildContext context, {
+    required bool isLoading,
+    required List<Player> linkedPlayers,
+    required List<Player> todoPlayers,
+    required List<Player> rankedPlayers,
+    required List<Player> upgradePlayers,
+    required bool isDesktopWeb,
+  }) {
+    if (isLoading && linkedPlayers.isEmpty) {
+      return const [
+        Padding(
+          padding: EdgeInsets.only(top: 48),
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      ];
+    }
+    if (linkedPlayers.isEmpty) {
+      return [_buildNoLinkedAccounts(context)];
+    }
+    if (todoPlayers.isEmpty &&
+        upgradePlayers.isEmpty &&
+        rankedPlayers.isEmpty) {
+      return [_buildAllCardsHidden(context)];
+    }
+    return [
+      if (todoPlayers.isNotEmpty)
+        HomeTodoCard(players: todoPlayers, allPlayers: linkedPlayers),
+      if (todoPlayers.isNotEmpty && rankedPlayers.isNotEmpty)
+        SizedBox(height: isDesktopWeb ? 16 : 12),
+      if (rankedPlayers.isNotEmpty) HomeRankedCard(players: rankedPlayers),
+      if ((todoPlayers.isNotEmpty || rankedPlayers.isNotEmpty) &&
+          upgradePlayers.isNotEmpty)
+        SizedBox(height: isDesktopWeb ? 16 : 12),
+      if (upgradePlayers.isNotEmpty)
+        HomeUpgradeTrackerCard(players: upgradePlayers),
+    ];
+  }
+
+  Widget _buildNoLinkedAccounts(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return _EmptyDashboard(
+      title: loc.dashboardNoLinkedAccountsTitle,
+      message: loc.dashboardNoLinkedAccountsBody,
+      icon: Icons.account_circle_outlined,
+      actionLabel: loc.drawerManageAccounts,
+      onAction: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const AddCocAccountPage(refreshOnExit: false),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAllCardsHidden(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return _EmptyDashboard(
+      title: loc.dashboardTodoHiddenTitle,
+      message: loc.dashboardTodoHiddenBody,
+      icon: Icons.visibility_off_outlined,
     );
   }
 
@@ -462,21 +482,8 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
                 controller: _controller,
                 onPageChanged: (index) => setState(() => _index = index),
                 itemCount: itemCount,
-                itemBuilder: (context, index) {
-                  if (hasSummaryPage && index == 0) {
-                    return _RankedAllAccountsPanel(
-                      summary: summary,
-                      onTap: () =>
-                          _openRankedLeague(summary.accounts.first.player),
-                    );
-                  }
-                  final account =
-                      summary.accounts[index - (hasSummaryPage ? 1 : 0)];
-                  return _RankedAccountPanel(
-                    account: account,
-                    onTap: () => _openRankedLeague(account.player),
-                  );
-                },
+                itemBuilder: (context, index) =>
+                    _buildPage(summary, index, hasSummaryPage),
               ),
             ),
             if (itemCount > 1) ...[
@@ -492,6 +499,24 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildPage(
+    _RankedHomeSummary summary,
+    int index,
+    bool hasSummaryPage,
+  ) {
+    if (hasSummaryPage && index == 0) {
+      return _RankedAllAccountsPanel(
+        summary: summary,
+        onTap: () => _openRankedLeague(summary.accounts.first.player),
+      );
+    }
+    final account = summary.accounts[index - (hasSummaryPage ? 1 : 0)];
+    return _RankedAccountPanel(
+      account: account,
+      onTap: () => _openRankedLeague(account.player),
     );
   }
 }
@@ -1279,28 +1304,13 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
                 controller: _controller,
                 onPageChanged: (index) => setState(() => _index = index),
                 itemCount: itemCount,
-                itemBuilder: (context, index) {
-                  if (hasSummaryPage && index == 0) {
-                    return _UpgradeAllAccountsPanel(
-                      summary: summary,
-                      onTap: () => _openTracker(summary.accounts.first.tag),
-                    );
-                  }
-                  final localIndex = index - offset;
-                  if (localIndex < accountCount) {
-                    final account = summary.accounts[localIndex];
-                    return _UpgradeAccountPanel(
-                      account: account,
-                      onTap: () => _openTracker(account.tag),
-                    );
-                  }
-                  final player =
-                      summary.missingAccounts[localIndex - accountCount];
-                  return _UpgradeMissingDataPanel(
-                    player: player,
-                    onTap: () => _openTracker(player.tag),
-                  );
-                },
+                itemBuilder: (context, index) => _buildPage(
+                  summary,
+                  index,
+                  hasSummaryPage: hasSummaryPage,
+                  accountCount: accountCount,
+                  offset: offset,
+                ),
               ),
             ),
             if (itemCount > 1) ...[
@@ -1316,6 +1326,34 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildPage(
+    _UpgradeHomeSummary summary,
+    int index, {
+    required bool hasSummaryPage,
+    required int accountCount,
+    required int offset,
+  }) {
+    if (hasSummaryPage && index == 0) {
+      return _UpgradeAllAccountsPanel(
+        summary: summary,
+        onTap: () => _openTracker(summary.accounts.first.tag),
+      );
+    }
+    final localIndex = index - offset;
+    if (localIndex < accountCount) {
+      final account = summary.accounts[localIndex];
+      return _UpgradeAccountPanel(
+        account: account,
+        onTap: () => _openTracker(account.tag),
+      );
+    }
+    final player = summary.missingAccounts[localIndex - accountCount];
+    return _UpgradeMissingDataPanel(
+      player: player,
+      onTap: () => _openTracker(player.tag),
     );
   }
 }
