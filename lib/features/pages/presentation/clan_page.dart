@@ -356,25 +356,11 @@ class _ClanCard extends StatelessWidget {
                                   ),
                             ),
                           ),
-                          const SizedBox(height: 2),
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  item.tag,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.labelLarge
-                                      ?.copyWith(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onSurfaceVariant,
-                                      ),
-                                ),
-                              ),
-                              if (item.countryCode.isNotEmpty &&
-                                  item.locationName.isNotEmpty) ...[
-                                const SizedBox(width: 6),
+                          if (item.countryCode.isNotEmpty &&
+                              item.locationName.isNotEmpty) ...[
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
                                 SizedBox.square(
                                   dimension: 13,
                                   child: MobileWebImage(
@@ -394,7 +380,7 @@ class _ClanCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .labelMedium
+                                        .labelLarge
                                         ?.copyWith(
                                           color: Theme.of(
                                             context,
@@ -403,8 +389,8 @@ class _ClanCard extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ],
-                          ),
+                            ),
+                          ],
                           const SizedBox(height: 10),
                           Wrap(
                             spacing: 6,
