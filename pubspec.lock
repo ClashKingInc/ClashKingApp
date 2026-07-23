@@ -182,7 +182,7 @@ packages:
     description:
       path: "design/packages/flutter"
       ref: main
-      resolved-ref: "67c603755858c51b424c47bfd1da86d5be180572"
+      resolved-ref: a37abbe4310ea97a9938e10c28f1bb90c15f2bcc
       url: "https://github.com/ClashKingInc/DevKit.git"
     source: git
     version: "0.2.0"
@@ -801,10 +801,10 @@ packages:
     dependency: "direct main"
     description:
       name: liquid_glass_widgets
-      sha256: ac0d9d6602c165efe2da2b10586c67b6720ca7dd145011cea1eb40fc855a41c0
+      sha256: "62f498b0a4a5c4c09b6798f4c12267baadfc81eb71933158e27dfde5e94c355a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.21.6"
+    version: "0.22.1"
   logging:
     dependency: transitive
     description:
@@ -873,10 +873,10 @@ packages:
     dependency: "direct main"
     description:
       name: native_liquid_glass
-      sha256: "1e8299dae31c6a6962973fbe0f7f3823aecf307f29aba110fa1e4fe28640451a"
+      sha256: "4745b794461528f65a64e2b2a4df36c8cf34eb9c4bc6f0ac8fc948d2495184a2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.12"
+    version: "0.2.14"
   nested:
     dependency: transitive
     description:
@@ -1097,18 +1097,18 @@ packages:
     dependency: "direct main"
     description:
       name: share_plus
-      sha256: "02180b01c1237b9706b663d9402b2cf2402b3407f48cce99cc19e3200f095b8a"
+      sha256: "34f00f9becd2743c1fb05363d624f9f70d37f7ccdcdda47450bc0b8c9d327b8c"
       url: "https://pub.dev"
     source: hosted
-    version: "13.2.1"
+    version: "13.3.0"
   share_plus_platform_interface:
     dependency: transitive
     description:
       name: share_plus_platform_interface
-      sha256: "7f7ae28cf400d13f811e297ff37742dba83b79e0a6f5dce14eec0248274e6ce9"
+      sha256: "365ef7379fc22507256adda3385152942ffce08935452bc972c2e52a0bebae41"
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.0"
+    version: "7.2.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -1190,10 +1190,10 @@ packages:
     dependency: transitive
     description:
       name: source_gen
-      sha256: ec37cc0e6694374cbef59ed79685572c870a54ede6fa30a3e420feb3adffea02
+      sha256: a603f1fb984a7391ae5978d1b92bfaaa08b350dca5c825256f925818f7943bf5
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.3"
+    version: "4.2.4"
   source_span:
     dependency: transitive
     description:
