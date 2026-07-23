@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
@@ -149,6 +150,14 @@ class _PlayersPageState extends State<PlayersPage> {
           body: CustomScrollView(
             scrollCacheExtent: const ScrollCacheExtent.pixels(800),
             slivers: [
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                sliver: SliverToBoxAdapter(
+                  child: LastRefreshIndicator(
+                    lastRefresh: cocService.lastRefresh,
+                  ),
+                ),
+              ),
               SliverPadding(
                 padding: EdgeInsets.fromLTRB(
                   horizontalPadding,

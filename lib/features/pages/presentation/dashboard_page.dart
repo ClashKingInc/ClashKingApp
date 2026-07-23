@@ -19,6 +19,7 @@ import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repos
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
@@ -250,6 +251,7 @@ class DashboardPage extends StatelessWidget {
                 bottomPadding,
               ),
               children: [
+                LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
                 const HomeEventBanner(),
                 SizedBox(height: isDesktopWeb ? 24 : 16),
                 ..._buildBody(
