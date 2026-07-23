@@ -372,10 +372,18 @@ class HomeRankedCard extends StatefulWidget {
 /// to-do card's synchronous data never has a loading gap to begin with.
 class _HomeCardCache<T> {
   final Map<String, T> _entries = {};
+  // Bumped by clear() so a fetch already in flight from a signed-out
+  // session (e.g. a background revalidation kicked off just before logout)
+  // can no longer write a previous user's data back into this cache once
+  // it resolves.
+  int _generation = 0;
 
   void invalidate(String signature) => _entries.remove(signature);
 
-  void clear() => _entries.clear();
+  void clear() {
+    _entries.clear();
+    _generation++;
+  }
 
   Future<T> reload({
     required String signature,
@@ -383,25 +391,57 @@ class _HomeCardCache<T> {
     required void Function(T fresh) onFresh,
     bool Function(T fresh, T cached)? shouldReplace,
   }) {
+    final generation = _generation;
     final cached = _entries[signature];
     if (cached == null) {
       return fetch(forceRefresh: false).then((fresh) {
-        _entries[signature] = fresh;
+        if (generation == _generation) _entries[signature] = fresh;
+        // The underlying service may have handed back its own stale cache
+        // (e.g. warmed by the startup prefetch) without hitting the
+        // network — force a real revalidation even on this first load so
+        // Home doesn't keep showing that stale snapshot indefinitely.
+        _revalidate(
+          generation: generation,
+          signature: signature,
+          fetch: fetch,
+          baseline: fresh,
+          onFresh: onFresh,
+          shouldReplace: shouldReplace,
+        );
         return fresh;
       });
     }
-    // The account shown to the user may have changed since it was cached
-    // (attacks done, rank moved) — this background check must hit the real
-    // source, not just return the same cached value again.
+    _revalidate(
+      generation: generation,
+      signature: signature,
+      fetch: fetch,
+      baseline: cached,
+      onFresh: onFresh,
+      shouldReplace: shouldReplace,
+    );
+    return Future.value(cached);
+  }
+
+  // The account shown to the user may have changed since it was cached
+  // (attacks done, rank moved) — this background check must hit the real
+  // source, not just return the same cached value again.
+  void _revalidate({
+    required int generation,
+    required String signature,
+    required Future<T> Function({required bool forceRefresh}) fetch,
+    required T baseline,
+    required void Function(T fresh) onFresh,
+    bool Function(T fresh, T cached)? shouldReplace,
+  }) {
     fetch(forceRefresh: true).then((fresh) {
+      if (generation != _generation) return;
       // Both card loaders swallow per-account fetch errors and still return
       // a "valid" but degraded summary — a transient endpoint failure must
       // not blank out data the user was already looking at.
-      if (shouldReplace != null && !shouldReplace(fresh, cached)) return;
+      if (shouldReplace != null && !shouldReplace(fresh, baseline)) return;
       _entries[signature] = fresh;
       onFresh(fresh);
     });
-    return Future.value(cached);
   }
 }
 
