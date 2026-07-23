@@ -5,6 +5,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/observability_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
@@ -400,6 +401,7 @@ class CocAccountService extends ChangeNotifier {
         clanService,
         warCwlService,
         bookmarkedClanTags: bookmarkedClanTags,
+        forceAuxiliaryRefresh: true,
       );
       _lastRefresh = DateTime.now();
       _safeNotify();
@@ -490,10 +492,29 @@ class CocAccountService extends ChangeNotifier {
     ClanService clanService,
     WarCwlService warCwlService, {
     List<String> bookmarkedClanTags = const [],
+    bool forceAuxiliaryRefresh = false,
   }) async {
     DebugUtils.debugInfo(
       "🚀 Hydrating ${playerTags.length} players with parallel requests",
     );
+
+    // At startup this stays outside the awaited critical path so slow
+    // per-account endpoints never delay the loading screen. Manual refresh
+    // forces and awaits it so lastRefresh covers the Home dashboard cards too.
+    UpgradeTrackerRepository.shared.configureRemote(
+      accountId: _currentUserId,
+      verifiedPlayerTags: verifiedAccounts.map(
+        (account) => account['player_tag']?.toString() ?? '',
+      ),
+    );
+    final homeDashboardWarmup = _warmHomeDashboardData(
+      playerTags,
+      playerService,
+      forceRefresh: forceAuxiliaryRefresh,
+    );
+    if (!forceAuxiliaryRefresh) {
+      unawaited(homeDashboardWarmup);
+    }
 
     final timer = Stopwatch()..start();
     final cachedClanTagsByPlayer = await _cachedClanTagsByPlayer(playerTags);
@@ -543,6 +564,10 @@ class CocAccountService extends ChangeNotifier {
         ),
     ]);
 
+    if (forceAuxiliaryRefresh) {
+      await homeDashboardWarmup;
+    }
+
     final allClanTags = {
       ...optimisticClanTags,
       ...discoveredClanTags,
@@ -556,6 +581,29 @@ class CocAccountService extends ChangeNotifier {
     DebugUtils.debugSuccess(
       "All data linked successfully in ${timer.elapsedMilliseconds} ms",
     );
+  }
+
+  Future<void> _warmHomeDashboardData(
+    Iterable<String> playerTags,
+    PlayerService playerService, {
+    required bool forceRefresh,
+  }) async {
+    await Future.wait([
+      playerService.prefetchRankedLeagueData(
+        playerTags,
+        forceRefresh: forceRefresh,
+      ),
+      ...playerTags.map((tag) async {
+        try {
+          await UpgradeTrackerRepository.shared.load(
+            tag,
+            forceRefresh: forceRefresh,
+          );
+        } catch (_) {
+          // Best-effort warm-up only; card-level loads surface their own errors.
+        }
+      }),
+    ]);
   }
 
   Future<Map<String, String>> _cachedClanTagsByPlayer(

@@ -1,7 +1,10 @@
+import 'dart:async' show unawaited;
+
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -37,16 +40,20 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   @override
   void initState() {
     super.initState();
-    _fetch();
+    _fetch(forceRefresh: false);
   }
 
   // Keeps the last-loaded data mounted across a refresh instead of tearing
   // down the hero header/tabs — the RefreshIndicator already provides the
   // reload affordance, so a full-screen loading swap would just be a flash.
-  Future<void> _fetch() async {
+  // Same philosophy applies to opening the screen itself: show a warmed
+  // cache instantly (no loading flash) and quietly revalidate in the
+  // background, rather than forcing every open through a spinner.
+  Future<void> _fetch({required bool forceRefresh}) async {
     try {
       final data = await context.read<PlayerService>().loadRankedLeagueData(
         widget.player.tag,
+        forceRefresh: forceRefresh,
       );
       if (!mounted) return;
       setState(() {
@@ -57,9 +64,28 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
       if (!mounted) return;
       setState(() => _loading = false);
     }
+    if (!forceRefresh) {
+      // The cached value just shown may already be stale (attacks done,
+      // rank moved since it was cached) — catch up silently instead of
+      // leaving the user looking at outdated numbers all session.
+      unawaited(_revalidate());
+    }
   }
 
-  Future<void> _refresh() => _fetch();
+  Future<void> _revalidate() async {
+    try {
+      final fresh = await context.read<PlayerService>().loadRankedLeagueData(
+        widget.player.tag,
+        forceRefresh: true,
+      );
+      if (!mounted) return;
+      setState(() => _data = fresh);
+    } catch (_) {
+      // Best-effort only; the initial fetch already surfaced any error.
+    }
+  }
+
+  Future<void> _refresh() => _fetch(forceRefresh: true);
 
   void _selectTab(int index) {
     final clamped = index.clamp(0, 1);
@@ -548,7 +574,7 @@ class _BestTierPagerState extends State<_BestTierPager> {
         if (highlights.length > 1) ...[
           const SizedBox(height: 10),
           Center(
-            child: _TierPageDots(
+            child: PageDotsIndicator(
               count: highlights.length,
               index: _index,
               onDotTap: _showPage,
@@ -737,50 +763,6 @@ class _CategoryStatRow extends StatelessWidget {
         const SizedBox(width: 4),
         Text(value, style: Theme.of(context).textTheme.labelMedium),
       ],
-    );
-  }
-}
-
-class _TierPageDots extends StatelessWidget {
-  const _TierPageDots({
-    required this.count,
-    required this.index,
-    this.onDotTap,
-  });
-
-  final int count;
-  final int index;
-  final ValueChanged<int>? onDotTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(count, (dotIndex) {
-        final selected = dotIndex == index;
-        final dot = AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          width: selected ? 18 : 7,
-          height: 7,
-          margin: const EdgeInsets.symmetric(horizontal: 2),
-          decoration: BoxDecoration(
-            color: selected
-                ? colorScheme.onSurface
-                : colorScheme.onSurface.withValues(alpha: 0.24),
-            borderRadius: BorderRadius.circular(999),
-          ),
-        );
-        if (onDotTap == null) return dot;
-        return InkResponse(
-          radius: 14,
-          onTap: () => onDotTap!(dotIndex),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
-            child: dot,
-          ),
-        );
-      }),
     );
   }
 }
@@ -1061,11 +1043,9 @@ class _BattleSide extends StatelessWidget {
                     ),
                   ),
                   if (battles.isNotEmpty)
-                    Text(
-                      ' ($sign${total.abs()})',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: isDefense ? StatColors.loss : StatColors.win,
-                      ),
+                    _TrophyDeltaSuperscript(
+                      value: '$sign${total.abs()}',
+                      isDefense: isDefense,
                     ),
                 ],
               ),
@@ -1101,6 +1081,34 @@ class _BattleSide extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TrophyDeltaSuperscript extends StatelessWidget {
+  const _TrophyDeltaSuperscript({required this.value, required this.isDefense});
+
+  final String value;
+  final bool isDefense;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isDefense ? StatColors.loss : StatColors.win;
+    return Transform.translate(
+      offset: const Offset(0, -4),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 1),
+        child: Text(
+          '($value)',
+          maxLines: 1,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: color,
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
+            height: 1,
+          ),
+        ),
       ),
     );
   }
@@ -1243,28 +1251,39 @@ class _BattleLine extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _BattleStars(stars: battle.stars),
-                    const SizedBox(width: 6),
-                    Text(
-                      '${battle.destructionPercentage.toStringAsFixed(0)}%',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _BattleStars(stars: battle.stars),
+                        const SizedBox(width: 6),
+                        _FixedPercentText(
+                          value:
+                              '${battle.destructionPercentage.toStringAsFixed(0)}%',
+                          reservedValue: '100%',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(width: 1),
+                        _TrophyDeltaSuperscript(
+                          value: signedTrophies,
+                          isDefense: isDefense,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 6),
-                    Text(
-                      signedTrophies,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: isDefense ? StatColors.loss : StatColors.win,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 if (time != null) ...[
                   const SizedBox(height: 2),
-                  Text(time, style: Theme.of(context).textTheme.labelSmall),
+                  Text(
+                    time,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
                 ],
               ],
             ),
@@ -1313,30 +1332,43 @@ class _EmptyBattleLine extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const _BattleStars(stars: 0),
-                      const SizedBox(width: 6),
-                      Text(
-                        '-%',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(color: muted),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const _BattleStars(stars: 0),
+                          const SizedBox(width: 6),
+                          _FixedPercentText(
+                            value: '-%',
+                            reservedValue: '100%',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(color: muted),
+                          ),
+                          const SizedBox(width: 1),
+                          Text(
+                            '(-)',
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: muted,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1,
+                                ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        '-',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: muted,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '-',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(
                       context,
                     ).textTheme.labelSmall?.copyWith(color: muted),
@@ -1347,6 +1379,34 @@ class _EmptyBattleLine extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FixedPercentText extends StatelessWidget {
+  const _FixedPercentText({
+    required this.value,
+    required this.reservedValue,
+    this.style,
+  });
+
+  final String value;
+  final String reservedValue;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    final direction = Directionality.of(context);
+    final effectiveStyle = DefaultTextStyle.of(context).style.merge(style);
+    final painter = TextPainter(
+      text: TextSpan(text: reservedValue, style: effectiveStyle),
+      textDirection: direction,
+      maxLines: 1,
+    )..layout();
+
+    return SizedBox(
+      width: painter.width,
+      child: Text(value, maxLines: 1, textAlign: TextAlign.right, style: style),
     );
   }
 }

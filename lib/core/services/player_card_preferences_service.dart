@@ -8,29 +8,43 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///
 /// These are the toggles revealed under each player card (notifications,
 /// show this account's clan in the War tab, and show this account in the full
-/// to-do page). Home always includes every verified account in fixed order.
+/// to-do page).
 class PlayerCardOptions {
   const PlayerCardOptions({
     this.notificationsEnabled = false,
     this.showInWarTab = true,
     this.showInTodoPage = true,
+    this.showUpgradeTrackerOnHome = true,
+    this.showRankedOnHome = true,
   });
 
   final bool notificationsEnabled;
   final bool showInWarTab;
   final bool showInTodoPage;
+  final bool showUpgradeTrackerOnHome;
+  final bool showRankedOnHome;
 
-  bool get isDefault => !notificationsEnabled && showInWarTab && showInTodoPage;
+  bool get isDefault =>
+      !notificationsEnabled &&
+      showInWarTab &&
+      showInTodoPage &&
+      showUpgradeTrackerOnHome &&
+      showRankedOnHome;
 
   PlayerCardOptions copyWith({
     bool? notificationsEnabled,
     bool? showInWarTab,
     bool? showInTodoPage,
+    bool? showUpgradeTrackerOnHome,
+    bool? showRankedOnHome,
   }) {
     return PlayerCardOptions(
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       showInWarTab: showInWarTab ?? this.showInWarTab,
       showInTodoPage: showInTodoPage ?? this.showInTodoPage,
+      showUpgradeTrackerOnHome:
+          showUpgradeTrackerOnHome ?? this.showUpgradeTrackerOnHome,
+      showRankedOnHome: showRankedOnHome ?? this.showRankedOnHome,
     );
   }
 
@@ -38,6 +52,8 @@ class PlayerCardOptions {
     'notifications': notificationsEnabled,
     'warTab': showInWarTab,
     'todoPage': showInTodoPage,
+    'upgradeTrackerHome': showUpgradeTrackerOnHome,
+    'rankedHome': showRankedOnHome,
   };
 
   factory PlayerCardOptions.fromJson(Map<String, dynamic> json) {
@@ -45,6 +61,8 @@ class PlayerCardOptions {
       notificationsEnabled: json['notifications'] == true,
       showInWarTab: json['warTab'] != false,
       showInTodoPage: json['todoPage'] != false,
+      showUpgradeTrackerOnHome: json['upgradeTrackerHome'] != false,
+      showRankedOnHome: json['rankedHome'] != false,
     );
   }
 }
@@ -72,6 +90,20 @@ class PlayerCardPreferencesService extends ChangeNotifier {
   bool isShownInWarTab(String tag) => optionsFor(tag).showInWarTab;
 
   bool isShownInTodoPage(String tag) => optionsFor(tag).showInTodoPage;
+
+  bool isUpgradeTrackerShownOnHome(String tag) =>
+      optionsFor(tag).showUpgradeTrackerOnHome;
+
+  bool isRankedShownOnHome(String tag) => optionsFor(tag).showRankedOnHome;
+
+  /// Drops the in-memory per-tag options — called on sign-out so a shared
+  /// device's next signed-in account never inherits the previous account's
+  /// "hidden from Home" choices for a tag it also happens to verify, even
+  /// though the persisted preferences were already cleared.
+  void clear() {
+    _optionsByTag.clear();
+    notifyListeners();
+  }
 
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -108,6 +140,17 @@ class PlayerCardPreferencesService extends ChangeNotifier {
 
   Future<void> setShowInTodoPage(String tag, bool value) {
     return _update(tag, (options) => options.copyWith(showInTodoPage: value));
+  }
+
+  Future<void> setShowUpgradeTrackerOnHome(String tag, bool value) {
+    return _update(
+      tag,
+      (options) => options.copyWith(showUpgradeTrackerOnHome: value),
+    );
+  }
+
+  Future<void> setShowRankedOnHome(String tag, bool value) {
+    return _update(tag, (options) => options.copyWith(showRankedOnHome: value));
   }
 
   Future<void> _update(

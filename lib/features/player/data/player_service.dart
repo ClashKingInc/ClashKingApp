@@ -252,8 +252,59 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
-  Future<RankedLeagueData> loadRankedLeagueData(String rawPlayerTag) async {
+  final Map<String, RankedLeagueData> _rankedLeagueCache = {};
+  int _rankedLeagueCacheGeneration = 0;
+
+  /// Drops the in-memory Ranked League cache — called on sign-out so a
+  /// shared device's next account never sees a previous user's cached
+  /// Ranked data before its own fetch completes. Bumping the generation
+  /// also discards any fetch already in flight from the signed-out
+  /// session — e.g. a best-effort startup prefetch still running when the
+  /// user logs out — so it can no longer write the old account's data
+  /// back into the cache once it resolves.
+  void clearRankedLeagueCache() {
+    _rankedLeagueCache.clear();
+    _rankedLeagueCacheGeneration++;
+  }
+
+  /// Warms the ranked league cache for several accounts in parallel — used
+  /// at app startup so the Home dashboard's Ranked card never has to wait,
+  /// the same way its base player profiles are already hydrated by then.
+  /// Failures are swallowed per-account; callers that need a specific
+  /// account's data still call [loadRankedLeagueData] directly.
+  Future<void> prefetchRankedLeagueData(
+    Iterable<String> playerTags, {
+    bool forceRefresh = false,
+  }) async {
+    await Future.wait(
+      playerTags.map((tag) async {
+        try {
+          await loadRankedLeagueData(tag, forceRefresh: forceRefresh);
+        } catch (_) {
+          // Best-effort warm-up only; the real load surfaces its own errors.
+        }
+      }),
+    );
+  }
+
+  Future<RankedLeagueData> loadRankedLeagueData(
+    String rawPlayerTag, {
+    bool forceRefresh = false,
+  }) async {
     final playerTag = _canonicalTag(rawPlayerTag);
+    if (!forceRefresh) {
+      final cached = _rankedLeagueCache[playerTag];
+      if (cached != null) return cached;
+    }
+    final generation = _rankedLeagueCacheGeneration;
+    final data = await _fetchRankedLeagueData(playerTag);
+    if (generation == _rankedLeagueCacheGeneration) {
+      _rankedLeagueCache[playerTag] = data;
+    }
+    return data;
+  }
+
+  Future<RankedLeagueData> _fetchRankedLeagueData(String playerTag) async {
     final encodedPlayerTag = Uri.encodeComponent(playerTag);
     final playerResponse = await _apiService.proxyGet(
       '/players/$encodedPlayerTag',

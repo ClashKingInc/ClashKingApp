@@ -9,11 +9,13 @@ import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/services/app_icon_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/live_activity_debug_service.dart';
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
+import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
 import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
@@ -692,9 +694,18 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       context,
       listen: false,
     );
+    final playerService = Provider.of<PlayerService>(context, listen: false);
+    final cardPreferences = Provider.of<PlayerCardPreferencesService>(
+      context,
+      listen: false,
+    );
 
     await authService.logoutAndClearAllData();
     cocAccountService.clearAccountData();
+    clearAccountScopedHomeCaches(
+      playerService,
+      cardPreferences: cardPreferences,
+    );
 
     globalNavigatorKey.currentState?.pushReplacement(
       MaterialPageRoute(builder: (context) => LoginPage()),

@@ -1,7 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
+import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
@@ -395,7 +394,7 @@ class _HeaderProgressRing extends StatelessWidget {
     return SizedBox.square(
       dimension: size,
       child: CustomPaint(
-        painter: _HeaderRingPainter(
+        painter: ProgressRingPainter(
           value: ratio,
           color: color,
           trackColor: colorScheme.surfaceContainerHighest,
@@ -413,52 +412,6 @@ class _HeaderProgressRing extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _HeaderRingPainter extends CustomPainter {
-  final double value;
-  final Color color;
-  final Color trackColor;
-
-  const _HeaderRingPainter({
-    required this.value,
-    required this.color,
-    required this.trackColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width * 0.15;
-    final rect =
-        Offset(strokeWidth / 2, strokeWidth / 2) &
-        Size(size.width - strokeWidth, size.height - strokeWidth);
-    final trackPaint = Paint()
-      ..color = trackColor
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
-    final valuePaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
-
-    canvas.drawArc(rect, -math.pi / 2, math.pi * 2, false, trackPaint);
-    canvas.drawArc(
-      rect,
-      -math.pi / 2,
-      math.pi * 2 * value.clamp(0, 1),
-      false,
-      valuePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _HeaderRingPainter oldDelegate) {
-    return oldDelegate.value != value ||
-        oldDelegate.color != color ||
-        oldDelegate.trackColor != trackColor;
   }
 }
 
@@ -635,24 +588,36 @@ class _TodoHeaderSummary {
         }
       }
 
-      final warData = player.warData;
-      if (warData != null &&
-          warData.state == 'inWar' &&
-          !_isSameWarAsCwl(player)) {
-        final total = warData.attacksPerMember ?? 0;
-        final done = warData.getAttacksDoneByPlayer(player.tag, player.clanTag);
+      // `clan.warCwl.warInfo` is the primary source of "this clan's current
+      // war", used for both regular wars and CWL rounds — `isInCwl` decides
+      // which bucket/label it belongs to. `player.warData` (from the player
+      // endpoint directly) is the fallback for players hydrated without a
+      // linked `clan.warCwl` (e.g. bookmarked/public accounts).
+      final currentWar = player.clan?.warCwl?.warInfo ?? player.warData;
+      final isActuallyInCwl = player.clan?.warCwl?.isInCwl == true;
+      if (currentWar != null &&
+          currentWar.state == 'inWar' &&
+          currentWar.isPlayerInWar(player.tag, player.clanTag)) {
+        final total = currentWar.attacksPerMember ?? (isActuallyInCwl ? 1 : 2);
+        final done = currentWar.getAttacksDoneByPlayer(
+          player.tag,
+          player.clanTag,
+        );
         if (total > 0) {
-          warDone += done;
-          warTotal += total;
+          if (isActuallyInCwl) {
+            cwlDone += done;
+            cwlTotal += total;
+          } else {
+            warDone += done;
+            warTotal += total;
+          }
           if (done < total) {
             playerOpenTasks++;
           } else {
             completedTasks++;
           }
         }
-      }
-
-      if (presence.attacksAvailable > 0) {
+      } else if (isActuallyInCwl && presence.attacksAvailable > 0) {
         cwlDone += presence.attacksDone;
         cwlTotal += presence.attacksAvailable;
         if (presence.attacksDone < presence.attacksAvailable) {
@@ -675,8 +640,9 @@ class _TodoHeaderSummary {
       }
 
       if (isInTimeFrameForClanGames()) {
+        final required = requiredClanGamesPoints;
         clanGamesDone += player.currentClanGamesPoints;
-        clanGamesTotal += requiredClanGamesPoints;
+        clanGamesTotal += required > 0 ? required : 4000;
         if (player.clanGamesRatio < 1) {
           playerOpenTasks++;
         } else {
@@ -743,18 +709,5 @@ class _TodoHeaderSummary {
     WarMemberPresence presence,
   ) {
     return player.getTodoProgressMetrics(memberCwl: presence);
-  }
-
-  static bool _isSameWarAsCwl(Player player) {
-    if (player.warData == null || player.clan?.warCwl?.warInfo == null) {
-      return false;
-    }
-
-    final regularWar = player.warData!;
-    final cwlWar = player.clan!.warCwl!.warInfo;
-    return (regularWar.clan?.tag == cwlWar.clan?.tag &&
-            regularWar.opponent?.tag == cwlWar.opponent?.tag) ||
-        (regularWar.clan?.tag == cwlWar.opponent?.tag &&
-            regularWar.opponent?.tag == cwlWar.clan?.tag);
   }
 }

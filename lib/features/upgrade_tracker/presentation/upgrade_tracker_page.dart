@@ -47,14 +47,19 @@ bool _isTrackerDesktop(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= _trackerDesktopBreakpoint;
 
 class UpgradeTrackerPage extends StatefulWidget {
-  const UpgradeTrackerPage({super.key});
+  const UpgradeTrackerPage({super.key, this.initialTag});
+
+  /// Opens directly on this account instead of the first linked one — used
+  /// when navigating in from a specific account's card/row elsewhere in the
+  /// app (e.g. a Home dashboard panel).
+  final String? initialTag;
 
   @override
   State<UpgradeTrackerPage> createState() => _UpgradeTrackerPageState();
 }
 
 class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
-  final _repository = UpgradeTrackerRepository();
+  final _repository = UpgradeTrackerRepository.shared;
   final _widgetSync = const UpgradeWidgetSyncService();
   final _planLanes = ValueNotifier<List<UpgradePlanLane>>(const []);
   final _clock = ValueNotifier<DateTime>(DateTime.now());
@@ -161,7 +166,20 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       accountId: context.read<AuthService>().currentUser?.userId,
       verifiedPlayerTags: linkedTags,
     );
-    final initial = linkedTags.firstOrNull;
+    final normalizedRequestedTag = widget.initialTag == null
+        ? null
+        : UpgradeTrackerRepository.normalizeTag(widget.initialTag!);
+    final requested = normalizedRequestedTag == null
+        ? null
+        : linkedTags.firstWhere(
+            (tag) =>
+                UpgradeTrackerRepository.normalizeTag(tag) ==
+                normalizedRequestedTag,
+            orElse: () => '',
+          );
+    final initial = (requested != null && requested.isNotEmpty)
+        ? requested
+        : linkedTags.firstOrNull;
     unawaited(_loadSnapshotMetadata());
     if (initial == null) {
       setState(() => _loading = false);
@@ -199,53 +217,70 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   Future<void> _load(String tag) async {
     _ticker?.cancel();
     _ticker = null;
+    // A snapshot already warmed in memory (e.g. by the startup prefetch, or
+    // a previous visit to this tag) can render immediately; only fall back
+    // to a loading state when nothing is available yet to show.
+    final cached = _repository.peekCached(tag);
     setState(() {
       _selectedTag = tag;
-      _loading = true;
+      _loading = cached == null;
       _error = null;
       _planData = null;
     });
+    if (cached != null) {
+      _applyCachedSnapshot(cached);
+      unawaited(_hydrateCachedSnapshot(tag, cached));
+      return;
+    }
+    await _fetchAndApply(tag);
+  }
+
+  Future<void> _hydrateCachedSnapshot(
+    String tag,
+    UpgradeTrackerSnapshot snapshot,
+  ) async {
+    await _applySnapshot(snapshot);
+    if (!mounted || _selectedTag != tag) return;
+    await _revalidate(tag);
+  }
+
+  void _applyCachedSnapshot(UpgradeTrackerSnapshot snapshot) {
+    final goldPassPercent = _resolveGoldPassPercent(snapshot, null);
+    const planPreferences = UpgradePlanPreferences();
+    final planData = _buildTrackerPlanData(
+      snapshot,
+      goldPassPercent: goldPassPercent,
+      preferences: planPreferences,
+    );
+    setState(() {
+      _snapshot = snapshot;
+      _loading = false;
+      _error = null;
+      _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(snapshot.tag)] =
+          snapshot.capturedAt;
+      _goldPassPercent = goldPassPercent;
+      _planPreferences = planPreferences;
+      _planData = planData;
+    });
+    _planLanes.value = planData.allLanes;
+    _scheduleClockTick();
+  }
+
+  Future<void> _revalidate(String tag) async {
+    try {
+      final snapshot = await _repository.load(tag, forceRefresh: true);
+      if (!mounted || snapshot == null || _selectedTag != tag) return;
+      await _applySnapshot(snapshot);
+    } catch (_) {
+      // Best-effort only; the cached snapshot already rendered.
+    }
+  }
+
+  Future<void> _fetchAndApply(String tag) async {
     try {
       final snapshot = await _repository.load(tag);
-      final draft = snapshot == null
-          ? null
-          : await _repository.loadPlanPreferences(snapshot.tag);
       if (!mounted) return;
-      setState(() {
-        _snapshot = snapshot;
-        _loading = false;
-        if (snapshot != null) {
-          _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(
-                snapshot.tag,
-              )] =
-              snapshot.capturedAt;
-        }
-        final detectedGoldPass = snapshot == null
-            ? 0
-            : [
-                snapshot.boosts.builderCostReductionPercent,
-                snapshot.boosts.builderTimeReductionPercent,
-                snapshot.boosts.labCostReductionPercent,
-                snapshot.boosts.labTimeReductionPercent,
-              ].reduce((a, b) => a > b ? a : b);
-        final savedGoldPass = draft?['gold_pass_percent'];
-        final parsedGoldPass = savedGoldPass is num
-            ? savedGoldPass.toInt()
-            : int.tryParse(savedGoldPass?.toString() ?? '');
-        _goldPassPercent = (parsedGoldPass ?? detectedGoldPass).clamp(0, 100);
-        _planPreferences = UpgradePlanPreferences.fromJson(
-          draft?['heuristics'] is Map
-              ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
-              : null,
-        );
-      });
-      if (snapshot != null) {
-        _rebuildPlanLanes(snapshot);
-        _scheduleClockTick();
-      } else {
-        _planLanes.value = const [];
-      }
-      _scheduleWidgetSync();
+      await _applySnapshot(snapshot);
     } catch (error) {
       if (!mounted) return;
       setState(() {
@@ -256,6 +291,55 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       });
       _planLanes.value = const [];
     }
+  }
+
+  Future<void> _applySnapshot(UpgradeTrackerSnapshot? snapshot) async {
+    final draft = snapshot == null
+        ? null
+        : await _repository.loadPlanPreferences(snapshot.tag);
+    if (!mounted) return;
+    final goldPassPercent = _resolveGoldPassPercent(snapshot, draft);
+    final planPreferences = UpgradePlanPreferences.fromJson(
+      draft?['heuristics'] is Map
+          ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
+          : null,
+    );
+    setState(() {
+      _snapshot = snapshot;
+      _loading = false;
+      if (snapshot != null) {
+        _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(snapshot.tag)] =
+            snapshot.capturedAt;
+      }
+      _goldPassPercent = goldPassPercent;
+      _planPreferences = planPreferences;
+    });
+    if (snapshot != null) {
+      _rebuildPlanLanes(snapshot);
+      _scheduleClockTick();
+    } else {
+      _planLanes.value = const [];
+    }
+    _scheduleWidgetSync();
+  }
+
+  int _resolveGoldPassPercent(
+    UpgradeTrackerSnapshot? snapshot,
+    Map<String, dynamic>? draft,
+  ) {
+    final detectedGoldPass = snapshot == null
+        ? 0
+        : [
+            snapshot.boosts.builderCostReductionPercent,
+            snapshot.boosts.builderTimeReductionPercent,
+            snapshot.boosts.labCostReductionPercent,
+            snapshot.boosts.labTimeReductionPercent,
+          ].reduce((a, b) => a > b ? a : b);
+    final savedGoldPass = draft?['gold_pass_percent'];
+    final parsedGoldPass = savedGoldPass is num
+        ? savedGoldPass.toInt()
+        : int.tryParse(savedGoldPass?.toString() ?? '');
+    return (parsedGoldPass ?? detectedGoldPass).clamp(0, 100);
   }
 
   Future<void> _importSnapshot() async {

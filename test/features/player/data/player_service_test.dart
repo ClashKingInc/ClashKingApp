@@ -637,4 +637,46 @@ void main() {
       expect(service.clans, isEmpty);
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // PlayerService.loadRankedLeagueData caching
+  // ---------------------------------------------------------------------------
+
+  group('PlayerService — loadRankedLeagueData caching', () {
+    late FakeApiService fakeApi;
+    late PlayerService service;
+
+    setUp(() {
+      fakeApi = FakeApiService();
+      fakeApi.getStubs['/players/%23P1'] = http.Response(
+        jsonEncode({'tag': '#P1', 'name': 'Hero'}),
+        200,
+      );
+      fakeApi.getStubs['/players/%23P1/leaguehistory'] = http.Response(
+        '{}',
+        200,
+      );
+      fakeApi.getStubs['/leaguetiers'] = http.Response('{}', 200);
+      service = PlayerService(apiService: fakeApi);
+    });
+
+    test('a second call reuses the cached result by default', () async {
+      await service.loadRankedLeagueData('#P1');
+      await service.loadRankedLeagueData('#P1');
+      expect(fakeApi.getCallCounts['/players/%23P1'], 1);
+    });
+
+    test('forceRefresh always hits the network', () async {
+      await service.loadRankedLeagueData('#P1');
+      await service.loadRankedLeagueData('#P1', forceRefresh: true);
+      expect(fakeApi.getCallCounts['/players/%23P1'], 2);
+    });
+
+    test('clearRankedLeagueCache forces the next call to refetch', () async {
+      await service.loadRankedLeagueData('#P1');
+      service.clearRankedLeagueCache();
+      await service.loadRankedLeagueData('#P1');
+      expect(fakeApi.getCallCounts['/players/%23P1'], 2);
+    });
+  });
 }

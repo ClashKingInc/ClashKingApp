@@ -7,6 +7,10 @@ import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_mod
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpgradeTrackerRepository {
+  // Shared app-wide so accounts fetched once (e.g. at startup, or by the
+  // Home dashboard) stay warm in memory for every other screen.
+  static final UpgradeTrackerRepository shared = UpgradeTrackerRepository();
+
   UpgradeTrackerRepository({
     UpgradeTrackerParser parser = const UpgradeTrackerParser(),
     ApiService? apiService,
@@ -24,6 +28,7 @@ class UpgradeTrackerRepository {
   final Map<String, UpgradeTrackerSnapshot> _snapshotCache = {};
   String? _remoteAccountId;
   Set<String> _verifiedRemoteTags = const {};
+  int _cacheGeneration = 0;
 
   void configureRemote({
     required String? accountId,
@@ -39,38 +44,86 @@ class UpgradeTrackerRepository {
         .toSet();
   }
 
-  Future<UpgradeTrackerSnapshot?> load(String playerTag) async {
+  /// Drops the in-memory snapshot cache and remote config — called on
+  /// sign-out so a shared device's next account never sees a previous
+  /// user's cached upgrade data before its own fetch completes. Bumping
+  /// the generation also discards any fetch already in flight from the
+  /// signed-out session — e.g. a best-effort startup prefetch still
+  /// running when the user logs out — so it can no longer write the old
+  /// account's data back into memory or persisted preferences once it
+  /// resolves.
+  void clearCache() {
+    _snapshotCache.clear();
+    _remoteAccountId = null;
+    _verifiedRemoteTags = const {};
+    _cacheGeneration++;
+  }
+
+  /// Returns an already in-memory snapshot without touching the network or
+  /// disk, so callers can render instantly and revalidate in the background
+  /// (e.g. a snapshot warmed by the startup prefetch) instead of flashing a
+  /// loading state for data that's already sitting in memory.
+  UpgradeTrackerSnapshot? peekCached(String playerTag) {
+    return _snapshotCache[normalizeTag(playerTag)];
+  }
+
+  Future<UpgradeTrackerSnapshot?> load(
+    String playerTag, {
+    bool forceRefresh = false,
+  }) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
-    if (_remoteAccountId != null && _verifiedRemoteTags.contains(normalized)) {
-      try {
-        final remote = await _loadRemoteSnapshot(normalized);
-        if (remote != null) {
-          final parsed = _parser.parse(remote);
-          await _saveRawSnapshotLocally(
-            normalized,
-            remote,
-            parsedSnapshot: parsed,
-          );
-          return parsed;
-        }
-      } catch (_) {
-        // The on-device copy remains a deliberate offline fallback.
-      }
+    final generation = _cacheGeneration;
+    if (!forceRefresh) {
+      final cached = _snapshotCache[normalized];
+      if (cached != null) return cached;
     }
+    final remote = await _tryLoadRemoteSnapshot(normalized, generation);
+    if (remote != null) return remote;
     final cached = _snapshotCache[normalized];
     if (cached != null) return cached;
+    return _loadPersistedSnapshot(normalized, generation);
+  }
+
+  Future<UpgradeTrackerSnapshot?> _tryLoadRemoteSnapshot(
+    String normalized,
+    int generation,
+  ) async {
+    if (_remoteAccountId == null || !_verifiedRemoteTags.contains(normalized)) {
+      return null;
+    }
+    try {
+      final remote = await _loadRemoteSnapshot(normalized);
+      if (remote == null) return null;
+      final parsed = _parser.parse(remote);
+      if (generation == _cacheGeneration) {
+        await _saveRawSnapshotLocally(
+          normalized,
+          remote,
+          parsedSnapshot: parsed,
+        );
+      }
+      return parsed;
+    } catch (_) {
+      // The on-device copy remains a deliberate offline fallback.
+      return null;
+    }
+  }
+
+  Future<UpgradeTrackerSnapshot?> _loadPersistedSnapshot(
+    String normalized,
+    int generation,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString('$_snapshotPrefix$normalized');
-    if (saved != null) {
-      final decoded = jsonDecode(saved);
-      if (decoded is Map) {
-        final parsed = _parser.parse(Map<String, dynamic>.from(decoded));
-        _snapshotCache[normalized] = parsed;
-        return parsed;
-      }
+    if (saved == null) return null;
+    final decoded = jsonDecode(saved);
+    if (decoded is! Map) return null;
+    final parsed = _parser.parse(Map<String, dynamic>.from(decoded));
+    if (generation == _cacheGeneration) {
+      _snapshotCache[normalized] = parsed;
     }
-    return null;
+    return parsed;
   }
 
   Future<void> saveRawSnapshot(

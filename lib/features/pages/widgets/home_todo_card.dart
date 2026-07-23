@@ -1,7 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
@@ -23,23 +26,6 @@ const double _homePagerDesktopBreakpoint = 900;
 
 bool _usesDesktopHomePager(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= _homePagerDesktopBreakpoint;
-
-void _animateHomePagerTo(
-  BuildContext context,
-  PageController controller,
-  int page,
-) {
-  if (!controller.hasClients) return;
-  if (CKMotion.animationsDisabled(context)) {
-    controller.jumpToPage(page);
-    return;
-  }
-  controller.animateToPage(
-    page,
-    duration: CKMotion.fast,
-    curve: CKMotion.standardCurve,
-  );
-}
 
 class HomeEventBanner extends StatefulWidget {
   const HomeEventBanner({super.key});
@@ -73,7 +59,7 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
     if (count <= 0) return;
     final next = page % count;
     setState(() => _index = next);
-    _animateHomePagerTo(context, _controller, next);
+    animatePagerTo(context, _controller, next);
   }
 
   @override
@@ -128,10 +114,11 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  _PageDots(
+                  PageDotsIndicator(
                     count: items.length,
                     index: _index,
                     onDotTap: (index) => _showBannerPage(items.length, index),
+                    tooltipForIndex: (index) => 'Card ${index + 1}',
                   ),
                   const SizedBox(width: 12),
                   _PagerArrowButton(
@@ -154,7 +141,7 @@ class _HomeEventBannerState extends State<HomeEventBanner> {
                 ],
               )
             else
-              _PageDots(count: items.length, index: _index),
+              PageDotsIndicator(count: items.length, index: _index),
           ],
         );
       },
@@ -204,7 +191,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
     if (count <= 0) return;
     final next = page % count;
     setState(() => _index = next);
-    _animateHomePagerTo(context, _controller, next);
+    animatePagerTo(context, _controller, next);
   }
 
   @override
@@ -291,10 +278,11 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _PageDots(
+                PageDotsIndicator(
                   count: itemCount,
                   index: _index,
                   onDotTap: (index) => _showTodoPage(itemCount, index),
+                  tooltipForIndex: (index) => 'Card ${index + 1}',
                 ),
                 const SizedBox(width: 12),
                 _PagerArrowButton(
@@ -316,7 +304,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
             )
           else
             Center(
-              child: _PageDots(count: itemCount, index: _index),
+              child: PageDotsIndicator(count: itemCount, index: _index),
             ),
         ],
       ],
@@ -339,6 +327,11 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       return _AllAccountsPanel(
         accountCount: widget.players.length,
         summary: summaries[index],
+        status: _todoAllAccountsStatus(
+          context,
+          widget.players,
+          summaries.sublist(1),
+        ),
         onTap: () => _openTodo(context, warCwlService!),
       );
     }
@@ -587,24 +580,53 @@ class _AccountTodoPanel extends StatelessWidget {
   }
 }
 
+/// Names the accounts that still have tasks left today, falling back to a
+/// generic combined label once every account is caught up.
+String _todoAllAccountsStatus(
+  BuildContext context,
+  List<Player> players,
+  List<_TodoSummary> perAccountSummaries,
+) {
+  final loc = AppLocalizations.of(context)!;
+  final incomplete = <Player>[];
+  for (var i = 0; i < players.length && i < perAccountSummaries.length; i++) {
+    if (!perAccountSummaries[i].isDone) incomplete.add(players[i]);
+  }
+  if (incomplete.isEmpty) return loc.todoCombinedAcrossAccounts;
+
+  final visibleNames = incomplete
+      .take(3)
+      .map((player) => player.name.trim())
+      .where((name) => name.isNotEmpty)
+      .toList(growable: false);
+  final remaining = incomplete.length - visibleNames.length;
+  final suffix = remaining > 0 ? ', +$remaining' : '';
+  final subject = visibleNames.isEmpty
+      ? loc.todoAccountsNumber(incomplete.length)
+      : '${visibleNames.join(', ')}$suffix';
+  return loc.todoAccountsHaveTasksLeft(subject, incomplete.length);
+}
+
 /// Leading page when several accounts are pinned: combined progress and
 /// per-category totals across all of them.
 class _AllAccountsPanel extends StatelessWidget {
   const _AllAccountsPanel({
     required this.accountCount,
     required this.summary,
+    required this.status,
     required this.onTap,
   });
 
   final int accountCount;
   final _TodoSummary summary;
+  final String status;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 42.0 : 30.0;
+    final iconSize = isDesktop ? 54.0 : 46.0;
     final ringSize = isDesktop ? 54.0 : 46.0;
 
     final header = Row(
@@ -627,7 +649,7 @@ class _AllAccountsPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.of(context)!.todoAllAccounts,
+                AppLocalizations.of(context)!.todoTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(
@@ -680,9 +702,7 @@ class _AllAccountsPanel extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.todoCombinedAcrossAccounts,
+                        status,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -718,7 +738,7 @@ class _AccountHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 42.0 : 30.0;
+    final iconSize = isDesktop ? 54.0 : 46.0;
 
     return Row(
       children: [
@@ -750,7 +770,7 @@ class _AccountHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                player.name,
+                AppLocalizations.of(context)!.todoTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(
@@ -758,7 +778,9 @@ class _AccountHeader extends StatelessWidget {
                 ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               Text(
-                'TH${player.townHallLevel}',
+                player.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w700,
@@ -781,7 +803,7 @@ class _PreviewHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 42.0 : 30.0;
+    final iconSize = isDesktop ? 54.0 : 46.0;
 
     return Row(
       children: [
@@ -851,7 +873,7 @@ class _TodoRing extends StatelessWidget {
     return SizedBox.square(
       dimension: size,
       child: CustomPaint(
-        painter: _RingPainter(
+        painter: ProgressRingPainter(
           value: summary.ratio,
           color: summary.isDone ? Colors.green : colorScheme.primary,
           trackColor: colorScheme.surfaceContainerHighest,
@@ -945,10 +967,10 @@ class _MetricBar extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: fillColor.withValues(alpha: isDark ? 0.28 : 0.34),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.control),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.control),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -968,31 +990,21 @@ class _MetricBar extends StatelessWidget {
                     _MetricIcon(metric: metric),
                     const SizedBox(width: 7),
                     Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
+                      child: Semantics(
+                        label: '${metric.label}, ${metric.detail}',
+                        child: ExcludeSemantics(
+                          child: Text(
                             metric.label,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.labelLarge
                                 ?.copyWith(
                                   color: colorScheme.onSurface,
                                   fontWeight: FontWeight.w900,
+                                  height: 1.1,
                                 ),
                           ),
-                          Text(
-                            metric.detail,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                     Text(
@@ -1057,51 +1069,6 @@ class _CaughtUp extends StatelessWidget {
         color: colorScheme.onSurfaceVariant,
         fontWeight: FontWeight.w800,
       ),
-    );
-  }
-}
-
-class _PageDots extends StatelessWidget {
-  const _PageDots({required this.count, required this.index, this.onDotTap});
-
-  final int count;
-  final int index;
-  final ValueChanged<int>? onDotTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(count, (dotIndex) {
-        final selected = dotIndex == index;
-        final dot = AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          width: selected ? 18 : 7,
-          height: 7,
-          margin: const EdgeInsets.symmetric(horizontal: 2),
-          decoration: BoxDecoration(
-            color: selected
-                ? colorScheme.onSurface
-                : colorScheme.onSurface.withValues(alpha: 0.24),
-            borderRadius: BorderRadius.circular(999),
-          ),
-        );
-
-        if (onDotTap == null) return dot;
-        return Tooltip(
-          message: 'Card ${dotIndex + 1}',
-          child: InkResponse(
-            radius: 14,
-            onTap: () => onDotTap!(dotIndex),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
-              child: dot,
-            ),
-          ),
-        );
-      }),
     );
   }
 }
@@ -1639,52 +1606,6 @@ class _BannerTileState extends State<_BannerTile>
         ),
       ),
     );
-  }
-}
-
-class _RingPainter extends CustomPainter {
-  const _RingPainter({
-    required this.value,
-    required this.color,
-    required this.trackColor,
-  });
-
-  final double value;
-  final Color color;
-  final Color trackColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width * 0.15;
-    final rect =
-        Offset(strokeWidth / 2, strokeWidth / 2) &
-        Size(size.width - strokeWidth, size.height - strokeWidth);
-    final trackPaint = Paint()
-      ..color = trackColor
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
-    final valuePaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
-
-    canvas.drawArc(rect, -math.pi / 2, math.pi * 2, false, trackPaint);
-    canvas.drawArc(
-      rect,
-      -math.pi / 2,
-      math.pi * 2 * value.clamp(0, 1),
-      false,
-      valuePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _RingPainter oldDelegate) {
-    return oldDelegate.value != value ||
-        oldDelegate.color != color ||
-        oldDelegate.trackColor != trackColor;
   }
 }
 
