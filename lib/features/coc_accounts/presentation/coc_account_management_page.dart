@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
@@ -36,6 +37,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   bool _isOrderChanged = false;
   String? _deletingPlayerTag;
   bool _isFirstConnection = false;
+  bool _hasResolvedInitialConnectionState = false;
 
   @override
   void initState() {
@@ -43,10 +45,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DeepLinkHandler.tryHandlePendingDeepLink(context);
     });
-    // Always sync — it already sets _isFirstConnection from
-    // hasVerifiedAccounts itself. Skipping it when there were no verified
-    // accounts left _tempUserAccounts empty, so already-linked-but-
-    // unverified accounts silently vanished from the list below.
+    // Always sync. Skipping it when there were no verified accounts left
+    // _tempUserAccounts empty, so already-linked-but-unverified accounts
+    // silently vanished from the list below.
     _syncTempAccountsWithPlayerService();
   }
 
@@ -125,9 +126,6 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final userAccounts = cocService.cocAccounts;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
-    final desktopPanelHeight = (174 + (_tempUserAccounts.length * 72))
-        .clamp(260, 460)
-        .toDouble();
 
     final logoUrl = (isDarkMode
         ? ImageAssets.darkModeLogo
@@ -170,290 +168,123 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Flexible(
-                  fit: isDesktopWeb ? FlexFit.loose : FlexFit.tight,
-                  child: Column(
-                    mainAxisSize: isDesktopWeb
-                        ? MainAxisSize.min
-                        : MainAxisSize.max,
-                    children: [
-                      const SizedBox(height: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 70,
-                              width: 70,
-                              child: MobileWebImage(
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                                imageUrl: logoUrl,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            SizedBox(
-                              width: 150,
-                              child: MobileWebImage(
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                                imageUrl: textLogoUrl,
-                              ),
-                            ),
-                            const SizedBox(height: 32),
-                            if (_isFirstConnection) ...[
-                              Text(
-                                AppLocalizations.of(context)!.accountsWelcome,
-                                style: Theme.of(context).textTheme.titleSmall,
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                AppLocalizations.of(
-                                  context,
-                                )!.accountsWelcomeMessage,
-                                style: Theme.of(context).textTheme.bodyMedium,
-                                textAlign: TextAlign.center,
-                              ),
-                            ] else ...[
-                              Text(
-                                AppLocalizations.of(
-                                  context,
-                                )!.accountsManageTitle,
-                                style: Theme.of(context).textTheme.titleSmall,
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                AppLocalizations.of(
-                                  context,
-                                )!.authAccountManagement,
-                                style: Theme.of(context).textTheme.bodyMedium,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ],
+                Expanded(
+                  child: CustomScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: _AccountManagementIntro(
+                          logoUrl: logoUrl,
+                          textLogoUrl: textLogoUrl,
+                          isFirstConnection: _isFirstConnection,
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Flexible(
-                        fit: isDesktopWeb ? FlexFit.loose : FlexFit.tight,
-                        child: SizedBox(
-                          height: isDesktopWeb ? desktopPanelHeight : null,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  Theme.of(context).cardTheme.color ??
-                                  Theme.of(context).colorScheme.surface,
-                              borderRadius: BorderRadius.circular(
-                                AppRadius.card,
-                              ),
-                              border: Border.all(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant
-                                    .withValues(alpha: AppOpacity.border),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  Column(
-                                    children: [
-                                      TextField(
-                                        controller: _playerTagController,
-                                        textInputAction: TextInputAction.done,
-                                        onSubmitted: (_) {
-                                          if (!_isAddingLoading) {
-                                            _addAccount();
-                                          }
-                                        },
-                                        decoration: InputDecoration(
-                                          labelText: AppLocalizations.of(
-                                            context,
-                                          )!.accountsPlayerTag,
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              16.0,
-                                            ),
-                                          ),
-                                          suffixIcon: _isAddingLoading
-                                              ? const SizedBox(
-                                                  height: 24,
-                                                  width: 24,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.all(
-                                                      8.0,
-                                                    ),
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                                )
-                                              : IconButton(
-                                                  icon: Icon(
-                                                    Icons.add_circle,
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                                  ),
-                                                  tooltip: AppLocalizations.of(
-                                                    context,
-                                                  )!.accountsAdd,
-                                                  onPressed: _addAccount,
-                                                ),
-                                        ),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                            RegExp(r'[a-zA-Z0-9#]'),
-                                          ),
-                                        ],
-                                      ),
-                                      if (_errorMessage.isNotEmpty) ...[
-                                        SizedBox(height: 8),
-                                        Text(
-                                          _errorMessage,
-                                          style: TextStyle(color: Colors.red),
-                                        ),
-                                      ],
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.info_outline,
-                                            size: 16,
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              AppLocalizations.of(
-                                                context,
-                                              )!.accountsAddInstruction,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall
-                                                  ?.copyWith(
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).colorScheme.onSurface,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: userAccounts.isEmpty
-                                        ? Center(
-                                            child: _AccountsEmptyState(
-                                              message: AppLocalizations.of(
-                                                context,
-                                              )!.accountsNoneFound,
-                                            ),
-                                          )
-                                        : ReorderableListView(
-                                            onReorderItem:
-                                                (oldIndex, newIndex) {
-                                                  setState(() {
-                                                    final item =
-                                                        _tempUserAccounts
-                                                            .removeAt(oldIndex);
-                                                    _tempUserAccounts.insert(
-                                                      newIndex,
-                                                      item,
-                                                    );
-                                                    _isOrderChanged = true;
-                                                  });
-                                                },
-                                            children: [
-                                              for (
-                                                int index = 0;
-                                                index <
-                                                    _tempUserAccounts.length;
-                                                index++
-                                              )
-                                                _AccountRow(
-                                                  key: ValueKey(
-                                                    _tempUserAccounts[index]["player_tag"],
-                                                  ),
-                                                  name:
-                                                      _tempUserAccounts[index]["name"] ??
-                                                      "",
-                                                  playerTag:
-                                                      _tempUserAccounts[index]["player_tag"] ??
-                                                      "",
-                                                  townHallLevel:
-                                                      _tempUserAccounts[index]["townHallLevel"] ??
-                                                      1,
-                                                  isVerified:
-                                                      _tempUserAccounts[index]["isVerified"] ==
-                                                      true,
-                                                  isDeleting:
-                                                      _deletingPlayerTag ==
-                                                      _tempUserAccounts[index]["player_tag"],
-                                                  onVerify: () => _showVerificationDialog(
-                                                    _tempUserAccounts[index]["player_tag"],
-                                                    _tempUserAccounts[index]["name"] ??
-                                                        "Unknown Player",
-                                                    _tempUserAccounts[index]["townHallLevel"] ??
-                                                        1,
-                                                  ),
-                                                  onRemove: () => _removeAccount(
-                                                    _tempUserAccounts[index]["player_tag"],
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                      SliverPinnedHeader(
+                        child: _AddAccountStickyPanel(
+                          isAddingLoading: _isAddingLoading,
+                          errorMessage: _errorMessage,
+                          playerTagController: _playerTagController,
+                          onAddAccount: _addAccount,
                         ),
+                      ),
+                      userAccounts.isEmpty
+                          ? SliverToBoxAdapter(
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.sizeOf(context).height *
+                                    (_isFirstConnection ? 0.34 : 0.46),
+                                child: _AccountsEmptyPanel(
+                                  message: AppLocalizations.of(
+                                    context,
+                                  )!.accountsNoneFound,
+                                ),
+                              ),
+                            )
+                          : SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  8,
+                                  16,
+                                  16,
+                                ),
+                                child: _AccountsListPanel(
+                                  accounts: _tempUserAccounts,
+                                  deletingPlayerTag: _deletingPlayerTag,
+                                  onReorder: (oldIndex, newIndex) {
+                                    setState(() {
+                                      final item = _tempUserAccounts.removeAt(
+                                        oldIndex,
+                                      );
+                                      _tempUserAccounts.insert(newIndex, item);
+                                      _isOrderChanged = true;
+                                    });
+                                  },
+                                  onVerify: _showVerificationDialog,
+                                  onRemove: _removeAccount,
+                                ),
+                              ),
+                            ),
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: _isFirstConnection ? 96 : 24),
                       ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 16.0,
-                    left: 16,
-                    right: 16,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: userAccounts.isEmpty
-                          ? null
-                          : () async {
-                              showDialog(
-                                context: context,
-                                useRootNavigator: false,
-                                barrierDismissible: false,
-                                builder: (_) => const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
+                if (_isFirstConnection)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 16.0,
+                      left: 16,
+                      right: 16,
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: cocService.hasVerifiedAccounts
+                            ? () async {
+                                showDialog(
+                                  context: context,
+                                  useRootNavigator: false,
+                                  barrierDismissible: false,
+                                  builder: (_) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
 
-                              await _loadAllAccountData();
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: userAccounts.isEmpty
-                            ? Theme.of(context).colorScheme.surface
+                                await _loadAllAccountData();
+                              }
                             : null,
-                        foregroundColor: userAccounts.isEmpty
-                            ? Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withValues(alpha: 0.4)
-                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: cocService.hasVerifiedAccounts
+                              ? Theme.of(
+                                  context,
+                                ).colorScheme.surfaceContainerHighest
+                              : Theme.of(context).colorScheme.surface,
+                          foregroundColor: cocService.hasVerifiedAccounts
+                              ? Theme.of(context).colorScheme.onSurface
+                              : Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.4),
+                          side: cocService.hasVerifiedAccounts
+                              ? BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant
+                                      .withValues(
+                                        alpha: AppOpacity.borderStrong,
+                                      ),
+                                )
+                              : null,
+                          minimumSize: const Size.fromHeight(52),
+                        ),
+                        child: Text(
+                          MaterialLocalizations.of(context).continueButtonLabel,
+                        ),
                       ),
-                      child: Text(AppLocalizations.of(context)!.generalConfirm),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -480,6 +311,30 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
       _errorMessage = message;
       _isAddingLoading = false;
     });
+  }
+
+  Future<void> _refreshAccountDataAfterManagementChange() async {
+    if (_isFirstConnection || !mounted) return;
+
+    final playerService = context.read<PlayerService>();
+    final clanService = context.read<ClanService>();
+    final warCwlService = context.read<WarCwlService>();
+    final cocService = context.read<CocAccountService>();
+
+    try {
+      await cocService.loadApiData(playerService, clanService, warCwlService);
+      if (mounted) {
+        _syncTempAccountsWithPlayerService();
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = AppLocalizations.of(context)!.generalRefreshFailed(
+            error.toString().replaceAll('Exception: ', ''),
+          );
+        });
+      }
+    }
   }
 
   Future<void> _addAccount() async {
@@ -544,6 +399,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           });
           _playerTagController.clear();
           _syncTempAccountsWithPlayerService();
+          await _refreshAccountDataAfterManagementChange();
         } else {
           setState(() {
             _isAddingLoading = false;
@@ -569,10 +425,11 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     setState(() {
       _isAddingLoading = false;
       _errorMessage = "";
-      _syncTempAccountsWithPlayerService();
     });
 
     _playerTagController.clear();
+    _syncTempAccountsWithPlayerService();
+    await _refreshAccountDataAfterManagementChange();
   }
 
   Future<void> _removeAccount(String playerTag) async {
@@ -609,6 +466,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     if (result == true) {
       // Refresh the temp accounts to show updated verification status
       _syncTempAccountsWithPlayerService();
+      await _refreshAccountDataAfterManagementChange();
     }
   }
 
@@ -616,7 +474,10 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final playerService = context.read<PlayerService>();
     final cocService = context.read<CocAccountService>();
     setState(() {
-      _isFirstConnection = !cocService.hasVerifiedAccounts;
+      if (!_hasResolvedInitialConnectionState) {
+        _isFirstConnection = !cocService.hasVerifiedAccounts;
+        _hasResolvedInitialConnectionState = true;
+      }
       _tempUserAccounts = cocService.cocAccounts.map((account) {
         String playerTag = account["player_tag"];
 
@@ -645,6 +506,267 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
         }
       }).toList();
     });
+  }
+}
+
+class _AccountManagementIntro extends StatelessWidget {
+  const _AccountManagementIntro({
+    required this.logoUrl,
+    required this.textLogoUrl,
+    required this.isFirstConnection,
+  });
+
+  final String logoUrl;
+  final String textLogoUrl;
+  final bool isFirstConnection;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isFirstConnection) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.accountsManageTitle,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                AppLocalizations.of(context)!.authAccountManagement,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 70,
+            width: 70,
+            child: MobileWebImage(
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              imageUrl: logoUrl,
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: 150,
+            child: MobileWebImage(
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              imageUrl: textLogoUrl,
+            ),
+          ),
+          const SizedBox(height: 32),
+          if (isFirstConnection) ...[
+            Text(
+              AppLocalizations.of(context)!.accountsWelcome,
+              style: Theme.of(context).textTheme.titleSmall,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              AppLocalizations.of(context)!.accountsWelcomeMessage,
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _AddAccountStickyPanel extends StatelessWidget {
+  const _AddAccountStickyPanel({
+    required this.isAddingLoading,
+    required this.errorMessage,
+    required this.playerTagController,
+    required this.onAddAccount,
+  });
+
+  final bool isAddingLoading;
+  final String errorMessage;
+  final TextEditingController playerTagController;
+  final VoidCallback onAddAccount;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ColoredBox(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: playerTagController,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) {
+                if (!isAddingLoading) {
+                  onAddAccount();
+                }
+              },
+              decoration: InputDecoration(
+                isDense: true,
+                filled: true,
+                fillColor:
+                    Theme.of(context).cardTheme.color ?? colorScheme.surface,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                labelText: AppLocalizations.of(context)!.accountsPlayerTag,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                  borderSide: BorderSide(
+                    color: colorScheme.outlineVariant.withValues(
+                      alpha: AppOpacity.borderStrong,
+                    ),
+                  ),
+                ),
+                suffixIcon: isAddingLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : IconButton(
+                        icon: Icon(
+                          Icons.add_circle,
+                          color: colorScheme.primary,
+                        ),
+                        tooltip: AppLocalizations.of(context)!.accountsAdd,
+                        onPressed: onAddAccount,
+                      ),
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9#]')),
+              ],
+            ),
+            if (errorMessage.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                errorMessage,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: colorScheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Icon(Icons.info_outline, size: 16, color: colorScheme.primary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)!.accountsAddInstruction,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AccountsEmptyPanel extends StatelessWidget {
+  const _AccountsEmptyPanel({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(
+              alpha: AppOpacity.border,
+            ),
+          ),
+        ),
+        child: Center(child: _AccountsEmptyState(message: message)),
+      ),
+    );
+  }
+}
+
+class _AccountsListPanel extends StatelessWidget {
+  const _AccountsListPanel({
+    required this.accounts,
+    required this.deletingPlayerTag,
+    required this.onReorder,
+    required this.onVerify,
+    required this.onRemove,
+  });
+
+  final List<Map<String, dynamic>> accounts;
+  final String? deletingPlayerTag;
+  final void Function(int oldIndex, int newIndex) onReorder;
+  final void Function(String playerTag, String playerName, int playerTownHall)
+  onVerify;
+  final ValueChanged<String> onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return ReorderableListView(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      onReorderItem: onReorder,
+      children: [
+        for (int index = 0; index < accounts.length; index++)
+          _AccountRow(
+            key: ValueKey(accounts[index]["player_tag"]),
+            name: accounts[index]["name"] ?? "",
+            playerTag: accounts[index]["player_tag"] ?? "",
+            townHallLevel: accounts[index]["townHallLevel"] ?? 1,
+            isVerified: accounts[index]["isVerified"] == true,
+            isDeleting: deletingPlayerTag == accounts[index]["player_tag"],
+            onVerify: () => onVerify(
+              accounts[index]["player_tag"],
+              accounts[index]["name"] ?? "Unknown Player",
+              accounts[index]["townHallLevel"] ?? 1,
+            ),
+            onRemove: () => onRemove(accounts[index]["player_tag"]),
+          ),
+      ],
+    );
   }
 }
 
