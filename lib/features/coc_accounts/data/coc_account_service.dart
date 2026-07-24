@@ -310,7 +310,26 @@ class CocAccountService extends ChangeNotifier {
         "Failed to update account order, status code: ${response.statusCode}, body: ${response.body}",
         level: SentryLevel.error,
       );
+      return;
     }
+
+    final orderedTags = playerTags.map((tag) => tag.toUpperCase()).toList();
+    final accountsByTag = {
+      for (final account in _cocAccounts)
+        account["player_tag"].toString().toUpperCase(): account,
+    };
+    final reorderedAccounts = <Map<String, dynamic>>[
+      for (final tag in orderedTags)
+        if (accountsByTag[tag] != null) accountsByTag[tag]!,
+      for (final account in _cocAccounts)
+        if (!orderedTags.contains(
+          account["player_tag"].toString().toUpperCase(),
+        ))
+          account,
+    ];
+
+    _cocAccounts = reorderedAccounts;
+    _safeNotify();
   }
 
   Future<void> reorderLocalAccounts(int oldIndex, int newIndex) async {
