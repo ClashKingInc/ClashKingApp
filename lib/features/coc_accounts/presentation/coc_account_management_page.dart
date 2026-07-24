@@ -37,6 +37,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
   bool _isOrderChanged = false;
   String? _deletingPlayerTag;
   bool _isFirstConnection = false;
+  bool _hasResolvedInitialConnectionState = false;
 
   @override
   void initState() {
@@ -44,10 +45,9 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DeepLinkHandler.tryHandlePendingDeepLink(context);
     });
-    // Always sync — it already sets _isFirstConnection from
-    // hasVerifiedAccounts itself. Skipping it when there were no verified
-    // accounts left _tempUserAccounts empty, so already-linked-but-
-    // unverified accounts silently vanished from the list below.
+    // Always sync. Skipping it when there were no verified accounts left
+    // _tempUserAccounts empty, so already-linked-but-unverified accounts
+    // silently vanished from the list below.
     _syncTempAccountsWithPlayerService();
   }
 
@@ -447,7 +447,10 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     final playerService = context.read<PlayerService>();
     final cocService = context.read<CocAccountService>();
     setState(() {
-      _isFirstConnection = !cocService.hasVerifiedAccounts;
+      if (!_hasResolvedInitialConnectionState) {
+        _isFirstConnection = !cocService.hasVerifiedAccounts;
+        _hasResolvedInitialConnectionState = true;
+      }
       _tempUserAccounts = cocService.cocAccounts.map((account) {
         String playerTag = account["player_tag"];
 
