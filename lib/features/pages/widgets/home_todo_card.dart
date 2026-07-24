@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
-import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/home_metric_pill.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
@@ -231,9 +231,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       (acc, summary) => math.max(acc, (summary.metrics.length + 1) ~/ 2),
     );
     // Panel chrome: padding + border + header row + status row + gaps.
-    final barsHeight = maxRows == 0
-        ? 64.0
-        : maxRows * 38.0 + (maxRows - 1) * 7.0;
+    final barsHeight = maxRows == 0 ? 64.0 : HomeMetricPill.gridHeight(maxRows);
     final height = 116.0 + barsHeight;
     final useDesktopPager = _usesDesktopHomePager(context);
 
@@ -921,31 +919,9 @@ class _MetricBars extends StatelessWidget {
       );
     }
 
-    // Two metrics per row; a metric alone on its row spans the full width.
-    final rows = <Widget>[];
-    for (var i = 0; i < metrics.length; i += 2) {
-      if (i + 1 < metrics.length) {
-        rows.add(
-          Row(
-            children: [
-              Expanded(child: _MetricBar(metric: metrics[i])),
-              const SizedBox(width: 7),
-              Expanded(child: _MetricBar(metric: metrics[i + 1])),
-            ],
-          ),
-        );
-      } else {
-        rows.add(_MetricBar(metric: metrics[i]));
-      }
-    }
-
-    return Column(
-      children: [
-        for (var i = 0; i < rows.length; i++) ...[
-          if (i > 0) const SizedBox(height: 7),
-          rows[i],
-        ],
-      ],
+    return CKMetricChipGrid(
+      spacing: HomeMetricPill.gap,
+      chips: [for (final metric in metrics) _MetricBar(metric: metric)],
     );
   }
 }
@@ -957,98 +933,13 @@ class _MetricBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final done = metric.done >= metric.total;
-    final fillColor = done ? Colors.green : metric.color;
-
-    return SizedBox(
-      height: 38,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: fillColor.withValues(alpha: isDark ? 0.28 : 0.34),
-          borderRadius: BorderRadius.circular(AppRadius.control),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.control),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: metric.ratio,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: fillColor.withValues(alpha: isDark ? 0.38 : 0.48),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 9),
-                child: Row(
-                  children: [
-                    _MetricIcon(metric: metric),
-                    const SizedBox(width: 7),
-                    Expanded(
-                      child: Semantics(
-                        label: '${metric.label}, ${metric.detail}',
-                        child: ExcludeSemantics(
-                          child: Text(
-                            metric.label,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(
-                                  color: colorScheme.onSurface,
-                                  fontWeight: FontWeight.w900,
-                                  height: 1.1,
-                                ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '${metric.done}/${metric.total}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: fillColor,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MetricIcon extends StatelessWidget {
-  const _MetricIcon({required this.metric});
-
-  final _TodoMetric metric;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.72),
-        shape: BoxShape.circle,
-      ),
-      child: SizedBox.square(
-        dimension: 26,
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: MobileWebImage(
-            imageUrl: metric.imageUrl,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) =>
-                Icon(metric.fallbackIcon, size: 18, color: metric.color),
-          ),
-        ),
-      ),
+    return HomeMetricPill(
+      label: metric.label,
+      value: '${metric.done}/${metric.total}',
+      progress: metric.ratio,
+      imageUrl: metric.imageUrl,
+      fallbackIcon: metric.fallbackIcon,
+      semanticLabel: '${metric.label}, ${metric.detail}',
     );
   }
 }
