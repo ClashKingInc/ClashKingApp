@@ -313,6 +313,30 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     });
   }
 
+  Future<void> _refreshAccountDataAfterManagementChange() async {
+    if (_isFirstConnection || !mounted) return;
+
+    final playerService = context.read<PlayerService>();
+    final clanService = context.read<ClanService>();
+    final warCwlService = context.read<WarCwlService>();
+    final cocService = context.read<CocAccountService>();
+
+    try {
+      await cocService.loadApiData(playerService, clanService, warCwlService);
+      if (mounted) {
+        _syncTempAccountsWithPlayerService();
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = AppLocalizations.of(context)!.generalRefreshFailed(
+            error.toString().replaceAll('Exception: ', ''),
+          );
+        });
+      }
+    }
+  }
+
   Future<void> _addAccount() async {
     if (_isAddingLoading) return;
 
@@ -375,6 +399,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
           });
           _playerTagController.clear();
           _syncTempAccountsWithPlayerService();
+          await _refreshAccountDataAfterManagementChange();
         } else {
           setState(() {
             _isAddingLoading = false;
@@ -400,10 +425,11 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     setState(() {
       _isAddingLoading = false;
       _errorMessage = "";
-      _syncTempAccountsWithPlayerService();
     });
 
     _playerTagController.clear();
+    _syncTempAccountsWithPlayerService();
+    await _refreshAccountDataAfterManagementChange();
   }
 
   Future<void> _removeAccount(String playerTag) async {
@@ -440,6 +466,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
     if (result == true) {
       // Refresh the temp accounts to show updated verification status
       _syncTempAccountsWithPlayerService();
+      await _refreshAccountDataAfterManagementChange();
     }
   }
 
