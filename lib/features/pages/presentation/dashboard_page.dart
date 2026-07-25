@@ -266,7 +266,10 @@ class DashboardPage extends StatelessWidget {
                   bottomPadding,
                 ),
                 children: [
-                  LastRefreshIndicator(lastRefresh: cocService.lastRefresh),
+                  LastRefreshIndicator(
+                    lastRefresh: cocService.lastRefresh,
+                    onRefresh: () => _refresh(context),
+                  ),
                   const SizedBox(height: 12),
                   const HomeEventBanner(),
                   SizedBox(height: isDesktopWeb ? 24 : 16),
@@ -457,7 +460,11 @@ class _HomeCardCache<T> {
   }
 }
 
-class _HomeRankedCardState extends State<HomeRankedCard> {
+class _HomeRankedCardState extends State<HomeRankedCard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   static final _cache = _HomeCardCache<_RankedHomeSummary>();
 
   Future<_RankedHomeSummary>? _load;
@@ -560,6 +567,7 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder<_RankedHomeSummary>(
       future: _load,
       builder: (context, snapshot) {
@@ -1122,7 +1130,11 @@ class HomeUpgradeTrackerCard extends StatefulWidget {
   State<HomeUpgradeTrackerCard> createState() => _HomeUpgradeTrackerCardState();
 }
 
-class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
+class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   static final _cache = _HomeCardCache<_UpgradeHomeSummary>();
 
   final _repository = UpgradeTrackerRepository.shared;
@@ -1241,6 +1253,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder<_UpgradeHomeSummary>(
       future: _load,
       builder: (context, snapshot) {

@@ -56,7 +56,14 @@ class HomeAccountRail extends StatelessWidget {
   final ValueChanged<int> onSelect;
 
   /// Height the rail occupies — home cards size their headers against this.
-  static const double height = 28;
+  ///
+  /// The visible pill stays [_pillHeight]; the rest is invisible padding that
+  /// brings the tap target to the 44pt/48dp minimum. Sizing the row to the
+  /// pill alone made every account a 28px target, worse than the 42px
+  /// `HeaderIconButton` the design system already flags as too small.
+  static const double height = 44;
+
+  static const double _pillHeight = 28;
 
   /// Keeps one long account name from pushing the rest of the rail off-screen.
   static const double _maxLabelWidth = 92;
@@ -107,8 +114,14 @@ class _PendingBadge extends StatelessWidget {
       height: 9,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: pending ? CKColors.lossRed : CKColors.donationGreen,
-        border: Border.all(color: colorScheme.surface, width: 1.4),
+        // Filled when something is pending, hollow once settled: red and
+        // green sit on the commonest colour-blindness axis, so the state has
+        // to survive without the hue.
+        color: pending ? CKColors.lossRed : Colors.transparent,
+        border: Border.all(
+          color: pending ? colorScheme.surface : CKColors.donationGreen,
+          width: pending ? 1.4 : 2,
+        ),
       ),
     );
   }
@@ -143,76 +156,82 @@ class _RailItem extends StatelessWidget {
         child: InkResponse(
           onTap: onTap,
           radius: HomeAccountRail.height * 0.7,
-          child: Container(
+          child: SizedBox(
             height: HomeAccountRail.height,
-            padding: EdgeInsets.only(right: selected ? 9 : 0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(CKRadius.pill),
-              color: colorScheme.surfaceContainerHighest.withValues(
-                alpha: selected ? 0.55 : 0.25,
-              ),
-              border: Border.all(
-                color: selected
-                    ? colorScheme.primary
-                    : colorScheme.outlineVariant.withValues(alpha: 0.24),
-                width: selected ? 1.6 : 1,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox.square(
-                  dimension: HomeAccountRail.height - 2,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Opacity(
-                          // Unselected entries recede so the rail reads as one
-                          // control rather than a row of equal buttons.
-                          opacity: selected ? 1 : 0.5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(3),
-                            child: entry.imageUrl != null
-                                ? MobileWebImage(
-                                    imageUrl: entry.imageUrl!,
-                                    fit: BoxFit.contain,
-                                    errorWidget: (context, url, error) =>
-                                        fallback,
-                                  )
-                                : fallback,
-                          ),
-                        ),
-                      ),
-                      if (entry.hasPendingActions != null)
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: _PendingBadge(
-                            pending: entry.hasPendingActions!,
-                          ),
-                        ),
-                    ],
+            child: Center(
+              child: Container(
+                height: HomeAccountRail._pillHeight,
+                padding: EdgeInsets.only(right: selected ? 9 : 0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(CKRadius.pill),
+                  color: colorScheme.surfaceContainerHighest.withValues(
+                    alpha: selected ? 0.55 : 0.25,
+                  ),
+                  border: Border.all(
+                    color: selected
+                        ? colorScheme.primary
+                        : colorScheme.outlineVariant.withValues(alpha: 0.24),
+                    width: selected ? 1.6 : 1,
                   ),
                 ),
-                if (selected) ...[
-                  const SizedBox(width: 5),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: HomeAccountRail._maxLabelWidth,
-                    ),
-                    child: Text(
-                      entry.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: colorScheme.onSurface,
-                        fontWeight: FontWeight.w900,
-                        height: 1,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox.square(
+                      dimension: HomeAccountRail._pillHeight - 2,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Opacity(
+                              // Unselected entries recede so the rail reads as one
+                              // control rather than a row of equal buttons.
+                              opacity: selected ? 1 : 0.5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3),
+                                child: entry.imageUrl != null
+                                    ? MobileWebImage(
+                                        imageUrl: entry.imageUrl!,
+                                        fit: BoxFit.contain,
+                                        errorWidget: (context, url, error) =>
+                                            fallback,
+                                      )
+                                    : fallback,
+                              ),
+                            ),
+                          ),
+                          if (entry.hasPendingActions != null)
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: _PendingBadge(
+                                pending: entry.hasPendingActions!,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              ],
+                    if (selected) ...[
+                      const SizedBox(width: 5),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: HomeAccountRail._maxLabelWidth,
+                        ),
+                        child: Text(
+                          entry.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: colorScheme.onSurface,
+                                fontWeight: FontWeight.w900,
+                                height: 1,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),

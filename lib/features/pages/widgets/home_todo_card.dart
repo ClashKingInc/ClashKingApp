@@ -164,7 +164,15 @@ class HomeTodoCard extends StatefulWidget {
   State<HomeTodoCard> createState() => _HomeTodoCardState();
 }
 
-class _HomeTodoCardState extends State<HomeTodoCard> {
+/// Kept alive so the selected account survives a trip to another tab: the
+/// app's main navigation is a `PageView`, which unmounts the pages either
+/// side, and picking an account is now a deliberate act rather than an
+/// incidental swipe position.
+class _HomeTodoCardState extends State<HomeTodoCard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   late final PageController _controller;
   int _index = 0;
 
@@ -197,6 +205,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final loc = AppLocalizations.of(context)!;
     final warCwlService = _showTodoMockups
         ? null
