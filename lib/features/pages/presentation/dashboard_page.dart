@@ -644,12 +644,14 @@ class _HomeRankedCardState extends State<HomeRankedCard>
                                 label: entry.name,
                                 imageUrl: entry.player.townHallPic,
                                 fallbackIcon: Icons.home_rounded,
-                                hasPendingActions:
-                                    _rankedRatio(
-                                      entry.attacksDone,
-                                      entry.maxBattles,
-                                    ) <
-                                    1,
+                                // Null, not false, when the cap is unknown:
+                                // `_rankedRatio` floors to 0 there, which
+                                // would paint a pending badge on an account
+                                // the app cannot actually judge. The rest of
+                                // this card already treats an unknown cap as
+                                // "no verdict" — a plain count, and excluded
+                                // from the combined "attacks left" status.
+                                hasPendingActions: entry.hasPendingBattles,
                               ),
                           ],
                         ),
@@ -1054,6 +1056,16 @@ class _RankedHomeAccount {
   final int defensesDone;
   final int? maxBattles;
 
+  /// Whether attacks are still owed, or null when the cap is unknown and the
+  /// question has no answer. Callers must not fall back to a ratio here: a
+  /// missing cap floors it to 0, which reads as "nothing done" rather than
+  /// "not known".
+  bool? get hasPendingBattles {
+    final cap = maxBattles;
+    if (cap == null || cap <= 0) return null;
+    return attacksDone < cap;
+  }
+
   factory _RankedHomeAccount.fromData(
     RankedLeagueData data, {
     required Player player,
@@ -1082,13 +1094,6 @@ class _RankedHomeAccount {
 /// Height of a ranked page's status row, set by the trophy pill rather than
 /// by the text, so every page in the pager aligns.
 const double _rankedStatusRowHeight = 30;
-
-/// Share of ranked attacks already used. Zero when the limit is unknown —
-/// a fraction of an unknown total isn't meaningful.
-double _rankedRatio(int done, int? total) {
-  if (total == null || total <= 0) return 0;
-  return (done / total).clamp(0.0, 1.0);
-}
 
 /// Names the accounts that still have ranked attacks left today, falling
 /// back to a generic combined label once every account is caught up.
