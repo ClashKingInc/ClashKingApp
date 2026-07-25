@@ -586,11 +586,6 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
         final account = isSummaryPage
             ? null
             : summary.accounts[safeIndex - (hasSummaryPage ? 1 : 0)];
-        // Attacks used, not defenses: attacks are the part the player can
-        // still act on, and it's what the status line underneath talks about.
-        final ringRatio = isSummaryPage
-            ? _rankedRatio(summary.totalAttacksDone, summary.totalAttacksMax)
-            : _rankedRatio(account!.attacksDone, account.maxBattles);
 
         // Same split as the home to-do card: the frame, title and account
         // rail stay put, only the status line and the pills ride the pager.
@@ -653,20 +648,16 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
                       ],
                     ),
                   ),
-                  // The rank/trophy pill used to sit here and covered the rail
-                  // on a three-account row; it moved down to the status line,
-                  // where the ring can own the header's right edge like the
-                  // other two home cards.
-                  _UpgradeProgressRing(
-                    value: ringRatio,
-                    label: '${(ringRatio * 100).round()}%',
-                    size: _homeDashboardRingSize(context),
-                  ),
+                  // No ring: it showed attacksDone/maxBattles, which the
+                  // "Attacks 11/38" pill right below states exactly. The
+                  // rank and trophy pills live on the status line instead.
                 ],
               ),
               const SizedBox(height: 8),
               SizedBox(
-                height: 22 + 10 + HomeMetricPill.gridHeight(1),
+                // 30, not the text's height: the status row carries the rank
+                // or trophy pill, which is taller than its own label.
+                height: 30 + 10 + HomeMetricPill.gridHeight(1),
                 child: PageView.builder(
                   controller: _controller,
                   onPageChanged: (index) => setState(() => _index = index),
@@ -715,27 +706,33 @@ class _RankedAccountPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                rankText,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
+        // Pinned to the trophy pill's height so this page and the combined
+        // one line up: the pager gives both the same box, and a status row
+        // that shrank on one of them shifted all the content below it.
+        SizedBox(
+          height: _rankedStatusRowHeight,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  rankText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
-            _RankedTrophyPill(value: formatter.format(account.trophies)),
-            const SizedBox(width: 6),
-            Icon(
-              Icons.chevron_right_rounded,
-              size: 22,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ],
+              _RankedTrophyPill(value: formatter.format(account.trophies)),
+              const SizedBox(width: 6),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 22,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 10),
         _RankedHomeMetricBars(
@@ -776,22 +773,23 @@ class _RankedAllAccountsPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                _rankedSummaryStatus(context, summary),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
+        SizedBox(
+          height: _rankedStatusRowHeight,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  _rankedSummaryStatus(context, summary),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
-            if (summary.bestRank != null)
-              _RankedBestRankPill(rank: summary.bestRank!),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 10),
         _RankedHomeMetricBars(
@@ -909,45 +907,6 @@ class _RankedTrophyPill extends StatelessWidget {
             Text(
               value,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _RankedBestRankPill extends StatelessWidget {
-  const _RankedBestRankPill({required this.rank});
-
-  final int rank;
-
-  @override
-  Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: CKColors.warGold.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.leaderboard_rounded,
-              size: 16,
-              color: CKColors.warGold,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              '${loc.rankedLeagueBestGroupRank} #$rank',
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.w900,
               ),
@@ -1111,6 +1070,10 @@ class _RankedHomeAccount {
     );
   }
 }
+
+/// Height of a ranked page's status row, set by the trophy pill rather than
+/// by the text, so every page in the pager aligns.
+const double _rankedStatusRowHeight = 30;
 
 /// Share of ranked attacks already used. Zero when the limit is unknown —
 /// a fraction of an unknown total isn't meaningful.
@@ -1309,37 +1272,120 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
         }
         _clampIndex(itemCount);
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              // Panel chrome + the tallest page's two pill rows (builders,
-              // lab, and — when the account has one — pets).
-              height: 121 + HomeMetricPill.gridHeight(2),
-              child: PageView.builder(
-                controller: _controller,
-                onPageChanged: (index) => setState(() => _index = index),
-                itemCount: itemCount,
-                itemBuilder: (context, index) => _buildPage(
-                  summary,
-                  index,
-                  hasSummaryPage: hasSummaryPage,
-                  accountCount: accountCount,
-                  offset: offset,
-                ),
+        final loc = AppLocalizations.of(context)!;
+        final safeIndex = _index.clamp(0, itemCount - 1);
+        final localIndex = safeIndex - offset;
+        final isSummaryPage = hasSummaryPage && safeIndex == 0;
+        final account = !isSummaryPage && localIndex < accountCount
+            ? summary.accounts[localIndex]
+            : null;
+        final missing = !isSummaryPage && localIndex >= accountCount
+            ? summary.missingAccounts[localIndex - accountCount]
+            : null;
+        final ringRatio = isSummaryPage
+            ? summary.completion
+            : (account?.completion ?? 0);
+
+        // Same split as the other two home cards: frame, title and account
+        // rail stay put, only the status line and the pills ride the pager.
+        return _HomeCardTappablePanel(
+          onTap: isSummaryPage
+              ? null
+              : () => _openTracker(account?.tag ?? missing!.tag),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // Village completion took the town hall's slot, since the
+                  // rail right below already shows that artwork per account.
+                  // The combined page has no town hall to duplicate, so it
+                  // keeps the card's own icon instead.
+                  if (isSummaryPage)
+                    SizedBox.square(
+                      dimension: 46,
+                      child: MobileWebImage(
+                        imageUrl: ImageAssets.builderWave,
+                        fit: BoxFit.contain,
+                        errorWidget: (_, _, _) =>
+                            const Icon(Icons.construction_rounded, size: 28),
+                      ),
+                    )
+                  else
+                    _UpgradeProgressRing(
+                      value: ringRatio,
+                      label: '${(ringRatio * 100).round()}%',
+                      size: _homeDashboardRingSize(context),
+                    ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          loc.drawerUpgradeTracker,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(height: 4),
+                        HomeAccountRail(
+                          selectedIndex: safeIndex,
+                          onSelect: (index) => _showPage(itemCount, index),
+                          entries: [
+                            if (hasSummaryPage)
+                              HomeAccountRailEntry(
+                                label: loc.todoAllAccounts,
+                                fallbackIcon: Icons.groups_rounded,
+                              ),
+                            for (final entry in summary.accounts)
+                              HomeAccountRailEntry(
+                                label: entry.name,
+                                imageUrl: entry.hallImageUrl,
+                                fallbackIcon: Icons.construction_rounded,
+                                hasPendingActions: entry.hasIdleQueue,
+                              ),
+                            // An account with no imported snapshot always
+                            // needs attention — that's the whole reason it
+                            // still gets a page instead of disappearing.
+                            for (final entry in summary.missingAccounts)
+                              HomeAccountRailEntry(
+                                label: entry.name,
+                                imageUrl: ImageAssets.townHall(
+                                  entry.townHallLevel,
+                                ),
+                                fallbackIcon: Icons.construction_rounded,
+                                hasPendingActions: true,
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Village completion moved into a pill of its own: unlike
+                  // the other two cards' rings it wasn't redundant, but it's
+                  // a metric like the rest, so it belongs with them.
+                ],
               ),
-            ),
-            if (itemCount > 1) ...[
               const SizedBox(height: 8),
-              Center(
-                child: PageDotsIndicator(
-                  count: itemCount,
-                  index: _index,
-                  onDotTap: (index) => _showPage(itemCount, index),
+              SizedBox(
+                height: 22 + 10 + HomeMetricPill.gridHeight(2),
+                child: PageView.builder(
+                  controller: _controller,
+                  onPageChanged: (index) => setState(() => _index = index),
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) => _buildPage(
+                    summary,
+                    index,
+                    hasSummaryPage: hasSummaryPage,
+                    accountCount: accountCount,
+                    offset: offset,
+                  ),
                 ),
               ),
             ],
-          ],
+          ),
         );
       },
     );
@@ -1357,155 +1403,96 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard> {
     }
     final localIndex = index - offset;
     if (localIndex < accountCount) {
-      final account = summary.accounts[localIndex];
-      return _UpgradeAccountPanel(
-        account: account,
-        onTap: () => _openTracker(account.tag),
-      );
+      return _UpgradeAccountPanel(account: summary.accounts[localIndex]);
     }
-    final player = summary.missingAccounts[localIndex - accountCount];
     return _UpgradeMissingDataPanel(
-      player: player,
-      onTap: () => _openTracker(player.tag),
+      player: summary.missingAccounts[localIndex - accountCount],
     );
   }
 }
 
+/// Pager body for one account: snapshot freshness plus its queue pills. The
+/// card frame, title, account rail and completion ring live in the header.
 class _UpgradeAccountPanel extends StatelessWidget {
-  const _UpgradeAccountPanel({required this.account, required this.onTap});
+  const _UpgradeAccountPanel({required this.account});
 
   final _UpgradeHomeAccount account;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
-    final progress = '${(account.completion * 100).round()}%';
 
-    return _HomeCardTappablePanel(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SizedBox.square(
-                dimension: 46,
-                child: MobileWebImage(
-                  imageUrl: account.hallImageUrl,
-                  fit: BoxFit.contain,
-                  errorWidget: (_, _, _) =>
-                      const Icon(Icons.construction_rounded),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                _upgradeSnapshotAgeLabel(context, account.capturedAt),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.drawerUpgradeTracker,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Text(
-                      account.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 22,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _UpgradeHomeMetricBars(
+          metrics: [
+            _UpgradeHomeMetricData(
+              imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                "Builder's Hut",
+                1,
               ),
-              _UpgradeProgressRing(
-                value: account.completion,
-                label: progress,
-                size: _homeDashboardRingSize(context),
+              fallbackIcon: Icons.construction_rounded,
+              label: loc.dashboardUpgradeTrackerBuilders,
+              meta: _formatDuration(account.builderProjectedSeconds),
+              active: account.activeBuilders,
+              total: account.totalBuilders,
+            ),
+            _UpgradeHomeMetricData(
+              imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                'Laboratory',
+                1,
               ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  _upgradeSnapshotAgeLabel(context, account.capturedAt),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 22,
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          _UpgradeHomeMetricBars(
-            metrics: [
+              fallbackIcon: Icons.science_rounded,
+              label: loc.dashboardUpgradeTrackerLab,
+              meta: _formatDuration(account.labProjectedSeconds),
+              active: account.labActive ? 1 : 0,
+              total: account.hasLab ? 1 : 0,
+            ),
+            if (account.hasPets)
               _UpgradeHomeMetricData(
                 imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                  "Builder's Hut",
+                  'Pet House',
                   1,
                 ),
-                fallbackIcon: Icons.construction_rounded,
-                label: loc.dashboardUpgradeTrackerBuilders,
-                meta: _formatDuration(account.builderProjectedSeconds),
-                active: account.activeBuilders,
-                total: account.totalBuilders,
+                fallbackIcon: Icons.pets_rounded,
+                label: loc.dashboardUpgradeTrackerPets,
+                meta: _formatDuration(account.petProjectedSeconds),
+                active: account.petsActive ? 1 : 0,
+                total: 1,
               ),
-              _UpgradeHomeMetricData(
-                imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                  'Laboratory',
-                  1,
-                ),
-                fallbackIcon: Icons.science_rounded,
-                label: loc.dashboardUpgradeTrackerLab,
-                meta: _formatDuration(account.labProjectedSeconds),
-                active: account.labActive ? 1 : 0,
-                total: account.hasLab ? 1 : 0,
-              ),
-              if (account.hasPets)
-                _UpgradeHomeMetricData(
-                  imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                    'Pet House',
-                    1,
-                  ),
-                  fallbackIcon: Icons.pets_rounded,
-                  label: loc.dashboardUpgradeTrackerPets,
-                  meta: _formatDuration(account.petProjectedSeconds),
-                  active: account.petsActive ? 1 : 0,
-                  total: 1,
-                ),
-              _UpgradeHomeMetricData(
-                imageUrl: ImageAssets.getHomeVillageBuildingImage('Wall', 1),
-                fallbackIcon: Icons.fence_rounded,
-                label: loc.dashboardUpgradeTrackerWalls,
-                meta: account.wallsLevelsRemaining > 0
-                    ? loc.todoItemsLeftShort(account.wallsLevelsRemaining)
-                    : null,
-                // Walls have no queue, so there is no active/total to show —
-                // the value is the completion ratio itself.
-                active: (account.wallsCompletion * 100).round(),
-                total: 100,
-                valueOverride: '${(account.wallsCompletion * 100).round()}%',
-              ),
-            ],
-          ),
-        ],
-      ),
+            _UpgradeHomeMetricData(
+              imageUrl: ImageAssets.getHomeVillageBuildingImage('Wall', 1),
+              fallbackIcon: Icons.fence_rounded,
+              label: loc.dashboardUpgradeTrackerWalls,
+              active: account.wallsAtMax,
+              total: account.wallsTotal,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -1513,29 +1500,33 @@ class _UpgradeAccountPanel extends StatelessWidget {
 /// Page shown for a configured account that has no imported Upgrade Tracker
 /// data yet, instead of silently dropping it from the pager.
 class _UpgradeMissingDataPanel extends StatelessWidget {
-  const _UpgradeMissingDataPanel({required this.player, required this.onTap});
+  const _UpgradeMissingDataPanel({required this.player});
 
   final Player player;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
-    return _HomeCardTappablePanel(
-      onTap: onTap,
-      child: _UpgradeEmptyContent(
-        imageUrl: ImageAssets.townHall(player.townHallLevel),
-        title: loc.drawerUpgradeTracker,
-        subtitle: player.name,
-        status: loc.dashboardUpgradeTrackerNoData,
-        trailing: _UpgradeProgressRing(
-          value: 0,
-          label: '0%',
-          size: _homeDashboardRingSize(context),
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            AppLocalizations.of(context)!.dashboardUpgradeTrackerNoData,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ),
-        showChevron: true,
-      ),
+        Icon(
+          Icons.chevron_right_rounded,
+          size: 22,
+          color: colorScheme.onSurfaceVariant,
+        ),
+      ],
     );
   }
 }
@@ -1551,112 +1542,65 @@ class _UpgradeAllAccountsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
-    final progress = '${(summary.completion * 100).round()}%';
 
-    return _HomeCardFrame(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SizedBox.square(
-                dimension: 46,
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.builderWave,
-                  fit: BoxFit.contain,
-                  errorWidget: (_, _, _) =>
-                      const Icon(Icons.construction_rounded, size: 28),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                _upgradeSummaryStatus(context, summary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.drawerUpgradeTracker,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Text(
-                      loc.todoAccountsNumber(summary.accounts.length),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _UpgradeHomeMetricBars(
+          metrics: [
+            _UpgradeHomeMetricData(
+              imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                "Builder's Hut",
+                1,
               ),
-              _UpgradeProgressRing(
-                value: summary.completion,
-                label: progress,
-                size: _homeDashboardRingSize(context),
+              fallbackIcon: Icons.construction_rounded,
+              label: loc.dashboardUpgradeTrackerBuilders,
+              meta: _formatDuration(summary.builderProjectedSeconds),
+              active: summary.activeBuilders,
+              total: summary.totalBuilders,
+            ),
+            _UpgradeHomeMetricData(
+              imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                'Laboratory',
+                1,
               ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  _upgradeSummaryStatus(context, summary),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          _UpgradeHomeMetricBars(
-            metrics: [
+              fallbackIcon: Icons.science_rounded,
+              label: loc.dashboardUpgradeTrackerLab,
+              meta: _formatDuration(summary.labProjectedSeconds),
+              active: summary.activeLabs,
+              total: summary.totalLabs,
+            ),
+            if (summary.hasPets)
               _UpgradeHomeMetricData(
                 imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                  "Builder's Hut",
+                  'Pet House',
                   1,
                 ),
-                fallbackIcon: Icons.construction_rounded,
-                label: loc.dashboardUpgradeTrackerBuilders,
-                meta: _formatDuration(summary.builderProjectedSeconds),
-                active: summary.activeBuilders,
-                total: summary.totalBuilders,
+                fallbackIcon: Icons.pets_rounded,
+                label: loc.dashboardUpgradeTrackerPets,
+                meta: _formatDuration(summary.petProjectedSeconds),
+                active: summary.activePets,
+                total: summary.totalPets,
               ),
-              _UpgradeHomeMetricData(
-                imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                  'Laboratory',
-                  1,
-                ),
-                fallbackIcon: Icons.science_rounded,
-                label: loc.dashboardUpgradeTrackerLab,
-                meta: _formatDuration(summary.labProjectedSeconds),
-                active: summary.activeLabs,
-                total: summary.totalLabs,
-              ),
-              if (summary.hasPets)
-                _UpgradeHomeMetricData(
-                  imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                    'Pet House',
-                    1,
-                  ),
-                  fallbackIcon: Icons.pets_rounded,
-                  label: loc.dashboardUpgradeTrackerPets,
-                  meta: _formatDuration(summary.petProjectedSeconds),
-                  active: summary.activePets,
-                  total: summary.totalPets,
-                ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -1686,20 +1630,16 @@ class _UpgradeHomeEmpty extends StatelessWidget {
 
 class _UpgradeEmptyContent extends StatelessWidget {
   const _UpgradeEmptyContent({
-    this.imageUrl,
     required this.title,
     required this.subtitle,
     required this.status,
     required this.trailing,
-    this.showChevron = false,
   });
 
-  final String? imageUrl;
   final String title;
   final String subtitle;
   final String status;
   final Widget trailing;
-  final bool showChevron;
 
   @override
   Widget build(BuildContext context) {
@@ -1713,7 +1653,7 @@ class _UpgradeEmptyContent extends StatelessWidget {
             SizedBox.square(
               dimension: 46,
               child: MobileWebImage(
-                imageUrl: imageUrl ?? ImageAssets.builderWave,
+                imageUrl: ImageAssets.builderWave,
                 fit: BoxFit.contain,
                 errorWidget: (_, _, _) =>
                     const Icon(Icons.construction_rounded, size: 28),
@@ -1761,12 +1701,6 @@ class _UpgradeEmptyContent extends StatelessWidget {
                 ),
               ),
             ),
-            if (showChevron)
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 22,
-                color: colorScheme.onSurfaceVariant,
-              ),
           ],
         ),
         const SizedBox(height: 8),
@@ -1823,12 +1757,7 @@ class _UpgradeHomeMetricData {
     required this.active,
     required this.total,
     this.meta,
-    this.valueOverride,
   });
-
-  /// Set when the metric isn't a queue count — walls report a percentage
-  /// rather than "x of y slots busy".
-  final String? valueOverride;
 
   final String imageUrl;
   final IconData fallbackIcon;
@@ -1845,7 +1774,7 @@ class _UpgradeHomeMetricData {
   /// house): shown as a placeholder with no bar rather than a bogus `0/0`.
   bool get isKnown => total > 0;
 
-  String get value => valueOverride ?? (isKnown ? '$active/$total' : '-');
+  String get value => isKnown ? '$active/$total' : '-';
 
   double? get progress => isKnown ? (active / total).clamp(0.0, 1.0) : null;
 }
@@ -1906,7 +1835,9 @@ class _UpgradeProgressRing extends StatelessWidget {
       child: CustomPaint(
         painter: ProgressRingPainter(
           value: value,
-          color: CKColors.donationGreen,
+          color: value >= 1
+              ? CKUpgradeColors.completion
+              : CKColors.donationGreen,
           trackColor: colorScheme.surfaceContainerHighest,
         ),
         child: Center(
@@ -2000,8 +1931,9 @@ class _UpgradeHomeAccount {
     required this.name,
     required this.hallImageUrl,
     required this.completion,
-    required this.wallsCompletion,
-    required this.wallsLevelsRemaining,
+    required this.needsUpdate,
+    required this.wallsAtMax,
+    required this.wallsTotal,
     required this.projectedSeconds,
     required this.builderProjectedSeconds,
     required this.labProjectedSeconds,
@@ -2020,12 +1952,25 @@ class _UpgradeHomeAccount {
   final String hallImageUrl;
   final double completion;
 
-  /// Walls are reported as a completion ratio plus the levels still to buy,
-  /// not as `current/target`: those two are sums of levels (5764/5850 on a
-  /// near-maxed base), which means nothing to a player. `levelsRemaining` is
-  /// the count they actually think in — "86 walls left".
-  final double wallsCompletion;
-  final int wallsLevelsRemaining;
+  /// True once every upgrade the snapshot knew about has finished, so the
+  /// tracker is describing work that is already done. Recurrent helper tasks
+  /// are excluded: they restart on their own, and letting them count would
+  /// leave an idle account permanently flagged.
+  final bool needsUpdate;
+
+  /// Wall segments already at their target level, out of the total. Counted
+  /// per wall rather than per level, which is how players talk about them.
+  final int wallsAtMax;
+  final int wallsTotal;
+
+  /// Whether any build slot is sitting idle. This is what the rail badge
+  /// reports: the card exists to answer "do I need to go restart something",
+  /// so green means every builder, the lab and the pet house are all busy.
+  /// Walls are deliberately not part of it — they have no queue to start.
+  bool get hasIdleQueue =>
+      activeBuilders < totalBuilders ||
+      (hasLab && !labActive) ||
+      (hasPets && !petsActive);
 
   final int projectedSeconds;
   final int builderProjectedSeconds;
@@ -2100,18 +2045,36 @@ class _UpgradeHomeAccount {
       queue: UpgradeQueue.pets,
     );
 
-    final walls = snapshot.summaryFor(
-      UpgradeCategory.walls,
+    // Counted per wall, not per level: `summaryFor(walls)` reports sums of
+    // levels (5764/5850 on a near-maxed base), which is not how anyone thinks
+    // about walls — players count segments still behind.
+    final wallItems = snapshot.itemsFor(
       village: UpgradeVillage.home,
+      category: UpgradeCategory.walls,
     );
+    final wallsTotal = wallItems.fold<int>(0, (sum, item) => sum + item.count);
+    final wallsAtMax = wallItems
+        .where((item) => item.currentLevel >= item.targetLevel)
+        .fold<int>(0, (sum, item) => sum + item.count);
+
+    final trackedItems = snapshot.itemsFor(village: UpgradeVillage.home);
+    final startedItems = trackedItems.where(
+      (item) => !item.recurrentHelper && (item.activeSeconds ?? 0) > 0,
+    );
+    final needsUpdate =
+        startedItems.isNotEmpty &&
+        startedItems.every(
+          (item) => snapshot.remainingActiveSeconds(item, now: now) <= 0,
+        );
 
     return _UpgradeHomeAccount(
       tag: snapshot.tag,
       name: snapshot.name,
       hallImageUrl: ImageAssets.townHall(snapshot.townHallLevel),
       completion: home.completion.clamp(0.0, 1.0),
-      wallsCompletion: walls.completion.clamp(0.0, 1.0),
-      wallsLevelsRemaining: walls.levelsRemaining,
+      needsUpdate: needsUpdate,
+      wallsAtMax: wallsAtMax,
+      wallsTotal: wallsTotal,
       projectedSeconds: projectedSeconds,
       builderProjectedSeconds: builderProjectedSeconds,
       labProjectedSeconds: labProjectedSeconds,
@@ -2132,23 +2095,27 @@ String _upgradeSummaryStatus(
   _UpgradeHomeSummary summary,
 ) {
   final loc = AppLocalizations.of(context)!;
-  if (summary.missingAccounts.isEmpty) {
+  // An imported account goes stale too, not just a missing one: once every
+  // timer in its snapshot has run out, the tracker is showing work that has
+  // since finished. Naming only the accounts with no snapshot at all meant a
+  // five-day-old import still read as up to date.
+  final staleNames = [
+    ...summary.missingAccounts.map((player) => player.name),
+    ...summary.accounts
+        .where((account) => account.needsUpdate)
+        .map((account) => account.name),
+  ].map((name) => name.trim()).where((name) => name.isNotEmpty).toList();
+
+  if (staleNames.isEmpty) {
     return loc.dashboardUpgradeTrackerCombinedAcrossAccounts;
   }
 
-  final visibleNames = summary.missingAccounts
-      .take(3)
-      .map((player) => player.name.trim())
-      .where((name) => name.isNotEmpty)
-      .toList(growable: false);
-  final remaining = summary.missingAccounts.length - visibleNames.length;
+  final visibleNames = staleNames.take(3).toList(growable: false);
+  final remaining = staleNames.length - visibleNames.length;
   final suffix = remaining > 0 ? ', +$remaining' : '';
-  final subject = visibleNames.isEmpty
-      ? loc.todoAccountsNumber(summary.missingAccounts.length)
-      : '${visibleNames.join(', ')}$suffix';
   return loc.dashboardUpgradeTrackerNeedsUpdate(
-    subject,
-    summary.missingAccounts.length,
+    '${visibleNames.join(', ')}$suffix',
+    staleNames.length,
   );
 }
 

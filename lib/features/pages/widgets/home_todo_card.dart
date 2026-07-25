@@ -299,10 +299,33 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // No ring here: it showed the average of metrics that can't be
+              // averaged (war attacks vs. 6288 pass points), so a finished
+              // war still read as 13%. The chips below say it precisely.
               Row(
                 children: [
                   Expanded(
                     child: _TodoCardHeader(
+                      // The ring only replaces the town hall on an account
+                      // page, where that artwork is already in the rail. The
+                      // combined page has no town hall to duplicate, so it
+                      // keeps the card's own icon.
+                      leading: isSummaryPage
+                          ? SizedBox.square(
+                              dimension: 46,
+                              child: MobileWebImage(
+                                imageUrl: ImageAssets.iconBuilderPotion,
+                                fit: BoxFit.contain,
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.checklist_rounded,
+                                  size: 24,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            )
+                          : _TodoRing(summary: summary, size: 46),
                       player: player,
                       players: widget.players,
                       hasSummaryPage: hasSummaryPage,
@@ -311,7 +334,6 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
                       summaries: summaries,
                     ),
                   ),
-                  _TodoRing(summary: summary, size: 46),
                 ],
               ),
               const SizedBox(height: 8),
@@ -492,6 +514,7 @@ class _HomeTodoDesktopGrid extends StatelessWidget {
 /// user set in account management: position is stable and learnable.
 class _TodoCardHeader extends StatelessWidget {
   const _TodoCardHeader({
+    required this.leading,
     required this.player,
     required this.players,
     required this.hasSummaryPage,
@@ -499,6 +522,11 @@ class _TodoCardHeader extends StatelessWidget {
     required this.onSelect,
     required this.summaries,
   });
+
+  /// Occupies the slot the town hall image used to: the rail right below
+  /// already shows that artwork for every account, so repeating it for the
+  /// selected one said nothing and wasted the card's most prominent spot.
+  final Widget leading;
 
   /// Null on the combined page.
   final Player? player;
@@ -512,23 +540,11 @@ class _TodoCardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final loc = AppLocalizations.of(context)!;
 
     return Row(
       children: [
-        SizedBox.square(
-          dimension: 46,
-          child: MobileWebImage(
-            imageUrl: player?.townHallPic ?? ImageAssets.iconBuilderPotion,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => Icon(
-              Icons.checklist_rounded,
-              size: 24,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ),
+        leading,
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -548,10 +564,12 @@ class _TodoCardHeader extends StatelessWidget {
                 onSelect: onSelect,
                 entries: [
                   if (hasSummaryPage)
+                    // No badge on the combined entry: it could only ever say
+                    // "at least one account has something left", which the
+                    // per-account badges next to it already say precisely.
                     HomeAccountRailEntry(
                       label: loc.todoAllAccounts,
                       fallbackIcon: Icons.groups_rounded,
-                      hasPendingActions: !summaries.first.isDone,
                     ),
                   for (var i = 0; i < players.length; i++)
                     HomeAccountRailEntry(
@@ -1041,8 +1059,14 @@ class _TodoRing extends StatelessWidget {
       dimension: size,
       child: CustomPaint(
         painter: ProgressRingPainter(
+          // Same colour rule as the ranked and upgrade rings: brand red is
+          // the app's CTA colour, not a progress colour, and it made an
+          // ordinary "nothing done yet" morning look like an error. Raw
+          // `Colors.green` was also a token the design system doesn't own.
           value: summary.ratio,
-          color: summary.isDone ? Colors.green : colorScheme.primary,
+          color: summary.isDone
+              ? CKUpgradeColors.completion
+              : CKColors.donationGreen,
           trackColor: colorScheme.surfaceContainerHighest,
         ),
         child: Center(

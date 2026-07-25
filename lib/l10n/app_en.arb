@@ -2604,6 +2604,7 @@
   "dashboardUpgradeTrackerLab": "Lab",
   "dashboardUpgradeTrackerPets": "Pets",
   "dashboardUpgradeTrackerWalls": "Walls",
+  "dashboardUpgradeTrackerVillage": "Village",
   "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
   "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
   "@dashboardRankedAccounts": {
