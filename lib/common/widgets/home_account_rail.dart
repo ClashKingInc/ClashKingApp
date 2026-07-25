@@ -70,7 +70,21 @@ class HomeAccountRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (entries.length < 2) return const SizedBox.shrink();
+    if (entries.isEmpty) return const SizedBox.shrink();
+
+    // A single account still gets its pill, just not as a control: hiding the
+    // rail outright left the card with no name and no town hall at all, since
+    // the ring had taken the artwork's place. It reads as a label rather than
+    // a switcher because there is nothing to switch to.
+    if (entries.length == 1) {
+      return SizedBox(
+        height: height,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: _RailItem(entry: entries.first, selected: true, onTap: null),
+        ),
+      );
+    }
 
     return SizedBox(
       height: height,
@@ -136,7 +150,10 @@ class _RailItem extends StatelessWidget {
 
   final HomeAccountRailEntry entry;
   final bool selected;
-  final VoidCallback onTap;
+
+  /// Null when the rail holds a single account: the pill is then a label, so
+  /// it must not advertise a tap that would do nothing.
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +167,7 @@ class _RailItem extends StatelessWidget {
     return Tooltip(
       message: entry.label,
       child: Semantics(
-        button: true,
+        button: onTap != null,
         selected: selected,
         label: entry.label,
         child: InkResponse(
