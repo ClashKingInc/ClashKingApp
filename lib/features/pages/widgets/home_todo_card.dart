@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
+import 'package:clashkingapp/common/widgets/home_account_rail.dart';
 import 'package:clashkingapp/common/widgets/home_metric_pill.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -230,9 +231,13 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       0,
       (acc, summary) => math.max(acc, (summary.metrics.length + 1) ~/ 2),
     );
-    // Panel chrome: padding + border + header row + status row + gaps.
     final barsHeight = maxRows == 0 ? 64.0 : HomeMetricPill.gridHeight(maxRows);
-    final height = 116.0 + barsHeight;
+    // Header is the taller of the town-hall image and the title-over-rail
+    // column; the rest is the card's own padding plus the body's status row
+    // and gaps. Spelled out rather than left as one number so adding to the
+    // header can't silently overflow the card again.
+    final headerHeight = math.max(46.0, 19 + 4 + HomeAccountRail.height);
+    final height = 14 + headerHeight + 8 + _bodyHeight(barsHeight) + 14;
     final useDesktopPager = _usesDesktopHomePager(context);
 
     if (useDesktopPager) {
@@ -251,63 +256,95 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: height,
-          child: PageView.builder(
-            controller: _controller,
-            onPageChanged: (index) => setState(() => _index = index),
-            itemCount: itemCount,
-            itemBuilder: (context, index) => _buildTodoPanel(
-              context,
-              index,
-              mockups,
-              hasSummaryPage,
-              summaries,
-              warCwlService,
+    if (_showTodoMockups) {
+      return SizedBox(
+        height: height,
+        child: PageView.builder(
+          controller: _controller,
+          onPageChanged: (index) => setState(() => _index = index),
+          itemCount: itemCount,
+          itemBuilder: (context, index) =>
+              _TodoPreviewPanel(preview: mockups[index]),
+        ),
+      );
+    }
+
+    final safeIndex = _index.clamp(0, itemCount - 1);
+    final summary = summaries[safeIndex];
+    final isSummaryPage = hasSummaryPage && safeIndex == 0;
+    final player = isSummaryPage
+        ? null
+        : widget.players[safeIndex - (hasSummaryPage ? 1 : 0)];
+
+    // The card frame, its title and the account rail stay put — only the
+    // status line and the metric pills live in the pager. Sliding the whole
+    // card meant animating a "To-do list" title that is the same on every
+    // page, and pushed the account rail out with it.
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _openTodo(context, warCwlService!),
+        borderRadius: BorderRadius.circular(28),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(
+              color: Theme.of(
+                context,
+              ).colorScheme.outlineVariant.withValues(alpha: 0.32),
             ),
           ),
-        ),
-        if (itemCount > 1) ...[
-          const SizedBox(height: 10),
-          if (useDesktopPager)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                PageDotsIndicator(
-                  count: itemCount,
-                  index: _index,
-                  onDotTap: (index) => _showTodoPage(itemCount, index),
-                  tooltipForIndex: (index) => 'Card ${index + 1}',
-                ),
-                const SizedBox(width: 12),
-                _PagerArrowButton(
-                  icon: Icons.chevron_left_rounded,
-                  tooltip: 'Previous card',
-                  onPressed: () => _showTodoPage(
-                    itemCount,
-                    (_index - 1 + itemCount) % itemCount,
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: _TodoCardHeader(
+                      player: player,
+                      players: widget.players,
+                      hasSummaryPage: hasSummaryPage,
+                      selectedIndex: safeIndex,
+                      onSelect: (index) => _showTodoPage(itemCount, index),
+                      summaries: summaries,
+                    ),
+                  ),
+                  _TodoRing(summary: summary, size: 46),
+                ],
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: _bodyHeight(barsHeight),
+                child: PageView.builder(
+                  controller: _controller,
+                  onPageChanged: (index) => setState(() => _index = index),
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) => _TodoCardBody(
+                    status: hasSummaryPage && index == 0
+                        ? _todoAllAccountsStatus(
+                            context,
+                            widget.players,
+                            summaries.sublist(1),
+                          )
+                        : summaries[index].lastActiveText(context),
+                    summary: summaries[index],
                   ),
                 ),
-                const SizedBox(width: 6),
-                _PagerArrowButton(
-                  icon: Icons.chevron_right_rounded,
-                  tooltip: 'Next card',
-                  onPressed: () =>
-                      _showTodoPage(itemCount, (_index + 1) % itemCount),
-                ),
-              ],
-            )
-          else
-            Center(
-              child: PageDotsIndicator(count: itemCount, index: _index),
-            ),
-        ],
-      ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
+
+  /// Status row + its gap + the metric pills — everything inside the pager.
+  ///
+  /// The status row is as tall as its chevron (22), not as its text: budgeting
+  /// for the text is what overflowed the card by 4px.
+  static double _bodyHeight(double barsHeight) => 22 + 10 + barsHeight;
 
   Widget _buildTodoPanel(
     BuildContext context,
@@ -442,6 +479,138 @@ class _HomeTodoDesktopGrid extends StatelessWidget {
           children: children,
         );
       },
+    );
+  }
+}
+
+/// Card title plus the account rail that replaced the pager dots.
+///
+/// Dots said only "there are 4 pages" — not which account each one was, so
+/// finding a given account meant swiping through the others and back. The
+/// rail names them and jumps straight there. It scrolls horizontally past a
+/// handful of accounts, which stays workable because the order is the one the
+/// user set in account management: position is stable and learnable.
+class _TodoCardHeader extends StatelessWidget {
+  const _TodoCardHeader({
+    required this.player,
+    required this.players,
+    required this.hasSummaryPage,
+    required this.selectedIndex,
+    required this.onSelect,
+    required this.summaries,
+  });
+
+  /// Null on the combined page.
+  final Player? player;
+  final List<Player> players;
+  final bool hasSummaryPage;
+  final int selectedIndex;
+  final ValueChanged<int> onSelect;
+
+  /// One per page, in page order — drives each avatar's pending badge.
+  final List<_TodoSummary> summaries;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final loc = AppLocalizations.of(context)!;
+
+    return Row(
+      children: [
+        SizedBox.square(
+          dimension: 46,
+          child: MobileWebImage(
+            imageUrl: player?.townHallPic ?? ImageAssets.iconBuilderPotion,
+            fit: BoxFit.contain,
+            errorWidget: (context, url, error) => Icon(
+              Icons.checklist_rounded,
+              size: 24,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                loc.todoTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 4),
+              HomeAccountRail(
+                selectedIndex: selectedIndex,
+                onSelect: onSelect,
+                entries: [
+                  if (hasSummaryPage)
+                    HomeAccountRailEntry(
+                      label: loc.todoAllAccounts,
+                      fallbackIcon: Icons.groups_rounded,
+                      hasPendingActions: !summaries.first.isDone,
+                    ),
+                  for (var i = 0; i < players.length; i++)
+                    HomeAccountRailEntry(
+                      label: players[i].name,
+                      imageUrl: players[i].townHallPic,
+                      fallbackIcon: Icons.home_rounded,
+                      hasPendingActions:
+                          !summaries[i + (hasSummaryPage ? 1 : 0)].isDone,
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Everything that actually changes between accounts: the status line and the
+/// metric pills. The card frame, title and account rail stay outside the
+/// pager, so switching account no longer slides a "To-do list" title that is
+/// identical on every page.
+class _TodoCardBody extends StatelessWidget {
+  const _TodoCardBody({required this.status, required this.summary});
+
+  final String status;
+  final _TodoSummary summary;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                status,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 22,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        _MetricBars(metrics: summary.metrics),
+      ],
     );
   }
 }

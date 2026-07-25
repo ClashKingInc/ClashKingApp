@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/home_account_rail.dart';
 import 'package:clashkingapp/common/widgets/home_metric_pill.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
@@ -92,7 +93,9 @@ class _HomeCardFrame extends StatelessWidget {
 class _HomeCardTappablePanel extends StatelessWidget {
   const _HomeCardTappablePanel({required this.onTap, required this.child});
 
-  final VoidCallback onTap;
+  /// Null on a combined "all accounts" view, which has no single destination
+  /// to open — the card then keeps its frame but stops being a button.
+  final VoidCallback? onTap;
   final Widget child;
 
   @override
@@ -577,31 +580,103 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
         final itemCount = summary.accounts.length + (hasSummaryPage ? 1 : 0);
         _clampIndex(itemCount);
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              // Panel chrome (padding, header, status row, gaps) + one pill row.
-              height: 120 + HomeMetricPill.gridHeight(1),
-              child: PageView.builder(
-                controller: _controller,
-                onPageChanged: (index) => setState(() => _index = index),
-                itemCount: itemCount,
-                itemBuilder: (context, index) =>
-                    _buildPage(summary, index, hasSummaryPage),
+        final loc = AppLocalizations.of(context)!;
+        final safeIndex = _index.clamp(0, itemCount - 1);
+        final isSummaryPage = hasSummaryPage && safeIndex == 0;
+        final account = isSummaryPage
+            ? null
+            : summary.accounts[safeIndex - (hasSummaryPage ? 1 : 0)];
+        // Attacks used, not defenses: attacks are the part the player can
+        // still act on, and it's what the status line underneath talks about.
+        final ringRatio = isSummaryPage
+            ? _rankedRatio(summary.totalAttacksDone, summary.totalAttacksMax)
+            : _rankedRatio(account!.attacksDone, account.maxBattles);
+
+        // Same split as the home to-do card: the frame, title and account
+        // rail stay put, only the status line and the pills ride the pager.
+        return _HomeCardTappablePanel(
+          onTap: account == null
+              ? null
+              : () => _openRankedLeague(account.player),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SizedBox.square(
+                    dimension: 46,
+                    child: MobileWebImage(
+                      imageUrl: account?.tierIconUrl.isNotEmpty == true
+                          ? account!.tierIconUrl
+                          : ImageAssets.shieldWithArrow,
+                      fit: BoxFit.contain,
+                      errorWidget: (_, _, _) =>
+                          const Icon(Icons.emoji_events_rounded),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          loc.rankedLeagueTitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(height: 4),
+                        HomeAccountRail(
+                          selectedIndex: safeIndex,
+                          onSelect: (index) => _showPage(itemCount, index),
+                          entries: [
+                            if (hasSummaryPage)
+                              HomeAccountRailEntry(
+                                label: loc.todoAllAccounts,
+                                fallbackIcon: Icons.groups_rounded,
+                              ),
+                            for (final entry in summary.accounts)
+                              HomeAccountRailEntry(
+                                label: entry.name,
+                                imageUrl: entry.player.townHallPic,
+                                fallbackIcon: Icons.home_rounded,
+                                hasPendingActions:
+                                    _rankedRatio(
+                                      entry.attacksDone,
+                                      entry.maxBattles,
+                                    ) <
+                                    1,
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // The rank/trophy pill used to sit here and covered the rail
+                  // on a three-account row; it moved down to the status line,
+                  // where the ring can own the header's right edge like the
+                  // other two home cards.
+                  _UpgradeProgressRing(
+                    value: ringRatio,
+                    label: '${(ringRatio * 100).round()}%',
+                    size: _homeDashboardRingSize(context),
+                  ),
+                ],
               ),
-            ),
-            if (itemCount > 1) ...[
               const SizedBox(height: 8),
-              Center(
-                child: PageDotsIndicator(
-                  count: itemCount,
-                  index: _index,
-                  onDotTap: (index) => _showPage(itemCount, index),
+              SizedBox(
+                height: 22 + 10 + HomeMetricPill.gridHeight(1),
+                child: PageView.builder(
+                  controller: _controller,
+                  onPageChanged: (index) => setState(() => _index = index),
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) =>
+                      _buildPage(summary, index, hasSummaryPage),
                 ),
               ),
             ],
-          ],
+          ),
         );
       },
     );
@@ -616,18 +691,16 @@ class _HomeRankedCardState extends State<HomeRankedCard> {
       return _RankedAllAccountsPanel(summary: summary);
     }
     final account = summary.accounts[index - (hasSummaryPage ? 1 : 0)];
-    return _RankedAccountPanel(
-      account: account,
-      onTap: () => _openRankedLeague(account.player),
-    );
+    return _RankedAccountPanel(account: account);
   }
 }
 
+/// Pager body for one account: rank line plus its attack/defense pills. The
+/// card frame, title, account rail and trophy pill live in the card header.
 class _RankedAccountPanel extends StatelessWidget {
-  const _RankedAccountPanel({required this.account, required this.onTap});
+  const _RankedAccountPanel({required this.account});
 
   final _RankedHomeAccount account;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -639,94 +712,51 @@ class _RankedAccountPanel extends StatelessWidget {
         ? loc.rankedLeagueNoGroup
         : '${loc.rankedLeagueGroupRank} #${formatter.format(account.rank)}';
 
-    return _HomeCardTappablePanel(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SizedBox.square(
-                dimension: 46,
-                child: account.tierIconUrl.isEmpty
-                    ? const Icon(Icons.emoji_events_rounded)
-                    : MobileWebImage(
-                        imageUrl: account.tierIconUrl,
-                        fit: BoxFit.contain,
-                        errorWidget: (_, _, _) =>
-                            const Icon(Icons.emoji_events_rounded),
-                      ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.rankedLeagueTitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Text(
-                      account.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                rankText,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              _RankedTrophyPill(value: formatter.format(account.trophies)),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  rankText,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 22,
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          _RankedHomeMetricBars(
-            metrics: [
-              _RankedHomeMetricData(
-                imageUrl: ImageAssets.sword,
-                fallbackIcon: Icons.sports_kabaddi_rounded,
-                label: loc.rankedLeagueAttacks,
-                done: account.attacksDone,
-                total: account.maxBattles,
-              ),
-              _RankedHomeMetricData(
-                imageUrl: ImageAssets.shieldWithArrow,
-                fallbackIcon: Icons.shield_rounded,
-                label: loc.rankedLeagueDefenses,
-                done: account.defensesDone,
-                total: account.maxBattles,
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            _RankedTrophyPill(value: formatter.format(account.trophies)),
+            const SizedBox(width: 6),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 22,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        _RankedHomeMetricBars(
+          metrics: [
+            _RankedHomeMetricData(
+              imageUrl: ImageAssets.sword,
+              fallbackIcon: Icons.sports_kabaddi_rounded,
+              label: loc.rankedLeagueAttacks,
+              done: account.attacksDone,
+              total: account.maxBattles,
+            ),
+            _RankedHomeMetricData(
+              imageUrl: ImageAssets.shieldWithArrow,
+              fallbackIcon: Icons.shield_rounded,
+              label: loc.rankedLeagueDefenses,
+              done: account.defensesDone,
+              total: account.maxBattles,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -743,87 +773,46 @@ class _RankedAllAccountsPanel extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return _HomeCardFrame(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SizedBox.square(
-                dimension: 46,
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.shieldWithArrow,
-                  fit: BoxFit.contain,
-                  errorWidget: (_, _, _) =>
-                      const Icon(Icons.emoji_events_rounded),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                _rankedSummaryStatus(context, summary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.rankedLeagueTitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Text(
-                      _rankedSummarySubtitle(context, summary),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (summary.bestRank != null)
-                _RankedBestRankPill(rank: summary.bestRank!),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  _rankedSummaryStatus(context, summary),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          _RankedHomeMetricBars(
-            metrics: [
-              _RankedHomeMetricData(
-                imageUrl: ImageAssets.sword,
-                fallbackIcon: Icons.sports_kabaddi_rounded,
-                label: loc.rankedLeagueAttacks,
-                done: summary.totalAttacksDone,
-                total: summary.totalAttacksMax,
-              ),
-              _RankedHomeMetricData(
-                imageUrl: ImageAssets.shieldWithArrow,
-                fallbackIcon: Icons.shield_rounded,
-                label: loc.rankedLeagueDefenses,
-                done: summary.totalDefensesDone,
-                total: summary.totalDefensesMax,
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            if (summary.bestRank != null)
+              _RankedBestRankPill(rank: summary.bestRank!),
+          ],
+        ),
+        const SizedBox(height: 10),
+        _RankedHomeMetricBars(
+          metrics: [
+            _RankedHomeMetricData(
+              imageUrl: ImageAssets.sword,
+              fallbackIcon: Icons.sports_kabaddi_rounded,
+              label: loc.rankedLeagueAttacks,
+              done: summary.totalAttacksDone,
+              total: summary.totalAttacksMax,
+            ),
+            _RankedHomeMetricData(
+              imageUrl: ImageAssets.shieldWithArrow,
+              fallbackIcon: Icons.shield_rounded,
+              label: loc.rankedLeagueDefenses,
+              done: summary.totalDefensesDone,
+              total: summary.totalDefensesMax,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -1123,12 +1112,11 @@ class _RankedHomeAccount {
   }
 }
 
-String _rankedSummarySubtitle(
-  BuildContext context,
-  _RankedHomeSummary summary,
-) {
-  final loc = AppLocalizations.of(context)!;
-  return loc.todoAccountsNumber(summary.accounts.length);
+/// Share of ranked attacks already used. Zero when the limit is unknown —
+/// a fraction of an unknown total isn't meaningful.
+double _rankedRatio(int done, int? total) {
+  if (total == null || total <= 0) return 0;
+  return (done / total).clamp(0.0, 1.0);
 }
 
 /// Names the accounts that still have ranked attacks left today, falling
