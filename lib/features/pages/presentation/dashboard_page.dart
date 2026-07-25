@@ -1489,6 +1489,19 @@ class _UpgradeAccountPanel extends StatelessWidget {
                   active: account.petsActive ? 1 : 0,
                   total: 1,
                 ),
+              _UpgradeHomeMetricData(
+                imageUrl: ImageAssets.getHomeVillageBuildingImage('Wall', 1),
+                fallbackIcon: Icons.fence_rounded,
+                label: loc.dashboardUpgradeTrackerWalls,
+                meta: account.wallsLevelsRemaining > 0
+                    ? loc.todoItemsLeftShort(account.wallsLevelsRemaining)
+                    : null,
+                // Walls have no queue, so there is no active/total to show —
+                // the value is the completion ratio itself.
+                active: (account.wallsCompletion * 100).round(),
+                total: 100,
+                valueOverride: '${(account.wallsCompletion * 100).round()}%',
+              ),
             ],
           ),
         ],
@@ -1810,7 +1823,12 @@ class _UpgradeHomeMetricData {
     required this.active,
     required this.total,
     this.meta,
+    this.valueOverride,
   });
+
+  /// Set when the metric isn't a queue count — walls report a percentage
+  /// rather than "x of y slots busy".
+  final String? valueOverride;
 
   final String imageUrl;
   final IconData fallbackIcon;
@@ -1827,7 +1845,7 @@ class _UpgradeHomeMetricData {
   /// house): shown as a placeholder with no bar rather than a bogus `0/0`.
   bool get isKnown => total > 0;
 
-  String get value => isKnown ? '$active/$total' : '-';
+  String get value => valueOverride ?? (isKnown ? '$active/$total' : '-');
 
   double? get progress => isKnown ? (active / total).clamp(0.0, 1.0) : null;
 }
@@ -1982,6 +2000,8 @@ class _UpgradeHomeAccount {
     required this.name,
     required this.hallImageUrl,
     required this.completion,
+    required this.wallsCompletion,
+    required this.wallsLevelsRemaining,
     required this.projectedSeconds,
     required this.builderProjectedSeconds,
     required this.labProjectedSeconds,
@@ -1999,6 +2019,14 @@ class _UpgradeHomeAccount {
   final String name;
   final String hallImageUrl;
   final double completion;
+
+  /// Walls are reported as a completion ratio plus the levels still to buy,
+  /// not as `current/target`: those two are sums of levels (5764/5850 on a
+  /// near-maxed base), which means nothing to a player. `levelsRemaining` is
+  /// the count they actually think in — "86 walls left".
+  final double wallsCompletion;
+  final int wallsLevelsRemaining;
+
   final int projectedSeconds;
   final int builderProjectedSeconds;
   final int labProjectedSeconds;
@@ -2072,11 +2100,18 @@ class _UpgradeHomeAccount {
       queue: UpgradeQueue.pets,
     );
 
+    final walls = snapshot.summaryFor(
+      UpgradeCategory.walls,
+      village: UpgradeVillage.home,
+    );
+
     return _UpgradeHomeAccount(
       tag: snapshot.tag,
       name: snapshot.name,
       hallImageUrl: ImageAssets.townHall(snapshot.townHallLevel),
       completion: home.completion.clamp(0.0, 1.0),
+      wallsCompletion: walls.completion.clamp(0.0, 1.0),
+      wallsLevelsRemaining: walls.levelsRemaining,
       projectedSeconds: projectedSeconds,
       builderProjectedSeconds: builderProjectedSeconds,
       labProjectedSeconds: labProjectedSeconds,
