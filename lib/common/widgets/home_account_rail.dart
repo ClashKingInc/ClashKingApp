@@ -72,16 +72,43 @@ class HomeAccountRail extends StatelessWidget {
   Widget build(BuildContext context) {
     if (entries.isEmpty) return const SizedBox.shrink();
 
-    // A single account still gets its pill, just not as a control: hiding the
-    // rail outright left the card with no name and no town hall at all, since
-    // the ring had taken the artwork's place. It reads as a label rather than
-    // a switcher because there is nothing to switch to.
+    // A single account gets a plain subtitle, not a pill. A bordered pill
+    // announces a control, so on a card with nothing to switch to it sat
+    // there looking tappable and inert — and repeated the same name on all
+    // three cards. This is the subtitle the cards carried before the rail.
     if (entries.length == 1) {
-      return SizedBox(
-        height: height,
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: _RailItem(entry: entries.first, selected: true, onTap: null),
+      final entry = entries.first;
+      // Sized by its text, not by [height]: that height exists to give the
+      // pills a 44dp tap target, and a label has nothing to tap, so
+      // reserving it just left a hole under the title.
+      return Padding(
+        padding: const EdgeInsets.only(top: 1, bottom: 3),
+        child: Row(
+          children: [
+            if (entry.imageUrl != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: SizedBox.square(
+                  dimension: 20,
+                  child: MobileWebImage(
+                    imageUrl: entry.imageUrl!,
+                    fit: BoxFit.contain,
+                    errorWidget: (context, url, error) => const SizedBox(),
+                  ),
+                ),
+              ),
+            Flexible(
+              child: Text(
+                entry.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }

@@ -1310,26 +1310,18 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
             children: [
               Row(
                 children: [
-                  // Village completion took the town hall's slot, since the
-                  // rail right below already shows that artwork per account.
-                  // The combined page has no town hall to duplicate, so it
-                  // keeps the card's own icon instead.
-                  if (isSummaryPage)
-                    SizedBox.square(
-                      dimension: 46,
-                      child: MobileWebImage(
-                        imageUrl: ImageAssets.builderWave,
-                        fit: BoxFit.contain,
-                        errorWidget: (_, _, _) =>
-                            const Icon(Icons.construction_rounded, size: 28),
-                      ),
-                    )
-                  else
-                    _UpgradeProgressRing(
-                      value: ringRatio,
-                      label: '${(ringRatio * 100).round()}%',
-                      size: _homeDashboardRingSize(context),
+                  // The card's own icon always leads, so the three home cards
+                  // stay tellable apart while scrolling; the town hall lives
+                  // in the rail underneath, and completion owns the right.
+                  SizedBox.square(
+                    dimension: 46,
+                    child: MobileWebImage(
+                      imageUrl: ImageAssets.builderWave,
+                      fit: BoxFit.contain,
+                      errorWidget: (_, _, _) =>
+                          const Icon(Icons.construction_rounded, size: 28),
                     ),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -1376,9 +1368,11 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
                       ],
                     ),
                   ),
-                  // Village completion moved into a pill of its own: unlike
-                  // the other two cards' rings it wasn't redundant, but it's
-                  // a metric like the rest, so it belongs with them.
+                  _UpgradeProgressRing(
+                    value: ringRatio,
+                    label: '${(ringRatio * 100).round()}%',
+                    size: _homeDashboardRingSize(context),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),

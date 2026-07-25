@@ -315,26 +315,24 @@ class _HomeTodoCardState extends State<HomeTodoCard>
                 children: [
                   Expanded(
                     child: _TodoCardHeader(
-                      // The ring only replaces the town hall on an account
-                      // page, where that artwork is already in the rail. The
-                      // combined page has no town hall to duplicate, so it
-                      // keeps the card's own icon.
-                      leading: isSummaryPage
-                          ? SizedBox.square(
-                              dimension: 46,
-                              child: MobileWebImage(
-                                imageUrl: ImageAssets.iconBuilderPotion,
-                                fit: BoxFit.contain,
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.checklist_rounded,
-                                  size: 24,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            )
-                          : _TodoRing(summary: summary, size: 46),
+                      // The card's own icon always leads, so the three home
+                      // cards stay tellable apart while scrolling; the town
+                      // hall lives in the rail underneath, and progress owns
+                      // the right edge.
+                      leading: SizedBox.square(
+                        dimension: 46,
+                        child: MobileWebImage(
+                          imageUrl: ImageAssets.iconBuilderPotion,
+                          fit: BoxFit.contain,
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.checklist_rounded,
+                            size: 24,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
                       player: player,
                       players: widget.players,
                       hasSummaryPage: hasSummaryPage,
@@ -343,6 +341,7 @@ class _HomeTodoCardState extends State<HomeTodoCard>
                       summaries: summaries,
                     ),
                   ),
+                  _TodoRing(summary: summary, size: 46),
                 ],
               ),
               const SizedBox(height: 8),
