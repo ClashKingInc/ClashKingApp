@@ -96,6 +96,7 @@ class PushNotificationService {
   static const _preferencesEndpoint = '/notifications/preferences';
   static const _tokenPrefsKey = 'push_fcm_token';
   static const _lastRegistrationPrefsKey = 'push_last_registration_token';
+  static const _permissionPrimerShownPrefsKey = 'notif_permission_primer_shown';
   static const notificationsEnabledPrefsKey =
       'notif_settings_notifications_enabled';
   static const _channelId = 'clashking_push';
@@ -117,6 +118,42 @@ class PushNotificationService {
   );
 
   PushNotificationSetupResult get lastResult => _lastResult;
+
+  Future<void> showPermissionPrimerOnce() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasPrompted = prefs.getBool(_permissionPrimerShownPrefsKey) ?? false;
+
+    if (hasPrompted) return;
+
+    final context = globalNavigatorKey.currentContext;
+    if (context == null || !context.mounted) return;
+
+    final shouldEnable = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Enable notifications?'),
+        content: const Text(
+          'ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Not now'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Allow'),
+          ),
+        ],
+      ),
+    );
+
+    await prefs.setBool(_permissionPrimerShownPrefsKey, true);
+
+    if (shouldEnable == true) {
+      await requestPermissionAndRegister();
+    }
+  }
 
   Future<PushNotificationSetupResult> initialize({
     bool register = false,

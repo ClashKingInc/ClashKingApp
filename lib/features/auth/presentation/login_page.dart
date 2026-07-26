@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
+import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dart';
@@ -810,6 +815,7 @@ class _PostAuthLoadingScreen extends StatefulWidget {
 class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
   static const _accountBootstrap = AccountBootstrapService();
   bool _isInitializing = true;
+  bool _shouldPromptForPushPermission = false;
 
   @override
   void initState() {
@@ -825,6 +831,7 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
       final warCwlService = context.read<WarCwlService>();
       final authService = context.read<AuthService>();
       final bookmarkService = context.read<BookmarkService>();
+      final appState = context.read<MyAppState>();
 
       try {
         await _accountBootstrap.initialize(
@@ -835,6 +842,14 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
           clans: clanService,
           wars: warCwlService,
         );
+        if (appState.isFeatureEnabled(AppFeatureFlags.notifications) &&
+            await PushNotificationService.instance.areNotificationsEnabled()) {
+          await PushNotificationService.instance.initialize();
+          unawaited(
+            PushNotificationService.instance.registerCurrentDeviceToken(),
+          );
+          _shouldPromptForPushPermission = true;
+        }
       } catch (e) {
         if (mounted) {
           _showPostAuthFailure(e);
@@ -888,6 +903,14 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
         Navigator.of(
           context,
         ).pushReplacement(MaterialPageRoute(builder: (_) => nextPage));
+        if (_shouldPromptForPushPermission) {
+          unawaited(
+            Future<void>.delayed(
+              const Duration(seconds: 1),
+              PushNotificationService.instance.showPermissionPrimerOnce,
+            ),
+          );
+        }
       }
     });
   }
