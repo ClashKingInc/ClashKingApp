@@ -1,7 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
-import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/home_account_rail.dart';
+import 'package:clashkingapp/common/widgets/home_metric_pill.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
@@ -163,7 +164,15 @@ class HomeTodoCard extends StatefulWidget {
   State<HomeTodoCard> createState() => _HomeTodoCardState();
 }
 
-class _HomeTodoCardState extends State<HomeTodoCard> {
+/// Kept alive so the selected account survives a trip to another tab: the
+/// app's main navigation is a `PageView`, which unmounts the pages either
+/// side, and picking an account is now a deliberate act rather than an
+/// incidental swipe position.
+class _HomeTodoCardState extends State<HomeTodoCard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   late final PageController _controller;
   int _index = 0;
 
@@ -196,6 +205,7 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final loc = AppLocalizations.of(context)!;
     final warCwlService = _showTodoMockups
         ? null
@@ -230,11 +240,13 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       0,
       (acc, summary) => math.max(acc, (summary.metrics.length + 1) ~/ 2),
     );
-    // Panel chrome: padding + border + header row + status row + gaps.
-    final barsHeight = maxRows == 0
-        ? 64.0
-        : maxRows * 38.0 + (maxRows - 1) * 7.0;
-    final height = 116.0 + barsHeight;
+    final barsHeight = maxRows == 0 ? 64.0 : HomeMetricPill.gridHeight(maxRows);
+    // Header is the taller of the town-hall image and the title-over-rail
+    // column; the rest is the card's own padding plus the body's status row
+    // and gaps. Spelled out rather than left as one number so adding to the
+    // header can't silently overflow the card again.
+    final headerHeight = math.max(46.0, 19 + 4 + HomeAccountRail.height);
+    final height = 14 + headerHeight + 8 + _bodyHeight(barsHeight) + 14;
     final useDesktopPager = _usesDesktopHomePager(context);
 
     if (useDesktopPager) {
@@ -253,63 +265,116 @@ class _HomeTodoCardState extends State<HomeTodoCard> {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: height,
-          child: PageView.builder(
-            controller: _controller,
-            onPageChanged: (index) => setState(() => _index = index),
-            itemCount: itemCount,
-            itemBuilder: (context, index) => _buildTodoPanel(
-              context,
-              index,
-              mockups,
-              hasSummaryPage,
-              summaries,
-              warCwlService,
+    if (_showTodoMockups) {
+      return SizedBox(
+        height: height,
+        child: PageView.builder(
+          controller: _controller,
+          onPageChanged: (index) => setState(() => _index = index),
+          itemCount: itemCount,
+          itemBuilder: (context, index) =>
+              _TodoPreviewPanel(preview: mockups[index]),
+        ),
+      );
+    }
+
+    final safeIndex = _index.clamp(0, itemCount - 1);
+    final summary = summaries[safeIndex];
+    final isSummaryPage = hasSummaryPage && safeIndex == 0;
+    final player = isSummaryPage
+        ? null
+        : widget.players[safeIndex - (hasSummaryPage ? 1 : 0)];
+
+    // The card frame, its title and the account rail stay put — only the
+    // status line and the metric pills live in the pager. Sliding the whole
+    // card meant animating a "To-do list" title that is the same on every
+    // page, and pushed the account rail out with it.
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _openTodo(context, warCwlService!),
+        borderRadius: BorderRadius.circular(28),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(
+              color: Theme.of(
+                context,
+              ).colorScheme.outlineVariant.withValues(alpha: 0.32),
             ),
           ),
-        ),
-        if (itemCount > 1) ...[
-          const SizedBox(height: 10),
-          if (useDesktopPager)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                PageDotsIndicator(
-                  count: itemCount,
-                  index: _index,
-                  onDotTap: (index) => _showTodoPage(itemCount, index),
-                  tooltipForIndex: (index) => 'Card ${index + 1}',
-                ),
-                const SizedBox(width: 12),
-                _PagerArrowButton(
-                  icon: Icons.chevron_left_rounded,
-                  tooltip: 'Previous card',
-                  onPressed: () => _showTodoPage(
-                    itemCount,
-                    (_index - 1 + itemCount) % itemCount,
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // No ring here: it showed the average of metrics that can't be
+              // averaged (war attacks vs. 6288 pass points), so a finished
+              // war still read as 13%. The chips below say it precisely.
+              Row(
+                children: [
+                  Expanded(
+                    child: _TodoCardHeader(
+                      // The card's own icon always leads, so the three home
+                      // cards stay tellable apart while scrolling; the town
+                      // hall lives in the rail underneath, and progress owns
+                      // the right edge.
+                      leading: SizedBox.square(
+                        dimension: 46,
+                        child: MobileWebImage(
+                          imageUrl: ImageAssets.iconBuilderPotion,
+                          fit: BoxFit.contain,
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.checklist_rounded,
+                            size: 24,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                      player: player,
+                      players: widget.players,
+                      hasSummaryPage: hasSummaryPage,
+                      selectedIndex: safeIndex,
+                      onSelect: (index) => _showTodoPage(itemCount, index),
+                      summaries: summaries,
+                    ),
+                  ),
+                  _TodoRing(summary: summary, size: 46),
+                ],
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: _bodyHeight(barsHeight),
+                child: PageView.builder(
+                  controller: _controller,
+                  onPageChanged: (index) => setState(() => _index = index),
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) => _TodoCardBody(
+                    status: hasSummaryPage && index == 0
+                        ? _todoAllAccountsStatus(
+                            context,
+                            widget.players,
+                            summaries.sublist(1),
+                          )
+                        : summaries[index].lastActiveText(context),
+                    summary: summaries[index],
                   ),
                 ),
-                const SizedBox(width: 6),
-                _PagerArrowButton(
-                  icon: Icons.chevron_right_rounded,
-                  tooltip: 'Next card',
-                  onPressed: () =>
-                      _showTodoPage(itemCount, (_index + 1) % itemCount),
-                ),
-              ],
-            )
-          else
-            Center(
-              child: PageDotsIndicator(count: itemCount, index: _index),
-            ),
-        ],
-      ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
+
+  /// Status row + its gap + the metric pills — everything inside the pager.
+  ///
+  /// The status row is as tall as its chevron (22), not as its text: budgeting
+  /// for the text is what overflowed the card by 4px.
+  static double _bodyHeight(double barsHeight) => 22 + 10 + barsHeight;
 
   Widget _buildTodoPanel(
     BuildContext context,
@@ -444,6 +509,134 @@ class _HomeTodoDesktopGrid extends StatelessWidget {
           children: children,
         );
       },
+    );
+  }
+}
+
+/// Card title plus the account rail that replaced the pager dots.
+///
+/// Dots said only "there are 4 pages" — not which account each one was, so
+/// finding a given account meant swiping through the others and back. The
+/// rail names them and jumps straight there. It scrolls horizontally past a
+/// handful of accounts, which stays workable because the order is the one the
+/// user set in account management: position is stable and learnable.
+class _TodoCardHeader extends StatelessWidget {
+  const _TodoCardHeader({
+    required this.leading,
+    required this.player,
+    required this.players,
+    required this.hasSummaryPage,
+    required this.selectedIndex,
+    required this.onSelect,
+    required this.summaries,
+  });
+
+  /// Occupies the slot the town hall image used to: the rail right below
+  /// already shows that artwork for every account, so repeating it for the
+  /// selected one said nothing and wasted the card's most prominent spot.
+  final Widget leading;
+
+  /// Null on the combined page.
+  final Player? player;
+  final List<Player> players;
+  final bool hasSummaryPage;
+  final int selectedIndex;
+  final ValueChanged<int> onSelect;
+
+  /// One per page, in page order — drives each avatar's pending badge.
+  final List<_TodoSummary> summaries;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    return Row(
+      children: [
+        leading,
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                loc.todoTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 4),
+              HomeAccountRail(
+                selectedIndex: selectedIndex,
+                onSelect: onSelect,
+                entries: [
+                  if (hasSummaryPage)
+                    // No badge on the combined entry: it could only ever say
+                    // "at least one account has something left", which the
+                    // per-account badges next to it already say precisely.
+                    HomeAccountRailEntry(
+                      label: loc.todoAllAccounts,
+                      fallbackIcon: Icons.groups_rounded,
+                    ),
+                  for (var i = 0; i < players.length; i++)
+                    HomeAccountRailEntry(
+                      label: players[i].name,
+                      imageUrl: players[i].townHallPic,
+                      fallbackIcon: Icons.home_rounded,
+                      hasPendingActions:
+                          !summaries[i + (hasSummaryPage ? 1 : 0)].isDone,
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Everything that actually changes between accounts: the status line and the
+/// metric pills. The card frame, title and account rail stay outside the
+/// pager, so switching account no longer slides a "To-do list" title that is
+/// identical on every page.
+class _TodoCardBody extends StatelessWidget {
+  const _TodoCardBody({required this.status, required this.summary});
+
+  final String status;
+  final _TodoSummary summary;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                status,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 22,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        _MetricBars(metrics: summary.metrics),
+      ],
     );
   }
 }
@@ -874,8 +1067,14 @@ class _TodoRing extends StatelessWidget {
       dimension: size,
       child: CustomPaint(
         painter: ProgressRingPainter(
+          // Same colour rule as the ranked and upgrade rings: brand red is
+          // the app's CTA colour, not a progress colour, and it made an
+          // ordinary "nothing done yet" morning look like an error. Raw
+          // `Colors.green` was also a token the design system doesn't own.
           value: summary.ratio,
-          color: summary.isDone ? Colors.green : colorScheme.primary,
+          color: summary.isDone
+              ? CKUpgradeColors.completion
+              : CKColors.donationGreen,
           trackColor: colorScheme.surfaceContainerHighest,
         ),
         child: Center(
@@ -921,31 +1120,9 @@ class _MetricBars extends StatelessWidget {
       );
     }
 
-    // Two metrics per row; a metric alone on its row spans the full width.
-    final rows = <Widget>[];
-    for (var i = 0; i < metrics.length; i += 2) {
-      if (i + 1 < metrics.length) {
-        rows.add(
-          Row(
-            children: [
-              Expanded(child: _MetricBar(metric: metrics[i])),
-              const SizedBox(width: 7),
-              Expanded(child: _MetricBar(metric: metrics[i + 1])),
-            ],
-          ),
-        );
-      } else {
-        rows.add(_MetricBar(metric: metrics[i]));
-      }
-    }
-
-    return Column(
-      children: [
-        for (var i = 0; i < rows.length; i++) ...[
-          if (i > 0) const SizedBox(height: 7),
-          rows[i],
-        ],
-      ],
+    return CKMetricChipGrid(
+      spacing: HomeMetricPill.gap,
+      chips: [for (final metric in metrics) _MetricBar(metric: metric)],
     );
   }
 }
@@ -957,98 +1134,13 @@ class _MetricBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final done = metric.done >= metric.total;
-    final fillColor = done ? Colors.green : metric.color;
-
-    return SizedBox(
-      height: 38,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: fillColor.withValues(alpha: isDark ? 0.28 : 0.34),
-          borderRadius: BorderRadius.circular(AppRadius.control),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.control),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: metric.ratio,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: fillColor.withValues(alpha: isDark ? 0.38 : 0.48),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 9),
-                child: Row(
-                  children: [
-                    _MetricIcon(metric: metric),
-                    const SizedBox(width: 7),
-                    Expanded(
-                      child: Semantics(
-                        label: '${metric.label}, ${metric.detail}',
-                        child: ExcludeSemantics(
-                          child: Text(
-                            metric.label,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(
-                                  color: colorScheme.onSurface,
-                                  fontWeight: FontWeight.w900,
-                                  height: 1.1,
-                                ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '${metric.done}/${metric.total}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: fillColor,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MetricIcon extends StatelessWidget {
-  const _MetricIcon({required this.metric});
-
-  final _TodoMetric metric;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.72),
-        shape: BoxShape.circle,
-      ),
-      child: SizedBox.square(
-        dimension: 26,
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: MobileWebImage(
-            imageUrl: metric.imageUrl,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) =>
-                Icon(metric.fallbackIcon, size: 18, color: metric.color),
-          ),
-        ),
-      ),
+    return HomeMetricPill(
+      label: metric.label,
+      value: '${metric.done}/${metric.total}',
+      progress: metric.ratio,
+      imageUrl: metric.imageUrl,
+      fallbackIcon: metric.fallbackIcon,
+      semanticLabel: '${metric.label}, ${metric.detail}',
     );
   }
 }

@@ -6,7 +6,15 @@ import 'package:intl/intl.dart';
 class LastRefreshIndicator extends StatefulWidget {
   final DateTime? lastRefresh;
 
-  const LastRefreshIndicator({super.key, required this.lastRefresh});
+  /// Optional: makes the indicator tappable. Without it the widget keeps its
+  /// original read-only behaviour.
+  final Future<void> Function()? onRefresh;
+
+  const LastRefreshIndicator({
+    super.key,
+    required this.lastRefresh,
+    this.onRefresh,
+  });
 
   @override
   State<LastRefreshIndicator> createState() => _LastRefreshIndicatorState();
@@ -69,28 +77,47 @@ class _LastRefreshIndicatorState extends State<LastRefreshIndicator> {
 
     final formattedTime = _formatRefreshTime(widget.lastRefresh!, context);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+    final colorScheme = Theme.of(context).colorScheme;
+    final label = AppLocalizations.of(
+      context,
+    )!.generalLastRefresh(formattedTime);
+
+    final row = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             Icons.refresh,
             size: 12,
-            color: Theme.of(
-              context,
-            ).colorScheme.onSurface.withValues(alpha: 0.6),
+            color: colorScheme.onSurface.withValues(alpha: 0.6),
           ),
           const SizedBox(width: 4),
           Text(
-            AppLocalizations.of(context)!.generalLastRefresh(formattedTime),
+            label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(
-                context,
-              ).colorScheme.onSurface.withValues(alpha: 0.6),
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
+      ),
+    );
+
+    // The refresh glyph made this look actionable while it was inert, so the
+    // obvious tap did nothing and pull-to-refresh had to be discovered. When
+    // a caller wires [onRefresh] it becomes the button it already looked like.
+    if (widget.onRefresh == null) return Center(child: row);
+
+    return Center(
+      child: Semantics(
+        button: true,
+        label: label,
+        child: InkWell(
+          onTap: widget.onRefresh,
+          borderRadius: BorderRadius.circular(999),
+          child: row,
+        ),
       ),
     );
   }

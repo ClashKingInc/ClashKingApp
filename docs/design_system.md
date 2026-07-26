@@ -4,6 +4,24 @@ This is the reference for the visual language shared by every detail screen in t
 
 The philosophy in one line: **one flat surface with rounded rows — never a card inside a card.**
 
+## Where the truth lives
+
+> **Tokens and cross-client primitives live in DevKit** (`design/` in the
+> `ClashKingInc/DevKit` repo, consumed here as the `clashking_design_system`
+> package). Colours, radii, spacing, opacity, typography roles and the `CK*`
+> widgets are defined there and must not be redefined here — see
+> `design/docs/components.md` and `design/docs/governance.md`.
+>
+> **This document covers what DevKit does not**: the app's layout patterns,
+> its local widget catalog, and the known gaps.
+>
+> When the two disagree, **the shipped app wins and the docs get fixed** — not
+> the other way round. This is not hypothetical: `components.md` presents
+> `CKMetricChip` as *the* answer for "compact label/value stats", but the
+> Player and Clan cards deliberately use a different, quieter shape (see
+> [Two chip roles](#two-chip-roles)). Reading the doc without reading the
+> screens produced a home dashboard that matched nothing, twice.
+
 ## Contents
 - [Tokens](#tokens)
 - [Component catalog](#component-catalog)
@@ -84,6 +102,38 @@ Two tiers, by what the icon represents:
 ## Component catalog
 
 All in `lib/common/widgets/`.
+
+### Two chip roles
+
+DevKit's `components.md` describes `CKMetricChip` as the shape for "compact
+label/value stats". That is true **inside a hero header's stats panel**, and
+misleading everywhere else. The app actually runs two distinct shapes, and
+picking the wrong one is the single easiest way to make a new screen look
+foreign:
+
+| | **Card tag** | **Header stat tile** |
+| --- | --- | --- |
+| Where | inside a list/summary card | in a hero header's stats panel |
+| Shape | pill (`999`), one or two lines | `CKRadius.control`, label over value |
+| Fill | quiet `surface @ 0.5`, hairline border | tinted by the stat's own colour |
+| Leading | bare game asset, no circle | asset in a 26px circle |
+| Examples | `players_page.dart`'s `_InfoChip`, `clan_page.dart`'s `_ClanChipShell`, `home_metric_pill.dart` | `MetricChip`/`MetricChipGrid` → `CKMetricChip` |
+
+Rule of thumb: **a card already is a surface, so its contents stay quiet; a
+hero header is artwork, so its stats need their own fill to read.** If you are
+adding a chip inside a `Card`, copy the pill; if you are adding one to a
+header panel, use `MetricChip`.
+
+### `home_metric_pill.dart`
+- **`HomeMetricPill`** — the card-tag pill used by all three home dashboard
+  cards. Label (+ optional `meta`) over a value, completion carried by the
+  value's colour rather than by any added badge or bar.
+
+### `home_account_rail.dart`
+- **`HomeAccountRail`** — account switcher shown in a home card's header in
+  place of pager dots. Only the selected entry expands to show its name; a
+  single-entry rail renders as a non-interactive label. Optional per-entry
+  status badge (filled = something pending, hollow = settled).
 
 ### `summary_chips.dart`
 - **`ClanSummaryChip`** — read-only stat pill: dot-or-icon, bold value, muted label. `color` tints the icon/value; omit it for a neutral chip. Optional `onTap` wraps it in a tooltip + ripple.
@@ -207,5 +257,7 @@ Never a bare `Card` with a single line of text. Reference: `clan_info/clan_page.
 - `clan_info/clan_page.dart` has a richer filter row than `ClanFilterRail`/`ClanFilterChip`: a private `_FilterBar`/`_FilterPill`/`_FilterActionButton` (icon toggle that reveals a `Wrap` of chips on demand, plus optional trailing action icons and a middle `ClanSummaryChips` slot) already shared internally between its War Log and Statistics tabs. It isn't promoted to `common/widgets/` yet, so `clan_capital`/`cwl` screens fall back to the simpler always-visible `ClanFilterRail`. Worth promoting if a screen needs the collapsible behavior.
 - Not every existing card/row in the app has been retrofitted to reference `AppRadius`/`AppOpacity` by name — some still repeat the literal numbers (16/20/0.28/0.32/etc). Prefer the token in new/touched code; a full retrofit hasn't been done.
 - **Bespoke chip reimplementations**: several screens hand-roll their own icon+value pill instead of `ClanSummaryChip`/`ClanFilterChip` — `clan_header.dart`'s `_ClanQuickChip`/`_ClanChipRows`, `clan_members.dart`'s `_SortValueChip`, `pages/clan_page.dart`'s `_AccountCountChip`/`_ClanImageChip`/`_ClanIconChip`/`_ClanChipShell`, `players_page.dart`'s `_InfoChip`, `player_war_stats_profile_tab.dart`'s `_WarTypeChip`. Most have a genuine reason (image-vs-icon leading slot, different sizing, a `Wrap`-based auto-layout `ClanSummaryChip` doesn't do) rather than being pure duplication — audit case by case before consolidating, don't blanket-replace.
+  **Partly resolved**: `_InfoChip`, `_ClanChipShell` and `home_metric_pill.dart` are now understood as one shape with three copies — the *card tag* documented in [Two chip roles](#two-chip-roles). They share a recipe (pill radius, `surface @ 0.5`, `outlineVariant @ 0.18`, bare leading asset) but no code. Per DevKit's `governance.md` — reusable visual vocabulary, no dependency on product state, three consumers already — this belongs upstream as a `CK*` primitive rather than being consolidated locally. Until that lands, copy the recipe; do not invent a fourth variant.
+- **`HomeMetricPill` and `HomeAccountRail` are candidates for DevKit**: both encode a reusable vocabulary with no product-state dependency. `HomeMetricPill` additionally wants a `progress`-free completion convention that DevKit has no primitive for yet.
 - **`Card` still used outside the migrated screens**: clan/CWL/capital/player-war-stats no longer use `Card` (the three instances found in `cwl_team_card.dart`/`cwl_member_card.dart`/`cwl_round_card.dart` were converted to the flat pattern). Plenty of `Card` usage remains elsewhere — auth flow dialogs (`forgot_password`, `reset_password`, `email_verification`, `account_management`), `clan_search_filters_dialog.dart`, and a handful of simple empty-state placeholders (`clan_war_log.dart`, `clan_members.dart`, `pages/clan_page.dart`, `player_legend_by_day.dart`). These are outside this system's current scope (mostly dialogs/simple lists, not the hero-header detail screens this document targets) — migrate opportunistically, not as a forced sweep.
 - This document currently covers the Flutter app only. If `ClashKingDashboard` (web) ever needs to share visual identity, only the token layer (color/radius/opacity values, not the Flutter widgets themselves) would be portable — see the "design system repo" discussion in project history for why a shared component library isn't feasible across Flutter and web.
