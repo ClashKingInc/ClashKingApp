@@ -1944,6 +1944,7 @@ class _UpgradeHomeAccount {
     required this.hallImageUrl,
     required this.completion,
     required this.needsUpdate,
+    required this.hasActionableQueueWork,
     required this.wallsAtMax,
     required this.wallsTotal,
     required this.projectedSeconds,
@@ -1970,19 +1971,20 @@ class _UpgradeHomeAccount {
   /// leave an idle account permanently flagged.
   final bool needsUpdate;
 
+  /// True when a queue slot is free and the snapshot still contains a
+  /// non-recurrent, unfinished item that is not already running. Idle slots by
+  /// themselves are not actionable on maxed accounts.
+  final bool hasActionableQueueWork;
+
   /// Wall segments already at their target level, out of the total. Counted
   /// per wall rather than per level, which is how players talk about them.
   final int wallsAtMax;
   final int wallsTotal;
 
-  /// Whether any build slot is sitting idle. This is what the rail badge
-  /// reports: the card exists to answer "do I need to go restart something",
-  /// so green means every builder, the lab and the pet house are all busy.
-  /// Walls are deliberately not part of it — they have no queue to start.
-  bool get hasIdleQueue =>
-      activeBuilders < totalBuilders ||
-      (hasLab && !labActive) ||
-      (hasPets && !petsActive);
+  /// Whether the rail should flag this account as needing attention. Stale
+  /// snapshots are actionable, as are idle queue slots with unfinished work to
+  /// start. Fully maxed accounts and wall-only leftovers stay settled.
+  bool get hasIdleQueue => needsUpdate || hasActionableQueueWork;
 
   final int projectedSeconds;
   final int builderProjectedSeconds;
@@ -2056,6 +2058,16 @@ class _UpgradeHomeAccount {
       village: UpgradeVillage.home,
       queue: UpgradeQueue.pets,
     );
+    final totalBuilders = snapshot.buildersFor(UpgradeVillage.home);
+    final labActive = isActive(UpgradeQueue.laboratory);
+    final petsActive = isActive(UpgradeQueue.pets);
+
+    bool hasIdleWork(Iterable<UpgradeTrackerItem> items) => items.any(
+      (item) =>
+          !item.recurrentHelper &&
+          !item.isComplete &&
+          snapshot.remainingActiveSeconds(item, now: now) <= 0,
+    );
 
     // Counted per wall, not per level: `summaryFor(walls)` reports sums of
     // levels (5764/5850 on a near-maxed base), which is not how anyone thinks
@@ -2078,6 +2090,10 @@ class _UpgradeHomeAccount {
         startedItems.every(
           (item) => snapshot.remainingActiveSeconds(item, now: now) <= 0,
         );
+    final hasActionableQueueWork =
+        (activeBuilders < totalBuilders && hasIdleWork(builderItems)) ||
+        (!labActive && hasIdleWork(labItems)) ||
+        (!petsActive && hasIdleWork(petItems));
 
     return _UpgradeHomeAccount(
       tag: snapshot.tag,
@@ -2085,6 +2101,7 @@ class _UpgradeHomeAccount {
       hallImageUrl: ImageAssets.townHall(snapshot.townHallLevel),
       completion: home.completion.clamp(0.0, 1.0),
       needsUpdate: needsUpdate,
+      hasActionableQueueWork: hasActionableQueueWork,
       wallsAtMax: wallsAtMax,
       wallsTotal: wallsTotal,
       projectedSeconds: projectedSeconds,
@@ -2092,10 +2109,10 @@ class _UpgradeHomeAccount {
       labProjectedSeconds: labProjectedSeconds,
       petProjectedSeconds: petProjectedSeconds,
       activeBuilders: activeBuilders,
-      totalBuilders: snapshot.buildersFor(UpgradeVillage.home),
-      labActive: isActive(UpgradeQueue.laboratory),
+      totalBuilders: totalBuilders,
+      labActive: labActive,
       hasLab: labItems.isNotEmpty,
-      petsActive: isActive(UpgradeQueue.pets),
+      petsActive: petsActive,
       hasPets: petItems.isNotEmpty,
       capturedAt: snapshot.capturedAt,
     );
