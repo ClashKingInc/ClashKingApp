@@ -91,8 +91,11 @@ class PushNotificationService {
     return '$_pushApiV2BaseOverride$endpoint';
   }
 
+  static bool get supportsPushNotifications =>
+      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+
   static void registerBackgroundHandler() {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    if (supportsPushNotifications) {
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     }
   }
@@ -124,6 +127,8 @@ class PushNotificationService {
   PushNotificationSetupResult get lastResult => _lastResult;
 
   Future<void> showPermissionPrimerOnce() async {
+    if (!supportsPushNotifications) return;
+
     final prefs = await SharedPreferences.getInstance();
     final hasPrompted = prefs.getBool(_permissionPrimerShownPrefsKey) ?? false;
 
@@ -162,7 +167,7 @@ class PushNotificationService {
   Future<PushNotificationSetupResult> initialize({
     bool register = false,
   }) async {
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
+    if (!supportsPushNotifications) {
       return _setResult(
         const PushNotificationSetupResult(
           state: PushNotificationSetupState.unsupported,
@@ -321,6 +326,8 @@ class PushNotificationService {
     String? token,
     bool allowDisabled = false,
   }) async {
+    if (!supportsPushNotifications) return;
+
     if (!allowDisabled && !await areNotificationsEnabled()) {
       DebugUtils.debugInfo(
         'Push registration skipped: notifications disabled.',
@@ -375,7 +382,7 @@ class PushNotificationService {
   }
 
   Future<bool> unregisterCurrentDeviceToken() async {
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
+    if (!supportsPushNotifications) return false;
 
     final prefs = await SharedPreferences.getInstance();
     final payload = <String, dynamic>{
