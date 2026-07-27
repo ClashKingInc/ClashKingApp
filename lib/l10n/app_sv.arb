@@ -779,8 +779,6 @@
   "todoExplanationIntro": "Procenten slutförda uppgifter beräknas utifrån följande aktiviteter med specifika viktningar:",
   "todoExplanationLegendsTitle": "Legend-ligan:",
   "todoExplanationLegends": "Vikt på 8 poäng per konto, 1 attack = 1 poäng.",
-  "todoExplanationRaidsTitle": "Räder:",
-  "todoExplanationRaids": "Vikt på 5 poäng per konto (eller 6 om den sista attacken har låsts upp), 1 attack = 1 poäng.",
   "todoExplanationClanWarsTitle": "Klankrig:",
   "todoExplanationClanWars": "Vikt på 2 poäng per konto, 1 attack = 1 poäng.",
   "todoExplanationCwlTitle": "Klan-krigsligan:",
@@ -2360,34 +2358,6 @@
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
-  "settingsLiveActivityTest": "Liveaktivitetstest",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStart": "Starta testaktivitet",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "settingsLiveActivityStartSubtitle": "Visar en lokal förhandsvisning av klankrig.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdate": "Uppdatera poäng",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityUpdateSubtitle": "Avancerar den falska krigspoängen.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Avsluta testaktivitet",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "settingsLiveActivityEndSubtitle": "Tar bort den lokala förhandsgranskningen.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
   "settingsSupport": "Stöd",
   "@settingsSupport": {
     "description": "Settings section: support"
@@ -2777,7 +2747,6 @@
   "todoLegendAttacks": "Legend attacks",
   "todoWarAttacks": "War attacks",
   "todoCwlAttacks": "CWL attacks",
-  "todoRaidAttacks": "Raid attacks",
   "gameSeasonPassShort": "Pass",
   "todoMockMaxedMainName": "Maxed Main",
   "todoMockMaxedMainSubtitle": "TH17 · everything active",
@@ -2786,14 +2755,11 @@
   "todoMockWar1Left": "1 left",
   "todoMockCwl1LeftRound": "1 left this round",
   "todoMockClanGames2700Left": "2.7K points left",
-  "todoMockRaid4Left": "4 left",
   "todoMockPass850Left": "850 points left",
   "todoMockWarAltName": "War Alt",
   "todoMockWarAltSubtitle": "TH15 · war focused",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
   "todoMockWar2Left": "2 left",
   "todoMockClanGames900Left": "900 points left",
-  "todoMockRaid1Left": "1 left",
   "todoMockLegendPushName": "Legend Push",
   "todoMockLegendPushSubtitle": "TH16 · daily attacks",
   "todoMockLegendPushStatus": "Active 1h ago · legends and pass progress",
