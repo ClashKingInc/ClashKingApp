@@ -16,6 +16,8 @@ class FaqScreen extends StatefulWidget {
 }
 
 class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
+  static const _supportEmail = 'devs@clashk.ing';
+
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   late AnimationController _animationController;
@@ -477,7 +479,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.manage_accounts_rounded,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -485,7 +487,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqLinkedAccountsAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildSolutionItem(
                   AppLocalizations.of(context)!.faqLinkedAccountsSolution1,
                 ),
@@ -511,7 +513,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.notifications_active_rounded,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -519,7 +521,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqNotificationsAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildSolutionItem(
                   AppLocalizations.of(context)!.faqNotificationsSolution1,
                 ),
@@ -545,7 +547,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.widgets_rounded,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -553,7 +555,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqWidgetsAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildSolutionItem(
                   AppLocalizations.of(context)!.faqWidgetsSolution1,
                 ),
@@ -585,7 +587,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         icon: Icons.favorite,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -593,14 +595,14 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqSupportWorkAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   AppLocalizations.of(context)!.faqWaysToSupport,
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Column(
                   children: [
                     Row(
@@ -647,7 +649,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         _buildActionButton(
@@ -676,12 +678,12 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
           AppLocalizations.of(context)!.faqNeedHelpAnswer,
           AppLocalizations.of(context)!.faqSendEmail,
           AppLocalizations.of(context)!.faqJoinDiscord,
-          'devs@clashk.ing',
+          _supportEmail,
         ],
         icon: Icons.help,
         content: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -689,7 +691,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                   AppLocalizations.of(context)!.faqNeedHelpAnswer,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     _buildActionButton(
@@ -699,7 +701,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       onPressed: () async {
                         final Uri params = Uri(
                           scheme: 'mailto',
-                          path: 'devs@clashk.ing',
+                          path: _supportEmail,
                           query: 'subject=App%20Inquiry',
                         );
 
@@ -735,7 +737,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                               },
                             );
 
-                            FlutterClipboard.copy('devs@clashk.ing').then((_) {
+                            FlutterClipboard.copy(_supportEmail).then((_) {
                               if (mounted) {
                                 showClipboardSnackbar(
                                   context,
