@@ -101,11 +101,11 @@ void main() {
     });
   });
 
-  test('device opt-in saves V2 preferences without dropping choices', () async {
-    SharedPreferences.setMockInitialValues({
-      NotificationPreferencesService.localKey: jsonEncode(responseBody),
-    });
+  test('device opt-in loads V2 preferences before saving', () async {
     final api = FakeApiService();
+    const query =
+        '/notifications/preferences?device_id=device-1&environment=sandbox';
+    api.getStubs[query] = http.Response(jsonEncode(responseBody), 200);
     api.putStubs[NotificationPreferencesService.endpoint] = http.Response(
       jsonEncode({...responseBody, 'deviceEnabled': true}),
       200,
@@ -118,6 +118,7 @@ void main() {
 
     final saved = await service.setDeviceEnabled(true);
 
+    expect(api.getCallCounts[query], 1);
     expect(saved.deviceEnabled, isTrue);
     expect(api.lastPutBodies[NotificationPreferencesService.endpoint], {
       'deviceId': 'device-1',
