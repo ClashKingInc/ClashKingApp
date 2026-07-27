@@ -102,17 +102,19 @@ class TokenService {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final newAccessToken = data['access_token'];
+        final newRefreshToken = data['refresh_token'];
 
-        if (newAccessToken == null || newAccessToken.isEmpty) {
+        if (newAccessToken is! String ||
+            newAccessToken.isEmpty ||
+            newRefreshToken is! String ||
+            newRefreshToken.isEmpty) {
           Sentry.captureMessage(
-            "Token refresh API returned empty access token",
+            "Token refresh API returned empty replacement tokens",
           );
           return null;
         }
 
-        await _persistAccessToken(newAccessToken);
-        _cachedAccessToken = newAccessToken;
-        _tokensLoaded = true;
+        await saveTokens(newAccessToken, newRefreshToken);
 
         DebugUtils.debugSuccess("Token refreshed successfully");
         return newAccessToken;
@@ -362,16 +364,5 @@ class TokenService {
     }
 
     return (accessToken, refreshToken);
-  }
-
-  Future<void> _persistAccessToken(String accessToken) async {
-    if (kIsWeb) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_accessTokenKey, accessToken);
-      await _secureStorage.delete(key: _accessTokenKey);
-      return;
-    }
-
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
   }
 }

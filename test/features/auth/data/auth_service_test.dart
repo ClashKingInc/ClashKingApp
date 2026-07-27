@@ -164,6 +164,42 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // signInWithDiscord
+  // ---------------------------------------------------------------------------
+
+  group('AuthService — signInWithDiscord', () {
+    test('sends the Discord OAuth contract without device_name', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/auth/discord'] = http.Response(
+        jsonEncode({
+          'access_token': 'acc123',
+          'refresh_token': 'ref123',
+          'user': userJson(),
+        }),
+        200,
+      );
+      final service = AuthService(
+        apiService: fakeApi,
+        tokenService: FakeTokenService(fakeToken: null),
+        discordAuthCodeProvider: () async => {
+          'code': 'auth_code',
+          'code_verifier': 'verifier',
+        },
+      );
+
+      await service.signInWithDiscord();
+
+      final body =
+          fakeApi.lastPostBodies['/auth/discord'] as Map<String, dynamic>;
+      expect(body['code'], 'auth_code');
+      expect(body['code_verifier'], 'verifier');
+      expect(body['device_id'], 'test-device-id');
+      expect(body['redirect_uri'], isNotEmpty);
+      expect(body, isNot(contains('device_name')));
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // signInWithEmail
   // ---------------------------------------------------------------------------
 

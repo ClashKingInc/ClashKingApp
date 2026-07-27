@@ -63,6 +63,7 @@ void main() {
       final refreshedToken = _buildToken(
         DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120,
       );
+      const replacementRefreshToken = 'replacement-refresh-token';
       FlutterSecureStorage.setMockInitialValues({
         'access_token': expiredToken,
         'refresh_token': 'refresh-token',
@@ -71,7 +72,13 @@ void main() {
       final client = MockClient((request) async {
         refreshRequests++;
         await Future<void>.delayed(const Duration(milliseconds: 10));
-        return http.Response(jsonEncode({'access_token': refreshedToken}), 200);
+        return http.Response(
+          jsonEncode({
+            'access_token': refreshedToken,
+            'refresh_token': replacementRefreshToken,
+          }),
+          200,
+        );
       });
       final tokenService = _CountingTokenService(client: client);
 
@@ -85,6 +92,78 @@ void main() {
       expect(tokenService.deviceIdReads, 1);
       const storage = FlutterSecureStorage();
       expect(await storage.read(key: 'access_token'), refreshedToken);
+      expect(await storage.read(key: 'refresh_token'), replacementRefreshToken);
+    });
+
+    test('uses the replacement refresh token on the next rotation', () async {
+      final expiredToken = _buildToken(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 60,
+      );
+      final firstRefreshedToken = _buildToken(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 60,
+      );
+      final secondRefreshedToken = _buildToken(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120,
+      );
+      FlutterSecureStorage.setMockInitialValues({
+        'access_token': expiredToken,
+        'refresh_token': 'initial-refresh-token',
+      });
+      final presentedRefreshTokens = <String>[];
+      final client = MockClient((request) async {
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        presentedRefreshTokens.add(body['refresh_token'] as String);
+        final firstRequest = presentedRefreshTokens.length == 1;
+        return http.Response(
+          jsonEncode({
+            'access_token': firstRequest
+                ? firstRefreshedToken
+                : secondRefreshedToken,
+            'refresh_token': firstRequest
+                ? 'first-replacement-refresh-token'
+                : 'second-replacement-refresh-token',
+          }),
+          200,
+        );
+      });
+      final tokenService = _CountingTokenService(client: client);
+
+      expect(await tokenService.getAccessToken(), firstRefreshedToken);
+      expect(await tokenService.getAccessToken(), secondRefreshedToken);
+
+      expect(presentedRefreshTokens, [
+        'initial-refresh-token',
+        'first-replacement-refresh-token',
+      ]);
+      const storage = FlutterSecureStorage();
+      expect(await storage.read(key: 'access_token'), secondRefreshedToken);
+      expect(
+        await storage.read(key: 'refresh_token'),
+        'second-replacement-refresh-token',
+      );
+    });
+
+    test('rejects a successful response missing a replacement token', () async {
+      final expiredToken = _buildToken(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 60,
+      );
+      FlutterSecureStorage.setMockInitialValues({
+        'access_token': expiredToken,
+        'refresh_token': 'deleted-refresh-token',
+      });
+      final client = MockClient(
+        (_) async => http.Response(
+          jsonEncode({'access_token': 'new-access-token'}),
+          200,
+        ),
+      );
+      final tokenService = _CountingTokenService(client: client);
+
+      expect(await tokenService.getAccessToken(), isNull);
+
+      const storage = FlutterSecureStorage();
+      expect(await storage.read(key: 'access_token'), isNull);
+      expect(await storage.read(key: 'refresh_token'), isNull);
     });
   });
 }
