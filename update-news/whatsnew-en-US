@@ -1,6 +1,7 @@
 - Settings language and theme pickers now match the app's current settings styling in light and dark mode
 - Refined notification audience settings with clearer account scope controls.
 - Updated the FAQ with clearer feature coverage for accounts, notifications, widgets, to-do, and upgrade tracking
+- Added the Upgrade Tracker widget on Android with account selection, responsive iOS-style layouts, and reliable refreshes
 - Fixed the home to-do card so it also hides accounts you've turned "Show on to-do page" off for, not just the full to-do list
 - Added safer remote rollouts for posts, notifications, rankings, widgets, upgrade tracking, and experimental features
 - Rebuilt the Legend League page for the new weekly Ranked League groups, live standings, battle logs, and period history

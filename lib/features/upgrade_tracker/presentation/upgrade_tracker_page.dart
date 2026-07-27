@@ -567,6 +567,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     final snapshots = await _repository.loadSavedSnapshots(linkedTags);
     await _widgetSync.sync(
       snapshots,
+      selectedTag: _selectedTag,
       linkedAccounts: linkedAccounts
           .map(
             (account) => <String, Object?>{

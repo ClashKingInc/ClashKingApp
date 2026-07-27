@@ -1,4 +1,12 @@
 <resources>
     <color name="widget_background">#1F1F1F</color>
     <color name="widget_text">#FFFFFF</color>
+    <color name="widget_text_secondary">#B8B8B8</color>
+    <color name="widget_surface">#303033</color>
+    <color name="widget_accent">#E30613</color>
+    <color name="widget_boost_orange_surface">#49301A</color>
+    <color name="widget_boost_purple_surface">#3C2949</color>
+    <color name="widget_boost_pink_surface">#4E2833</color>
+    <color name="widget_status_idle">#FFB45E</color>
+    <color name="widget_status_maxed">#73D98A</color>
 </resources>

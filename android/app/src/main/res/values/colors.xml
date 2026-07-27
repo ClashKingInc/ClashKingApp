@@ -1,6 +1,14 @@
 <resources>
     <color name="widget_background">#FFFFFF</color>
     <color name="widget_text">#000000</color>
+    <color name="widget_text_secondary">#5F6368</color>
+    <color name="widget_surface">#F1F3F4</color>
+    <color name="widget_accent">#E30613</color>
+    <color name="widget_boost_orange_surface">#FFF0DC</color>
+    <color name="widget_boost_purple_surface">#F3E8FF</color>
+    <color name="widget_boost_pink_surface">#FFE6EC</color>
+    <color name="widget_status_idle">#B85C00</color>
+    <color name="widget_status_maxed">#137333</color>
 	<color name="ic_launcher_background">#FFFFFF</color>
     <color name="notification_accent">#D90709</color>
 </resources>
