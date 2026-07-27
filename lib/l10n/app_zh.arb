@@ -1648,10 +1648,10 @@
   "translationHelpUsTranslate": "帮助我们翻译",
   "translationSuggestFeatures": "建议功能",
   "translationThankYou": "感谢您！",
-  "translationThankYouContent": "非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！",
-  "translationHelpTranslateContent": "您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！",
-  "translationHelpTranslateButton": "在Crowdin上帮助翻译",
-  "translationCurrentTranslators": "当前翻译员",
+  "translationThankYouContent": "Thank you to everyone who reviews, corrects, and improves ClashKing translations. Your contributions make the app feel clearer, more natural, and easier to use for players around the world.",
+  "translationHelpTranslateContent": "Spot a missing, awkward, or incorrect translation? You can suggest a correction on Crowdin, or reach us on Discord if your language is missing or you are not sure where to start.",
+  "translationHelpTranslateButton": "Edit on Crowdin",
+  "translationCurrentTranslators": "Translators",
   "filtersTimeFilters": "时间筛选",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
