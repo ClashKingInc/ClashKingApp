@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Política de contingut de fans de Supercell"
+  "faqSupercellFanContentPolicyLink": "Política de contingut de fans de Supercell",
+  "notifAudienceSectionTitle": "Audiència de notificacions",
+  "notifScopeAllLinkedAccounts": "Tots els comptes enllaçats",
+  "notifScopeSelectedAccounts": "Comptes seleccionats",
+  "notifAudienceSheetDescription": "Tria quins comptes poden rebre notificacions en aquest dispositiu.",
+  "notifAudienceAllSubtitle": "{count} compte(s) actual(s). Els futurs comptes enllaçats s’inclouran automàticament.",
+  "notifAudienceSelectedSubtitle": "{count} seleccionat(s) per a notificacions.",
+  "notifAudienceSelectedEmpty": "Tria exactament quins comptes rebran notificacions.",
+  "notifAudienceAllInlineNote": "Qualsevol compte que enllacis més endavant s’inclourà sense canviar aquest ajust.",
+  "notifAccountVerified": "Verificat",
+  "notifAccountBookmarked": "Desat",
+  "notifGroupLeagueBattles": "Batalles de lliga",
+  "notifGroupWarAttacks": "Atacs de guerra",
+  "notifGroupWarState": "Estat de guerra",
+  "notifGroupWarReminders": "Recordatoris de guerra",
+  "notifGroupEvents": "Esdeveniments",
+  "notifGroupAppAnnouncements": "Anuncis de l’app",
+  "notifGroupUpgradeFinishes": "Millores acabades",
+  "notifGroupMonthlySupport": "Suport mensual"
 }

@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercellin fanisisältökäytäntö"
+  "faqSupercellFanContentPolicyLink": "Supercellin fanisisältökäytäntö",
+  "notifAudienceSectionTitle": "Ilmoitusten kohderyhmä",
+  "notifScopeAllLinkedAccounts": "Kaikki linkitetyt tilit",
+  "notifScopeSelectedAccounts": "Valitut tilit",
+  "notifAudienceSheetDescription": "Valitse, mitkä tilit voivat saada ilmoituksia tällä laitteella.",
+  "notifAudienceAllSubtitle": "{count} nykyistä tiliä. Myöhemmin linkitetyt tilit sisällytetään automaattisesti.",
+  "notifAudienceSelectedSubtitle": "{count} valittu ilmoituksiin.",
+  "notifAudienceSelectedEmpty": "Valitse tarkasti, mitkä tilit saavat ilmoituksia.",
+  "notifAudienceAllInlineNote": "Kaikki myöhemmin linkittämäsi sisällytetään ilman tämän asetuksen muuttamista.",
+  "notifAccountVerified": "Vahvistettu",
+  "notifAccountBookmarked": "Kirjanmerkitty",
+  "notifGroupLeagueBattles": "Liigataistelut",
+  "notifGroupWarAttacks": "Sotahyökkäykset",
+  "notifGroupWarState": "Sodan tila",
+  "notifGroupWarReminders": "Sotamuistutukset",
+  "notifGroupEvents": "Tapahtumat",
+  "notifGroupAppAnnouncements": "Sovelluksen ilmoitukset",
+  "notifGroupUpgradeFinishes": "Valmistuneet parannukset",
+  "notifGroupMonthlySupport": "Kuukausituki"
 }

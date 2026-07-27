@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercellファンコンテンツポリシー"
+  "faqSupercellFanContentPolicyLink": "Supercellファンコンテンツポリシー",
+  "notifAudienceSectionTitle": "通知の対象",
+  "notifScopeAllLinkedAccounts": "すべての連携済みアカウント",
+  "notifScopeSelectedAccounts": "選択したアカウント",
+  "notifAudienceSheetDescription": "この端末で通知を受け取れるアカウントを選択します。",
+  "notifAudienceAllSubtitle": "現在のアカウント {count} 件。今後連携するアカウントも自動的に含まれます。",
+  "notifAudienceSelectedSubtitle": "通知対象として {count} 件を選択中。",
+  "notifAudienceSelectedEmpty": "通知を受け取るアカウントを正確に選択します。",
+  "notifAudienceAllInlineNote": "あとから連携したアカウントも、この設定を変更せずに含まれます。",
+  "notifAccountVerified": "確認済み",
+  "notifAccountBookmarked": "保存済み",
+  "notifGroupLeagueBattles": "リーグバトル",
+  "notifGroupWarAttacks": "対戦攻撃",
+  "notifGroupWarState": "対戦状況",
+  "notifGroupWarReminders": "対戦リマインダー",
+  "notifGroupEvents": "イベント",
+  "notifGroupAppAnnouncements": "アプリのお知らせ",
+  "notifGroupUpgradeFinishes": "アップグレード完了",
+  "notifGroupMonthlySupport": "月次サポート"
 }

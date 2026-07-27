@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell फ़ैन कंटेंट नीति"
+  "faqSupercellFanContentPolicyLink": "Supercell फ़ैन कंटेंट नीति",
+  "notifAudienceSectionTitle": "सूचनाओं के प्राप्तकर्ता",
+  "notifScopeAllLinkedAccounts": "सभी लिंक किए गए खाते",
+  "notifScopeSelectedAccounts": "चुने गए खाते",
+  "notifAudienceSheetDescription": "चुनें कि इस डिवाइस पर कौन से खाते सूचनाएं प्राप्त कर सकते हैं।",
+  "notifAudienceAllSubtitle": "{count} मौजूदा खाते। भविष्य में लिंक किए गए खाते अपने आप शामिल होंगे।",
+  "notifAudienceSelectedSubtitle": "{count} सूचनाओं के लिए चुने गए।",
+  "notifAudienceSelectedEmpty": "ठीक-ठीक चुनें कि कौन से खाते सूचनाएं प्राप्त करेंगे।",
+  "notifAudienceAllInlineNote": "बाद में लिंक किए गए सभी खाते इस सेटिंग को बदले बिना शामिल हो जाएंगे।",
+  "notifAccountVerified": "सत्यापित",
+  "notifAccountBookmarked": "सहेजा गया",
+  "notifGroupLeagueBattles": "लीग लड़ाइयां",
+  "notifGroupWarAttacks": "युद्ध हमले",
+  "notifGroupWarState": "युद्ध स्थिति",
+  "notifGroupWarReminders": "युद्ध रिमाइंडर",
+  "notifGroupEvents": "इवेंट",
+  "notifGroupAppAnnouncements": "ऐप घोषणाएं",
+  "notifGroupUpgradeFinishes": "अपग्रेड पूरे हुए",
+  "notifGroupMonthlySupport": "मासिक समर्थन"
 }

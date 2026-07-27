@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Politica Supercell privind conținutul fanilor"
+  "faqSupercellFanContentPolicyLink": "Politica Supercell privind conținutul fanilor",
+  "notifAudienceSectionTitle": "Publicul notificărilor",
+  "notifScopeAllLinkedAccounts": "Toate conturile conectate",
+  "notifScopeSelectedAccounts": "Conturi selectate",
+  "notifAudienceSheetDescription": "Alege ce conturi pot primi notificări pe acest dispozitiv.",
+  "notifAudienceAllSubtitle": "{count} cont(uri) curente. Conturile conectate ulterior vor fi incluse automat.",
+  "notifAudienceSelectedSubtitle": "{count} selectate pentru notificări.",
+  "notifAudienceSelectedEmpty": "Alege exact ce conturi vor primi notificări.",
+  "notifAudienceAllInlineNote": "Tot ce conectezi mai târziu va fi inclus fără să schimbi această setare.",
+  "notifAccountVerified": "Verificat",
+  "notifAccountBookmarked": "Salvat",
+  "notifGroupLeagueBattles": "Lupte de ligă",
+  "notifGroupWarAttacks": "Atacuri de război",
+  "notifGroupWarState": "Starea războiului",
+  "notifGroupWarReminders": "Mementouri de război",
+  "notifGroupEvents": "Evenimente",
+  "notifGroupAppAnnouncements": "Anunțuri ale aplicației",
+  "notifGroupUpgradeFinishes": "Îmbunătățiri finalizate",
+  "notifGroupMonthlySupport": "Suport lunar"
 }

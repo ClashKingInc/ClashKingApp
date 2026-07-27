@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell politika sadržaja fanova"
+  "faqSupercellFanContentPolicyLink": "Supercell politika sadržaja fanova",
+  "notifAudienceSectionTitle": "Primaoci obaveštenja",
+  "notifScopeAllLinkedAccounts": "Svi povezani nalozi",
+  "notifScopeSelectedAccounts": "Izabrani nalozi",
+  "notifAudienceSheetDescription": "Izaberi koji nalozi mogu da primaju obaveštenja na ovom uređaju.",
+  "notifAudienceAllSubtitle": "{count} trenutnih naloga. Budući povezani nalozi biće automatski uključeni.",
+  "notifAudienceSelectedSubtitle": "{count} izabrano za obaveštenja.",
+  "notifAudienceSelectedEmpty": "Izaberi tačno koji nalozi će primati obaveštenja.",
+  "notifAudienceAllInlineNote": "Sve što povežeš kasnije biće uključeno bez promene ovog podešavanja.",
+  "notifAccountVerified": "Verifikovan",
+  "notifAccountBookmarked": "Sačuvan",
+  "notifGroupLeagueBattles": "Ligaške bitke",
+  "notifGroupWarAttacks": "Ratni napadi",
+  "notifGroupWarState": "Stanje rata",
+  "notifGroupWarReminders": "Ratni podsetnici",
+  "notifGroupEvents": "Događaji",
+  "notifGroupAppAnnouncements": "Obaveštenja aplikacije",
+  "notifGroupUpgradeFinishes": "Završene nadogradnje",
+  "notifGroupMonthlySupport": "Mesečna podrška"
 }

@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Hayran İçeriği Politikası"
+  "faqSupercellFanContentPolicyLink": "Supercell Hayran İçeriği Politikası",
+  "notifAudienceSectionTitle": "Bildirim hedef kitlesi",
+  "notifScopeAllLinkedAccounts": "Tüm bağlı hesaplar",
+  "notifScopeSelectedAccounts": "Seçili hesaplar",
+  "notifAudienceSheetDescription": "Bu cihazda hangi hesapların bildirim alabileceğini seç.",
+  "notifAudienceAllSubtitle": "{count} mevcut hesap. Gelecekte bağlanan hesaplar otomatik olarak dahil edilir.",
+  "notifAudienceSelectedSubtitle": "Bildirimler için {count} seçildi.",
+  "notifAudienceSelectedEmpty": "Hangi hesapların bildirim alacağını tam olarak seç.",
+  "notifAudienceAllInlineNote": "Daha sonra bağladıkların bu ayarı değiştirmeden dahil edilir.",
+  "notifAccountVerified": "Doğrulandı",
+  "notifAccountBookmarked": "Kaydedildi",
+  "notifGroupLeagueBattles": "Lig savaşları",
+  "notifGroupWarAttacks": "Savaş saldırıları",
+  "notifGroupWarState": "Savaş durumu",
+  "notifGroupWarReminders": "Savaş hatırlatmaları",
+  "notifGroupEvents": "Etkinlikler",
+  "notifGroupAppAnnouncements": "Uygulama duyuruları",
+  "notifGroupUpgradeFinishes": "Tamamlanan yükseltmeler",
+  "notifGroupMonthlySupport": "Aylık destek"
 }

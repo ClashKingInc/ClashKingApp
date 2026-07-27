@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "מדיניות תוכן מעריצים של Supercell"
+  "faqSupercellFanContentPolicyLink": "מדיניות תוכן מעריצים של Supercell",
+  "notifAudienceSectionTitle": "קהל ההתראות",
+  "notifScopeAllLinkedAccounts": "כל החשבונות המקושרים",
+  "notifScopeSelectedAccounts": "חשבונות נבחרים",
+  "notifAudienceSheetDescription": "בחר אילו חשבונות יכולים לקבל התראות במכשיר הזה.",
+  "notifAudienceAllSubtitle": "{count} חשבונות נוכחיים. חשבונות שיקושרו בעתיד ייכללו אוטומטית.",
+  "notifAudienceSelectedSubtitle": "{count} נבחרו להתראות.",
+  "notifAudienceSelectedEmpty": "בחר בדיוק אילו חשבונות יקבלו התראות.",
+  "notifAudienceAllInlineNote": "כל חשבון שתקשר בהמשך ייכלל בלי לשנות הגדרה זו.",
+  "notifAccountVerified": "מאומת",
+  "notifAccountBookmarked": "מסומן",
+  "notifGroupLeagueBattles": "קרבות ליגה",
+  "notifGroupWarAttacks": "התקפות מלחמה",
+  "notifGroupWarState": "מצב מלחמה",
+  "notifGroupWarReminders": "תזכורות מלחמה",
+  "notifGroupEvents": "אירועים",
+  "notifGroupAppAnnouncements": "הודעות אפליקציה",
+  "notifGroupUpgradeFinishes": "שדרוגים שהסתיימו",
+  "notifGroupMonthlySupport": "תמיכה חודשית"
 }

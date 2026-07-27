@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Política de Conteúdo de Fãs da Supercell"
+  "faqSupercellFanContentPolicyLink": "Política de Conteúdo de Fãs da Supercell",
+  "notifAudienceSectionTitle": "Público das notificações",
+  "notifScopeAllLinkedAccounts": "Todas as contas vinculadas",
+  "notifScopeSelectedAccounts": "Contas selecionadas",
+  "notifAudienceSheetDescription": "Escolhe quais contas podem receber notificações neste dispositivo.",
+  "notifAudienceAllSubtitle": "{count} conta(s) atual(is). Contas vinculadas no futuro serão incluídas automaticamente.",
+  "notifAudienceSelectedSubtitle": "{count} selecionada(s) para notificações.",
+  "notifAudienceSelectedEmpty": "Escolhe exatamente quais contas receberão notificações.",
+  "notifAudienceAllInlineNote": "Tudo que vinculares mais tarde será incluído sem alterar esta configuração.",
+  "notifAccountVerified": "Verificada",
+  "notifAccountBookmarked": "Guardada",
+  "notifGroupLeagueBattles": "Batalhas de liga",
+  "notifGroupWarAttacks": "Ataques de guerra",
+  "notifGroupWarState": "Estado da guerra",
+  "notifGroupWarReminders": "Lembretes de guerra",
+  "notifGroupEvents": "Eventos",
+  "notifGroupAppAnnouncements": "Anúncios da app",
+  "notifGroupUpgradeFinishes": "Melhorias concluídas",
+  "notifGroupMonthlySupport": "Apoio mensal"
 }

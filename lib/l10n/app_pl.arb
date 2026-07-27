@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Polityka treści fanowskich Supercell"
+  "faqSupercellFanContentPolicyLink": "Polityka treści fanowskich Supercell",
+  "notifAudienceSectionTitle": "Odbiorcy powiadomień",
+  "notifScopeAllLinkedAccounts": "Wszystkie połączone konta",
+  "notifScopeSelectedAccounts": "Wybrane konta",
+  "notifAudienceSheetDescription": "Wybierz, które konta mogą otrzymywać powiadomienia na tym urządzeniu.",
+  "notifAudienceAllSubtitle": "{count} obecne konto/konta. Przyszłe połączone konta zostaną dodane automatycznie.",
+  "notifAudienceSelectedSubtitle": "{count} wybrane do powiadomień.",
+  "notifAudienceSelectedEmpty": "Wybierz dokładnie, które konta będą otrzymywać powiadomienia.",
+  "notifAudienceAllInlineNote": "Wszystko, co połączysz później, zostanie uwzględnione bez zmiany tego ustawienia.",
+  "notifAccountVerified": "Zweryfikowane",
+  "notifAccountBookmarked": "Zapisane",
+  "notifGroupLeagueBattles": "Bitwy ligowe",
+  "notifGroupWarAttacks": "Ataki wojenne",
+  "notifGroupWarState": "Stan wojny",
+  "notifGroupWarReminders": "Przypomnienia wojenne",
+  "notifGroupEvents": "Wydarzenia",
+  "notifGroupAppAnnouncements": "Ogłoszenia aplikacji",
+  "notifGroupUpgradeFinishes": "Ukończone ulepszenia",
+  "notifGroupMonthlySupport": "Miesięczne wsparcie"
 }

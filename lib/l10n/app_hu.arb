@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell rajongói tartalom irányelvek"
+  "faqSupercellFanContentPolicyLink": "Supercell rajongói tartalom irányelvek",
+  "notifAudienceSectionTitle": "Értesítések címzettjei",
+  "notifScopeAllLinkedAccounts": "Minden összekapcsolt fiók",
+  "notifScopeSelectedAccounts": "Kiválasztott fiókok",
+  "notifAudienceSheetDescription": "Válaszd ki, mely fiókok kaphatnak értesítéseket ezen az eszközön.",
+  "notifAudienceAllSubtitle": "{count} jelenlegi fiók. A később összekapcsolt fiókok automatikusan bekerülnek.",
+  "notifAudienceSelectedSubtitle": "{count} kiválasztva értesítésekhez.",
+  "notifAudienceSelectedEmpty": "Válaszd ki pontosan, mely fiókok kapjanak értesítéseket.",
+  "notifAudienceAllInlineNote": "A később összekapcsolt fiókok bekerülnek anélkül, hogy módosítanád ezt a beállítást.",
+  "notifAccountVerified": "Ellenőrzött",
+  "notifAccountBookmarked": "Mentett",
+  "notifGroupLeagueBattles": "Ligacsaták",
+  "notifGroupWarAttacks": "Háborús támadások",
+  "notifGroupWarState": "Háború állapota",
+  "notifGroupWarReminders": "Háborús emlékeztetők",
+  "notifGroupEvents": "Események",
+  "notifGroupAppAnnouncements": "Alkalmazásbejelentések",
+  "notifGroupUpgradeFinishes": "Befejezett fejlesztések",
+  "notifGroupMonthlySupport": "Havi támogatás"
 }

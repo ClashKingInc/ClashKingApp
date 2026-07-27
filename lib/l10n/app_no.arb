@@ -2886,5 +2886,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercells retningslinjer for faninnhold"
+  "faqSupercellFanContentPolicyLink": "Supercells retningslinjer for faninnhold",
+  "notifAudienceSectionTitle": "Varselmottakere",
+  "notifScopeAllLinkedAccounts": "Alle tilknyttede kontoer",
+  "notifScopeSelectedAccounts": "Valgte kontoer",
+  "notifAudienceSheetDescription": "Velg hvilke kontoer som kan motta varsler på denne enheten.",
+  "notifAudienceAllSubtitle": "{count} nåværende konto(er). Fremtidige tilknyttede kontoer inkluderes automatisk.",
+  "notifAudienceSelectedSubtitle": "{count} valgt for varsler.",
+  "notifAudienceSelectedEmpty": "Velg nøyaktig hvilke kontoer som skal motta varsler.",
+  "notifAudienceAllInlineNote": "Alt du knytter til senere, inkluderes uten å endre denne innstillingen.",
+  "notifAccountVerified": "Verifisert",
+  "notifAccountBookmarked": "Lagret",
+  "notifGroupLeagueBattles": "Ligakamper",
+  "notifGroupWarAttacks": "Krigsangrep",
+  "notifGroupWarState": "Krigsstatus",
+  "notifGroupWarReminders": "Krigspåminnelser",
+  "notifGroupEvents": "Arrangementer",
+  "notifGroupAppAnnouncements": "App-kunngjøringer",
+  "notifGroupUpgradeFinishes": "Oppgraderinger ferdige",
+  "notifGroupMonthlySupport": "Månedlig støtte"
 }
