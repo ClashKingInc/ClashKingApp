@@ -6,6 +6,7 @@ import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
@@ -63,6 +64,12 @@ class StartupWidgetState extends State<StartupWidget> {
 
     if (!mounted) return;
 
+    final shouldHandlePushNotifications =
+        appState.isFeatureEnabled(AppFeatureFlags.notifications) &&
+        PushNotificationService.supportsPushNotifications;
+
+    if (!mounted) return;
+
     if (authService.canUseApp) {
       final cocService = context.read<CocAccountService>();
       final playerService = context.read<PlayerService>();
@@ -78,12 +85,17 @@ class StartupWidgetState extends State<StartupWidget> {
           clans: clanService,
           wars: warService,
         );
-        if (appState.isFeatureEnabled(AppFeatureFlags.notifications) &&
-            await PushNotificationService.instance.areNotificationsEnabled()) {
-          await PushNotificationService.instance.initialize();
-          unawaited(
-            PushNotificationService.instance.registerCurrentDeviceToken(),
-          );
+        if (shouldHandlePushNotifications) {
+          final pushResult = await PushNotificationService.instance
+              .initialize();
+          final token = pushResult.token;
+          if (token != null) {
+            unawaited(
+              PushNotificationService.instance.registerCurrentDeviceToken(
+                token: token,
+              ),
+            );
+          }
         }
       } catch (e, stackTrace) {
         ErrorReporter.captureException(
@@ -104,7 +116,11 @@ class StartupWidgetState extends State<StartupWidget> {
       _isInitializing = false;
     });
 
-    _navigateToNextScreen(authService);
+    _navigateToNextScreen(
+      authService,
+      requestPushPermission:
+          shouldHandlePushNotifications && authService.canUseApp,
+    );
   }
 
   void _showInitializationFailure(dynamic error) {
@@ -131,7 +147,10 @@ class StartupWidgetState extends State<StartupWidget> {
     );
   }
 
-  void _navigateToNextScreen(AuthService authService) {
+  void _navigateToNextScreen(
+    AuthService authService, {
+    required bool requestPushPermission,
+  }) {
     Future.microtask(() {
       Widget nextPage;
       if (authService.canUseApp && mounted) {
@@ -147,6 +166,17 @@ class StartupWidgetState extends State<StartupWidget> {
         Navigator.of(
           context,
         ).pushReplacement(MaterialPageRoute(builder: (_) => nextPage));
+      }
+      if (requestPushPermission) {
+        unawaited(
+          Future<void>.delayed(
+            const Duration(seconds: 1),
+            () => PushNotificationService.instance.showPermissionPrimerOnce(
+              onPermissionAccepted: () =>
+                  NotificationPreferencesService().setDeviceEnabled(true),
+            ),
+          ),
+        );
       }
     });
   }
