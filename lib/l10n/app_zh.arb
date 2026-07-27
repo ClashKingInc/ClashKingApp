@@ -2320,11 +2320,11 @@
       }
     }
   },
-  "gameItemOverview": "Overview",
+  "gameItemOverview": "概览",
   "@gameItemOverview": {
     "description": "Section title for item description"
   },
-  "gameItemStats": "Stats",
+  "gameItemStats": "详细数据",
   "@gameItemStats": {
     "description": "Section title for item stats"
   },
@@ -2623,15 +2623,15 @@
   "navigationHome": "Home",
   "drawerFollowers": "Followers",
   "drawerFollowersHelp": "People who bookmarked one of your verified linked accounts.",
-  "drawerCalculators": "Calculators",
+  "drawerCalculators": "数据计算器",
   "drawerSubscription": "Subscription",
   "drawerUpgradeTracker": "Upgrade Tracker",
   "drawerBasesArmies": "Bases & Armies",
   "drawerGameAssets": "Game Assets",
-  "drawerManageAccounts": "Manage Accounts",
-  "playersLinked": "Linked",
-  "playersBookmarked": "Bookmarked",
-  "searchGlobalHint": "Search players or clans",
+  "drawerManageAccounts": "管理账号",
+  "playersLinked": "已绑定",
+  "playersBookmarked": "已收藏",
+  "searchGlobalHint": "搜索玩家或部落",
   "tooltipDecreaseMinimumMembers": "Decrease minimum members",
   "tooltipIncreaseMinimumMembers": "Increase minimum members",
   "tooltipDecreaseMaximumMembers": "Decrease maximum members",
@@ -2640,27 +2640,27 @@
   "tooltipIncreaseMinimumClanPoints": "Increase minimum clan points",
   "tooltipDecreaseMinimumClanLevel": "Decrease minimum clan level",
   "tooltipIncreaseMinimumClanLevel": "Increase minimum clan level",
-  "tooltipShowChart": "Show chart",
-  "tooltipShowTable": "Show table",
+  "tooltipShowChart": "显示图表",
+  "tooltipShowTable": "显示表格",
   "tooltipDismissMessage": "Dismiss message",
-  "tooltipShowPassword": "Show password",
-  "tooltipHidePassword": "Hide password",
-  "tooltipRemoveAccount": "Remove account",
-  "calculatorsTitle": "Calculators",
+  "tooltipShowPassword": "显示密码",
+  "tooltipHidePassword": "隐藏密码",
+  "tooltipRemoveAccount": "移除账号",
+  "calculatorsTitle": "数据计算器",
   "calculatorsSubtitle": "Plan damage against current building levels.",
-  "calculatorZapQuake": "Zap quake",
-  "calculatorFireball": "Fireball",
+  "calculatorZapQuake": "闪震计算器",
+  "calculatorFireball": "火球计算器",
   "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
-  "damageNoStaticDataTitle": "Damage data is unavailable",
-  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
-  "damageTownHall": "Town Hall",
+  "damageNoStaticDataTitle": "暂无伤害数据",
+  "damageNoStaticDataBody": "游戏基础数据加载完成后，请尝试刷新应用。",
+  "damageTownHall": "大本营",
   "damageVerifiedAccountPrefill": "Verified account preset",
-  "damageOverridesStayLocal": "Changes here do not update the player account.",
-  "damageTargets": "Buildings",
-  "damageAddBuilding": "Add building",
-  "damageRemoveBuilding": "Remove building",
-  "damageNoTargetsBody": "Add at least one building to compare results.",
-  "damageHitpoints": "{hitpoints} HP",
+  "damageOverridesStayLocal": "此处的修改仅用于模拟计算，不会同步至您的实际游戏账号。",
+  "damageTargets": "建筑",
+  "damageAddBuilding": "添加建筑",
+  "damageRemoveBuilding": "删除建筑",
+  "damageNoTargetsBody": "请至少添加一个建筑进行对比结果。",
+  "damageHitpoints": "{hitpoints} 生命值",
   "@damageHitpoints": {
     "placeholders": {
       "hitpoints": {
@@ -2668,13 +2668,13 @@
       }
     }
   },
-  "damageSearchBuildings": "Search buildings",
-  "damageNoBuildingsFound": "No buildings found",
-  "damageTryAnotherSearch": "Try another name or Town Hall level.",
-  "damageAttackStack": "Manual attack stack",
+  "damageSearchBuildings": "搜索建筑",
+  "damageNoBuildingsFound": "未找到建筑",
+  "damageTryAnotherSearch": "请尝试更换建筑名称或大本营等级。",
+  "damageAttackStack": "自定义攻击组合",
   "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
-  "damageCount": "Count",
-  "damagePerUse": "{damage} damage per use",
+  "damageCount": "数量",
+  "damagePerUse": "单次伤害：{damage}",
   "@damagePerUse": {
     "placeholders": {
       "damage": {
@@ -2682,7 +2682,7 @@
       }
     }
   },
-  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "damageEarthquakePercent": "造成最大生命值 {percent}% 的伤害，连续使用效果递减",
   "@damageEarthquakePercent": {
     "placeholders": {
       "percent": {
@@ -2690,17 +2690,17 @@
       }
     }
   },
-  "damageSourceLightning": "Lightning",
-  "damageSourceEarthquake": "Earthquake",
-  "damageSourceGiantArrow": "Giant Arrow",
-  "damageSourceFireball": "Fireball",
-  "damageSourceFlameFlinger": "Flame Flinger hit",
-  "damageSourceBalloonDeath": "Balloon death damage",
-  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
-  "damageResults": "Results",
-  "damageDestroyed": "Destroyed",
-  "damageSurvives": "Survives",
-  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "damageSourceLightning": "雷电法术",
+  "damageSourceEarthquake": "地震法术",
+  "damageSourceGiantArrow": "巨型箭矢",
+  "damageSourceFireball": "巨大火球",
+  "damageSourceFlameFlinger": "攻城烈焰车单发命中",
+  "damageSourceBalloonDeath": "气球兵死亡伤害",
+  "damageSourceRocketBalloonDeath": "火箭气球兵死亡伤害",
+  "damageResults": "结果",
+  "damageDestroyed": "摧毁",
+  "damageSurvives": "未摧毁",
+  "damageResultSummary": "造成 {damage} 伤害 · 剩余 {remaining} 生命值",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -2711,7 +2711,7 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake optimizer",
+  "damageZapQuakeOptimizer": "闪震组合优化",
   "damageSpellCapacity": "Spell capacity",
   "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
   "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
