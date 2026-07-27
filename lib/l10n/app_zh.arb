@@ -475,7 +475,7 @@
   "gameTrophies": "奖杯",
   "gameBuilderBaseTrophies": "建筑大师奖杯",
   "gameDonations": "增援",
-  "gameDonationsReceived": "Received",
+  "gameDonationsReceived": "收到",
   "gameDonationsRatio": "捐收比例",
   "gameLevel": "等级：{level}/{maxLevel}",
   "@gameLevel": {
@@ -513,7 +513,7 @@
   "clanMembersSearchPlaceholder": "搜索成员",
   "clanMembersShowTotals": "显示部落统计",
   "clanMembersHideTotals": "隐藏部落统计",
-  "clanMembersReceivedShort": "Received",
+  "clanMembersReceivedShort": "收到",
   "clanMembersAverageTh": "平均大本等级",
   "clanMinimumMembers": "最小成员数",
   "clanMaximumMembers": "最大成员数",
@@ -1048,8 +1048,8 @@
   "warCalculatorNeededOverall": "所需总百分比",
   "warCalculatorCalculate": "计算",
   "warAttacksTitle": "进攻记录",
-  "warAttacksSuccessful": "Successful attacks",
-  "warAttacksFailed": "Failed attacks",
+  "warAttacksSuccessful": "进攻成功",
+  "warAttacksFailed": "进攻失败",
   "warAttacksNone": "暂无进攻",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -1057,7 +1057,7 @@
   "warAttacksBest": "最佳进攻",
   "warAttacksCount": "进攻次数",
   "warAttacksMissed": "错过的进攻",
-  "warAttacksMissedShort": "Missed",
+  "warAttacksMissedShort": "未进攻",
   "warAttacksNumber": "在最近 {number_war} 场部落战中，你进攻了 {number_time} 次。",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1292,8 +1292,8 @@
   "clanRankingsFilterActivity": "活跃度",
   "clanRankingsFilterWar": "部落战",
   "clanRankingsFilterPoints": "Points",
-  "cwlHistoryPreviewBadge": "Preview",
-  "cwlHistoryPreviewSubtitle": "{clan} mockup until CWL endpoint is fixed",
+  "cwlHistoryPreviewBadge": "预览",
+  "cwlHistoryPreviewSubtitle": "联赛数据接口修复前，{clan} 将显示模拟数据",
   "@cwlHistoryPreviewSubtitle": {
     "description": "Small notice shown while CWL history uses mock data",
     "placeholders": {
@@ -1305,8 +1305,8 @@
   "cwlHistoryEmptyTitle": "暂无联赛历史",
   "cwlHistoryEmptyBody": "该部落尚未参加过部落对战联赛。",
   "cwlRankTitle": "排名",
-  "cwlWarsPlayedTitle": "Wars played",
-  "playerWarStarsTitle": "War stars",
+  "cwlWarsPlayedTitle": "参战次数",
+  "playerWarStarsTitle": "部落战星数",
   "playerWarPreferenceTitle": "部落对战偏好。",
   "playerDonatedTitle": "增援",
   "playerReceivedTitle": "收到",
@@ -1317,10 +1317,10 @@
   "clanBuilderBaseTitle": "建筑大师基地",
   "clanTypeTitle": "类型",
   "clanWarFrequencyTitle": "对战频率",
-  "clanMinTownHallTitle": "Min. TH",
+  "clanMinTownHallTitle": "所需大本营等级",
   "clanMinTrophiesTitle": "所需联赛最低要求",
   "clanCapitalHallTitle": "都城大本营",
-  "clanDistrictsTitle": "Districts",
+  "clanDistrictsTitle": "区域",
   "legendsCountryTitle": "地区",
   "legendsLocalRankTitle": "本地排名",
   "legendsGlobalRankTitle": "全球排名",
@@ -1489,34 +1489,34 @@
   "capitalRaidStatusOngoing": "进行中",
   "capitalRaidStatusEnded": "已结束",
   "capitalRaidLoot": "战利品",
-  "capitalRaidRewards": "Rewards",
+  "capitalRaidRewards": "突袭奖章",
   "capitalRaidPreviousWeek": "上周",
   "capitalRaidNextWeek": "下周",
   "capitalRaidFilterAttacked": "已进攻",
-  "capitalRaidFilterNotAttacked": "Not attacked",
-  "capitalRaidFilterLinked": "Linked accounts",
-  "capitalRaidEmptyTitle": "No capital raid data",
-  "capitalRaidEmptyBody": "Raid history will appear here once this clan's capital raid weekends are tracked.",
-  "capitalRaidEstimated": "Estimated",
-  "capitalRaidEstimatedTooltip": "Not official yet: estimated from this week's attack and defense logs. Supercell publishes the real medal count once the raid ends.",
-  "capitalRaidTrophyPrediction": "Predicted trophies",
-  "capitalRaidTrophyPredictionTooltip": "Estimated Capital League trophies after this raid, based on this week's performance so far. Not official.",
-  "capitalRaidProjectedLoot": "Projected loot",
-  "capitalRaidOneshots": "One-shots",
+  "capitalRaidFilterNotAttacked": "未进攻",
+  "capitalRaidFilterLinked": "已绑定账号",
+  "capitalRaidEmptyTitle": "暂无突袭数据",
+  "capitalRaidEmptyBody": "记录该部落都城突袭周末数据后，突袭历史将在这里显示。",
+  "capitalRaidEstimated": "预估",
+  "capitalRaidEstimatedTooltip": "当前数据并非官方结果：根据本周进攻和防御记录估算。突袭结束后，Supercell 将公布实际奖章数量。",
+  "capitalRaidTrophyPrediction": "预估都城奖杯",
+  "capitalRaidTrophyPredictionTooltip": "根据本周当前表现预测的突袭结束后部落都城联赛奖杯数量，非官方数据。",
+  "capitalRaidProjectedLoot": "预估都城金币",
+  "capitalRaidOneshots": "一刀摧毁",
   "capitalRaidFails": "Fails",
-  "capitalDetailsOffense": "Offense",
-  "capitalDetailsDefense": "Defense",
-  "capitalDistrictsSection": "Districts",
-  "capitalOpponentsSection": "Opponents",
-  "capitalAvgAttacksPerDistrict": "Avg attacks/district",
-  "capitalAvgLootPerAttack": "Avg loot/attack",
-  "capitalHistorySection": "Raid history",
-  "capitalHistoryWeeksTracked": "Weeks tracked",
-  "capitalAvgLootPerWeek": "Avg loot/week",
-  "capitalAvgAttacksPerWeek": "Avg attacks/week",
-  "capitalBestRaid": "Best raid",
-  "capitalWorstRaid": "Worst raid",
-  "capitalHistoryChartTitle": "Weekly trend",
+  "capitalDetailsOffense": "进攻",
+  "capitalDetailsDefense": "防守",
+  "capitalDistrictsSection": "子城",
+  "capitalOpponentsSection": "对手",
+  "capitalAvgAttacksPerDistrict": "平均每个子城进攻次数",
+  "capitalAvgLootPerAttack": "平均每次进攻都城金币",
+  "capitalHistorySection": "突袭历史",
+  "capitalHistoryWeeksTracked": "统计周数",
+  "capitalAvgLootPerWeek": "平均每周都城金币",
+  "capitalAvgAttacksPerWeek": "平均每周进攻次数",
+  "capitalBestRaid": "最佳突袭",
+  "capitalWorstRaid": "最低突袭",
+  "capitalHistoryChartTitle": "每周趋势",
   "searchNoResult": "没有找到该查询的结果",
   "maintenanceTitle": "维护",
   "maintenanceDescription": "《部落冲突》当前正在维护，因此我们无法访问 API。请稍后再回来查看。",
@@ -1842,7 +1842,7 @@
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsDuration": "Duration",
+  "warAttacksDetailsDuration": "进攻时长",
   "@warAttacksDetailsDuration": {
     "description": "Label for attack duration in attack details"
   },
@@ -2262,23 +2262,23 @@
   "gameItemAttackSpeed": "攻击速度",
   "gameItemAttackRange": "攻击范围",
   "gameItemMovementSpeed": "移动速度",
-  "gameItemWardenWeight": "Warden weight",
+  "gameItemWardenWeight": "大守护者跟随权重",
   "@gameItemWardenWeight": {
     "description": "Grand Warden follow-priority weight for a game item"
   },
-  "gameItemWardenWeightTooltip": "Warden weight can override housing space and determines how strongly the Grand Warden prioritizes following a unit group.",
+  "gameItemWardenWeightTooltip": "大守护者跟随权重可覆盖所需空间，用于决定大守护者优先跟随哪一组部队。",
   "@gameItemWardenWeightTooltip": {
     "description": "Explains how Warden weight affects Grand Warden follow priority"
   },
-  "gameItemHealerWeight": "Healer weight",
+  "gameItemHealerWeight": "天使治疗权重",
   "@gameItemHealerWeight": {
     "description": "Healer targeting-priority weight for a game item"
   },
-  "gameItemHealerWeightTooltip": "Healer weight can override housing space when Healers decide which units to prioritize.",
+  "gameItemHealerWeightTooltip": "天使治疗权重可覆盖所需空间，用于决定天使优先治疗哪些单位。",
   "@gameItemHealerWeightTooltip": {
     "description": "Explains how Healer weight affects targeting priority"
   },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "gameItemWardenThresholdCopies": "{count, plural, =1{达到跟随阈值需 1 个单位} other{达到跟随阈值需 {count} 个单位}}",
   "@gameItemWardenThresholdCopies": {
     "description": "Number of copies needed to reach the Grand Warden follow threshold",
     "placeholders": {
@@ -2287,7 +2287,7 @@
       }
     }
   },
-  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "gameItemWardenNoThresholdContribution": "不计入跟随阈值",
   "@gameItemWardenNoThresholdContribution": {
     "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
   },
