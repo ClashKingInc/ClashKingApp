@@ -884,10 +884,10 @@
   "warStats": "部落战统计",
   "warStatsSearchPlaceholder": "查找玩家",
   "warStatsCurrentTownHall": "My TH",
-  "warStatsLast50": "Last 50",
-  "warStatsWars": "Wars",
+  "warStatsLast50": "最近 50 场",
+  "warStatsWars": "部落战",
   "warStatsSelectSeason": "Select war stats season",
-  "warOngoing": "Ongoing War",
+  "warOngoing": "进行中的部落战",
   "warIsNotInWar": "{clan} 当前未参与部落战。",
   "@warIsNotInWar": {
     "placeholders": {
@@ -997,10 +997,10 @@
       }
     }
   },
-  "warAnalysisToWin": "To win",
-  "warAnalysisToLose": "To lose",
-  "warAnalysisNoAttacksLeft": "No attacks left",
-  "warAnalysisScenario": "{attacks} attacks left -> need {stars} stars / {percent}% per attack",
+  "warAnalysisToWin": "获胜条件",
+  "warAnalysisToLose": "失败条件",
+  "warAnalysisNoAttacksLeft": "暂无进攻次数",
+  "warAnalysisScenario": "剩余 {attacks} 次进攻 -> 均场需 {stars} 星 / {percent}%",
   "@warAnalysisScenario": {
     "placeholders": {
       "attacks": {
@@ -1014,7 +1014,7 @@
       }
     }
   },
-  "warAnalysisImpossibleScenario": "{attacks} attacks left -> impossible ({stars} stars / {percent}% per attack)",
+  "warAnalysisImpossibleScenario": "剩余 {attacks} 次进攻，无法获胜（每次需 {stars} 星 / {percent}%）",
   "@warAnalysisImpossibleScenario": {
     "placeholders": {
       "attacks": {
@@ -1284,13 +1284,13 @@
   "cwlTitle": "部落联赛",
   "cwlClanWarLeague": "部落战联赛",
   "cwlOngoing": "正在进行的部落联赛",
-  "cwlHistoryTitle": "CWL History",
-  "clanJoinLeaveTab": "Join/Leave",
-  "clanRankingsTab": "Rankings",
-  "clanRankingsSeason": "Season",
-  "clanRankingsSelectSeason": "Select ranking season",
-  "clanRankingsFilterActivity": "Activity",
-  "clanRankingsFilterWar": "War",
+  "cwlHistoryTitle": "联赛历史",
+  "clanJoinLeaveTab": "加入/退出",
+  "clanRankingsTab": "排名",
+  "clanRankingsSeason": "赛季",
+  "clanRankingsSelectSeason": "选择排名赛季",
+  "clanRankingsFilterActivity": "活跃度",
+  "clanRankingsFilterWar": "部落战",
   "clanRankingsFilterPoints": "Points",
   "cwlHistoryPreviewBadge": "Preview",
   "cwlHistoryPreviewSubtitle": "{clan} mockup until CWL endpoint is fixed",
@@ -1302,23 +1302,23 @@
       }
     }
   },
-  "cwlHistoryEmptyTitle": "No CWL history yet",
-  "cwlHistoryEmptyBody": "This clan hasn't taken part in a Clan War League season yet.",
-  "cwlRankTitle": "Rank",
+  "cwlHistoryEmptyTitle": "暂无联赛历史",
+  "cwlHistoryEmptyBody": "该部落尚未参加过部落对战联赛。",
+  "cwlRankTitle": "排名",
   "cwlWarsPlayedTitle": "Wars played",
   "playerWarStarsTitle": "War stars",
-  "playerWarPreferenceTitle": "War pref.",
-  "playerDonatedTitle": "Donated",
-  "playerReceivedTitle": "Received",
-  "playerCapitalTitle": "Capital",
-  "playerExpLevelTitle": "Exp. level",
-  "clanWarWinsTitle": "War wins",
-  "clanWinStreakTitle": "Win streak",
-  "clanBuilderBaseTitle": "Builder base",
-  "clanTypeTitle": "Type",
-  "clanWarFrequencyTitle": "Wars",
+  "playerWarPreferenceTitle": "部落对战偏好。",
+  "playerDonatedTitle": "增援",
+  "playerReceivedTitle": "收到",
+  "playerCapitalTitle": "都城",
+  "playerExpLevelTitle": "经验等级",
+  "clanWarWinsTitle": "对战胜利",
+  "clanWinStreakTitle": "对战连胜数",
+  "clanBuilderBaseTitle": "建筑大师基地",
+  "clanTypeTitle": "类型",
+  "clanWarFrequencyTitle": "对战频率",
   "clanMinTownHallTitle": "Min. TH",
-  "clanMinTrophiesTitle": "Min. trophies",
+  "clanMinTrophiesTitle": "所需联赛最低要求",
   "clanCapitalHallTitle": "Capital Hall",
   "clanDistrictsTitle": "Districts",
   "legendsCountryTitle": "Country",
