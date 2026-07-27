@@ -1031,7 +1031,7 @@ class _AudienceAccountRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final sourceLabel = choice.source == NotificationAccountSource.verified
-        ? l10n.notifAccountVerified
+        ? l10n.accountVerified
         : l10n.notifAccountBookmarked;
 
     return Padding(

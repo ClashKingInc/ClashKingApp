@@ -107,7 +107,7 @@ class ClanSearchCardState extends State<ClanSearchCard> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        tooltip: AppLocalizations.of(context)!.searchFilters,
+                        tooltip: AppLocalizations.of(context)!.generalFilters,
                         icon: const Icon(Icons.filter_list),
                         onPressed: () {
                           showDialog<String>(
