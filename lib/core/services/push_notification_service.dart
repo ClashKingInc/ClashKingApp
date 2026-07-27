@@ -91,8 +91,11 @@ class PushNotificationService {
     return '$_pushApiV2BaseOverride$endpoint';
   }
 
+  static bool get supportsPushNotifications =>
+      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+
   static void registerBackgroundHandler() {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    if (supportsPushNotifications) {
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     }
   }
@@ -100,6 +103,7 @@ class PushNotificationService {
   static const _deviceEndpoint = '/notifications/devices';
   static const _tokenPrefsKey = 'push_fcm_token';
   static const _lastRegistrationPrefsKey = 'push_last_registration_token';
+  static const _permissionPrimerShownPrefsKey = 'notif_permission_primer_shown';
   static const notificationsEnabledPrefsKey =
       'notif_settings_notifications_enabled';
   static const _channelId = 'clashking_push';
@@ -122,10 +126,60 @@ class PushNotificationService {
 
   PushNotificationSetupResult get lastResult => _lastResult;
 
+  Future<void> showPermissionPrimerOnce({
+    Future<void> Function()? onPermissionAccepted,
+  }) async {
+    if (!supportsPushNotifications) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final hasPrompted = prefs.getBool(_permissionPrimerShownPrefsKey) ?? false;
+
+    if (hasPrompted) return;
+
+    final context = globalNavigatorKey.currentContext;
+    if (context == null || !context.mounted) return;
+
+    final shouldEnable = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Enable notifications?'),
+        content: const Text(
+          'ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Not now'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Allow'),
+          ),
+        ],
+      ),
+    );
+
+    await prefs.setBool(_permissionPrimerShownPrefsKey, true);
+
+    if (shouldEnable == true) {
+      final result = await requestPermissionAndRegister();
+      if (result.canReceivePush && onPermissionAccepted != null) {
+        try {
+          await onPermissionAccepted();
+        } catch (error, stackTrace) {
+          await Sentry.captureException(error, stackTrace: stackTrace);
+          DebugUtils.debugWarning(
+            'Push permission preference sync skipped: $error',
+          );
+        }
+      }
+    }
+  }
+
   Future<PushNotificationSetupResult> initialize({
     bool register = false,
   }) async {
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
+    if (!supportsPushNotifications) {
       return _setResult(
         const PushNotificationSetupResult(
           state: PushNotificationSetupState.unsupported,
@@ -284,6 +338,8 @@ class PushNotificationService {
     String? token,
     bool allowDisabled = false,
   }) async {
+    if (!supportsPushNotifications) return;
+
     if (!allowDisabled && !await areNotificationsEnabled()) {
       DebugUtils.debugInfo(
         'Push registration skipped: notifications disabled.',
@@ -338,7 +394,7 @@ class PushNotificationService {
   }
 
   Future<bool> unregisterCurrentDeviceToken() async {
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
+    if (!supportsPushNotifications) return false;
 
     final prefs = await SharedPreferences.getInstance();
     final payload = <String, dynamic>{
