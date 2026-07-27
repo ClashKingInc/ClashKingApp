@@ -65,7 +65,7 @@ class StartupWidgetState extends State<StartupWidget> {
 
     final shouldHandlePushNotifications =
         appState.isFeatureEnabled(AppFeatureFlags.notifications) &&
-        await PushNotificationService.instance.areNotificationsEnabled();
+        PushNotificationService.supportsPushNotifications;
 
     if (!mounted) return;
 
@@ -85,10 +85,16 @@ class StartupWidgetState extends State<StartupWidget> {
           wars: warService,
         );
         if (shouldHandlePushNotifications) {
-          await PushNotificationService.instance.initialize();
-          unawaited(
-            PushNotificationService.instance.registerCurrentDeviceToken(),
-          );
+          final pushResult = await PushNotificationService.instance
+              .initialize();
+          final token = pushResult.token;
+          if (token != null) {
+            unawaited(
+              PushNotificationService.instance.registerCurrentDeviceToken(
+                token: token,
+              ),
+            );
+          }
         }
       } catch (e, stackTrace) {
         ErrorReporter.captureException(

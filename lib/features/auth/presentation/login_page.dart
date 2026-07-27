@@ -843,11 +843,17 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
           wars: warCwlService,
         );
         if (appState.isFeatureEnabled(AppFeatureFlags.notifications) &&
-            await PushNotificationService.instance.areNotificationsEnabled()) {
-          await PushNotificationService.instance.initialize();
-          unawaited(
-            PushNotificationService.instance.registerCurrentDeviceToken(),
-          );
+            PushNotificationService.supportsPushNotifications) {
+          final pushResult = await PushNotificationService.instance
+              .initialize();
+          final token = pushResult.token;
+          if (token != null) {
+            unawaited(
+              PushNotificationService.instance.registerCurrentDeviceToken(
+                token: token,
+              ),
+            );
+          }
           _shouldPromptForPushPermission = true;
         }
       } catch (e) {
