@@ -779,8 +779,6 @@
   "todoExplanationIntro": "작업 완료율은 다음 활동과 특정 가중치를 기준으로 계산됩니다:",
   "todoExplanationLegendsTitle": "전설 리그:",
   "todoExplanationLegends": "계정당 8점 가중치, 공격 1회 = 1점.",
-  "todoExplanationRaidsTitle": "습격:",
-  "todoExplanationRaids": "계정당 5점 가중치(마지막 공격이 해제된 경우 6점), 공격 1회 = 1점.",
   "todoExplanationClanWarsTitle": "클랜전:",
   "todoExplanationClanWars": "계정당 2점 가중치, 공격 1회 = 1점.",
   "todoExplanationCwlTitle": "클랜전 리그:",
@@ -2360,34 +2358,6 @@
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
-  "settingsLiveActivityTest": "실시간 활동 테스트",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStart": "테스트 활동 시작",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "settingsLiveActivityStartSubtitle": "지역 클랜 전쟁 미리보기를 표시합니다.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdate": "점수 업데이트",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityUpdateSubtitle": "가짜 전쟁 점수를 향상시킵니다.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "테스트 활동 종료",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "settingsLiveActivityEndSubtitle": "로컬 미리보기를 제거합니다.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
   "settingsSupport": "지원하다",
   "@settingsSupport": {
     "description": "Settings section: support"
@@ -2777,7 +2747,6 @@
   "todoLegendAttacks": "Legend attacks",
   "todoWarAttacks": "War attacks",
   "todoCwlAttacks": "CWL attacks",
-  "todoRaidAttacks": "Raid attacks",
   "gameSeasonPassShort": "Pass",
   "todoMockMaxedMainName": "Maxed Main",
   "todoMockMaxedMainSubtitle": "TH17 · everything active",
@@ -2786,14 +2755,11 @@
   "todoMockWar1Left": "1 left",
   "todoMockCwl1LeftRound": "1 left this round",
   "todoMockClanGames2700Left": "2.7K points left",
-  "todoMockRaid4Left": "4 left",
   "todoMockPass850Left": "850 points left",
   "todoMockWarAltName": "War Alt",
   "todoMockWarAltSubtitle": "TH15 · war focused",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
   "todoMockWar2Left": "2 left",
   "todoMockClanGames900Left": "900 points left",
-  "todoMockRaid1Left": "1 left",
   "todoMockLegendPushName": "Legend Push",
   "todoMockLegendPushSubtitle": "TH16 · daily attacks",
   "todoMockLegendPushStatus": "Active 1h ago · legends and pass progress",
