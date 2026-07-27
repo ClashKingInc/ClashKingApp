@@ -767,8 +767,6 @@
   "todoExplanationIntro": "El porcentaje de finalización de tareas se calcula según las siguientes actividades con ponderaciones específicas:",
   "todoExplanationLegendsTitle": "Liga de Leyendas:",
   "todoExplanationLegends": "Peso de 8 puntos por cuenta, 1 ataque = 1 punto.",
-  "todoExplanationRaidsTitle": "Asaltos:",
-  "todoExplanationRaids": "Peso de 5 puntos por cuenta (o 6 si se ha desbloqueado el último ataque), 1 ataque = 1 punto.",
   "todoExplanationClanWarsTitle": "Guerras de clanes:",
   "todoExplanationClanWars": "Peso de 2 puntos por cuenta, 1 ataque = 1 punto.",
   "todoExplanationCwlTitle": "Liga de Guerras de Clanes:",
@@ -2319,34 +2317,6 @@
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
-  "settingsLiveActivityTest": "Prueba de actividad en vivo",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStart": "Iniciar actividad de prueba",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "settingsLiveActivityStartSubtitle": "Muestra una vista previa de la guerra de clanes local.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdate": "Actualizar puntuación",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityUpdateSubtitle": "Avanza la puntuación de guerra falsa.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Finalizar actividad de prueba",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "settingsLiveActivityEndSubtitle": "Elimina la vista previa local.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
   "settingsSupport": "Apoyo",
   "@settingsSupport": {
     "description": "Settings section: support"
@@ -2577,7 +2547,6 @@
   "todoLegendAttacks": "Ataques de leyenda",
   "todoWarAttacks": "Ataques de guerra",
   "todoCwlAttacks": "Ataques CWL",
-  "todoRaidAttacks": "Ataques de incursión",
   "gameSeasonPassShort": "Aprobar",
   "todoMockMaxedMainName": "Principal al máximo",
   "todoMockMaxedMainSubtitle": "TH17 · todo activo",
@@ -2586,14 +2555,11 @@
   "todoMockWar1Left": "1 restante",
   "todoMockCwl1LeftRound": "1 salió de esta ronda",
   "todoMockClanGames2700Left": "Quedan 2,7 mil puntos",
-  "todoMockRaid4Left": "quedan 4",
   "todoMockPass850Left": "Quedan 850 puntos",
   "todoMockWarAltName": "Guerra alternativa",
   "todoMockWarAltSubtitle": "TH15 · centrado en la guerra",
-  "todoMockWarAltStatus": "Activo hace 18 m · la guerra y las redadas necesitan atención",
   "todoMockWar2Left": "quedan 2",
   "todoMockClanGames900Left": "Quedan 900 puntos",
-  "todoMockRaid1Left": "1 restante",
   "todoMockLegendPushName": "Empuje de leyenda",
   "todoMockLegendPushSubtitle": "TH16 · ataques diarios",
   "todoMockLegendPushStatus": "Activo hace 1h · leyendas y progreso de pases",

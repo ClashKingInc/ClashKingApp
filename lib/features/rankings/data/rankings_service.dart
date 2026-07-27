@@ -86,16 +86,14 @@ class RankingsService {
           '/ranking/player-trophies/${query.location.apiPath}/$date',
         RankingBoard.playerBuilder =>
           '/ranking/player-builder/${query.location.apiPath}/$date',
-        RankingBoard.playerTownHall =>
-          '/leaderboard/townhalls/${query.townHallLevel}/history/$date?limit=200',
-        RankingBoard.playerRanked =>
-          '/leaderboard/league/${query.leagueTier.id}/history/$date?limit=200',
         RankingBoard.clanHome =>
           '/ranking/clan-trophies/${query.location.apiPath}/$date',
         RankingBoard.clanBuilder =>
           '/ranking/clan-builder/${query.location.apiPath}/$date',
         RankingBoard.clanCapital =>
           '/ranking/clan-capital/${query.location.apiPath}/$date',
+        RankingBoard.playerTownHall ||
+        RankingBoard.playerRanked ||
         RankingBoard.clanDonations ||
         RankingBoard.clanWarWins ||
         RankingBoard.clanWinStreak => throw UnsupportedError(

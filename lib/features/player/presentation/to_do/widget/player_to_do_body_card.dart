@@ -378,7 +378,6 @@ class _TodoTask {
       ..._legendTask(loc, player),
       ..._warTask(loc, player, member),
       ..._clanGamesTask(loc, compact, player),
-      ..._raidTask(loc, player),
       _seasonPassTask(loc, compact, player),
     ];
 
@@ -468,21 +467,6 @@ class _TodoTask {
         imageUrl: ImageAssets.clanGamesMedals,
         color: StatColors.win,
         done: player.clanGamesRatio >= 1,
-      ),
-    ];
-  }
-
-  static List<_TodoTask> _raidTask(AppLocalizations loc, Player player) {
-    if (!isInTimeFrameForRaid()) return const [];
-    final done = player.raids?.attackDone ?? 0;
-    final total = player.raids?.attackLimit ?? 5;
-    return [
-      _TodoTask(
-        label: loc.raidsTitle,
-        value: '$done/$total',
-        imageUrl: ImageAssets.raidAttacks,
-        color: const Color(0xFF2A9FD6),
-        done: done >= total,
       ),
     ];
   }
