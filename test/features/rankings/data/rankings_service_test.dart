@@ -62,56 +62,55 @@ void main() {
     expect(result.entries.single.tag, '#ONE');
   });
 
-  test('uses ClashKing top-500 and stored-history routes', () async {
-    final api = FakeApiService();
-    const current = '/leaderboard/townhalls/17?limit=500';
-    const history = '/leaderboard/townhalls/17/history/2026-07-18?limit=200';
-    api.getStubs[current] = http.Response(
-      jsonEncode({
-        'items': [
-          {
-            'tag': '#TOWN',
-            'name': 'Town Player',
-            'rank': 1,
-            'townhall_level': 17,
-            'trophies': 5800,
-          },
-        ],
-      }),
-      200,
-    );
-    api.getStubs[history] = http.Response(
-      jsonEncode({'kind': 'townhall', 'items': []}),
-      200,
-    );
-    final service = RankingsService(apiService: api);
-    final base = RankingQuery(
-      board: RankingBoard.playerTownHall,
-      location: const RankingLocation.worldwide(),
-      period: RankingPeriod.current,
-      historyDate: DateTime(2026, 7, 18),
-      townHallLevel: 17,
-      leagueTier: RankingLeagueOption.legendOne,
-    );
+  test(
+    'keeps Town Hall current-only without calling retired history',
+    () async {
+      final api = FakeApiService();
+      const current = '/leaderboard/townhalls/17?limit=500';
+      api.getStubs[current] = http.Response(
+        jsonEncode({
+          'items': [
+            {
+              'tag': '#TOWN',
+              'name': 'Town Player',
+              'rank': 1,
+              'townhall_level': 17,
+              'trophies': 5800,
+            },
+          ],
+        }),
+        200,
+      );
+      final service = RankingsService(apiService: api);
+      final base = RankingQuery(
+        board: RankingBoard.playerTownHall,
+        location: const RankingLocation.worldwide(),
+        period: RankingPeriod.current,
+        historyDate: DateTime(2026, 7, 18),
+        townHallLevel: 17,
+        leagueTier: RankingLeagueOption.legendOne,
+      );
 
-    final currentResult = await service.fetchRankings(base);
-    final historyResult = await service.fetchRankings(
-      RankingQuery(
-        board: base.board,
-        location: base.location,
-        period: RankingPeriod.history,
-        historyDate: base.historyDate,
-        townHallLevel: base.townHallLevel,
-        leagueTier: base.leagueTier,
-      ),
-    );
-
-    expect(api.getCallCounts[current], 1);
-    expect(api.getCallCounts[history], 1);
-    expect(currentResult.limit, 500);
-    expect(currentResult.entries.single.townHallLevel, 17);
-    expect(historyResult.entries, isEmpty);
-  });
+      final currentResult = await service.fetchRankings(base);
+      expect(api.getCallCounts[current], 1);
+      expect(currentResult.limit, 500);
+      expect(currentResult.entries.single.townHallLevel, 17);
+      await expectLater(
+        service.fetchRankings(
+          RankingQuery(
+            board: base.board,
+            location: base.location,
+            period: RankingPeriod.history,
+            historyDate: base.historyDate,
+            townHallLevel: base.townHallLevel,
+            leagueTier: base.leagueTier,
+          ),
+        ),
+        throwsA(isA<UnsupportedError>()),
+      );
+      expect(api.getCallCounts, {current: 1});
+    },
+  );
 
   test(
     'applies the selected tier badge and cached clan to ranked rows',
@@ -163,4 +162,24 @@ void main() {
       expect(result.entries.single.subtitle, isNot(contains('#')));
     },
   );
+
+  test('rejects Ranked League history without making an API call', () async {
+    final api = FakeApiService();
+    final service = RankingsService(apiService: api);
+
+    await expectLater(
+      service.fetchRankings(
+        RankingQuery(
+          board: RankingBoard.playerRanked,
+          location: const RankingLocation.worldwide(),
+          period: RankingPeriod.history,
+          historyDate: DateTime(2026, 7, 20),
+          townHallLevel: 18,
+          leagueTier: RankingLeagueOption.legendOne,
+        ),
+      ),
+      throwsA(isA<UnsupportedError>()),
+    );
+    expect(api.getCallCounts, isEmpty);
+  });
 }

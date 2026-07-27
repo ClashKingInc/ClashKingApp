@@ -78,12 +78,17 @@ class PushNotificationService {
     'CK_PUSH_API_V2_BASE_URL',
   );
 
-  static String get _pushEnvironment {
+  static String get environment {
     if (_pushApiV2BaseOverride.isNotEmpty ||
         ApiConfig.environment == ApiEnvironment.local) {
       return 'sandbox';
     }
     return 'production';
+  }
+
+  static String? urlFor(String endpoint) {
+    if (_pushApiV2BaseOverride.isEmpty) return null;
+    return '$_pushApiV2BaseOverride$endpoint';
   }
 
   static void registerBackgroundHandler() {
@@ -93,7 +98,6 @@ class PushNotificationService {
   }
 
   static const _deviceEndpoint = '/notifications/devices';
-  static const _preferencesEndpoint = '/notifications/preferences';
   static const _tokenPrefsKey = 'push_fcm_token';
   static const _lastRegistrationPrefsKey = 'push_last_registration_token';
   static const _permissionPrimerShownPrefsKey = 'notif_permission_primer_shown';
@@ -292,7 +296,7 @@ class PushNotificationService {
       }
 
       await _cacheToken(token);
-      await registerCurrentDeviceToken(token: token);
+      await registerCurrentDeviceToken(token: token, allowDisabled: true);
 
       return _setResult(
         PushNotificationSetupResult(
@@ -313,8 +317,11 @@ class PushNotificationService {
     }
   }
 
-  Future<void> registerCurrentDeviceToken({String? token}) async {
-    if (!await areNotificationsEnabled()) {
+  Future<void> registerCurrentDeviceToken({
+    String? token,
+    bool allowDisabled = false,
+  }) async {
+    if (!allowDisabled && !await areNotificationsEnabled()) {
       DebugUtils.debugInfo(
         'Push registration skipped: notifications disabled.',
       );
@@ -330,32 +337,19 @@ class PushNotificationService {
     final packageInfo = await PackageInfo.fromPlatform();
     final tokenService = TokenService();
     final settings = await FirebaseMessaging.instance.getNotificationSettings();
-    final payload = <String, dynamic>{
-      'token': resolvedToken,
-      'device_id': await tokenService.getDeviceId(),
-      'provider': 'fcm',
-      'platform': Platform.operatingSystem,
-      'environment': _pushEnvironment,
-      'app_version': packageInfo.version,
-      'build_number': packageInfo.buildNumber,
-      'os_version': Platform.operatingSystemVersion,
-      'device_model': await tokenService.getDeviceName(),
-      'authorization_status': settings.authorizationStatus.name,
-      'locale': PlatformDispatcher.instance.locale.toLanguageTag(),
-      'timezone': DateTime.now().timeZoneName,
-    };
-
-    if (Platform.isIOS) {
-      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-      if (apnsToken != null) {
-        payload['apns_token'] = apnsToken;
-      }
-    }
+    final payload = buildNotificationDeviceRegistrationPayload(
+      token: resolvedToken,
+      deviceId: await tokenService.getDeviceId(),
+      provider: 'fcm',
+      platform: Platform.operatingSystem,
+      environment: environment,
+      appVersion: packageInfo.version,
+      locale: PlatformDispatcher.instance.locale.toLanguageTag(),
+      authorizationStatus: settings.authorizationStatus.name,
+    );
 
     try {
-      final url = _pushApiV2BaseOverride.isEmpty
-          ? null
-          : '$_pushApiV2BaseOverride$_deviceEndpoint';
+      final url = urlFor(_deviceEndpoint);
       final response = await ApiService().postResponse(
         _deviceEndpoint,
         body: payload,
@@ -380,41 +374,6 @@ class PushNotificationService {
     }
   }
 
-  Future<bool> savePreferences(Map<String, dynamic> preferences) async {
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
-    final payload = <String, dynamic>{
-      'device_id': await TokenService().getDeviceId(),
-      'environment': _pushEnvironment,
-      'locale': PlatformDispatcher.instance.locale.toLanguageTag(),
-      'timezone': DateTime.now().timeZoneName,
-      'enabled_types': <String>[],
-      'war_attack_modes': <String>[],
-      'event_types': <String>[],
-      'reminder_timings': <String>[],
-      'account_scope': 'all',
-      'selected_accounts': <String>[],
-      'selected_town_halls': <int>[],
-      'selected_clan_tags': <String>[],
-      ...preferences,
-    };
-    try {
-      final url = _pushApiV2BaseOverride.isEmpty
-          ? null
-          : '$_pushApiV2BaseOverride$_preferencesEndpoint';
-      final response = await ApiService().putResponse(
-        _preferencesEndpoint,
-        body: payload,
-        requiresAuth: true,
-        url: url,
-      );
-      return response.statusCode >= 200 && response.statusCode < 300;
-    } catch (error, stackTrace) {
-      await Sentry.captureException(error, stackTrace: stackTrace);
-      DebugUtils.debugWarning('Push preferences sync failed: $error');
-      return false;
-    }
-  }
-
   Future<bool> unregisterCurrentDeviceToken() async {
     if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return false;
 
@@ -423,13 +382,11 @@ class PushNotificationService {
       'device_id': await TokenService().getDeviceId(),
       'provider': 'fcm',
       'platform': Platform.operatingSystem,
-      'environment': _pushEnvironment,
+      'environment': environment,
     };
 
     try {
-      final url = _pushApiV2BaseOverride.isEmpty
-          ? null
-          : '$_pushApiV2BaseOverride$_deviceEndpoint';
+      final url = urlFor(_deviceEndpoint);
       final response = await ApiService().deleteResponse(
         _deviceEndpoint,
         body: payload,
@@ -473,7 +430,7 @@ class PushNotificationService {
 
   Future<bool> areNotificationsEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(notificationsEnabledPrefsKey) ?? true;
+    return prefs.getBool(notificationsEnabledPrefsKey) ?? false;
   }
 
   Future<String?> tokenPreview() async {
@@ -748,4 +705,27 @@ class PushNotificationService {
         ? PushNotificationSetupState.permissionDenied
         : PushNotificationSetupState.permissionRequired;
   }
+}
+
+@visibleForTesting
+Map<String, dynamic> buildNotificationDeviceRegistrationPayload({
+  required String token,
+  required String deviceId,
+  required String provider,
+  required String platform,
+  required String environment,
+  required String appVersion,
+  required String locale,
+  required String authorizationStatus,
+}) {
+  return {
+    'token': token,
+    'device_id': deviceId,
+    'provider': provider,
+    'platform': platform,
+    'environment': environment,
+    'app_version': appVersion,
+    'locale': locale,
+    'authorization_status': authorizationStatus,
+  };
 }

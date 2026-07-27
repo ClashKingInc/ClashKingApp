@@ -97,7 +97,7 @@ class AuthService extends ChangeNotifier {
   Future<void> signInWithDiscord() async {
     try {
       DebugUtils.debugInfo("🔄 Starting Discord login process...");
-      final result = await DiscordAuthHelper.getDiscordAuthCode();
+      final result = await _discordAuthCodeProvider();
       if (result == null) {
         throw Exception(
           _localized(
@@ -108,13 +108,11 @@ class AuthService extends ChangeNotifier {
       }
 
       final deviceId = await _tokenService.getDeviceId();
-      final deviceName = await _tokenService.getDeviceName();
       final response = await _apiService.post('/auth/discord', {
         'code': result['code']!,
         'redirect_uri': DiscordAuthHelper.getRedirectUri(),
         'code_verifier': result['code_verifier']!,
         'device_id': deviceId,
-        'device_name': deviceName,
       });
 
       await _tokenService.saveTokens(

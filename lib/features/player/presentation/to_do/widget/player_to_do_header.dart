@@ -115,11 +115,6 @@ class PlayerToDoHeader extends StatelessWidget {
           ),
           TextSpan(text: "${loc.todoExplanationLegends}\n\n"),
           TextSpan(
-            text: "${loc.todoExplanationRaidsTitle}\n",
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(text: "${loc.todoExplanationRaids}\n\n"),
-          TextSpan(
             text: "${loc.todoExplanationClanWarsTitle}\n",
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -274,12 +269,6 @@ class _TodoStatsPanel extends StatelessWidget {
                   value: '${summary.cwlDone}/${summary.cwlTotal}',
                   imageUrl: ImageAssets.cwlSwordsNoBorder,
                   tooltip: loc.cwlTitle,
-                ),
-              if (summary.raidTotal > 0)
-                _TodoQuickChip(
-                  value: '${summary.raidDone}/${summary.raidTotal}',
-                  imageUrl: ImageAssets.raidAttacks,
-                  tooltip: loc.raidsTitle,
                 ),
               if (summary.clanGamesTotal > 0)
                 _TodoQuickChip(
@@ -498,8 +487,6 @@ class _TodoHeaderSummary {
     required this.warTotal,
     required this.cwlDone,
     required this.cwlTotal,
-    required this.raidDone,
-    required this.raidTotal,
     required this.clanGamesDone,
     required this.clanGamesTotal,
     required this.seasonDone,
@@ -516,8 +503,6 @@ class _TodoHeaderSummary {
   final int warTotal;
   final int cwlDone;
   final int cwlTotal;
-  final int raidDone;
-  final int raidTotal;
   final int clanGamesDone;
   final int clanGamesTotal;
   final int seasonDone;
@@ -535,8 +520,6 @@ class _TodoHeaderSummary {
     var warTotal = 0;
     var cwlDone = 0;
     var cwlTotal = 0;
-    var raidDone = 0;
-    var raidTotal = 0;
     var clanGamesDone = 0;
     var clanGamesTotal = 0;
     var seasonDone = 0;
@@ -627,18 +610,6 @@ class _TodoHeaderSummary {
         }
       }
 
-      if (isInTimeFrameForRaid()) {
-        final done = player.raids?.attackDone ?? 0;
-        final total = player.raids?.attackLimit ?? 5;
-        raidDone += done;
-        raidTotal += total;
-        if (done < total) {
-          playerOpenTasks++;
-        } else {
-          completedTasks++;
-        }
-      }
-
       if (isInTimeFrameForClanGames()) {
         final required = requiredClanGamesPoints;
         clanGamesDone += player.currentClanGamesPoints;
@@ -667,8 +638,6 @@ class _TodoHeaderSummary {
       warTotal: warTotal,
       cwlDone: cwlDone,
       cwlTotal: cwlTotal,
-      raidDone: raidDone,
-      raidTotal: raidTotal,
       clanGamesDone: clanGamesDone,
       clanGamesTotal: clanGamesTotal,
       seasonDone: seasonDone,

@@ -1,31 +1,52 @@
 class PlayerRankings {
   final String tag;
-  final String? countryCode;
-  final String? countryName;
-  final int? localRank;
-  final int? globalRank;
-  final int? builderGlobalRank;
-  final int? builderLocalRank;
+  final PlayerRankingCategory homeVillage;
+  final PlayerRankingCategory builderBase;
 
-  PlayerRankings({
+  const PlayerRankings({
     required this.tag,
-    this.countryCode,
-    this.countryName,
-    this.localRank,
-    this.globalRank,
-    this.builderGlobalRank,
-    this.builderLocalRank,
+    required this.homeVillage,
+    required this.builderBase,
   });
 
   factory PlayerRankings.fromJson(Map<String, dynamic> json) {
     return PlayerRankings(
-      tag: json['tag'] ?? "",
-      countryCode: json['country_code'] ?? "",
-      countryName: json['country_name'] ?? "",
-      localRank: json['local_rank'] ?? 0,
-      globalRank: json['global_rank'] ?? 0,
-      builderGlobalRank: json['builder_global_rank'] ?? 0,
-      builderLocalRank: json['builder_local_rank'] ?? 0,
+      tag: json['tag'] as String? ?? '',
+      homeVillage: PlayerRankingCategory.fromJson(
+        json['homeVillage'] as Map<String, dynamic>? ?? const {},
+      ),
+      builderBase: PlayerRankingCategory.fromJson(
+        json['builderBase'] as Map<String, dynamic>? ?? const {},
+      ),
+    );
+  }
+}
+
+class PlayerRankingCategory {
+  final int? points;
+  final int? globalRank;
+  final String? locationId;
+  final String? locationName;
+  final String? countryCode;
+  final int? localRank;
+
+  const PlayerRankingCategory({
+    this.points,
+    this.globalRank,
+    this.locationId,
+    this.locationName,
+    this.countryCode,
+    this.localRank,
+  });
+
+  factory PlayerRankingCategory.fromJson(Map<String, dynamic> json) {
+    return PlayerRankingCategory(
+      points: (json['points'] as num?)?.toInt(),
+      globalRank: (json['globalRank'] as num?)?.toInt(),
+      locationId: json['locationId'] as String?,
+      locationName: json['locationName'] as String?,
+      countryCode: json['countryCode'] as String?,
+      localRank: (json['localRank'] as num?)?.toInt(),
     );
   }
 }

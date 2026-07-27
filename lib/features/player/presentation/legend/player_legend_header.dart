@@ -258,7 +258,7 @@ class _StatsPanel extends StatelessWidget {
     final currentTrophies = currentSeason?.endTrophies ?? 0;
     final inLegends = currentTrophies > 0;
     final diffTrophies = currentTrophies - 5000;
-    final rankings = player.rankings;
+    final rankings = player.rankings?.homeVillage;
     final hasCountry =
         rankings?.countryCode != null && rankings!.countryCode!.isNotEmpty;
 
@@ -356,7 +356,7 @@ class _StatsPanel extends StatelessWidget {
                   label:
                       AppLocalizations.of(context)?.legendsCountryTitle ??
                       'Country',
-                  value: rankings.countryName ?? '',
+                  value: rankings.locationName ?? '',
                   imageUrl: ImageAssets.flag(rankings.countryCode!),
                 ),
               if (hasCountry)

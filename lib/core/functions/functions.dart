@@ -102,22 +102,6 @@ String getEndedAgoText(DateTime? endTime, material.BuildContext context) {
   }
 }
 
-bool isInTimeFrameForRaid() {
-  DateTime nowUtc = DateTime.now().toUtc();
-  bool isInTimeFrameForRaid = false;
-
-  if (nowUtc.weekday == DateTime.friday && nowUtc.hour >= 7) {
-    isInTimeFrameForRaid = true;
-  } else if (nowUtc.weekday == DateTime.saturday ||
-      nowUtc.weekday == DateTime.sunday) {
-    isInTimeFrameForRaid = true;
-  } else if (nowUtc.weekday == DateTime.monday && nowUtc.hour < 7) {
-    isInTimeFrameForRaid = true;
-  }
-
-  return isInTimeFrameForRaid;
-}
-
 bool isInTimeFrameForClanGames() {
   DateTime nowUtc = DateTime.now().toUtc();
   bool isInTimeFrameForClanGames = false;
