@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:clashkingapp/core/models/notification_preferences.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/features/pages/data/announcement_presentation_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +19,14 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    SharedPreferences.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues({
+      NotificationPreferencesService.localKey: jsonEncode(
+        const NotificationPreferences(
+          deviceId: 'device-1',
+          announcements: true,
+        ).toLocalJson(),
+      ),
+    });
   });
 
   test(
@@ -52,7 +63,12 @@ void main() {
 
   test('respects the app announcement notification preference', () async {
     SharedPreferences.setMockInitialValues({
-      'notif_settings_enabled_types': <String>['Events'],
+      NotificationPreferencesService.localKey: jsonEncode(
+        const NotificationPreferences(
+          deviceId: 'device-1',
+          events: true,
+        ).toLocalJson(),
+      ),
     });
     final service = AnnouncementPresentationService();
 

@@ -37,7 +37,7 @@ Audit date: 2026-07-15. Scope: Flutter navigation, startup services, remote cont
 - **Authentication as a whole:** must always retain at least one recovery path. Provider-specific auth flags can be added only with server-enforced guarantees that one method remains available.
 - **Bookmarks and account management:** required local recovery/navigation tools.
 - **Language, theme, help, privacy, licences:** safe local or mandatory surfaces.
-- **Live Activity and notification debug tools:** already compile/runtime-gated with `kDebugMode`.
+- **Notification debug tools:** already compile/runtime-gated with `kDebugMode`.
 - **Observability sampling:** intentionally controlled by build-time environment values, not product flags.
 - **Liquid Glass rendering:** platform capability and fallback widgets already decide this locally; remote switching would require rebuilding state throughout the widget tree.
 

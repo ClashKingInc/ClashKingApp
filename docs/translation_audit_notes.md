@@ -55,4 +55,4 @@ The file `docs/translation_audit_doubts.json` lists values that are still identi
 
 - `CWL`, `TH`, `BH`, `XP`: Clash of Clans/common app acronyms; preserved when natural for the locale.
 - `Discord`, `Google`, `Supercell`, `Excel (.xlsx)`: product names/formats.
-- `endpoint`, `Live Activity`: preserved where already used as platform/product terminology or where localization would be risky without native review.
+- `endpoint`: preserved where already used as platform terminology or where localization would be risky without native review.

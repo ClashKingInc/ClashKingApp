@@ -8,7 +8,6 @@ import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/services/app_icon_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
-import 'package:clashkingapp/core/services/live_activity_debug_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
@@ -159,30 +158,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   ),
               ],
             ),
-            if (kDebugMode && LiveActivityDebugService.isSupportedPlatform)
-              _SettingsSection(
-                title: l10n.settingsLiveActivityTest,
-                children: [
-                  _SettingsTile(
-                    icon: LucideIcons.radio,
-                    title: l10n.settingsLiveActivityStart,
-                    subtitle: l10n.settingsLiveActivityStartSubtitle,
-                    onTap: () => _runLiveActivityAction('start'),
-                  ),
-                  _SettingsTile(
-                    icon: LucideIcons.refreshCw,
-                    title: l10n.settingsLiveActivityUpdate,
-                    subtitle: l10n.settingsLiveActivityUpdateSubtitle,
-                    onTap: () => _runLiveActivityAction('update'),
-                  ),
-                  _SettingsTile(
-                    icon: LucideIcons.circleStop,
-                    title: l10n.settingsLiveActivityEnd,
-                    subtitle: l10n.settingsLiveActivityEndSubtitle,
-                    onTap: () => _runLiveActivityAction('end'),
-                  ),
-                ],
-              ),
             _SettingsSection(
               title: l10n.settingsSupport,
               children: [
@@ -639,33 +614,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       ),
       applicationLegalese: '© ${DateTime.now().year} ClashKing',
     );
-  }
-
-  Future<void> _runLiveActivityAction(String action) async {
-    final service = LiveActivityDebugService();
-
-    try {
-      final status = switch (action) {
-        'start' => await service.start(),
-        'update' => await service.update(),
-        'end' => await service.end(),
-        _ => await service.status(),
-      };
-
-      if (!mounted) return;
-      final running = status['running'] == true;
-      final message = running
-          ? 'Live Activity running: ${status['score'] ?? ''} ${status['timeState'] ?? ''}'
-          : 'Live Activity ended.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
-    } on PlatformException catch (error) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error.message ?? error.code)));
-    }
   }
 
   void _showConnectionPlaceholder(String action) {

@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:clashkingapp/core/models/notification_preferences.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,18 +12,18 @@ class AnnouncementPresentationService {
     AnnouncementPreferencesLoader? preferencesLoader,
   }) : _preferencesLoader = preferencesLoader ?? SharedPreferences.getInstance;
 
-  static const notificationPreferenceLabel = 'App announcements';
-  static const _enabledTypesKey = 'notif_settings_enabled_types';
   static const _dismissedPrefix = 'announcement_dismissed_';
 
   final AnnouncementPreferencesLoader _preferencesLoader;
 
   Future<bool> shouldPresent(AppAnnouncement announcement) async {
     final preferences = await _preferencesLoader();
-    final enabledTypes = preferences.getStringList(_enabledTypesKey);
-    final announcementsEnabled =
-        enabledTypes == null ||
-        enabledTypes.contains(notificationPreferenceLabel);
+    final raw = preferences.getString(NotificationPreferencesService.localKey);
+    final announcementsEnabled = raw == null
+        ? false
+        : NotificationPreferences.fromJson(
+            Map<String, dynamic>.from(jsonDecode(raw) as Map),
+          ).announcements;
     if (!announcementsEnabled) {
       return false;
     }
