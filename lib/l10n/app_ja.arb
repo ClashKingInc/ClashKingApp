@@ -1491,7 +1491,7 @@
   "translationThankYouContent": "このアプリを世界中のより多くの人に届けるために協力してくれる素晴らしい翻訳者の皆さんに、心から感謝します！",
   "translationHelpTranslateContent": "Crowdinでアプリの翻訳に協力できます。あなたの言語がCrowdinにない場合は、Discordサーバーでリクエストしてください。ご協力本当にありがとうございます！",
   "translationHelpTranslateButton": "Crowdinで翻訳を手伝う",
-  "translationCurrentTranslators": "現在の翻訳者",
+  "translationCurrentTranslators": "翻訳者",
   "filtersTimeFilters": "時間フィルター",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"

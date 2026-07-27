@@ -1491,7 +1491,7 @@
   "translationThankYouContent": "हमारे सभी अद्भुत अनुवादकों को बहुत-बहुत धन्यवाद, जो इस ऐप को दुनिया भर के अधिक लोगों तक पहुंचाने में हमारी मदद करते हैं!",
   "translationHelpTranslateContent": "आप क्राउडिन पर ऐप का अनुवाद करने में हमारी मदद कर सकते हैं। अगर आपकी भाषा क्राउडिन पर उपलब्ध नहीं है, तो बेझिझक हमारे डिस्कॉर्ड सर्वर पर इसका अनुरोध करें। आपकी मदद के लिए बहुत-बहुत धन्यवाद!",
   "translationHelpTranslateButton": "क्राउडिन पर अनुवाद में सहायता करें",
-  "translationCurrentTranslators": "वर्तमान अनुवादक",
+  "translationCurrentTranslators": "अनुवादक",
   "filtersTimeFilters": "समय फ़िल्टर",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"

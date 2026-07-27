@@ -1491,7 +1491,7 @@
   "translationThankYouContent": "非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！",
   "translationHelpTranslateContent": "您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！",
   "translationHelpTranslateButton": "在Crowdin上帮助翻译",
-  "translationCurrentTranslators": "当前翻译员",
+  "translationCurrentTranslators": "翻译员",
   "filtersTimeFilters": "时间筛选",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
