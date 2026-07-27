@@ -1491,7 +1491,7 @@
   "translationThankYouContent": "Valtava kiitos kaikille uskomattomille kääntäjille, jotka auttavat meitä tekemään tämän sovelluksen useampien ihmisten saataville ympäri maailmaa!",
   "translationHelpTranslateContent": "Voit auttaa meitä kääntämään sovelluksen Crowdinissa. Jos kielesi ei ole käytettävissä Crowdinissa, voit vapaasti pyytää sitä meidän Discord-palvelimella. Kiitos paljon avustasi!",
   "translationHelpTranslateButton": "Auta kääntämään Crowdinia",
-  "translationCurrentTranslators": "Nykyiset Kääntäjät",
+  "translationCurrentTranslators": "Kääntäjät",
   "filtersTimeFilters": "Aikasuodattimet",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"

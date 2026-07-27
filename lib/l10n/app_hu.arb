@@ -1491,7 +1491,7 @@
   "translationThankYouContent": "Hatalmas köszönet a rendkívüli fordítóknak, akik segítenek hogy az app minél több embernek világszerte elérhető legyen!",
   "translationHelpTranslateContent": "Segíthetsz a fordításban Crowdin-en. Ha a nyelved nem elérhető Crowdin-en, nyugodtan kérd a Discord szerverünkön. Nagyon köszönjük a segítségedet!",
   "translationHelpTranslateButton": "Segíts fordítani Crowdin-en",
-  "translationCurrentTranslators": "Jelenlegi Fordítók",
+  "translationCurrentTranslators": "Fordítók",
   "filtersTimeFilters": "Időszűrők",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
