@@ -184,6 +184,18 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     await _save(_settings.copyWith(accounts: accounts));
   }
 
+  Future<void> _useSelectedAccounts(List<_AccountChoice> choices) async {
+    if (choices.isEmpty) return;
+    final accounts = [
+      for (final choice in choices)
+        NotificationAccount(
+          playerTag: choice.tag.startsWith('#') ? choice.tag : '#${choice.tag}',
+          source: choice.source,
+        ),
+    ];
+    await _save(_settings.copyWith(accounts: accounts));
+  }
+
   NotificationAccountSource _sourceForTag(String tag) {
     final normalizedTag = _normalizeTag(tag);
     final verified = context.read<CocAccountService>().verifiedAccounts.any(
@@ -199,6 +211,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final accountChoices = _accountChoices(context);
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -302,12 +315,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 _SettingsAvailability(
                   enabled: _settings.deviceEnabled && !_saving,
                   child: _AccountSection(
-                    choices: _accountChoices(context),
+                    choices: accountChoices,
                     selectedTags: _settings.accounts
                         .map((account) => _normalizeTag(account.playerTag))
                         .toSet(),
                     onUseAllAccounts: () =>
                         _save(_settings.copyWith(accounts: const [])),
+                    onUseSelectedAccounts: () =>
+                        _useSelectedAccounts(accountChoices),
                     onChanged: _setAccount,
                   ),
                 ),
@@ -836,12 +851,14 @@ class _AccountSection extends StatelessWidget {
     required this.choices,
     required this.selectedTags,
     required this.onUseAllAccounts,
+    required this.onUseSelectedAccounts,
     required this.onChanged,
   });
 
   final List<_AccountChoice> choices;
   final Set<String> selectedTags;
   final VoidCallback onUseAllAccounts;
+  final VoidCallback onUseSelectedAccounts;
   final void Function(String tag, bool enabled) onChanged;
 
   @override
@@ -877,7 +894,7 @@ class _AccountSection extends StatelessWidget {
               : l10n.notifAudienceSelectedSubtitle(selectedCount),
           selected: !allAccounts,
           onTap: allAccounts && choices.isNotEmpty
-              ? () => onChanged(choices.first.tag, true)
+              ? onUseSelectedAccounts
               : null,
         ),
         if (allAccounts)
