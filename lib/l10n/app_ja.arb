@@ -1648,10 +1648,10 @@
   "translationHelpUsTranslate": "翻訳に協力する",
   "translationSuggestFeatures": "機能を提案する",
   "translationThankYou": "ありがとうございます！",
-  "translationThankYouContent": "このアプリを世界中のより多くの人に届けるために協力してくれる素晴らしい翻訳者の皆さんに、心から感謝します！",
-  "translationHelpTranslateContent": "Crowdinでアプリの翻訳に協力できます。あなたの言語がCrowdinにない場合は、Discordサーバーでリクエストしてください。ご協力本当にありがとうございます！",
-  "translationHelpTranslateButton": "Crowdinで翻訳を手伝う",
-  "translationCurrentTranslators": "現在の翻訳者",
+  "translationThankYouContent": "Thank you to everyone who reviews, corrects, and improves ClashKing translations. Your contributions make the app feel clearer, more natural, and easier to use for players around the world.",
+  "translationHelpTranslateContent": "Spot a missing, awkward, or incorrect translation? You can suggest a correction on Crowdin, or reach us on Discord if your language is missing or you are not sure where to start.",
+  "translationHelpTranslateButton": "Edit on Crowdin",
+  "translationCurrentTranslators": "Translators",
   "filtersTimeFilters": "時間フィルター",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
