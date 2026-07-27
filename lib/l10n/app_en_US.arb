@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
+  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy",
+  "notifAudienceSectionTitle": "Notification audience",
+  "notifScopeAllLinkedAccounts": "All linked accounts",
+  "notifScopeSelectedAccounts": "Selected accounts",
+  "notifAudienceSheetDescription": "Choose which accounts can receive notifications on this device.",
+  "notifAudienceAllSubtitle": "{count} current account(s). Future linked accounts are included automatically.",
+  "notifAudienceSelectedSubtitle": "{count} selected for notifications.",
+  "notifAudienceSelectedEmpty": "Choose exactly which accounts receive notifications.",
+  "notifAudienceAllInlineNote": "Anything you link later will be included without changing this setting.",
+  "notifAccountVerified": "Verified",
+  "notifAccountBookmarked": "Bookmarked",
+  "notifGroupLeagueBattles": "League battles",
+  "notifGroupWarAttacks": "War attacks",
+  "notifGroupWarState": "War state",
+  "notifGroupWarReminders": "War reminders",
+  "notifGroupEvents": "Events",
+  "notifGroupAppAnnouncements": "App announcements",
+  "notifGroupUpgradeFinishes": "Upgrade finishes",
+  "notifGroupMonthlySupport": "Monthly support"
 }

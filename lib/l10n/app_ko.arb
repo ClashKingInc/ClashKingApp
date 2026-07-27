@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell 팬 콘텐츠 정책"
+  "faqSupercellFanContentPolicyLink": "Supercell 팬 콘텐츠 정책",
+  "notifAudienceSectionTitle": "알림 대상",
+  "notifScopeAllLinkedAccounts": "연결된 모든 계정",
+  "notifScopeSelectedAccounts": "선택한 계정",
+  "notifAudienceSheetDescription": "이 기기에서 알림을 받을 계정을 선택하세요.",
+  "notifAudienceAllSubtitle": "현재 계정 {count}개. 앞으로 연결되는 계정도 자동으로 포함됩니다.",
+  "notifAudienceSelectedSubtitle": "알림 대상으로 {count}개 선택됨.",
+  "notifAudienceSelectedEmpty": "알림을 받을 계정을 정확히 선택하세요.",
+  "notifAudienceAllInlineNote": "나중에 연결하는 계정도 이 설정을 바꾸지 않아도 포함됩니다.",
+  "notifAccountVerified": "인증됨",
+  "notifAccountBookmarked": "저장됨",
+  "notifGroupLeagueBattles": "리그 전투",
+  "notifGroupWarAttacks": "클랜전 공격",
+  "notifGroupWarState": "클랜전 상태",
+  "notifGroupWarReminders": "클랜전 알림",
+  "notifGroupEvents": "이벤트",
+  "notifGroupAppAnnouncements": "앱 공지",
+  "notifGroupUpgradeFinishes": "업그레이드 완료",
+  "notifGroupMonthlySupport": "월간 지원"
 }

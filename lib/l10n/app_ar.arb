@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "سياسة محتوى المعجبين لدى Supercell"
+  "faqSupercellFanContentPolicyLink": "سياسة محتوى المعجبين لدى Supercell",
+  "notifAudienceSectionTitle": "جمهور الإشعارات",
+  "notifScopeAllLinkedAccounts": "كل الحسابات المرتبطة",
+  "notifScopeSelectedAccounts": "حسابات محددة",
+  "notifAudienceSheetDescription": "اختر الحسابات التي يمكنها تلقي الإشعارات على هذا الجهاز.",
+  "notifAudienceAllSubtitle": "{count} حساب حالي. سيتم تضمين الحسابات المرتبطة لاحقًا تلقائيًا.",
+  "notifAudienceSelectedSubtitle": "تم اختيار {count} للإشعارات.",
+  "notifAudienceSelectedEmpty": "اختر بدقة الحسابات التي ستتلقى الإشعارات.",
+  "notifAudienceAllInlineNote": "أي حساب تربطه لاحقًا سيتم تضمينه بدون تغيير هذا الإعداد.",
+  "notifAccountVerified": "موثّق",
+  "notifAccountBookmarked": "محفوظ",
+  "notifGroupLeagueBattles": "معارك الدوري",
+  "notifGroupWarAttacks": "هجمات الحرب",
+  "notifGroupWarState": "حالة الحرب",
+  "notifGroupWarReminders": "تذكيرات الحرب",
+  "notifGroupEvents": "الأحداث",
+  "notifGroupAppAnnouncements": "إعلانات التطبيق",
+  "notifGroupUpgradeFinishes": "انتهاء الترقيات",
+  "notifGroupMonthlySupport": "الدعم الشهري"
 }

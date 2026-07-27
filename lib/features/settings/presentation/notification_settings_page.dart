@@ -161,6 +161,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   Future<void> _setAccount(String tag, bool enabled) async {
     final normalizedTag = _normalizeTag(tag);
+    if (!enabled &&
+        _settings.accounts.length <= 1 &&
+        _settings.accounts.any(
+          (account) => _normalizeTag(account.playerTag) == normalizedTag,
+        )) {
+      return;
+    }
+
     final accounts = [..._settings.accounts]
       ..removeWhere(
         (account) => _normalizeTag(account.playerTag) == normalizedTag,
@@ -173,6 +181,18 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         ),
       );
     }
+    await _save(_settings.copyWith(accounts: accounts));
+  }
+
+  Future<void> _useSelectedAccounts(List<_AccountChoice> choices) async {
+    if (choices.isEmpty) return;
+    final accounts = [
+      for (final choice in choices)
+        NotificationAccount(
+          playerTag: choice.tag.startsWith('#') ? choice.tag : '#${choice.tag}',
+          source: choice.source,
+        ),
+    ];
     await _save(_settings.copyWith(accounts: accounts));
   }
 
@@ -191,6 +211,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final accountChoices = _accountChoices(context);
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -228,7 +249,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       _categoryRow(
                         NotificationCategory.leagueBattles,
                         LucideIcons.shield,
-                        'League battles',
+                        AppLocalizations.of(context)!.notifGroupLeagueBattles,
                         AppLocalizations.of(
                           context,
                         )!.notifLeagueDefenseDescription,
@@ -236,7 +257,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       _categoryRow(
                         NotificationCategory.warAttacks,
                         LucideIcons.swords,
-                        'War attacks',
+                        AppLocalizations.of(context)!.notifGroupWarAttacks,
                         AppLocalizations.of(
                           context,
                         )!.notifWarAttackOptionsDescription,
@@ -244,7 +265,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       _categoryRow(
                         NotificationCategory.warState,
                         LucideIcons.flag,
-                        'War state',
+                        AppLocalizations.of(context)!.notifGroupWarState,
                         AppLocalizations.of(context)!.notifWarAlertsDescription,
                       ),
                       _WarReminderRow(
@@ -259,13 +280,15 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       _categoryRow(
                         NotificationCategory.events,
                         LucideIcons.calendarDays,
-                        'Events',
+                        AppLocalizations.of(context)!.notifGroupEvents,
                         AppLocalizations.of(context)!.notifEventsDescription,
                       ),
                       _categoryRow(
                         NotificationCategory.announcements,
                         LucideIcons.megaphone,
-                        'Announcements',
+                        AppLocalizations.of(
+                          context,
+                        )!.notifGroupAppAnnouncements,
                         AppLocalizations.of(
                           context,
                         )!.notifAnnouncementsDescription,
@@ -273,7 +296,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       _categoryRow(
                         NotificationCategory.upgradeFinishes,
                         LucideIcons.hammer,
-                        'Upgrade finishes',
+                        AppLocalizations.of(context)!.notifGroupUpgradeFinishes,
                         AppLocalizations.of(
                           context,
                         )!.notifUpgradeFinishesDescription,
@@ -281,7 +304,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       _categoryRow(
                         NotificationCategory.monthlySupport,
                         LucideIcons.heartHandshake,
-                        'Monthly support',
+                        AppLocalizations.of(context)!.notifGroupMonthlySupport,
                         AppLocalizations.of(
                           context,
                         )!.notifSupportReminderDescription,
@@ -292,10 +315,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 _SettingsAvailability(
                   enabled: _settings.deviceEnabled && !_saving,
                   child: _AccountSection(
-                    choices: _accountChoices(context),
+                    choices: accountChoices,
                     selectedTags: _settings.accounts
                         .map((account) => _normalizeTag(account.playerTag))
                         .toSet(),
+                    onUseAllAccounts: () =>
+                        _save(_settings.copyWith(accounts: const [])),
+                    onUseSelectedAccounts: () =>
+                        _useSelectedAccounts(accountChoices),
                     onChanged: _setAccount,
                   ),
                 ),
@@ -632,9 +659,11 @@ class _WarReminderRowState extends State<_WarReminderRow> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'War reminders',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                      Text(
+                        AppLocalizations.of(context)!.notifGroupWarReminders,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -821,53 +850,230 @@ class _AccountSection extends StatelessWidget {
   const _AccountSection({
     required this.choices,
     required this.selectedTags,
+    required this.onUseAllAccounts,
+    required this.onUseSelectedAccounts,
     required this.onChanged,
   });
 
   final List<_AccountChoice> choices;
   final Set<String> selectedTags;
+  final VoidCallback onUseAllAccounts;
+  final VoidCallback onUseSelectedAccounts;
   final void Function(String tag, bool enabled) onChanged;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final allAccounts = selectedTags.isEmpty;
+    final selectedCount = allAccounts ? choices.length : selectedTags.length;
+
     return _Section(
-      title: 'Accounts',
+      title: l10n.notifAudienceSectionTitle,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
           child: Text(
-            'Choose players once for every device. Clan alerts follow the current clans of enabled players.',
+            l10n.notifAudienceSheetDescription,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
         ),
+        _AudienceScopeOption(
+          icon: LucideIcons.usersRound,
+          title: l10n.notifScopeAllLinkedAccounts,
+          subtitle: l10n.notifAudienceAllSubtitle(choices.length),
+          selected: allAccounts,
+          onTap: allAccounts ? null : onUseAllAccounts,
+        ),
+        _AudienceScopeOption(
+          icon: LucideIcons.userRoundCheck,
+          title: l10n.notifScopeSelectedAccounts,
+          subtitle: choices.isEmpty
+              ? l10n.notifAudienceSelectedEmpty
+              : l10n.notifAudienceSelectedSubtitle(selectedCount),
+          selected: !allAccounts,
+          onTap: allAccounts && choices.isNotEmpty
+              ? onUseSelectedAccounts
+              : null,
+        ),
+        if (allAccounts)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
+            child: Text(
+              l10n.notifAudienceAllInlineNote,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
         if (choices.isEmpty)
           Padding(
             padding: const EdgeInsets.all(14),
-            child: Text(AppLocalizations.of(context)!.notifNoAccountsLoadedYet),
+            child: Text(l10n.notifNoAccountsLoadedYet),
           )
-        else
+        else if (!allAccounts)
           for (final choice in choices)
-            ListTile(
+            Builder(
               key: ValueKey('notification-account-${choice.tag}'),
-              leading: Image.network(
-                ImageAssets.townHall(choice.townHallLevel),
-                width: 38,
-                height: 38,
-                errorBuilder: (_, _, _) =>
-                    const Icon(LucideIcons.userRound, size: 30),
-              ),
-              title: Text(choice.name),
-              subtitle: Text(
-                '${choice.tag} • ${choice.source == NotificationAccountSource.verified ? 'Verified' : 'Bookmarked'}',
-              ),
-              trailing: Switch.adaptive(
-                value: selectedTags.contains(_normalizeTag(choice.tag)),
-                onChanged: (enabled) => onChanged(choice.tag, enabled),
-              ),
+              builder: (context) {
+                final selected = selectedTags.contains(
+                  _normalizeTag(choice.tag),
+                );
+                final isLastSelected = selected && selectedTags.length == 1;
+                return _AudienceAccountRow(
+                  choice: choice,
+                  selected: selected,
+                  onChanged: isLastSelected
+                      ? null
+                      : (enabled) => onChanged(choice.tag, enabled),
+                );
+              },
             ),
       ],
+    );
+  }
+}
+
+class _AudienceScopeOption extends StatelessWidget {
+  const _AudienceScopeOption({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool selected;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final accent = selected
+        ? colorScheme.primary
+        : colorScheme.onSurfaceVariant;
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 10, 12, 10),
+        child: Row(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: selected ? 0.12 : 0.08),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: SizedBox.square(
+                dimension: 36,
+                child: Icon(icon, size: 20, color: accent),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            SizedBox.square(
+              dimension: 22,
+              child: selected
+                  ? Icon(
+                      LucideIcons.check,
+                      size: 20,
+                      color: colorScheme.primary,
+                    )
+                  : null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AudienceAccountRow extends StatelessWidget {
+  const _AudienceAccountRow({
+    required this.choice,
+    required this.selected,
+    required this.onChanged,
+  });
+
+  final _AccountChoice choice;
+  final bool selected;
+  final ValueChanged<bool>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final sourceLabel = choice.source == NotificationAccountSource.verified
+        ? l10n.notifAccountVerified
+        : l10n.notifAccountBookmarked;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
+      child: Row(
+        children: [
+          Image.network(
+            ImageAssets.townHall(choice.townHallLevel),
+            width: 38,
+            height: 38,
+            errorBuilder: (_, _, _) =>
+                const Icon(LucideIcons.userRound, size: 28),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  choice.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${choice.tag} • $sourceLabel',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Switch.adaptive(value: selected, onChanged: onChanged),
+        ],
+      ),
     );
   }
 }

@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Политика фан-контента Supercell"
+  "faqSupercellFanContentPolicyLink": "Политика фан-контента Supercell",
+  "notifAudienceSectionTitle": "Получатели уведомлений",
+  "notifScopeAllLinkedAccounts": "Все связанные аккаунты",
+  "notifScopeSelectedAccounts": "Выбранные аккаунты",
+  "notifAudienceSheetDescription": "Выберите, какие аккаунты могут получать уведомления на этом устройстве.",
+  "notifAudienceAllSubtitle": "{count} текущих аккаунтов. Будущие связанные аккаунты будут добавлены автоматически.",
+  "notifAudienceSelectedSubtitle": "{count} выбрано для уведомлений.",
+  "notifAudienceSelectedEmpty": "Выберите, какие именно аккаунты будут получать уведомления.",
+  "notifAudienceAllInlineNote": "Все, что вы свяжете позже, будет включено без изменения этой настройки.",
+  "notifAccountVerified": "Подтверждено",
+  "notifAccountBookmarked": "В закладках",
+  "notifGroupLeagueBattles": "Бои лиги",
+  "notifGroupWarAttacks": "Атаки войны",
+  "notifGroupWarState": "Состояние войны",
+  "notifGroupWarReminders": "Напоминания о войне",
+  "notifGroupEvents": "События",
+  "notifGroupAppAnnouncements": "Объявления приложения",
+  "notifGroupUpgradeFinishes": "Завершенные улучшения",
+  "notifGroupMonthlySupport": "Ежемесячная поддержка"
 }

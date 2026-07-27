@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Zásady Supercell pro fanouškovský obsah"
+  "faqSupercellFanContentPolicyLink": "Zásady Supercell pro fanouškovský obsah",
+  "notifAudienceSectionTitle": "Příjemci oznámení",
+  "notifScopeAllLinkedAccounts": "Všechny propojené účty",
+  "notifScopeSelectedAccounts": "Vybrané účty",
+  "notifAudienceSheetDescription": "Vyber, které účty mohou na tomto zařízení dostávat oznámení.",
+  "notifAudienceAllSubtitle": "{count} aktuálních účtů. Budoucí propojené účty budou zahrnuty automaticky.",
+  "notifAudienceSelectedSubtitle": "{count} vybráno pro oznámení.",
+  "notifAudienceSelectedEmpty": "Vyber přesně, které účty mají dostávat oznámení.",
+  "notifAudienceAllInlineNote": "Vše, co propojíš později, bude zahrnuto bez změny tohoto nastavení.",
+  "notifAccountVerified": "Ověřeno",
+  "notifAccountBookmarked": "Uloženo",
+  "notifGroupLeagueBattles": "Ligové bitvy",
+  "notifGroupWarAttacks": "Válečné útoky",
+  "notifGroupWarState": "Stav války",
+  "notifGroupWarReminders": "Připomenutí války",
+  "notifGroupEvents": "Události",
+  "notifGroupAppAnnouncements": "Oznámení aplikace",
+  "notifGroupUpgradeFinishes": "Dokončená vylepšení",
+  "notifGroupMonthlySupport": "Měsíční podpora"
 }

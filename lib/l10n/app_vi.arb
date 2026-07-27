@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Chính sách Nội dung Người hâm mộ của Supercell"
+  "faqSupercellFanContentPolicyLink": "Chính sách Nội dung Người hâm mộ của Supercell",
+  "notifAudienceSectionTitle": "Đối tượng nhận thông báo",
+  "notifScopeAllLinkedAccounts": "Tất cả tài khoản đã liên kết",
+  "notifScopeSelectedAccounts": "Tài khoản đã chọn",
+  "notifAudienceSheetDescription": "Chọn tài khoản có thể nhận thông báo trên thiết bị này.",
+  "notifAudienceAllSubtitle": "{count} tài khoản hiện tại. Các tài khoản liên kết sau này sẽ được tự động bao gồm.",
+  "notifAudienceSelectedSubtitle": "Đã chọn {count} cho thông báo.",
+  "notifAudienceSelectedEmpty": "Chọn chính xác tài khoản sẽ nhận thông báo.",
+  "notifAudienceAllInlineNote": "Bất kỳ tài khoản nào bạn liên kết sau này sẽ được bao gồm mà không cần đổi cài đặt này.",
+  "notifAccountVerified": "Đã xác minh",
+  "notifAccountBookmarked": "Đã lưu",
+  "notifGroupLeagueBattles": "Trận đấu giải đấu",
+  "notifGroupWarAttacks": "Đòn tấn công chiến tranh",
+  "notifGroupWarState": "Trạng thái chiến tranh",
+  "notifGroupWarReminders": "Nhắc nhở chiến tranh",
+  "notifGroupEvents": "Sự kiện",
+  "notifGroupAppAnnouncements": "Thông báo ứng dụng",
+  "notifGroupUpgradeFinishes": "Nâng cấp hoàn tất",
+  "notifGroupMonthlySupport": "Ủng hộ hằng tháng"
 }

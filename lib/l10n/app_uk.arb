@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Політика фан-контенту Supercell"
+  "faqSupercellFanContentPolicyLink": "Політика фан-контенту Supercell",
+  "notifAudienceSectionTitle": "Одержувачі сповіщень",
+  "notifScopeAllLinkedAccounts": "Усі пов’язані акаунти",
+  "notifScopeSelectedAccounts": "Вибрані акаунти",
+  "notifAudienceSheetDescription": "Виберіть, які акаунти можуть отримувати сповіщення на цьому пристрої.",
+  "notifAudienceAllSubtitle": "{count} поточних акаунтів. Майбутні пов’язані акаунти буде додано автоматично.",
+  "notifAudienceSelectedSubtitle": "{count} вибрано для сповіщень.",
+  "notifAudienceSelectedEmpty": "Виберіть саме ті акаунти, які отримуватимуть сповіщення.",
+  "notifAudienceAllInlineNote": "Усе, що ви пов’яжете пізніше, буде включено без зміни цього налаштування.",
+  "notifAccountVerified": "Підтверджено",
+  "notifAccountBookmarked": "Збережено",
+  "notifGroupLeagueBattles": "Битви ліги",
+  "notifGroupWarAttacks": "Атаки війни",
+  "notifGroupWarState": "Стан війни",
+  "notifGroupWarReminders": "Нагадування про війну",
+  "notifGroupEvents": "Події",
+  "notifGroupAppAnnouncements": "Оголошення застосунку",
+  "notifGroupUpgradeFinishes": "Завершені покращення",
+  "notifGroupMonthlySupport": "Щомісячна підтримка"
 }

@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell-beleid voor fancontent"
+  "faqSupercellFanContentPolicyLink": "Supercell-beleid voor fancontent",
+  "notifAudienceSectionTitle": "Meldingspubliek",
+  "notifScopeAllLinkedAccounts": "Alle gekoppelde accounts",
+  "notifScopeSelectedAccounts": "Geselecteerde accounts",
+  "notifAudienceSheetDescription": "Kies welke accounts meldingen op dit apparaat kunnen ontvangen.",
+  "notifAudienceAllSubtitle": "{count} huidige account(s). Toekomstige gekoppelde accounts worden automatisch meegenomen.",
+  "notifAudienceSelectedSubtitle": "{count} geselecteerd voor meldingen.",
+  "notifAudienceSelectedEmpty": "Kies precies welke accounts meldingen ontvangen.",
+  "notifAudienceAllInlineNote": "Alles wat je later koppelt, wordt meegenomen zonder deze instelling te wijzigen.",
+  "notifAccountVerified": "Geverifieerd",
+  "notifAccountBookmarked": "Opgeslagen",
+  "notifGroupLeagueBattles": "Leaguegevechten",
+  "notifGroupWarAttacks": "Oorlogsaanvallen",
+  "notifGroupWarState": "Oorlogsstatus",
+  "notifGroupWarReminders": "Oorlogsherinneringen",
+  "notifGroupEvents": "Evenementen",
+  "notifGroupAppAnnouncements": "App-aankondigingen",
+  "notifGroupUpgradeFinishes": "Upgrades voltooid",
+  "notifGroupMonthlySupport": "Maandelijkse steun"
 }

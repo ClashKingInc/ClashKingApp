@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Πολιτική Fan Content της Supercell"
+  "faqSupercellFanContentPolicyLink": "Πολιτική Fan Content της Supercell",
+  "notifAudienceSectionTitle": "Κοινό ειδοποιήσεων",
+  "notifScopeAllLinkedAccounts": "Όλοι οι συνδεδεμένοι λογαριασμοί",
+  "notifScopeSelectedAccounts": "Επιλεγμένοι λογαριασμοί",
+  "notifAudienceSheetDescription": "Επίλεξε ποιοι λογαριασμοί μπορούν να λαμβάνουν ειδοποιήσεις σε αυτήν τη συσκευή.",
+  "notifAudienceAllSubtitle": "{count} τρέχοντες λογαριασμοί. Οι μελλοντικοί συνδεδεμένοι λογαριασμοί θα συμπεριλαμβάνονται αυτόματα.",
+  "notifAudienceSelectedSubtitle": "{count} επιλεγμένοι για ειδοποιήσεις.",
+  "notifAudienceSelectedEmpty": "Επίλεξε ακριβώς ποιοι λογαριασμοί θα λαμβάνουν ειδοποιήσεις.",
+  "notifAudienceAllInlineNote": "Ό,τι συνδέσεις αργότερα θα συμπεριληφθεί χωρίς να αλλάξεις αυτήν τη ρύθμιση.",
+  "notifAccountVerified": "Επαληθευμένος",
+  "notifAccountBookmarked": "Αποθηκευμένος",
+  "notifGroupLeagueBattles": "Μάχες πρωταθλήματος",
+  "notifGroupWarAttacks": "Επιθέσεις πολέμου",
+  "notifGroupWarState": "Κατάσταση πολέμου",
+  "notifGroupWarReminders": "Υπενθυμίσεις πολέμου",
+  "notifGroupEvents": "Εκδηλώσεις",
+  "notifGroupAppAnnouncements": "Ανακοινώσεις εφαρμογής",
+  "notifGroupUpgradeFinishes": "Ολοκληρωμένες αναβαθμίσεις",
+  "notifGroupMonthlySupport": "Μηνιαία υποστήριξη"
 }

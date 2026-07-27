@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercells policy för faninnehåll"
+  "faqSupercellFanContentPolicyLink": "Supercells policy för faninnehåll",
+  "notifAudienceSectionTitle": "Mottagare för notiser",
+  "notifScopeAllLinkedAccounts": "Alla länkade konton",
+  "notifScopeSelectedAccounts": "Valda konton",
+  "notifAudienceSheetDescription": "Välj vilka konton som kan få notiser på den här enheten.",
+  "notifAudienceAllSubtitle": "{count} nuvarande konto(n). Framtida länkade konton inkluderas automatiskt.",
+  "notifAudienceSelectedSubtitle": "{count} valt för notiser.",
+  "notifAudienceSelectedEmpty": "Välj exakt vilka konton som ska få notiser.",
+  "notifAudienceAllInlineNote": "Allt du länkar senare inkluderas utan att ändra den här inställningen.",
+  "notifAccountVerified": "Verifierat",
+  "notifAccountBookmarked": "Sparat",
+  "notifGroupLeagueBattles": "Ligastrider",
+  "notifGroupWarAttacks": "Krigsattacker",
+  "notifGroupWarState": "Krigsstatus",
+  "notifGroupWarReminders": "Krigspåminnelser",
+  "notifGroupEvents": "Evenemang",
+  "notifGroupAppAnnouncements": "Appmeddelanden",
+  "notifGroupUpgradeFinishes": "Uppgraderingar klara",
+  "notifGroupMonthlySupport": "Månatligt stöd"
 }

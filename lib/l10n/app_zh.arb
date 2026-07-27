@@ -2888,5 +2888,23 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell 粉丝内容政策"
+  "faqSupercellFanContentPolicyLink": "Supercell 粉丝内容政策",
+  "notifAudienceSectionTitle": "通知接收范围",
+  "notifScopeAllLinkedAccounts": "所有已关联账号",
+  "notifScopeSelectedAccounts": "已选择账号",
+  "notifAudienceSheetDescription": "选择哪些账号可以在此设备上接收通知。",
+  "notifAudienceAllSubtitle": "当前 {count} 个账号。以后关联的账号会自动包含。",
+  "notifAudienceSelectedSubtitle": "已选择 {count} 个用于通知。",
+  "notifAudienceSelectedEmpty": "准确选择要接收通知的账号。",
+  "notifAudienceAllInlineNote": "之后关联的任何账号都会自动包含，无需更改此设置。",
+  "notifAccountVerified": "已验证",
+  "notifAccountBookmarked": "已收藏",
+  "notifGroupLeagueBattles": "联赛战斗",
+  "notifGroupWarAttacks": "部落战进攻",
+  "notifGroupWarState": "部落战状态",
+  "notifGroupWarReminders": "部落战提醒",
+  "notifGroupEvents": "活动",
+  "notifGroupAppAnnouncements": "应用公告",
+  "notifGroupUpgradeFinishes": "升级完成",
+  "notifGroupMonthlySupport": "每月支持提醒"
 }
