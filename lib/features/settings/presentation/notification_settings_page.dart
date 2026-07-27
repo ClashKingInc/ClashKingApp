@@ -161,6 +161,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   Future<void> _setAccount(String tag, bool enabled) async {
     final normalizedTag = _normalizeTag(tag);
+    if (!enabled &&
+        _settings.accounts.length <= 1 &&
+        _settings.accounts.any(
+          (account) => _normalizeTag(account.playerTag) == normalizedTag,
+        )) {
+      return;
+    }
+
     final accounts = [..._settings.accounts]
       ..removeWhere(
         (account) => _normalizeTag(account.playerTag) == normalizedTag,
@@ -889,11 +897,21 @@ class _AccountSection extends StatelessWidget {
           )
         else if (!allAccounts)
           for (final choice in choices)
-            _AudienceAccountRow(
+            Builder(
               key: ValueKey('notification-account-${choice.tag}'),
-              choice: choice,
-              selected: selectedTags.contains(_normalizeTag(choice.tag)),
-              onChanged: (enabled) => onChanged(choice.tag, enabled),
+              builder: (context) {
+                final selected = selectedTags.contains(
+                  _normalizeTag(choice.tag),
+                );
+                final isLastSelected = selected && selectedTags.length == 1;
+                return _AudienceAccountRow(
+                  choice: choice,
+                  selected: selected,
+                  onChanged: isLastSelected
+                      ? null
+                      : (enabled) => onChanged(choice.tag, enabled),
+                );
+              },
             ),
       ],
     );
@@ -983,7 +1001,6 @@ class _AudienceScopeOption extends StatelessWidget {
 
 class _AudienceAccountRow extends StatelessWidget {
   const _AudienceAccountRow({
-    super.key,
     required this.choice,
     required this.selected,
     required this.onChanged,
@@ -991,7 +1008,7 @@ class _AudienceAccountRow extends StatelessWidget {
 
   final _AccountChoice choice;
   final bool selected;
-  final ValueChanged<bool> onChanged;
+  final ValueChanged<bool>? onChanged;
 
   @override
   Widget build(BuildContext context) {
