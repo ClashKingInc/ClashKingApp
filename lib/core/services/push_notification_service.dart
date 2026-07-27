@@ -313,7 +313,6 @@ class PushNotificationService {
       }
 
       await _cacheToken(token);
-      await _setNotificationsEnabled(true);
       await registerCurrentDeviceToken(token: token, allowDisabled: true);
 
       return _setResult(
@@ -451,11 +450,6 @@ class PushNotificationService {
   Future<bool> areNotificationsEnabled() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(notificationsEnabledPrefsKey) ?? false;
-  }
-
-  Future<void> _setNotificationsEnabled(bool enabled) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(notificationsEnabledPrefsKey, enabled);
   }
 
   Future<String?> tokenPreview() async {
