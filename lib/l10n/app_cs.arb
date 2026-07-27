@@ -1648,10 +1648,10 @@
   "translationHelpUsTranslate": "Pomozte nám s překladem",
   "translationSuggestFeatures": "Navrhnout funkce",
   "translationThankYou": "Děkujeme!",
-  "translationThankYouContent": "Velice vám děkuji všem našim úžasným překladatelům, kteří nám pomáhají zpřístupnit tuto aplikaci více lidí po celém světě!",
-  "translationHelpTranslateContent": "Můžete nám pomoci přeložit aplikaci na Crowdin. Pokud tvůj jazyk není k dispozici na Crowdinu, neváhej se o něj požádat na našem Discord serveru. Mnohokrát ti děkujeme za pomoc!",
-  "translationHelpTranslateButton": "Pomozte přeložit na Crowdin",
-  "translationCurrentTranslators": "Aktuální překladatelé",
+  "translationThankYouContent": "Thank you to everyone who reviews, corrects, and improves ClashKing translations. Your contributions make the app feel clearer, more natural, and easier to use for players around the world.",
+  "translationHelpTranslateContent": "Spot a missing, awkward, or incorrect translation? You can suggest a correction on Crowdin, or reach us on Discord if your language is missing or you are not sure where to start.",
+  "translationHelpTranslateButton": "Edit on Crowdin",
+  "translationCurrentTranslators": "Translators",
   "filtersTimeFilters": "Časové filtry",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
