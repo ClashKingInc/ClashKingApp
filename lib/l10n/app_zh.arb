@@ -15,15 +15,15 @@
   "accountVerificationSuccess": "账号验证成功！",
   "generalRetry": "重试",
   "generalRetrying": "正在重试...",
-  "postsTitle": "Posts",
-  "postsDescription": "ClashKing news, update stories, and previous announcements.",
-  "postsEmpty": "No published posts yet.",
-  "postsLoadFailed": "Posts could not be loaded.",
-  "postsLoadMore": "Load more",
-  "postsCurrent": "Current",
-  "postsPast": "Past",
+  "postsTitle": "资讯",
+  "postsDescription": "ClashKing 新闻、更新资讯及历史公告。",
+  "postsEmpty": "暂无发布的资讯。",
+  "postsLoadFailed": "资讯加载失败，请重试。",
+  "postsLoadMore": "加载更多",
+  "postsCurrent": "当前",
+  "postsPast": "往期",
   "postsStory": "Interactive story",
-  "postsPinned": "Featured",
+  "postsPinned": "精选",
   "generalTryAgain": "再试一次",
   "generalReset": "重置",
   "generalCancel": "取消",
@@ -103,8 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "筛选器",
-  "generalExpand": "Expand",
-  "generalCollapse": "Collapse",
+  "generalExpand": "展开",
+  "generalCollapse": "收起",
   "generalNotSet": "未设置",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -120,8 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
-  "generalBookmark": "Bookmark",
-  "generalRemoveBookmark": "Remove bookmark",
+  "generalBookmark": "收藏",
+  "generalRemoveBookmark": "取消收藏",
   "generalClearFilters": "清除筛选",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -471,7 +471,7 @@
     }
   },
   "gameExpLevel": "经验等级",
-  "gameLeague": "League",
+  "gameLeague": "联赛",
   "gameTrophies": "奖杯",
   "gameBuilderBaseTrophies": "建筑大师奖杯",
   "gameDonations": "增援",
@@ -510,11 +510,11 @@
   "clanNone": "无部落信息",
   "clanJoinToUnlock": "加入一个部落来解锁新功能。",
   "clanMembers": "成员",
-  "clanMembersSearchPlaceholder": "Search members",
-  "clanMembersShowTotals": "Show clan totals",
-  "clanMembersHideTotals": "Hide clan totals",
+  "clanMembersSearchPlaceholder": "搜索成员",
+  "clanMembersShowTotals": "显示部落统计",
+  "clanMembersHideTotals": "隐藏部落统计",
   "clanMembersReceivedShort": "Received",
-  "clanMembersAverageTh": "Avg TH",
+  "clanMembersAverageTh": "平均大本等级",
   "clanMinimumMembers": "最小成员数",
   "clanMaximumMembers": "最大成员数",
   "clanLocation": "位置",
@@ -872,7 +872,7 @@
   "warLeague": "部落战/联赛",
   "warHistory": "部落对战历史",
   "warLog": "对战日志",
-  "warLogSearchPlaceholder": "Search wars",
+  "warLogSearchPlaceholder": "查找对战",
   "warLogClosed": "{clan} 的部落战日志已关闭。",
   "@warLogClosed": {
     "placeholders": {
@@ -882,7 +882,7 @@
     }
   },
   "warStats": "部落战统计",
-  "warStatsSearchPlaceholder": "Search players",
+  "warStatsSearchPlaceholder": "查找玩家",
   "warStatsCurrentTownHall": "My TH",
   "warStatsLast50": "Last 50",
   "warStatsWars": "Wars",
