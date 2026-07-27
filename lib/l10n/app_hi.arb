@@ -779,8 +779,6 @@
   "todoExplanationIntro": "कार्य पूर्णता प्रतिशत की गणना विशिष्ट भार के साथ निम्नलिखित गतिविधियों के आधार पर की जाती है:",
   "todoExplanationLegendsTitle": "लीजेंड लीग",
   "todoExplanationLegends": "प्रति खाता 8 अंक का भार, 1 हमला = 1 अंक.",
-  "todoExplanationRaidsTitle": "छापे:",
-  "todoExplanationRaids": "प्रति खाते 5 पॉइंट का वजन (या 6 यदि अंतिम हमला अनलॉक हो चुका है), 1 हमला = 1 पॉइंट।",
   "todoExplanationClanWarsTitle": "कबीले युद्ध:",
   "todoExplanationClanWars": "प्रति खाता 2 अंक का भार, 1 आक्रमण = 1 अंक.",
   "todoExplanationCwlTitle": "वंश युद्ध लीग:",
@@ -2360,34 +2358,6 @@
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
-  "settingsLiveActivityTest": "लाइव एक्टिविटी टेस्ट",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStart": "परीक्षण गतिविधि प्रारंभ करें",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "settingsLiveActivityStartSubtitle": "स्थानीय कबीला-युद्ध पूर्वावलोकन दिखाता है।",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdate": "अद्यतन स्कोर",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityUpdateSubtitle": "नकली युद्ध स्कोर को आगे बढ़ाता है।",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "परीक्षण गतिविधि समाप्त करें",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "settingsLiveActivityEndSubtitle": "स्थानीय पूर्वावलोकन हटा देता है.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
   "settingsSupport": "सहायता",
   "@settingsSupport": {
     "description": "Settings section: support"
@@ -2777,7 +2747,6 @@
   "todoLegendAttacks": "Legend attacks",
   "todoWarAttacks": "War attacks",
   "todoCwlAttacks": "CWL attacks",
-  "todoRaidAttacks": "Raid attacks",
   "gameSeasonPassShort": "Pass",
   "todoMockMaxedMainName": "Maxed Main",
   "todoMockMaxedMainSubtitle": "TH17 · everything active",
@@ -2786,14 +2755,11 @@
   "todoMockWar1Left": "1 left",
   "todoMockCwl1LeftRound": "1 left this round",
   "todoMockClanGames2700Left": "2.7K points left",
-  "todoMockRaid4Left": "4 left",
   "todoMockPass850Left": "850 points left",
   "todoMockWarAltName": "War Alt",
   "todoMockWarAltSubtitle": "TH15 · war focused",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
   "todoMockWar2Left": "2 left",
   "todoMockClanGames900Left": "900 points left",
-  "todoMockRaid1Left": "1 left",
   "todoMockLegendPushName": "Legend Push",
   "todoMockLegendPushSubtitle": "TH16 · daily attacks",
   "todoMockLegendPushStatus": "Active 1h ago · legends and pass progress",
