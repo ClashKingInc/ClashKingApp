@@ -779,8 +779,6 @@
   "todoExplanationIntro": "Tỷ lệ hoàn thành nhiệm vụ được tính dựa trên các hoạt động sau với trọng số cụ thể:",
   "todoExplanationLegendsTitle": "Giải Huyền Thoại:",
   "todoExplanationLegends": "Trọng số 8 điểm cho mỗi tài khoản, 1 lượt tấn công = 1 điểm.",
-  "todoExplanationRaidsTitle": "Đột kích:",
-  "todoExplanationRaids": "Trọng số 5 điểm cho mỗi tài khoản (hoặc 6 nếu lượt tấn công cuối đã được mở khóa), 1 lượt tấn công = 1 điểm.",
   "todoExplanationClanWarsTitle": "Hội chiến:",
   "todoExplanationClanWars": "Trọng số 2 điểm cho mỗi tài khoản, 1 lượt tấn công = 1 điểm.",
   "todoExplanationCwlTitle": "Giải đấu Hội chiến:",
@@ -2360,34 +2358,6 @@
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
-  "settingsLiveActivityTest": "Kiểm tra hoạt động trực tiếp",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStart": "Bắt đầu hoạt động thử nghiệm",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "settingsLiveActivityStartSubtitle": "Hiển thị bản xem trước chiến tranh bang hội địa phương.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdate": "Cập nhật điểm",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityUpdateSubtitle": "Nâng cao điểm chiến tranh giả.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Kết thúc hoạt động thử nghiệm",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "settingsLiveActivityEndSubtitle": "Loại bỏ bản xem trước cục bộ.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
   "settingsSupport": "Ủng hộ",
   "@settingsSupport": {
     "description": "Settings section: support"
@@ -2777,7 +2747,6 @@
   "todoLegendAttacks": "Legend attacks",
   "todoWarAttacks": "War attacks",
   "todoCwlAttacks": "CWL attacks",
-  "todoRaidAttacks": "Raid attacks",
   "gameSeasonPassShort": "Pass",
   "todoMockMaxedMainName": "Maxed Main",
   "todoMockMaxedMainSubtitle": "TH17 · everything active",
@@ -2786,14 +2755,11 @@
   "todoMockWar1Left": "1 left",
   "todoMockCwl1LeftRound": "1 left this round",
   "todoMockClanGames2700Left": "2.7K points left",
-  "todoMockRaid4Left": "4 left",
   "todoMockPass850Left": "850 points left",
   "todoMockWarAltName": "War Alt",
   "todoMockWarAltSubtitle": "TH15 · war focused",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
   "todoMockWar2Left": "2 left",
   "todoMockClanGames900Left": "900 points left",
-  "todoMockRaid1Left": "1 left",
   "todoMockLegendPushName": "Legend Push",
   "todoMockLegendPushSubtitle": "TH16 · daily attacks",
   "todoMockLegendPushStatus": "Active 1h ago · legends and pass progress",
