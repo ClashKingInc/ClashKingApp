@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/auth/presentation/register_page.dart';
 import 'package:clashkingapp/features/auth/presentation/forgot_password_page.dart';
 import 'package:clashkingapp/features/auth/presentation/email_verification_page.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/account_bootstrap_service.dart';
@@ -913,7 +914,10 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
           unawaited(
             Future<void>.delayed(
               const Duration(seconds: 1),
-              PushNotificationService.instance.showPermissionPrimerOnce,
+              () => PushNotificationService.instance.showPermissionPrimerOnce(
+                onPermissionAccepted: () =>
+                    NotificationPreferencesService().setDeviceEnabled(true),
+              ),
             ),
           );
         }

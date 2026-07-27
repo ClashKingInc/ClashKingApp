@@ -85,6 +85,11 @@ class NotificationPreferencesService {
     return saved;
   }
 
+  Future<NotificationPreferences> setDeviceEnabled(bool enabled) async {
+    final current = await loadLocal();
+    return save(current.copyWith(deviceEnabled: enabled));
+  }
+
   Future<NotificationPreferences> loadLocal() async {
     final preferences = await _preferencesProvider();
     final raw = preferences.getString(localKey);

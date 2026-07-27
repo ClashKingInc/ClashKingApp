@@ -101,6 +101,46 @@ void main() {
     });
   });
 
+  test('device opt-in saves V2 preferences without dropping choices', () async {
+    SharedPreferences.setMockInitialValues({
+      NotificationPreferencesService.localKey: jsonEncode(responseBody),
+    });
+    final api = FakeApiService();
+    api.putStubs[NotificationPreferencesService.endpoint] = http.Response(
+      jsonEncode({...responseBody, 'deviceEnabled': true}),
+      200,
+    );
+    final service = NotificationPreferencesService(
+      apiService: api,
+      deviceIdProvider: () async => 'device-1',
+      environmentProvider: () => 'sandbox',
+    );
+
+    final saved = await service.setDeviceEnabled(true);
+
+    expect(saved.deviceEnabled, isTrue);
+    expect(api.lastPutBodies[NotificationPreferencesService.endpoint], {
+      'deviceId': 'device-1',
+      'environment': 'sandbox',
+      'deviceEnabled': true,
+      'leagueBattlesEnabled': true,
+      'warAttacksEnabled': false,
+      'warStateEnabled': true,
+      'warRemindersEnabled': true,
+      'eventsEnabled': true,
+      'announcementsEnabled': false,
+      'upgradeFinishesEnabled': true,
+      'monthlySupportEnabled': false,
+      'reminderTimings': [15, 30, 60],
+      'accountTags': ['#VERIFIED', '#BOOKMARK'],
+    });
+    final preferences = await SharedPreferences.getInstance();
+    expect(
+      preferences.getBool(PushNotificationService.notificationsEnabledPrefsKey),
+      isTrue,
+    );
+  });
+
   test('local defaults disable device and every category', () async {
     final service = NotificationPreferencesService(
       apiService: FakeApiService(),

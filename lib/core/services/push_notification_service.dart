@@ -126,7 +126,9 @@ class PushNotificationService {
 
   PushNotificationSetupResult get lastResult => _lastResult;
 
-  Future<void> showPermissionPrimerOnce() async {
+  Future<void> showPermissionPrimerOnce({
+    Future<void> Function()? onPermissionAccepted,
+  }) async {
     if (!supportsPushNotifications) return;
 
     final prefs = await SharedPreferences.getInstance();
@@ -160,7 +162,17 @@ class PushNotificationService {
     await prefs.setBool(_permissionPrimerShownPrefsKey, true);
 
     if (shouldEnable == true) {
-      await requestPermissionAndRegister();
+      final result = await requestPermissionAndRegister();
+      if (result.canReceivePush && onPermissionAccepted != null) {
+        try {
+          await onPermissionAccepted();
+        } catch (error, stackTrace) {
+          await Sentry.captureException(error, stackTrace: stackTrace);
+          DebugUtils.debugWarning(
+            'Push permission preference sync skipped: $error',
+          );
+        }
+      }
     }
   }
 

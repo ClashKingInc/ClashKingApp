@@ -6,6 +6,7 @@ import 'package:clashkingapp/core/app/my_home_page.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
@@ -170,7 +171,10 @@ class StartupWidgetState extends State<StartupWidget> {
         unawaited(
           Future<void>.delayed(
             const Duration(seconds: 1),
-            PushNotificationService.instance.showPermissionPrimerOnce,
+            () => PushNotificationService.instance.showPermissionPrimerOnce(
+              onPermissionAccepted: () =>
+                  NotificationPreferencesService().setDeviceEnabled(true),
+            ),
           ),
         );
       }
