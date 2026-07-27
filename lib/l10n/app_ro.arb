@@ -779,8 +779,6 @@
   "todoExplanationIntro": "Procentul de finalizare a sarcinilor este calculat pe baza următoarelor activități, cu ponderi specifice:",
   "todoExplanationLegendsTitle": "Liga Legendelor:",
   "todoExplanationLegends": "Pondere de 8 puncte per cont, 1 atac = 1 punct.",
-  "todoExplanationRaidsTitle": "Raiduri:",
-  "todoExplanationRaids": "Pondere de 5 puncte per cont (sau 6 dacă ultimul atac a fost deblocat), 1 atac = 1 punct.",
   "todoExplanationClanWarsTitle": "Războaie de clan:",
   "todoExplanationClanWars": "Pondere de 2 puncte per cont, 1 atac = 1 punct.",
   "todoExplanationCwlTitle": "Liga Războaielor de Clan:",
@@ -2360,34 +2358,6 @@
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
-  "settingsLiveActivityTest": "Test de activitate live",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStart": "Începeți activitatea de testare",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "settingsLiveActivityStartSubtitle": "Afișează o previzualizare locală a războiului între clanuri.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdate": "Actualizați scorul",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityUpdateSubtitle": "Avansează scorul de război fals.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Încheiați activitatea de testare",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "settingsLiveActivityEndSubtitle": "Elimină previzualizarea locală.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
   "settingsSupport": "Sprijin",
   "@settingsSupport": {
     "description": "Settings section: support"
@@ -2777,7 +2747,6 @@
   "todoLegendAttacks": "Legend attacks",
   "todoWarAttacks": "War attacks",
   "todoCwlAttacks": "CWL attacks",
-  "todoRaidAttacks": "Raid attacks",
   "gameSeasonPassShort": "Pass",
   "todoMockMaxedMainName": "Maxed Main",
   "todoMockMaxedMainSubtitle": "TH17 · everything active",
@@ -2786,14 +2755,11 @@
   "todoMockWar1Left": "1 left",
   "todoMockCwl1LeftRound": "1 left this round",
   "todoMockClanGames2700Left": "2.7K points left",
-  "todoMockRaid4Left": "4 left",
   "todoMockPass850Left": "850 points left",
   "todoMockWarAltName": "War Alt",
   "todoMockWarAltSubtitle": "TH15 · war focused",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
   "todoMockWar2Left": "2 left",
   "todoMockClanGames900Left": "900 points left",
-  "todoMockRaid1Left": "1 left",
   "todoMockLegendPushName": "Legend Push",
   "todoMockLegendPushSubtitle": "TH16 · daily attacks",
   "todoMockLegendPushStatus": "Active 1h ago · legends and pass progress",
