@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upgrade_widget_label">Suivi des améliorations</string>
+    <string name="upgrade_widget_description">Suis la progression des améliorations ClashKing pour tes comptes liés.</string>
+    <string name="upgrade_widget_empty_sync">Ouvre ClashKing pour synchroniser les améliorations</string>
+    <string name="upgrade_widget_hall_description">Hôtel de ville</string>
+    <string name="upgrade_widget_task_description">Amélioration en cours</string>
+    <string name="upgrade_widget_boost_description">Bonus actif</string>
+    <string name="upgrade_widget_helper_description">Assistant d’amélioration</string>
+    <string name="upgrade_widget_configure_eyebrow">WIDGET CLASHKING</string>
+    <string name="upgrade_widget_configure_title">Choisir un compte</string>
+    <string name="upgrade_widget_configure_description">Ce widget suivra les améliorations du compte lié sélectionné.</string>
+    <string name="upgrade_widget_configure_empty">Aucun compte synchronisé pour l’instant. Le widget utilisera ton compte sélectionné après la synchronisation de ClashKing.</string>
+    <string name="upgrade_widget_configure_automatic">Automatique\nSuit le compte ClashKing sélectionné</string>
+    <string name="upgrade_widget_configure_add">Ajouter le widget</string>
+</resources>

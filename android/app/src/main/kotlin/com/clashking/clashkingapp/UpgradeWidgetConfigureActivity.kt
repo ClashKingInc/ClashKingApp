@@ -39,28 +39,31 @@ class UpgradeWidgetConfigureActivity : Activity() {
         val padding = dp(20)
         val container = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(padding, dp(24), padding, padding)
+            setPadding(padding, dp(22), padding, dp(28))
             setBackgroundColor(getColor(R.color.widget_background))
         }
         container.addView(TextView(this).apply {
             setText(R.string.upgrade_widget_configure_eyebrow)
-            textSize = 11f
+            textSize = 10f
             setTextColor(getColor(R.color.widget_accent))
             setTypeface(typeface, Typeface.BOLD)
+            letterSpacing = 0.08f
         }
         )
         container.addView(TextView(this).apply {
             setText(R.string.upgrade_widget_configure_title)
-            textSize = 22f
+            textSize = 24f
             setTextColor(getColor(R.color.widget_text))
             setTypeface(typeface, Typeface.BOLD)
-            setPadding(0, dp(4), 0, 0)
+            includeFontPadding = false
+            setPadding(0, dp(8), 0, 0)
         })
         container.addView(TextView(this).apply {
             setText(R.string.upgrade_widget_configure_description)
             textSize = 14f
             setTextColor(getColor(R.color.widget_text_secondary))
-            setPadding(0, dp(6), 0, dp(22))
+            setLineSpacing(dp(2).toFloat(), 1f)
+            setPadding(0, dp(10), 0, dp(24))
         })
 
         val accounts = readAccounts()
@@ -68,9 +71,6 @@ class UpgradeWidgetConfigureActivity : Activity() {
             orientation = RadioGroup.VERTICAL
         }
         val savedTag = UpgradeWidgetSelectionStore.selectedTag(this, appWidgetId)
-        val globalTag = homeWidgetPreferences()
-            .getString("upgradeWidgetSelectedTag", null)
-            ?.let(UpgradeWidgetSelectionStore::normalizeTag)
         var defaultRadioId: Int? = null
 
         accounts.forEach { account ->
@@ -79,10 +79,7 @@ class UpgradeWidgetConfigureActivity : Activity() {
             )
             tagsByRadioId[radio.id] = account.tag
             radioGroup.addView(radio)
-            if (account.tag == savedTag ||
-                (savedTag == null && account.tag == globalTag) ||
-                defaultRadioId == null
-            ) {
+            if (savedTag != null && account.tag == savedTag) {
                 defaultRadioId = radio.id
             }
         }
@@ -92,6 +89,9 @@ class UpgradeWidgetConfigureActivity : Activity() {
         )
         tagsByRadioId[automatic.id] = null
         radioGroup.addView(automatic, 0)
+        if (savedTag == null) {
+            defaultRadioId = automatic.id
+        }
         if (accounts.isEmpty()) {
             defaultRadioId = automatic.id
             container.addView(TextView(this).apply {
@@ -112,18 +112,30 @@ class UpgradeWidgetConfigureActivity : Activity() {
             setTextColor(getColor(android.R.color.white))
             setBackgroundResource(R.drawable.upgrade_widget_config_button)
             stateListAnimator = null
-            minHeight = dp(52)
+            minHeight = 0
+            minWidth = 0
+            setPadding(dp(16), 0, dp(16), 0)
             setOnClickListener {
                 saveSelection(tagsByRadioId[radioGroup.checkedRadioButtonId])
             }
             val params = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                dp(50)
             )
-            params.topMargin = dp(24)
+            params.topMargin = dp(18)
             layoutParams = params
         })
-        return ScrollView(this).apply { addView(container) }
+        return ScrollView(this).apply {
+            setBackgroundColor(getColor(R.color.widget_background))
+            isFillViewport = true
+            addView(
+                container,
+                ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            )
+        }
     }
 
     private fun accountOption(label: String): RadioButton {
@@ -134,8 +146,8 @@ class UpgradeWidgetConfigureActivity : Activity() {
             text = label
             textSize = 15f
             setTextColor(getColor(R.color.widget_text))
-            setLineSpacing(dp(2).toFloat(), 1f)
-            setPadding(dp(14), dp(11), dp(14), dp(11))
+            setLineSpacing(dp(1).toFloat(), 1f)
+            setPadding(dp(14), dp(10), dp(14), dp(10))
             setBackgroundResource(R.drawable.upgrade_widget_config_option)
             buttonTintList = ColorStateList(
                 arrayOf(
@@ -148,7 +160,7 @@ class UpgradeWidgetConfigureActivity : Activity() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                bottomMargin = dp(10)
+                bottomMargin = dp(8)
             }
         }
     }

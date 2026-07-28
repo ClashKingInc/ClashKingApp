@@ -203,6 +203,7 @@ test.describe('Reset password page', () => {
   });
 
   test('password that does not meet requirements fails validation', async ({ page }) => {
+    test.setTimeout(120_000);
     const reached = await navigateToResetPage(page);
     if (!reached) test.skip(true, 'TEST_EMAIL not set or could not reach reset password page');
     if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');

@@ -2,6 +2,7 @@
 <resources>
     <string name="upgrade_widget_label">Upgrade Tracker</string>
     <string name="upgrade_widget_description">Track ClashKing upgrade progress for your linked accounts.</string>
+    <string name="upgrade_widget_empty_sync">Open ClashKing to sync upgrade data</string>
     <string name="upgrade_widget_hall_description">Town Hall</string>
     <string name="upgrade_widget_task_description">Active upgrade</string>
     <string name="upgrade_widget_boost_description">Active boost</string>

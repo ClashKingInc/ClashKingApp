@@ -2,20 +2,20 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
         <shape>
-            <solid android:color="@color/widget_surface" />
+            <solid android:color="@color/widget_config_selected_surface" />
             <stroke
-                android:width="2dp"
+                android:width="1.5dp"
                 android:color="@color/widget_accent" />
-            <corners android:radius="12dp" />
+            <corners android:radius="18dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="@color/widget_surface" />
+            <solid android:color="@color/widget_config_surface" />
             <stroke
                 android:width="1dp"
-                android:color="@color/widget_text_secondary" />
-            <corners android:radius="12dp" />
+                android:color="@color/widget_config_border" />
+            <corners android:radius="18dp" />
         </shape>
     </item>
 </selector>

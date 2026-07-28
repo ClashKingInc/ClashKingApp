@@ -4,8 +4,8 @@
     <LinearLayout
         android:id="@+id/upgrade_large_builder_task_one"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -33,8 +33,8 @@
     <LinearLayout
         android:id="@+id/upgrade_large_builder_task_two"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="38dp"
+        android:layout_marginTop="6dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

@@ -73,6 +73,7 @@ class CocAccountService extends ChangeNotifier {
     _selectedTag = null;
     selectedTagNotifier.value = null;
     unawaited(ObservabilityService.setSelectedPlayerTag(null));
+    unawaited(const UpgradeWidgetSyncService().clear());
     _isLoading = false;
     _lastRefresh = null;
     _safeNotify();
@@ -350,6 +351,7 @@ class CocAccountService extends ChangeNotifier {
     _selectedTag = tag;
     selectedTagNotifier.value = tag;
     unawaited(ObservabilityService.setSelectedPlayerTag(tag));
+    unawaited(_syncUpgradeWidgetSelectedTag(tag));
 
     // Persist to SharedPreferences for widget access
     if (tag != null) {
@@ -367,6 +369,14 @@ class CocAccountService extends ChangeNotifier {
     }
 
     _safeNotify();
+  }
+
+  Future<void> _syncUpgradeWidgetSelectedTag(String? tag) async {
+    try {
+      await const UpgradeWidgetSyncService().syncSelectedTag(tag);
+    } catch (e) {
+      DebugUtils.debugWarning("⚠️ Could not sync upgrade widget selection: $e");
+    }
   }
 
   Future<void> initializeSelectedTag() async {
@@ -628,7 +638,6 @@ class CocAccountService extends ChangeNotifier {
     final snapshots = snapshotResults
         .whereType<UpgradeTrackerSnapshot>()
         .toList(growable: false);
-    if (snapshots.isEmpty) return;
 
     try {
       await const UpgradeWidgetSyncService().sync(
