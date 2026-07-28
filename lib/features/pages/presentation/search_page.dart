@@ -442,7 +442,7 @@ class _SearchPageState extends State<SearchPage> {
                   children: [
                     if (_mode == _SearchMode.clans)
                       IconButton(
-                        tooltip: l10n?.searchFilters ?? 'Filters',
+                        tooltip: l10n?.generalFilters ?? 'Filters',
                         onPressed: _showClanFilters,
                         splashRadius: 18,
                         icon: Icon(
@@ -564,7 +564,7 @@ class _SearchPageState extends State<SearchPage> {
                         textStyle: Theme.of(context).textTheme.bodyMedium
                             ?.copyWith(fontWeight: FontWeight.w600),
                       ),
-                      child: Text(AppLocalizations.of(context)!.searchCancel),
+                      child: Text(AppLocalizations.of(context)!.generalCancel),
                     ),
                   ],
                 ),
