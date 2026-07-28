@@ -2686,7 +2686,7 @@
       }
     }
   },
-  "damageSourceLightning": "雷电法术",
+  "damageSourceLightning": "闪电法术",
   "damageSourceEarthquake": "地震法术",
   "damageSourceGiantArrow": "巨型箭矢",
   "damageSourceFireball": "巨大火球",
@@ -2708,9 +2708,9 @@
     }
   },
   "damageZapQuakeOptimizer": "闪震组合优化",
-  "damageSpellCapacity": "Spell capacity",
-  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
-  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "damageSpellCapacity": "法术容量",
+  "damageZapQuakeUnavailable": "当前大本营等级尚未解锁闪电法术和地震法术。",
+  "damageZapQuakeUsesSelectedLevels": "当前使用 {lightningLevel} 级闪电法术与 {earthquakeLevel} 级地震法术。",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -2721,9 +2721,9 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
-  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
-  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "damageZapQuakeIneligible": "闪电法术和地震法术无法对此类资源建筑造成伤害。",
+  "damageNoValidZapQuake": "没有符合当前法术空间的有效闪震组合。",
+  "damageZapQuakeCombination": "{lightning} 闪电 + {earthquake} 地震 · {capacity} 空间",
   "@damageZapQuakeCombination": {
     "placeholders": {
       "lightning": {
@@ -2742,7 +2742,7 @@
   "linkedAccountLabel": "Linked account",
   "noLinkedPlayersLoadedTitle": "No linked players loaded",
   "noLinkedPlayersLoadedBody": "Add or refresh linked accounts to see upgrade totals.",
-  "playerOptionNotificationsTitle": "Notifications",
+  "playerOptionNotificationsTitle": "消息通知",
   "playerOptionNotificationsSubtitle": "Get alerts for this account.",
   "playerOptionShowTodoPageTitle": "Show on to-do page",
   "playerOptionShowTodoPageSubtitle": "Include this account in the full to-do list.",
@@ -2758,14 +2758,14 @@
   "searchCancel": "Cancel",
   "bookmarkPlayerLoadFailed": "Failed to load bookmarked player.",
   "warNoLinkedOrBookmarked": "No linked or bookmarked clan wars to show.",
-  "warWidgetRefreshData": "Refresh War Data",
+  "warWidgetRefreshData": "刷新部落战数据",
   "warWidgetNoData": "No war data available",
-  "warWidgetLastUpdated": "Last updated: {time}",
-  "todoEventClanGames": "Clan Games",
-  "todoEventCwl": "CWL",
+  "warWidgetLastUpdated": "更新于：{time}",
+  "todoEventClanGames": "部落竞赛",
+  "todoEventCwl": "部落联赛",
   "todoEventSeasonEnds": "Season ends",
   "todoEventLeagueReset": "League reset",
-  "todoEventRaidWeekend": "Raid Weekend",
+  "todoEventRaidWeekend": "突袭周末",
   "todoMagicDispatch": "Magic Dispatch",
   "todoMagicDispatchDescription": "Tap for the latest ClashKing update",
   "todoUseCodeClashKing": "Use code ClashKing",
