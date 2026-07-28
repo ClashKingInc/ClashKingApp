@@ -462,14 +462,6 @@
       }
     }
   },
-  "gameTHLevel": "RH{level}",
-  "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
   "gameExpLevel": "Erfaringsnivå",
   "gameLeague": "League",
   "gameTrophies": "Trofeer",
@@ -499,7 +491,6 @@
   "gameAchievements": "Prestasjoner",
   "gameClanGames": "Klanleker",
   "gameSeasonPass": "Sesongpass",
-  "gameCreatorCode": "Skaperkode: ClashKing",
   "gameCreatorCodeDescription": "Støtt oss gratis!",
   "gameCreatorCodeDialogTitle": "Støtt ClashKing",
   "gameCreatorCodeDialogDescription": "Når du bruker skaperkoden vår, hjelper du med å finansiere utvikling, holde appen og boten gratis for alle og støtte nye funksjoner.\n\nVi mottar 5 % av kjøpene dine i spillet uten ekstra kostnad for deg — bare skriv inn \"ClashKing\" i butikken i et hvilket som helst Supercell-spill.\n\nTakk for støtten!",
@@ -1314,7 +1305,6 @@
   "clanWinStreakTitle": "Win streak",
   "clanBuilderBaseTitle": "Builder base",
   "clanTypeTitle": "Type",
-  "clanWarFrequencyTitle": "Wars",
   "clanMinTownHallTitle": "Min. TH",
   "clanMinTrophiesTitle": "Min. trophies",
   "clanCapitalHallTitle": "Capital Hall",
@@ -2364,10 +2354,6 @@
   "@gameItemUpgradeDataUnavailable": {
     "description": "Shown when static upgrade cost/time data is missing"
   },
-  "notifScopeAllAccounts": "Alle kontoer",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
-  },
   "notifScopeSelected": "Valgt",
   "@notifScopeSelected": {
     "description": "Notification scope: only selected accounts"
@@ -2441,10 +2427,6 @@
       }
     }
   },
-  "notifSelectedAccounts": "Utvalgte kontoer",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
   "searchRecent": "Nylig",
   "@searchRecent": {
     "description": "Section heading for recent search results"
@@ -2456,10 +2438,6 @@
   "searchTabClans": "Klaner",
   "@searchTabClans": {
     "description": "Search mode tab: clans"
-  },
-  "searchFilters": "Filtre",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
   },
   "searchClear": "Klar",
   "@searchClear": {
@@ -2580,17 +2558,6 @@
         "type": "String"
       },
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts tracked",
-  "@dashboardUpgradeTrackerAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
         "type": "int"
       }
     }
@@ -2755,7 +2722,6 @@
   "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
   "playerOptionShowWarTabTitle": "Show in War tab",
   "playerOptionShowWarTabSubtitle": "Include this account’s clan in the War tab.",
-  "searchCancel": "Cancel",
   "bookmarkPlayerLoadFailed": "Failed to load bookmarked player.",
   "warNoLinkedOrBookmarked": "No linked or bookmarked clan wars to show.",
   "warWidgetRefreshData": "Refresh War Data",
@@ -3189,9 +3155,6 @@
   "rankingClanBuilderHeading": "Clans Builder Base Ranking",
   "rankingClanCapital": "Clan capital",
   "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
   "assetFolderEquipment": "Equipment",
   "assetFolderLeagues": "Leagues",
   "assetFolderResources": "Resources",
@@ -3218,11 +3181,8 @@
   "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
   "endpointStateTop200": "Top 200",
   "endpointStateWeekly": "Weekly",
-  "endpointStateWins": "Wins",
   "endpointStateUsage": "Usage",
-  "notifGroupBattles": "Battles",
   "notifGroupReminders": "Reminders",
-  "notifGroupSupport": "Support",
   "notifGroupProgress": "Progress",
   "notifLeagueDefense": "League defense",
   "notifLeagueDefenseResult": "League defense result",
@@ -3852,7 +3812,6 @@
   "rankedLeaguePeriodTab": "Period",
   "rankedLeagueAverage": "Average",
   "rankedLeagueRemaining": "Remaining",
-  "rankedLeagueStars": "Stars",
   "rankedLeagueSevenDayPeriod": "7-day Ranked League period",
   "rankedLeagueEquipmentUnavailable": "Army and equipment are not included in the official Ranked League battle logs yet.",
   "rankedLeagueBattleDetailsUnavailable": "Detailed battle logs are not available for this period.",
@@ -3899,10 +3858,6 @@
   "notifAudienceAllInlineNote": "Anything you link later will be included without changing this setting.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
-  },
-  "notifAccountVerified": "Verified",
-  "@notifAccountVerified": {
-    "description": "Label for a verified Clash of Clans account in notification settings."
   },
   "notifAccountBookmarked": "Bookmarked",
   "@notifAccountBookmarked": {
