@@ -3894,5 +3894,72 @@
   "notifGroupMonthlySupport": "Monthly support",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
+  },
+  "widgetUpgradeProgressTitle": "Upgrade Progress",
+  "widgetHomeVillage": "HOME VILLAGE",
+  "widgetVillage": "VILLAGE",
+  "widgetLaboratory": "LAB",
+  "widgetPets": "PETS",
+  "widgetBuilderBase": "BUILDER BASE",
+  "widgetResearch": "RESEARCH",
+  "widgetActive": "ACTIVE",
+  "widgetIdle": "IDLE",
+  "widgetLocked": "LOCKED",
+  "widgetMaxed": "MAXED",
+  "widgetNotUnlocked": "Not unlocked",
+  "widgetFullyUpgraded": "Fully upgraded",
+  "widgetNoActiveUpgrades": "No active upgrades",
+  "widgetNoActiveResearch": "No active research",
+  "widgetDataStale": "Update needed",
+  "widgetMoreUpgrade": "more upgrade",
+  "widgetMoreUpgrades": "more upgrades",
+  "widgetLevelShort": "Lv",
+  "widgetReady": "Ready",
+  "widgetReadyIn": "Ready in",
+  "widgetHelping": "Helping",
+  "widgetApprenticeShort": "Apprentice",
+  "widgetAssistantShort": "Assistant",
+  "widgetAlchemistShort": "Alchemist",
+  "widgetBuilderPotion": "Builder Potion",
+  "widgetResearchPotion": "Research Potion",
+  "widgetPetPotion": "Pet Potion",
+  "widgetClockTower": "Clock Tower",
+  "widgetTownHallBuilderBoost": "Town Hall builder boost",
+  "widgetTownHallLabBoost": "Town Hall lab boost",
+  "widgetBuilderBoostShort": "Builder",
+  "widgetResearchBoostShort": "Research",
+  "widgetPetBoostShort": "Pet",
+  "widgetClockBoostShort": "Clock",
+  "widgetBuilderCostPerk": "{percent}% builder cost perk",
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabTimePerk": "{percent}% lab time perk",
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
   }
 }
