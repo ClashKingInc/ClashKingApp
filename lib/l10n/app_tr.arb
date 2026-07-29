@@ -1631,17 +1631,17 @@
   "faqWidgetsAnswer": "Savaş ekran araçları, desteklenen cihazlarda hızlı bir özet gösterir. Seçtiğiniz veya bağlantılı hesaplarınızı, önbelleğe alınmış ClashKing verilerini kullanır ve platform izin verdiğinde arka planda yenileme yapar.",
   "faqWidgetsSolution1": "Hesap veya klan değiştirdikten sonra ekran aracının senkronize olabilmesi için uygulamayı açın.",
   "faqWidgetsSolution2": "Bir ekran aracı güncel görünmüyorsa, önce uygulamayı yenileyin. Android ve iOS, arka plan güncellemelerini sınırlandırır.",
-  "faqWidgetsSolution3": "The clan needs accessible war data to show useful status.",
-  "faqTranslationIssue": "Is a translation missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are first drafted with generation and AI tools, then reviewed and improved over time. If you are a native speaker and something sounds off, you can propose a correction on Crowdin or contact us on Discord or by email.",
+  "faqWidgetsSolution3": "Klanın durumunu faydalı bir şekilde gösterebilmesi için erişilebilir savaş verilerine ihtiyacı var.",
+  "faqTranslationIssue": "Çeviride eksiklik veya hata mı var?",
+  "faqTranslationIssueAnswer": "Çeviriler öncelikle üretim ve yapay zeka araçlarıyla taslak haline getirilir, ardından zaman içinde gözden geçirilir ve geliştirilir. Eğer ana dili İngilizce olan bir kişiyseniz ve bir şey kulağa yanlış geliyorsa, Crowdin üzerinden düzeltme önerisinde bulunabilir veya Discord üzerinden ya da e-posta yoluyla bizimle iletişime geçebilirsiniz.",
   "faqWaysToSupport": "Bizi desteklemenin yolları:",
   "translationHelpUsTranslate": "Çeviriye yardımcı olun",
   "translationSuggestFeatures": "Özellik önerin",
   "translationThankYou": "Teşekkürler!",
-  "translationThankYouContent": "Thank you to everyone who reviews, corrects, and improves ClashKing translations. Your contributions make the app feel clearer, more natural, and easier to use for players around the world.",
-  "translationHelpTranslateContent": "Spot a missing, awkward, or incorrect translation? You can suggest a correction on Crowdin, or reach us on Discord if your language is missing or you are not sure where to start.",
-  "translationHelpTranslateButton": "Edit on Crowdin",
-  "translationCurrentTranslators": "Translators",
+  "translationThankYouContent": "ClashKing çevirilerini gözden geçiren, düzelten ve geliştiren herkese teşekkür ederiz. Katkılarınız, uygulamayı dünyanın dört bir yanındaki oyuncular için daha anlaşılır, doğal ve kullanımı daha kolay hale getiriyor.",
+  "translationHelpTranslateContent": "Eksik, garip veya yanlış bir çeviri mi fark ettiniz? Crowdin üzerinden düzeltme önerisinde bulunabilir veya diliniz eksikse ya da nereden başlayacağınızdan emin değilseniz Discord üzerinden bize ulaşabilirsiniz.",
+  "translationHelpTranslateButton": "Crowdin'de düzenle",
+  "translationCurrentTranslators": "Çevirmenler",
   "filtersTimeFilters": "Zaman Filtreleri",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
@@ -1856,7 +1856,7 @@
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
   },
-  "warAttacksDetailsDuration": "Duration",
+  "warAttacksDetailsDuration": "Süre",
   "@warAttacksDetailsDuration": {
     "description": "Label for attack duration in attack details"
   },
@@ -2276,23 +2276,23 @@
   "gameItemAttackSpeed": "Saldırı Hızı",
   "gameItemAttackRange": "Saldırı Menzili",
   "gameItemMovementSpeed": "Hareket Hızı",
-  "gameItemWardenWeight": "Warden weight",
+  "gameItemWardenWeight": "Büyük koruyucu ağırlığı",
   "@gameItemWardenWeight": {
     "description": "Grand Warden follow-priority weight for a game item"
   },
-  "gameItemWardenWeightTooltip": "Warden weight can override housing space and determines how strongly the Grand Warden prioritizes following a unit group.",
+  "gameItemWardenWeightTooltip": "Büyük koruyucunun ağırlığı, barınma alanını geçersiz kılabilir ve Büyük Koruyucunun birlik grubunu ne kadar öncelikli olarak takip edeceğini belirler.",
   "@gameItemWardenWeightTooltip": {
     "description": "Explains how Warden weight affects Grand Warden follow priority"
   },
-  "gameItemHealerWeight": "Healer weight",
+  "gameItemHealerWeight": "Şifacı ağırlığı",
   "@gameItemHealerWeight": {
     "description": "Healer targeting-priority weight for a game item"
   },
-  "gameItemHealerWeightTooltip": "Healer weight can override housing space when Healers decide which units to prioritize.",
+  "gameItemHealerWeightTooltip": "Şifacıların hangi birimlere öncelik vereceklerine karar verirken, şifacının ağırlığı konut alanının önüne geçebilir.",
   "@gameItemHealerWeightTooltip": {
     "description": "Explains how Healer weight affects targeting priority"
   },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "gameItemWardenThresholdCopies": "{count, plural,=1{eşik değerini takip etmek için 1 asker} other{{count} takip eşiği için birlikler}}",
   "@gameItemWardenThresholdCopies": {
     "description": "Number of copies needed to reach the Grand Warden follow threshold",
     "placeholders": {
@@ -2301,7 +2301,7 @@
       }
     }
   },
-  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "gameItemWardenNoThresholdContribution": "Eşik değerine uyulmasına katkıda bulunmaz",
   "@gameItemWardenNoThresholdContribution": {
     "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
   },
@@ -2317,15 +2317,15 @@
   "gameItemFlying": "Uçan",
   "gameItemUpgradeCost": "Yükseltme maliyeti",
   "gameItemUpgradeTime": "Yükseltme süresi",
-  "gameItemRemainingToTownHallMax": "To TH max",
+  "gameItemRemainingToTownHallMax": "BB maksimuma",
   "@gameItemRemainingToTownHallMax": {
     "description": "Label for remaining upgrades to the player's current Town Hall max"
   },
-  "gameItemRemainingToGlobalMax": "To global max",
+  "gameItemRemainingToGlobalMax": "Küresel maksimuma",
   "@gameItemRemainingToGlobalMax": {
     "description": "Label for remaining upgrades to global max"
   },
-  "gameItemLevelsLeft": "{count} level(s) left",
+  "gameItemLevelsLeft": "{count} seviye kaldı",
   "@gameItemLevelsLeft": {
     "description": "Number of remaining item levels",
     "placeholders": {
@@ -2334,23 +2334,23 @@
       }
     }
   },
-  "gameItemOverview": "Overview",
+  "gameItemOverview": "Genel Bakış",
   "@gameItemOverview": {
     "description": "Section title for item description"
   },
-  "gameItemStats": "Stats",
+  "gameItemStats": "İstatistikler",
   "@gameItemStats": {
     "description": "Section title for item stats"
   },
-  "gameItemNextUpgrade": "Next upgrade",
+  "gameItemNextUpgrade": "Sonraki yükseltme",
   "@gameItemNextUpgrade": {
     "description": "Section title for the next item upgrade"
   },
-  "gameItemUpgradePlan": "Upgrade plan",
+  "gameItemUpgradePlan": "Yükseltme planı",
   "@gameItemUpgradePlan": {
     "description": "Section title for remaining upgrade totals"
   },
-  "gameItemUpgradeDataUnavailable": "Upgrade data unavailable",
+  "gameItemUpgradeDataUnavailable": "Yükseltme verileri mevcut değil",
   "@gameItemUpgradeDataUnavailable": {
     "description": "Shown when static upgrade cost/time data is missing"
   },
@@ -2510,26 +2510,26 @@
   "@searchErrorClanLoadFailed": {
     "description": "Error when clan data fails to load from search"
   },
-  "todoNoMatchingAccounts": "No matching accounts",
-  "todoNoConfiguredAccounts": "No to-do accounts configured",
-  "todoNoLinkedAccounts": "No linked accounts",
-  "todoNoAccountsNeedAction": "No accounts need action",
-  "todoNoCompletedAccounts": "No completed accounts",
-  "todoNoBookmarkedAccounts": "No bookmarked accounts",
-  "todoTryAnotherSearchOrFilter": "Try another search or filter.",
-  "clanJoinLeaveNoDataTitle": "No join/leave data",
-  "clanJoinLeaveNoDataBody": "Recent roster movement appears here when tracking data is loaded.",
-  "clanJoinLeaveNoRecentMovementTitle": "No recent movement",
-  "clanJoinLeaveNoRecentMovementBody": "The summary is loaded, but the event list is empty.",
-  "capitalRaidMembersAttackLogFallback": "Member list is not returned for this raid weekend. Showing attack-log stats instead.",
-  "capitalRaidMembersNoPlayerData": "No player-level data is returned for this raid weekend. The API only includes district and opponent totals.",
-  "capitalRaidMembersNoIndividualData": "No player list or individual attacks available for this raid.",
-  "dashboardNoLinkedAccountsTitle": "No linked accounts",
-  "dashboardNoLinkedAccountsBody": "Link a Clash account to see attacks, events, and activity here.",
-  "dashboardTodoHiddenTitle": "No accounts shown here",
-  "dashboardTodoHiddenBody": "Turn on one of the home card options (to-do, Upgrade Tracker, Ranked) for an account in the Players tab to see it here.",
-  "dashboardUpgradeTrackerNoData": "Open the tracker to import or refresh upgrade data.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {needs an update} other {need an update}}",
+  "todoNoMatchingAccounts": "Eşleşen hesap bulunamadı",
+  "todoNoConfiguredAccounts": "Yapılandırılmış yapılacaklar hesabı yok",
+  "todoNoLinkedAccounts": "Bağlantılı hesap yok",
+  "todoNoAccountsNeedAction": "Hiçbir hesap için işlem yapılması gerekmiyor",
+  "todoNoCompletedAccounts": "Tamamlanmış hesap yok",
+  "todoNoBookmarkedAccounts": "Kaydedilmiş hesap yok",
+  "todoTryAnotherSearchOrFilter": "Başka bir arama veya filtre deneyin.",
+  "clanJoinLeaveNoDataTitle": "Katılma/ayrılma verisi yok",
+  "clanJoinLeaveNoDataBody": "Takip verileri yüklendiğinde, son kadro değişiklikleri burada görünür.",
+  "clanJoinLeaveNoRecentMovementTitle": "Son zamanlarda herhangi bir hareketlilik yok",
+  "clanJoinLeaveNoRecentMovementBody": "Özet yüklendi, ancak etkinlik listesi boş.",
+  "capitalRaidMembersAttackLogFallback": "Bu baskın haftasonu için üye listesi getirilmedi. Bunun yerine saldırı günlüğü istatistikleri gösteriliyor.",
+  "capitalRaidMembersNoPlayerData": "Bu baskın haftasonu için oyuncu düzeyinde veri getirilmiyor. API yalnızca bölge ve rakip toplamlarını içeriyor.",
+  "capitalRaidMembersNoIndividualData": "Bu baskın için oyuncu listesi veya bireysel saldırılar mevcut değil.",
+  "dashboardNoLinkedAccountsTitle": "Bağlantılı hesap yok",
+  "dashboardNoLinkedAccountsBody": "Clash hesabınızı bağlayarak saldırıları, etkinlikleri ve aktiviteleri buradan görebilirsiniz.",
+  "dashboardTodoHiddenTitle": "Burada hiçbir hesap gösterilmiyor",
+  "dashboardTodoHiddenBody": "Oyuncular sekmesinde bir hesap için ana sayfa kart seçeneklerinden birini (Yapılacaklar, Yükseltme Takipçisi, Dereceli) etkinleştirerek burada görüntüleyebilirsiniz.",
+  "dashboardUpgradeTrackerNoData": "Yükseltme verilerini içe aktarmak veya yenilemek için takip cihazını açın.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject}{count, plural,one {güncelleme gerekli}other {güncelleme gerekli}}",
   "@dashboardUpgradeTrackerNeedsUpdate": {
     "placeholders": {
       "subject": {
@@ -2540,7 +2540,7 @@
       }
     }
   },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {has tasks left} other {have tasks left}}",
+  "todoAccountsHaveTasksLeft": "{subject}{count, plural,one {yapılacak işleri var}other {yapılacak işleri var}}",
   "@todoAccountsHaveTasksLeft": {
     "placeholders": {
       "subject": {
@@ -2551,7 +2551,7 @@
       }
     }
   },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {has attacks left} other {have attacks left}}",
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject}{count, plural,one {saldırıları kaldı} other {saldırıları kaldı}}",
   "@dashboardRankedAccountsHaveAttacksLeft": {
     "placeholders": {
       "subject": {
@@ -2562,12 +2562,12 @@
       }
     }
   },
-  "dashboardUpgradeTrackerTimeLeft": "Projected",
-  "dashboardUpgradeTrackerBuilders": "Builders",
+  "dashboardUpgradeTrackerTimeLeft": "Tahmini",
+  "dashboardUpgradeTrackerBuilders": "İnşaatçılar",
   "dashboardUpgradeTrackerLab": "Lab",
-  "dashboardUpgradeTrackerPets": "Pets",
-  "dashboardUpgradeTrackerWalls": "Walls",
-  "dashboardUpgradeTrackerVillage": "Village",
+  "dashboardUpgradeTrackerPets": "Evcil Hayvanlar",
+  "dashboardUpgradeTrackerWalls": "Duvarlar",
+  "dashboardUpgradeTrackerVillage": "Köy",
   "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
   "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
   "@dashboardRankedAccounts": {
