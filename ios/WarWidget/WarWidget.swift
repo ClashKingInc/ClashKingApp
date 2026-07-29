@@ -1236,13 +1236,14 @@ private struct UpgradeWidgetView: View {
   }
 
   private var largeBody: some View {
+    let activeBoosts = entry.data.activeBoosts(at: entry.date)
     VStack(alignment: .leading, spacing: 7) {
       accountHeader
       if entry.data.hasFinishedTask(now: entry.date) {
         staleChip
       }
 
-      if !entry.data.boosts.isEmpty {
+      if !activeBoosts.isEmpty {
         LazyVGrid(
           columns: [
             GridItem(.flexible(), spacing: 4),
@@ -1252,7 +1253,7 @@ private struct UpgradeWidgetView: View {
           alignment: .leading,
           spacing: 4
         ) {
-          ForEach(Array(entry.data.boosts.prefix(3))) { boost in
+          ForEach(Array(activeBoosts.prefix(3))) { boost in
             boostPill(boost)
           }
         }
