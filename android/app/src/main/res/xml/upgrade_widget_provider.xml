@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/upgrade_widget_description"
+    android:configure="com.clashking.clashkingapp.UpgradeWidgetConfigureActivity"
+    android:initialLayout="@layout/upgrade_widget_layout"
+    android:minWidth="250dp"
+    android:minHeight="110dp"
+    android:updatePeriodMillis="1800000"
+    android:previewImage="@drawable/upgrade_widget_preview"
+    android:previewLayout="@layout/upgrade_widget_layout_large"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="4"
+    android:targetCellHeight="3"
+    android:widgetFeatures="reconfigurable"
+    android:widgetCategory="home_screen" />

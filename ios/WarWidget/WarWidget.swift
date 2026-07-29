@@ -871,7 +871,22 @@ private struct UpgradeWidgetTask: Codable, Identifiable {
   let finishesAt: Date
   let helperName: String?
   let helperFinishesAt: Date?
-  var id: String { "\(name)-\(finishesAt.timeIntervalSince1970)" }
+  let count: Int?
+
+  init(name: String, imageUrl: String, fromLevel: Int, toLevel: Int, finishesAt: Date, helperName: String?, helperFinishesAt: Date?, count: Int? = nil) {
+    self.name = name
+    self.imageUrl = imageUrl
+    self.fromLevel = fromLevel
+    self.toLevel = toLevel
+    self.finishesAt = finishesAt
+    self.helperName = helperName
+    self.helperFinishesAt = helperFinishesAt
+    self.count = count
+  }
+
+  var displayCount: Int { max(count ?? 1, 1) }
+  var displayName: String { displayCount > 1 ? "\(displayCount)x \(name)" : name }
+  var id: String { "\(name)-\(finishesAt.timeIntervalSince1970)-\(displayCount)" }
 }
 
 private struct UpgradeWidgetTaskChoice: Identifiable {
@@ -884,24 +899,88 @@ private struct UpgradeWidgetTaskChoice: Identifiable {
 private struct UpgradeWidgetBoost: Codable, Identifiable {
   let kind: String
   let label: String
+  let shortLabel: String?
   let imageUrl: String?
   let expiresAt: Date?
+
+  init(kind: String, label: String, shortLabel: String? = nil, imageUrl: String?, expiresAt: Date?) {
+    self.kind = kind
+    self.label = label
+    self.shortLabel = shortLabel
+    self.imageUrl = imageUrl
+    self.expiresAt = expiresAt
+  }
+
   var id: String { "\(kind)-\(label)" }
 }
 
 private struct UpgradeWidgetHelper: Codable, Identifiable {
   let name: String
+  let shortName: String?
   let imageUrl: String
   let status: String
   let statusUntil: Date?
+
+  init(name: String, shortName: String? = nil, imageUrl: String, status: String, statusUntil: Date?) {
+    self.name = name
+    self.shortName = shortName
+    self.imageUrl = imageUrl
+    self.status = status
+    self.statusUntil = statusUntil
+  }
+
   var id: String { name }
 }
 
 private struct UpgradeWidgetSectionData: Codable {
   let available: Bool
   let capacity: Int
+  let activeCount: Int?
+  let hiddenFinishesAt: Date?
   let remainingCount: Int
   let tasks: [UpgradeWidgetTask]
+}
+
+private struct UpgradeWidgetLabels: Codable {
+  let title: String
+  let homeVillage: String
+  let village: String
+  let laboratory: String
+  let pets: String
+  let builderBase: String
+  let research: String
+  let active: String
+  let idle: String
+  let locked: String
+  let maxed: String
+  let notUnlocked: String
+  let fullyUpgraded: String
+  let noActiveUpgrades: String
+  let noActiveResearch: String
+  let staleData: String?
+  let level: String
+  let ready: String
+
+  static let fallback = UpgradeWidgetLabels(
+    title: "Upgrade Progress",
+    homeVillage: "HOME VILLAGE",
+    village: "VILLAGE",
+    laboratory: "LAB",
+    pets: "PETS",
+    builderBase: "BUILDER BASE",
+    research: "RESEARCH",
+    active: "ACTIVE",
+    idle: "IDLE",
+    locked: "LOCKED",
+    maxed: "MAXED",
+    notUnlocked: "Not unlocked",
+    fullyUpgraded: "Fully upgraded",
+    noActiveUpgrades: "No active upgrades",
+    noActiveResearch: "No active research",
+    staleData: "Update needed",
+    level: "Lv",
+    ready: "Ready"
+  )
 }
 
 private struct UpgradeWidgetData: Codable {
@@ -911,8 +990,10 @@ private struct UpgradeWidgetData: Codable {
   let builderHallLevel: Int
   let hallImageUrl: String
   let updatedAt: Date
+  let hasStaleData: Bool?
   let boosts: [UpgradeWidgetBoost]
   let helpers: [UpgradeWidgetHelper]
+  let labels: UpgradeWidgetLabels?
   let homeBuilders: UpgradeWidgetSectionData
   let laboratory: UpgradeWidgetSectionData
   let pets: UpgradeWidgetSectionData
@@ -925,11 +1006,15 @@ private struct UpgradeWidgetData: Codable {
     builderHallLevel: 10,
     hallImageUrl: "https://assets.clashk.ing/buildings/home-village/town_hall/level_18.webp",
     updatedAt: Date(),
+    hasStaleData: false,
     boosts: [UpgradeWidgetBoost(kind: "builderPotion", label: "Builder Potion", imageUrl: "https://assets.clashk.ing/magic_items/builder_potion.webp", expiresAt: Date().addingTimeInterval(1800))],
     helpers: [UpgradeWidgetHelper(name: "Builder Apprentice", imageUrl: "https://assets.clashk.ing/helpers/builder's_apprentice.webp", status: "Helping Archer Tower", statusUntil: Date().addingTimeInterval(1200))],
+    labels: .fallback,
     homeBuilders: UpgradeWidgetSectionData(
       available: true,
       capacity: 6,
+      activeCount: 2,
+      hiddenFinishesAt: nil,
       remainingCount: 2,
       tasks: [
         UpgradeWidgetTask(name: "Archer Tower", imageUrl: "https://assets.clashk.ing/buildings/home-village/archer_tower/level_18.webp", fromLevel: 17, toLevel: 18, finishesAt: Date().addingTimeInterval(7200), helperName: "Builder Apprentice", helperFinishesAt: Date().addingTimeInterval(1800)),
@@ -939,11 +1024,30 @@ private struct UpgradeWidgetData: Codable {
     laboratory: UpgradeWidgetSectionData(
       available: true,
       capacity: 1,
+      activeCount: 1,
+      hiddenFinishesAt: nil,
       remainingCount: 1,
       tasks: [UpgradeWidgetTask(name: "Dragon", imageUrl: "https://assets.clashk.ing/troops/dragon/icon.webp", fromLevel: 12, toLevel: 13, finishesAt: Date().addingTimeInterval(21600), helperName: nil, helperFinishesAt: nil)]
     ),
-    pets: UpgradeWidgetSectionData(available: true, capacity: 1, remainingCount: 0, tasks: []),
-    builderBase: UpgradeWidgetSectionData(available: true, capacity: 2, remainingCount: 1, tasks: [])
+    pets: UpgradeWidgetSectionData(available: true, capacity: 1, activeCount: 0, hiddenFinishesAt: nil, remainingCount: 0, tasks: []),
+    builderBase: UpgradeWidgetSectionData(available: true, capacity: 2, activeCount: 0, hiddenFinishesAt: nil, remainingCount: 1, tasks: [])
+  )
+
+  static let empty = UpgradeWidgetData(
+    tag: "",
+    name: "ClashKing",
+    townHallLevel: 0,
+    builderHallLevel: 0,
+    hallImageUrl: "",
+    updatedAt: Date(),
+    hasStaleData: false,
+    boosts: [],
+    helpers: [],
+    labels: .fallback,
+    homeBuilders: UpgradeWidgetSectionData(available: false, capacity: 0, activeCount: 0, hiddenFinishesAt: nil, remainingCount: 0, tasks: []),
+    laboratory: UpgradeWidgetSectionData(available: false, capacity: 0, activeCount: 0, hiddenFinishesAt: nil, remainingCount: 0, tasks: []),
+    pets: UpgradeWidgetSectionData(available: false, capacity: 0, activeCount: 0, hiddenFinishesAt: nil, remainingCount: 0, tasks: []),
+    builderBase: UpgradeWidgetSectionData(available: false, capacity: 0, activeCount: 0, hiddenFinishesAt: nil, remainingCount: 0, tasks: [])
   )
 
   static func current(accountTag: String?) -> UpgradeWidgetData? {
@@ -954,7 +1058,14 @@ private struct UpgradeWidgetData: Codable {
     let linkedTags = UpgradeWidgetAccountQuery.linkedTags(defaults: defaults)
     guard !linkedTags.isEmpty else { return nil }
     let selected = accountTag.map(UpgradeWidgetAccountQuery.normalizedTag)
-    let candidateTags = [selected, linkedTags.first].compactMap { $0 }
+    let candidateTags: [String]
+    if let selected, !selected.isEmpty {
+      candidateTags = [selected]
+    } else if let firstLinkedTag = linkedTags.first {
+      candidateTags = [firstLinkedTag]
+    } else {
+      candidateTags = []
+    }
     var seen = Set<String>()
     for tag in candidateTags where seen.insert(tag).inserted {
       guard linkedTags.contains(tag) else { continue }
@@ -1004,7 +1115,7 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
   func snapshot(for configuration: SelectUpgradeAccountIntent, in context: Context) async -> UpgradeWidgetEntry {
     let data: UpgradeWidgetData = context.isPreview
       ? .placeholder
-      : (.current(accountTag: configuration.account?.id) ?? .placeholder)
+      : (.current(accountTag: configuration.account?.id) ?? .empty)
     return UpgradeWidgetEntry(
       date: Date(),
       data: data,
@@ -1014,7 +1125,7 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
   }
 
   func timeline(for configuration: SelectUpgradeAccountIntent, in context: Context) async -> Timeline<UpgradeWidgetEntry> {
-    let data = UpgradeWidgetData.current(accountTag: configuration.account?.id) ?? .placeholder
+    let data = UpgradeWidgetData.current(accountTag: configuration.account?.id) ?? .empty
     let now = Date()
     let imageData = await images(for: data)
     let rotationCount = data.mediumTaskChoices.count
@@ -1039,7 +1150,14 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
       entries = [baseEntry]
     }
     let next = data.timelineDates.filter { $0 > now }.min() ?? now.addingTimeInterval(3600)
-    return Timeline(entries: entries, policy: .after(next))
+    let refreshDate: Date
+    if context.family == .systemMedium && rotationCount > 1 {
+      let rotationCycleEnd = now.addingTimeInterval(TimeInterval(rotationCount) * 15 * 60)
+      refreshDate = min(next, rotationCycleEnd)
+    } else {
+      refreshDate = next
+    }
+    return Timeline(entries: entries, policy: .after(refreshDate))
   }
 
   private func images(for data: UpgradeWidgetData) async -> [String: Data] {
@@ -1057,16 +1175,30 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
 }
 
 private extension UpgradeWidgetData {
+  var localizedLabels: UpgradeWidgetLabels { labels ?? .fallback }
+
   var allTasks: [UpgradeWidgetTask] {
     homeBuilders.tasks + laboratory.tasks + pets.tasks + builderBase.tasks
   }
 
+  var allSections: [UpgradeWidgetSectionData] {
+    [homeBuilders, laboratory, pets, builderBase]
+  }
+
+  func activeBoosts(at date: Date) -> [UpgradeWidgetBoost] {
+    boosts.filter { boost in
+      guard let expiresAt = boost.expiresAt else { return true }
+      return expiresAt > date
+    }
+  }
+
   var mediumTaskChoices: [UpgradeWidgetTaskChoice] {
+    let labels = localizedLabels
     let groups: [(String, [UpgradeWidgetTask])] = [
-      ("VILLAGE", homeBuilders.tasks),
-      ("LAB", laboratory.tasks),
-      ("PETS", pets.tasks),
-      ("BUILDER BASE", builderBase.tasks),
+      (labels.village, homeBuilders.tasks),
+      (labels.laboratory, laboratory.tasks),
+      (labels.pets, pets.tasks),
+      (labels.builderBase, builderBase.tasks),
     ]
     return groups.flatMap { title, tasks in
       tasks.map { UpgradeWidgetTaskChoice(title: title, task: $0) }
@@ -1077,13 +1209,20 @@ private extension UpgradeWidgetData {
     let taskDates = allTasks.flatMap { task in
       [task.finishesAt, task.helperFinishesAt].compactMap { $0 }
     }
-    return taskDates + boosts.compactMap(\.expiresAt) + helpers.compactMap(\.statusUntil)
+    return taskDates + activeBoosts(at: Date()).compactMap(\.expiresAt) + helpers.compactMap(\.statusUntil)
+  }
+
+  func hasFinishedTask(now: Date) -> Bool {
+    (hasStaleData ?? false) ||
+      allSections.contains { ($0.hiddenFinishesAt ?? .distantFuture) <= now } ||
+      allTasks.contains { $0.finishesAt <= now }
   }
 }
 
 private struct UpgradeWidgetView: View {
   let entry: UpgradeWidgetEntry
   @Environment(\.widgetFamily) private var family
+  private var labels: UpgradeWidgetLabels { entry.data.localizedLabels }
 
   var body: some View {
     Group {
@@ -1097,10 +1236,14 @@ private struct UpgradeWidgetView: View {
   }
 
   private var largeBody: some View {
+    let activeBoosts = entry.data.activeBoosts(at: entry.date)
     VStack(alignment: .leading, spacing: 7) {
       accountHeader
+      if entry.data.hasFinishedTask(now: entry.date) {
+        staleChip
+      }
 
-      if !entry.data.boosts.isEmpty {
+      if !activeBoosts.isEmpty {
         LazyVGrid(
           columns: [
             GridItem(.flexible(), spacing: 4),
@@ -1110,7 +1253,7 @@ private struct UpgradeWidgetView: View {
           alignment: .leading,
           spacing: 4
         ) {
-          ForEach(Array(entry.data.boosts.prefix(3))) { boost in
+          ForEach(Array(activeBoosts.prefix(3))) { boost in
             boostPill(boost)
           }
         }
@@ -1121,11 +1264,11 @@ private struct UpgradeWidgetView: View {
       }
 
       HStack(alignment: .top, spacing: 7) {
-        sectionCard(title: "HOME VILLAGE", section: entry.data.homeBuilders, columns: 1)
+        sectionCard(title: labels.homeVillage, section: entry.data.homeBuilders, columns: 1)
         VStack(alignment: .leading, spacing: 7) {
-          sectionCard(title: "LAB", section: entry.data.laboratory, columns: 1)
-          sectionCard(title: "PETS", section: entry.data.pets, columns: 1)
-          sectionCard(title: "BUILDER BASE", section: entry.data.builderBase, columns: 1)
+          sectionCard(title: labels.laboratory, section: entry.data.laboratory, columns: 1)
+          sectionCard(title: labels.pets, section: entry.data.pets, columns: 1)
+          sectionCard(title: labels.builderBase, section: entry.data.builderBase, columns: 1)
         }
       }
     }
@@ -1134,16 +1277,19 @@ private struct UpgradeWidgetView: View {
   private var mediumBody: some View {
     VStack(alignment: .leading, spacing: 6) {
       accountHeader
+      if entry.data.hasFinishedTask(now: entry.date) {
+        staleChip
+      }
       if let choice = mediumTaskChoice {
         mediumTaskCard(choice)
       } else {
         HStack(alignment: .top, spacing: 7) {
-          compactSection(title: "VILLAGE", section: entry.data.homeBuilders)
+          compactSection(title: labels.village, section: entry.data.homeBuilders)
           compactResearchSection
         }
       }
       HStack(spacing: 5) {
-        ForEach(Array(entry.data.boosts.prefix(2))) { boost in
+        ForEach(Array(entry.data.activeBoosts(at: entry.date).prefix(2))) { boost in
           mediumBoostSlot(boost)
         }
         if let helper = entry.data.helpers.first {
@@ -1185,6 +1331,16 @@ private struct UpgradeWidgetView: View {
     }
   }
 
+  private var staleChip: some View {
+    Text(labels.staleData ?? "Update needed")
+      .font(.system(size: 8.5, weight: .bold))
+      .foregroundStyle(.orange)
+      .lineLimit(1)
+      .padding(.horizontal, 8)
+      .padding(.vertical, 3)
+      .background(.orange.opacity(0.16), in: Capsule())
+  }
+
   private func boostPill(_ boost: UpgradeWidgetBoost) -> some View {
     TimelineView(.periodic(from: .now, by: 60)) { context in
       Group {
@@ -1219,7 +1375,7 @@ private struct UpgradeWidgetView: View {
       HStack(spacing: 3) {
         boostImage(boost)
         VStack(alignment: .leading, spacing: 0) {
-          Text(shortBoostName(boost.label))
+          Text(boost.shortLabel ?? shortBoostName(boost.label))
             .fontWeight(.semibold)
           if let expiresAt = boost.expiresAt, expiresAt > context.date {
             Text(humanDuration(until: expiresAt, now: context.date))
@@ -1241,13 +1397,15 @@ private struct UpgradeWidgetView: View {
   private func mediumHelperSlot(_ helper: UpgradeWidgetHelper) -> some View {
     HStack(spacing: 3) {
       helperImage(helper)
-      VStack(alignment: .leading, spacing: 0) {
-        Text(shortHelperName(helper.name)).fontWeight(.semibold)
-        Text(helper.status)
-          .foregroundStyle(.secondary)
+      TimelineView(.periodic(from: .now, by: 60)) { context in
+        VStack(alignment: .leading, spacing: 0) {
+          Text(helper.shortName ?? shortHelperName(helper.name)).fontWeight(.semibold)
+          Text(helper.statusUntil != nil && helper.statusUntil! <= context.date ? labels.ready : helper.status)
+            .foregroundStyle(.secondary)
+        }
+        .font(.system(size: 7.5))
+        .lineLimit(1)
       }
-      .font(.system(size: 7.5))
-      .lineLimit(1)
       Spacer(minLength: 0)
     }
     .padding(.horizontal, 5)
@@ -1271,11 +1429,11 @@ private struct UpgradeWidgetView: View {
       helperImage(helper)
       TimelineView(.periodic(from: .now, by: 60)) { context in
         VStack(alignment: .leading, spacing: 0) {
-          Text(shortHelperName(helper.name))
+          Text(helper.shortName ?? shortHelperName(helper.name))
             .fontWeight(.semibold)
             .foregroundStyle(.primary)
           HStack(spacing: 2) {
-            Text(helper.statusUntil != nil && helper.statusUntil! <= context.date ? "Ready" : helper.status)
+            Text(helper.statusUntil != nil && helper.statusUntil! <= context.date ? labels.ready : helper.status)
           if let until = helper.statusUntil, until > context.date {
             Text(humanDuration(until: until, now: context.date))
               .monospacedDigit()
@@ -1314,13 +1472,13 @@ private struct UpgradeWidgetView: View {
 
   private var compactResearchSection: some View {
     VStack(alignment: .leading, spacing: 3) {
-      Text("RESEARCH")
+      Text(labels.research)
         .font(.system(size: 8, weight: .bold))
         .foregroundStyle(.secondary)
       if let task = entry.data.laboratory.tasks.first ?? entry.data.pets.tasks.first ?? entry.data.builderBase.tasks.first {
         taskRow(task)
       } else {
-        Text("No active research")
+        Text(labels.noActiveResearch)
           .font(.system(size: 8, weight: .medium))
           .foregroundStyle(.tertiary)
       }
@@ -1436,12 +1594,12 @@ private struct UpgradeWidgetView: View {
     HStack(spacing: 5) {
       taskImage(task)
       VStack(alignment: .leading, spacing: 0) {
-        Text(task.name)
+        Text(task.displayName)
           .font(.system(size: 10, weight: .semibold))
           .lineLimit(1)
         TimelineView(.periodic(from: .now, by: 1)) { context in
           HStack(spacing: 3) {
-            Text("Lv \(task.fromLevel) → \(task.toLevel) ·")
+            Text("\(labels.level) \(task.fromLevel) → \(task.toLevel) ·")
             Text(humanDuration(until: task.finishesAt, now: context.date))
               .monospacedDigit()
           }
@@ -1458,23 +1616,26 @@ private struct UpgradeWidgetView: View {
   }
 
   private func sectionStatus(_ section: UpgradeWidgetSectionData) -> String {
-    guard section.available else { return "LOCKED" }
-    if section.tasks.isEmpty && section.remainingCount == 0 { return "MAXED" }
-    let idle = max(0, section.capacity - section.tasks.count)
-    if idle > 0 { return "\(idle) IDLE" }
+    guard section.available else { return labels.locked }
+    let taskCount = section.activeCount ?? section.tasks.reduce(0) { $0 + $1.displayCount }
+    if taskCount == 0 && section.remainingCount == 0 { return labels.maxed }
+    let idle = max(0, section.capacity - taskCount)
+    if idle > 0 { return "\(idle) \(labels.idle)" }
+    if taskCount > 0 { return "\(taskCount) \(labels.active)" }
     return ""
   }
 
   private func sectionStatusColor(_ section: UpgradeWidgetSectionData) -> Color {
     guard section.available else { return .secondary }
-    if section.tasks.isEmpty && section.remainingCount == 0 { return .green }
-    if section.capacity > section.tasks.count { return .orange }
+    let taskCount = section.activeCount ?? section.tasks.reduce(0) { $0 + $1.displayCount }
+    if taskCount == 0 && section.remainingCount == 0 { return .green }
+    if section.capacity > taskCount { return .orange }
     return .secondary
   }
 
   private func emptySectionLabel(_ section: UpgradeWidgetSectionData) -> String {
-    guard section.available else { return "Not unlocked" }
-    return section.remainingCount == 0 ? "Fully upgraded" : "No active upgrades"
+    guard section.available else { return labels.notUnlocked }
+    return section.remainingCount == 0 ? labels.fullyUpgraded : labels.noActiveUpgrades
   }
 
   private func humanDuration(until end: Date, now: Date) -> String {

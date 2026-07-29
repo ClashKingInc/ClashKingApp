@@ -6,6 +6,8 @@ import 'package:clashkingapp/core/services/observability_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_widget_sync_service.dart';
+import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/functions/functions.dart';
@@ -71,6 +73,7 @@ class CocAccountService extends ChangeNotifier {
     _selectedTag = null;
     selectedTagNotifier.value = null;
     unawaited(ObservabilityService.setSelectedPlayerTag(null));
+    unawaited(const UpgradeWidgetSyncService().clear());
     _isLoading = false;
     _lastRefresh = null;
     _safeNotify();
@@ -348,6 +351,7 @@ class CocAccountService extends ChangeNotifier {
     _selectedTag = tag;
     selectedTagNotifier.value = tag;
     unawaited(ObservabilityService.setSelectedPlayerTag(tag));
+    unawaited(_syncUpgradeWidgetSelectedTag(tag));
 
     // Persist to SharedPreferences for widget access
     if (tag != null) {
@@ -365,6 +369,14 @@ class CocAccountService extends ChangeNotifier {
     }
 
     _safeNotify();
+  }
+
+  Future<void> _syncUpgradeWidgetSelectedTag(String? tag) async {
+    try {
+      await const UpgradeWidgetSyncService().syncSelectedTag(tag);
+    } catch (e) {
+      DebugUtils.debugWarning("⚠️ Could not sync upgrade widget selection: $e");
+    }
   }
 
   Future<void> initializeSelectedTag() async {
@@ -607,22 +619,52 @@ class CocAccountService extends ChangeNotifier {
     PlayerService playerService, {
     required bool forceRefresh,
   }) async {
-    await Future.wait([
-      playerService.prefetchRankedLeagueData(
-        playerTags,
-        forceRefresh: forceRefresh,
-      ),
-      ...playerTags.map((tag) async {
+    final snapshotResults = await Future.wait<Object?>([
+      playerService
+          .prefetchRankedLeagueData(playerTags, forceRefresh: forceRefresh)
+          .then<Object?>((_) => null),
+      ...playerTags.map<Future<Object?>>((tag) async {
         try {
-          await UpgradeTrackerRepository.shared.load(
+          return await UpgradeTrackerRepository.shared.load(
             tag,
             forceRefresh: forceRefresh,
           );
         } catch (_) {
           // Best-effort warm-up only; card-level loads surface their own errors.
+          return null;
         }
       }),
     ]);
+    final snapshots = snapshotResults
+        .whereType<UpgradeTrackerSnapshot>()
+        .toList(growable: false);
+
+    try {
+      await const UpgradeWidgetSyncService().sync(
+        snapshots,
+        selectedTag: selectedTag,
+        linkedAccounts: verifiedAccounts
+            .map(
+              (account) => <String, Object?>{
+                'tag':
+                    account['player_tag']?.toString() ??
+                    account['tag']?.toString() ??
+                    '',
+                'name':
+                    account['player_name']?.toString() ??
+                    account['name']?.toString(),
+                'townHallLevel':
+                    account['town_hall_level'] ?? account['townHallLevel'],
+                'builderHallLevel':
+                    account['builder_hall_level'] ??
+                    account['builderHallLevel'],
+              },
+            )
+            .toList(growable: false),
+      );
+    } catch (_) {
+      // Widget sync must not turn optional dashboard warm-up into a failure.
+    }
   }
 
   Future<Map<String, String>> _cachedClanTagsByPlayer(
