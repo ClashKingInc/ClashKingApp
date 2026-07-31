@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/config/observability_config.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/services/clashking_font_service.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
@@ -119,6 +120,7 @@ void _initializeDeepLinks() {
 Future<void> main() async {
   // Initialize Flutter binding BEFORE Sentry
   WidgetsFlutterBinding.ensureInitialized();
+  await ClashKingFontService.load();
   PushNotificationService.registerBackgroundHandler();
 
   if (!ObservabilityConfig.isEnabled) {
