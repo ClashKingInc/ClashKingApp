@@ -7,9 +7,9 @@ import 'package:clashkingapp/core/services/observability_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService extends ChangeNotifier {
   AuthService({
@@ -108,17 +108,15 @@ class AuthService extends ChangeNotifier {
       }
 
       final deviceId = await _tokenService.getDeviceId();
-      final response = await _apiService.post('/auth/discord', {
-        'code': result['code']!,
-        'redirect_uri': DiscordAuthHelper.getRedirectUri(),
-        'code_verifier': result['code_verifier']!,
-        'device_id': deviceId,
-      });
+      final response = await _apiService
+          .post(kIsWeb ? '/auth/web/discord' : '/auth/discord', {
+            'code': result['code']!,
+            'redirect_uri': DiscordAuthHelper.getRedirectUri(),
+            'code_verifier': result['code_verifier']!,
+            'device_id': deviceId,
+          });
 
-      await _tokenService.saveTokens(
-        response['access_token'],
-        response['refresh_token'],
-      );
+      await _storeSessionTokens(response);
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       await ObservabilityService.setAuthenticatedUser(_currentUser);
@@ -143,17 +141,15 @@ class AuthService extends ChangeNotifier {
       final deviceId = await _tokenService.getDeviceId();
       final deviceName = await _tokenService.getDeviceName();
 
-      final response = await _apiService.post('/auth/email', {
-        'email': email,
-        'password': password,
-        'device_id': deviceId,
-        'device_name': deviceName,
-      });
+      final response = await _apiService
+          .post(kIsWeb ? '/auth/web/email' : '/auth/email', {
+            'email': email,
+            'password': password,
+            'device_id': deviceId,
+            'device_name': deviceName,
+          });
 
-      await _tokenService.saveTokens(
-        response['access_token'],
-        response['refresh_token'],
-      );
+      await _storeSessionTokens(response);
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       await ObservabilityService.setAuthenticatedUser(_currentUser);
@@ -215,15 +211,12 @@ class AuthService extends ChangeNotifier {
     try {
       DebugUtils.debugInfo("🔄 Starting email verification with code...");
 
-      final response = await _apiService.post('/auth/verify-email-code', {
-        'email': email,
-        'code': code,
-      });
-
-      await _tokenService.saveTokens(
-        response['access_token'],
-        response['refresh_token'],
+      final response = await _apiService.post(
+        kIsWeb ? '/auth/web/verify-email-code' : '/auth/verify-email-code',
+        {'email': email, 'code': code},
       );
+
+      await _storeSessionTokens(response);
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       await ObservabilityService.setAuthenticatedUser(_currentUser);
@@ -282,18 +275,16 @@ class AuthService extends ChangeNotifier {
       final deviceId = await _tokenService.getDeviceId();
       final deviceName = await _tokenService.getDeviceName();
 
-      final response = await _apiService.post('/auth/reset-password', {
-        'email': email,
-        'reset_code': resetCode,
-        'new_password': newPassword,
-        'device_id': deviceId,
-        'device_name': deviceName,
-      });
+      final response = await _apiService
+          .post(kIsWeb ? '/auth/web/reset-password' : '/auth/reset-password', {
+            'email': email,
+            'reset_code': resetCode,
+            'new_password': newPassword,
+            'device_id': deviceId,
+            'device_name': deviceName,
+          });
 
-      await _tokenService.saveTokens(
-        response['access_token'],
-        response['refresh_token'],
-      );
+      await _storeSessionTokens(response);
       await deletePrefs('auth_local_mode');
       _currentUser = User.fromJson(response['user']);
       await ObservabilityService.setAuthenticatedUser(_currentUser);
@@ -429,6 +420,13 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
+    if (kIsWeb) {
+      try {
+        await _apiService.postResponse('/auth/web/logout');
+      } catch (_) {
+        // Local state is still cleared if the network is unavailable.
+      }
+    }
     await _tokenService.clearTokens();
     try {
       await clearPrefs();
@@ -443,6 +441,11 @@ class AuthService extends ChangeNotifier {
   /// Comprehensive logout that clears all service data
   /// Call this method and then separately call clearAccountData() on CocAccountService
   Future<void> logoutAndClearAllData() async {
+    if (kIsWeb) {
+      try {
+        await _apiService.postResponse('/auth/web/logout');
+      } catch (_) {}
+    }
     await _tokenService.clearTokens();
     try {
       await clearPrefs();
@@ -457,5 +460,25 @@ class AuthService extends ChangeNotifier {
     DebugUtils.debugInfo(
       "🔄 AuthService data cleared. Make sure to also clear CocAccountService data.",
     );
+  }
+
+  Future<void> _storeSessionTokens(Map<String, dynamic> response) async {
+    final accessToken = response['access_token'];
+    if (accessToken is! String || accessToken.isEmpty) {
+      throw const FormatException(
+        'Authentication response omitted access_token.',
+      );
+    }
+    if (kIsWeb) {
+      await _tokenService.saveWebAccessToken(accessToken);
+      return;
+    }
+    final refreshToken = response['refresh_token'];
+    if (refreshToken is! String || refreshToken.isEmpty) {
+      throw const FormatException(
+        'Authentication response omitted refresh_token.',
+      );
+    }
+    await _tokenService.saveTokens(accessToken, refreshToken);
   }
 }

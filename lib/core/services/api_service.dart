@@ -9,13 +9,14 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:clashkingapp/core/services/platform_http_client.dart';
 
 class ApiService {
   ApiService({
     http.Client? client,
     TokenService? tokenService,
     ApiEnvironment? environment,
-  }) : _client = client ?? http.Client(),
+  }) : _client = client ?? createPlatformHttpClient(),
        _tokenService = tokenService ?? TokenService.shared,
        _environment = environment ?? ApiConfig.environment;
 
