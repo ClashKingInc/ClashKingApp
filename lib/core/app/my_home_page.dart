@@ -9,7 +9,6 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
-import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -1790,10 +1789,7 @@ class _RankedLeagueAccountsPageState extends State<_RankedLeagueAccountsPage> {
   }
 
   List<Player> _rankedMenuPlayers(BuildContext context) {
-    final playerPrefs = context.watch<PlayerCardPreferencesService>();
-    return _linkedPlayersForMenu(context, listen: true)
-        .where((player) => playerPrefs.isRankedShownOnHome(player.tag))
-        .toList(growable: false);
+    return _linkedPlayersForMenu(context, listen: true).toList(growable: false);
   }
 
   Future<void> _showAccountPicker(List<Player> players) async {
