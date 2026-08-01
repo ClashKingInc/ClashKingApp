@@ -1896,7 +1896,6 @@ class _TodoMetric {
         'war_attacks' => ImageAssets.war,
         'cwl_attacks' => ImageAssets.cwlSwordsNoBorder,
         'clan_games' => ImageAssets.clanGamesMedals,
-        'raid_attacks' => ImageAssets.raidAttacks,
         _ => ImageAssets.iconGoldPass,
       },
       color: switch (metric.label) {
@@ -1904,7 +1903,6 @@ class _TodoMetric {
         'war_attacks' => CKColors.lossRed,
         'cwl_attacks' => CKColors.capitalPurple,
         'clan_games' => CKColors.donationGreen,
-        'raid_attacks' => CKColors.builderBlue,
         _ => CKColors.warGold,
       },
       fallbackIcon: switch (metric.label) {
@@ -1912,7 +1910,6 @@ class _TodoMetric {
         'war_attacks' => Icons.local_fire_department_rounded,
         'cwl_attacks' => Icons.military_tech_rounded,
         'clan_games' => Icons.emoji_events_rounded,
-        'raid_attacks' => Icons.fort_rounded,
         _ => Icons.confirmation_number_rounded,
       },
     );
@@ -1928,7 +1925,6 @@ String _todoMetricDisplayLabel(String label, AppLocalizations loc) {
     'war_attacks' => loc.todoWarAttacks,
     'cwl_attacks' => loc.todoCwlAttacks,
     'clan_games' => loc.gameClanGames,
-    'raid_attacks' => loc.todoRaidAttacks,
     'season_pass' => loc.gameSeasonPassShort,
     _ => label,
   };
@@ -1967,7 +1963,7 @@ class _TodoPreview {
         ),
         _TodoMetric(
           label: loc.todoWarAttacks,
-          detail: loc.todoMockRaid1Left,
+          detail: loc.todoItemsLeftShort(1),
           done: 1,
           total: 2,
           imageUrl: ImageAssets.war,
@@ -1993,15 +1989,6 @@ class _TodoPreview {
           fallbackIcon: Icons.emoji_events_rounded,
         ),
         _TodoMetric(
-          label: loc.todoRaidAttacks,
-          detail: loc.todoMockRaid4Left,
-          done: 2,
-          total: 6,
-          imageUrl: ImageAssets.raidAttacks,
-          color: CKColors.builderBlue,
-          fallbackIcon: Icons.fort_rounded,
-        ),
-        _TodoMetric(
           label: loc.gameSeasonPassShort,
           detail: loc.todoMockPass850Left,
           done: 1750,
@@ -2015,7 +2002,7 @@ class _TodoPreview {
     _TodoPreview(
       name: loc.todoMockWarAltName,
       subtitle: loc.todoMockWarAltSubtitle,
-      status: loc.todoMockWarAltStatus,
+      status: loc.todoMockWar2Left,
       avatarUrl: ImageAssets.townHall(15),
       summary: _TodoSummary.fromMetrics([
         _TodoMetric(
@@ -2035,15 +2022,6 @@ class _TodoPreview {
           imageUrl: ImageAssets.clanGamesMedals,
           color: CKColors.donationGreen,
           fallbackIcon: Icons.emoji_events_rounded,
-        ),
-        _TodoMetric(
-          label: loc.todoRaidAttacks,
-          detail: loc.todoMockRaid1Left,
-          done: 5,
-          total: 6,
-          imageUrl: ImageAssets.raidAttacks,
-          color: CKColors.builderBlue,
-          fallbackIcon: Icons.fort_rounded,
         ),
       ]),
     ),

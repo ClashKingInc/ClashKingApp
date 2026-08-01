@@ -26,14 +26,14 @@ enum RankingBoard {
     audience: RankingAudience.players,
     source: RankingSource.clashKing,
     supportsLocation: false,
-    supportsHistory: true,
+    supportsHistory: false,
     iconUrl: ImageAssets.trophies,
   ),
   playerRanked(
     audience: RankingAudience.players,
     source: RankingSource.clashKing,
     supportsLocation: false,
-    supportsHistory: true,
+    supportsHistory: false,
     iconUrl: ImageAssets.legendLeagueOne,
   ),
   clanHome(

@@ -233,6 +233,45 @@ void main() {
       ], notify: false);
       expect(notified, isFalse);
     });
+
+    test('parses mobile initialization ranking categories', () {
+      final service = PlayerService();
+      service.processBulkPlayerData(
+        [
+          {
+            'tag': '#P1',
+            'rankings': {
+              'tag': '#P1',
+              'homeVillage': {
+                'points': null,
+                'globalRank': null,
+                'locationId': '32000087',
+                'locationName': 'United States',
+                'countryCode': 'US',
+                'localRank': null,
+              },
+              'builderBase': {
+                'points': 5100,
+                'globalRank': 84,
+                'locationId': null,
+                'locationName': null,
+                'countryCode': null,
+                'localRank': null,
+              },
+            },
+          },
+        ],
+        [_playerBasicJson('#P1')],
+      );
+
+      final rankings = service.profiles.single.rankings!;
+      expect(rankings.homeVillage.locationId, '32000087');
+      expect(rankings.homeVillage.points, isNull);
+      expect(rankings.homeVillage.localRank, isNull);
+      expect(rankings.homeVillage.globalRank, isNull);
+      expect(rankings.builderBase.points, 5100);
+      expect(rankings.builderBase.globalRank, 84);
+    });
   });
 
   // ---------------------------------------------------------------------------

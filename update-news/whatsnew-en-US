@@ -1,4 +1,6 @@
 - Empty/no-result screens now share the same visual treatment across side pages and rankings.
+- Settings language and theme pickers now match the app's current settings styling in light and dark mode
+- Refined notification audience settings with clearer account scope controls.
 - Upgrade Tracker no-result states now match the shared empty screen used by clan arrivals and departures.
 - Upgrade Tracker tabs now use ClashKing asset icons for calendar, plan, and collection.
 - Sidebar and drawer menu items now use ClashKing asset icons where available.
@@ -31,7 +33,7 @@
 - Fixed player headers showing Ranked League tiers in the classic trophy league slot
 - Fixed startup and widget fallback logos so ClashKing assets keep rendering when a CDN image fails once
 - Refined language, theme, and translation-help settings so they match the app's settings design
-- Added the Upgrade Tracker widget on Android, matching the existing iOS widget support
+- Added the Upgrade Tracker widget on Android with account selection, responsive iOS-style layouts, and reliable refreshes
 - Updated the FAQ with clearer feature coverage for accounts, notifications, widgets, to-do, and upgrade tracking
 - Monthly support notifications now follow your Events or App announcements preference instead of appearing as a separate technical toggle
 - Fixed the home to-do card so it also hides accounts you've turned "Show on to-do page" off for, not just the full to-do list

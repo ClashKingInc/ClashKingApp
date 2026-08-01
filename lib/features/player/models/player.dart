@@ -14,7 +14,6 @@ import 'package:clashkingapp/features/player/models/player_legend_ranking.dart';
 import 'package:clashkingapp/features/player/models/player_legend_season.dart';
 import 'package:clashkingapp/features/player/models/player_legend_stats.dart';
 import 'package:clashkingapp/features/player/models/player_pet.dart';
-import 'package:clashkingapp/features/player/models/player_raids.dart';
 import 'package:clashkingapp/features/player/models/player_rankings.dart';
 import 'package:clashkingapp/features/player/models/player_season_pass.dart';
 import 'package:clashkingapp/features/player/models/player_siege_machine.dart';
@@ -73,7 +72,6 @@ class Player {
   List<PlayerLegendRanking> legendRanking;
   PlayerRankings? rankings;
   PlayerWarStats? warStats;
-  PlayerRaids? raids;
   WarInfo? warData;
 
   // Per-season tracked stats from ClashKing (populated via enrichWithFullStats)
@@ -536,9 +534,6 @@ class Player {
     rankings = json['rankings'] != null
         ? PlayerRankings.fromJson(json['rankings'])
         : null;
-    raids = json['raid_data'] != null && (json['raid_data'] as Map).isNotEmpty
-        ? PlayerRaids.fromJson(json['raid_data'])
-        : PlayerRaids.empty();
 
     if (json['war_data'] != null &&
         json['war_data']["currentWarInfo"] != null) {
@@ -759,16 +754,6 @@ class Player {
           total: total,
           progressDone: ratio * 2,
           progressTotal: 2,
-        ),
-      );
-    }
-
-    if (isInTimeFrameForRaid()) {
-      metrics.add(
-        TodoProgressMetric(
-          label: 'raid_attacks',
-          done: raids?.attackDone ?? 0,
-          total: raids?.attackLimit ?? 5,
         ),
       );
     }

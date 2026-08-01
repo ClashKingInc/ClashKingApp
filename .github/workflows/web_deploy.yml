@@ -26,7 +26,9 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --release
+        run: >-
+          flutter build web --release
+          --dart-define=CK_API_V2_BASE_URL=https://v2-api.clashk.ing/v2
 
       - name: Publish to Cloudflare Pages
         id: deploy

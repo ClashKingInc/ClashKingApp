@@ -10,6 +10,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
+import 'package:clashkingapp/core/services/platform_http_client.dart';
 
 class TokenService {
   TokenService({
@@ -30,7 +31,7 @@ class TokenService {
   http.Client? _defaultClient;
 
   http.Client get _client =>
-      _providedClient ?? (_defaultClient ??= http.Client());
+      _providedClient ?? (_defaultClient ??= createPlatformHttpClient());
 
   String? _cachedAccessToken;
   String? _cachedRefreshToken;
@@ -41,6 +42,11 @@ class TokenService {
   Future<String>? _deviceNameLoad;
 
   Future<String?> getAccessToken() async {
+    if (kIsWeb) {
+      final cached = _cachedAccessToken;
+      if (cached != null && !isTokenExpired(cached)) return cached;
+      return _refreshWebAccessToken();
+    }
     final tokens = await _loadTokensOnce();
     final accessToken = tokens.$1;
     final refreshToken = tokens.$2;
@@ -87,6 +93,7 @@ class TokenService {
     String refreshToken,
     String deviceId,
   ) async {
+    if (kIsWeb) return _refreshWebAccessToken();
     try {
       final response = await _client
           .post(
@@ -102,17 +109,19 @@ class TokenService {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final newAccessToken = data['access_token'];
+        final newRefreshToken = data['refresh_token'];
 
-        if (newAccessToken == null || newAccessToken.isEmpty) {
+        if (newAccessToken is! String ||
+            newAccessToken.isEmpty ||
+            newRefreshToken is! String ||
+            newRefreshToken.isEmpty) {
           Sentry.captureMessage(
-            "Token refresh API returned empty access token",
+            "Token refresh API returned empty replacement tokens",
           );
           return null;
         }
 
-        await _persistAccessToken(newAccessToken);
-        _cachedAccessToken = newAccessToken;
-        _tokensLoaded = true;
+        await saveTokens(newAccessToken, newRefreshToken);
 
         DebugUtils.debugSuccess("Token refreshed successfully");
         return newAccessToken;
@@ -132,19 +141,58 @@ class TokenService {
     }
   }
 
+  Future<String?> _refreshWebAccessToken() async {
+    final existing = _refreshInFlight;
+    if (existing != null) return existing;
+
+    final refresh = () async {
+      try {
+        final response = await _client
+            .post(Uri.parse('${ApiConfig.apiUrlV2}/auth/web/refresh'))
+            .timeout(const Duration(seconds: 10));
+        if (response.statusCode != 200) {
+          _cachedAccessToken = null;
+          return null;
+        }
+        final data = json.decode(response.body);
+        final token = data['access_token'];
+        if (token is! String || token.isEmpty) return null;
+        await saveWebAccessToken(token);
+        return token;
+      } catch (e, stackTrace) {
+        ErrorReporter.captureException(
+          e,
+          stackTrace: stackTrace,
+          operation: 'token.web_refresh',
+        );
+        return null;
+      }
+    }();
+    _refreshInFlight = refresh;
+    try {
+      return await refresh;
+    } finally {
+      if (identical(_refreshInFlight, refresh)) _refreshInFlight = null;
+    }
+  }
+
+  Future<void> saveWebAccessToken(String accessToken) async {
+    _cachedAccessToken = accessToken;
+    _cachedRefreshToken = null;
+    _tokensLoaded = true;
+    final prefs = await SharedPreferences.getInstance();
+    await Future.wait([
+      prefs.remove(_accessTokenKey),
+      prefs.remove(_refreshTokenKey),
+      _secureStorage.delete(key: _accessTokenKey),
+      _secureStorage.delete(key: _refreshTokenKey),
+    ]);
+  }
+
   Future<void> saveTokens(String accessToken, String refreshToken) async {
     final prefs = await SharedPreferences.getInstance();
     if (kIsWeb) {
-      await Future.wait([
-        prefs.setString(_accessTokenKey, accessToken),
-        prefs.setString(_refreshTokenKey, refreshToken),
-        _secureStorage.delete(key: _accessTokenKey),
-        _secureStorage.delete(key: _refreshTokenKey),
-      ]);
-      _cachedAccessToken = accessToken;
-      _cachedRefreshToken = refreshToken;
-      _tokensLoaded = true;
-      return;
+      return saveWebAccessToken(accessToken);
     }
 
     await Future.wait([
@@ -305,27 +353,13 @@ class TokenService {
   Future<(String?, String?)> _readTokens() async {
     if (kIsWeb) {
       final prefs = await SharedPreferences.getInstance();
-      var accessToken = prefs.getString(_accessTokenKey);
-      var refreshToken = prefs.getString(_refreshTokenKey);
-      if (accessToken != null && refreshToken != null) {
-        return (accessToken, refreshToken);
-      }
-
-      final legacyTokens = await Future.wait([
-        _secureStorage.read(key: _accessTokenKey),
-        _secureStorage.read(key: _refreshTokenKey),
-      ]);
-      accessToken ??= legacyTokens[0];
-      refreshToken ??= legacyTokens[1];
-
       await Future.wait([
-        if (accessToken != null) prefs.setString(_accessTokenKey, accessToken),
-        if (refreshToken != null)
-          prefs.setString(_refreshTokenKey, refreshToken),
+        prefs.remove(_accessTokenKey),
+        prefs.remove(_refreshTokenKey),
         _secureStorage.delete(key: _accessTokenKey),
         _secureStorage.delete(key: _refreshTokenKey),
       ]);
-      return (accessToken, refreshToken);
+      return (_cachedAccessToken, null);
     }
 
     final storedTokens = await Future.wait([
@@ -362,16 +396,5 @@ class TokenService {
     }
 
     return (accessToken, refreshToken);
-  }
-
-  Future<void> _persistAccessToken(String accessToken) async {
-    if (kIsWeb) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_accessTokenKey, accessToken);
-      await _secureStorage.delete(key: _accessTokenKey);
-      return;
-    }
-
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
   }
 }

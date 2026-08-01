@@ -210,10 +210,12 @@ void main() {
     await provider.selectBoard(RankingBoard.playerTownHall);
     await tester.pumpAndSettle();
     expect(find.text('TH18'), findsOneWidget);
+    expect(find.byKey(const Key('rankings-period-control')), findsNothing);
 
     await provider.selectBoard(RankingBoard.playerRanked);
     await tester.pumpAndSettle();
     expect(find.text('Legend League 2'), findsOneWidget);
+    expect(find.byKey(const Key('rankings-period-control')), findsNothing);
 
     await provider.selectLeague(RankingLeagueOption.legendThree);
     await tester.pumpAndSettle();

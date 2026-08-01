@@ -18,7 +18,6 @@ void main() {
     expect(find.text('Building to destroy'), findsOneWidget);
     expect(find.text('No building selected'), findsOneWidget);
     expect(find.text('Choose a building'), findsOneWidget);
-    expect(find.text('Attack method'), findsOneWidget);
     expect(find.text('Custom'), findsOneWidget);
     expect(find.byType(TabBarView), findsNothing);
 

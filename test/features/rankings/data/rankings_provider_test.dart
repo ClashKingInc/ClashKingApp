@@ -57,21 +57,21 @@ void main() {
     await provider.selectBoard(RankingBoard.playerTownHall);
     await provider.selectTownHall(17);
     await provider.selectPeriod(RankingPeriod.history);
-    await provider.selectHistoryDate(DateTime(2026, 7, 18));
     expect(service.queries.last.board, RankingBoard.playerTownHall);
     expect(service.queries.last.townHallLevel, 17);
-    expect(service.queries.last.period, RankingPeriod.history);
-    expect(service.queries.last.historyDate, DateTime(2026, 7, 18));
+    expect(service.queries.last.period, RankingPeriod.current);
 
     await provider.selectBoard(RankingBoard.playerRanked);
+    await provider.selectPeriod(RankingPeriod.history);
     await provider.selectLeague(provider.leagueOptions.last);
     expect(service.queries.last.leagueTier.id, 105000034);
+    expect(service.queries.last.period, RankingPeriod.current);
 
     await provider.selectAudience(RankingAudience.clans);
     await provider.selectBoard(RankingBoard.clanDonations);
     expect(service.queries.last.board, RankingBoard.clanDonations);
     expect(service.queries.last.period, RankingPeriod.current);
-    expect(service.queries.length, 10);
+    expect(service.queries.length, 8);
   });
 
   test(

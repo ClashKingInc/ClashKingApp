@@ -446,14 +446,6 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
-  "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
   "gameExpLevel": "Experience Level",
   "gameTrophies": "Trophies",
   "gameBuilderBaseTrophies": "BB Trophies",
@@ -482,7 +474,6 @@
   "gameAchievements": "Achievements",
   "gameClanGames": "Clan Games",
   "gameSeasonPass": "Season Pass",
-  "gameCreatorCode": "Creator Code: ClashKing",
   "gameCreatorCodeDescription": "Support us for free!",
   "gameCreatorCodeDialogTitle": "Support ClashKing",
   "gameCreatorCodeDialogDescription": "Using our creator code helps fund development, keeps the app & bot free for all, and allows us to add new features.\n\nWe get 5% of what you spend in-game, but it doesn't cost you anything extra - just use \"ClashKing\" as your creator code in the Clash of Clans shop!",
@@ -757,8 +748,6 @@
   "todoExplanationIntro": "The task completion percentage is calculated based on the following activities with specific weightings:",
   "todoExplanationLegendsTitle": "Legend League:",
   "todoExplanationLegends": "Weight of 8 points per account, 1 attack = 1 point.",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
   "todoExplanationClanWarsTitle": "Clan Wars:",
   "todoExplanationClanWars": "Weight of 2 points per account, 1 attack = 1 point.",
   "todoExplanationCwlTitle": "Clan War League:",
@@ -1415,23 +1404,23 @@
   "settingsToggleTheme": "Toggle Theme",
   "faqTitle": "FAQ",
   "faqSubtitle": "Frequently Asked Questions",
-  "faqIsThisFromSupercell": "Is this App from Supercell?",
-  "faqFanContentPolicy": "This material is unofficial and is not endorsed by Supercell. For more information see Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqIsThisFromSupercell": "Is this app made by Supercell?",
+  "faqFanContentPolicy": "ClashKing is unofficial and is not endorsed by Supercell. See Supercell's Fan Content Policy: www.supercell.com/fan-content-policy",
   "faqWhyNotAccurate": "Why is the data sometimes inaccurate or missing?",
   "faqClanNotTracked": "Clan not tracked",
-  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this info if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord Server and use the command /addclan. We are working on making this feature available in the app soon.",
-  "faqTrackingDown": "Tracking down",
-  "faqTrackingDownAnswer": "The tracking can stop working for a certain period of time. This is why you can sometimes have holes in your data. We are working on improving this.",
+  "faqClanNotTrackedAnswer": "ClashKing can only retrieve this information if the clan is tracked. If your clan isn't tracked, please invite the ClashKing Bot to your Discord server and use the command /addclan. We are working on making this feature available in the app soon.",
+  "faqTrackingDown": "Tracking temporarily unavailable",
+  "faqTrackingDownAnswer": "Tracking can temporarily stop working, which may leave gaps in your data. We are working on improving this.",
   "faqApiLimitation": "Clash of Clans API limitation",
-  "faqApiLimitationAnswer": "Some data is provided by Clash of Clans and their API have some limitations. This is the case for legends tracking, it sometimes stacks the trophy gain and loss as if it was a single attack. This is also why we don't have any information on your building levels.",
-  "faqSupportWork": "How can I support your work?",
+  "faqApiLimitationAnswer": "Some data comes from the official Clash of Clans API. It can lag or group updates. In Ranked League, trophy changes may appear late when several battles happen close together. Building levels are not part of regular player profiles; upgrade data comes from the manual Upgrade Tracker snapshot provided by the user.",
+  "faqSupportWork": "How can I support ClashKing?",
   "faqSupportWorkAnswer": "There are several ways to support us:",
-  "faqUseCodeClashKing": "Use code \"ClashKing\"",
+  "faqUseCodeClashKing": "Creator Code: ClashKing",
   "faqSupportUsOnPatreon": "Support us on Patreon",
   "faqRateTheApp": "Rate the app in the store",
   "faqWhatCanBotDo": "What can the ClashKing Discord bot do?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan directly from Discord with comprehensive tracking tools, automated notifications, and seamless integration with this app. It's designed for clan leaders and members who want to stay connected and organized:",
-  "faqInviteBotToServer": "Invite Bot to Server",
+  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan from Discord. It adds tracking, alerts, and quick commands for leaders and members:",
+  "faqInviteBotToServer": "Invite bot to server",
   "faqBotFeatureTracking": "Player & Clan Tracking",
   "faqBotFeatureTrackingDesc": "Add and monitor multiple clans and players with real-time updates",
   "faqBotFeatureWars": "War Management",
@@ -1440,58 +1429,60 @@
   "faqBotFeatureNotificationsDesc": "Get alerts for donations, war attacks, and important clan events",
   "faqBotFeatureCommands": "Powerful Commands",
   "faqBotFeatureCommandsDesc": "Use slash commands to quickly access player stats, war info, and more",
-  "faqNeedHelp": "I need help or I would like to make a suggestion. How can I contact you?",
-  "faqNeedHelpAnswer": "You can join our Discord Server to ask for help or to provide feedback, or you can email us at devs@clashk.ing. Please only write in English or French.",
+  "faqNeedHelp": "I need help or want to make a suggestion. How can I contact you?",
+  "faqNeedHelpAnswer": "You can join our Discord server to ask for help or share feedback, or you can email us at devs@clashk.ing. Please write in English or French only.",
+  "faqPrivacyDataTitle": "Can I manage or delete my personal data?",
+  "faqPrivacyDataAnswer": "Yes. In Settings > Privacy Policy, you can open the privacy policy, prepare an export of your ClashKing account data, ask for corrections or restrictions, and start account deletion. Some requests may still use the support email fallback while backend privacy services roll out. ClashKing can act on data stored in your ClashKing account; Clash of Clans data may also come from Supercell APIs or public clan and player data.",
   "faqSendEmail": "Send an email",
-  "faqJoinDiscord": "Join our Discord Server",
-  "faqCannotOpenMailClient": "For some reasons we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
+  "faqJoinDiscord": "Join our Discord server",
+  "faqCannotOpenMailClient": "For some reason, we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
   "faqTroubleshooting": "Troubleshooting",
   "faqTroubleshootingDataTitle": "Why is my data not syncing?",
   "faqTroubleshootingDataDescription": "Player or clan data appears outdated",
   "faqTroubleshootingDataSolution1": "Pull down to refresh the page",
   "faqTroubleshootingDataSolution2": "Check if your clan is tracked (see above)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again : the API can take some time to update",
+  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again: the API can take some time to update",
   "faqTroubleshootingCrashTitle": "Why does the app crash?",
   "faqTroubleshootingCrashDescription": "App closes unexpectedly or freezes",
   "faqTroubleshootingCrashSolution1": "Close the app and restart it",
   "faqTroubleshootingCrashSolution2": "Update the app to the latest version",
   "faqTroubleshootingCrashSolution3": "Clear app cache and data (Android) or reinstall the app",
   "faqTroubleshootingCrashSolution4": "Free up device storage space",
-  "faqContactSupport": "Contact support if problem persists (see last section)",
+  "faqContactSupport": "Contact support if the problem persists (see the last section)",
   "faqTroubleshootingAccountTitle": "Why can't I verify my account?",
   "faqTroubleshootingAccountDescription": "Problems linking your Clash of Clans account",
   "faqTroubleshootingAccountSolution1": "Make sure you're using the correct player tag starting with #",
   "faqTroubleshootingAccountSolution2": "If the account seems to be already linked, use the API token from Clash of Clans settings",
   "faqTroubleshootingSolutions": "Solutions:",
   "faqWhatIsClashKingProject": "What is the ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans statistics and clan management project created by passionate players for the community. We develop this as a side project alongside our full-time jobs, driven by our love for the game. We offer a mobile app, Discord bot, and free API that work together to provide the ultimate Clash of Clans experience. The project is funded entirely through user donations and Supercell Creator code usage - no ads, no premium features!",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans stats and clan management project. It is mainly maintained by two developers, with occasional help from contributors. We keep improving it as our time allows, with one goal: helping players and clans follow their progress more easily. The app, Discord bot, and free API work together.",
   "faqViewOnGitHub": "View on GitHub",
-  "faqFeaturesGuide": "What can ClashKing app do?",
-  "faqFeaturesGuideDescription": "Take your Clash of Clans experience to the next level! ClashKing app delivers beautiful, fast access to all your stats and clan data - perfect for players who do not have Discordand those who prefer a sleek mobile experience:",
-  "faqAppDevelopmentNotice": "We're actively developing new features to make the app even better. Your feedback helps us improve!",
+  "faqFeaturesGuide": "What can the ClashKing app do?",
+  "faqFeaturesGuideDescription": "ClashKing gives fast mobile access to player stats, clan data, wars, CWL, Ranked, and account tools. It is useful even if you do not use Discord:",
+  "faqAppDevelopmentNotice": "The app is still improving. Your feedback helps shape what comes next.",
   "faqFeaturesPlayerTitle": "Player Statistics",
-  "faqFeaturesPlayerDescription": "Track your progress, achievements, and legend league performance",
+  "faqFeaturesPlayerDescription": "Track your progress, achievements, and Ranked League performance",
   "faqFeaturesClanTitle": "Clan Management",
   "faqFeaturesClanDescription": "Monitor clan members, donations, and overall clan health",
   "faqFeaturesWarTitle": "War Tracking",
   "faqFeaturesWarDescription": "Analyze war performance, attack strategies, and win rates",
-  "faqFeaturesLegendsTitle": "Inaccurate data?",
-  "faqFeaturesLegendsDescription": "Daily trophy tracking and end-of-season statistics",
+  "faqFeaturesLegendsTitle": "Ranked League tracking",
+  "faqFeaturesLegendsDescription": "Follow ranked periods, battle logs, trophy changes, and season statistics",
   "faqFeaturesCwlTitle": "CWL Analytics",
   "faqFeaturesCwlDescription": "Clan War League performance and member contributions",
   "faqSearchHint": "Search FAQ...",
   "faqSectionGettingStarted": "Getting Started & About",
   "faqSectionSupportAndContact": "Support & Contact",
-  "faqTranslationIssue": "Translation is missing or incorrect?",
-  "faqTranslationIssueAnswer": "Translations are done by app users like you! We (developers) only provide French and English translations. If you find missing or incorrect translations, you can help improve them. Do not hesitate to reach out to us on Discord or via email if want to help us. We have a specific Discord channel for translators where you can ask questions and get help.",
+  "faqTranslationIssue": "Is a translation missing or incorrect?",
+  "faqTranslationIssueAnswer": "Translations are first drafted with generation and AI tools, then reviewed and improved over time. If you are a native speaker and something sounds off, you can propose a correction on Crowdin or contact us on Discord or by email.",
   "faqWaysToSupport": "Ways to support us:",
   "translationHelpUsTranslate": "Help us translate",
   "translationSuggestFeatures": "Suggest features",
   "translationThankYou": "Thank you!",
-  "translationThankYouContent": "A huge thank you to all our amazing translators who help us make this app accessible to more people around the world!",
-  "translationHelpTranslateContent": "You can help us translate the app on Crowdin. If your language is not available on Crowdin, feel free to request it in our Discord Server. Thank you so much for your help!",
-  "translationHelpTranslateButton": "Help Translate on Crowdin",
-  "translationCurrentTranslators": "Current Translators",
+  "translationThankYouContent": "Thank you to everyone who reviews, corrects, and improves ClashKing translations. Your contributions make the app feel clearer, more natural, and easier to use for players around the world.",
+  "translationHelpTranslateContent": "Spot a missing, awkward, or incorrect translation? You can suggest a correction on Crowdin, or reach us on Discord if your language is missing or you are not sure where to start.",
+  "translationHelpTranslateButton": "Edit on Crowdin",
+  "translationCurrentTranslators": "Translators",
   "filtersTimeFilters": "Time Filters",
   "@filtersTimeFilters": {
     "description": "Time-based filters section title"
@@ -2182,7 +2173,6 @@
   "clanWinStreakTitle": "Win streak",
   "clanBuilderBaseTitle": "Builder base",
   "clanTypeTitle": "Type",
-  "clanWarFrequencyTitle": "Wars",
   "clanMinTownHallTitle": "Min. TH",
   "clanMinTrophiesTitle": "Min. trophies",
   "clanCapitalHallTitle": "Capital Hall",
@@ -2233,18 +2223,10 @@
   "gameItemNextUpgrade": "Next upgrade",
   "gameItemUpgradePlan": "Upgrade plan",
   "gameItemUpgradeDataUnavailable": "Upgrade data unavailable",
-  "notifScopeAllAccounts": "All accounts",
   "notifScopeSelected": "Selected",
   "settingsPreferences": "Preferences",
   "settingsNotificationsTitle": "Notifications",
   "settingsNotificationsSubtitle": "Choose alerts and send local test previews.",
-  "settingsLiveActivityTest": "Live Activity Test",
-  "settingsLiveActivityStart": "Start test activity",
-  "settingsLiveActivityStartSubtitle": "Shows a local clan-war preview.",
-  "settingsLiveActivityUpdate": "Update score",
-  "settingsLiveActivityUpdateSubtitle": "Advances the fake war score.",
-  "settingsLiveActivityEnd": "End test activity",
-  "settingsLiveActivityEndSubtitle": "Removes the local preview.",
   "settingsSupport": "Support",
   "settingsAbout": "About",
   "settingsAccount": "Account",
@@ -2258,11 +2240,9 @@
   "notifNoAccountsLoadedYet": "No linked accounts loaded yet.",
   "notifNoAccountsSelected": "No accounts selected",
   "notifAccountsSelected": "{count} accounts selected",
-  "notifSelectedAccounts": "Selected accounts",
   "searchRecent": "Recent",
   "searchTabPlayers": "Players",
   "searchTabClans": "Clans",
-  "searchFilters": "Filters",
   "searchClear": "Clear",
   "warStatsRefreshSuccess": "Data refreshed successfully",
   "warStatsRefreshFailed": "Failed to refresh data: {error}",
@@ -2293,8 +2273,6 @@
   "capitalRaidMembersNoIndividualData": "No player list or individual attacks available for this raid.",
   "dashboardNoLinkedAccountsTitle": "No linked accounts",
   "dashboardNoLinkedAccountsBody": "Link a Clash account to see attacks, events, and activity here.",
-  "dashboardNothingPinnedTitle": "Nothing pinned yet",
-  "dashboardNothingPinnedBody": "Open the Players tab, expand a card’s options, and turn on “Show to-do on home” to pin an account here.",
   "playersNoBookmarkedTitle": "No bookmarked players yet",
   "playersNoBookmarkedBody": "Open a player profile and save it for later.",
   "playersNoLinkedBody": "Manage accounts from the account setup screen.",
@@ -2335,13 +2313,10 @@
   "noLinkedPlayersLoadedBody": "Add or refresh linked accounts to see upgrade totals.",
   "playerOptionNotificationsTitle": "Notifications",
   "playerOptionNotificationsSubtitle": "Get alerts for this account.",
-  "playerOptionShowTodoHomeTitle": "Show to-do on home",
-  "playerOptionShowTodoHomeSubtitle": "Pin this account’s to-do card to the home tab.",
   "playerOptionShowTodoPageTitle": "Show on to-do page",
   "playerOptionShowTodoPageSubtitle": "Include this account in the full to-do list.",
   "playerOptionShowWarTabTitle": "Show in War tab",
   "playerOptionShowWarTabSubtitle": "Include this account’s clan in the War tab.",
-  "searchCancel": "Cancel",
   "bookmarkPlayerLoadFailed": "Failed to load bookmarked player.",
   "warNoLinkedOrBookmarked": "No linked or bookmarked clan wars to show.",
   "warWidgetRefreshData": "Refresh War Data",
@@ -2359,7 +2334,6 @@
   "todoLegendAttacks": "Legend attacks",
   "todoWarAttacks": "War attacks",
   "todoCwlAttacks": "CWL attacks",
-  "todoRaidAttacks": "Raid attacks",
   "gameSeasonPassShort": "Pass",
   "todoMockMaxedMainName": "Maxed Main",
   "todoMockMaxedMainSubtitle": "TH17 · everything active",
@@ -2368,14 +2342,11 @@
   "todoMockWar1Left": "1 left",
   "todoMockCwl1LeftRound": "1 left this round",
   "todoMockClanGames2700Left": "2.7K points left",
-  "todoMockRaid4Left": "4 left",
   "todoMockPass850Left": "850 points left",
   "todoMockWarAltName": "War Alt",
   "todoMockWarAltSubtitle": "TH15 · war focused",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
   "todoMockWar2Left": "2 left",
   "todoMockClanGames900Left": "900 points left",
-  "todoMockRaid1Left": "1 left",
   "todoMockLegendPushName": "Legend Push",
   "todoMockLegendPushSubtitle": "TH16 · daily attacks",
   "todoMockLegendPushStatus": "Active 1h ago · legends and pass progress",
@@ -2631,9 +2602,6 @@
   "rankingClanBuilderHeading": "Clans Builder Base Ranking",
   "rankingClanCapital": "Clan capital",
   "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
   "assetFolderEquipment": "Equipment",
   "assetFolderLeagues": "Leagues",
   "assetFolderResources": "Resources",
@@ -2660,11 +2628,8 @@
   "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
   "endpointStateTop200": "Top 200",
   "endpointStateWeekly": "Weekly",
-  "endpointStateWins": "Wins",
   "endpointStateUsage": "Usage",
-  "notifGroupBattles": "Battles",
   "notifGroupReminders": "Reminders",
-  "notifGroupSupport": "Support",
   "notifGroupProgress": "Progress",
   "notifLeagueDefense": "League defense",
   "notifLeagueDefenseResult": "League defense result",
@@ -2899,5 +2864,1078 @@
       }
     }
   },
-  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy"
+  "faqSupercellFanContentPolicyLink": "Supercell Fan Content Policy",
+  "notifAudienceSectionTitle": "Notification audience",
+  "notifScopeAllLinkedAccounts": "All linked accounts",
+  "notifScopeSelectedAccounts": "Selected accounts",
+  "notifAudienceSheetDescription": "Choose which accounts can receive notifications on this device.",
+  "notifAudienceAllSubtitle": "{count} current account(s). Future linked accounts are included automatically.",
+  "notifAudienceSelectedSubtitle": "{count} selected for notifications.",
+  "notifAudienceSelectedEmpty": "Choose exactly which accounts receive notifications.",
+  "notifAudienceAllInlineNote": "Anything you link later will be included without changing this setting.",
+  "notifAccountBookmarked": "Bookmarked",
+  "notifGroupLeagueBattles": "League battles",
+  "notifGroupWarAttacks": "War attacks",
+  "notifGroupWarState": "War state",
+  "notifGroupWarReminders": "War reminders",
+  "notifGroupEvents": "Events",
+  "notifGroupAppAnnouncements": "App announcements",
+  "notifGroupUpgradeFinishes": "Upgrade finishes",
+  "notifGroupMonthlySupport": "Monthly support",
+  "postsTitle": "Posts",
+  "postsDescription": "ClashKing news, update stories, and previous announcements.",
+  "postsEmpty": "No published posts yet.",
+  "postsLoadFailed": "Posts could not be loaded.",
+  "postsLoadMore": "Load more",
+  "postsCurrent": "Current",
+  "postsPast": "Past",
+  "postsStory": "Interactive story",
+  "postsPinned": "Featured",
+  "authAccountLinkDiscord": "Link Discord Account",
+  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
+  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "faqFeaturesTodoTitle": "To-do checklist",
+  "faqFeaturesTodoDescription": "See which accounts still need Ranked attacks, raids, war attacks, Clan Games, or pass actions",
+  "faqFeaturesUpgradeTrackerTitle": "Upgrade Tracker",
+  "faqFeaturesUpgradeTrackerDescription": "Use a manual account snapshot provided by the user to see remaining upgrades, resources, builders, lab time, and progress",
+  "faqFeaturesNotificationsTitle": "Push notifications",
+  "faqFeaturesNotificationsDescription": "Choose which accounts should receive alerts for supported ClashKing events",
+  "faqFeaturesWidgetsTitle": "War widgets",
+  "faqFeaturesWidgetsDescription": "Keep current war status visible on your home screen where widgets are supported",
+  "faqSectionAccountsAlertsWidgets": "Accounts, alerts & widgets",
+  "faqLinkedAccountsTitle": "How do linked accounts and verification work?",
+  "faqLinkedAccountsAnswer": "Your ClashKing profile can include several Clash of Clans accounts. Adding a tag shows public data. Verifying with the Clash of Clans API token proves the account is yours and unlocks account-specific features.",
+  "faqLinkedAccountsSolution1": "Manage, reorder, hide, or remove accounts from account management.",
+  "faqLinkedAccountsSolution2": "Find the API token in Clash of Clans under Settings > More Settings > API Token.",
+  "faqLinkedAccountsSolution3": "You can sign in with Discord or email. When account connections are available, manage them from Settings.",
+  "faqNotificationsTitle": "How do notifications work?",
+  "faqNotificationsAnswer": "Notifications are optional. When enabled, ClashKing registers this device. You can choose which linked accounts each alert targets.",
+  "faqNotificationsSolution1": "Allow notifications on your device and in ClashKing settings.",
+  "faqNotificationsSolution2": "Each alert can target different accounts. Check the selected accounts if an alert is missing.",
+  "faqNotificationsSolution3": "Some alerts depend on tracked clan or war data. Delays can happen while external data updates.",
+  "faqWidgetsTitle": "How do war widgets work?",
+  "faqWidgetsAnswer": "War widgets show a quick summary on supported devices. They use your selected or linked accounts, cached ClashKing data, and background refreshes when the platform allows them.",
+  "faqWidgetsSolution1": "Open the app after changing accounts or clans so the widget can sync.",
+  "faqWidgetsSolution2": "If a widget looks stale, refresh the app first. Android and iOS limit background updates.",
+  "faqWidgetsSolution3": "The clan needs accessible war data to show useful status.",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
+  },
+  "gameItemWardenWeight": "Warden weight",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Warden weight can override housing space and determines how strongly the Grand Warden prioritizes following a unit group.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Healer weight",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "Healer weight can override housing space when Healers decide which units to prioritize.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
+  "dashboardTodoHiddenTitle": "No accounts shown here",
+  "dashboardTodoHiddenBody": "Turn on one of the home card options (to-do, Upgrade Tracker, Ranked) for an account in the Players tab to see it here.",
+  "dashboardUpgradeTrackerNoData": "Open the tracker to import or refresh upgrade data.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {needs an update} other {need an update}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {has tasks left} other {have tasks left}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {has attacks left} other {have attacks left}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Projected",
+  "dashboardUpgradeTrackerBuilders": "Builders",
+  "dashboardUpgradeTrackerLab": "Lab",
+  "dashboardUpgradeTrackerPets": "Pets",
+  "dashboardUpgradeTrackerWalls": "Walls",
+  "dashboardUpgradeTrackerVillage": "Village",
+  "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
+  "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
+  "damageNoStaticDataTitle": "Damage data is unavailable",
+  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
+  "damageTownHall": "Town Hall",
+  "damageVerifiedAccountPrefill": "Verified account preset",
+  "damageOverridesStayLocal": "Changes here do not update the player account.",
+  "damageTargets": "Buildings",
+  "damageAddBuilding": "Add building",
+  "damageRemoveBuilding": "Remove building",
+  "damageNoTargetsBody": "Add at least one building to compare results.",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Search buildings",
+  "damageNoBuildingsFound": "No buildings found",
+  "damageTryAnotherSearch": "Try another name or Town Hall level.",
+  "damageAttackStack": "Manual attack stack",
+  "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
+  "damageCount": "Count",
+  "damagePerUse": "{damage} damage per use",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Lightning",
+  "damageSourceEarthquake": "Earthquake",
+  "damageSourceGiantArrow": "Giant Arrow",
+  "damageSourceFireball": "Fireball",
+  "damageSourceFlameFlinger": "Flame Flinger hit",
+  "damageSourceBalloonDeath": "Balloon death damage",
+  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
+  "damageResults": "Results",
+  "damageDestroyed": "Destroyed",
+  "damageSurvives": "Survives",
+  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Zap Quake optimizer",
+  "damageSpellCapacity": "Spell capacity",
+  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
+  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
+  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
+  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Show Upgrade Tracker on Home",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Pin this account's upgrade summary on Home.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verify this account to show upgrade progress on Home.",
+  "playerOptionShowRankedHomeTitle": "Show Ranked on Home",
+  "playerOptionShowRankedHomeSubtitle": "Pin this account's Ranked League summary on Home.",
+  "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
+  "dashboardRankedCombinedAcrossAccounts": "Combined ranking across your accounts",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Combined upgrade tracking across your accounts",
+  "rankingsHomeVillage": "Home Village",
+  "rankingsBuilderBase": "Builder Base",
+  "rankingsTownHall": "Town Hall",
+  "rankingsRankedLeague": "Ranked League",
+  "rankingsClanCapital": "Clan Capital",
+  "rankingsDonations": "Donations",
+  "rankingsWarWins": "War Wins",
+  "rankingsWinStreak": "Win Streak",
+  "rankingsCurrent": "Current",
+  "rankingsWorldwide": "Worldwide",
+  "rankingsSelectLocation": "Select a location",
+  "rankingsSearchLocations": "Search locations or country codes",
+  "rankingsWorldwideUnavailable": "Choose a region or country for this leaderboard.",
+  "rankingsLocationsLoadFailed": "The full location list could not be loaded. Worldwide is still available where supported.",
+  "rankingsSnapshotDate": "Snapshot date",
+  "rankingsSource": "Source",
+  "rankingsOfficialSource": "Official Clash API",
+  "rankingsResults": "Results",
+  "rankingsTopCount": "Top {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "No stored snapshot",
+  "rankingsNoSnapshotBody": "No ranking snapshot is stored for {date}. Choose another date or return to Current.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Failed to load this player.",
+  "rankingsClanLoadFailed": "Failed to load this clan.",
+  "statsOverview": "Overview",
+  "statsArmies": "Armies",
+  "statsItems": "Items",
+  "statsWar": "War",
+  "statsCwl": "CWL",
+  "statsRanked": "Ranked",
+  "statsDateRange": "Date range",
+  "statsDateRangeHint": "Choose up to 90 days",
+  "statsDateRangeTooLong": "Choose a date range of 90 days or less.",
+  "statsUpdated": "Fresh data",
+  "statsNoDataTitle": "No battle data yet",
+  "statsNoDataBody": "Try a wider date range or less restrictive filters.",
+  "statsAddItemsTitle": "Choose items to analyze",
+  "statsAddItemsBody": "Add troops, spells, heroes, pets, or equipment, then run the query.",
+  "statsGlobalCounts": "Global counts",
+  "statsPerformance": "Performance",
+  "statsSamples": "Samples",
+  "statsUsage": "Usage",
+  "statsAverageStars": "Average stars",
+  "statsAverageDestruction": "Average destruction",
+  "statsStarRates": "Star rates",
+  "statsThreeStarRate": "Three-star rate",
+  "statsDailyTrend": "Daily trend",
+  "statsPlayers": "Players",
+  "statsClans": "Clans",
+  "statsPlayersInWar": "Players in war",
+  "statsClansInWar": "Clans in war",
+  "statsPlayersInLegends": "Players in Legends",
+  "statsWarsStored": "Wars stored",
+  "statsJoinLeaves": "Join / leave events",
+  "statsSearchArmies": "Search exact compositions",
+  "statsExactComposition": "Exact composition",
+  "statsArmyShareCode": "Army share code",
+  "statsMinimumSample": "Minimum sample",
+  "statsSortBy": "Sort by",
+  "statsIncludeItems": "Include items",
+  "statsExcludeItems": "Exclude items",
+  "statsItemId": "Item ID or stored name",
+  "statsItemType": "Item type",
+  "statsTroop": "Troop",
+  "statsSpell": "Spell",
+  "statsHero": "Hero",
+  "statsPet": "Pet",
+  "statsEquipment": "Equipment",
+  "statsOwningHero": "Owning hero",
+  "statsAddItem": "Add item",
+  "statsAnalyzeItems": "Analyze items",
+  "statsCompositionShare": "Composition share",
+  "statsNoLevels": "Army records do not contain item levels.",
+  "statsRankedCompositionOnly": "Composition data comes from ranked battlelogs; War and CWL performance remain separate.",
+  "statsTownHall": "Town Hall",
+  "statsOpponentTownHall": "Opponent Town Hall",
+  "statsEqualTownHalls": "Equal Town Halls",
+  "statsLeagueTier": "League tier",
+  "statsLegendLeagueOne": "Legend League 1",
+  "statsCwlLeague": "CWL league",
+  "statsAllCwlLeagues": "All CWL leagues",
+  "statsCwlSeasons": "CWL seasons",
+  "statsCwlSeasonsHint": "YYYY-MM, separated by commas",
+  "statsApplyFilters": "Apply filters",
+  "statsRefresh": "Refresh data",
+  "statsRegularWarOnly": "Regular wars only; friendly wars and CWL are excluded.",
+  "statsRankedRequired": "Town Hall and one league tier are required.",
+  "statsSeasonBreakdown": "Season breakdown",
+  "gameAssetsLoadError": "Could not load game assets",
+  "gameAssetsEmptyTitle": "No game assets available",
+  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
+  "gameAssetsOneImage": "1 image",
+  "gameAssetsImageCount": "{count} images",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Search this category",
+  "gameAssetsAllFormats": "All formats",
+  "gameAssetsOneResult": "1 result",
+  "gameAssetsResultCount": "{count} results",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "No matching images",
+  "gameAssetsNoResultsBody": "Try another search or file format.",
+  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
+  "gameAssetsCopyUrl": "Copy URL",
+  "gameAssetsCopyPath": "Copy path",
+  "gameAssetsUrlCopied": "Asset URL copied",
+  "gameAssetsPathCopied": "Asset path copied",
+  "gameAssetsCopyError": "Could not copy the asset details.",
+  "gameAssetsShare": "Share",
+  "gameAssetsShareError": "Could not share this asset.",
+  "gameAssetsSave": "Save",
+  "gameAssetsSaving": "Saving...",
+  "gameAssetsSaved": "Asset saved.",
+  "gameAssetsSavedTo": "Asset saved to {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Could not save this asset.",
+  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerUpgrades": "Upgrades",
+  "upgradeTrackerCollection": "Collection",
+  "upgradeTrackerChooseAccount": "Choose account",
+  "upgradeTrackerSwitchAccount": "Switch account, {account}",
+  "@upgradeTrackerSwitchAccount": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerShare": "Share tracker",
+  "upgradeTrackerPasteJson": "Paste account JSON",
+  "upgradeTrackerImportTitle": "Import account data",
+  "upgradeTrackerImportDescription": "Paste the raw account JSON. It stays on this device.",
+  "upgradeTrackerAccountJson": "Account JSON",
+  "upgradeTrackerPasteClipboard": "Paste clipboard",
+  "upgradeTrackerImportAction": "Import account",
+  "upgradeTrackerImportSuccess": "{player} was imported on this device.",
+  "@upgradeTrackerImportSuccess": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerImportFailed": "Could not import account data: {error}",
+  "@upgradeTrackerImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSnapshotUnreadable": "Account data could not be read",
+  "upgradeTrackerTryAgain": "Try again",
+  "upgradeTrackerNoDataTitle": "Bring your village progress into ClashKing",
+  "upgradeTrackerNoDataBody": "Copy your Account Data JSON from Clash of Clans, then paste it from your clipboard. Your data stays on this device.",
+  "upgradeTrackerNoDataLocation": "In Clash of Clans, open Settings > More Settings. Account Data JSON is directly below the API Token section.",
+  "upgradeTrackerOpenMoreSettings": "Open More Settings in Clash of Clans",
+  "upgradeTrackerNoLinkedAccount": "Link a Clash of Clans account before importing its account data.",
+  "upgradeTrackerUpdatedJustNow": "Updated just now",
+  "upgradeTrackerUpdatedMinutesAgo": "Updated {count} minutes ago",
+  "@upgradeTrackerUpdatedMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedHoursAgo": "Updated {count} hours ago",
+  "@upgradeTrackerUpdatedHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedOn": "Updated {date}",
+  "@upgradeTrackerUpdatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSearchUpgrades": "Search upgrades",
+  "upgradeTrackerSearchCollection": "Search collection",
+  "upgradeTrackerShowFilters": "Show filters",
+  "upgradeTrackerHideFilters": "Hide filters",
+  "upgradeTrackerFilterAll": "All",
+  "upgradeTrackerFilterOwned": "Owned",
+  "upgradeTrackerFilterMissing": "Missing",
+  "upgradeTrackerAllVillages": "All villages",
+  "upgradeTrackerHomeVillage": "Home Village",
+  "upgradeTrackerBuilderBase": "Builder Base",
+  "upgradeTrackerNoMatchingItems": "No matching items",
+  "upgradeTrackerOwnedCount": "{owned} of {total} owned",
+  "@upgradeTrackerOwnedCount": {
+    "placeholders": {
+      "owned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLevelsLeft": "{count} levels left",
+  "@upgradeTrackerLevelsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemCount": "{count} items",
+  "@upgradeTrackerItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCollected": "collected",
+  "upgradeTrackerMissing": "missing",
+  "upgradeTrackerDataAge": "Account data",
+  "upgradeTrackerBuildersCount": "{count} builders",
+  "@upgradeTrackerBuildersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLaboratory": "Laboratory",
+  "upgradeTrackerPets": "Pets",
+  "upgradeTrackerWalls": "Walls",
+  "upgradeTrackerEquipment": "Equipment",
+  "upgradeTrackerLevelsRemaining": "{count} levels remaining",
+  "@upgradeTrackerLevelsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCompletesOn": "Completes {date} · {duration}",
+  "@upgradeTrackerCompletesOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerHeaderComplete": "Complete",
+  "upgradeTrackerHeaderLevelsLeft": "Levels left",
+  "upgradeTrackerHeaderActive": "Active",
+  "upgradeTrackerHeaderFinishes": "Finishes",
+  "upgradeTrackerHeaderOwned": "Owned",
+  "upgradeTrackerHeaderUpdated": "Updated",
+  "homeCouldNotLoadTitle": "Home could not load",
+  "homeVerifiedAccountRequiredTitle": "Verify a linked account",
+  "homeVerifiedAccountRequiredBody": "Home needs at least one verified Clash account. Link an account or verify an existing link to continue.",
+  "homeVerifyAccountAction": "Link or verify account",
+  "playerOptionVerifyAccountBody": "This account isn't verified yet. Verify it to unlock the to-do, Ranked, and Upgrade Tracker options below.",
+  "homeUpcomingTitle": "Upcoming",
+  "homeUpcomingSubtitle": "The next deadlines and upgrade completions across your accounts.",
+  "homeCollapseSection": "Collapse section",
+  "homeExpandSection": "Expand section",
+  "homeUpcomingEmpty": "No tracked deadlines are coming up. Pull to refresh if this account was just linked.",
+  "homeRecentlyCompleted": "Completed",
+  "homeTodoTitle": "To do",
+  "homeTodoSubtitle": "Actionable account details, ordered by urgency.",
+  "homeTodoEmpty": "No verified account needs attention right now.",
+  "homeClanless": "No clan",
+  "homeNeedsAttention": "Needs attention",
+  "homeCaughtUp": "Caught up",
+  "homeTrackingDataPending": "This verified player is newly tracked or inactive, so actionable details are not available yet.",
+  "homeUpgradeUnavailable": "Upgrade data could not be loaded. Your other account data is still current.",
+  "homeUpgradeNotImported": "No upgrade data yet. Import this verified account's JSON in Upgrade tracker.",
+  "homeUpgradeActiveCount": "{count} active upgrades",
+  "@homeUpgradeActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeIdle": "No active upgrade timers were found; builders may be idle.",
+  "homeDone": "Done",
+  "homeRemainingCount": "{count} left",
+  "@homeRemainingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeVerifiedPlayerDataMissing": "This link is verified, but its player profile is unavailable. Pull to refresh or wait for tracking to begin.",
+  "homeSinceAwayTitle": "Since away",
+  "homeSinceAwayFirstVisit": "This is the first tracked Home visit, so older activity is not marked new.",
+  "homeSinceAwaySubtitle": "New markers compare with your previous Home open at {time}.",
+  "@homeSinceAwaySubtitle": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSinceAwayEmpty": "No join, leave, or player-history activity is available for these verified players and clans.",
+  "homeNewMarker": "New",
+  "homePulseTitle": "Your pulse",
+  "homePulseSubtitle": "Personal 30-day war and CWL form, ranked play, and available global rankings.",
+  "homePulseEmpty": "Performance history or rankings are not available yet. Newly tracked and inactive accounts will fill in as data arrives.",
+  "homeToday": "Today",
+  "homeYesterday": "Yesterday",
+  "homeEarlier": "Earlier",
+  "homeRankedAttacks": "Ranked attacks",
+  "homeSeasonPass": "Season pass",
+  "homeUpcomingAccountDetail": "{player} has {count} remaining.",
+  "@homeUpcomingAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeDataNeeded": "Add upgrade data",
+  "homeUpgradeDataNeededDetail": "Import {player}'s account JSON to track upgrade timers and idle builders.",
+  "@homeUpgradeDataNeededDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeIdleTitle": "Builders may be idle",
+  "homeUpgradeIdleDetail": "{player} has upgrade data, but no active timers were found.",
+  "@homeUpgradeIdleDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeAccountDetail": "Upgrade timer for {player}.",
+  "@homeUpgradeAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseWarAverage": "30-day war average",
+  "homePulseCwlAverage": "30-day CWL average",
+  "homePulseRankedToday": "30-day ranked",
+  "homePulseRankedValue": "{count} attacks · {trophies} trophies",
+  "@homePulseRankedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseBestGlobalRank": "Best global player rank",
+  "homeActivityJoined": "joined",
+  "homeActivityLeft": "left",
+  "homeActivityAClan": "a clan",
+  "statsMeta": "Meta",
+  "statsBattle": "Battle",
+  "statsWorld": "World",
+  "statsHeaderSubtitle": "Explore battle performance and the world we track.",
+  "statsPreview": "Preview",
+  "statsTownHallDistribution": "Town Hall distribution",
+  "statsBuilderHallDistribution": "Builder Hall distribution",
+  "statsLeagueDistribution": "Ranked league distribution",
+  "statsTrackedPlayers": "Current tracked player population",
+  "statsTrackedClans": "Current tracked clan population",
+  "statsCwlLeagueDistribution": "CWL league distribution",
+  "statsCapitalLeagueDistribution": "Capital league distribution",
+  "statsTrackedLocations": "Tracked clan locations",
+  "statsLocationCountHelp": "Countries and locations represented by tracked clans.",
+  "statsLeagueId": "League {id}",
+  "@statsLeagueId": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "statsEquipmentAdoption": "Equipment adoption by level",
+  "statsEquipmentAdoptionPreview": "Mock layout until aggregated ownership and level counts are available.",
+  "statsExperienceDistribution": "Player XP distribution",
+  "statsExperienceDistributionPreview": "Mock layout until XP histogram buckets are available.",
+  "statsCwlRosterSizes": "CWL roster sizes",
+  "statsCwlRosterSizesPreview": "Mock 15v15 / 30v30 split until group-size counts are available.",
+  "statsWarsOverTime": "Wars over time",
+  "statsWarsOverTimePreview": "Mock daily trend until the canonical counts endpoint is connected.",
+  "statsStrategyLenses": "Strategy lenses",
+  "statsStrategyLensesBody": "Named strategies use overlapping, versioned rules. Exact loadouts stay separate so the label never pretends to prove battle intent.",
+  "statsQueenCharge": "Queen Charge",
+  "statsQueenChargeRule": "Archer Queen + at least 5 Healers",
+  "statsSuperBowlerCore": "Super Bowler core",
+  "statsSuperBowlerRule": "At least 4 Super Bowlers",
+  "statsRootRiderCore": "Root Rider core",
+  "statsRootRiderRule": "At least 4 Root Riders",
+  "statsPatternDiscoveryBody": "Automated discovery should surface similar loadout clusters for human naming; it should not infer tactics from composition alone.",
+  "statsUsageVsThreeStar": "Usage vs. three-star rate",
+  "statsTapPointForLoadout": "Tap a point to inspect its exact loadout and sample.",
+  "statsExactLoadouts": "Exact loadouts",
+  "statsCustomLens": "Custom lens",
+  "statsCustomLensBody": "Choose required quantities, exclusions, Town Hall, league, sample floor, and sort order. This runs against real loadouts but is not saved yet.",
+  "rankedLeagueTitle": "Ranked League",
+  "rankedLeagueAbout": "About Ranked League",
+  "rankedLeagueAboutBody": "This page uses the official weekly Ranked League group, battle logs and period history. Current results can change until the period ends.",
+  "rankedLeagueOverview": "Overview",
+  "rankedLeagueRanking": "Ranking",
+  "rankedLeagueGroupRank": "Group rank",
+  "rankedLeagueTrophies": "Trophies",
+  "rankedLeaguePlayers": "{count} players",
+  "@rankedLeaguePlayers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBest": "Best: {value}",
+  "@rankedLeagueBest": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueNoGroup": "No active group",
+  "rankedLeagueCurrentPeriod": "Current period",
+  "rankedLeagueLiveGroupSubtitle": "Live results from the player's official Ranked League group.",
+  "rankedLeagueBattles": "Battles",
+  "rankedLeagueAttacksPlayed": "attacks played",
+  "rankedLeagueAttackRecord": "Attack record",
+  "rankedLeagueDefenseRecord": "Defense record",
+  "rankedLeagueWinsLosses": "wins - losses",
+  "rankedLeagueDefensesLogged": "{count} defenses logged",
+  "@rankedLeagueDefensesLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueRecentBattles": "Recent battles",
+  "rankedLeagueRecentBattlesSubtitle": "Detailed results available for the active weekly group.",
+  "rankedLeagueAttacks": "Attacks",
+  "rankedLeagueDefenses": "Defenses",
+  "rankedLeagueNoBattles": "No battle recorded yet.",
+  "rankedLeagueGroupRanking": "Group ranking",
+  "rankedLeagueRankingSubtitle": "Live standings for the current group. Your player is highlighted.",
+  "rankedLeagueJumpToMyRank": "Jump to my rank",
+  "rankedLeagueLastPeriod": "Last Period",
+  "rankedLeagueBestGroupRank": "Best Rank",
+  "rankedLeaguePeriodHistory": "Period history",
+  "rankedLeagueHistorySubtitle": "Official summaries for completed weekly periods.",
+  "rankedLeagueBestRankedResults": "Best Ranked results",
+  "rankedLeagueAllRankedResults": "All Ranked results",
+  "rankedLeaguePeriods": "Periods",
+  "rankedLeaguePeriodStats": "Period statistics",
+  "rankedLeagueTrophyProgress": "Trophy progress by battle",
+  "rankedLeagueTrophiesByPeriod": "Trophies by period",
+  "rankedLeagueBattleCount": "{count} battles",
+  "@rankedLeagueBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBattleProgress": "{count} / {max} battles",
+  "@rankedLeagueBattleProgress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueTrophyAverage": "{trophies} trophies · {average} avg.",
+  "@rankedLeagueTrophyAverage": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueByPeriod": "By period",
+  "rankedLeaguePeriodTab": "Period",
+  "rankedLeagueAverage": "Average",
+  "rankedLeagueRemaining": "Remaining",
+  "rankedLeagueSevenDayPeriod": "7-day Ranked League period",
+  "rankedLeagueEquipmentUnavailable": "Army and equipment are not included in the official Ranked League battle logs yet.",
+  "rankedLeagueBattleDetailsUnavailable": "Detailed battle logs are not available for this period.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Only the official period summary is available for this older period.",
+  "rankedLeagueStarBreakdownUnavailable": "The API provides the star total, but not the detailed star distribution for this period.",
+  "@notifAudienceSectionTitle": {
+    "description": "Section title for choosing which accounts receive notifications."
+  },
+  "@notifScopeAllLinkedAccounts": {
+    "description": "Option that sends notifications to all linked accounts."
+  },
+  "@notifScopeSelectedAccounts": {
+    "description": "Option that sends notifications only to selected linked accounts."
+  },
+  "@notifAudienceSheetDescription": {
+    "description": "Description for notification audience settings."
+  },
+  "@notifAudienceAllSubtitle": {
+    "description": "Subtitle for the all linked accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@notifAudienceSelectedSubtitle": {
+    "description": "Subtitle for the selected accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@notifAudienceSelectedEmpty": {
+    "description": "Empty state subtitle for selected notification accounts."
+  },
+  "@notifAudienceAllInlineNote": {
+    "description": "Inline note explaining all linked accounts behavior."
+  },
+  "@notifAccountBookmarked": {
+    "description": "Label for a bookmarked account in notification settings."
+  },
+  "@notifGroupLeagueBattles": {
+    "description": "Notification group label for league battles."
+  },
+  "@notifGroupWarAttacks": {
+    "description": "Notification group label for war attacks."
+  },
+  "@notifGroupWarState": {
+    "description": "Notification group label for war state changes."
+  },
+  "@notifGroupWarReminders": {
+    "description": "Notification group label for war reminders."
+  },
+  "@notifGroupEvents": {
+    "description": "Notification group label for events."
+  },
+  "@notifGroupAppAnnouncements": {
+    "description": "Notification group label for app announcements."
+  },
+  "@notifGroupUpgradeFinishes": {
+    "description": "Notification group label for completed upgrades."
+  },
+  "@notifGroupMonthlySupport": {
+    "description": "Notification group label for monthly support reminders."
+  },
+  "widgetUpgradeProgressTitle": "Upgrade Progress",
+  "widgetHomeVillage": "HOME VILLAGE",
+  "widgetVillage": "VILLAGE",
+  "widgetLaboratory": "LAB",
+  "widgetPets": "PETS",
+  "widgetBuilderBase": "BUILDER BASE",
+  "widgetResearch": "RESEARCH",
+  "widgetActive": "ACTIVE",
+  "widgetIdle": "IDLE",
+  "widgetLocked": "LOCKED",
+  "widgetMaxed": "MAXED",
+  "widgetNotUnlocked": "Not unlocked",
+  "widgetFullyUpgraded": "Fully upgraded",
+  "widgetNoActiveUpgrades": "No active upgrades",
+  "widgetNoActiveResearch": "No active research",
+  "widgetDataStale": "Update needed",
+  "widgetMoreUpgrade": "more upgrade",
+  "widgetMoreUpgrades": "more upgrades",
+  "widgetLevelShort": "Lv",
+  "widgetReady": "Ready",
+  "widgetReadyIn": "Ready in",
+  "widgetHelping": "Helping",
+  "widgetApprenticeShort": "Apprentice",
+  "widgetAssistantShort": "Assistant",
+  "widgetAlchemistShort": "Alchemist",
+  "widgetBuilderPotion": "Builder Potion",
+  "widgetResearchPotion": "Research Potion",
+  "widgetPetPotion": "Pet Potion",
+  "widgetClockTower": "Clock Tower",
+  "widgetTownHallBuilderBoost": "Town Hall builder boost",
+  "widgetTownHallLabBoost": "Town Hall lab boost",
+  "widgetBuilderBoostShort": "Builder",
+  "widgetResearchBoostShort": "Research",
+  "widgetPetBoostShort": "Pet",
+  "widgetClockBoostShort": "Clock",
+  "widgetBuilderCostPerk": "{percent}% builder cost perk",
+  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "widgetLabTimePerk": "{percent}% lab time perk",
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
 }

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
@@ -8,7 +9,6 @@ import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:clashkingapp/core/services/app_icon_service.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
-import 'package:clashkingapp/core/services/live_activity_debug_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
 import 'package:clashkingapp/core/theme/theme_notifier.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
@@ -159,30 +159,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   ),
               ],
             ),
-            if (kDebugMode && LiveActivityDebugService.isSupportedPlatform)
-              _SettingsSection(
-                title: l10n.settingsLiveActivityTest,
-                children: [
-                  _SettingsTile(
-                    icon: LucideIcons.radio,
-                    title: l10n.settingsLiveActivityStart,
-                    subtitle: l10n.settingsLiveActivityStartSubtitle,
-                    onTap: () => _runLiveActivityAction('start'),
-                  ),
-                  _SettingsTile(
-                    icon: LucideIcons.refreshCw,
-                    title: l10n.settingsLiveActivityUpdate,
-                    subtitle: l10n.settingsLiveActivityUpdateSubtitle,
-                    onTap: () => _runLiveActivityAction('update'),
-                  ),
-                  _SettingsTile(
-                    icon: LucideIcons.circleStop,
-                    title: l10n.settingsLiveActivityEnd,
-                    subtitle: l10n.settingsLiveActivityEndSubtitle,
-                    onTap: () => _runLiveActivityAction('end'),
-                  ),
-                ],
-              ),
             _SettingsSection(
               title: l10n.settingsSupport,
               children: [
@@ -338,41 +314,30 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
   }
 
   Future<void> _showLanguageSelection(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final currentLocale = Provider.of<MyAppState>(
+      context,
+      listen: false,
+    ).locale;
     final selectedLocale = await showModalBottomSheet<Locale>(
       context: context,
+      isScrollControlled: true,
       showDragHandle: true,
       builder: (context) {
-        return SafeArea(
-          child: ListView.separated(
-            shrinkWrap: true,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-            itemBuilder: (context, index) {
-              final locale = supportedLocales[index];
-              return ListTile(
-                leading: MobileWebImage(
-                  imageUrl: locale.flagUrl,
-                  width: 32,
-                  height: 32,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) =>
-                      const Icon(Icons.error_outline),
-                ),
-                title: Text(locale.languageName),
-                onTap: () {
-                  Navigator.pop(
-                    context,
-                    Locale.fromSubtags(
-                      languageCode: locale.languageCode,
-                      countryCode: locale.countryCode,
-                      scriptCode: locale.scriptCode,
-                    ),
-                  );
-                },
-              );
-            },
-            separatorBuilder: (context, index) => const Divider(height: 1),
-            itemCount: supportedLocales.length,
+        return FractionallySizedBox(
+          heightFactor: 0.82,
+          child: _SettingsSelectionSheet(
+            title: l10n.settingsLanguage,
+            subtitle: l10n.settingsSelectLanguage,
+            child: _SettingsChoiceGroup(
+              children: [
+                for (final locale in supportedLocales)
+                  _LanguageChoiceTile(
+                    locale: locale,
+                    selected: _isSelectedLocale(locale, currentLocale),
+                  ),
+              ],
+            ),
           ),
         );
       },
@@ -386,6 +351,20 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     }
   }
 
+  bool _isSelectedLocale(LocaleInfo locale, Locale currentLocale) {
+    if (locale.languageCode != currentLocale.languageCode) return false;
+    if (currentLocale.countryCode == null && currentLocale.scriptCode == null) {
+      return supportedLocales
+              .where(
+                (entry) => entry.languageCode == currentLocale.languageCode,
+              )
+              .firstOrNull ==
+          locale;
+    }
+    return locale.countryCode == currentLocale.countryCode &&
+        locale.scriptCode == currentLocale.scriptCode;
+  }
+
   Future<void> _showThemeModeSelection(
     BuildContext context,
     ThemeNotifier themeNotifier,
@@ -396,33 +375,30 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
       showDragHandle: true,
       builder: (context) {
         final current = themeNotifier.themeMode;
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-            child: _SettingsSection(
-              title: l10n.settingsAppearance,
-              children: [
-                _ThemeModeTile(
-                  title: l10n.settingsThemeSystem,
-                  subtitle: l10n.settingsThemeMatchDevice,
-                  icon: Icons.brightness_auto_outlined,
-                  selected: current == ThemeMode.system,
-                  value: ThemeMode.system,
-                ),
-                _ThemeModeTile(
-                  title: l10n.settingsThemeLight,
-                  icon: Icons.light_mode_outlined,
-                  selected: current == ThemeMode.light,
-                  value: ThemeMode.light,
-                ),
-                _ThemeModeTile(
-                  title: l10n.settingsThemeDark,
-                  icon: Icons.dark_mode_outlined,
-                  selected: current == ThemeMode.dark,
-                  value: ThemeMode.dark,
-                ),
-              ],
-            ),
+        return _SettingsSelectionSheet(
+          title: l10n.settingsAppearance,
+          child: _SettingsChoiceGroup(
+            children: [
+              _ThemeModeTile(
+                title: l10n.settingsThemeSystem,
+                subtitle: l10n.settingsThemeMatchDevice,
+                icon: Icons.brightness_auto_outlined,
+                selected: current == ThemeMode.system,
+                value: ThemeMode.system,
+              ),
+              _ThemeModeTile(
+                title: l10n.settingsThemeLight,
+                icon: Icons.light_mode_outlined,
+                selected: current == ThemeMode.light,
+                value: ThemeMode.light,
+              ),
+              _ThemeModeTile(
+                title: l10n.settingsThemeDark,
+                icon: Icons.dark_mode_outlined,
+                selected: current == ThemeMode.dark,
+                value: ThemeMode.dark,
+              ),
+            ],
           ),
         );
       },
@@ -641,33 +617,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     );
   }
 
-  Future<void> _runLiveActivityAction(String action) async {
-    final service = LiveActivityDebugService();
-
-    try {
-      final status = switch (action) {
-        'start' => await service.start(),
-        'update' => await service.update(),
-        'end' => await service.end(),
-        _ => await service.status(),
-      };
-
-      if (!mounted) return;
-      final running = status['running'] == true;
-      final message = running
-          ? 'Live Activity running: ${status['score'] ?? ''} ${status['timeState'] ?? ''}'
-          : 'Live Activity ended.';
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
-    } on PlatformException catch (error) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error.message ?? error.code)));
-    }
-  }
-
   void _showConnectionPlaceholder(String action) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -814,13 +763,15 @@ class _SettingsSection extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
-              borderRadius: BorderRadius.circular(17),
+              borderRadius: BorderRadius.circular(AppRadius.chip),
               border: Border.all(
-                color: colorScheme.outlineVariant.withValues(alpha: 0.28),
+                color: colorScheme.outlineVariant.withValues(
+                  alpha: AppOpacity.border,
+                ),
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(17),
+              borderRadius: BorderRadius.circular(AppRadius.chip),
               child: Column(
                 children: [
                   for (var index = 0; index < children.length; index++) ...[
@@ -954,14 +905,241 @@ class _ThemeModeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return _SettingsTile(
-      icon: icon,
+    return _SettingsChoiceTile(
+      leading: _SettingsChoiceIcon(icon: icon, selected: selected),
       title: title,
       subtitle: subtitle,
-      showChevron: false,
-      trailingText: selected ? l10n.settingsThemeSelected : null,
+      selected: selected,
       onTap: () => Navigator.pop(context, value),
+    );
+  }
+}
+
+class _SettingsSelectionSheet extends StatelessWidget {
+  const _SettingsSelectionSheet({
+    required this.title,
+    required this.child,
+    this.subtitle,
+  });
+
+  final String title;
+  final String? subtitle;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            if (subtitle != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                subtitle!,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+            const SizedBox(height: 14),
+            Flexible(child: child),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsChoiceGroup extends StatelessWidget {
+  const _SettingsChoiceGroup({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(
+            alpha: AppOpacity.border,
+          ),
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        child: ListView.separated(
+          shrinkWrap: true,
+          itemBuilder: (context, index) => children[index],
+          separatorBuilder: (context, index) => Divider(
+            height: 1,
+            indent: 58,
+            color: colorScheme.outlineVariant.withValues(
+              alpha: AppOpacity.borderStrong,
+            ),
+          ),
+          itemCount: children.length,
+        ),
+      ),
+    );
+  }
+}
+
+class _LanguageChoiceTile extends StatelessWidget {
+  const _LanguageChoiceTile({required this.locale, required this.selected});
+
+  final LocaleInfo locale;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return _SettingsChoiceTile(
+      leading: ClipOval(
+        child: MobileWebImage(
+          imageUrl: locale.flagUrl,
+          width: 34,
+          height: 34,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => const SizedBox.square(
+            dimension: 18,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          errorWidget: (context, url, error) =>
+              const Icon(Icons.error_outline, size: 20),
+        ),
+      ),
+      title: locale.languageName,
+      selected: selected,
+      onTap: () {
+        Navigator.pop(
+          context,
+          Locale.fromSubtags(
+            languageCode: locale.languageCode,
+            countryCode: locale.countryCode,
+            scriptCode: locale.scriptCode,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SettingsChoiceTile extends StatelessWidget {
+  const _SettingsChoiceTile({
+    required this.leading,
+    required this.title,
+    required this.selected,
+    required this.onTap,
+    this.subtitle,
+  });
+
+  final Widget leading;
+  final String title;
+  final String? subtitle;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Material(
+      color: selected
+          ? colorScheme.primary.withValues(alpha: 0.08)
+          : Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          height: subtitle == null ? 56 : 66,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Row(
+              children: [
+                SizedBox.square(dimension: 34, child: Center(child: leading)),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                                fontSize: 13,
+                              ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SizedBox.square(
+                  dimension: 20,
+                  child: selected
+                      ? Icon(
+                          LucideIcons.check,
+                          color: colorScheme.primary,
+                          size: 20,
+                        )
+                      : null,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsChoiceIcon extends StatelessWidget {
+  const _SettingsChoiceIcon({required this.icon, required this.selected});
+
+  final IconData icon;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final color = selected ? colorScheme.primary : colorScheme.onSurfaceVariant;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: selected ? 0.12 : 0.08),
+        borderRadius: BorderRadius.circular(AppRadius.control),
+      ),
+      child: Center(child: Icon(icon, color: color, size: 21)),
     );
   }
 }
