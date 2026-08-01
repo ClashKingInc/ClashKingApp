@@ -3189,6 +3189,17 @@ class _PlanTimelineState extends State<_PlanTimeline> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant _PlanTimeline oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final maxPeriodIndex = _maxPeriodIndex;
+    if (_periodIndex <= maxPeriodIndex) return;
+    _periodIndex = maxPeriodIndex;
+    if (_horizontalController.hasClients) {
+      _horizontalController.jumpTo(0);
+    }
+  }
+
   int get _maxPeriodIndex {
     final baseDay = DateTime(
       widget.startsAt.year,
