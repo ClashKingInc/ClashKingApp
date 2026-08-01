@@ -4,7 +4,6 @@ import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -15,6 +14,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_ranked_league.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/features/player/presentation/ranked/player_ranked_league_header.dart';
+import 'package:clashkingapp/features/player/presentation/ranked/ranked_account_picker_sheet.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -47,6 +47,7 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   RankedLeagueData? _data;
   bool _loading = true;
   Player? _selectedPlayer;
+  int _loadGeneration = 0;
 
   Player get _activePlayer => _selectedPlayer ?? widget.player;
 
@@ -80,40 +81,49 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   // cache instantly (no loading flash) and quietly revalidate in the
   // background, rather than forcing every open through a spinner.
   Future<void> _fetch({required bool forceRefresh}) async {
+    final requestTag = _activePlayer.tag;
+    final normalizedRequestTag = _normalizeTag(requestTag);
+    final generation = ++_loadGeneration;
     try {
       final data = await context.read<PlayerService>().loadRankedLeagueData(
-        _activePlayer.tag,
+        requestTag,
         forceRefresh: forceRefresh,
       );
-      if (!mounted) return;
+      if (!_isCurrentRequest(generation, normalizedRequestTag)) return;
       setState(() {
         _data = data;
         _loading = false;
       });
     } catch (_) {
-      if (!mounted) return;
+      if (!_isCurrentRequest(generation, normalizedRequestTag)) return;
       setState(() => _loading = false);
     }
-    if (!forceRefresh) {
+    if (!forceRefresh && _isCurrentRequest(generation, normalizedRequestTag)) {
       // The cached value just shown may already be stale (attacks done,
       // rank moved since it was cached) — catch up silently instead of
       // leaving the user looking at outdated numbers all session.
-      unawaited(_revalidate());
+      unawaited(_revalidate(generation, normalizedRequestTag));
     }
   }
 
-  Future<void> _revalidate() async {
+  Future<void> _revalidate(int generation, String normalizedRequestTag) async {
     try {
+      final requestTag = _activePlayer.tag;
       final fresh = await context.read<PlayerService>().loadRankedLeagueData(
-        _activePlayer.tag,
+        requestTag,
         forceRefresh: true,
       );
-      if (!mounted) return;
+      if (!_isCurrentRequest(generation, normalizedRequestTag)) return;
       setState(() => _data = fresh);
     } catch (_) {
       // Best-effort only; the initial fetch already surfaced any error.
     }
   }
+
+  bool _isCurrentRequest(int generation, String normalizedRequestTag) =>
+      mounted &&
+      generation == _loadGeneration &&
+      _normalizeTag(_activePlayer.tag) == normalizedRequestTag;
 
   Future<void> _refresh() => _fetch(forceRefresh: true);
 
@@ -170,7 +180,7 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (context) => _RankedAccountPickerSheet(
+      builder: (context) => RankedAccountPickerSheet(
         players: players,
         selectedTag: _activePlayer.tag,
       ),
@@ -358,125 +368,6 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
 
 String _normalizeTag(String tag) =>
     tag.replaceAll('#', '').trim().toUpperCase();
-
-class _RankedAccountPickerSheet extends StatefulWidget {
-  const _RankedAccountPickerSheet({required this.players, this.selectedTag});
-
-  final List<Player> players;
-  final String? selectedTag;
-
-  @override
-  State<_RankedAccountPickerSheet> createState() =>
-      _RankedAccountPickerSheetState();
-}
-
-class _RankedAccountPickerSheetState extends State<_RankedAccountPickerSheet> {
-  final _searchController = TextEditingController();
-  String _query = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    final query = _query.trim().toLowerCase();
-    final players = widget.players
-        .where(
-          (player) =>
-              query.isEmpty ||
-              player.name.toLowerCase().contains(query) ||
-              player.tag.toLowerCase().contains(query),
-        )
-        .toList(growable: false);
-
-    return FractionallySizedBox(
-      heightFactor: 0.82,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    loc.rankedLeagueTitle,
-                    style: CKTypography.of(context, CKTextRole.screenTitle),
-                  ),
-                ),
-                IconButton(
-                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-            child: AppSearchField(
-              controller: _searchController,
-              query: _query,
-              hintText: loc.upgradeTrackerChooseAccount,
-              onChanged: (value) => setState(() => _query = value),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              itemCount: players.length,
-              itemBuilder: (context, index) {
-                final player = players[index];
-                final selected =
-                    _normalizeTag(player.tag) ==
-                    _normalizeTag(widget.selectedTag ?? '');
-                return ListTile(
-                  selected: selected,
-                  selectedColor: Theme.of(context).colorScheme.onSurface,
-                  selectedTileColor: Theme.of(
-                    context,
-                  ).colorScheme.surfaceContainerHighest,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(CKRadius.control),
-                  ),
-                  leading: SizedBox.square(
-                    dimension: 44,
-                    child: MobileWebImage(
-                      imageUrl: player.townHallPic,
-                      fit: BoxFit.contain,
-                      errorWidget: (_, _, _) =>
-                          const Icon(Icons.person_rounded),
-                    ),
-                  ),
-                  title: Text(
-                    player.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    '${player.tag} · ${loc.gameTownHallShortLevel(player.townHallLevel)}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: selected
-                      ? Icon(
-                          Icons.check_rounded,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        )
-                      : null,
-                  onTap: () => Navigator.pop(context, player.tag),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _PeriodViewModel {
   const _PeriodViewModel({

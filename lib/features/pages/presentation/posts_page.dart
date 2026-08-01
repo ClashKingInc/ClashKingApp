@@ -524,7 +524,9 @@ class _PostArticlePage extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 900),
                 child: AnnouncementWebView(
                   html: articleHtml,
-                  url: post.htmlUrl,
+                  url: articleHtml == null || articleHtml.trim().isEmpty
+                      ? post.htmlUrl
+                      : null,
                 ),
               ),
             ),
