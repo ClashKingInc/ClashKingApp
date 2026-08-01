@@ -3266,7 +3266,7 @@ class _PlanTimelineState extends State<_PlanTimeline> {
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final timelineWidth = _horizonDays * _dayWidth;
+                  const timelineWidth = _horizonDays * _dayWidth;
                   final timelineViewport = math.max(
                     0.0,
                     constraints.maxWidth -

@@ -199,15 +199,15 @@ class _GameAssetsLoadingSkeleton extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(
-                  child: const SkeletonLoader(
+                const Expanded(
+                  child: SkeletonLoader(
                     height: 36,
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
                 ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: const SkeletonLoader(
+                const Expanded(
+                  child: SkeletonLoader(
                     height: 36,
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),

@@ -198,131 +198,13 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
         key: const ValueKey('damage-calculator-scroll'),
         padding: sidePagePadding,
         children: [
-          SidePageSectionHeader(title: loc.damageTargetSectionTitle),
-          if (targets.isEmpty)
-            _TargetEmptyPanel(onChoose: _showBuildingPicker)
-          else ...[
-            for (final target in targets) ...[
-              _TargetCard(
-                key: ValueKey('target-${target.id}'),
-                target: target,
-                availableLevels: target.building.levelsForTownHall(
-                  _session.townHall,
-                ),
-                result: resultByTargetId[target.id],
-                onLevelChanged: (level) =>
-                    setState(() => _session.setTargetLevel(target.id, level)),
-                onRemove: () =>
-                    setState(() => _session.removeTarget(target.id)),
-              ),
-              const SizedBox(height: 10),
-            ],
-            SizedBox(
-              width: double.infinity,
-              height: 44,
-              child: OutlinedButton.icon(
-                key: const ValueKey('add-building'),
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppRadius.control),
-                  ),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.outlineVariant
-                        .withValues(alpha: AppOpacity.borderStrong),
-                  ),
-                ),
-                onPressed: _session.availableBuildings.length == targets.length
-                    ? null
-                    : _showBuildingPicker,
-                icon: const Icon(Icons.add_rounded),
-                label: Text(loc.damageAddBuilding),
-              ),
-            ),
-          ],
-
-          const SizedBox(height: 22),
-          SidePageSectionHeader(title: loc.damageAttackStack),
-          _QuickSetupPanel(
-            setups: quickSetups,
-            selectedId: selectedSetup?.id,
-            onSelected: _applyQuickSetup,
+          ..._targetSectionWidgets(context, loc, targets, resultByTargetId),
+          ..._attackStackSectionWidgets(
+            loc,
+            quickSetups: quickSetups,
+            selectedSetup: selectedSetup,
+            sourceVisibility: sourceVisibility,
           ),
-          const SizedBox(height: 14),
-          _AccountSelectorPanel(
-            accountPresets: _accountPresets,
-            selectedAccountTag: _session.selectedAccountTag,
-            onAccountChanged: (tag) {
-              setState(() {
-                if (tag == null) {
-                  _session.selectedAccountTag = null;
-                  _session.setTownHall(_catalog.maxTownHall);
-                } else {
-                  final preset = _accountPresets.firstWhere(
-                    (candidate) => candidate.tag == tag,
-                  );
-                  _session.applyPreset(preset);
-                }
-                _repairSelectedQuickSetup();
-              });
-            },
-          ),
-          const SizedBox(height: 14),
-          if (selectedSetup == null)
-            _InlineEmpty(message: loc.damageNoActiveSources)
-          else if (_session.availableSources.isEmpty)
-            _InlineEmpty(message: loc.damageNoSourcesForTownHall)
-          else ...[
-            for (final source in sourceVisibility.primarySources) ...[
-              _SourceRow(
-                key: ValueKey('source-${source.kind.name}'),
-                source: source,
-                selection: _session.sources[source.kind]!,
-                townHall: _session.townHall,
-                onLevelChanged: (level) =>
-                    setState(() => _session.setSourceLevel(source.kind, level)),
-                onCountChanged: (count) =>
-                    setState(() => _session.setSourceCount(source.kind, count)),
-              ),
-              const SizedBox(height: 10),
-            ],
-            if (sourceVisibility.extraSources.isNotEmpty) ...[
-              if (_showAllSources)
-                _InlineSectionLabel(title: loc.damageOtherSources),
-              for (final source in sourceVisibility.visibleExtraSources) ...[
-                _SourceRow(
-                  key: ValueKey('source-${source.kind.name}'),
-                  source: source,
-                  selection: _session.sources[source.kind]!,
-                  townHall: _session.townHall,
-                  onLevelChanged: (level) => setState(
-                    () => _session.setSourceLevel(source.kind, level),
-                  ),
-                  onCountChanged: (count) => setState(
-                    () => _session.setSourceCount(source.kind, count),
-                  ),
-                ),
-                const SizedBox(height: 10),
-              ],
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  onPressed: () =>
-                      setState(() => _showAllSources = !_showAllSources),
-                  icon: Icon(
-                    _showAllSources
-                        ? Icons.expand_less_rounded
-                        : Icons.add_rounded,
-                  ),
-                  label: Text(
-                    _showAllSources
-                        ? loc.damageShowFewerSources
-                        : loc.damageShowAllSources,
-                  ),
-                ),
-              ),
-            ],
-          ],
-
           if (showZapQuakeOptimizer) ...[
             const SizedBox(height: 22),
             SidePageSectionHeader(title: loc.damageZapQuakeOptimizer),
@@ -337,6 +219,120 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
         ],
       ),
     );
+  }
+
+  List<Widget> _targetSectionWidgets(
+    BuildContext context,
+    AppLocalizations loc,
+    List<DamageTarget> targets,
+    Map<String, DamageResult> resultByTargetId,
+  ) {
+    return [
+      SidePageSectionHeader(title: loc.damageTargetSectionTitle),
+      if (targets.isEmpty)
+        _TargetEmptyPanel(onChoose: _showBuildingPicker)
+      else ...[
+        for (final target in targets) ...[
+          _TargetCard(
+            key: ValueKey('target-${target.id}'),
+            target: target,
+            availableLevels: target.building.levelsForTownHall(
+              _session.townHall,
+            ),
+            result: resultByTargetId[target.id],
+            onLevelChanged: (level) =>
+                setState(() => _session.setTargetLevel(target.id, level)),
+            onRemove: () => setState(() => _session.removeTarget(target.id)),
+          ),
+          const SizedBox(height: 10),
+        ],
+        _AddBuildingButton(
+          enabled: _session.availableBuildings.length != targets.length,
+          onPressed: _showBuildingPicker,
+        ),
+      ],
+    ];
+  }
+
+  List<Widget> _attackStackSectionWidgets(
+    AppLocalizations loc, {
+    required List<_QuickSetup> quickSetups,
+    required _QuickSetup? selectedSetup,
+    required _DamageSourceVisibility sourceVisibility,
+  }) {
+    return [
+      const SizedBox(height: 22),
+      SidePageSectionHeader(title: loc.damageAttackStack),
+      _QuickSetupPanel(
+        setups: quickSetups,
+        selectedId: selectedSetup?.id,
+        onSelected: _applyQuickSetup,
+      ),
+      const SizedBox(height: 14),
+      _AccountSelectorPanel(
+        accountPresets: _accountPresets,
+        selectedAccountTag: _session.selectedAccountTag,
+        onAccountChanged: _applyAccountPresetTag,
+      ),
+      const SizedBox(height: 14),
+      ..._sourceSectionWidgets(loc, selectedSetup, sourceVisibility),
+    ];
+  }
+
+  List<Widget> _sourceSectionWidgets(
+    AppLocalizations loc,
+    _QuickSetup? selectedSetup,
+    _DamageSourceVisibility sourceVisibility,
+  ) {
+    if (selectedSetup == null) {
+      return [_InlineEmpty(message: loc.damageNoActiveSources)];
+    }
+    if (_session.availableSources.isEmpty) {
+      return [_InlineEmpty(message: loc.damageNoSourcesForTownHall)];
+    }
+
+    return [
+      ..._sourceRows(sourceVisibility.primarySources),
+      if (sourceVisibility.extraSources.isNotEmpty) ...[
+        if (_showAllSources) _InlineSectionLabel(title: loc.damageOtherSources),
+        ..._sourceRows(sourceVisibility.visibleExtraSources),
+        _ShowAllSourcesButton(
+          expanded: _showAllSources,
+          onPressed: () => setState(() => _showAllSources = !_showAllSources),
+        ),
+      ],
+    ];
+  }
+
+  List<Widget> _sourceRows(List<DamageSourceDefinition> sources) => [
+    for (final source in sources) ...[
+      _SourceRow(
+        key: ValueKey('source-${source.kind.name}'),
+        source: source,
+        selection: _session.sources[source.kind]!,
+        townHall: _session.townHall,
+        onLevelChanged: (level) =>
+            setState(() => _session.setSourceLevel(source.kind, level)),
+        onCountChanged: (count) =>
+            setState(() => _session.setSourceCount(source.kind, count)),
+      ),
+      const SizedBox(height: 10),
+    ],
+  ];
+
+  void _applyAccountPresetTag(String? tag) {
+    setState(() {
+      if (tag == null) {
+        _session.selectedAccountTag = null;
+        _session.setTownHall(_catalog.maxTownHall);
+      } else {
+        final preset = _accountPresets.firstWhere(
+          (candidate) => candidate.tag == tag,
+        );
+        _session.applyPreset(preset);
+      }
+      _repairSelectedQuickSetup();
+    });
   }
 
   _DamageSourceVisibility _damageSourceVisibility(_QuickSetup? selectedSetup) {
@@ -1251,6 +1247,63 @@ class _TargetEmptyPanel extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AddBuildingButton extends StatelessWidget {
+  const _AddBuildingButton({required this.enabled, required this.onPressed});
+
+  final bool enabled;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return SizedBox(
+      width: double.infinity,
+      height: 44,
+      child: OutlinedButton.icon(
+        key: const ValueKey('add-building'),
+        style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.control),
+          ),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant.withValues(
+              alpha: AppOpacity.borderStrong,
+            ),
+          ),
+        ),
+        onPressed: enabled ? onPressed : null,
+        icon: const Icon(Icons.add_rounded),
+        label: Text(loc.damageAddBuilding),
+      ),
+    );
+  }
+}
+
+class _ShowAllSourcesButton extends StatelessWidget {
+  const _ShowAllSourcesButton({
+    required this.expanded,
+    required this.onPressed,
+  });
+
+  final bool expanded;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: TextButton.icon(
+        onPressed: onPressed,
+        icon: Icon(expanded ? Icons.expand_less_rounded : Icons.add_rounded),
+        label: Text(
+          expanded ? loc.damageShowFewerSources : loc.damageShowAllSources,
+        ),
       ),
     );
   }
