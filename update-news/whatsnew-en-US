@@ -1,3 +1,36 @@
+- Empty/no-result screens now share the same visual treatment across side pages and rankings.
+- Upgrade Tracker no-result states now match the shared empty screen used by clan arrivals and departures.
+- Upgrade Tracker tabs now use ClashKing asset icons for calendar, plan, and collection.
+- Sidebar and drawer menu items now use ClashKing asset icons where available.
+- Damage Calculator target cards now keep the target identity, level control, and damage result readable on mobile.
+- Damage Calculator now supports fully custom attack methods with editable source quantities.
+- Damage Calculator attack method selection now uses the same shared controls as the other side pages.
+- Damage Calculator now starts with an explicit building target, attack method, and account selection flow.
+- Rankings now use Player and Clan as the main tabs, with dropdown filters, skeleton loading, asset mode icons, and empty states for missing data.
+- Upgrade Tracker Plan and Collection filters now use one primary chip row with compact dropdowns for secondary filters.
+- Shared filter and summary chips now come from the ClashKing DevKit for consistent styling across screens.
+- Shared segmented controls now use the same rounded Linked/Favorites style across filters and mode selectors.
+- Upgrade Tracker plan and collection filters now use the same chip style as clan screens.
+- Fixed Upgrade Tracker empty plan states crashing during layout.
+- Damage Calculator now follows a clearer flow: setup, live target result, compact attack method, focused settings, then optional optimization.
+- Ranked League account switching now uses a labelled account selector directly in the player identity.
+- Damage Calculator now starts from a clear attack method, shows only relevant damage sources first, and hides the Zap Quake optimizer outside Zap Quake mode.
+- Calculator UX now has cleaner setup controls, compact source rows, localized building labels, and no redundant empty stack card
+- Posts now show announcement-shaped skeleton cards while loading instead of a spinner
+- Posts now use cleaner announcement cards and a lighter article header when no image is available
+- Upgrade Tracker expandable sections now match the Player profile item card style
+- Fixed Upgrade Tracker item icons to use a consistent player-style tile pattern while keeping leveled building and trap art
+- Added header-preserving skeleton loading to the game resources screen and asset previews
+- Reworked the game resources header to better match the player detail header style
+- Refined game resources header stats and dropdown selection states for closer player-header consistency
+- Reordered game resources filters above search and added category asset thumbnails
+- Localized game resources filters, counts, empty states, and action labels in French
+- Fixed player headers showing Ranked League tiers in the classic trophy league slot
+- Fixed startup and widget fallback logos so ClashKing assets keep rendering when a CDN image fails once
+- Refined language, theme, and translation-help settings so they match the app's settings design
+- Added the Upgrade Tracker widget on Android, matching the existing iOS widget support
+- Updated the FAQ with clearer feature coverage for accounts, notifications, widgets, to-do, and upgrade tracking
+- Monthly support notifications now follow your Events or App announcements preference instead of appearing as a separate technical toggle
 - Fixed the home to-do card so it also hides accounts you've turned "Show on to-do page" off for, not just the full to-do list
 - Added safer remote rollouts for posts, notifications, rankings, widgets, upgrade tracking, and experimental features
 - Rebuilt the Legend League page for the new weekly Ranked League groups, live standings, battle logs, and period history
@@ -56,6 +89,7 @@ What’s new
 - War Team empty attack and defense slots now match the real row layout without repeated text
 - War Team empty attack and defense slots now show the player's Town Hall as a muted placeholder
 - War statistics now show the fast calculator inline above metrics and restore the war state analysis
+- War state analysis now uses real war outcomes instead of dividing star goals per remaining attack
 - War state analysis now shows a compact per-attack win or loss-risk scenario
 - War calculator now uses a cleaner neutral layout with the calculator action aligned to the right
 - War calculator fields now avoid clipping long labels on narrow screens
@@ -115,3 +149,9 @@ What’s new
 - Notification settings now let each alert target different linked accounts
 - Notification settings now make pause state and account audience rules clearer
 - Fixed distorted images when cached inside square or fixed-size layouts
+
+- Added To-do list and Ranked League entries to the side menu alongside Upgrade Tracker.
+- Damage Calculator now has a clearer title, quick attack presets, and a live target/damage/result summary.
+- Damage Calculator now opens on the customizable attack method.
+- Ranked League now opens directly like Upgrade Tracker, with an in-page account switcher instead of an intermediate account list.
+- Ranked League account switching now follows the same Home visibility setting as the Ranked Home card.

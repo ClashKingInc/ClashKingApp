@@ -2650,16 +2650,26 @@
   "calculatorsSubtitle": "Plan damage against current building levels.",
   "calculatorZapQuake": "Zap quake",
   "calculatorFireball": "Fireball",
-  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
+  "damageCalculatorTitle": "Damage Calculator",
+  "damageCalculatorSubtitle": "Choose a target, pick an attack method, then adjust damage.",
   "damageNoStaticDataTitle": "Damage data is unavailable",
   "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
   "damageTownHall": "Town Hall",
   "damageVerifiedAccountPrefill": "Verified account preset",
+  "damageAccountPresetShort": "Account",
+  "damageChooseAccount": "Choose an account",
+  "damageAccountSelectorHint": "The levels used follow the selected account.",
+  "damageNoAccountsAvailable": "No verified account available",
   "damageOverridesStayLocal": "Changes here do not update the player account.",
+  "damageTargetSectionTitle": "Building to destroy",
   "damageTargets": "Buildings",
   "damageAddBuilding": "Add building",
+  "damageChooseTarget": "Choose a building",
   "damageRemoveBuilding": "Remove building",
+  "damageNoTargetTitle": "No building selected",
+  "damageNoTargetBody": "Choose a building to see how much damage it can take.",
   "damageNoTargetsBody": "Add at least one building to compare results.",
+  "damageTargetLevelLabel": "Target level",
   "damageHitpoints": "{hitpoints} HP",
   "@damageHitpoints": {
     "placeholders": {
@@ -2669,9 +2679,11 @@
     }
   },
   "damageSearchBuildings": "Search buildings",
+  "damageCommonBuildings": "Most commonly chosen",
+  "damageAllBuildings": "All buildings",
   "damageNoBuildingsFound": "No buildings found",
   "damageTryAnotherSearch": "Try another name or Town Hall level.",
-  "damageAttackStack": "Manual attack stack",
+  "damageAttackStack": "Attack method",
   "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
   "damageCount": "Count",
   "damagePerUse": "{damage} damage per use",
@@ -2741,6 +2753,41 @@
       }
     }
   },
+  "damageQuickSetups": "Choose a method",
+  "damageQuickSetupZapQuake": "Zap + quake",
+  "damageQuickSetupFireballQuake": "Fireball + quake",
+  "damageQuickSetupGiantArrow": "Giant Arrow",
+  "damageQuickSetupFlameFlinger": "Flame Flinger",
+  "damageQuickSetupCustom": "Custom",
+  "damageClearStack": "Clear",
+  "damageSummaryTarget": "Target",
+  "damageSummaryAttack": "Damage",
+  "damageSummaryResult": "Result",
+  "damageSummaryPending": "Pending",
+  "damageNoDamageSelected": "No damage",
+  "damageSelectedSourcesCount": "{count} source(s)",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageDestroyedCount": "{destroyed}/{total} destroyed",
+  "@damageDestroyedCount": {
+    "placeholders": {
+      "destroyed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Choose a method to show the damage sources to adjust.",
+  "damageOtherSources": "Other sources",
+  "damageShowAllSources": "Add another source",
+  "damageShowFewerSources": "Hide other sources",
   "upgradeTrackerTitle": "Upgrade Tracker",
   "upgradeTrackerSubtitle": "Remaining upgrade cost and time.",
   "linkedAccountLabel": "Linked account",
@@ -3077,6 +3124,20 @@
   "gameAssetsLoadError": "Could not load game assets",
   "gameAssetsEmptyTitle": "No game assets available",
   "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
+  "gameAssetsCategoryBuildings": "Buildings",
+  "gameAssetsCategoryCapitalBase": "Capital Base",
+  "gameAssetsCategoryCapitalHouseParts": "Capital House Parts",
+  "gameAssetsCategoryChests": "Chests",
+  "gameAssetsCategoryClanLabels": "Clan Labels",
+  "gameAssetsCategoryCountryFlags": "Country Flags",
+  "gameAssetsCategoryDecorations": "Decorations",
+  "gameAssetsCategoryEquipment": "Equipment",
+  "gameAssetsCategoryGuardians": "Guardians",
+  "gameAssetsCategoryHeroes": "Heroes",
+  "gameAssetsCategoryPets": "Pets",
+  "gameAssetsCategorySkins": "Skins",
+  "gameAssetsCategorySpells": "Spells",
+  "gameAssetsCategoryTroops": "Troops",
   "gameAssetsOneImage": "1 image",
   "gameAssetsImageCount": "{count} images",
   "@gameAssetsImageCount": {
@@ -3663,6 +3724,7 @@
   "statsCustomLens": "Custom lens",
   "statsCustomLensBody": "Choose required quantities, exclusions, Town Hall, league, sample floor, and sort order. This runs against real loadouts but is not saved yet.",
   "rankedLeagueTitle": "Ranked League",
+  "rankedLeagueAccountSelector": "Shown account",
   "rankedLeagueAbout": "About Ranked League",
   "rankedLeagueAboutBody": "This page uses the official weekly Ranked League group, battle logs and period history. Current results can change until the period ends.",
   "rankedLeagueOverview": "Overview",
