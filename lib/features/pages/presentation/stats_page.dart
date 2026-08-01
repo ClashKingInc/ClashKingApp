@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
@@ -387,7 +388,7 @@ class _SectionFrame extends StatelessWidget {
         padding: sidePagePadding,
         children: [
           if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
-          SidePageEmptyState(
+          AppEmptyState(
             icon: Icons.query_stats_rounded,
             title: emptyTitle ?? loc.statsNoDataTitle,
             body: emptyBody ?? loc.statsNoDataBody,
@@ -953,7 +954,7 @@ class _ArmiesSectionState extends State<_ArmiesSection> {
                     );
               }).toList();
               if (filtered.isEmpty) {
-                return SidePageEmptyState(
+                return AppEmptyState(
                   icon: Icons.search_off_rounded,
                   title: loc.statsNoDataTitle,
                   body: loc.generalNoFilteredResults,

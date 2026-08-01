@@ -173,14 +173,13 @@ class _PlayersPageState extends State<PlayersPage> {
                     14,
                   ),
                   sliver: SliverToBoxAdapter(
-                    child: LiquidGlassSegmentedControl<_PlayerRosterMode>(
+                    child: AppFilterSegmentedControl<_PlayerRosterMode>(
                       values: const [
                         _PlayerRosterMode.linked,
                         _PlayerRosterMode.bookmarked,
                       ],
                       labels: [l10n.playersLinked, l10n.playersBookmarked],
                       selected: _mode,
-                      color: Theme.of(context).colorScheme.onSurface,
                       onChanged: (value) => setState(() => _mode = value),
                     ),
                   ),

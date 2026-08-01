@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,13 +59,13 @@ class SidePageScaffold extends StatelessWidget {
   const SidePageScaffold({
     super.key,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     required this.child,
     this.bottom,
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final Widget child;
   final PreferredSizeWidget? bottom;
 
@@ -96,14 +97,15 @@ class SidePageScaffold extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title),
-            Text(
-              subtitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+            if (subtitle case final subtitle?)
+              Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
-            ),
           ],
         ),
         bottom: constrainedBottom(),
@@ -144,6 +146,199 @@ class SidePageSectionHeader extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class SidePagePanel extends StatelessWidget {
+  const SidePagePanel({
+    super.key,
+    required this.child,
+    this.radius = AppRadius.chip,
+    this.padding = const EdgeInsets.all(14),
+    this.borderColor,
+  });
+
+  final Widget child;
+  final double radius;
+  final EdgeInsetsGeometry padding;
+  final Color? borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(
+          color:
+              borderColor ??
+              colorScheme.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
+      ),
+      child: Padding(padding: padding, child: child),
+    );
+  }
+}
+
+class SidePageInlineSelector<T> extends StatelessWidget {
+  const SidePageInlineSelector({
+    super.key,
+    required this.selected,
+    required this.options,
+    required this.onSelected,
+    this.minWidth = 112,
+    this.maxWidth = 148,
+    this.height = 36,
+  });
+
+  final T selected;
+  final Map<T, String> options;
+  final ValueChanged<T> onSelected;
+  final double minWidth;
+  final double maxWidth;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final selectedLabel = options[selected] ?? selected.toString();
+    return PopupMenuButton<T>(
+      initialValue: selected,
+      onSelected: onSelected,
+      color: colorScheme.surface,
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        side: BorderSide(
+          color: colorScheme.outlineVariant.withValues(
+            alpha: AppOpacity.border,
+          ),
+        ),
+      ),
+      itemBuilder: (context) => options.entries
+          .map(
+            (entry) => PopupMenuItem<T>(
+              value: entry.key,
+              height: 40,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      entry.value,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (entry.key == selected)
+                    Icon(
+                      Icons.check_rounded,
+                      size: 16,
+                      color: colorScheme.onSurface,
+                    ),
+                ],
+              ),
+            ),
+          )
+          .toList(growable: false),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minWidth: minWidth, maxWidth: maxWidth),
+        child: Container(
+          height: height,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(
+                alpha: AppOpacity.borderStrong,
+              ),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  selectedLabel,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 18,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SidePageStepper extends StatelessWidget {
+  const SidePageStepper({
+    super.key,
+    required this.value,
+    required this.onDecrease,
+    required this.onIncrease,
+    this.compact = false,
+  });
+
+  final int value;
+  final VoidCallback? onDecrease;
+  final VoidCallback? onIncrease;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final textStyle = compact
+        ? Theme.of(context).textTheme.titleSmall
+        : Theme.of(context).textTheme.titleMedium;
+    final buttonSize = compact ? 34.0 : 40.0;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox.square(
+          dimension: buttonSize,
+          child: IconButton(
+            tooltip: loc.sideDecrease,
+            padding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
+            onPressed: onDecrease,
+            icon: const Icon(Icons.remove_circle_outline_rounded),
+          ),
+        ),
+        SizedBox(
+          width: compact ? 30 : 34,
+          child: Text(
+            '$value',
+            textAlign: TextAlign.center,
+            style: textStyle?.copyWith(fontWeight: FontWeight.w800),
+          ),
+        ),
+        SizedBox.square(
+          dimension: buttonSize,
+          child: IconButton(
+            tooltip: loc.sideIncrease,
+            padding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
+            onPressed: onIncrease,
+            icon: const Icon(Icons.add_circle_outline_rounded),
+          ),
+        ),
+      ],
     );
   }
 }

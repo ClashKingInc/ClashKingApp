@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
@@ -62,7 +63,7 @@ class _UpgradeTrackerTeasePageState extends State<UpgradeTrackerTeasePage> {
               onChanged: (value) => setState(() => _selectedTag = value),
             )
           else
-            SidePageEmptyState(
+            AppEmptyState(
               icon: Icons.construction_rounded,
               title: loc.noLinkedPlayersLoadedTitle,
               body: loc.noLinkedPlayersLoadedBody,
