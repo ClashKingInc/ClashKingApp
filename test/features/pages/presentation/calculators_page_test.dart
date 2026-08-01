@@ -7,32 +7,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets(
-    'renders one mobile-first damage calculator with static defaults',
-    (tester) async {
-      await _pump(tester);
+  testWidgets('starts with an explicit target and attack method flow', (
+    tester,
+  ) async {
+    await _pump(tester);
 
-      expect(
-        find.text('Compare one attack stack against multiple buildings.'),
-        findsOneWidget,
-      );
-      expect(find.text('Buildings'), findsOneWidget);
-      expect(find.text('Town Hall'), findsWidgets);
-      expect(find.text('1,000 HP'), findsOneWidget);
-      expect(find.text('Manual attack stack'), findsOneWidget);
-      expect(find.text('Lightning'), findsOneWidget);
-      expect(find.text('Earthquake'), findsOneWidget);
-      expect(find.byType(TabBarView), findsNothing);
+    expect(find.text('Damage Calculator'), findsOneWidget);
+    expect(find.text('Building to destroy'), findsOneWidget);
+    expect(find.text('No building selected'), findsOneWidget);
+    expect(find.text('Choose a building'), findsOneWidget);
+    expect(find.text('Attack method'), findsOneWidget);
+    expect(find.text('Custom'), findsOneWidget);
+    expect(find.byType(TabBarView), findsNothing);
 
-      await tester.scrollUntilVisible(find.text('Zap Quake optimizer'), 400);
-      expect(find.text('Zap Quake optimizer'), findsOneWidget);
-    },
-  );
+    await tester.tap(find.text('Choose a building'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ListTile).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Zap + quake'));
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const ValueKey('damage-calculator-scroll')),
+      const Offset(0, -1200),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Zap Quake optimizer'), findsOneWidget);
+  });
 
   testWidgets('searches and adds another building on a phone', (tester) async {
     await _pump(tester);
 
-    await tester.tap(find.byKey(const ValueKey('add-building')));
+    await tester.tap(find.byKey(const ValueKey('choose-building')));
     await tester.pumpAndSettle();
     await tester.enterText(
       find.byKey(const ValueKey('building-search')),
@@ -56,11 +61,46 @@ void main() {
     expect(find.text('600 HP'), findsOneWidget);
   });
 
+  testWidgets('allows a custom attack method', (tester) async {
+    await _pump(tester);
+
+    await tester.tap(find.text('Custom'));
+    await tester.pumpAndSettle();
+
+    final lightningRow = find.byKey(const ValueKey('source-lightning'));
+    final earthquakeRow = find.byKey(const ValueKey('source-earthquake'));
+    expect(lightningRow, findsOneWidget);
+    expect(earthquakeRow, findsOneWidget);
+    expect(
+      find.descendant(of: lightningRow, matching: find.text('0')),
+      findsOneWidget,
+    );
+
+    await tester.tap(
+      find.descendant(
+        of: lightningRow,
+        matching: find.byIcon(Icons.add_circle_outline_rounded),
+      ),
+    );
+    await tester.pump();
+
+    expect(
+      find.descendant(of: lightningRow, matching: find.text('1')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('updates independent results from the manual stack', (
     tester,
   ) async {
     await _pump(tester);
 
+    await tester.tap(find.text('Choose a building'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ListTile).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Zap + quake'));
+    await tester.pumpAndSettle();
     final lightningRow = find.byKey(const ValueKey('source-lightning'));
     await tester.ensureVisible(lightningRow);
     await tester.pumpAndSettle();
@@ -72,16 +112,16 @@ void main() {
     );
     await tester.pump();
     expect(
-      find.descendant(of: lightningRow, matching: find.text('1')),
+      find.descendant(of: lightningRow, matching: find.text('6')),
       findsOneWidget,
     );
-    await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('result-town-hall')),
-      300,
+    await tester.drag(
+      find.byKey(const ValueKey('damage-calculator-scroll')),
+      const Offset(0, 1200),
     );
-
-    expect(find.text('400 damage · 600 HP remaining'), findsOneWidget);
-    expect(find.text('Survives'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('1,000 damage · 0 HP remaining'), findsOneWidget);
+    expect(find.text('Destroyed'), findsOneWidget);
   });
 
   testWidgets('verified account presets remain local to the calculator', (
@@ -99,17 +139,29 @@ void main() {
       ],
     );
 
-    await tester.tap(find.text('Verified account preset'));
+    await tester.tap(find.text('Choose a building'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ListTile).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choose an account'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Chief · TH10').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Zap + quake'));
     await tester.pumpAndSettle();
 
     expect(find.text('800 HP'), findsOneWidget);
     expect(
-      find.text('Changes here do not update the player account.'),
+      find.text('The levels used follow the selected account.'),
       findsOneWidget,
     );
-    expect(find.byKey(const ValueKey('lightning-level-1')), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('source-lightning')),
+        matching: find.text('Level 1'),
+      ),
+      findsOneWidget,
+    );
   });
 }
 

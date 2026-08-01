@@ -167,10 +167,6 @@ class DamageCalculatorSession {
 
   void _seedDefaults() {
     _repairSources();
-    final townHallBuilding = catalog.buildings
-        .where((building) => building.name == 'Town Hall')
-        .firstOrNull;
-    if (townHallBuilding != null) addTarget(townHallBuilding.id);
   }
 
   void _repairTargets() {
@@ -212,8 +208,4 @@ class DamageCalculatorSession {
     }
     return null;
   }
-}
-
-extension<T> on Iterable<T> {
-  T? get firstOrNull => isEmpty ? null : first;
 }

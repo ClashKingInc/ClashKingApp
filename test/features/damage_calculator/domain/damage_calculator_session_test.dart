@@ -7,6 +7,8 @@ void main() {
   test('uses max valid levels and repairs invalid state after a TH change', () {
     final session = DamageCalculatorSession(_catalog, townHall: 12);
 
+    expect(session.targets, isEmpty);
+    expect(session.addTarget('town-hall'), isTrue);
     expect(session.targets.single.level, 2);
     expect(session.sources[DamageSourceKind.lightning]!.level, 3);
 
@@ -35,6 +37,7 @@ void main() {
   test('rejects duplicate and invalid building selections', () {
     final session = DamageCalculatorSession(_catalog, townHall: 9);
 
+    expect(session.addTarget('town-hall'), isTrue);
     expect(session.addTarget('town-hall'), isFalse);
     expect(session.addTarget('locked'), isFalse);
     expect(session.targets, hasLength(1));
