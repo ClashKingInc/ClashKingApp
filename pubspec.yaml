@@ -77,7 +77,7 @@ dependencies:
   clashking_design_system:
     git:
       url: https://github.com/ClashKingInc/DevKit.git
-      ref: main
+      ref: codex/shared-devkit-controls
       path: design/packages/flutter
   firebase_core: ^4.11.0
   firebase_messaging: ^16.4.1
@@ -152,7 +152,6 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icons/icon-play-store.png"
   image_path_ios: "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png"
-
 
 flutter_native_splash:
   color: "#ffffff"

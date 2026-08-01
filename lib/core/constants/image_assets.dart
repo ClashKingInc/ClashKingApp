@@ -11,6 +11,7 @@ class ImageAssets {
       "$baseUrl/logos/crown-arrow-dark-bg/ClashKing-1.png";
   static const String lightModeLogo =
       "$baseUrl/logos/crown-arrow-white-bg/ClashKing-2.png";
+  static const String fallbackLogo = darkModeLogo;
   static const String darkModeTextLogo =
       "$baseUrl/logos/crown-arrow-dark-bg/CK-text-dark-bg.png";
   static const String lightModeTextLogo =
@@ -221,6 +222,8 @@ class ImageAssets {
       "$baseUrl/icons/Magic_Item_Builder_Potion.png";
   static const String builderPotion =
       "$baseUrl/magic_items/builder_potion.webp";
+  static const String hammerOfBuilding =
+      "$baseUrl/magic_items/hammer_of_building.webp";
   static const String researchPotion =
       "$baseUrl/magic_items/research_potion.webp";
   static const String petPotion = "$baseUrl/magic_items/pet_potion.webp";
@@ -311,12 +314,28 @@ class ImageAssets {
     return _buildAssetUrl(['pets', slug, 'icon.webp']);
   }
 
+  static String getGuardianImage(String guardianName) {
+    final slug = _assetSlug(guardianName);
+    if (slug.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl(['guardians', slug, 'icon.webp']);
+  }
+
   static String getGearImage(String gearName) {
     final slug = _assetSlug(gearName);
     if (slug.isEmpty) {
       return defaultImage;
     }
     return _buildAssetUrl(['equipment', '$slug.webp']);
+  }
+
+  static String getHelperImage(String helperName) {
+    final slug = _assetSlug(helperName);
+    if (slug.isEmpty) {
+      return defaultImage;
+    }
+    return _buildAssetUrl(['helpers', '$slug.webp']);
   }
 
   static String getHomeVillageBuildingImage(String buildingName, int level) {

@@ -7,11 +7,14 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_ranked_league.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/features/player/presentation/ranked/player_ranked_league_header.dart';
+import 'package:clashkingapp/features/player/presentation/ranked/ranked_account_picker_sheet.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -20,9 +23,16 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PlayerRankedLeagueScreen extends StatefulWidget {
-  const PlayerRankedLeagueScreen({super.key, required this.player});
+  const PlayerRankedLeagueScreen({
+    super.key,
+    required this.player,
+    this.onSwitchAccount,
+    this.switchAccountTooltip,
+  });
 
   final Player player;
+  final VoidCallback? onSwitchAccount;
+  final String? switchAccountTooltip;
 
   @override
   State<PlayerRankedLeagueScreen> createState() =>
@@ -36,10 +46,31 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   bool _showHistoryTable = false;
   RankedLeagueData? _data;
   bool _loading = true;
+  Player? _selectedPlayer;
+  int _loadGeneration = 0;
+
+  Player get _activePlayer => _selectedPlayer ?? widget.player;
 
   @override
   void initState() {
     super.initState();
+    _fetch(forceRefresh: false);
+  }
+
+  @override
+  void didUpdateWidget(covariant PlayerRankedLeagueScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_normalizeTag(oldWidget.player.tag) ==
+        _normalizeTag(widget.player.tag)) {
+      return;
+    }
+    _selectedPlayer = null;
+    _selectedSeason = 0;
+    _selectedTab = 0;
+    _showCurrentRanking = false;
+    _showHistoryTable = false;
+    _data = null;
+    _loading = true;
     _fetch(forceRefresh: false);
   }
 
@@ -50,42 +81,131 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   // cache instantly (no loading flash) and quietly revalidate in the
   // background, rather than forcing every open through a spinner.
   Future<void> _fetch({required bool forceRefresh}) async {
+    final requestTag = _activePlayer.tag;
+    final normalizedRequestTag = _normalizeTag(requestTag);
+    final generation = ++_loadGeneration;
     try {
       final data = await context.read<PlayerService>().loadRankedLeagueData(
-        widget.player.tag,
+        requestTag,
         forceRefresh: forceRefresh,
       );
-      if (!mounted) return;
+      if (!_isCurrentRequest(generation, normalizedRequestTag)) return;
       setState(() {
         _data = data;
         _loading = false;
       });
     } catch (_) {
-      if (!mounted) return;
+      if (!_isCurrentRequest(generation, normalizedRequestTag)) return;
       setState(() => _loading = false);
     }
-    if (!forceRefresh) {
+    if (!forceRefresh && _isCurrentRequest(generation, normalizedRequestTag)) {
       // The cached value just shown may already be stale (attacks done,
       // rank moved since it was cached) — catch up silently instead of
       // leaving the user looking at outdated numbers all session.
-      unawaited(_revalidate());
+      unawaited(_revalidate(generation, normalizedRequestTag));
     }
   }
 
-  Future<void> _revalidate() async {
+  Future<void> _revalidate(int generation, String normalizedRequestTag) async {
     try {
+      final requestTag = _activePlayer.tag;
       final fresh = await context.read<PlayerService>().loadRankedLeagueData(
-        widget.player.tag,
+        requestTag,
         forceRefresh: true,
       );
-      if (!mounted) return;
+      if (!_isCurrentRequest(generation, normalizedRequestTag)) return;
       setState(() => _data = fresh);
     } catch (_) {
       // Best-effort only; the initial fetch already surfaced any error.
     }
   }
 
+  bool _isCurrentRequest(int generation, String normalizedRequestTag) =>
+      mounted &&
+      generation == _loadGeneration &&
+      _normalizeTag(_activePlayer.tag) == normalizedRequestTag;
+
   Future<void> _refresh() => _fetch(forceRefresh: true);
+
+  List<Widget>? _appBarActions({
+    required BuildContext context,
+    required VoidCallback? onSwitchAccount,
+    required String? switchAccountTooltip,
+  }) {
+    if (onSwitchAccount == null) return null;
+    return [
+      IconButton(
+        tooltip:
+            switchAccountTooltip ??
+            AppLocalizations.of(
+              context,
+            )!.upgradeTrackerSwitchAccount(_activePlayer.name),
+        onPressed: onSwitchAccount,
+        icon: const Icon(Icons.switch_account_rounded),
+      ),
+    ];
+  }
+
+  List<Player> _rankedSelectablePlayers(BuildContext context) {
+    try {
+      final playerService = context.watch<PlayerService>();
+      final cocService = context.watch<CocAccountService>();
+      final playerPrefs = context.watch<PlayerCardPreferencesService>();
+      final linkedTags = cocService.verifiedAccounts
+          .map(
+            (account) => _normalizeTag(account['player_tag']?.toString() ?? ''),
+          )
+          .where((tag) => tag.isNotEmpty)
+          .toSet();
+
+      return playerService.profiles
+          .where((player) => linkedTags.contains(_normalizeTag(player.tag)))
+          .where((player) => playerPrefs.isRankedShownOnHome(player.tag))
+          .toList(growable: false);
+    } on ProviderNotFoundException {
+      return const [];
+    }
+  }
+
+  VoidCallback? _fallbackSwitchAccountAction(List<Player> players) {
+    final hasOtherPlayer = players.any(
+      (player) => _normalizeTag(player.tag) != _normalizeTag(_activePlayer.tag),
+    );
+    if (!hasOtherPlayer) return null;
+    return () => _showAccountPicker(players);
+  }
+
+  Future<void> _showAccountPicker(List<Player> players) async {
+    final tag = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => RankedAccountPickerSheet(
+        players: players,
+        selectedTag: _activePlayer.tag,
+      ),
+    );
+    if (tag == null || !mounted) return;
+    Player? selected;
+    for (final player in players) {
+      if (_normalizeTag(player.tag) == _normalizeTag(tag)) {
+        selected = player;
+        break;
+      }
+    }
+    if (selected == null) return;
+    if (_normalizeTag(selected.tag) == _normalizeTag(_activePlayer.tag)) return;
+    setState(() {
+      _selectedPlayer = selected;
+      _selectedSeason = 0;
+      _selectedTab = 0;
+      _showCurrentRanking = false;
+      _showHistoryTable = false;
+      _data = null;
+      _loading = true;
+    });
+    await _fetch(forceRefresh: false);
+  }
 
   void _selectTab(int index) {
     final clamped = index.clamp(0, 1);
@@ -105,12 +225,22 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final selectablePlayers = _rankedSelectablePlayers(context);
+    final switchAccountAction =
+        widget.onSwitchAccount ??
+        _fallbackSwitchAccountAction(selectablePlayers);
+    final switchAccountTooltip = widget.switchAccountTooltip;
     final data = _data;
     if (data == null) {
       if (_loading) {
         return Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.rankedLeagueTitle),
+            actions: _appBarActions(
+              context: context,
+              onSwitchAccount: switchAccountAction,
+              switchAccountTooltip: switchAccountTooltip,
+            ),
           ),
           body: const Center(child: CircularProgressIndicator()),
         );
@@ -118,6 +248,11 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
       return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.rankedLeagueTitle),
+          actions: _appBarActions(
+            context: context,
+            onSwitchAccount: switchAccountAction,
+            switchAccountTooltip: switchAccountTooltip,
+          ),
         ),
         body: AppEmptyState(
           title: AppLocalizations.of(context)!.generalNoDataAvailable,
@@ -147,8 +282,10 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
             slivers: [
               SliverToBoxAdapter(
                 child: RankedLeagueHeaderCard(
-                  player: widget.player,
+                  player: _activePlayer,
                   data: data,
+                  onSwitchAccount: switchAccountAction,
+                  switchAccountTooltip: switchAccountTooltip,
                 ),
               ),
               // Once the header/tabs scroll past the top of the viewport,
@@ -228,6 +365,9 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
     );
   }
 }
+
+String _normalizeTag(String tag) =>
+    tag.replaceAll('#', '').trim().toUpperCase();
 
 class _PeriodViewModel {
   const _PeriodViewModel({

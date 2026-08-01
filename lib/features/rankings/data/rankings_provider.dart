@@ -84,9 +84,8 @@ class RankingsProvider extends ChangeNotifier {
           .where((item) => !item.isWorldwide)
           .firstOrNull;
       if (replacement == null) {
-        result = null;
-        error =
-            locationError ?? const FormatException('No locations available.');
+        result = _emptyResultFor(selectedBoard);
+        error = null;
         notifyListeners();
         return;
       }
@@ -112,8 +111,13 @@ class RankingsProvider extends ChangeNotifier {
       result = next;
     } catch (exception) {
       if (generation != _requestGeneration) return;
-      result = null;
-      error = exception;
+      if (_isNoDataException(exception)) {
+        result = _emptyResultFor(selectedBoard);
+        error = null;
+      } else {
+        result = null;
+        error = exception;
+      }
     } finally {
       if (generation == _requestGeneration) {
         isLoading = false;
@@ -124,6 +128,14 @@ class RankingsProvider extends ChangeNotifier {
 
   Future<void> selectAudience(RankingAudience value) async {
     if (audience == value) return;
+    final matchingBoard = _matchingBoardForAudience(board, value);
+    if (matchingBoard != null) {
+      if (value == RankingAudience.players) {
+        playerBoard = matchingBoard;
+      } else {
+        clanBoard = matchingBoard;
+      }
+    }
     audience = value;
     period = RankingPeriod.current;
     notifyListeners();
@@ -182,6 +194,45 @@ class RankingsProvider extends ChangeNotifier {
     notifyListeners();
     await reload();
   }
+}
+
+bool _isNoDataException(Object exception) {
+  if (exception is RankingsRequestException && exception.isNoData) {
+    return true;
+  }
+
+  final message = exception.toString().toLowerCase();
+  return message.contains('no data') ||
+      message.contains('no ranking') ||
+      message.contains('not found') ||
+      message.contains('404');
+}
+
+RankingResult _emptyResultFor(RankingBoard board) {
+  return RankingResult(
+    entries: const [],
+    source: board.source,
+    limit: board.source == RankingSource.official ? 200 : 500,
+  );
+}
+
+RankingBoard? _matchingBoardForAudience(
+  RankingBoard board,
+  RankingAudience audience,
+) {
+  if (audience == RankingAudience.players) {
+    return switch (board) {
+      RankingBoard.clanHome => RankingBoard.playerHome,
+      RankingBoard.clanBuilder => RankingBoard.playerBuilder,
+      _ => null,
+    };
+  }
+
+  return switch (board) {
+    RankingBoard.playerHome => RankingBoard.clanHome,
+    RankingBoard.playerBuilder => RankingBoard.clanBuilder,
+    _ => null,
+  };
 }
 
 List<RankingLeagueOption> rankingLeagueOptionsFromGameData() {

@@ -42,6 +42,35 @@ void main() {
       expect(manifest.assets.last.fileName, 'wizard.webp');
     });
 
+    test('sorts numbered asset levels naturally', () {
+      final manifest = GameAssetManifest.fromJson({
+        'version': 1,
+        'assets': [
+          _assetJson(
+            path: 'buildings/home-village/air_bombs/level_10.webp',
+            category: 'buildings',
+            name: 'level 10',
+          ),
+          _assetJson(
+            path: 'buildings/home-village/air_bombs/level_2.webp',
+            category: 'buildings',
+            name: 'level 2',
+          ),
+          _assetJson(
+            path: 'buildings/home-village/air_bombs/level_1.webp',
+            category: 'buildings',
+            name: 'level 1',
+          ),
+        ],
+      });
+
+      expect(manifest.assets.map((asset) => asset.path), [
+        'buildings/home-village/air_bombs/level_1.webp',
+        'buildings/home-village/air_bombs/level_2.webp',
+        'buildings/home-village/air_bombs/level_10.webp',
+      ]);
+    });
+
     test('rejects unsupported or inconsistent entries', () {
       expect(
         () => GameAssetManifest.fromJson({

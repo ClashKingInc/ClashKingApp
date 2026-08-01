@@ -438,7 +438,7 @@ class _StarBreakdownStrip extends StatelessWidget {
   }
 }
 
-/// Flexible-width, card-less sibling of the shared `StatTile` — no
+/// Flexible-width, card-less sibling of the shared `CKStatTile` — no
 /// background/border, just icon/label/value, so it stretches to fill an
 /// `Expanded` slot in a fixed-column `Row` without reading as a boxed chip.
 class _MetricTile extends StatelessWidget {

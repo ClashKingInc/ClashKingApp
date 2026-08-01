@@ -181,8 +181,8 @@ packages:
     dependency: "direct main"
     description:
       path: "design/packages/flutter"
-      ref: main
-      resolved-ref: a37abbe4310ea97a9938e10c28f1bb90c15f2bcc
+      ref: "codex/shared-devkit-controls"
+      resolved-ref: ef875eb840e276bd177520dc6b6df9511d1d7927
       url: "https://github.com/ClashKingInc/DevKit.git"
     source: git
     version: "0.2.0"

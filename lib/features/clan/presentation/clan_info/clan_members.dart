@@ -298,23 +298,23 @@ class ClanMembersState extends State<ClanMembers> {
           child: Stack(
             alignment: Alignment.centerLeft,
             children: [
-              ClanSummaryChips(
+              CKSummaryChipRail(
                 padding: EdgeInsets.zero,
                 children: [
                   const SizedBox(width: 44),
-                  ClanSummaryChip(
+                  CKSummaryChip(
                     icon: LucideIcons.chevronUp,
                     value: numberFormat.format(totalDonations),
                     label: loc?.gameDonations ?? 'Donated',
                     color: Colors.green,
                   ),
-                  ClanSummaryChip(
+                  CKSummaryChip(
                     icon: LucideIcons.chevronDown,
                     value: numberFormat.format(totalReceived),
                     label: loc?.clanMembersReceivedShort ?? 'Received',
                     color: Colors.redAccent,
                   ),
-                  ClanSummaryChip(
+                  CKSummaryChip(
                     icon: Icons.home_work_rounded,
                     value: averageTownHall == 0
                         ? '-'

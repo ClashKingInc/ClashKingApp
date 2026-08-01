@@ -76,8 +76,11 @@ class _InfoProfileTabsState extends State<InfoProfileTabs>
     // alwaysScrollable (game_assets_page, stats_page) rather than this
     // defaulting to scrollable on every mobile screen.
     final isScrollable = widget.alwaysScrollable;
-    return DecoratedBox(
-      decoration: BoxDecoration(color: scheme.surface),
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      elevation: 0,
       child: SizedBox(
         height: 50,
         child: TabBar(

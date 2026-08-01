@@ -3934,8 +3934,186 @@
   "widgetBuilderTimePerk": "{percent}% temps ouvriers",
   "widgetLabCostPerk": "{percent}% coût labo",
   "widgetLabTimePerk": "{percent}% temps labo",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Objectif de farm",
+  "farmGoalFormTitle": "Ressources à obtenir",
+  "farmGoalAccountTitle": "Compte",
+  "farmGoalAccountHint": "Le compte choisi fournit l'hôtel de ville et la ligue actuels utilisés pour l'estimation.",
+  "farmGoalTargetTitle": "Bâtiment à améliorer",
+  "farmGoalTargetBuildingLabel": "Bâtiment",
+  "farmGoalChooseBuilding": "Choisir un bâtiment",
+  "farmGoalTargetLevelLabel": "Niveau cible",
+  "farmGoalUpgradeCostLabel": "Coût de l'amélioration",
+  "farmGoalCostUnavailable": "Coût d'amélioration indisponible pour ce niveau.",
+  "farmGoalLootTitle": "Butin estimé",
+  "farmGoalResourceLabel": "Ressource",
+  "farmGoalAmountLabel": "Montant à obtenir",
+  "farmGoalAverageLootLabel": "Butin moyen par raid",
+  "farmGoalLeagueEstimate": "Suggestion basée sur le bonus de la ligue {league}. Tu peux l'ajuster.",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalNoLeagueLoot": "Choisis un compte avec une ligue pour obtenir une suggestion de butin.",
+  "farmGoalMissingTarget": "Choisis un bâtiment et un niveau cible pour calculer le nombre de raids nécessaires.",
+  "farmGoalMissingValues": "Renseigne un montant et un butin moyen pour voir le nombre de raids.",
+  "farmGoalResultTitle": "Raids nécessaires",
+  "farmGoalRaids": "raids",
+  "farmGoalResultSummary": "{target} {resource} à environ {average} par raid.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "HDV{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Code créateur : ClashKing",
+  "todoExplanationRaidsTitle": "Raids :",
+  "todoExplanationRaids": "Poids de 5 points par compte (ou 6 si la dernière attaque a été débloquée), 1 attaque = 1 point.",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} comptes suivis",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardNothingPinnedTitle": "Rien d’épinglé pour le moment",
+  "dashboardNothingPinnedBody": "Ouvre l’onglet Joueurs, déplie les options d’une carte et active « Afficher la To Do sur l’accueil » pour épingler un compte ici.",
+  "searchFilters": "Filtres",
+  "clanWarFrequencyTitle": "Guerres",
+  "notifScopeAllAccounts": "Tous les comptes",
+  "settingsLiveActivityTest": "Test Live Activity",
+  "settingsLiveActivityStart": "Démarrer l’activité de test",
+  "settingsLiveActivityStartSubtitle": "Affiche un aperçu local de guerre de clan.",
+  "settingsLiveActivityUpdate": "Mettre à jour le score",
+  "settingsLiveActivityUpdateSubtitle": "Fait avancer le faux score de guerre.",
+  "settingsLiveActivityEnd": "Terminer l’activité de test",
+  "settingsLiveActivityEndSubtitle": "Supprime l’aperçu local.",
+  "notifSelectedAccounts": "Comptes sélectionnés",
+  "calculatorsModeDamage": "Dégâts",
+  "calculatorsModeFarmGoal": "Objectif de farm",
+  "playerOptionShowTodoHomeTitle": "Afficher la To Do sur l’accueil",
+  "playerOptionShowTodoHomeSubtitle": "Épingle la carte To Do de ce compte sur l’onglet accueil.",
+  "searchCancel": "Annuler",
+  "todoRaidAttacks": "Attaques de raid",
+  "todoMockRaid4Left": "4 restantes",
+  "todoMockWarAltStatus": "Actif il y a 18 min · guerre et raids à faire",
+  "todoMockRaid1Left": "1 restante",
+  "gameAssetsCategoryBuildings": "Bâtiments",
+  "gameAssetsCategoryCapitalBase": "Base de capitale",
+  "gameAssetsCategoryCapitalHouseParts": "Éléments de maison de capitale",
+  "gameAssetsCategoryChests": "Coffres",
+  "gameAssetsCategoryClanLabels": "Labels de clan",
+  "gameAssetsCategoryCountryFlags": "Drapeaux de pays",
+  "gameAssetsCategoryDecorations": "Décorations",
+  "gameAssetsCategoryEquipment": "Équipements",
+  "gameAssetsCategoryGuardians": "Gardiens",
+  "gameAssetsCategoryHeroes": "Héros",
+  "gameAssetsCategoryPets": "Familiers",
+  "gameAssetsCategorySkins": "Skins",
+  "gameAssetsCategorySpells": "Sorts",
+  "gameAssetsCategoryTroops": "Troupes",
+  "assetFolderTroops": "Troupes",
+  "assetFolderSpells": "Sorts",
+  "assetFolderHeroes": "Héros",
+  "endpointStateWins": "Victoires",
+  "notifGroupBattles": "Combats",
+  "notifGroupSupport": "Assistance",
+  "rankedLeagueAccountSelector": "Compte affiché",
+  "rankedLeagueStars": "Étoiles",
+  "damageCalculatorTitle": "Calculateur de dégâts",
+  "damageAccountPresetShort": "Compte",
+  "damageChooseAccount": "Choisir un compte",
+  "damageAccountSelectorHint": "Les niveaux utilisés suivent le compte choisi.",
+  "damageNoAccountsAvailable": "Aucun compte vérifié disponible",
+  "damageTargetSectionTitle": "Bâtiment à détruire",
+  "damageChooseTarget": "Choisir un bâtiment",
+  "damageNoTargetTitle": "Aucun bâtiment sélectionné",
+  "damageNoTargetBody": "Choisis un bâtiment pour voir les dégâts qu'il peut subir.",
+  "damageTargetLevelLabel": "Niveau de la cible",
+  "damageCommonBuildings": "Bâtiments les plus choisis",
+  "damageAllBuildings": "Tous les bâtiments",
+  "damageQuickSetups": "Choisis une méthode",
+  "damageQuickSetupZapQuake": "Foudre + Séisme",
+  "damageQuickSetupFireballQuake": "Boule de feu + Séisme",
+  "damageQuickSetupGiantArrow": "Flèche géante",
+  "damageQuickSetupFlameFlinger": "Lance-flammes",
+  "damageQuickSetupCustom": "Personnalisée",
+  "damageClearStack": "Effacer",
+  "damageSummaryTarget": "Cible",
+  "damageSummaryAttack": "Dégâts",
+  "damageSummaryResult": "Résultat",
+  "damageSummaryPending": "À compléter",
+  "damageNoDamageSelected": "Aucun dégât",
+  "damageSelectedSourcesCount": "{count} source(s)",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageDestroyedCount": "{destroyed}/{total} détruit(s)",
+  "@damageDestroyedCount": {
+    "placeholders": {
+      "destroyed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Choisis une méthode pour afficher les sources à ajuster.",
+  "damageOtherSources": "Autres sources",
+  "damageShowAllSources": "Ajouter une autre source",
+  "damageShowFewerSources": "Masquer les autres sources"
 }

@@ -63,25 +63,25 @@ class _WarStatsCompactSummary extends StatelessWidget {
         ? Theme.of(context).colorScheme.error
         : Theme.of(context).colorScheme.primary;
 
-    return ClanSummaryChips(
+    return CKSummaryChipRail(
       padding: EdgeInsets.zero,
       children: [
-        ClanSummaryChip(
+        CKSummaryChip(
           label: loc.generalTotal,
           value: count.toString(),
           icon: Icons.format_list_numbered_rounded,
         ),
-        ClanSummaryChip(
+        CKSummaryChip(
           label: loc.warStarsAverage,
           value: averageStars.toStringAsFixed(2),
           icon: Icons.star_rounded,
         ),
-        ClanSummaryChip(
+        CKSummaryChip(
           label: loc.warDestructionTitle,
           value: '${destruction.toStringAsFixed(1)}%',
           icon: Icons.percent_rounded,
         ),
-        ClanSummaryChip(
+        CKSummaryChip(
           label: loc.warAttacksMissedShort,
           value: missed.toString(),
           icon: Icons.warning_amber_rounded,

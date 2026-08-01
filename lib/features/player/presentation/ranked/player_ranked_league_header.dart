@@ -2,6 +2,7 @@ import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
@@ -17,10 +18,14 @@ class RankedLeagueHeaderCard extends StatelessWidget {
     super.key,
     required this.player,
     required this.data,
+    this.onSwitchAccount,
+    this.switchAccountTooltip,
   });
 
   final Player player;
   final RankedLeagueData data;
+  final VoidCallback? onSwitchAccount;
+  final String? switchAccountTooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +66,8 @@ class RankedLeagueHeaderCard extends StatelessWidget {
                 player: player,
                 data: data,
                 maxWidth: headerMaxWidth,
+                onSwitchAccount: onSwitchAccount,
+                switchAccountTooltip: switchAccountTooltip,
               )
             else ...[
               const SizedBox(height: 6),
@@ -70,6 +77,8 @@ class RankedLeagueHeaderCard extends StatelessWidget {
                   player: player,
                   data: data,
                   horizontal: false,
+                  onSwitchAccount: onSwitchAccount,
+                  switchAccountTooltip: switchAccountTooltip,
                 ),
               ),
               Padding(
@@ -89,11 +98,15 @@ class _DesktopRankedHeaderPanel extends StatelessWidget {
     required this.player,
     required this.data,
     required this.maxWidth,
+    this.onSwitchAccount,
+    this.switchAccountTooltip,
   });
 
   final Player player;
   final RankedLeagueData data;
   final double maxWidth;
+  final VoidCallback? onSwitchAccount;
+  final String? switchAccountTooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +133,8 @@ class _DesktopRankedHeaderPanel extends StatelessWidget {
                             player: player,
                             data: data,
                             horizontal: true,
+                            onSwitchAccount: onSwitchAccount,
+                            switchAccountTooltip: switchAccountTooltip,
                           ),
                         ),
                       ),
@@ -231,11 +246,15 @@ class _RankedIdentity extends StatelessWidget {
     required this.player,
     required this.data,
     required this.horizontal,
+    this.onSwitchAccount,
+    this.switchAccountTooltip,
   });
 
   final Player player;
   final RankedLeagueData data;
   final bool horizontal;
+  final VoidCallback? onSwitchAccount;
+  final String? switchAccountTooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -281,24 +300,42 @@ class _RankedIdentity extends StatelessWidget {
         ],
       ),
     );
+    final canSwitchAccount = onSwitchAccount != null;
+    final nameStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
+      color: colors.onSurface,
+      fontSize: 26,
+      fontWeight: FontWeight.w700,
+      height: 1.02,
+    );
+    final name = Text(
+      player.name,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textAlign: horizontal ? TextAlign.start : TextAlign.center,
+      style: nameStyle,
+    );
+    final selectorLabel = AppLocalizations.of(
+      context,
+    )!.rankedLeagueAccountSelector;
+    final switchTooltip =
+        switchAccountTooltip ??
+        AppLocalizations.of(context)!.upgradeTrackerSwitchAccount(player.name);
+    final accountSelector = canSwitchAccount
+        ? Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: _RankedAccountSelectorPill(
+              label: selectorLabel,
+              tooltip: switchTooltip,
+            ),
+          )
+        : const SizedBox.shrink();
     final details = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: horizontal
           ? CrossAxisAlignment.start
           : CrossAxisAlignment.center,
       children: [
-        Text(
-          player.name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: horizontal ? TextAlign.start : TextAlign.center,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: colors.onSurface,
-            fontSize: 26,
-            fontWeight: FontWeight.w700,
-            height: 1.02,
-          ),
-        ),
+        name,
         const SizedBox(height: 3),
         Text(
           player.tag,
@@ -309,11 +346,13 @@ class _RankedIdentity extends StatelessWidget {
           ),
         ),
         _ClanLine(player: player, centered: !horizontal),
+        if (canSwitchAccount) accountSelector,
       ],
     );
 
+    Widget identity;
     if (horizontal) {
-      return SizedBox(
+      identity = SizedBox(
         height: imageDimension,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -324,10 +363,94 @@ class _RankedIdentity extends StatelessWidget {
           ],
         ),
       );
+    } else {
+      identity = Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [image, const SizedBox(height: 2), details],
+      );
     }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [image, const SizedBox(height: 2), details],
+
+    if (!canSwitchAccount) return identity;
+    return Tooltip(
+      message: switchTooltip,
+      child: Semantics(
+        button: true,
+        label: switchTooltip,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            onTap: onSwitchAccount,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              child: identity,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RankedAccountSelectorPill extends StatelessWidget {
+  const _RankedAccountSelectorPill({
+    required this.label,
+    required this.tooltip,
+  });
+
+  final String label;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textStyle = Theme.of(context).textTheme.labelLarge?.copyWith(
+      color: colors.onSurface,
+      fontWeight: FontWeight.w800,
+      height: 1,
+    );
+
+    return Tooltip(
+      message: tooltip,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colors.surfaceContainerHighest.withValues(
+            alpha: AppOpacity.fillMuted,
+          ),
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          border: Border.all(
+            color: colors.outlineVariant.withValues(alpha: AppOpacity.border),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.switch_account_rounded,
+                size: 17,
+                color: colors.onSurface.withValues(alpha: 0.82),
+              ),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textStyle,
+                ),
+              ),
+              const SizedBox(width: 3),
+              Icon(
+                Icons.expand_more_rounded,
+                size: 18,
+                color: colors.onSurface.withValues(alpha: 0.78),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

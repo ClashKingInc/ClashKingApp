@@ -15,6 +15,8 @@ void main() {
       'X-Bow',
     ]);
     expect(catalog.buildings.first.levelsForTownHall(9).single.level, 9);
+    expect(catalog.buildings.first.level(10)?.upgradeResource, 'Gold');
+    expect(catalog.buildings.first.level(10)?.upgradeCost, 250000);
     expect(
       catalog
           .source(DamageSourceKind.lightning)!
@@ -59,9 +61,15 @@ final _bundle = <String, dynamic>{
       '_id': 1,
       'name': 'Town Hall',
       'village': 'home',
+      'upgrade_resource': 'Gold',
       'levels': [
         {'level': 9, 'hitpoints': 4600, 'required_townhall': 9},
-        {'level': 10, 'hitpoints': 5500, 'required_townhall': 10},
+        {
+          'level': 10,
+          'hitpoints': 5500,
+          'required_townhall': 10,
+          'build_cost': 250000,
+        },
         {'level': 12, 'hitpoints': 7000, 'required_townhall': 11},
       ],
     },

@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
@@ -21,6 +23,13 @@ import 'package:clashkingapp/features/pages/presentation/search_page.dart';
 import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/features/pages/presentation/war_cwl_page.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
+import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/player/presentation/ranked/player_ranked_league_page.dart';
+import 'package:clashkingapp/features/player/presentation/ranked/ranked_account_picker_sheet.dart';
+import 'package:clashkingapp/features/player/presentation/to_do/player_to_do_page.dart';
+import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -502,21 +511,25 @@ class _DesktopSidebar extends StatelessWidget {
       _DesktopNavItem(
         icon: Icons.home_outlined,
         selectedIcon: Icons.home_rounded,
+        assetUrl: ImageAssets.townHall(18),
         label: l10n.navigationHome,
       ),
       _DesktopNavItem(
         icon: Icons.person_outline_rounded,
         selectedIcon: Icons.person_rounded,
+        assetUrl: ImageAssets.getTroopImage('Barbarian'),
         label: l10n.searchTabPlayers,
       ),
       _DesktopNavItem(
         icon: Icons.groups_outlined,
         selectedIcon: Icons.groups,
+        assetUrl: ImageAssets.clanCastle,
         label: l10n.searchTabClans,
       ),
       _DesktopNavItem(
         icon: CustomIcons.swordCross,
         selectedIcon: CustomIcons.swordCross,
+        assetUrl: ImageAssets.sword,
         label: l10n.warTitle,
       ),
     ];
@@ -583,6 +596,8 @@ class _DesktopSidebar extends StatelessWidget {
                       if (appState.isFeatureEnabled(AppFeatureFlags.posts))
                         _DesktopUtilityButton(
                           icon: Icons.article_outlined,
+                          assetUrl: ImageAssets.fallbackLogo,
+                          assetScale: 1.2,
                           label: l10n.postsTitle,
                           selected: selectedUtility == l10n.postsTitle,
                           onTap: () => openUtility(
@@ -595,6 +610,8 @@ class _DesktopSidebar extends StatelessWidget {
                       ))
                         _DesktopUtilityButton(
                           icon: Icons.leaderboard_outlined,
+                          assetUrl: ImageAssets.podium,
+                          assetScale: 1.2,
                           label: l10n.clanRankingsTab,
                           selected: selectedUtility == l10n.clanRankingsTab,
                           onTap: () => openUtility(
@@ -607,6 +624,8 @@ class _DesktopSidebar extends StatelessWidget {
                       ))
                         _DesktopUtilityButton(
                           icon: Icons.bar_chart_rounded,
+                          assetUrl: ImageAssets.hitrate,
+                          assetScale: 0.86,
                           label: l10n.generalStats,
                           selected: selectedUtility == l10n.generalStats,
                           onTap: () => openUtility(
@@ -619,6 +638,10 @@ class _DesktopSidebar extends StatelessWidget {
                       ))
                         _DesktopUtilityButton(
                           icon: Icons.calculate_outlined,
+                          assetUrl: ImageAssets.getSpellImage(
+                            'Lightning Spell',
+                          ),
+                          assetScale: 0.92,
                           label: l10n.drawerCalculators,
                           selected: selectedUtility == l10n.drawerCalculators,
                           onTap: () => openUtility(
@@ -626,11 +649,35 @@ class _DesktopSidebar extends StatelessWidget {
                             (_) => const CalculatorsPage(),
                           ),
                         ),
+                      _DesktopUtilityButton(
+                        icon: Icons.fact_check_outlined,
+                        assetUrl: ImageAssets.iconTick,
+                        assetScale: 0.9,
+                        label: l10n.todoTitle,
+                        selected: selectedUtility == l10n.todoTitle,
+                        onTap: () =>
+                            openUtility(l10n.todoTitle, _buildTodoMenuPage),
+                      ),
+                      _DesktopUtilityButton(
+                        icon: Icons.emoji_events_outlined,
+                        assetUrl: ImageAssets.legendLeagueTwo,
+                        label: l10n.rankedLeagueTitle,
+                        selected: selectedUtility == l10n.rankedLeagueTitle,
+                        onTap: () => openUtility(
+                          l10n.rankedLeagueTitle,
+                          (_) => const _RankedLeagueAccountsPage(),
+                        ),
+                      ),
                       if (appState.isFeatureEnabled(
                         AppFeatureFlags.upgradeTracker,
                       ))
                         _DesktopUtilityButton(
                           icon: Icons.construction_rounded,
+                          assetUrl: ImageAssets.getHomeVillageBuildingImage(
+                            "Builder's Hut",
+                            1,
+                          ),
+                          assetScale: 1.45,
                           label: l10n.drawerUpgradeTracker,
                           selected:
                               selectedUtility == l10n.drawerUpgradeTracker,
@@ -642,6 +689,8 @@ class _DesktopSidebar extends StatelessWidget {
                       if (appState.isFeatureEnabled(AppFeatureFlags.gameAssets))
                         _DesktopUtilityButton(
                           icon: Icons.inventory_2_outlined,
+                          assetUrl: ImageAssets.getTroopImage('Barbarian'),
+                          assetScale: 0.92,
                           label: l10n.drawerGameAssets,
                           selected: selectedUtility == l10n.drawerGameAssets,
                           onTap: () => openUtility(
@@ -659,6 +708,7 @@ class _DesktopSidebar extends StatelessWidget {
               ),
               _DesktopUtilityButton(
                 icon: Icons.manage_accounts_outlined,
+                assetUrl: ImageAssets.defaultProfile,
                 label: l10n.drawerManageAccounts,
                 selected: selectedUtility == l10n.drawerManageAccounts,
                 onTap: () => openUtility(
@@ -690,11 +740,13 @@ class _DesktopNavItem {
     required this.icon,
     required this.selectedIcon,
     required this.label,
+    this.assetUrl,
   });
 
   final IconData icon;
   final IconData selectedIcon;
   final String label;
+  final String? assetUrl;
 }
 
 class _DesktopNavButton extends StatelessWidget {
@@ -731,10 +783,11 @@ class _DesktopNavButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
               child: Row(
                 children: [
-                  Icon(
-                    selected ? item.selectedIcon : item.icon,
+                  _MenuAssetIcon(
+                    assetUrl: item.assetUrl,
+                    fallbackIcon: selected ? item.selectedIcon : item.icon,
+                    size: 24,
                     color: foreground,
-                    size: 21,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -765,10 +818,14 @@ class _DesktopUtilityButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.assetUrl,
+    this.assetScale = 1,
     this.selected = false,
   });
 
   final IconData icon;
+  final String? assetUrl;
+  final double assetScale;
   final String label;
   final VoidCallback? onTap;
   final bool selected;
@@ -790,9 +847,11 @@ class _DesktopUtilityButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: 19,
+              _MenuAssetIcon(
+                assetUrl: assetUrl,
+                fallbackIcon: icon,
+                size: 21,
+                assetScale: assetScale,
                 color: onTap == null
                     ? colorScheme.onSurfaceVariant.withValues(alpha: 0.44)
                     : selected
@@ -814,6 +873,50 @@ class _DesktopUtilityButton extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuAssetIcon extends StatelessWidget {
+  const _MenuAssetIcon({
+    required this.assetUrl,
+    required this.fallbackIcon,
+    required this.size,
+    required this.color,
+    this.assetScale = 1,
+    this.enabled = true,
+  });
+
+  final String? assetUrl;
+  final IconData fallbackIcon;
+  final double size;
+  final Color color;
+  final double assetScale;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final fallback = Icon(fallbackIcon, size: size, color: color);
+    final imageUrl = assetUrl?.trim();
+    if (imageUrl == null || imageUrl.isEmpty) return fallback;
+
+    return Opacity(
+      opacity: enabled ? 1 : 0.45,
+      child: SizedBox.square(
+        dimension: size,
+        child: ClipRect(
+          child: Transform.scale(
+            scale: assetScale,
+            child: MobileWebImage(
+              imageUrl: imageUrl,
+              width: size,
+              height: size,
+              fit: BoxFit.contain,
+              errorWidget: (context, url, error) => fallback,
+            ),
           ),
         ),
       ),
@@ -1272,6 +1375,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                     if (appState.isFeatureEnabled(AppFeatureFlags.posts))
                       _DrawerMenuItem(
                         icon: Icons.article_outlined,
+                        assetUrl: ImageAssets.fallbackLogo,
+                        assetScale: 1.2,
                         label: l10n.postsTitle,
                         onTap: () => _pushAndClose(
                           context,
@@ -1283,6 +1388,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                     if (appState.isFeatureEnabled(AppFeatureFlags.leaderboards))
                       _DrawerMenuItem(
                         icon: Icons.leaderboard_outlined,
+                        assetUrl: ImageAssets.podium,
+                        assetScale: 1.2,
                         label: l10n.clanRankingsTab,
                         onTap: () => _pushAndClose(
                           context,
@@ -1294,6 +1401,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                     if (appState.isFeatureEnabled(AppFeatureFlags.globalStats))
                       _DrawerMenuItem(
                         icon: Icons.bar_chart_rounded,
+                        assetUrl: ImageAssets.hitrate,
+                        assetScale: 0.86,
                         label: l10n.generalStats,
                         onTap: () => _pushAndClose(
                           context,
@@ -1305,6 +1414,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                     if (appState.isFeatureEnabled(AppFeatureFlags.calculators))
                       _DrawerMenuItem(
                         icon: Icons.calculate_outlined,
+                        assetUrl: ImageAssets.getSpellImage('Lightning Spell'),
+                        assetScale: 0.92,
                         label: l10n.drawerCalculators,
                         onTap: () => _pushAndClose(
                           context,
@@ -1318,6 +1429,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                     ))
                       _DrawerMenuItem(
                         icon: Icons.workspace_premium_outlined,
+                        assetUrl: ImageAssets.iconGoldPass,
+                        assetScale: 0.94,
                         label: l10n.drawerSubscription,
                         onTap: () => _pushAndClose(
                           context,
@@ -1326,11 +1439,38 @@ class _AccountMenuDrawer extends StatelessWidget {
                           ),
                         ),
                       ),
+                    _DrawerMenuItem(
+                      icon: Icons.fact_check_outlined,
+                      assetUrl: ImageAssets.iconTick,
+                      assetScale: 0.9,
+                      label: l10n.todoTitle,
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(builder: _buildTodoMenuPage),
+                      ),
+                    ),
+                    _DrawerMenuItem(
+                      icon: Icons.emoji_events_outlined,
+                      assetUrl: ImageAssets.legendLeagueTwo,
+                      label: l10n.rankedLeagueTitle,
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const _RankedLeagueAccountsPage(),
+                        ),
+                      ),
+                    ),
                     if (appState.isFeatureEnabled(
                       AppFeatureFlags.upgradeTracker,
                     ))
                       _DrawerMenuItem(
                         icon: Icons.construction_rounded,
+                        assetUrl: ImageAssets.getHomeVillageBuildingImage(
+                          "Builder's Hut",
+                          1,
+                        ),
+                        assetScale: 1.45,
                         label: l10n.drawerUpgradeTracker,
                         onTap: () => _pushAndClose(
                           context,
@@ -1342,6 +1482,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                     if (appState.isFeatureEnabled(AppFeatureFlags.basesArmies))
                       _DrawerMenuItem(
                         icon: Icons.grid_view_rounded,
+                        assetUrl: ImageAssets.townHall(18),
+                        assetScale: 0.92,
                         label: l10n.drawerBasesArmies,
                         onTap: () => _pushAndClose(
                           context,
@@ -1353,6 +1495,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                     if (appState.isFeatureEnabled(AppFeatureFlags.gameAssets))
                       _DrawerMenuItem(
                         icon: Icons.inventory_2_outlined,
+                        assetUrl: ImageAssets.getTroopImage('Barbarian'),
+                        assetScale: 0.92,
                         label: l10n.drawerGameAssets,
                         onTap: () => _pushAndClose(
                           context,
@@ -1363,6 +1507,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     _DrawerMenuItem(
                       icon: Icons.manage_accounts_outlined,
+                      assetUrl: ImageAssets.defaultProfile,
                       label: l10n.drawerManageAccounts,
                       onTap: () => _pushAndClose(
                         context,
@@ -1472,10 +1617,14 @@ class _DrawerMenuItem extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.assetUrl,
+    this.assetScale = 1,
     this.dense = false,
   });
 
   final IconData icon;
+  final String? assetUrl;
+  final double assetScale;
   final String label;
   final VoidCallback? onTap;
   final bool dense;
@@ -1492,12 +1641,15 @@ class _DrawerMenuItem extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: dense ? 8 : 9.5),
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: dense ? 18 : 19,
+              _MenuAssetIcon(
+                assetUrl: assetUrl,
+                fallbackIcon: icon,
+                size: dense ? 18 : 21,
+                assetScale: assetScale,
                 color: onTap == null
                     ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
                     : colorScheme.onSurface,
+                enabled: onTap != null,
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -1522,6 +1674,134 @@ class _DrawerMenuItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Widget _buildTodoMenuPage(BuildContext context) {
+  final players = _linkedPlayersForMenu(context);
+  return PlayerToDoScreen(
+    players: players,
+    memberPresenceMap: _memberPresenceByPlayerTag(context, players),
+  );
+}
+
+List<Player> _linkedPlayersForMenu(
+  BuildContext context, {
+  bool listen = false,
+}) {
+  final playerService = listen
+      ? context.watch<PlayerService>()
+      : context.read<PlayerService>();
+  final cocService = listen
+      ? context.watch<CocAccountService>()
+      : context.read<CocAccountService>();
+  final linkedTags = cocService.verifiedAccounts
+      .map(
+        (account) =>
+            _normalizePlayerTag(account['player_tag']?.toString() ?? ''),
+      )
+      .where((tag) => tag.isNotEmpty)
+      .toSet();
+
+  return playerService.profiles
+      .where((player) => linkedTags.contains(_normalizePlayerTag(player.tag)))
+      .toList(growable: false);
+}
+
+Map<String, WarMemberPresence> _memberPresenceByPlayerTag(
+  BuildContext context,
+  List<Player> players,
+) {
+  final warCwlService = context.read<WarCwlService>();
+  final presenceByTag = <String, WarMemberPresence>{};
+
+  for (final player in players) {
+    final clanTag = player.clan?.tag ?? '';
+    if (clanTag.isEmpty) continue;
+    final warCwl = warCwlService.getWarCwlByTag(clanTag);
+    if (warCwl == null) continue;
+    presenceByTag[player.tag] = warCwl.getMemberPresence(player.tag, clanTag);
+  }
+
+  return presenceByTag;
+}
+
+String _normalizePlayerTag(String tag) =>
+    tag.replaceAll('#', '').trim().toUpperCase();
+
+class _RankedLeagueAccountsPage extends StatefulWidget {
+  const _RankedLeagueAccountsPage();
+
+  @override
+  State<_RankedLeagueAccountsPage> createState() =>
+      _RankedLeagueAccountsPageState();
+}
+
+class _RankedLeagueAccountsPageState extends State<_RankedLeagueAccountsPage> {
+  String? _selectedTag;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final rankedPlayers = _rankedMenuPlayers(context);
+    final selectedPlayer = _selectedPlayer(rankedPlayers);
+
+    if (selectedPlayer == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(loc.rankedLeagueTitle),
+          backgroundColor: colorScheme.surface,
+          surfaceTintColor: Colors.transparent,
+        ),
+        body: AppEmptyState(
+          title: loc.generalNoDataAvailable,
+          body: loc.dashboardRankedNoData,
+          icon: Icons.emoji_events_outlined,
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+        ),
+      );
+    }
+
+    return PlayerRankedLeagueScreen(
+      player: selectedPlayer,
+      onSwitchAccount: rankedPlayers.length <= 1
+          ? null
+          : () => _showAccountPicker(rankedPlayers),
+      switchAccountTooltip: loc.upgradeTrackerSwitchAccount(
+        selectedPlayer.name,
+      ),
+    );
+  }
+
+  Player? _selectedPlayer(List<Player> players) {
+    if (players.isEmpty) return null;
+    final selected = players
+        .where(
+          (player) =>
+              _normalizePlayerTag(player.tag) ==
+              _normalizePlayerTag(_selectedTag ?? ''),
+        )
+        .firstOrNull;
+    final next = selected ?? players.first;
+    if (_selectedTag != next.tag) _selectedTag = next.tag;
+    return next;
+  }
+
+  List<Player> _rankedMenuPlayers(BuildContext context) {
+    return _linkedPlayersForMenu(context, listen: true).toList(growable: false);
+  }
+
+  Future<void> _showAccountPicker(List<Player> players) async {
+    final tag = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) =>
+          RankedAccountPickerSheet(players: players, selectedTag: _selectedTag),
+    );
+    if (tag == null || !mounted) return;
+    setState(() => _selectedTag = tag);
   }
 }
 

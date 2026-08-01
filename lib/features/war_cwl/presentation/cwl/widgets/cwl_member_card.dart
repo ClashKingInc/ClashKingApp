@@ -1,6 +1,6 @@
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
-import 'package:clashkingapp/common/widgets/shapes/stat_tile.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -753,7 +753,7 @@ class MembersCard extends StatelessWidget {
     );
   }
 
-  Widget buildStatCategory(String title, List<StatTile> stats) {
+  Widget buildStatCategory(String title, List<CKStatTile> stats) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -772,7 +772,7 @@ class MembersCard extends StatelessWidget {
 }
 
 /// Label/value pair for the member full-stats grid — a card-less sibling of
-/// `StatTile`: same layout (icon, label, value) but no background/border, so
+/// `CKStatTile`: same layout (icon, label, value) but no background/border, so
 /// a dense 13-item wrap doesn't turn into a wall of boxes.
 class _FlatStat extends StatelessWidget {
   final String label;

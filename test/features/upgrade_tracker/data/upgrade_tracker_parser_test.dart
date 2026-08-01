@@ -54,11 +54,19 @@ void main() {
     final mine = snapshot.items.firstWhere((item) => item.name == 'Gold Mine');
     expect(mine.currentLevel, 16);
     expect(mine.targetLevel, 17);
+    expect(
+      mine.imageUrl,
+      'https://assets.clashk.ing/buildings/home-village/gold_mine/level_16.webp',
+    );
     expect(mine.steps.single.costs.single.amount, 8000000);
     expect(mine.steps.single.seconds, 172800);
     expect(mine.count, 2);
 
     final troop = snapshot.items.firstWhere((item) => item.name == 'Barbarian');
+    expect(
+      troop.imageUrl,
+      'https://assets.clashk.ing/troops/barbarian/icon.webp',
+    );
     expect(troop.steps.single.costs.single.amount, 8000000);
     expect(troop.steps.single.seconds, 345600);
     expect(troop.wardenWeight, 0.5);
@@ -197,7 +205,92 @@ void main() {
     final summary = snapshot.summaryForItems(helpers);
 
     expect(helpers, hasLength(2));
+    expect(
+      helpers.firstWhere((item) => item.name == 'Builder Apprentice').imageUrl,
+      'https://assets.clashk.ing/helpers/builder_apprentice.webp',
+    );
     expect(summary.completion, closeTo(0.05, 0.0001));
+  });
+
+  test('uses player-style icons except leveled building and trap art', () {
+    final snapshot = parser.parse(
+      {
+        'tag': '#TEST',
+        'buildings': [
+          {'data': 1, 'lvl': 18},
+          {'data': 3, 'lvl': 16},
+        ],
+        'buildings2': [
+          {'data': 13, 'lvl': 6},
+        ],
+        'traps2': [
+          {'data': 22, 'lvl': 1},
+        ],
+        'guardians': [
+          {'data': 23, 'lvl': 1},
+        ],
+        'units': [
+          {'data': 5, 'lvl': 11},
+        ],
+        'spells': [
+          {'data': 24, 'lvl': 1},
+        ],
+        'heroes': [
+          {'data': 25, 'lvl': 1},
+        ],
+        'pets': [
+          {'data': 26, 'lvl': 1},
+        ],
+        'equipment': [
+          {'data': 6, 'lvl': 1},
+        ],
+        'helpers': [
+          {'data': 20, 'lvl': 1},
+        ],
+      },
+      staticData: _bundle,
+      now: DateTime.utc(2026, 7, 11),
+    );
+
+    String imageFor(String name) =>
+        snapshot.items.firstWhere((item) => item.name == name).imageUrl;
+
+    expect(
+      imageFor('Gold Mine'),
+      'https://assets.clashk.ing/buildings/home-village/gold_mine/level_16.webp',
+    );
+    expect(
+      imageFor('Push Trap'),
+      'https://assets.clashk.ing/traps/builder-base/push_trap/level_1.webp',
+    );
+    expect(
+      imageFor('Barbarian'),
+      'https://assets.clashk.ing/troops/barbarian/icon.webp',
+    );
+    expect(
+      imageFor('Heroic Torch'),
+      'https://assets.clashk.ing/guardians/heroic_torch/icon.webp',
+    );
+    expect(
+      imageFor('Rage Spell'),
+      'https://assets.clashk.ing/spells/rage_spell.webp',
+    );
+    expect(
+      imageFor('Barbarian King'),
+      'https://assets.clashk.ing/heroes/barbarian_king/icon.webp',
+    );
+    expect(
+      imageFor('Unicorn'),
+      'https://assets.clashk.ing/pets/unicorn/icon.webp',
+    );
+    expect(
+      imageFor('Barbarian Puppet'),
+      'https://assets.clashk.ing/equipment/barbarian_puppet.webp',
+    );
+    expect(
+      imageFor('Builder Apprentice'),
+      'https://assets.clashk.ing/helpers/builder_apprentice.webp',
+    );
   });
 
   test('active grouped building consumes one planned instance', () {
@@ -393,8 +486,28 @@ final _bundle = <String, dynamic>{
       ],
     },
   ],
-  'traps': <Map<String, dynamic>>[],
-  'guardians': <Map<String, dynamic>>[],
+  'traps': [
+    {
+      '_id': 22,
+      'name': 'Push Trap',
+      'village': 'builderBase',
+      'upgrade_resource': 'Builder Gold',
+      'levels': [
+        {'level': 1, 'build_cost': 1, 'build_time': 1},
+      ],
+    },
+  ],
+  'guardians': [
+    {
+      '_id': 23,
+      'name': 'Heroic Torch',
+      'village': 'home',
+      'upgrade_resource': 'Gold',
+      'levels': [
+        {'level': 1, 'upgrade_cost': 1, 'upgrade_time': 1},
+      ],
+    },
+  ],
   'troops': [
     {
       '_id': 5,
@@ -430,9 +543,39 @@ final _bundle = <String, dynamic>{
       ],
     },
   ],
-  'spells': <Map<String, dynamic>>[],
-  'heroes': <Map<String, dynamic>>[],
-  'pets': <Map<String, dynamic>>[],
+  'spells': [
+    {
+      '_id': 24,
+      'name': 'Rage Spell',
+      'village': 'home',
+      'upgrade_resource': 'Elixir',
+      'levels': [
+        {'level': 1, 'upgrade_cost': 1, 'upgrade_time': 1},
+      ],
+    },
+  ],
+  'heroes': [
+    {
+      '_id': 25,
+      'name': 'Barbarian King',
+      'village': 'home',
+      'upgrade_resource': 'Dark Elixir',
+      'levels': [
+        {'level': 1, 'upgrade_cost': 1, 'upgrade_time': 1},
+      ],
+    },
+  ],
+  'pets': [
+    {
+      '_id': 26,
+      'name': 'Unicorn',
+      'village': 'home',
+      'upgrade_resource': 'Dark Elixir',
+      'levels': [
+        {'level': 1, 'upgrade_cost': 1, 'upgrade_time': 1},
+      ],
+    },
+  ],
   'equipment': [
     {
       '_id': 6,

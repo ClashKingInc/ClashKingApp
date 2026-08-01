@@ -225,16 +225,16 @@ class _CapitalMembersTabState extends State<CapitalMembersTab> {
           },
         ),
         const SizedBox(height: 8),
-        ClanFilterRail(
+        CKFilterChipRail(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           children: [
-            ClanFilterChip(
+            CKFilterChip(
               label: loc.clanCapitalSelectedRaid,
               icon: Icons.calendar_today_rounded,
               selected: !_historyMode,
               onTap: () => setState(() => _historyMode = false),
             ),
-            ClanFilterChip(
+            CKFilterChip(
               label: loc.generalHistory,
               icon: Icons.history_rounded,
               selected: _historyMode,
@@ -243,17 +243,17 @@ class _CapitalMembersTabState extends State<CapitalMembersTab> {
           ],
         ),
         const SizedBox(height: 8),
-        ClanFilterRail(
+        CKFilterChipRail(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           children: [
             if (!effectiveHistoryMode && selectedRaidHasMembers) ...[
-              ClanFilterChip(
+              CKFilterChip(
                 label: loc.generalAll,
                 icon: Icons.all_inclusive_rounded,
                 selected: _filter == 'all',
                 onTap: () => setState(() => _filter = 'all'),
               ),
-              ClanFilterChip(
+              CKFilterChip(
                 label: loc.capitalRaidFilterAttacked,
                 icon: Icons.check_rounded,
                 selected: _filter == 'attacked',
@@ -261,7 +261,7 @@ class _CapitalMembersTabState extends State<CapitalMembersTab> {
                 onTap: () => setState(() => _filter = 'attacked'),
               ),
               if (isOngoing)
-                ClanFilterChip(
+                CKFilterChip(
                   label: loc.capitalRaidFilterNotAttacked,
                   icon: Icons.close_rounded,
                   selected: _filter == 'notAttacked',
@@ -269,7 +269,7 @@ class _CapitalMembersTabState extends State<CapitalMembersTab> {
                   onTap: () => setState(() => _filter = 'notAttacked'),
                 ),
             ],
-            ClanFilterChip(
+            CKFilterChip(
               label: loc.capitalRaidFilterLinked,
               icon: Icons.link_rounded,
               selected: _linkedOnly,

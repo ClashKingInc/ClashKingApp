@@ -56,11 +56,15 @@ class BuildingLevelDefinition {
     required this.level,
     required this.hitpoints,
     required this.requiredTownHall,
+    this.upgradeResource,
+    this.upgradeCost,
   });
 
   final int level;
   final int hitpoints;
   final int requiredTownHall;
+  final String? upgradeResource;
+  final int? upgradeCost;
 }
 
 class BuildingDefinition {

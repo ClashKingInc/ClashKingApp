@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/features/game_assets/models/game_asset_manifest.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +23,7 @@ class GameAssetImage extends StatelessWidget {
       return SvgPicture.network(
         asset.url.toString(),
         fit: fit,
-        placeholderBuilder: (_) =>
-            const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        placeholderBuilder: (_) => const _GameAssetImageSkeleton(),
         errorBuilder: (_, _, _) => const _GameAssetImageError(),
       );
     }
@@ -31,9 +31,35 @@ class GameAssetImage extends StatelessWidget {
     return MobileWebImage(
       imageUrl: asset.url.toString(),
       fit: fit,
-      placeholder: (_, _) =>
-          const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      placeholder: (_, _) => const _GameAssetImageSkeleton(),
       errorWidget: (_, _, _) => const _GameAssetImageError(),
+    );
+  }
+}
+
+class _GameAssetImageSkeleton extends StatelessWidget {
+  const _GameAssetImageSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final boundedSides = [
+          if (constraints.hasBoundedWidth) constraints.maxWidth,
+          if (constraints.hasBoundedHeight) constraints.maxHeight,
+        ];
+        final maxSide = boundedSides.isEmpty
+            ? 72.0
+            : boundedSides.reduce((a, b) => a < b ? a : b);
+        final side = (maxSide * 0.56).clamp(36.0, 96.0).toDouble();
+        return Center(
+          child: SkeletonLoader(
+            width: side,
+            height: side,
+            borderRadius: BorderRadius.circular(side * 0.24),
+          ),
+        );
+      },
     );
   }
 }

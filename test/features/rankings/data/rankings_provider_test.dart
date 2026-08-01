@@ -74,6 +74,30 @@ void main() {
     expect(service.queries.length, 8);
   });
 
+  test(
+    'switching audience keeps the matching village board when available',
+    () async {
+      final service = _RecordingRankingsService();
+      final provider = RankingsProvider(
+        service: service,
+        leagueOptions: const [RankingLeagueOption.legendTwo],
+        clock: () => DateTime(2026, 7, 20),
+      );
+
+      await provider.initialize();
+      await provider.selectBoard(RankingBoard.playerBuilder);
+      await provider.selectAudience(RankingAudience.clans);
+
+      expect(provider.board, RankingBoard.clanBuilder);
+      expect(service.queries.last.board, RankingBoard.clanBuilder);
+
+      await provider.selectAudience(RankingAudience.players);
+
+      expect(provider.board, RankingBoard.playerBuilder);
+      expect(service.queries.last.board, RankingBoard.playerBuilder);
+    },
+  );
+
   test('surfaces a clear empty history result without an error', () async {
     final service = _RecordingRankingsService(empty: true);
     final provider = RankingsProvider(
@@ -84,6 +108,34 @@ void main() {
 
     await provider.initialize();
     await provider.selectPeriod(RankingPeriod.history);
+
+    expect(provider.error, isNull);
+    expect(provider.result?.entries, isEmpty);
+    expect(provider.isLoading, isFalse);
+  });
+
+  test('treats no-data ranking responses as an empty result', () async {
+    final provider = RankingsProvider(
+      service: _NoDataRankingsService(),
+      leagueOptions: const [RankingLeagueOption.legendTwo],
+      clock: () => DateTime(2026, 7, 20),
+    );
+
+    await provider.initialize();
+
+    expect(provider.error, isNull);
+    expect(provider.result?.entries, isEmpty);
+    expect(provider.isLoading, isFalse);
+  });
+
+  test('treats not-found ranking errors as an empty result', () async {
+    final provider = RankingsProvider(
+      service: _NotFoundRankingsService(),
+      leagueOptions: const [RankingLeagueOption.legendTwo],
+      clock: () => DateTime(2026, 7, 20),
+    );
+
+    await provider.initialize();
 
     expect(provider.error, isNull);
     expect(provider.result?.entries, isEmpty);
@@ -133,5 +185,29 @@ class _RecordingRankingsService extends RankingsService {
       source: query.board.source,
       limit: query.board.source == RankingSource.official ? 200 : 500,
     );
+  }
+}
+
+class _NoDataRankingsService extends RankingsService {
+  @override
+  Future<List<RankingLocation>> fetchLocations() async => const [
+    RankingLocation.worldwide(),
+  ];
+
+  @override
+  Future<RankingResult> fetchRankings(RankingQuery query) async {
+    throw const RankingsRequestException(404);
+  }
+}
+
+class _NotFoundRankingsService extends RankingsService {
+  @override
+  Future<List<RankingLocation>> fetchLocations() async => const [
+    RankingLocation.worldwide(),
+  ];
+
+  @override
+  Future<RankingResult> fetchRankings(RankingQuery query) async {
+    throw StateError('No rankings found for selected filters.');
   }
 }

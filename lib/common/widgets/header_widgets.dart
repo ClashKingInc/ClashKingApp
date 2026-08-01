@@ -15,6 +15,7 @@ class InfoHeroBackdrop extends StatelessWidget {
     required this.imageUrl,
     required this.height,
     this.additionalDarken = 0,
+    this.fallbackImageUrls = const [],
   });
 
   final String imageUrl;
@@ -24,11 +25,13 @@ class InfoHeroBackdrop extends StatelessWidget {
   /// images bright enough that the gradient alone doesn't give white
   /// overlay content enough contrast.
   final double additionalDarken;
+  final List<String> fallbackImageUrls;
 
   @override
   Widget build(BuildContext context) {
     Widget image = MobileWebImage(
       imageUrl: imageUrl,
+      fallbackImageUrls: fallbackImageUrls,
       fit: BoxFit.cover,
       alignment: Alignment.bottomCenter,
       errorWidget: (context, url, error) =>

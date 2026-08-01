@@ -44,7 +44,11 @@ class RankingsService {
     final response = route.official
         ? await _apiService.proxyGet(route.path)
         : await _apiService.getResponse(route.path);
-    final decoded = _decodeSuccessful(response.statusCode, response);
+    final decoded = _decodeSuccessful(
+      response.statusCode,
+      response,
+      emptyOnNoData: true,
+    );
     final rawItems = decoded is Map ? decoded['items'] : null;
     if (decoded == null || rawItems == null) {
       return RankingResult(
@@ -152,7 +156,14 @@ class RankingsService {
     };
   }
 
-  Object? _decodeSuccessful(int statusCode, dynamic response) {
+  Object? _decodeSuccessful(
+    int statusCode,
+    dynamic response, {
+    bool emptyOnNoData = false,
+  }) {
+    if (emptyOnNoData && (statusCode == 204 || statusCode == 404)) {
+      return null;
+    }
     if (statusCode != 200) {
       throw RankingsRequestException(statusCode);
     }
@@ -166,6 +177,7 @@ class RankingsRequestException implements Exception {
   const RankingsRequestException(this.statusCode);
 
   final int statusCode;
+  bool get isNoData => statusCode == 204 || statusCode == 404;
 
   @override
   String toString() => 'Rankings request failed ($statusCode).';

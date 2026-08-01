@@ -6,12 +6,14 @@ class DamageAccountPreset {
     required this.tag,
     required this.name,
     required this.townHall,
+    this.league,
     this.ownedLevels = const {},
   });
 
   final String tag;
   final String name;
   final int townHall;
+  final String? league;
   final Map<DamageSourceKind, int> ownedLevels;
 }
 
@@ -167,10 +169,6 @@ class DamageCalculatorSession {
 
   void _seedDefaults() {
     _repairSources();
-    final townHallBuilding = catalog.buildings
-        .where((building) => building.name == 'Town Hall')
-        .firstOrNull;
-    if (townHallBuilding != null) addTarget(townHallBuilding.id);
   }
 
   void _repairTargets() {
@@ -212,8 +210,4 @@ class DamageCalculatorSession {
     }
     return null;
   }
-}
-
-extension<T> on Iterable<T> {
-  T? get firstOrNull => isEmpty ? null : first;
 }
