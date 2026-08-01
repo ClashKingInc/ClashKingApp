@@ -4,9 +4,12 @@ import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_ranked_league.dart';
@@ -20,9 +23,16 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PlayerRankedLeagueScreen extends StatefulWidget {
-  const PlayerRankedLeagueScreen({super.key, required this.player});
+  const PlayerRankedLeagueScreen({
+    super.key,
+    required this.player,
+    this.onSwitchAccount,
+    this.switchAccountTooltip,
+  });
 
   final Player player;
+  final VoidCallback? onSwitchAccount;
+  final String? switchAccountTooltip;
 
   @override
   State<PlayerRankedLeagueScreen> createState() =>
@@ -36,10 +46,30 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   bool _showHistoryTable = false;
   RankedLeagueData? _data;
   bool _loading = true;
+  Player? _selectedPlayer;
+
+  Player get _activePlayer => _selectedPlayer ?? widget.player;
 
   @override
   void initState() {
     super.initState();
+    _fetch(forceRefresh: false);
+  }
+
+  @override
+  void didUpdateWidget(covariant PlayerRankedLeagueScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_normalizeTag(oldWidget.player.tag) ==
+        _normalizeTag(widget.player.tag)) {
+      return;
+    }
+    _selectedPlayer = null;
+    _selectedSeason = 0;
+    _selectedTab = 0;
+    _showCurrentRanking = false;
+    _showHistoryTable = false;
+    _data = null;
+    _loading = true;
     _fetch(forceRefresh: false);
   }
 
@@ -52,7 +82,7 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   Future<void> _fetch({required bool forceRefresh}) async {
     try {
       final data = await context.read<PlayerService>().loadRankedLeagueData(
-        widget.player.tag,
+        _activePlayer.tag,
         forceRefresh: forceRefresh,
       );
       if (!mounted) return;
@@ -75,7 +105,7 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   Future<void> _revalidate() async {
     try {
       final fresh = await context.read<PlayerService>().loadRankedLeagueData(
-        widget.player.tag,
+        _activePlayer.tag,
         forceRefresh: true,
       );
       if (!mounted) return;
@@ -86,6 +116,86 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
   }
 
   Future<void> _refresh() => _fetch(forceRefresh: true);
+
+  List<Widget>? _appBarActions({
+    required BuildContext context,
+    required VoidCallback? onSwitchAccount,
+    required String? switchAccountTooltip,
+  }) {
+    if (onSwitchAccount == null) return null;
+    return [
+      IconButton(
+        tooltip:
+            switchAccountTooltip ??
+            AppLocalizations.of(
+              context,
+            )!.upgradeTrackerSwitchAccount(_activePlayer.name),
+        onPressed: onSwitchAccount,
+        icon: const Icon(Icons.switch_account_rounded),
+      ),
+    ];
+  }
+
+  List<Player> _rankedSelectablePlayers(BuildContext context) {
+    try {
+      final playerService = context.watch<PlayerService>();
+      final cocService = context.watch<CocAccountService>();
+      final playerPrefs = context.watch<PlayerCardPreferencesService>();
+      final linkedTags = cocService.verifiedAccounts
+          .map(
+            (account) => _normalizeTag(account['player_tag']?.toString() ?? ''),
+          )
+          .where((tag) => tag.isNotEmpty)
+          .toSet();
+
+      return playerService.profiles
+          .where((player) => linkedTags.contains(_normalizeTag(player.tag)))
+          .where((player) => playerPrefs.isRankedShownOnHome(player.tag))
+          .toList(growable: false);
+    } on ProviderNotFoundException {
+      return const [];
+    }
+  }
+
+  VoidCallback? _fallbackSwitchAccountAction(List<Player> players) {
+    final hasOtherPlayer = players.any(
+      (player) => _normalizeTag(player.tag) != _normalizeTag(_activePlayer.tag),
+    );
+    if (!hasOtherPlayer) return null;
+    return () => _showAccountPicker(players);
+  }
+
+  Future<void> _showAccountPicker(List<Player> players) async {
+    final tag = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => _RankedAccountPickerSheet(
+        players: players,
+        selectedTag: _activePlayer.tag,
+      ),
+    );
+    if (tag == null || !mounted) return;
+    Player? selected;
+    for (final player in players) {
+      if (_normalizeTag(player.tag) == _normalizeTag(tag)) {
+        selected = player;
+        break;
+      }
+    }
+    if (selected == null) return;
+    if (_normalizeTag(selected.tag) == _normalizeTag(_activePlayer.tag)) return;
+    setState(() {
+      _selectedPlayer = selected;
+      _selectedSeason = 0;
+      _selectedTab = 0;
+      _showCurrentRanking = false;
+      _showHistoryTable = false;
+      _data = null;
+      _loading = true;
+    });
+    await _fetch(forceRefresh: false);
+  }
 
   void _selectTab(int index) {
     final clamped = index.clamp(0, 1);
@@ -105,12 +215,22 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final selectablePlayers = _rankedSelectablePlayers(context);
+    final switchAccountAction =
+        widget.onSwitchAccount ??
+        _fallbackSwitchAccountAction(selectablePlayers);
+    final switchAccountTooltip = widget.switchAccountTooltip;
     final data = _data;
     if (data == null) {
       if (_loading) {
         return Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.rankedLeagueTitle),
+            actions: _appBarActions(
+              context: context,
+              onSwitchAccount: switchAccountAction,
+              switchAccountTooltip: switchAccountTooltip,
+            ),
           ),
           body: const Center(child: CircularProgressIndicator()),
         );
@@ -118,6 +238,11 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
       return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.rankedLeagueTitle),
+          actions: _appBarActions(
+            context: context,
+            onSwitchAccount: switchAccountAction,
+            switchAccountTooltip: switchAccountTooltip,
+          ),
         ),
         body: AppEmptyState(
           title: AppLocalizations.of(context)!.generalNoDataAvailable,
@@ -147,8 +272,10 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
             slivers: [
               SliverToBoxAdapter(
                 child: RankedLeagueHeaderCard(
-                  player: widget.player,
+                  player: _activePlayer,
                   data: data,
+                  onSwitchAccount: switchAccountAction,
+                  switchAccountTooltip: switchAccountTooltip,
                 ),
               ),
               // Once the header/tabs scroll past the top of the viewport,
@@ -224,6 +351,128 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+String _normalizeTag(String tag) =>
+    tag.replaceAll('#', '').trim().toUpperCase();
+
+class _RankedAccountPickerSheet extends StatefulWidget {
+  const _RankedAccountPickerSheet({required this.players, this.selectedTag});
+
+  final List<Player> players;
+  final String? selectedTag;
+
+  @override
+  State<_RankedAccountPickerSheet> createState() =>
+      _RankedAccountPickerSheetState();
+}
+
+class _RankedAccountPickerSheetState extends State<_RankedAccountPickerSheet> {
+  final _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final query = _query.trim().toLowerCase();
+    final players = widget.players
+        .where(
+          (player) =>
+              query.isEmpty ||
+              player.name.toLowerCase().contains(query) ||
+              player.tag.toLowerCase().contains(query),
+        )
+        .toList(growable: false);
+
+    return FractionallySizedBox(
+      heightFactor: 0.82,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    loc.rankedLeagueTitle,
+                    style: CKTypography.of(context, CKTextRole.screenTitle),
+                  ),
+                ),
+                IconButton(
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+            child: AppSearchField(
+              controller: _searchController,
+              query: _query,
+              hintText: loc.upgradeTrackerChooseAccount,
+              onChanged: (value) => setState(() => _query = value),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              itemCount: players.length,
+              itemBuilder: (context, index) {
+                final player = players[index];
+                final selected =
+                    _normalizeTag(player.tag) ==
+                    _normalizeTag(widget.selectedTag ?? '');
+                return ListTile(
+                  selected: selected,
+                  selectedColor: Theme.of(context).colorScheme.onSurface,
+                  selectedTileColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(CKRadius.control),
+                  ),
+                  leading: SizedBox.square(
+                    dimension: 44,
+                    child: MobileWebImage(
+                      imageUrl: player.townHallPic,
+                      fit: BoxFit.contain,
+                      errorWidget: (_, _, _) =>
+                          const Icon(Icons.person_rounded),
+                    ),
+                  ),
+                  title: Text(
+                    player.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Text(
+                    '${player.tag} · ${loc.gameTownHallShortLevel(player.townHallLevel)}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: selected
+                      ? Icon(
+                          Icons.check_rounded,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        )
+                      : null,
+                  onTap: () => Navigator.pop(context, player.tag),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

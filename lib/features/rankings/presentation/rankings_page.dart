@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -51,46 +54,39 @@ class _RankingsPageState extends State<RankingsPage> {
     return AnimatedBuilder(
       animation: _provider,
       builder: (context, _) {
-        final boards = _provider.boards;
-        final selectedIndex = boards
-            .indexOf(_provider.board)
-            .clamp(0, boards.length - 1);
+        final l10n = AppLocalizations.of(context)!;
+        final selectedAudienceIndex = RankingAudience.values
+            .indexOf(_provider.audience)
+            .clamp(0, RankingAudience.values.length - 1);
         return Scaffold(
           resizeToAvoidBottomInset: false,
           body: GestureDetector(
             behavior: HitTestBehavior.translucent,
-            onHorizontalDragEnd: (details) =>
-                _handleBoardSwipe(details, boards, selectedIndex),
+            onHorizontalDragEnd: _handleAudienceSwipe,
             child: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverToBoxAdapter(
-                  child: _RankingsHeader(
-                    provider: _provider,
-                    onAudienceChanged: _provider.selectAudience,
-                  ),
-                ),
+                SliverToBoxAdapter(child: _RankingsHeader(provider: _provider)),
                 SliverToBoxAdapter(
                   child: InfoProfileTabs(
-                    selectedIndex: selectedIndex,
-                    onTabSelected: (index) =>
-                        _provider.selectBoard(boards[index]),
-                    alwaysScrollable: true,
-                    tabs: boards
-                        .map(
-                          (board) => InfoProfileTabData(
-                            label: board.labelOf(AppLocalizations.of(context)!),
-                            imageUrl: board.iconUrl,
-                          ),
-                        )
-                        .toList(growable: false),
+                    selectedIndex: selectedAudienceIndex,
+                    onTabSelected: (index) => unawaited(
+                      _provider.selectAudience(RankingAudience.values[index]),
+                    ),
+                    tabs: [
+                      InfoProfileTabData(
+                        label: l10n.searchTabPlayers,
+                        imageUrl: ImageAssets.getTroopImage('Barbarian'),
+                      ),
+                      InfoProfileTabData(
+                        label: l10n.searchTabClans,
+                        imageUrl: ImageAssets.clanCastle,
+                      ),
+                    ],
                   ),
                 ),
               ],
               body: _RankingsBody(
                 provider: _provider,
-                onOpenLocationPicker: _openLocationPicker,
-                onOpenTownHallPicker: _openTownHallPicker,
-                onOpenLeaguePicker: _openLeaguePicker,
                 onOpenHistoryDatePicker: _openHistoryDatePicker,
                 onOpenEntry: _openEntry,
               ),
@@ -101,121 +97,14 @@ class _RankingsPageState extends State<RankingsPage> {
     );
   }
 
-  void _handleBoardSwipe(
-    DragEndDetails details,
-    List<RankingBoard> boards,
-    int selectedIndex,
-  ) {
+  void _handleAudienceSwipe(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
     if (velocity.abs() < 240) return;
+    final selectedIndex = RankingAudience.values.indexOf(_provider.audience);
     final next = velocity < 0 ? selectedIndex + 1 : selectedIndex - 1;
-    if (next >= 0 && next < boards.length) {
-      unawaited(_provider.selectBoard(boards[next]));
+    if (next >= 0 && next < RankingAudience.values.length) {
+      unawaited(_provider.selectAudience(RankingAudience.values[next]));
     }
-  }
-
-  Future<void> _openLocationPicker() async {
-    final selected = await showRankingLocationPicker(
-      context,
-      locations: _provider.locations,
-      selected: _provider.location,
-      allowWorldwide: _provider.board.supportsWorldwide,
-    );
-    if (selected != null) await _provider.selectLocation(selected);
-  }
-
-  Future<void> _openTownHallPicker() async {
-    final selected = await _showChoiceSheet<int>(
-      title: AppLocalizations.of(context)!.rankingsTownHall,
-      values: List<int>.generate(12, (index) => 18 - index),
-      selected: _provider.townHallLevel,
-      label: (value) => 'TH$value',
-      leading: (value) => MobileWebImage(
-        imageUrl: ImageAssets.townHall(value),
-        width: 36,
-        height: 36,
-      ),
-    );
-    if (selected != null) await _provider.selectTownHall(selected);
-  }
-
-  Future<void> _openLeaguePicker() async {
-    final selected = await _showChoiceSheet<RankingLeagueOption>(
-      title: AppLocalizations.of(context)!.rankingsRankedLeague,
-      values: _provider.leagueOptions,
-      selected: _provider.selectedLeague,
-      label: (value) => value.name,
-      leading: (value) =>
-          MobileWebImage(imageUrl: value.iconUrl, width: 36, height: 36),
-      matches: (a, b) => a.id == b.id,
-    );
-    if (selected != null) await _provider.selectLeague(selected);
-  }
-
-  Future<T?> _showChoiceSheet<T>({
-    required String title,
-    required List<T> values,
-    required T selected,
-    required String Function(T) label,
-    required Widget Function(T) leading,
-    bool Function(T, T)? matches,
-  }) {
-    final scheme = Theme.of(context).colorScheme;
-    return showModalBottomSheet<T>(
-      context: context,
-      showDragHandle: true,
-      backgroundColor: scheme.surface,
-      constraints: const BoxConstraints(maxWidth: 640),
-      builder: (context) => SafeArea(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 520),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ),
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
-                  itemCount: values.length,
-                  itemBuilder: (context, index) {
-                    final value = values[index];
-                    final isSelected =
-                        matches?.call(value, selected) ?? value == selected;
-                    return ListTile(
-                      leading: leading(value),
-                      title: Text(label(value)),
-                      trailing: isSelected
-                          ? Icon(Icons.check_rounded, color: scheme.primary)
-                          : null,
-                      selected: isSelected,
-                      selectedTileColor: scheme.primaryContainer.withValues(
-                        alpha: 0.36,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      onTap: () => Navigator.pop(context, value),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Future<void> _openHistoryDatePicker() async {
@@ -286,19 +175,15 @@ class _RankingsPageState extends State<RankingsPage> {
 }
 
 class _RankingsHeader extends StatelessWidget {
-  const _RankingsHeader({
-    required this.provider,
-    required this.onAudienceChanged,
-  });
+  const _RankingsHeader({required this.provider});
 
   final RankingsProvider provider;
-  final ValueChanged<RankingAudience> onAudienceChanged;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final isDesktop = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
-    final height = MediaQuery.paddingOf(context).top + (isDesktop ? 210 : 246);
+    final height = MediaQuery.paddingOf(context).top + (isDesktop ? 184 : 216);
     return Stack(
       children: [
         Positioned.fill(
@@ -373,17 +258,6 @@ class _RankingsHeader extends StatelessWidget {
                       ],
                     ),
                   ),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 520),
-                    child: LiquidGlassSegmentedControl<RankingAudience>(
-                      height: 46,
-                      values: RankingAudience.values,
-                      labels: [l10n.searchTabPlayers, l10n.searchTabClans],
-                      selected: provider.audience,
-                      color: Colors.white,
-                      onChanged: onAudienceChanged,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -397,17 +271,11 @@ class _RankingsHeader extends StatelessWidget {
 class _RankingsBody extends StatelessWidget {
   const _RankingsBody({
     required this.provider,
-    required this.onOpenLocationPicker,
-    required this.onOpenTownHallPicker,
-    required this.onOpenLeaguePicker,
     required this.onOpenHistoryDatePicker,
     required this.onOpenEntry,
   });
 
   final RankingsProvider provider;
-  final VoidCallback onOpenLocationPicker;
-  final VoidCallback onOpenTownHallPicker;
-  final VoidCallback onOpenLeaguePicker;
   final VoidCallback onOpenHistoryDatePicker;
   final ValueChanged<RankingEntry> onOpenEntry;
 
@@ -422,23 +290,15 @@ class _RankingsBody extends StatelessWidget {
     return CustomScrollView(
       key: PageStorageKey(provider.board),
       slivers: [
-        if (hasFilters)
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
-            sliver: SliverToBoxAdapter(
-              child: _RankingControls(
-                provider: provider,
-                onOpenLocationPicker: onOpenLocationPicker,
-                onOpenTownHallPicker: onOpenTownHallPicker,
-                onOpenLeaguePicker: onOpenLeaguePicker,
-                onOpenHistoryDatePicker: onOpenHistoryDatePicker,
-              ),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+          sliver: SliverToBoxAdapter(
+            child: _RankingControls(
+              provider: provider,
+              onOpenHistoryDatePicker: onOpenHistoryDatePicker,
             ),
           ),
-        if (provider.isLoading)
-          const SliverToBoxAdapter(
-            child: LinearProgressIndicator(minHeight: 2),
-          ),
+        ),
         if (provider.error != null)
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
@@ -450,16 +310,35 @@ class _RankingsBody extends StatelessWidget {
               ),
             ),
           )
+        else if (provider.isLoading && entries.isEmpty)
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(
+              16,
+              hasFilters ? 0 : 12,
+              16,
+              24 + MediaQuery.paddingOf(context).bottom,
+            ),
+            sliver: const SliverList(
+              delegate: SliverChildBuilderDelegate(
+                _buildRankingSkeletonRow,
+                childCount: 8,
+              ),
+            ),
+          )
         else if (!provider.isLoading && entries.isEmpty)
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: _RankingEmptyState(provider: provider),
+          SliverPadding(
+            padding: EdgeInsets.only(
+              bottom: 24 + MediaQuery.paddingOf(context).bottom,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: _RankingEmptyState(provider: provider),
+            ),
           )
         else ...[
           SliverPadding(
             padding: EdgeInsets.fromLTRB(
               16,
-              hasFilters ? 0 : 14,
+              hasFilters ? 0 : 12,
               16,
               24 + MediaQuery.paddingOf(context).bottom,
             ),
@@ -478,115 +357,220 @@ class _RankingsBody extends StatelessWidget {
   }
 }
 
+class _BoardFilterDropdown extends StatelessWidget {
+  const _BoardFilterDropdown({required this.provider});
+
+  final RankingsProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final boards = provider.boards;
+    final options = <dynamic, String>{
+      for (final board in boards)
+        _imageDropdownLabel(board.iconUrl, board.labelOf(l10n)): board.name,
+    };
+
+    return FilterDropdown(
+      key: const Key('rankings-board-dropdown'),
+      sortBy: provider.board.name,
+      updateSortBy: (value) {
+        for (final board in boards) {
+          if (board.name == value) {
+            unawaited(provider.selectBoard(board));
+            return;
+          }
+        }
+      },
+      sortByOptions: options,
+      height: 46,
+      fillWidth: true,
+    );
+  }
+}
+
+class _LocationFilterDropdown extends StatelessWidget {
+  const _LocationFilterDropdown({super.key, required this.provider});
+
+  final RankingsProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final supportedLocations = provider.locations
+        .where(
+          (location) =>
+              provider.board.supportsWorldwide || !location.isWorldwide,
+        )
+        .toList(growable: false);
+    final locations = supportedLocations.isEmpty
+        ? provider.locations
+        : supportedLocations;
+    final selectedApiPath =
+        locations.any(
+          (location) => location.apiPath == provider.location.apiPath,
+        )
+        ? provider.location.apiPath
+        : locations.first.apiPath;
+    final options = <dynamic, String>{
+      for (final location in locations)
+        _locationDropdownLabel(context, l10n, location): location.apiPath,
+    };
+
+    return FilterDropdown(
+      sortBy: selectedApiPath,
+      updateSortBy: (value) {
+        for (final location in locations) {
+          if (location.apiPath == value) {
+            unawaited(provider.selectLocation(location));
+            return;
+          }
+        }
+      },
+      sortByOptions: options,
+      height: 46,
+      maxWidth: 132,
+    );
+  }
+}
+
+class _TownHallFilterDropdown extends StatelessWidget {
+  const _TownHallFilterDropdown({required this.provider});
+
+  final RankingsProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    final options = <dynamic, String>{
+      for (final level in List<int>.generate(12, (index) => 18 - index))
+        _imageDropdownLabel(ImageAssets.townHall(level), 'TH$level'): level
+            .toString(),
+    };
+
+    return FilterDropdown(
+      sortBy: provider.townHallLevel.toString(),
+      updateSortBy: (value) =>
+          unawaited(provider.selectTownHall(int.parse(value))),
+      sortByOptions: options,
+      height: 46,
+      maxWidth: 132,
+    );
+  }
+}
+
+class _LeagueFilterDropdown extends StatelessWidget {
+  const _LeagueFilterDropdown({required this.provider});
+
+  final RankingsProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    final options = <dynamic, String>{
+      for (final league in provider.leagueOptions)
+        _imageDropdownLabel(league.iconUrl, league.name): league.id.toString(),
+    };
+
+    return FilterDropdown(
+      sortBy: provider.selectedLeague.id.toString(),
+      updateSortBy: (value) {
+        final id = int.tryParse(value);
+        for (final league in provider.leagueOptions) {
+          if (league.id == id) {
+            unawaited(provider.selectLeague(league));
+            return;
+          }
+        }
+      },
+      sortByOptions: options,
+      height: 46,
+      maxWidth: 132,
+    );
+  }
+}
+
+List<Widget> _imageDropdownLabel(String imageUrl, String label) {
+  return [
+    MobileWebImage(imageUrl: imageUrl, width: 20, height: 20),
+    const SizedBox(width: 7),
+    Expanded(
+      child: Text(
+        label,
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+  ];
+}
+
+List<Widget> _locationDropdownLabel(
+  BuildContext context,
+  AppLocalizations l10n,
+  RankingLocation location,
+) {
+  return [
+    SizedBox.square(
+      dimension: 20,
+      child: location.hasValidCountryCode
+          ? MobileWebImage(
+              imageUrl: ImageAssets.flag(location.countryCode!),
+              fit: BoxFit.contain,
+              errorWidget: (context, url, error) =>
+                  const Icon(Icons.public_rounded, size: 18),
+            )
+          : const Icon(Icons.public_rounded, size: 18),
+    ),
+    const SizedBox(width: 7),
+    Expanded(
+      child: Text(
+        location.isWorldwide ? l10n.rankingsWorldwide : location.name,
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+  ];
+}
+
 class _RankingControls extends StatelessWidget {
   const _RankingControls({
     required this.provider,
-    required this.onOpenLocationPicker,
-    required this.onOpenTownHallPicker,
-    required this.onOpenLeaguePicker,
     required this.onOpenHistoryDatePicker,
   });
 
   final RankingsProvider provider;
-  final VoidCallback onOpenLocationPicker;
-  final VoidCallback onOpenTownHallPicker;
-  final VoidCallback onOpenLeaguePicker;
   final VoidCallback onOpenHistoryDatePicker;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final controls = <Widget>[];
+    final filters = <Widget>[];
     if (provider.board.supportsLocation) {
-      controls.add(
-        _OpaqueFilterButton(
+      filters.add(
+        _LocationFilterDropdown(
           key: const Key('rankings-location-button'),
-          label: l10n.sideLocation,
-          value: provider.location.isWorldwide
-              ? l10n.rankingsWorldwide
-              : provider.location.name,
-          icon: Icons.public_rounded,
-          imageUrl: provider.location.hasValidCountryCode
-              ? ImageAssets.flag(provider.location.countryCode!)
-              : null,
-          enabled: !provider.isLoadingLocations,
-          onTap: onOpenLocationPicker,
+          provider: provider,
         ),
       );
     }
     if (provider.board == RankingBoard.playerTownHall) {
-      controls.add(
-        _OpaqueFilterButton(
-          label: l10n.sideFilter,
-          value: 'TH${provider.townHallLevel}',
-          imageUrl: ImageAssets.townHall(provider.townHallLevel),
-          icon: Icons.home_work_outlined,
-          onTap: onOpenTownHallPicker,
-        ),
-      );
+      filters.add(_TownHallFilterDropdown(provider: provider));
     }
     if (provider.board == RankingBoard.playerRanked) {
-      controls.add(
-        _OpaqueFilterButton(
-          label: l10n.sideFilter,
-          value: provider.selectedLeague.name,
-          imageUrl: provider.selectedLeague.iconUrl,
-          icon: Icons.emoji_events_outlined,
-          onTap: onOpenLeaguePicker,
-        ),
-      );
+      filters.add(_LeagueFilterDropdown(provider: provider));
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        _BoardAndFilterRow(provider: provider, filters: filters),
         if (provider.board.supportsHistory) ...[
-          LiquidGlassSegmentedControl<RankingPeriod>(
-            key: const Key('rankings-period-control'),
-            height: 44,
-            values: RankingPeriod.values,
-            labels: [l10n.rankingsCurrent, l10n.generalHistory],
-            selected: provider.period,
-            onChanged: provider.selectPeriod,
+          const SizedBox(height: 8),
+          _PeriodControls(
+            provider: provider,
+            onOpenHistoryDatePicker: onOpenHistoryDatePicker,
           ),
-          const SizedBox(height: 10),
         ],
-        if (provider.period == RankingPeriod.history) ...[
-          _OpaqueFilterButton(
-            key: const Key('rankings-history-date-button'),
-            label: l10n.rankingsSnapshotDate,
-            value: DateFormat.yMMMd(
-              Localizations.localeOf(context).toLanguageTag(),
-            ).format(provider.historyDate),
-            icon: Icons.calendar_month_rounded,
-            onTap: onOpenHistoryDatePicker,
-          ),
-          const SizedBox(height: 10),
-        ],
-        if (controls.isNotEmpty)
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (controls.length == 1 || constraints.maxWidth < 520) {
-                return Column(
-                  children: [
-                    for (var index = 0; index < controls.length; index++) ...[
-                      controls[index],
-                      if (index < controls.length - 1)
-                        const SizedBox(height: 10),
-                    ],
-                  ],
-                );
-              }
-              return Row(
-                children: [
-                  for (var index = 0; index < controls.length; index++) ...[
-                    if (index > 0) const SizedBox(width: 10),
-                    Expanded(child: controls[index]),
-                  ],
-                ],
-              );
-            },
-          ),
         if (provider.locationError != null && provider.board.supportsLocation)
           Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -603,6 +587,104 @@ class _RankingControls extends StatelessWidget {
   }
 }
 
+class _BoardAndFilterRow extends StatelessWidget {
+  const _BoardAndFilterRow({required this.provider, required this.filters});
+
+  final RankingsProvider provider;
+  final List<Widget> filters;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final boardDropdown = _BoardFilterDropdown(provider: provider);
+        if (filters.isEmpty) {
+          return boardDropdown;
+        }
+
+        const spacing = 8.0;
+        if (filters.length == 1 && constraints.maxWidth >= 320) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: boardDropdown),
+              const SizedBox(width: spacing),
+              SizedBox(width: 132, child: filters.single),
+            ],
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            boardDropdown,
+            const SizedBox(height: 8),
+            if (filters.length == 1)
+              filters.single
+            else
+              Row(
+                children: [
+                  for (var index = 0; index < filters.length; index++) ...[
+                    if (index > 0) const SizedBox(width: 8),
+                    Expanded(child: filters[index]),
+                  ],
+                ],
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PeriodControls extends StatelessWidget {
+  const _PeriodControls({
+    required this.provider,
+    required this.onOpenHistoryDatePicker,
+  });
+
+  final RankingsProvider provider;
+  final VoidCallback onOpenHistoryDatePicker;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppFilterSegmentedControl<RankingPeriod>(
+          key: const Key('rankings-period-control'),
+          values: const [RankingPeriod.current, RankingPeriod.history],
+          labels: [l10n.rankingsCurrent, l10n.generalHistory],
+          iconWidgets: [
+            _segmentAssetIcon(ImageAssets.trophies),
+            _segmentAssetIcon(ImageAssets.iconClock),
+          ],
+          selected: provider.period,
+          onChanged: (value) => unawaited(provider.selectPeriod(value)),
+        ),
+        if (provider.period == RankingPeriod.history) ...[
+          const SizedBox(height: 8),
+          _OpaqueFilterButton(
+            key: const Key('rankings-history-date-button'),
+            label: l10n.rankingsSnapshotDate,
+            value: DateFormat.yMMMd(
+              Localizations.localeOf(context).toLanguageTag(),
+            ).format(provider.historyDate),
+            icon: Icons.calendar_month_rounded,
+            onTap: onOpenHistoryDatePicker,
+            height: 52,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+Widget _segmentAssetIcon(String imageUrl) {
+  return MobileWebImage(imageUrl: imageUrl, width: 18, height: 18);
+}
+
 class _OpaqueFilterButton extends StatelessWidget {
   const _OpaqueFilterButton({
     super.key,
@@ -610,47 +692,41 @@ class _OpaqueFilterButton extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.onTap,
-    this.imageUrl,
-    this.enabled = true,
+    this.height = 52,
   });
 
   final String label;
   final String value;
   final IconData icon;
-  final String? imageUrl;
   final VoidCallback onTap;
-  final bool enabled;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Semantics(
       button: true,
-      enabled: enabled,
       label: '$label: $value',
       child: Material(
-        color: scheme.surfaceContainerHigh,
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
         surfaceTintColor: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
         child: InkWell(
-          onTap: enabled ? onTap : null,
-          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.chip),
           child: Container(
-            height: 58,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            height: height,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppRadius.chip),
               border: Border.all(
-                color: scheme.outlineVariant.withValues(alpha: 0.48),
+                color: scheme.outlineVariant.withValues(alpha: 0.32),
               ),
             ),
             child: Row(
               children: [
-                if (imageUrl != null)
-                  MobileWebImage(imageUrl: imageUrl!, width: 24, height: 24)
-                else
-                  Icon(icon, size: 23, color: scheme.primary),
-                const SizedBox(width: 11),
+                Icon(icon, size: 21, color: scheme.primary),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -693,7 +769,7 @@ class _RankingEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final history = provider.period == RankingPeriod.history;
-    return SidePageEmptyState(
+    return AppEmptyState(
       icon: history
           ? Icons.history_toggle_off_rounded
           : Icons.leaderboard_outlined,
@@ -707,6 +783,99 @@ class _RankingEmptyState extends StatelessWidget {
               ).format(provider.historyDate),
             )
           : l10n.sideRankingsEmptyBody,
+    );
+  }
+}
+
+Widget _buildRankingSkeletonRow(BuildContext context, int index) {
+  return const _RankingSkeletonRow();
+}
+
+class _RankingSkeletonRow extends StatelessWidget {
+  const _RankingSkeletonRow();
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final cardColor = Theme.of(context).cardTheme.color ?? scheme.surface;
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      color: cardColor,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        side: BorderSide(
+          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 40,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SkeletonLoader(
+                    width: 24,
+                    height: 14,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  const SizedBox(height: 5),
+                  SkeletonLoader(
+                    width: 18,
+                    height: 10,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ],
+              ),
+            ),
+            SkeletonLoader(
+              width: 40,
+              height: 40,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: 0.68,
+                    child: SkeletonLoader(
+                      height: 16,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  const SizedBox(height: 7),
+                  FractionallySizedBox(
+                    widthFactor: 0.46,
+                    child: SkeletonLoader(
+                      height: 12,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            SkeletonLoader(
+              width: 19,
+              height: 19,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            const SizedBox(width: 6),
+            SkeletonLoader(
+              width: 50,
+              height: 16,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            const SizedBox(width: 22),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -732,20 +901,20 @@ class RankingRow extends StatelessWidget {
         color: cardColor,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
           side: BorderSide(
-            color: scheme.outlineVariant.withValues(alpha: 0.32),
+            color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
           ),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             child: Row(
               children: [
                 SizedBox(
-                  width: 42,
+                  width: 40,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -771,7 +940,7 @@ class RankingRow extends StatelessWidget {
                   ),
                 ),
                 SizedBox.square(
-                  dimension: 42,
+                  dimension: 40,
                   child: MobileWebImage(
                     imageUrl: entry.imageUrl,
                     fit: BoxFit.contain,
