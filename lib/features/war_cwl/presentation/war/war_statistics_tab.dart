@@ -444,8 +444,21 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
       0.0,
       targetScore.destruction - actorState.currentScore.destruction + 0.01,
     );
+    final canLeadByDestruction =
+        allowWin &&
+        actorState.potentialScore.stars >= targetScore.stars &&
+        actorState.potentialScore.destruction > targetScore.destruction;
 
-    if (allowWin && starsForWin > 0) {
+    if (canLeadByDestruction) {
+      if (starsForTie > 0) {
+        lines.add(copy.starsToTie(actor.name, starsForTie));
+      }
+      if (destructionForLead > 0.004) {
+        lines.add(
+          copy.destructionToLead(copy.percentPoints(destructionForLead)),
+        );
+      }
+    } else if (allowWin && starsForWin > 0) {
       lines.add(copy.starsToWin(actor.name, starsForWin));
     } else if (starsForTie > 0) {
       lines.add(copy.starsToTie(actor.name, starsForTie));

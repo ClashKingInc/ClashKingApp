@@ -507,7 +507,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     if (selectedId == _customSetupId) return;
     final counts = _quickSetupCountsById[selectedId] ?? const {};
     if (!counts.keys.every(_session.sources.containsKey)) {
-      _selectedQuickSetupId = null;
+      _selectedQuickSetupId = _customSetupId;
       _setAttackStack(const {});
       return;
     }
