@@ -1,3 +1,5 @@
+import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/features/pages/data/announcement_service.dart';
@@ -89,12 +91,7 @@ class _PostsPageState extends State<PostsPage> {
                       ),
                       const SizedBox(height: 16),
                       if (_posts.isEmpty && _loading)
-                        const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(32),
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
+                        _PostsLoadingSkeleton(isGrid: isDesktopWeb)
                       else if (_posts.isEmpty && _error != null)
                         _PostsMessage(
                           icon: Icons.cloud_off_rounded,
@@ -153,6 +150,126 @@ class _PostsPageState extends State<PostsPage> {
   }
 }
 
+class _PostsLoadingSkeleton extends StatelessWidget {
+  const _PostsLoadingSkeleton({required this.isGrid});
+
+  final bool isGrid;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isGrid) {
+      return ResponsiveCardGrid(
+        itemCount: 4,
+        minItemWidth: 360,
+        maxColumns: 2,
+        spacing: 16,
+        itemBuilder: (_, index) => _PostSkeletonCard(showImage: index.isEven),
+      );
+    }
+
+    return Column(
+      children: [
+        for (var index = 0; index < 3; index++) ...[
+          _PostSkeletonCard(showImage: index == 0),
+          if (index != 2) const SizedBox(height: 14),
+        ],
+      ],
+    );
+  }
+}
+
+class _PostSkeletonCard extends StatelessWidget {
+  const _PostSkeletonCard({required this.showImage});
+
+  final bool showImage;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final radius = BorderRadius.circular(AppRadius.chip);
+    final lineRadius = BorderRadius.circular(6);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color ?? colors.surface,
+        borderRadius: radius,
+        border: Border.all(
+          color: colors.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: radius,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (showImage)
+              SkeletonLoader(
+                width: double.infinity,
+                height: 188,
+                borderRadius: BorderRadius.zero,
+              ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(14, showImage ? 14 : 16, 14, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SkeletonLoader(
+                              width: double.infinity,
+                              height: 24,
+                              borderRadius: lineRadius,
+                            ),
+                            const SizedBox(height: 8),
+                            SkeletonLoader(
+                              width: 180,
+                              height: 24,
+                              borderRadius: lineRadius,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      SkeletonLoader(
+                        width: 30,
+                        height: 30,
+                        borderRadius: BorderRadius.circular(AppRadius.pill),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  SkeletonLoader(
+                    width: 108,
+                    height: 14,
+                    borderRadius: lineRadius,
+                  ),
+                  const SizedBox(height: 12),
+                  SkeletonLoader(
+                    width: double.infinity,
+                    height: 16,
+                    borderRadius: lineRadius,
+                  ),
+                  const SizedBox(height: 8),
+                  SkeletonLoader(
+                    width: 220,
+                    height: 16,
+                    borderRadius: lineRadius,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _PostArchiveCard extends StatelessWidget {
   const _PostArchiveCard({required this.post});
 
@@ -165,13 +282,7 @@ class _PostArchiveCard extends StatelessWidget {
     }
     if (!context.mounted) return;
     await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => AnnouncementWebViewPage(
-          title: post.title,
-          html: post.body,
-          url: post.htmlUrl,
-        ),
-      ),
+      MaterialPageRoute<void>(builder: (_) => _PostArticlePage(post: post)),
     );
   }
 
@@ -179,95 +290,102 @@ class _PostArchiveCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final publishedAt = post.publishedAt;
     final dateLabel = publishedAt == null
         ? null
         : MaterialLocalizations.of(
             context,
           ).formatMediumDate(publishedAt.toLocal());
+    final hasImage = post.bannerImageUrl?.isNotEmpty == true;
+    final showLabels = post.isCurrent || post.isStory || post.pinnedOnHome;
 
     return Material(
-      color: colors.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(28),
+      color: Theme.of(context).cardTheme.color ?? colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        side: BorderSide(
+          color: colors.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
+      ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
         onTap: () => _open(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (post.bannerImageUrl?.isNotEmpty == true)
+            if (hasImage)
               MobileWebImage(
                 imageUrl: post.bannerImageUrl!,
                 width: double.infinity,
-                height: 156,
+                height: 188,
                 fit: BoxFit.cover,
+                placeholder: (_, _) => ColoredBox(
+                  color: colors.surfaceContainerHighest,
+                  child: const SizedBox.expand(),
+                ),
               ),
             Padding(
-              padding: const EdgeInsets.all(18),
+              padding: EdgeInsets.fromLTRB(14, hasImage ? 14 : 16, 14, 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _PostChip(
-                        label: post.isCurrent
-                            ? loc.postsCurrent
-                            : loc.postsPast,
-                        color: post.isCurrent
-                            ? colors.primary
-                            : colors.onSurfaceVariant,
+                      Expanded(
+                        child: Text(
+                          post.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            height: 1.12,
+                          ),
+                        ),
                       ),
-                      if (post.isStory)
-                        _PostChip(
-                          label: loc.postsStory,
-                          color: colors.tertiary,
-                        ),
-                      if (post.pinnedOnHome)
-                        _PostChip(
-                          label: loc.postsPinned,
-                          color: colors.secondary,
-                        ),
+                      const SizedBox(width: 12),
+                      _PostOpenIndicator(color: colors.onSurfaceVariant),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    post.title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    post.subtitle,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colors.onSurfaceVariant,
-                    ),
-                  ),
                   if (dateLabel != null) ...[
+                    const SizedBox(height: 8),
+                    _PostDateLabel(dateLabel: dateLabel),
+                  ],
+                  if (post.subtitle.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      post.subtitle,
+                      maxLines: hasImage ? 2 : 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: colors.onSurfaceVariant,
+                        height: 1.35,
+                      ),
+                    ),
+                  ],
+                  if (showLabels) ...[
                     const SizedBox(height: 14),
-                    Row(
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          size: 15,
-                          color: colors.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: 7),
-                        Text(
-                          dateLabel,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(color: colors.onSurfaceVariant),
-                        ),
-                        const Spacer(),
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 20,
-                          color: colors.primary,
-                        ),
+                        if (post.isCurrent)
+                          _PostDotLabel(
+                            label: loc.postsCurrent,
+                            color: colors.primary,
+                          ),
+                        if (post.isStory)
+                          _PostDotLabel(
+                            label: loc.postsStory,
+                            color: colors.tertiary,
+                          ),
+                        if (post.pinnedOnHome)
+                          _PostDotLabel(
+                            label: loc.postsPinned,
+                            color: colors.secondary,
+                          ),
                       ],
                     ),
                   ],
@@ -281,29 +399,200 @@ class _PostArchiveCard extends StatelessWidget {
   }
 }
 
-class _PostChip extends StatelessWidget {
-  const _PostChip({required this.label, required this.color});
+class _PostOpenIndicator extends StatelessWidget {
+  const _PostOpenIndicator({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 30,
+      height: 30,
+      child: Icon(Icons.chevron_right_rounded, size: 30, color: color),
+    );
+  }
+}
+
+class _PostArticlePage extends StatelessWidget {
+  const _PostArticlePage({required this.post});
+
+  final AppAnnouncement post;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final publishedAt = post.publishedAt;
+    final dateLabel = publishedAt == null
+        ? null
+        : MaterialLocalizations.of(
+            context,
+          ).formatFullDate(publishedAt.toLocal());
+    final hasImage = post.bannerImageUrl?.isNotEmpty == true;
+    final articleHtml = _postArticleHtml(post.body, stripHeroImage: hasImage);
+
+    return Scaffold(
+      backgroundColor: colors.surface,
+      appBar: AppBar(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: hasImage ? colors.surfaceContainer : colors.surface,
+              border: hasImage
+                  ? Border(bottom: BorderSide(color: colors.outlineVariant))
+                  : null,
+            ),
+            child: SafeArea(
+              top: false,
+              bottom: false,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 900),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (hasImage)
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(AppRadius.chip),
+                          ),
+                          child: MobileWebImage(
+                            imageUrl: post.bannerImageUrl!,
+                            width: double.infinity,
+                            height: 240,
+                            fit: BoxFit.cover,
+                            placeholder: (_, _) => ColoredBox(
+                              color: colors.surfaceContainerHighest,
+                              child: const SizedBox.expand(),
+                            ),
+                          ),
+                        ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          20,
+                          hasImage ? 18 : 8,
+                          20,
+                          hasImage ? 20 : 12,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              post.title,
+                              style:
+                                  (hasImage
+                                          ? textTheme.headlineSmall
+                                          : textTheme.titleLarge)
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                        height: hasImage ? 1.08 : 1.14,
+                                      ),
+                            ),
+                            if (dateLabel != null) ...[
+                              const SizedBox(height: 10),
+                              _PostDateLabel(dateLabel: dateLabel),
+                            ],
+                            if (post.subtitle.isNotEmpty) ...[
+                              SizedBox(height: hasImage ? 14 : 10),
+                              Text(
+                                post.subtitle,
+                                style:
+                                    (hasImage
+                                            ? textTheme.titleMedium
+                                            : textTheme.bodyLarge)
+                                        ?.copyWith(
+                                          color: colors.onSurfaceVariant,
+                                          height: 1.35,
+                                        ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 900),
+                child: AnnouncementWebView(
+                  html: articleHtml,
+                  url: post.htmlUrl,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String? _postArticleHtml(String? html, {required bool stripHeroImage}) {
+  if (!stripHeroImage || html == null || html.isEmpty) return html;
+  return html.replaceFirst(
+    RegExp(r'<img class="hero" src="[^"]*" alt="">'),
+    '',
+  );
+}
+
+class _PostDateLabel extends StatelessWidget {
+  const _PostDateLabel({required this.dateLabel});
+
+  final String dateLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          Icons.calendar_today_outlined,
+          size: 15,
+          color: colors.onSurfaceVariant,
+        ),
+        const SizedBox(width: 7),
+        Text(
+          dateLabel,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: colors.onSurfaceVariant,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PostDotLabel extends StatelessWidget {
+  const _PostDotLabel({required this.label, required this.color});
 
   final String label;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: Text(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.circle, size: 7, color: color),
+        const SizedBox(width: 6),
+        Text(
           label,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: color,
-            fontWeight: FontWeight.w800,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w700,
           ),
         ),
-      ),
+      ],
     );
   }
 }
