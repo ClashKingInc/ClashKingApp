@@ -25,6 +25,7 @@ const _zapQuakeSetupId = 'zap-quake';
 const _fireballQuakeSetupId = 'fireball-quake';
 const _giantArrowSetupId = 'giant-arrow';
 const _flameFlingerSetupId = 'flame-flinger';
+const _townHallBuildingName = 'Town Hall';
 
 class CalculatorsPage extends StatefulWidget {
   const CalculatorsPage({super.key, this.catalog, this.accountPresets});
@@ -452,7 +453,8 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   ) {
     if (building == null) return const <BuildingLevelDefinition>[];
     final targetTownHall =
-        building.name == 'Town Hall' && townHall < _catalog.maxTownHall
+        building.name == _townHallBuildingName &&
+            townHall < _catalog.maxTownHall
         ? townHall + 1
         : townHall;
     return building.levelsForTownHall(targetTownHall);
@@ -1743,7 +1745,7 @@ class _BuildingPicker extends StatefulWidget {
 
 class _BuildingPickerState extends State<_BuildingPicker> {
   static const _commonBuildingNames = [
-    'Town Hall',
+    _townHallBuildingName,
     'Inferno Tower',
     'Eagle Artillery',
     'Scattershot',
@@ -2042,7 +2044,7 @@ String _normalizeTag(String value) =>
     value.trim().toUpperCase().replaceAll('#', '');
 
 String _buildingDisplayName(AppLocalizations loc, String name) {
-  if (name == 'Town Hall') return loc.damageTownHall;
+  if (name == _townHallBuildingName) return loc.damageTownHall;
   return name;
 }
 
