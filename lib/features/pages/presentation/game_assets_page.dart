@@ -197,16 +197,16 @@ class _GameAssetsLoadingSkeleton extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: SkeletonLoader(
                     height: 36,
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                   ),
                 ),
-                const SizedBox(width: 8),
-                const Expanded(
+                SizedBox(width: 8),
+                Expanded(
                   child: SkeletonLoader(
                     height: 36,
                     borderRadius: BorderRadius.all(Radius.circular(16)),
