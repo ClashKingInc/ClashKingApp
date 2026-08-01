@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/notification_debug_service.dart';
@@ -697,15 +698,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SegmentedButton<bool>(
-                    segments: const [
-                      ButtonSegment(value: false, label: Text('All accounts')),
-                      ButtonSegment(value: true, label: Text('Selected')),
-                    ],
-                    selected: {limited},
-                    showSelectedIcon: false,
-                    onSelectionChanged: (selection) => setSheetState(() {
-                      limited = selection.first;
+                  child: AppFilterSegmentedControl<bool>(
+                    values: const [false, true],
+                    labels: const ['All accounts', 'Selected'],
+                    icons: const [LucideIcons.users, LucideIcons.userCheck],
+                    selected: limited,
+                    onChanged: (value) => setSheetState(() {
+                      limited = value;
                       if (limited && selected.isEmpty) {
                         selected.addAll(accounts.map((account) => account.tag));
                       }
@@ -2181,25 +2180,18 @@ class _ScopeSelector extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: SizedBox(
-        width: double.infinity,
-        child: SegmentedButton<_NotificationAccountScope>(
-          segments: [
-            ButtonSegment(
-              value: _NotificationAccountScope.all,
-              icon: const Icon(LucideIcons.users),
-              label: Text(l10n?.notifScopeAllAccounts ?? 'All accounts'),
-            ),
-            ButtonSegment(
-              value: _NotificationAccountScope.selected,
-              icon: const Icon(LucideIcons.userCheck),
-              label: Text(l10n?.notifScopeSelected ?? 'Selected'),
-            ),
-          ],
-          selected: {value},
-          showSelectedIcon: false,
-          onSelectionChanged: (selection) => onChanged(selection.first),
-        ),
+      child: AppFilterSegmentedControl<_NotificationAccountScope>(
+        values: const [
+          _NotificationAccountScope.all,
+          _NotificationAccountScope.selected,
+        ],
+        labels: [
+          l10n?.notifScopeAllAccounts ?? 'All accounts',
+          l10n?.notifScopeSelected ?? 'Selected',
+        ],
+        icons: const [LucideIcons.users, LucideIcons.userCheck],
+        selected: value,
+        onChanged: onChanged,
       ),
     );
   }
