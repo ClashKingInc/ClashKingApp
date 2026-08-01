@@ -9,7 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 class MobileWebImage extends StatelessWidget {
   static const _maxResolvedImages = 512;
   static const _maxFailedImages = 1024;
-  static const _failureTtl = Duration(minutes: 5);
+  static const _failureTtl = Duration(seconds: 20);
   static final LinkedHashMap<String, String> _resolvedImages = LinkedHashMap();
   static final LinkedHashMap<String, DateTime> _failedImages = LinkedHashMap();
 
