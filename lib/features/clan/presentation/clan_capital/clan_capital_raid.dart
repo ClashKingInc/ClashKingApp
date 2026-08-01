@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 /// Raid overview for the currently selected week: a single flat summary
 /// panel (no nested Card) with the reward/loot headline and a
-/// ClanSummaryChip row, matching the language already used by the clan
+/// CKSummaryChip row, matching the language already used by the clan
 /// and CWL detail tabs instead of the page's old elevated Card stack.
 class CapitalRaidsTab extends StatelessWidget {
   final CapitalHistoryItem raid;

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
@@ -6,6 +8,7 @@ import 'package:clashkingapp/features/war_cwl/data/war_functions.dart'
     show countStars;
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_member.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/widgets/war_calculator_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
@@ -130,7 +133,7 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
             padding: const EdgeInsets.all(14),
             child: _WarAnalysis(
               title: loc.warStateOfTheWar,
-              scenario: _warScenario(
+              analysis: _warAnalysis(
                 context,
                 clan,
                 opponent,
@@ -192,7 +195,7 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
     return warInfo.state == 'inWar' || warInfo.state == 'warInWar';
   }
 
-  _WarScenario _warScenario(
+  _WarAnalysisResult _warAnalysis(
     BuildContext context,
     WarClan clan,
     WarClan opponent,
@@ -200,75 +203,267 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
     int teamSize,
   ) {
     final loc = AppLocalizations.of(context)!;
-    final clanIsAhead = _isAhead(clan, opponent);
-    final actor = clanIsAhead ? opponent : clan;
-    final target = clanIsAhead ? clan : opponent;
-    final attacksLeft = (maxAttacks - actor.attacks).clamp(0, maxAttacks);
-    final starsToTie = (target.stars - actor.stars).clamp(0, maxAttacks * 3);
-    final targetDestructionTotal = target.destructionPercentage * teamSize;
-    final actorDestructionTotal = actor.destructionPercentage * teamSize;
-    final percentToLead =
-        (targetDestructionTotal - actorDestructionTotal + 0.01).clamp(
-          0.0,
-          teamSize * 100.0,
-        );
+    final copy = _WarAnalysisCopy(loc);
+    final clanState = _WarSideState.fromWar(
+      clan,
+      target: opponent,
+      maxAttacks: maxAttacks,
+      maxStars: teamSize * 3,
+    );
+    final opponentState = _WarSideState.fromWar(
+      opponent,
+      target: clan,
+      maxAttacks: maxAttacks,
+      maxStars: teamSize * 3,
+    );
 
     if (clan.stars == 0 &&
         opponent.stars == 0 &&
         clan.destructionPercentage == 0.0 &&
         opponent.destructionPercentage == 0.0) {
-      return _WarScenario(
-        label: loc.warAnalysisToWin,
-        clanName: clan.name,
-        attacksLeft: attacksLeft,
-        starsPerAttack: 0,
-        percentPerAttack: 0,
-        impossible: false,
-        lossRisk: false,
-        waiting: true,
+      return _WarAnalysisResult(
+        status: _WarAnalysisStatus.waiting,
+        headline: loc.warNotStarted,
+        lines: [
+          copy.remainingAttempts(clanState.remainingAttacks),
+          copy.remainingAttempts(opponentState.remainingAttacks),
+        ],
       );
     }
 
-    var requiredStars = starsToTie.toDouble();
-    var requiredPercent = percentToLead.toDouble();
-    final perAttackStars = attacksLeft == 0
-        ? requiredStars
-        : requiredStars / attacksLeft;
-    final perAttackPercent = attacksLeft == 0
-        ? requiredPercent
-        : requiredPercent / attacksLeft;
-
-    if (perAttackStars > 3 || perAttackPercent > 100) {
-      final starsToOutscore = (target.stars - actor.stars + 1).clamp(
-        0,
-        maxAttacks * 3,
+    if (clanState.isPerfect && opponentState.isPerfect) {
+      return _WarAnalysisResult(
+        status: _WarAnalysisStatus.locked,
+        headline: loc.warPerfectDraw,
+        lines: [copy.noBetterResult()],
       );
-      final starsToOutscorePerAttack = attacksLeft == 0
-          ? starsToOutscore.toDouble()
-          : starsToOutscore / attacksLeft;
-      if (starsToOutscorePerAttack <= 3) {
-        requiredStars = starsToOutscore.toDouble();
-        requiredPercent = 0;
+    }
+
+    final tiedNow =
+        clanState.currentScore.compareTo(opponentState.currentScore) == 0;
+    if (tiedNow) {
+      return _WarAnalysisResult(
+        status: _WarAnalysisStatus.live,
+        headline: copy.warStillOpen(),
+        lines: [
+          copy.currentDraw(),
+          copy.remainingAttempts(clanState.remainingAttacks),
+          copy.remainingAttempts(opponentState.remainingAttacks),
+        ],
+      );
+    }
+
+    final clanIsAhead = _isAhead(clan, opponent);
+    final leader = clanIsAhead ? clan : opponent;
+    final chaser = clanIsAhead ? opponent : clan;
+    final leaderState = clanIsAhead ? clanState : opponentState;
+    final chaserState = clanIsAhead ? opponentState : clanState;
+    final targetMembers = clanIsAhead ? clan.members : opponent.members;
+    final chaserCanWin = chaserState.canBeat(leaderState.currentScore);
+    final chaserCanTie = chaserState.canTie(leaderState.currentScore);
+
+    if (leaderState.isPerfect && !chaserState.isPerfect) {
+      if (chaserCanTie) {
+        return _drawOnlyAnalysis(
+          copy: copy,
+          leader: leader,
+          chaser: chaser,
+          chaserState: chaserState,
+          targetMembers: targetMembers,
+        );
       }
+
+      return _advantageAnalysis(
+        copy: copy,
+        leader: leader,
+        chaser: chaser,
+        chaserState: chaserState,
+        targetScore: leaderState.currentScore,
+        targetMembers: targetMembers,
+        chaserCanTie: false,
+      );
     }
 
-    final starsPerAttack = attacksLeft == 0
-        ? requiredStars
-        : requiredStars / attacksLeft;
-    final percentPerAttack = attacksLeft == 0
-        ? requiredPercent
-        : requiredPercent / attacksLeft;
+    if (chaserCanWin) {
+      return _WarAnalysisResult(
+        status: _WarAnalysisStatus.live,
+        headline: copy.warStillOpen(),
+        lines: [
+          copy.currentLeader(leader.name),
+          ..._objectiveLines(
+            copy: copy,
+            actor: chaser,
+            actorState: chaserState,
+            targetScore: leaderState.currentScore,
+            targetMembers: targetMembers,
+            allowWin: true,
+          ),
+        ],
+      );
+    }
 
-    return _WarScenario(
-      label: clanIsAhead ? loc.warAnalysisToLose : loc.warAnalysisToWin,
-      clanName: actor.name,
-      attacksLeft: attacksLeft,
-      starsPerAttack: starsPerAttack,
-      percentPerAttack: percentPerAttack,
-      impossible:
-          attacksLeft == 0 || starsPerAttack > 3 || percentPerAttack > 100,
-      lossRisk: clanIsAhead,
+    if (chaserCanTie) {
+      return _drawOnlyAnalysis(
+        copy: copy,
+        leader: leader,
+        chaser: chaser,
+        chaserState: chaserState,
+        targetMembers: targetMembers,
+      );
+    }
+
+    return _advantageAnalysis(
+      copy: copy,
+      leader: leader,
+      chaser: chaser,
+      chaserState: chaserState,
+      targetScore: leaderState.currentScore,
+      targetMembers: targetMembers,
+      chaserCanTie: false,
     );
+  }
+
+  _WarAnalysisResult _advantageAnalysis({
+    required _WarAnalysisCopy copy,
+    required WarClan leader,
+    required WarClan chaser,
+    required _WarSideState chaserState,
+    required _WarScore targetScore,
+    required List<WarMember> targetMembers,
+    required bool chaserCanTie,
+  }) {
+    return _WarAnalysisResult(
+      status: _WarAnalysisStatus.advantage,
+      headline: copy.cannotLose(leader.name),
+      lines: [
+        if (chaserCanTie) copy.canStillTie(chaser.name),
+        if (!chaserCanTie) copy.cannotCatchUp(chaser.name),
+        ..._objectiveLines(
+          copy: copy,
+          actor: chaser,
+          actorState: chaserState,
+          targetScore: targetScore,
+          targetMembers: targetMembers,
+          allowWin: false,
+        ),
+      ],
+    );
+  }
+
+  _WarAnalysisResult _drawOnlyAnalysis({
+    required _WarAnalysisCopy copy,
+    required WarClan leader,
+    required WarClan chaser,
+    required _WarSideState chaserState,
+    required List<WarMember> targetMembers,
+  }) {
+    return _WarAnalysisResult(
+      status: _WarAnalysisStatus.drawOnly,
+      headline: copy.cannotLose(leader.name),
+      lines: [
+        copy.canStillTie(chaser.name),
+        copy.objectivePerfectWar(),
+        ..._perfectObjectiveLines(
+          copy: copy,
+          chaserState: chaserState,
+          targetMembers: targetMembers,
+        ),
+      ],
+    );
+  }
+
+  List<String> _perfectObjectiveLines({
+    required _WarAnalysisCopy copy,
+    required _WarSideState chaserState,
+    required List<WarMember> targetMembers,
+  }) {
+    final lines = <String>[];
+    final starsNeeded = (chaserState.maxStars - chaserState.currentScore.stars)
+        .clamp(0, chaserState.maxStars)
+        .toInt();
+    final destructionNeeded = math.max(
+      0.0,
+      100.0 - chaserState.currentScore.destruction,
+    );
+
+    if (starsNeeded > 0) {
+      lines.add(copy.starsOnUntripledBases(starsNeeded));
+    }
+    if (destructionNeeded > 0.004) {
+      lines.add(copy.destructionPoints(copy.percentPoints(destructionNeeded)));
+    }
+    lines.add(copy.remainingAttempts(chaserState.remainingAttacks));
+    lines.addAll(_opportunityLines(copy, targetMembers));
+    return lines;
+  }
+
+  List<String> _objectiveLines({
+    required _WarAnalysisCopy copy,
+    required WarClan actor,
+    required _WarSideState actorState,
+    required _WarScore targetScore,
+    required List<WarMember> targetMembers,
+    required bool allowWin,
+  }) {
+    final lines = <String>[];
+    final starsForWin = (targetScore.stars + 1 - actorState.currentScore.stars)
+        .clamp(0, actorState.maxStars)
+        .toInt();
+    final starsForTie = (targetScore.stars - actorState.currentScore.stars)
+        .clamp(0, actorState.maxStars)
+        .toInt();
+    final destructionForLead = math.max(
+      0.0,
+      targetScore.destruction - actorState.currentScore.destruction + 0.01,
+    );
+
+    if (allowWin && starsForWin > 0) {
+      lines.add(copy.starsToWin(actor.name, starsForWin));
+    } else if (starsForTie > 0) {
+      lines.add(copy.starsToTie(actor.name, starsForTie));
+    } else if (destructionForLead > 0.004) {
+      lines.add(copy.destructionToLead(copy.percentPoints(destructionForLead)));
+    }
+
+    lines.add(copy.remainingAttempts(actorState.remainingAttacks));
+    lines.addAll(_opportunityLines(copy, targetMembers));
+    return lines;
+  }
+
+  List<String> _opportunityLines(
+    _WarAnalysisCopy copy,
+    List<WarMember> targetMembers,
+  ) {
+    final opportunities =
+        targetMembers
+            .where(
+              (member) =>
+                  member.bestOpponentAttack == null ||
+                  member.bestOpponentAttack!.stars < 3 ||
+                  member.bestOpponentAttack!.destructionPercentage < 100,
+            )
+            .toList()
+          ..sort((a, b) {
+            final aAttack = a.bestOpponentAttack;
+            final bAttack = b.bestOpponentAttack;
+            final starCompare = (bAttack?.stars ?? 0).compareTo(
+              aAttack?.stars ?? 0,
+            );
+            if (starCompare != 0) return starCompare;
+            final destructionCompare = (bAttack?.destructionPercentage ?? 0)
+                .compareTo(aAttack?.destructionPercentage ?? 0);
+            if (destructionCompare != 0) return destructionCompare;
+            return a.mapPosition.compareTo(b.mapPosition);
+          });
+
+    return opportunities.take(2).map((member) {
+      final attack = member.bestOpponentAttack;
+      return copy.opportunity(
+        member.mapPosition,
+        attack?.stars ?? 0,
+        attack?.destructionPercentage ?? 0,
+      );
+    }).toList();
   }
 
   bool _isAhead(WarClan clan, WarClan opponent) {
@@ -327,18 +522,21 @@ class _SectionHeader extends StatelessWidget {
 
 class _WarAnalysis extends StatelessWidget {
   final String title;
-  final _WarScenario scenario;
+  final _WarAnalysisResult analysis;
 
-  const _WarAnalysis({required this.title, required this.scenario});
+  const _WarAnalysis({required this.title, required this.analysis});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final accent = scenario.impossible
-        ? StatColors.loss
-        : scenario.lossRisk
-        ? StatColors.warStarGold
-        : StatColors.win;
+    final accent = switch (analysis.status) {
+      _WarAnalysisStatus.live => StatColors.win,
+      _WarAnalysisStatus.advantage => StatColors.win,
+      _WarAnalysisStatus.drawOnly => StatColors.warStarGold,
+      _WarAnalysisStatus.locked => colorScheme.onSurfaceVariant,
+      _WarAnalysisStatus.waiting => colorScheme.primary,
+    };
+    final visibleLines = analysis.lines.take(5).toList(growable: false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -367,7 +565,7 @@ class _WarAnalysis extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${scenario.label}: ${scenario.clanName}',
+                    analysis.headline,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -377,16 +575,20 @@ class _WarAnalysis extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    scenario.text(context),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w700,
-                      height: 1.2,
+                  for (var index = 0; index < visibleLines.length; index++) ...[
+                    Text(
+                      visibleLines[index],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                      ),
                     ),
-                  ),
+                    if (index < visibleLines.length - 1)
+                      const SizedBox(height: 3),
+                  ],
                 ],
               ),
             ),
@@ -397,44 +599,201 @@ class _WarAnalysis extends StatelessWidget {
   }
 }
 
-class _WarScenario {
-  final String label;
-  final String clanName;
-  final int attacksLeft;
-  final double starsPerAttack;
-  final double percentPerAttack;
-  final bool impossible;
-  final bool lossRisk;
-  final bool waiting;
+enum _WarAnalysisStatus { live, advantage, drawOnly, locked, waiting }
 
-  const _WarScenario({
-    required this.label,
-    required this.clanName,
-    required this.attacksLeft,
-    required this.starsPerAttack,
-    required this.percentPerAttack,
-    required this.impossible,
-    required this.lossRisk,
-    this.waiting = false,
+class _WarAnalysisResult {
+  final _WarAnalysisStatus status;
+  final String headline;
+  final List<String> lines;
+
+  const _WarAnalysisResult({
+    required this.status,
+    required this.headline,
+    required this.lines,
+  });
+}
+
+class _WarScore {
+  final int stars;
+  final double destruction;
+
+  const _WarScore({required this.stars, required this.destruction});
+
+  int compareTo(_WarScore other) {
+    if (stars != other.stars) return stars.compareTo(other.stars);
+    return destruction.compareTo(other.destruction);
+  }
+}
+
+class _WarSideState {
+  final _WarScore currentScore;
+  final _WarScore potentialScore;
+  final int remainingAttacks;
+  final int maxStars;
+
+  const _WarSideState({
+    required this.currentScore,
+    required this.potentialScore,
+    required this.remainingAttacks,
+    required this.maxStars,
   });
 
-  String text(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    if (waiting) return loc.warNotStarted;
-    if (attacksLeft == 0) return loc.warAnalysisNoAttacksLeft;
+  bool get isPerfect =>
+      currentScore.stars >= maxStars && currentScore.destruction >= 100.0;
 
-    final stars = _formatStars(starsPerAttack);
-    final percent = percentPerAttack.ceil().clamp(0, 999).toString();
-    if (impossible) {
-      return loc.warAnalysisImpossibleScenario(attacksLeft, stars, percent);
+  bool canBeat(_WarScore target) => potentialScore.compareTo(target) > 0;
+
+  bool canTie(_WarScore target) =>
+      potentialScore.stars >= target.stars &&
+      potentialScore.destruction + 0.0001 >= target.destruction;
+
+  factory _WarSideState.fromWar(
+    WarClan side, {
+    required WarClan target,
+    required int maxAttacks,
+    required int maxStars,
+  }) {
+    final remainingAttacks = (maxAttacks - side.attacks)
+        .clamp(0, maxAttacks)
+        .toInt();
+    return _WarSideState(
+      currentScore: _WarScore(
+        stars: side.stars,
+        destruction: side.destructionPercentage,
+      ),
+      potentialScore: _potentialScore(side, target, remainingAttacks, maxStars),
+      remainingAttacks: remainingAttacks,
+      maxStars: maxStars,
+    );
+  }
+
+  static _WarScore _potentialScore(
+    WarClan side,
+    WarClan target,
+    int remainingAttacks,
+    int maxStars,
+  ) {
+    if (remainingAttacks <= 0) {
+      return _WarScore(
+        stars: side.stars,
+        destruction: side.destructionPercentage,
+      );
     }
-    return loc.warAnalysisScenario(attacksLeft, stars, percent);
+
+    if (target.members.isEmpty) {
+      return _WarScore(
+        stars: math.min(maxStars, side.stars + remainingAttacks * 3),
+        destruction: 100,
+      );
+    }
+
+    final baseCount = math.max(1, target.members.length);
+    final improvements =
+        target.members.map((member) {
+          final attack = member.bestOpponentAttack;
+          return _WarBaseImprovement(
+            starGain: math.max(0, 3 - (attack?.stars ?? 0)),
+            destructionGain:
+                math.max(0, 100 - (attack?.destructionPercentage ?? 0)) /
+                baseCount,
+          );
+        }).toList()..sort((a, b) {
+          final starCompare = b.starGain.compareTo(a.starGain);
+          if (starCompare != 0) return starCompare;
+          return b.destructionGain.compareTo(a.destructionGain);
+        });
+
+    final selected = improvements.take(remainingAttacks);
+    final potentialStars = selected.fold<int>(
+      side.stars,
+      (sum, improvement) => sum + improvement.starGain,
+    );
+    final potentialDestruction = selected.fold<double>(
+      side.destructionPercentage,
+      (sum, improvement) => sum + improvement.destructionGain,
+    );
+
+    return _WarScore(
+      stars: math.min(maxStars, potentialStars),
+      destruction: potentialDestruction.clamp(0.0, 100.0).toDouble(),
+    );
+  }
+}
+
+class _WarBaseImprovement {
+  final int starGain;
+  final double destructionGain;
+
+  const _WarBaseImprovement({
+    required this.starGain,
+    required this.destructionGain,
+  });
+}
+
+class _WarAnalysisCopy {
+  final AppLocalizations loc;
+
+  const _WarAnalysisCopy(this.loc);
+
+  bool get _fr => loc.localeName.startsWith('fr');
+
+  String warStillOpen() => _fr ? 'Guerre encore ouverte' : 'War still open';
+
+  String currentLeader(String clan) =>
+      _fr ? '$clan mène actuellement' : '$clan is currently ahead';
+
+  String currentDraw() =>
+      _fr ? 'Les deux clans sont à égalité' : 'Both clans are tied';
+
+  String cannotLose(String clan) =>
+      _fr ? '$clan ne peut plus perdre' : '$clan can no longer lose';
+
+  String canStillTie(String clan) =>
+      _fr ? '$clan peut encore égaliser' : '$clan can still tie';
+
+  String cannotCatchUp(String clan) => loc.warCannotCatchUp(clan);
+
+  String objectivePerfectWar() =>
+      _fr ? 'Objectif: guerre parfaite' : 'Objective: perfect war';
+
+  String starsOnUntripledBases(int stars) => _fr
+      ? '+$stars ${_plural(stars, 'étoile', 'étoiles')} sur ${_plural(stars, 'une base non triplée', 'des bases non triplées')}'
+      : '+$stars ${_plural(stars, 'star', 'stars')} on untripled bases';
+
+  String starsToWin(String clan, int stars) => _fr
+      ? '$clan doit gagner +$stars ${_plural(stars, 'étoile', 'étoiles')}'
+      : '$clan needs +$stars ${_plural(stars, 'star', 'stars')} to take the lead';
+
+  String starsToTie(String clan, int stars) => _fr
+      ? '$clan doit gagner +$stars ${_plural(stars, 'étoile', 'étoiles')} pour égaliser'
+      : '$clan needs +$stars ${_plural(stars, 'star', 'stars')} to tie';
+
+  String destructionToLead(String points) => _fr
+      ? '+$points pt de destruction pour passer devant'
+      : '+$points destruction ${points == '1' ? 'point' : 'points'} to lead';
+
+  String destructionPoints(String points) =>
+      _fr ? '+$points pt de destruction' : '+$points destruction points';
+
+  String remainingAttempts(int attacks) => _fr
+      ? '$attacks ${_plural(attacks, 'tentative restante', 'tentatives restantes')}'
+      : '$attacks ${_plural(attacks, 'attempt', 'attempts')} left';
+
+  String opportunity(int mapPosition, int stars, int destruction) => _fr
+      ? '#$mapPosition: déjà $stars ${_plural(stars, 'étoile', 'étoiles')}, $destruction%'
+      : '#$mapPosition: currently $stars ${_plural(stars, 'star', 'stars')}, $destruction%';
+
+  String noBetterResult() =>
+      _fr ? 'Aucun meilleur résultat possible' : 'No better result is possible';
+
+  String percentPoints(double value) {
+    final text = value >= 10
+        ? value.toStringAsFixed(1)
+        : value.toStringAsFixed(2);
+    return _fr ? text.replaceFirst('.', ',') : text;
   }
 
-  String _formatStars(double value) {
-    if (value == value.roundToDouble()) return value.toInt().toString();
-    return value.toStringAsFixed(1);
-  }
+  String _plural(int count, String one, String many) => count == 1 ? one : many;
 }
 
 class _CalculatorActionButton extends StatelessWidget {

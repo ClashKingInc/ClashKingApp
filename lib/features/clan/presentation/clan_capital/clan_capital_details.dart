@@ -46,16 +46,16 @@ class _CapitalRaidBreakdownState extends State<CapitalRaidBreakdown> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClanFilterRail(
+          CKFilterChipRail(
             padding: EdgeInsets.zero,
             children: [
-              ClanFilterChip(
+              CKFilterChip(
                 label: loc.capitalDetailsOffense,
                 icon: Icons.arrow_outward_rounded,
                 selected: _showOffense,
                 onTap: () => setState(() => _showOffense = true),
               ),
-              ClanFilterChip(
+              CKFilterChip(
                 label: loc.capitalDetailsDefense,
                 icon: Icons.shield_rounded,
                 selected: !_showOffense,
@@ -65,18 +65,18 @@ class _CapitalRaidBreakdownState extends State<CapitalRaidBreakdown> {
             ],
           ),
           const SizedBox(height: 12),
-          ClanSummaryChips(
+          CKSummaryChipRail(
             padding: EdgeInsets.zero,
             alignment: WrapAlignment.start,
             scrollable: false,
             children: [
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.bolt_rounded,
                 value: efficiency.oneshots.toString(),
                 label: loc.capitalRaidOneshots,
                 color: StatColors.win,
               ),
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.close_rounded,
                 value: efficiency.fails.toString(),
                 label: loc.capitalRaidFails,
@@ -703,18 +703,18 @@ class _CapitalHistorySummaryState extends State<CapitalHistorySummary> {
               ),
             ),
             const SizedBox(height: 10),
-            ClanSummaryChips(
+            CKSummaryChipRail(
               padding: EdgeInsets.zero,
               alignment: WrapAlignment.start,
               scrollable: false,
               children: [
-                ClanSummaryChip(
+                CKSummaryChip(
                   icon: Icons.diamond_rounded,
                   value: formatter.format(summary.avgLootPerWeek.round()),
                   label: loc.capitalAvgLootPerWeek,
                   color: StatColors.capitalLoot,
                 ),
-                ClanSummaryChip(
+                CKSummaryChip(
                   icon: Icons.bolt_rounded,
                   value: formatter.format(summary.avgAttacksPerWeek.round()),
                   label: loc.capitalAvgAttacksPerWeek,
@@ -727,30 +727,30 @@ class _CapitalHistorySummaryState extends State<CapitalHistorySummary> {
               secondChild: Column(
                 children: [
                   const SizedBox(height: 12),
-                  ClanSummaryChips(
+                  CKSummaryChipRail(
                     padding: EdgeInsets.zero,
                     alignment: WrapAlignment.start,
                     scrollable: false,
                     children: [
-                      ClanSummaryChip(
+                      CKSummaryChip(
                         icon: Icons.emoji_events_rounded,
                         value: formatter.format(avgRewards),
                         label: loc.clanCapitalAvgRewards,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      ClanSummaryChip(
+                      CKSummaryChip(
                         icon: Icons.savings_rounded,
                         value: formatter.format(avgLootPerAttack),
                         label: loc.capitalAvgLootPerAttack,
                         color: StatColors.capitalLoot,
                       ),
-                      ClanSummaryChip(
+                      CKSummaryChip(
                         icon: Icons.domain_rounded,
                         value: avgDistrictsPerWeek.toStringAsFixed(1),
                         label: loc.clanCapitalAvgDistrictsPerWeek,
                         color: StatColors.capitalDistrict,
                       ),
-                      ClanSummaryChip(
+                      CKSummaryChip(
                         icon: Icons.checklist_rounded,
                         value: formatter.format(summary.totalRaidsCompleted),
                         label: loc.raidsCompleted,

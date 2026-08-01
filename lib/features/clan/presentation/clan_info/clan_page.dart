@@ -335,27 +335,27 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
           _FilterBar(
             trailing: const SizedBox.shrink(),
             padding: EdgeInsets.zero,
-            middle: ClanSummaryChips(
+            middle: CKSummaryChipRail(
               padding: EdgeInsets.zero,
               children: [
-                ClanSummaryChip(
+                CKSummaryChip(
                   icon: Icons.login_rounded,
                   value: stats.totalJoins.toString(),
                   label: loc?.joinLeaveJoins ?? 'Joins',
                   color: Colors.green,
                 ),
-                ClanSummaryChip(
+                CKSummaryChip(
                   icon: Icons.logout_rounded,
                   value: stats.totalLeaves.toString(),
                   label: loc?.joinLeaveLeaves ?? 'Leaves',
                   color: Colors.redAccent,
                 ),
-                ClanSummaryChip(
+                CKSummaryChip(
                   icon: Icons.person_search_rounded,
                   value: stats.uniquePlayers.toString(),
                   label: loc?.joinLeaveUniquePlayers ?? 'Unique Players',
                 ),
-                ClanSummaryChip(
+                CKSummaryChip(
                   icon: Icons.repeat_rounded,
                   value: stats.rejoinedPlayers.toString(),
                   label: loc?.joinLeaveRejoinedPlayers ?? 'Rejoined Players',
@@ -676,10 +676,10 @@ class _ClanRankingsTabState extends State<_ClanRankingsTab> {
                 onTap: _pickSeason,
               ),
             ],
-            middle: ClanSummaryChips(
+            middle: CKSummaryChipRail(
               padding: EdgeInsets.zero,
               children: [
-                ClanSummaryChip(
+                CKSummaryChip(
                   icon: Icons.calendar_month_rounded,
                   value: seasonLabel,
                   label:
@@ -1593,39 +1593,39 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
               onTap: _pickStatsSeason,
             ),
           ],
-          middle: ClanSummaryChips(
+          middle: CKSummaryChipRail(
             padding: EdgeInsets.zero,
             children: [
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.calendar_month_rounded,
                 value: statsPeriodValue,
                 label: statsPeriodLabel,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.groups_rounded,
                 value: overview.activePlayers.toString(),
                 label: loc.clanMembers,
               ),
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.bolt_rounded,
                 value: overview.totalAttacks.toString(),
                 label: loc.warAttacksTitle,
                 color: Colors.blueAccent,
               ),
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.star_rounded,
                 value: overview.averageStars.toStringAsFixed(2),
                 label: loc.warStarsAverage,
                 color: Colors.amber.shade700,
               ),
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.percent_rounded,
                 value: '${overview.averageDestruction.toStringAsFixed(1)}%',
                 label: loc.warDestructionAverage,
                 color: Colors.teal,
               ),
-              ClanSummaryChip(
+              CKSummaryChip(
                 icon: Icons.warning_amber_rounded,
                 value: overview.missedAttacks.toString(),
                 label: loc.warAttacksMissedShort,

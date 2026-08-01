@@ -279,25 +279,25 @@ class WarLogSummary extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final publicRecord = clan.isWarLogPublic;
     final stats = <Widget>[
-      ClanSummaryChip(
+      CKSummaryChip(
         label: loc.warWinsTitle,
         value: clan.warWins.toString(),
         color: StatColors.win,
       ),
       if (publicRecord)
-        ClanSummaryChip(
+        CKSummaryChip(
           label: loc.warDrawsTitle,
           value: clan.warTies.toString(),
           color: StatColors.tie,
         ),
       if (publicRecord)
-        ClanSummaryChip(
+        CKSummaryChip(
           label: loc.warLossesTitle,
           value: clan.warLosses.toString(),
           color: StatColors.loss,
         ),
       if (clan.warWinStreak > 0)
-        ClanSummaryChip(
+        CKSummaryChip(
           label: loc.clanWinStreakTitle,
           value: clan.warWinStreak.toString(),
           color: const Color(0xFFE35D4F),
@@ -305,7 +305,7 @@ class WarLogSummary extends StatelessWidget {
         ),
     ];
 
-    return ClanSummaryChips(padding: EdgeInsets.zero, children: stats);
+    return CKSummaryChipRail(padding: EdgeInsets.zero, children: stats);
   }
 }
 
