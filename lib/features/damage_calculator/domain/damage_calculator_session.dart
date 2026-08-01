@@ -6,12 +6,14 @@ class DamageAccountPreset {
     required this.tag,
     required this.name,
     required this.townHall,
+    this.league,
     this.ownedLevels = const {},
   });
 
   final String tag;
   final String name;
   final int townHall;
+  final String? league;
   final Map<DamageSourceKind, int> ownedLevels;
 }
 

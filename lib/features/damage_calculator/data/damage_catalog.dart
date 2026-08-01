@@ -90,6 +90,8 @@ List<BuildingDefinition> _parseBuildings(dynamic rawBuildings) {
         requiredTownHall: name == 'Town Hall'
             ? levelNumber
             : _int(level['required_townhall'], fallback: 1),
+        upgradeResource: raw['upgrade_resource']?.toString(),
+        upgradeCost: _optionalInt(level['build_cost']),
       );
     });
     if (levels.isEmpty) continue;
@@ -310,6 +312,12 @@ int _int(Object? value, {int fallback = 0}) => switch (value) {
   final num number => number.round(),
   final String text => int.tryParse(text) ?? fallback,
   _ => fallback,
+};
+
+int? _optionalInt(Object? value) => switch (value) {
+  final num number => number.round(),
+  final String text => int.tryParse(text),
+  _ => null,
 };
 
 double _double(Object? value) => switch (value) {

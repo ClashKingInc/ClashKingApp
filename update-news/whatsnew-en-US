@@ -15,6 +15,9 @@
 - Damage Calculator now follows a clearer flow: setup, live target result, compact attack method, focused settings, then optional optimization.
 - Ranked League account switching now uses a labelled account selector directly in the player identity.
 - Damage Calculator now starts from a clear attack method, shows only relevant damage sources first, and hides the Zap Quake optimizer outside Zap Quake mode.
+- Calculators now use the same hero header and tabs as player and clan detail pages.
+- Added a farm goal mode next to the damage calculator to estimate required raids from a resource target and average loot.
+- Farm goals now use a selected building level and suggest league-based loot for the selected account.
 - Calculator UX now has cleaner setup controls, compact source rows, localized building labels, and no redundant empty stack card
 - Posts now show announcement-shaped skeleton cards while loading instead of a spinner
 - Posts now use cleaner announcement cards and a lighter article header when no image is available
@@ -155,3 +158,4 @@ What’s new
 - Damage Calculator now opens on the customizable attack method.
 - Ranked League now opens directly like Upgrade Tracker, with an in-page account switcher instead of an intermediate account list.
 - Ranked League account switching now follows the same Home visibility setting as the Ranked Home card.
+- Calculator hero backgrounds now keep a visible image with fallback assets, and calculator tabs no longer inherit a grey surface tint.

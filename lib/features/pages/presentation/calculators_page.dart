@@ -1,5 +1,7 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/header_widgets.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
@@ -11,9 +13,12 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'side_page_components.dart';
+
+enum _CalculatorMode { damage, farmGoal }
 
 class CalculatorsPage extends StatefulWidget {
   const CalculatorsPage({super.key, this.catalog, this.accountPresets});
@@ -53,6 +58,11 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   bool _readProviders = false;
   bool _showAllSources = false;
   String? _selectedQuickSetupId;
+  _CalculatorMode _calculatorMode = _CalculatorMode.damage;
+  String? _farmAccountTag;
+  String? _farmBuildingId;
+  int? _farmBuildingLevel;
+  late final TextEditingController _farmAverageLootController;
 
   @override
   void initState() {
@@ -62,6 +72,16 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     _session = DamageCalculatorSession(_catalog);
     _selectedQuickSetupId = _customSetupId;
     _accountPresets = widget.accountPresets ?? const [];
+    if (_accountPresets.isNotEmpty) {
+      _farmAccountTag = _accountPresets.first.tag;
+    }
+    _farmAverageLootController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _farmAverageLootController.dispose();
+    super.dispose();
   }
 
   @override
@@ -70,10 +90,16 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     if (_readProviders || widget.accountPresets != null) return;
     _readProviders = true;
     try {
+      final accounts = context.read<CocAccountService>();
       _accountPresets = _verifiedAccountPresets(
-        context.read<CocAccountService>(),
+        accounts,
         context.read<PlayerService>(),
       );
+      final selectedTag = accounts.selectedTag;
+      _farmAccountTag =
+          _accountPresets.any((preset) => preset.tag == selectedTag)
+          ? selectedTag
+          : _accountPresets.firstOrNull?.tag;
     } on ProviderNotFoundException {
       _accountPresets = const [];
     }
@@ -82,13 +108,56 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final isFarmGoalMode = _calculatorMode == _CalculatorMode.farmGoal;
+    if (isFarmGoalMode) {
+      final farmPreset = _farmSelectedPreset;
+      final farmTownHall = farmPreset?.townHall ?? _catalog.maxTownHall;
+      final farmBuildings = _catalog.buildingsForTownHall(farmTownHall);
+      final farmBuilding = _farmSelectedBuilding(farmBuildings);
+      final farmLevels =
+          farmBuilding?.levelsForTownHall(farmTownHall) ??
+          const <BuildingLevelDefinition>[];
+      final farmLevel = _farmSelectedLevel(farmLevels);
+      return _CalculatorScaffold(
+        selectedMode: _calculatorMode,
+        onModeChanged: _selectCalculatorMode,
+        child: ListView(
+          key: const ValueKey('farm-goal-scroll'),
+          padding: sidePagePadding,
+          children: [
+            _FarmGoalView(
+              accountPresets: _accountPresets,
+              selectedAccountTag: _farmAccountTag,
+              selectedAccount: farmPreset,
+              onAccountChanged: _selectFarmAccount,
+              buildings: farmBuildings,
+              selectedBuildingId: _farmBuildingId,
+              selectedBuilding: farmBuilding,
+              levels: farmLevels,
+              selectedLevel: farmLevel,
+              onBuildingChanged: _selectFarmBuilding,
+              onLevelChanged: _selectFarmBuildingLevel,
+              averageLootController: _farmAverageLootController,
+              onLootChanged: () => setState(() {}),
+            ),
+          ],
+        ),
+      );
+    }
     if (_catalog.buildings.isEmpty || _catalog.sources.isEmpty) {
-      return SidePageScaffold(
-        title: loc.damageCalculatorTitle,
-        child: AppEmptyState(
-          icon: Icons.cloud_off_rounded,
-          title: loc.damageNoStaticDataTitle,
-          body: loc.damageNoStaticDataBody,
+      return _CalculatorScaffold(
+        selectedMode: _calculatorMode,
+        onModeChanged: _selectCalculatorMode,
+        child: ListView(
+          key: const ValueKey('calculators-scroll'),
+          padding: sidePagePadding,
+          children: [
+            AppEmptyState(
+              icon: Icons.cloud_off_rounded,
+              title: loc.damageNoStaticDataTitle,
+              body: loc.damageNoStaticDataBody,
+            ),
+          ],
         ),
       );
     }
@@ -134,8 +203,9 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final showZapQuakeOptimizer =
         selectedSetup?.id == 'zap-quake' && targets.isNotEmpty;
 
-    return SidePageScaffold(
-      title: loc.damageCalculatorTitle,
+    return _CalculatorScaffold(
+      selectedMode: _calculatorMode,
+      onModeChanged: _selectCalculatorMode,
       child: ListView(
         key: const ValueKey('damage-calculator-scroll'),
         padding: sidePagePadding,
@@ -281,6 +351,92 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     );
   }
 
+  void _selectCalculatorMode(_CalculatorMode mode) {
+    if (mode == _calculatorMode) return;
+    setState(() => _calculatorMode = mode);
+  }
+
+  DamageAccountPreset? get _farmSelectedPreset {
+    final tag = _farmAccountTag;
+    if (tag == null) return null;
+    for (final preset in _accountPresets) {
+      if (preset.tag == tag) return preset;
+    }
+    return null;
+  }
+
+  BuildingDefinition? _farmSelectedBuilding(
+    List<BuildingDefinition> buildings,
+  ) {
+    final selectedId = _farmBuildingId;
+    if (selectedId == null) return null;
+    for (final building in buildings) {
+      if (building.id == selectedId) return building;
+    }
+    return null;
+  }
+
+  BuildingLevelDefinition? _farmSelectedLevel(
+    List<BuildingLevelDefinition> levels,
+  ) {
+    if (levels.isEmpty) return null;
+    final selectedLevel = _farmBuildingLevel;
+    if (selectedLevel != null) {
+      for (final level in levels) {
+        if (level.level == selectedLevel) return level;
+      }
+    }
+    return levels.last;
+  }
+
+  void _selectFarmAccount(String? tag) {
+    setState(() {
+      _farmAccountTag = tag;
+      _farmBuildingId = null;
+      _farmBuildingLevel = null;
+      _farmAverageLootController.clear();
+    });
+  }
+
+  void _selectFarmBuilding(String buildingId) {
+    final farmPreset = _farmSelectedPreset;
+    final townHall = farmPreset?.townHall ?? _catalog.maxTownHall;
+    final building = _catalog
+        .buildingsForTownHall(townHall)
+        .firstWhere((candidate) => candidate.id == buildingId);
+    final levels = building.levelsForTownHall(townHall);
+    setState(() {
+      _farmBuildingId = buildingId;
+      _farmBuildingLevel = levels.isEmpty ? null : levels.last.level;
+      _setFarmLootSuggestion();
+    });
+  }
+
+  void _selectFarmBuildingLevel(int level) {
+    setState(() {
+      _farmBuildingLevel = level;
+      _setFarmLootSuggestion();
+    });
+  }
+
+  void _setFarmLootSuggestion() {
+    final farmPreset = _farmSelectedPreset;
+    final farmTownHall = farmPreset?.townHall ?? _catalog.maxTownHall;
+    final building = _farmSelectedBuilding(
+      _catalog.buildingsForTownHall(farmTownHall),
+    );
+    final levels =
+        building?.levelsForTownHall(farmTownHall) ??
+        const <BuildingLevelDefinition>[];
+    final level = _farmSelectedLevel(levels);
+    final suggestion = _farmLeagueLoot(
+      league: farmPreset?.league,
+      townHall: farmTownHall,
+      resource: level?.upgradeResource,
+    );
+    _farmAverageLootController.text = suggestion?.toString() ?? '';
+  }
+
   List<_QuickSetup> _quickSetups(AppLocalizations loc) => [
     _QuickSetup(
       id: _customSetupId,
@@ -366,6 +522,132 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   }
 }
 
+class _CalculatorScaffold extends StatelessWidget {
+  const _CalculatorScaffold({
+    required this.selectedMode,
+    required this.onModeChanged,
+    required this.child,
+  });
+
+  final _CalculatorMode selectedMode;
+  final ValueChanged<_CalculatorMode> onModeChanged;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Scaffold(
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          const SliverToBoxAdapter(child: _CalculatorHeader()),
+          SliverToBoxAdapter(
+            child: InfoProfileTabs(
+              key: const ValueKey('calculator-tabs'),
+              selectedIndex: selectedMode.index,
+              onTabSelected: (index) => onModeChanged(
+                _CalculatorMode.values[index.clamp(
+                  0,
+                  _CalculatorMode.values.length - 1,
+                )],
+              ),
+              tabs: [
+                InfoProfileTabData(
+                  label: loc.calculatorsModeDamage,
+                  icon: Icons.bolt_rounded,
+                ),
+                InfoProfileTabData(
+                  label: loc.calculatorsModeFarmGoal,
+                  icon: Icons.savings_outlined,
+                ),
+              ],
+            ),
+          ),
+        ],
+        body: child,
+      ),
+    );
+  }
+}
+
+class _CalculatorHeader extends StatelessWidget {
+  const _CalculatorHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    final isDesktopWeb = isSidePageDesktop(context);
+    final imageHeight = media.padding.top + (isDesktopWeb ? 292 : 246);
+
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: InfoHeroBackdrop(
+            imageUrl: ImageAssets.homeBaseBackground,
+            fallbackImageUrls: [
+              ImageAssets.clanPageBackground,
+              ImageAssets.builderBaseBackground,
+            ],
+            height: imageHeight,
+          ),
+        ),
+        SizedBox(
+          height: imageHeight,
+          child: SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                isDesktopWeb ? 20 : 12,
+                0,
+                isDesktopWeb ? 20 : 12,
+                14,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      HeaderIconButton(
+                        icon: Icons.arrow_back_rounded,
+                        iconColor: Colors.white,
+                        tooltip: MaterialLocalizations.of(
+                          context,
+                        ).backButtonTooltip,
+                        onTap: () => Navigator.of(context).maybePop(),
+                        showBackground: false,
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.calculate_rounded,
+                          size: 58,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          AppLocalizations.of(context)!.calculatorsTitle,
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _QuickSetup {
   const _QuickSetup({
     required this.id,
@@ -404,16 +686,286 @@ class _QuickSetupPanel extends StatelessWidget {
   }
 }
 
+class _FarmGoalView extends StatelessWidget {
+  const _FarmGoalView({
+    required this.accountPresets,
+    required this.selectedAccountTag,
+    required this.selectedAccount,
+    required this.onAccountChanged,
+    required this.buildings,
+    required this.selectedBuildingId,
+    required this.selectedBuilding,
+    required this.levels,
+    required this.selectedLevel,
+    required this.onBuildingChanged,
+    required this.onLevelChanged,
+    required this.averageLootController,
+    required this.onLootChanged,
+  });
+
+  final List<DamageAccountPreset> accountPresets;
+  final String? selectedAccountTag;
+  final DamageAccountPreset? selectedAccount;
+  final ValueChanged<String?> onAccountChanged;
+  final List<BuildingDefinition> buildings;
+  final String? selectedBuildingId;
+  final BuildingDefinition? selectedBuilding;
+  final List<BuildingLevelDefinition> levels;
+  final BuildingLevelDefinition? selectedLevel;
+  final ValueChanged<String> onBuildingChanged;
+  final ValueChanged<int> onLevelChanged;
+  final TextEditingController averageLootController;
+  final VoidCallback onLootChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final averageLoot = _parseFarmAmount(averageLootController.text);
+    final resourceLabel =
+        _upgradeResourceLabel(loc, selectedLevel?.upgradeResource) ?? '';
+    final upgradeCost = selectedLevel?.upgradeCost;
+    final raids =
+        upgradeCost != null &&
+            upgradeCost > 0 &&
+            resourceLabel.isNotEmpty &&
+            averageLoot > 0
+        ? (upgradeCost / averageLoot).ceil()
+        : null;
+    final buildingOptions = {
+      _noFarmBuilding: loc.farmGoalChooseBuilding,
+      for (final building in buildings)
+        building.id: _buildingDisplayName(loc, building.name),
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SidePageSectionHeader(title: loc.farmGoalAccountTitle),
+        _AccountSelectorPanel(
+          accountPresets: accountPresets,
+          selectedAccountTag: selectedAccountTag,
+          onAccountChanged: onAccountChanged,
+          hint: loc.farmGoalAccountHint,
+        ),
+        const SizedBox(height: 22),
+        SidePageSectionHeader(title: loc.farmGoalTargetTitle),
+        SidePagePanel(
+          key: const ValueKey('farm-goal-target'),
+          radius: AppRadius.card,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                loc.farmGoalTargetBuildingLabel,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 8),
+              SidePageInlineSelector<String>(
+                key: const ValueKey('farm-goal-building'),
+                selected: selectedBuildingId ?? _noFarmBuilding,
+                options: buildingOptions,
+                onSelected: (id) {
+                  if (id != _noFarmBuilding) onBuildingChanged(id);
+                },
+                minWidth: double.infinity,
+                maxWidth: double.infinity,
+                height: 46,
+              ),
+              if (selectedBuilding != null && selectedLevel != null) ...[
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        loc.farmGoalTargetLevelLabel,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    SidePageInlineSelector<int>(
+                      key: const ValueKey('farm-goal-level'),
+                      selected: selectedLevel!.level,
+                      options: {
+                        for (final level in levels)
+                          level.level: loc.sideLevel(level.level),
+                      },
+                      onSelected: onLevelChanged,
+                      minWidth: 132,
+                      maxWidth: 160,
+                      height: 44,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    MobileWebImage(
+                      imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                        selectedBuilding!.imageName,
+                        selectedLevel!.level,
+                      ),
+                      width: 52,
+                      height: 52,
+                      errorWidget: (_, _, _) =>
+                          const Icon(Icons.home_work_rounded, size: 40),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${_buildingDisplayName(loc, selectedBuilding!.name)} · ${loc.sideLevel(selectedLevel!.level)}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            upgradeCost == null || resourceLabel.isEmpty
+                                ? loc.farmGoalCostUnavailable
+                                : '${loc.farmGoalUpgradeCostLabel}: ${formatSidePageInt(upgradeCost)} $resourceLabel',
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        SidePageSectionHeader(title: loc.farmGoalLootTitle),
+        SidePagePanel(
+          key: const ValueKey('farm-goal-loot'),
+          radius: AppRadius.card,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                key: const ValueKey('farm-goal-average-loot'),
+                controller: averageLootController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  labelText: loc.farmGoalAverageLootLabel,
+                  suffixText: resourceLabel,
+                  prefixIcon: const Icon(Icons.savings_outlined),
+                ),
+                onChanged: (_) => onLootChanged(),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                selectedAccount?.league == null || resourceLabel.isEmpty
+                    ? loc.farmGoalNoLeagueLoot
+                    : loc.farmGoalLeagueEstimate(selectedAccount!.league!),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        if (raids == null)
+          _InlineEmpty(
+            message: selectedBuilding == null
+                ? loc.farmGoalMissingTarget
+                : upgradeCost == null || resourceLabel.isEmpty
+                ? loc.farmGoalCostUnavailable
+                : loc.farmGoalMissingValues,
+          )
+        else
+          SidePagePanel(
+            key: const ValueKey('farm-goal-result'),
+            radius: AppRadius.card,
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.track_changes_rounded,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        loc.farmGoalResultTitle,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        loc.farmGoalResultSummary(
+                          formatSidePageInt(upgradeCost!),
+                          resourceLabel,
+                          formatSidePageInt(averageLoot),
+                        ),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      '$raids',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(
+                      loc.farmGoalRaids,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _AccountSelectorPanel extends StatelessWidget {
   const _AccountSelectorPanel({
     required this.accountPresets,
     required this.selectedAccountTag,
     required this.onAccountChanged,
+    this.hint,
   });
 
   final List<DamageAccountPreset> accountPresets;
   final String? selectedAccountTag;
   final ValueChanged<String?> onAccountChanged;
+  final String? hint;
 
   @override
   Widget build(BuildContext context) {
@@ -477,7 +1029,7 @@ class _AccountSelectorPanel extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  loc.damageAccountSelectorHint,
+                  hint ?? loc.damageAccountSelectorHint,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -489,6 +1041,7 @@ class _AccountSelectorPanel extends StatelessWidget {
 }
 
 const _noAccountPreset = '__none__';
+const _noFarmBuilding = '__none__';
 
 class _TargetEmptyPanel extends StatelessWidget {
   const _TargetEmptyPanel({required this.onChoose});
@@ -1194,6 +1747,7 @@ List<DamageAccountPreset> _verifiedAccountPresets(
         tag: tag,
         name: player.name,
         townHall: player.townHallLevel,
+        league: player.league,
         ownedLevels: _ownedDamageLevels(player),
       ),
     );
@@ -1233,6 +1787,54 @@ String _buildingDisplayName(AppLocalizations loc, String name) {
   if (name == 'Town Hall') return loc.damageTownHall;
   return name;
 }
+
+String? _upgradeResourceLabel(AppLocalizations loc, String? resource) {
+  final normalized = resource?.trim().toLowerCase().replaceAll('_', ' ');
+  return switch (normalized) {
+    'gold' => loc.resourceGold,
+    'elixir' => loc.resourceElixir,
+    'dark elixir' => loc.resourceDarkElixir,
+    final value when value != null && value.isNotEmpty => resource,
+    _ => null,
+  };
+}
+
+int? _farmLeagueLoot({
+  required String? league,
+  required int townHall,
+  required String? resource,
+}) {
+  if (league == null || resource == null || resource.isEmpty) return null;
+  final leagues = GameDataService.playerLeagueData['leagues'];
+  final leagueData = leagues is Map ? leagues[league] : null;
+  if (leagueData is! Map) return null;
+  final rewards = leagueData['rewards'];
+  if (rewards is! List) return null;
+
+  Map? selectedReward;
+  for (final reward in rewards) {
+    if (reward is! Map) continue;
+    final requiredTownHall = reward['townhall_level'];
+    if (requiredTownHall is! num || requiredTownHall > townHall) continue;
+    selectedReward = reward;
+  }
+  final resources = selectedReward?['resources'];
+  if (resources is! Map) return null;
+  final resourceKey = switch (resource.trim().toLowerCase().replaceAll(
+    ' ',
+    '_',
+  )) {
+    'gold' => 'gold',
+    'elixir' => 'elixir',
+    'dark_elixir' => 'dark_elixir',
+    _ => null,
+  };
+  final value = resourceKey == null ? null : resources[resourceKey];
+  return value is num && value > 0 ? value.round() : null;
+}
+
+int _parseFarmAmount(String value) =>
+    int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
 
 String _quickSetupLabel(AppLocalizations loc, String id) => switch (id) {
   'zap-quake' => loc.damageQuickSetupZapQuake,

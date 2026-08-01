@@ -2,6 +2,7 @@ import 'package:clashkingapp/features/damage_calculator/data/damage_catalog.dart
 import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator_engine.dart';
 import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator_session.dart';
 import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +13,8 @@ void main() {
   ) async {
     await _pump(tester);
 
-    expect(find.text('Damage Calculator'), findsOneWidget);
+    expect(find.text('Calculators'), findsOneWidget);
+    expect(find.text('Damage'), findsOneWidget);
     expect(find.text('Building to destroy'), findsOneWidget);
     expect(find.text('No building selected'), findsOneWidget);
     expect(find.text('Choose a building'), findsOneWidget);
@@ -64,6 +66,8 @@ void main() {
   testWidgets('allows a custom attack method', (tester) async {
     await _pump(tester);
 
+    await tester.ensureVisible(find.text('Custom'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Custom'));
     await tester.pumpAndSettle();
 
@@ -90,6 +94,64 @@ void main() {
     );
   });
 
+  testWidgets('calculates raids for a farm goal', (tester) async {
+    addTearDown(() => GameDataService.loadFromBundleForTesting({}));
+    GameDataService.loadFromBundleForTesting({
+      'league_tiers': [
+        {
+          'name': 'Titan League 25',
+          'rewards': [
+            {
+              'townhall_level': 10,
+              'resources': {'gold': 350000},
+            },
+          ],
+        },
+      ],
+    });
+    await _pump(
+      tester,
+      accountPresets: const [
+        DamageAccountPreset(
+          tag: '#FARM',
+          name: 'Farmer',
+          townHall: 12,
+          league: 'Titan League 25',
+        ),
+      ],
+    );
+
+    final modeSelector = find.byKey(const ValueKey('calculator-tabs'));
+    await tester.tap(
+      find.descendant(of: modeSelector, matching: find.text('Farm goal')),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Town Hall').last);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('farm-goal-level')), findsOneWidget);
+    expect(find.text('350000'), findsOneWidget);
+    await tester.enterText(
+      find.byKey(const ValueKey('farm-goal-average-loot')),
+      '100',
+    );
+    await tester.pump();
+
+    final result = find.byKey(const ValueKey('farm-goal-result'));
+    expect(result, findsOneWidget);
+    expect(
+      find.descendant(of: result, matching: find.text('10')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: result, matching: find.text('Raids needed')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('updates independent results from the manual stack', (
     tester,
   ) async {
@@ -98,6 +160,8 @@ void main() {
     await tester.tap(find.text('Choose a building'));
     await tester.pumpAndSettle();
     await tester.tap(find.byType(ListTile).first);
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Zap + quake'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Zap + quake'));
     await tester.pumpAndSettle();
@@ -134,6 +198,7 @@ void main() {
           tag: '#ABC',
           name: 'Chief',
           townHall: 10,
+          league: 'Titan League 25',
           ownedLevels: {DamageSourceKind.lightning: 1},
         ),
       ],
@@ -143,9 +208,13 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byType(ListTile).first);
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Choose an account'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Choose an account'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Chief · TH10').last);
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Zap + quake'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Zap + quake'));
     await tester.pumpAndSettle();
@@ -193,11 +262,19 @@ const _catalog = DamageCatalog(
       imageName: 'Town Hall',
       zapQuakeEligible: true,
       levels: [
-        BuildingLevelDefinition(level: 1, hitpoints: 800, requiredTownHall: 10),
+        BuildingLevelDefinition(
+          level: 1,
+          hitpoints: 800,
+          requiredTownHall: 10,
+          upgradeResource: 'Gold',
+          upgradeCost: 0,
+        ),
         BuildingLevelDefinition(
           level: 2,
           hitpoints: 1000,
           requiredTownHall: 12,
+          upgradeResource: 'Gold',
+          upgradeCost: 1000,
         ),
       ],
     ),
@@ -207,7 +284,13 @@ const _catalog = DamageCatalog(
       imageName: 'Air Defense',
       zapQuakeEligible: true,
       levels: [
-        BuildingLevelDefinition(level: 1, hitpoints: 600, requiredTownHall: 12),
+        BuildingLevelDefinition(
+          level: 1,
+          hitpoints: 600,
+          requiredTownHall: 12,
+          upgradeResource: 'Gold',
+          upgradeCost: 2000,
+        ),
       ],
     ),
   ],
