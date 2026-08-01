@@ -11,32 +11,41 @@ class UpgradeWidgetSyncService {
 
   static const _appGroup = 'group.com.clashking.apps';
 
+  static String? _appGroupForPlatform() {
+    if (kIsWeb) return null;
+    return Platform.isIOS ? _appGroup : null;
+  }
+
   Future<void> sync(
     List<UpgradeTrackerSnapshot> linkedSnapshots, {
     required List<Map<String, Object?>> linkedAccounts,
+    String? selectedTag,
   }) async {
-    if (kIsWeb || !Platform.isIOS) return;
-    await HomeWidget.setAppGroupId(_appGroup);
+    if (kIsWeb || !(Platform.isIOS || Platform.isAndroid)) return;
+    if (Platform.isIOS) {
+      await HomeWidget.setAppGroupId(_appGroup);
+    }
 
     final snapshotsByTag = {
       for (final snapshot in linkedSnapshots)
         _normalized(snapshot.tag): snapshot,
     };
+    final linkedAccountsByTag = {
+      for (final account in linkedAccounts)
+        _normalized(account['tag']?.toString() ?? ''): account,
+    }..remove('');
     final accounts = <Map<String, Object?>>[];
     final seenTags = <String>{};
-    for (final account in linkedAccounts) {
-      final tag = account['tag']?.toString() ?? '';
-      final normalizedTag = _normalized(tag);
-      final snapshot = snapshotsByTag[normalizedTag];
-      if (normalizedTag.isEmpty ||
-          snapshot == null ||
-          !seenTags.add(normalizedTag)) {
-        continue;
-      }
-      final name = _nonEmpty(account['name']) ?? snapshot.name;
-      final townHallLevel = _int(account['townHallLevel']).clamp(0, 99).toInt();
+    for (final snapshot in linkedSnapshots) {
+      final normalizedTag = _normalized(snapshot.tag);
+      if (normalizedTag.isEmpty || !seenTags.add(normalizedTag)) continue;
+      final account = linkedAccountsByTag[normalizedTag];
+      final name = _nonEmpty(account?['name']) ?? snapshot.name;
+      final townHallLevel = _int(
+        account?['townHallLevel'],
+      ).clamp(0, 99).toInt();
       final builderHallLevel = _int(
-        account['builderHallLevel'],
+        account?['builderHallLevel'],
       ).clamp(0, 99).toInt();
       accounts.add({
         'tag': _canonicalTag(normalizedTag),
@@ -53,27 +62,52 @@ class UpgradeWidgetSyncService {
     await HomeWidget.saveWidgetData<String>(
       'upgradeWidgetAccounts',
       jsonEncode(accounts),
-      appGroupId: _appGroup,
+      appGroupId: _appGroupForPlatform(),
     );
+    final normalizedSelectedTag = _normalized(selectedTag ?? '');
+    String? currentPayload;
+    String? selectedPayload;
+    String? firstTag;
     for (final account in accounts) {
       final tag = account['tag']!.toString();
+      final normalizedTag = _normalized(tag);
       final snapshot = snapshotsByTag[_normalized(tag)]!;
-      await HomeWidget.saveWidgetData<String>(
-        'upgradeWidget_${_normalized(tag)}',
-        jsonEncode(
-          _widgetPayload(
-            snapshot,
-            canonicalTag: tag,
-            canonicalName: account['name']!.toString(),
-            townHallLevel: _int(account['townHallLevel']),
-            builderHallLevel: _int(account['builderHallLevel']),
-          ),
+      final payload = jsonEncode(
+        _widgetPayload(
+          snapshot,
+          canonicalTag: tag,
+          canonicalName: account['name']!.toString(),
+          townHallLevel: _int(account['townHallLevel']),
+          builderHallLevel: _int(account['builderHallLevel']),
         ),
-        appGroupId: _appGroup,
+      );
+      currentPayload ??= payload;
+      firstTag ??= normalizedTag;
+      if (normalizedTag == normalizedSelectedTag) {
+        selectedPayload = payload;
+      }
+      await HomeWidget.saveWidgetData<String>(
+        'upgradeWidget_$normalizedTag',
+        payload,
+        appGroupId: _appGroupForPlatform(),
+      );
+    }
+    if (Platform.isAndroid) {
+      final resolvedSelectedTag = selectedPayload == null
+          ? firstTag
+          : normalizedSelectedTag;
+      await HomeWidget.saveWidgetData<String>(
+        'upgradeWidgetData',
+        selectedPayload ?? currentPayload,
+      );
+      await HomeWidget.saveWidgetData<String>(
+        'upgradeWidgetSelectedTag',
+        resolvedSelectedTag,
       );
     }
     await HomeWidget.updateWidget(
       name: 'UpgradeWidget',
+      androidName: 'UpgradeAppWidgetProvider',
       iOSName: 'UpgradeWidget',
     );
   }
