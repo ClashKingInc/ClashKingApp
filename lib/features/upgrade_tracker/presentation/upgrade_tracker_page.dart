@@ -7,9 +7,11 @@ import 'dart:ui' as ui;
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/collapsible_item_section.dart';
+import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -35,7 +37,6 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -567,6 +568,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     final snapshots = await _repository.loadSavedSnapshots(linkedTags);
     await _widgetSync.sync(
       snapshots,
+      selectedTag: _selectedTag,
       linkedAccounts: linkedAccounts
           .map(
             (account) => <String, Object?>{
@@ -767,15 +769,15 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                 ),
                 InfoProfileTabData(
                   label: 'Calendar',
-                  icon: Icons.calendar_month_rounded,
+                  imageUrl: ImageAssets.iconClock,
                 ),
                 InfoProfileTabData(
                   label: l10n.upgradeTrackerPlan,
-                  icon: Icons.route_rounded,
+                  imageUrl: ImageAssets.hammerOfBuilding,
                 ),
                 InfoProfileTabData(
                   label: l10n.upgradeTrackerCollection,
-                  icon: Icons.collections_rounded,
+                  imageUrl: ImageAssets.clanGamesMedals,
                 ),
               ],
             ),
@@ -1143,10 +1145,11 @@ class _TrackerInfoHeader extends StatelessWidget {
     final collectionOwned = snapshot.collections
         .where((item) => item.owned)
         .length;
-    final active = snapshot
-        .itemsFor(village: village)
+    final busyBuilders = snapshot
+        .itemsFor(village: village, queue: UpgradeQueue.builders)
         .where((item) => snapshot.remainingActiveSeconds(item) > 0)
         .length;
+    final totalBuilders = snapshot.buildersFor(village);
     final isDesktop = _isTrackerDesktop(context);
     final headerHeight =
         MediaQuery.paddingOf(context).top + (isDesktop ? 214.0 : 276.0);
@@ -1310,92 +1313,61 @@ class _TrackerInfoHeader extends StatelessWidget {
                               : latest,
                         );
                     final values = selectedTab == 4
-                        ? <(String, String)>[
-                            (
-                              l10n.upgradeTrackerCollected,
-                              collectionTotal == 0
+                        ? <_TrackerQuickStat>[
+                            _TrackerQuickStat(
+                              value: collectionTotal == 0
                                   ? '0%'
                                   : '${(collectionOwned * 100 / collectionTotal).toStringAsFixed(1)}%',
+                              imageUrl: ImageAssets.iconTick,
+                              fallbackIcon: Icons.percent_rounded,
+                              tooltip: l10n.upgradeTrackerCollected,
                             ),
-                            (
-                              l10n.upgradeTrackerHeaderOwned,
-                              '$collectionOwned / $collectionTotal',
+                            _TrackerQuickStat(
+                              value: '$collectionOwned / $collectionTotal',
+                              imageUrl: ImageAssets.clanGamesMedals,
+                              fallbackIcon: Icons.inventory_2_rounded,
+                              tooltip: l10n.upgradeTrackerHeaderOwned,
                             ),
-                            (
-                              l10n.upgradeTrackerHeaderUpdated,
-                              _shortAge(snapshot.capturedAt),
+                            _TrackerQuickStat(
+                              value: _shortAge(snapshot.capturedAt),
+                              imageUrl: ImageAssets.iconClock,
+                              fallbackIcon: Icons.update_rounded,
+                              tooltip: l10n.upgradeTrackerHeaderUpdated,
                             ),
                           ]
-                        : <(String, String)>[
-                            (
-                              l10n.upgradeTrackerHeaderComplete,
-                              '${(summary.completion * 100).toStringAsFixed(1)}%',
+                        : <_TrackerQuickStat>[
+                            _TrackerQuickStat(
+                              value:
+                                  '${(summary.completion * 100).toStringAsFixed(1)}%',
+                              imageUrl: ImageAssets.iconTick,
+                              fallbackIcon: Icons.percent_rounded,
+                              tooltip: l10n.upgradeTrackerHeaderComplete,
                             ),
-                            (
-                              l10n.upgradeTrackerHeaderLevelsLeft,
-                              '${summary.levelsRemaining}',
+                            _TrackerQuickStat(
+                              value: '${summary.levelsRemaining}',
+                              imageUrl: ImageAssets.hammerOfBuilding,
+                              fallbackIcon: Icons.layers_rounded,
+                              tooltip: l10n.upgradeTrackerHeaderLevelsLeft,
                             ),
-                            (l10n.upgradeTrackerHeaderActive, '$active'),
-                            (
-                              l10n.upgradeTrackerHeaderFinishes,
-                              finish == null ? '—' : _dateLabel(finish),
+                            _TrackerQuickStat(
+                              value: '$busyBuilders/$totalBuilders',
+                              imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                                "Builder's Hut",
+                                1,
+                              ),
+                              fallbackIcon: Icons.handyman_rounded,
+                              tooltip: l10n.upgradeTrackerHeaderActive,
+                            ),
+                            _TrackerQuickStat(
+                              value: finish == null ? '—' : _dateLabel(finish),
+                              imageUrl: ImageAssets.iconClock,
+                              fallbackIcon: Icons.event_rounded,
+                              tooltip: l10n.upgradeTrackerHeaderFinishes,
                             ),
                           ];
-                    return Row(
-                      children: [
-                        for (var index = 0; index < values.length; index++) ...[
-                          if (index > 0) const SizedBox(width: 6),
-                          Expanded(
-                            flex: values.length == 4 && index == 3 ? 2 : 1,
-                            child: Container(
-                              height: isDesktop ? 48 : 52,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.34),
-                                borderRadius: BorderRadius.circular(
-                                  isDesktop ? 12 : 16,
-                                ),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.12),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    values[index].$2,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                  ),
-                                  Text(
-                                    values[index].$1,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.copyWith(
-                                          color: Colors.white.withValues(
-                                            alpha: 0.72,
-                                          ),
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
+                    return _TrackerHeaderQuickStats(
+                      stats: values,
+                      compact: isDesktop,
                     );
                   },
                 ),
@@ -1405,6 +1377,117 @@ class _TrackerInfoHeader extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _TrackerQuickStat {
+  const _TrackerQuickStat({
+    required this.value,
+    this.imageUrl,
+    required this.fallbackIcon,
+    required this.tooltip,
+  });
+
+  final String value;
+  final String? imageUrl;
+  final IconData fallbackIcon;
+  final String tooltip;
+}
+
+class _TrackerHeaderQuickStats extends StatelessWidget {
+  const _TrackerHeaderQuickStats({required this.stats, required this.compact});
+
+  final List<_TrackerQuickStat> stats;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    if (stats.isEmpty) return const SizedBox.shrink();
+    return SizedBox(
+      width: double.infinity,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var index = 0; index < stats.length; index++) ...[
+              if (index > 0) const SizedBox(width: 7),
+              _TrackerQuickChip(
+                value: stats[index].value,
+                imageUrl: stats[index].imageUrl,
+                fallbackIcon: stats[index].fallbackIcon,
+                tooltip: stats[index].tooltip,
+                compact: compact,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TrackerQuickChip extends StatelessWidget {
+  const _TrackerQuickChip({
+    required this.value,
+    this.imageUrl,
+    required this.fallbackIcon,
+    required this.tooltip,
+    required this.compact,
+  });
+
+  final String value;
+  final String? imageUrl;
+  final IconData fallbackIcon;
+  final String tooltip;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final foreground = colorScheme.onSurface;
+    final chipBody = Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: compact ? 9 : 10,
+        vertical: compact ? 5 : 6,
+      ),
+      decoration: BoxDecoration(
+        color: colorScheme.surface.withValues(alpha: 0.58),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (imageUrl != null && imageUrl!.isNotEmpty)
+            MobileWebImage(
+              imageUrl: imageUrl!,
+              width: compact ? 18 : 19,
+              height: compact ? 18 : 19,
+              fit: BoxFit.contain,
+            )
+          else
+            Icon(fallbackIcon, size: compact ? 18 : 19, color: foreground),
+          const SizedBox(width: 5),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: compact ? 118 : 132),
+            child: Text(
+              value,
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: foreground,
+                fontWeight: FontWeight.w700,
+                height: 1,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return Tooltip(message: tooltip, child: chipBody);
   }
 }
 
@@ -1488,8 +1571,7 @@ class _TrackerCollapsibleCard extends StatelessWidget {
     required this.onToggle,
     required this.onSummaryTap,
     required this.child,
-    this.showContent = true,
-    this.surfaceWhenExpanded = false,
+    this.surfaceWhenExpanded = true,
     this.margin = const EdgeInsets.only(bottom: 10),
   });
 
@@ -1501,7 +1583,6 @@ class _TrackerCollapsibleCard extends StatelessWidget {
   final VoidCallback onToggle;
   final VoidCallback onSummaryTap;
   final Widget child;
-  final bool showContent;
   final bool surfaceWhenExpanded;
   final EdgeInsetsGeometry margin;
 
@@ -1515,13 +1596,8 @@ class _TrackerCollapsibleCard extends StatelessWidget {
       expanded: expanded,
       onToggle: onToggle,
       margin: margin,
-      showContent: showContent,
       surfaceWhenExpanded: surfaceWhenExpanded,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: CKSpacing.sm,
-        vertical: CKSpacing.xs,
-      ),
-      expandedSpacing: CKSpacing.sm,
+      contentPadding: const EdgeInsets.all(CKSpacing.md),
       animateContent: false,
       child: child,
     );
@@ -1544,7 +1620,8 @@ class _UpgradesTab extends StatefulWidget {
   State<_UpgradesTab> createState() => _UpgradesTabState();
 }
 
-class _UpgradesTabState extends State<_UpgradesTab> {
+class _UpgradesTabState extends State<_UpgradesTab>
+    with AutomaticKeepAliveClientMixin<_UpgradesTab> {
   final _expandedGroups = <String>{};
   final _searchController = TextEditingController();
   String _query = '';
@@ -1554,8 +1631,12 @@ class _UpgradesTabState extends State<_UpgradesTab> {
   late Set<UpgradeTrackerItem> _activeItems;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
+    _searchController.addListener(_handleSearchChange);
     _rebuildIndex();
     _activeItems = _currentActiveItems();
     widget.clock.addListener(_handleClockChange);
@@ -1578,6 +1659,7 @@ class _UpgradesTabState extends State<_UpgradesTab> {
   @override
   void dispose() {
     widget.clock.removeListener(_handleClockChange);
+    _searchController.removeListener(_handleSearchChange);
     _searchController.dispose();
     super.dispose();
   }
@@ -1593,6 +1675,10 @@ class _UpgradesTabState extends State<_UpgradesTab> {
     final next = _currentActiveItems();
     if (setEquals(_activeItems, next)) return;
     setState(() => _activeItems = next);
+  }
+
+  void _handleSearchChange() {
+    _setQuery(_searchController.text);
   }
 
   void _setQuery(String value) {
@@ -1615,6 +1701,7 @@ class _UpgradesTabState extends State<_UpgradesTab> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final l10n = AppLocalizations.of(context)!;
     final village = widget.village;
     final hasActive = _activeItems.isNotEmpty;
@@ -1683,30 +1770,21 @@ class _UpgradesTabState extends State<_UpgradesTab> {
           10,
         ),
         sliver: SliverToBoxAdapter(
-          child: Row(
-            children: [
-              Expanded(
-                child: AppSearchField(
-                  controller: _searchController,
-                  query: _query,
-                  hintText: l10n.upgradeTrackerSearchUpgrades,
-                  onChanged: _setQuery,
-                ),
-              ),
-              const SizedBox(width: CKSpacing.sm),
-              FilterDropdown(
-                sortBy: _groupFilter,
-                maxWidth: 118,
-                sortByOptions: const {
-                  'All': 'all',
-                  'Buildings': 'buildings',
-                  'Heroes': 'heroes',
-                  'Research': 'research',
-                  'Other': 'other',
-                },
-                updateSortBy: (value) => setState(() => _groupFilter = value),
-              ),
-            ],
+          child: ClanTabSearchSortBar(
+            controller: _searchController,
+            query: _query,
+            hintText: l10n.upgradeTrackerSearchUpgrades,
+            sortBy: _groupFilter,
+            updateSortBy: (value) => setState(() => _groupFilter = value),
+            maxSortWidth: 118,
+            padding: EdgeInsets.zero,
+            sortByOptions: const {
+              'All': 'all',
+              'Buildings': 'buildings',
+              'Heroes': 'heroes',
+              'Research': 'research',
+              'Other': 'other',
+            },
           ),
         ),
       ),
@@ -1716,7 +1794,11 @@ class _UpgradesTabState extends State<_UpgradesTab> {
       slivers.add(
         SliverFillRemaining(
           hasScrollBody: false,
-          child: Center(child: Text(l10n.upgradeTrackerNoMatchingItems)),
+          child: AppEmptyState(
+            icon: Icons.search_off_rounded,
+            title: l10n.upgradeTrackerNoMatchingItems,
+            body: l10n.todoTryAnotherSearchOrFilter,
+          ),
         ),
       );
     } else {
@@ -1751,14 +1833,25 @@ class _UpgradesTabState extends State<_UpgradesTab> {
                 }),
                 onSummaryTap: () =>
                     _showUpgradeSectionSummary(context, groupTitle, summary),
-                showContent: false,
-                child: const SizedBox.shrink(),
+                child: _buildMobileGroupContent(group, items),
               ),
             ),
           ),
         );
-        final groupSlivers = <Widget>[];
-        if (groupExpanded && group == _UpgradeGroup.laboratory) {
+      }
+    }
+    slivers.add(const SliverToBoxAdapter(child: SizedBox(height: 28)));
+    return CustomScrollView(slivers: slivers);
+  }
+
+  Widget _buildMobileGroupContent(
+    _UpgradeGroup group,
+    List<UpgradeTrackerItem> items,
+  ) {
+    if (group == _UpgradeGroup.laboratory) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           for (final category in <(String, List<UpgradeTrackerItem>)>[
             (
               'Troops',
@@ -1782,72 +1875,33 @@ class _UpgradesTabState extends State<_UpgradesTab> {
                   .where((item) => item.category == UpgradeCategory.sieges)
                   .toList(growable: false),
             ),
-          ]) {
-            if (category.$2.isEmpty) continue;
-            groupSlivers.add(
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  _trackerContentGutter,
-                  4,
-                  _trackerContentGutter,
-                  6,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: Text(
-                    category.$1,
-                    style: CKTypography.of(context, CKTextRole.rowTitle),
-                  ),
-                ),
-              ),
-            );
-            groupSlivers.add(_upgradeGridSliver(category.$2));
-          }
-        } else if (groupExpanded && group == _UpgradeGroup.equipment) {
-          for (final heroGroup in _equipmentHeroGroups(items)) {
-            groupSlivers.add(
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  _trackerContentGutter,
-                  4,
-                  _trackerContentGutter,
-                  6,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      _AspectSafeImage(
-                        imageUrl: ImageAssets.getHeroImage(heroGroup.$1),
-                        width: 26,
-                        height: 26,
-                      ),
-                      const SizedBox(width: CKSpacing.xs),
-                      Text(
-                        heroGroup.$1,
-                        style: CKTypography.of(context, CKTextRole.rowTitle),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-            groupSlivers.add(_upgradeGridSliver(heroGroup.$2));
-          }
-        } else if (groupExpanded) {
-          groupSlivers.add(_upgradeGridSliver(items));
-        }
-        slivers.add(
-          SliverAnimatedPaintExtent(
-            duration: CKMotion.durationOf(context, CKMotion.standard),
-            curve: CKMotion.standardCurve,
-            child: groupExpanded
-                ? SliverMainAxisGroup(slivers: groupSlivers)
-                : SliverToBoxAdapter(child: const SizedBox.shrink()),
-          ),
-        );
-      }
+          ])
+            if (category.$2.isNotEmpty) ...[
+              _DesktopUpgradeSubheading(label: category.$1),
+              _upgradeCompactGrid(category.$2),
+              const SizedBox(height: 10),
+            ],
+        ],
+      );
     }
-    slivers.add(const SliverToBoxAdapter(child: SizedBox(height: 28)));
-    return CustomScrollView(slivers: slivers);
+
+    if (group == _UpgradeGroup.equipment) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final heroGroup in _equipmentHeroGroups(items)) ...[
+            _DesktopUpgradeSubheading(
+              label: heroGroup.$1,
+              imageUrl: ImageAssets.getHeroImage(heroGroup.$1),
+            ),
+            _upgradeCompactGrid(heroGroup.$2),
+            const SizedBox(height: 10),
+          ],
+        ],
+      );
+    }
+
+    return _upgradeCompactGrid(items);
   }
 
   Widget _buildDesktopGrid(
@@ -1911,37 +1965,32 @@ class _UpgradesTabState extends State<_UpgradesTab> {
                       ),
                       const SizedBox(height: 12),
                     ],
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AppSearchField(
-                            controller: _searchController,
-                            query: _query,
-                            hintText: l10n.upgradeTrackerSearchUpgrades,
-                            onChanged: _setQuery,
-                          ),
-                        ),
-                        const SizedBox(width: CKSpacing.sm),
-                        FilterDropdown(
-                          sortBy: _groupFilter,
-                          maxWidth: 136,
-                          sortByOptions: const {
-                            'All': 'all',
-                            'Buildings': 'buildings',
-                            'Heroes': 'heroes',
-                            'Research': 'research',
-                            'Other': 'other',
-                          },
-                          updateSortBy: (value) =>
-                              setState(() => _groupFilter = value),
-                        ),
-                      ],
+                    ClanTabSearchSortBar(
+                      controller: _searchController,
+                      query: _query,
+                      hintText: l10n.upgradeTrackerSearchUpgrades,
+                      sortBy: _groupFilter,
+                      updateSortBy: (value) =>
+                          setState(() => _groupFilter = value),
+                      maxSortWidth: 136,
+                      padding: EdgeInsets.zero,
+                      sortByOptions: const {
+                        'All': 'all',
+                        'Buildings': 'buildings',
+                        'Heroes': 'heroes',
+                        'Research': 'research',
+                        'Other': 'other',
+                      },
                     ),
                     const SizedBox(height: 12),
                     if (data.visibleItems.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 88),
-                        child: Text(l10n.upgradeTrackerNoMatchingItems),
+                      SizedBox(
+                        height: 360,
+                        child: AppEmptyState(
+                          icon: Icons.search_off_rounded,
+                          title: l10n.upgradeTrackerNoMatchingItems,
+                          body: l10n.todoTryAnotherSearchOrFilter,
+                        ),
                       )
                     else
                       _DesktopUpgradeGroupGrid(
@@ -2048,6 +2097,40 @@ class _UpgradesTabState extends State<_UpgradesTab> {
     return _upgradeIconWrap(items);
   }
 
+  Widget _upgradeCompactGrid(List<UpgradeTrackerItem> items) {
+    const spacing = 8.0;
+    const minTileSize = 54.0;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns =
+            ((constraints.maxWidth + spacing) / (minTileSize + spacing))
+                .floor()
+                .clamp(1, 999);
+        return GridView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: spacing,
+            crossAxisSpacing: spacing,
+          ),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            return RepaintBoundary(
+              child: _UpgradeIconTile(
+                snapshot: widget.snapshot,
+                item: item,
+                clock: _activeItems.contains(item) ? widget.clock : null,
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _upgradeIconWrap(List<UpgradeTrackerItem> items) {
     const tileSize = 54.0;
     const spacing = 8.0;
@@ -2060,85 +2143,18 @@ class _UpgradesTabState extends State<_UpgradesTab> {
           runSpacing: spacing,
           children: [
             for (final item in items)
-              SizedBox.square(
-                dimension: tileSize,
-                child: _UpgradeIconTile(
-                  snapshot: widget.snapshot,
-                  item: item,
-                  clock: _activeItems.contains(item) ? widget.clock : null,
+              RepaintBoundary(
+                child: SizedBox.square(
+                  dimension: tileSize,
+                  child: _UpgradeIconTile(
+                    snapshot: widget.snapshot,
+                    item: item,
+                    clock: _activeItems.contains(item) ? widget.clock : null,
+                  ),
                 ),
               ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _upgradeGridSliver(List<UpgradeTrackerItem> items) {
-    final width = MediaQuery.sizeOf(context).width;
-    final isDesktop = _isTrackerDesktop(context);
-    if (isDesktop) {
-      const tileSize = 54.0;
-      const spacing = 8.0;
-      return SliverPadding(
-        padding: const EdgeInsets.fromLTRB(
-          _trackerContentGutter,
-          0,
-          _trackerContentGutter,
-          12,
-        ),
-        sliver: SliverToBoxAdapter(
-          child: LayoutBuilder(
-            builder: (context, constraints) => SizedBox(
-              width: constraints.maxWidth,
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                spacing: spacing,
-                runSpacing: spacing,
-                children: [
-                  for (final item in items)
-                    SizedBox.square(
-                      dimension: tileSize,
-                      child: _UpgradeIconTile(
-                        snapshot: widget.snapshot,
-                        item: item,
-                        clock: _activeItems.contains(item)
-                            ? widget.clock
-                            : null,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    final crossAxisCount = width < 600 ? 5 : 8;
-
-    return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(
-        _trackerContentGutter,
-        0,
-        _trackerContentGutter,
-        12,
-      ),
-      sliver: SliverGrid.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          mainAxisSpacing: 6,
-          crossAxisSpacing: 6,
-        ),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return _UpgradeIconTile(
-            snapshot: widget.snapshot,
-            item: item,
-            clock: _activeItems.contains(item) ? widget.clock : null,
-          );
-        },
       ),
     );
   }
@@ -2447,15 +2463,22 @@ class _UpgradeIconTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final usePlayerFrame = _usesPlayerIconFrame;
+    final useContainedArt = _usesContainedArt;
     final content = Stack(
       children: [
         Positioned.fill(
           child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: MobileWebImage(
-              imageUrl: item.imageUrl,
-              fallbackImageUrls: _upgradeImageFallbacks(item),
-              fit: BoxFit.contain,
+            padding: useContainedArt
+                ? const EdgeInsets.all(4)
+                : EdgeInsets.zero,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(usePlayerFrame ? 6 : 0),
+              child: MobileWebImage(
+                imageUrl: item.imageUrl,
+                fallbackImageUrls: _upgradeImageFallbacks(item),
+                fit: useContainedArt ? BoxFit.contain : BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -2468,7 +2491,7 @@ class _UpgradeIconTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               color: item.isComplete
-                  ? CKUpgradeColors.completion
+                  ? const Color(0xFFFFD75E)
                   : Colors.black.withValues(alpha: 0.86),
               borderRadius: BorderRadius.circular(5),
             ),
@@ -2526,17 +2549,58 @@ class _UpgradeIconTile extends StatelessWidget {
   Widget _buildFrame(BuildContext context, DateTime now, Widget child) {
     final scheme = Theme.of(context).colorScheme;
     final active = snapshot.remainingActiveSeconds(item, now: now) > 0;
+    final usePlayerFrame = _usesPlayerIconFrame;
+    final completeColor = const Color(0xFFFFD75E);
+    final borderColor = usePlayerFrame
+        ? active
+              ? scheme.primary
+              : item.isComplete
+              ? completeColor
+              : Theme.of(context).brightness == Brightness.dark
+              ? Colors.white.withValues(alpha: 0.88)
+              : Colors.black87
+        : active
+        ? scheme.primary
+        : scheme.outlineVariant;
+    final backgroundColor = usePlayerFrame
+        ? _playerFrameBackground
+        : scheme.surfaceContainerHighest.withValues(alpha: 0.34);
     return Container(
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
-        borderRadius: BorderRadius.circular(CKRadius.tile),
-        border: Border.all(
-          color: active ? scheme.primary : scheme.outlineVariant,
-          width: active ? 2 : 1,
-        ),
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(usePlayerFrame ? 8 : CKRadius.tile),
+        border: Border.all(color: borderColor, width: usePlayerFrame ? 2 : 1),
+        boxShadow: usePlayerFrame && item.isComplete
+            ? [
+                BoxShadow(
+                  color: borderColor.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ]
+            : null,
       ),
       child: child,
     );
+  }
+
+  bool get _usesPlayerIconFrame => true;
+
+  bool get _usesContainedArt => const {
+    UpgradeCategory.defenses,
+    UpgradeCategory.traps,
+    UpgradeCategory.craftedDefenses,
+    UpgradeCategory.army,
+    UpgradeCategory.resources,
+    UpgradeCategory.walls,
+    UpgradeCategory.supercharge,
+  }.contains(item.category);
+
+  Color? get _playerFrameBackground {
+    if (item.category != UpgradeCategory.equipment) return null;
+    return item.meta?['rarity']?.toString() == '2'
+        ? Colors.purple
+        : Colors.blue;
   }
 }
 
@@ -2736,12 +2800,13 @@ class _PlanTabState extends State<_PlanTab> {
           sliver: SliverToBoxAdapter(child: _buildMobileFilters()),
         ),
         if (_groups.isEmpty)
-          const SliverFillRemaining(
-            hasScrollBody: false,
-            child: _TrackerEmptyState(
-              icon: Icons.task_alt_rounded,
-              title: 'No matching upgrades',
-              body: 'Try another village or queue.',
+          const SliverToBoxAdapter(
+            child: _TrackerEmptySliverBody(
+              child: AppEmptyState(
+                icon: Icons.task_alt_rounded,
+                title: 'No matching upgrades',
+                body: 'Try another village or queue.',
+              ),
             ),
           )
         else
@@ -2785,12 +2850,13 @@ class _PlanTabState extends State<_PlanTab> {
           ),
         ),
         if (_groups.isEmpty)
-          const SliverFillRemaining(
-            hasScrollBody: false,
-            child: _TrackerEmptyState(
-              icon: Icons.task_alt_rounded,
-              title: 'No matching upgrades',
-              body: 'Try another village or queue.',
+          const SliverToBoxAdapter(
+            child: _TrackerEmptySliverBody(
+              child: AppEmptyState(
+                icon: Icons.task_alt_rounded,
+                title: 'No matching upgrades',
+                body: 'Try another village or queue.',
+              ),
             ),
           )
         else
@@ -2821,38 +2887,27 @@ class _PlanTabState extends State<_PlanTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 36,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: _PlanVillageFilter.values
-                .map(
-                  (value) => _FilterChip(
-                    label: _planVillageFilterLabel(value),
-                    selected: _villageFilter == value,
-                    onTap: () => _updateFilters(() => _villageFilter = value),
-                  ),
-                )
-                .toList(growable: false),
-          ),
+        CKFilterChipRail(
+          padding: EdgeInsets.zero,
+          children: _PlanQueueFilter.values
+              .map(
+                (value) => CKFilterChip(
+                  label: _planQueueFilterLabel(value),
+                  icon: _planQueueFilterIcon(value),
+                  selected: _queueFilter == value,
+                  onTap: () => _updateFilters(() => _queueFilter = value),
+                ),
+              )
+              .toList(growable: false),
         ),
-        SizedBox(
-          height: 36,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: _PlanQueueFilter.values
-                .map(
-                  (value) => _FilterChip(
-                    label: _planQueueFilterLabel(value),
-                    selected: _queueFilter == value,
-                    onTap: () => _updateFilters(() => _queueFilter = value),
-                  ),
-                )
-                .toList(growable: false),
-          ),
+        const SizedBox(height: CKSpacing.sm),
+        Row(
+          children: [
+            Expanded(child: _buildVillageDropdown(maxWidth: 180)),
+            const SizedBox(width: CKSpacing.sm),
+            SizedBox(width: 154, child: _buildSortDropdown(maxWidth: 154)),
+          ],
         ),
-        const SizedBox(height: 6),
-        Align(alignment: Alignment.centerRight, child: _buildSortDropdown()),
       ],
     );
   }
@@ -2861,55 +2916,54 @@ class _PlanTabState extends State<_PlanTab> {
     return CKSectionPanel(
       padding: const EdgeInsets.all(CKSpacing.md),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Wrap(
-                  spacing: CKSpacing.xs,
-                  runSpacing: CKSpacing.xs,
-                  children: _PlanVillageFilter.values
-                      .map(
-                        (value) => _FilterChip(
-                          label: _planVillageFilterLabel(value),
-                          selected: _villageFilter == value,
-                          onTap: () =>
-                              _updateFilters(() => _villageFilter = value),
-                        ),
-                      )
-                      .toList(growable: false),
-                ),
-                const SizedBox(height: CKSpacing.sm),
-                Wrap(
-                  spacing: CKSpacing.xs,
-                  runSpacing: CKSpacing.xs,
-                  children: _PlanQueueFilter.values
-                      .map(
-                        (value) => _FilterChip(
-                          label: _planQueueFilterLabel(value),
-                          selected: _queueFilter == value,
-                          onTap: () =>
-                              _updateFilters(() => _queueFilter = value),
-                        ),
-                      )
-                      .toList(growable: false),
-                ),
-              ],
+            child: Wrap(
+              spacing: CKSpacing.xs,
+              runSpacing: CKSpacing.xs,
+              children: _PlanQueueFilter.values
+                  .map(
+                    (value) => CKFilterChip(
+                      label: _planQueueFilterLabel(value),
+                      icon: _planQueueFilterIcon(value),
+                      selected: _queueFilter == value,
+                      onTap: () => _updateFilters(() => _queueFilter = value),
+                    ),
+                  )
+                  .toList(growable: false),
             ),
           ),
           const SizedBox(width: CKSpacing.md),
-          _buildSortDropdown(),
+          SizedBox(width: 132, child: _buildVillageDropdown(maxWidth: 132)),
+          const SizedBox(width: CKSpacing.sm),
+          SizedBox(width: 160, child: _buildSortDropdown(maxWidth: 160)),
         ],
       ),
     );
   }
 
-  Widget _buildSortDropdown() {
+  Widget _buildVillageDropdown({required double maxWidth}) {
+    return FilterDropdown(
+      sortBy: _villageFilter.name,
+      maxWidth: maxWidth,
+      sortByOptions: {
+        for (final value in _PlanVillageFilter.values)
+          _filterDropdownLabel(
+            _planVillageFilterIcon(value),
+            _planVillageFilterLabel(value),
+          ): value.name,
+      },
+      updateSortBy: (value) => _updateFilters(
+        () => _villageFilter = _PlanVillageFilter.values.byName(value),
+      ),
+    );
+  }
+
+  Widget _buildSortDropdown({required double maxWidth}) {
     return FilterDropdown(
       sortBy: _planSort.name,
-      maxWidth: 160,
+      maxWidth: maxWidth,
       sortByOptions: {
         for (final value in _PlanSort.values) _planSortLabel(value): value.name,
       },
@@ -2917,6 +2971,21 @@ class _PlanTabState extends State<_PlanTab> {
           _updateFilters(() => _planSort = _PlanSort.values.byName(value)),
     );
   }
+}
+
+List<Widget> _filterDropdownLabel(IconData icon, String label) {
+  return [
+    Icon(icon, size: 16),
+    const SizedBox(width: 6),
+    Expanded(
+      child: Text(
+        label,
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+  ];
 }
 
 enum _PlanCalendarGroup {
@@ -3072,7 +3141,7 @@ class _PlanCalendarTab extends StatelessWidget {
   );
 }
 
-class _PlanTimeline extends StatelessWidget {
+class _PlanTimeline extends StatefulWidget {
   const _PlanTimeline({
     required this.snapshot,
     required this.startsAt,
@@ -3083,15 +3152,81 @@ class _PlanTimeline extends StatelessWidget {
   final DateTime startsAt;
   final List<_PlanTimelineGroup> groups;
 
-  static const _horizonDays = 60;
-  static const _labelWidth = 64.0;
-  static const _dayWidth = 72.0;
-  static const _laneHeight = 64.0;
+  static const _horizonDays = 30;
+  static const _labelWidth = 56.0;
+  static const _dayWidth = 64.0;
+  static const _laneHeight = 60.0;
+  static const _horizontalInset = 16.0;
+  static const _sectionStartInset = 12.0;
+  static const _periodBarHeight = 42.0;
+
+  @override
+  State<_PlanTimeline> createState() => _PlanTimelineState();
+}
+
+class _PlanTimelineState extends State<_PlanTimeline> {
+  static const _horizonDays = _PlanTimeline._horizonDays;
+  static const _labelWidth = _PlanTimeline._labelWidth;
+  static const _dayWidth = _PlanTimeline._dayWidth;
+  static const _laneHeight = _PlanTimeline._laneHeight;
+  static const _horizontalInset = _PlanTimeline._horizontalInset;
+  static const _sectionStartInset = _PlanTimeline._sectionStartInset;
+  static const _periodBarHeight = _PlanTimeline._periodBarHeight;
+
+  late final ScrollController _horizontalController;
+  int _periodIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _horizontalController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _horizontalController.dispose();
+    super.dispose();
+  }
+
+  int get _maxPeriodIndex {
+    final baseDay = DateTime(
+      widget.startsAt.year,
+      widget.startsAt.month,
+      widget.startsAt.day,
+    );
+    final latest = widget.groups
+        .expand((group) => group.lanes)
+        .expand((lane) => lane.upgrades)
+        .map((upgrade) => upgrade.endsAt)
+        .fold<DateTime?>(null, (current, value) {
+          return current == null || value.isAfter(current) ? value : current;
+        });
+    if (latest == null || !latest.isAfter(baseDay)) return 0;
+    return math.max(0, latest.difference(baseDay).inDays ~/ _horizonDays);
+  }
+
+  void _setPeriod(int value) {
+    final next = value.clamp(0, _maxPeriodIndex).toInt();
+    if (next == _periodIndex) return;
+    setState(() => _periodIndex = next);
+    if (_horizontalController.hasClients) {
+      _horizontalController.jumpTo(0);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final firstDay = DateTime(startsAt.year, startsAt.month, startsAt.day);
+    final baseFirstDay = DateTime(
+      widget.startsAt.year,
+      widget.startsAt.month,
+      widget.startsAt.day,
+    );
+    final firstDay = baseFirstDay.add(
+      Duration(days: _periodIndex * _horizonDays),
+    );
+    final now = DateTime.now();
     final scheme = Theme.of(context).colorScheme;
+    final maxPeriodIndex = _maxPeriodIndex;
 
     return Material(
       color: scheme.surface,
@@ -3102,78 +3237,119 @@ class _PlanTimeline extends StatelessWidget {
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
+                  final timelineWidth = _horizonDays * _dayWidth;
                   final timelineViewport = math.max(
                     0.0,
-                    constraints.maxWidth - 32 - _labelWidth,
+                    constraints.maxWidth -
+                        (_horizontalInset * 2) -
+                        _sectionStartInset -
+                        _labelWidth,
                   );
                   final contentWidth =
+                      (_horizontalInset * 2) +
+                      _sectionStartInset +
                       _labelWidth +
-                      math.max(timelineViewport, _horizonDays * _dayWidth);
-                  return SingleChildScrollView(
-                    key: ValueKey(
-                      'plan-calendar-horizontal-${startsAt.microsecondsSinceEpoch}',
-                    ),
-                    scrollDirection: Axis.horizontal,
-                    primary: false,
-                    physics: const ClampingScrollPhysics(),
-                    dragStartBehavior: DragStartBehavior.down,
-                    child: SizedBox(
-                      width: contentWidth,
-                      height: constraints.maxHeight,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ColoredBox(
-                            color: scheme.surface,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                              child: _PlanTimelineHeader(
-                                firstDay: firstDay,
-                                days: _horizonDays,
-                                labelWidth: _labelWidth,
-                                dayWidth: _dayWidth,
-                              ),
-                            ),
-                          ),
-                          const Divider(height: 1),
-                          Expanded(
-                            child: CustomScrollView(
-                              key: ValueKey(
-                                'plan-calendar-vertical-${startsAt.microsecondsSinceEpoch}',
-                              ),
-                              // Share the NestedScrollView's vertical
-                              // controller so pulling down at the top restores
-                              // the collapsed scenic header.
-                              primary: true,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              slivers: [
-                                SliverPadding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    16,
-                                    8,
-                                    16,
-                                    28,
+                      math.max(timelineViewport, timelineWidth);
+                  final bodyHeight = math.max(
+                    0.0,
+                    constraints.maxHeight - _periodBarHeight,
+                  );
+                  return Column(
+                    children: [
+                      _PlanTimelinePeriodBar(
+                        height: _periodBarHeight,
+                        firstDay: firstDay,
+                        days: _horizonDays,
+                        periodIndex: _periodIndex,
+                        periodCount: maxPeriodIndex + 1,
+                        onPrevious: _periodIndex > 0
+                            ? () => _setPeriod(_periodIndex - 1)
+                            : null,
+                        onNext: _periodIndex < maxPeriodIndex
+                            ? () => _setPeriod(_periodIndex + 1)
+                            : null,
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          controller: _horizontalController,
+                          scrollDirection: Axis.horizontal,
+                          primary: false,
+                          physics: const ClampingScrollPhysics(),
+                          dragStartBehavior: DragStartBehavior.start,
+                          child: SizedBox(
+                            width: contentWidth,
+                            height: bodyHeight,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ColoredBox(
+                                  color: scheme.surface,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      _horizontalInset + _sectionStartInset,
+                                      8,
+                                      _horizontalInset,
+                                      8,
+                                    ),
+                                    child: _PlanTimelineHeader(
+                                      firstDay: firstDay,
+                                      now: now,
+                                      days: _horizonDays,
+                                      labelWidth: _labelWidth,
+                                      dayWidth: _dayWidth,
+                                      horizontalController:
+                                          _horizontalController,
+                                      stickyInset:
+                                          _horizontalInset + _sectionStartInset,
+                                    ),
                                   ),
-                                  sliver: SliverList.builder(
-                                    itemCount: groups.length,
-                                    itemBuilder: (context, index) =>
-                                        _PlanTimelineSection(
-                                          snapshot: snapshot,
-                                          group: groups[index],
-                                          firstDay: startsAt,
-                                          days: _horizonDays,
-                                          labelWidth: _labelWidth,
-                                          dayWidth: _dayWidth,
-                                          laneHeight: _laneHeight,
+                                ),
+                                const Divider(height: 1),
+                                Expanded(
+                                  child: CustomScrollView(
+                                    // Share the NestedScrollView's vertical
+                                    // controller so pulling down at the top restores
+                                    // the collapsed scenic header.
+                                    primary: true,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    slivers: [
+                                      SliverPadding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                          _horizontalInset,
+                                          8,
+                                          _horizontalInset,
+                                          28,
                                         ),
+                                        sliver: SliverList.builder(
+                                          itemCount: widget.groups.length,
+                                          itemBuilder: (context, index) =>
+                                              _PlanTimelineSection(
+                                                snapshot: widget.snapshot,
+                                                group: widget.groups[index],
+                                                firstDay: firstDay,
+                                                now: now,
+                                                days: _horizonDays,
+                                                labelWidth: _labelWidth,
+                                                dayWidth: _dayWidth,
+                                                laneHeight: _laneHeight,
+                                                horizontalController:
+                                                    _horizontalController,
+                                                stickyInset:
+                                                    _horizontalInset +
+                                                    _sectionStartInset,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   );
                 },
               ),
@@ -3185,38 +3361,168 @@ class _PlanTimeline extends StatelessWidget {
   }
 }
 
-class _PlanTimelineHeader extends StatelessWidget {
-  const _PlanTimelineHeader({
+class _PlanTimelinePeriodBar extends StatelessWidget {
+  const _PlanTimelinePeriodBar({
+    required this.height,
     required this.firstDay,
     required this.days,
-    required this.labelWidth,
-    required this.dayWidth,
+    required this.periodIndex,
+    required this.periodCount,
+    required this.onPrevious,
+    required this.onNext,
   });
 
+  final double height;
   final DateTime firstDay;
   final int days;
-  final double labelWidth;
-  final double dayWidth;
+  final int periodIndex;
+  final int periodCount;
+  final VoidCallback? onPrevious;
+  final VoidCallback? onNext;
 
   @override
   Widget build(BuildContext context) {
-    final formatter = DateFormat('EEE\nMMM d');
-    final style = Theme.of(context).textTheme.labelSmall?.copyWith(
-      color: Theme.of(context).colorScheme.onSurfaceVariant,
-      fontWeight: FontWeight.w800,
-      height: 1.1,
+    final scheme = Theme.of(context).colorScheme;
+    final lastDay = firstDay.add(Duration(days: days - 1));
+    final label =
+        '${DateFormat('MMM d').format(firstDay)} - ${DateFormat('MMM d').format(lastDay)}';
+    return Container(
+      height: height,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        border: Border(
+          bottom: BorderSide(
+            color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            tooltip: 'Previous period',
+            visualDensity: VisualDensity.compact,
+            onPressed: onPrevious,
+            icon: const Icon(Icons.chevron_left_rounded),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: scheme.onSurface,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                if (periodCount > 1)
+                  Text(
+                    'Period ${periodIndex + 1} / $periodCount',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w700,
+                      height: 1,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          IconButton(
+            tooltip: 'Next period',
+            visualDensity: VisualDensity.compact,
+            onPressed: onNext,
+            icon: const Icon(Icons.chevron_right_rounded),
+          ),
+        ],
+      ),
     );
-    return Row(
+  }
+}
+
+class _PlanTimelineHeader extends StatelessWidget {
+  const _PlanTimelineHeader({
+    required this.firstDay,
+    required this.now,
+    required this.days,
+    required this.labelWidth,
+    required this.dayWidth,
+    required this.horizontalController,
+    required this.stickyInset,
+  });
+
+  final DateTime firstDay;
+  final DateTime now;
+  final int days;
+  final double labelWidth;
+  final double dayWidth;
+  final ScrollController horizontalController;
+  final double stickyInset;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final style = Theme.of(
+      context,
+    ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w800, height: 1.1);
+    return Stack(
+      clipBehavior: Clip.none,
       children: [
-        SizedBox(width: labelWidth),
-        ...List.generate(
-          days,
-          (index) => SizedBox(
-            width: dayWidth,
-            child: Text(
-              formatter.format(firstDay.add(Duration(days: index))),
-              textAlign: TextAlign.center,
-              style: style,
+        Row(
+          children: [
+            SizedBox(width: labelWidth),
+            ...List.generate(days, (index) {
+              final day = firstDay.add(Duration(days: index));
+              final isToday = _isSameDay(day, now);
+              final isMajor = isToday || index <= 1 || index % 7 == 0;
+              return SizedBox(
+                width: dayWidth,
+                child: Text(
+                  _timelineHeaderLabel(day, now),
+                  textAlign: TextAlign.center,
+                  style: style?.copyWith(
+                    color: isToday
+                        ? scheme.primary
+                        : isMajor
+                        ? scheme.onSurface
+                        : scheme.onSurfaceVariant.withValues(alpha: 0.62),
+                    fontWeight: isMajor ? FontWeight.w900 : FontWeight.w700,
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+        AnimatedBuilder(
+          animation: horizontalController,
+          builder: (context, child) {
+            final offset = _safeScrollOffset(horizontalController);
+            return Positioned(
+              left: offset - stickyInset,
+              top: 0,
+              bottom: 0,
+              width: labelWidth + stickyInset,
+              child: child!,
+            );
+          },
+          child: ColoredBox(
+            color: scheme.surface,
+            child: Padding(
+              padding: EdgeInsets.only(left: stickyInset),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Slot',
+                  style: style?.copyWith(
+                    color: scheme.onSurfaceVariant.withValues(alpha: 0.76),
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -3230,41 +3536,71 @@ class _PlanTimelineSection extends StatefulWidget {
     required this.snapshot,
     required this.group,
     required this.firstDay,
+    required this.now,
     required this.days,
     required this.labelWidth,
     required this.dayWidth,
     required this.laneHeight,
+    required this.horizontalController,
+    required this.stickyInset,
   });
 
   final UpgradeTrackerSnapshot snapshot;
   final _PlanTimelineGroup group;
   final DateTime firstDay;
+  final DateTime now;
   final int days;
   final double labelWidth;
   final double dayWidth;
   final double laneHeight;
+  final ScrollController horizontalController;
+  final double stickyInset;
 
   @override
   State<_PlanTimelineSection> createState() => _PlanTimelineSectionState();
 }
 
-class _PlanTimelineSectionState extends State<_PlanTimelineSection>
-    with AutomaticKeepAliveClientMixin {
+class _PlanTimelineSectionState extends State<_PlanTimelineSection> {
   bool _expanded = true;
+  late List<UpgradePlanLane> _plannedLanes;
+  late int _scheduledCount;
+  late List<PlannedUpgrade> _upcomingFinishes;
 
   @override
-  bool get wantKeepAlive => true;
+  void initState() {
+    super.initState();
+    _rebuildDerivedData();
+  }
+
+  @override
+  void didUpdateWidget(covariant _PlanTimelineSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.group, widget.group) ||
+        oldWidget.now != widget.now) {
+      _rebuildDerivedData();
+    }
+  }
+
+  void _rebuildDerivedData() {
+    _plannedLanes = widget.group.lanes
+        .where((lane) => lane.upgrades.isNotEmpty)
+        .toList(growable: false);
+    _scheduledCount = _plannedLanes.expand((lane) => lane.upgrades).length;
+    _upcomingFinishes =
+        _plannedLanes
+            .expand((lane) => lane.upgrades)
+            .where((upgrade) => upgrade.endsAt.isAfter(widget.now))
+            .toList(growable: false)
+          ..sort((a, b) => a.endsAt.compareTo(b.endsAt));
+  }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final scheme = Theme.of(context).colorScheme;
     final accent = widget.group.type.accent;
-    final plannedLanes = widget.group.lanes
-        .where((lane) => lane.upgrades.isNotEmpty)
-        .toList(growable: false);
-    final scheduledCount = plannedLanes.expand((lane) => lane.upgrades).length;
-    if (plannedLanes.isEmpty) return const SizedBox.shrink();
+    final nextFinish = _upcomingFinishes.firstOrNull;
+    final showTimelineTooltips = _isTrackerDesktop(context);
+    if (_plannedLanes.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
@@ -3301,18 +3637,25 @@ class _PlanTimelineSectionState extends State<_PlanTimelineSection>
                     height: 25,
                   ),
                   const SizedBox(width: 6),
-                  Text(
-                    widget.group.type.label,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const Spacer(),
-                  Text(
-                    '$scheduledCount upgrades',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w700,
+                  Expanded(
+                    child: Text(
+                      widget.group.type.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  _PlanTimelinePill(text: '$_scheduledCount upg'),
+                  if (nextFinish != null) ...[
+                    const SizedBox(width: 6),
+                    _PlanTimelinePill(
+                      icon: Icons.flag_rounded,
+                      text: _duration(
+                        nextFinish.endsAt.difference(widget.now).inSeconds,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -3325,7 +3668,7 @@ class _PlanTimelineSectionState extends State<_PlanTimelineSection>
                 ? Column(
                     children: [
                       const SizedBox(height: 12),
-                      ...plannedLanes.map(
+                      ..._plannedLanes.map(
                         (lane) => _PlanTimelineLane(
                           label: _planLaneLabel(
                             widget.snapshot,
@@ -3334,11 +3677,15 @@ class _PlanTimelineSectionState extends State<_PlanTimelineSection>
                           ),
                           upgrades: lane.upgrades,
                           firstDay: widget.firstDay,
+                          now: widget.now,
                           days: widget.days,
                           labelWidth: widget.labelWidth,
                           dayWidth: widget.dayWidth,
                           laneHeight: widget.laneHeight,
                           accent: accent,
+                          horizontalController: widget.horizontalController,
+                          stickyInset: widget.stickyInset,
+                          showTooltips: showTimelineTooltips,
                         ),
                       ),
                     ],
@@ -3356,21 +3703,29 @@ class _PlanTimelineLane extends StatelessWidget {
     required this.label,
     required this.upgrades,
     required this.firstDay,
+    required this.now,
     required this.days,
     required this.labelWidth,
     required this.dayWidth,
     required this.laneHeight,
     required this.accent,
+    required this.horizontalController,
+    required this.stickyInset,
+    required this.showTooltips,
   });
 
   final String label;
   final List<PlannedUpgrade> upgrades;
   final DateTime firstDay;
+  final DateTime now;
   final int days;
   final double labelWidth;
   final double dayWidth;
   final double laneHeight;
   final Color accent;
+  final ScrollController horizontalController;
+  final double stickyInset;
+  final bool showTooltips;
 
   @override
   Widget build(BuildContext context) {
@@ -3385,21 +3740,14 @@ class _PlanTimelineLane extends StatelessWidget {
         .toList(growable: false);
     final scheme = Theme.of(context).colorScheme;
     return SizedBox(
+      width: labelWidth + width,
       height: laneHeight,
-      child: Row(
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          SizedBox(
-            width: labelWidth,
-            child: Text(
-              label,
-              textAlign: TextAlign.left,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ),
-          SizedBox(
+          Positioned(
+            left: labelWidth,
+            top: 0,
             width: width,
             height: laneHeight,
             child: ClipRect(
@@ -3426,9 +3774,65 @@ class _PlanTimelineLane extends StatelessWidget {
                       width: width,
                       dayWidth: dayWidth,
                       accent: accent,
+                      showTooltip: showTooltips,
                     ),
                   ),
+                  if (!now.isBefore(firstDay) && now.isBefore(horizonEnd))
+                    Positioned(
+                      left:
+                          now.difference(firstDay).inMinutes / 1440 * dayWidth,
+                      top: 0,
+                      bottom: 0,
+                      child: IgnorePointer(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              left: BorderSide(color: scheme.primary, width: 2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
+              ),
+            ),
+          ),
+          AnimatedBuilder(
+            animation: horizontalController,
+            builder: (context, child) {
+              final offset = _safeScrollOffset(horizontalController);
+              return Positioned(
+                left: offset - stickyInset,
+                top: 0,
+                bottom: 0,
+                width: labelWidth + stickyInset,
+                child: child!,
+              );
+            },
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color:
+                    Theme.of(context).cardTheme.color ??
+                    Theme.of(context).colorScheme.surface,
+                border: Border(
+                  right: BorderSide(
+                    color: scheme.outlineVariant.withValues(alpha: 0.22),
+                  ),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: stickyInset),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -3487,6 +3891,7 @@ class _PlanTimelineBlock extends StatelessWidget {
     required this.width,
     required this.dayWidth,
     required this.accent,
+    required this.showTooltip,
   });
 
   final PlannedUpgrade upgrade;
@@ -3495,6 +3900,7 @@ class _PlanTimelineBlock extends StatelessWidget {
   final double width;
   final double dayWidth;
   final Color accent;
+  final bool showTooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -3515,147 +3921,369 @@ class _PlanTimelineBlock extends StatelessWidget {
       1.0,
       math.min(width - left, duration / 1440 * dayWidth),
     );
-    final iconOnly = blockWidth < 54;
-    final showMetadata = blockWidth >= 126;
-    final firstCost = upgrade.costs.firstOrNull;
-    return Positioned(
-      left: left + 0.75,
-      top: 3,
-      width: math.max(1.0, blockWidth - 1.5).toDouble(),
-      height: 56,
-      child: Semantics(
-        label:
-            '${upgrade.item.name}, level ${upgrade.step.targetLevel}, ${_timelineDateTimeLabel(upgrade.startsAt)} to ${_timelineDateTimeLabel(upgrade.endsAt)}',
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: iconOnly ? 2 : 6,
-            vertical: 5,
+    final iconOnly = blockWidth < 78;
+    final showMetadata = blockWidth >= 168;
+    final durationLabel = upgrade.isOngoing
+        ? '${_duration(upgrade.endsAt.difference(DateTime.now()).inSeconds)} left'
+        : _duration(upgrade.endsAt.difference(upgrade.startsAt).inSeconds);
+    final scheme = Theme.of(context).colorScheme;
+    final blockColor = Color.alphaBlend(
+      accent.withValues(alpha: 0.22),
+      scheme.surfaceContainerHighest,
+    );
+    final borderColor = upgrade.isOngoing
+        ? scheme.primary
+        : accent.withValues(alpha: 0.78);
+    final block = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _showPlannedUpgradeDetails(context, upgrade),
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: blockColor,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: borderColor,
+            width: upgrade.isOngoing ? 2 : 1,
           ),
-          decoration: BoxDecoration(
-            color: accent,
-            borderRadius: BorderRadius.circular(10),
-            border: upgrade.isOngoing
-                ? Border.all(
-                    color: Colors.white.withValues(alpha: 0.92),
-                    width: 2,
-                  )
-                : null,
-          ),
-          child: blockWidth < 24
-              ? const SizedBox.shrink()
-              : iconOnly
-              ? Center(
-                  child: _AspectSafeImage(
-                    imageUrl: upgrade.item.imageUrl,
-                    width: 24,
-                    height: 24,
-                  ),
-                )
-              : Row(
-                  children: [
-                    _AspectSafeImage(
-                      imageUrl: upgrade.item.imageUrl,
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${upgrade.isOngoing ? 'Now · ' : ''}${upgrade.item.name} · Lv ${upgrade.step.targetLevel}',
-                            maxLines: showMetadata ? 1 : 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelSmall
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.05,
-                                ),
-                          ),
-                          if (showMetadata) ...[
-                            const SizedBox(height: 3),
-                            Row(
+        ),
+        child: blockWidth < 24
+            ? const SizedBox.shrink()
+            : Row(
+                children: [
+                  Container(width: 3, color: accent),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: iconOnly ? 3 : 6,
+                        vertical: 5,
+                      ),
+                      child: iconOnly
+                          ? Center(
+                              child: _TimelineBlockIcon(
+                                imageUrl: upgrade.item.imageUrl,
+                                level: upgrade.step.targetLevel,
+                                compact: true,
+                              ),
+                            )
+                          : Row(
                               children: [
-                                if (firstCost != null) ...[
-                                  Flexible(
-                                    child: _TimelineMiniChip(
-                                      imageUrl: _resourceImage(
-                                        firstCost.resource,
+                                _TimelineBlockIcon(
+                                  imageUrl: upgrade.item.imageUrl,
+                                  level: upgrade.step.targetLevel,
+                                ),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${upgrade.isOngoing ? 'Now · ' : ''}${upgrade.item.name}',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall
+                                            ?.copyWith(
+                                              color: scheme.onSurface,
+                                              fontWeight: FontWeight.w800,
+                                              height: 1.05,
+                                            ),
                                       ),
-                                      text: _compact(firstCost.amount),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 3),
-                                ],
-                                _TimelineMiniChip(
-                                  icon: Icons.schedule_rounded,
-                                  text: _duration(
-                                    upgrade.endsAt
-                                        .difference(upgrade.startsAt)
-                                        .inSeconds,
+                                      if (showMetadata) ...[
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          'Lv ${upgrade.step.targetLevel} · $durationLabel',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall
+                                              ?.copyWith(
+                                                color: scheme.onSurfaceVariant,
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.w700,
+                                                height: 1,
+                                              ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ],
-                        ],
-                      ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+      ),
+    );
+    final interactiveBlock = showTooltip
+        ? Tooltip(
+            message:
+                '${upgrade.item.name} · Lv ${upgrade.step.targetLevel}\n${_timelineDateTimeLabel(upgrade.startsAt)} - ${_timelineDateTimeLabel(upgrade.endsAt)}',
+            child: block,
+          )
+        : block;
+    final includeSemantics = SemanticsBinding.instance.semanticsEnabled;
+    final blockChild = includeSemantics
+        ? Semantics(
+            label:
+                '${upgrade.item.name}, level ${upgrade.step.targetLevel}, ${_timelineDateTimeLabel(upgrade.startsAt)} to ${_timelineDateTimeLabel(upgrade.endsAt)}',
+            child: interactiveBlock,
+          )
+        : interactiveBlock;
+    return Positioned(
+      left: left + 0.75,
+      top: 3,
+      width: math.max(1.0, blockWidth - 1.5).toDouble(),
+      height: 54,
+      child: blockChild,
+    );
+  }
+}
+
+void _showPlannedUpgradeDetails(BuildContext context, PlannedUpgrade upgrade) {
+  final durationSeconds = upgrade.endsAt.difference(upgrade.startsAt).inSeconds;
+  final village = upgrade.item.village == UpgradeVillage.home
+      ? 'Home Village'
+      : 'Builder Base';
+  final levelText =
+      'Lv ${upgrade.item.currentLevel} -> ${upgrade.step.targetLevel}';
+
+  showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    builder: (sheetContext) {
+      final scheme = Theme.of(sheetContext).colorScheme;
+      return SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(18, 4, 18, 18),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox.square(
+                    dimension: 58,
+                    child: _AspectSafeImage(
+                      imageUrl: upgrade.item.imageUrl,
+                      width: 58,
+                      height: 58,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          upgrade.item.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(sheetContext).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          '$levelText · $village · ${_categoryLabel(upgrade.item.category)}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(sheetContext).textTheme.bodySmall
+                              ?.copyWith(
+                                color: scheme.onSurfaceVariant,
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              _SummaryMetricPanel(
+                metrics: [
+                  (
+                    label: 'Duration',
+                    value: _duration(durationSeconds),
+                    icon: Icons.schedule_rounded,
+                    imageUrl: null,
+                    color: null,
+                  ),
+                  (
+                    label: 'Starts',
+                    value: _timelineDateTimeLabel(upgrade.startsAt),
+                    icon: Icons.play_arrow_rounded,
+                    imageUrl: null,
+                    color: null,
+                  ),
+                  (
+                    label: 'Finishes',
+                    value: _timelineDateTimeLabel(upgrade.endsAt),
+                    icon: Icons.flag_rounded,
+                    imageUrl: null,
+                    color: null,
+                  ),
+                  (
+                    label: 'Lane',
+                    value: upgrade.isOngoing
+                        ? 'In progress'
+                        : 'Scheduled #${upgrade.instance}',
+                    icon: Icons.view_timeline_rounded,
+                    imageUrl: null,
+                    color: null,
+                  ),
+                ],
+              ),
+              if (upgrade.costs.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                Text(
+                  'Upgrade cost',
+                  style: Theme.of(
+                    sheetContext,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900),
                 ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: upgrade.costs
+                      .map((cost) => _ResourcePill(cost: cost))
+                      .toList(growable: false),
+                ),
+              ],
+            ],
+          ),
         ),
+      );
+    },
+  );
+}
+
+class _TimelineBlockIcon extends StatelessWidget {
+  const _TimelineBlockIcon({
+    required this.imageUrl,
+    required this.level,
+    this.compact = false,
+  });
+
+  final String imageUrl;
+  final int level;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = compact ? 27.0 : 30.0;
+    final scheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned.fill(
+            child: _AspectSafeImage(
+              imageUrl: imageUrl,
+              width: size,
+              height: size,
+            ),
+          ),
+          Positioned(
+            right: -1,
+            bottom: -1,
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+              decoration: BoxDecoration(
+                color: scheme.surface,
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+                border: Border.all(color: scheme.outlineVariant),
+              ),
+              child: Text(
+                '$level',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: scheme.onSurface,
+                  fontSize: 8,
+                  fontWeight: FontWeight.w900,
+                  height: 1,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _TimelineMiniChip extends StatelessWidget {
-  const _TimelineMiniChip({required this.text, this.imageUrl, this.icon});
+class _PlanTimelinePill extends StatelessWidget {
+  const _PlanTimelinePill({required this.text, this.icon});
 
   final String text;
-  final String? imageUrl;
   final IconData? icon;
 
   @override
-  Widget build(BuildContext context) => Container(
-    constraints: const BoxConstraints(maxWidth: 72),
-    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-    decoration: BoxDecoration(
-      color: Colors.black.withValues(alpha: 0.2),
-      borderRadius: BorderRadius.circular(AppRadius.pill),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (imageUrl != null) ...[
-          _AspectSafeImage(imageUrl: imageUrl!, width: 11, height: 11),
-          const SizedBox(width: 2),
-        ] else if (icon != null) ...[
-          Icon(icon, size: 10, color: Colors.white),
-          const SizedBox(width: 2),
-        ],
-        Flexible(
-          child: Text(
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.58),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 12, color: scheme.onSurfaceVariant),
+            const SizedBox(width: 3),
+          ],
+          Text(
             text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Colors.white,
-              fontSize: 8.5,
+              color: scheme.onSurface,
+              fontWeight: FontWeight.w900,
               height: 1,
             ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
 }
 
 String _timelineDateTimeLabel(DateTime value) =>
     DateFormat('MMM d HH:mm').format(value);
+
+String _timelineHeaderLabel(DateTime day, DateTime now) {
+  if (_isSameDay(day, now)) return 'Today\n${DateFormat('MMM d').format(day)}';
+  if (_isSameDay(day, now.add(const Duration(days: 1)))) {
+    return 'Tomorrow\n${DateFormat('MMM d').format(day)}';
+  }
+  if (day.day == 1) return DateFormat('MMM\nd').format(day);
+  final daysFromNow = day
+      .difference(DateTime(now.year, now.month, now.day))
+      .inDays;
+  if (daysFromNow % 7 == 0) return DateFormat('EEE\nd').format(day);
+  return '\n${DateFormat('d').format(day)}';
+}
+
+bool _isSameDay(DateTime a, DateTime b) =>
+    a.year == b.year && a.month == b.month && a.day == b.day;
+
+double _safeScrollOffset(ScrollController controller) {
+  if (!controller.hasClients || controller.positions.length != 1) return 0;
+  return controller.offset;
+}
 
 class _PlanRuleNote extends StatelessWidget {
   const _PlanRuleNote();
@@ -4083,17 +4711,31 @@ String _planSortLabel(_PlanSort sort) => switch (sort) {
 };
 
 String _planVillageFilterLabel(_PlanVillageFilter filter) => switch (filter) {
-  _PlanVillageFilter.all => 'All villages',
-  _PlanVillageFilter.home => 'Home Village',
-  _PlanVillageFilter.builderBase => 'Builder Base',
+  _PlanVillageFilter.all => 'All',
+  _PlanVillageFilter.home => 'Home',
+  _PlanVillageFilter.builderBase => 'Builder',
+};
+
+IconData _planVillageFilterIcon(_PlanVillageFilter filter) => switch (filter) {
+  _PlanVillageFilter.all => Icons.all_inclusive_rounded,
+  _PlanVillageFilter.home => Icons.home_rounded,
+  _PlanVillageFilter.builderBase => Icons.handyman_rounded,
 };
 
 String _planQueueFilterLabel(_PlanQueueFilter filter) => switch (filter) {
-  _PlanQueueFilter.all => 'All queues',
+  _PlanQueueFilter.all => 'All',
   _PlanQueueFilter.builders => 'Builders',
   _PlanQueueFilter.laboratory => 'Laboratory',
   _PlanQueueFilter.pets => 'Pets',
   _PlanQueueFilter.walls => 'Walls',
+};
+
+IconData _planQueueFilterIcon(_PlanQueueFilter filter) => switch (filter) {
+  _PlanQueueFilter.all => Icons.all_inclusive_rounded,
+  _PlanQueueFilter.builders => Icons.construction_rounded,
+  _PlanQueueFilter.laboratory => Icons.science_rounded,
+  _PlanQueueFilter.pets => Icons.pets_rounded,
+  _PlanQueueFilter.walls => Icons.grid_view_rounded,
 };
 
 bool _matchesPlanFilters(
@@ -4257,6 +4899,46 @@ enum _CollectionFilter { all, owned, missing }
 
 enum _CollectionSort { nameAscending, nameDescending, newest, oldest }
 
+String _collectionFilterLabel(
+  AppLocalizations l10n,
+  _CollectionFilter filter,
+) => switch (filter) {
+  _CollectionFilter.all => l10n.upgradeTrackerFilterAll,
+  _CollectionFilter.owned => l10n.upgradeTrackerFilterOwned,
+  _CollectionFilter.missing => l10n.upgradeTrackerFilterMissing,
+};
+
+IconData _collectionFilterIcon(_CollectionFilter filter) => switch (filter) {
+  _CollectionFilter.all => Icons.all_inclusive_rounded,
+  _CollectionFilter.owned => Icons.check_rounded,
+  _CollectionFilter.missing => Icons.close_rounded,
+};
+
+Color? _collectionFilterColor(_CollectionFilter filter) => switch (filter) {
+  _CollectionFilter.all => null,
+  _CollectionFilter.owned => StatColors.win,
+  _CollectionFilter.missing => StatColors.loss,
+};
+
+List<({String label, IconData icon, UpgradeVillage? value})>
+_collectionVillageFilters(AppLocalizations l10n) => [
+  (
+    label: l10n.upgradeTrackerFilterAll,
+    icon: Icons.all_inclusive_rounded,
+    value: null,
+  ),
+  (
+    label: l10n.navigationHome,
+    icon: Icons.home_rounded,
+    value: UpgradeVillage.home,
+  ),
+  (
+    label: 'Builder',
+    icon: Icons.handyman_rounded,
+    value: UpgradeVillage.builderBase,
+  ),
+];
+
 class _CollectionTab extends StatefulWidget {
   const _CollectionTab({required this.snapshot});
 
@@ -4266,7 +4948,8 @@ class _CollectionTab extends StatefulWidget {
   State<_CollectionTab> createState() => _CollectionTabState();
 }
 
-class _CollectionTabState extends State<_CollectionTab> {
+class _CollectionTabState extends State<_CollectionTab>
+    with AutomaticKeepAliveClientMixin<_CollectionTab> {
   final _expanded = <UpgradeCollectionType>{};
   final _searchController = TextEditingController();
   _CollectionFilter _filter = _CollectionFilter.all;
@@ -4283,6 +4966,9 @@ class _CollectionTabState extends State<_CollectionTab> {
   >
   _sortedItemsByType;
   late List<_CollectionSectionViewData> _sections;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -4395,6 +5081,7 @@ class _CollectionTabState extends State<_CollectionTab> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final l10n = AppLocalizations.of(context)!;
     if (_isTrackerDesktop(context)) {
       return _buildDesktop(context, l10n);
@@ -4445,57 +5132,42 @@ class _CollectionTabState extends State<_CollectionTab> {
                     : Padding(
                         padding: const EdgeInsets.only(top: CKSpacing.sm),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CKSegmentedControl<_CollectionFilter>(
-                              values: _CollectionFilter.values,
-                              labels: [
-                                l10n.upgradeTrackerFilterAll,
-                                l10n.upgradeTrackerFilterOwned,
-                                l10n.upgradeTrackerFilterMissing,
-                              ],
-                              selected: _filter,
-                              density: CKControlDensity.compact,
-                              onChanged: (value) =>
-                                  _update(() => _filter = value),
+                            CKFilterChipRail(
+                              padding: EdgeInsets.zero,
+                              children: _CollectionFilter.values
+                                  .map(
+                                    (value) => CKFilterChip(
+                                      label: _collectionFilterLabel(
+                                        l10n,
+                                        value,
+                                      ),
+                                      icon: _collectionFilterIcon(value),
+                                      color: _collectionFilterColor(value),
+                                      selected: _filter == value,
+                                      onTap: () =>
+                                          _update(() => _filter = value),
+                                    ),
+                                  )
+                                  .toList(growable: false),
                             ),
                             const SizedBox(height: CKSpacing.sm),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 if (_supportsVillage)
                                   Expanded(
-                                    child: CKSegmentedControl<UpgradeVillage?>(
-                                      values: const [
-                                        null,
-                                        UpgradeVillage.home,
-                                        UpgradeVillage.builderBase,
-                                      ],
-                                      labels: [
-                                        l10n.upgradeTrackerFilterAll,
-                                        l10n.upgradeTrackerHomeVillage,
-                                        l10n.upgradeTrackerBuilderBase,
-                                      ],
-                                      selected: _village,
-                                      density: CKControlDensity.compact,
-                                      onChanged: (value) =>
-                                          _update(() => _village = value),
+                                    child: _buildVillageDropdown(
+                                      l10n,
+                                      maxWidth: 160,
                                     ),
                                   ),
                                 if (_supportsVillage)
                                   const SizedBox(width: CKSpacing.sm),
-                                FilterDropdown(
-                                  sortBy: _sort.name,
-                                  maxWidth: 118,
-                                  sortByOptions: const {
-                                    'Name A–Z': 'nameAscending',
-                                    'Name Z–A': 'nameDescending',
-                                    'Newest': 'newest',
-                                    'Oldest': 'oldest',
-                                  },
-                                  updateSortBy: (value) => _update(
-                                    () => _sort = _CollectionSort.values.byName(
-                                      value,
-                                    ),
-                                  ),
+                                SizedBox(
+                                  width: 118,
+                                  child: _buildSortDropdown(maxWidth: 118),
                                 ),
                               ],
                             ),
@@ -4537,60 +5209,12 @@ class _CollectionTabState extends State<_CollectionTab> {
                 title,
                 items: section.scoped,
               ),
-              showContent: false,
-              child: const SizedBox.shrink(),
-            ),
-          ),
-        ),
-      );
-      final sectionSlivers = <Widget>[];
-      if (expanded && section.visible.isEmpty) {
-        sectionSlivers.add(
-          SliverPadding(
-            padding: const EdgeInsets.all(CKSpacing.lg),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                l10n.upgradeTrackerNoMatchingItems,
-                textAlign: TextAlign.center,
+              child: _CollectionTileGrid(
+                section: section,
+                emptyLabel: l10n.upgradeTrackerNoMatchingItems,
               ),
             ),
           ),
-        );
-      } else if (expanded) {
-        sectionSlivers.add(
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(
-              _trackerContentGutter,
-              4,
-              _trackerContentGutter,
-              14,
-            ),
-            sliver: SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: section.type == UpgradeCollectionType.sceneries
-                    ? 2
-                    : 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 10,
-                childAspectRatio:
-                    section.type == UpgradeCollectionType.sceneries
-                    ? 1.12
-                    : 0.84,
-              ),
-              itemCount: section.visible.length,
-              itemBuilder: (context, index) =>
-                  _CollectionTile(item: section.visible[index]),
-            ),
-          ),
-        );
-      }
-      slivers.add(
-        SliverAnimatedPaintExtent(
-          duration: CKMotion.durationOf(context, CKMotion.standard),
-          curve: CKMotion.standardCurve,
-          child: expanded
-              ? SliverMainAxisGroup(slivers: sectionSlivers)
-              : SliverToBoxAdapter(child: const SizedBox.shrink()),
         ),
       );
     }
@@ -4616,12 +5240,13 @@ class _CollectionTabState extends State<_CollectionTab> {
           ),
         ),
         if (_sections.isEmpty)
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: _TrackerEmptyState(
-              icon: Icons.collections_bookmark_rounded,
-              title: l10n.upgradeTrackerNoMatchingItems,
-              body: l10n.upgradeTrackerSearchCollection,
+          SliverToBoxAdapter(
+            child: _TrackerEmptySliverBody(
+              child: _TrackerEmptyState(
+                icon: Icons.collections_bookmark_rounded,
+                title: l10n.upgradeTrackerNoMatchingItems,
+                body: l10n.upgradeTrackerSearchCollection,
+              ),
             ),
           )
         else
@@ -4686,56 +5311,39 @@ class _CollectionTabState extends State<_CollectionTab> {
                 : Padding(
                     padding: const EdgeInsets.only(top: CKSpacing.sm),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CKSegmentedControl<_CollectionFilter>(
-                          values: _CollectionFilter.values,
-                          labels: [
-                            l10n.upgradeTrackerFilterAll,
-                            l10n.upgradeTrackerFilterOwned,
-                            l10n.upgradeTrackerFilterMissing,
-                          ],
-                          selected: _filter,
-                          density: CKControlDensity.compact,
-                          onChanged: (value) => _update(() => _filter = value),
+                        CKFilterChipRail(
+                          padding: EdgeInsets.zero,
+                          children: _CollectionFilter.values
+                              .map(
+                                (value) => CKFilterChip(
+                                  label: _collectionFilterLabel(l10n, value),
+                                  icon: _collectionFilterIcon(value),
+                                  color: _collectionFilterColor(value),
+                                  selected: _filter == value,
+                                  onTap: () => _update(() => _filter = value),
+                                ),
+                              )
+                              .toList(growable: false),
                         ),
                         const SizedBox(height: CKSpacing.sm),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             if (_supportsVillage)
-                              Expanded(
-                                child: CKSegmentedControl<UpgradeVillage?>(
-                                  values: const [
-                                    null,
-                                    UpgradeVillage.home,
-                                    UpgradeVillage.builderBase,
-                                  ],
-                                  labels: [
-                                    l10n.upgradeTrackerFilterAll,
-                                    l10n.upgradeTrackerHomeVillage,
-                                    l10n.upgradeTrackerBuilderBase,
-                                  ],
-                                  selected: _village,
-                                  density: CKControlDensity.compact,
-                                  onChanged: (value) =>
-                                      _update(() => _village = value),
+                              SizedBox(
+                                width: 132,
+                                child: _buildVillageDropdown(
+                                  l10n,
+                                  maxWidth: 132,
                                 ),
                               ),
                             if (_supportsVillage)
                               const SizedBox(width: CKSpacing.sm),
-                            FilterDropdown(
-                              sortBy: _sort.name,
-                              maxWidth: 140,
-                              sortByOptions: const {
-                                'Name A–Z': 'nameAscending',
-                                'Name Z–A': 'nameDescending',
-                                'Newest': 'newest',
-                                'Oldest': 'oldest',
-                              },
-                              updateSortBy: (value) => _update(
-                                () => _sort = _CollectionSort.values.byName(
-                                  value,
-                                ),
-                              ),
+                            SizedBox(
+                              width: 140,
+                              child: _buildSortDropdown(maxWidth: 140),
                             ),
                           ],
                         ),
@@ -4745,6 +5353,41 @@ class _CollectionTabState extends State<_CollectionTab> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildVillageDropdown(
+    AppLocalizations l10n, {
+    required double maxWidth,
+  }) {
+    return FilterDropdown(
+      sortBy: _village?.name ?? 'all',
+      maxWidth: maxWidth,
+      sortByOptions: {
+        for (final entry in _collectionVillageFilters(l10n))
+          _filterDropdownLabel(entry.icon, entry.label):
+              entry.value?.name ?? 'all',
+      },
+      updateSortBy: (value) => _update(
+        () => _village = value == 'all'
+            ? null
+            : UpgradeVillage.values.byName(value),
+      ),
+    );
+  }
+
+  Widget _buildSortDropdown({required double maxWidth}) {
+    return FilterDropdown(
+      sortBy: _sort.name,
+      maxWidth: maxWidth,
+      sortByOptions: const {
+        'Name A-Z': 'nameAscending',
+        'Name Z-A': 'nameDescending',
+        'Newest': 'newest',
+        'Oldest': 'oldest',
+      },
+      updateSortBy: (value) =>
+          _update(() => _sort = _CollectionSort.values.byName(value)),
     );
   }
 
@@ -4826,8 +5469,9 @@ class _CollectionTileGrid extends StatelessWidget {
             childAspectRatio: isScenery ? 1.18 : 0.88,
           ),
           itemCount: section.visible.length,
-          itemBuilder: (context, index) =>
-              _CollectionTile(item: section.visible[index]),
+          itemBuilder: (context, index) => RepaintBoundary(
+            child: _CollectionTile(item: section.visible[index]),
+          ),
         );
       },
     );
@@ -5820,66 +6464,6 @@ class _ProgressGraphic extends StatelessWidget {
   }
 }
 
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Semantics(
-        button: true,
-        selected: selected,
-        label: label,
-        excludeSemantics: true,
-        child: Material(
-          color: selected
-              ? scheme.surfaceContainerHighest.withValues(alpha: 0.42)
-              : scheme.surfaceContainerHighest.withValues(alpha: 0.22),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.chip),
-            side: BorderSide(
-              color: selected
-                  ? scheme.primary.withValues(alpha: 0.72)
-                  : Colors.transparent,
-            ),
-          ),
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(AppRadius.chip),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(13, 6, 13, 6),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: selected
-                          ? scheme.onSurface
-                          : scheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _SectionHeading extends StatelessWidget {
   const _SectionHeading({required this.title, this.trailing});
 
@@ -5980,6 +6564,18 @@ class _ResourcePill extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _TrackerEmptySliverBody extends StatelessWidget {
+  const _TrackerEmptySliverBody({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final viewportHeight = MediaQuery.sizeOf(context).height;
+    return SizedBox(height: math.max(320, viewportHeight * 0.55), child: child);
   }
 }
 
@@ -6383,21 +6979,22 @@ List<UpgradePlanLane> _buildPlannerLanes(
   return List.generate(lanes.length, (index) {
     final activeItem = index < activeItems.length ? activeItems[index] : null;
     final activeStep = activeItem?.steps.firstOrNull;
+    final activeRemainingSeconds = activeItem == null
+        ? 0
+        : snapshot.remainingActiveSeconds(activeItem, now: startsAt);
+    final activeElapsedSeconds = activeItem == null
+        ? 0
+        : snapshot.activeElapsedSeconds(activeItem, now: startsAt);
     final activeUpgrade = activeItem == null || activeStep == null
         ? null
         : PlannedUpgrade(
             item: activeItem,
             instance: 0,
             step: activeStep,
-            startsAt: startsAt,
-            endsAt: startsAt.add(
-              Duration(
-                seconds: snapshot.remainingActiveSeconds(
-                  activeItem,
-                  now: startsAt,
-                ),
-              ),
+            startsAt: startsAt.subtract(
+              Duration(seconds: activeElapsedSeconds),
             ),
+            endsAt: startsAt.add(Duration(seconds: activeRemainingSeconds)),
             costs: activeStep.costs,
             isOngoing: true,
           );
@@ -7555,29 +8152,18 @@ class _ResourcePreferenceControl extends StatelessWidget {
             ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w800),
           ),
         ),
-        SegmentedButton<UpgradeResourcePreference>(
-          segments: const [
-            ButtonSegment(
-              value: UpgradeResourcePreference.conserve,
-              label: Text('Save'),
-            ),
-            ButtonSegment(
-              value: UpgradeResourcePreference.balanced,
-              label: Text('Mix'),
-            ),
-            ButtonSegment(
-              value: UpgradeResourcePreference.spend,
-              label: Text('Spend'),
-            ),
-          ],
-          selected: {value},
-          showSelectedIcon: false,
-          onSelectionChanged: (values) => onChanged(values.first),
-          style: ButtonStyle(
-            visualDensity: VisualDensity.compact,
-            textStyle: WidgetStatePropertyAll(
-              Theme.of(context).textTheme.labelSmall,
-            ),
+        SizedBox(
+          width: 176,
+          child: AppFilterSegmentedControl<UpgradeResourcePreference>(
+            height: 40,
+            values: const [
+              UpgradeResourcePreference.conserve,
+              UpgradeResourcePreference.balanced,
+              UpgradeResourcePreference.spend,
+            ],
+            labels: const ['Save', 'Mix', 'Spend'],
+            selected: value,
+            onChanged: onChanged,
           ),
         ),
       ],
@@ -8692,6 +9278,7 @@ final Expando<Map<int, List<String>>> _upgradeImageFallbackCache = Expando();
 List<String> _upgradeImageFallbacks(UpgradeTrackerItem item, {int? fromLevel}) {
   if (!const {
     UpgradeCategory.defenses,
+    UpgradeCategory.traps,
     UpgradeCategory.craftedDefenses,
     UpgradeCategory.army,
     UpgradeCategory.resources,
@@ -8707,9 +9294,7 @@ List<String> _upgradeImageFallbacks(UpgradeTrackerItem item, {int? fromLevel}) {
     current,
     () => List.unmodifiable([
       for (var level = current - 1; level >= 1; level--)
-        item.village == UpgradeVillage.home
-            ? ImageAssets.getHomeVillageBuildingImage(item.name, level)
-            : ImageAssets.getBuilderBaseBuildingImage(item.name, level),
+        _upgradeImageForLevel(item, level),
     ]),
   );
 }

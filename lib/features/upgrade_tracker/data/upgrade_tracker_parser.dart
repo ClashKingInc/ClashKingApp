@@ -66,8 +66,7 @@ class UpgradeTrackerParser {
       builderHallLevel: builderHallLevel,
       category: (_) => UpgradeCategory.guardians,
       queue: (_) => UpgradeQueue.builders,
-      image: (data, _) =>
-          '${ImageAssets.baseUrl}/guardians/${_slug(_name(data))}/icon.webp',
+      image: (data, _) => ImageAssets.getGuardianImage(_name(data)),
     );
     _addLeveledSection(
       items,
@@ -145,8 +144,7 @@ class UpgradeTrackerParser {
       builderHallLevel: builderHallLevel,
       category: (_) => UpgradeCategory.builders,
       queue: (_) => UpgradeQueue.none,
-      image: (data, _) =>
-          '${ImageAssets.baseUrl}/helpers/${_slug(_name(data))}.webp',
+      image: (data, _) => ImageAssets.getHelperImage(_name(data)),
     );
 
     items.sort((a, b) {
