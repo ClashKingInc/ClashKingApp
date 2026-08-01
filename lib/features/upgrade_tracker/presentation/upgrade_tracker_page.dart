@@ -565,10 +565,11 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     if (!mounted) return;
     final linkedAccounts = _linkedAccountOptions();
     final linkedTags = linkedAccounts.map((account) => account.tag);
+    final selectedWidgetTag = context.read<CocAccountService>().selectedTag;
     final snapshots = await _repository.loadSavedSnapshots(linkedTags);
     await _widgetSync.sync(
       snapshots,
-      selectedTag: _selectedTag,
+      selectedTag: selectedWidgetTag,
       linkedAccounts: linkedAccounts
           .map(
             (account) => <String, Object?>{

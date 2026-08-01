@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
@@ -19,6 +20,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_ranked_league.dart';
 import 'package:clashkingapp/features/player/presentation/ranked/player_ranked_league_page.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_widget_sync_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -378,6 +380,7 @@ class DashboardPage extends StatelessWidget {
       if (upgradePlayers.isNotEmpty)
         HomeUpgradeTrackerCard(
           players: upgradePlayers,
+          linkedPlayersForWidgetSync: linkedPlayers,
           refreshGeneration: refreshGeneration,
         ),
     ];
@@ -1125,10 +1128,12 @@ class HomeUpgradeTrackerCard extends StatefulWidget {
   const HomeUpgradeTrackerCard({
     super.key,
     required this.players,
+    required this.linkedPlayersForWidgetSync,
     required this.refreshGeneration,
   });
 
   final List<Player> players;
+  final List<Player> linkedPlayersForWidgetSync;
   final int refreshGeneration;
 
   @override
@@ -1143,6 +1148,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
   static final _cache = _HomeCardCache<_UpgradeHomeSummary>();
 
   final _repository = UpgradeTrackerRepository.shared;
+  final _widgetSync = const UpgradeWidgetSyncService();
   Future<_UpgradeHomeSummary>? _load;
   String _signature = '';
   int? _refreshGeneration;
@@ -1174,9 +1180,16 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
   }
 
   void _reloadIfNeeded() {
-    final signature = widget.players
+    final selectedTag = UpgradeTrackerRepository.normalizeTag(
+      context.read<CocAccountService>().selectedTag ?? '',
+    );
+    final visibleTags = widget.players
         .map((player) => UpgradeTrackerRepository.normalizeTag(player.tag))
         .join('|');
+    final linkedTags = widget.linkedPlayersForWidgetSync
+        .map((player) => UpgradeTrackerRepository.normalizeTag(player.tag))
+        .join('|');
+    final signature = '$selectedTag:$visibleTags:$linkedTags';
     final refreshChanged = widget.refreshGeneration != _refreshGeneration;
     if (_load != null && signature == _signature && !refreshChanged) return;
     _signature = signature;
@@ -1199,6 +1212,7 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
     );
 
     final accounts = <_UpgradeHomeAccount>[];
+    final snapshots = <UpgradeTrackerSnapshot>[];
     final missingAccounts = <Player>[];
     for (final player in widget.players) {
       try {
@@ -1210,17 +1224,80 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
           missingAccounts.add(player);
           continue;
         }
+        snapshots.add(snapshot);
         accounts.add(_UpgradeHomeAccount.fromSnapshot(snapshot));
       } catch (_) {
         // Surfaced as a "needs import" page instead of being dropped silently.
         missingAccounts.add(player);
       }
     }
+    unawaited(
+      _syncHiddenWidgetSnapshots(snapshots, forceRefresh: forceRefresh),
+    );
     return _UpgradeHomeSummary(
       configuredCount: widget.players.length,
       accounts: accounts,
       missingAccounts: missingAccounts,
     );
+  }
+
+  Future<void> _syncUpgradeWidget(
+    List<UpgradeTrackerSnapshot> snapshots,
+  ) async {
+    try {
+      await _widgetSync.sync(
+        snapshots,
+        selectedTag: context.read<CocAccountService>().selectedTag,
+        linkedAccounts: widget.linkedPlayersForWidgetSync
+            .map(
+              (player) => <String, Object?>{
+                'tag': player.tag,
+                'name': player.name,
+                'townHallLevel': player.townHallLevel,
+                'builderHallLevel': player.builderHallLevel,
+              },
+            )
+            .toList(growable: false),
+      );
+    } catch (_) {
+      // The Home dashboard should still render if widget storage is unavailable.
+    }
+  }
+
+  Future<List<UpgradeTrackerSnapshot>> _loadWidgetSnapshots(
+    List<UpgradeTrackerSnapshot> visibleSnapshots, {
+    required bool forceRefresh,
+  }) async {
+    final byTag = <String, UpgradeTrackerSnapshot>{
+      for (final snapshot in visibleSnapshots)
+        UpgradeTrackerRepository.normalizeTag(snapshot.tag): snapshot,
+    };
+    for (final player in widget.linkedPlayersForWidgetSync) {
+      final normalized = UpgradeTrackerRepository.normalizeTag(player.tag);
+      if (byTag.containsKey(normalized)) continue;
+      try {
+        final snapshot = await _repository.load(
+          player.tag,
+          forceRefresh: forceRefresh,
+        );
+        if (snapshot != null) byTag[normalized] = snapshot;
+      } catch (_) {
+        // A missing hidden account should not block widget sync for the rest.
+      }
+    }
+    return byTag.values.toList(growable: false);
+  }
+
+  Future<void> _syncHiddenWidgetSnapshots(
+    List<UpgradeTrackerSnapshot> visibleSnapshots, {
+    required bool forceRefresh,
+  }) async {
+    final widgetSnapshots = await _loadWidgetSnapshots(
+      visibleSnapshots,
+      forceRefresh: forceRefresh,
+    );
+    if (!mounted || widgetSnapshots.isEmpty) return;
+    await _syncUpgradeWidget(widgetSnapshots);
   }
 
   Future<void> _openTracker([String? initialTag]) async {

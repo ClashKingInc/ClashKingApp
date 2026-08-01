@@ -4,6 +4,7 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
@@ -35,20 +36,34 @@ class UpgradeWidgetConfigureActivity : Activity() {
     }
 
     private fun buildContent(): ScrollView {
-        val padding = dp(24)
+        val padding = dp(20)
         val container = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(padding, dp(32), padding, padding)
+            setPadding(padding, dp(22), padding, dp(28))
+            setBackgroundColor(getColor(R.color.widget_background))
         }
+        container.addView(TextView(this).apply {
+            setText(R.string.upgrade_widget_configure_eyebrow)
+            textSize = 10f
+            setTextColor(getColor(R.color.widget_accent))
+            setTypeface(typeface, Typeface.BOLD)
+            letterSpacing = 0.08f
+        }
+        )
         container.addView(TextView(this).apply {
             setText(R.string.upgrade_widget_configure_title)
             textSize = 24f
+            setTextColor(getColor(R.color.widget_text))
             setTypeface(typeface, Typeface.BOLD)
+            includeFontPadding = false
+            setPadding(0, dp(8), 0, 0)
         })
         container.addView(TextView(this).apply {
             setText(R.string.upgrade_widget_configure_description)
-            textSize = 15f
-            setPadding(0, dp(8), 0, dp(20))
+            textSize = 14f
+            setTextColor(getColor(R.color.widget_text_secondary))
+            setLineSpacing(dp(2).toFloat(), 1f)
+            setPadding(0, dp(10), 0, dp(24))
         })
 
         val accounts = readAccounts()
@@ -56,43 +71,33 @@ class UpgradeWidgetConfigureActivity : Activity() {
             orientation = RadioGroup.VERTICAL
         }
         val savedTag = UpgradeWidgetSelectionStore.selectedTag(this, appWidgetId)
-        val globalTag = homeWidgetPreferences()
-            .getString("upgradeWidgetSelectedTag", null)
-            ?.let(UpgradeWidgetSelectionStore::normalizeTag)
         var defaultRadioId: Int? = null
 
         accounts.forEach { account ->
-            val radio = RadioButton(this).apply {
-                id = View.generateViewId()
-                text = listOf(account.name, account.tag, account.hall)
-                    .filter { it.isNotBlank() }
-                    .joinToString("  ·  ")
-                textSize = 16f
-                setPadding(0, dp(8), 0, dp(8))
-            }
+            val radio = accountOption(
+                "${account.name}\n#${account.tag}  ·  ${account.hall}"
+            )
             tagsByRadioId[radio.id] = account.tag
             radioGroup.addView(radio)
-            if (account.tag == savedTag ||
-                (savedTag == null && account.tag == globalTag) ||
-                defaultRadioId == null
-            ) {
+            if (savedTag != null && account.tag == savedTag) {
                 defaultRadioId = radio.id
             }
         }
 
-        val automatic = RadioButton(this).apply {
-            id = View.generateViewId()
-            setText(R.string.upgrade_widget_configure_automatic)
-            textSize = 16f
-            setPadding(0, dp(8), 0, dp(8))
-        }
+        val automatic = accountOption(
+            getString(R.string.upgrade_widget_configure_automatic)
+        )
         tagsByRadioId[automatic.id] = null
         radioGroup.addView(automatic, 0)
+        if (savedTag == null) {
+            defaultRadioId = automatic.id
+        }
         if (accounts.isEmpty()) {
             defaultRadioId = automatic.id
             container.addView(TextView(this).apply {
                 setText(R.string.upgrade_widget_configure_empty)
                 textSize = 14f
+                setTextColor(getColor(R.color.widget_text_secondary))
                 setPadding(0, 0, 0, dp(12))
             })
         }
@@ -102,17 +107,62 @@ class UpgradeWidgetConfigureActivity : Activity() {
         container.addView(Button(this).apply {
             setText(R.string.upgrade_widget_configure_add)
             isAllCaps = false
+            textSize = 15f
+            setTypeface(typeface, Typeface.BOLD)
+            setTextColor(getColor(android.R.color.white))
+            setBackgroundResource(R.drawable.upgrade_widget_config_button)
+            stateListAnimator = null
+            minHeight = 0
+            minWidth = 0
+            setPadding(dp(16), 0, dp(16), 0)
             setOnClickListener {
                 saveSelection(tagsByRadioId[radioGroup.checkedRadioButtonId])
             }
             val params = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                dp(50)
             )
-            params.topMargin = dp(24)
+            params.topMargin = dp(18)
             layoutParams = params
         })
-        return ScrollView(this).apply { addView(container) }
+        return ScrollView(this).apply {
+            setBackgroundColor(getColor(R.color.widget_background))
+            isFillViewport = true
+            addView(
+                container,
+                ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            )
+        }
+    }
+
+    private fun accountOption(label: String): RadioButton {
+        val accent = getColor(R.color.widget_accent)
+        val secondary = getColor(R.color.widget_text_secondary)
+        return RadioButton(this).apply {
+            id = View.generateViewId()
+            text = label
+            textSize = 15f
+            setTextColor(getColor(R.color.widget_text))
+            setLineSpacing(dp(1).toFloat(), 1f)
+            setPadding(dp(14), dp(10), dp(14), dp(10))
+            setBackgroundResource(R.drawable.upgrade_widget_config_option)
+            buttonTintList = ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_checked),
+                    intArrayOf()
+                ),
+                intArrayOf(accent, secondary)
+            )
+            layoutParams = RadioGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                bottomMargin = dp(8)
+            }
+        }
     }
 
     private fun saveSelection(tag: String?) {

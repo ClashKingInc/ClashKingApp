@@ -67,6 +67,10 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         val appWidgetManager: AppWidgetManager,
         val appWidgetId: Int,
         val views: RemoteViews,
+        val expectedLayoutId: Int,
+        val expectedTaskCapacity: Int,
+        val expectedTag: String,
+        val expectedUpdatedAt: String,
         val targets: Map<Int, String>
     ) {
         fun apply(context: Context) {
@@ -86,13 +90,72 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
                     views.setImageViewBitmap(viewId, bitmap)
                     changed = true
                 }
-                if (changed) {
+                if (changed && isStillCurrent(context)) {
                     appWidgetManager.updateAppWidget(appWidgetId, views)
                 }
             } finally {
                 executor.shutdownNow()
             }
         }
+
+        private fun isStillCurrent(context: Context): Boolean {
+            val widgetData = context.getSharedPreferences(HOME_WIDGET_PREFERENCES, Context.MODE_PRIVATE)
+            if (currentLayoutId() != expectedLayoutId) return false
+            if (expectedLayoutId == R.layout.upgrade_widget_layout &&
+                currentTaskCapacity() != expectedTaskCapacity
+            ) {
+                return false
+            }
+
+            val expectedNormalizedTag = normalizedTagValue(expectedTag)
+            val currentTag = UpgradeWidgetSelectionStore.selectedTag(context, appWidgetId)
+                ?: widgetData.getString("upgradeWidgetSelectedTag", null)?.let(::normalizedTagValue)
+                ?: firstLinkedTag(widgetData)
+            if (currentTag != expectedNormalizedTag) return false
+
+            val raw = widgetData.getString("upgradeWidget_$expectedNormalizedTag", null)
+                ?: widgetData.getString("upgradeWidgetData", null)
+                ?: return false
+            val decoded = runCatching { JSONObject(raw) }.getOrNull() ?: return false
+            return normalizedTagValue(decoded.optString("tag", "")) == expectedNormalizedTag &&
+                decoded.optString("updatedAt", "") == expectedUpdatedAt
+        }
+
+        private fun currentLayoutId(): Int {
+            return if (currentMinHeight() >= 190) {
+                R.layout.upgrade_widget_layout_large
+            } else {
+                R.layout.upgrade_widget_layout
+            }
+        }
+
+        private fun currentTaskCapacity(): Int {
+            val minHeight = currentMinHeight()
+            return when {
+                minHeight >= 250 -> 4
+                minHeight >= 180 -> 2
+                else -> 1
+            }
+        }
+
+        private fun currentMinHeight(): Int {
+            return appWidgetManager.getAppWidgetOptions(appWidgetId)
+                .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0)
+        }
+
+        private fun firstLinkedTag(widgetData: SharedPreferences): String? {
+            val accounts = widgetData.getString("upgradeWidgetAccounts", null)
+                ?.let { runCatching { JSONArray(it) }.getOrNull() }
+                ?: return null
+            for (index in 0 until accounts.length()) {
+                val tag = normalizedTagValue(accounts.optJSONObject(index)?.optString("tag", "") ?: "")
+                if (tag.isNotEmpty()) return tag
+            }
+            return null
+        }
+
+        private fun normalizedTagValue(tag: String): String =
+            tag.replace("#", "").trim().uppercase()
     }
 
     private fun updateAppWidget(
@@ -101,25 +164,45 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         appWidgetId: Int,
         widgetData: SharedPreferences
     ): UpgradeWidgetImageUpdate? {
-        val views = RemoteViews(context.packageName, R.layout.upgrade_widget_layout)
+        val isLarge = isLargeWidget(appWidgetManager, appWidgetId)
+        val layoutId = if (isLarge) {
+            R.layout.upgrade_widget_layout_large
+        } else {
+            R.layout.upgrade_widget_layout
+        }
+        val compactTaskCapacity = if (isLarge) 0 else taskCapacity(appWidgetManager, appWidgetId)
+        val views = RemoteViews(context.packageName, layoutId)
         views.setOnClickPendingIntent(R.id.upgrade_root_layout, getUpgradePendingIntent(context))
 
         val data = readCurrentUpgradeData(context, appWidgetId, widgetData)
         if (data == null) {
-            renderEmptyState(views)
+            renderEmptyState(context, views)
             appWidgetManager.updateAppWidget(appWidgetId, views)
             return null
         }
 
-        val imageTargets = renderUpgradeData(
-            context,
-            views,
-            data,
-            taskCapacity(appWidgetManager, appWidgetId)
-        )
+        val imageTargets = if (isLarge) {
+            renderLargeUpgradeData(context, views, data)
+        } else {
+            renderUpgradeData(
+                context,
+                views,
+                data,
+                compactTaskCapacity
+            )
+        }
         appWidgetManager.updateAppWidget(appWidgetId, views)
         return imageTargets.takeIf { it.isNotEmpty() }?.let {
-            UpgradeWidgetImageUpdate(appWidgetManager, appWidgetId, views, it)
+            UpgradeWidgetImageUpdate(
+                appWidgetManager,
+                appWidgetId,
+                views,
+                layoutId,
+                compactTaskCapacity,
+                data.optString("tag", ""),
+                data.optString("updatedAt", ""),
+                it
+            )
         }
     }
 
@@ -141,8 +224,13 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         val instanceTag = UpgradeWidgetSelectionStore.selectedTag(context, appWidgetId)
         val globalTag = widgetData.getString("upgradeWidgetSelectedTag", null)
             ?.let(::normalizedTag)
-        val candidateTags = listOfNotNull(instanceTag, globalTag, linkedTags.firstOrNull())
-            .distinct()
+        val candidateTags = if (instanceTag != null) {
+            listOf(instanceTag)
+        } else if (!globalTag.isNullOrEmpty()) {
+            listOf(globalTag)
+        } else {
+            listOfNotNull(linkedTags.firstOrNull())
+        }
         for (tag in candidateTags) {
             if (tag !in linkedTags) continue
             val raw = widgetData.getString("upgradeWidget_$tag", null) ?: continue
@@ -153,12 +241,23 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
 
         // Compatibility with payloads written before per-account storage existed.
-        return widgetData.getString("upgradeWidgetData", null)
-            ?.let { runCatching { JSONObject(it) }.getOrNull() }
+        if (linkedTags.isNotEmpty()) return null
+        return legacyUpgradeData(widgetData, instanceTag ?: globalTag)
     }
 
-    private fun renderEmptyState(views: RemoteViews) {
-        views.setTextViewText(R.id.upgrade_account_name, "Upgrade Progress")
+    private fun legacyUpgradeData(
+        widgetData: SharedPreferences,
+        requestedTag: String?
+    ): JSONObject? {
+        val decoded = widgetData.getString("upgradeWidgetData", null)
+            ?.let { runCatching { JSONObject(it) }.getOrNull() }
+            ?: return null
+        val decodedTag = normalizedTag(decoded.optString("tag", ""))
+        return if (requestedTag == null || decodedTag == requestedTag) decoded else null
+    }
+
+    private fun renderEmptyState(context: Context, views: RemoteViews) {
+        views.setTextViewText(R.id.upgrade_account_name, context.getString(R.string.upgrade_widget_label))
         views.setTextViewText(R.id.upgrade_account_tag, "")
         views.setViewVisibility(R.id.upgrade_empty_state, View.VISIBLE)
         views.setViewVisibility(R.id.upgrade_content, View.GONE)
@@ -175,8 +274,10 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         taskCapacity: Int
     ): Map<Int, String> {
         val imageTargets = mutableMapOf<Int, String>()
+        val labels = labels(data)
         views.setViewVisibility(R.id.upgrade_empty_state, View.GONE)
         views.setViewVisibility(R.id.upgrade_content, View.VISIBLE)
+        renderStaleChip(views, data, labels)
         views.setImageViewResource(
             R.id.upgrade_hall_image,
             R.drawable.ic_upgrade_hall_placeholder
@@ -196,12 +297,15 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             views.setViewVisibility(R.id.upgrade_featured_card, View.VISIBLE)
             views.setViewVisibility(R.id.upgrade_compact_sections, View.GONE)
             views.setTextViewText(R.id.upgrade_featured_category, featured.category)
-            views.setTextViewText(R.id.upgrade_active_count, "${activeTasks.size} ACTIVE")
+            views.setTextViewText(
+                R.id.upgrade_active_count,
+                activeStatus(labels, totalActiveCount(data))
+            )
             views.setTextViewText(
                 R.id.upgrade_featured_name,
-                featured.task.optString("name", "Upgrade")
+                taskName(featured.task)
             )
-            views.setTextViewText(R.id.upgrade_featured_meta, taskMeta(featured.task))
+            views.setTextViewText(R.id.upgrade_featured_meta, taskMeta(featured.task, labels))
             views.setImageViewResource(
                 R.id.upgrade_featured_image,
                 R.drawable.ic_upgrade_task_placeholder
@@ -215,28 +319,32 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
                 views,
                 activeTasks,
                 taskCapacity,
+                labels,
                 imageTargets
             )
         } else {
             views.setViewVisibility(R.id.upgrade_featured_card, View.GONE)
             views.setViewVisibility(R.id.upgrade_compact_sections, View.VISIBLE)
+            views.setTextViewText(R.id.upgrade_village_title, label(labels, "village", "VILLAGE"))
+            views.setTextViewText(R.id.upgrade_research_title, label(labels, "research", "RESEARCH"))
             renderCompactSection(
                 context,
                 views,
                 data.optJSONObject("homeBuilders"),
+                labels,
                 R.id.upgrade_village_state,
                 R.id.upgrade_village_status
             )
-            renderCompactResearch(context, views, data)
+            renderCompactResearch(context, views, data, labels)
         }
 
-        val boosts = data.optJSONArray("boosts")
+        val boosts = activeBoosts(data.optJSONArray("boosts"))
         val helpers = data.optJSONArray("helpers")
-        val hasStatus = (boosts?.length() ?: 0) > 0 || (helpers?.length() ?: 0) > 0
+        val hasStatus = boosts.isNotEmpty() || (helpers?.length() ?: 0) > 0
         views.setViewVisibility(R.id.upgrade_status_row, if (hasStatus) View.VISIBLE else View.GONE)
         renderBoost(
             views,
-            boosts?.optJSONObject(0),
+            boosts.getOrNull(0),
             R.id.upgrade_boost_one_slot,
             R.id.upgrade_boost_one,
             R.id.upgrade_boost_one_image,
@@ -244,7 +352,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         )
         renderBoost(
             views,
-            boosts?.optJSONObject(1),
+            boosts.getOrNull(1),
             R.id.upgrade_boost_two_slot,
             R.id.upgrade_boost_two,
             R.id.upgrade_boost_two_image,
@@ -253,22 +361,298 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         renderHelper(
             views,
             helpers?.optJSONObject(0),
+            labels,
             imageTargets
         )
         return imageTargets
     }
 
+    private fun renderLargeUpgradeData(
+        context: Context,
+        views: RemoteViews,
+        data: JSONObject
+    ): Map<Int, String> {
+        val imageTargets = mutableMapOf<Int, String>()
+        val labels = labels(data)
+        views.setViewVisibility(R.id.upgrade_empty_state, View.GONE)
+        views.setViewVisibility(R.id.upgrade_content, View.VISIBLE)
+        renderStaleChip(views, data, labels)
+        views.setImageViewResource(
+            R.id.upgrade_hall_image,
+            R.drawable.ic_upgrade_hall_placeholder
+        )
+        views.setTextViewText(R.id.upgrade_account_name, data.optString("name", "Upgrade Progress"))
+        views.setTextViewText(R.id.upgrade_account_tag, data.optString("tag", ""))
+        addImageTarget(
+            imageTargets,
+            R.id.upgrade_hall_image,
+            data.optString("hallImageUrl", "")
+        )
+
+        val boosts = activeBoosts(data.optJSONArray("boosts"))
+        val hasBoosts = boosts.isNotEmpty()
+        views.setViewVisibility(
+            R.id.upgrade_large_boosts,
+            if (hasBoosts) View.VISIBLE else View.GONE
+        )
+        val boostSlots = listOf(
+            StatusSlot(
+                R.id.upgrade_large_boost_one_slot,
+                R.id.upgrade_large_boost_one,
+                R.id.upgrade_large_boost_one_image
+            ),
+            StatusSlot(
+                R.id.upgrade_large_boost_two_slot,
+                R.id.upgrade_large_boost_two,
+                R.id.upgrade_large_boost_two_image
+            ),
+            StatusSlot(
+                R.id.upgrade_large_boost_three_slot,
+                R.id.upgrade_large_boost_three,
+                R.id.upgrade_large_boost_three_image
+            )
+        )
+        boostSlots.forEachIndexed { index, slot ->
+            renderBoost(
+                views,
+                boosts.getOrNull(index),
+                slot.containerId,
+                slot.textId,
+                slot.imageId,
+                imageTargets
+            )
+        }
+
+        val helpers = data.optJSONArray("helpers")
+        val hasHelpers = (helpers?.length() ?: 0) > 0
+        views.setViewVisibility(
+            R.id.upgrade_large_helpers,
+            if (hasHelpers) View.VISIBLE else View.GONE
+        )
+        val helperSlots = listOf(
+            StatusSlot(
+                R.id.upgrade_large_helper_one_slot,
+                R.id.upgrade_large_helper_one,
+                R.id.upgrade_large_helper_one_image
+            ),
+            StatusSlot(
+                R.id.upgrade_large_helper_two_slot,
+                R.id.upgrade_large_helper_two,
+                R.id.upgrade_large_helper_two_image
+            ),
+            StatusSlot(
+                R.id.upgrade_large_helper_three_slot,
+                R.id.upgrade_large_helper_three,
+                R.id.upgrade_large_helper_three_image
+            )
+        )
+        helperSlots.forEachIndexed { index, slot ->
+            renderLargeHelper(
+                views,
+                helpers?.optJSONObject(index),
+                labels,
+                slot,
+                imageTargets
+            )
+        }
+
+        views.setTextViewText(R.id.upgrade_large_home_title, label(labels, "homeVillage", "HOME VILLAGE"))
+        views.setTextViewText(R.id.upgrade_large_lab_title, label(labels, "laboratory", "LAB"))
+        views.setTextViewText(R.id.upgrade_large_pets_title, label(labels, "pets", "PETS"))
+        views.setTextViewText(R.id.upgrade_large_builder_title, label(labels, "builderBase", "BUILDER BASE"))
+
+        renderLargeSection(
+            context,
+            views,
+            data.optJSONObject("homeBuilders"),
+            labels,
+            R.id.upgrade_large_home_status,
+            R.id.upgrade_large_home_empty,
+            listOf(
+                LargeTaskSlot(
+                    R.id.upgrade_large_home_task_one,
+                    R.id.upgrade_large_home_task_one_image,
+                    R.id.upgrade_large_home_task_one_text
+                ),
+                LargeTaskSlot(
+                    R.id.upgrade_large_home_task_two,
+                    R.id.upgrade_large_home_task_two_image,
+                    R.id.upgrade_large_home_task_two_text
+                ),
+                LargeTaskSlot(
+                    R.id.upgrade_large_home_task_three,
+                    R.id.upgrade_large_home_task_three_image,
+                    R.id.upgrade_large_home_task_three_text
+                )
+            ),
+            imageTargets
+        )
+        renderLargeSection(
+            context,
+            views,
+            data.optJSONObject("laboratory"),
+            labels,
+            R.id.upgrade_large_lab_status,
+            R.id.upgrade_large_lab_empty,
+            listOf(
+                LargeTaskSlot(
+                    R.id.upgrade_large_lab_task_one,
+                    R.id.upgrade_large_lab_task_one_image,
+                    R.id.upgrade_large_lab_task_one_text
+                ),
+                LargeTaskSlot(
+                    R.id.upgrade_large_lab_task_two,
+                    R.id.upgrade_large_lab_task_two_image,
+                    R.id.upgrade_large_lab_task_two_text
+                )
+            ),
+            imageTargets
+        )
+        renderLargeSection(
+            context,
+            views,
+            data.optJSONObject("pets"),
+            labels,
+            R.id.upgrade_large_pets_status,
+            R.id.upgrade_large_pets_empty,
+            listOf(
+                LargeTaskSlot(
+                    R.id.upgrade_large_pets_task_one,
+                    R.id.upgrade_large_pets_task_one_image,
+                    R.id.upgrade_large_pets_task_one_text
+                )
+            ),
+            imageTargets
+        )
+        renderLargeSection(
+            context,
+            views,
+            data.optJSONObject("builderBase"),
+            labels,
+            R.id.upgrade_large_builder_status,
+            R.id.upgrade_large_builder_empty,
+            listOf(
+                LargeTaskSlot(
+                    R.id.upgrade_large_builder_task_one,
+                    R.id.upgrade_large_builder_task_one_image,
+                    R.id.upgrade_large_builder_task_one_text
+                ),
+                LargeTaskSlot(
+                    R.id.upgrade_large_builder_task_two,
+                    R.id.upgrade_large_builder_task_two_image,
+                    R.id.upgrade_large_builder_task_two_text
+                )
+            ),
+            imageTargets
+        )
+        return imageTargets
+    }
+
+    private data class StatusSlot(
+        val containerId: Int,
+        val textId: Int,
+        val imageId: Int
+    )
+
+    private data class LargeTaskSlot(
+        val containerId: Int,
+        val imageId: Int,
+        val textId: Int
+    )
+
+    private fun renderLargeHelper(
+        views: RemoteViews,
+        helper: JSONObject?,
+        labels: JSONObject?,
+        slot: StatusSlot,
+        imageTargets: MutableMap<Int, String>
+    ) {
+        if (helper == null) {
+            views.setViewVisibility(slot.containerId, View.GONE)
+            return
+        }
+        val status = helperStatus(helper, labels)
+        val text = listOf(shortHelperName(helper.optString("name", "Helper")), status)
+            .filter { it.isNotBlank() }
+            .joinToString("\n")
+        val imageUrl = helper.optString("imageUrl", "")
+        views.setViewVisibility(slot.containerId, View.VISIBLE)
+        views.setTextViewText(slot.textId, text)
+        if (imageUrl.startsWith("https://")) {
+            views.setViewVisibility(slot.imageId, View.VISIBLE)
+            views.setImageViewResource(slot.imageId, R.drawable.ic_upgrade_status)
+            addImageTarget(imageTargets, slot.imageId, imageUrl)
+        } else {
+            views.setViewVisibility(slot.imageId, View.GONE)
+        }
+    }
+
+    private fun renderStaleChip(
+        views: RemoteViews,
+        data: JSONObject,
+        labels: JSONObject?
+    ) {
+        val isStale = data.optBoolean("hasStaleData", false) || hasFinishedTask(data)
+        views.setViewVisibility(R.id.upgrade_stale_chip, if (isStale) View.VISIBLE else View.GONE)
+        views.setTextViewText(
+            R.id.upgrade_stale_chip,
+            label(labels, "staleData", "Update needed")
+        )
+    }
+
+    private fun renderLargeSection(
+        context: Context,
+        views: RemoteViews,
+        section: JSONObject?,
+        labels: JSONObject?,
+        statusViewId: Int,
+        emptyViewId: Int,
+        slots: List<LargeTaskSlot>,
+        imageTargets: MutableMap<Int, String>
+    ) {
+        val status = sectionStatus(section, labels)
+        views.setTextViewText(statusViewId, status)
+        views.setTextColor(statusViewId, context.getColor(statusColor(status)))
+        val tasks = section?.optJSONArray("tasks")
+        val taskCount = taskArrayDisplayCount(tasks)
+        views.setViewVisibility(
+            emptyViewId,
+            if (taskCount == 0) View.VISIBLE else View.GONE
+        )
+        views.setTextViewText(emptyViewId, emptySectionLabel(section, labels))
+        slots.forEachIndexed { index, slot ->
+            val task = tasks?.optJSONObject(index)
+            views.setViewVisibility(
+                slot.containerId,
+                if (task == null) View.GONE else View.VISIBLE
+            )
+            if (task == null) return@forEachIndexed
+            views.setImageViewResource(slot.imageId, R.drawable.ic_upgrade_task_placeholder)
+            views.setTextViewText(
+                slot.textId,
+                "${taskName(task)}\n${taskMeta(task, labels)}"
+            )
+            addImageTarget(
+                imageTargets,
+                slot.imageId,
+                task.optString("imageUrl", "")
+            )
+        }
+    }
+
     private data class CategorizedTask(val category: String, val task: JSONObject)
 
-    private fun activeTasks(data: JSONObject): List<CategorizedTask> {
-        val sections = listOf(
-            "HOME VILLAGE" to data.optJSONObject("homeBuilders"),
-            "LAB" to data.optJSONObject("laboratory"),
-            "PETS" to data.optJSONObject("pets"),
-            "BUILDER BASE" to data.optJSONObject("builderBase")
+    private fun upgradeSections(data: JSONObject): List<Pair<String, JSONObject?>> =
+        listOf(
+            label(labels(data), "homeVillage", "HOME VILLAGE") to data.optJSONObject("homeBuilders"),
+            label(labels(data), "laboratory", "LAB") to data.optJSONObject("laboratory"),
+            label(labels(data), "pets", "PETS") to data.optJSONObject("pets"),
+            label(labels(data), "builderBase", "BUILDER BASE") to data.optJSONObject("builderBase")
         )
+
+    private fun activeTasks(data: JSONObject): List<CategorizedTask> {
         return buildList {
-            for ((title, section) in sections) {
+            for ((title, section) in upgradeSections(data)) {
                 val tasks = section?.optJSONArray("tasks") ?: continue
                 for (index in 0 until tasks.length()) {
                     tasks.optJSONObject(index)?.let { add(CategorizedTask(title, it)) }
@@ -288,6 +672,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         views: RemoteViews,
         activeTasks: List<CategorizedTask>,
         taskCapacity: Int,
+        labels: JSONObject?,
         imageTargets: MutableMap<Int, String>
     ) {
         val slots = listOf(
@@ -319,10 +704,10 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             )
             if (task == null) return@forEachIndexed
             views.setImageViewResource(slot.imageId, R.drawable.ic_upgrade_task_placeholder)
-            views.setTextViewText(slot.nameId, task.task.optString("name", "Upgrade"))
+            views.setTextViewText(slot.nameId, taskName(task.task))
             views.setTextViewText(
                 slot.metaId,
-                "${task.category} · ${taskMeta(task.task)}"
+                "${task.category} · ${taskMeta(task.task, labels)}"
             )
             addImageTarget(
                 imageTargets,
@@ -331,14 +716,18 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             )
         }
 
-        val hiddenCount = (activeTasks.size - taskCapacity).coerceAtLeast(0)
+        val hiddenCount = activeTasks.drop(taskCapacity).sumOf { taskDisplayCount(it.task) }
         views.setViewVisibility(
             R.id.upgrade_more_count,
             if (hiddenCount > 0) View.VISIBLE else View.GONE
         )
         views.setTextViewText(
             R.id.upgrade_more_count,
-            if (hiddenCount == 1) "+1 more upgrade" else "+$hiddenCount more upgrades"
+            if (hiddenCount == 1) {
+                "+1 ${label(labels, "moreUpgrade", "more upgrade")}"
+            } else {
+                "+$hiddenCount ${label(labels, "moreUpgrades", "more upgrades")}"
+            }
         )
     }
 
@@ -350,26 +739,35 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0)
         return when {
             minHeight >= 250 -> 4
-            minHeight >= 180 -> 3
-            minHeight >= 145 -> 2
+            minHeight >= 180 -> 2
             else -> 1
         }
+    }
+
+    private fun isLargeWidget(
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int
+    ): Boolean {
+        val minHeight = appWidgetManager.getAppWidgetOptions(appWidgetId)
+            .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0)
+        return minHeight >= 190
     }
 
     private fun renderCompactSection(
         context: Context,
         views: RemoteViews,
         section: JSONObject?,
+        labels: JSONObject?,
         stateViewId: Int,
         statusViewId: Int
     ) {
-        val status = sectionStatus(section)
-        views.setTextViewText(stateViewId, emptySectionLabel(section))
+        val status = sectionStatus(section, labels)
+        views.setTextViewText(stateViewId, emptySectionLabel(section, labels))
         views.setTextViewText(statusViewId, status)
         views.setTextColor(statusViewId, context.getColor(statusColor(status)))
     }
 
-    private fun renderCompactResearch(context: Context, views: RemoteViews, data: JSONObject) {
+    private fun renderCompactResearch(context: Context, views: RemoteViews, data: JSONObject, labels: JSONObject?) {
         val sections = listOf(
             data.optJSONObject("laboratory"),
             data.optJSONObject("pets"),
@@ -378,14 +776,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         val available = sections.filterNotNull().filter { it.optBoolean("available", true) }
         val remaining = available.sumOf { it.optInt("remainingCount", 0) }
         val state = when {
-            available.isEmpty() -> "Not unlocked"
-            remaining == 0 -> "Fully upgraded"
-            else -> "No active research"
+            available.isEmpty() -> label(labels, "notUnlocked", "Not unlocked")
+            remaining == 0 -> label(labels, "fullyUpgraded", "Fully upgraded")
+            else -> label(labels, "noActiveResearch", "No active research")
         }
         val status = when {
-            available.isEmpty() -> "LOCKED"
-            remaining == 0 -> "MAXED"
-            else -> "IDLE"
+            available.isEmpty() -> label(labels, "locked", "LOCKED")
+            remaining == 0 -> label(labels, "maxed", "MAXED")
+            else -> label(labels, "idle", "IDLE")
         }
         views.setTextViewText(R.id.upgrade_research_state, state)
         views.setTextViewText(R.id.upgrade_research_status, status)
@@ -416,67 +814,178 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
     private fun boostText(boost: JSONObject?): String {
         if (boost == null) return ""
         val duration = durationUntil(boost.optString("expiresAt", ""))
-        return listOf(shortBoostName(boost.optString("label", "Boost")), duration)
+        return listOf(boost.optString("shortLabel", boost.optString("label", "Boost")), duration)
             .filter { it.isNotBlank() }
             .joinToString("\n")
+    }
+
+    private fun isExpiredTimedBoost(boost: JSONObject): Boolean {
+        val expiresAt = boost.optString("expiresAt", "")
+        if (expiresAt.isBlank()) return false
+        val end = runCatching { Instant.parse(expiresAt) }.getOrNull() ?: return false
+        return !end.isAfter(Instant.now())
+    }
+
+    private fun activeBoosts(boosts: JSONArray?): List<JSONObject> {
+        if (boosts == null) return emptyList()
+        val active = mutableListOf<JSONObject>()
+        for (index in 0 until boosts.length()) {
+            val boost = boosts.optJSONObject(index) ?: continue
+            if (!isExpiredTimedBoost(boost)) active.add(boost)
+        }
+        return active
     }
 
     private fun renderHelper(
         views: RemoteViews,
         helper: JSONObject?,
+        labels: JSONObject?,
         imageTargets: MutableMap<Int, String>
     ) {
         if (helper == null) {
             views.setViewVisibility(R.id.upgrade_helper_slot, View.GONE)
             return
         }
-        val until = durationUntil(helper.optString("statusUntil", ""))
-        val status = listOf(helper.optString("status", ""), until)
-            .filter { it.isNotBlank() }
-            .joinToString(" ")
-        val text = listOf(shortHelperName(helper.optString("name", "Helper")), status)
+        val status = helperStatus(helper, labels)
+        val text = listOf(helper.optString("shortName", shortHelperName(helper.optString("name", "Helper"))), status)
             .filter { it.isNotBlank() }
             .joinToString("\n")
+        val imageUrl = helper.optString("imageUrl", "")
         views.setViewVisibility(R.id.upgrade_helper_slot, View.VISIBLE)
-        views.setImageViewResource(R.id.upgrade_helper_image, R.drawable.ic_upgrade_status)
         views.setTextViewText(R.id.upgrade_helper_one, text)
-        addImageTarget(
-            imageTargets,
-            R.id.upgrade_helper_image,
-            helper.optString("imageUrl", "")
-        )
+        if (imageUrl.startsWith("https://")) {
+            views.setViewVisibility(R.id.upgrade_helper_image, View.VISIBLE)
+            views.setImageViewResource(R.id.upgrade_helper_image, R.drawable.ic_upgrade_status)
+            addImageTarget(imageTargets, R.id.upgrade_helper_image, imageUrl)
+        } else {
+            views.setViewVisibility(R.id.upgrade_helper_image, View.GONE)
+        }
     }
 
-    private fun taskMeta(task: JSONObject): String {
+    private fun helperStatus(helper: JSONObject, labels: JSONObject?): String {
+        val statusUntil = helper.optString("statusUntil", "")
+        val statusEnd = statusUntil
+            .takeIf { it.isNotBlank() }
+            ?.let { runCatching { Instant.parse(it) }.getOrNull() }
+        if (statusEnd != null && !statusEnd.isAfter(Instant.now())) {
+            return label(labels, "ready", "Ready")
+        }
+        val until = durationUntil(statusUntil)
+        return listOf(helper.optString("status", ""), until)
+            .filter { it.isNotBlank() }
+            .joinToString(" ")
+    }
+
+    private fun taskMeta(task: JSONObject, labels: JSONObject?): String {
         val fromLevel = task.optInt("fromLevel", 0)
         val toLevel = task.optInt("toLevel", 0)
         val duration = durationUntil(task.optString("finishesAt", ""))
-        return "Lv $fromLevel → $toLevel  ·  $duration"
+        return "${label(labels, "level", "Lv")} $fromLevel → $toLevel  ·  $duration"
     }
 
-    private fun sectionStatus(section: JSONObject?): String {
-        if (section == null || !section.optBoolean("available", true)) return "LOCKED"
-        val tasks = section.optJSONArray("tasks")?.length() ?: 0
-        if (tasks == 0 && section.optInt("remainingCount", 0) == 0) return "MAXED"
+    private fun taskName(task: JSONObject): String {
+        val name = task.optString("name", "Upgrade")
+        val count = taskDisplayCount(task)
+        return if (count > 1) "${count}x $name" else name
+    }
+
+    private fun taskDisplayCount(task: JSONObject?): Int =
+        (task?.optInt("count", 1) ?: 1).coerceAtLeast(1)
+
+    private fun taskArrayDisplayCount(tasks: JSONArray?): Int {
+        if (tasks == null) return 0
+        var count = 0
+        for (index in 0 until tasks.length()) {
+            count += taskDisplayCount(tasks.optJSONObject(index))
+        }
+        return count
+    }
+
+    private fun totalActiveCount(data: JSONObject): Int =
+        upgradeSections(data).sumOf { (_, section) ->
+            val displayedTasks = taskArrayDisplayCount(section?.optJSONArray("tasks"))
+            section?.optInt("activeCount", displayedTasks) ?: 0
+        }
+
+    private fun hasFinishedTask(data: JSONObject): Boolean {
+        val sections = listOf(
+            data.optJSONObject("homeBuilders"),
+            data.optJSONObject("laboratory"),
+            data.optJSONObject("pets"),
+            data.optJSONObject("builderBase")
+        )
+        val now = Instant.now()
+        for (section in sections) {
+            val hiddenFinishesAt = section
+                ?.optString("hiddenFinishesAt", "")
+                ?.takeIf { it.isNotBlank() }
+            if (hiddenFinishesAt != null) {
+                val hiddenFinish = runCatching {
+                    Instant.parse(hiddenFinishesAt)
+                }.getOrNull()
+                if (hiddenFinish != null && !hiddenFinish.isAfter(now)) return true
+            }
+            val tasks = section?.optJSONArray("tasks") ?: continue
+            for (index in 0 until tasks.length()) {
+                val finishesAt = tasks.optJSONObject(index)
+                    ?.optString("finishesAt", "")
+                    ?.takeIf { it.isNotBlank() }
+                    ?: continue
+                val finish = runCatching { Instant.parse(finishesAt) }.getOrNull() ?: continue
+                if (!finish.isAfter(now)) return true
+            }
+        }
+        return false
+    }
+
+    private fun sectionStatus(section: JSONObject?, labels: JSONObject?): String {
+        if (section == null || !section.optBoolean("available", true)) {
+            return label(labels, "locked", "LOCKED")
+        }
+        val displayedTasks = taskArrayDisplayCount(section.optJSONArray("tasks"))
+        val tasks = section.optInt("activeCount", displayedTasks)
+        if (tasks == 0 && section.optInt("remainingCount", 0) == 0) {
+            return label(labels, "maxed", "MAXED")
+        }
         val idle = (section.optInt("capacity", 0) - tasks).coerceAtLeast(0)
-        return if (idle > 0) "$idle IDLE" else ""
+        return when {
+            idle > 0 -> idleStatus(labels, idle)
+            tasks > 0 -> activeStatus(labels, tasks)
+            else -> ""
+        }
+    }
+
+    private fun emptySectionLabel(section: JSONObject?, labels: JSONObject?): String {
+        if (section == null) return label(labels, "noActiveUpgrades", "No active upgrades")
+        if (!section.optBoolean("available", true)) return label(labels, "notUnlocked", "Not unlocked")
+        return if (section.optInt("remainingCount", 0) == 0) {
+            label(labels, "fullyUpgraded", "Fully upgraded")
+        } else {
+            label(labels, "noActiveUpgrades", "No active upgrades")
+        }
+    }
+
+    private fun labels(data: JSONObject?): JSONObject? = data?.optJSONObject("labels")
+
+    private fun label(labels: JSONObject?, key: String, fallback: String): String =
+        labels?.optString(key, fallback)?.takeIf { it.isNotBlank() } ?: fallback
+
+    private fun activeStatus(labels: JSONObject?, count: Int): String =
+        "$count ${label(labels, "active", "ACTIVE")}"
+
+    private fun idleStatus(labels: JSONObject?, count: Int): String =
+        "$count ${label(labels, "idle", "IDLE")}"
+
+    private fun isMaxedStatus(status: String): Boolean {
+        val normalized = status.uppercase()
+        return normalized == "MAXED" || normalized == "MAXÉ" || normalized == "MAXE"
     }
 
     private fun statusColor(status: String): Int {
         return when {
-            status == "MAXED" -> R.color.widget_status_maxed
-            "IDLE" in status -> R.color.widget_status_idle
+            isMaxedStatus(status) -> R.color.widget_status_maxed
+            status.isNotBlank() -> R.color.widget_status_idle
             else -> R.color.widget_text_secondary
-        }
-    }
-
-    private fun emptySectionLabel(section: JSONObject?): String {
-        if (section == null) return "No active upgrades"
-        if (!section.optBoolean("available", true)) return "Not unlocked"
-        return if (section.optInt("remainingCount", 0) == 0) {
-            "Fully upgraded"
-        } else {
-            "No active upgrades"
         }
     }
 
