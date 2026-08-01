@@ -15,6 +15,9 @@ import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+const _frenchStarSingular = 'étoile';
+const _frenchStarPlural = 'étoiles';
+
 class WarStatisticsTab extends StatefulWidget {
   const WarStatisticsTab({super.key, required this.warInfo});
 
@@ -217,27 +220,15 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
       maxStars: teamSize * 3,
     );
 
-    if (clan.stars == 0 &&
-        opponent.stars == 0 &&
-        clan.destructionPercentage == 0.0 &&
-        opponent.destructionPercentage == 0.0) {
-      return _WarAnalysisResult(
-        status: _WarAnalysisStatus.waiting,
-        headline: loc.warNotStarted,
-        lines: [
-          copy.remainingAttempts(clanState.remainingAttacks),
-          copy.remainingAttempts(opponentState.remainingAttacks),
-        ],
-      );
-    }
-
-    if (clanState.isPerfect && opponentState.isPerfect) {
-      return _WarAnalysisResult(
-        status: _WarAnalysisStatus.locked,
-        headline: loc.warPerfectDraw,
-        lines: [copy.noBetterResult()],
-      );
-    }
+    final earlyResult = _earlyWarAnalysis(
+      loc: loc,
+      copy: copy,
+      clan: clan,
+      opponent: opponent,
+      clanState: clanState,
+      opponentState: opponentState,
+    );
+    if (earlyResult != null) return earlyResult;
 
     final tiedNow =
         clanState.currentScore.compareTo(opponentState.currentScore) == 0;
@@ -321,6 +312,43 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
       targetMembers: targetMembers,
       chaserCanTie: false,
     );
+  }
+
+  _WarAnalysisResult? _earlyWarAnalysis({
+    required AppLocalizations loc,
+    required _WarAnalysisCopy copy,
+    required WarClan clan,
+    required WarClan opponent,
+    required _WarSideState clanState,
+    required _WarSideState opponentState,
+  }) {
+    if (_warHasNoScore(clan, opponent)) {
+      return _WarAnalysisResult(
+        status: _WarAnalysisStatus.waiting,
+        headline: loc.warNotStarted,
+        lines: [
+          copy.remainingAttempts(clanState.remainingAttacks),
+          copy.remainingAttempts(opponentState.remainingAttacks),
+        ],
+      );
+    }
+
+    if (clanState.isPerfect && opponentState.isPerfect) {
+      return _WarAnalysisResult(
+        status: _WarAnalysisStatus.locked,
+        headline: loc.warPerfectDraw,
+        lines: [copy.noBetterResult()],
+      );
+    }
+
+    return null;
+  }
+
+  bool _warHasNoScore(WarClan clan, WarClan opponent) {
+    return clan.stars == 0 &&
+        opponent.stars == 0 &&
+        clan.destructionPercentage == 0.0 &&
+        opponent.destructionPercentage == 0.0;
   }
 
   _WarAnalysisResult _advantageAnalysis({
@@ -757,20 +785,23 @@ class _WarAnalysisCopy {
       _fr ? 'Objectif: guerre parfaite' : 'Objective: perfect war';
 
   String starsOnUntripledBases(int stars) => _fr
-      ? '+$stars ${_plural(stars, 'étoile', 'étoiles')} sur ${_plural(stars, 'une base non triplée', 'des bases non triplées')}'
+      ? '+$stars ${_plural(stars, _frenchStarSingular, _frenchStarPlural)} sur ${_plural(stars, 'une base non triplée', 'des bases non triplées')}'
       : '+$stars ${_plural(stars, 'star', 'stars')} on untripled bases';
 
   String starsToWin(String clan, int stars) => _fr
-      ? '$clan doit gagner +$stars ${_plural(stars, 'étoile', 'étoiles')}'
+      ? '$clan doit gagner +$stars ${_plural(stars, _frenchStarSingular, _frenchStarPlural)}'
       : '$clan needs +$stars ${_plural(stars, 'star', 'stars')} to take the lead';
 
   String starsToTie(String clan, int stars) => _fr
-      ? '$clan doit gagner +$stars ${_plural(stars, 'étoile', 'étoiles')} pour égaliser'
+      ? '$clan doit gagner +$stars ${_plural(stars, _frenchStarSingular, _frenchStarPlural)} pour égaliser'
       : '$clan needs +$stars ${_plural(stars, 'star', 'stars')} to tie';
 
-  String destructionToLead(String points) => _fr
-      ? '+$points pt de destruction pour passer devant'
-      : '+$points destruction ${points == '1' ? 'point' : 'points'} to lead';
+  String destructionToLead(String points) {
+    final pointWord = points == '1' ? 'point' : 'points';
+    return _fr
+        ? '+$points pt de destruction pour passer devant'
+        : '+$points destruction $pointWord to lead';
+  }
 
   String destructionPoints(String points) =>
       _fr ? '+$points pt de destruction' : '+$points destruction points';
@@ -780,7 +811,7 @@ class _WarAnalysisCopy {
       : '$attacks ${_plural(attacks, 'attempt', 'attempts')} left';
 
   String opportunity(int mapPosition, int stars, int destruction) => _fr
-      ? '#$mapPosition: déjà $stars ${_plural(stars, 'étoile', 'étoiles')}, $destruction%'
+      ? '#$mapPosition: déjà $stars ${_plural(stars, _frenchStarSingular, _frenchStarPlural)}, $destruction%'
       : '#$mapPosition: currently $stars ${_plural(stars, 'star', 'stars')}, $destruction%';
 
   String noBetterResult() =>

@@ -20,6 +20,12 @@ import 'side_page_components.dart';
 
 enum _CalculatorMode { damage, farmGoal }
 
+const _customSetupId = 'custom';
+const _zapQuakeSetupId = 'zap-quake';
+const _fireballQuakeSetupId = 'fireball-quake';
+const _giantArrowSetupId = 'giant-arrow';
+const _flameFlingerSetupId = 'flame-flinger';
+
 class CalculatorsPage extends StatefulWidget {
   const CalculatorsPage({super.key, this.catalog, this.accountPresets});
 
@@ -32,24 +38,23 @@ class CalculatorsPage extends StatefulWidget {
 
 class _CalculatorsPageState extends State<CalculatorsPage> {
   static const _engine = DamageCalculatorEngine();
-  static const _customSetupId = 'custom';
   static const _quickSetupOrder = [
-    'zap-quake',
-    'fireball-quake',
-    'giant-arrow',
-    'flame-flinger',
+    _zapQuakeSetupId,
+    _fireballQuakeSetupId,
+    _giantArrowSetupId,
+    _flameFlingerSetupId,
   ];
   static const _quickSetupCountsById = {
-    'zap-quake': {
+    _zapQuakeSetupId: {
       DamageSourceKind.lightning: 5,
       DamageSourceKind.earthquake: 1,
     },
-    'fireball-quake': {
+    _fireballQuakeSetupId: {
       DamageSourceKind.fireball: 1,
       DamageSourceKind.earthquake: 1,
     },
-    'giant-arrow': {DamageSourceKind.giantArrow: 1},
-    'flame-flinger': {DamageSourceKind.flameFlinger: 1},
+    _giantArrowSetupId: {DamageSourceKind.giantArrow: 1},
+    _flameFlingerSetupId: {DamageSourceKind.flameFlinger: 1},
   };
 
   late final DamageCatalog _catalog;
@@ -107,101 +112,84 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    final isFarmGoalMode = _calculatorMode == _CalculatorMode.farmGoal;
-    if (isFarmGoalMode) {
-      final farmPreset = _farmSelectedPreset;
-      final farmTownHall = farmPreset?.townHall ?? _catalog.maxTownHall;
-      final farmBuildings = _catalog.buildingsForTownHall(farmTownHall);
-      final farmBuilding = _farmSelectedBuilding(farmBuildings);
-      final farmLevels =
-          farmBuilding?.levelsForTownHall(farmTownHall) ??
-          const <BuildingLevelDefinition>[];
-      final farmLevel = _farmSelectedLevel(farmLevels);
-      return _CalculatorScaffold(
-        selectedMode: _calculatorMode,
-        onModeChanged: _selectCalculatorMode,
-        child: ListView(
-          key: const ValueKey('farm-goal-scroll'),
-          padding: sidePagePadding,
-          children: [
-            _FarmGoalView(
-              accountPresets: _accountPresets,
-              selectedAccountTag: _farmAccountTag,
-              selectedAccount: farmPreset,
-              onAccountChanged: _selectFarmAccount,
-              buildings: farmBuildings,
-              selectedBuildingId: _farmBuildingId,
-              selectedBuilding: farmBuilding,
-              levels: farmLevels,
-              selectedLevel: farmLevel,
-              onBuildingChanged: _selectFarmBuilding,
-              onLevelChanged: _selectFarmBuildingLevel,
-              averageLootController: _farmAverageLootController,
-              onLootChanged: () => setState(() {}),
-            ),
-          ],
-        ),
-      );
+    if (_calculatorMode == _CalculatorMode.farmGoal) {
+      return _buildFarmGoalScaffold();
     }
     if (_catalog.buildings.isEmpty || _catalog.sources.isEmpty) {
-      return _CalculatorScaffold(
-        selectedMode: _calculatorMode,
-        onModeChanged: _selectCalculatorMode,
-        child: ListView(
-          key: const ValueKey('calculators-scroll'),
-          padding: sidePagePadding,
-          children: [
-            AppEmptyState(
-              icon: Icons.cloud_off_rounded,
-              title: loc.damageNoStaticDataTitle,
-              body: loc.damageNoStaticDataBody,
-            ),
-          ],
-        ),
-      );
+      return _buildMissingDataScaffold(context);
     }
 
+    return _buildDamageScaffold(context);
+  }
+
+  Widget _buildFarmGoalScaffold() {
+    final farmPreset = _farmSelectedPreset;
+    final farmTownHall = farmPreset?.townHall ?? _catalog.maxTownHall;
+    final farmBuildings = _catalog.buildingsForTownHall(farmTownHall);
+    final farmBuilding = _farmSelectedBuilding(farmBuildings);
+    final farmLevels =
+        farmBuilding?.levelsForTownHall(farmTownHall) ??
+        const <BuildingLevelDefinition>[];
+
+    return _CalculatorScaffold(
+      selectedMode: _calculatorMode,
+      onModeChanged: _selectCalculatorMode,
+      child: ListView(
+        key: const ValueKey('farm-goal-scroll'),
+        padding: sidePagePadding,
+        children: [
+          _FarmGoalView(
+            accountPresets: _accountPresets,
+            selectedAccountTag: _farmAccountTag,
+            selectedAccount: farmPreset,
+            onAccountChanged: _selectFarmAccount,
+            buildings: farmBuildings,
+            selectedBuildingId: _farmBuildingId,
+            selectedBuilding: farmBuilding,
+            levels: farmLevels,
+            selectedLevel: _farmSelectedLevel(farmLevels),
+            onBuildingChanged: _selectFarmBuilding,
+            onLevelChanged: _selectFarmBuildingLevel,
+            averageLootController: _farmAverageLootController,
+            onLootChanged: () => setState(() {}),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMissingDataScaffold(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return _CalculatorScaffold(
+      selectedMode: _calculatorMode,
+      onModeChanged: _selectCalculatorMode,
+      child: ListView(
+        key: const ValueKey('calculators-scroll'),
+        padding: sidePagePadding,
+        children: [
+          AppEmptyState(
+            icon: Icons.cloud_off_rounded,
+            title: loc.damageNoStaticDataTitle,
+            body: loc.damageNoStaticDataBody,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDamageScaffold(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final targets = _session.resolvedTargets();
     final stack = _session.resolvedStack();
     final results = _engine.evaluateAll(targets, stack);
-
     final resultByTargetId = {
       for (final result in results) result.target.id: result,
     };
     final quickSetups = _quickSetups(loc);
     final selectedSetup = _selectedQuickSetup(quickSetups);
-    final selectedSourceKinds =
-        selectedSetup?.counts.keys.toSet() ?? <DamageSourceKind>{};
-    final availableSources = _session.availableSources;
-    final hasSelectedAttackMethod = selectedSetup != null;
-    final primarySources = availableSources
-        .where(
-          (source) =>
-              selectedSourceKinds.contains(source.kind) ||
-              (_session.sources[source.kind]?.count ?? 0) > 0,
-        )
-        .toList(growable: false);
-    final visiblePrimarySources = selectedSetup?.id == _customSetupId
-        ? availableSources
-        : hasSelectedAttackMethod
-        ? primarySources
-        : const <DamageSourceDefinition>[];
-    final visiblePrimaryKinds = visiblePrimarySources
-        .map((source) => source.kind)
-        .toSet();
-    final extraSources = selectedSetup?.id == _customSetupId
-        ? const <DamageSourceDefinition>[]
-        : hasSelectedAttackMethod
-        ? availableSources
-              .where((source) => !visiblePrimaryKinds.contains(source.kind))
-              .toList(growable: false)
-        : const <DamageSourceDefinition>[];
-    final visibleExtraSources = _showAllSources
-        ? extraSources
-        : const <DamageSourceDefinition>[];
+    final sourceVisibility = _damageSourceVisibility(selectedSetup);
     final showZapQuakeOptimizer =
-        selectedSetup?.id == 'zap-quake' && targets.isNotEmpty;
+        selectedSetup?.id == _zapQuakeSetupId && targets.isNotEmpty;
 
     return _CalculatorScaffold(
       selectedMode: _calculatorMode,
@@ -284,7 +272,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
           else if (_session.availableSources.isEmpty)
             _InlineEmpty(message: loc.damageNoSourcesForTownHall)
           else ...[
-            for (final source in visiblePrimarySources) ...[
+            for (final source in sourceVisibility.primarySources) ...[
               _SourceRow(
                 key: ValueKey('source-${source.kind.name}'),
                 source: source,
@@ -297,10 +285,10 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
               ),
               const SizedBox(height: 10),
             ],
-            if (extraSources.isNotEmpty) ...[
+            if (sourceVisibility.extraSources.isNotEmpty) ...[
               if (_showAllSources)
                 _InlineSectionLabel(title: loc.damageOtherSources),
-              for (final source in visibleExtraSources) ...[
+              for (final source in sourceVisibility.visibleExtraSources) ...[
                 _SourceRow(
                   key: ValueKey('source-${source.kind.name}'),
                   source: source,
@@ -348,6 +336,35 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
           ],
         ],
       ),
+    );
+  }
+
+  _DamageSourceVisibility _damageSourceVisibility(_QuickSetup? selectedSetup) {
+    final availableSources = _session.availableSources;
+    if (selectedSetup == null) return const _DamageSourceVisibility();
+    if (selectedSetup.id == _customSetupId) {
+      return _DamageSourceVisibility(primarySources: availableSources);
+    }
+
+    final selectedSourceKinds = selectedSetup.counts.keys.toSet();
+    final primarySources = availableSources
+        .where(
+          (source) =>
+              selectedSourceKinds.contains(source.kind) ||
+              (_session.sources[source.kind]?.count ?? 0) > 0,
+        )
+        .toList(growable: false);
+    final visiblePrimaryKinds = primarySources.map((source) => source.kind);
+    final extraSources = availableSources
+        .where((source) => !visiblePrimaryKinds.contains(source.kind))
+        .toList(growable: false);
+
+    return _DamageSourceVisibility(
+      primarySources: primarySources,
+      extraSources: extraSources,
+      visibleExtraSources: _showAllSources
+          ? extraSources
+          : const <DamageSourceDefinition>[],
     );
   }
 
@@ -522,6 +539,18 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   }
 }
 
+class _DamageSourceVisibility {
+  const _DamageSourceVisibility({
+    this.primarySources = const <DamageSourceDefinition>[],
+    this.extraSources = const <DamageSourceDefinition>[],
+    this.visibleExtraSources = const <DamageSourceDefinition>[],
+  });
+
+  final List<DamageSourceDefinition> primarySources;
+  final List<DamageSourceDefinition> extraSources;
+  final List<DamageSourceDefinition> visibleExtraSources;
+}
+
 class _CalculatorScaffold extends StatelessWidget {
   const _CalculatorScaffold({
     required this.selectedMode,
@@ -583,7 +612,7 @@ class _CalculatorHeader extends StatelessWidget {
         Positioned.fill(
           child: InfoHeroBackdrop(
             imageUrl: ImageAssets.homeBaseBackground,
-            fallbackImageUrls: [
+            fallbackImageUrls: const [
               ImageAssets.clanPageBackground,
               ImageAssets.builderBaseBackground,
             ],
@@ -724,18 +753,11 @@ class _FarmGoalView extends StatelessWidget {
     final resourceLabel =
         _upgradeResourceLabel(loc, selectedLevel?.upgradeResource) ?? '';
     final upgradeCost = selectedLevel?.upgradeCost;
-    final raids =
-        upgradeCost != null &&
-            upgradeCost > 0 &&
-            resourceLabel.isNotEmpty &&
-            averageLoot > 0
-        ? (upgradeCost / averageLoot).ceil()
-        : null;
-    final buildingOptions = {
-      _noFarmBuilding: loc.farmGoalChooseBuilding,
-      for (final building in buildings)
-        building.id: _buildingDisplayName(loc, building.name),
-    };
+    final raids = _farmRaids(
+      upgradeCost: upgradeCost,
+      resourceLabel: resourceLabel,
+      averageLoot: averageLoot,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -749,131 +771,246 @@ class _FarmGoalView extends StatelessWidget {
         ),
         const SizedBox(height: 22),
         SidePageSectionHeader(title: loc.farmGoalTargetTitle),
-        SidePagePanel(
-          key: const ValueKey('farm-goal-target'),
-          radius: AppRadius.card,
-          padding: const EdgeInsets.all(16),
+        _buildTargetPanel(
+          context,
+          loc,
+          resourceLabel: resourceLabel,
+          upgradeCost: upgradeCost,
+        ),
+        const SizedBox(height: 22),
+        SidePageSectionHeader(title: loc.farmGoalLootTitle),
+        _buildLootPanel(context, loc, resourceLabel: resourceLabel),
+        const SizedBox(height: 16),
+        if (raids == null)
+          _InlineEmpty(
+            message: _farmMissingMessage(
+              loc,
+              upgradeCost: upgradeCost,
+              resourceLabel: resourceLabel,
+            ),
+          )
+        else
+          _FarmGoalResultPanel(
+            raids: raids,
+            upgradeCost: upgradeCost!,
+            resourceLabel: resourceLabel,
+            averageLoot: averageLoot,
+          ),
+      ],
+    );
+  }
+
+  int? _farmRaids({
+    required int? upgradeCost,
+    required String resourceLabel,
+    required int averageLoot,
+  }) {
+    if (upgradeCost == null || upgradeCost <= 0) return null;
+    if (resourceLabel.isEmpty || averageLoot <= 0) return null;
+    return (upgradeCost / averageLoot).ceil();
+  }
+
+  Map<String, String> _buildingOptions(AppLocalizations loc) => {
+    _noFarmBuilding: loc.farmGoalChooseBuilding,
+    for (final building in buildings)
+      building.id: _buildingDisplayName(loc, building.name),
+  };
+
+  String _farmMissingMessage(
+    AppLocalizations loc, {
+    required int? upgradeCost,
+    required String resourceLabel,
+  }) {
+    if (selectedBuilding == null) return loc.farmGoalMissingTarget;
+    if (upgradeCost == null || resourceLabel.isEmpty) {
+      return loc.farmGoalCostUnavailable;
+    }
+    return loc.farmGoalMissingValues;
+  }
+
+  Widget _buildTargetPanel(
+    BuildContext context,
+    AppLocalizations loc, {
+    required String resourceLabel,
+    required int? upgradeCost,
+  }) {
+    return SidePagePanel(
+      key: const ValueKey('farm-goal-target'),
+      radius: AppRadius.card,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            loc.farmGoalTargetBuildingLabel,
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 8),
+          SidePageInlineSelector<String>(
+            key: const ValueKey('farm-goal-building'),
+            selected: selectedBuildingId ?? _noFarmBuilding,
+            options: _buildingOptions(loc),
+            onSelected: (id) {
+              if (id != _noFarmBuilding) onBuildingChanged(id);
+            },
+            minWidth: double.infinity,
+            maxWidth: double.infinity,
+            height: 46,
+          ),
+          if (selectedBuilding != null && selectedLevel != null) ...[
+            const SizedBox(height: 16),
+            _FarmGoalLevelSelector(
+              levels: levels,
+              selectedLevel: selectedLevel!,
+              onLevelChanged: onLevelChanged,
+            ),
+            const SizedBox(height: 16),
+            _FarmGoalTargetSummary(
+              building: selectedBuilding!,
+              level: selectedLevel!,
+              upgradeCost: upgradeCost,
+              resourceLabel: resourceLabel,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLootPanel(
+    BuildContext context,
+    AppLocalizations loc, {
+    required String resourceLabel,
+  }) {
+    final league = selectedAccount?.league;
+    final hint = league == null || resourceLabel.isEmpty
+        ? loc.farmGoalNoLeagueLoot
+        : loc.farmGoalLeagueEstimate(league);
+
+    return SidePagePanel(
+      key: const ValueKey('farm-goal-loot'),
+      radius: AppRadius.card,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            key: const ValueKey('farm-goal-average-loot'),
+            controller: averageLootController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              labelText: loc.farmGoalAverageLootLabel,
+              suffixText: resourceLabel,
+              prefixIcon: const Icon(Icons.savings_outlined),
+            ),
+            onChanged: (_) => onLootChanged(),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            hint,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FarmGoalLevelSelector extends StatelessWidget {
+  const _FarmGoalLevelSelector({
+    required this.levels,
+    required this.selectedLevel,
+    required this.onLevelChanged,
+  });
+
+  final List<BuildingLevelDefinition> levels;
+  final BuildingLevelDefinition selectedLevel;
+  final ValueChanged<int> onLevelChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            loc.farmGoalTargetLevelLabel,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        SidePageInlineSelector<int>(
+          key: const ValueKey('farm-goal-level'),
+          selected: selectedLevel.level,
+          options: {
+            for (final level in levels) level.level: loc.sideLevel(level.level),
+          },
+          onSelected: onLevelChanged,
+          minWidth: 132,
+          maxWidth: 160,
+          height: 44,
+        ),
+      ],
+    );
+  }
+}
+
+class _FarmGoalTargetSummary extends StatelessWidget {
+  const _FarmGoalTargetSummary({
+    required this.building,
+    required this.level,
+    required this.upgradeCost,
+    required this.resourceLabel,
+  });
+
+  final BuildingDefinition building;
+  final BuildingLevelDefinition level;
+  final int? upgradeCost;
+  final String resourceLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final costText = upgradeCost == null || resourceLabel.isEmpty
+        ? loc.farmGoalCostUnavailable
+        : '${loc.farmGoalUpgradeCostLabel}: ${formatSidePageInt(upgradeCost!)} $resourceLabel';
+
+    return Row(
+      children: [
+        MobileWebImage(
+          imageUrl: ImageAssets.getHomeVillageBuildingImage(
+            building.imageName,
+            level.level,
+          ),
+          width: 52,
+          height: 52,
+          errorWidget: (_, _, _) =>
+              const Icon(Icons.home_work_rounded, size: 40),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                loc.farmGoalTargetBuildingLabel,
+                '${_buildingDisplayName(loc, building.name)} · ${loc.sideLevel(level.level)}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(
                   context,
                 ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
               ),
-              const SizedBox(height: 8),
-              SidePageInlineSelector<String>(
-                key: const ValueKey('farm-goal-building'),
-                selected: selectedBuildingId ?? _noFarmBuilding,
-                options: buildingOptions,
-                onSelected: (id) {
-                  if (id != _noFarmBuilding) onBuildingChanged(id);
-                },
-                minWidth: double.infinity,
-                maxWidth: double.infinity,
-                height: 46,
-              ),
-              if (selectedBuilding != null && selectedLevel != null) ...[
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        loc.farmGoalTargetLevelLabel,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    SidePageInlineSelector<int>(
-                      key: const ValueKey('farm-goal-level'),
-                      selected: selectedLevel!.level,
-                      options: {
-                        for (final level in levels)
-                          level.level: loc.sideLevel(level.level),
-                      },
-                      onSelected: onLevelChanged,
-                      minWidth: 132,
-                      maxWidth: 160,
-                      height: 44,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    MobileWebImage(
-                      imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                        selectedBuilding!.imageName,
-                        selectedLevel!.level,
-                      ),
-                      width: 52,
-                      height: 52,
-                      errorWidget: (_, _, _) =>
-                          const Icon(Icons.home_work_rounded, size: 40),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${_buildingDisplayName(loc, selectedBuilding!.name)} · ${loc.sideLevel(selectedLevel!.level)}',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleSmall
-                                ?.copyWith(fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            upgradeCost == null || resourceLabel.isEmpty
-                                ? loc.farmGoalCostUnavailable
-                                : '${loc.farmGoalUpgradeCostLabel}: ${formatSidePageInt(upgradeCost)} $resourceLabel',
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ],
-          ),
-        ),
-        const SizedBox(height: 22),
-        SidePageSectionHeader(title: loc.farmGoalLootTitle),
-        SidePagePanel(
-          key: const ValueKey('farm-goal-loot'),
-          radius: AppRadius.card,
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                key: const ValueKey('farm-goal-average-loot'),
-                controller: averageLootController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  labelText: loc.farmGoalAverageLootLabel,
-                  suffixText: resourceLabel,
-                  prefixIcon: const Icon(Icons.savings_outlined),
-                ),
-                onChanged: (_) => onLootChanged(),
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 3),
               Text(
-                selectedAccount?.league == null || resourceLabel.isEmpty
-                    ? loc.farmGoalNoLeagueLoot
-                    : loc.farmGoalLeagueEstimate(selectedAccount!.league!),
+                costText,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -881,75 +1018,84 @@ class _FarmGoalView extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 16),
-        if (raids == null)
-          _InlineEmpty(
-            message: selectedBuilding == null
-                ? loc.farmGoalMissingTarget
-                : upgradeCost == null || resourceLabel.isEmpty
-                ? loc.farmGoalCostUnavailable
-                : loc.farmGoalMissingValues,
-          )
-        else
-          SidePagePanel(
-            key: const ValueKey('farm-goal-result'),
-            radius: AppRadius.card,
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      ],
+    );
+  }
+}
+
+class _FarmGoalResultPanel extends StatelessWidget {
+  const _FarmGoalResultPanel({
+    required this.raids,
+    required this.upgradeCost,
+    required this.resourceLabel,
+    required this.averageLoot,
+  });
+
+  final int raids;
+  final int upgradeCost;
+  final String resourceLabel;
+  final int averageLoot;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return SidePagePanel(
+      key: const ValueKey('farm-goal-result'),
+      radius: AppRadius.card,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.track_changes_rounded,
+            size: 28,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.track_changes_rounded,
-                  size: 28,
-                  color: Theme.of(context).colorScheme.secondary,
+                Text(
+                  loc.farmGoalResultTitle,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        loc.farmGoalResultTitle,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        loc.farmGoalResultSummary(
-                          formatSidePageInt(upgradeCost!),
-                          resourceLabel,
-                          formatSidePageInt(averageLoot),
-                        ),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 4),
+                Text(
+                  loc.farmGoalResultSummary(
+                    formatSidePageInt(upgradeCost),
+                    resourceLabel,
+                    formatSidePageInt(averageLoot),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '$raids',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Text(
-                      loc.farmGoalRaids,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
           ),
-      ],
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '$raids',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              Text(
+                loc.farmGoalRaids,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1546,6 +1692,10 @@ class _BuildingPickerState extends State<_BuildingPicker> {
 
   String _query = '';
 
+  String get _normalizedQuery => _query.trim().toLowerCase();
+
+  bool get _hasQuery => _normalizedQuery.isNotEmpty;
+
   List<BuildingDefinition> _commonBuildings() {
     final buildingsByName = {
       for (final building in widget.buildings) building.name: building,
@@ -1556,93 +1706,140 @@ class _BuildingPickerState extends State<_BuildingPicker> {
         .toList(growable: false);
   }
 
+  List<BuildingDefinition> _filteredBuildings() {
+    final query = _normalizedQuery;
+    return widget.buildings
+        .where((building) => building.name.toLowerCase().contains(query))
+        .toList(growable: false);
+  }
+
+  List<BuildingDefinition> _remainingBuildings(
+    List<BuildingDefinition> commonBuildings,
+  ) {
+    final commonIds = commonBuildings.map((building) => building.id).toSet();
+    return widget.buildings
+        .where((building) => !commonIds.contains(building.id))
+        .toList(growable: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final filtered = widget.buildings
-        .where(
-          (building) =>
-              building.name.toLowerCase().contains(_query.trim().toLowerCase()),
-        )
-        .toList(growable: false);
-    final hasQuery = _query.trim().isNotEmpty;
+    final hasQuery = _hasQuery;
+    final filtered = hasQuery ? _filteredBuildings() : widget.buildings;
     final commonBuildings = hasQuery
         ? const <BuildingDefinition>[]
         : _commonBuildings();
-    final commonIds = commonBuildings.map((building) => building.id).toSet();
     final remainingBuildings = hasQuery
         ? filtered
-        : widget.buildings
-              .where((building) => !commonIds.contains(building.id))
-              .toList(growable: false);
+        : _remainingBuildings(commonBuildings);
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.82,
       minChildSize: 0.45,
       maxChildSize: 0.95,
-      builder: (context, controller) => Padding(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-        child: Column(
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.outlineVariant,
-                borderRadius: BorderRadius.circular(AppRadius.pill),
-              ),
+      builder: (context, controller) => _buildSheet(
+        context,
+        loc,
+        controller: controller,
+        hasQuery: hasQuery,
+        filtered: filtered,
+        commonBuildings: commonBuildings,
+        remainingBuildings: remainingBuildings,
+      ),
+    );
+  }
+
+  Widget _buildSheet(
+    BuildContext context,
+    AppLocalizations loc, {
+    required ScrollController controller,
+    required bool hasQuery,
+    required List<BuildingDefinition> filtered,
+    required List<BuildingDefinition> commonBuildings,
+    required List<BuildingDefinition> remainingBuildings,
+  }) {
+    final visibleBuildings = hasQuery
+        ? filtered
+        : [...commonBuildings, ...remainingBuildings];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      child: Column(
+        children: [
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.outlineVariant,
+              borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
-            const SizedBox(height: 14),
-            TextField(
-              key: const ValueKey('building-search'),
-              autofocus: true,
-              decoration: InputDecoration(
-                labelText: loc.damageSearchBuildings,
-                prefixIcon: const Icon(Icons.search_rounded),
-                suffixIcon: _query.isEmpty
-                    ? null
-                    : IconButton(
-                        tooltip: loc.generalClearSearch,
-                        onPressed: () => setState(() => _query = ''),
-                        icon: const Icon(Icons.close_rounded),
-                      ),
-              ),
-              onChanged: (value) => setState(() => _query = value),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child:
-                  (hasQuery
-                          ? filtered
-                          : [...commonBuildings, ...remainingBuildings])
-                      .isEmpty
-                  ? AppEmptyState(
-                      icon: Icons.search_off_rounded,
-                      title: loc.damageNoBuildingsFound,
-                      body: loc.damageTryAnotherSearch,
-                    )
-                  : ListView(
-                      controller: controller,
-                      children: [
-                        if (commonBuildings.isNotEmpty) ...[
-                          _PickerSectionLabel(title: loc.damageCommonBuildings),
-                          for (final building in commonBuildings)
-                            _buildingTile(context, building),
-                        ],
-                        if (remainingBuildings.isNotEmpty && !hasQuery) ...[
-                          _PickerSectionLabel(title: loc.damageAllBuildings),
-                          for (final building in remainingBuildings)
-                            _buildingTile(context, building),
-                        ],
-                        if (hasQuery)
-                          for (final building in filtered)
-                            _buildingTile(context, building),
-                      ],
+          ),
+          const SizedBox(height: 14),
+          TextField(
+            key: const ValueKey('building-search'),
+            autofocus: true,
+            decoration: InputDecoration(
+              labelText: loc.damageSearchBuildings,
+              prefixIcon: const Icon(Icons.search_rounded),
+              suffixIcon: _query.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: loc.generalClearSearch,
+                      onPressed: () => setState(() => _query = ''),
+                      icon: const Icon(Icons.close_rounded),
                     ),
             ),
-          ],
-        ),
+            onChanged: (value) => setState(() => _query = value),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: visibleBuildings.isEmpty
+                ? AppEmptyState(
+                    icon: Icons.search_off_rounded,
+                    title: loc.damageNoBuildingsFound,
+                    body: loc.damageTryAnotherSearch,
+                  )
+                : _buildBuildingList(
+                    context,
+                    loc,
+                    controller: controller,
+                    hasQuery: hasQuery,
+                    filtered: filtered,
+                    commonBuildings: commonBuildings,
+                    remainingBuildings: remainingBuildings,
+                  ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildBuildingList(
+    BuildContext context,
+    AppLocalizations loc, {
+    required ScrollController controller,
+    required bool hasQuery,
+    required List<BuildingDefinition> filtered,
+    required List<BuildingDefinition> commonBuildings,
+    required List<BuildingDefinition> remainingBuildings,
+  }) {
+    return ListView(
+      controller: controller,
+      children: [
+        if (commonBuildings.isNotEmpty) ...[
+          _PickerSectionLabel(title: loc.damageCommonBuildings),
+          for (final building in commonBuildings)
+            _buildingTile(context, building),
+        ],
+        if (remainingBuildings.isNotEmpty && !hasQuery) ...[
+          _PickerSectionLabel(title: loc.damageAllBuildings),
+          for (final building in remainingBuildings)
+            _buildingTile(context, building),
+        ],
+        if (hasQuery)
+          for (final building in filtered) _buildingTile(context, building),
+      ],
     );
   }
 
@@ -1814,33 +2011,37 @@ int? _farmLeagueLoot({
   Map? selectedReward;
   for (final reward in rewards) {
     if (reward is! Map) continue;
-    final requiredTownHall = reward['townhall_level'];
-    if (requiredTownHall is! num || requiredTownHall > townHall) continue;
+    if (!_rewardAppliesToTownHall(reward, townHall)) continue;
     selectedReward = reward;
   }
   final resources = selectedReward?['resources'];
   if (resources is! Map) return null;
-  final resourceKey = switch (resource.trim().toLowerCase().replaceAll(
-    ' ',
-    '_',
-  )) {
-    'gold' => 'gold',
-    'elixir' => 'elixir',
-    'dark_elixir' => 'dark_elixir',
-    _ => null,
-  };
+  final resourceKey = _farmResourceKey(resource);
   final value = resourceKey == null ? null : resources[resourceKey];
   return value is num && value > 0 ? value.round() : null;
 }
+
+bool _rewardAppliesToTownHall(Map reward, int townHall) {
+  final requiredTownHall = reward['townhall_level'];
+  return requiredTownHall is num && requiredTownHall <= townHall;
+}
+
+String? _farmResourceKey(String resource) =>
+    switch (resource.trim().toLowerCase().replaceAll(' ', '_')) {
+      'gold' => 'gold',
+      'elixir' => 'elixir',
+      'dark_elixir' => 'dark_elixir',
+      _ => null,
+    };
 
 int _parseFarmAmount(String value) =>
     int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
 
 String _quickSetupLabel(AppLocalizations loc, String id) => switch (id) {
-  'zap-quake' => loc.damageQuickSetupZapQuake,
-  'fireball-quake' => loc.damageQuickSetupFireballQuake,
-  'giant-arrow' => loc.damageQuickSetupGiantArrow,
-  'flame-flinger' => loc.damageQuickSetupFlameFlinger,
+  _zapQuakeSetupId => loc.damageQuickSetupZapQuake,
+  _fireballQuakeSetupId => loc.damageQuickSetupFireballQuake,
+  _giantArrowSetupId => loc.damageQuickSetupGiantArrow,
+  _flameFlingerSetupId => loc.damageQuickSetupFlameFlinger,
   _ => loc.damageSummaryAttack,
 };
 

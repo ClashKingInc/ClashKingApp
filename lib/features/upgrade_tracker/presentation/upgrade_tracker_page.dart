@@ -43,6 +43,11 @@ import 'package:url_launcher/url_launcher.dart';
 const _trackerContentGutter = 16.0;
 const _trackerDesktopBreakpoint = 900.0;
 const _trackerDesktopMaxWidth = 1180.0;
+const _homeVillageLabel = 'Home Village';
+const _builderBaseLabel = 'Builder Base';
+const _inProgressLabel = 'In progress';
+const _upgradeCostLabel = 'Upgrade cost';
+const _timelineDateFormat = 'MMM d';
 
 bool _isTrackerDesktop(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= _trackerDesktopBreakpoint;
@@ -1743,7 +1748,7 @@ class _UpgradesTabState extends State<_UpgradesTab>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _SectionHeading(
-                        title: 'In progress',
+                        title: _inProgressLabel,
                         trailing: '${active.length} active',
                       ),
                       ...active.map(
@@ -1949,7 +1954,7 @@ class _UpgradesTabState extends State<_UpgradesTab>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _SectionHeading(
-                                  title: 'In progress',
+                                  title: _inProgressLabel,
                                   trailing: '${active.length} active',
                                 ),
                                 ...active.map(
@@ -2551,15 +2556,14 @@ class _UpgradeIconTile extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final active = snapshot.remainingActiveSeconds(item, now: now) > 0;
     final usePlayerFrame = _usesPlayerIconFrame;
-    final completeColor = const Color(0xFFFFD75E);
+    const completeColor = Color(0xFFFFD75E);
+    final playerFrameBorderColor = _playerFrameBorderColor(
+      context,
+      active: active,
+      completeColor: completeColor,
+    );
     final borderColor = usePlayerFrame
-        ? active
-              ? scheme.primary
-              : item.isComplete
-              ? completeColor
-              : Theme.of(context).brightness == Brightness.dark
-              ? Colors.white.withValues(alpha: 0.88)
-              : Colors.black87
+        ? playerFrameBorderColor
         : active
         ? scheme.primary
         : scheme.outlineVariant;
@@ -2583,6 +2587,19 @@ class _UpgradeIconTile extends StatelessWidget {
       ),
       child: child,
     );
+  }
+
+  Color _playerFrameBorderColor(
+    BuildContext context, {
+    required bool active,
+    required Color completeColor,
+  }) {
+    if (active) return Theme.of(context).colorScheme.primary;
+    if (item.isComplete) return completeColor;
+    if (Theme.of(context).brightness == Brightness.dark) {
+      return Colors.white.withValues(alpha: 0.88);
+    }
+    return Colors.black87;
   }
 
   bool get _usesPlayerIconFrame => true;
@@ -3397,7 +3414,7 @@ class _PlanTimelinePeriodBar extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final lastDay = firstDay.add(Duration(days: days - 1));
     final label =
-        '${DateFormat('MMM d').format(firstDay)} - ${DateFormat('MMM d').format(lastDay)}';
+        '${DateFormat(_timelineDateFormat).format(firstDay)} - ${DateFormat(_timelineDateFormat).format(lastDay)}';
     return Container(
       height: height,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -3491,17 +3508,18 @@ class _PlanTimelineHeader extends StatelessWidget {
               final day = firstDay.add(Duration(days: index));
               final isToday = _isSameDay(day, now);
               final isMajor = isToday || index <= 1 || index % 7 == 0;
+              final labelColor = _timelineHeaderColor(
+                scheme,
+                isToday: isToday,
+                isMajor: isMajor,
+              );
               return SizedBox(
                 width: dayWidth,
                 child: Text(
                   _timelineHeaderLabel(day, now),
                   textAlign: TextAlign.center,
                   style: style?.copyWith(
-                    color: isToday
-                        ? scheme.primary
-                        : isMajor
-                        ? scheme.onSurface
-                        : scheme.onSurfaceVariant.withValues(alpha: 0.62),
+                    color: labelColor,
                     fontWeight: isMajor ? FontWeight.w900 : FontWeight.w700,
                   ),
                 ),
@@ -3541,6 +3559,16 @@ class _PlanTimelineHeader extends StatelessWidget {
       ],
     );
   }
+}
+
+Color _timelineHeaderColor(
+  ColorScheme scheme, {
+  required bool isToday,
+  required bool isMajor,
+}) {
+  if (isToday) return scheme.primary;
+  if (isMajor) return scheme.onSurface;
+  return scheme.onSurfaceVariant.withValues(alpha: 0.62);
 }
 
 class _PlanTimelineSection extends StatefulWidget {
@@ -4060,8 +4088,8 @@ class _PlanTimelineBlock extends StatelessWidget {
 void _showPlannedUpgradeDetails(BuildContext context, PlannedUpgrade upgrade) {
   final durationSeconds = upgrade.endsAt.difference(upgrade.startsAt).inSeconds;
   final village = upgrade.item.village == UpgradeVillage.home
-      ? 'Home Village'
-      : 'Builder Base';
+      ? _homeVillageLabel
+      : _builderBaseLabel;
   final levelText =
       'Lv ${upgrade.item.currentLevel} -> ${upgrade.step.targetLevel}';
 
@@ -4144,7 +4172,7 @@ void _showPlannedUpgradeDetails(BuildContext context, PlannedUpgrade upgrade) {
                   (
                     label: 'Lane',
                     value: upgrade.isOngoing
-                        ? 'In progress'
+                        ? _inProgressLabel
                         : 'Scheduled #${upgrade.instance}',
                     icon: Icons.view_timeline_rounded,
                     imageUrl: null,
@@ -4155,7 +4183,7 @@ void _showPlannedUpgradeDetails(BuildContext context, PlannedUpgrade upgrade) {
               if (upgrade.costs.isNotEmpty) ...[
                 const SizedBox(height: 14),
                 Text(
-                  'Upgrade cost',
+                  _upgradeCostLabel,
                   style: Theme.of(
                     sheetContext,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900),
@@ -4277,9 +4305,11 @@ String _timelineDateTimeLabel(DateTime value) =>
     DateFormat('MMM d HH:mm').format(value);
 
 String _timelineHeaderLabel(DateTime day, DateTime now) {
-  if (_isSameDay(day, now)) return 'Today\n${DateFormat('MMM d').format(day)}';
+  if (_isSameDay(day, now)) {
+    return 'Today\n${DateFormat(_timelineDateFormat).format(day)}';
+  }
   if (_isSameDay(day, now.add(const Duration(days: 1)))) {
-    return 'Tomorrow\n${DateFormat('MMM d').format(day)}';
+    return 'Tomorrow\n${DateFormat(_timelineDateFormat).format(day)}';
   }
   if (day.day == 1) return DateFormat('MMM\nd').format(day);
   final daysFromNow = day
@@ -7421,7 +7451,7 @@ Future<void> _showPlanPreferences(
                   const _SectionHeading(title: 'Planning goals'),
                   const SizedBox(height: 4),
                   _PlanGoalSelector(
-                    label: 'Home Village',
+                    label: _homeVillageLabel,
                     goal: draft.homeGoal,
                     onChanged: (value) => setSheetState(
                       () =>
@@ -7430,7 +7460,7 @@ Future<void> _showPlanPreferences(
                   ),
                   const SizedBox(height: 10),
                   _PlanGoalSelector(
-                    label: 'Builder Base',
+                    label: _builderBaseLabel,
                     goal: draft.builderBaseGoal,
                     onChanged: (value) => setSheetState(
                       () => draft = _copyPlanPreferences(
@@ -7452,7 +7482,7 @@ Future<void> _showPlanPreferences(
                     ),
                     sections: [
                       _PlanPriorityVillageSection(
-                        title: 'Home Village',
+                        title: _homeVillageLabel,
                         order: _planQueueOrder(
                           snapshot,
                           draft,
@@ -7497,7 +7527,7 @@ Future<void> _showPlanPreferences(
                         }),
                       ),
                       _PlanPriorityVillageSection(
-                        title: 'Builder Base',
+                        title: _builderBaseLabel,
                         order: _planQueueOrder(
                           snapshot,
                           draft,
@@ -7558,7 +7588,7 @@ Future<void> _showPlanPreferences(
                     ),
                     sections: [
                       _PlanPriorityVillageSection(
-                        title: 'Home Village',
+                        title: _homeVillageLabel,
                         order: _planQueueOrder(
                           snapshot,
                           draft,
@@ -7603,7 +7633,7 @@ Future<void> _showPlanPreferences(
                         }),
                       ),
                       _PlanPriorityVillageSection(
-                        title: 'Builder Base',
+                        title: _builderBaseLabel,
                         order: _planQueueOrder(
                           snapshot,
                           draft,
@@ -7664,7 +7694,7 @@ Future<void> _showPlanPreferences(
                     ),
                     sections: [
                       _PlanPriorityVillageSection(
-                        title: 'Home Village',
+                        title: _homeVillageLabel,
                         order: _planQueueOrder(
                           snapshot,
                           draft,
@@ -9140,7 +9170,7 @@ void showUpgradeDetails(BuildContext context, UpgradeTrackerItem item) {
                           else
                             _TrackerDetailStatRow(
                               icon: Icons.payments_rounded,
-                              label: 'Upgrade cost',
+                              label: _upgradeCostLabel,
                               value: selectedSteps.isEmpty ? 'Max' : 'None',
                               accent: accent,
                             ),
@@ -9856,7 +9886,7 @@ class _UpgradeCostStatRow extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: Text(
-            'Upgrade cost',
+            _upgradeCostLabel,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -10303,9 +10333,9 @@ _collectionInfo(UpgradeCollectionItem item) {
 }
 
 String _collectionVillageName(Object? value) => switch (value?.toString()) {
-  'builderBase' || 'builder' => 'Builder Base',
+  'builderBase' || 'builder' => _builderBaseLabel,
   'war' => 'War Base',
-  'home' => 'Home Village',
+  'home' => _homeVillageLabel,
   final value? => value,
   _ => '',
 };

@@ -203,7 +203,7 @@ class _PostSkeletonCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (showImage)
-              SkeletonLoader(
+              const SkeletonLoader(
                 width: double.infinity,
                 height: 188,
                 borderRadius: BorderRadius.zero,
@@ -422,13 +422,6 @@ class _PostArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    final publishedAt = post.publishedAt;
-    final dateLabel = publishedAt == null
-        ? null
-        : MaterialLocalizations.of(
-            context,
-          ).formatFullDate(publishedAt.toLocal());
     final hasImage = post.bannerImageUrl?.isNotEmpty == true;
     final articleHtml = _postArticleHtml(post.body, stripHeroImage: hasImage);
 
@@ -438,86 +431,7 @@ class _PostArticlePage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: hasImage ? colors.surfaceContainer : colors.surface,
-              border: hasImage
-                  ? Border(bottom: BorderSide(color: colors.outlineVariant))
-                  : null,
-            ),
-            child: SafeArea(
-              top: false,
-              bottom: false,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 900),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (hasImage)
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(AppRadius.chip),
-                          ),
-                          child: MobileWebImage(
-                            imageUrl: post.bannerImageUrl!,
-                            width: double.infinity,
-                            height: 240,
-                            fit: BoxFit.cover,
-                            placeholder: (_, _) => ColoredBox(
-                              color: colors.surfaceContainerHighest,
-                              child: const SizedBox.expand(),
-                            ),
-                          ),
-                        ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          20,
-                          hasImage ? 18 : 8,
-                          20,
-                          hasImage ? 20 : 12,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              post.title,
-                              style:
-                                  (hasImage
-                                          ? textTheme.headlineSmall
-                                          : textTheme.titleLarge)
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w800,
-                                        height: hasImage ? 1.08 : 1.14,
-                                      ),
-                            ),
-                            if (dateLabel != null) ...[
-                              const SizedBox(height: 10),
-                              _PostDateLabel(dateLabel: dateLabel),
-                            ],
-                            if (post.subtitle.isNotEmpty) ...[
-                              SizedBox(height: hasImage ? 14 : 10),
-                              Text(
-                                post.subtitle,
-                                style:
-                                    (hasImage
-                                            ? textTheme.titleMedium
-                                            : textTheme.bodyLarge)
-                                        ?.copyWith(
-                                          color: colors.onSurfaceVariant,
-                                          height: 1.35,
-                                        ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _PostArticleHeader(post: post, hasImage: hasImage),
           Expanded(
             child: Center(
               child: ConstrainedBox(
@@ -535,6 +449,118 @@ class _PostArticlePage extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PostArticleHeader extends StatelessWidget {
+  const _PostArticleHeader({required this.post, required this.hasImage});
+
+  final AppAnnouncement post;
+  final bool hasImage;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final dateLabel = _publishedDateLabel(context, post);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: hasImage ? colors.surfaceContainer : colors.surface,
+        border: hasImage
+            ? Border(bottom: BorderSide(color: colors.outlineVariant))
+            : null,
+      ),
+      child: SafeArea(
+        top: false,
+        bottom: false,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (hasImage) _PostArticleHero(imageUrl: post.bannerImageUrl!),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    20,
+                    hasImage ? 18 : 8,
+                    20,
+                    hasImage ? 20 : 12,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.title,
+                        style:
+                            (hasImage
+                                    ? textTheme.headlineSmall
+                                    : textTheme.titleLarge)
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  height: hasImage ? 1.08 : 1.14,
+                                ),
+                      ),
+                      if (dateLabel != null) ...[
+                        const SizedBox(height: 10),
+                        _PostDateLabel(dateLabel: dateLabel),
+                      ],
+                      if (post.subtitle.isNotEmpty) ...[
+                        SizedBox(height: hasImage ? 14 : 10),
+                        Text(
+                          post.subtitle,
+                          style:
+                              (hasImage
+                                      ? textTheme.titleMedium
+                                      : textTheme.bodyLarge)
+                                  ?.copyWith(
+                                    color: colors.onSurfaceVariant,
+                                    height: 1.35,
+                                  ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PostArticleHero extends StatelessWidget {
+  const _PostArticleHero({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(
+        bottom: Radius.circular(AppRadius.chip),
+      ),
+      child: MobileWebImage(
+        imageUrl: imageUrl,
+        width: double.infinity,
+        height: 240,
+        fit: BoxFit.cover,
+        placeholder: (_, _) => ColoredBox(
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          child: const SizedBox.expand(),
+        ),
+      ),
+    );
+  }
+}
+
+String? _publishedDateLabel(BuildContext context, AppAnnouncement post) {
+  final publishedAt = post.publishedAt;
+  return publishedAt == null
+      ? null
+      : MaterialLocalizations.of(context).formatFullDate(publishedAt.toLocal());
 }
 
 String? _postArticleHtml(String? html, {required bool stripHeroImage}) {
