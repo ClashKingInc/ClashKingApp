@@ -127,9 +127,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final farmTownHall = farmPreset?.townHall ?? _catalog.maxTownHall;
     final farmBuildings = _catalog.buildingsForTownHall(farmTownHall);
     final farmBuilding = _farmSelectedBuilding(farmBuildings);
-    final farmLevels =
-        farmBuilding?.levelsForTownHall(farmTownHall) ??
-        const <BuildingLevelDefinition>[];
+    final farmLevels = _farmTargetLevels(farmBuilding, farmTownHall);
 
     return _CalculatorScaffold(
       selectedMode: _calculatorMode,
@@ -417,7 +415,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final building = _catalog
         .buildingsForTownHall(townHall)
         .firstWhere((candidate) => candidate.id == buildingId);
-    final levels = building.levelsForTownHall(townHall);
+    final levels = _farmTargetLevels(building, townHall);
     setState(() {
       _farmBuildingId = buildingId;
       _farmBuildingLevel = levels.isEmpty ? null : levels.last.level;
@@ -438,9 +436,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final building = _farmSelectedBuilding(
       _catalog.buildingsForTownHall(farmTownHall),
     );
-    final levels =
-        building?.levelsForTownHall(farmTownHall) ??
-        const <BuildingLevelDefinition>[];
+    final levels = _farmTargetLevels(building, farmTownHall);
     final level = _farmSelectedLevel(levels);
     final suggestion = _farmLeagueLoot(
       league: farmPreset?.league,
@@ -448,6 +444,18 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       resource: level?.upgradeResource,
     );
     _farmAverageLootController.text = suggestion?.toString() ?? '';
+  }
+
+  List<BuildingLevelDefinition> _farmTargetLevels(
+    BuildingDefinition? building,
+    int townHall,
+  ) {
+    if (building == null) return const <BuildingLevelDefinition>[];
+    final targetTownHall =
+        building.name == 'Town Hall' && townHall < _catalog.maxTownHall
+        ? townHall + 1
+        : townHall;
+    return building.levelsForTownHall(targetTownHall);
   }
 
   List<_QuickSetup> _quickSetups(AppLocalizations loc) => [

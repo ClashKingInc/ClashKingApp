@@ -110,6 +110,7 @@ void main() {
     });
     await _pump(
       tester,
+      catalog: _farmGoalCatalog,
       accountPresets: const [
         DamageAccountPreset(
           tag: '#FARM',
@@ -142,7 +143,7 @@ void main() {
     final result = find.byKey(const ValueKey('farm-goal-result'));
     expect(result, findsOneWidget);
     expect(
-      find.descendant(of: result, matching: find.text('10')),
+      find.descendant(of: result, matching: find.text('13')),
       findsOneWidget,
     );
     expect(
@@ -235,6 +236,7 @@ void main() {
 
 Future<void> _pump(
   WidgetTester tester, {
+  DamageCatalog catalog = _catalog,
   List<DamageAccountPreset> accountPresets = const [],
 }) async {
   tester.view.physicalSize = const Size(390, 844);
@@ -246,7 +248,7 @@ Future<void> _pump(
     MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: CalculatorsPage(catalog: _catalog, accountPresets: accountPresets),
+      home: CalculatorsPage(catalog: catalog, accountPresets: accountPresets),
     ),
   );
   await tester.pump();
@@ -274,6 +276,72 @@ const _catalog = DamageCatalog(
           requiredTownHall: 12,
           upgradeResource: 'Gold',
           upgradeCost: 1000,
+        ),
+      ],
+    ),
+    BuildingDefinition(
+      id: 'air-defense',
+      name: 'Air Defense',
+      imageName: 'Air Defense',
+      zapQuakeEligible: true,
+      levels: [
+        BuildingLevelDefinition(
+          level: 1,
+          hitpoints: 600,
+          requiredTownHall: 12,
+          upgradeResource: 'Gold',
+          upgradeCost: 2000,
+        ),
+      ],
+    ),
+  ],
+  sources: [
+    DamageSourceDefinition(
+      kind: DamageSourceKind.lightning,
+      name: 'Lightning Spell',
+      imageUrl: '',
+      levels: [DamageLevel(level: 1, requiredTownHall: 3, damage: 400)],
+    ),
+    DamageSourceDefinition(
+      kind: DamageSourceKind.earthquake,
+      name: 'Earthquake Spell',
+      imageUrl: '',
+      levels: [
+        DamageLevel(level: 1, requiredTownHall: 8, earthquakePercent: 29),
+      ],
+    ),
+  ],
+);
+
+const _farmGoalCatalog = DamageCatalog(
+  maxTownHall: 13,
+  buildings: [
+    BuildingDefinition(
+      id: 'town-hall',
+      name: 'Town Hall',
+      imageName: 'Town Hall',
+      zapQuakeEligible: true,
+      levels: [
+        BuildingLevelDefinition(
+          level: 1,
+          hitpoints: 800,
+          requiredTownHall: 10,
+          upgradeResource: 'Gold',
+          upgradeCost: 0,
+        ),
+        BuildingLevelDefinition(
+          level: 2,
+          hitpoints: 1000,
+          requiredTownHall: 12,
+          upgradeResource: 'Gold',
+          upgradeCost: 1000,
+        ),
+        BuildingLevelDefinition(
+          level: 3,
+          hitpoints: 1200,
+          requiredTownHall: 13,
+          upgradeResource: 'Gold',
+          upgradeCost: 1300,
         ),
       ],
     ),
