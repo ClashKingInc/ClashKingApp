@@ -14,7 +14,7 @@ class GameAssetManifest {
     required this.version,
     required Iterable<GameAsset> assets,
   }) : assets = UnmodifiableListView(
-         assets.toList()..sort((a, b) => a.path.compareTo(b.path)),
+         assets.toList()..sort((a, b) => _compareNatural(a.path, b.path)),
        );
 
   factory GameAssetManifest.fromJson(Map<String, dynamic> json) {
@@ -189,4 +189,33 @@ String _requiredString(Map<String, dynamic> json, String key) {
     throw FormatException('Game asset $key must be a non-empty string');
   }
   return value;
+}
+
+int _compareNatural(String a, String b) {
+  final aParts = _naturalParts(a);
+  final bParts = _naturalParts(b);
+  final length = aParts.length < bParts.length ? aParts.length : bParts.length;
+
+  for (var i = 0; i < length; i++) {
+    final aPart = aParts[i];
+    final bPart = bParts[i];
+    if (aPart is int && bPart is int) {
+      final result = aPart.compareTo(bPart);
+      if (result != 0) return result;
+      continue;
+    }
+
+    final result = aPart.toString().compareTo(bPart.toString());
+    if (result != 0) return result;
+  }
+
+  return aParts.length.compareTo(bParts.length);
+}
+
+List<Object> _naturalParts(String value) {
+  final matches = RegExp(r'\d+|\D+').allMatches(value.toLowerCase());
+  return [
+    for (final match in matches)
+      int.tryParse(match.group(0)!) ?? match.group(0)!,
+  ];
 }
