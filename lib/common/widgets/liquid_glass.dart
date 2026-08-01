@@ -351,17 +351,20 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
     required this.labels,
     required this.selected,
     required this.onChanged,
+    this.icons,
     this.height = 52,
     this.color,
     // Kept for API compat — used only when fewer than 2 valid segments are
     // resolved (both backends require at least 2).
     this.fallbackBuilder,
-  }) : assert(values.length == labels.length);
+  }) : assert(values.length == labels.length),
+       assert(icons == null || icons.length == values.length);
 
   final List<T> values;
   final List<String> labels;
   final T selected;
   final ValueChanged<T> onChanged;
+  final List<IconData>? icons;
   final double height;
   final Color? color;
   final WidgetBuilder? fallbackBuilder;
@@ -373,37 +376,62 @@ class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
       return fallbackBuilder?.call(context) ?? const SizedBox.shrink();
     }
 
-    final resolvedColor = color ?? Theme.of(context).colorScheme.primary;
-
-    if (_isIOS) {
-      return glass.LiquidGlassSegmentedControl(
-        labels: labels,
-        selectedIndex: selectedIndex,
-        height: height,
-        color: resolvedColor,
-        onValueChanged: (index) => onChanged(values[index]),
-      );
-    }
-
-    final theme = Theme.of(context);
-    final readableLabelStyle = (theme.textTheme.labelLarge ?? const TextStyle())
-        .copyWith(fontSize: 14);
-
-    return Theme(
-      data: theme.copyWith(
-        textTheme: theme.textTheme.copyWith(labelSmall: readableLabelStyle),
-      ),
-      child: CKSegmentedControl<T>(
-        values: values,
-        labels: labels,
-        selected: selected,
-        onChanged: onChanged,
-        height: height,
-        color: resolvedColor,
-      ),
+    return CKSegmentedControl<T>(
+      values: values,
+      labels: labels,
+      selected: selected,
+      onChanged: onChanged,
+      icons: _segmentIcons(icons),
+      height: height,
+      color: color,
     );
   }
 }
+
+class AppFilterSegmentedControl<T> extends StatelessWidget {
+  const AppFilterSegmentedControl({
+    super.key,
+    required this.values,
+    required this.labels,
+    required this.selected,
+    required this.onChanged,
+    this.icons,
+    this.iconWidgets,
+    this.height = 46,
+  }) : assert(values.length == labels.length),
+       assert(icons == null || icons.length == values.length),
+       assert(iconWidgets == null || iconWidgets.length == values.length),
+       assert(icons == null || iconWidgets == null);
+
+  final List<T> values;
+  final List<String> labels;
+  final T selected;
+  final ValueChanged<T> onChanged;
+  final List<IconData>? icons;
+  final List<Widget>? iconWidgets;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedIndex = values.indexOf(selected);
+    if (selectedIndex < 0 || labels.length < 2) {
+      return const SizedBox.shrink();
+    }
+
+    return CKSegmentedControl<T>(
+      values: values,
+      labels: labels,
+      selected: selected,
+      onChanged: onChanged,
+      icons: iconWidgets ?? _segmentIcons(icons),
+      height: height,
+      density: CKControlDensity.compact,
+    );
+  }
+}
+
+List<Widget>? _segmentIcons(List<IconData>? icons) =>
+    icons?.map((icon) => Icon(icon)).toList(growable: false);
 
 /// Whether glass surfaces should render at all. Header panels inside slivers
 /// rely on this flag to fall back to an opaque fill — see

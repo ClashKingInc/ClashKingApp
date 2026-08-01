@@ -180,11 +180,9 @@ packages:
   clashking_design_system:
     dependency: "direct main"
     description:
-      path: "design/packages/flutter"
-      ref: main
-      resolved-ref: a37abbe4310ea97a9938e10c28f1bb90c15f2bcc
-      url: "https://github.com/ClashKingInc/DevKit.git"
-    source: git
+      path: "../clashking-devkit/design/packages/flutter"
+      relative: true
+    source: path
     version: "0.2.0"
   cli_util:
     dependency: transitive
