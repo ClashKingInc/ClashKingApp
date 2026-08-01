@@ -1,5 +1,5 @@
 import 'package:clashkingapp/features/game_assets/data/game_asset_actions.dart';
-import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/features/game_assets/data/game_asset_manifest_service.dart';
 import 'package:clashkingapp/features/game_assets/models/game_asset_manifest.dart';
 import 'package:clashkingapp/features/pages/presentation/game_assets_page.dart';
@@ -38,14 +38,7 @@ void main() {
     expect(find.byType(NestedScrollView), findsOneWidget);
     expect(find.byKey(const ValueKey('game-assets-search')), findsOneWidget);
     expect(find.text('Buildings'), findsOneWidget);
-    expect(find.text('Troops'), findsOneWidget);
-    expect(tester.widget<TabBar>(find.byType(TabBar)).isScrollable, isTrue);
-    final tabs = tester.widget<InfoProfileTabs>(find.byType(InfoProfileTabs));
-    expect(
-      tabs.tabs.map((tab) => tab.imageUrl),
-      everyElement(startsWith('https://assets.clashk.ing/')),
-    );
-    expect(tabs.tabs.map((tab) => tab.icon), everyElement(isNull));
+    expect(find.byType(FilterDropdown), findsNWidgets(2));
     expect(
       find.byKey(const ValueKey('game-assets-header-image')),
       findsOneWidget,
@@ -64,6 +57,10 @@ void main() {
           .crossAxisCount,
       3,
     );
+
+    await tester.tap(find.byType(FilterDropdown).first);
+    await tester.pumpAndSettle();
+    expect(find.text('Troops'), findsOneWidget);
 
     await tester.tap(find.text('Troops'));
     await tester.pumpAndSettle();
