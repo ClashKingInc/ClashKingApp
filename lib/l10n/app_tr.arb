@@ -2590,7 +2590,7 @@
   "drawerSubscription": "Abonelik",
   "drawerUpgradeTracker": "Yükseltme Takipçisi",
   "drawerBasesArmies": "Üsler & Ordular",
-  "drawerGameAssets": "Oyun Varlıkları",
+  "drawerGameAssets": "Oyun Verileri",
   "drawerManageAccounts": "Hesapları Yönet",
   "playersLinked": "Bağlı",
   "playersBookmarked": "Yer imlenmiş",
@@ -3029,13 +3029,13 @@
   "sideSavedArmies": "Kaydedilen ordular",
   "sideArmyLinks": "Ordu bağlantıları",
   "sideArmyLinksBody": "Kombinasyon, büyüler, kuşatma, notlar ve paylaşım bağlantısı.",
-  "sideGameAssetsTitle": "Oyun Varlıkları",
-  "sideGameAssetsSubtitle": "ClashKing'e ait, klasörlere göre gruplandırılmış varlıklar.",
-  "gameAssetsLoadError": "Could not load game assets",
-  "gameAssetsEmptyTitle": "No game assets available",
-  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
-  "gameAssetsOneImage": "1 image",
-  "gameAssetsImageCount": "{count} images",
+  "sideGameAssetsTitle": "Oyun Verileri",
+  "sideGameAssetsSubtitle": "ClashKing'e ait, klasörlere göre gruplandırılmış veriler.",
+  "gameAssetsLoadError": "Oyun verileri yüklenemedi",
+  "gameAssetsEmptyTitle": "Kullanılabilir oyun verisi yok",
+  "gameAssetsEmptyBody": "Barındırılan bildirim dosyası desteklenen herhangi bir görsel içermiyordu.",
+  "gameAssetsOneImage": "1 resim",
+  "gameAssetsImageCount": "{count} resim",
   "@gameAssetsImageCount": {
     "placeholders": {
       "count": {
@@ -3043,10 +3043,10 @@
       }
     }
   },
-  "gameAssetsSearchHint": "Search this category",
-  "gameAssetsAllFormats": "All formats",
-  "gameAssetsOneResult": "1 result",
-  "gameAssetsResultCount": "{count} results",
+  "gameAssetsSearchHint": "Bu kategoride ara",
+  "gameAssetsAllFormats": "Tüm biçimler",
+  "gameAssetsOneResult": "1 sonuç",
+  "gameAssetsResultCount": "{count} sonuçlar",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3054,20 +3054,20 @@
       }
     }
   },
-  "gameAssetsNoResultsTitle": "No matching images",
-  "gameAssetsNoResultsBody": "Try another search or file format.",
-  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
-  "gameAssetsCopyUrl": "Copy URL",
-  "gameAssetsCopyPath": "Copy path",
-  "gameAssetsUrlCopied": "Asset URL copied",
-  "gameAssetsPathCopied": "Asset path copied",
-  "gameAssetsCopyError": "Could not copy the asset details.",
-  "gameAssetsShare": "Share",
-  "gameAssetsShareError": "Could not share this asset.",
-  "gameAssetsSave": "Save",
-  "gameAssetsSaving": "Saving...",
-  "gameAssetsSaved": "Asset saved.",
-  "gameAssetsSavedTo": "Asset saved to {path}",
+  "gameAssetsNoResultsTitle": "Eşleşen görsel bulunamadı",
+  "gameAssetsNoResultsBody": "Başka bir arama veya dosya formatı deneyin.",
+  "gameAssetsLongPressHint": "Barındırılan URL'yi kopyalamak için uzun süre basılı tutun",
+  "gameAssetsCopyUrl": "URL'yi kopyala",
+  "gameAssetsCopyPath": "Yolu kopyala",
+  "gameAssetsUrlCopied": "Veri URL'si kopyalandı",
+  "gameAssetsPathCopied": "Veri yolu kopyalandı",
+  "gameAssetsCopyError": "Veri detayları kopyalanamadı.",
+  "gameAssetsShare": "Paylaş",
+  "gameAssetsShareError": "Bu veri paylaşılamadı.",
+  "gameAssetsSave": "Kaydet",
+  "gameAssetsSaving": "Kaydediliyor...",
+  "gameAssetsSaved": "Veri kaydedildi.",
+  "gameAssetsSavedTo": "Veri {path} konumuna kaydedildi",
   "@gameAssetsSavedTo": {
     "placeholders": {
       "path": {
@@ -3075,8 +3075,8 @@
       }
     }
   },
-  "gameAssetsSaveError": "Could not save this asset.",
-  "sideZapQuakeTitle": "{zaps} lightning + 1 quake",
+  "gameAssetsSaveError": "Bu veri kaydedilemedi.",
+  "sideZapQuakeTitle": "{zaps} yıldırım + 1 deprem",
   "@sideZapQuakeTitle": {
     "placeholders": {
       "zaps": {
@@ -3084,7 +3084,7 @@
       }
     }
   },
-  "sideZapQuakeSubtitle": "{quakeDamage} quake damage, {lightningDamage} per lightning",
+  "sideZapQuakeSubtitle": "{quakeDamage} deprem hasarı, yıldırım başına {lightningDamage} ",
   "@sideZapQuakeSubtitle": {
     "placeholders": {
       "quakeDamage": {
@@ -3095,7 +3095,7 @@
       }
     }
   },
-  "sideBuildingHp": "Building HP",
+  "sideBuildingHp": "Bina İP",
   "sideLightningLevel": "Lightning level",
   "sideEarthquakeLevel": "Earthquake level",
   "sideWithoutEarthquake": "Without earthquake",
