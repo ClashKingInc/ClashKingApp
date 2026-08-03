@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
-import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/compact_filter_chip.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/file_opener.dart';
@@ -177,19 +177,19 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
 
     return _WarStatsFilterBar(
       chips: [
-        _WarTypeChip(
+        CompactFilterChip(
           label: loc.cwlTitle,
           imageUrl: ImageAssets.cwlSwordsNoBorder,
           selected: isCWLChecked,
           onTap: () => setState(() => isCWLChecked = !isCWLChecked),
         ),
-        _WarTypeChip(
+        CompactFilterChip(
           label: loc.warFiltersRandom,
           icon: Icons.shuffle_rounded,
           selected: isRandomChecked,
           onTap: () => setState(() => isRandomChecked = !isRandomChecked),
         ),
-        _WarTypeChip(
+        CompactFilterChip(
           label: loc.warFiltersFriendly,
           icon: Icons.handshake_rounded,
           selected: isFriendlyChecked,
@@ -1142,78 +1142,6 @@ class _IconPillButton extends StatelessWidget {
               ),
             ),
             child: Icon(icon, size: 18, color: colorScheme.onSurface),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Same compact war-type chip visual recipe as the clan War Log filters.
-class _WarTypeChip extends StatelessWidget {
-  const _WarTypeChip({
-    required this.label,
-    this.icon,
-    this.imageUrl,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final IconData? icon;
-  final String? imageUrl;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final accent = colorScheme.primary;
-
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(999),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(999),
-        splashFactory: NoSplash.splashFactory,
-        onTap: onTap,
-        child: Container(
-          height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: 11),
-          decoration: BoxDecoration(
-            color: selected
-                ? accent.withValues(alpha: 0.16)
-                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: selected
-                  ? accent.withValues(alpha: 0.42)
-                  : colorScheme.outlineVariant.withValues(alpha: 0.28),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (imageUrl != null) ...[
-                MobileWebImage(imageUrl: imageUrl!, height: 15, width: 15),
-                const SizedBox(width: 5),
-              ] else if (icon != null) ...[
-                Icon(
-                  icon,
-                  size: 15,
-                  color: selected ? accent : colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 5),
-              ],
-              Text(
-                label,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onSurface,
-                  fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
-                  height: 1,
-                ),
-              ),
-            ],
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
@@ -78,12 +79,15 @@ class _StatsPageContentState extends State<_StatsPageContent> {
           children: [
             if (provider.audience == StatsAudience.battle)
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                 child: _DateRangeControl(provider: provider),
               ),
             Expanded(
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 180),
+                duration: _motionDuration(
+                  context,
+                  const Duration(milliseconds: 180),
+                ),
                 child: KeyedSubtree(
                   key: ValueKey(provider.section),
                   child: switch (provider.section) {
@@ -258,47 +262,76 @@ class _DateRangeControl extends StatelessWidget {
     );
     final colorScheme = Theme.of(context).colorScheme;
     return Material(
-      color: colorScheme.primaryContainer.withValues(alpha: 0.58),
-      borderRadius: BorderRadius.circular(16),
+      color: colorScheme.surfaceContainerHighest.withValues(
+        alpha: AppOpacity.fillMuted,
+      ),
+      borderRadius: BorderRadius.circular(AppRadius.chip),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
         onTap: () => _pick(context),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          child: Row(
-            children: [
-              const Icon(Icons.date_range_rounded),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.statsDateRange,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text(
-                      '${formatter.format(provider.dates.start)} – '
-                      '${formatter.format(provider.dates.end)} '
-                      '· ${loc.statsIndexDays(provider.dates.inclusiveDays)}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 56),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(
+                alpha: AppOpacity.borderStrong,
               ),
-              Text(
-                loc.statsDateRangeHint,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            child: Row(
+              children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface.withValues(alpha: 0.72),
+                    shape: BoxShape.circle,
+                  ),
+                  child: SizedBox.square(
+                    dimension: 34,
+                    child: Icon(
+                      Icons.date_range_rounded,
+                      size: 19,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        loc.statsDateRange,
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${formatter.format(provider.dates.start)} - '
+                        '${formatter.format(provider.dates.end)} '
+                        '- ${loc.statsIndexDays(provider.dates.inclusiveDays)}',
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.chevron_right_rounded,
                   color: colorScheme.onSurfaceVariant,
                 ),
-              ),
-              const SizedBox(width: 4),
-              const Icon(Icons.chevron_right_rounded),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -406,16 +439,10 @@ class _SectionFrame extends StatelessWidget {
           ],
           if (data != null) builder(data),
           if (state.updatedAt != null) ...[
-            const SizedBox(height: 14),
+            const SizedBox(height: 4),
             Align(
               alignment: Alignment.centerLeft,
-              child: Chip(
-                avatar: const Icon(
-                  Icons.check_circle_outline_rounded,
-                  size: 18,
-                ),
-                label: Text(loc.statsUpdated),
-              ),
+              child: _FreshDataChip(label: loc.statsUpdated),
             ),
           ],
         ],
@@ -511,7 +538,7 @@ class _PlayersSection extends StatelessWidget {
               subtitle: loc.statsTrackedPlayers,
               values: counts.townHalls,
               labelBuilder: (id) => 'TH${id ?? '?'}',
-              color: const Color(0xFFFF9F43),
+              color: StatColors.capitalProjected,
             ),
             const SizedBox(height: 12),
             _DistributionCard(
@@ -519,7 +546,7 @@ class _PlayersSection extends StatelessWidget {
               subtitle: loc.statsTrackedPlayers,
               values: counts.leagueTiers,
               labelBuilder: _leagueTierLabel,
-              color: const Color(0xFF8B5CF6),
+              color: StatColors.capitalTrophy,
             ),
             const SizedBox(height: 12),
             _DistributionCard(
@@ -527,7 +554,7 @@ class _PlayersSection extends StatelessWidget {
               subtitle: loc.statsTrackedPlayers,
               values: counts.builderHalls,
               labelBuilder: (id) => 'BH${id ?? '?'}',
-              color: const Color(0xFF38BDF8),
+              color: StatColors.capitalAttack,
             ),
             const SizedBox(height: 12),
             _PreviewPanel(
@@ -566,7 +593,7 @@ class _ClansSection extends StatelessWidget {
               subtitle: loc.statsTrackedClans,
               values: counts.cwlLeagues,
               labelBuilder: (id) => _cwlLeagues[id] ?? '${id ?? '?'}',
-              color: const Color(0xFFFF5D8F),
+              color: StatColors.loss,
             ),
             const SizedBox(height: 12),
             _DistributionCard(
@@ -574,7 +601,7 @@ class _ClansSection extends StatelessWidget {
               subtitle: loc.statsTrackedClans,
               values: counts.capitalLeagues,
               labelBuilder: (id) => loc.statsLeagueId(id ?? 0),
-              color: const Color(0xFF2DD4BF),
+              color: StatColors.capitalDistrict,
             ),
             const SizedBox(height: 12),
             _CountsSummaryCard(
@@ -750,7 +777,7 @@ class _CountBarChart extends StatelessWidget {
             ),
         ],
       ),
-      duration: const Duration(milliseconds: 300),
+      duration: _motionDuration(context, const Duration(milliseconds: 300)),
       curve: Curves.easeOutCubic,
     );
   }
@@ -856,13 +883,14 @@ class _PreviewBadge extends StatelessWidget {
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.tertiaryContainer,
-      borderRadius: BorderRadius.circular(99),
+      borderRadius: BorderRadius.circular(AppRadius.pill),
     ),
     child: Text(
       label,
-      style: Theme.of(
-        context,
-      ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w900),
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+        color: Theme.of(context).colorScheme.onTertiaryContainer,
+        fontWeight: FontWeight.w900,
+      ),
     ),
   );
 }
@@ -889,7 +917,7 @@ class _MiniPreviewBars extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.72),
                     borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(6),
+                      top: Radius.circular(AppRadius.control),
                     ),
                   ),
                 ),
@@ -1179,7 +1207,10 @@ class _ArmyMetaChart extends StatelessWidget {
                     ),
                 ],
               ),
-              duration: const Duration(milliseconds: 300),
+              duration: _motionDuration(
+                context,
+                const Duration(milliseconds: 300),
+              ),
               curve: Curves.easeOutCubic,
             ),
           ),
@@ -1228,7 +1259,7 @@ class _ArmyCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.inverseSurface,
-                            borderRadius: BorderRadius.circular(99),
+                            borderRadius: BorderRadius.circular(AppRadius.pill),
                           ),
                           child: Text(
                             '${entry.value}',
@@ -1389,6 +1420,7 @@ class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
                   '${filter.minQuantity ?? 1}–${filter.maxQuantity ?? '∞'}',
                 ),
                 trailing: IconButton(
+                  tooltip: loc.presetsDelete,
                   onPressed: () => setState(() => include.remove(filter)),
                   icon: const Icon(Icons.close_rounded),
                 ),
@@ -1420,6 +1452,7 @@ class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
                   ),
                 ),
                 IconButton(
+                  tooltip: loc.statsAddItem,
                   onPressed: _addInclude,
                   icon: const Icon(Icons.add_circle_rounded),
                 ),
@@ -1717,6 +1750,7 @@ class _ItemResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final scheme = Theme.of(context).colorScheme;
     return _SurfaceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1731,17 +1765,31 @@ class _ItemResultCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Chip(label: Text(item.type)),
+              _PreviewBadge(label: item.type),
             ],
           ),
-          if (item.hero != null) Text('${loc.statsOwningHero}: ${item.hero}'),
-          Text('${loc.statsUsage}: ${_compact(item.useCount)}'),
-          if (item.compositionShare != null)
-            Text(
-              '${loc.statsCompositionShare}: '
-              '${_percent(item.compositionShare!)}',
-            ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _MetricPill(
+                label: loc.statsUsage,
+                value: _compact(item.useCount),
+              ),
+              if (item.compositionShare != null)
+                _MetricPill(
+                  label: loc.statsCompositionShare,
+                  value: _percent(item.compositionShare!),
+                ),
+              if (item.hero != null)
+                _MetricPill(label: loc.statsOwningHero, value: item.hero!),
+            ],
+          ),
+          Divider(
+            height: 22,
+            color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
+          ),
           _MetricsContent(metrics: item.metrics),
         ],
       ),
@@ -1796,7 +1844,7 @@ class _WarSectionState extends State<_WarSection> {
               value: equalTownHalls,
               onChanged: (value) => setState(() => equalTownHalls = value),
             ),
-            FilledButton(onPressed: _apply, child: Text(loc.statsApplyFilters)),
+            _FilterApplyButton(onPressed: _apply),
           ],
         ),
       ),
@@ -1870,21 +1918,11 @@ class _CwlSectionState extends State<_CwlSection> {
               value: equalTownHalls,
               onChanged: (value) => setState(() => equalTownHalls = value),
             ),
-            DropdownButtonFormField<int?>(
-              initialValue: leagueId,
-              decoration: InputDecoration(labelText: loc.statsCwlLeague),
-              items: [
-                DropdownMenuItem<int?>(
-                  value: null,
-                  child: Text(loc.statsAllCwlLeagues),
-                ),
-                ..._cwlLeagues.entries.map(
-                  (entry) => DropdownMenuItem<int?>(
-                    value: entry.key,
-                    child: Text(entry.value),
-                  ),
-                ),
-              ],
+            _CompactMenuField<int?>(
+              label: loc.statsCwlLeague,
+              icon: Icons.emoji_events_outlined,
+              value: leagueId,
+              options: {null: loc.statsAllCwlLeagues, ..._cwlLeagues},
               onChanged: (value) => setState(() => leagueId = value),
             ),
             const SizedBox(height: 10),
@@ -1896,7 +1934,7 @@ class _CwlSectionState extends State<_CwlSection> {
               ),
             ),
             const SizedBox(height: 12),
-            FilledButton(onPressed: _apply, child: Text(loc.statsApplyFilters)),
+            _FilterApplyButton(onPressed: _apply),
           ],
         ),
       ),
@@ -1966,7 +2004,7 @@ class _RankedSectionState extends State<_RankedSection> {
               onChanged: (value) => setState(() => leagueTier = value ?? 1),
             ),
             const SizedBox(height: 12),
-            FilledButton(
+            _FilterApplyButton(
               onPressed: () {
                 final provider = context.read<StatsProvider>();
                 provider.updateRankedFilters(
@@ -1975,7 +2013,6 @@ class _RankedSectionState extends State<_RankedSection> {
                 );
                 provider.load(StatsSection.ranked, force: true);
               },
-              child: Text(loc.statsApplyFilters),
             ),
           ],
         ),
@@ -2069,19 +2106,25 @@ class _MetricsContent extends StatelessWidget {
             _MetricPill(
               label: loc.statsSamples,
               value: _compact(metrics.sampleSize),
+              icon: Icons.dataset_outlined,
             ),
             if (metrics.usageRate != null)
               _MetricPill(
                 label: loc.statsUsage,
                 value: _percent(metrics.usageRate!),
+                icon: Icons.pie_chart_outline_rounded,
               ),
             _MetricPill(
               label: loc.statsAverageStars,
               value: metrics.averageStars.toStringAsFixed(2),
+              icon: Icons.star_rounded,
+              accentColor: StatColors.warStarGold,
             ),
             _MetricPill(
               label: loc.statsAverageDestruction,
               value: _percent(metrics.averageDestruction),
+              icon: Icons.percent_rounded,
+              accentColor: Theme.of(context).colorScheme.primary,
             ),
           ],
         ),
@@ -2110,33 +2153,65 @@ class _StarRates extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final rates = [
       metrics.zeroStarRate,
       metrics.oneStarRate,
       metrics.twoStarRate,
       metrics.threeStarRate,
     ];
-    final colors = [Colors.grey, Colors.orange, Colors.blue, Colors.green];
+    final colors = [
+      scheme.onSurfaceVariant,
+      StatColors.loss,
+      StatColors.tie,
+      StatColors.win,
+    ];
     return Column(
       children: List.generate(
         4,
         (index) => Padding(
-          padding: const EdgeInsets.only(bottom: 4),
+          padding: const EdgeInsets.only(bottom: 8),
           child: Row(
             children: [
-              SizedBox(width: 28, child: Text('$index★')),
+              SizedBox(
+                width: 34,
+                child: Text(
+                  '$index★',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
               Expanded(
                 child: LinearProgressIndicator(
                   value: _asPercentValue(rates[index]).clamp(0, 100) / 100,
-                  minHeight: 7,
-                  borderRadius: BorderRadius.circular(99),
+                  minHeight: 9,
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
                   color: colors[index],
+                  backgroundColor: scheme.surfaceContainerHighest.withValues(
+                    alpha: 0.42,
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
-              SizedBox(
-                width: 52,
-                child: Text(_percent(rates[index]), textAlign: TextAlign.end),
+              Container(
+                constraints: const BoxConstraints(minWidth: 58, minHeight: 30),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                  border: Border.all(
+                    color: colors[index].withValues(alpha: 0.44),
+                  ),
+                ),
+                child: Text(
+                  _percent(rates[index]),
+                  textAlign: TextAlign.end,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
               ),
             ],
           ),
@@ -2253,7 +2328,7 @@ class _TrendChart extends StatelessWidget {
               ),
             ],
           ),
-          duration: const Duration(milliseconds: 300),
+          duration: _motionDuration(context, const Duration(milliseconds: 300)),
           curve: Curves.easeOutCubic,
         ),
       ),
@@ -2274,6 +2349,7 @@ class _SearchAndFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
@@ -2286,10 +2362,10 @@ class _SearchAndFilter extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        FilledButton.tonalIcon(
+        IconButton.filledTonal(
+          tooltip: loc.statsCustomLens,
           onPressed: onFilter,
           icon: const Icon(Icons.tune_rounded),
-          label: Text(AppLocalizations.of(context)!.statsCustomLens),
         ),
       ],
     );
@@ -2358,22 +2434,15 @@ class _TownHallField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    return DropdownButtonFormField<int?>(
-      initialValue: value,
-      decoration: InputDecoration(
-        labelText: opponent ? loc.statsOpponentTownHall : loc.statsTownHall,
-      ),
-      items: [
-        if (allowAll)
-          DropdownMenuItem<int?>(
-            value: null,
-            child: Text(loc.statsAllTownHalls),
-          ),
-        ...List.generate(12, (index) => 18 - index).map(
-          (value) =>
-              DropdownMenuItem<int?>(value: value, child: Text('TH$value')),
-        ),
-      ],
+    return _CompactMenuField<int?>(
+      label: opponent ? loc.statsOpponentTownHall : loc.statsTownHall,
+      icon: opponent ? Icons.gps_fixed_rounded : Icons.other_houses_rounded,
+      value: value,
+      options: {
+        if (allowAll) null: loc.statsAllTownHalls,
+        for (final townHall in List.generate(12, (index) => 18 - index))
+          townHall: 'TH$townHall',
+      },
       onChanged: onChanged,
     );
   }
@@ -2393,24 +2462,169 @@ class _LeagueTierField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    return DropdownButtonFormField<int?>(
+    return _CompactMenuField<int?>(
+      label: loc.statsLeagueTier,
+      icon: Icons.workspace_premium_outlined,
+      value: value,
+      options: {
+        if (optional) null: loc.generalAll,
+        for (final tier in List.generate(10, (index) => index + 1))
+          tier: tier == 1
+              ? loc.statsLegendLeagueOne
+              : '${loc.statsLeagueTier} $tier',
+      },
+      onChanged: onChanged,
+    );
+  }
+}
+
+class _CompactMenuField<T> extends StatelessWidget {
+  const _CompactMenuField({
+    required this.label,
+    required this.icon,
+    required this.value,
+    required this.options,
+    required this.onChanged,
+  });
+
+  final String label;
+  final IconData icon;
+  final T value;
+  final Map<T, String> options;
+  final ValueChanged<T> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final selectedLabel = options[value] ?? value.toString();
+    return PopupMenuButton<T>(
       initialValue: value,
-      decoration: InputDecoration(labelText: loc.statsLeagueTier),
-      items: [
-        if (optional)
-          DropdownMenuItem<int?>(value: null, child: Text(loc.generalAll)),
-        ...List.generate(10, (index) => index + 1).map(
-          (tier) => DropdownMenuItem<int?>(
-            value: tier,
-            child: Text(
-              tier == 1
-                  ? loc.statsLegendLeagueOne
-                  : '${loc.statsLeagueTier} $tier',
+      onSelected: onChanged,
+      color: scheme.surface,
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        side: BorderSide(
+          color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
+        ),
+      ),
+      itemBuilder: (context) => options.entries
+          .map(
+            (entry) => PopupMenuItem<T>(
+              value: entry.key,
+              height: 42,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      entry.value,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (entry.key == value)
+                    Icon(Icons.check_rounded, size: 18, color: scheme.primary),
+                ],
+              ),
             ),
+          )
+          .toList(growable: false),
+      child: _CompactFilterTile(label: label, value: selectedLabel, icon: icon),
+    );
+  }
+}
+
+class _CompactFilterTile extends StatelessWidget {
+  const _CompactFilterTile({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+
+  final String label;
+  final String value;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      constraints: const BoxConstraints(minHeight: 58),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(
+            alpha: AppOpacity.borderStrong,
           ),
         ),
-      ],
-      onChanged: onChanged,
+      ),
+      child: Row(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: scheme.surface.withValues(alpha: 0.72),
+              shape: BoxShape.circle,
+            ),
+            child: SizedBox.square(
+              dimension: 32,
+              child: Icon(icon, size: 18, color: scheme.primary),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Icon(
+            Icons.keyboard_arrow_down_rounded,
+            size: 20,
+            color: scheme.onSurfaceVariant,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterApplyButton extends StatelessWidget {
+  const _FilterApplyButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: FilledButton.icon(
+        onPressed: onPressed,
+        icon: const Icon(Icons.tune_rounded, size: 18),
+        label: Text(AppLocalizations.of(context)!.statsApplyFilters),
+      ),
     );
   }
 }
@@ -2422,41 +2636,98 @@ class _SurfaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ?? scheme.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(alpha: 0.36),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: SizedBox(
+        width: double.infinity,
+        child: SidePagePanel(
+          radius: AppRadius.card,
+          padding: const EdgeInsets.all(16),
+          child: child,
         ),
       ),
-      child: child,
     );
   }
 }
 
 class _MetricPill extends StatelessWidget {
-  const _MetricPill({required this.label, required this.value});
+  const _MetricPill({
+    required this.label,
+    required this.value,
+    this.icon,
+    this.accentColor,
+  });
 
   final String label;
   final String value;
+  final IconData? icon;
+  final Color? accentColor;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        '$label  $value',
-        style: const TextStyle(fontWeight: FontWeight.w800),
+    final accent = accentColor ?? scheme.onSurfaceVariant;
+    return Semantics(
+      label: '$label: $value',
+      excludeSemantics: true,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 44),
+        padding: const EdgeInsets.fromLTRB(8, 6, 11, 6),
+        decoration: BoxDecoration(
+          color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          border: Border.all(
+            color: scheme.outlineVariant.withValues(
+              alpha: AppOpacity.borderStrong,
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.16),
+                  shape: BoxShape.circle,
+                ),
+                child: SizedBox.square(
+                  dimension: 28,
+                  child: Icon(icon, size: 16, color: accent),
+                ),
+              ),
+              const SizedBox(width: 7),
+            ],
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 154),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w700,
+                      height: 1.1,
+                    ),
+                  ),
+                  Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      height: 1.15,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -2476,20 +2747,24 @@ class _InlineNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final color = error ? scheme.errorContainer : scheme.secondaryContainer;
-    final foreground = error
-        ? scheme.onErrorContainer
-        : scheme.onSecondaryContainer;
+    final accent = error ? scheme.error : scheme.primary;
+    final foreground = error ? scheme.onErrorContainer : scheme.onSurface;
+    final fill = error
+        ? scheme.errorContainer.withValues(alpha: 0.46)
+        : scheme.surfaceContainerHighest.withValues(alpha: 0.34);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(12),
+        color: fill,
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+        border: Border.all(
+          color: accent.withValues(alpha: AppOpacity.borderStrong),
+        ),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 19, color: foreground),
+          Icon(icon, size: 19, color: accent),
           const SizedBox(width: 8),
           Expanded(
             child: Text(text, style: TextStyle(color: foreground)),
@@ -2499,6 +2774,48 @@ class _InlineNotice extends StatelessWidget {
     );
   }
 }
+
+class _FreshDataChip extends StatelessWidget {
+  const _FreshDataChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      constraints: const BoxConstraints(minHeight: 36),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.24),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        border: Border.all(
+          color: scheme.primary.withValues(alpha: AppOpacity.borderStrong),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.check_circle_outline_rounded,
+            size: 17,
+            color: scheme.primary,
+          ),
+          const SizedBox(width: 7),
+          Text(
+            label,
+            style: Theme.of(
+              context,
+            ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Duration _motionDuration(BuildContext context, Duration duration) =>
+    MediaQuery.disableAnimationsOf(context) ? Duration.zero : duration;
 
 String _percent(double value) {
   final normalized = _asPercentValue(value);
