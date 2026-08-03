@@ -1617,10 +1617,10 @@
   "faqSectionGettingStarted": "入门与关于",
   "faqSectionAccountsAlertsWidgets": "账号、提醒与小组件",
   "faqSectionSupportAndContact": "支持与联系",
-  "faqLinkedAccountsTitle": "How do linked accounts and verification work?",
-  "faqLinkedAccountsAnswer": "Your ClashKing profile can include several Clash of Clans accounts. Adding a tag shows public data. Verifying with the Clash of Clans API token proves the account is yours and unlocks account-specific features.",
-  "faqLinkedAccountsSolution1": "Manage, reorder, hide, or remove accounts from account management.",
-  "faqLinkedAccountsSolution2": "Find the API token in Clash of Clans under Settings > More Settings > API Token.",
+  "faqLinkedAccountsTitle": "如何关联账号并完成验证？",
+  "faqLinkedAccountsAnswer": "你的 ClashKing 玩家资料可以包含多个《部落冲突》账号。添加玩家标签即可查看公开数据。通过《部落冲突》API 令牌验证后，可以证明该账号属于你本人，并解锁账号专属功能。",
+  "faqLinkedAccountsSolution1": "你可以在账号管理中管理、调整顺序、隐藏或移除账号。",
+  "faqLinkedAccountsSolution2": "你可以在《部落冲突》中前往「设置 > 更多设置 > API 令牌」找到 API 令牌。",
   "faqLinkedAccountsSolution3": "You can sign in with Discord or email. When account connections are available, manage them from Settings.",
   "faqNotificationsTitle": "How do notifications work?",
   "faqNotificationsAnswer": "Notifications are optional. When enabled, ClashKing registers this device. You can choose which linked accounts each alert targets.",
@@ -2342,11 +2342,11 @@
   "@gameItemStats": {
     "description": "Section title for item stats"
   },
-  "gameItemNextUpgrade": "Next upgrade",
+  "gameItemNextUpgrade": "下次升级",
   "@gameItemNextUpgrade": {
     "description": "Section title for the next item upgrade"
   },
-  "gameItemUpgradePlan": "Upgrade plan",
+  "gameItemUpgradePlan": "升级计划",
   "@gameItemUpgradePlan": {
     "description": "Section title for remaining upgrade totals"
   },
