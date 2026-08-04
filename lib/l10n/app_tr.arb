@@ -2711,6 +2711,10 @@
   "noLinkedPlayersLoadedBody": "Yükseltme toplamlarını görmek için bağlantılı hesapları ekleyin veya yenileyin.",
   "playerOptionNotificationsTitle": "Bildirimler",
   "playerOptionNotificationsSubtitle": "Bu hesap için bildirim al.",
+  "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
+  "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
+  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
+  "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
   "playerOptionShowTodoPageTitle": "Yapılacaklar sayfasında göster",
   "playerOptionShowTodoPageSubtitle": "Bu hesabı yapılacaklar listesine ekleyin.",
   "playerOptionShowTodoPageVerifyFirst": "Bu hesabı doğrulayarak yapılacaklar sayfasında görünmesini sağlayabilirsiniz.",
@@ -2761,6 +2765,10 @@
   "todoMockCaughtUpSubtitle": "BB14 · açık görev yok",
   "todoMockCaughtUpStatus": "Bugün aktif · herhangi bir işlem gerekmiyor",
   "notifChooseAlerts": "Bildirimleri seçin",
+  "notifGroupLegendAttacks": "Legend I attacks",
+  "notifLegendAttacksDescription": "Attack results for notification-enabled bookmarked accounts in Legend I.",
+  "notifGroupLegendDefenses": "Legend I defenses",
+  "notifLegendDefensesDescription": "Defense results for notification-enabled accounts in Legend I.",
   "notifLeagueDefenseDescription": "Saldırgan, yıldız, yüzde ve lig durumunu içeren savunma sonuçları",
   "notifWarAttackOptionsDescription": "Savaş saldırısı sonuçları, savunma uyarıları ve 5v5 saldırı akışı seçenekleri.",
   "notifWarAlertsDescription": "Savaş eşleşti, savaş günü başladı ve savaş bitti.",
@@ -3859,18 +3867,8 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifAutoAddVerifiedAccounts": "Automatically add verified accounts",
   "notifChooseAccountsManually": "Choose accounts manually",
   "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
-  "notifAutoAddVerifiedSubtitle": "{count} eligible account(s). Newly verified accounts are added automatically.",
-  "@notifAutoAddVerifiedSubtitle": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "notifAutoAddVerifiedNote": "Verified accounts are added when you enable this setting and whenever you verify another account.",
   "notifAccountBookmarked": "Bookmarked",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
