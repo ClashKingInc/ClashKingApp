@@ -268,7 +268,7 @@ class UpgradeTrackerParser {
     );
 
     _addSupercharge(output, raw, data, image, village);
-    _addCraftedDefenses(output, raw, data, lookup, village);
+    _addCraftedDefenses(output, raw, data, lookup, village, hall);
   }
 
   static void _addSupercharge(
@@ -331,6 +331,7 @@ class UpgradeTrackerParser {
     Map<String, dynamic> data,
     _StaticLookup lookup,
     UpgradeVillage village,
+    int townHallLevel,
   ) {
     final types = _mapList(raw['types']);
     for (final type in types) {
@@ -340,7 +341,7 @@ class UpgradeTrackerParser {
         final module = lookup.byId[_int(moduleRaw['data'])];
         if (module == null) continue;
         final current = _int(moduleRaw['lvl']);
-        final target = _maxLevel(module['levels']);
+        final target = _maxLevelForHall(module, townHallLevel);
         final steps = _buildSteps(
           module,
           current: current,

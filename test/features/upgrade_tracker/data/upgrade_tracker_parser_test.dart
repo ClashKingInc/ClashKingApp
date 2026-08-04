@@ -76,7 +76,8 @@ void main() {
       (item) => item.category == UpgradeCategory.craftedDefenses,
     );
     expect(crafted.name, 'Roaster HP Module');
-    expect(crafted.steps.single.targetLevel, 2);
+    expect(crafted.targetLevel, 1);
+    expect(crafted.steps, isEmpty);
 
     final supercharge = snapshot.items.firstWhere((item) => item.isSupercharge);
     expect(supercharge.currentLevel, 1);
@@ -457,8 +458,18 @@ final _bundle = <String, dynamic>{
               'name': 'Roaster HP Module',
               'upgrade_resource': 'Elixir',
               'levels': [
-                {'level': 1, 'build_cost': 0, 'build_time': 0},
-                {'level': 2, 'build_cost': 3500000, 'build_time': 21600},
+                {
+                  'level': 1,
+                  'required_townhall': 18,
+                  'build_cost': 0,
+                  'build_time': 0,
+                },
+                {
+                  'level': 2,
+                  'required_townhall': 19,
+                  'build_cost': 3500000,
+                  'build_time': 21600,
+                },
               ],
             },
           ],
