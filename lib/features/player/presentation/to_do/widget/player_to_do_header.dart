@@ -1,3 +1,4 @@
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
@@ -250,44 +251,50 @@ class _TodoStatsPanel extends StatelessWidget {
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _TodoChipRows(
-            children: [
+          child: MetricChipGrid(
+            spacing: 7,
+            chips: [
               if (summary.legendTotal > 0)
-                _TodoQuickChip(
+                MetricChip(
+                  label: loc.legendsTitle,
                   value: '${summary.legendDone}/${summary.legendTotal}',
                   imageUrl: ImageAssets.legendBlazonNoPadding,
-                  tooltip: loc.legendsTitle,
+                  color: CKColors.legendBlue,
                 ),
               if (summary.warTotal > 0)
-                _TodoQuickChip(
+                MetricChip(
+                  label: loc.warTitle,
                   value: '${summary.warDone}/${summary.warTotal}',
                   imageUrl: ImageAssets.war,
-                  tooltip: loc.warTitle,
+                  color: CKColors.lossRed,
                 ),
               if (summary.cwlTotal > 0)
-                _TodoQuickChip(
+                MetricChip(
+                  label: loc.cwlTitle,
                   value: '${summary.cwlDone}/${summary.cwlTotal}',
                   imageUrl: ImageAssets.cwlSwordsNoBorder,
-                  tooltip: loc.cwlTitle,
+                  color: CKColors.capitalPurple,
                 ),
               if (summary.clanGamesTotal > 0)
-                _TodoQuickChip(
+                MetricChip(
+                  label: loc.gameClanGames,
                   value: summary.compactValue(
                     context,
                     summary.clanGamesDone,
                     summary.clanGamesTotal,
                   ),
                   imageUrl: ImageAssets.clanGamesMedals,
-                  tooltip: loc.gameClanGames,
+                  color: CKColors.donationGreen,
                 ),
-              _TodoQuickChip(
+              MetricChip(
+                label: loc.gameSeasonPassShort,
                 value: summary.compactValue(
                   context,
                   summary.seasonDone,
                   summary.seasonTotal,
                 ),
                 imageUrl: ImageAssets.iconGoldPass,
-                tooltip: loc.gameSeasonPass,
+                color: CKColors.warGold,
               ),
             ],
           ),
@@ -310,49 +317,59 @@ class _TodoProgressSummaryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final loc = AppLocalizations.of(context)!;
-    final color = summary.openTasks == 0 ? Colors.green : colorScheme.primary;
+    final color = summary.openTasks == 0
+        ? CKColors.donationGreen
+        : colorScheme.primary;
     final completedTasks = summary.totalTasks - summary.openTasks;
 
-    return Container(
-      height: 76,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: colorScheme.surface.withValues(alpha: 0.58),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
+    const height = 76.0;
+    return SizedBox(
+      height: height,
+      child: Stack(
         children: [
-          _HeaderProgressRing(
-            ratio: summary.progressRatio,
-            percent: percent,
-            color: color,
+          const Positioned.fill(
+            child: HeaderPanelBackground(height: height, cornerRadius: 16),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
               children: [
-                Text(
-                  summary.openTasks == 0
-                      ? loc.generalCompleted
-                      : '${summary.openTasks} ${loc.generalRemaining}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: colorScheme.onSurface,
-                    fontWeight: FontWeight.w800,
-                    height: 1,
-                  ),
+                _HeaderProgressRing(
+                  ratio: summary.progressRatio,
+                  percent: percent,
+                  color: color,
                 ),
-                const SizedBox(height: 5),
-                Text(
-                  '$completedTasks/${summary.totalTasks} ${loc.generalCompleted} · ${loc.todoAccountsNumber(summary.totalAccounts)}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        summary.openTasks == 0
+                            ? loc.generalCompleted
+                            : '${summary.openTasks} ${loc.generalRemaining}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: colorScheme.onSurface,
+                              fontWeight: FontWeight.w800,
+                              height: 1,
+                            ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        '$completedTasks/${summary.totalTasks} ${loc.generalCompleted} · ${loc.todoAccountsNumber(summary.totalAccounts)}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -398,77 +415,6 @@ class _HeaderProgressRing extends StatelessWidget {
               height: 1,
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TodoChipRows extends StatelessWidget {
-  final List<_TodoQuickChip> children;
-
-  const _TodoChipRows({required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    if (children.isEmpty) return const SizedBox.shrink();
-
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 7,
-      runSpacing: 7,
-      children: children,
-    );
-  }
-}
-
-class _TodoQuickChip extends StatelessWidget {
-  final String value;
-  final String? imageUrl;
-  final String tooltip;
-
-  const _TodoQuickChip({
-    required this.value,
-    this.imageUrl,
-    required this.tooltip,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final foreground = colorScheme.onSurface;
-
-    return Tooltip(
-      message: tooltip,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: colorScheme.surface.withValues(alpha: 0.58),
-          borderRadius: BorderRadius.circular(999),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (imageUrl != null && imageUrl!.isNotEmpty)
-              MobileWebImage(imageUrl: imageUrl!, width: 19, height: 19)
-            else
-              Icon(Icons.info_rounded, size: 19, color: foreground),
-            const SizedBox(width: 5),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 132),
-              child: Text(
-                value,
-                maxLines: 1,
-                softWrap: false,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: foreground,
-                  fontWeight: FontWeight.w700,
-                  height: 1,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );
