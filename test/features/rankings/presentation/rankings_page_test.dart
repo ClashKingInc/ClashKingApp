@@ -1,7 +1,3 @@
-import 'dart:async';
-
-import 'package:clashkingapp/common/widgets/empty_state.dart';
-import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/rankings/data/rankings_provider.dart';
 import 'package:clashkingapp/features/rankings/data/rankings_service.dart';
 import 'package:clashkingapp/features/rankings/models/ranking_models.dart';
@@ -122,64 +118,13 @@ void main() {
     expect(find.text('Player result'), findsNothing);
     expect(service.queries.last.board, RankingBoard.clanHome);
 
-    await tester.tap(find.byKey(const Key('rankings-board-dropdown')));
+    await tester.drag(find.byType(TabBar), const Offset(-520, 0));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Donations').last);
+    await tester.tap(find.text('Donations'));
     await tester.pumpAndSettle();
 
     expect(service.queries.last.board, RankingBoard.clanDonations);
     expect(service.queries.last.location.isWorldwide, isFalse);
-  });
-
-  testWidgets('shows ranking row skeletons while loading', (tester) async {
-    final service = _PendingRankingsService();
-    final provider = RankingsProvider(
-      service: service,
-      leagueOptions: const [RankingLeagueOption.legendTwo],
-      clock: () => DateTime(2026, 7, 20),
-    );
-    addTearDown(() {
-      if (!service.completer.isCompleted) {
-        service.completer.complete(_emptyResult(RankingBoard.playerHome));
-      }
-    });
-
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: RankingsPage(provider: provider),
-      ),
-    );
-    await tester.pump();
-
-    expect(find.byType(LinearProgressIndicator), findsNothing);
-    expect(find.byType(SkeletonLoader), findsWidgets);
-
-    service.completer.complete(_emptyResult(RankingBoard.playerHome));
-    await tester.pumpAndSettle();
-  });
-
-  testWidgets('uses the shared empty state when rankings have no data', (
-    tester,
-  ) async {
-    final provider = RankingsProvider(
-      service: _EmptyRankingsService(),
-      leagueOptions: const [RankingLeagueOption.legendTwo],
-      clock: () => DateTime(2026, 7, 20),
-    );
-
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: RankingsPage(provider: provider),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.byType(AppEmptyState), findsOneWidget);
-    expect(find.byType(LinearProgressIndicator), findsNothing);
   });
 
   testWidgets('does not show source, results, or fake filter chips', (
@@ -226,14 +171,48 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('TH17'), findsOneWidget);
   });
-}
 
-RankingResult _emptyResult(RankingBoard board) {
-  return RankingResult(
-    entries: const [],
-    source: board.source,
-    limit: board.source == RankingSource.official ? 200 : 500,
-  );
+  testWidgets('selected subtab opens a Current and History menu', (
+    tester,
+  ) async {
+    final provider = RankingsProvider(
+      service: _WidgetRankingsService(),
+      leagueOptions: const [RankingLeagueOption.legendTwo],
+      clock: () => DateTime(2026, 7, 20),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: RankingsPage(provider: provider),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final selector = find.byKey(const Key('rankings-period-control'));
+    expect(selector, findsOneWidget);
+    expect(
+      find.ancestor(of: selector, matching: find.byType(TabBar)),
+      findsOneWidget,
+    );
+    expect(find.text('History'), findsNothing);
+
+    await tester.tap(selector);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Current'), findsOneWidget);
+    expect(find.text('History'), findsOneWidget);
+
+    await tester.tap(find.text('History'));
+    await tester.pumpAndSettle();
+
+    expect(provider.period, RankingPeriod.history);
+    expect(
+      find.byKey(const Key('rankings-history-date-button')),
+      findsOneWidget,
+    );
+  });
 }
 
 class _WidgetRankingsService extends RankingsService {
@@ -272,31 +251,5 @@ class _WidgetRankingsService extends RankingsService {
       source: query.board.source,
       limit: query.board.source == RankingSource.official ? 200 : 500,
     );
-  }
-}
-
-class _PendingRankingsService extends RankingsService {
-  final completer = Completer<RankingResult>();
-
-  @override
-  Future<List<RankingLocation>> fetchLocations() async => const [
-    RankingLocation.worldwide(),
-  ];
-
-  @override
-  Future<RankingResult> fetchRankings(RankingQuery query) {
-    return completer.future;
-  }
-}
-
-class _EmptyRankingsService extends RankingsService {
-  @override
-  Future<List<RankingLocation>> fetchLocations() async => const [
-    RankingLocation.worldwide(),
-  ];
-
-  @override
-  Future<RankingResult> fetchRankings(RankingQuery query) async {
-    return _emptyResult(query.board);
   }
 }

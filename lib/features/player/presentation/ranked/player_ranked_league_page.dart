@@ -486,7 +486,7 @@ class _CurrentPeriodTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        LiquidGlassSegmentedControl<bool>(
+        AppGlassSegmentedControl<bool>(
           values: const [false, true],
           labels: [
             AppLocalizations.of(context)!.generalDetails,

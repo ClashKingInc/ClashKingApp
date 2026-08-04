@@ -1,6 +1,8 @@
-import 'package:clashking_design_system/clashking_design_system.dart';
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' as lgw;
 import 'package:native_liquid_glass/native_liquid_glass.dart' as glass;
 
@@ -343,95 +345,342 @@ class NativeLiquidGlassIconButton extends StatelessWidget {
   }
 }
 
-/// Glass-style segmented control — filter/mode toggles throughout the app.
-class NativeLiquidGlassSegmentedControl<T> extends StatelessWidget {
-  const NativeLiquidGlassSegmentedControl({
+/// Thin, cross-platform segmented control styled after the native iOS 26
+/// `UISegmentedControl`.
+///
+/// Its material follows the quieter painted treatment from
+/// `CKSegmentedControl`, while this wrapper supplies the native proportions and
+/// a continuous, critically damped slide. Keeping shader glass out of this
+/// control avoids the bright rims and lensing that overpower small capsules.
+class AppGlassSegmentedControl<T> extends StatefulWidget {
+  const AppGlassSegmentedControl({
     super.key,
     required this.values,
     required this.labels,
     required this.selected,
     required this.onChanged,
-    this.icons,
     this.height = 52,
-    this.color,
-    // Kept for API compat — used only when fewer than 2 valid segments are
-    // resolved (both backends require at least 2).
-    this.fallbackBuilder,
-  }) : assert(values.length == labels.length),
-       assert(icons == null || icons.length == values.length);
+    this.foregroundColor,
+  }) : assert(values.length == labels.length);
 
   final List<T> values;
   final List<String> labels;
   final T selected;
   final ValueChanged<T> onChanged;
-  final List<IconData>? icons;
   final double height;
-  final Color? color;
-  final WidgetBuilder? fallbackBuilder;
+  final Color? foregroundColor;
 
   @override
-  Widget build(BuildContext context) {
-    final selectedIndex = values.indexOf(selected);
-    if (selectedIndex < 0 || labels.length < 2) {
-      return fallbackBuilder?.call(context) ?? const SizedBox.shrink();
-    }
-
-    return CKSegmentedControl<T>(
-      values: values,
-      labels: labels,
-      selected: selected,
-      onChanged: onChanged,
-      icons: _segmentIcons(icons),
-      height: height,
-      color: color,
-    );
-  }
+  State<AppGlassSegmentedControl<T>> createState() =>
+      _AppGlassSegmentedControlState<T>();
 }
 
-class AppFilterSegmentedControl<T> extends StatelessWidget {
-  const AppFilterSegmentedControl({
-    super.key,
-    required this.values,
-    required this.labels,
-    required this.selected,
-    required this.onChanged,
-    this.icons,
-    this.iconWidgets,
-    this.height = 46,
-  }) : assert(values.length == labels.length),
-       assert(icons == null || icons.length == values.length),
-       assert(iconWidgets == null || iconWidgets.length == values.length),
-       assert(icons == null || iconWidgets == null);
+class _AppGlassSegmentedControlState<T>
+    extends State<AppGlassSegmentedControl<T>>
+    with SingleTickerProviderStateMixin {
+  static const _spring = SpringDescription(
+    mass: 1,
+    stiffness: 420,
+    damping: 41,
+  );
+  static const _trackKey = Key('app-glass-segmented-track');
+  static const _indicatorKey = Key('app-glass-segmented-indicator');
 
-  final List<T> values;
-  final List<String> labels;
-  final T selected;
-  final ValueChanged<T> onChanged;
-  final List<IconData>? icons;
-  final List<Widget>? iconWidgets;
-  final double height;
+  late final AnimationController _position;
+  late int _lastReportedIndex;
+  bool _disableAnimations = false;
+
+  int get _selectedIndex => widget.values.indexOf(widget.selected);
+
+  @override
+  void initState() {
+    super.initState();
+    final initialIndex = _selectedIndex;
+    _lastReportedIndex = math.max(0, initialIndex);
+    _position = AnimationController.unbounded(
+      vsync: this,
+      value: math.max(0, initialIndex).toDouble(),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _disableAnimations = MediaQuery.disableAnimationsOf(context);
+  }
+
+  @override
+  void didUpdateWidget(covariant AppGlassSegmentedControl<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final nextIndex = _selectedIndex;
+    if (nextIndex < 0) return;
+
+    _lastReportedIndex = nextIndex;
+    if ((_position.value - nextIndex).abs() > 0.001) {
+      _animateTo(nextIndex);
+    }
+  }
+
+  @override
+  void dispose() {
+    _position.dispose();
+    super.dispose();
+  }
+
+  void _animateTo(int index, {double? velocity}) {
+    final target = index.toDouble();
+    if (_disableAnimations) {
+      _position.value = target;
+      return;
+    }
+
+    final inheritedVelocity =
+        velocity ?? (_position.isAnimating ? _position.velocity : 0.0);
+    _position.animateWith(
+      SpringSimulation(
+        _spring,
+        _position.value,
+        target,
+        inheritedVelocity.clamp(-4.0, 4.0),
+        snapToEnd: true,
+      ),
+    );
+  }
+
+  void _selectIndex(int index, {double? velocity}) {
+    _animateTo(index, velocity: velocity);
+    if (index == _lastReportedIndex) return;
+    _lastReportedIndex = index;
+    widget.onChanged(widget.values[index]);
+  }
+
+  void _handleDragUpdate(
+    DragUpdateDetails details,
+    double segmentWidth,
+    TextDirection direction,
+  ) {
+    _position.stop();
+    final directionalDelta =
+        (details.primaryDelta ?? 0) * (direction == TextDirection.ltr ? 1 : -1);
+    _position.value = (_position.value + directionalDelta / segmentWidth).clamp(
+      0.0,
+      widget.values.length - 1.0,
+    );
+  }
+
+  void _handleDragEnd(
+    DragEndDetails details,
+    double segmentWidth,
+    TextDirection direction,
+  ) {
+    final directionalVelocity =
+        details.velocity.pixelsPerSecond.dx *
+        (direction == TextDirection.ltr ? 1 : -1);
+    final segmentVelocity = directionalVelocity / segmentWidth;
+    final projectedPosition = _position.value + segmentVelocity * 0.08;
+    final target = projectedPosition.round().clamp(0, widget.values.length - 1);
+    _selectIndex(target, velocity: segmentVelocity);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final selectedIndex = values.indexOf(selected);
-    if (selectedIndex < 0 || labels.length < 2) {
+    final selectedIndex = _selectedIndex;
+    if (selectedIndex < 0 || widget.labels.length < 2) {
       return const SizedBox.shrink();
     }
 
-    return CKSegmentedControl<T>(
-      values: values,
-      labels: labels,
-      selected: selected,
-      onChanged: onChanged,
-      icons: iconWidgets ?? _segmentIcons(icons),
-      height: height,
-      density: CKControlDensity.compact,
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final onColoredSurface = widget.foregroundColor != null;
+    final labelColor = widget.foregroundColor ?? scheme.onSurface;
+    const labelStyle = TextStyle(fontSize: 13, fontWeight: FontWeight.w600);
+    final desiredWidth = _segmentedControlWidth(
+      context,
+      widget.labels,
+      labelStyle,
+    );
+    const controlHeight = 32.0;
+    final layoutHeight = math.max(widget.height, controlHeight);
+    final trackBorderColor = scheme.outlineVariant.withValues(
+      alpha: onColoredSurface ? 0.22 : 0.32,
+    );
+    final trackFill = scheme.surfaceContainerHighest.withValues(
+      alpha: onColoredSurface ? 0.38 : 0.45,
+    );
+    final indicatorFill = scheme.surfaceContainerHighest.withValues(
+      alpha: onColoredSurface ? 0.72 : 0.74,
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final resolvedWidth = constraints.hasBoundedWidth
+            ? constraints.maxWidth
+            : desiredWidth + 32;
+        final trackWidth = math.max(0.0, resolvedWidth - 32);
+        return Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: resolvedWidth,
+            height: layoutHeight,
+            child: Center(
+              child: SizedBox(
+                width: trackWidth,
+                height: controlHeight,
+                child: LayoutBuilder(
+                  builder: (context, controlConstraints) {
+                    const indicatorInset = 2.0;
+                    final direction = Directionality.of(context);
+                    final innerWidth =
+                        controlConstraints.maxWidth - indicatorInset * 2;
+                    final segmentWidth = innerWidth / widget.values.length;
+                    final maxIndex = widget.values.length - 1.0;
+
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onHorizontalDragStart: (_) => _position.stop(),
+                      onHorizontalDragUpdate: (details) =>
+                          _handleDragUpdate(details, segmentWidth, direction),
+                      onHorizontalDragEnd: (details) =>
+                          _handleDragEnd(details, segmentWidth, direction),
+                      onHorizontalDragCancel: () => _animateTo(selectedIndex),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              child: DecoratedBox(
+                                key: _trackKey,
+                                decoration: BoxDecoration(
+                                  color: trackFill,
+                                  borderRadius: BorderRadius.circular(
+                                    controlHeight / 2,
+                                  ),
+                                  border: Border.all(
+                                    color: trackBorderColor,
+                                    width: 0.8,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: indicatorInset,
+                            top: indicatorInset,
+                            width: segmentWidth,
+                            height: controlHeight - indicatorInset * 2,
+                            child: AnimatedBuilder(
+                              animation: _position,
+                              child: IgnorePointer(
+                                child: DecoratedBox(
+                                  key: _indicatorKey,
+                                  decoration: BoxDecoration(
+                                    color: indicatorFill,
+                                    borderRadius: BorderRadius.circular(
+                                      controlHeight / 2,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              builder: (context, child) {
+                                final logicalPosition = _position.value.clamp(
+                                  0.0,
+                                  maxIndex,
+                                );
+                                final physicalPosition =
+                                    direction == TextDirection.ltr
+                                    ? logicalPosition
+                                    : maxIndex - logicalPosition;
+                                return Transform.translate(
+                                  offset: Offset(
+                                    physicalPosition * segmentWidth,
+                                    0,
+                                  ),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Row(
+                              children: [
+                                for (
+                                  var index = 0;
+                                  index < widget.labels.length;
+                                  index++
+                                )
+                                  Expanded(
+                                    child: Semantics(
+                                      button: true,
+                                      selected: selectedIndex == index,
+                                      label: widget.labels[index],
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () => _selectIndex(index),
+                                        child: Center(
+                                          child: AnimatedDefaultTextStyle(
+                                            duration: const Duration(
+                                              milliseconds: 180,
+                                            ),
+                                            curve: Curves.easeOutCubic,
+                                            style: labelStyle.copyWith(
+                                              color: selectedIndex == index
+                                                  ? labelColor
+                                                  : labelColor.withValues(
+                                                      alpha: 0.67,
+                                                    ),
+                                              fontWeight: selectedIndex == index
+                                                  ? FontWeight.w600
+                                                  : FontWeight.w500,
+                                            ),
+                                            child: Text(
+                                              widget.labels[index],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
 
-List<Widget>? _segmentIcons(List<IconData>? icons) =>
-    icons?.map((icon) => Icon(icon)).toList(growable: false);
+double _segmentedControlWidth(
+  BuildContext context,
+  List<String> labels,
+  TextStyle style,
+) {
+  final direction = Directionality.of(context);
+  final scaler = MediaQuery.textScalerOf(context);
+  var longestLabel = 0.0;
+  for (final label in labels) {
+    final painter = TextPainter(
+      text: TextSpan(text: label, style: style),
+      textDirection: direction,
+      textScaler: scaler,
+      maxLines: 1,
+    )..layout();
+    longestLabel = math.max(longestLabel, painter.width);
+  }
+
+  final segmentWidth = (longestLabel + 40).clamp(112.0, 180.0);
+  return segmentWidth * labels.length;
+}
 
 /// Whether glass surfaces should render at all. Header panels inside slivers
 /// rely on this flag to fall back to an opaque fill — see
@@ -443,7 +692,6 @@ typedef LiquidGlassBar = NativeLiquidGlassBar;
 typedef LiquidGlassTabItem = NativeLiquidGlassTabItem;
 typedef LiquidGlassTabBar = NativeLiquidGlassTabBar;
 typedef LiquidGlassIconButton = NativeLiquidGlassIconButton;
-typedef LiquidGlassSegmentedControl<T> = NativeLiquidGlassSegmentedControl<T>;
 
 bool get supportsLiquidGlass => supportsNativeLiquidGlass;
 

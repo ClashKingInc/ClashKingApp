@@ -1,12 +1,20 @@
+import 'dart:ui' as ui;
+
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 
 class InfoProfileTabData {
-  const InfoProfileTabData({required this.label, this.imageUrl, this.icon});
+  const InfoProfileTabData({
+    required this.label,
+    this.imageUrl,
+    this.icon,
+    this.trailing,
+  });
 
   final String label;
   final String? imageUrl;
   final IconData? icon;
+  final Widget? trailing;
 }
 
 /// Shared detail-page navigation used below Player, Clan, and tracker headers.
@@ -17,25 +25,131 @@ class InfoProfileTabs extends StatefulWidget {
     required this.selectedIndex,
     required this.onTabSelected,
     this.alwaysScrollable = false,
+    this.controller,
   });
 
   final List<InfoProfileTabData> tabs;
   final int selectedIndex;
   final ValueChanged<int> onTabSelected;
   final bool alwaysScrollable;
+  final TabController? controller;
 
   @override
   State<InfoProfileTabs> createState() => _InfoProfileTabsState();
 }
 
+/// Pinned counterpart to [InfoProfileTabs] for image-backed detail headers.
+///
+/// The overlay materializes as the in-flow tabs approach the system safe area,
+/// then keeps navigation below the status bar while content scrolls underneath
+/// the same compact material. Keeping this beside [InfoProfileTabs] ensures
+/// the pinned and in-flow controls always share the same tab implementation.
+class PinnedInfoProfileTabs extends StatelessWidget {
+  const PinnedInfoProfileTabs({
+    super.key,
+    required this.tabs,
+    required this.selectedIndex,
+    required this.onTabSelected,
+    required this.progress,
+    this.alwaysScrollable = false,
+    this.controller,
+  });
+
+  final List<InfoProfileTabData> tabs;
+  final int selectedIndex;
+  final ValueChanged<int> onTabSelected;
+  final double progress;
+  final bool alwaysScrollable;
+  final TabController? controller;
+
+  static const double tabHeight = 50;
+
+  /// The pinned and in-flow controls cross-fade only at the final edge of the
+  /// collapse. This keeps the progressive status-bar treatment without
+  /// rendering two dividers or indicators at visibly different heights.
+  static double tabsOpacityFor(double progress) => Curves.easeOutCubic
+      .transform(((progress.clamp(0.0, 1.0) - 0.82) / 0.18).clamp(0.0, 1.0));
+
+  static double inFlowTabsOpacityFor(double progress) =>
+      1 - tabsOpacityFor(progress);
+
+  @override
+  Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    final safeTop = media.padding.top;
+    final clampedProgress = progress.clamp(0.0, 1.0);
+    final highContrast = media.highContrast;
+    final surface = Theme.of(context).scaffoldBackgroundColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final chromeColor = isDark ? Colors.black : surface;
+    final tabOpacity = tabsOpacityFor(clampedProgress);
+
+    if (clampedProgress <= 0) return const SizedBox.shrink();
+
+    return IgnorePointer(
+      ignoring: tabOpacity < 0.98,
+      child: SizedBox(
+        height: safeTop + tabHeight,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: safeTop,
+              child: ClipRect(
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(
+                    sigmaX: highContrast ? 0 : 16 * clampedProgress,
+                    sigmaY: highContrast ? 0 : 16 * clampedProgress,
+                    tileMode: TileMode.decal,
+                  ),
+                  child: ColoredBox(
+                    color: chromeColor.withValues(
+                      alpha: highContrast
+                          ? clampedProgress
+                          : 0.90 * clampedProgress,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: safeTop,
+              left: 0,
+              right: 0,
+              height: tabHeight,
+              child: Opacity(
+                opacity: tabOpacity,
+                child: InfoProfileTabs(
+                  tabs: tabs,
+                  selectedIndex: selectedIndex,
+                  onTabSelected: onTabSelected,
+                  alwaysScrollable: alwaysScrollable,
+                  controller: controller,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _InfoProfileTabsState extends State<InfoProfileTabs>
     with TickerProviderStateMixin {
-  late TabController _controller;
+  TabController? _internalController;
+
+  TabController get _controller => widget.controller ?? _internalController!;
 
   @override
   void initState() {
     super.initState();
-    _controller = _createController();
+    if (widget.controller == null) {
+      _internalController = _createController();
+    }
   }
 
   TabController _createController() => TabController(
@@ -47,12 +161,25 @@ class _InfoProfileTabsState extends State<InfoProfileTabs>
   @override
   void didUpdateWidget(covariant InfoProfileTabs oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.tabs.length != widget.tabs.length) {
-      _controller.dispose();
-      _controller = _createController();
-      return;
+    if (oldWidget.controller != widget.controller) {
+      if (oldWidget.controller == null) {
+        _internalController?.dispose();
+      }
+      _internalController = widget.controller == null
+          ? _createController()
+          : null;
+    } else if (widget.controller == null &&
+        oldWidget.tabs.length != widget.tabs.length) {
+      _internalController?.dispose();
+      _internalController = _createController();
     }
-    if (_controller.index != widget.selectedIndex) {
+
+    // An externally supplied controller is the single motion source for both
+    // the TabBar and its TabBarView. The owning screen advances it directly,
+    // so starting a second animateTo here would make the indicator trail the
+    // page during a swipe.
+    if (widget.controller == null &&
+        _controller.index != widget.selectedIndex) {
       _controller.animateTo(
         widget.selectedIndex,
         duration: const Duration(milliseconds: 220),
@@ -63,7 +190,7 @@ class _InfoProfileTabsState extends State<InfoProfileTabs>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _internalController?.dispose();
     super.dispose();
   }
 
@@ -151,6 +278,10 @@ class _InfoProfileTab extends StatelessWidget {
                 ),
               ),
             ),
+            if (data.trailing case final trailing?) ...[
+              const SizedBox(width: 2),
+              trailing,
+            ],
           ],
         ),
       ),

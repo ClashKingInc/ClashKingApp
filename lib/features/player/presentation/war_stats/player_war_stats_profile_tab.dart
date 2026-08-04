@@ -95,7 +95,7 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
         const SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: LiquidGlassSegmentedControl<int>(
+          child: AppGlassSegmentedControl<int>(
             values: const [0, 1, 2, 3],
             labels: [
               loc.generalStats,

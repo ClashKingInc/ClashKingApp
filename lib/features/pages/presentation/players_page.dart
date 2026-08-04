@@ -173,7 +173,7 @@ class _PlayersPageState extends State<PlayersPage> {
                     14,
                   ),
                   sliver: SliverToBoxAdapter(
-                    child: AppFilterSegmentedControl<_PlayerRosterMode>(
+                    child: AppGlassSegmentedControl<_PlayerRosterMode>(
                       values: const [
                         _PlayerRosterMode.linked,
                         _PlayerRosterMode.bookmarked,
@@ -713,18 +713,6 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                             color: StatColors.capitalProjected,
                             onTap: onVerifyAccount!,
                           ),
-                        _PlayerOptionSwitch(
-                          icon: Icons.notifications_outlined,
-                          title: AppLocalizations.of(
-                            context,
-                          )!.playerOptionNotificationsTitle,
-                          subtitle: AppLocalizations.of(
-                            context,
-                          )!.playerOptionNotificationsSubtitle,
-                          value: options.notificationsEnabled,
-                          onChanged: (value) =>
-                              prefs.setNotificationsEnabled(tag, value),
-                        ),
                         _PlayerOptionSwitch(
                           icon: Icons.fact_check_outlined,
                           title: AppLocalizations.of(

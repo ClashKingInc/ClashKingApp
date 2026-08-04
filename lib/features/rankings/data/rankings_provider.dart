@@ -129,12 +129,10 @@ class RankingsProvider extends ChangeNotifier {
   Future<void> selectAudience(RankingAudience value) async {
     if (audience == value) return;
     final matchingBoard = _matchingBoardForAudience(board, value);
-    if (matchingBoard != null) {
-      if (value == RankingAudience.players) {
-        playerBoard = matchingBoard;
-      } else {
-        clanBoard = matchingBoard;
-      }
+    if (value == RankingAudience.players) {
+      playerBoard = matchingBoard;
+    } else {
+      clanBoard = matchingBoard;
     }
     audience = value;
     period = RankingPeriod.current;
@@ -216,7 +214,7 @@ RankingResult _emptyResultFor(RankingBoard board) {
   );
 }
 
-RankingBoard? _matchingBoardForAudience(
+RankingBoard _matchingBoardForAudience(
   RankingBoard board,
   RankingAudience audience,
 ) {
@@ -224,14 +222,14 @@ RankingBoard? _matchingBoardForAudience(
     return switch (board) {
       RankingBoard.clanHome => RankingBoard.playerHome,
       RankingBoard.clanBuilder => RankingBoard.playerBuilder,
-      _ => null,
+      _ => RankingBoard.playerHome,
     };
   }
 
   return switch (board) {
     RankingBoard.playerHome => RankingBoard.clanHome,
     RankingBoard.playerBuilder => RankingBoard.clanBuilder,
-    _ => null,
+    _ => RankingBoard.clanHome,
   };
 }
 

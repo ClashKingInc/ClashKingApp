@@ -574,7 +574,6 @@ class _SearchPageState extends State<SearchPage> {
                 child: _ModeSelector(
                   mode: _mode,
                   onChanged: _setMode,
-                  useLiquidGlass: false,
                   compact: true,
                 ),
               ),
@@ -601,7 +600,7 @@ class _SearchPageState extends State<SearchPage> {
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
       children: [
-        _ModeSelector(mode: _mode, onChanged: _setMode, useLiquidGlass: true),
+        _ModeSelector(mode: _mode, onChanged: _setMode),
         const SizedBox(height: 12),
         searchField(overlay: false),
         ...resultChildren,
@@ -616,205 +615,25 @@ class _ModeSelector extends StatelessWidget {
   const _ModeSelector({
     required this.mode,
     required this.onChanged,
-    this.useLiquidGlass = true,
     this.compact = false,
   });
 
   final _SearchMode mode;
   final ValueChanged<_SearchMode> onChanged;
-  final bool useLiquidGlass;
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context);
-
-    final height = compact ? 40.0 : 52.0;
-    final inset = compact ? 4.0 : 5.0;
-    final selectedHeight = height - (inset * 2);
-    final selectedRadius = selectedHeight / 2;
-
-    Widget fallbackControl(BuildContext context) => SizedBox(
-      height: height,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final segmentWidth = constraints.maxWidth / 2;
-          final selectedLeft = mode == _SearchMode.players
-              ? inset
-              : segmentWidth + inset;
-
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              _ModeSegmentChrome(
-                height: height,
-                cornerRadius: height / 2,
-                useGlass: useLiquidGlass,
-              ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 180),
-                curve: Curves.easeOutCubic,
-                left: selectedLeft,
-                top: inset,
-                width: segmentWidth - (inset * 2),
-                height: selectedHeight,
-                child: _ModeSegmentChrome(
-                  height: selectedHeight,
-                  cornerRadius: selectedRadius,
-                  selected: true,
-                  useGlass: useLiquidGlass,
-                ),
-              ),
-              Row(
-                children: [
-                  _ModeButton(
-                    icon: Icons.person_search,
-                    label: l10n?.searchTabPlayers ?? 'Players',
-                    selected: mode == _SearchMode.players,
-                    colorScheme: colorScheme,
-                    compact: compact,
-                    onTap: () => onChanged(_SearchMode.players),
-                  ),
-                  _ModeButton(
-                    icon: Icons.shield_outlined,
-                    label: l10n?.searchTabClans ?? 'Clans',
-                    selected: mode == _SearchMode.clans,
-                    colorScheme: colorScheme,
-                    compact: compact,
-                    onTap: () => onChanged(_SearchMode.clans),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
-    );
-
-    if (!useLiquidGlass) {
-      return fallbackControl(context);
-    }
-
-    return LiquidGlassSegmentedControl<_SearchMode>(
-      height: height,
+    return AppGlassSegmentedControl<_SearchMode>(
+      height: compact ? 40 : 52,
       values: const [_SearchMode.players, _SearchMode.clans],
       labels: [
         l10n?.searchTabPlayers ?? 'Players',
         l10n?.searchTabClans ?? 'Clans',
       ],
       selected: mode,
-      color: colorScheme.primary,
       onChanged: onChanged,
-      fallbackBuilder: fallbackControl,
-    );
-  }
-}
-
-class _ModeSegmentChrome extends StatelessWidget {
-  const _ModeSegmentChrome({
-    required this.height,
-    required this.cornerRadius,
-    required this.useGlass,
-    this.selected = false,
-  });
-
-  final double height;
-  final double cornerRadius;
-  final bool useGlass;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    if (useGlass) {
-      return LiquidGlassBar(
-        height: height,
-        cornerRadius: cornerRadius,
-        interactive: selected,
-        selected: selected,
-        borderOpacity: selected ? 0.46 : 0.28,
-        shadowOpacity: selected ? 0.12 : 0.08,
-      );
-    }
-
-    final colorScheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: selected
-            ? colorScheme.surface.withValues(alpha: 0.98)
-            : colorScheme.surface.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(cornerRadius),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withValues(
-            alpha: selected ? 0.38 : 0.30,
-          ),
-        ),
-      ),
-      child: SizedBox(height: height),
-    );
-  }
-}
-
-class _ModeButton extends StatelessWidget {
-  const _ModeButton({
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.colorScheme,
-    required this.compact,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final ColorScheme colorScheme;
-  final bool compact;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = selected
-        ? colorScheme.onSurface
-        : colorScheme.onSurfaceVariant;
-
-    return Expanded(
-      child: Material(
-        color: Colors.transparent,
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashFactory: NoSplash.splashFactory,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(24),
-            onTap: onTap,
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icon, size: 20, color: color),
-                  SizedBox(width: compact ? 6 : 8),
-                  Text(
-                    label,
-                    style:
-                        (compact
-                                ? Theme.of(context).textTheme.labelMedium
-                                : Theme.of(context).textTheme.labelLarge)
-                            ?.copyWith(
-                              color: color,
-                              fontWeight: selected
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
-                            ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

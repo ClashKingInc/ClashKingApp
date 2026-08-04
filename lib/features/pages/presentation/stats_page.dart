@@ -235,12 +235,12 @@ class _StatsHeader extends StatelessWidget {
                   ),
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 520),
-                    child: LiquidGlassSegmentedControl<StatsAudience>(
+                    child: AppGlassSegmentedControl<StatsAudience>(
                       height: 46,
                       values: StatsAudience.values,
                       labels: [loc.statsBattle, loc.statsWorld],
                       selected: provider.audience,
-                      color: Colors.white,
+                      foregroundColor: Colors.white,
                       onChanged: provider.selectAudience,
                     ),
                   ),

@@ -324,7 +324,7 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                       padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
                       child: Column(
                         children: [
-                          LiquidGlassSegmentedControl<int>(
+                          AppGlassSegmentedControl<int>(
                             values: const [1, 2],
                             labels: [
                               AppLocalizations.of(context)!.warMyTeam,
@@ -332,7 +332,9 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
                             ],
                             selected: _currentSegment,
                             height: 44,
-                            color: Theme.of(context).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
                             onChanged: (v) {
                               setState(() {
                                 _currentSegment = v;

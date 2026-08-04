@@ -98,6 +98,29 @@ void main() {
     },
   );
 
+  test('switching audience falls back to Home for unmatched boards', () async {
+    final service = _RecordingRankingsService();
+    final provider = RankingsProvider(
+      service: service,
+      leagueOptions: const [RankingLeagueOption.legendTwo],
+      clock: () => DateTime(2026, 7, 20),
+    );
+
+    await provider.initialize();
+    await provider.selectAudience(RankingAudience.clans);
+    await provider.selectBoard(RankingBoard.clanDonations);
+    await provider.selectAudience(RankingAudience.players);
+
+    expect(provider.board, RankingBoard.playerHome);
+    expect(service.queries.last.board, RankingBoard.playerHome);
+
+    await provider.selectBoard(RankingBoard.playerRanked);
+    await provider.selectAudience(RankingAudience.clans);
+
+    expect(provider.board, RankingBoard.clanHome);
+    expect(service.queries.last.board, RankingBoard.clanHome);
+  });
+
   test('surfaces a clear empty history result without an error', () async {
     final service = _RecordingRankingsService(empty: true);
     final provider = RankingsProvider(

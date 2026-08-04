@@ -10,6 +10,7 @@ class FilterDropdown extends StatefulWidget {
   final double height;
   final IconData? leadingIcon;
   final bool fillWidth;
+  final Widget? customButton;
 
   const FilterDropdown({
     super.key,
@@ -20,6 +21,7 @@ class FilterDropdown extends StatefulWidget {
     this.height = 40,
     this.leadingIcon,
     this.fillWidth = false,
+    this.customButton,
   });
 
   @override
@@ -120,6 +122,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
       width: widget.fillWidth ? double.infinity : null,
       child: DropdownButton2<String>(
         isExpanded: true,
+        customButton: widget.customButton,
         valueListenable: _valueNotifier,
         items: widget.sortByOptions.entries.map((entry) {
           final isSelected = entry.value == widget.sortBy;

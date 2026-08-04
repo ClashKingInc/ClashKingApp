@@ -368,7 +368,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           children: [
             Padding(
               padding: const EdgeInsets.all(8),
-              child: LiquidGlassSegmentedControl<int>(
+              child: AppGlassSegmentedControl<int>(
                 values: const [0, 1],
                 labels: [
                   AppLocalizations.of(context)!.authDiscordTitle,

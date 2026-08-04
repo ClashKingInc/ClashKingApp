@@ -62,20 +62,24 @@ void main() {
     expect(find.byType(glass.GlassIconButton), findsOneWidget);
   });
 
-  testWidgets('segmented control remains interactive without native views', (
+  testWidgets('app glass segmented control maps selections to values', (
     tester,
   ) async {
     var selected = 0;
+    var callbackCount = 0;
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: SizedBox(
-            width: 240,
-            child: LiquidGlassSegmentedControl<int>(
+            width: 360,
+            child: AppGlassSegmentedControl<int>(
               values: const [0, 1],
               labels: const ['One', 'Two'],
               selected: selected,
-              onChanged: (value) => selected = value,
+              onChanged: (value) {
+                selected = value;
+                callbackCount++;
+              },
             ),
           ),
         ),
@@ -84,17 +88,18 @@ void main() {
 
     await tester.tap(find.text('Two'));
     expect(selected, 1);
+    expect(callbackCount, 1);
   });
 
-  testWidgets('segmented control keeps readable labels on non-iOS platforms', (
+  testWidgets('app glass segmented control keeps readable labels', (
     tester,
   ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: SizedBox(
-            width: 240,
-            child: LiquidGlassSegmentedControl<int>(
+            width: 360,
+            child: AppGlassSegmentedControl<int>(
               values: const [0, 1],
               labels: const ['Linked', 'Bookmarked'],
               selected: 0,
@@ -116,6 +121,89 @@ void main() {
         )
         .style;
 
-    expect(style.fontSize, 14);
+    expect(style.fontSize, 13);
+  });
+
+  testWidgets('segmented control uses thin CK-style translucent capsules', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 360,
+            child: AppGlassSegmentedControl<int>(
+              values: const [0, 1],
+              labels: const ['Players', 'Clans'],
+              selected: 0,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byType(glass.GlassContainer), findsNothing);
+
+    final trackFinder = find.byKey(const Key('app-glass-segmented-track'));
+    final trackSize = tester.getSize(trackFinder);
+    expect(trackSize.width, 328);
+    expect(trackSize.height, 32);
+
+    final track = tester.widget<DecoratedBox>(trackFinder);
+    final decoration = track.decoration as BoxDecoration;
+    final border = decoration.border! as Border;
+    expect(border.top.width, 0.8);
+    expect(border.top.color.a, greaterThan(0));
+    expect(border.top.color.a, lessThan(0.4));
+    expect(decoration.color!.a, closeTo(0.45, 0.01));
+
+    final indicator = tester.widget<DecoratedBox>(
+      find.byKey(const Key('app-glass-segmented-indicator')),
+    );
+    final indicatorDecoration = indicator.decoration as BoxDecoration;
+    expect(indicatorDecoration.color!.a, closeTo(0.74, 0.01));
+    expect(indicatorDecoration.border, isNull);
+  });
+
+  testWidgets('selection indicator slides through intermediate positions', (
+    tester,
+  ) async {
+    var selected = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 360,
+            child: StatefulBuilder(
+              builder: (context, setState) => AppGlassSegmentedControl<int>(
+                values: const [0, 1],
+                labels: const ['Linked', 'Bookmarked'],
+                selected: selected,
+                onChanged: (value) {
+                  setState(() => selected = value);
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final indicatorFinder = find.byKey(
+      const Key('app-glass-segmented-indicator'),
+    );
+    final start = tester.getTopLeft(indicatorFinder).dx;
+
+    await tester.tap(find.text('Bookmarked'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 80));
+    final middle = tester.getTopLeft(indicatorFinder).dx;
+
+    await tester.pumpAndSettle();
+    final end = tester.getTopLeft(indicatorFinder).dx;
+
+    expect(middle, greaterThan(start + 1));
+    expect(middle, lessThan(end - 1));
   });
 }

@@ -8196,7 +8196,7 @@ class _ResourcePreferenceControl extends StatelessWidget {
         ),
         SizedBox(
           width: 176,
-          child: AppFilterSegmentedControl<UpgradeResourcePreference>(
+          child: AppGlassSegmentedControl<UpgradeResourcePreference>(
             height: 40,
             values: const [
               UpgradeResourcePreference.conserve,
