@@ -32,6 +32,8 @@ const _fireballQuakeSetupId = 'fireball-quake';
 const _giantArrowSetupId = 'giant-arrow';
 const _flameFlingerSetupId = 'flame-flinger';
 const _townHallBuildingName = 'Town Hall';
+const _lightningSpellName = 'Lightning Spell';
+const _darkElixirResourceName = 'dark elixir';
 const _defaultFarmPerfectLoot = 1000000;
 
 class CalculatorsPage extends StatefulWidget {
@@ -777,7 +779,7 @@ class _CalculatorScaffold extends StatelessWidget {
         tabs: [
           InfoProfileTabData(
             label: loc.calculatorsModeDamage,
-            imageUrl: ImageAssets.getSpellImage('Lightning Spell'),
+            imageUrl: ImageAssets.getSpellImage(_lightningSpellName),
           ),
           InfoProfileTabData(
             label: loc.calculatorsModeFarmGoal,
@@ -804,7 +806,7 @@ class _CalculatorHeader extends StatelessWidget {
     final isDesktopWeb = isSidePageDesktop(context);
     final imageHeight = media.padding.top + (isDesktopWeb ? 292 : 246);
     final imageUrl = selectedMode == _CalculatorMode.damage
-        ? ImageAssets.getSpellImage('Lightning Spell')
+        ? ImageAssets.getSpellImage(_lightningSpellName)
         : ImageAssets.getHomeVillageBuildingImage(_townHallBuildingName, 1);
     final fallbackIcon = selectedMode == _CalculatorMode.damage
         ? Icons.bolt_rounded
@@ -1736,9 +1738,27 @@ class _CalculatorAccountPickerSheetState
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final accounts = _filteredAccounts();
+
+    return FractionallySizedBox(
+      heightFactor: 0.82,
+      child: Column(
+        children: [
+          _buildHeader(context),
+          _buildSearchField(context),
+          Expanded(
+            child: accounts.isEmpty && !widget.allowCustom
+                ? _buildEmptyState(context)
+                : _buildAccountsList(context, accounts),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<DamageAccountPreset> _filteredAccounts() {
     final query = _query.trim().toLowerCase();
-    final accounts = widget.accountPresets
+    return widget.accountPresets
         .where(
           (account) =>
               query.isEmpty ||
@@ -1746,134 +1766,139 @@ class _CalculatorAccountPickerSheetState
               account.tag.toLowerCase().contains(query),
         )
         .toList(growable: false);
+  }
 
-    return FractionallySizedBox(
-      heightFactor: 0.82,
-      child: Column(
+  Widget _buildHeader(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
+      child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    loc.damageAccountPresetShort,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                labelText: loc.damageChooseAccount,
-                prefixIcon: const Icon(Icons.search_rounded),
-                suffixIcon: _query.isEmpty
-                    ? null
-                    : IconButton(
-                        tooltip: loc.generalClearSearch,
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() => _query = '');
-                        },
-                        icon: const Icon(Icons.close_rounded),
-                      ),
-              ),
-              onChanged: (value) => setState(() => _query = value),
-            ),
-          ),
           Expanded(
-            child: accounts.isEmpty && !widget.allowCustom
-                ? AppEmptyState(
-                    icon: Icons.person_search_rounded,
-                    title: loc.damageNoAccountsAvailable,
-                    body: loc.generalTryAgain,
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    itemCount: accounts.length + (widget.allowCustom ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (widget.allowCustom && index == 0) {
-                        final selected = widget.selectedTag == null;
-                        return ListTile(
-                          selected: selected,
-                          selectedTileColor: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerHighest,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppRadius.chip),
-                          ),
-                          leading: const SizedBox.square(
-                            dimension: 44,
-                            child: Icon(Icons.tune_rounded),
-                          ),
-                          title: Text(loc.damageQuickSetupCustom),
-                          subtitle: Text(loc.damageAccountSelectorHint),
-                          trailing: selected
-                              ? const Icon(Icons.check_rounded)
-                              : null,
-                          onTap: () =>
-                              Navigator.pop(context, _accountlessPresetTag),
-                        );
-                      }
-                      final account =
-                          accounts[widget.allowCustom ? index - 1 : index];
-                      final selected = account.tag == widget.selectedTag;
-                      return ListTile(
-                        selected: selected,
-                        selectedTileColor: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerHighest,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.chip),
-                        ),
-                        leading: SizedBox.square(
-                          dimension: 44,
-                          child: MobileWebImage(
-                            imageUrl: ImageAssets.townHall(account.townHall),
-                            fit: BoxFit.contain,
-                            errorWidget: (_, _, _) => MobileWebImage(
-                              imageUrl: ImageAssets.defaultProfile,
-                              fit: BoxFit.contain,
-                              errorWidget: (_, _, _) =>
-                                  const Icon(Icons.person_rounded),
-                            ),
-                          ),
-                        ),
-                        title: Text(
-                          '${account.name} · ${loc.gameTownHallShortLevel(account.townHall)}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          [
-                            account.tag,
-                            if (account.league?.trim().isNotEmpty == true)
-                              account.league!,
-                          ].join(' · '),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: selected
-                            ? const Icon(Icons.check_rounded)
-                            : null,
-                        onTap: () => Navigator.pop(context, account.tag),
-                      );
-                    },
-                  ),
+            child: Text(
+              loc.damageAccountPresetShort,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+          ),
+          IconButton(
+            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.close_rounded),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSearchField(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          labelText: loc.damageChooseAccount,
+          prefixIcon: const Icon(Icons.search_rounded),
+          suffixIcon: _query.isEmpty
+              ? null
+              : IconButton(
+                  tooltip: loc.generalClearSearch,
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() => _query = '');
+                  },
+                  icon: const Icon(Icons.close_rounded),
+                ),
+        ),
+        onChanged: (value) => setState(() => _query = value),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return AppEmptyState(
+      icon: Icons.person_search_rounded,
+      title: loc.damageNoAccountsAvailable,
+      body: loc.generalTryAgain,
+    );
+  }
+
+  Widget _buildAccountsList(
+    BuildContext context,
+    List<DamageAccountPreset> accounts,
+  ) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      itemCount: accounts.length + (widget.allowCustom ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (widget.allowCustom && index == 0) {
+          return _buildCustomTile(context);
+        }
+        final account = accounts[widget.allowCustom ? index - 1 : index];
+        return _buildAccountTile(context, account);
+      },
+    );
+  }
+
+  Widget _buildCustomTile(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final selected = widget.selectedTag == null;
+    return ListTile(
+      selected: selected,
+      selectedTileColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      leading: const SizedBox.square(
+        dimension: 44,
+        child: Icon(Icons.tune_rounded),
+      ),
+      title: Text(loc.damageQuickSetupCustom),
+      subtitle: Text(loc.damageAccountSelectorHint),
+      trailing: selected ? const Icon(Icons.check_rounded) : null,
+      onTap: () => Navigator.pop(context, _accountlessPresetTag),
+    );
+  }
+
+  Widget _buildAccountTile(BuildContext context, DamageAccountPreset account) {
+    final loc = AppLocalizations.of(context)!;
+    final selected = account.tag == widget.selectedTag;
+    return ListTile(
+      selected: selected,
+      selectedTileColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      leading: SizedBox.square(
+        dimension: 44,
+        child: MobileWebImage(
+          imageUrl: ImageAssets.townHall(account.townHall),
+          fit: BoxFit.contain,
+          errorWidget: (_, _, _) => MobileWebImage(
+            imageUrl: ImageAssets.defaultProfile,
+            fit: BoxFit.contain,
+            errorWidget: (_, _, _) => const Icon(Icons.person_rounded),
+          ),
+        ),
+      ),
+      title: Text(
+        '${account.name} · ${loc.gameTownHallShortLevel(account.townHall)}',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Text(
+        [
+          account.tag,
+          if (account.league?.trim().isNotEmpty == true) account.league!,
+        ].join(' · '),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: selected ? const Icon(Icons.check_rounded) : null,
+      onTap: () => Navigator.pop(context, account.tag),
     );
   }
 }
@@ -2402,7 +2427,7 @@ class _ZapQuakePanel extends StatelessWidget {
           .map(
             (combo) => Chip(
               avatar: MobileWebImage(
-                imageUrl: ImageAssets.getSpellImage('Lightning Spell'),
+                imageUrl: ImageAssets.getSpellImage(_lightningSpellName),
                 width: 18,
                 height: 18,
                 fit: BoxFit.contain,
@@ -2721,7 +2746,7 @@ Map<DamageSourceKind, int> _ownedDamageLevels(Player player) {
     }
   }
 
-  add(DamageSourceKind.lightning, player.spells, 'Lightning Spell');
+  add(DamageSourceKind.lightning, player.spells, _lightningSpellName);
   add(DamageSourceKind.earthquake, player.spells, 'Earthquake Spell');
   add(DamageSourceKind.giantArrow, player.equipments, 'Giant Arrow');
   add(DamageSourceKind.fireball, player.equipments, 'Fireball');
@@ -2748,7 +2773,7 @@ String? _upgradeResourceLabel(AppLocalizations loc, String? resource) {
   return switch (normalized) {
     'gold' => loc.resourceGold,
     'elixir' => loc.resourceElixir,
-    'dark elixir' => loc.resourceDarkElixir,
+    _darkElixirResourceName => loc.resourceDarkElixir,
     final value when value != null && value.isNotEmpty => resource,
     _ => null,
   };
@@ -2837,12 +2862,14 @@ String? _farmResourceImage(String? resource) =>
     switch (resource?.trim().toLowerCase().replaceAll('_', ' ')) {
       'gold' => '${ImageAssets.baseUrl}/resources/gold.webp',
       'elixir' => '${ImageAssets.baseUrl}/resources/elixir.webp',
-      'dark elixir' => '${ImageAssets.baseUrl}/resources/dark_elixir.webp',
+      _darkElixirResourceName =>
+        '${ImageAssets.baseUrl}/resources/dark_elixir.webp',
       _ => null,
     };
 
 int _farmDefaultPerfectLoot(String? resource) =>
-    resource?.trim().toLowerCase().replaceAll('_', ' ') == 'dark elixir'
+    resource?.trim().toLowerCase().replaceAll('_', ' ') ==
+        _darkElixirResourceName
     ? 10000
     : _defaultFarmPerfectLoot;
 
