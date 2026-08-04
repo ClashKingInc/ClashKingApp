@@ -347,10 +347,12 @@ class _WarScreenState extends State<WarScreen> {
                 children: [
                   AppGlassSegmentedControl<int>(
                     values: const [1, 2],
-                    labels: [loc.warMyTeam, loc.warEnemiesTeam],
+                    labels: [
+                      widget.war.clan?.name ?? loc.clanTitle,
+                      widget.war.opponent?.name ?? loc.capitalOpponentsSection,
+                    ],
                     selected: _currentSegment,
                     height: 44,
-                    foregroundColor: Theme.of(context).colorScheme.primary,
                     onChanged: (v) {
                       setState(() {
                         _currentSegment = v;

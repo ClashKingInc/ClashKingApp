@@ -6,6 +6,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/cwl/widgets/cwl_round_card.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:flutter/material.dart';
 
 class CwlRoundsTab extends StatefulWidget {
@@ -145,19 +146,6 @@ class _RoundSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final roundSurface = isDark
-        ? Colors.black.withValues(alpha: 0.28)
-        : Colors.black.withValues(alpha: 0.06);
-    final roundBorder = Colors.black.withValues(
-      alpha: isCurrentRound
-          ? isDark
-                ? 0.44
-                : 0.18
-          : isDark
-          ? 0.28
-          : 0.10,
-    );
     final selectedWar = _selectedClanWar;
     final fallbackWar = wars.isNotEmpty ? wars.first : null;
     final status = _RoundStatus.fromWar(selectedWar ?? fallbackWar);
@@ -172,51 +160,35 @@ class _RoundSection extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
         children: [
-          Material(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.chip),
-            child: Ink(
-              decoration: BoxDecoration(
-                color: roundSurface,
-                borderRadius: BorderRadius.circular(AppRadius.chip),
-                border: Border.all(color: roundBorder),
-              ),
-              child: InkWell(
-                onTap: onToggle,
-                borderRadius: BorderRadius.circular(AppRadius.chip),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        isExpanded
-                            ? Icons.keyboard_arrow_up_rounded
-                            : Icons.keyboard_arrow_down_rounded,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          loc.cwlRoundNumber(round.roundNumber),
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w700),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      _RoundBadge(
-                        label: badgeLabel,
-                        color: badgeColor,
-                        imageUrl: badgeImageUrl,
-                      ),
-                    ],
+          CKSectionPanel(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            onTap: onToggle,
+            child: Row(
+              children: [
+                Icon(
+                  isExpanded
+                      ? Icons.keyboard_arrow_up_rounded
+                      : Icons.keyboard_arrow_down_rounded,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    loc.cwlRoundNumber(round.roundNumber),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              ),
+                const SizedBox(width: 8),
+                _RoundBadge(
+                  label: badgeLabel,
+                  color: badgeColor,
+                  imageUrl: badgeImageUrl,
+                ),
+              ],
             ),
           ),
           AnimatedCrossFade(
@@ -237,10 +209,10 @@ class _RoundSection extends StatelessWidget {
             crossFadeState: isExpanded
                 ? CrossFadeState.showSecond
                 : CrossFadeState.showFirst,
-            duration: const Duration(milliseconds: 220),
-            firstCurve: Curves.easeOutCubic,
-            secondCurve: Curves.easeOutCubic,
-            sizeCurve: Curves.easeOutCubic,
+            duration: CKMotion.durationOf(context, CKMotion.standard),
+            firstCurve: CKMotion.standardCurve,
+            secondCurve: CKMotion.standardCurve,
+            sizeCurve: CKMotion.standardCurve,
           ),
         ],
       ),

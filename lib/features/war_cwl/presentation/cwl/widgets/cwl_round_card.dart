@@ -5,6 +5,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war/war.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:intl/intl.dart';
 
 class RoundClanCard extends StatelessWidget {
@@ -15,236 +16,213 @@ class RoundClanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                WarScreen(war: warInfo, cwlRoundNumber: roundNumber),
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        decoration: BoxDecoration(
-          color:
-              Theme.of(context).cardTheme.color ??
-              Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(AppRadius.chip),
-          border: Border.all(
-            color: Theme.of(
-              context,
-            ).colorScheme.outlineVariant.withValues(alpha: AppOpacity.border),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 4,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: MobileWebImage(
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                            imageUrl: warInfo.clan!.badgeUrls.small,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: CKSectionPanel(
+        padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  WarScreen(war: warInfo, cwlRoundNumber: roundNumber),
+            ),
+          );
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 4,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: MobileWebImage(
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageUrl: warInfo.clan!.badgeUrls.small,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                child: MobileWebImage(
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  imageUrl: ImageAssets.sword,
+                                  width: 12,
+                                  height: 12,
+                                ),
+                              ),
+                              Text(
+                                "${warInfo.clan!.attacks}/${warInfo.teamSize.toString()}",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ],
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  child: MobileWebImage(
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                    imageUrl: ImageAssets.sword,
-                                    width: 12,
-                                    height: 12,
-                                  ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                child: MobileWebImage(
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  imageUrl: ImageAssets.hitrate,
+                                  width: 12,
+                                  height: 12,
                                 ),
-                                Text(
-                                  "${warInfo.clan!.attacks}/${warInfo.teamSize.toString()}",
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.labelMedium,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  child: MobileWebImage(
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                    imageUrl: ImageAssets.hitrate,
-                                    width: 12,
-                                    height: 12,
-                                  ),
-                                ),
-                                Text(
-                                  " ${warInfo.clan!.destructionPercentage.toStringAsFixed(2)}",
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.labelMedium,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Text(
-                      warInfo.clan!.name,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+                              ),
+                              Text(
+                                " ${warInfo.clan!.destructionPercentage.toStringAsFixed(2)}",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Text(
+                    warInfo.clan!.name,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      warInfo.state == "preparation"
-                          ? "Starts at ${DateFormat('HH:mm').format(warInfo.startTime!.toLocal())}"
-                          : warInfo.state == "inWar"
-                          ? "Ends at ${DateFormat('HH:mm').format(warInfo.endTime!.toLocal())}"
-                          : getEndedAgoText(warInfo.endTime, context),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    Builder(
-                      builder: (context) {
-                        final clanWon =
-                            warInfo.clan!.stars > warInfo.opponent!.stars ||
-                            (warInfo.clan!.stars == warInfo.opponent!.stars &&
-                                warInfo.clan!.destructionPercentage >
-                                    warInfo.opponent!.destructionPercentage);
-                        final opponentWon =
-                            warInfo.opponent!.stars > warInfo.clan!.stars ||
-                            (warInfo.opponent!.stars == warInfo.clan!.stars &&
-                                warInfo.opponent!.destructionPercentage >
-                                    warInfo.clan!.destructionPercentage);
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    warInfo.state == "preparation"
+                        ? "Starts at ${DateFormat('HH:mm').format(warInfo.startTime!.toLocal())}"
+                        : warInfo.state == "inWar"
+                        ? "Ends at ${DateFormat('HH:mm').format(warInfo.endTime!.toLocal())}"
+                        : getEndedAgoText(warInfo.endTime, context),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  Builder(
+                    builder: (context) {
+                      final clanWon =
+                          warInfo.clan!.stars > warInfo.opponent!.stars ||
+                          (warInfo.clan!.stars == warInfo.opponent!.stars &&
+                              warInfo.clan!.destructionPercentage >
+                                  warInfo.opponent!.destructionPercentage);
+                      final opponentWon =
+                          warInfo.opponent!.stars > warInfo.clan!.stars ||
+                          (warInfo.opponent!.stars == warInfo.clan!.stars &&
+                              warInfo.opponent!.destructionPercentage >
+                                  warInfo.clan!.destructionPercentage);
 
-                        // Bold, not just tinted green - a colorblind user
-                        // shouldn't need to tell winner from loser by hue.
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${warInfo.clan!.stars}",
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    color: clanWon ? StatColors.win : null,
-                                    fontWeight: clanWon
-                                        ? FontWeight.bold
-                                        : null,
-                                  ),
-                            ),
-                            const Text(" - "),
-                            Text(
-                              "${warInfo.opponent!.stars}",
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    color: opponentWon ? StatColors.win : null,
-                                    fontWeight: opponentWon
-                                        ? FontWeight.bold
-                                        : null,
-                                  ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${warInfo.opponent!.attacks}/${warInfo.teamSize.toString()}",
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.labelMedium,
+                      // Bold, not just tinted green - a colorblind user
+                      // shouldn't need to tell winner from loser by hue.
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${warInfo.clan!.stars}",
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: clanWon ? StatColors.win : null,
+                                  fontWeight: clanWon ? FontWeight.bold : null,
                                 ),
-                                SizedBox(
-                                  child: MobileWebImage(
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                    imageUrl:
-                                        "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
-                                    width: 12,
-                                    height: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "${warInfo.opponent!.destructionPercentage.toStringAsFixed(2)} ",
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.labelMedium,
-                                ),
-                                SizedBox(
-                                  child: MobileWebImage(
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                    imageUrl:
-                                        "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
-                                    width: 12,
-                                    height: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: MobileWebImage(
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                            imageUrl: warInfo.opponent!.badgeUrls.small,
                           ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      warInfo.opponent!.name,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+                          const Text(" - "),
+                          Text(
+                            "${warInfo.opponent!.stars}",
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: opponentWon ? StatColors.win : null,
+                                  fontWeight: opponentWon
+                                      ? FontWeight.bold
+                                      : null,
+                                ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "${warInfo.opponent!.attacks}/${warInfo.teamSize.toString()}",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                              SizedBox(
+                                child: MobileWebImage(
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  imageUrl:
+                                      "https://assets.clashk.ing/icons/Icon_HV_Sword.png",
+                                  width: 12,
+                                  height: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "${warInfo.opponent!.destructionPercentage.toStringAsFixed(2)} ",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                              SizedBox(
+                                child: MobileWebImage(
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  imageUrl:
+                                      "https://assets.clashk.ing/icons/Icon_DC_Hitrate.png",
+                                  width: 12,
+                                  height: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: MobileWebImage(
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageUrl: warInfo.opponent!.badgeUrls.small,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    warInfo.opponent!.name,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 - Replaced loading spinners across the app with skeleton placeholders that match the loaded layouts.
+- War state analysis now separates locked outcomes from still-playable tie or win scenarios.
 - Stats now follows the shared ClashKing side-page design system with tokenized panels, filters, stat pills, and chart accents.
 - Calculator screens now use ClashKing assets throughout targets, accounts, sources, resources, results, and method filters, with shared outlined actions and no redundant target/damage/result summary.
 - Calculator header imagery now follows the active mode instead of displaying the generic ClashKing logo.
