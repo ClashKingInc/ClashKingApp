@@ -92,6 +92,251 @@ class _SkeletonLoaderState extends State<SkeletonLoader>
   }
 }
 
+class SkeletonActionIndicator extends StatelessWidget {
+  final double width;
+  final double height;
+
+  const SkeletonActionIndicator({super.key, this.width = 20, this.height = 8});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: width,
+      child: Center(
+        child: SkeletonLoader(
+          width: width,
+          height: height,
+          borderRadius: BorderRadius.circular(height),
+        ),
+      ),
+    );
+  }
+}
+
+class SkeletonListItem extends StatelessWidget {
+  final bool leading;
+  final bool trailing;
+  final int lines;
+  final EdgeInsetsGeometry padding;
+
+  const SkeletonListItem({
+    super.key,
+    this.leading = true,
+    this.trailing = true,
+    this.lines = 2,
+    this.padding = const EdgeInsets.all(16),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final radius = BorderRadius.circular(CKRadius.card);
+
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.28),
+        borderRadius: radius,
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.36),
+        ),
+      ),
+      child: Row(
+        children: [
+          if (leading) ...[
+            SkeletonLoader(
+              width: 48,
+              height: 48,
+              borderRadius: BorderRadius.circular(CKRadius.control),
+            ),
+            const SizedBox(width: 12),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SkeletonLoader(
+                  width: double.infinity,
+                  height: 16,
+                  borderRadius: BorderRadius.circular(CKSpacing.xs),
+                ),
+                if (lines > 1) ...[
+                  const SizedBox(height: 10),
+                  SkeletonLoader(
+                    width: 160,
+                    height: 12,
+                    borderRadius: BorderRadius.circular(CKSpacing.xs),
+                  ),
+                ],
+                if (lines > 2) ...[
+                  const SizedBox(height: 10),
+                  SkeletonLoader(
+                    width: 96,
+                    height: 12,
+                    borderRadius: BorderRadius.circular(CKSpacing.xs),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (trailing) ...[
+            const SizedBox(width: 12),
+            SkeletonLoader(
+              width: 36,
+              height: 24,
+              borderRadius: BorderRadius.circular(CKRadius.chip),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class SkeletonList extends StatelessWidget {
+  final int itemCount;
+  final EdgeInsetsGeometry padding;
+  final bool leading;
+  final bool trailing;
+  final int lines;
+
+  const SkeletonList({
+    super.key,
+    this.itemCount = 5,
+    this.padding = EdgeInsets.zero,
+    this.leading = true,
+    this.trailing = true,
+    this.lines = 2,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding,
+      child: Column(
+        children: List.generate(
+          itemCount,
+          (index) => Padding(
+            padding: EdgeInsets.only(bottom: index == itemCount - 1 ? 0 : 12),
+            child: SkeletonListItem(
+              leading: leading,
+              trailing: trailing,
+              lines: lines,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SkeletonPage extends StatelessWidget {
+  final int itemCount;
+  final EdgeInsetsGeometry padding;
+  final bool includeHeader;
+
+  const SkeletonPage({
+    super.key,
+    this.itemCount = 5,
+    this.padding = const EdgeInsets.all(16),
+    this.includeHeader = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: padding,
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (includeHeader) ...[
+            SkeletonLoader(
+              width: 180,
+              height: 24,
+              borderRadius: BorderRadius.circular(CKSpacing.sm),
+            ),
+            const SizedBox(height: 10),
+            SkeletonLoader(
+              width: 260,
+              height: 14,
+              borderRadius: BorderRadius.circular(CKSpacing.xs),
+            ),
+            const SizedBox(height: 20),
+          ],
+          SkeletonList(itemCount: itemCount),
+        ],
+      ),
+    );
+  }
+}
+
+class SkeletonLoadingDialog extends StatelessWidget {
+  const SkeletonLoadingDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 320),
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 28),
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(CKRadius.card),
+              border: Border.all(
+                color: colorScheme.outlineVariant.withValues(alpha: 0.36),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.18),
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                SkeletonLoader(
+                  width: 48,
+                  height: 48,
+                  borderRadius: BorderRadius.circular(CKRadius.control),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SkeletonLoader(
+                        width: double.infinity,
+                        height: 16,
+                        borderRadius: BorderRadius.circular(CKSpacing.xs),
+                      ),
+                      const SizedBox(height: 10),
+                      SkeletonLoader(
+                        width: 140,
+                        height: 12,
+                        borderRadius: BorderRadius.circular(CKSpacing.xs),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// A pre-built skeleton for war stats cards
 class WarStatsSkeletonCard extends StatelessWidget {
   const WarStatsSkeletonCard({super.key});

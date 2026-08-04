@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
@@ -180,16 +181,7 @@ class _ErrorPageState extends State<ErrorPage> {
                         elevation: _isRetrying ? 1 : 3,
                       ),
                       icon: _isRetrying
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white,
-                                ),
-                              ),
-                            )
+                          ? const SkeletonActionIndicator(width: 20, height: 6)
                           : const Icon(Icons.refresh, size: 20),
                       label: Text(
                         _isRetrying

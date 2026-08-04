@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/pages/data/announcement_story_cache_service.dart';
 import 'package:clashkingapp/features/pages/models/app_announcement.dart';
 import 'package:clashkingapp/features/pages/presentation/announcement_webview_page.dart';
@@ -209,12 +210,9 @@ class _AnnouncementStoryDialogState extends State<_AnnouncementStoryDialog> {
                     child: AnimatedOpacity(
                       opacity: _ready ? 0 : 1,
                       duration: const Duration(milliseconds: 120),
-                      child: const SizedBox.square(
-                        dimension: 26,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.5,
-                          color: Colors.white70,
-                        ),
+                      child: const SkeletonActionIndicator(
+                        width: 26,
+                        height: 8,
                       ),
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -55,8 +56,7 @@ class CwlTeamCard extends StatelessWidget {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (_) =>
-                      const Center(child: CircularProgressIndicator()),
+                  builder: (_) => const SkeletonLoadingDialog(),
                 );
                 final Clan clanInfo = await ClanService().loadClanData(
                   clan.tag,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_filters_dialog.dart';
 import 'package:clashkingapp/features/pages/widgets/clan_search_result_tiles.dart';
@@ -138,11 +139,7 @@ class ClanSearchCardState extends State<ClanSearchCard> {
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                       isSearching
-                          ? const SizedBox(
-                              width: 20.0,
-                              height: 20.0,
-                              child: CircularProgressIndicator(),
-                            )
+                          ? const SkeletonActionIndicator()
                           : !isEmpty
                           ? IconButton(
                               tooltip: AppLocalizations.of(

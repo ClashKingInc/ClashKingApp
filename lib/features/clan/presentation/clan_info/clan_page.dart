@@ -1,6 +1,7 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
@@ -95,10 +96,13 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
         nestedScrollPhysics: _NoImplicitScrollPhysics(
           parent: ScrollConfiguration.of(context).getScrollPhysics(context),
         ),
-        body: KeyedSubtree(
-          key: ValueKey(visibleTabs[activeIndex]),
-          child: _buildSelectedTab(context, visibleTabs[activeIndex]),
-        ),
+        pages: [
+          for (final tab in visibleTabs)
+            KeyedSubtree(
+              key: ValueKey(tab),
+              child: _buildSelectedTab(context, tab),
+            ),
+        ],
       ),
     );
   }
@@ -277,7 +281,7 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
     final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
     if (_isLoading && widget.clan.joinLeave == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const SkeletonPage(itemCount: 4, includeHeader: false);
     }
 
     return NotificationListener<ScrollNotification>(
@@ -370,7 +374,7 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
           if (_isLoadingMore)
             const Padding(
               padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
+              child: SkeletonList(itemCount: 2),
             ),
         ],
       ),
@@ -1273,7 +1277,7 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const SkeletonList(itemCount: 4)
               : ClanWarLog(
                   clan: widget.clan,
                   selectedTypes: widget.selectedTypes,
@@ -1686,7 +1690,7 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
         if (_isLoadingStats)
           const Padding(
             padding: EdgeInsets.all(32),
-            child: Center(child: CircularProgressIndicator()),
+            child: SkeletonList(itemCount: 4),
           )
         else
           Padding(
@@ -1913,7 +1917,7 @@ class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
         future: _history,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const SkeletonList(itemCount: 4);
           }
           final entries = snapshot.data ?? const [];
           if (entries.isEmpty) {

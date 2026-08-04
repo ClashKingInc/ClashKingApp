@@ -124,6 +124,33 @@ void main() {
     expect(style.fontSize, 13);
   });
 
+  testWidgets('app glass segmented control exposes stable semantic buttons', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    try {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 360,
+              child: AppGlassSegmentedControl<int>(
+                values: const [0, 1],
+                labels: const ['Discord', 'Email'],
+                selected: 0,
+                onChanged: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.bySemanticsLabel('Discord'), findsOneWidget);
+      expect(find.bySemanticsLabel('Email'), findsOneWidget);
+    } finally {
+      semantics.dispose();
+    }
+  });
   testWidgets('segmented control uses thin CK-style translucent capsules', (
     tester,
   ) async {

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,8 +68,11 @@ class CocAccountsAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ? MobileWebImage(
                         imageUrl: user.avatarUrl,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                        placeholder: (context, url) => SkeletonLoader(
+                          width: 40,
+                          height: 40,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       )
                     : null,

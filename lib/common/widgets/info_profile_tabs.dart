@@ -232,7 +232,9 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
     if (!_tabController.indexIsChanging &&
         _tabController.offset.abs() < 0.001 &&
         _tabController.index != selected) {
-      if (!_usesPages) _resetNestedInnerScroll();
+      if (!_usesPages) {
+        _prepareBodySelection();
+      }
       _tabController.index = selected;
     }
   }
@@ -357,7 +359,9 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
 
   void _prepareBodySelection() {
     _resetNestedInnerScroll();
-    if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
+    if (_chromeProgress.value >= 0.98) {
+      _snapOuterToPinThreshold();
+    }
   }
 
   void _preparePageSwipe() {
@@ -374,9 +378,8 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
       if (_usesPages) {
         _resetPageToTop(index);
       } else {
-        _resetNestedInnerScroll();
+        _prepareBodySelection();
       }
-      if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
       widget.onTabSelected(index);
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -384,15 +387,22 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
     });
   }
 
-  void _resetNestedInnerScroll() {
-    final controller = _nestedScrollKey.currentState?.innerController;
-    if (controller != null && controller.hasClients) controller.jumpTo(0);
-  }
-
   void _resetPageToTop(int index) {
     final position = _scrollableStateBelow(_pageScrollKeys[index])?.position;
     if (position != null && position.hasPixels && position.pixels != 0) {
       position.jumpTo(0);
+    }
+  }
+
+  void _resetNestedInnerScroll() {
+    final controller = _nestedScrollKey.currentState?.innerController;
+    if (controller == null || !controller.hasClients) return;
+    for (final position in List<ScrollPosition>.of(controller.positions)) {
+      if (!position.hasPixels) continue;
+      final target = position.minScrollExtent;
+      if ((position.pixels - target).abs() > 0.5) {
+        position.jumpTo(target);
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
@@ -179,16 +180,9 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                               ),
                               child: _isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              Colors.white,
-                                            ),
-                                      ),
+                                  ? const SkeletonActionIndicator(
+                                      width: 24,
+                                      height: 8,
                                     )
                                   : Text(
                                       AppLocalizations.of(

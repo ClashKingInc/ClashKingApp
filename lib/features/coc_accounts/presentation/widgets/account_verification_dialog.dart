@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -238,11 +239,7 @@ class _AccountVerificationDialogState extends State<AccountVerificationDialog> {
         ElevatedButton(
           onPressed: _isVerifying ? null : _verifyAccount,
           child: _isVerifying
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
+              ? const SkeletonActionIndicator(width: 16, height: 5)
               : Text(AppLocalizations.of(context)!.accountVerify),
         ),
       ],

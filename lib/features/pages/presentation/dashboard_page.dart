@@ -332,10 +332,8 @@ class DashboardPage extends StatelessWidget {
   }) {
     if (isLoading && linkedPlayers.isEmpty) {
       return const [
-        Padding(
-          padding: EdgeInsets.only(top: 48),
-          child: Center(child: CircularProgressIndicator()),
-        ),
+        _HomeCardFrame(child: _RankedHomeSkeleton()),
+        _HomeCardFrame(child: _UpgradeHomeSkeleton()),
       ];
     }
     if (linkedPlayers.isEmpty) {

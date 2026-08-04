@@ -610,33 +610,39 @@ class _AppGlassSegmentedControlState<T>
                                 )
                                   Expanded(
                                     child: Semantics(
+                                      container: true,
                                       button: true,
+                                      enabled: true,
                                       selected: selectedIndex == index,
                                       label: widget.labels[index],
+                                      onTap: () => _selectIndex(index),
                                       child: GestureDetector(
                                         behavior: HitTestBehavior.opaque,
                                         onTap: () => _selectIndex(index),
                                         child: Center(
-                                          child: AnimatedDefaultTextStyle(
-                                            duration: const Duration(
-                                              milliseconds: 180,
-                                            ),
-                                            curve: Curves.easeOutCubic,
-                                            style: labelStyle.copyWith(
-                                              color: selectedIndex == index
-                                                  ? labelColor
-                                                  : labelColor.withValues(
-                                                      alpha: 0.67,
-                                                    ),
-                                              fontWeight: selectedIndex == index
-                                                  ? FontWeight.w600
-                                                  : FontWeight.w500,
-                                            ),
-                                            child: Text(
-                                              widget.labels[index],
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.center,
+                                          child: ExcludeSemantics(
+                                            child: AnimatedDefaultTextStyle(
+                                              duration: const Duration(
+                                                milliseconds: 180,
+                                              ),
+                                              curve: Curves.easeOutCubic,
+                                              style: labelStyle.copyWith(
+                                                color: selectedIndex == index
+                                                    ? labelColor
+                                                    : labelColor.withValues(
+                                                        alpha: 0.67,
+                                                      ),
+                                                fontWeight:
+                                                    selectedIndex == index
+                                                    ? FontWeight.w600
+                                                    : FontWeight.w500,
+                                              ),
+                                              child: Text(
+                                                widget.labels[index],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                              ),
                                             ),
                                           ),
                                         ),

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/pages/widgets/player_search_result_tile.dart';
 import 'package:flutter/material.dart';
@@ -133,11 +134,7 @@ class PlayerSearchCardState extends State<PlayerSearchCard> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       isSearching
-                          ? SizedBox(
-                              width: 20.0,
-                              height: 20.0,
-                              child: CircularProgressIndicator(),
-                            )
+                          ? const SkeletonActionIndicator()
                           : !isEmpty
                           ? IconButton(
                               tooltip: AppLocalizations.of(

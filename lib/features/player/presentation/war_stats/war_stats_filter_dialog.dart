@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 import 'package:clashkingapp/features/player/models/filter_preset.dart';
@@ -2025,17 +2026,12 @@ class _WarStatsFilterDialogState extends State<WarStatsFilterDialog> {
           ),
           const SizedBox(height: 8),
           if (_isLoadingPresets)
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
+              child: SkeletonList(
+                itemCount: 1,
+                leading: false,
+                trailing: false,
               ),
             )
           else

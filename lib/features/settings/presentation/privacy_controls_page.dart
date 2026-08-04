@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -97,10 +98,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
           ),
           onPressed: _isDeleting ? null : _confirmDeletion,
           icon: _isDeleting
-              ? const SizedBox.square(
-                  dimension: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
+              ? const SkeletonActionIndicator(width: 18, height: 6)
               : const Icon(Icons.delete_forever_outlined),
           label: const Text('Delete account'),
         ),
@@ -175,10 +173,7 @@ class _PrivacyControlsPageState extends State<PrivacyControlsPage> {
         FilledButton.icon(
           onPressed: _isExporting ? null : _requestExport,
           icon: _isExporting
-              ? const SizedBox.square(
-                  dimension: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
+              ? const SkeletonActionIndicator(width: 18, height: 6)
               : const Icon(Icons.file_download_outlined),
           label: Text(hasPreparedExport ? 'Refresh export' : 'Prepare export'),
         ),

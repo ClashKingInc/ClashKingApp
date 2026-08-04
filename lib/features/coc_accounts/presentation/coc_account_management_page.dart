@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/app_bar/coc_accounts_app_bar.dart';
 import 'package:clashkingapp/common/widgets/error/error_page.dart';
@@ -154,7 +155,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
             context: context,
             useRootNavigator: false,
             barrierDismissible: false,
-            builder: (_) => const Center(child: CircularProgressIndicator()),
+            builder: (_) => const SkeletonLoadingDialog(),
           );
           await _loadAllAccountData();
         }
@@ -248,9 +249,7 @@ class AddCocAccountPageState extends State<AddCocAccountPage> {
                                   context: context,
                                   useRootNavigator: false,
                                   barrierDismissible: false,
-                                  builder: (_) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                                  builder: (_) => const SkeletonLoadingDialog(),
                                 );
 
                                 await _loadAllAccountData();
@@ -647,7 +646,7 @@ class _AddAccountStickyPanel extends StatelessWidget {
                         width: 24,
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(),
+                          child: SkeletonActionIndicator(width: 16, height: 5),
                         ),
                       )
                     : IconButton(
@@ -852,11 +851,7 @@ class _AccountRow extends StatelessWidget {
             IconButton(
               tooltip: AppLocalizations.of(context)!.tooltipRemoveAccount,
               icon: isDeleting
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
+                  ? const SkeletonActionIndicator(width: 20, height: 6)
                   : Icon(Icons.delete_outline, color: colorScheme.primary),
               onPressed: isDeleting ? null : onRemove,
             ),

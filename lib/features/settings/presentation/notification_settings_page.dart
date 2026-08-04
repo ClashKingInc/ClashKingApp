@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/models/notification_preferences.dart';
 import 'package:clashkingapp/core/services/notification_debug_service.dart';
@@ -175,7 +176,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         scrolledUnderElevation: 0,
       ),
       body: _loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const SkeletonPage(itemCount: 4)
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 6, 16, 28),
               children: [
@@ -761,10 +762,7 @@ class _DebugNotificationSection extends StatelessWidget {
           child: FilledButton.icon(
             onPressed: sending ? null : onSend,
             icon: sending
-                ? const SizedBox.square(
-                    dimension: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
+                ? const SkeletonActionIndicator(width: 18, height: 6)
                 : const Icon(LucideIcons.bellRing),
             label: Text(
               AppLocalizations.of(context)!.notifSendTestNotification,

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/custom_icons_icons.dart';
 import 'package:clashkingapp/common/widgets/native_liquid_glass.dart';
@@ -201,9 +202,7 @@ class MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     if (!context.watch<CocAccountService>().hasVerifiedAccounts) {
       _redirectToAccountVerification();
-      return const Scaffold(
-        body: SafeArea(child: Center(child: CircularProgressIndicator())),
-      );
+      return const Scaffold(body: SafeArea(child: SkeletonPage(itemCount: 3)));
     }
     _schedulePageControllerSync();
     if (_usesDesktopWebLayout(context)) {

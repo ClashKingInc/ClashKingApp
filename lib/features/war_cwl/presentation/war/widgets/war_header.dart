@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -182,7 +183,7 @@ class _WarHeaderState extends State<WarHeader> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
+      builder: (_) => const SkeletonLoadingDialog(),
     );
 
     final Clan clanInfo = await ClanService().loadClanData(clan.tag);

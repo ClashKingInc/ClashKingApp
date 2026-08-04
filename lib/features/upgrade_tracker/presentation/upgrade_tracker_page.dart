@@ -12,6 +12,7 @@ import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
@@ -713,7 +714,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     }
     final planData = _planData;
     if (planData == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(body: SkeletonPage(itemCount: 5));
     }
     final tabs = [
       InfoProfileTabData(
@@ -914,7 +915,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   Widget _buildBody() {
     final l10n = AppLocalizations.of(context)!;
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const SkeletonPage(itemCount: 5);
     }
     if (_error != null) {
       return _TrackerEmptyState(
@@ -947,7 +948,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     }
     final planData = _planData;
     if (planData == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const SkeletonPage(itemCount: 5);
     }
     return PageView(
       controller: _pageController,
@@ -5687,10 +5688,7 @@ class _ShareCollectionSheetState extends State<_ShareCollectionSheet> {
             child: FilledButton.icon(
               onPressed: _sharing ? null : _share,
               icon: _sharing
-                  ? const SizedBox.square(
-                      dimension: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
+                  ? const SkeletonActionIndicator(width: 18, height: 6)
                   : const Icon(Icons.ios_share_rounded),
               label: Text(_sharing ? 'Preparing images…' : 'Share collection'),
             ),
@@ -6146,10 +6144,7 @@ class _ShareProgressSheetState extends State<_ShareProgressSheet> {
               child: FilledButton.icon(
                 onPressed: _sharing ? null : _share,
                 icon: _sharing
-                    ? const SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
+                    ? const SkeletonActionIndicator(width: 18, height: 6)
                     : const Icon(Icons.ios_share_rounded),
                 label: Text(_sharing ? 'Preparing images…' : 'Share progress'),
               ),
@@ -10153,7 +10148,7 @@ class _SceneryMusicButtonState extends State<_SceneryMusicButton> {
         width: 36,
         child: Padding(
           padding: EdgeInsets.all(9),
-          child: CircularProgressIndicator(strokeWidth: 2),
+          child: SkeletonActionIndicator(width: 18, height: 6),
         ),
       );
     }
@@ -10170,11 +10165,7 @@ class _SceneryMusicButtonState extends State<_SceneryMusicButton> {
             padding: EdgeInsets.zero,
             onPressed: _loading ? null : _toggle,
             icon: _loading
-                ? const SizedBox(
-                    width: 17,
-                    height: 17,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
+                ? const SkeletonActionIndicator(width: 17, height: 5)
                 : Icon(
                     _playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
                     size: 25,

@@ -4,6 +4,7 @@ import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/indicators/last_refresh_indicator.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/models/notification_preferences.dart';
@@ -455,7 +456,7 @@ class _PlayersPageState extends State<PlayersPage> {
       context: context,
       useRootNavigator: false,
       barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) => const SkeletonLoadingDialog(),
     );
 
     try {
