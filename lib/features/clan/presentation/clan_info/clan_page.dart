@@ -69,17 +69,6 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
     setState(() => selectedTab = bounded);
   }
 
-  void _handleTabSwipe(DragEndDetails details) {
-    final velocity = details.primaryVelocity ?? 0;
-    if (velocity.abs() < 240) return;
-    final tabCount = _visibleTabs(context).length;
-    if (velocity < 0) {
-      _selectTab(selectedTab + 1, tabCount);
-    } else {
-      _selectTab(selectedTab - 1, tabCount);
-    }
-  }
-
   void _resetWarTypeFilters() {
     setState(() {
       isCWLChecked = true;
@@ -94,38 +83,21 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
     final activeIndex = selectedTab.clamp(0, visibleTabs.length - 1);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onHorizontalDragEnd: _handleTabSwipe,
-        child: NestedScrollView(
-          physics: _NoImplicitScrollPhysics(
-            parent: ScrollConfiguration.of(context).getScrollPhysics(context),
-          ),
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverToBoxAdapter(
-              child: ClanInfoHeaderCard(clanInfo: widget.clanInfo),
-            ),
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  InfoProfileTabs(
-                    selectedIndex: activeIndex,
-                    onTabSelected: (index) =>
-                        _selectTab(index, visibleTabs.length),
-                    alwaysScrollable: true,
-                    tabs: visibleTabs
-                        .map((tab) => tab.data(AppLocalizations.of(context)!))
-                        .toList(growable: false),
-                  ),
-                ],
-              ),
-            ),
-          ],
-          body: KeyedSubtree(
-            key: ValueKey(visibleTabs[activeIndex]),
-            child: _buildSelectedTab(context, visibleTabs[activeIndex]),
-          ),
+      body: InfoProfileTabScaffold(
+        header: ClanInfoHeaderCard(clanInfo: widget.clanInfo),
+        tabsTopSpacing: 10,
+        selectedIndex: activeIndex,
+        onTabSelected: (index) => _selectTab(index, visibleTabs.length),
+        alwaysScrollable: true,
+        tabs: visibleTabs
+            .map((tab) => tab.data(AppLocalizations.of(context)!))
+            .toList(growable: false),
+        nestedScrollPhysics: _NoImplicitScrollPhysics(
+          parent: ScrollConfiguration.of(context).getScrollPhysics(context),
+        ),
+        body: KeyedSubtree(
+          key: ValueKey(visibleTabs[activeIndex]),
+          child: _buildSelectedTab(context, visibleTabs[activeIndex]),
         ),
       ),
     );

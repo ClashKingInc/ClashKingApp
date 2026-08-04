@@ -58,66 +58,38 @@ class _RankingsPageState extends State<RankingsPage> {
             .clamp(0, boards.length - 1);
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          body: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onHorizontalDragEnd: (details) =>
-                _handleBoardSwipe(details, boards, selectedIndex),
-            child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverToBoxAdapter(
-                  child: _RankingsHeader(
-                    provider: _provider,
-                    onAudienceChanged: _provider.selectAudience,
+          body: InfoProfileTabScaffold(
+            header: _RankingsHeader(
+              provider: _provider,
+              onAudienceChanged: _provider.selectAudience,
+            ),
+            selectedIndex: selectedIndex,
+            onTabSelected: (index) =>
+                unawaited(_provider.selectBoard(boards[index])),
+            alwaysScrollable: true,
+            tabs: boards
+                .map(
+                  (board) => InfoProfileTabData(
+                    label: board.labelOf(AppLocalizations.of(context)!),
+                    imageUrl: board.iconUrl,
+                    trailing: board == _provider.board && board.supportsHistory
+                        ? _RankingPeriodDropdown(provider: _provider)
+                        : null,
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: InfoProfileTabs(
-                    selectedIndex: selectedIndex,
-                    onTabSelected: (index) =>
-                        _provider.selectBoard(boards[index]),
-                    alwaysScrollable: true,
-                    tabs: boards
-                        .map(
-                          (board) => InfoProfileTabData(
-                            label: board.labelOf(AppLocalizations.of(context)!),
-                            imageUrl: board.iconUrl,
-                            trailing:
-                                board == _provider.board &&
-                                    board.supportsHistory
-                                ? _RankingPeriodDropdown(provider: _provider)
-                                : null,
-                          ),
-                        )
-                        .toList(growable: false),
-                  ),
-                ),
-              ],
-              body: _RankingsBody(
-                provider: _provider,
-                onOpenLocationPicker: _openLocationPicker,
-                onOpenTownHallPicker: _openTownHallPicker,
-                onOpenLeaguePicker: _openLeaguePicker,
-                onOpenHistoryDatePicker: _openHistoryDatePicker,
-                onOpenEntry: _openEntry,
-              ),
+                )
+                .toList(growable: false),
+            body: _RankingsBody(
+              provider: _provider,
+              onOpenLocationPicker: _openLocationPicker,
+              onOpenTownHallPicker: _openTownHallPicker,
+              onOpenLeaguePicker: _openLeaguePicker,
+              onOpenHistoryDatePicker: _openHistoryDatePicker,
+              onOpenEntry: _openEntry,
             ),
           ),
         );
       },
     );
-  }
-
-  void _handleBoardSwipe(
-    DragEndDetails details,
-    List<RankingBoard> boards,
-    int selectedIndex,
-  ) {
-    final velocity = details.primaryVelocity ?? 0;
-    if (velocity.abs() < 240) return;
-    final next = velocity < 0 ? selectedIndex + 1 : selectedIndex - 1;
-    if (next >= 0 && next < boards.length) {
-      unawaited(_provider.selectBoard(boards[next]));
-    }
   }
 
   Future<void> _openLocationPicker() async {

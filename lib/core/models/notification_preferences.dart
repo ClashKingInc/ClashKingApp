@@ -1,11 +1,11 @@
 enum NotificationCategory {
-  leagueBattles,
+  legendAttacks,
+  legendDefenses,
   warAttacks,
   warState,
   warReminders,
   events,
   announcements,
-  upgradeFinishes,
   monthlySupport,
 }
 
@@ -50,16 +50,14 @@ class NotificationPreferences {
   const NotificationPreferences({
     this.deviceId = '',
     this.environment = 'production',
-    this.deviceEnabled = false,
     this.notificationsEnabled = false,
-    this.autoAddVerifiedAccounts = false,
-    this.leagueBattles = false,
+    this.legendAttacks = false,
+    this.legendDefenses = false,
     this.warAttacks = false,
     this.warState = false,
     this.warReminders = false,
     this.events = false,
     this.announcements = false,
-    this.upgradeFinishes = false,
     this.monthlySupport = false,
     this.reminderTimings = const [],
     this.accounts = const [],
@@ -67,16 +65,14 @@ class NotificationPreferences {
 
   final String deviceId;
   final String environment;
-  final bool deviceEnabled;
   final bool notificationsEnabled;
-  final bool autoAddVerifiedAccounts;
-  final bool leagueBattles;
+  final bool legendAttacks;
+  final bool legendDefenses;
   final bool warAttacks;
   final bool warState;
   final bool warReminders;
   final bool events;
   final bool announcements;
-  final bool upgradeFinishes;
   final bool monthlySupport;
   final List<int> reminderTimings;
   final List<NotificationAccount> accounts;
@@ -126,16 +122,14 @@ class NotificationPreferences {
     return NotificationPreferences(
       deviceId: deviceId,
       environment: environment,
-      deviceEnabled: readBool('deviceEnabled'),
       notificationsEnabled: readBool('notificationsEnabled'),
-      autoAddVerifiedAccounts: readBool('autoAddVerifiedAccounts'),
-      leagueBattles: readBool('leagueBattlesEnabled'),
+      legendAttacks: readBool('legendAttacksEnabled'),
+      legendDefenses: readBool('legendDefensesEnabled'),
       warAttacks: readBool('warAttacksEnabled'),
       warState: readBool('warStateEnabled'),
       warReminders: readBool('warRemindersEnabled'),
       events: readBool('eventsEnabled'),
       announcements: readBool('announcementsEnabled'),
-      upgradeFinishes: readBool('upgradeFinishesEnabled'),
       monthlySupport: readBool('monthlySupportEnabled'),
       reminderTimings: minutes,
       accounts: parsedAccounts,
@@ -149,28 +143,22 @@ class NotificationPreferences {
     return {
       'deviceId': deviceId,
       'environment': environment,
-      'deviceEnabled': deviceEnabled,
       'notificationsEnabled': notificationsEnabled,
-      'autoAddVerifiedAccounts': autoAddVerifiedAccounts,
-      'leagueBattlesEnabled': leagueBattles,
+      'legendAttacksEnabled': legendAttacks,
+      'legendDefensesEnabled': legendDefenses,
       'warAttacksEnabled': warAttacks,
       'warStateEnabled': warState,
       'warRemindersEnabled': warReminders,
       'eventsEnabled': events,
       'announcementsEnabled': announcements,
-      'upgradeFinishesEnabled': upgradeFinishes,
       'monthlySupportEnabled': monthlySupport,
       'reminderTimings': reminderTimings,
-      'accountTags': accounts
-          .map((account) => account.playerTag)
-          .toList(growable: false),
     };
   }
 
   Map<String, dynamic> toLocalJson() {
     return {
-      ...toPutJson(deviceId: deviceId, environment: environment)
-        ..remove('accountTags'),
+      ...toPutJson(deviceId: deviceId, environment: environment),
       'accounts': accounts
           .map(
             (account) => {
@@ -184,13 +172,13 @@ class NotificationPreferences {
   }
 
   bool enabled(NotificationCategory category) => switch (category) {
-    NotificationCategory.leagueBattles => leagueBattles,
+    NotificationCategory.legendAttacks => legendAttacks,
+    NotificationCategory.legendDefenses => legendDefenses,
     NotificationCategory.warAttacks => warAttacks,
     NotificationCategory.warState => warState,
     NotificationCategory.warReminders => warReminders,
     NotificationCategory.events => events,
     NotificationCategory.announcements => announcements,
-    NotificationCategory.upgradeFinishes => upgradeFinishes,
     NotificationCategory.monthlySupport => monthlySupport,
   };
 
@@ -198,29 +186,27 @@ class NotificationPreferences {
     NotificationCategory category,
     bool enabled,
   ) => switch (category) {
-    NotificationCategory.leagueBattles => copyWith(leagueBattles: enabled),
+    NotificationCategory.legendAttacks => copyWith(legendAttacks: enabled),
+    NotificationCategory.legendDefenses => copyWith(legendDefenses: enabled),
     NotificationCategory.warAttacks => copyWith(warAttacks: enabled),
     NotificationCategory.warState => copyWith(warState: enabled),
     NotificationCategory.warReminders => copyWith(warReminders: enabled),
     NotificationCategory.events => copyWith(events: enabled),
     NotificationCategory.announcements => copyWith(announcements: enabled),
-    NotificationCategory.upgradeFinishes => copyWith(upgradeFinishes: enabled),
     NotificationCategory.monthlySupport => copyWith(monthlySupport: enabled),
   };
 
   NotificationPreferences copyWith({
     String? deviceId,
     String? environment,
-    bool? deviceEnabled,
     bool? notificationsEnabled,
-    bool? autoAddVerifiedAccounts,
-    bool? leagueBattles,
+    bool? legendAttacks,
+    bool? legendDefenses,
     bool? warAttacks,
     bool? warState,
     bool? warReminders,
     bool? events,
     bool? announcements,
-    bool? upgradeFinishes,
     bool? monthlySupport,
     List<int>? reminderTimings,
     List<NotificationAccount>? accounts,
@@ -228,17 +214,14 @@ class NotificationPreferences {
     return NotificationPreferences(
       deviceId: deviceId ?? this.deviceId,
       environment: environment ?? this.environment,
-      deviceEnabled: deviceEnabled ?? this.deviceEnabled,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
-      autoAddVerifiedAccounts:
-          autoAddVerifiedAccounts ?? this.autoAddVerifiedAccounts,
-      leagueBattles: leagueBattles ?? this.leagueBattles,
+      legendAttacks: legendAttacks ?? this.legendAttacks,
+      legendDefenses: legendDefenses ?? this.legendDefenses,
       warAttacks: warAttacks ?? this.warAttacks,
       warState: warState ?? this.warState,
       warReminders: warReminders ?? this.warReminders,
       events: events ?? this.events,
       announcements: announcements ?? this.announcements,
-      upgradeFinishes: upgradeFinishes ?? this.upgradeFinishes,
       monthlySupport: monthlySupport ?? this.monthlySupport,
       reminderTimings: reminderTimings ?? this.reminderTimings,
       accounts: accounts ?? this.accounts,

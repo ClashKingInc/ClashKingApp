@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_functions.dart';
@@ -12,7 +13,6 @@ import 'package:clashkingapp/features/war_cwl/presentation/war/war_team_tab.dart
     show WarTeamTab;
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
-import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:flutter/foundation.dart';
@@ -42,8 +42,8 @@ class PlayerTab {
   PlayerTab(this.tag, this.name, this.townhallLevel, this.mapPosition);
 }
 
-class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
-  late TabController tabController;
+class _WarScreenState extends State<WarScreen> {
+  int selectedTab = 0;
   int _currentSegment = 1;
   String filterBy = "all";
   final TextEditingController _teamSearchController = TextEditingController();
@@ -52,7 +52,6 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
     _teamSearchController.addListener(() {
       setState(
         () =>
@@ -63,7 +62,6 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    tabController.dispose();
     _teamSearchController.dispose();
     super.dispose();
   }
@@ -285,162 +283,151 @@ class _WarScreenState extends State<WarScreen> with TickerProviderStateMixin {
       _teamSearchQuery,
     );
     final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
+    final maxWidth = isDesktopWeb ? 1320.0 : double.infinity;
+    final loc = AppLocalizations.of(context)!;
+
+    Widget page(Widget child) => SingleChildScrollView(
+      padding: EdgeInsets.only(
+        bottom: 16 + MediaQuery.paddingOf(context).bottom,
+      ),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: child,
+        ),
+      ),
+    );
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Align(
+      body: InfoProfileTabScaffold(
+        header: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: isDesktopWeb ? 1320 : double.infinity,
-            ),
-            child: Column(
-              children: [
-                WarHeader(
-                  warInfo: widget.war,
-                  cwlRoundNumber: widget.cwlRoundNumber,
-                  onOpenCwl: widget.cwlScreenBuilder == null
-                      ? null
-                      : () => Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: widget.cwlScreenBuilder!),
-                        ),
-                ),
-                ScrollableTab(
-                  onTap: (value) {},
-                  tabs: [
-                    Tab(
-                      text: AppLocalizations.of(context)!.navigationStatistics,
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: WarHeader(
+              warInfo: widget.war,
+              cwlRoundNumber: widget.cwlRoundNumber,
+              onOpenCwl: widget.cwlScreenBuilder == null
+                  ? null
+                  : () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: widget.cwlScreenBuilder!),
                     ),
-                    Tab(text: AppLocalizations.of(context)!.warEventsTitle),
-                    Tab(text: AppLocalizations.of(context)!.navigationTeam),
-                  ],
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
-                      child: WarStatisticsTab(warInfo: widget.war),
-                    ),
-                    WarEventsTab(warInfo: widget.war),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
-                      child: Column(
-                        children: [
-                          AppGlassSegmentedControl<int>(
-                            values: const [1, 2],
-                            labels: [
-                              AppLocalizations.of(context)!.warMyTeam,
-                              AppLocalizations.of(context)!.warEnemiesTeam,
-                            ],
-                            selected: _currentSegment,
-                            height: 44,
-                            foregroundColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            onChanged: (v) {
-                              setState(() {
-                                _currentSegment = v;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: WarSearchField(
-                                  controller: _teamSearchController,
-                                  query: _teamSearchQuery,
-                                  hintText: AppLocalizations.of(
-                                    context,
-                                  )!.playerSearchPlaceholder,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              FilterDropdown(
-                                sortBy: filterBy,
-                                updateSortBy: (value) {
-                                  setState(() {
-                                    filterBy = value;
-                                  });
-                                },
-                                maxWidth: 132,
-                                sortByOptions: {
-                                  AppLocalizations.of(context)!.warPositionMap:
-                                      'all',
-                                  AppLocalizations.of(context)!.warAttacksTitle:
-                                      'rattacks',
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.warDefensesTitle: 'rdefenses',
-                                  AppLocalizations.of(context)!.warAttacksBest:
-                                      'bestAttacks',
-                                  AppLocalizations.of(context)!.warDefensesBest:
-                                      'bestDefenses',
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.warStarsBestPerformance: 'bestPerformance',
-                                  AppLocalizations.of(context)!.warAttacksNone:
-                                      'noattacks',
-                                  AppLocalizations.of(context)!.warDefensesNone:
-                                      'nodefenses',
-                                  generateStarsWithIconBefore(
-                                    3,
-                                    16,
-                                    ImageAssets.sword,
-                                  ): '3stars',
-                                  generateStarsWithIconBefore(
-                                    2,
-                                    16,
-                                    ImageAssets.sword,
-                                  ): '2stars',
-                                  generateStarsWithIconBefore(
-                                    1,
-                                    16,
-                                    ImageAssets.sword,
-                                  ): '1star',
-                                  generateStarsWithIconBefore(
-                                    0,
-                                    16,
-                                    ImageAssets.sword,
-                                  ): '0star',
-                                  generateStarsWithIconBefore(
-                                    3,
-                                    16,
-                                    ImageAssets.shieldWithArrow,
-                                  ): 'def_3stars',
-                                  generateStarsWithIconBefore(
-                                    2,
-                                    16,
-                                    ImageAssets.shieldWithArrow,
-                                  ): 'def_2stars',
-                                  generateStarsWithIconBefore(
-                                    1,
-                                    16,
-                                    ImageAssets.shieldWithArrow,
-                                  ): 'def_1star',
-                                  generateStarsWithIconBefore(
-                                    0,
-                                    16,
-                                    ImageAssets.shieldWithArrow,
-                                  ): 'def_0star',
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          WarTeamTab(
-                            members: filteredMembers,
-                            warInfo: widget.war,
-                            attacksPerMember:
-                                widget.war.effectiveAttacksPerMember,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ),
           ),
         ),
+        selectedIndex: selectedTab,
+        onTabSelected: (index) => setState(() => selectedTab = index),
+        tabs: [
+          InfoProfileTabData(
+            label: loc.navigationStatistics,
+            icon: Icons.query_stats_rounded,
+          ),
+          InfoProfileTabData(
+            label: loc.warEventsTitle,
+            icon: Icons.sports_kabaddi_rounded,
+          ),
+          InfoProfileTabData(
+            label: loc.navigationTeam,
+            icon: Icons.groups_rounded,
+          ),
+        ],
+        pages: [
+          page(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
+              child: WarStatisticsTab(warInfo: widget.war),
+            ),
+          ),
+          page(WarEventsTab(warInfo: widget.war)),
+          page(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
+              child: Column(
+                children: [
+                  AppGlassSegmentedControl<int>(
+                    values: const [1, 2],
+                    labels: [loc.warMyTeam, loc.warEnemiesTeam],
+                    selected: _currentSegment,
+                    height: 44,
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    onChanged: (v) {
+                      setState(() {
+                        _currentSegment = v;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: WarSearchField(
+                          controller: _teamSearchController,
+                          query: _teamSearchQuery,
+                          hintText: loc.playerSearchPlaceholder,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      FilterDropdown(
+                        sortBy: filterBy,
+                        updateSortBy: (value) {
+                          setState(() {
+                            filterBy = value;
+                          });
+                        },
+                        maxWidth: 132,
+                        sortByOptions: {
+                          loc.warPositionMap: 'all',
+                          loc.warAttacksTitle: 'rattacks',
+                          loc.warDefensesTitle: 'rdefenses',
+                          loc.warAttacksBest: 'bestAttacks',
+                          loc.warDefensesBest: 'bestDefenses',
+                          loc.warStarsBestPerformance: 'bestPerformance',
+                          loc.warAttacksNone: 'noattacks',
+                          loc.warDefensesNone: 'nodefenses',
+                          generateStarsWithIconBefore(3, 16, ImageAssets.sword):
+                              '3stars',
+                          generateStarsWithIconBefore(2, 16, ImageAssets.sword):
+                              '2stars',
+                          generateStarsWithIconBefore(1, 16, ImageAssets.sword):
+                              '1star',
+                          generateStarsWithIconBefore(0, 16, ImageAssets.sword):
+                              '0star',
+                          generateStarsWithIconBefore(
+                            3,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_3stars',
+                          generateStarsWithIconBefore(
+                            2,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_2stars',
+                          generateStarsWithIconBefore(
+                            1,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_1star',
+                          generateStarsWithIconBefore(
+                            0,
+                            16,
+                            ImageAssets.shieldWithArrow,
+                          ): 'def_0star',
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  WarTeamTab(
+                    members: filteredMembers,
+                    warInfo: widget.war,
+                    attacksPerMember: widget.war.effectiveAttacksPerMember,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

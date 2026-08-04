@@ -13,16 +13,14 @@ void main() {
   const responseBody = {
     'deviceId': 'device-1',
     'environment': 'sandbox',
-    'deviceEnabled': false,
     'notificationsEnabled': true,
-    'autoAddVerifiedAccounts': true,
-    'leagueBattlesEnabled': true,
+    'legendAttacksEnabled': true,
+    'legendDefensesEnabled': false,
     'warAttacksEnabled': false,
     'warStateEnabled': true,
     'warRemindersEnabled': true,
     'eventsEnabled': true,
     'announcementsEnabled': false,
-    'upgradeFinishesEnabled': true,
     'monthlySupportEnabled': false,
     'reminderTimings': [15, 30, 60],
     'accounts': [
@@ -51,8 +49,7 @@ void main() {
       final settings = await service.load();
 
       expect(api.getCallCounts[endpoint], 1);
-      expect(settings.deviceEnabled, isFalse);
-      expect(settings.leagueBattles, isTrue);
+      expect(settings.notificationsEnabled, isTrue);
       expect(settings.reminderTimings, [15, 30, 60]);
       expect(settings.accounts.map((account) => account.source), [
         NotificationAccountSource.verified,
@@ -68,10 +65,10 @@ void main() {
     },
   );
 
-  test('PUT sends only the final fields and account tags', () async {
+  test('PUT sends categories without rewriting account selection', () async {
     final api = FakeApiService();
     api.putStubs[NotificationPreferencesService.endpoint] = http.Response(
-      jsonEncode({...responseBody, 'deviceEnabled': true}),
+      jsonEncode(responseBody),
       200,
     );
     final service = NotificationPreferencesService(
@@ -81,9 +78,9 @@ void main() {
     );
     final settings = NotificationPreferences.fromJson({
       ...responseBody,
-      'deviceEnabled': true,
       'notificationsEnabled': true,
-      'autoAddVerifiedAccounts': true,
+      'legendAttacksEnabled': true,
+      'legendDefensesEnabled': false,
     });
 
     await service.save(settings);
@@ -91,21 +88,58 @@ void main() {
     expect(api.lastPutBodies[NotificationPreferencesService.endpoint], {
       'deviceId': 'device-1',
       'environment': 'sandbox',
-      'deviceEnabled': true,
       'notificationsEnabled': true,
-      'autoAddVerifiedAccounts': true,
-      'leagueBattlesEnabled': true,
+      'legendAttacksEnabled': true,
+      'legendDefensesEnabled': false,
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,
       'eventsEnabled': true,
       'announcementsEnabled': false,
-      'upgradeFinishesEnabled': true,
       'monthlySupportEnabled': false,
       'reminderTimings': [15, 30, 60],
-      'accountTags': ['#VERIFIED', '#BOOKMARK'],
     });
   });
+
+  test('successful PUT remains successful when local caching fails', () async {
+    final api = FakeApiService();
+    api.putStubs[NotificationPreferencesService.endpoint] = http.Response(
+      jsonEncode(responseBody),
+      200,
+    );
+    final service = NotificationPreferencesService(
+      apiService: api,
+      deviceIdProvider: () async => 'device-1',
+      environmentProvider: () => 'sandbox',
+      preferencesProvider: () async => throw StateError('cache unavailable'),
+    );
+
+    final saved = await service.save(
+      NotificationPreferences.fromJson(responseBody),
+    );
+
+    expect(saved.notificationsEnabled, isTrue);
+  });
+
+  test(
+    'successful GET remains authoritative when local caching fails',
+    () async {
+      final api = FakeApiService();
+      const endpoint =
+          '/notifications/preferences?device_id=device-1&environment=sandbox';
+      api.getStubs[endpoint] = http.Response(jsonEncode(responseBody), 200);
+      final service = NotificationPreferencesService(
+        apiService: api,
+        deviceIdProvider: () async => 'device-1',
+        environmentProvider: () => 'sandbox',
+        preferencesProvider: () async => throw StateError('cache unavailable'),
+      );
+
+      final loaded = await service.load();
+
+      expect(loaded.notificationsEnabled, isTrue);
+    },
+  );
 
   test('device opt-in loads V2 preferences before saving', () async {
     final api = FakeApiService();
@@ -113,7 +147,7 @@ void main() {
         '/notifications/preferences?device_id=device-1&environment=sandbox';
     api.getStubs[query] = http.Response(jsonEncode(responseBody), 200);
     api.putStubs[NotificationPreferencesService.endpoint] = http.Response(
-      jsonEncode({...responseBody, 'deviceEnabled': true}),
+      jsonEncode(responseBody),
       200,
     );
     final service = NotificationPreferencesService(
@@ -125,23 +159,20 @@ void main() {
     final saved = await service.setDeviceEnabled(true);
 
     expect(api.getCallCounts[query], 1);
-    expect(saved.deviceEnabled, isTrue);
+    expect(saved.notificationsEnabled, isTrue);
     expect(api.lastPutBodies[NotificationPreferencesService.endpoint], {
       'deviceId': 'device-1',
       'environment': 'sandbox',
-      'deviceEnabled': true,
       'notificationsEnabled': true,
-      'autoAddVerifiedAccounts': true,
-      'leagueBattlesEnabled': true,
+      'legendAttacksEnabled': true,
+      'legendDefensesEnabled': false,
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,
       'eventsEnabled': true,
       'announcementsEnabled': false,
-      'upgradeFinishesEnabled': true,
       'monthlySupportEnabled': false,
       'reminderTimings': [15, 30, 60],
-      'accountTags': ['#VERIFIED', '#BOOKMARK'],
     });
     final preferences = await SharedPreferences.getInstance();
     expect(
@@ -150,7 +181,27 @@ void main() {
     );
   });
 
-  test('local defaults disable device and every category', () async {
+  test('account toggle uses the dedicated per-player endpoint', () async {
+    final api = FakeApiService();
+    const endpoint = '/notifications/accounts/%23BOOKMARK';
+    api.putStubs[endpoint] = http.Response(
+      jsonEncode({
+        'playerTag': '#BOOKMARK',
+        'source': 'bookmarked',
+        'active': true,
+      }),
+      200,
+    );
+    final service = NotificationPreferencesService(apiService: api);
+
+    final account = await service.setAccountEnabled('#BOOKMARK', true);
+
+    expect(account.active, isTrue);
+    expect(account.source, NotificationAccountSource.bookmarked);
+    expect(api.lastPutBodies[endpoint], {'enabled': true});
+  });
+
+  test('local defaults disable notifications and every category', () async {
     final service = NotificationPreferencesService(
       apiService: FakeApiService(),
       deviceIdProvider: () async => 'device-1',
@@ -159,7 +210,7 @@ void main() {
 
     final settings = await service.loadLocal();
 
-    expect(settings.deviceEnabled, isFalse);
+    expect(settings.notificationsEnabled, isFalse);
     for (final category in NotificationCategory.values) {
       expect(settings.enabled(category), isFalse);
     }

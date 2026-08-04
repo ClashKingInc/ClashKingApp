@@ -2,18 +2,15 @@ import 'dart:async';
 
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/models/notification_preferences.dart';
-import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/notification_debug_service.dart';
 import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/core/services/push_notification_service.dart';
-import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:provider/provider.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key, this.preferencesService});
@@ -62,7 +59,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       // current contract and is replaced after the next successful GET/PUT.
     }
 
-    final pushResult = _settings.deviceEnabled
+    final pushResult = _settings.notificationsEnabled
         ? await PushNotificationService.instance.initialize()
         : PushNotificationService.instance.lastResult;
     final tokenPreview = await PushNotificationService.instance.tokenPreview();
@@ -126,14 +123,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     }
 
     await _save(
-      _settings.copyWith(
-        deviceEnabled: enabled,
-        notificationsEnabled: enabled,
-        autoAddVerifiedAccounts: enabled
-            ? true
-            : _settings.autoAddVerifiedAccounts,
-        accounts: enabled ? _settings.accounts : const [],
-      ),
+      _settings.copyWith(notificationsEnabled: enabled),
       rollback: previous,
     );
   }
@@ -169,44 +159,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     await _save(_settings.copyWith(reminderTimings: normalized));
   }
 
-  Future<void> _setAccount(String tag, bool enabled) async {
-    final normalizedTag = _normalizeTag(tag);
-    final accounts = [..._settings.accounts]
-      ..removeWhere(
-        (account) => _normalizeTag(account.playerTag) == normalizedTag,
-      );
-    if (enabled) {
-      accounts.add(
-        NotificationAccount(
-          playerTag: tag.startsWith('#') ? tag : '#$tag',
-          source: _sourceForTag(tag),
-        ),
-      );
-    }
-    await _save(_settings.copyWith(accounts: accounts));
-  }
-
-  Future<void> _useSelectedAccounts(List<_AccountChoice> choices) async {
-    if (choices.isEmpty) return;
-    await _save(_settings.copyWith(autoAddVerifiedAccounts: false));
-  }
-
-  NotificationAccountSource _sourceForTag(String tag) {
-    final normalizedTag = _normalizeTag(tag);
-    final verified = context.read<CocAccountService>().verifiedAccounts.any(
-      (account) =>
-          _normalizeTag(account['player_tag']?.toString() ?? '') ==
-          normalizedTag,
-    );
-    return verified
-        ? NotificationAccountSource.verified
-        : NotificationAccountSource.bookmarked;
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final accountChoices = _accountChoices(context);
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -242,12 +197,20 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     title: AppLocalizations.of(context)!.notifChooseAlerts,
                     children: [
                       _categoryRow(
-                        NotificationCategory.leagueBattles,
-                        LucideIcons.shield,
-                        AppLocalizations.of(context)!.notifGroupLeagueBattles,
+                        NotificationCategory.legendAttacks,
+                        LucideIcons.swords,
+                        AppLocalizations.of(context)!.notifGroupLegendAttacks,
                         AppLocalizations.of(
                           context,
-                        )!.notifLeagueDefenseDescription,
+                        )!.notifLegendAttacksDescription,
+                      ),
+                      _categoryRow(
+                        NotificationCategory.legendDefenses,
+                        LucideIcons.shield,
+                        AppLocalizations.of(context)!.notifGroupLegendDefenses,
+                        AppLocalizations.of(
+                          context,
+                        )!.notifLegendDefensesDescription,
                       ),
                       _categoryRow(
                         NotificationCategory.warAttacks,
@@ -289,14 +252,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         )!.notifAnnouncementsDescription,
                       ),
                       _categoryRow(
-                        NotificationCategory.upgradeFinishes,
-                        LucideIcons.hammer,
-                        AppLocalizations.of(context)!.notifGroupUpgradeFinishes,
-                        AppLocalizations.of(
-                          context,
-                        )!.notifUpgradeFinishesDescription,
-                      ),
-                      _categoryRow(
                         NotificationCategory.monthlySupport,
                         LucideIcons.heartHandshake,
                         AppLocalizations.of(context)!.notifGroupMonthlySupport,
@@ -305,26 +260,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         )!.notifSupportReminderDescription,
                       ),
                     ],
-                  ),
-                ),
-                _SettingsAvailability(
-                  enabled: _settings.notificationsEnabled && !_saving,
-                  child: _AccountSection(
-                    choices: accountChoices,
-                    autoAddVerifiedAccounts: _settings.autoAddVerifiedAccounts,
-                    selectedTags: _settings.accounts
-                        .map((account) => _normalizeTag(account.playerTag))
-                        .toSet(),
-                    inactiveTags: _settings.accounts
-                        .where((account) => !account.active)
-                        .map((account) => _normalizeTag(account.playerTag))
-                        .toSet(),
-                    onUseAllAccounts: () => _save(
-                      _settings.copyWith(autoAddVerifiedAccounts: true),
-                    ),
-                    onUseSelectedAccounts: () =>
-                        _useSelectedAccounts(accountChoices),
-                    onChanged: _setAccount,
                   ),
                 ),
                 if (kDebugMode && NotificationDebugService.isSupportedPlatform)
@@ -351,46 +286,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       enabled: _settings.enabled(category),
       onChanged: (enabled) => _setCategory(category, enabled),
     );
-  }
-
-  List<_AccountChoice> _accountChoices(BuildContext context) {
-    final choices = <String, _AccountChoice>{};
-    for (final account in context.watch<CocAccountService>().verifiedAccounts) {
-      final tag = account['player_tag']?.toString() ?? '';
-      if (tag.isEmpty) continue;
-      choices[_normalizeTag(tag)] = _AccountChoice(
-        tag: tag,
-        name: account['name']?.toString() ?? tag,
-        townHallLevel:
-            int.tryParse(account['townHallLevel']?.toString() ?? '') ?? 1,
-        source: NotificationAccountSource.verified,
-      );
-    }
-    for (final player in context.watch<BookmarkService>().players) {
-      choices.putIfAbsent(
-        _normalizeTag(player.tag),
-        () => _AccountChoice(
-          tag: player.tag,
-          name: player.name,
-          townHallLevel: player.townHallLevel,
-          source: NotificationAccountSource.bookmarked,
-        ),
-      );
-    }
-    for (final selected in _settings.accounts) {
-      choices.putIfAbsent(
-        _normalizeTag(selected.playerTag),
-        () => _AccountChoice(
-          tag: selected.playerTag,
-          name: selected.playerTag,
-          townHallLevel: 1,
-          source: selected.source,
-        ),
-      );
-    }
-    final result = choices.values.toList()
-      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-    return result;
   }
 
   Future<void> _sendTestNotification() async {
@@ -847,259 +742,6 @@ class _ReminderTimingSheetState extends State<_ReminderTimingSheet> {
   }
 }
 
-class _AccountSection extends StatelessWidget {
-  const _AccountSection({
-    required this.choices,
-    required this.autoAddVerifiedAccounts,
-    required this.selectedTags,
-    required this.inactiveTags,
-    required this.onUseAllAccounts,
-    required this.onUseSelectedAccounts,
-    required this.onChanged,
-  });
-
-  final List<_AccountChoice> choices;
-  final bool autoAddVerifiedAccounts;
-  final Set<String> selectedTags;
-  final Set<String> inactiveTags;
-  final VoidCallback onUseAllAccounts;
-  final VoidCallback onUseSelectedAccounts;
-  final void Function(String tag, bool enabled) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final allAccounts = autoAddVerifiedAccounts;
-    final selectedCount = allAccounts ? choices.length : selectedTags.length;
-
-    return _Section(
-      title: l10n.notifAudienceSectionTitle,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
-          child: Text(
-            l10n.notifAudienceAcrossDevicesDescription,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ),
-        _AudienceScopeOption(
-          icon: LucideIcons.usersRound,
-          title: l10n.notifAutoAddVerifiedAccounts,
-          subtitle: l10n.notifAutoAddVerifiedSubtitle(choices.length),
-          selected: allAccounts,
-          onTap: allAccounts ? null : onUseAllAccounts,
-        ),
-        _AudienceScopeOption(
-          icon: LucideIcons.userRoundCheck,
-          title: l10n.notifChooseAccountsManually,
-          subtitle: choices.isEmpty
-              ? l10n.notifAudienceSelectedEmpty
-              : l10n.notifAudienceSelectedSubtitle(selectedCount),
-          selected: !allAccounts,
-          onTap: allAccounts && choices.isNotEmpty
-              ? onUseSelectedAccounts
-              : null,
-        ),
-        if (allAccounts)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
-            child: Text(
-              l10n.notifAutoAddVerifiedNote,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-        if (choices.isEmpty)
-          Padding(
-            padding: const EdgeInsets.all(14),
-            child: Text(l10n.notifNoAccountsLoadedYet),
-          )
-        else
-          for (final choice in choices)
-            Builder(
-              key: ValueKey('notification-account-${choice.tag}'),
-              builder: (context) {
-                final selected = selectedTags.contains(
-                  _normalizeTag(choice.tag),
-                );
-                return _AudienceAccountRow(
-                  choice: choice,
-                  selected: selected,
-                  active: !inactiveTags.contains(_normalizeTag(choice.tag)),
-                  onChanged: (enabled) => onChanged(choice.tag, enabled),
-                );
-              },
-            ),
-      ],
-    );
-  }
-}
-
-class _AudienceScopeOption extends StatelessWidget {
-  const _AudienceScopeOption({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final bool selected;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final accent = selected
-        ? colorScheme.primary
-        : colorScheme.onSurfaceVariant;
-
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 10, 12, 10),
-        child: Row(
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: selected ? 0.12 : 0.08),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: SizedBox.square(
-                dimension: 36,
-                child: Icon(icon, size: 20, color: accent),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 10),
-            SizedBox.square(
-              dimension: 22,
-              child: selected
-                  ? Icon(
-                      LucideIcons.check,
-                      size: 20,
-                      color: colorScheme.primary,
-                    )
-                  : null,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AudienceAccountRow extends StatelessWidget {
-  const _AudienceAccountRow({
-    required this.choice,
-    required this.selected,
-    required this.active,
-    required this.onChanged,
-  });
-
-  final _AccountChoice choice;
-  final bool selected;
-  final bool active;
-  final ValueChanged<bool>? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final baseSourceLabel = choice.source == NotificationAccountSource.verified
-        ? l10n.accountVerified
-        : l10n.notifAccountBookmarked;
-    final sourceLabel = active
-        ? baseSourceLabel
-        : '$baseSourceLabel • ${l10n.generalInactive}';
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
-      child: Row(
-        children: [
-          Image.network(
-            ImageAssets.townHall(choice.townHallLevel),
-            width: 38,
-            height: 38,
-            errorBuilder: (_, _, _) =>
-                const Icon(LucideIcons.userRound, size: 28),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  choice.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  '${choice.tag} • $sourceLabel',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Switch.adaptive(value: selected, onChanged: onChanged),
-        ],
-      ),
-    );
-  }
-}
-
-class _AccountChoice {
-  const _AccountChoice({
-    required this.tag,
-    required this.name,
-    required this.townHallLevel,
-    required this.source,
-  });
-
-  final String tag;
-  final String name;
-  final int townHallLevel;
-  final NotificationAccountSource source;
-}
-
 class _DebugNotificationSection extends StatelessWidget {
   const _DebugNotificationSection({
     required this.sending,
@@ -1133,9 +775,6 @@ class _DebugNotificationSection extends StatelessWidget {
     );
   }
 }
-
-String _normalizeTag(String value) =>
-    value.replaceAll('#', '').trim().toUpperCase();
 
 String _timingLabel(int minutes) {
   if (minutes % 60 == 0) {

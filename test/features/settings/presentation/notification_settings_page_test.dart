@@ -15,51 +15,52 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  testWidgets('shows exactly eight flat categories without legacy selectors', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 1800);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
+  testWidgets(
+    'shows current notification categories without legacy selectors',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 1800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => CocAccountService(apiService: ApiService.shared),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => BookmarkService(apiService: ApiService.shared),
-          ),
-        ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: NotificationSettingsPage(
-            preferencesService: _FakeNotificationPreferencesService(),
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_) => CocAccountService(apiService: ApiService.shared),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => BookmarkService(apiService: ApiService.shared),
+            ),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: NotificationSettingsPage(
+              preferencesService: _FakeNotificationPreferencesService(),
+            ),
           ),
         ),
-      ),
-    );
-    await tester.pump();
-    await tester.pump(const Duration(seconds: 1));
+      );
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
-    for (final category in NotificationCategory.values) {
-      final key = category == NotificationCategory.warReminders
-          ? 'notification-warReminders'
-          : 'notification-${category.name}';
-      expect(find.byKey(ValueKey(key)), findsOneWidget);
-    }
-    expect(find.text('Defenses against your base'), findsNothing);
-    expect(find.text('All attacks'), findsNothing);
-    expect(find.text('Clan Games'), findsNothing);
-    expect(find.text('War starts'), findsNothing);
-    expect(find.text('War ends'), findsNothing);
-    expect(find.text('Town Hall'), findsNothing);
-    expect(find.text('Clan'), findsNothing);
-    expect(find.text('All accounts'), findsNothing);
-  });
+      for (final category in NotificationCategory.values) {
+        final key = category == NotificationCategory.warReminders
+            ? 'notification-warReminders'
+            : 'notification-${category.name}';
+        expect(find.byKey(ValueKey(key)), findsOneWidget);
+      }
+      expect(find.text('Defenses against your base'), findsNothing);
+      expect(find.text('All attacks'), findsNothing);
+      expect(find.text('Clan Games'), findsNothing);
+      expect(find.text('War starts'), findsNothing);
+      expect(find.text('War ends'), findsNothing);
+      expect(find.text('Town Hall'), findsNothing);
+      expect(find.text('Clan'), findsNothing);
+      expect(find.text('All accounts'), findsNothing);
+    },
+  );
 }
 
 class _FakeNotificationPreferencesService

@@ -6,8 +6,12 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
+import 'package:clashkingapp/core/models/notification_preferences.dart';
+import 'package:clashkingapp/core/models/subscription_status.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
+import 'package:clashkingapp/core/services/subscription_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
@@ -37,6 +41,110 @@ class PlayersPage extends StatefulWidget {
 class _PlayersPageState extends State<PlayersPage> {
   _PlayerRosterMode _mode = _PlayerRosterMode.linked;
   final Set<String> _requestedBookmarkPlayerTags = {};
+  final NotificationPreferencesService _notificationService =
+      NotificationPreferencesService();
+  final SubscriptionService _subscriptionService = SubscriptionService();
+  final Set<String> _updatingNotificationTags = {};
+  NotificationPreferences? _notificationPreferences;
+  SubscriptionStatus _subscriptionStatus = const SubscriptionStatus();
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_loadNotificationState());
+  }
+
+  Future<void> _loadNotificationState() async {
+    NotificationPreferences? preferences;
+    SubscriptionStatus subscription = const SubscriptionStatus();
+    try {
+      preferences = await _notificationService.load();
+    } catch (_) {
+      // Controls stay unavailable until authenticated preferences can load.
+    }
+    try {
+      subscription = await _subscriptionService.load();
+    } catch (_) {
+      // Never expose paid controls without a confirmed entitlement.
+    }
+    if (!mounted) return;
+    setState(() {
+      _notificationPreferences = preferences;
+      _subscriptionStatus = subscription;
+    });
+  }
+
+  NotificationAccount? _notificationAccount(String tag) {
+    final normalized = _normalizeTag(tag);
+    for (final account in _notificationPreferences?.accounts ?? const []) {
+      if (_normalizeTag(account.playerTag) == normalized) return account;
+    }
+    return null;
+  }
+
+  Future<void> _setAccountNotifications(String tag, bool enabled) async {
+    final normalized = _normalizeTag(tag);
+    if (_updatingNotificationTags.contains(normalized)) return;
+    setState(() => _updatingNotificationTags.add(normalized));
+    try {
+      final updated = await _notificationService.setAccountEnabled(
+        tag,
+        enabled,
+      );
+      if (!mounted || _notificationPreferences == null) return;
+      final accounts = [..._notificationPreferences!.accounts]
+        ..removeWhere(
+          (account) => _normalizeTag(account.playerTag) == normalized,
+        );
+      if (updated.active) accounts.add(updated);
+      setState(
+        () => _notificationPreferences = _notificationPreferences!.copyWith(
+          accounts: accounts,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Couldn’t update account notifications.')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _updatingNotificationTags.remove(normalized));
+      }
+    }
+  }
+
+  String _linkedNotificationSubtitle(
+    BuildContext context, {
+    required bool verified,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    if (!verified) return l10n.playerOptionNotificationsVerifyFirst;
+    if (_notificationPreferences?.notificationsEnabled != true) {
+      return l10n.playerOptionNotificationsEnableMaster;
+    }
+    return l10n.playerOptionNotificationsSubtitle;
+  }
+
+  String _bookmarkNotificationSubtitle(
+    BuildContext context, {
+    required bool enabled,
+    required int activeCount,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    if (_notificationPreferences?.notificationsEnabled != true) {
+      return l10n.playerOptionNotificationsEnableMaster;
+    }
+    if (!_subscriptionStatus.active ||
+        _subscriptionStatus.bookmarkNotificationsLimit <= 0) {
+      return l10n.playerOptionNotificationsSubscriptionRequired;
+    }
+    if (!enabled &&
+        activeCount >= _subscriptionStatus.bookmarkNotificationsLimit) {
+      return l10n.playerOptionNotificationsLimitReached;
+    }
+    return l10n.playerOptionNotificationsSubtitle;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +202,7 @@ class _PlayersPageState extends State<PlayersPage> {
         final player = linkedPlayers[index];
         final link = cocService.getAccountLink(player.tag);
         final isVerified = link?.isVerified ?? false;
+        final notificationAccount = _notificationAccount(player.tag);
         return _PlayerDataCard(
           player: player,
           showActivity: true,
@@ -108,6 +217,19 @@ class _PlayersPageState extends State<PlayersPage> {
           onVerifyAccount: isVerified
               ? null
               : () => _showVerificationDialog(context, player),
+          notificationEnabled: notificationAccount?.active == true,
+          notificationAvailable:
+              _notificationPreferences?.notificationsEnabled == true &&
+              isVerified,
+          notificationUpdating: _updatingNotificationTags.contains(
+            _normalizeTag(player.tag),
+          ),
+          notificationSubtitle: _linkedNotificationSubtitle(
+            context,
+            verified: isVerified,
+          ),
+          onNotificationChanged: (enabled) =>
+              _setAccountNotifications(player.tag, enabled),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -118,6 +240,24 @@ class _PlayersPageState extends State<PlayersPage> {
       }
 
       final bookmark = bookmarkedPlayers[index];
+      final notificationAccount = _notificationAccount(bookmark.tag);
+      final activeBookmarkCount =
+          _notificationPreferences?.accounts
+              .where(
+                (account) =>
+                    account.source == NotificationAccountSource.bookmarked &&
+                    account.active,
+              )
+              .length ??
+          0;
+      final bookmarkEnabled = notificationAccount?.active == true;
+      final bookmarkNotificationsAvailable =
+          _notificationPreferences?.notificationsEnabled == true &&
+          _subscriptionStatus.active &&
+          _subscriptionStatus.bookmarkNotificationsLimit > 0 &&
+          (bookmarkEnabled ||
+              activeBookmarkCount <
+                  _subscriptionStatus.bookmarkNotificationsLimit);
       final hydratedPlayer = profilesByTag[_normalizeTag(bookmark.tag)];
       if (hydratedPlayer != null) {
         return _PlayerDataCard(
@@ -125,6 +265,19 @@ class _PlayersPageState extends State<PlayersPage> {
           showActivity: false,
           statusIcon: Icons.bookmark_rounded,
           statusColor: Theme.of(context).colorScheme.onSurfaceVariant,
+          bookmarked: true,
+          notificationEnabled: bookmarkEnabled,
+          notificationAvailable: bookmarkNotificationsAvailable,
+          notificationUpdating: _updatingNotificationTags.contains(
+            _normalizeTag(bookmark.tag),
+          ),
+          notificationSubtitle: _bookmarkNotificationSubtitle(
+            context,
+            enabled: bookmarkEnabled,
+            activeCount: activeBookmarkCount,
+          ),
+          onNotificationChanged: (enabled) =>
+              _setAccountNotifications(bookmark.tag, enabled),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -137,6 +290,18 @@ class _PlayersPageState extends State<PlayersPage> {
 
       return _BookmarkedPlayerCard(
         player: bookmark,
+        notificationEnabled: bookmarkEnabled,
+        notificationAvailable: bookmarkNotificationsAvailable,
+        notificationUpdating: _updatingNotificationTags.contains(
+          _normalizeTag(bookmark.tag),
+        ),
+        notificationSubtitle: _bookmarkNotificationSubtitle(
+          context,
+          enabled: bookmarkEnabled,
+          activeCount: activeBookmarkCount,
+        ),
+        onNotificationChanged: (enabled) =>
+            _setAccountNotifications(bookmark.tag, enabled),
         onTap: () =>
             _openBookmarkedPlayer(context, playerService, bookmark.tag),
       );
@@ -338,6 +503,12 @@ class _PlayerDataCard extends StatefulWidget {
     this.hidden,
     required this.statusIcon,
     required this.statusColor,
+    this.bookmarked = false,
+    required this.notificationEnabled,
+    required this.notificationAvailable,
+    required this.notificationUpdating,
+    required this.notificationSubtitle,
+    required this.onNotificationChanged,
     this.onVerifyAccount,
     required this.onTap,
   });
@@ -348,6 +519,12 @@ class _PlayerDataCard extends StatefulWidget {
   final bool? hidden;
   final IconData statusIcon;
   final Color statusColor;
+  final bool bookmarked;
+  final bool notificationEnabled;
+  final bool notificationAvailable;
+  final bool notificationUpdating;
+  final String notificationSubtitle;
+  final ValueChanged<bool> onNotificationChanged;
   final VoidCallback? onVerifyAccount;
   final VoidCallback onTap;
 
@@ -396,11 +573,17 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
       onTap: widget.onTap,
       footer: _PlayerCardOptionsFooter(
         tag: player.tag,
+        bookmarked: widget.bookmarked,
         isVerified: widget.isVerified,
         hidden: widget.hidden,
         updatingVisibility: _updatingVisibility,
         onToggleVisibility: _toggleVisibility,
         onVerifyAccount: widget.onVerifyAccount,
+        notificationEnabled: widget.notificationEnabled,
+        notificationAvailable: widget.notificationAvailable,
+        notificationUpdating: widget.notificationUpdating,
+        notificationSubtitle: widget.notificationSubtitle,
+        onNotificationChanged: widget.onNotificationChanged,
         expanded: _optionsExpanded,
         onToggleExpanded: () =>
             setState(() => _optionsExpanded = !_optionsExpanded),
@@ -425,14 +608,35 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
   }
 }
 
-class _BookmarkedPlayerCard extends StatelessWidget {
-  const _BookmarkedPlayerCard({required this.player, required this.onTap});
+class _BookmarkedPlayerCard extends StatefulWidget {
+  const _BookmarkedPlayerCard({
+    required this.player,
+    required this.notificationEnabled,
+    required this.notificationAvailable,
+    required this.notificationUpdating,
+    required this.notificationSubtitle,
+    required this.onNotificationChanged,
+    required this.onTap,
+  });
 
   final BookmarkedPlayer player;
+  final bool notificationEnabled;
+  final bool notificationAvailable;
+  final bool notificationUpdating;
+  final String notificationSubtitle;
+  final ValueChanged<bool> onNotificationChanged;
   final VoidCallback onTap;
 
   @override
+  State<_BookmarkedPlayerCard> createState() => _BookmarkedPlayerCardState();
+}
+
+class _BookmarkedPlayerCardState extends State<_BookmarkedPlayerCard> {
+  bool _optionsExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
+    final player = widget.player;
     return _PlayerCardShell(
       imageUrl: player.townHallPic.isNotEmpty
           ? player.townHallPic
@@ -442,7 +646,21 @@ class _BookmarkedPlayerCard extends StatelessWidget {
       tag: player.tag,
       statusIcon: Icons.bookmark_rounded,
       statusColor: Theme.of(context).colorScheme.onSurfaceVariant,
-      onTap: onTap,
+      onTap: widget.onTap,
+      footer: _PlayerCardOptionsFooter(
+        tag: player.tag,
+        bookmarked: true,
+        notificationEnabled: widget.notificationEnabled,
+        notificationAvailable: widget.notificationAvailable,
+        notificationUpdating: widget.notificationUpdating,
+        notificationSubtitle: widget.notificationSubtitle,
+        onNotificationChanged: widget.onNotificationChanged,
+        updatingVisibility: false,
+        onToggleVisibility: () {},
+        expanded: _optionsExpanded,
+        onToggleExpanded: () =>
+            setState(() => _optionsExpanded = !_optionsExpanded),
+      ),
       chips: [
         _InfoChipData(
           imageUrl: ImageAssets.clanCastle,
@@ -626,21 +844,33 @@ String _normalizeTag(String tag) => tag.trim().toUpperCase();
 class _PlayerCardOptionsFooter extends StatelessWidget {
   const _PlayerCardOptionsFooter({
     required this.tag,
-    required this.isVerified,
-    required this.hidden,
+    this.bookmarked = false,
+    this.isVerified,
+    this.hidden,
     required this.updatingVisibility,
     required this.onToggleVisibility,
-    required this.onVerifyAccount,
+    this.onVerifyAccount,
+    required this.notificationEnabled,
+    required this.notificationAvailable,
+    required this.notificationUpdating,
+    required this.notificationSubtitle,
+    required this.onNotificationChanged,
     required this.expanded,
     required this.onToggleExpanded,
   });
 
   final String tag;
+  final bool bookmarked;
   final bool? isVerified;
   final bool? hidden;
   final bool updatingVisibility;
   final VoidCallback onToggleVisibility;
   final VoidCallback? onVerifyAccount;
+  final bool notificationEnabled;
+  final bool notificationAvailable;
+  final bool notificationUpdating;
+  final String notificationSubtitle;
+  final ValueChanged<bool> onNotificationChanged;
   final bool expanded;
   final VoidCallback onToggleExpanded;
 
@@ -701,6 +931,17 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                     child: Column(
                       children: [
+                        _PlayerOptionSwitch(
+                          icon: Icons.notifications_outlined,
+                          title: AppLocalizations.of(
+                            context,
+                          )!.playerOptionNotificationsTitle,
+                          subtitle: notificationSubtitle,
+                          value: notificationEnabled,
+                          enabled:
+                              notificationAvailable && !notificationUpdating,
+                          onChanged: onNotificationChanged,
+                        ),
                         if (isVerified == false && onVerifyAccount != null)
                           _PlayerOptionAction(
                             icon: Icons.warning_amber_rounded,
@@ -713,69 +954,73 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                             color: StatColors.capitalProjected,
                             onTap: onVerifyAccount!,
                           ),
-                        _PlayerOptionSwitch(
-                          icon: Icons.fact_check_outlined,
-                          title: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowTodoPageTitle,
-                          subtitle: isVerified == true
-                              ? AppLocalizations.of(
-                                  context,
-                                )!.playerOptionShowTodoPageSubtitle
-                              : AppLocalizations.of(
-                                  context,
-                                )!.playerOptionShowTodoPageVerifyFirst,
-                          value: options.showInTodoPage,
-                          enabled: isVerified == true,
-                          onChanged: (value) =>
-                              prefs.setShowInTodoPage(tag, value),
-                        ),
-                        _PlayerOptionSwitch(
-                          icon: Icons.construction_rounded,
-                          title: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowUpgradeTrackerHomeTitle,
-                          subtitle: isVerified == true
-                              ? AppLocalizations.of(
-                                  context,
-                                )!.playerOptionShowUpgradeTrackerHomeSubtitle
-                              : AppLocalizations.of(
-                                  context,
-                                )!.playerOptionShowUpgradeTrackerHomeVerifyFirst,
-                          value: options.showUpgradeTrackerOnHome,
-                          enabled: isVerified == true,
-                          onChanged: (value) =>
-                              prefs.setShowUpgradeTrackerOnHome(tag, value),
-                        ),
-                        _PlayerOptionSwitch(
-                          icon: Icons.emoji_events_outlined,
-                          title: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowRankedHomeTitle,
-                          subtitle: isVerified == true
-                              ? AppLocalizations.of(
-                                  context,
-                                )!.playerOptionShowRankedHomeSubtitle
-                              : AppLocalizations.of(
-                                  context,
-                                )!.playerOptionShowRankedHomeVerifyFirst,
-                          value: options.showRankedOnHome,
-                          enabled: isVerified == true,
-                          onChanged: (value) =>
-                              prefs.setShowRankedOnHome(tag, value),
-                        ),
-                        _PlayerOptionSwitch(
-                          icon: Icons.shield_moon_outlined,
-                          title: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowWarTabTitle,
-                          subtitle: AppLocalizations.of(
-                            context,
-                          )!.playerOptionShowWarTabSubtitle,
-                          value: options.showInWarTab,
-                          onChanged: (value) =>
-                              prefs.setShowInWarTab(tag, value),
-                        ),
+                        if (!bookmarked)
+                          _PlayerOptionSwitch(
+                            icon: Icons.fact_check_outlined,
+                            title: AppLocalizations.of(
+                              context,
+                            )!.playerOptionShowTodoPageTitle,
+                            subtitle: isVerified == true
+                                ? AppLocalizations.of(
+                                    context,
+                                  )!.playerOptionShowTodoPageSubtitle
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.playerOptionShowTodoPageVerifyFirst,
+                            value: options.showInTodoPage,
+                            enabled: isVerified == true,
+                            onChanged: (value) =>
+                                prefs.setShowInTodoPage(tag, value),
+                          ),
+                        if (!bookmarked)
+                          _PlayerOptionSwitch(
+                            icon: Icons.construction_rounded,
+                            title: AppLocalizations.of(
+                              context,
+                            )!.playerOptionShowUpgradeTrackerHomeTitle,
+                            subtitle: isVerified == true
+                                ? AppLocalizations.of(
+                                    context,
+                                  )!.playerOptionShowUpgradeTrackerHomeSubtitle
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.playerOptionShowUpgradeTrackerHomeVerifyFirst,
+                            value: options.showUpgradeTrackerOnHome,
+                            enabled: isVerified == true,
+                            onChanged: (value) =>
+                                prefs.setShowUpgradeTrackerOnHome(tag, value),
+                          ),
+                        if (!bookmarked)
+                          _PlayerOptionSwitch(
+                            icon: Icons.emoji_events_outlined,
+                            title: AppLocalizations.of(
+                              context,
+                            )!.playerOptionShowRankedHomeTitle,
+                            subtitle: isVerified == true
+                                ? AppLocalizations.of(
+                                    context,
+                                  )!.playerOptionShowRankedHomeSubtitle
+                                : AppLocalizations.of(
+                                    context,
+                                  )!.playerOptionShowRankedHomeVerifyFirst,
+                            value: options.showRankedOnHome,
+                            enabled: isVerified == true,
+                            onChanged: (value) =>
+                                prefs.setShowRankedOnHome(tag, value),
+                          ),
+                        if (!bookmarked)
+                          _PlayerOptionSwitch(
+                            icon: Icons.shield_moon_outlined,
+                            title: AppLocalizations.of(
+                              context,
+                            )!.playerOptionShowWarTabTitle,
+                            subtitle: AppLocalizations.of(
+                              context,
+                            )!.playerOptionShowWarTabSubtitle,
+                            value: options.showInWarTab,
+                            onChanged: (value) =>
+                                prefs.setShowInWarTab(tag, value),
+                          ),
                         if (isVerified != null && hidden != null)
                           AccountVisibilityOption(
                             hidden: hidden!,

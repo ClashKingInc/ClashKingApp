@@ -2711,6 +2711,10 @@
   "noLinkedPlayersLoadedBody": "Add or refresh linked accounts to see upgrade totals.",
   "playerOptionNotificationsTitle": "Notifications",
   "playerOptionNotificationsSubtitle": "Get alerts for this account.",
+  "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
+  "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
+  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
+  "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
   "playerOptionShowTodoPageTitle": "Show on to-do page",
   "playerOptionShowTodoPageSubtitle": "Include this account in the full to-do list.",
   "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
@@ -2761,6 +2765,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · no open tasks",
   "todoMockCaughtUpStatus": "Active today · no action needed",
   "notifChooseAlerts": "Choose alerts",
+  "notifGroupLegendAttacks": "Legend I attacks",
+  "notifLegendAttacksDescription": "Attack results for notification-enabled bookmarked accounts in Legend I.",
+  "notifGroupLegendDefenses": "Legend I defenses",
+  "notifLegendDefensesDescription": "Defense results for notification-enabled accounts in Legend I.",
   "notifLeagueDefenseDescription": "Defense results with attacker, stars, percentage, and league context.",
   "notifWarAttackOptionsDescription": "War attack results, defense alerts, and 5v5 attack feed options.",
   "notifWarAlertsDescription": "War matched, battle day started, and war ended.",
@@ -3859,16 +3867,8 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifAutoAddVerifiedAccounts": "Automatically add verified accounts",
   "notifChooseAccountsManually": "Choose accounts manually",
   "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
-  "notifAutoAddVerifiedSubtitle": "{count} eligible account(s). Newly verified accounts are added automatically.",
-  "@notifAutoAddVerifiedSubtitle": {
-    "placeholders": {
-      "count": { "type": "int" }
-    }
-  },
-  "notifAutoAddVerifiedNote": "Verified accounts are added when you enable this setting and whenever you verify another account.",
   "notifAccountBookmarked": "Bookmarked",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."

@@ -8,8 +8,8 @@ import 'package:clashkingapp/features/player/presentation/legend/widgets/player_
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_chart.dart';
 import 'package:clashkingapp/features/player/presentation/legend/widgets/player_legend_season_list.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:flutter/material.dart';
-import 'package:clashkingapp/common/widgets/navigation/scrollable_tab.dart';
 import 'package:intl/intl.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/functions/legend_functions.dart';
@@ -22,9 +22,8 @@ class PlayerLegendScreen extends StatefulWidget {
   State<PlayerLegendScreen> createState() => _PlayerLegendScreenState();
 }
 
-class _PlayerLegendScreenState extends State<PlayerLegendScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
+class _PlayerLegendScreenState extends State<PlayerLegendScreen> {
+  int selectedTab = 0;
   DateTime selectedDate = DateTime.now().toUtc().subtract(
     const Duration(hours: 5),
   );
@@ -37,14 +36,7 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
     selectedMonth = findCurrentSeasonMonth(selectedMonth);
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
   }
 
   void incrementDate() =>
@@ -83,160 +75,160 @@ class _PlayerLegendScreenState extends State<PlayerLegendScreen>
       );
     }
 
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       body: RefreshIndicator(
         backgroundColor: Theme.of(context).colorScheme.surface,
         onRefresh: () => Future.value(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              LegendHeaderCard(player: widget.player),
-              ScrollableTab(
-                onTap: (_) => setState(() {}),
-                tabs: [
-                  Tab(
-                    text: AppLocalizations.of(context)?.statsByDay ?? "By Day",
-                  ),
-                  Tab(
-                    text:
-                        AppLocalizations.of(context)?.statsBySeason ??
-                        "By Season",
-                  ),
-                  Tab(
-                    text:
-                        AppLocalizations.of(context)?.generalHistory ??
-                        "History",
-                  ),
-                ],
+        child: InfoProfileTabScaffold(
+          header: LegendHeaderCard(player: widget.player),
+          selectedIndex: selectedTab,
+          onTabSelected: (index) => setState(() => selectedTab = index),
+          tabs: [
+            InfoProfileTabData(
+              label: loc.statsByDay,
+              icon: Icons.today_rounded,
+            ),
+            InfoProfileTabData(
+              label: loc.statsBySeason,
+              icon: Icons.calendar_month_rounded,
+            ),
+            InfoProfileTabData(
+              label: loc.generalHistory,
+              icon: Icons.history_rounded,
+            ),
+          ],
+          pages: [
+            SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: 16 + MediaQuery.paddingOf(context).bottom,
+              ),
+              child: LegendByDayTab(player: widget.player),
+            ),
+            SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: 16 + MediaQuery.paddingOf(context).bottom,
+              ),
+              child: Column(
                 children: [
-                  LegendByDayTab(player: widget.player),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(width: 16),
-                              IconButton(
-                                tooltip: showBySeasonTable
-                                    ? AppLocalizations.of(
-                                        context,
-                                      )!.tooltipShowChart
-                                    : AppLocalizations.of(
-                                        context,
-                                      )!.tooltipShowTable,
-                                icon: Icon(
-                                  showBySeasonTable
-                                      ? Icons.bar_chart
-                                      : Icons.table_chart,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                  size: 24,
-                                ),
-                                onPressed: toggleBySeasonView,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: IconButton(
-                                  tooltip: MaterialLocalizations.of(
-                                    context,
-                                  ).previousMonthTooltip,
-                                  icon: Icon(
-                                    Icons.arrow_back,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                    size: 16,
-                                  ),
-                                  onPressed: decrementMonth,
-                                ),
-                              ),
-                              Text(
-                                DateFormat(
-                                  'MMMM yyyy',
-                                  Localizations.localeOf(context).languageCode,
-                                ).format(selectedMonth),
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: IconButton(
-                                  tooltip: MaterialLocalizations.of(
-                                    context,
-                                  ).nextMonthTooltip,
-                                  icon: Icon(
-                                    Icons.arrow_forward,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                    size: 16,
-                                  ),
-                                  onPressed: incrementMonth,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                            ],
-                          ),
-                        ],
-                      ),
-                      LegendSeason(
-                        player: widget.player,
-                        season: legends.getSpecificSeason(selectedMonth),
-                      ),
-                      showBySeasonTable
-                          ? PlayerLegendSeasonList(
-                              player: widget.player,
-                              season: legends.getSpecificSeason(selectedMonth),
-                            )
-                          : LegendSeasonChart(
-                              season: legends.getSpecificSeason(selectedMonth),
-                            ),
-                    ],
-                  ),
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
                           const SizedBox(width: 16),
                           IconButton(
-                            tooltip: showHistoryTable
+                            tooltip: showBySeasonTable
                                 ? AppLocalizations.of(context)!.tooltipShowChart
                                 : AppLocalizations.of(
                                     context,
                                   )!.tooltipShowTable,
                             icon: Icon(
-                              showHistoryTable
+                              showBySeasonTable
                                   ? Icons.bar_chart
                                   : Icons.table_chart,
                               color: Theme.of(context).colorScheme.onSurface,
                               size: 24,
                             ),
-                            onPressed: toggleHistoryView,
+                            onPressed: toggleBySeasonView,
                           ),
                         ],
                       ),
-                      PlayerLegendHistory(player: widget.player),
-                      showHistoryTable
-                          ? PlayerLegendHistoryEosList(
-                              rankings: widget.player.legendRanking,
-                            )
-                          : PlayerLegendHistoryEosChart(
-                              rankings: widget.player.legendRanking,
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              tooltip: MaterialLocalizations.of(
+                                context,
+                              ).previousMonthTooltip,
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                size: 16,
+                              ),
+                              onPressed: decrementMonth,
                             ),
+                          ),
+                          Text(
+                            DateFormat(
+                              'MMMM yyyy',
+                              Localizations.localeOf(context).languageCode,
+                            ).format(selectedMonth),
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              tooltip: MaterialLocalizations.of(
+                                context,
+                              ).nextMonthTooltip,
+                              icon: Icon(
+                                Icons.arrow_forward,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                size: 16,
+                              ),
+                              onPressed: incrementMonth,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                        ],
+                      ),
                     ],
                   ),
+                  LegendSeason(
+                    player: widget.player,
+                    season: legends.getSpecificSeason(selectedMonth),
+                  ),
+                  showBySeasonTable
+                      ? PlayerLegendSeasonList(
+                          player: widget.player,
+                          season: legends.getSpecificSeason(selectedMonth),
+                        )
+                      : LegendSeasonChart(
+                          season: legends.getSpecificSeason(selectedMonth),
+                        ),
                 ],
               ),
-            ],
-          ),
+            ),
+            SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: 16 + MediaQuery.paddingOf(context).bottom,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      IconButton(
+                        tooltip: showHistoryTable
+                            ? AppLocalizations.of(context)!.tooltipShowChart
+                            : AppLocalizations.of(context)!.tooltipShowTable,
+                        icon: Icon(
+                          showHistoryTable
+                              ? Icons.bar_chart
+                              : Icons.table_chart,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          size: 24,
+                        ),
+                        onPressed: toggleHistoryView,
+                      ),
+                    ],
+                  ),
+                  PlayerLegendHistory(player: widget.player),
+                  showHistoryTable
+                      ? PlayerLegendHistoryEosList(
+                          rankings: widget.player.legendRanking,
+                        )
+                      : PlayerLegendHistoryEosChart(
+                          rankings: widget.player.legendRanking,
+                        ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -138,6 +138,324 @@ class PinnedInfoProfileTabs extends StatelessWidget {
   }
 }
 
+/// Shared hero-header + subtab layout for detail and feature pages.
+///
+/// When [pages] is supplied, every page remains attached to the same
+/// [NestedScrollView] coordinator and horizontal movement is driven by the
+/// same [TabController] as the indicator. Inactive page positions are reset
+/// on pointer-down, so the destination is already at its content top while it
+/// follows the finger instead of being corrected after the swipe settles.
+///
+/// Data-driven screens can supply a single [body] instead. Their horizontal
+/// gesture changes the tab and resets the coordinated inner scroll in the
+/// same frame, which avoids carrying the previous section's offset into the
+/// replacement content.
+class InfoProfileTabScaffold extends StatefulWidget {
+  const InfoProfileTabScaffold({
+    super.key,
+    required this.header,
+    required this.tabs,
+    required this.selectedIndex,
+    required this.onTabSelected,
+    this.pages,
+    this.body,
+    this.alwaysScrollable = false,
+    this.tabsTopSpacing = 0,
+    this.nestedScrollPhysics,
+  }) : assert(
+         (pages == null) != (body == null),
+         'Provide either pages or body, but not both.',
+       ),
+       assert(pages == null || pages.length == tabs.length);
+
+  final Widget header;
+  final List<InfoProfileTabData> tabs;
+  final int selectedIndex;
+  final ValueChanged<int> onTabSelected;
+  final List<Widget>? pages;
+  final Widget? body;
+  final bool alwaysScrollable;
+  final double tabsTopSpacing;
+  final ScrollPhysics? nestedScrollPhysics;
+
+  @override
+  State<InfoProfileTabScaffold> createState() => _InfoProfileTabScaffoldState();
+}
+
+class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
+    with TickerProviderStateMixin {
+  static const double _chromeRamp = 12;
+
+  final _outerController = ScrollController();
+  final _nestedScrollKey = GlobalKey<NestedScrollViewState>();
+  final _tabsKey = GlobalKey();
+  final _bodyScrollKey = GlobalKey();
+  final _chromeProgress = ValueNotifier<double>(0);
+  late TabController _tabController;
+  late List<GlobalKey> _pageScrollKeys;
+
+  int get _selectedIndex =>
+      widget.selectedIndex.clamp(0, widget.tabs.length - 1);
+
+  bool get _usesPages => widget.pages != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = _createController();
+    _pageScrollKeys = _createPageKeys();
+    _outerController.addListener(_updateChrome);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateChrome());
+  }
+
+  TabController _createController() => TabController(
+    length: widget.tabs.length,
+    vsync: this,
+    initialIndex: widget.selectedIndex.clamp(0, widget.tabs.length - 1),
+  )..addListener(_handleControllerChange);
+
+  List<GlobalKey> _createPageKeys() =>
+      List.generate(widget.tabs.length, (_) => GlobalKey());
+
+  @override
+  void didUpdateWidget(covariant InfoProfileTabScaffold oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tabs.length != widget.tabs.length) {
+      _tabController.removeListener(_handleControllerChange);
+      _tabController.dispose();
+      _tabController = _createController();
+      _pageScrollKeys = _createPageKeys();
+      return;
+    }
+
+    final selected = _selectedIndex;
+    if (!_tabController.indexIsChanging &&
+        _tabController.offset.abs() < 0.001 &&
+        _tabController.index != selected) {
+      if (!_usesPages) _resetNestedInnerScroll();
+      _tabController.index = selected;
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleControllerChange);
+    _tabController.dispose();
+    _outerController.removeListener(_updateChrome);
+    _outerController.dispose();
+    _chromeProgress.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        NestedScrollView(
+          key: _nestedScrollKey,
+          controller: _outerController,
+          physics: widget.nestedScrollPhysics,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverToBoxAdapter(child: widget.header),
+            SliverToBoxAdapter(
+              child: ValueListenableBuilder<double>(
+                valueListenable: _chromeProgress,
+                child: Column(
+                  children: [
+                    if (widget.tabsTopSpacing > 0)
+                      SizedBox(height: widget.tabsTopSpacing),
+                    KeyedSubtree(
+                      key: _tabsKey,
+                      child: InfoProfileTabs(
+                        selectedIndex: _selectedIndex,
+                        onTabSelected: _selectTab,
+                        alwaysScrollable: widget.alwaysScrollable,
+                        tabs: widget.tabs,
+                        controller: _tabController,
+                      ),
+                    ),
+                  ],
+                ),
+                builder: (context, progress, child) => Opacity(
+                  opacity: PinnedInfoProfileTabs.inFlowTabsOpacityFor(progress),
+                  child: child,
+                ),
+              ),
+            ),
+          ],
+          body: _usesPages ? _buildPager() : _buildSelectedBody(),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: ValueListenableBuilder<double>(
+            valueListenable: _chromeProgress,
+            builder: (context, progress, _) => PinnedInfoProfileTabs(
+              tabs: widget.tabs,
+              selectedIndex: _selectedIndex,
+              onTabSelected: _selectTab,
+              alwaysScrollable: widget.alwaysScrollable,
+              progress: progress,
+              controller: _tabController,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPager() {
+    final pages = widget.pages!;
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) => _preparePageSwipe(),
+      child: TabBarView(
+        controller: _tabController,
+        children: [
+          for (var index = 0; index < pages.length; index++)
+            KeyedSubtree(key: _pageScrollKeys[index], child: pages[index]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSelectedBody() {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onHorizontalDragEnd: _handleBodySwipe,
+      child: KeyedSubtree(key: _bodyScrollKey, child: widget.body!),
+    );
+  }
+
+  void _selectTab(int index) {
+    final target = index.clamp(0, widget.tabs.length - 1);
+    if (target == _tabController.index) return;
+    if (_usesPages) {
+      _tabController.animateTo(
+        target,
+        duration: MediaQuery.disableAnimationsOf(context)
+            ? Duration.zero
+            : const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+      );
+      return;
+    }
+
+    _prepareBodySelection();
+    _tabController.index = target;
+  }
+
+  void _handleBodySwipe(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    if (velocity.abs() < 240) return;
+    final target = velocity < 0 ? _selectedIndex + 1 : _selectedIndex - 1;
+    if (target < 0 || target >= widget.tabs.length) return;
+    _prepareBodySelection();
+    _tabController.index = target;
+  }
+
+  void _prepareBodySelection() {
+    _resetNestedInnerScroll();
+    if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
+  }
+
+  void _preparePageSwipe() {
+    _updateChrome();
+    for (var index = 0; index < _pageScrollKeys.length; index++) {
+      if (index == _selectedIndex) continue;
+      _resetPageToTop(index);
+    }
+  }
+
+  void _handleControllerChange() {
+    final index = _tabController.index;
+    if (index != _selectedIndex) {
+      if (_usesPages) {
+        _resetPageToTop(index);
+      } else {
+        _resetNestedInnerScroll();
+      }
+      if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
+      widget.onTabSelected(index);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _updateChrome();
+    });
+  }
+
+  void _resetNestedInnerScroll() {
+    final controller = _nestedScrollKey.currentState?.innerController;
+    if (controller != null && controller.hasClients) controller.jumpTo(0);
+  }
+
+  void _resetPageToTop(int index) {
+    final position = _scrollableStateBelow(_pageScrollKeys[index])?.position;
+    if (position != null && position.hasPixels && position.pixels != 0) {
+      position.jumpTo(0);
+    }
+  }
+
+  ScrollableState? _scrollableStateBelow(GlobalKey key) {
+    final context = key.currentContext;
+    if (context is! Element) return null;
+    ScrollableState? result;
+    void findScrollable(Element element) {
+      if (result != null) return;
+      if (element is StatefulElement && element.state is ScrollableState) {
+        final scrollable = element.state as ScrollableState;
+        if (axisDirectionToAxis(scrollable.position.axisDirection) ==
+            Axis.vertical) {
+          result = scrollable;
+          return;
+        }
+      }
+      element.visitChildElements(findScrollable);
+    }
+
+    context.visitChildElements(findScrollable);
+    return result;
+  }
+
+  void _updateChrome() {
+    if (!mounted || !_outerController.hasClients) return;
+    final tabsContext = _tabsKey.currentContext;
+    if (tabsContext == null) return;
+    final renderObject = tabsContext.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) return;
+
+    final safeTop = MediaQuery.paddingOf(context).top;
+    final tabsTop = renderObject.localToGlobal(Offset.zero).dy;
+    final progress = ((safeTop + _chromeRamp - tabsTop) / _chromeRamp).clamp(
+      0.0,
+      1.0,
+    );
+    if ((_chromeProgress.value - progress).abs() >= 0.005) {
+      _chromeProgress.value = progress;
+    }
+  }
+
+  void _snapOuterToPinThreshold() {
+    final outerController = _nestedScrollKey.currentState?.outerController;
+    final tabsRenderObject = _tabsKey.currentContext?.findRenderObject();
+    if (outerController == null ||
+        !outerController.hasClients ||
+        tabsRenderObject is! RenderBox ||
+        !tabsRenderObject.hasSize) {
+      return;
+    }
+
+    final safeTop = MediaQuery.paddingOf(context).top;
+    final tabsTop = tabsRenderObject.localToGlobal(Offset.zero).dy;
+    if (tabsTop > safeTop) return;
+    final targetOffset = (outerController.offset + tabsTop - safeTop).clamp(
+      outerController.position.minScrollExtent,
+      outerController.position.maxScrollExtent,
+    );
+    outerController.jumpTo(targetOffset);
+  }
+}
+
 class _InfoProfileTabsState extends State<InfoProfileTabs>
     with TickerProviderStateMixin {
   TabController? _internalController;

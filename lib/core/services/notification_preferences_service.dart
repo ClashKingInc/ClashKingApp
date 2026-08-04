@@ -5,6 +5,7 @@ import 'package:clashkingapp/core/models/notification_preferences.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationPreferencesService {
@@ -61,7 +62,7 @@ class NotificationPreferencesService {
       );
     }
     final settings = _decode(response);
-    await _persist(settings);
+    await _persistBestEffort(settings);
     return settings;
   }
 
@@ -81,13 +82,38 @@ class NotificationPreferencesService {
       );
     }
     final saved = _decode(response);
-    await _persist(saved);
+    await _persistBestEffort(saved);
     return saved;
   }
 
   Future<NotificationPreferences> setDeviceEnabled(bool enabled) async {
     final current = await load();
-    return save(current.copyWith(deviceEnabled: enabled));
+    return save(current.copyWith(notificationsEnabled: enabled));
+  }
+
+  Future<NotificationAccount> setAccountEnabled(
+    String playerTag,
+    bool enabled,
+  ) async {
+    final endpoint =
+        '/notifications/accounts/${Uri.encodeComponent(playerTag)}';
+    final response = await _apiService.putResponse(
+      endpoint,
+      body: {'enabled': enabled},
+      requiresAuth: true,
+      url: PushNotificationService.urlFor(endpoint),
+    );
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw HttpException(
+        'Failed to update account notifications (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+    final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+    if (decoded is! Map) {
+      throw const FormatException('Invalid notification account response');
+    }
+    return NotificationAccount.fromJson(Map<String, dynamic>.from(decoded));
   }
 
   Future<NotificationPreferences> loadLocal() async {
@@ -123,6 +149,16 @@ class NotificationPreferencesService {
     );
     for (final key in _legacyKeys) {
       await preferences.remove(key);
+    }
+  }
+
+  Future<void> _persistBestEffort(NotificationPreferences settings) async {
+    try {
+      await _persist(settings);
+    } catch (error) {
+      // The API is authoritative. A local cache failure must not roll back a
+      // preference change that the server has already committed.
+      debugPrint('Notification preference cache update failed: $error');
     }
   }
 }

@@ -65,6 +65,105 @@ void main() {
     expect(find.text('Second nested page'), findsOneWidget);
   });
 
+  testWidgets('incoming page has no transient top gap during a swipe', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: _NestedTabsHarness()));
+
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.byType(TabBarView)),
+    );
+    await tester.pump();
+    await gesture.moveBy(const Offset(-40, 0));
+    await tester.pump(const Duration(milliseconds: 16));
+    await gesture.moveBy(const Offset(-260, 0));
+    await tester.pump(const Duration(milliseconds: 16));
+
+    final incomingPage = find.text('Second nested page', skipOffstage: false);
+    expect(
+      tester.getTopLeft(incomingPage).dy,
+      closeTo(tester.getTopLeft(find.byType(TabBarView)).dy, 1),
+    );
+
+    await gesture.up();
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('deep scroll does not bleed into the incoming swipe page', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: _NestedTabsHarness()));
+    final state = tester.state<_NestedTabsHarnessState>(
+      find.byType(_NestedTabsHarness),
+    );
+
+    await tester.drag(
+      find.byKey(const ValueKey('nested-page-0')),
+      const Offset(0, -700),
+    );
+    await tester.pumpAndSettle();
+
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.byType(TabBarView)),
+    );
+    await gesture.moveBy(const Offset(-40, 0));
+    await tester.pump(const Duration(milliseconds: 16));
+    await gesture.moveBy(const Offset(-560, 0));
+    await tester.pump(const Duration(milliseconds: 16));
+
+    final incomingPage = find.text('Second nested page', skipOffstage: false);
+    expect(
+      tester.getTopLeft(incomingPage).dy,
+      closeTo(tester.getTopLeft(find.byType(TabBarView)).dy, 1),
+    );
+
+    await gesture.up();
+    for (var frame = 0; frame < 20; frame++) {
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(
+        tester.getTopLeft(incomingPage).dy,
+        closeTo(tester.getTopLeft(find.byType(TabBarView)).dy, 1),
+        reason: 'incoming content shifted on settle frame $frame',
+      );
+    }
+    await tester.pumpAndSettle();
+
+    expect(state.selectedIndex, 1);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('replacement subtabs switch at their content top immediately', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: _SelectedBodyHarness()));
+
+    await tester.drag(
+      find.byKey(const ValueKey('selected-body-0')),
+      const Offset(0, -700),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.fling(
+      find.byKey(const ValueKey('selected-body-0')),
+      const Offset(-500, 0),
+      1200,
+    );
+    await tester.pump();
+
+    expect(find.text('Body 1 top'), findsOneWidget);
+    final initialTop = tester.getTopLeft(find.text('Body 1 top')).dy;
+    for (var frame = 0; frame < 20; frame++) {
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(
+        tester.getTopLeft(find.text('Body 1 top')).dy,
+        closeTo(initialTop, 1),
+        reason: 'replacement body shifted after selection frame $frame',
+      );
+    }
+  });
+
   testWidgets(
     'pinned profile tabs stay hidden before reaching the scroll edge',
     (tester) async {
@@ -202,74 +301,66 @@ class _NestedTabsHarness extends StatefulWidget {
   State<_NestedTabsHarness> createState() => _NestedTabsHarnessState();
 }
 
-class _NestedTabsHarnessState extends State<_NestedTabsHarness>
-    with SingleTickerProviderStateMixin {
-  late final TabController controller;
-  final inactiveControllers = List.generate(2, (_) => ScrollController());
+class _NestedTabsHarnessState extends State<_NestedTabsHarness> {
   var selectedIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TabController(length: 2, vsync: this)
-      ..addListener(_handleTabChange);
-  }
-
-  void _handleTabChange() {
-    if (controller.index != selectedIndex) {
-      setState(() => selectedIndex = controller.index);
-    }
-  }
-
-  @override
-  void dispose() {
-    controller.removeListener(_handleTabChange);
-    controller.dispose();
-    for (final scrollController in inactiveControllers) {
-      scrollController.dispose();
-    }
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => const [
-          SliverToBoxAdapter(child: SizedBox(height: 300)),
+      body: InfoProfileTabScaffold(
+        header: const SizedBox(height: 300),
+        tabsTopSpacing: 10,
+        selectedIndex: selectedIndex,
+        onTabSelected: (index) => setState(() => selectedIndex = index),
+        tabs: const [
+          InfoProfileTabData(label: 'First', icon: Icons.home_rounded),
+          InfoProfileTabData(label: 'Second', icon: Icons.history_rounded),
         ],
-        body: TabBarView(
-          controller: controller,
-          children: [
-            _page(0, 'First nested page'),
-            _page(1, 'Second nested page'),
-          ],
-        ),
+        pages: [_page(0, 'First nested page'), _page(1, 'Second nested page')],
       ),
     );
   }
 
   Widget _page(int index, String label) {
-    return Builder(
-      builder: (pageContext) {
-        final nestedController = PrimaryScrollController.maybeOf(pageContext);
-        return PrimaryScrollController(
-          controller: index == selectedIndex && nestedController != null
-              ? nestedController
-              : inactiveControllers[index],
-          child: CustomScrollView(
-            key: ValueKey(
-              'nested-page-$index-${index == selectedIndex ? 'nested' : 'standalone'}',
-            ),
-            primary: true,
-            slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(height: 1000, child: Text(label)),
-              ),
-            ],
-          ),
-        );
-      },
+    return CustomScrollView(
+      key: ValueKey('nested-page-$index'),
+      primary: true,
+      slivers: [
+        SliverToBoxAdapter(child: SizedBox(height: 1000, child: Text(label))),
+      ],
+    );
+  }
+}
+
+class _SelectedBodyHarness extends StatefulWidget {
+  const _SelectedBodyHarness();
+
+  @override
+  State<_SelectedBodyHarness> createState() => _SelectedBodyHarnessState();
+}
+
+class _SelectedBodyHarnessState extends State<_SelectedBodyHarness> {
+  var selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: InfoProfileTabScaffold(
+        header: const SizedBox(height: 300),
+        selectedIndex: selectedIndex,
+        onTabSelected: (index) => setState(() => selectedIndex = index),
+        tabs: const [
+          InfoProfileTabData(label: 'First', icon: Icons.home_rounded),
+          InfoProfileTabData(label: 'Second', icon: Icons.history_rounded),
+        ],
+        body: ListView(
+          key: ValueKey('selected-body-$selectedIndex'),
+          primary: true,
+          children: [
+            SizedBox(height: 1000, child: Text('Body $selectedIndex top')),
+          ],
+        ),
+      ),
     );
   }
 }

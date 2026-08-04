@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
@@ -35,16 +36,6 @@ class _ClanCapitalScreenState extends State<ClanCapitalScreen> {
     setState(() => selectedTab = bounded);
   }
 
-  void _handleTabSwipe(DragEndDetails details) {
-    final velocity = details.primaryVelocity ?? 0;
-    if (velocity.abs() < 240) return;
-    if (velocity < 0) {
-      _selectTab(selectedTab + 1);
-    } else {
-      _selectTab(selectedTab - 1);
-    }
-  }
-
   void _setWeek(int value, int maxIndex) {
     setState(() => week = value.clamp(0, maxIndex));
   }
@@ -57,11 +48,9 @@ class _ClanCapitalScreenState extends State<ClanCapitalScreen> {
     final boundedWeek = week.clamp(0, maxWeekIndex);
     final selectedRaid = hasData ? raidItems[boundedWeek] : null;
 
-    return Scaffold(
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onHorizontalDragEnd: hasData ? _handleTabSwipe : null,
-        child: SingleChildScrollView(
+    if (!hasData) {
+      return Scaffold(
+        body: SingleChildScrollView(
           padding: EdgeInsets.only(
             bottom: 16 + MediaQuery.of(context).padding.bottom,
           ),
@@ -69,206 +58,86 @@ class _ClanCapitalScreenState extends State<ClanCapitalScreen> {
             children: [
               ClanCapitalHeaderCard(clanInfo: widget.clanInfo),
               const SizedBox(height: 10),
-              if (!hasData)
-                const _CapitalEmptyState()
-              else ...[
-                _CapitalProfileTabs(
-                  selectedIndex: selectedTab,
-                  onTabSelected: _selectTab,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                  child: _WeekNavigator(
-                    raid: selectedRaid!,
-                    onOlder: boundedWeek < maxWeekIndex
-                        ? () => _setWeek(boundedWeek + 1, maxWeekIndex)
-                        : null,
-                    onNewer: boundedWeek > 0
-                        ? () => _setWeek(boundedWeek - 1, maxWeekIndex)
-                        : null,
-                  ),
-                ),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 180),
-                  switchInCurve: Curves.easeOutCubic,
-                  switchOutCurve: Curves.easeOutCubic,
-                  child: KeyedSubtree(
-                    key: ValueKey(selectedTab),
-                    child: switch (selectedTab) {
-                      0 => CapitalRaidsTab(
-                        raid: selectedRaid,
-                        clanCapitalPoints: widget.clanInfo.clanCapitalPoints,
-                      ),
-                      1 => CapitalMembersTab(
-                        clanInfo: widget.clanInfo,
-                        raid: selectedRaid,
-                        allRaids: raidItems,
-                      ),
-                      2 => Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: CapitalRaidBreakdown(raid: selectedRaid),
-                      ),
-                      _ => Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: CapitalHistorySummary(
-                          allRaids: raidItems,
-                          clanCapitalPoints: widget.clanInfo.clanCapitalPoints,
-                          clanMembers: widget.clanInfo.memberList,
-                        ),
-                      ),
-                    },
-                  ),
-                ),
-              ],
+              const _CapitalEmptyState(),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Same clean tab strip recipe as War/Player: surface background, underline
-/// indicator, icon+label tabs, external TabController driven by the parent's
-/// selectedTab so content can crossfade via AnimatedSwitcher.
-class _CapitalProfileTabs extends StatefulWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onTabSelected;
-
-  const _CapitalProfileTabs({
-    required this.selectedIndex,
-    required this.onTabSelected,
-  });
-
-  @override
-  State<_CapitalProfileTabs> createState() => _CapitalProfileTabsState();
-}
-
-class _CapitalProfileTabsState extends State<_CapitalProfileTabs>
-    with SingleTickerProviderStateMixin {
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-      length: 4,
-      vsync: this,
-      initialIndex: widget.selectedIndex,
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant _CapitalProfileTabs oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedIndex != widget.selectedIndex &&
-        _tabController.index != widget.selectedIndex) {
-      _tabController.animateTo(
-        widget.selectedIndex,
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
       );
     }
-  }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final loc = AppLocalizations.of(context)!;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(color: colorScheme.surface),
-      child: SizedBox(
-        height: 50,
-        child: TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          tabAlignment: TabAlignment.start,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 12),
-          labelColor: colorScheme.onSurface,
-          unselectedLabelColor: colorScheme.onSurface,
-          indicatorColor: colorScheme.primary,
-          indicatorWeight: 2.5,
-          indicatorSize: TabBarIndicatorSize.tab,
-          dividerColor: colorScheme.outlineVariant.withValues(alpha: 0.35),
-          splashFactory: NoSplash.splashFactory,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-          onTap: widget.onTabSelected,
-          tabs: [
-            _CapitalTab(
-              label: loc.generalSummary,
-              icon: Icons.dashboard_rounded,
-              selected: widget.selectedIndex == 0,
-            ),
-            _CapitalTab(
-              label: loc.clanMembers,
-              icon: Icons.groups_rounded,
-              selected: widget.selectedIndex == 1,
-            ),
-            _CapitalTab(
-              label: loc.generalBreakdown,
-              imageUrl: ImageAssets.raidAttacks,
-              selected: widget.selectedIndex == 2,
-            ),
-            _CapitalTab(
-              label: loc.generalHistory,
-              icon: Icons.bar_chart_rounded,
-              selected: widget.selectedIndex == 3,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CapitalTab extends StatelessWidget {
-  final String label;
-  final String? imageUrl;
-  final IconData? icon;
-  final bool selected;
-
-  const _CapitalTab({
-    required this.label,
-    this.imageUrl,
-    this.icon,
-    required this.selected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final foreground = selected
-        ? colorScheme.onSurface
-        : colorScheme.onSurface.withValues(alpha: 0.58);
-
-    return Tab(
-      height: 48,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          imageUrl != null
-              ? MobileWebImage(imageUrl: imageUrl!, width: 18, height: 18)
-              : Icon(icon, size: 18, color: foreground),
-          const SizedBox(width: 5),
-          Text(
-            label,
-            maxLines: 1,
-            softWrap: false,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: foreground,
-              fontSize: 13,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-            ),
+    return Scaffold(
+      body: InfoProfileTabScaffold(
+        header: ClanCapitalHeaderCard(clanInfo: widget.clanInfo),
+        selectedIndex: selectedTab,
+        onTabSelected: _selectTab,
+        alwaysScrollable: true,
+        tabsTopSpacing: 10,
+        tabs: [
+          InfoProfileTabData(
+            label: loc.generalSummary,
+            icon: Icons.dashboard_rounded,
+          ),
+          InfoProfileTabData(
+            label: loc.clanMembers,
+            icon: Icons.groups_rounded,
+          ),
+          InfoProfileTabData(
+            label: loc.generalBreakdown,
+            imageUrl: ImageAssets.raidAttacks,
+          ),
+          InfoProfileTabData(
+            label: loc.generalHistory,
+            icon: Icons.bar_chart_rounded,
           ),
         ],
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: 16 + MediaQuery.of(context).padding.bottom,
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                child: _WeekNavigator(
+                  raid: selectedRaid!,
+                  onOlder: boundedWeek < maxWeekIndex
+                      ? () => _setWeek(boundedWeek + 1, maxWeekIndex)
+                      : null,
+                  onNewer: boundedWeek > 0
+                      ? () => _setWeek(boundedWeek - 1, maxWeekIndex)
+                      : null,
+                ),
+              ),
+              KeyedSubtree(
+                key: ValueKey(selectedTab),
+                child: switch (selectedTab) {
+                  0 => CapitalRaidsTab(
+                    raid: selectedRaid,
+                    clanCapitalPoints: widget.clanInfo.clanCapitalPoints,
+                  ),
+                  1 => CapitalMembersTab(
+                    clanInfo: widget.clanInfo,
+                    raid: selectedRaid,
+                    allRaids: raidItems,
+                  ),
+                  2 => Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: CapitalRaidBreakdown(raid: selectedRaid),
+                  ),
+                  _ => Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: CapitalHistorySummary(
+                      allRaids: raidItems,
+                      clanCapitalPoints: widget.clanInfo.clanCapitalPoints,
+                      clanMembers: widget.clanInfo.memberList,
+                    ),
+                  ),
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

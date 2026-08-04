@@ -711,85 +711,79 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
             : _buildBody(),
       );
     }
+    final planData = _planData;
+    if (planData == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    final tabs = [
+      InfoProfileTabData(
+        label: l10n.upgradeTrackerHomeVillage,
+        imageUrl: ImageAssets.townHall(snapshot.townHallLevel),
+      ),
+      InfoProfileTabData(
+        label: l10n.upgradeTrackerBuilderBase,
+        imageUrl: ImageAssets.builderHall(snapshot.builderHallLevel),
+      ),
+      InfoProfileTabData(label: 'Calendar', imageUrl: ImageAssets.iconClock),
+      InfoProfileTabData(
+        label: l10n.upgradeTrackerPlan,
+        imageUrl: ImageAssets.hammerOfBuilding,
+      ),
+      InfoProfileTabData(
+        label: l10n.upgradeTrackerCollection,
+        imageUrl: ImageAssets.clanGamesMedals,
+      ),
+    ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverToBoxAdapter(
-            child: _TrackerInfoHeader(
-              snapshot: snapshot,
-              selectedTab: _section,
-              selectedAccount: selectedAccount,
-              clock: _clock,
-              lanes: _planLanes,
-              onBack: () => Navigator.of(context).pop(),
-              onSwitchAccount: () => _showAccountPicker(uniqueAccounts),
-              onShare: () => _showShareHub(snapshot),
-              onImport: _importSnapshot,
-              onInfo: _section > 1
-                  ? null
-                  : () {
-                      final village = _section == 1
-                          ? UpgradeVillage.builderBase
-                          : UpgradeVillage.home;
-                      final title = village == UpgradeVillage.home
-                          ? l10n.upgradeTrackerHomeVillage
-                          : l10n.upgradeTrackerBuilderBase;
-                      _showUpgradeSectionSummary(
-                        context,
-                        title,
-                        snapshot.overallSummary(village: village),
-                        snapshot: snapshot,
-                        village: village,
-                        goldPassPercent: _goldPassPercent,
-                        preferences: _planPreferences,
-                      );
-                    },
-              goldPassPercent: _goldPassPercent,
-              onGoldPass: () => _showGoldPassPicker(snapshot),
-              onPriorities: () => _showPlanPreferences(
-                context,
-                snapshot,
-                _planPreferences,
-                (value) {
-                  setState(() => _planPreferences = value);
-                  _rebuildPlanLanes(snapshot);
-                  unawaited(_savePlanDraft());
+      body: InfoProfileTabScaffold(
+        header: _TrackerInfoHeader(
+          snapshot: snapshot,
+          selectedTab: _section,
+          selectedAccount: selectedAccount,
+          clock: _clock,
+          lanes: _planLanes,
+          onBack: () => Navigator.of(context).pop(),
+          onSwitchAccount: () => _showAccountPicker(uniqueAccounts),
+          onShare: () => _showShareHub(snapshot),
+          onImport: _importSnapshot,
+          onInfo: _section > 1
+              ? null
+              : () {
+                  final village = _section == 1
+                      ? UpgradeVillage.builderBase
+                      : UpgradeVillage.home;
+                  final title = village == UpgradeVillage.home
+                      ? l10n.upgradeTrackerHomeVillage
+                      : l10n.upgradeTrackerBuilderBase;
+                  _showUpgradeSectionSummary(
+                    context,
+                    title,
+                    snapshot.overallSummary(village: village),
+                    snapshot: snapshot,
+                    village: village,
+                    goldPassPercent: _goldPassPercent,
+                    preferences: _planPreferences,
+                  );
                 },
-              ),
-            ),
+          goldPassPercent: _goldPassPercent,
+          onGoldPass: () => _showGoldPassPicker(snapshot),
+          onPriorities: () => _showPlanPreferences(
+            context,
+            snapshot,
+            _planPreferences,
+            (value) {
+              setState(() => _planPreferences = value);
+              _rebuildPlanLanes(snapshot);
+              unawaited(_savePlanDraft());
+            },
           ),
-          SliverToBoxAdapter(
-            child: InfoProfileTabs(
-              selectedIndex: _section,
-              onTabSelected: _selectSection,
-              alwaysScrollable: true,
-              tabs: [
-                InfoProfileTabData(
-                  label: l10n.upgradeTrackerHomeVillage,
-                  imageUrl: ImageAssets.townHall(snapshot.townHallLevel),
-                ),
-                InfoProfileTabData(
-                  label: l10n.upgradeTrackerBuilderBase,
-                  imageUrl: ImageAssets.builderHall(snapshot.builderHallLevel),
-                ),
-                InfoProfileTabData(
-                  label: 'Calendar',
-                  imageUrl: ImageAssets.iconClock,
-                ),
-                InfoProfileTabData(
-                  label: l10n.upgradeTrackerPlan,
-                  imageUrl: ImageAssets.hammerOfBuilding,
-                ),
-                InfoProfileTabData(
-                  label: l10n.upgradeTrackerCollection,
-                  imageUrl: ImageAssets.clanGamesMedals,
-                ),
-              ],
-            ),
-          ),
-        ],
-        body: _buildBody(),
+        ),
+        tabs: tabs,
+        selectedIndex: _section,
+        onTabSelected: _selectSection,
+        alwaysScrollable: true,
+        pages: _trackerPages(snapshot, planData),
       ),
     );
   }
@@ -958,25 +952,30 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     return PageView(
       controller: _pageController,
       onPageChanged: _onPageChanged,
-      children: [
-        _UpgradesTab(
-          key: const ValueKey('home-upgrades'),
-          snapshot: snapshot,
-          village: UpgradeVillage.home,
-          clock: _clock,
-        ),
-        _UpgradesTab(
-          key: const ValueKey('builder-upgrades'),
-          snapshot: snapshot,
-          village: UpgradeVillage.builderBase,
-          clock: _clock,
-        ),
-        _PlanCalendarTab(snapshot: snapshot, planData: planData),
-        _PlanTab(planData: planData),
-        _CollectionTab(snapshot: snapshot),
-      ],
+      children: _trackerPages(snapshot, planData),
     );
   }
+
+  List<Widget> _trackerPages(
+    UpgradeTrackerSnapshot snapshot,
+    _TrackerPlanData planData,
+  ) => [
+    _UpgradesTab(
+      key: const ValueKey('home-upgrades'),
+      snapshot: snapshot,
+      village: UpgradeVillage.home,
+      clock: _clock,
+    ),
+    _UpgradesTab(
+      key: const ValueKey('builder-upgrades'),
+      snapshot: snapshot,
+      village: UpgradeVillage.builderBase,
+      clock: _clock,
+    ),
+    _PlanCalendarTab(snapshot: snapshot, planData: planData),
+    _PlanTab(planData: planData),
+    _CollectionTab(snapshot: snapshot),
+  ];
 
   void _rebuildPlanLanes(UpgradeTrackerSnapshot snapshot) {
     final planData = _buildTrackerPlanData(

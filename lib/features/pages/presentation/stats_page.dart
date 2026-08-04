@@ -62,26 +62,17 @@ class _StatsPageContentState extends State<_StatsPageContent> {
         .clamp(0, sections.length - 1);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverToBoxAdapter(child: _StatsHeader(provider: provider)),
-          SliverToBoxAdapter(
-            child: InfoProfileTabs(
-              selectedIndex: selectedIndex,
-              alwaysScrollable: true,
-              onTabSelected: (index) => provider.selectSection(sections[index]),
-              tabs: [
-                for (final section in sections)
-                  InfoProfileTabData(
-                    label: _sectionLabel(
-                      AppLocalizations.of(context)!,
-                      section,
-                    ),
-                    imageUrl: _sectionImage(section),
-                  ),
-              ],
+      body: InfoProfileTabScaffold(
+        header: _StatsHeader(provider: provider),
+        selectedIndex: selectedIndex,
+        alwaysScrollable: true,
+        onTabSelected: (index) => provider.selectSection(sections[index]),
+        tabs: [
+          for (final section in sections)
+            InfoProfileTabData(
+              label: _sectionLabel(AppLocalizations.of(context)!, section),
+              imageUrl: _sectionImage(section),
             ),
-          ),
         ],
         body: Column(
           children: [

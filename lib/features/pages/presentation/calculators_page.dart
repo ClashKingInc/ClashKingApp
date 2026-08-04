@@ -572,30 +572,24 @@ class _CalculatorScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          const SliverToBoxAdapter(child: _CalculatorHeader()),
-          SliverToBoxAdapter(
-            child: InfoProfileTabs(
-              key: const ValueKey('calculator-tabs'),
-              selectedIndex: selectedMode.index,
-              onTabSelected: (index) => onModeChanged(
-                _CalculatorMode.values[index.clamp(
-                  0,
-                  _CalculatorMode.values.length - 1,
-                )],
-              ),
-              tabs: [
-                InfoProfileTabData(
-                  label: loc.calculatorsModeDamage,
-                  icon: Icons.bolt_rounded,
-                ),
-                InfoProfileTabData(
-                  label: loc.calculatorsModeFarmGoal,
-                  icon: Icons.savings_outlined,
-                ),
-              ],
-            ),
+      body: InfoProfileTabScaffold(
+        key: const ValueKey('calculator-tabs'),
+        header: const _CalculatorHeader(),
+        selectedIndex: selectedMode.index,
+        onTabSelected: (index) => onModeChanged(
+          _CalculatorMode.values[index.clamp(
+            0,
+            _CalculatorMode.values.length - 1,
+          )],
+        ),
+        tabs: [
+          InfoProfileTabData(
+            label: loc.calculatorsModeDamage,
+            icon: Icons.bolt_rounded,
+          ),
+          InfoProfileTabData(
+            label: loc.calculatorsModeFarmGoal,
+            icon: Icons.savings_outlined,
           ),
         ],
         body: child,

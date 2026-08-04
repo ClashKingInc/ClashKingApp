@@ -213,16 +213,6 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
     setState(() => _selectedTab = clamped);
   }
 
-  void _handleTabSwipe(DragEndDetails details) {
-    final velocity = details.primaryVelocity ?? 0;
-    if (velocity.abs() < 240) return;
-    if (velocity < 0) {
-      _selectTab(_selectedTab + 1);
-    } else {
-      _selectTab(_selectedTab - 1);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectablePlayers = _rankedSelectablePlayers(context);
@@ -273,93 +263,70 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
     final selectedPeriod = periods[selectedSeason];
 
     return Scaffold(
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onHorizontalDragEnd: _handleTabSwipe,
-        child: RefreshIndicator(
-          onRefresh: _refresh,
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: RankedLeagueHeaderCard(
-                  player: _activePlayer,
-                  data: data,
-                  onSwitchAccount: switchAccountAction,
-                  switchAccountTooltip: switchAccountTooltip,
-                ),
-              ),
-              // Once the header/tabs scroll past the top of the viewport,
-              // they'd otherwise render under the (transparent) status bar —
-              // the header itself is meant to bleed under it, but the tab
-              // labels and card content are not.
-              SliverSafeArea(
-                bottom: false,
-                sliver: SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      InfoProfileTabs(
-                        selectedIndex: _selectedTab,
-                        onTabSelected: _selectTab,
-                        tabs: [
-                          InfoProfileTabData(
-                            label: AppLocalizations.of(
-                              context,
-                            )!.clanRankingsSeason,
-                            icon: Icons.calendar_month_rounded,
-                          ),
-                          InfoProfileTabData(
-                            label: AppLocalizations.of(context)!.generalHistory,
-                            icon: Icons.history_rounded,
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 180),
-                          switchInCurve: Curves.easeOutCubic,
-                          switchOutCurve: Curves.easeOutCubic,
-                          child: KeyedSubtree(
-                            key: ValueKey(_selectedTab),
-                            child: switch (_selectedTab) {
-                              0 => _CurrentPeriodTab(
-                                data: data,
-                                period: selectedPeriod,
-                                onOlderSeason:
-                                    selectedSeason < periods.length - 1
-                                    ? () => setState(
-                                        () => _selectedSeason =
-                                            selectedSeason + 1,
-                                      )
-                                    : null,
-                                onNewerSeason: selectedSeason > 0
-                                    ? () => setState(
-                                        () => _selectedSeason =
-                                            selectedSeason - 1,
-                                      )
-                                    : null,
-                                showRanking: _showCurrentRanking,
-                                onViewChanged: (showRanking) => setState(
-                                  () => _showCurrentRanking = showRanking,
-                                ),
-                              ),
-                              _ => _HistoryTab(
-                                data: data,
-                                showTable: _showHistoryTable,
-                                onToggleView: () => setState(
-                                  () => _showHistoryTable = !_showHistoryTable,
-                                ),
-                              ),
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: InfoProfileTabScaffold(
+          header: RankedLeagueHeaderCard(
+            player: _activePlayer,
+            data: data,
+            onSwitchAccount: switchAccountAction,
+            switchAccountTooltip: switchAccountTooltip,
           ),
+          selectedIndex: _selectedTab,
+          onTabSelected: _selectTab,
+          tabs: [
+            InfoProfileTabData(
+              label: AppLocalizations.of(context)!.clanRankingsSeason,
+              icon: Icons.calendar_month_rounded,
+            ),
+            InfoProfileTabData(
+              label: AppLocalizations.of(context)!.generalHistory,
+              icon: Icons.history_rounded,
+            ),
+          ],
+          pages: [
+            ListView(
+              key: const PageStorageKey('ranked-current-period'),
+              primary: true,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+              children: [
+                _CurrentPeriodTab(
+                  data: data,
+                  period: selectedPeriod,
+                  onOlderSeason: selectedSeason < periods.length - 1
+                      ? () =>
+                            setState(() => _selectedSeason = selectedSeason + 1)
+                      : null,
+                  onNewerSeason: selectedSeason > 0
+                      ? () =>
+                            setState(() => _selectedSeason = selectedSeason - 1)
+                      : null,
+                  showRanking: _showCurrentRanking,
+                  onViewChanged: (showRanking) =>
+                      setState(() => _showCurrentRanking = showRanking),
+                ),
+              ],
+            ),
+            ListView(
+              key: const PageStorageKey('ranked-history'),
+              primary: true,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+              children: [
+                _HistoryTab(
+                  data: data,
+                  showTable: _showHistoryTable,
+                  onToggleView: () =>
+                      setState(() => _showHistoryTable = !_showHistoryTable),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
