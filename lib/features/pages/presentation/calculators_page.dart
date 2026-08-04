@@ -423,6 +423,8 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   }
 
   void _selectFarmAccount(String? tag) {
+    if (tag == _farmAccountTag) return;
+
     setState(() {
       _farmAccountTag = tag;
       _farmBuildingId = null;
