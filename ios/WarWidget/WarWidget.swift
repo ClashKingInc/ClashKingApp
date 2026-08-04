@@ -1237,7 +1237,7 @@ private struct UpgradeWidgetView: View {
 
   private var largeBody: some View {
     let activeBoosts = entry.data.activeBoosts(at: entry.date)
-    VStack(alignment: .leading, spacing: 7) {
+    return VStack(alignment: .leading, spacing: 7) {
       accountHeader
       if entry.data.hasFinishedTask(now: entry.date) {
         staleChip
