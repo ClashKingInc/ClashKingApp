@@ -3821,19 +3821,19 @@
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
-  "notifScopeAllLinkedAccounts": "All linked accounts",
+	"notifScopeAllLinkedAccounts": "Automatically add verified accounts",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
-  "notifScopeSelectedAccounts": "Selected accounts",
+	"notifScopeSelectedAccounts": "Choose accounts manually",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
-  "notifAudienceSheetDescription": "Choose which accounts can receive notifications on this device.",
+	"notifAudienceSheetDescription": "These account choices apply across all of your devices.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
-  "notifAudienceAllSubtitle": "{count} current account(s). Future linked accounts are included automatically.",
+	"notifAudienceAllSubtitle": "{count} eligible account(s). Newly verified accounts are added automatically.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3855,10 +3855,20 @@
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
-  "notifAudienceAllInlineNote": "Anything you link later will be included without changing this setting.",
+  "notifAudienceAllInlineNote": "Verified accounts are added when you enable this setting and whenever you verify another account.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifAutoAddVerifiedAccounts": "Automatically add verified accounts",
+  "notifChooseAccountsManually": "Choose accounts manually",
+  "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
+  "notifAutoAddVerifiedSubtitle": "{count} eligible account(s). Newly verified accounts are added automatically.",
+  "@notifAutoAddVerifiedSubtitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "notifAutoAddVerifiedNote": "Verified accounts are added when you enable this setting and whenever you verify another account.",
   "notifAccountBookmarked": "Bookmarked",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
