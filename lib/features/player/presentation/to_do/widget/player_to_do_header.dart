@@ -1,4 +1,3 @@
-import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/buttons/info_button.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
@@ -251,50 +250,44 @@ class _TodoStatsPanel extends StatelessWidget {
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: MetricChipGrid(
-            spacing: 7,
+          child: _TodoHeaderQuickStats(
             chips: [
               if (summary.legendTotal > 0)
-                MetricChip(
-                  label: loc.legendsTitle,
+                _TodoHeaderQuickChip(
                   value: '${summary.legendDone}/${summary.legendTotal}',
                   imageUrl: ImageAssets.legendBlazonNoPadding,
-                  color: CKColors.legendBlue,
+                  tooltip: loc.legendsTitle,
                 ),
               if (summary.warTotal > 0)
-                MetricChip(
-                  label: loc.warTitle,
+                _TodoHeaderQuickChip(
                   value: '${summary.warDone}/${summary.warTotal}',
                   imageUrl: ImageAssets.war,
-                  color: CKColors.lossRed,
+                  tooltip: loc.warTitle,
                 ),
               if (summary.cwlTotal > 0)
-                MetricChip(
-                  label: loc.cwlTitle,
+                _TodoHeaderQuickChip(
                   value: '${summary.cwlDone}/${summary.cwlTotal}',
                   imageUrl: ImageAssets.cwlSwordsNoBorder,
-                  color: CKColors.capitalPurple,
+                  tooltip: loc.cwlTitle,
                 ),
               if (summary.clanGamesTotal > 0)
-                MetricChip(
-                  label: loc.gameClanGames,
+                _TodoHeaderQuickChip(
                   value: summary.compactValue(
                     context,
                     summary.clanGamesDone,
                     summary.clanGamesTotal,
                   ),
                   imageUrl: ImageAssets.clanGamesMedals,
-                  color: CKColors.donationGreen,
+                  tooltip: loc.gameClanGames,
                 ),
-              MetricChip(
-                label: loc.gameSeasonPassShort,
+              _TodoHeaderQuickChip(
                 value: summary.compactValue(
                   context,
                   summary.seasonDone,
                   summary.seasonTotal,
                 ),
                 imageUrl: ImageAssets.iconGoldPass,
-                color: CKColors.warGold,
+                tooltip: loc.gameSeasonPass,
               ),
             ],
           ),
@@ -317,9 +310,7 @@ class _TodoProgressSummaryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final loc = AppLocalizations.of(context)!;
-    final color = summary.openTasks == 0
-        ? CKColors.donationGreen
-        : colorScheme.primary;
+    final color = summary.openTasks == 0 ? Colors.green : colorScheme.primary;
     final completedTasks = summary.totalTasks - summary.openTasks;
 
     const height = 76.0;
@@ -376,6 +367,89 @@ class _TodoProgressSummaryTile extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TodoHeaderQuickStats extends StatelessWidget {
+  const _TodoHeaderQuickStats({required this.chips});
+
+  final List<_TodoHeaderQuickChip> chips;
+
+  @override
+  Widget build(BuildContext context) {
+    if (chips.isEmpty) return const SizedBox.shrink();
+
+    return SizedBox(
+      width: double.infinity,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var index = 0; index < chips.length; index++) ...[
+              if (index > 0) const SizedBox(width: 7),
+              chips[index],
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TodoHeaderQuickChip extends StatelessWidget {
+  const _TodoHeaderQuickChip({
+    required this.value,
+    required this.imageUrl,
+    required this.tooltip,
+  });
+
+  final String value;
+  final String imageUrl;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final foreground = colorScheme.onSurface;
+
+    return Tooltip(
+      message: tooltip,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: colorScheme.surface.withValues(alpha: 0.58),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MobileWebImage(
+              imageUrl: imageUrl,
+              width: 19,
+              height: 19,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(width: 5),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 132),
+              child: Text(
+                value,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: foreground,
+                  fontWeight: FontWeight.w700,
+                  height: 1,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
