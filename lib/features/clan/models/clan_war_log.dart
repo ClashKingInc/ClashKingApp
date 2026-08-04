@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/models/clan_badge.dart';
+import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
 
 class ClanWarLog {
   final List<WarLogDetails> items;
+  final List<WarInfo> wars;
   final String clanTag;
+  final bool isPrivate;
+  final bool reconstructed;
   WarLogStats? _warLogStats;
 
   // Getter with fallback to avoid LateInitializationError
@@ -13,7 +17,13 @@ class ClanWarLog {
   // Setter
   set warLogStats(WarLogStats stats) => _warLogStats = stats;
 
-  ClanWarLog({required this.items, required this.clanTag});
+  ClanWarLog({
+    required this.items,
+    this.wars = const [],
+    required this.clanTag,
+    this.isPrivate = false,
+    this.reconstructed = false,
+  });
 
   // Create empty stats as fallback
   WarLogStats _createEmptyStats() {
@@ -54,7 +64,27 @@ class ClanWarLog {
               )
               .toList()
         : [];
-    return ClanWarLog(items: itemList.cast<WarLogDetails>(), clanTag: clanTag);
+    final wars = (json['items'] as List<dynamic>? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .map(
+          (item) => WarInfo.fromJson({
+            ...item,
+            'state': 'warEnded',
+            'warType':
+                item['warType'] ??
+                ((item['result'] as String? ?? '').isEmpty
+                    ? 'friendly'
+                    : 'random'),
+          }),
+        )
+        .toList(growable: false);
+    return ClanWarLog(
+      items: itemList.cast<WarLogDetails>(),
+      wars: wars,
+      clanTag: clanTag,
+      isPrivate: json['isPrivate'] as bool? ?? false,
+      reconstructed: json['reconstructed'] as bool? ?? false,
+    );
   }
 }
 
@@ -144,8 +174,12 @@ class WarLogDetails {
       endTime: DateTime.parse(json['endTime']),
       teamSize: json['teamSize'] ?? 0,
       attacksPerMember: json['attacksPerMember'] ?? 1,
-      clan: ClanDetails.fromJson(json['clan']),
-      opponent: ClanDetails.fromJson(json['opponent']),
+      clan: ClanDetails.fromJson(
+        Map<String, dynamic>.from(json['clan'] as Map? ?? const {}),
+      ),
+      opponent: ClanDetails.fromJson(
+        Map<String, dynamic>.from(json['opponent'] as Map? ?? const {}),
+      ),
       clanTag: clanTag,
     );
   }
@@ -176,7 +210,9 @@ class ClanDetails {
     return ClanDetails(
       tag: json['tag'] ?? '',
       name: json['name'] ?? '',
-      badgeUrls: ClanBadgeUrls.fromJson(json['badgeUrls'] ?? {}),
+      badgeUrls: ClanBadgeUrls.fromJson(
+        Map<String, dynamic>.from(json['badgeUrls'] as Map? ?? const {}),
+      ),
       clanLevel: json['clanLevel'] ?? 0,
       attacks: json['attacks'] ?? 0,
       stars: json['stars'] ?? 0,
@@ -189,8 +225,9 @@ class ClanDetails {
 
 class WarLogService {
   static Future<ClanWarLog> fetchWarLogData(String tag) async {
-    final response = await ApiService.shared.proxyGet(
-      '/clans/${Uri.encodeComponent(tag)}/warlog',
+    final response = await ApiService.shared.getResponse(
+      '/clan/${Uri.encodeComponent(tag)}/war-log?limit=50',
+      requiresAuth: true,
     );
 
     if (response.statusCode == 200) {
@@ -201,8 +238,6 @@ class WarLogService {
         warLog.items,
       );
       return warLog;
-    } else if (response.statusCode == 403) {
-      return ClanWarLog(items: [], clanTag: tag);
     } else {
       throw Exception('Failed to load war history data');
     }

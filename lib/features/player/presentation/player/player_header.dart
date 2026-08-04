@@ -9,6 +9,7 @@ import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/ranked/player_ranked_league_page.dart';
@@ -279,6 +280,11 @@ class PlayerInfoHeaderActions extends StatelessWidget {
         Consumer<BookmarkService>(
           builder: (context, bookmarks, child) {
             final bookmarked = bookmarks.isPlayerBookmarked(player.tag);
+            final normalizedTag = player.tag.replaceAll('#', '').toUpperCase();
+            final linked = context.watch<CocAccountService>().accounts.any(
+              (tag) => tag.replaceAll('#', '').toUpperCase() == normalizedTag,
+            );
+            if (linked && !bookmarked) return const SizedBox.shrink();
             return HeaderIconButton(
               icon: bookmarked
                   ? Icons.bookmark_rounded

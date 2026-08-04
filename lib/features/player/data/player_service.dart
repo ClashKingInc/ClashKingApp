@@ -4,6 +4,7 @@ import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
+import 'package:clashkingapp/features/player/models/player_join_leave.dart';
 import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -186,6 +187,51 @@ class PlayerService extends ChangeNotifier {
       return normalized;
     }
     return '#$normalized';
+  }
+
+  Future<PlayerJoinLeavePage> loadPlayerJoinLeave(
+    String rawPlayerTag, {
+    DateTime? before,
+  }) async {
+    final tag = Uri.encodeComponent(_canonicalTag(rawPlayerTag));
+    final query = StringBuffer('/player/$tag/join-leave?limit=50');
+    if (before != null) {
+      query.write(
+        '&time%5Bbefore%5D=${Uri.encodeQueryComponent(before.toUtc().toIso8601String())}',
+      );
+    }
+    final response = await _apiService.getResponse(
+      query.toString(),
+      requiresAuth: true,
+    );
+    if (response.statusCode != 200) {
+      throw HttpException(
+        'Failed to fetch player join/leave history (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+    return PlayerJoinLeavePage.fromJson(_decodeMap(response));
+  }
+
+  Future<List<PlayerJoinLeaveTotal>> loadPlayerJoinLeaveTotals(
+    String rawPlayerTag,
+  ) async {
+    final tag = Uri.encodeComponent(_canonicalTag(rawPlayerTag));
+    final response = await _apiService.getResponse(
+      '/player/$tag/join-leave/totals',
+      requiresAuth: true,
+    );
+    if (response.statusCode != 200) {
+      throw HttpException(
+        'Failed to fetch player join/leave totals (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+    final json = _decodeMap(response);
+    return (json['items'] as List<dynamic>? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .map(PlayerJoinLeaveTotal.fromJson)
+        .toList(growable: false);
   }
 
   /// Init basic stats for the saved accounts.

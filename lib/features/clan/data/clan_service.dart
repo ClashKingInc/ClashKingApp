@@ -198,23 +198,23 @@ class ClanService extends ChangeNotifier {
     String clanTag,
   ) async {
     try {
-      final response = await _apiService.getResponse(
-        '/cwl/${clanTag.replaceAll("#", "%23")}/ranking-history',
+      final encodedTag = Uri.encodeComponent(clanTag);
+      final seasonsResponse = await _apiService.getResponse(
+        '/cwl/$encodedTag/seasons',
       );
+      if (seasonsResponse.statusCode != 200) return [];
 
-      if (response.statusCode == 200) {
-        final body = ApiService.decodeResponseBody(response);
-        final Map<String, dynamic> jsonBody = json.decode(body);
-        final items = jsonBody['items'] as List<dynamic>? ?? [];
-        return items
-            .map(
-              (item) =>
-                  CwlRankingHistoryEntry.fromJson(item as Map<String, dynamic>),
-            )
-            .toList();
-      }
-      // 404 means the clan has no CWL data yet — a normal, non-error state.
-      return [];
+      final seasonsBody = json.decode(
+        ApiService.decodeResponseBody(seasonsResponse),
+      );
+      final seasonItems = seasonsBody is Map<String, dynamic>
+          ? seasonsBody['items'] as List<dynamic>? ?? const []
+          : const <dynamic>[];
+
+      return seasonItems
+          .whereType<Map<String, dynamic>>()
+          .map(CwlRankingHistoryEntry.fromJson)
+          .toList(growable: false);
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("Error loading CWL ranking history: $e");
@@ -223,8 +223,7 @@ class ClanService extends ChangeNotifier {
   }
 
   Future<void> loadJoinLeaveForClan(Clan clan) async {
-    if (clan.joinLeave?.stats.totalEvents != null &&
-        clan.joinLeave!.stats.totalEvents > 0) {
+    if (clan.joinLeave != null) {
       return;
     }
 
@@ -354,29 +353,28 @@ class ClanService extends ChangeNotifier {
     return List<ClanJoinLeave>.empty();
   }
 
-  Future<ClanJoinLeave?> _fetchSingleClanJoinLeave(String tag) async {
+  Future<ClanJoinLeave?> _fetchSingleClanJoinLeave(
+    String tag, {
+    DateTime? before,
+  }) async {
     final encodedTag = Uri.encodeComponent(tag);
     final base = '/clan/$encodedTag/join-leave';
 
     try {
-      final responses = await Future.wait([
-        _apiService.getResponse(
-          '$base?current_season=true',
-          requiresAuth: true,
-        ),
-        _apiService.getResponse(
-          '$base/stats?current_season=true',
-          requiresAuth: true,
-        ),
-      ]);
+      final query = StringBuffer('$base?limit=50');
+      if (before != null) {
+        query.write(
+          '&time%5Bbefore%5D=${Uri.encodeQueryComponent(before.toUtc().toIso8601String())}',
+        );
+      }
+      final eventsResponse = await _apiService.getResponse(
+        query.toString(),
+        requiresAuth: true,
+      );
 
-      final eventsResponse = responses[0];
-      final statsResponse = responses[1];
-
-      if (eventsResponse.statusCode != 200 || statsResponse.statusCode != 200) {
+      if (eventsResponse.statusCode != 200) {
         DebugUtils.debugWarning(
-          "⚠️ Join-leave fetch failed for $tag "
-          "(events: ${eventsResponse.statusCode}, stats: ${statsResponse.statusCode})",
+          "⚠️ Join-leave fetch failed for $tag (${eventsResponse.statusCode})",
         );
         return null;
       }
@@ -384,37 +382,28 @@ class ClanService extends ChangeNotifier {
       final eventsData =
           jsonDecode(ApiService.decodeResponseBody(eventsResponse))
               as Map<String, dynamic>;
-      final statsData =
-          jsonDecode(ApiService.decodeResponseBody(statsResponse))
-              as Map<String, dynamic>;
-
-      // Go v2 uses event_type/player_tag/player_name/townhall_level.
-      // Map to the field names ClanJoinLeave.fromJson / JoinLeaveEvent.fromJson expect.
-      final items = (eventsData['items'] as List<dynamic>? ?? [])
-          .whereType<Map<String, dynamic>>()
-          .map(
-            (e) => <String, dynamic>{
-              'type': e['event_type'] ?? '',
-              'clan': tag,
-              'time': e['time'] ?? '',
-              'tag': e['player_tag'] ?? '',
-              'name': e['player_name'] ?? '',
-              'th': (e['townhall_level'] as num?)?.toInt() ?? 0,
-            },
-          )
-          .toList();
-
-      return ClanJoinLeave.fromJson({
-        'clan_tag': tag,
-        'timestamp_start': eventsData['timestamp_start'] ?? 0,
-        'timestamp_end': eventsData['timestamp_end'] ?? 0,
-        'stats': statsData['stats'] ?? {},
-        'join_leave_list': items,
-      });
+      return ClanJoinLeave.fromJson({'clan_tag': tag, ...eventsData});
     } catch (e) {
       DebugUtils.debugError("Join-leave fetch error for $tag: $e");
       return null;
     }
+  }
+
+  Future<bool> loadMoreJoinLeaveForClan(Clan clan) async {
+    final current = clan.joinLeave;
+    if (current == null ||
+        current.joinLeaveList.isEmpty ||
+        current.joinLeaveList.length >= current.available) {
+      return false;
+    }
+    final cursor = current.joinLeaveList.last.time.toUtc().subtract(
+      const Duration(microseconds: 1),
+    );
+    final page = await _fetchSingleClanJoinLeave(clan.tag, before: cursor);
+    if (page == null || page.joinLeaveList.isEmpty) return false;
+    clan.joinLeave = current.appendPage(page);
+    _safeNotify();
+    return true;
   }
 
   void linkJoinLeaveToClans() {
@@ -422,11 +411,13 @@ class ClanService extends ChangeNotifier {
       for (final joinLeave in joinLeaveList) joinLeave.clanTag: joinLeave,
     };
     for (var clan in _clans.values) {
-      final joinLeave = joinLeaveByTag[clan.tag] ?? ClanJoinLeave.empty();
-      clan.joinLeave = joinLeave;
-      DebugUtils.debugInfo(
-        "🔗 Linked ${clan.tag} to join/leave data (${joinLeave.clanTag})",
-      );
+      final joinLeave = joinLeaveByTag[clan.tag];
+      if (joinLeave != null) {
+        clan.joinLeave = joinLeave;
+        DebugUtils.debugInfo(
+          "🔗 Linked ${clan.tag} to join/leave data (${joinLeave.clanTag})",
+        );
+      }
     }
   }
 
@@ -523,8 +514,9 @@ class ClanService extends ChangeNotifier {
       final warLogs = await Future.wait(
         clanTags.map((tag) async {
           final encodedTag = Uri.encodeComponent(tag);
-          final response = await _apiService.proxyGet(
-            '/clans/$encodedTag/warlog',
+          final response = await _apiService.getResponse(
+            '/clan/$encodedTag/war-log?limit=50',
+            requiresAuth: true,
           );
 
           if (response.statusCode == 200) {
@@ -535,8 +527,6 @@ class ClanService extends ChangeNotifier {
               warLog.items,
             );
             return warLog;
-          } else if (response.statusCode == 403) {
-            return ClanWarLog(items: [], clanTag: tag);
           } else {
             throw HttpException(
               'Failed to load war history data (${response.statusCode})',
@@ -715,27 +705,6 @@ class ClanService extends ChangeNotifier {
           DebugUtils.debugError("Error processing clan ${entry.key}: $e");
         }
       }
-    }
-
-    // Process join/leave data
-    if (clanData["join_leave_data"] != null) {
-      final joinLeaveData = clanData["join_leave_data"] as Map<String, dynamic>;
-      joinLeaveList = joinLeaveData.entries
-          .map((entry) {
-            try {
-              return ClanJoinLeave.fromJson(entry.value);
-            } catch (e) {
-              DebugUtils.debugError(
-                "Error processing join/leave data for ${entry.key}: $e",
-              );
-              return null;
-            }
-          })
-          .whereType<ClanJoinLeave>()
-          .toList();
-      DebugUtils.debugSuccess(
-        "Processed ${joinLeaveList.length} join/leave records",
-      );
     }
 
     // Process capital data

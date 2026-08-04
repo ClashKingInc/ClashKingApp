@@ -1,6 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
-import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
+import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
@@ -22,8 +22,6 @@ import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:clashkingapp/core/app/my_app_state.dart';
-import 'package:clashkingapp/core/config/app_feature_flags.dart';
 
 /// Clan detail screen: hero header + tabs for Members / War Log /
 /// Join-Leave / Statistics / CWL History — content that used to live
@@ -134,22 +132,23 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
   }
 
   List<_ClanInfoTab> _visibleTabs(BuildContext context) {
-    final appState = context.watch<MyAppState>();
     return [
       _ClanInfoTab.members,
       _ClanInfoTab.warLog,
       _ClanInfoTab.joinLeave,
       _ClanInfoTab.statistics,
-      if (appState.isFeatureEnabled(AppFeatureFlags.clanRankingsPreview))
-        _ClanInfoTab.rankings,
-      if (appState.isFeatureEnabled(AppFeatureFlags.cwlHistoryPreview))
-        _ClanInfoTab.cwlHistory,
+      _ClanInfoTab.rankings,
+      _ClanInfoTab.cwlHistory,
     ];
   }
 
   Widget _buildSelectedTab(BuildContext context, _ClanInfoTab tab) {
     if (tab == _ClanInfoTab.members) {
       return ClanMembers(clanInfo: widget.clanInfo);
+    }
+
+    if (tab == _ClanInfoTab.joinLeave) {
+      return _ClanJoinLeaveTab(clan: widget.clanInfo);
     }
 
     final content = switch (tab) {
@@ -165,9 +164,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
         onFriendlyChanged: () =>
             setState(() => isFriendlyChecked = !isFriendlyChecked),
       ),
-      _ClanInfoTab.joinLeave => _ClanJoinLeaveTab(
-        joinLeave: widget.clanInfo.joinLeave,
-      ),
+      _ClanInfoTab.joinLeave => const SizedBox.shrink(),
       _ClanInfoTab.statistics => _ClanStatisticsTab(
         clan: widget.clanInfo,
         isCWLChecked: isCWLChecked,
@@ -246,42 +243,43 @@ class _NoImplicitScrollPhysics extends ScrollPhysics {
 }
 
 class _ClanJoinLeaveTab extends StatefulWidget {
-  final ClanJoinLeave? joinLeave;
+  final Clan clan;
 
-  const _ClanJoinLeaveTab({required this.joinLeave});
+  const _ClanJoinLeaveTab({required this.clan});
 
   @override
   State<_ClanJoinLeaveTab> createState() => _ClanJoinLeaveTabState();
 }
 
 class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-  String _selectedSort = 'newest';
   String _selectedMovement = 'all';
+  bool _isLoading = false;
+  bool _isLoadingMore = false;
 
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(() {
-      setState(
-        () => _searchQuery = _searchController.text.trim().toLowerCase(),
-      );
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadInitialPage());
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  Future<void> _loadInitialPage() async {
+    if (widget.clan.joinLeave != null || _isLoading) return;
+    setState(() => _isLoading = true);
+    await context.read<ClanService>().loadJoinLeaveForClan(widget.clan);
+    if (mounted) setState(() => _isLoading = false);
+  }
+
+  Future<void> _loadNextPageIfNeeded() async {
+    if (_isLoadingMore) return;
+    final data = widget.clan.joinLeave;
+    if (data == null || data.joinLeaveList.length >= data.available) return;
+    setState(() => _isLoadingMore = true);
+    await context.read<ClanService>().loadMoreJoinLeaveForClan(widget.clan);
+    if (mounted) setState(() => _isLoadingMore = false);
   }
 
   List<JoinLeaveEvent> _filteredEvents(List<JoinLeaveEvent> events) {
-    var filtered = _searchQuery.isEmpty
-        ? events
-        : events
-              .where((event) => event.name.toLowerCase().contains(_searchQuery))
-              .toList(growable: false);
+    var filtered = events;
 
     switch (_selectedMovement) {
       case 'joined':
@@ -296,42 +294,37 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
         break;
     }
 
-    switch (_selectedSort) {
-      case 'oldest':
-        return filtered.reversed.toList(growable: false);
-      default:
-        return filtered;
-    }
+    return filtered;
   }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
-    final data = widget.joinLeave ?? ClanJoinLeave.empty();
-    final stats = data.stats;
-    final events = _filteredEvents(
-      data.joinLeaveList.take(30).toList(growable: false),
-    );
+    final data = widget.clan.joinLeave ?? ClanJoinLeave.empty();
+    final events = _filteredEvents(data.joinLeaveList);
     final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-      child: Column(
+    if (_isLoading && widget.clan.joinLeave == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification.depth == 0 &&
+            notification.metrics.axis == Axis.vertical &&
+            notification.metrics.extentAfter <= 500) {
+          _loadNextPageIfNeeded();
+        }
+        return false;
+      },
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          10,
+          16,
+          16 + MediaQuery.paddingOf(context).bottom,
+        ),
         children: [
-          ClanTabSearchSortBar(
-            controller: _searchController,
-            query: _searchQuery,
-            hintText: loc?.clanMembersSearchPlaceholder ?? 'Search members',
-            sortBy: _selectedSort,
-            updateSortBy: (value) => setState(() => _selectedSort = value),
-            maxSortWidth: 130,
-            padding: EdgeInsets.zero,
-            sortByOptions: {
-              loc?.warEventsNewest ?? 'Newest': 'newest',
-              loc?.warEventsOldest ?? 'Oldest': 'oldest',
-            },
-          ),
-          const SizedBox(height: 8),
           _FilterBar(
             trailing: const SizedBox.shrink(),
             padding: EdgeInsets.zero,
@@ -339,26 +332,14 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
               padding: EdgeInsets.zero,
               children: [
                 CKSummaryChip(
-                  icon: Icons.login_rounded,
-                  value: stats.totalJoins.toString(),
-                  label: loc?.joinLeaveJoins ?? 'Joins',
-                  color: Colors.green,
-                ),
-                CKSummaryChip(
-                  icon: Icons.logout_rounded,
-                  value: stats.totalLeaves.toString(),
-                  label: loc?.joinLeaveLeaves ?? 'Leaves',
-                  color: Colors.redAccent,
+                  icon: Icons.swap_horiz_rounded,
+                  value: data.available.toString(),
+                  label: 'Events',
                 ),
                 CKSummaryChip(
                   icon: Icons.person_search_rounded,
-                  value: stats.uniquePlayers.toString(),
+                  value: data.uniquePlayers.toString(),
                   label: loc?.joinLeaveUniquePlayers ?? 'Unique Players',
-                ),
-                CKSummaryChip(
-                  icon: Icons.repeat_rounded,
-                  value: stats.rejoinedPlayers.toString(),
-                  label: loc?.joinLeaveRejoinedPlayers ?? 'Rejoined Players',
                 ),
               ],
             ),
@@ -388,36 +369,37 @@ class _ClanJoinLeaveTabState extends State<_ClanJoinLeaveTab> {
           const SizedBox(height: 12),
           if (events.isEmpty)
             _ClanEmptyTab(
-              title: _searchQuery.isNotEmpty || _selectedMovement != 'all'
+              title: _selectedMovement != 'all'
                   ? (loc?.generalNoFilteredResults ??
                         'No results match your filters')
-                  : stats.totalEvents == 0
+                  : data.available == 0
                   ? loc!.clanJoinLeaveNoDataTitle
                   : loc!.clanJoinLeaveNoRecentMovementTitle,
-              body: _searchQuery.isNotEmpty || _selectedMovement != 'all'
+              body: _selectedMovement != 'all'
                   ? ''
-                  : stats.totalEvents == 0
+                  : data.available == 0
                   ? loc!.clanJoinLeaveNoDataBody
                   : loc!.clanJoinLeaveNoRecentMovementBody,
               icon: Icons.history_toggle_off_rounded,
             )
+          else if (isDesktopWeb)
+            ResponsiveCardGrid(
+              itemCount: events.length,
+              minItemWidth: 340,
+              maxColumns: 3,
+              spacing: 10,
+              itemBuilder: (_, index) => _JoinLeaveEventCard(
+                event: events[index],
+                margin: EdgeInsets.zero,
+              ),
+            )
           else
-            isDesktopWeb
-                ? ResponsiveCardGrid(
-                    itemCount: events.length,
-                    minItemWidth: 340,
-                    maxColumns: 3,
-                    spacing: 10,
-                    itemBuilder: (_, index) => _JoinLeaveEventCard(
-                      event: events[index],
-                      margin: EdgeInsets.zero,
-                    ),
-                  )
-                : Column(
-                    children: events
-                        .map((event) => _JoinLeaveEventCard(event: event))
-                        .toList(growable: false),
-                  ),
+            ...events.map((event) => _JoinLeaveEventCard(event: event)),
+          if (_isLoadingMore)
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Center(child: CircularProgressIndicator()),
+            ),
         ],
       ),
     );
@@ -1197,6 +1179,7 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
   String? _selectedFilter;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -1206,6 +1189,22 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
         () => _searchQuery = _searchController.text.trim().toLowerCase(),
       );
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadWarLog());
+  }
+
+  Future<void> _loadWarLog() async {
+    if (widget.clan.clanWarLog != null || _isLoading) return;
+    setState(() => _isLoading = true);
+    final logs = await context.read<ClanService>().loadWarLogData([
+      widget.clan.tag,
+    ], throwOnError: false);
+    for (final log in logs) {
+      if (log.clanTag == widget.clan.tag) {
+        widget.clan.clanWarLog = log;
+        break;
+      }
+    }
+    if (mounted) setState(() => _isLoading = false);
   }
 
   @override
@@ -1268,14 +1267,47 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
           trailing: const SizedBox.shrink(),
           middle: WarLogSummary(clan: widget.clan),
         ),
+        if (widget.clan.clanWarLog?.reconstructed == true)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Material(
+              color: Theme.of(context).colorScheme.tertiaryContainer,
+              borderRadius: BorderRadius.circular(14),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline_rounded,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'This clan has a private war log. This history was reconstructed from ClashKing data.',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onTertiaryContainer,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-          child: ClanWarLog(
-            clan: widget.clan,
-            selectedTypes: widget.selectedTypes,
-            selectedFilter: _selectedFilter,
-            searchQuery: _searchQuery,
-          ),
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ClanWarLog(
+                  clan: widget.clan,
+                  selectedTypes: widget.selectedTypes,
+                  selectedFilter: _selectedFilter,
+                  searchQuery: _searchQuery,
+                ),
         ),
       ],
     );
@@ -1309,11 +1341,16 @@ class _ClanStatisticsTab extends StatefulWidget {
   State<_ClanStatisticsTab> createState() => _ClanStatisticsTabState();
 }
 
+enum _WarStatsRangeMode { wars, days }
+
 class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
   String _sortBy = 'Three Stars Attacks';
   bool showUppedTownHall = true;
+  bool _currentMembersOnly = false;
   bool _isLoadingStats = false;
-  DateTime? _selectedStatsSeason;
+  _WarStatsRangeMode _rangeMode = _WarStatsRangeMode.wars;
+  int _warRange = 50;
+  int _dayRange = 90;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   late List<PlayerWarStats> _periodPlayers;
@@ -1383,17 +1420,20 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
     }
   }
 
-  Future<void> _loadStatsForSelectedSeason() async {
+  Future<void> _loadStatsForRange() async {
     setState(() => _isLoadingStats = true);
     List<PlayerWarStats>? loadedPlayers;
     try {
       final clanService = context.read<ClanService>();
+      final now = DateTime.now();
       final stats = await clanService.loadClanWarStatsWithFilter(
         widget.clan.tag,
         ClanWarStatsFilter(
-          startDate: _statsSeasonStart,
-          endDate: _statsSeasonEnd,
-          limit: 200,
+          startDate: _rangeMode == _WarStatsRangeMode.days
+              ? now.subtract(Duration(days: _dayRange))
+              : null,
+          endDate: _rangeMode == _WarStatsRangeMode.days ? now : null,
+          limit: _rangeMode == _WarStatsRangeMode.wars ? _warRange : 500,
         ),
       );
       loadedPlayers = stats?.players ?? [];
@@ -1413,43 +1453,40 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
     }
   }
 
-  DateTime get _statsSeasonStart =>
-      DateTime(_selectedStatsSeason!.year, _selectedStatsSeason!.month);
-
-  DateTime get _statsSeasonEnd => DateTime(
-    _selectedStatsSeason!.year,
-    _selectedStatsSeason!.month + 1,
-    1,
-  ).subtract(const Duration(seconds: 1));
-
-  Future<void> _pickStatsSeason() async {
-    final now = DateTime.now();
-    final latestDate = DateTime(now.year, now.month, now.day);
-    final initialSeason = _selectedStatsSeason ?? DateTime(now.year, now.month);
-    final picked = await showDatePicker(
+  Future<void> _showStatsRangePicker() async {
+    final selection = await showModalBottomSheet<_WarStatsRangeSelection>(
       context: context,
-      initialDate: initialSeason.isAfter(latestDate)
-          ? latestDate
-          : initialSeason,
-      firstDate: DateTime(2020),
-      lastDate: latestDate,
-      initialDatePickerMode: DatePickerMode.year,
-      helpText:
-          AppLocalizations.of(context)?.warStatsSelectSeason ??
-          'Select war stats season',
+      useSafeArea: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) => _WarStatsRangeSheet(
+        initialMode: _rangeMode,
+        initialWarRange: _warRange,
+        initialDayRange: _dayRange,
+      ),
     );
 
-    if (!mounted || picked == null) return;
+    if (!mounted || selection == null) return;
+    if (selection.mode == _rangeMode &&
+        selection.wars == _warRange &&
+        selection.days == _dayRange) {
+      return;
+    }
 
-    final selectedMonth = DateTime(picked.year, picked.month);
-    if (selectedMonth == _selectedStatsSeason) return;
-
-    setState(() => _selectedStatsSeason = selectedMonth);
-    await _loadStatsForSelectedSeason();
+    setState(() {
+      _rangeMode = selection.mode;
+      _warRange = selection.wars;
+      _dayRange = selection.days;
+    });
+    await _loadStatsForRange();
   }
 
   void _toggleTownHallVisibility() {
     setState(() => showUppedTownHall = !showUppedTownHall);
+  }
+
+  void _toggleCurrentMembersOnly() {
+    setState(() => _currentMembersOnly = !_currentMembersOnly);
   }
 
   void _updateSortBy(String newValue) {
@@ -1463,7 +1500,10 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
     widget.onResetWarTypes();
     _searchController.clear();
     setState(() {
-      _selectedStatsSeason = null;
+      _rangeMode = _WarStatsRangeMode.wars;
+      _warRange = 50;
+      _dayRange = 90;
+      _currentMembersOnly = false;
       showUppedTownHall = true;
       _periodPlayers = widget.clan.clanWarStats?.players ?? _periodPlayers;
       filteredPlayers = _periodPlayers;
@@ -1500,12 +1540,19 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
   }
 
   List<PlayerWarStats> _displayedPlayers() {
-    if (_searchQuery.isEmpty) return filteredPlayers;
+    final currentMemberTags = widget.clan.memberList
+        .map((member) => member.tag.trim().toUpperCase())
+        .toSet();
     return filteredPlayers
         .where(
           (player) =>
-              player.name.toLowerCase().contains(_searchQuery) ||
-              player.tag.toLowerCase().contains(_searchQuery),
+              (!_currentMembersOnly ||
+                  currentMemberTags.contains(
+                    player.tag.trim().toUpperCase(),
+                  )) &&
+              (_searchQuery.isEmpty ||
+                  player.name.toLowerCase().contains(_searchQuery) ||
+                  player.tag.toLowerCase().contains(_searchQuery)),
         )
         .toList(growable: false);
   }
@@ -1551,13 +1598,12 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final localeName = Localizations.localeOf(context).toString();
-    final statsPeriodValue = _selectedStatsSeason == null
-        ? loc.warStatsLast50
-        : DateFormat.yMMM(localeName).format(_selectedStatsSeason!);
-    final statsPeriodLabel = _selectedStatsSeason == null
+    final statsPeriodValue = _rangeMode == _WarStatsRangeMode.wars
+        ? 'Last $_warRange'
+        : 'Last $_dayRange';
+    final statsPeriodLabel = _rangeMode == _WarStatsRangeMode.wars
         ? loc.warStatsWars
-        : loc.clanRankingsSeason;
+        : 'Days';
     final displayedPlayers = _displayedPlayers();
     final overview = _overviewFor(displayedPlayers);
 
@@ -1586,21 +1632,16 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
         _FilterBar(
           trailing: const SizedBox.shrink(),
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          actions: [
-            _FilterActionButton(
-              tooltip: loc.warStatsSelectSeason,
-              icon: Icons.calendar_month_rounded,
-              onTap: _pickStatsSeason,
-            ),
-          ],
           middle: CKSummaryChipRail(
             padding: EdgeInsets.zero,
             children: [
               CKSummaryChip(
-                icon: Icons.calendar_month_rounded,
+                icon: Icons.tune_rounded,
                 value: statsPeriodValue,
                 label: statsPeriodLabel,
                 color: Theme.of(context).colorScheme.primary,
+                selected: true,
+                onTap: _showStatsRangePicker,
               ),
               CKSummaryChip(
                 icon: Icons.groups_rounded,
@@ -1660,6 +1701,13 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
               color: Theme.of(context).colorScheme.tertiary,
               onTap: _toggleTownHallVisibility,
             ),
+            _FilterPill(
+              label: 'Current members',
+              icon: Icons.group_rounded,
+              selected: _currentMembersOnly,
+              color: Colors.teal,
+              onTap: _toggleCurrentMembersOnly,
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -1685,6 +1733,164 @@ class _ClanStatisticsTabState extends State<_ClanStatisticsTab> {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _WarStatsRangeSelection {
+  final _WarStatsRangeMode mode;
+  final int wars;
+  final int days;
+
+  const _WarStatsRangeSelection({
+    required this.mode,
+    required this.wars,
+    required this.days,
+  });
+}
+
+class _WarStatsRangeSheet extends StatefulWidget {
+  final _WarStatsRangeMode initialMode;
+  final int initialWarRange;
+  final int initialDayRange;
+
+  const _WarStatsRangeSheet({
+    required this.initialMode,
+    required this.initialWarRange,
+    required this.initialDayRange,
+  });
+
+  @override
+  State<_WarStatsRangeSheet> createState() => _WarStatsRangeSheetState();
+}
+
+class _WarStatsRangeSheetState extends State<_WarStatsRangeSheet> {
+  late _WarStatsRangeMode _mode;
+  late int _wars;
+  late int _days;
+
+  @override
+  void initState() {
+    super.initState();
+    _mode = widget.initialMode;
+    _wars = widget.initialWarRange;
+    _days = widget.initialDayRange;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final usingWars = _mode == _WarStatsRangeMode.wars;
+    final value = usingWars ? _wars : _days;
+    final sliderLabel = usingWars
+        ? 'Last $_wars ${loc.warStatsWars.toLowerCase()}'
+        : 'Last ${loc.statsIndexDays(_days)}';
+    final rangeLabel = usingWars ? 'Wars to include' : 'Days to include';
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'War stats range',
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Choose whether the stats cover a fixed number of recent wars or a recent span of days.',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 20),
+            AppGlassSegmentedControl<_WarStatsRangeMode>(
+              values: const [_WarStatsRangeMode.wars, _WarStatsRangeMode.days],
+              labels: [loc.warStatsWars, 'Days'],
+              selected: _mode,
+              onChanged: (value) => setState(() => _mode = value),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Icon(
+                  usingWars ? Icons.shield_rounded : Icons.schedule_rounded,
+                  size: 18,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    rangeLabel,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                Text(
+                  value.toString(),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            Slider(
+              value: value.toDouble(),
+              min: usingWars ? 10 : 7,
+              max: usingWars ? 100 : 365,
+              divisions: usingWars ? 18 : 358,
+              label: sliderLabel,
+              onChanged: (nextValue) {
+                setState(() {
+                  if (usingWars) {
+                    _wars = (nextValue / 5).round() * 5;
+                  } else {
+                    _days = nextValue.round();
+                  }
+                });
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(usingWars ? '10' : '7'),
+                Text(usingWars ? '100' : '365'),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () => setState(() {
+                    _mode = _WarStatsRangeMode.wars;
+                    _wars = 50;
+                    _days = 90;
+                  }),
+                  child: Text(loc.generalReset),
+                ),
+                const Spacer(),
+                FilledButton(
+                  onPressed: () => Navigator.of(context).pop(
+                    _WarStatsRangeSelection(
+                      mode: _mode,
+                      wars: _wars,
+                      days: _days,
+                    ),
+                  ),
+                  child: Text(loc.generalApply),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -1715,179 +1921,79 @@ class _ClanCwlHistoryTab extends StatefulWidget {
 }
 
 class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
-  static const _mockEntries = [
-    CwlRankingHistoryEntry(
-      season: 'July 2026',
-      league: 'Legend League',
-      rank: 3,
-      stars: 287,
-      destruction: 93.4,
-      roundsWon: 5,
-      roundsTied: 0,
-      roundsLost: 2,
-    ),
-    CwlRankingHistoryEntry(
-      season: 'June 2026',
-      league: 'Champion League I',
-      rank: 1,
-      stars: 301,
-      destruction: 95.1,
-      roundsWon: 7,
-      roundsTied: 0,
-      roundsLost: 0,
-    ),
-    CwlRankingHistoryEntry(
-      season: 'May 2026',
-      league: 'Master League I',
-      rank: 2,
-      stars: 276,
-      destruction: 91.8,
-      roundsWon: 5,
-      roundsTied: 1,
-      roundsLost: 1,
-    ),
-    CwlRankingHistoryEntry(
-      season: 'April 2026',
-      league: 'Crystal League I',
-      rank: 1,
-      stars: 244,
-      destruction: 89.6,
-      roundsWon: 6,
-      roundsTied: 0,
-      roundsLost: 1,
-    ),
-    CwlRankingHistoryEntry(
-      season: 'March 2026',
-      league: 'Gold League I',
-      rank: 2,
-      stars: 218,
-      destruction: 86.2,
-      roundsWon: 5,
-      roundsTied: 0,
-      roundsLost: 2,
-    ),
-    CwlRankingHistoryEntry(
-      season: 'February 2026',
-      league: 'Silver League I',
-      rank: 4,
-      stars: 182,
-      destruction: 81.9,
-      roundsWon: 3,
-      roundsTied: 1,
-      roundsLost: 3,
-    ),
-    CwlRankingHistoryEntry(
-      season: 'January 2026',
-      league: 'Bronze League I',
-      rank: 1,
-      stars: 156,
-      destruction: 78.4,
-      roundsWon: 6,
-      roundsTied: 0,
-      roundsLost: 1,
-    ),
-  ];
+  late Future<List<CwlRankingHistoryEntry>> _history;
+
+  @override
+  void initState() {
+    super.initState();
+    _history = context.read<ClanService>().getCwlRankingHistory(
+      widget.clan.tag,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDesktopWeb = kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
-    // TODO: Replace this mockup with getCwlRankingHistory(widget.clan.tag)
-    // once the CWL history endpoint is fixed.
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-      child: Column(
-        children: [
-          _CwlHistoryPreviewNotice(clan: widget.clan),
-          const SizedBox(height: 10),
-          isDesktopWeb
+      child: FutureBuilder<List<CwlRankingHistoryEntry>>(
+        future: _history,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final entries = snapshot.data ?? const [];
+          if (entries.isEmpty) {
+            return _ClanEmptyTab(
+              title: 'No CWL history yet',
+              body: 'Stored CWL seasons for this clan will appear here.',
+              icon: Icons.emoji_events_outlined,
+            );
+          }
+          return isDesktopWeb
               ? ResponsiveCardGrid(
-                  itemCount: _mockEntries.length,
+                  itemCount: entries.length,
                   minItemWidth: 420,
                   maxColumns: 2,
                   spacing: 10,
                   itemBuilder: (_, index) => _CwlSeasonMockupCard(
-                    entry: _mockEntries[index],
+                    entry: entries[index],
+                    movement: _cwlMovementFor(
+                      entries,
+                      index,
+                      widget.clan.warLeague?.id,
+                    ),
                     padding: EdgeInsets.zero,
                   ),
                 )
               : Column(
-                  children: _mockEntries
-                      .map((entry) => _CwlSeasonMockupCard(entry: entry))
-                      .toList(growable: false),
-                ),
-        ],
+                  children: List.generate(
+                    entries.length,
+                    (index) => _CwlSeasonMockupCard(
+                      entry: entries[index],
+                      movement: _cwlMovementFor(
+                        entries,
+                        index,
+                        widget.clan.warLeague?.id,
+                      ),
+                    ),
+                  ),
+                );
+        },
       ),
-    );
-  }
-}
-
-class _CwlHistoryPreviewNotice extends StatelessWidget {
-  final Clan clan;
-
-  const _CwlHistoryPreviewNotice({required this.clan});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.30),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: colorScheme.outlineVariant.withValues(alpha: 0.24),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.visibility_outlined,
-                size: 15,
-                color: colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                AppLocalizations.of(context)?.cwlHistoryPreviewBadge ??
-                    'Preview',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onSurface,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            AppLocalizations.of(
-                  context,
-                )?.cwlHistoryPreviewSubtitle(clan.name) ??
-                '${clan.name} mockup until CWL endpoint is fixed',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
 
 class _CwlSeasonMockupCard extends StatelessWidget {
   final CwlRankingHistoryEntry entry;
+  final _CwlLeagueMovement? movement;
   final EdgeInsetsGeometry padding;
 
   const _CwlSeasonMockupCard({
     required this.entry,
+    required this.movement,
     this.padding = const EdgeInsets.only(bottom: 10),
   });
 
@@ -1896,56 +2002,162 @@ class _CwlSeasonMockupCard extends StatelessWidget {
     final leagueName = entry.league ?? 'Unranked';
     final leagueIcon = ImageAssets.getWarLeagueImage(leagueName);
     final accent = _CwlLeagueAccent.forLeague(leagueName);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
       padding: padding,
-      child: GlassPanel(
-        width: double.infinity,
+      child: Container(
         height: 74,
-        borderRadius: 16,
-        padding: const EdgeInsets.fromLTRB(10, 8, 12, 8),
-        tint: accent,
-        borderOpacity: 0.22,
-        shadowOpacity: 0.16,
-        child: Builder(
-          builder: (context) {
-            final colorScheme = Theme.of(context).colorScheme;
-
-            return Row(
-              children: [
-                SizedBox.square(
-                  dimension: 52,
-                  child: MobileWebImage(
-                    imageUrl: leagueIcon,
-                    width: 52,
-                    height: 52,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.white.withValues(alpha: 0.30),
+              colorScheme.outlineVariant.withValues(alpha: 0.22),
+              Colors.white.withValues(alpha: 0.07),
+              colorScheme.outlineVariant.withValues(alpha: 0.18),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.16),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(0.8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15.2),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.alphaBlend(
+                          accent.withValues(alpha: 0.30),
+                          colorScheme.surfaceContainerHighest.withValues(
+                            alpha: 0.46,
+                          ),
+                        ),
+                        colorScheme.surfaceContainer.withValues(alpha: 0.34),
+                        Color.alphaBlend(
+                          accent.withValues(alpha: 0.13),
+                          colorScheme.surface.withValues(alpha: 0.28),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _CwlSeasonMainInfo(
-                    leagueName: leagueName,
-                    rank: entry.rank,
-                    roundsWon: entry.roundsWon,
-                    roundsTied: entry.roundsTied,
-                    roundsLost: entry.roundsLost,
-                    accent: accent,
+              ),
+              Positioned(
+                top: 0,
+                left: 12,
+                right: 54,
+                height: 1.1,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.transparent,
+                        Colors.white.withValues(alpha: 0.42),
+                        Colors.white.withValues(alpha: 0.12),
+                        Colors.transparent,
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(width: 10),
-                _CwlSeasonSideInfo(
-                  season: entry.season,
-                  stars: entry.stars,
-                  destruction: entry.destruction,
-                  color: colorScheme.onSurface.withValues(alpha: 0.74),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(9.2, 7.2, 11.2, 7.2),
+                child: Row(
+                  children: [
+                    SizedBox.square(
+                      dimension: 52,
+                      child: MobileWebImage(
+                        imageUrl: leagueIcon,
+                        width: 52,
+                        height: 52,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _CwlSeasonMainInfo(
+                        leagueName: leagueName,
+                        rank: entry.rank,
+                        roundsWon: entry.roundsWon,
+                        roundsTied: entry.roundsTied,
+                        roundsLost: entry.roundsLost,
+                        hasStanding: entry.hasStanding,
+                        movement: movement,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    _CwlSeasonSideInfo(
+                      season: _formatCwlSeason(entry.season),
+                      stars: entry.stars,
+                      destruction: entry.destruction,
+                      hasStanding: entry.hasStanding,
+                      color: colorScheme.onSurface.withValues(alpha: 0.74),
+                    ),
+                  ],
                 ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+enum _CwlLeagueMovement { promoted, demoted }
+
+_CwlLeagueMovement? _cwlMovementFor(
+  List<CwlRankingHistoryEntry> entries,
+  int index,
+  int? currentClanLeagueId,
+) {
+  final season = entries[index];
+  final seasonMonth = _cwlSeasonMonth(season.season);
+  int? followingLeagueId;
+
+  if (index == 0) {
+    followingLeagueId = currentClanLeagueId;
+  } else {
+    for (var newerIndex = index - 1; newerIndex >= 0; newerIndex--) {
+      final candidate = entries[newerIndex];
+      if (_cwlSeasonMonth(candidate.season) != seasonMonth) {
+        followingLeagueId = candidate.leagueId;
+        break;
+      }
+    }
+  }
+
+  final seasonLeagueId = season.leagueId;
+  if (seasonLeagueId == null || followingLeagueId == null) return null;
+  if (followingLeagueId > seasonLeagueId) {
+    return _CwlLeagueMovement.promoted;
+  }
+  if (followingLeagueId < seasonLeagueId) {
+    return _CwlLeagueMovement.demoted;
+  }
+  return null;
+}
+
+String _cwlSeasonMonth(String season) =>
+    season.length >= 7 ? season.substring(0, 7) : season;
+
+String _formatCwlSeason(String season) {
+  final month = _cwlSeasonMonth(season);
+  final parsed = DateTime.tryParse('$month-01');
+  return parsed == null ? season : DateFormat('MMMM yyyy').format(parsed);
 }
 
 class _CwlLeagueAccent {
@@ -1978,7 +2190,8 @@ class _CwlSeasonMainInfo extends StatelessWidget {
   final int roundsWon;
   final int roundsTied;
   final int roundsLost;
-  final Color accent;
+  final bool hasStanding;
+  final _CwlLeagueMovement? movement;
 
   const _CwlSeasonMainInfo({
     required this.leagueName,
@@ -1986,7 +2199,8 @@ class _CwlSeasonMainInfo extends StatelessWidget {
     required this.roundsWon,
     required this.roundsTied,
     required this.roundsLost,
-    required this.accent,
+    required this.hasStanding,
+    required this.movement,
   });
 
   @override
@@ -2013,7 +2227,7 @@ class _CwlSeasonMainInfo extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                '#$rank',
+                hasStanding && rank > 0 ? '#$rank' : '—',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -2023,16 +2237,24 @@ class _CwlSeasonMainInfo extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 7),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 2),
-              child: _CwlRecordPill(
-                won: roundsWon,
-                tied: roundsTied,
-                lost: roundsLost,
-                color: accent,
+            if (hasStanding) ...[
+              const SizedBox(width: 7),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: _CwlRecordPill(
+                  won: roundsWon,
+                  tied: roundsTied,
+                  lost: roundsLost,
+                ),
               ),
-            ),
+              if (movement != null) ...[
+                const SizedBox(width: 6),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: _CwlLeagueMovementIcon(movement: movement!),
+                ),
+              ],
+            ],
           ],
         ),
       ],
@@ -2044,12 +2266,14 @@ class _CwlSeasonSideInfo extends StatelessWidget {
   final String season;
   final int stars;
   final double destruction;
+  final bool hasStanding;
   final Color color;
 
   const _CwlSeasonSideInfo({
     required this.season,
     required this.stars,
     required this.destruction,
+    required this.hasStanding,
     required this.color,
   });
 
@@ -2085,12 +2309,12 @@ class _CwlSeasonSideInfo extends StatelessWidget {
           children: [
             _CwlImageStat(
               imageUrl: ImageAssets.builderBaseStar,
-              value: '$stars',
+              value: hasStanding ? '$stars' : '—',
             ),
             const SizedBox(width: 9),
             _CwlIconStat(
               icon: Icons.percent_rounded,
-              value: destruction.toStringAsFixed(1),
+              value: hasStanding ? destruction.toStringAsFixed(2) : '—',
             ),
           ],
         ),
@@ -2103,35 +2327,85 @@ class _CwlRecordPill extends StatelessWidget {
   final int won;
   final int tied;
   final int lost;
-  final Color color;
 
   const _CwlRecordPill({
     required this.won,
     required this.tied,
     required this.lost,
-    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
-    final readableColor = color.computeLuminance() < 0.18
-        ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.86)
-        : color;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: readableColor.withValues(alpha: 0.16),
+        color: colorScheme.surface.withValues(alpha: 0.38),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: readableColor.withValues(alpha: 0.38)),
-      ),
-      child: Text(
-        '${won}W ${tied}D ${lost}L',
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: readableColor,
-          fontWeight: FontWeight.w900,
-          height: 1,
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.72),
         ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _CwlRecordToken(value: won, suffix: 'W', color: StatColors.win),
+          const SizedBox(width: 5),
+          _CwlRecordToken(value: tied, suffix: 'T', color: StatColors.tie),
+          const SizedBox(width: 5),
+          _CwlRecordToken(value: lost, suffix: 'L', color: StatColors.loss),
+        ],
+      ),
+    );
+  }
+}
+
+class _CwlRecordToken extends StatelessWidget {
+  final int value;
+  final String suffix;
+  final Color color;
+
+  const _CwlRecordToken({
+    required this.value,
+    required this.suffix,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) => Text(
+    '$value$suffix',
+    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+      color: color,
+      fontWeight: FontWeight.w900,
+      height: 1,
+    ),
+  );
+}
+
+class _CwlLeagueMovementIcon extends StatelessWidget {
+  static const _promotedUrl =
+      'https://assets.clashk.ing/bot/icons/up_green_arrow.png';
+  static const _demotedUrl =
+      'https://assets.clashk.ing/bot/icons/down_red_arrow.png';
+
+  final _CwlLeagueMovement movement;
+
+  const _CwlLeagueMovementIcon({required this.movement});
+
+  @override
+  Widget build(BuildContext context) {
+    final (label, imageUrl) = switch (movement) {
+      _CwlLeagueMovement.promoted => ('Promoted', _promotedUrl),
+      _CwlLeagueMovement.demoted => ('Demoted', _demotedUrl),
+    };
+
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        label: label,
+        image: true,
+        child: MobileWebImage(imageUrl: imageUrl, width: 19, height: 19),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_achievement.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_join_leave_tab.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_profile_tab.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -28,102 +29,315 @@ class PlayerScreen extends StatefulWidget {
   PlayerScreenState createState() => PlayerScreenState();
 }
 
-class PlayerScreenState extends State<PlayerScreen> {
+class PlayerScreenState extends State<PlayerScreen>
+    with SingleTickerProviderStateMixin {
   static const double _desktopBreakpoint = 900;
   static const double _desktopMaxContentWidth = 1320;
+  static const double _profileChromeRamp = 12;
 
-  late int selectedTab = widget.initialTab;
+  final ScrollController _scrollController = ScrollController();
+  final List<ScrollController> _inactiveTabControllers = List.generate(
+    5,
+    (_) => ScrollController(),
+  );
+  final GlobalKey<NestedScrollViewState> _nestedScrollKey = GlobalKey();
+  final GlobalKey _profileTabsKey = GlobalKey();
+  final ValueNotifier<double> _profileChromeProgress = ValueNotifier(0);
+  late final TabController _profileTabController;
+  late int selectedTab;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTab = widget.initialTab.clamp(0, 4);
+    _profileTabController = TabController(
+      length: 5,
+      vsync: this,
+      initialIndex: selectedTab,
+    )..addListener(_handleProfileTabChange);
+    _scrollController.addListener(_updateProfileChrome);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _updateProfileChrome());
+  }
+
+  @override
+  void dispose() {
+    _profileTabController.removeListener(_handleProfileTabChange);
+    _profileTabController.dispose();
+    _scrollController.removeListener(_updateProfileChrome);
+    _scrollController.dispose();
+    for (final controller in _inactiveTabControllers) {
+      controller.dispose();
+    }
+    _profileChromeProgress.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final bottomPadding = 16 + MediaQuery.paddingOf(context).bottom;
 
+    final tabs = _profileTabs(context);
+
     return Scaffold(
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onHorizontalDragEnd: _handleTabSwipe,
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: PlayerInfoHeader(
-                selectedTab: selectedTab,
-                player: widget.selectedPlayer,
+      body: Stack(
+        children: [
+          NestedScrollView(
+            key: _nestedScrollKey,
+            controller: _scrollController,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(
+                child: PlayerInfoHeader(
+                  selectedTab: selectedTab,
+                  player: widget.selectedPlayer,
+                ),
               ),
+              SliverToBoxAdapter(
+                child: KeyedSubtree(
+                  key: _profileTabsKey,
+                  child: ValueListenableBuilder<double>(
+                    valueListenable: _profileChromeProgress,
+                    child: InfoProfileTabs(
+                      selectedIndex: selectedTab,
+                      onTabSelected: _selectTab,
+                      alwaysScrollable: true,
+                      tabs: tabs,
+                      controller: _profileTabController,
+                    ),
+                    builder: (context, progress, child) => Opacity(
+                      opacity: PinnedInfoProfileTabs.inFlowTabsOpacityFor(
+                        progress,
+                      ),
+                      child: child,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            body: TabBarView(
+              controller: _profileTabController,
+              children: [
+                _profileTabPage(
+                  index: 0,
+                  child: _buildSliverTab(
+                    index: 0,
+                    key: 'player-home',
+                    slivers: _buildPlayerSlivers(widget.selectedPlayer),
+                    bottomPadding: bottomPadding,
+                  ),
+                ),
+                _profileTabPage(
+                  index: 1,
+                  child: _buildSliverTab(
+                    index: 1,
+                    key: 'player-builder',
+                    slivers: _buildBuilderSlivers(widget.selectedPlayer),
+                    bottomPadding: bottomPadding,
+                  ),
+                ),
+                _profileTabPage(
+                  index: 2,
+                  child: _buildSliverTab(
+                    index: 2,
+                    key: 'player-war-stats',
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: PlayerWarStatsProfileTab(
+                          player: widget.selectedPlayer,
+                        ),
+                      ),
+                    ],
+                    bottomPadding: bottomPadding,
+                    alwaysScrollable: widget.selectedPlayer.warStats != null,
+                  ),
+                ),
+                _profileTabPage(
+                  index: 3,
+                  child: _buildSliverTab(
+                    index: 3,
+                    key: 'player-achievements',
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: _buildAchievementContent(widget.selectedPlayer),
+                      ),
+                    ],
+                    bottomPadding: bottomPadding,
+                  ),
+                ),
+                _profileTabPage(
+                  index: 4,
+                  child: PlayerJoinLeaveTab(
+                    key: const ValueKey('player-join-leave'),
+                    playerTag: widget.selectedPlayer.tag,
+                    bottomPadding: bottomPadding,
+                    scrollViewKey: ValueKey(
+                      'player-join-leave-scroll-${selectedTab == 4 ? 'nested' : 'standalone'}',
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SliverToBoxAdapter(
-              child: InfoProfileTabs(
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: ValueListenableBuilder<double>(
+              valueListenable: _profileChromeProgress,
+              builder: (context, progress, _) => PinnedInfoProfileTabs(
+                tabs: tabs,
                 selectedIndex: selectedTab,
                 onTabSelected: _selectTab,
                 alwaysScrollable: true,
-                tabs: [
-                  InfoProfileTabData(
-                    label:
-                        AppLocalizations.of(context)?.gameBaseHome ??
-                        'Home Base',
-                    imageUrl: ImageAssets.townHall(
-                      widget.selectedPlayer.townHallLevel,
-                    ),
-                  ),
-                  InfoProfileTabData(
-                    label:
-                        AppLocalizations.of(context)?.gameBaseBuilder ??
-                        'Builder Base',
-                    imageUrl: ImageAssets.builderHall(
-                      widget.selectedPlayer.builderHallLevel,
-                    ),
-                  ),
-                  InfoProfileTabData(
-                    label:
-                        AppLocalizations.of(context)?.warStats ?? 'War Stats',
-                    imageUrl: ImageAssets.war,
-                  ),
-                  InfoProfileTabData(
-                    label:
-                        AppLocalizations.of(context)?.gameAchievements ??
-                        'Achievements',
-                    imageUrl: ImageAssets.attackStar,
-                  ),
-                ],
+                progress: progress,
+                controller: _profileTabController,
               ),
             ),
-            ...switch (selectedTab) {
-              0 => _buildPlayerSlivers(widget.selectedPlayer),
-              1 => _buildBuilderSlivers(widget.selectedPlayer),
-              2 => [
-                SliverToBoxAdapter(
-                  child: PlayerWarStatsProfileTab(
-                    player: widget.selectedPlayer,
-                  ),
-                ),
-              ],
-              _ => [
-                SliverToBoxAdapter(
-                  child: _buildAchievementContent(widget.selectedPlayer),
-                ),
-              ],
-            },
-            SliverToBoxAdapter(child: SizedBox(height: bottomPadding)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  void _selectTab(int index) {
-    final clampedIndex = index > 3 ? 3 : index;
-    final boundedIndex = index < 0 ? 0 : clampedIndex;
-    if (boundedIndex == selectedTab) return;
-    setState(() => selectedTab = boundedIndex);
+  List<InfoProfileTabData> _profileTabs(BuildContext context) => [
+    InfoProfileTabData(
+      label: AppLocalizations.of(context)?.gameBaseHome ?? 'Home Base',
+      imageUrl: ImageAssets.townHall(widget.selectedPlayer.townHallLevel),
+    ),
+    InfoProfileTabData(
+      label: AppLocalizations.of(context)?.gameBaseBuilder ?? 'Builder Base',
+      imageUrl: ImageAssets.builderHall(widget.selectedPlayer.builderHallLevel),
+    ),
+    InfoProfileTabData(
+      label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
+      imageUrl: ImageAssets.war,
+    ),
+    InfoProfileTabData(
+      label: AppLocalizations.of(context)?.gameAchievements ?? 'Achievements',
+      imageUrl: ImageAssets.attackStar,
+    ),
+    const InfoProfileTabData(
+      label: 'Join / Leave',
+      icon: Icons.swap_horiz_rounded,
+    ),
+  ];
+
+  void _updateProfileChrome() {
+    if (!mounted || !_scrollController.hasClients) return;
+    final tabsContext = _profileTabsKey.currentContext;
+    if (tabsContext == null) return;
+    final renderObject = tabsContext.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) return;
+
+    final safeTop = MediaQuery.paddingOf(context).top;
+    final tabsTop = renderObject.localToGlobal(Offset.zero).dy;
+    final progress =
+        ((safeTop + _profileChromeRamp - tabsTop) / _profileChromeRamp).clamp(
+          0.0,
+          1.0,
+        );
+    if ((_profileChromeProgress.value - progress).abs() >= 0.005) {
+      _profileChromeProgress.value = progress;
+    }
   }
 
-  void _handleTabSwipe(DragEndDetails details) {
-    final velocity = details.primaryVelocity ?? 0;
-    if (velocity.abs() < 240) return;
-    if (velocity < 0) {
-      _selectTab(selectedTab + 1);
-    } else {
-      _selectTab(selectedTab - 1);
+  void _selectTab(int index) {
+    final clampedIndex = index > 4 ? 4 : index;
+    final boundedIndex = index < 0 ? 0 : clampedIndex;
+    if (boundedIndex == _profileTabController.index) return;
+    _profileTabController.animateTo(
+      boundedIndex,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  void _handleProfileTabChange() {
+    final index = _profileTabController.index;
+    final selectionChanged = index != selectedTab;
+    final pinned = _profileChromeProgress.value >= 0.98;
+    if (selectionChanged) {
+      if (pinned) {
+        _snapOuterScrollToPinThreshold();
+      }
+      setState(() => selectedTab = index);
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!_profileTabController.indexIsChanging) {
+        _resetInactiveTabScrolls();
+      }
+      _updateProfileChrome();
+    });
+  }
+
+  void _snapOuterScrollToPinThreshold() {
+    final outerController = _nestedScrollKey.currentState?.outerController;
+    final tabsRenderObject = _profileTabsKey.currentContext?.findRenderObject();
+    if (outerController == null ||
+        !outerController.hasClients ||
+        tabsRenderObject is! RenderBox ||
+        !tabsRenderObject.hasSize) {
+      return;
+    }
+
+    final safeTop = MediaQuery.paddingOf(context).top;
+    final tabsTop = tabsRenderObject.localToGlobal(Offset.zero).dy;
+    if (tabsTop > safeTop) return;
+
+    final targetOffset = (outerController.offset + tabsTop - safeTop).clamp(
+      outerController.position.minScrollExtent,
+      outerController.position.maxScrollExtent,
+    );
+    outerController.jumpTo(targetOffset);
+  }
+
+  void _resetInactiveTabScrolls() {
+    for (var index = 0; index < _inactiveTabControllers.length; index++) {
+      if (index == selectedTab) continue;
+      final controller = _inactiveTabControllers[index];
+      if (controller.hasClients && controller.offset != 0) {
+        controller.jumpTo(0);
+      }
+    }
+  }
+
+  Widget _profileTabPage({required int index, required Widget child}) {
+    return KeyedSubtree(
+      key: ValueKey('player-profile-tab-$index'),
+      child: Builder(
+        builder: (pageContext) {
+          final nestedController = PrimaryScrollController.maybeOf(pageContext);
+          final active = index == selectedTab;
+          final controller = active && nestedController != null
+              ? nestedController
+              : _inactiveTabControllers[index];
+          return PrimaryScrollController(controller: controller, child: child);
+        },
+      ),
+    );
+  }
+
+  Widget _buildSliverTab({
+    required int index,
+    required String key,
+    required List<Widget> slivers,
+    required double bottomPadding,
+    bool alwaysScrollable = true,
+  }) {
+    return CustomScrollView(
+      key: ValueKey(
+        '$key-scroll-${selectedTab == index ? 'nested' : 'standalone'}',
+      ),
+      primary: true,
+      physics: alwaysScrollable
+          ? const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics())
+          : const BouncingScrollPhysics(),
+      slivers: [
+        ...slivers,
+        SliverToBoxAdapter(child: SizedBox(height: bottomPadding)),
+      ],
+    );
   }
 
   List<Widget> _buildPlayerSlivers(Player player) {
@@ -229,6 +443,7 @@ class PlayerScreenState extends State<PlayerScreen> {
           title: loc.gameTroops,
           items: player.bbTroops,
           townHallLevel: player.builderHallLevel,
+          initiallyExpanded: true,
           margin: margin,
         ),
     ];
@@ -385,7 +600,7 @@ class _AchievementsTabState extends State<_AchievementsTab> {
         const SizedBox(height: 10),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: isDesktopWeb ? 0 : 16),
-          child: LiquidGlassSegmentedControl<int>(
+          child: AppGlassSegmentedControl<int>(
             values: const [0, 1],
             labels: [
               '$homeLabel · $homeDone/${home.length}',

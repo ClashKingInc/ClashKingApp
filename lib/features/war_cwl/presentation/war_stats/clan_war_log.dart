@@ -56,13 +56,8 @@ class ClanWarLog extends StatelessWidget {
 
   List<WarInfo> getFilteredWarLogData() {
     List<WarInfo> filteredData =
-        clan.clanWarStats?.wars
-            .where(
-              (war) =>
-                  war.warDetails.warType != null &&
-                  selectedTypes.contains(war.warDetails.warType!.toLowerCase()),
-            )
-            .map((war) => war.warDetails)
+        clan.clanWarLog?.wars
+            .where((war) => selectedTypes.contains(war.warType?.toLowerCase()))
             .toList() ??
         [];
 

@@ -1,127 +1,59 @@
 class ClanJoinLeave {
   final String clanTag;
-  final int timeStampStart;
-  final int timeStampEnd;
-  final JoinLeaveStats stats;
+  final int available;
+  final int uniquePlayers;
   final List<JoinLeaveEvent> joinLeaveList;
 
   ClanJoinLeave({
     required this.clanTag,
-    required this.timeStampStart,
-    required this.timeStampEnd,
-    required this.stats,
+    required this.available,
+    required this.uniquePlayers,
     required this.joinLeaveList,
   });
 
   factory ClanJoinLeave.fromJson(Map<String, dynamic> json) {
     return ClanJoinLeave(
       clanTag: json['clan_tag'] ?? "",
-      timeStampStart: json['timestamp_start'] ?? 0,
-      timeStampEnd: json['timestamp_end'] ?? 0,
-      stats: JoinLeaveStats.fromJson(json['stats']),
-      joinLeaveList: (json['join_leave_list'] as List<dynamic>? ?? [])
-          .map((e) => JoinLeaveEvent.fromJson(e))
-          .toList(),
+      available: (json['available'] as num?)?.toInt() ?? 0,
+      uniquePlayers: (json['uniquePlayers'] as num?)?.toInt() ?? 0,
+      joinLeaveList:
+          (json['items'] as List<dynamic>? ??
+                  json['join_leave_list'] as List<dynamic>? ??
+                  const [])
+              .map((e) => JoinLeaveEvent.fromJson(e))
+              .toList(),
     );
   }
 
   factory ClanJoinLeave.empty() {
     return ClanJoinLeave(
       clanTag: "",
-      timeStampStart: 0,
-      timeStampEnd: 0,
-      stats: JoinLeaveStats(
-        totalEvents: 0,
-        totalJoins: 0,
-        totalLeaves: 0,
-        uniquePlayers: 0,
-        movingPlayers: 0,
-        playerStillInClan: 0,
-        playerLeftClan: 0,
-        rejoinedPlayers: 0,
-        mostMovingPlayers: [],
-      ),
+      available: 0,
+      uniquePlayers: 0,
       joinLeaveList: [],
     );
   }
-}
 
-class JoinLeaveStats {
-  final int totalEvents;
-  final int totalJoins;
-  final int totalLeaves;
-  final int uniquePlayers;
-  final int movingPlayers;
-  final int playerStillInClan;
-  final int playerLeftClan;
-  final int rejoinedPlayers;
-  final String? firstEvent;
-  final String? lastEvent;
-  final int? mostMovingHour;
-  final double? avgTimeBetweenJoinLeave;
-  final List<MostActivePlayer> mostMovingPlayers;
-
-  JoinLeaveStats({
-    required this.totalEvents,
-    required this.totalJoins,
-    required this.totalLeaves,
-    required this.uniquePlayers,
-    required this.movingPlayers,
-    required this.playerStillInClan,
-    required this.playerLeftClan,
-    required this.rejoinedPlayers,
-    this.firstEvent,
-    this.lastEvent,
-    this.mostMovingHour,
-    this.avgTimeBetweenJoinLeave,
-    required this.mostMovingPlayers,
-  });
-
-  factory JoinLeaveStats.fromJson(Map<String, dynamic> json) {
-    return JoinLeaveStats(
-      totalEvents: json['total_events'] ?? 0,
-      totalJoins: json['total_joins'] ?? 0,
-      totalLeaves: json['total_leaves'] ?? 0,
-      uniquePlayers: json['unique_players'] ?? 0,
-      movingPlayers: json['moving_players'] ?? 0,
-      playerStillInClan: json['players_still_in_clan'] ?? 0,
-      playerLeftClan: json['players_left_forever'] ?? 0,
-      rejoinedPlayers: json['rejoined_players'] ?? 0,
-      firstEvent: json['first_event'] ?? "",
-      lastEvent: json['last_event'] ?? "",
-      mostMovingHour: json['most_moving_hour'] ?? 0,
-      avgTimeBetweenJoinLeave: (json['avg_time_between_join_leave'] as num?)
-          ?.toDouble(),
-      mostMovingPlayers: (json['most_moving_players'] as List<dynamic>? ?? [])
-          .map((e) => MostActivePlayer.fromJson(e))
-          .toList(),
-    );
-  }
-}
-
-class MostActivePlayer {
-  final String tag;
-  final String name;
-  final int count;
-
-  MostActivePlayer({
-    required this.tag,
-    required this.name,
-    required this.count,
-  });
-
-  factory MostActivePlayer.fromJson(Map<String, dynamic> json) {
-    return MostActivePlayer(
-      tag: json['tag'] ?? "",
-      name: json['name'] ?? "",
-      count: json['count'] ?? 0,
+  ClanJoinLeave appendPage(ClanJoinLeave page) {
+    final seen = <String>{};
+    final combined = <JoinLeaveEvent>[];
+    for (final event in [...joinLeaveList, ...page.joinLeaveList]) {
+      final key =
+          '${event.time.toUtc().toIso8601String()}|${event.type}|${event.tag}';
+      if (seen.add(key)) combined.add(event);
+    }
+    return ClanJoinLeave(
+      clanTag: clanTag.isEmpty ? page.clanTag : clanTag,
+      available: page.available,
+      uniquePlayers: page.uniquePlayers,
+      joinLeaveList: combined,
     );
   }
 }
 
 class JoinLeaveEvent {
   final String type;
-  final String clan;
+  final JoinLeaveClan? clan;
   final DateTime time;
   final String tag;
   final String name;
@@ -139,11 +71,34 @@ class JoinLeaveEvent {
   factory JoinLeaveEvent.fromJson(Map<String, dynamic> json) {
     return JoinLeaveEvent(
       type: json['type'] ?? "",
-      clan: json['clan'] ?? "",
+      clan: json['clan'] is Map<String, dynamic>
+          ? JoinLeaveClan.fromJson(json['clan'] as Map<String, dynamic>)
+          : null,
       time: DateTime.tryParse(json['time'] ?? '') ?? DateTime(1970),
       tag: json['tag'] ?? "",
       name: json['name'] ?? "",
-      th: json['th'] ?? 0,
+      th:
+          (json['townHallLevel'] as num?)?.toInt() ??
+          (json['th'] as num?)?.toInt() ??
+          0,
     );
   }
+}
+
+class JoinLeaveClan {
+  final String name;
+  final String tag;
+  final String badge;
+
+  const JoinLeaveClan({
+    required this.name,
+    required this.tag,
+    required this.badge,
+  });
+
+  factory JoinLeaveClan.fromJson(Map<String, dynamic> json) => JoinLeaveClan(
+    name: json['name'] as String? ?? '',
+    tag: json['tag'] as String? ?? '',
+    badge: json['badge'] as String? ?? '',
+  );
 }

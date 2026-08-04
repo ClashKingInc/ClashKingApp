@@ -44,6 +44,44 @@ void main() {
     });
   });
 
+  group('ClanService — CWL history', () {
+    test('loads standing summaries directly from stored seasons', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/cwl/%23CLAN/seasons'] = http.Response(
+        jsonEncode({
+          'items': [
+            {
+              'season': '2026-07',
+              'state': 'ended',
+              'warSize': 15,
+              'warLeague': {'id': 48000003, 'name': 'Champion League I'},
+              'rank': 2,
+              'stars': 301,
+              'destruction': 95.1,
+              'rounds': {'won': 6, 'tied': 0, 'lost': 1},
+            },
+          ],
+        }),
+        200,
+      );
+
+      final history = await ClanService(
+        apiService: fakeApi,
+      ).getCwlRankingHistory('#CLAN');
+
+      expect(history, hasLength(1));
+      expect(history.single.season, '2026-07');
+      expect(history.single.league, 'Champion League I');
+      expect(history.single.rank, 2);
+      expect(history.single.stars, 301);
+      expect(history.single.destruction, 95.1);
+      expect(history.single.roundsWon, 6);
+      expect(history.single.roundsTied, 0);
+      expect(history.single.roundsLost, 1);
+      expect(fakeApi.getCallCounts['/cwl/%23CLAN/ranking-history'], isNull);
+    });
+  });
+
   // ---------------------------------------------------------------------------
   // loadAllClanData
   // ---------------------------------------------------------------------------
@@ -176,30 +214,11 @@ void main() {
 
     test('populates joinLeaveList on 200', () async {
       final fakeApi = FakeApiService();
-      // New implementation: GET /clan/:tag/join-leave + /clan/:tag/join-leave/stats
       final encodedTag = Uri.encodeComponent('#CLAN1');
-      fakeApi.getStubs['/clan/$encodedTag/join-leave?current_season=true'] =
-          http.Response(
-            jsonEncode({'items': [], 'timestamp_start': 0, 'timestamp_end': 0}),
-            200,
-          );
-      fakeApi.getStubs['/clan/$encodedTag/join-leave/stats?current_season=true'] =
-          http.Response(
-            jsonEncode({
-              'stats': {
-                'total_events': 0,
-                'total_joins': 0,
-                'total_leaves': 0,
-                'unique_players': 0,
-                'moving_players': 0,
-                'players_still_in_clan': 0,
-                'players_left_forever': 0,
-                'rejoined_players': 0,
-                'most_moving_players': [],
-              },
-            }),
-            200,
-          );
+      fakeApi.getStubs['/clan/$encodedTag/join-leave?limit=50'] = http.Response(
+        jsonEncode({'items': [], 'available': 0, 'uniquePlayers': 0}),
+        200,
+      );
       final service = ClanService(apiService: fakeApi);
       final result = await service.loadClanJoinLeaveData(['#CLAN1']);
       expect(result, isNotEmpty);
@@ -267,7 +286,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('ClanService — linkJoinLeaveToClans', () {
-    test('assigns empty JoinLeave when no matching entry', () async {
+    test('leaves joinLeave unset when no matching entry', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/clans/details'] = http.Response(
         jsonEncode({
@@ -278,7 +297,7 @@ void main() {
       final service = ClanService(apiService: fakeApi);
       await service.loadAllClanData(['#CLAN1']);
       service.linkJoinLeaveToClans(); // joinLeaveList is empty
-      expect(service.clans['#CLAN1']?.joinLeave, isNotNull);
+      expect(service.clans['#CLAN1']?.joinLeave, isNull);
     });
   });
 
@@ -293,13 +312,18 @@ void main() {
       expect(result, isEmpty);
     });
 
-    test('returns ClanWarLog with empty items on 403', () async {
+    test('returns reconstructed private ClanWarLog on 200', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs[''] = http.Response('Forbidden', 403);
+      final encodedTag = Uri.encodeComponent('#CLAN1');
+      fakeApi.getStubs['/clan/$encodedTag/war-log?limit=50'] = http.Response(
+        jsonEncode({'items': [], 'isPrivate': true, 'reconstructed': true}),
+        200,
+      );
       final service = ClanService(apiService: fakeApi);
       final result = await service.loadWarLogData(['#CLAN1']);
       expect(result, hasLength(1));
       expect(result.first.items, isEmpty);
+      expect(result.first.reconstructed, isTrue);
     });
 
     test('returns empty list on network error without throwOnError', () async {
@@ -630,6 +654,34 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('ClanService — loadClanWarStatsWithFilter', () {
+    test('sends war-count and date-range controls to warhits', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/war/clans/warhits'] = http.Response(
+        jsonEncode({
+          'items': [
+            {'tag': '#CLAN1', 'clan_tag': '#CLAN1', 'players': [], 'wars': []},
+          ],
+        }),
+        200,
+      );
+      final service = ClanService(apiService: fakeApi);
+      final start = DateTime.utc(2026, 1, 1);
+      final end = DateTime.utc(2026, 4, 1);
+
+      await service.loadClanWarStatsWithFilter(
+        '#CLAN1',
+        ClanWarStatsFilter(startDate: start, endDate: end, limit: 100),
+      );
+
+      expect(fakeApi.lastPostBodies['/war/clans/warhits'], {
+        'clan_tags': ['#CLAN1'],
+        'limit': 100,
+        'same_th': false,
+        'timestamp_start': start.millisecondsSinceEpoch ~/ 1000,
+        'timestamp_end': end.millisecondsSinceEpoch ~/ 1000,
+      });
+    });
+
     test('returns ClanWarStats when item matches clan tag', () async {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/war/clans/warhits'] = http.Response(
@@ -714,7 +766,7 @@ void main() {
       expect(service.clans['#CLAN1']?.name, 'Bulk Clan');
     });
 
-    test('populates joinLeaveList from join_leave_data', () async {
+    test('ignores legacy bundled join_leave_data', () async {
       final service = ClanService();
       await service.processBulkClanData(
         {
@@ -740,8 +792,7 @@ void main() {
         },
         ['#CLAN1'],
       );
-      expect(service.joinLeaveList, hasLength(1));
-      expect(service.joinLeaveList.first.clanTag, '#CLAN1');
+      expect(service.joinLeaveList, isEmpty);
     });
 
     test('populates capitalHistory from capital_data', () async {

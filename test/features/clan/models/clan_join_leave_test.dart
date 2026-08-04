@@ -5,47 +5,16 @@ import 'package:flutter_test/flutter_test.dart';
 // Helpers
 // ---------------------------------------------------------------------------
 
-Map<String, dynamic> _statsJson({
-  int totalEvents = 10,
-  int totalJoins = 6,
-  int totalLeaves = 4,
-  int uniquePlayers = 5,
-  int movingPlayers = 2,
-  int playerStillInClan = 3,
-  int playerLeftClan = 1,
-  int rejoinedPlayers = 1,
-  String? firstEvent,
-  String? lastEvent,
-  int? mostMovingHour,
-  double? avgTimeBetweenJoinLeave,
-  List<dynamic>? mostMovingPlayers,
-}) => <String, dynamic>{
-  'total_events': totalEvents,
-  'total_joins': totalJoins,
-  'total_leaves': totalLeaves,
-  'unique_players': uniquePlayers,
-  'moving_players': movingPlayers,
-  'players_still_in_clan': playerStillInClan,
-  'players_left_forever': playerLeftClan,
-  'rejoined_players': rejoinedPlayers,
-  'first_event': ?firstEvent,
-  'last_event': ?lastEvent,
-  'most_moving_hour': ?mostMovingHour,
-  'avg_time_between_join_leave': ?avgTimeBetweenJoinLeave,
-  'most_moving_players': mostMovingPlayers ?? [],
-};
-
 Map<String, dynamic> _joinLeaveJson({
   String tag = '#CLAN1',
-  int tsStart = 1000,
-  int tsEnd = 2000,
+  int available = 10,
+  int uniquePlayers = 5,
   List<dynamic>? events,
 }) => <String, dynamic>{
   'clan_tag': tag,
-  'timestamp_start': tsStart,
-  'timestamp_end': tsEnd,
-  'stats': _statsJson(),
-  'join_leave_list': events ?? [],
+  'available': available,
+  'uniquePlayers': uniquePlayers,
+  'items': events ?? [],
 };
 
 Map<String, dynamic> _eventJson({
@@ -57,7 +26,7 @@ Map<String, dynamic> _eventJson({
   int th = 14,
 }) => <String, dynamic>{
   'type': type,
-  'clan': clan,
+  'clan': {'tag': clan, 'name': 'Test Clan', 'badge': 'badge.png'},
   'time': time,
   'tag': playerTag,
   'name': name,
@@ -81,7 +50,7 @@ void main() {
 
     test('parses clan tag correctly', () {
       final event = JoinLeaveEvent.fromJson(_eventJson(clan: '#TESTCLAN'));
-      expect(event.clan, '#TESTCLAN');
+      expect(event.clan?.tag, '#TESTCLAN');
     });
 
     test('parses player tag correctly', () {
@@ -117,7 +86,7 @@ void main() {
       );
       final event = JoinLeaveEvent.fromJson(json);
       expect(event.type, 'join');
-      expect(event.clan, '#MYHOME');
+      expect(event.clan?.tag, '#MYHOME');
       expect(event.tag, '#XYZ');
       expect(event.name, 'Santa');
       expect(event.th, 15);
@@ -129,9 +98,9 @@ void main() {
       expect(event.type, '');
     });
 
-    test('clan defaults to empty string when null', () {
+    test('clan defaults to null when absent', () {
       final event = JoinLeaveEvent.fromJson(_eventJson()..['clan'] = null);
-      expect(event.clan, '');
+      expect(event.clan, isNull);
     });
 
     test('tag defaults to empty string when null', () {
@@ -160,14 +129,14 @@ void main() {
       expect(obj.clanTag, '#MYCLAN');
     });
 
-    test('parses timestamp_start', () {
-      final obj = ClanJoinLeave.fromJson(_joinLeaveJson(tsStart: 5000));
-      expect(obj.timeStampStart, 5000);
+    test('parses available', () {
+      final obj = ClanJoinLeave.fromJson(_joinLeaveJson(available: 5000));
+      expect(obj.available, 5000);
     });
 
-    test('parses timestamp_end', () {
-      final obj = ClanJoinLeave.fromJson(_joinLeaveJson(tsEnd: 9999));
-      expect(obj.timeStampEnd, 9999);
+    test('parses uniquePlayers', () {
+      final obj = ClanJoinLeave.fromJson(_joinLeaveJson(uniquePlayers: 9999));
+      expect(obj.uniquePlayers, 9999);
     });
 
     test('parses empty join_leave_list', () {
@@ -196,18 +165,20 @@ void main() {
       expect(obj.clanTag, '');
     });
 
-    test('uses 0 for missing timestamp_start', () {
+    test('uses 0 for missing available', () {
       final json = _joinLeaveJson();
-      json.remove('timestamp_start');
+      json.remove('available');
+      json['stats'] = <String, dynamic>{};
       final obj = ClanJoinLeave.fromJson(json);
-      expect(obj.timeStampStart, 0);
+      expect(obj.available, 0);
     });
 
-    test('uses 0 for missing timestamp_end', () {
+    test('uses 0 for missing uniquePlayers', () {
       final json = _joinLeaveJson();
-      json.remove('timestamp_end');
+      json.remove('uniquePlayers');
+      json['stats'] = <String, dynamic>{};
       final obj = ClanJoinLeave.fromJson(json);
-      expect(obj.timeStampEnd, 0);
+      expect(obj.uniquePlayers, 0);
     });
   });
 
@@ -220,175 +191,20 @@ void main() {
       expect(ClanJoinLeave.empty().clanTag, '');
     });
 
-    test('timeStampStart is 0', () {
-      expect(ClanJoinLeave.empty().timeStampStart, 0);
+    test('available is 0', () {
+      expect(ClanJoinLeave.empty().available, 0);
     });
 
-    test('timeStampEnd is 0', () {
-      expect(ClanJoinLeave.empty().timeStampEnd, 0);
+    test('uniquePlayers is 0', () {
+      expect(ClanJoinLeave.empty().uniquePlayers, 0);
     });
 
     test('joinLeaveList is empty', () {
       expect(ClanJoinLeave.empty().joinLeaveList, isEmpty);
     });
 
-    test('stats.totalEvents is 0', () {
-      expect(ClanJoinLeave.empty().stats.totalEvents, 0);
-    });
-
-    test('stats.totalJoins is 0', () {
-      expect(ClanJoinLeave.empty().stats.totalJoins, 0);
-    });
-
-    test('stats.totalLeaves is 0', () {
-      expect(ClanJoinLeave.empty().stats.totalLeaves, 0);
-    });
-
-    test('stats.mostMovingPlayers is empty', () {
-      expect(ClanJoinLeave.empty().stats.mostMovingPlayers, isEmpty);
-    });
-
     test('returns a valid ClanJoinLeave instance', () {
       expect(ClanJoinLeave.empty(), isA<ClanJoinLeave>());
-    });
-  });
-
-  // ---------------------------------------------------------------------------
-  // JoinLeaveStats.fromJson
-  // ---------------------------------------------------------------------------
-
-  group('JoinLeaveStats.fromJson', () {
-    test('parses totalEvents', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(totalEvents: 42));
-      expect(stats.totalEvents, 42);
-    });
-
-    test('parses totalJoins', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(totalJoins: 20));
-      expect(stats.totalJoins, 20);
-    });
-
-    test('parses totalLeaves', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(totalLeaves: 5));
-      expect(stats.totalLeaves, 5);
-    });
-
-    test('parses uniquePlayers', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(uniquePlayers: 8));
-      expect(stats.uniquePlayers, 8);
-    });
-
-    test('parses movingPlayers', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(movingPlayers: 3));
-      expect(stats.movingPlayers, 3);
-    });
-
-    test('parses playerStillInClan', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(playerStillInClan: 7));
-      expect(stats.playerStillInClan, 7);
-    });
-
-    test('parses playerLeftClan', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(playerLeftClan: 2));
-      expect(stats.playerLeftClan, 2);
-    });
-
-    test('parses rejoinedPlayers', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(rejoinedPlayers: 1));
-      expect(stats.rejoinedPlayers, 1);
-    });
-
-    test('parses avgTimeBetweenJoinLeave as double', () {
-      final stats = JoinLeaveStats.fromJson(
-        _statsJson(avgTimeBetweenJoinLeave: 3.14),
-      );
-      expect(stats.avgTimeBetweenJoinLeave, closeTo(3.14, 0.001));
-    });
-
-    test('avgTimeBetweenJoinLeave is null when missing', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson());
-      expect(stats.avgTimeBetweenJoinLeave, isNull);
-    });
-
-    test('parses mostMovingPlayers list', () {
-      final stats = JoinLeaveStats.fromJson(
-        _statsJson(
-          mostMovingPlayers: [
-            {'tag': '#P1', 'name': 'Alpha', 'count': 5},
-            {'tag': '#P2', 'name': 'Beta', 'count': 3},
-          ],
-        ),
-      );
-      expect(stats.mostMovingPlayers, hasLength(2));
-      expect(stats.mostMovingPlayers.first.tag, '#P1');
-      expect(stats.mostMovingPlayers.last.count, 3);
-    });
-
-    test('uses 0 defaults for missing numeric fields', () {
-      final stats = JoinLeaveStats.fromJson(<String, dynamic>{
-        'most_moving_players': [],
-      });
-      expect(stats.totalEvents, 0);
-      expect(stats.totalJoins, 0);
-      expect(stats.totalLeaves, 0);
-      expect(stats.uniquePlayers, 0);
-      expect(stats.movingPlayers, 0);
-    });
-
-    test('parses firstEvent as string', () {
-      final stats = JoinLeaveStats.fromJson(
-        _statsJson(firstEvent: '2024-01-01T00:00:00'),
-      );
-      expect(stats.firstEvent, '2024-01-01T00:00:00');
-    });
-
-    test('parses lastEvent as string', () {
-      final stats = JoinLeaveStats.fromJson(
-        _statsJson(lastEvent: '2024-12-31T23:59:59'),
-      );
-      expect(stats.lastEvent, '2024-12-31T23:59:59');
-    });
-
-    test('parses mostMovingHour', () {
-      final stats = JoinLeaveStats.fromJson(_statsJson(mostMovingHour: 14));
-      expect(stats.mostMovingHour, 14);
-    });
-  });
-
-  // ---------------------------------------------------------------------------
-  // MostActivePlayer.fromJson
-  // ---------------------------------------------------------------------------
-
-  group('MostActivePlayer.fromJson', () {
-    test('parses tag, name, count', () {
-      final player = MostActivePlayer.fromJson({
-        'tag': '#MVP',
-        'name': 'King',
-        'count': 12,
-      });
-      expect(player.tag, '#MVP');
-      expect(player.name, 'King');
-      expect(player.count, 12);
-    });
-
-    test('defaults to empty strings and 0 count on null fields', () {
-      final player = MostActivePlayer.fromJson(<String, dynamic>{
-        'tag': null,
-        'name': null,
-        'count': null,
-      });
-      expect(player.tag, '');
-      expect(player.name, '');
-      expect(player.count, 0);
-    });
-
-    test('parses count correctly', () {
-      final player = MostActivePlayer.fromJson({
-        'tag': '#A',
-        'name': 'B',
-        'count': 99,
-      });
-      expect(player.count, 99);
     });
   });
 }

@@ -5,6 +5,7 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_ranked_league.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -194,6 +195,11 @@ class _TopActions extends StatelessWidget {
         Consumer<BookmarkService>(
           builder: (context, bookmarks, child) {
             final bookmarked = bookmarks.isPlayerBookmarked(player.tag);
+            final normalizedTag = player.tag.replaceAll('#', '').toUpperCase();
+            final linked = context.watch<CocAccountService>().accounts.any(
+              (tag) => tag.replaceAll('#', '').toUpperCase() == normalizedTag,
+            );
+            if (linked && !bookmarked) return const SizedBox.shrink();
             return HeaderIconButton(
               icon: bookmarked
                   ? Icons.bookmark_rounded
