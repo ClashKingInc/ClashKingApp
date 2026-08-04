@@ -243,7 +243,7 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
     required _WarSideState opponentState,
   }) {
     final alreadySecured =
-        clanState.currentScore.compareTo(opponentState.potentialScore) > 0;
+        clanState.currentScore.compareTo(opponentState.potentialScore) >= 0;
     final canSecure = clanState.canBeat(opponentState.potentialScore);
 
     if (alreadySecured) {
@@ -253,7 +253,7 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
         badge: copy.secured(),
         sections: [
           _WarAnalysisSection(
-            title: copy.toLead(),
+            title: copy.situation(),
             lines: [copy.alreadySecured()],
           ),
         ],
@@ -713,6 +713,8 @@ class _WarAnalysisCopy {
       loc.warAnalysisCannotSecureAgainst(clan);
 
   String noSecureObjective() => loc.warAnalysisNoSecureObjective;
+
+  String situation() => loc.warDataState;
 
   String toLead() => loc.warAnalysisToWin;
 
