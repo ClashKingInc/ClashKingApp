@@ -91,11 +91,22 @@ export function authSegment(page: Page, name: RegExp): Locator {
       ? /^discord$/i
       : name;
 
-  return page
+  const ariaLabelSelector = /email/i.test(name.source)
+    ? 'flt-semantics[aria-label*="Email" i]'
+    : /discord/i.test(name.source)
+      ? 'flt-semantics[aria-label*="Discord" i]'
+      : null;
+
+  let segment = page
     .getByRole('tab', { name: exactName })
     .or(page.getByRole('button', { name: exactName }))
-    .or(page.locator('flt-semantics').filter({ hasText: exactName }))
-    .first();
+    .or(page.locator('flt-semantics').filter({ hasText: exactName }));
+
+  if (ariaLabelSelector) {
+    segment = segment.or(page.locator(ariaLabelSelector));
+  }
+
+  return segment.first();
 }
 
 export async function clickAuthSegment(page: Page, name: RegExp) {
