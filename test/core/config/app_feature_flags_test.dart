@@ -3,21 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('AppFeatureFlags defaults', () {
-    test('fails closed for preview and incomplete surfaces', () {
-      expect(
-        AppFeatureFlags.defaultValue(AppFeatureFlags.subscriptionSupport),
-        isFalse,
-      );
+    test('fails closed for incomplete surfaces', () {
       expect(
         AppFeatureFlags.defaultValue(AppFeatureFlags.basesArmies),
-        isFalse,
-      );
-      expect(
-        AppFeatureFlags.defaultValue(AppFeatureFlags.clanRankingsPreview),
-        isFalse,
-      );
-      expect(
-        AppFeatureFlags.defaultValue(AppFeatureFlags.cwlHistoryPreview),
         isFalse,
       );
       expect(
@@ -44,6 +32,10 @@ void main() {
         AppFeatureFlags.defaultValue(AppFeatureFlags.upgradeTracker),
         isTrue,
       );
+      expect(
+        AppFeatureFlags.defaultValue(AppFeatureFlags.subscriptionSupport),
+        isTrue,
+      );
       expect(AppFeatureFlags.defaultValue(AppFeatureFlags.warWidgets), isTrue);
     });
 
@@ -54,6 +46,11 @@ void main() {
     test('removed features are absent from the app flag registry', () {
       expect(AppFeatureFlags.defaults, isNot(contains('popular_insights')));
       expect(AppFeatureFlags.defaults, isNot(contains('leaderboard_previews')));
+      expect(
+        AppFeatureFlags.defaults,
+        isNot(contains('clan_rankings_preview')),
+      );
+      expect(AppFeatureFlags.defaults, isNot(contains('cwl_history_preview')));
     });
   });
 }

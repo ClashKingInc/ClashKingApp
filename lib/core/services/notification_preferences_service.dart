@@ -119,7 +119,7 @@ class NotificationPreferencesService {
     await preferences.setString(localKey, jsonEncode(settings.toLocalJson()));
     await preferences.setBool(
       PushNotificationService.notificationsEnabledPrefsKey,
-      settings.deviceEnabled,
+      settings.notificationsEnabled,
     );
     for (final key in _legacyKeys) {
       await preferences.remove(key);

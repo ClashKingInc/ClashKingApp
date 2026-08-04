@@ -6,40 +6,33 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Per-player card options stored locally on the device.
 ///
-/// These are the toggles revealed under each player card (notifications,
-/// show this account's clan in the War tab, and show this account in the full
-/// to-do page).
+/// These are the display toggles revealed under each player card.
 class PlayerCardOptions {
   const PlayerCardOptions({
-    this.notificationsEnabled = false,
     this.showInWarTab = true,
     this.showInTodoPage = true,
     this.showUpgradeTrackerOnHome = true,
     this.showRankedOnHome = true,
   });
 
-  final bool notificationsEnabled;
   final bool showInWarTab;
   final bool showInTodoPage;
   final bool showUpgradeTrackerOnHome;
   final bool showRankedOnHome;
 
   bool get isDefault =>
-      !notificationsEnabled &&
       showInWarTab &&
       showInTodoPage &&
       showUpgradeTrackerOnHome &&
       showRankedOnHome;
 
   PlayerCardOptions copyWith({
-    bool? notificationsEnabled,
     bool? showInWarTab,
     bool? showInTodoPage,
     bool? showUpgradeTrackerOnHome,
     bool? showRankedOnHome,
   }) {
     return PlayerCardOptions(
-      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       showInWarTab: showInWarTab ?? this.showInWarTab,
       showInTodoPage: showInTodoPage ?? this.showInTodoPage,
       showUpgradeTrackerOnHome:
@@ -49,7 +42,6 @@ class PlayerCardOptions {
   }
 
   Map<String, dynamic> toJson() => {
-    'notifications': notificationsEnabled,
     'warTab': showInWarTab,
     'todoPage': showInTodoPage,
     'upgradeTrackerHome': showUpgradeTrackerOnHome,
@@ -58,7 +50,6 @@ class PlayerCardOptions {
 
   factory PlayerCardOptions.fromJson(Map<String, dynamic> json) {
     return PlayerCardOptions(
-      notificationsEnabled: json['notifications'] == true,
       showInWarTab: json['warTab'] != false,
       showInTodoPage: json['todoPage'] != false,
       showUpgradeTrackerOnHome: json['upgradeTrackerHome'] != false,
@@ -125,13 +116,6 @@ class PlayerCardPreferencesService extends ChangeNotifier {
     }
     _loaded = true;
     notifyListeners();
-  }
-
-  Future<void> setNotificationsEnabled(String tag, bool value) {
-    return _update(
-      tag,
-      (options) => options.copyWith(notificationsEnabled: value),
-    );
   }
 
   Future<void> setShowInWarTab(String tag, bool value) {

@@ -21,20 +21,27 @@ enum NotificationAccountSource {
 }
 
 class NotificationAccount {
-  const NotificationAccount({required this.playerTag, required this.source});
+  const NotificationAccount({
+    required this.playerTag,
+    required this.source,
+    this.active = true,
+  });
 
   final String playerTag;
   final NotificationAccountSource source;
+  final bool active;
 
   factory NotificationAccount.fromJson(Map<String, dynamic> json) {
     final playerTag = json['playerTag'];
     final source = json['source'];
+    final active = json['active'];
     if (playerTag is! String || playerTag.isEmpty || source is! String) {
       throw const FormatException('Invalid notification account');
     }
     return NotificationAccount(
       playerTag: playerTag,
       source: NotificationAccountSource.fromWire(source),
+      active: active is bool ? active : true,
     );
   }
 }
@@ -44,6 +51,8 @@ class NotificationPreferences {
     this.deviceId = '',
     this.environment = 'production',
     this.deviceEnabled = false,
+    this.notificationsEnabled = false,
+    this.autoAddVerifiedAccounts = false,
     this.leagueBattles = false,
     this.warAttacks = false,
     this.warState = false,
@@ -59,6 +68,8 @@ class NotificationPreferences {
   final String deviceId;
   final String environment;
   final bool deviceEnabled;
+  final bool notificationsEnabled;
+  final bool autoAddVerifiedAccounts;
   final bool leagueBattles;
   final bool warAttacks;
   final bool warState;
@@ -116,6 +127,8 @@ class NotificationPreferences {
       deviceId: deviceId,
       environment: environment,
       deviceEnabled: readBool('deviceEnabled'),
+      notificationsEnabled: readBool('notificationsEnabled'),
+      autoAddVerifiedAccounts: readBool('autoAddVerifiedAccounts'),
       leagueBattles: readBool('leagueBattlesEnabled'),
       warAttacks: readBool('warAttacksEnabled'),
       warState: readBool('warStateEnabled'),
@@ -137,6 +150,8 @@ class NotificationPreferences {
       'deviceId': deviceId,
       'environment': environment,
       'deviceEnabled': deviceEnabled,
+      'notificationsEnabled': notificationsEnabled,
+      'autoAddVerifiedAccounts': autoAddVerifiedAccounts,
       'leagueBattlesEnabled': leagueBattles,
       'warAttacksEnabled': warAttacks,
       'warStateEnabled': warState,
@@ -161,6 +176,7 @@ class NotificationPreferences {
             (account) => {
               'playerTag': account.playerTag,
               'source': account.source.name,
+              'active': account.active,
             },
           )
           .toList(growable: false),
@@ -196,6 +212,8 @@ class NotificationPreferences {
     String? deviceId,
     String? environment,
     bool? deviceEnabled,
+    bool? notificationsEnabled,
+    bool? autoAddVerifiedAccounts,
     bool? leagueBattles,
     bool? warAttacks,
     bool? warState,
@@ -211,6 +229,9 @@ class NotificationPreferences {
       deviceId: deviceId ?? this.deviceId,
       environment: environment ?? this.environment,
       deviceEnabled: deviceEnabled ?? this.deviceEnabled,
+      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      autoAddVerifiedAccounts:
+          autoAddVerifiedAccounts ?? this.autoAddVerifiedAccounts,
       leagueBattles: leagueBattles ?? this.leagueBattles,
       warAttacks: warAttacks ?? this.warAttacks,
       warState: warState ?? this.warState,

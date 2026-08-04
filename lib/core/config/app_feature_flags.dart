@@ -13,8 +13,6 @@ abstract final class AppFeatureFlags {
   static const upgradeTracker = 'upgrade_tracker';
   static const basesArmies = 'bases_armies';
   static const gameAssets = 'game_assets';
-  static const clanRankingsPreview = 'clan_rankings_preview';
-  static const cwlHistoryPreview = 'cwl_history_preview';
   static const accountConnections = 'account_connections';
   static const warWidgets = 'war_widgets';
   static const featureRequests = 'feature_requests';
@@ -26,12 +24,10 @@ abstract final class AppFeatureFlags {
     leaderboards: true,
     globalStats: true,
     calculators: true,
-    subscriptionSupport: false,
+    subscriptionSupport: true,
     upgradeTracker: true,
     basesArmies: false,
     gameAssets: true,
-    clanRankingsPreview: false,
-    cwlHistoryPreview: false,
     accountConnections: false,
     warWidgets: true,
     featureRequests: true,

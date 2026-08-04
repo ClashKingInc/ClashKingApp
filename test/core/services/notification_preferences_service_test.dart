@@ -14,6 +14,8 @@ void main() {
     'deviceId': 'device-1',
     'environment': 'sandbox',
     'deviceEnabled': false,
+    'notificationsEnabled': true,
+    'autoAddVerifiedAccounts': true,
     'leagueBattlesEnabled': true,
     'warAttacksEnabled': false,
     'warStateEnabled': true,
@@ -24,8 +26,8 @@ void main() {
     'monthlySupportEnabled': false,
     'reminderTimings': [15, 30, 60],
     'accounts': [
-      {'playerTag': '#VERIFIED', 'source': 'verified'},
-      {'playerTag': '#BOOKMARK', 'source': 'bookmarked'},
+      {'playerTag': '#VERIFIED', 'source': 'verified', 'active': true},
+      {'playerTag': '#BOOKMARK', 'source': 'bookmarked', 'active': false},
     ],
   };
 
@@ -61,7 +63,7 @@ void main() {
         preferences.getBool(
           PushNotificationService.notificationsEnabledPrefsKey,
         ),
-        isFalse,
+        isTrue,
       );
     },
   );
@@ -80,6 +82,8 @@ void main() {
     final settings = NotificationPreferences.fromJson({
       ...responseBody,
       'deviceEnabled': true,
+      'notificationsEnabled': true,
+      'autoAddVerifiedAccounts': true,
     });
 
     await service.save(settings);
@@ -88,6 +92,8 @@ void main() {
       'deviceId': 'device-1',
       'environment': 'sandbox',
       'deviceEnabled': true,
+      'notificationsEnabled': true,
+      'autoAddVerifiedAccounts': true,
       'leagueBattlesEnabled': true,
       'warAttacksEnabled': false,
       'warStateEnabled': true,
@@ -124,6 +130,8 @@ void main() {
       'deviceId': 'device-1',
       'environment': 'sandbox',
       'deviceEnabled': true,
+      'notificationsEnabled': true,
+      'autoAddVerifiedAccounts': true,
       'leagueBattlesEnabled': true,
       'warAttacksEnabled': false,
       'warStateEnabled': true,

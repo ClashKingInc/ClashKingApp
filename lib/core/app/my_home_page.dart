@@ -9,6 +9,8 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/utils/deep_link_handler.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/config/app_feature_flags.dart';
+import 'package:clashkingapp/core/models/subscription_status.dart';
+import 'package:clashkingapp/core/services/subscription_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -1805,8 +1807,15 @@ class _RankedLeagueAccountsPageState extends State<_RankedLeagueAccountsPage> {
   }
 }
 
-class _SubscriptionPage extends StatelessWidget {
+class _SubscriptionPage extends StatefulWidget {
   const _SubscriptionPage();
+
+  @override
+  State<_SubscriptionPage> createState() => _SubscriptionPageState();
+}
+
+class _SubscriptionPageState extends State<_SubscriptionPage> {
+  late final Future<SubscriptionStatus> _status = SubscriptionService().load();
 
   @override
   Widget build(BuildContext context) {
@@ -1834,11 +1843,17 @@ class _SubscriptionPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '\$1.99/month',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: colorScheme.onSurface,
-                      fontWeight: FontWeight.w800,
+                  FutureBuilder<SubscriptionStatus>(
+                    future: _status,
+                    builder: (context, snapshot) => Text(
+                      snapshot.data?.active == true
+                          ? 'Active subscription'
+                          : '\$6.99/month',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.w800,
+                          ),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -1853,7 +1868,7 @@ class _SubscriptionPage extends StatelessWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'You help keep ClashKing free.',
+                          'Notifications for up to 10 bookmarked players and \$5 of roster assistant usage each month.',
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(
                                 color: colorScheme.onSurface,
@@ -1862,6 +1877,13 @@ class _SubscriptionPage extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    'Subscriptions cannot be purchased or managed in the app right now.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),

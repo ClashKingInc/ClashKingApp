@@ -20,7 +20,7 @@ Audit date: 2026-07-15. Scope: Flutter navigation, startup services, remote cont
 | `leaderboards` | Official proxy-backed rankings | on | External proxy/API dependency |
 | `global_stats` | Proxy-backed aggregate ranking statistics | on | External proxy/API dependency |
 | `calculators` | ZapQuake and Fireball calculators | on | Complex formulas can be remotely withdrawn |
-| `subscription_support` | `$1.99/month` support placeholder | off | No purchase flow exists |
+| `subscription_support` | Stripe-backed subscription status and benefits | on | Purchase and management happen on the dashboard, not in the app |
 | `upgrade_tracker` | Upgrade tracker and remote game-data parsing | on | Large, fast-moving feature with external data assumptions |
 | `bases_armies` | Discord-synced bases/armies placeholder | off | No synchronized payload is implemented |
 | `game_assets` | CDN/game-data asset browser | on | External asset dependency |

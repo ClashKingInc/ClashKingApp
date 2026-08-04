@@ -125,7 +125,17 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       }
     }
 
-    await _save(_settings.copyWith(deviceEnabled: enabled), rollback: previous);
+    await _save(
+      _settings.copyWith(
+        deviceEnabled: enabled,
+        notificationsEnabled: enabled,
+        autoAddVerifiedAccounts: enabled
+            ? true
+            : _settings.autoAddVerifiedAccounts,
+        accounts: enabled ? _settings.accounts : const [],
+      ),
+      rollback: previous,
+    );
   }
 
   void _showPushResult(PushNotificationSetupResult result) {
@@ -161,14 +171,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   Future<void> _setAccount(String tag, bool enabled) async {
     final normalizedTag = _normalizeTag(tag);
-    if (!enabled &&
-        _settings.accounts.length <= 1 &&
-        _settings.accounts.any(
-          (account) => _normalizeTag(account.playerTag) == normalizedTag,
-        )) {
-      return;
-    }
-
     final accounts = [..._settings.accounts]
       ..removeWhere(
         (account) => _normalizeTag(account.playerTag) == normalizedTag,
@@ -186,14 +188,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   Future<void> _useSelectedAccounts(List<_AccountChoice> choices) async {
     if (choices.isEmpty) return;
-    final accounts = [
-      for (final choice in choices)
-        NotificationAccount(
-          playerTag: choice.tag.startsWith('#') ? choice.tag : '#${choice.tag}',
-          source: choice.source,
-        ),
-    ];
-    await _save(_settings.copyWith(accounts: accounts));
+    await _save(_settings.copyWith(autoAddVerifiedAccounts: false));
   }
 
   NotificationAccountSource _sourceForTag(String tag) {
@@ -236,13 +231,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       result: _pushSetupResult,
                       tokenPreview: _pushTokenPreview,
                       busy: _saving || _configuringPush,
-                      enabled: _settings.deviceEnabled,
+                      enabled: _settings.notificationsEnabled,
                       onChanged: _setDeviceEnabled,
                     ),
                   ],
                 ),
                 _SettingsAvailability(
-                  enabled: _settings.deviceEnabled && !_saving,
+                  enabled: _settings.notificationsEnabled && !_saving,
                   child: _Section(
                     title: AppLocalizations.of(context)!.notifChooseAlerts,
                     children: [
@@ -313,14 +308,20 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   ),
                 ),
                 _SettingsAvailability(
-                  enabled: _settings.deviceEnabled && !_saving,
+                  enabled: _settings.notificationsEnabled && !_saving,
                   child: _AccountSection(
                     choices: accountChoices,
+                    autoAddVerifiedAccounts: _settings.autoAddVerifiedAccounts,
                     selectedTags: _settings.accounts
                         .map((account) => _normalizeTag(account.playerTag))
                         .toSet(),
-                    onUseAllAccounts: () =>
-                        _save(_settings.copyWith(accounts: const [])),
+                    inactiveTags: _settings.accounts
+                        .where((account) => !account.active)
+                        .map((account) => _normalizeTag(account.playerTag))
+                        .toSet(),
+                    onUseAllAccounts: () => _save(
+                      _settings.copyWith(autoAddVerifiedAccounts: true),
+                    ),
                     onUseSelectedAccounts: () =>
                         _useSelectedAccounts(accountChoices),
                     onChanged: _setAccount,
@@ -544,9 +545,9 @@ class _PushSetupCard extends StatelessWidget {
                 Text(
                   enabled
                       ? tokenPreview == null
-                            ? 'This device can receive enabled alerts.'
+                            ? 'Your enabled alerts can be delivered to this device.'
                             : 'Token: $tokenPreview'
-                      : 'Your alert choices are kept, but delivery is paused on this device.',
+                      : 'Notifications are turned off across your ClashKing account.',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -849,14 +850,18 @@ class _ReminderTimingSheetState extends State<_ReminderTimingSheet> {
 class _AccountSection extends StatelessWidget {
   const _AccountSection({
     required this.choices,
+    required this.autoAddVerifiedAccounts,
     required this.selectedTags,
+    required this.inactiveTags,
     required this.onUseAllAccounts,
     required this.onUseSelectedAccounts,
     required this.onChanged,
   });
 
   final List<_AccountChoice> choices;
+  final bool autoAddVerifiedAccounts;
   final Set<String> selectedTags;
+  final Set<String> inactiveTags;
   final VoidCallback onUseAllAccounts;
   final VoidCallback onUseSelectedAccounts;
   final void Function(String tag, bool enabled) onChanged;
@@ -864,7 +869,7 @@ class _AccountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final allAccounts = selectedTags.isEmpty;
+    final allAccounts = autoAddVerifiedAccounts;
     final selectedCount = allAccounts ? choices.length : selectedTags.length;
 
     return _Section(
@@ -873,7 +878,7 @@ class _AccountSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
           child: Text(
-            l10n.notifAudienceSheetDescription,
+            l10n.notifAudienceAcrossDevicesDescription,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -881,14 +886,14 @@ class _AccountSection extends StatelessWidget {
         ),
         _AudienceScopeOption(
           icon: LucideIcons.usersRound,
-          title: l10n.notifScopeAllLinkedAccounts,
-          subtitle: l10n.notifAudienceAllSubtitle(choices.length),
+          title: l10n.notifAutoAddVerifiedAccounts,
+          subtitle: l10n.notifAutoAddVerifiedSubtitle(choices.length),
           selected: allAccounts,
           onTap: allAccounts ? null : onUseAllAccounts,
         ),
         _AudienceScopeOption(
           icon: LucideIcons.userRoundCheck,
-          title: l10n.notifScopeSelectedAccounts,
+          title: l10n.notifChooseAccountsManually,
           subtitle: choices.isEmpty
               ? l10n.notifAudienceSelectedEmpty
               : l10n.notifAudienceSelectedSubtitle(selectedCount),
@@ -901,7 +906,7 @@ class _AccountSection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
             child: Text(
-              l10n.notifAudienceAllInlineNote,
+              l10n.notifAutoAddVerifiedNote,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -912,7 +917,7 @@ class _AccountSection extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             child: Text(l10n.notifNoAccountsLoadedYet),
           )
-        else if (!allAccounts)
+        else
           for (final choice in choices)
             Builder(
               key: ValueKey('notification-account-${choice.tag}'),
@@ -920,13 +925,11 @@ class _AccountSection extends StatelessWidget {
                 final selected = selectedTags.contains(
                   _normalizeTag(choice.tag),
                 );
-                final isLastSelected = selected && selectedTags.length == 1;
                 return _AudienceAccountRow(
                   choice: choice,
                   selected: selected,
-                  onChanged: isLastSelected
-                      ? null
-                      : (enabled) => onChanged(choice.tag, enabled),
+                  active: !inactiveTags.contains(_normalizeTag(choice.tag)),
+                  onChanged: (enabled) => onChanged(choice.tag, enabled),
                 );
               },
             ),
@@ -1020,19 +1023,24 @@ class _AudienceAccountRow extends StatelessWidget {
   const _AudienceAccountRow({
     required this.choice,
     required this.selected,
+    required this.active,
     required this.onChanged,
   });
 
   final _AccountChoice choice;
   final bool selected;
+  final bool active;
   final ValueChanged<bool>? onChanged;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final sourceLabel = choice.source == NotificationAccountSource.verified
+    final baseSourceLabel = choice.source == NotificationAccountSource.verified
         ? l10n.accountVerified
         : l10n.notifAccountBookmarked;
+    final sourceLabel = active
+        ? baseSourceLabel
+        : '$baseSourceLabel • ${l10n.generalInactive}';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
