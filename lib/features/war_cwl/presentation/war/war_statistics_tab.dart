@@ -285,6 +285,10 @@ class _WarStatisticsTabState extends State<WarStatisticsTab> {
     required _WarSideState actorState,
     required _WarScore targetScore,
   }) {
+    if (!actorState.canBeat(targetScore)) {
+      return copy.noSecureObjective();
+    }
+
     final starsForWin = (targetScore.stars + 1 - actorState.currentScore.stars)
         .clamp(0, actorState.maxStars)
         .toInt();

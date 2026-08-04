@@ -490,9 +490,9 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     }
   }
 
-  UpgradeTrackerItem? _farmTrackerSuggestion(
+  _FarmTrackerTarget? _farmTrackerSuggestion(
     List<BuildingDefinition> buildings,
-  ) => _farmTrackerBuildingItems(buildings).firstOrNull;
+  ) => _farmTrackerTargets(buildings).firstOrNull;
 
   List<BuildingDefinition> _farmTrackerBuildings(
     List<BuildingDefinition> buildings,
@@ -501,13 +501,13 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       for (final building in buildings)
         building.name.trim().toLowerCase(): building,
     };
-    return _farmTrackerBuildingItems(buildings)
-        .map((item) => byName[item.name.trim().toLowerCase()])
+    return _farmTrackerTargets(buildings)
+        .map((target) => byName[target.item.name.trim().toLowerCase()])
         .whereType<BuildingDefinition>()
         .toList(growable: false);
   }
 
-  List<UpgradeTrackerItem> _farmTrackerBuildingItems(
+  List<_FarmTrackerTarget> _farmTrackerTargets(
     List<BuildingDefinition> buildings,
   ) {
     final snapshot = _farmTrackerSnapshot;
@@ -517,15 +517,15 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final names = buildings
         .map((building) => building.name.trim().toLowerCase())
         .toSet();
-    final ordered = <UpgradeTrackerItem>[];
+    final ordered = <_FarmTrackerTarget>[];
     final seen = <String>{};
 
-    void addItem(UpgradeTrackerItem item) {
+    void addItem(UpgradeTrackerItem item, {UpgradeStep? step}) {
       final name = item.name.trim().toLowerCase();
       if (item.steps.isEmpty || !names.contains(name) || !seen.add(name)) {
         return;
       }
-      ordered.add(item);
+      ordered.add(_FarmTrackerTarget(item: item, plannedStep: step));
     }
 
     final planned =
@@ -540,7 +540,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
             .toList()
           ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
     for (final upgrade in planned) {
-      addItem(upgrade.item);
+      addItem(upgrade.item, step: upgrade.step);
     }
     for (final item in snapshot.itemsFor(
       village: UpgradeVillage.home,
@@ -552,7 +552,8 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     return ordered;
   }
 
-  void _useFarmTrackerSuggestion(UpgradeTrackerItem item) {
+  void _useFarmTrackerSuggestion(_FarmTrackerTarget target) {
+    final item = target.item;
     final building = _catalog.buildings
         .where(
           (candidate) =>
@@ -563,7 +564,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     if (building == null) return;
     final farmTownHall = _farmSelectedPreset?.townHall ?? _catalog.maxTownHall;
     final levels = _farmTargetLevels(building, farmTownHall);
-    final targetLevel = item.steps.first.targetLevel;
+    final targetLevel = target.targetLevel ?? item.steps.first.targetLevel;
     final matchingLevel = levels
         .where((level) => level.level == targetLevel)
         .firstOrNull;
@@ -934,6 +935,15 @@ class _QuickSetupPanel extends StatelessWidget {
   }
 }
 
+class _FarmTrackerTarget {
+  const _FarmTrackerTarget({required this.item, this.plannedStep});
+
+  final UpgradeTrackerItem item;
+  final UpgradeStep? plannedStep;
+
+  int? get targetLevel => plannedStep?.targetLevel;
+}
+
 class _FarmGoalView extends StatelessWidget {
   const _FarmGoalView({
     required this.accountPresets,
@@ -963,9 +973,9 @@ class _FarmGoalView extends StatelessWidget {
   final BuildingDefinition? selectedBuilding;
   final List<BuildingLevelDefinition> levels;
   final BuildingLevelDefinition? selectedLevel;
-  final UpgradeTrackerItem? trackerSuggestion;
+  final _FarmTrackerTarget? trackerSuggestion;
   final bool trackerLoading;
-  final ValueChanged<UpgradeTrackerItem> onUseTrackerSuggestion;
+  final ValueChanged<_FarmTrackerTarget> onUseTrackerSuggestion;
   final ValueChanged<String> onBuildingChanged;
   final ValueChanged<int> onLevelChanged;
   final TextEditingController averageLootController;
@@ -1102,7 +1112,7 @@ class _FarmGoalView extends StatelessWidget {
     AppLocalizations loc, {
     required String resourceLabel,
     required int? upgradeCost,
-    required UpgradeTrackerItem? trackerSuggestion,
+    required _FarmTrackerTarget? trackerSuggestion,
     required bool trackerLoading,
   }) {
     return SidePagePanel(
@@ -1135,8 +1145,14 @@ class _FarmGoalView extends StatelessWidget {
                 children: [
                   MobileWebImage(
                     imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                      trackerSuggestion.name,
-                      trackerSuggestion.steps.firstOrNull?.targetLevel ?? 1,
+                      trackerSuggestion.item.name,
+                      trackerSuggestion.targetLevel ??
+                          trackerSuggestion
+                              .item
+                              .steps
+                              .firstOrNull
+                              ?.targetLevel ??
+                          1,
                     ),
                     width: 28,
                     height: 28,
@@ -1150,7 +1166,9 @@ class _FarmGoalView extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      loc.farmGoalTrackerSuggestion(trackerSuggestion.name),
+                      loc.farmGoalTrackerSuggestion(
+                        trackerSuggestion.item.name,
+                      ),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -2780,17 +2798,20 @@ String? _upgradeResourceLabel(AppLocalizations loc, String? resource) {
 }
 
 UpgradeCost? _trackerCostForSelection(
-  UpgradeTrackerItem? item,
+  _FarmTrackerTarget? target,
   BuildingDefinition? building,
   BuildingLevelDefinition? level,
 ) {
+  final item = target?.item;
   if (item == null || building == null || level == null) return null;
   if (item.name.trim().toLowerCase() != building.name.trim().toLowerCase()) {
     return null;
   }
-  final step = item.steps
-      .where((candidate) => candidate.targetLevel == level.level)
-      .firstOrNull;
+  final step = target?.plannedStep?.targetLevel == level.level
+      ? target?.plannedStep
+      : item.steps
+            .where((candidate) => candidate.targetLevel == level.level)
+            .firstOrNull;
   if (step == null || step.costs.isEmpty) return null;
   final selectedResource = level.upgradeResource?.trim().toLowerCase();
   return step.costs
