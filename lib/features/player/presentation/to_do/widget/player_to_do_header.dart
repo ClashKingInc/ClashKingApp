@@ -322,6 +322,7 @@ class _TodoProgressSummaryTile extends StatelessWidget {
             ratio: summary.progressRatio,
             percent: percent,
             color: color,
+            foregroundColor: Colors.white,
           ),
           const SizedBox(width: 12),
           Flexible(
@@ -447,11 +448,13 @@ class _HeaderProgressRing extends StatelessWidget {
   final double ratio;
   final int percent;
   final Color color;
+  final Color? foregroundColor;
 
   const _HeaderProgressRing({
     required this.ratio,
     required this.percent,
     required this.color,
+    this.foregroundColor,
   });
 
   @override
@@ -471,7 +474,7 @@ class _HeaderProgressRing extends StatelessWidget {
           child: Text(
             '$percent%',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: colorScheme.onSurface,
+              color: foregroundColor ?? colorScheme.onSurface,
               fontSize: 13,
               fontWeight: FontWeight.w900,
               height: 1,
