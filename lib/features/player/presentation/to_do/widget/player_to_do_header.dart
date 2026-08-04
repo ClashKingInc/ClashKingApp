@@ -313,54 +313,42 @@ class _TodoProgressSummaryTile extends StatelessWidget {
     final color = summary.openTasks == 0 ? Colors.green : colorScheme.primary;
     final completedTasks = summary.totalTasks - summary.openTasks;
 
-    const height = 76.0;
-    return SizedBox(
-      height: height,
-      child: Stack(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Positioned.fill(
-            child: HeaderPanelBackground(height: height, cornerRadius: 16),
+          _HeaderProgressRing(
+            ratio: summary.progressRatio,
+            percent: percent,
+            color: color,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Row(
+          const SizedBox(width: 12),
+          Flexible(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _HeaderProgressRing(
-                  ratio: summary.progressRatio,
-                  percent: percent,
-                  color: color,
+                Text(
+                  summary.openTasks == 0
+                      ? loc.generalCompleted
+                      : '${summary.openTasks} ${loc.generalRemaining}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    height: 1,
+                  ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        summary.openTasks == 0
-                            ? loc.generalCompleted
-                            : '${summary.openTasks} ${loc.generalRemaining}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: colorScheme.onSurface,
-                              fontWeight: FontWeight.w800,
-                              height: 1,
-                            ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        '$completedTasks/${summary.totalTasks} ${loc.generalCompleted} · ${loc.todoAccountsNumber(summary.totalAccounts)}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                    ],
+                const SizedBox(height: 5),
+                Text(
+                  '$completedTasks/${summary.totalTasks} ${loc.generalCompleted} · ${loc.todoAccountsNumber(summary.totalAccounts)}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Colors.white.withValues(alpha: 0.72),
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ],
