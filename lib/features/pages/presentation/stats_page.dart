@@ -2496,10 +2496,14 @@ class _CompactMenuField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final selectedLabel = options[value] ?? value.toString();
-    return PopupMenuButton<T>(
-      initialValue: value,
-      onSelected: onChanged,
+    final entries = options.entries.toList(growable: false);
+    final selectedIndex = entries.indexWhere((entry) => entry.key == value);
+    final selectedLabel = selectedIndex >= 0
+        ? entries[selectedIndex].value
+        : value.toString();
+    return PopupMenuButton<int>(
+      initialValue: selectedIndex >= 0 ? selectedIndex : null,
+      onSelected: (index) => onChanged(entries[index].key),
       color: scheme.surface,
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -2508,27 +2512,26 @@ class _CompactMenuField<T> extends StatelessWidget {
           color: scheme.outlineVariant.withValues(alpha: AppOpacity.border),
         ),
       ),
-      itemBuilder: (context) => options.entries
-          .map(
-            (entry) => PopupMenuItem<T>(
-              value: entry.key,
-              height: 42,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      entry.value,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+      itemBuilder: (context) => [
+        for (var index = 0; index < entries.length; index++)
+          PopupMenuItem<int>(
+            value: index,
+            height: 42,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    entries[index].value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  if (entry.key == value)
-                    Icon(Icons.check_rounded, size: 18, color: scheme.primary),
-                ],
-              ),
+                ),
+                if (entries[index].key == value)
+                  Icon(Icons.check_rounded, size: 18, color: scheme.primary),
+              ],
             ),
-          )
-          .toList(growable: false),
+          ),
+      ],
       child: _CompactFilterTile(label: label, value: selectedLabel, icon: icon),
     );
   }

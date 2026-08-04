@@ -435,8 +435,15 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   }
 
   void _startFarmTrackerLoad(String? tag) {
-    if (tag == null || tag.isEmpty || tag == _farmTrackerLoadTag) return;
+    if (tag == null || tag.isEmpty) {
+      _farmTrackerLoadTag = tag;
+      _farmTrackerSnapshot = null;
+      _farmTrackerLoading = false;
+      return;
+    }
+    if (tag == _farmTrackerLoadTag) return;
     _farmTrackerLoadTag = tag;
+    _farmTrackerSnapshot = null;
     final cached = UpgradeTrackerRepository.shared.peekCached(tag);
     if (cached != null) {
       _farmTrackerSnapshot = cached;
@@ -447,7 +454,10 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     // the authenticated tracker configuration. Avoid starting an auxiliary
     // SharedPreferences/network load in that mode; a warmed shared snapshot
     // is still used above when one exists.
-    if (widget.accountPresets != null) return;
+    if (widget.accountPresets != null) {
+      _farmTrackerLoading = false;
+      return;
+    }
     _farmTrackerLoading = true;
     unawaited(_loadFarmTrackerSnapshot(tag));
   }
@@ -564,13 +574,14 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       builder: (context) => _CalculatorAccountPickerSheet(
         accountPresets: _accountPresets,
         selectedTag: selectedTag,
+        allowCustom: !forFarmGoal,
       ),
     );
     if (!mounted || result == null) return;
     if (forFarmGoal) {
       _selectFarmAccount(result);
     } else {
-      _applyAccountPresetTag(result);
+      _applyAccountPresetTag(result == _accountlessPresetTag ? null : result);
     }
   }
 
@@ -1683,15 +1694,18 @@ class _AccountSelectorPanel extends StatelessWidget {
 }
 
 const _noFarmBuilding = '__none__';
+const _accountlessPresetTag = '__accountless__';
 
 class _CalculatorAccountPickerSheet extends StatefulWidget {
   const _CalculatorAccountPickerSheet({
     required this.accountPresets,
     required this.selectedTag,
+    required this.allowCustom,
   });
 
   final List<DamageAccountPreset> accountPresets;
   final String? selectedTag;
+  final bool allowCustom;
 
   @override
   State<_CalculatorAccountPickerSheet> createState() =>
@@ -1768,7 +1782,7 @@ class _CalculatorAccountPickerSheetState
             ),
           ),
           Expanded(
-            child: accounts.isEmpty
+            child: accounts.isEmpty && !widget.allowCustom
                 ? AppEmptyState(
                     icon: Icons.person_search_rounded,
                     title: loc.damageNoAccountsAvailable,
@@ -1776,9 +1790,33 @@ class _CalculatorAccountPickerSheetState
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    itemCount: accounts.length,
+                    itemCount: accounts.length + (widget.allowCustom ? 1 : 0),
                     itemBuilder: (context, index) {
-                      final account = accounts[index];
+                      if (widget.allowCustom && index == 0) {
+                        final selected = widget.selectedTag == null;
+                        return ListTile(
+                          selected: selected,
+                          selectedTileColor: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHighest,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppRadius.chip),
+                          ),
+                          leading: const SizedBox.square(
+                            dimension: 44,
+                            child: Icon(Icons.tune_rounded),
+                          ),
+                          title: Text(loc.damageQuickSetupCustom),
+                          subtitle: Text(loc.damageAccountSelectorHint),
+                          trailing: selected
+                              ? const Icon(Icons.check_rounded)
+                              : null,
+                          onTap: () =>
+                              Navigator.pop(context, _accountlessPresetTag),
+                        );
+                      }
+                      final account =
+                          accounts[widget.allowCustom ? index - 1 : index];
                       final selected = account.tag == widget.selectedTag;
                       return ListTile(
                         selected: selected,
