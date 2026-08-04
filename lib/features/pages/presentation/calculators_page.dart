@@ -76,6 +76,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   String? _farmBuildingId;
   int? _farmBuildingLevel;
   UpgradeTrackerSnapshot? _farmTrackerSnapshot;
+  String? _farmTrackerSnapshotTag;
   bool _farmTrackerLoading = false;
   String? _farmTrackerLoadTag;
   late final TextEditingController _farmAverageLootController;
@@ -424,6 +425,9 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmAccountTag = tag;
       _farmBuildingId = null;
       _farmBuildingLevel = null;
+      _farmTrackerSnapshot = null;
+      _farmTrackerSnapshotTag = null;
+      _farmTrackerLoading = false;
       _farmAverageLootController.clear();
     });
     _startFarmTrackerLoad(tag);
@@ -438,15 +442,18 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     if (tag == null || tag.isEmpty) {
       _farmTrackerLoadTag = tag;
       _farmTrackerSnapshot = null;
+      _farmTrackerSnapshotTag = null;
       _farmTrackerLoading = false;
       return;
     }
     if (tag == _farmTrackerLoadTag) return;
     _farmTrackerLoadTag = tag;
     _farmTrackerSnapshot = null;
+    _farmTrackerSnapshotTag = null;
     final cached = UpgradeTrackerRepository.shared.peekCached(tag);
     if (cached != null) {
       _farmTrackerSnapshot = cached;
+      _farmTrackerSnapshotTag = tag;
       _farmTrackerLoading = false;
       return;
     }
@@ -468,12 +475,14 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       if (!mounted || tag != _farmAccountTag) return;
       setState(() {
         _farmTrackerSnapshot = snapshot;
+        _farmTrackerSnapshotTag = tag;
         _farmTrackerLoading = false;
       });
     } catch (_) {
       if (!mounted || tag != _farmAccountTag) return;
       setState(() {
         _farmTrackerSnapshot = null;
+        _farmTrackerSnapshotTag = null;
         _farmTrackerLoading = false;
       });
     }
@@ -500,7 +509,9 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     List<BuildingDefinition> buildings,
   ) {
     final snapshot = _farmTrackerSnapshot;
-    if (snapshot == null) return const [];
+    if (snapshot == null || _farmTrackerSnapshotTag != _farmAccountTag) {
+      return const [];
+    }
     final names = buildings
         .map((building) => building.name.trim().toLowerCase())
         .toSet();
