@@ -93,7 +93,7 @@ export function authSegment(page: Page, name: RegExp): Locator {
 
   if (/email/i.test(name.source)) {
     return page
-      .locator('flt-semantics[aria-label*="Email" i]')
+      .locator('flt-semantics[aria-label="Email" i]')
       .or(page.getByRole('tab', { name: exactName }))
       .or(page.getByRole('button', { name: exactName }))
       .first();
@@ -101,7 +101,7 @@ export function authSegment(page: Page, name: RegExp): Locator {
 
   if (/discord/i.test(name.source)) {
     return page
-      .locator('flt-semantics[aria-label*="Discord" i]')
+      .locator('flt-semantics[aria-label="Discord" i]')
       .or(page.getByRole('tab', { name: exactName }))
       .or(page.getByRole('button', { name: exactName }))
       .first();
