@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
@@ -279,7 +280,7 @@ class _SearchPageState extends State<SearchPage> {
       context: context,
       useRootNavigator: false,
       barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) => const SkeletonLoadingDialog(),
     );
 
     try {
@@ -321,7 +322,7 @@ class _SearchPageState extends State<SearchPage> {
       context: context,
       useRootNavigator: false,
       barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) => const SkeletonLoadingDialog(),
     );
 
     try {
@@ -455,10 +456,7 @@ class _SearchPageState extends State<SearchPage> {
                     if (_isSearching)
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 14),
-                        child: SizedBox.square(
-                          dimension: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
+                        child: SkeletonActionIndicator(width: 18, height: 6),
                       )
                     else if (_controller.text.isNotEmpty)
                       IconButton(

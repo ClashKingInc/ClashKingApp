@@ -233,6 +233,9 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
     if (!_tabController.indexIsChanging &&
         _tabController.offset.abs() < 0.001 &&
         _tabController.index != selected) {
+      if (!_usesPages) {
+        _prepareExternalBodySelection();
+      }
       _syncingExternalSelection = true;
       try {
         _tabController.index = selected;
@@ -361,11 +364,14 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
   }
 
   void _prepareBodySelection() {
+    final wasPinned = _chromeProgress.value >= 0.98;
     final previousOuterOffset = _outerController.hasClients
         ? _outerController.offset
         : null;
     _resetBodyToTop();
-    if (previousOuterOffset != null && _outerController.hasClients) {
+    if (wasPinned) {
+      _snapOuterToPinThreshold();
+    } else if (previousOuterOffset != null && _outerController.hasClients) {
       _outerController.jumpTo(
         previousOuterOffset
             .clamp(
@@ -374,6 +380,38 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
             )
             .toDouble(),
       );
+    }
+  }
+
+  void _prepareExternalBodySelection() {
+    final wasPinned = _chromeProgress.value >= 0.98;
+    final previousOuterOffset = _outerController.hasClients
+        ? _outerController.offset
+        : null;
+    _resetNestedInnerPositionsToTop();
+    if (wasPinned) {
+      _snapOuterToPinThreshold();
+    } else if (previousOuterOffset != null && _outerController.hasClients) {
+      _outerController.jumpTo(
+        previousOuterOffset
+            .clamp(
+              _outerController.position.minScrollExtent,
+              _outerController.position.maxScrollExtent,
+            )
+            .toDouble(),
+      );
+    }
+  }
+
+  void _resetNestedInnerPositionsToTop() {
+    final controller = _nestedScrollKey.currentState?.innerController;
+    if (controller == null || !controller.hasClients) return;
+    for (final position in List<ScrollPosition>.of(controller.positions)) {
+      if (!position.hasPixels) continue;
+      final target = position.minScrollExtent;
+      if ((position.pixels - target).abs() > 0.5) {
+        position.jumpTo(target);
+      }
     }
   }
 
@@ -392,6 +430,8 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
       if (_usesPages) {
         _resetPageToTop(index);
         if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
+      } else {
+        _prepareBodySelection();
       }
       widget.onTabSelected(index);
     }

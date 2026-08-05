@@ -1,3 +1,4 @@
+- Replaced loading spinners across the app with skeleton placeholders that match the loaded layouts.
 - Empty/no-result screens now share the same visual treatment across side pages and rankings.
 - Settings language and theme pickers now match the app's current settings styling in light and dark mode
 - Refined notification audience settings with clearer account scope controls.

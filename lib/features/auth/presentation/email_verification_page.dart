@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
@@ -308,7 +309,7 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
                     if (_isLoading) ...[
                       Column(
                         children: [
-                          CircularProgressIndicator(),
+                          const SkeletonActionIndicator(width: 48, height: 10),
                           SizedBox(height: 16),
                           Text(
                             AppLocalizations.of(

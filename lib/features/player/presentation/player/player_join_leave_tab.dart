@@ -1,5 +1,6 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/summary_chips.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
@@ -154,7 +155,7 @@ class _PlayerJoinLeaveTabState extends State<PlayerJoinLeaveTab> {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: const [
           SliverFillRemaining(
-            child: Center(child: CircularProgressIndicator()),
+            child: SkeletonPage(itemCount: 5, includeHeader: false),
           ),
         ],
       );
@@ -286,7 +287,7 @@ class _PlayerJoinLeaveTabState extends State<PlayerJoinLeaveTab> {
     if (_loadingMore)
       const Padding(
         padding: EdgeInsets.all(16),
-        child: Center(child: CircularProgressIndicator()),
+        child: SkeletonList(itemCount: 1),
       ),
   ];
 

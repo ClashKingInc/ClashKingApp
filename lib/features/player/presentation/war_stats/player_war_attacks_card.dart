@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
@@ -364,7 +365,7 @@ class _PlayerWarAttacksCardState extends State<PlayerWarAttacksCard> {
       context: context,
       useRootNavigator: false,
       barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
+      builder: (_) => const SkeletonLoadingDialog(),
     );
 
     try {

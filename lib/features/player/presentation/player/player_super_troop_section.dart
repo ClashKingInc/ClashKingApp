@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/features/player/models/player_super_troop.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -55,8 +56,11 @@ class PlayerSuperTroopSection extends StatelessWidget {
                       (troop) => ClipRRect(
                         borderRadius: BorderRadius.circular(6),
                         child: MobileWebImage(
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
+                          placeholder: (context, url) => SkeletonLoader(
+                            width: 50,
+                            height: 50,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                           imageUrl: troop.imageUrl,

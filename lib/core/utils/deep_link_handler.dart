@@ -1,5 +1,6 @@
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
@@ -130,7 +131,7 @@ class DeepLinkHandler {
       context: context,
       barrierDismissible: false,
       useRootNavigator: true,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
+      builder: (_) => const SkeletonLoadingDialog(),
     );
 
     try {
@@ -175,7 +176,7 @@ class DeepLinkHandler {
       context: context,
       barrierDismissible: false,
       useRootNavigator: true,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
+      builder: (_) => const SkeletonLoadingDialog(),
     );
 
     try {

@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
@@ -173,7 +174,7 @@ class ClanMembersState extends State<ClanMembers> {
             context: context,
             useRootNavigator: false,
             barrierDismissible: false,
-            builder: (_) => const Center(child: CircularProgressIndicator()),
+            builder: (_) => const SkeletonLoadingDialog(),
           );
 
           try {

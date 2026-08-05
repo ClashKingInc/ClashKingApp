@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/navigation/page_dots_indicator.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
@@ -232,7 +233,7 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
               switchAccountTooltip: switchAccountTooltip,
             ),
           ),
-          body: const Center(child: CircularProgressIndicator()),
+          body: const SkeletonPage(itemCount: 4),
         );
       }
       return Scaffold(
@@ -2046,7 +2047,7 @@ class _RankingRow extends StatelessWidget {
       context: context,
       useRootNavigator: false,
       barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
+      builder: (_) => const SkeletonLoadingDialog(),
     );
     try {
       final selectedPlayer = await context

@@ -1,6 +1,7 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -388,8 +389,7 @@ class MembersCard extends StatelessWidget {
                         context: context,
                         useRootNavigator: false,
                         barrierDismissible: false,
-                        builder: (_) =>
-                            const Center(child: CircularProgressIndicator()),
+                        builder: (_) => const SkeletonLoadingDialog(),
                       );
                       final player = await PlayerService().getPlayerAndClanData(
                         member.tag,

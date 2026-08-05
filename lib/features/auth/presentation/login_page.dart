@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/loading/app_loading_screen.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
 import 'package:clashkingapp/core/app/my_home_page.dart';
@@ -441,14 +442,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               elevation: 2,
             ),
             child: _isLoading
-                ? SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
+                ? const SkeletonActionIndicator(width: 24, height: 8)
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -636,14 +630,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 elevation: 2,
               ),
               child: _isLoading
-                  ? SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                  ? const SkeletonActionIndicator(width: 24, height: 8)
                   : Text(
                       AppLocalizations.of(context)!.authLogin,
                       style: TextStyle(

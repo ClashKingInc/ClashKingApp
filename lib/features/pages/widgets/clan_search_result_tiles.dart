@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -34,7 +35,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
             useRootNavigator: false,
             barrierDismissible: false,
             builder: (BuildContext context) {
-              return Center(child: CircularProgressIndicator());
+              return const SkeletonLoadingDialog();
             },
           );
 

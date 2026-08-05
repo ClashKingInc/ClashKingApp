@@ -1012,11 +1012,9 @@ class _GameAssetPreviewPageState extends State<GameAssetPreviewPage> {
                       FilledButton.tonalIcon(
                         onPressed: _sharing ? null : _share,
                         icon: _sharing
-                            ? const SizedBox.square(
-                                dimension: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
+                            ? const SkeletonActionIndicator(
+                                width: 18,
+                                height: 6,
                               )
                             : const Icon(Icons.ios_share_rounded),
                         label: Text(loc.gameAssetsShare),
@@ -1024,11 +1022,9 @@ class _GameAssetPreviewPageState extends State<GameAssetPreviewPage> {
                       FilledButton.icon(
                         onPressed: _saving ? null : _save,
                         icon: _saving
-                            ? const SizedBox.square(
-                                dimension: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
+                            ? const SkeletonActionIndicator(
+                                width: 18,
+                                height: 6,
                               )
                             : const Icon(Icons.download_rounded),
                         label: Text(

@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/dialogs/logout_dialog.dart';
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
@@ -1015,9 +1016,10 @@ class _LanguageChoiceTile extends StatelessWidget {
           width: 34,
           height: 34,
           fit: BoxFit.cover,
-          placeholder: (context, url) => const SizedBox.square(
-            dimension: 18,
-            child: CircularProgressIndicator(strokeWidth: 2),
+          placeholder: (context, url) => SkeletonLoader(
+            width: 34,
+            height: 34,
+            borderRadius: BorderRadius.circular(17),
           ),
           errorWidget: (context, url, error) =>
               const Icon(Icons.error_outline, size: 20),
@@ -1247,10 +1249,7 @@ class _WarWidgetClanTile extends StatelessWidget {
       title: Text(clan.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(clan.tag),
       trailing: isPending
-          ? const SizedBox.square(
-              dimension: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
+          ? const SkeletonActionIndicator()
           : const Icon(Icons.add_rounded),
       onTap: onTap,
     );

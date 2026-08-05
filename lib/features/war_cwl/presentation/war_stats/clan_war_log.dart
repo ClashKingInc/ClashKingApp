@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/common/widgets/summary_chips.dart';
@@ -159,7 +160,7 @@ class ClanWarLog extends StatelessWidget {
             useRootNavigator: false,
             barrierDismissible: false,
             builder: (BuildContext context) {
-              return Center(child: CircularProgressIndicator());
+              return const SkeletonLoadingDialog();
             },
           );
           try {

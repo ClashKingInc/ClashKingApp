@@ -22,9 +22,6 @@ class FeatureRequests extends StatelessWidget {
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (int progress) {
-            Center(child: CircularProgressIndicator(value: progress / 100));
-          },
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},

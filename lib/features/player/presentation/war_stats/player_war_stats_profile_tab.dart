@@ -561,14 +561,7 @@ class _PlayerWarStatsProfileTabState extends State<PlayerWarStatsProfileTab> {
         SnackBar(
           content: Row(
             children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Theme.of(context).colorScheme.onInverseSurface,
-                ),
-              ),
+              const SkeletonActionIndicator(width: 16, height: 5),
               const SizedBox(width: 12),
               Text(
                 AppLocalizations.of(context)?.exportGenerating ??

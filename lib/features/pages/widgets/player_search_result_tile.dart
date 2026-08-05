@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/buttons/chip.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -48,7 +49,7 @@ class PlayerSearchResultTileState extends State<PlayerSearchResultTile> {
             useRootNavigator: false,
             barrierDismissible: false,
             builder: (context) {
-              return const Center(child: CircularProgressIndicator());
+              return const SkeletonLoadingDialog();
             },
           );
 

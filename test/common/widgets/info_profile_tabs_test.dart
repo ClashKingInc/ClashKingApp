@@ -246,6 +246,35 @@ void main() {
     }
   });
 
+  testWidgets('external body tab changes reset the replacement content top', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: _SelectedBodyHarness()));
+    final state = tester.state<_SelectedBodyHarnessState>(
+      find.byType(_SelectedBodyHarness),
+    );
+
+    await tester.drag(
+      find.byKey(const ValueKey('selected-body-0')),
+      const Offset(0, -700),
+    );
+    await tester.pumpAndSettle();
+
+    state.selectExternally(1);
+    await tester.pump();
+
+    expect(find.text('Body 1 top'), findsOneWidget);
+    final initialTop = tester.getTopLeft(find.text('Body 1 top')).dy;
+    for (var frame = 0; frame < 20; frame++) {
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(
+        tester.getTopLeft(find.text('Body 1 top')).dy,
+        closeTo(initialTop, 1),
+        reason: 'external replacement body shifted after frame $frame',
+      );
+    }
+  });
+
   testWidgets(
     'pinned profile tabs stay hidden before reaching the scroll edge',
     (tester) async {
@@ -423,6 +452,10 @@ class _SelectedBodyHarness extends StatefulWidget {
 
 class _SelectedBodyHarnessState extends State<_SelectedBodyHarness> {
   var selectedIndex = 0;
+
+  void selectExternally(int index) {
+    setState(() => selectedIndex = index);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/utils/file_opener.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
@@ -90,11 +91,7 @@ class _DownloadCwlExcelButtonState extends State<DownloadCwlExcelButton> {
     return _isDownloading
         ? const Padding(
             padding: EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: 24,
-              width: 24,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
+            child: SkeletonActionIndicator(width: 24, height: 8),
           )
         : IconButton(
             icon: const Icon(Icons.download),

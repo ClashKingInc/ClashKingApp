@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -618,7 +619,7 @@ class WarDisplayWidgetState extends State<WarDisplayWidget> {
       return const Card(
         child: Padding(
           padding: EdgeInsets.all(16.0),
-          child: Center(child: CircularProgressIndicator()),
+          child: SkeletonListItem(lines: 3),
         ),
       );
     }

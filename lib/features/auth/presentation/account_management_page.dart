@@ -1,3 +1,4 @@
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/models/user.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,8 @@ class AccountManagementPageState extends State<AccountManagementPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                AppLocalizations.of(context)!.authAccountDiscordLinkedSuccess),
+              AppLocalizations.of(context)!.authAccountDiscordLinkedSuccess,
+            ),
             backgroundColor: Colors.green,
           ),
         );
@@ -302,16 +304,16 @@ class AccountManagementPageState extends State<AccountManagementPage> {
       children: [
         Text(
           AppLocalizations.of(context)!.authAccountLinkDiscord,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Text(
           AppLocalizations.of(context)!.authAccountAddDiscordAuth,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -321,8 +323,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
             icon: const Icon(Icons.discord),
             label: Text(
               AppLocalizations.of(context)!.authAccountLinkDiscord,
-              style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF5865F2),
@@ -486,7 +487,7 @@ class AccountManagementPageState extends State<AccountManagementPage> {
                         ),
                       ),
                       child: _isLoading
-                          ? CircularProgressIndicator(color: Colors.white)
+                          ? const SkeletonActionIndicator(width: 24, height: 8)
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
