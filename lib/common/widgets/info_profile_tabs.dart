@@ -193,6 +193,7 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
   final _chromeProgress = ValueNotifier<double>(0);
   late TabController _tabController;
   late List<GlobalKey> _pageScrollKeys;
+  var _syncingExternalSelection = false;
 
   int get _selectedIndex =>
       widget.selectedIndex.clamp(0, widget.tabs.length - 1);
@@ -233,9 +234,14 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
         _tabController.offset.abs() < 0.001 &&
         _tabController.index != selected) {
       if (!_usesPages) {
-        _prepareBodySelection();
+        _prepareExternalBodySelection();
       }
-      _tabController.index = selected;
+      _syncingExternalSelection = true;
+      try {
+        _tabController.index = selected;
+      } finally {
+        _syncingExternalSelection = false;
+      }
     }
   }
 
@@ -358,9 +364,54 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
   }
 
   void _prepareBodySelection() {
-    _resetNestedInnerScroll();
-    if (_chromeProgress.value >= 0.98) {
+    final wasPinned = _chromeProgress.value >= 0.98;
+    final previousOuterOffset = _outerController.hasClients
+        ? _outerController.offset
+        : null;
+    _resetBodyToTop();
+    if (wasPinned) {
       _snapOuterToPinThreshold();
+    } else if (previousOuterOffset != null && _outerController.hasClients) {
+      _outerController.jumpTo(
+        previousOuterOffset
+            .clamp(
+              _outerController.position.minScrollExtent,
+              _outerController.position.maxScrollExtent,
+            )
+            .toDouble(),
+      );
+    }
+  }
+
+  void _prepareExternalBodySelection() {
+    final wasPinned = _chromeProgress.value >= 0.98;
+    final previousOuterOffset = _outerController.hasClients
+        ? _outerController.offset
+        : null;
+    _resetNestedInnerPositionsToTop();
+    if (wasPinned) {
+      _snapOuterToPinThreshold();
+    } else if (previousOuterOffset != null && _outerController.hasClients) {
+      _outerController.jumpTo(
+        previousOuterOffset
+            .clamp(
+              _outerController.position.minScrollExtent,
+              _outerController.position.maxScrollExtent,
+            )
+            .toDouble(),
+      );
+    }
+  }
+
+  void _resetNestedInnerPositionsToTop() {
+    final controller = _nestedScrollKey.currentState?.innerController;
+    if (controller == null || !controller.hasClients) return;
+    for (final position in List<ScrollPosition>.of(controller.positions)) {
+      if (!position.hasPixels) continue;
+      final target = position.minScrollExtent;
+      if ((position.pixels - target).abs() > 0.5) {
+        position.jumpTo(target);
+      }
     }
   }
 
@@ -373,10 +424,12 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
   }
 
   void _handleControllerChange() {
+    if (_syncingExternalSelection) return;
     final index = _tabController.index;
     if (index != _selectedIndex) {
       if (_usesPages) {
         _resetPageToTop(index);
+        if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
       } else {
         _prepareBodySelection();
       }
@@ -387,22 +440,17 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
     });
   }
 
-  void _resetPageToTop(int index) {
-    final position = _scrollableStateBelow(_pageScrollKeys[index])?.position;
+  void _resetBodyToTop() {
+    final position = _scrollableStateBelow(_bodyScrollKey)?.position;
     if (position != null && position.hasPixels && position.pixels != 0) {
       position.jumpTo(0);
     }
   }
 
-  void _resetNestedInnerScroll() {
-    final controller = _nestedScrollKey.currentState?.innerController;
-    if (controller == null || !controller.hasClients) return;
-    for (final position in List<ScrollPosition>.of(controller.positions)) {
-      if (!position.hasPixels) continue;
-      final target = position.minScrollExtent;
-      if ((position.pixels - target).abs() > 0.5) {
-        position.jumpTo(target);
-      }
+  void _resetPageToTop(int index) {
+    final position = _scrollableStateBelow(_pageScrollKeys[index])?.position;
+    if (position != null && position.hasPixels && position.pixels != 0) {
+      position.jumpTo(0);
     }
   }
 

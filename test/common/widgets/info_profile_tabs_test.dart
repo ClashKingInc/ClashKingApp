@@ -164,6 +164,88 @@ void main() {
     }
   });
 
+  testWidgets('replacement subtabs preserve the current header position', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: _SelectedBodyHarness()));
+
+    await tester.drag(
+      find.byKey(const ValueKey('selected-body-0')),
+      const Offset(0, -120),
+    );
+    await tester.pumpAndSettle();
+
+    final tabs = find.byType(InfoProfileTabs);
+    expect(tabs, findsOneWidget);
+    final tabsTopBefore = tester.getTopLeft(tabs).dy;
+    expect(tabsTopBefore, greaterThan(100));
+
+    await tester.fling(
+      find.byKey(const ValueKey('selected-body-0')),
+      const Offset(-500, 0),
+      1200,
+    );
+    await tester.pump();
+
+    expect(find.text('Body 1 top'), findsOneWidget);
+    for (var frame = 0; frame < 20; frame++) {
+      expect(
+        tester.getTopLeft(find.byType(InfoProfileTabs)).dy,
+        closeTo(tabsTopBefore, 1),
+        reason: 'the shared header moved after selection frame $frame',
+      );
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+  });
+
+  testWidgets('replacement subtabs remain pinned through selection', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(
+            size: Size(390, 844),
+            padding: EdgeInsets.only(top: 47),
+          ),
+          child: _SelectedBodyHarness(),
+        ),
+      ),
+    );
+
+    await tester.drag(
+      find.byKey(const ValueKey('selected-body-0')),
+      const Offset(0, -700),
+    );
+    await tester.pumpAndSettle();
+
+    final inFlowTabs = find.descendant(
+      of: find.byType(NestedScrollView),
+      matching: find.byType(InfoProfileTabs, skipOffstage: false),
+      skipOffstage: false,
+    );
+    expect(inFlowTabs, findsOneWidget);
+    final pinnedTopBefore = tester.getTopLeft(inFlowTabs).dy;
+
+    await tester.fling(
+      find.byKey(const ValueKey('selected-body-0')),
+      const Offset(-500, 0),
+      1200,
+    );
+    await tester.pump();
+
+    expect(find.text('Body 1 top'), findsOneWidget);
+    for (var frame = 0; frame < 20; frame++) {
+      expect(inFlowTabs, findsOneWidget);
+      expect(
+        tester.getTopLeft(inFlowTabs).dy,
+        closeTo(pinnedTopBefore, 1),
+        reason: 'the pinned tabs moved after selection frame $frame',
+      );
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+  });
+
   testWidgets('external body tab changes reset the replacement content top', (
     tester,
   ) async {
