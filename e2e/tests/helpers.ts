@@ -91,6 +91,22 @@ export function authSegment(page: Page, name: RegExp): Locator {
       ? /^discord$/i
       : name;
 
+  if (/email/i.test(name.source)) {
+    return page
+      .locator('flt-semantics[aria-label="Email" i]')
+      .or(page.getByRole('tab', { name: exactName }))
+      .or(page.getByRole('button', { name: exactName }))
+      .first();
+  }
+
+  if (/discord/i.test(name.source)) {
+    return page
+      .locator('flt-semantics[aria-label="Discord" i]')
+      .or(page.getByRole('tab', { name: exactName }))
+      .or(page.getByRole('button', { name: exactName }))
+      .first();
+  }
+
   return page
     .getByRole('tab', { name: exactName })
     .or(page.getByRole('button', { name: exactName }))
