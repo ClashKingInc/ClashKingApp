@@ -1017,6 +1017,50 @@
       }
     }
   },
+  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisSecuredBadge": "Secured",
+  "warAnalysisAlreadySecured": "Already secured",
+  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
+  "warAnalysisStarGoal": "+{stars} star(s)",
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisNoBetterResult": "No better result is possible",
   "warCalculatorHintPercent": "50,00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -3985,21 +4029,59 @@
   "farmGoalLootTitle": "Estimated loot",
   "farmGoalResourceLabel": "Resource",
   "farmGoalAmountLabel": "Amount to farm",
-  "farmGoalAverageLootLabel": "Average loot per raid",
-  "farmGoalLeagueEstimate": "Suggested from the {league} league bonus. You can adjust it.",
+  "farmGoalAverageLootLabel": "Loot from a perfect attack",
+  "farmGoalPerfectLootHint": "Starting point for a perfect attack. Adjust it to match your actual loot.",
+  "farmGoalLeagueEstimate": "{league} base league bonus: {amount} {resource}. It is not the total loot from an attack.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
         "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
       }
     }
   },
+  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Perfect attack · 100%",
+  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "attack",
+  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
   "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
-  "farmGoalMissingTarget": "Choose a building and target level to calculate the required raids.",
-  "farmGoalMissingValues": "Enter an amount and an average loot value to see the number of raids.",
-  "farmGoalResultTitle": "Raids needed",
-  "farmGoalRaids": "raids",
-  "farmGoalResultSummary": "{target} {resource} at about {average} per raid.",
+  "farmGoalTrackerSuggestion": "Upgrade Tracker suggests {name}.",
+  "@farmGoalTrackerSuggestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalUseTrackerTarget": "Use target",
+  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
+  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
+  "farmGoalResultTitle": "Attacks needed",
+  "farmGoalAttacks": "attacks",
+  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
@@ -4081,6 +4163,7 @@
   "damageCalculatorTitle": "Damage Calculator",
   "damageAccountPresetShort": "Account",
   "damageChooseAccount": "Choose an account",
+  "damageSwitchAccount": "Switch account",
   "damageAccountSelectorHint": "The levels used follow the selected account.",
   "damageNoAccountsAvailable": "No verified account available",
   "damageTargetSectionTitle": "Building to destroy",
@@ -4097,26 +4180,11 @@
   "damageQuickSetupFlameFlinger": "Flame Flinger",
   "damageQuickSetupCustom": "Custom",
   "damageClearStack": "Clear",
-  "damageSummaryTarget": "Target",
-  "damageSummaryAttack": "Damage",
-  "damageSummaryResult": "Result",
-  "damageSummaryPending": "Pending",
   "damageNoDamageSelected": "No damage",
   "damageSelectedSourcesCount": "{count} source(s)",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "damageDestroyedCount": "{destroyed}/{total} destroyed",
-  "@damageDestroyedCount": {
-    "placeholders": {
-      "destroyed": {
-        "type": "int"
-      },
-      "total": {
         "type": "int"
       }
     }
