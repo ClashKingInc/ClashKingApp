@@ -305,6 +305,7 @@ class _TodoCardMetric {
     required this.imageUrl,
     required this.progress,
     required this.fallbackIcon,
+    required this.done,
   });
 
   final String label;
@@ -313,7 +314,7 @@ class _TodoCardMetric {
   final double progress;
   final IconData fallbackIcon;
 
-  bool get done => progress >= 1;
+  final bool done;
 
   static List<_TodoCardMetric> build(
     BuildContext context,
@@ -323,7 +324,9 @@ class _TodoCardMetric {
     final loc = AppLocalizations.of(context)!;
     final metrics = player
         .getTodoProgressMetrics(memberCwl: member)
-        .map((metric) => _TodoCardMetric.fromProgressMetric(metric, loc))
+        .map(
+          (metric) => _TodoCardMetric.fromProgressMetric(metric, loc, player),
+        )
         .toList(growable: false);
 
     metrics.sort((a, b) {
@@ -336,11 +339,15 @@ class _TodoCardMetric {
   factory _TodoCardMetric.fromProgressMetric(
     TodoProgressMetric metric,
     AppLocalizations loc,
+    Player player,
   ) {
     return _TodoCardMetric(
       label: _displayLabel(metric.label, loc),
       value: '${metric.done}/${metric.total}',
       progress: metric.progressRatio,
+      done: metric.label == 'clan_games'
+          ? player.clanGamesRatio >= 1
+          : metric.progressRatio >= 1,
       imageUrl: switch (metric.label) {
         'legend_attacks' => ImageAssets.legendBlazonNoPadding,
         'war_attacks' => ImageAssets.war,

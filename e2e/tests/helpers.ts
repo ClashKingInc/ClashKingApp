@@ -91,22 +91,27 @@ export function authSegment(page: Page, name: RegExp): Locator {
       ? /^discord$/i
       : name;
 
-  const ariaLabelSelector = /email/i.test(name.source)
-    ? 'flt-semantics[aria-label*="Email" i]'
-    : /discord/i.test(name.source)
-      ? 'flt-semantics[aria-label*="Discord" i]'
-      : null;
-
-  let segment = page
-    .getByRole('tab', { name: exactName })
-    .or(page.getByRole('button', { name: exactName }))
-    .or(page.locator('flt-semantics').filter({ hasText: exactName }));
-
-  if (ariaLabelSelector) {
-    segment = segment.or(page.locator(ariaLabelSelector));
+  if (/email/i.test(name.source)) {
+    return page
+      .locator('flt-semantics[aria-label*="Email" i]')
+      .or(page.getByRole('tab', { name: exactName }))
+      .or(page.getByRole('button', { name: exactName }))
+      .first();
   }
 
-  return segment.first();
+  if (/discord/i.test(name.source)) {
+    return page
+      .locator('flt-semantics[aria-label*="Discord" i]')
+      .or(page.getByRole('tab', { name: exactName }))
+      .or(page.getByRole('button', { name: exactName }))
+      .first();
+  }
+
+  return page
+    .getByRole('tab', { name: exactName })
+    .or(page.getByRole('button', { name: exactName }))
+    .or(page.locator('flt-semantics').filter({ hasText: exactName }))
+    .first();
 }
 
 export async function clickAuthSegment(page: Page, name: RegExp) {
