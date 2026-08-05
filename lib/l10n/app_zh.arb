@@ -1017,6 +1017,50 @@
       }
     }
   },
+  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisSecuredBadge": "Secured",
+  "warAnalysisAlreadySecured": "Already secured",
+  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
+  "warAnalysisStarGoal": "+{stars} star(s)",
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisNoBetterResult": "No better result is possible",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -3985,21 +4029,59 @@
   "farmGoalLootTitle": "预计战利品",
   "farmGoalResourceLabel": "资源",
   "farmGoalAmountLabel": "要打数量",
-  "farmGoalAverageLootLabel": "每次突袭平均战利品",
-  "farmGoalLeagueEstimate": "根据 {league} 联赛奖励建议，你可自行调整。",
+  "farmGoalAverageLootLabel": "Loot from a perfect attack",
+  "farmGoalPerfectLootHint": "Starting point for a perfect attack. Adjust it to match your actual loot.",
+  "farmGoalLeagueEstimate": "{league} base league bonus: {amount} {resource}. It is not the total loot from an attack.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
         "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
       }
     }
   },
+  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Perfect attack · 100%",
+  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "attack",
+  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
   "farmGoalNoLeagueLoot": "请选择带有联赛的账号以获取战利品建议。",
-  "farmGoalMissingTarget": "选择建筑与目标等级以计算所需突袭次数。",
-  "farmGoalMissingValues": "输入数量与平均战利品值以查看突袭次数。",
-  "farmGoalResultTitle": "需要突袭次数",
-  "farmGoalRaids": "次突袭",
-  "farmGoalResultSummary": "{target} {resource}，每次突袭约 {average}。",
+  "farmGoalTrackerSuggestion": "Upgrade Tracker suggests {name}.",
+  "@farmGoalTrackerSuggestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalUseTrackerTarget": "Use target",
+  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
+  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
+  "farmGoalResultTitle": "Attacks needed",
+  "farmGoalAttacks": "attacks",
+  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
@@ -4081,6 +4163,7 @@
   "damageCalculatorTitle": "伤害计算器",
   "damageAccountPresetShort": "账号",
   "damageChooseAccount": "选择账号",
+  "damageSwitchAccount": "Switch account",
   "damageAccountSelectorHint": "所用等级跟随所选账号。",
   "damageNoAccountsAvailable": "无可用已验证账号",
   "damageTargetSectionTitle": "要摧毁的建筑",
@@ -4097,26 +4180,11 @@
   "damageQuickSetupFlameFlinger": "攻城烈焰车",
   "damageQuickSetupCustom": "自定义",
   "damageClearStack": "清除",
-  "damageSummaryTarget": "目标",
-  "damageSummaryAttack": "伤害",
-  "damageSummaryResult": "结果",
-  "damageSummaryPending": "待定",
   "damageNoDamageSelected": "无伤害",
   "damageSelectedSourcesCount": "{count} 个来源",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "damageDestroyedCount": "{destroyed}/{total} 已摧毁",
-  "@damageDestroyedCount": {
-    "placeholders": {
-      "destroyed": {
-        "type": "int"
-      },
-      "total": {
         "type": "int"
       }
     }
