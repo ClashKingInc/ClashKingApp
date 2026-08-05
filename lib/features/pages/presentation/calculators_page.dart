@@ -530,13 +530,14 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       ordered.add(_FarmTrackerTarget(item: item, plannedStep: step));
     }
 
+    final now = DateTime.now();
     final planned =
         snapshot
             .buildPlan(
               queue: UpgradeQueue.builders,
               strategy: UpgradePlanStrategy.balanced,
               village: UpgradeVillage.home,
-              startsAt: DateTime.now(),
+              startsAt: now,
             )
             .expand((lane) => lane.upgrades)
             .toList()
@@ -549,6 +550,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       queue: UpgradeQueue.builders,
       remainingOnly: true,
     )) {
+      if (snapshot.remainingActiveSeconds(item, now: now) > 0) continue;
       addItem(item);
     }
     return ordered;
@@ -590,14 +592,15 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       builder: (context) => _CalculatorAccountPickerSheet(
         accountPresets: _accountPresets,
         selectedTag: selectedTag,
-        allowCustom: !forFarmGoal,
+        allowCustom: true,
       ),
     );
     if (!mounted || result == null) return;
+    final accountTag = result == _accountlessPresetTag ? null : result;
     if (forFarmGoal) {
-      _selectFarmAccount(result);
+      _selectFarmAccount(accountTag);
     } else {
-      _applyAccountPresetTag(result == _accountlessPresetTag ? null : result);
+      _applyAccountPresetTag(accountTag);
     }
   }
 
