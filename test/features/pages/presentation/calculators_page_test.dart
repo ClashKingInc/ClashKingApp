@@ -14,11 +14,23 @@ void main() {
     await _pump(tester);
 
     expect(find.text('Calculators'), findsOneWidget);
-    expect(find.text('Damage'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('calculator-tabs')),
+        matching: find.text('Damage'),
+      ),
+      findsOneWidget,
+    );
     expect(find.text('Building to destroy'), findsOneWidget);
     expect(find.text('No building selected'), findsOneWidget);
     expect(find.text('Choose a building'), findsOneWidget);
-    expect(find.text('Custom'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('calculator-quick-setups')),
+        matching: find.text('Custom'),
+      ),
+      findsOneWidget,
+    );
     expect(find.byType(TabBarView), findsNothing);
 
     await tester.tap(find.text('Choose a building'));
@@ -55,19 +67,35 @@ void main() {
       findsNothing,
     );
 
-    await tester.tap(find.text('Air Defense'));
+    await tester.tap(find.text('Air Defense').first);
     await tester.pumpAndSettle();
 
-    expect(find.text('Air Defense'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('target-air-defense')),
+        matching: find.text('Air Defense'),
+      ),
+      findsOneWidget,
+    );
     expect(find.text('600 HP'), findsOneWidget);
   });
 
   testWidgets('allows a custom attack method', (tester) async {
     await _pump(tester);
 
-    await tester.ensureVisible(find.text('Custom'));
+    await tester.ensureVisible(
+      find.descendant(
+        of: find.byKey(const ValueKey('calculator-quick-setups')),
+        matching: find.text('Custom'),
+      ),
+    );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Custom'));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey('calculator-quick-setups')),
+        matching: find.text('Custom'),
+      ),
+    );
     await tester.pumpAndSettle();
 
     final lightningRow = find.byKey(const ValueKey('source-lightning'));
@@ -93,7 +121,7 @@ void main() {
     );
   });
 
-  testWidgets('calculates raids for a farm goal', (tester) async {
+  testWidgets('calculates attacks for a farm goal', (tester) async {
     addTearDown(() => GameDataService.loadFromBundleForTesting({}));
     GameDataService.loadFromBundleForTesting({
       'league_tiers': [
@@ -103,11 +131,21 @@ void main() {
             {
               'townhall_level': 10,
               'resources': {'gold': 350000},
+              'star_bonus': {'gold': 900000},
             },
           ],
         },
       ],
     });
+    expect(
+      (GameDataService.playerLeagueData['leagues'] as Map)['Titan League 25'],
+      isNotNull,
+    );
+    expect(
+      ((GameDataService.playerLeagueData['leagues'] as Map)['Titan League 25']
+          as Map)['rewards'][0]['star_bonus'],
+      isNotNull,
+    );
     await _pump(
       tester,
       catalog: _farmGoalCatalog,
@@ -127,13 +165,22 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('Choose a building'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Town Hall').last);
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('farm-goal-level')), findsOneWidget);
-    expect(find.text('350000'), findsOneWidget);
+    expect(find.text('1000000'), findsOneWidget);
+    expect(
+      find.textContaining('Titan League 25 base league bonus: 350,000 Gold'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('Star bonus: 900,000 Gold after 5 stars'),
+      findsOneWidget,
+    );
     await tester.enterText(
       find.byKey(const ValueKey('farm-goal-average-loot')),
       '100',
@@ -147,7 +194,11 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.descendant(of: result, matching: find.text('Raids needed')),
+      find.descendant(of: result, matching: find.text('17')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: result, matching: find.text('Attacks needed')),
       findsOneWidget,
     );
   });

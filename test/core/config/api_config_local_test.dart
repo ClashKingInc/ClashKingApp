@@ -16,4 +16,11 @@ void main() {
       'http://localhost:8000/proxy/v1',
     );
   });
+
+  test('production API environment targets the public v2 API', () {
+    expect(
+      ApiConfig.defaultApiV2UrlFor(ApiEnvironment.production),
+      'https://v2-api.clashk.ing/v2',
+    );
+  });
 }

@@ -997,6 +997,20 @@
       }
     }
   },
+  "warAnalysisCannotLose": "{clanName} ne peut plus perdre",
+  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "warAnalysisSecuredBadge": "Sécurisé",
+  "warAnalysisAlreadySecured": "Déjà sécurisé",
+  "warAnalysisSecureAgainst": "Objectif calculé en supposant que {clanName} utilise toutes ses attaques restantes.",
+  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "warAnalysisCannotSecureAgainst": "Impossible à sécuriser mathématiquement si {clanName} optimise ses attaques restantes.",
+  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "warAnalysisNoSecureObjective": "Impossible à sécuriser avec les attaques restantes",
+  "warAnalysisStarGoal": "+{stars} étoile(s)",
+  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "warAnalysisRemainingAttempts": "{attacks} tentative(s) restante(s)",
+  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "warAnalysisNoBetterResult": "Aucun meilleur résultat possible",
   "warCalculatorHintPercent": "50,00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -3975,21 +3989,59 @@
   "farmGoalLootTitle": "Butin estimé",
   "farmGoalResourceLabel": "Ressource",
   "farmGoalAmountLabel": "Montant à obtenir",
-  "farmGoalAverageLootLabel": "Butin moyen par raid",
-  "farmGoalLeagueEstimate": "Suggestion basée sur le bonus de la ligue {league}. Tu peux l'ajuster.",
+  "farmGoalAverageLootLabel": "Butin d'une attaque parfaite",
+  "farmGoalPerfectLootHint": "Point de départ pour une attaque parfaite. Ajuste-le selon ton butin réel.",
+  "farmGoalLeagueEstimate": "Bonus de base de la ligue {league} : {amount} {resource}. Il ne représente pas le butin total d'une attaque.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
         "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
       }
     }
   },
+  "farmGoalStarBonusEstimate": "Bonus d'étoiles : {amount} {resource} après 5 étoiles. Il n'est pas inclus dans le nombre d'attaques.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Attaque parfaite · 100 %",
+  "farmGoalScenarioAtPercent": "{percent} % de destruction",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "attaque",
+  "farmGoalScenarioHint": "Approximation : le butin varie selon les bâtiments détruits. Les pourcentages s'appliquent à ton estimation d'une attaque parfaite.",
   "farmGoalNoLeagueLoot": "Choisis un compte avec une ligue pour obtenir une suggestion de butin.",
-  "farmGoalMissingTarget": "Choisis un bâtiment et un niveau cible pour calculer le nombre de raids nécessaires.",
-  "farmGoalMissingValues": "Renseigne un montant et un butin moyen pour voir le nombre de raids.",
-  "farmGoalResultTitle": "Raids nécessaires",
-  "farmGoalRaids": "raids",
-  "farmGoalResultSummary": "{target} {resource} à environ {average} par raid.",
+  "farmGoalTrackerSuggestion": "Le suivi des améliorations suggère {name}.",
+  "@farmGoalTrackerSuggestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalUseTrackerTarget": "Utiliser la cible",
+  "farmGoalMissingTarget": "Choisis un bâtiment et un niveau cible pour calculer le nombre d'attaques nécessaires.",
+  "farmGoalMissingValues": "Renseigne une cible et une estimation du butin d'une attaque parfaite pour voir les scénarios.",
+  "farmGoalResultTitle": "Attaques nécessaires",
+  "farmGoalAttacks": "attaques",
+  "farmGoalResultSummary": "{target} {resource} avec environ {average} par attaque parfaite.",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
@@ -4072,6 +4124,7 @@
   "damageCalculatorTitle": "Calculateur de dégâts",
   "damageAccountPresetShort": "Compte",
   "damageChooseAccount": "Choisir un compte",
+  "damageSwitchAccount": "Changer de compte",
   "damageAccountSelectorHint": "Les niveaux utilisés suivent le compte choisi.",
   "damageNoAccountsAvailable": "Aucun compte vérifié disponible",
   "damageTargetSectionTitle": "Bâtiment à détruire",
@@ -4088,26 +4141,11 @@
   "damageQuickSetupFlameFlinger": "Lance-flammes",
   "damageQuickSetupCustom": "Personnalisée",
   "damageClearStack": "Effacer",
-  "damageSummaryTarget": "Cible",
-  "damageSummaryAttack": "Dégâts",
-  "damageSummaryResult": "Résultat",
-  "damageSummaryPending": "À compléter",
   "damageNoDamageSelected": "Aucun dégât",
   "damageSelectedSourcesCount": "{count} source(s)",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {
-        "type": "int"
-      }
-    }
-  },
-  "damageDestroyedCount": "{destroyed}/{total} détruit(s)",
-  "@damageDestroyedCount": {
-    "placeholders": {
-      "destroyed": {
-        "type": "int"
-      },
-      "total": {
         "type": "int"
       }
     }

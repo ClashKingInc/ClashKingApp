@@ -90,7 +90,11 @@ class _CwlMembersTabState extends State<CwlMembersTab> {
     final warsPlayed = clanDetails?.warsPlayed ?? 0;
     final attacksPerWar = 1; // Standard CWL attacks per war
 
-    return Column(
+    return ListView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: EdgeInsets.only(
+        bottom: 16 + MediaQuery.paddingOf(context).bottom,
+      ),
       children: [
         const SizedBox(height: 12),
         Padding(

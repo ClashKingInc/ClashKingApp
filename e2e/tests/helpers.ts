@@ -86,9 +86,9 @@ export async function hasFlutterSemantics(page: Page): Promise<boolean> {
  */
 export function authSegment(page: Page, name: RegExp): Locator {
   const exactName = /email/i.test(name.source)
-    ? /^email$/i
+    ? /^email(?:\s+email)?$/i
     : /discord/i.test(name.source)
-      ? /^discord$/i
+      ? /^discord(?:\s+discord)?$/i
       : name;
 
   if (/email/i.test(name.source)) {

@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/compact_filter_chip.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
@@ -11,6 +15,8 @@ import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator
 import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator_session.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
+import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +32,9 @@ const _fireballQuakeSetupId = 'fireball-quake';
 const _giantArrowSetupId = 'giant-arrow';
 const _flameFlingerSetupId = 'flame-flinger';
 const _townHallBuildingName = 'Town Hall';
+const _lightningSpellName = 'Lightning Spell';
+const _darkElixirResourceName = 'dark elixir';
+const _defaultFarmPerfectLoot = 1000000;
 
 class CalculatorsPage extends StatefulWidget {
   const CalculatorsPage({super.key, this.catalog, this.accountPresets});
@@ -68,6 +77,10 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   String? _farmAccountTag;
   String? _farmBuildingId;
   int? _farmBuildingLevel;
+  UpgradeTrackerSnapshot? _farmTrackerSnapshot;
+  String? _farmTrackerSnapshotTag;
+  bool _farmTrackerLoading = false;
+  String? _farmTrackerLoadTag;
   late final TextEditingController _farmAverageLootController;
 
   @override
@@ -93,22 +106,26 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_readProviders || widget.accountPresets != null) return;
-    _readProviders = true;
-    try {
-      final accounts = context.read<CocAccountService>();
-      _accountPresets = _verifiedAccountPresets(
-        accounts,
-        context.read<PlayerService>(),
-      );
-      final selectedTag = accounts.selectedTag;
-      _farmAccountTag =
-          _accountPresets.any((preset) => preset.tag == selectedTag)
-          ? selectedTag
-          : _accountPresets.firstOrNull?.tag;
-    } on ProviderNotFoundException {
-      _accountPresets = const [];
+    if (!_readProviders) {
+      _readProviders = true;
+      if (widget.accountPresets == null) {
+        try {
+          final accounts = context.read<CocAccountService>();
+          _accountPresets = _verifiedAccountPresets(
+            accounts,
+            context.read<PlayerService>(),
+          );
+          final selectedTag = accounts.selectedTag;
+          _farmAccountTag =
+              _accountPresets.any((preset) => preset.tag == selectedTag)
+              ? selectedTag
+              : _accountPresets.firstOrNull?.tag;
+        } on ProviderNotFoundException {
+          _accountPresets = const [];
+        }
+      }
     }
+    _startFarmTrackerLoad(_farmAccountTag);
   }
 
   @override
@@ -127,6 +144,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final farmPreset = _farmSelectedPreset;
     final farmTownHall = farmPreset?.townHall ?? _catalog.maxTownHall;
     final farmBuildings = _catalog.buildingsForTownHall(farmTownHall);
+    final trackerBuildings = _farmTrackerBuildings(farmBuildings);
     final farmBuilding = _farmSelectedBuilding(farmBuildings);
     final farmLevels = _farmTargetLevels(farmBuilding, farmTownHall);
 
@@ -139,14 +157,17 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
         children: [
           _FarmGoalView(
             accountPresets: _accountPresets,
-            selectedAccountTag: _farmAccountTag,
             selectedAccount: farmPreset,
-            onAccountChanged: _selectFarmAccount,
+            onOpenAccountPicker: () => _showAccountPicker(forFarmGoal: true),
             buildings: farmBuildings,
+            trackerBuildings: trackerBuildings,
             selectedBuildingId: _farmBuildingId,
             selectedBuilding: farmBuilding,
             levels: farmLevels,
             selectedLevel: _farmSelectedLevel(farmLevels),
+            trackerSuggestion: _farmTrackerSuggestion(farmBuildings),
+            trackerLoading: _farmTrackerLoading,
+            onUseTrackerSuggestion: _useFarmTrackerSuggestion,
             onBuildingChanged: _selectFarmBuilding,
             onLevelChanged: _selectFarmBuildingLevel,
             averageLootController: _farmAverageLootController,
@@ -270,8 +291,8 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       const SizedBox(height: 14),
       _AccountSelectorPanel(
         accountPresets: _accountPresets,
-        selectedAccountTag: _session.selectedAccountTag,
-        onAccountChanged: _applyAccountPresetTag,
+        selectedAccount: _accountPreset(_session.selectedAccountTag),
+        onOpenAccountPicker: () => _showAccountPicker(forFarmGoal: false),
       ),
       const SizedBox(height: 14),
       ..._sourceSectionWidgets(loc, selectedSetup, sourceVisibility),
@@ -402,12 +423,191 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   }
 
   void _selectFarmAccount(String? tag) {
+    if (tag == _farmAccountTag) return;
+
     setState(() {
       _farmAccountTag = tag;
       _farmBuildingId = null;
       _farmBuildingLevel = null;
+      _farmTrackerSnapshot = null;
+      _farmTrackerSnapshotTag = null;
+      _farmTrackerLoading = false;
       _farmAverageLootController.clear();
     });
+    _startFarmTrackerLoad(tag);
+  }
+
+  DamageAccountPreset? _accountPreset(String? tag) {
+    if (tag == null) return null;
+    return _accountPresets.where((preset) => preset.tag == tag).firstOrNull;
+  }
+
+  void _startFarmTrackerLoad(String? tag) {
+    if (tag == null || tag.isEmpty) {
+      _farmTrackerLoadTag = tag;
+      _farmTrackerSnapshot = null;
+      _farmTrackerSnapshotTag = null;
+      _farmTrackerLoading = false;
+      return;
+    }
+    if (tag == _farmTrackerLoadTag &&
+        (_farmTrackerLoading || _farmTrackerSnapshotTag == tag)) {
+      return;
+    }
+    _farmTrackerLoadTag = tag;
+    _farmTrackerSnapshot = null;
+    _farmTrackerSnapshotTag = null;
+    final cached = UpgradeTrackerRepository.shared.peekCached(tag);
+    if (cached != null) {
+      _farmTrackerSnapshot = cached;
+      _farmTrackerSnapshotTag = tag;
+      _farmTrackerLoading = false;
+      return;
+    }
+    // Injected presets are used by isolated screens/tests and do not carry
+    // the authenticated tracker configuration. Avoid starting an auxiliary
+    // SharedPreferences/network load in that mode; a warmed shared snapshot
+    // is still used above when one exists.
+    if (widget.accountPresets != null) {
+      _farmTrackerLoadTag = null;
+      _farmTrackerLoading = false;
+      return;
+    }
+    _farmTrackerLoading = true;
+    unawaited(_loadFarmTrackerSnapshot(tag));
+  }
+
+  Future<void> _loadFarmTrackerSnapshot(String tag) async {
+    try {
+      final snapshot = await UpgradeTrackerRepository.shared.load(tag);
+      if (!mounted || tag != _farmAccountTag) return;
+      setState(() {
+        _farmTrackerSnapshot = snapshot;
+        _farmTrackerSnapshotTag = snapshot == null ? null : tag;
+        _farmTrackerLoadTag = snapshot == null ? null : tag;
+        _farmTrackerLoading = false;
+      });
+    } catch (_) {
+      if (!mounted || tag != _farmAccountTag) return;
+      setState(() {
+        _farmTrackerSnapshot = null;
+        _farmTrackerSnapshotTag = null;
+        _farmTrackerLoadTag = null;
+        _farmTrackerLoading = false;
+      });
+    }
+  }
+
+  _FarmTrackerTarget? _farmTrackerSuggestion(
+    List<BuildingDefinition> buildings,
+  ) => _farmTrackerTargets(buildings).firstOrNull;
+
+  List<BuildingDefinition> _farmTrackerBuildings(
+    List<BuildingDefinition> buildings,
+  ) {
+    final byName = {
+      for (final building in buildings)
+        building.name.trim().toLowerCase(): building,
+    };
+    return _farmTrackerTargets(buildings)
+        .map((target) => byName[target.item.name.trim().toLowerCase()])
+        .whereType<BuildingDefinition>()
+        .toList(growable: false);
+  }
+
+  List<_FarmTrackerTarget> _farmTrackerTargets(
+    List<BuildingDefinition> buildings,
+  ) {
+    final snapshot = _farmTrackerSnapshot;
+    if (snapshot == null || _farmTrackerSnapshotTag != _farmAccountTag) {
+      return const [];
+    }
+    final names = buildings
+        .map((building) => building.name.trim().toLowerCase())
+        .toSet();
+    final ordered = <_FarmTrackerTarget>[];
+    final seen = <String>{};
+
+    void addItem(UpgradeTrackerItem item, {UpgradeStep? step}) {
+      final name = item.name.trim().toLowerCase();
+      if (item.steps.isEmpty || !names.contains(name) || !seen.add(name)) {
+        return;
+      }
+      ordered.add(_FarmTrackerTarget(item: item, plannedStep: step));
+    }
+
+    final now = DateTime.now();
+    final planned =
+        snapshot
+            .buildPlan(
+              queue: UpgradeQueue.builders,
+              strategy: UpgradePlanStrategy.balanced,
+              village: UpgradeVillage.home,
+              startsAt: now,
+            )
+            .expand((lane) => lane.upgrades)
+            .toList()
+          ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
+    for (final upgrade in planned) {
+      addItem(upgrade.item, step: upgrade.step);
+    }
+    for (final item in snapshot.itemsFor(
+      village: UpgradeVillage.home,
+      queue: UpgradeQueue.builders,
+      remainingOnly: true,
+    )) {
+      if (snapshot.remainingActiveSeconds(item, now: now) > 0) continue;
+      addItem(item);
+    }
+    return ordered;
+  }
+
+  void _useFarmTrackerSuggestion(_FarmTrackerTarget target) {
+    final item = target.item;
+    final building = _catalog.buildings
+        .where(
+          (candidate) =>
+              candidate.name.trim().toLowerCase() ==
+              item.name.trim().toLowerCase(),
+        )
+        .firstOrNull;
+    if (building == null) return;
+    final farmTownHall = _farmSelectedPreset?.townHall ?? _catalog.maxTownHall;
+    final levels = _farmTargetLevels(building, farmTownHall);
+    final targetLevel = target.targetLevel ?? item.steps.first.targetLevel;
+    final matchingLevel = levels
+        .where((level) => level.level == targetLevel)
+        .firstOrNull;
+    if (matchingLevel == null) return;
+    setState(() {
+      _farmBuildingId = building.id;
+      _farmBuildingLevel = matchingLevel.level;
+      _setFarmLootSuggestion();
+    });
+  }
+
+  Future<void> _showAccountPicker({required bool forFarmGoal}) async {
+    if (_accountPresets.isEmpty) return;
+    final selectedTag = forFarmGoal
+        ? _farmAccountTag
+        : _session.selectedAccountTag;
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => _CalculatorAccountPickerSheet(
+        accountPresets: _accountPresets,
+        selectedTag: selectedTag,
+        allowCustom: true,
+      ),
+    );
+    if (!mounted || result == null) return;
+    final accountTag = result == _accountlessPresetTag ? null : result;
+    if (forFarmGoal) {
+      _selectFarmAccount(accountTag);
+    } else {
+      _applyAccountPresetTag(accountTag);
+    }
   }
 
   void _selectFarmBuilding(String buildingId) {
@@ -439,12 +639,9 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     );
     final levels = _farmTargetLevels(building, farmTownHall);
     final level = _farmSelectedLevel(levels);
-    final suggestion = _farmLeagueLoot(
-      league: farmPreset?.league,
-      townHall: farmTownHall,
-      resource: level?.upgradeResource,
-    );
-    _farmAverageLootController.text = suggestion?.toString() ?? '';
+    _farmAverageLootController.text = level == null
+        ? ''
+        : _farmDefaultPerfectLoot(level.upgradeResource).toString();
   }
 
   List<BuildingLevelDefinition> _farmTargetLevels(
@@ -458,6 +655,14 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
         ? townHall + 1
         : townHall;
     return building.levelsForTownHall(targetTownHall);
+  }
+
+  String? _quickSetupImageUrl(Map<DamageSourceKind, int> counts) {
+    for (final kind in counts.keys) {
+      final imageUrl = _session.catalog.source(kind)?.imageUrl.trim();
+      if (imageUrl?.isNotEmpty == true) return imageUrl;
+    }
+    return null;
   }
 
   List<_QuickSetup> _quickSetups(AppLocalizations loc) => [
@@ -474,6 +679,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
             id: id,
             label: _quickSetupLabel(loc, id),
             counts: counts,
+            imageUrl: _quickSetupImageUrl(counts),
           );
         })
         .where(
@@ -574,7 +780,7 @@ class _CalculatorScaffold extends StatelessWidget {
     return Scaffold(
       body: InfoProfileTabScaffold(
         key: const ValueKey('calculator-tabs'),
-        header: const _CalculatorHeader(),
+        header: _CalculatorHeader(selectedMode: selectedMode),
         selectedIndex: selectedMode.index,
         onTabSelected: (index) => onModeChanged(
           _CalculatorMode.values[index.clamp(
@@ -585,11 +791,14 @@ class _CalculatorScaffold extends StatelessWidget {
         tabs: [
           InfoProfileTabData(
             label: loc.calculatorsModeDamage,
-            icon: Icons.bolt_rounded,
+            imageUrl: ImageAssets.getSpellImage(_lightningSpellName),
           ),
           InfoProfileTabData(
             label: loc.calculatorsModeFarmGoal,
-            icon: Icons.savings_outlined,
+            imageUrl: ImageAssets.getHomeVillageBuildingImage(
+              _townHallBuildingName,
+              1,
+            ),
           ),
         ],
         body: child,
@@ -599,13 +808,21 @@ class _CalculatorScaffold extends StatelessWidget {
 }
 
 class _CalculatorHeader extends StatelessWidget {
-  const _CalculatorHeader();
+  const _CalculatorHeader({required this.selectedMode});
+
+  final _CalculatorMode selectedMode;
 
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final isDesktopWeb = isSidePageDesktop(context);
     final imageHeight = media.padding.top + (isDesktopWeb ? 292 : 246);
+    final imageUrl = selectedMode == _CalculatorMode.damage
+        ? ImageAssets.getSpellImage(_lightningSpellName)
+        : ImageAssets.getHomeVillageBuildingImage(_townHallBuildingName, 1);
+    final fallbackIcon = selectedMode == _CalculatorMode.damage
+        ? Icons.bolt_rounded
+        : Icons.home_work_rounded;
 
     return Stack(
       children: [
@@ -650,10 +867,13 @@ class _CalculatorHeader extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.calculate_rounded,
-                          size: 58,
-                          color: Colors.white,
+                        MobileWebImage(
+                          imageUrl: imageUrl,
+                          width: 58,
+                          height: 58,
+                          fit: BoxFit.contain,
+                          errorWidget: (_, _, _) =>
+                              Icon(fallbackIcon, size: 58, color: Colors.white),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -682,11 +902,13 @@ class _QuickSetup {
     required this.id,
     required this.label,
     required this.counts,
+    this.imageUrl,
   });
 
   final String id;
   final String label;
   final Map<DamageSourceKind, int> counts;
+  final String? imageUrl;
 }
 
 class _QuickSetupPanel extends StatelessWidget {
@@ -706,26 +928,47 @@ class _QuickSetupPanel extends StatelessWidget {
       (setup) => setup.id == selectedId,
       orElse: () => setups.first,
     );
-    return SidePageHorizontalSelector<_QuickSetup>(
-      values: setups,
-      selected: selectedSetup,
-      labelBuilder: (setup) => setup.label,
-      onSelected: onSelected,
+    return Wrap(
+      key: const ValueKey('calculator-quick-setups'),
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final setup in setups)
+          CompactFilterChip(
+            label: setup.label,
+            icon: _quickSetupIcon(setup.id),
+            imageUrl: setup.imageUrl,
+            selected: setup.id == selectedSetup.id,
+            onTap: () => onSelected(setup),
+          ),
+      ],
     );
   }
+}
+
+class _FarmTrackerTarget {
+  const _FarmTrackerTarget({required this.item, this.plannedStep});
+
+  final UpgradeTrackerItem item;
+  final UpgradeStep? plannedStep;
+
+  int? get targetLevel => plannedStep?.targetLevel;
 }
 
 class _FarmGoalView extends StatelessWidget {
   const _FarmGoalView({
     required this.accountPresets,
-    required this.selectedAccountTag,
     required this.selectedAccount,
-    required this.onAccountChanged,
+    required this.onOpenAccountPicker,
     required this.buildings,
+    required this.trackerBuildings,
     required this.selectedBuildingId,
     required this.selectedBuilding,
     required this.levels,
     required this.selectedLevel,
+    required this.trackerSuggestion,
+    required this.trackerLoading,
+    required this.onUseTrackerSuggestion,
     required this.onBuildingChanged,
     required this.onLevelChanged,
     required this.averageLootController,
@@ -733,14 +976,17 @@ class _FarmGoalView extends StatelessWidget {
   });
 
   final List<DamageAccountPreset> accountPresets;
-  final String? selectedAccountTag;
   final DamageAccountPreset? selectedAccount;
-  final ValueChanged<String?> onAccountChanged;
+  final VoidCallback onOpenAccountPicker;
   final List<BuildingDefinition> buildings;
+  final List<BuildingDefinition> trackerBuildings;
   final String? selectedBuildingId;
   final BuildingDefinition? selectedBuilding;
   final List<BuildingLevelDefinition> levels;
   final BuildingLevelDefinition? selectedLevel;
+  final _FarmTrackerTarget? trackerSuggestion;
+  final bool trackerLoading;
+  final ValueChanged<_FarmTrackerTarget> onUseTrackerSuggestion;
   final ValueChanged<String> onBuildingChanged;
   final ValueChanged<int> onLevelChanged;
   final TextEditingController averageLootController;
@@ -750,13 +996,27 @@ class _FarmGoalView extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final averageLoot = _parseFarmAmount(averageLootController.text);
+    final trackerCost = _trackerCostForSelection(
+      trackerSuggestion,
+      selectedBuilding,
+      selectedLevel,
+    );
     final resourceLabel =
-        _upgradeResourceLabel(loc, selectedLevel?.upgradeResource) ?? '';
-    final upgradeCost = selectedLevel?.upgradeCost;
-    final raids = _farmRaids(
+        _upgradeResourceLabel(
+          loc,
+          trackerCost?.resource ?? selectedLevel?.upgradeResource,
+        ) ??
+        '';
+    final upgradeCost =
+        trackerCost?.amount.round() ?? selectedLevel?.upgradeCost;
+    final leagueEstimate = _farmLeagueLootEstimate(
+      league: selectedAccount?.league,
+      townHall: selectedAccount?.townHall ?? 0,
+      resource: selectedLevel?.upgradeResource,
+    );
+    final scenarios = _farmAttackScenarios(
       upgradeCost: upgradeCost,
-      resourceLabel: resourceLabel,
-      averageLoot: averageLoot,
+      perfectLoot: averageLoot,
     );
 
     return Column(
@@ -765,8 +1025,8 @@ class _FarmGoalView extends StatelessWidget {
         SidePageSectionHeader(title: loc.farmGoalAccountTitle),
         _AccountSelectorPanel(
           accountPresets: accountPresets,
-          selectedAccountTag: selectedAccountTag,
-          onAccountChanged: onAccountChanged,
+          selectedAccount: selectedAccount,
+          onOpenAccountPicker: onOpenAccountPicker,
           hint: loc.farmGoalAccountHint,
         ),
         const SizedBox(height: 22),
@@ -776,12 +1036,20 @@ class _FarmGoalView extends StatelessWidget {
           loc,
           resourceLabel: resourceLabel,
           upgradeCost: upgradeCost,
+          trackerSuggestion: trackerSuggestion,
+          trackerLoading: trackerLoading,
         ),
         const SizedBox(height: 22),
         SidePageSectionHeader(title: loc.farmGoalLootTitle),
-        _buildLootPanel(context, loc, resourceLabel: resourceLabel),
+        _buildLootPanel(
+          context,
+          loc,
+          resource: selectedLevel?.upgradeResource,
+          resourceLabel: resourceLabel,
+          leagueEstimate: leagueEstimate,
+        ),
         const SizedBox(height: 16),
-        if (raids == null)
+        if (scenarios.isEmpty)
           _InlineEmpty(
             message: _farmMissingMessage(
               loc,
@@ -791,30 +1059,52 @@ class _FarmGoalView extends StatelessWidget {
           )
         else
           _FarmGoalResultPanel(
-            raids: raids,
+            scenarios: scenarios,
             upgradeCost: upgradeCost!,
             resourceLabel: resourceLabel,
-            averageLoot: averageLoot,
+            perfectLoot: averageLoot,
           ),
       ],
     );
   }
 
-  int? _farmRaids({
+  List<_FarmAttackScenario> _farmAttackScenarios({
     required int? upgradeCost,
-    required String resourceLabel,
-    required int averageLoot,
+    required int perfectLoot,
   }) {
-    if (upgradeCost == null || upgradeCost <= 0) return null;
-    if (resourceLabel.isEmpty || averageLoot <= 0) return null;
-    return (upgradeCost / averageLoot).ceil();
+    if (upgradeCost == null || upgradeCost <= 0 || perfectLoot <= 0) {
+      return const [];
+    }
+    return [100, 80, 60]
+        .map((percent) {
+          final lootPerAttack = (perfectLoot * percent / 100).round();
+          return _FarmAttackScenario(
+            destructionPercent: percent,
+            lootPerAttack: lootPerAttack,
+            attacks: (upgradeCost / lootPerAttack).ceil(),
+          );
+        })
+        .toList(growable: false);
   }
 
-  Map<String, String> _buildingOptions(AppLocalizations loc) => {
-    _noFarmBuilding: loc.farmGoalChooseBuilding,
-    for (final building in buildings)
-      building.id: _buildingDisplayName(loc, building.name),
-  };
+  Map<String, String> _buildingOptions(AppLocalizations loc) {
+    final trackerOptions = trackerBuildings.isEmpty
+        ? buildings
+        : trackerBuildings;
+    final options = <String, String>{
+      _noFarmBuilding: loc.farmGoalChooseBuilding,
+      for (final building in trackerOptions)
+        building.id: _buildingDisplayName(loc, building.name),
+    };
+    if (selectedBuilding != null &&
+        !options.containsKey(selectedBuilding!.id)) {
+      options[selectedBuilding!.id] = _buildingDisplayName(
+        loc,
+        selectedBuilding!.name,
+      );
+    }
+    return options;
+  }
 
   String _farmMissingMessage(
     AppLocalizations loc, {
@@ -833,6 +1123,8 @@ class _FarmGoalView extends StatelessWidget {
     AppLocalizations loc, {
     required String resourceLabel,
     required int? upgradeCost,
+    required _FarmTrackerTarget? trackerSuggestion,
+    required bool trackerLoading,
   }) {
     return SidePagePanel(
       key: const ValueKey('farm-goal-target'),
@@ -847,6 +1139,59 @@ class _FarmGoalView extends StatelessWidget {
               context,
             ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
           ),
+          if (trackerLoading)
+            const Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: SkeletonLoader(
+                height: 44,
+                width: double.infinity,
+                borderRadius: BorderRadius.all(Radius.circular(AppRadius.chip)),
+              ),
+            )
+          else if (trackerSuggestion != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 2),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MobileWebImage(
+                    imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                      trackerSuggestion.item.name,
+                      trackerSuggestion.targetLevel ??
+                          trackerSuggestion
+                              .item
+                              .steps
+                              .firstOrNull
+                              ?.targetLevel ??
+                          1,
+                    ),
+                    width: 28,
+                    height: 28,
+                    fit: BoxFit.contain,
+                    errorWidget: (_, _, _) => Icon(
+                      Icons.construction_rounded,
+                      size: 24,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      loc.farmGoalTrackerSuggestion(
+                        trackerSuggestion.item.name,
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => onUseTrackerSuggestion(trackerSuggestion),
+                    child: Text(loc.farmGoalUseTrackerTarget),
+                  ),
+                ],
+              ),
+            ),
           const SizedBox(height: 8),
           SidePageInlineSelector<String>(
             key: const ValueKey('farm-goal-building'),
@@ -882,12 +1227,20 @@ class _FarmGoalView extends StatelessWidget {
   Widget _buildLootPanel(
     BuildContext context,
     AppLocalizations loc, {
+    required String? resource,
     required String resourceLabel,
+    required _FarmLeagueLootEstimate? leagueEstimate,
   }) {
     final league = selectedAccount?.league;
-    final hint = league == null || resourceLabel.isEmpty
+    final resourceImageUrl = _farmResourceImage(resource);
+    final hint =
+        league == null || leagueEstimate?.loot == null || resourceLabel.isEmpty
         ? loc.farmGoalNoLeagueLoot
-        : loc.farmGoalLeagueEstimate(league);
+        : loc.farmGoalLeagueEstimate(
+            league,
+            formatSidePageInt(leagueEstimate!.loot!),
+            resourceLabel,
+          );
 
     return SidePagePanel(
       key: const ValueKey('farm-goal-loot'),
@@ -905,9 +1258,26 @@ class _FarmGoalView extends StatelessWidget {
             decoration: InputDecoration(
               labelText: loc.farmGoalAverageLootLabel,
               suffixText: resourceLabel,
-              prefixIcon: const Icon(Icons.savings_outlined),
+              prefixIcon: resourceImageUrl == null
+                  ? const Icon(Icons.savings_outlined)
+                  : Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: MobileWebImage(
+                        imageUrl: resourceImageUrl,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
             ),
             onChanged: (_) => onLootChanged(),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            loc.farmGoalPerfectLootHint,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -916,6 +1286,19 @@ class _FarmGoalView extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
+          if (leagueEstimate?.starBonus != null &&
+              resourceLabel.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              loc.farmGoalStarBonusEstimate(
+                formatSidePageInt(leagueEstimate!.starBonus!),
+                resourceLabel,
+              ),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -1023,18 +1406,30 @@ class _FarmGoalTargetSummary extends StatelessWidget {
   }
 }
 
-class _FarmGoalResultPanel extends StatelessWidget {
-  const _FarmGoalResultPanel({
-    required this.raids,
-    required this.upgradeCost,
-    required this.resourceLabel,
-    required this.averageLoot,
+class _FarmAttackScenario {
+  const _FarmAttackScenario({
+    required this.destructionPercent,
+    required this.lootPerAttack,
+    required this.attacks,
   });
 
-  final int raids;
+  final int destructionPercent;
+  final int lootPerAttack;
+  final int attacks;
+}
+
+class _FarmGoalResultPanel extends StatelessWidget {
+  const _FarmGoalResultPanel({
+    required this.scenarios,
+    required this.upgradeCost,
+    required this.resourceLabel,
+    required this.perfectLoot,
+  });
+
+  final List<_FarmAttackScenario> scenarios;
   final int upgradeCost;
   final String resourceLabel;
-  final int averageLoot;
+  final int perfectLoot;
 
   @override
   Widget build(BuildContext context) {
@@ -1043,56 +1438,65 @@ class _FarmGoalResultPanel extends StatelessWidget {
       key: const ValueKey('farm-goal-result'),
       radius: AppRadius.card,
       padding: const EdgeInsets.all(16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.track_changes_rounded,
-            size: 28,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  loc.farmGoalResultTitle,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  loc.farmGoalResultSummary(
-                    formatSidePageInt(upgradeCost),
-                    resourceLabel,
-                    formatSidePageInt(averageLoot),
-                  ),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '$raids',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+              MobileWebImage(
+                imageUrl: ImageAssets.raidAttacks,
+                width: 32,
+                height: 32,
+                fit: BoxFit.contain,
+                errorWidget: (_, _, _) => Icon(
+                  Icons.track_changes_rounded,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
-              Text(
-                loc.farmGoalRaids,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      loc.farmGoalResultTitle,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      loc.farmGoalResultSummary(
+                        formatSidePageInt(upgradeCost),
+                        resourceLabel,
+                        formatSidePageInt(perfectLoot),
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 8),
+          const Divider(height: 20),
+          for (var index = 0; index < scenarios.length; index++) ...[
+            _FarmAttackScenarioRow(
+              scenario: scenarios[index],
+              resourceLabel: resourceLabel,
+            ),
+            if (index < scenarios.length - 1) const Divider(height: 20),
+          ],
+          const SizedBox(height: 12),
+          Text(
+            loc.farmGoalScenarioHint,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
@@ -1100,17 +1504,77 @@ class _FarmGoalResultPanel extends StatelessWidget {
   }
 }
 
+class _FarmAttackScenarioRow extends StatelessWidget {
+  const _FarmAttackScenarioRow({
+    required this.scenario,
+    required this.resourceLabel,
+  });
+
+  final _FarmAttackScenario scenario;
+  final String resourceLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final title = scenario.destructionPercent == 100
+        ? loc.farmGoalScenarioPerfect
+        : loc.farmGoalScenarioAtPercent(scenario.destructionPercent.toString());
+    final textTheme = Theme.of(context).textTheme;
+    final mutedColor = Theme.of(context).colorScheme.onSurfaceVariant;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '${formatSidePageInt(scenario.lootPerAttack)} $resourceLabel / ${loc.farmGoalAttackShort}',
+                style: textTheme.bodySmall?.copyWith(color: mutedColor),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              '${scenario.attacks}',
+              style: textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            Text(
+              loc.farmGoalAttacks,
+              style: textTheme.bodySmall?.copyWith(color: mutedColor),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class _AccountSelectorPanel extends StatelessWidget {
   const _AccountSelectorPanel({
     required this.accountPresets,
-    required this.selectedAccountTag,
-    required this.onAccountChanged,
+    required this.selectedAccount,
+    required this.onOpenAccountPicker,
     this.hint,
   });
 
   final List<DamageAccountPreset> accountPresets;
-  final String? selectedAccountTag;
-  final ValueChanged<String?> onAccountChanged;
+  final DamageAccountPreset? selectedAccount;
+  final VoidCallback onOpenAccountPicker;
   final String? hint;
 
   @override
@@ -1123,9 +1587,15 @@ class _AccountSelectorPanel extends StatelessWidget {
       child: accountPresets.isEmpty
           ? Row(
               children: [
-                Icon(
-                  Icons.person_search_rounded,
-                  color: colorScheme.onSurfaceVariant,
+                MobileWebImage(
+                  imageUrl: ImageAssets.defaultProfile,
+                  width: 34,
+                  height: 34,
+                  fit: BoxFit.contain,
+                  errorWidget: (_, _, _) => Icon(
+                    Icons.person_search_rounded,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -1144,9 +1614,15 @@ class _AccountSelectorPanel extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(
-                      Icons.person_outline_rounded,
-                      color: colorScheme.onSurfaceVariant,
+                    MobileWebImage(
+                      imageUrl: ImageAssets.defaultProfile,
+                      width: 24,
+                      height: 24,
+                      fit: BoxFit.contain,
+                      errorWidget: (_, _, _) => Icon(
+                        Icons.person_outline_rounded,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -1158,20 +1634,93 @@ class _AccountSelectorPanel extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                SidePageInlineSelector<String>(
-                  selected: selectedAccountTag ?? _noAccountPreset,
-                  options: {
-                    _noAccountPreset: loc.damageChooseAccount,
-                    for (final preset in accountPresets)
-                      preset.tag:
-                          '${preset.name} · ${loc.gameTownHallShortLevel(preset.townHall)}',
-                  },
-                  onSelected: (tag) {
-                    onAccountChanged(tag == _noAccountPreset ? null : tag);
-                  },
-                  minWidth: double.infinity,
-                  maxWidth: double.infinity,
-                  height: 46,
+                Material(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(AppRadius.chip),
+                  child: InkWell(
+                    key: const ValueKey('calculator-account-selector'),
+                    borderRadius: BorderRadius.circular(AppRadius.chip),
+                    onTap: onOpenAccountPicker,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox.square(
+                            dimension: 44,
+                            child: selectedAccount == null
+                                ? MobileWebImage(
+                                    imageUrl: ImageAssets.defaultProfile,
+                                    fit: BoxFit.contain,
+                                    errorWidget: (_, _, _) => Icon(
+                                      Icons.person_search_rounded,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  )
+                                : MobileWebImage(
+                                    imageUrl: ImageAssets.townHall(
+                                      selectedAccount!.townHall,
+                                    ),
+                                    fit: BoxFit.contain,
+                                    errorWidget: (_, _, _) => MobileWebImage(
+                                      imageUrl: ImageAssets.defaultProfile,
+                                      fit: BoxFit.contain,
+                                      errorWidget: (_, _, _) => Icon(
+                                        Icons.person_rounded,
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: selectedAccount == null
+                                ? Text(
+                                    loc.damageChooseAccount,
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(fontWeight: FontWeight.w700),
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        selectedAccount!.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                      ),
+                                      Text(
+                                        '${selectedAccount!.tag} · ${loc.gameTownHallShortLevel(selectedAccount!.townHall)}',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color:
+                                                  colorScheme.onSurfaceVariant,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                          IconButton(
+                            tooltip: loc.damageSwitchAccount,
+                            onPressed: onOpenAccountPicker,
+                            icon: const Icon(Icons.switch_account_rounded),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -1186,8 +1735,202 @@ class _AccountSelectorPanel extends StatelessWidget {
   }
 }
 
-const _noAccountPreset = '__none__';
 const _noFarmBuilding = '__none__';
+const _accountlessPresetTag = '__accountless__';
+
+class _CalculatorAccountPickerSheet extends StatefulWidget {
+  const _CalculatorAccountPickerSheet({
+    required this.accountPresets,
+    required this.selectedTag,
+    required this.allowCustom,
+  });
+
+  final List<DamageAccountPreset> accountPresets;
+  final String? selectedTag;
+  final bool allowCustom;
+
+  @override
+  State<_CalculatorAccountPickerSheet> createState() =>
+      _CalculatorAccountPickerSheetState();
+}
+
+class _CalculatorAccountPickerSheetState
+    extends State<_CalculatorAccountPickerSheet> {
+  final _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final accounts = _filteredAccounts();
+
+    return FractionallySizedBox(
+      heightFactor: 0.82,
+      child: Column(
+        children: [
+          _buildHeader(context),
+          _buildSearchField(context),
+          Expanded(
+            child: accounts.isEmpty && !widget.allowCustom
+                ? _buildEmptyState(context)
+                : _buildAccountsList(context, accounts),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<DamageAccountPreset> _filteredAccounts() {
+    final query = _query.trim().toLowerCase();
+    return widget.accountPresets
+        .where(
+          (account) =>
+              query.isEmpty ||
+              account.name.toLowerCase().contains(query) ||
+              account.tag.toLowerCase().contains(query),
+        )
+        .toList(growable: false);
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              loc.damageAccountPresetShort,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            ),
+          ),
+          IconButton(
+            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.close_rounded),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchField(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          labelText: loc.damageChooseAccount,
+          prefixIcon: const Icon(Icons.search_rounded),
+          suffixIcon: _query.isEmpty
+              ? null
+              : IconButton(
+                  tooltip: loc.generalClearSearch,
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() => _query = '');
+                  },
+                  icon: const Icon(Icons.close_rounded),
+                ),
+        ),
+        onChanged: (value) => setState(() => _query = value),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return AppEmptyState(
+      icon: Icons.person_search_rounded,
+      title: loc.damageNoAccountsAvailable,
+      body: loc.generalTryAgain,
+    );
+  }
+
+  Widget _buildAccountsList(
+    BuildContext context,
+    List<DamageAccountPreset> accounts,
+  ) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      itemCount: accounts.length + (widget.allowCustom ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (widget.allowCustom && index == 0) {
+          return _buildCustomTile(context);
+        }
+        final account = accounts[widget.allowCustom ? index - 1 : index];
+        return _buildAccountTile(context, account);
+      },
+    );
+  }
+
+  Widget _buildCustomTile(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final selected = widget.selectedTag == null;
+    return ListTile(
+      selected: selected,
+      selectedTileColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      leading: const SizedBox.square(
+        dimension: 44,
+        child: Icon(Icons.tune_rounded),
+      ),
+      title: Text(loc.damageQuickSetupCustom),
+      subtitle: Text(loc.damageAccountSelectorHint),
+      trailing: selected ? const Icon(Icons.check_rounded) : null,
+      onTap: () => Navigator.pop(context, _accountlessPresetTag),
+    );
+  }
+
+  Widget _buildAccountTile(BuildContext context, DamageAccountPreset account) {
+    final loc = AppLocalizations.of(context)!;
+    final selected = account.tag == widget.selectedTag;
+    return ListTile(
+      selected: selected,
+      selectedTileColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      leading: SizedBox.square(
+        dimension: 44,
+        child: MobileWebImage(
+          imageUrl: ImageAssets.townHall(account.townHall),
+          fit: BoxFit.contain,
+          errorWidget: (_, _, _) => MobileWebImage(
+            imageUrl: ImageAssets.defaultProfile,
+            fit: BoxFit.contain,
+            errorWidget: (_, _, _) => const Icon(Icons.person_rounded),
+          ),
+        ),
+      ),
+      title: Text(
+        '${account.name} · ${loc.gameTownHallShortLevel(account.townHall)}',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Text(
+        [
+          account.tag,
+          if (account.league?.trim().isNotEmpty == true) account.league!,
+        ].join(' · '),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: selected ? const Icon(Icons.check_rounded) : null,
+      onTap: () => Navigator.pop(context, account.tag),
+    );
+  }
+}
 
 class _TargetEmptyPanel extends StatelessWidget {
   const _TargetEmptyPanel({required this.onChoose});
@@ -1207,9 +1950,15 @@ class _TargetEmptyPanel extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                Icons.gps_fixed_rounded,
-                color: colorScheme.onSurfaceVariant,
+              MobileWebImage(
+                imageUrl: ImageAssets.townHall(1),
+                width: 42,
+                height: 42,
+                fit: BoxFit.contain,
+                errorWidget: (_, _, _) => Icon(
+                  Icons.gps_fixed_rounded,
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -1237,17 +1986,11 @@ class _TargetEmptyPanel extends StatelessWidget {
           const SizedBox(height: 14),
           SizedBox(
             width: double.infinity,
-            height: 46,
             child: OutlinedButton.icon(
               key: const ValueKey('choose-building'),
               onPressed: onChoose,
               icon: const Icon(Icons.add_rounded),
               label: Text(loc.damageChooseTarget),
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppRadius.control),
-                ),
-              ),
             ),
           ),
         ],
@@ -1267,19 +2010,8 @@ class _AddBuildingButton extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
-      height: 44,
       child: OutlinedButton.icon(
         key: const ValueKey('add-building'),
-        style: OutlinedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.control),
-          ),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outlineVariant.withValues(
-              alpha: AppOpacity.borderStrong,
-            ),
-          ),
-        ),
         onPressed: enabled ? onPressed : null,
         icon: const Icon(Icons.add_rounded),
         label: Text(loc.damageAddBuilding),
@@ -1448,12 +2180,20 @@ class _TargetResultSummary extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      result.destroyed
-                          ? Icons.check_circle_outline_rounded
-                          : Icons.shield_outlined,
-                      size: 16,
-                      color: accent,
+                    MobileWebImage(
+                      imageUrl: result.destroyed
+                          ? ImageAssets.iconTick
+                          : ImageAssets.iconCross,
+                      width: 18,
+                      height: 18,
+                      fit: BoxFit.contain,
+                      errorWidget: (_, _, _) => Icon(
+                        result.destroyed
+                            ? Icons.check_circle_outline_rounded
+                            : Icons.shield_outlined,
+                        size: 16,
+                        color: accent,
+                      ),
                     ),
                     const SizedBox(width: 5),
                     Text(
@@ -1634,6 +2374,14 @@ class _ZapQuakePanel extends StatelessWidget {
         children: [
           Row(
             children: [
+              MobileWebImage(
+                imageUrl: lightningSource.imageUrl,
+                width: 28,
+                height: 28,
+                fit: BoxFit.contain,
+                errorWidget: (_, _, _) => const Icon(Icons.bolt_rounded),
+              ),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   loc.damageSpellCapacity,
@@ -1707,7 +2455,14 @@ class _ZapQuakePanel extends StatelessWidget {
       children: combinations
           .map(
             (combo) => Chip(
-              avatar: const Icon(Icons.bolt_rounded, size: 18),
+              avatar: MobileWebImage(
+                imageUrl: ImageAssets.getSpellImage(_lightningSpellName),
+                width: 18,
+                height: 18,
+                fit: BoxFit.contain,
+                errorWidget: (_, _, _) =>
+                    const Icon(Icons.bolt_rounded, size: 18),
+              ),
               label: Text(
                 loc.damageZapQuakeCombination(
                   combo.lightningCount,
@@ -2020,7 +2775,7 @@ Map<DamageSourceKind, int> _ownedDamageLevels(Player player) {
     }
   }
 
-  add(DamageSourceKind.lightning, player.spells, 'Lightning Spell');
+  add(DamageSourceKind.lightning, player.spells, _lightningSpellName);
   add(DamageSourceKind.earthquake, player.spells, 'Earthquake Spell');
   add(DamageSourceKind.giantArrow, player.equipments, 'Giant Arrow');
   add(DamageSourceKind.fireball, player.equipments, 'Fireball');
@@ -2047,13 +2802,47 @@ String? _upgradeResourceLabel(AppLocalizations loc, String? resource) {
   return switch (normalized) {
     'gold' => loc.resourceGold,
     'elixir' => loc.resourceElixir,
-    'dark elixir' => loc.resourceDarkElixir,
+    _darkElixirResourceName => loc.resourceDarkElixir,
     final value when value != null && value.isNotEmpty => resource,
     _ => null,
   };
 }
 
-int? _farmLeagueLoot({
+UpgradeCost? _trackerCostForSelection(
+  _FarmTrackerTarget? target,
+  BuildingDefinition? building,
+  BuildingLevelDefinition? level,
+) {
+  final item = target?.item;
+  if (item == null || building == null || level == null) return null;
+  if (item.name.trim().toLowerCase() != building.name.trim().toLowerCase()) {
+    return null;
+  }
+  final step = target?.plannedStep?.targetLevel == level.level
+      ? target?.plannedStep
+      : item.steps
+            .where((candidate) => candidate.targetLevel == level.level)
+            .firstOrNull;
+  if (step == null || step.costs.isEmpty) return null;
+  final selectedResource = level.upgradeResource?.trim().toLowerCase();
+  return step.costs
+          .where(
+            (cost) =>
+                selectedResource == null ||
+                cost.resource.trim().toLowerCase() == selectedResource,
+          )
+          .firstOrNull ??
+      step.costs.first;
+}
+
+class _FarmLeagueLootEstimate {
+  const _FarmLeagueLootEstimate({this.loot, this.starBonus});
+
+  final int? loot;
+  final int? starBonus;
+}
+
+_FarmLeagueLootEstimate? _farmLeagueLootEstimate({
   required String? league,
   required int townHall,
   required String? resource,
@@ -2071,10 +2860,20 @@ int? _farmLeagueLoot({
     if (!_rewardAppliesToTownHall(reward, townHall)) continue;
     selectedReward = reward;
   }
-  final resources = selectedReward?['resources'];
-  if (resources is! Map) return null;
   final resourceKey = _farmResourceKey(resource);
-  final value = resourceKey == null ? null : resources[resourceKey];
+  if (resourceKey == null) return null;
+  final loot = _farmRewardAmount(selectedReward?['resources'], resourceKey);
+  final starBonus = _farmRewardAmount(
+    selectedReward?['star_bonus'],
+    resourceKey,
+  );
+  if (loot == null && starBonus == null) return null;
+  return _FarmLeagueLootEstimate(loot: loot, starBonus: starBonus);
+}
+
+int? _farmRewardAmount(dynamic rewards, String resourceKey) {
+  if (rewards is! Map) return null;
+  final value = rewards[resourceKey];
   return value is num && value > 0 ? value.round() : null;
 }
 
@@ -2091,6 +2890,21 @@ String? _farmResourceKey(String resource) =>
       _ => null,
     };
 
+String? _farmResourceImage(String? resource) =>
+    switch (resource?.trim().toLowerCase().replaceAll('_', ' ')) {
+      'gold' => '${ImageAssets.baseUrl}/resources/gold.webp',
+      'elixir' => '${ImageAssets.baseUrl}/resources/elixir.webp',
+      _darkElixirResourceName =>
+        '${ImageAssets.baseUrl}/resources/dark_elixir.webp',
+      _ => null,
+    };
+
+int _farmDefaultPerfectLoot(String? resource) =>
+    resource?.trim().toLowerCase().replaceAll('_', ' ') ==
+        _darkElixirResourceName
+    ? 10000
+    : _defaultFarmPerfectLoot;
+
 int _parseFarmAmount(String value) =>
     int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
 
@@ -2099,7 +2913,15 @@ String _quickSetupLabel(AppLocalizations loc, String id) => switch (id) {
   _fireballQuakeSetupId => loc.damageQuickSetupFireballQuake,
   _giantArrowSetupId => loc.damageQuickSetupGiantArrow,
   _flameFlingerSetupId => loc.damageQuickSetupFlameFlinger,
-  _ => loc.damageSummaryAttack,
+  _ => loc.damageQuickSetupCustom,
+};
+
+IconData _quickSetupIcon(String id) => switch (id) {
+  _zapQuakeSetupId => Icons.bolt_rounded,
+  _fireballQuakeSetupId => Icons.local_fire_department_rounded,
+  _giantArrowSetupId => Icons.north_east_rounded,
+  _flameFlingerSetupId => Icons.rocket_launch_rounded,
+  _ => Icons.tune_rounded,
 };
 
 String _sourceLabel(AppLocalizations loc, DamageSourceDefinition source) =>

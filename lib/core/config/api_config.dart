@@ -44,12 +44,7 @@ class ApiConfig {
       return _withoutTrailingSlash(_apiV2BaseOverride);
     }
 
-    return switch (environment) {
-      ApiEnvironment.local => '$apiBaseUrl/v2',
-      // The notification endpoints are currently deployed on local-api.
-      // Move this to api.clashk.ing after the v2 rollout is complete.
-      ApiEnvironment.production => 'https://local-api.clashk.ing/v2',
-    };
+    return _resolvedApiV2UrlFor(environment);
   }
 
   static String get proxyUrl {
@@ -68,9 +63,21 @@ class ApiConfig {
     ApiEnvironment.production => 'https://api.clashk.ing',
   };
 
-  static String defaultApiV2UrlFor(ApiEnvironment target) => switch (target) {
+  static String defaultApiV2UrlFor(ApiEnvironment target) =>
+      _defaultApiV2UrlFor(target);
+
+  static String _resolvedApiV2UrlFor(ApiEnvironment target) {
+    // Keep CK_API_BASE_URL useful for local development while production has
+    // one canonical v2 host shared by the runtime getter and default helper.
+    if (target == ApiEnvironment.local && _apiBaseOverride.isNotEmpty) {
+      return '$apiBaseUrl/v2';
+    }
+    return _defaultApiV2UrlFor(target);
+  }
+
+  static String _defaultApiV2UrlFor(ApiEnvironment target) => switch (target) {
     ApiEnvironment.local => '${defaultApiBaseUrlFor(target)}/v2',
-    ApiEnvironment.production => 'https://local-api.clashk.ing/v2',
+    ApiEnvironment.production => 'https://v2-api.clashk.ing/v2',
   };
 
   static String defaultProxyUrlFor(ApiEnvironment target) => switch (target) {

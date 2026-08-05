@@ -1,5 +1,4 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
-import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/icons/build_stars.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -332,21 +331,10 @@ class MembersCard extends StatelessWidget {
     final attack = member.attackStats;
     final defense = member.defenseStats;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      decoration: BoxDecoration(
-        color:
-            Theme.of(context).cardTheme.color ??
-            Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        border: Border.all(
-          color: Theme.of(
-            context,
-          ).colorScheme.outlineVariant.withValues(alpha: AppOpacity.border),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: CKSectionPanel(
+        padding: const EdgeInsets.all(12),
         child: Column(
           children: [
             Row(
@@ -771,9 +759,8 @@ class MembersCard extends StatelessWidget {
   }
 }
 
-/// Label/value pair for the member full-stats grid — a card-less sibling of
-/// `CKStatTile`: same layout (icon, label, value) but no background/border, so
-/// a dense 13-item wrap doesn't turn into a wall of boxes.
+/// Adapter for the member full-stats grid so its stats use the shared devkit
+/// tile while keeping the CWL-specific call sites compact.
 class _FlatStat extends StatelessWidget {
   final String label;
   final String value;
@@ -786,40 +773,8 @@ class _FlatStat extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return SizedBox(
-      width: 56,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(child: icon),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      CKStatTile(label: label, value: value, icon: icon);
 }
 
 class _MemberFullStatsToggle extends StatelessWidget {

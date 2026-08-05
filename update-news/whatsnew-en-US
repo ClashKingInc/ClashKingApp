@@ -1,6 +1,13 @@
 - To Do header stats now sit directly on the hero image and match the compact quick-stat style used by other headers.
 - To Do account cards now use the same metric chips as the Home to-do card.
 - Replaced loading spinners across the app with skeleton placeholders that match the loaded layouts.
+- War state analysis now separates locked outcomes from still-playable tie or win scenarios.
+- Stats now follows the shared ClashKing side-page design system with tokenized panels, filters, stat pills, and chart accents.
+- Calculator screens now use ClashKing assets throughout targets, accounts, sources, resources, results, and method filters, with shared outlined actions and no redundant target/damage/result summary.
+- Calculator header imagery now follows the active mode instead of displaying the generic ClashKing logo.
+- Fixed production authentication by routing v2 requests to the public API instead of the unavailable local-api host.
+- Calculator account selection now matches Upgrade Tracker with Town Hall icons, account search, and a dedicated picker.
+- Farm goals now use cached Upgrade Tracker data to suggest the next building target and its known upgrade cost when available.
 - Empty/no-result screens now share the same visual treatment across side pages and rankings.
 - Settings language and theme pickers now match the app's current settings styling in light and dark mode
 - Refined notification audience settings with clearer account scope controls.
@@ -21,7 +28,7 @@
 - Ranked League account switching now uses a labelled account selector directly in the player identity.
 - Damage Calculator now starts from a clear attack method, shows only relevant damage sources first, and hides the Zap Quake optimizer outside Zap Quake mode.
 - Calculators now use the same hero header and tabs as player and clan detail pages.
-- Added a farm goal mode next to the damage calculator to estimate required raids from a resource target and average loot.
+- Added a farm goal mode next to the damage calculator to estimate required attacks from a resource target, perfect-attack loot, and 100%/80%/60% destruction scenarios, with upcoming buildings from Upgrade Tracker and separate league bonus context.
 - Farm goals now use a selected building level and suggest league-based loot for the selected account.
 - Calculator UX now has cleaner setup controls, compact source rows, localized building labels, and no redundant empty stack card
 - Posts now show announcement-shaped skeleton cards while loading instead of a spinner

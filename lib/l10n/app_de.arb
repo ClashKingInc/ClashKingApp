@@ -958,6 +958,20 @@
       }
     }
   },
+  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "warAnalysisSecuredBadge": "Secured",
+  "warAnalysisAlreadySecured": "Already secured",
+  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
+  "warAnalysisStarGoal": "+{stars} star(s)",
+  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "warAnalysisNoBetterResult": "No better result is possible",
   "warCalculatorHintPercent": "50,00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"

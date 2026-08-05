@@ -182,7 +182,7 @@ packages:
     description:
       path: "design/packages/flutter"
       ref: "codex/shared-devkit-controls"
-      resolved-ref: ef875eb840e276bd177520dc6b6df9511d1d7927
+      resolved-ref: "27d984dd1c5c7894b93f26b3062c4ded66680be2"
       url: "https://github.com/ClashKingInc/DevKit.git"
     source: git
     version: "0.2.0"
