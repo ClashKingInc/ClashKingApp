@@ -450,7 +450,10 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmTrackerLoading = false;
       return;
     }
-    if (tag == _farmTrackerLoadTag) return;
+    if (tag == _farmTrackerLoadTag &&
+        (_farmTrackerLoading || _farmTrackerSnapshotTag == tag)) {
+      return;
+    }
     _farmTrackerLoadTag = tag;
     _farmTrackerSnapshot = null;
     _farmTrackerSnapshotTag = null;
@@ -466,6 +469,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     // SharedPreferences/network load in that mode; a warmed shared snapshot
     // is still used above when one exists.
     if (widget.accountPresets != null) {
+      _farmTrackerLoadTag = null;
       _farmTrackerLoading = false;
       return;
     }
@@ -479,7 +483,8 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       if (!mounted || tag != _farmAccountTag) return;
       setState(() {
         _farmTrackerSnapshot = snapshot;
-        _farmTrackerSnapshotTag = tag;
+        _farmTrackerSnapshotTag = snapshot == null ? null : tag;
+        _farmTrackerLoadTag = snapshot == null ? null : tag;
         _farmTrackerLoading = false;
       });
     } catch (_) {
@@ -487,6 +492,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       setState(() {
         _farmTrackerSnapshot = null;
         _farmTrackerSnapshotTag = null;
+        _farmTrackerLoadTag = null;
         _farmTrackerLoading = false;
       });
     }
