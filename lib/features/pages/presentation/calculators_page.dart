@@ -17,7 +17,9 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
+import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -35,12 +37,40 @@ const _townHallBuildingName = 'Town Hall';
 const _lightningSpellName = 'Lightning Spell';
 const _darkElixirResourceName = 'dark elixir';
 const _defaultFarmPerfectLoot = 1000000;
+const _calculatorDesktopMaxWidth = 1120.0;
+
+EdgeInsets _calculatorPagePadding(BuildContext context) {
+  if (!isSidePageDesktop(context)) return sidePagePadding;
+  final width = MediaQuery.sizeOf(context).width;
+  final horizontal = width > _calculatorDesktopMaxWidth + 40
+      ? (width - _calculatorDesktopMaxWidth) / 2
+      : 20.0;
+  return EdgeInsets.fromLTRB(horizontal, 16, horizontal, 32);
+}
+
+ButtonStyle _calculatorSecondaryActionStyle(BuildContext context) {
+  final colorScheme = Theme.of(context).colorScheme;
+  return OutlinedButton.styleFrom(
+    foregroundColor: colorScheme.onSurface,
+    minimumSize: const Size(0, 44),
+    side: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.72)),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppRadius.control),
+    ),
+  );
+}
 
 class CalculatorsPage extends StatefulWidget {
-  const CalculatorsPage({super.key, this.catalog, this.accountPresets});
+  const CalculatorsPage({
+    super.key,
+    this.catalog,
+    this.accountPresets,
+    this.initialTrackerSnapshot,
+  });
 
   final DamageCatalog? catalog;
   final List<DamageAccountPreset>? accountPresets;
+  final UpgradeTrackerSnapshot? initialTrackerSnapshot;
 
   @override
   State<CalculatorsPage> createState() => _CalculatorsPageState();
@@ -79,6 +109,9 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   int? _farmBuildingLevel;
   UpgradeTrackerSnapshot? _farmTrackerSnapshot;
   String? _farmTrackerSnapshotTag;
+  UpgradePlanPreferences _farmTrackerPlanPreferences =
+      const UpgradePlanPreferences();
+  int _farmTrackerGoldPassPercent = 0;
   bool _farmTrackerLoading = false;
   String? _farmTrackerLoadTag;
   late final TextEditingController _farmAverageLootController;
@@ -91,10 +124,11 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     _session = DamageCalculatorSession(_catalog);
     _selectedQuickSetupId = _customSetupId;
     _accountPresets = widget.accountPresets ?? const [];
-    if (_accountPresets.isNotEmpty) {
-      _farmAccountTag = _accountPresets.first.tag;
-    }
-    _farmAverageLootController = TextEditingController();
+    _farmAverageLootController = TextEditingController(
+      text: _defaultFarmPerfectLoot.toString(),
+    );
+    _selectInitialAccount();
+    _setFarmLootSuggestion();
   }
 
   @override
@@ -115,11 +149,8 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
             accounts,
             context.read<PlayerService>(),
           );
-          final selectedTag = accounts.selectedTag;
-          _farmAccountTag =
-              _accountPresets.any((preset) => preset.tag == selectedTag)
-              ? selectedTag
-              : _accountPresets.firstOrNull?.tag;
+          _selectInitialAccount(preferredTag: accounts.selectedTag);
+          _setFarmLootSuggestion();
         } on ProviderNotFoundException {
           _accountPresets = const [];
         }
@@ -144,7 +175,8 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final farmPreset = _farmSelectedPreset;
     final farmTownHall = farmPreset?.townHall ?? _catalog.maxTownHall;
     final farmBuildings = _catalog.buildingsForTownHall(farmTownHall);
-    final trackerBuildings = _farmTrackerBuildings(farmBuildings);
+    final trackerTargets = _farmTrackerTargets(farmBuildings);
+    final selectableFarmBuildings = _farmSelectableBuildings(farmBuildings);
     final farmBuilding = _farmSelectedBuilding(farmBuildings);
     final farmLevels = _farmTargetLevels(farmBuilding, farmTownHall);
 
@@ -153,22 +185,33 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       onModeChanged: _selectCalculatorMode,
       child: ListView(
         key: const ValueKey('farm-goal-scroll'),
-        padding: sidePagePadding,
+        padding: _calculatorPagePadding(context),
         children: [
           _FarmGoalView(
             accountPresets: _accountPresets,
             selectedAccount: farmPreset,
             onOpenAccountPicker: () => _showAccountPicker(forFarmGoal: true),
-            buildings: farmBuildings,
-            trackerBuildings: trackerBuildings,
-            selectedBuildingId: _farmBuildingId,
+            onOpenBuildingPicker: () => _showFarmBuildingPicker(
+              buildings: selectableFarmBuildings,
+              townHall: farmTownHall,
+              trackerTargets: trackerTargets,
+            ),
             selectedBuilding: farmBuilding,
             levels: farmLevels,
             selectedLevel: _farmSelectedLevel(farmLevels),
-            trackerSuggestion: _farmTrackerSuggestion(farmBuildings),
+            trackerSuggestion: trackerTargets.firstOrNull,
             trackerLoading: _farmTrackerLoading,
+            trackerDataMissing:
+                farmPreset != null &&
+                !_farmTrackerLoading &&
+                _farmTrackerSnapshot == null,
+            trackerPlanComplete:
+                farmPreset != null &&
+                !_farmTrackerLoading &&
+                _farmTrackerSnapshot != null &&
+                trackerTargets.isEmpty,
+            onOpenUpgradeTracker: _openUpgradeTracker,
             onUseTrackerSuggestion: _useFarmTrackerSuggestion,
-            onBuildingChanged: _selectFarmBuilding,
             onLevelChanged: _selectFarmBuildingLevel,
             averageLootController: _farmAverageLootController,
             onLootChanged: () => setState(() {}),
@@ -185,7 +228,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       onModeChanged: _selectCalculatorMode,
       child: ListView(
         key: const ValueKey('calculators-scroll'),
-        padding: sidePagePadding,
+        padding: _calculatorPagePadding(context),
         children: [
           AppEmptyState(
             icon: Icons.cloud_off_rounded,
@@ -216,8 +259,16 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       onModeChanged: _selectCalculatorMode,
       child: ListView(
         key: const ValueKey('damage-calculator-scroll'),
-        padding: sidePagePadding,
+        padding: _calculatorPagePadding(context),
         children: [
+          SidePageSectionHeader(title: loc.damageAccountPresetShort),
+          _AccountSelectorPanel(
+            accountPresets: _accountPresets,
+            selectedAccount: _accountPreset(_session.selectedAccountTag),
+            onOpenAccountPicker: () => _showAccountPicker(forFarmGoal: false),
+            showHeading: false,
+          ),
+          const SizedBox(height: 22),
           ..._targetSectionWidgets(context, loc, targets, resultByTargetId),
           ..._attackStackSectionWidgets(
             loc,
@@ -289,12 +340,6 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
         onSelected: _applyQuickSetup,
       ),
       const SizedBox(height: 14),
-      _AccountSelectorPanel(
-        accountPresets: _accountPresets,
-        selectedAccount: _accountPreset(_session.selectedAccountTag),
-        onOpenAccountPicker: () => _showAccountPicker(forFarmGoal: false),
-      ),
-      const SizedBox(height: 14),
       ..._sourceSectionWidgets(loc, selectedSetup, sourceVisibility),
     ];
   }
@@ -353,6 +398,16 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       }
       _repairSelectedQuickSetup();
     });
+  }
+
+  void _selectInitialAccount({String? preferredTag}) {
+    final preferredPreset = _accountPreset(preferredTag);
+    final preset = preferredPreset ?? _accountPresets.firstOrNull;
+    _farmAccountTag = preset?.tag;
+    if (preset == null) return;
+
+    _session.applyPreset(preset);
+    _repairSelectedQuickSetup();
   }
 
   _DamageSourceVisibility _damageSourceVisibility(_QuickSetup? selectedSetup) {
@@ -431,8 +486,10 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmBuildingLevel = null;
       _farmTrackerSnapshot = null;
       _farmTrackerSnapshotTag = null;
+      _farmTrackerPlanPreferences = const UpgradePlanPreferences();
+      _farmTrackerGoldPassPercent = 0;
       _farmTrackerLoading = false;
-      _farmAverageLootController.clear();
+      _setFarmLootSuggestion();
     });
     _startFarmTrackerLoad(tag);
   }
@@ -447,6 +504,16 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmTrackerLoadTag = tag;
       _farmTrackerSnapshot = null;
       _farmTrackerSnapshotTag = null;
+      _farmTrackerPlanPreferences = const UpgradePlanPreferences();
+      _farmTrackerGoldPassPercent = 0;
+      _farmTrackerLoading = false;
+      return;
+    }
+    final initialSnapshot = widget.initialTrackerSnapshot;
+    if (initialSnapshot != null) {
+      _farmTrackerLoadTag = tag;
+      _farmTrackerSnapshot = initialSnapshot;
+      _farmTrackerSnapshotTag = tag;
       _farmTrackerLoading = false;
       return;
     }
@@ -462,6 +529,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmTrackerSnapshot = cached;
       _farmTrackerSnapshotTag = tag;
       _farmTrackerLoading = false;
+      unawaited(_loadFarmTrackerPreferences(tag, cached));
       return;
     }
     // Injected presets are used by isolated screens/tests and do not carry
@@ -481,11 +549,16 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     try {
       final snapshot = await UpgradeTrackerRepository.shared.load(tag);
       if (!mounted || tag != _farmAccountTag) return;
+      final draft = snapshot == null
+          ? null
+          : await UpgradeTrackerRepository.shared.loadPlanPreferences(tag);
+      if (!mounted || tag != _farmAccountTag) return;
       setState(() {
         _farmTrackerSnapshot = snapshot;
         _farmTrackerSnapshotTag = snapshot == null ? null : tag;
         _farmTrackerLoadTag = snapshot == null ? null : tag;
         _farmTrackerLoading = false;
+        _applyFarmTrackerPreferences(snapshot, draft);
       });
     } catch (_) {
       if (!mounted || tag != _farmAccountTag) return;
@@ -498,21 +571,46 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     }
   }
 
-  _FarmTrackerTarget? _farmTrackerSuggestion(
-    List<BuildingDefinition> buildings,
-  ) => _farmTrackerTargets(buildings).firstOrNull;
+  Future<void> _loadFarmTrackerPreferences(
+    String tag,
+    UpgradeTrackerSnapshot snapshot,
+  ) async {
+    try {
+      final draft = await UpgradeTrackerRepository.shared.loadPlanPreferences(
+        tag,
+      );
+      if (!mounted || tag != _farmAccountTag) return;
+      setState(() => _applyFarmTrackerPreferences(snapshot, draft));
+    } catch (_) {
+      // The snapshot still provides a useful recommendation with defaults.
+    }
+  }
 
-  List<BuildingDefinition> _farmTrackerBuildings(
-    List<BuildingDefinition> buildings,
+  void _applyFarmTrackerPreferences(
+    UpgradeTrackerSnapshot? snapshot,
+    Map<String, dynamic>? draft,
   ) {
-    final byName = {
-      for (final building in buildings)
-        building.name.trim().toLowerCase(): building,
-    };
-    return _farmTrackerTargets(buildings)
-        .map((target) => byName[target.item.name.trim().toLowerCase()])
-        .whereType<BuildingDefinition>()
-        .toList(growable: false);
+    _farmTrackerPlanPreferences = UpgradePlanPreferences.fromJson(
+      draft?['heuristics'] is Map
+          ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
+          : null,
+    );
+    final detectedGoldPass = snapshot == null
+        ? 0
+        : [
+            snapshot.boosts.builderCostReductionPercent,
+            snapshot.boosts.builderTimeReductionPercent,
+            snapshot.boosts.labCostReductionPercent,
+            snapshot.boosts.labTimeReductionPercent,
+          ].reduce((a, b) => a > b ? a : b);
+    final savedGoldPass = draft?['gold_pass_percent'];
+    final parsedGoldPass = savedGoldPass is num
+        ? savedGoldPass.toInt()
+        : int.tryParse(savedGoldPass?.toString() ?? '');
+    _farmTrackerGoldPassPercent = (parsedGoldPass ?? detectedGoldPass).clamp(
+      0,
+      100,
+    );
   }
 
   List<_FarmTrackerTarget> _farmTrackerTargets(
@@ -522,18 +620,46 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     if (snapshot == null || _farmTrackerSnapshotTag != _farmAccountTag) {
       return const [];
     }
-    final names = buildings
-        .map((building) => building.name.trim().toLowerCase())
-        .toSet();
+    final townHall = _farmSelectedPreset?.townHall ?? _catalog.maxTownHall;
+    final buildingsByName = {
+      for (final building in buildings)
+        building.name.trim().toLowerCase(): building,
+    };
     final ordered = <_FarmTrackerTarget>[];
     final seen = <String>{};
 
-    void addItem(UpgradeTrackerItem item, {UpgradeStep? step}) {
+    void addItem(
+      UpgradeTrackerItem item, {
+      UpgradeStep? step,
+      List<UpgradeCost>? plannedCosts,
+    }) {
       final name = item.name.trim().toLowerCase();
-      if (item.steps.isEmpty || !names.contains(name) || !seen.add(name)) {
+      if (item.isComplete || item.steps.isEmpty) {
         return;
       }
-      ordered.add(_FarmTrackerTarget(item: item, plannedStep: step));
+      final validSteps = item.steps
+          .where((candidate) => candidate.targetLevel > item.currentLevel)
+          .toList(growable: false);
+      final resolvedStep = step != null && step.targetLevel > item.currentLevel
+          ? step
+          : validSteps.firstOrNull;
+      final building = buildingsByName[name];
+      if (resolvedStep == null ||
+          building == null ||
+          !_farmTargetLevels(
+            building,
+            townHall,
+          ).any((level) => level.level == resolvedStep.targetLevel) ||
+          !seen.add(name)) {
+        return;
+      }
+      ordered.add(
+        _FarmTrackerTarget(
+          item: item,
+          plannedStep: resolvedStep,
+          plannedCosts: identical(resolvedStep, step) ? plannedCosts : null,
+        ),
+      );
     }
 
     final now = DateTime.now();
@@ -544,12 +670,14 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
               strategy: UpgradePlanStrategy.balanced,
               village: UpgradeVillage.home,
               startsAt: now,
+              goldPassPercent: _farmTrackerGoldPassPercent,
+              preferences: _farmTrackerPlanPreferences,
             )
             .expand((lane) => lane.upgrades)
             .toList()
           ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
     for (final upgrade in planned) {
-      addItem(upgrade.item, step: upgrade.step);
+      addItem(upgrade.item, step: upgrade.step, plannedCosts: upgrade.costs);
     }
     for (final item in snapshot.itemsFor(
       village: UpgradeVillage.home,
@@ -560,6 +688,36 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       addItem(item);
     }
     return ordered;
+  }
+
+  List<BuildingDefinition> _farmSelectableBuildings(
+    List<BuildingDefinition> buildings,
+  ) {
+    final snapshot = _farmTrackerSnapshot;
+    if (snapshot == null || _farmTrackerSnapshotTag != _farmAccountTag) {
+      return buildings;
+    }
+    final trackerItemsByName = <String, List<UpgradeTrackerItem>>{};
+    for (final item in snapshot.itemsFor(
+      village: UpgradeVillage.home,
+      queue: UpgradeQueue.builders,
+    )) {
+      trackerItemsByName
+          .putIfAbsent(item.name.trim().toLowerCase(), () => [])
+          .add(item);
+    }
+    return buildings
+        .where((building) {
+          final matching =
+              trackerItemsByName[building.name.trim().toLowerCase()];
+          if (matching == null || matching.isEmpty) return true;
+          return matching.any(
+            (item) =>
+                !item.isComplete &&
+                item.steps.any((step) => step.targetLevel > item.currentLevel),
+          );
+        })
+        .toList(growable: false);
   }
 
   void _useFarmTrackerSuggestion(_FarmTrackerTarget target) {
@@ -584,6 +742,16 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmBuildingLevel = matchingLevel.level;
       _setFarmLootSuggestion();
     });
+  }
+
+  Future<void> _openUpgradeTracker() async {
+    final tag = _farmAccountTag;
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(builder: (_) => UpgradeTrackerPage(initialTag: tag)),
+    );
+    if (!mounted) return;
+    _farmTrackerLoadTag = null;
+    _startFarmTrackerLoad(tag);
   }
 
   Future<void> _showAccountPicker({required bool forFarmGoal}) async {
@@ -639,9 +807,12 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     );
     final levels = _farmTargetLevels(building, farmTownHall);
     final level = _farmSelectedLevel(levels);
-    _farmAverageLootController.text = level == null
-        ? ''
-        : _farmDefaultPerfectLoot(level.upgradeResource).toString();
+    final resource = level?.upgradeResource ?? 'Gold';
+    _farmAverageLootController.text = _farmDefaultVillageLoot(
+      league: farmPreset?.league,
+      townHall: farmTownHall,
+      resource: resource,
+    ).toString();
   }
 
   List<BuildingLevelDefinition> _farmTargetLevels(
@@ -735,7 +906,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final selectedIds = _session.targets
         .map((target) => target.buildingId)
         .toSet();
-    final result = await showModalBottomSheet<String>(
+    final result = await showModalBottomSheet<_BuildingPickerSelection>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -746,7 +917,32 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       ),
     );
     if (result != null && mounted) {
-      setState(() => _session.addTarget(result));
+      setState(() => _session.addTarget(result.buildingId));
+    }
+  }
+
+  Future<void> _showFarmBuildingPicker({
+    required List<BuildingDefinition> buildings,
+    required int townHall,
+    required List<_FarmTrackerTarget> trackerTargets,
+  }) async {
+    final result = await showModalBottomSheet<_BuildingPickerSelection>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => _BuildingPicker(
+        buildings: buildings,
+        selectedIds: const {},
+        townHall: townHall,
+        trackerTargets: trackerTargets.take(1).toList(growable: false),
+      ),
+    );
+    if (result == null || !mounted) return;
+    final trackerTarget = result.trackerTarget;
+    if (trackerTarget != null) {
+      _useFarmTrackerSuggestion(trackerTarget);
+    } else {
+      _selectFarmBuilding(result.buildingId);
     }
   }
 }
@@ -795,10 +991,7 @@ class _CalculatorScaffold extends StatelessWidget {
           ),
           InfoProfileTabData(
             label: loc.calculatorsModeFarmGoal,
-            imageUrl: ImageAssets.getHomeVillageBuildingImage(
-              _townHallBuildingName,
-              1,
-            ),
+            imageUrl: ImageAssets.lootCart,
           ),
         ],
         body: child,
@@ -816,21 +1009,36 @@ class _CalculatorHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
     final isDesktopWeb = isSidePageDesktop(context);
-    final imageHeight = media.padding.top + (isDesktopWeb ? 292 : 246);
-    final imageUrl = selectedMode == _CalculatorMode.damage
+    final scaledBodyHeight = media.textScaler.scale(16);
+    final mobileTextScaleAllowance = ((scaledBodyHeight - 16) * 1.5).clamp(
+      0.0,
+      72.0,
+    );
+    final imageHeight =
+        media.padding.top +
+        (isDesktopWeb ? 292 : 332 + mobileTextScaleAllowance);
+    final loc = AppLocalizations.of(context)!;
+    final isDamage = selectedMode == _CalculatorMode.damage;
+    final backgroundImageUrl = isDamage
+        ? ImageAssets.playerWarStatsPageBackground
+        : ImageAssets.homeBaseBackground;
+    final artworkUrl = isDamage
         ? ImageAssets.getSpellImage(_lightningSpellName)
-        : ImageAssets.getHomeVillageBuildingImage(_townHallBuildingName, 1);
-    final fallbackIcon = selectedMode == _CalculatorMode.damage
+        : ImageAssets.lootCart;
+    final fallbackIcon = isDamage
         ? Icons.bolt_rounded
         : Icons.home_work_rounded;
+    final subtitle = isDamage
+        ? loc.damageCalculatorSubtitle
+        : loc.farmGoalFormTitle;
 
     return Stack(
       children: [
         Positioned.fill(
           child: InfoHeroBackdrop(
-            imageUrl: ImageAssets.homeBaseBackground,
+            imageUrl: backgroundImageUrl,
             fallbackImageUrls: const [
-              ImageAssets.clanPageBackground,
+              ImageAssets.homeBaseBackground,
               ImageAssets.builderBaseBackground,
             ],
             height: imageHeight,
@@ -864,34 +1072,113 @@ class _CalculatorHeader extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MobileWebImage(
-                          imageUrl: imageUrl,
-                          width: 58,
-                          height: 58,
-                          fit: BoxFit.contain,
-                          errorWidget: (_, _, _) =>
-                              Icon(fallbackIcon, size: 58, color: Colors.white),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: _calculatorDesktopMaxWidth,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          AppLocalizations.of(context)!.calculatorsTitle,
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                              ),
+                        child: _CalculatorHeroIdentity(
+                          imageUrl: artworkUrl,
+                          fallbackIcon: fallbackIcon,
+                          title: loc.calculatorsTitle,
+                          subtitle: subtitle,
+                          horizontal: isDesktopWeb,
                         ),
-                      ],
+                      ),
                     ),
                   ),
+                  SizedBox(height: isDesktopWeb ? CKSpacing.lg : CKSpacing.xl),
                 ],
               ),
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _CalculatorHeroIdentity extends StatelessWidget {
+  const _CalculatorHeroIdentity({
+    required this.imageUrl,
+    required this.fallbackIcon,
+    required this.title,
+    required this.subtitle,
+    required this.horizontal,
+  });
+
+  final String imageUrl;
+  final IconData fallbackIcon;
+  final String title;
+  final String subtitle;
+  final bool horizontal;
+
+  @override
+  Widget build(BuildContext context) {
+    final artwork = ExcludeSemantics(
+      child: SizedBox.square(
+        key: const ValueKey('calculator-hero-artwork'),
+        dimension: horizontal ? 104 : 112,
+        child: MobileWebImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.contain,
+          errorWidget: (_, _, _) =>
+              Icon(fallbackIcon, color: Colors.white, size: 42),
+        ),
+      ),
+    );
+    final copy = ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: horizontal ? 520 : 330),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: horizontal
+            ? CrossAxisAlignment.start
+            : CrossAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: horizontal ? TextAlign.start : TextAlign.center,
+            style: CKTypography.of(
+              context,
+              CKTextRole.screenTitle,
+            ).copyWith(color: Colors.white, fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: CKSpacing.sm),
+          Text(
+            subtitle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: horizontal ? TextAlign.start : TextAlign.center,
+            style: CKTypography.of(
+              context,
+              CKTextRole.body,
+            ).copyWith(color: Colors.white.withValues(alpha: 0.82)),
+          ),
+        ],
+      ),
+    );
+
+    if (horizontal) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          artwork,
+          const SizedBox(width: CKSpacing.xl),
+          copy,
+        ],
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        artwork,
+        const SizedBox(height: CKSpacing.md),
+        copy,
       ],
     );
   }
@@ -947,12 +1234,18 @@ class _QuickSetupPanel extends StatelessWidget {
 }
 
 class _FarmTrackerTarget {
-  const _FarmTrackerTarget({required this.item, this.plannedStep});
+  const _FarmTrackerTarget({
+    required this.item,
+    this.plannedStep,
+    this.plannedCosts,
+  });
 
   final UpgradeTrackerItem item;
   final UpgradeStep? plannedStep;
+  final List<UpgradeCost>? plannedCosts;
 
   int? get targetLevel => plannedStep?.targetLevel;
+  List<UpgradeCost> get costs => plannedCosts ?? plannedStep?.costs ?? const [];
 }
 
 class _FarmGoalView extends StatelessWidget {
@@ -960,16 +1253,16 @@ class _FarmGoalView extends StatelessWidget {
     required this.accountPresets,
     required this.selectedAccount,
     required this.onOpenAccountPicker,
-    required this.buildings,
-    required this.trackerBuildings,
-    required this.selectedBuildingId,
+    required this.onOpenBuildingPicker,
     required this.selectedBuilding,
     required this.levels,
     required this.selectedLevel,
     required this.trackerSuggestion,
     required this.trackerLoading,
+    required this.trackerDataMissing,
+    required this.trackerPlanComplete,
+    required this.onOpenUpgradeTracker,
     required this.onUseTrackerSuggestion,
-    required this.onBuildingChanged,
     required this.onLevelChanged,
     required this.averageLootController,
     required this.onLootChanged,
@@ -978,16 +1271,16 @@ class _FarmGoalView extends StatelessWidget {
   final List<DamageAccountPreset> accountPresets;
   final DamageAccountPreset? selectedAccount;
   final VoidCallback onOpenAccountPicker;
-  final List<BuildingDefinition> buildings;
-  final List<BuildingDefinition> trackerBuildings;
-  final String? selectedBuildingId;
+  final VoidCallback onOpenBuildingPicker;
   final BuildingDefinition? selectedBuilding;
   final List<BuildingLevelDefinition> levels;
   final BuildingLevelDefinition? selectedLevel;
   final _FarmTrackerTarget? trackerSuggestion;
   final bool trackerLoading;
+  final bool trackerDataMissing;
+  final bool trackerPlanComplete;
+  final VoidCallback onOpenUpgradeTracker;
   final ValueChanged<_FarmTrackerTarget> onUseTrackerSuggestion;
-  final ValueChanged<String> onBuildingChanged;
   final ValueChanged<int> onLevelChanged;
   final TextEditingController averageLootController;
   final VoidCallback onLootChanged;
@@ -995,29 +1288,35 @@ class _FarmGoalView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final averageLoot = _parseFarmAmount(averageLootController.text);
+    final villageLoot = _parseFarmAmount(averageLootController.text);
     final trackerCost = _trackerCostForSelection(
       trackerSuggestion,
       selectedBuilding,
       selectedLevel,
     );
-    final resourceLabel =
-        _upgradeResourceLabel(
-          loc,
-          trackerCost?.resource ?? selectedLevel?.upgradeResource,
-        ) ??
-        '';
+    final selectedResource =
+        trackerCost?.resource ?? selectedLevel?.upgradeResource ?? 'Gold';
+    final resourceLabel = _upgradeResourceLabel(loc, selectedResource) ?? '';
     final upgradeCost =
         trackerCost?.amount.round() ?? selectedLevel?.upgradeCost;
     final leagueEstimate = _farmLeagueLootEstimate(
       league: selectedAccount?.league,
       townHall: selectedAccount?.townHall ?? 0,
-      resource: selectedLevel?.upgradeResource,
+      resource: selectedResource,
     );
+    final perfectLoot = villageLoot + (leagueEstimate?.loot ?? 0);
     final scenarios = _farmAttackScenarios(
       upgradeCost: upgradeCost,
-      perfectLoot: averageLoot,
+      perfectLoot: perfectLoot,
     );
+    final suggestedTarget = trackerSuggestion;
+    final trackerSuggestionIsSelected =
+        suggestedTarget != null &&
+        selectedBuilding != null &&
+        selectedLevel != null &&
+        suggestedTarget.item.name.trim().toLowerCase() ==
+            selectedBuilding!.name.trim().toLowerCase() &&
+        suggestedTarget.targetLevel == selectedLevel!.level;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1028,6 +1327,7 @@ class _FarmGoalView extends StatelessWidget {
           selectedAccount: selectedAccount,
           onOpenAccountPicker: onOpenAccountPicker,
           hint: loc.farmGoalAccountHint,
+          showHeading: false,
         ),
         const SizedBox(height: 22),
         SidePageSectionHeader(title: loc.farmGoalTargetTitle),
@@ -1036,15 +1336,20 @@ class _FarmGoalView extends StatelessWidget {
           loc,
           resourceLabel: resourceLabel,
           upgradeCost: upgradeCost,
-          trackerSuggestion: trackerSuggestion,
+          trackerSuggestion: trackerSuggestionIsSelected
+              ? null
+              : trackerSuggestion,
           trackerLoading: trackerLoading,
+          trackerDataMissing: trackerDataMissing,
+          trackerPlanComplete: trackerPlanComplete,
+          onOpenUpgradeTracker: onOpenUpgradeTracker,
         ),
         const SizedBox(height: 22),
         SidePageSectionHeader(title: loc.farmGoalLootTitle),
         _buildLootPanel(
           context,
           loc,
-          resource: selectedLevel?.upgradeResource,
+          resource: selectedResource,
           resourceLabel: resourceLabel,
           leagueEstimate: leagueEstimate,
         ),
@@ -1062,7 +1367,7 @@ class _FarmGoalView extends StatelessWidget {
             scenarios: scenarios,
             upgradeCost: upgradeCost!,
             resourceLabel: resourceLabel,
-            perfectLoot: averageLoot,
+            perfectLoot: perfectLoot,
           ),
       ],
     );
@@ -1087,25 +1392,6 @@ class _FarmGoalView extends StatelessWidget {
         .toList(growable: false);
   }
 
-  Map<String, String> _buildingOptions(AppLocalizations loc) {
-    final trackerOptions = trackerBuildings.isEmpty
-        ? buildings
-        : trackerBuildings;
-    final options = <String, String>{
-      _noFarmBuilding: loc.farmGoalChooseBuilding,
-      for (final building in trackerOptions)
-        building.id: _buildingDisplayName(loc, building.name),
-    };
-    if (selectedBuilding != null &&
-        !options.containsKey(selectedBuilding!.id)) {
-      options[selectedBuilding!.id] = _buildingDisplayName(
-        loc,
-        selectedBuilding!.name,
-      );
-    }
-    return options;
-  }
-
   String _farmMissingMessage(
     AppLocalizations loc, {
     required int? upgradeCost,
@@ -1125,23 +1411,19 @@ class _FarmGoalView extends StatelessWidget {
     required int? upgradeCost,
     required _FarmTrackerTarget? trackerSuggestion,
     required bool trackerLoading,
+    required bool trackerDataMissing,
+    required bool trackerPlanComplete,
+    required VoidCallback onOpenUpgradeTracker,
   }) {
-    return SidePagePanel(
+    return CKSectionPanel(
       key: const ValueKey('farm-goal-target'),
-      radius: AppRadius.card,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            loc.farmGoalTargetBuildingLabel,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
-          ),
           if (trackerLoading)
             const Padding(
-              padding: EdgeInsets.only(top: 12),
+              padding: EdgeInsets.only(bottom: 12),
               child: SkeletonLoader(
                 height: 44,
                 width: double.infinity,
@@ -1150,61 +1432,108 @@ class _FarmGoalView extends StatelessWidget {
             )
           else if (trackerSuggestion != null)
             Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 2),
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    loc.farmGoalTrackerNextTitle,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  CKUpgradeRow(
+                    key: const ValueKey('farm-goal-tracker-suggestion'),
+                    leading: MobileWebImage(
+                      imageUrl: ImageAssets.getHomeVillageBuildingImage(
+                        trackerSuggestion.item.name,
+                        trackerSuggestion.targetLevel ??
+                            trackerSuggestion
+                                .item
+                                .steps
+                                .firstOrNull
+                                ?.targetLevel ??
+                            1,
+                      ),
+                      width: 36,
+                      height: 36,
+                      fit: BoxFit.contain,
+                      errorWidget: (_, _, _) => Icon(
+                        Icons.construction_rounded,
+                        size: 28,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    title: _buildingDisplayName(
+                      loc,
+                      trackerSuggestion.item.name,
+                    ),
+                    subtitle: [
+                      if (trackerSuggestion.targetLevel != null)
+                        '${loc.sideLevel(trackerSuggestion.item.currentLevel)} → ${loc.sideLevel(trackerSuggestion.targetLevel!)}',
+                      ...trackerSuggestion.costs.map((cost) {
+                        final resource =
+                            _upgradeResourceLabel(loc, cost.resource) ??
+                            cost.resource;
+                        return '${formatSidePageInt(cost.amount.round())} $resource';
+                      }),
+                    ].join(' · '),
+                    accentColor: Colors.transparent,
+                    trailing: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    onTap: () => onUseTrackerSuggestion(trackerSuggestion),
+                  ),
+                ],
+              ),
+            ),
+          if (trackerDataMissing)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _UpgradeTrackerImportPrompt(
+                onOpenUpgradeTracker: onOpenUpgradeTracker,
+              ),
+            ),
+          if (trackerPlanComplete)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MobileWebImage(
-                    imageUrl: ImageAssets.getHomeVillageBuildingImage(
-                      trackerSuggestion.item.name,
-                      trackerSuggestion.targetLevel ??
-                          trackerSuggestion
-                              .item
-                              .steps
-                              .firstOrNull
-                              ?.targetLevel ??
-                          1,
-                    ),
-                    width: 28,
-                    height: 28,
-                    fit: BoxFit.contain,
-                    errorWidget: (_, _, _) => Icon(
-                      Icons.construction_rounded,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                  Icon(
+                    Icons.check_circle_outline_rounded,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      loc.farmGoalTrackerSuggestion(
-                        trackerSuggestion.item.name,
-                      ),
+                      loc.farmGoalTrackerPlanComplete,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: () => onUseTrackerSuggestion(trackerSuggestion),
-                    child: Text(loc.farmGoalUseTrackerTarget),
-                  ),
                 ],
               ),
             ),
-          const SizedBox(height: 8),
-          SidePageInlineSelector<String>(
-            key: const ValueKey('farm-goal-building'),
-            selected: selectedBuildingId ?? _noFarmBuilding,
-            options: _buildingOptions(loc),
-            onSelected: (id) {
-              if (id != _noFarmBuilding) onBuildingChanged(id);
-            },
-            minWidth: double.infinity,
-            maxWidth: double.infinity,
-            height: 46,
-          ),
-          if (selectedBuilding != null && selectedLevel != null) ...[
+          if (selectedBuilding == null || selectedLevel == null)
+            _BuildingEmptyContent(
+              title: loc.farmGoalNoTargetTitle,
+              body: loc.farmGoalNoTargetBody,
+              actionLabel: loc.farmGoalChooseBuilding,
+              buttonKey: const ValueKey('farm-goal-building'),
+              onChoose: onOpenBuildingPicker,
+            )
+          else ...[
+            _FarmGoalTargetSummary(
+              building: selectedBuilding!,
+              level: selectedLevel!,
+              upgradeCost: upgradeCost,
+              resourceLabel: resourceLabel,
+            ),
             const SizedBox(height: 16),
             _FarmGoalLevelSelector(
               levels: levels,
@@ -1212,11 +1541,16 @@ class _FarmGoalView extends StatelessWidget {
               onLevelChanged: onLevelChanged,
             ),
             const SizedBox(height: 16),
-            _FarmGoalTargetSummary(
-              building: selectedBuilding!,
-              level: selectedLevel!,
-              upgradeCost: upgradeCost,
-              resourceLabel: resourceLabel,
+            SizedBox(
+              width: double.infinity,
+              height: 46,
+              child: OutlinedButton.icon(
+                key: const ValueKey('farm-goal-building'),
+                onPressed: onOpenBuildingPicker,
+                icon: const Icon(Icons.swap_horiz_rounded),
+                label: Text(loc.farmGoalChangeBuilding),
+                style: _calculatorSecondaryActionStyle(context),
+              ),
             ),
           ],
         ],
@@ -1242,9 +1576,8 @@ class _FarmGoalView extends StatelessWidget {
             resourceLabel,
           );
 
-    return SidePagePanel(
+    return CKSectionPanel(
       key: const ValueKey('farm-goal-loot'),
-      radius: AppRadius.card,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1300,6 +1633,70 @@ class _FarmGoalView extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _UpgradeTrackerImportPrompt extends StatelessWidget {
+  const _UpgradeTrackerImportPrompt({required this.onOpenUpgradeTracker});
+
+  final VoidCallback onOpenUpgradeTracker;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.warning_amber_rounded, color: colorScheme.secondary),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        loc.farmGoalTrackerMissingTitle,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        loc.farmGoalTrackerMissingBody,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: OutlinedButton.icon(
+                key: const ValueKey('farm-goal-open-upgrade-tracker'),
+                onPressed: onOpenUpgradeTracker,
+                icon: const Icon(Icons.upload_file_rounded),
+                label: Text(loc.farmGoalOpenUpgradeTracker),
+                style: _calculatorSecondaryActionStyle(context),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1434,9 +1831,8 @@ class _FarmGoalResultPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    return SidePagePanel(
+    return CKSectionPanel(
       key: const ValueKey('farm-goal-result'),
-      radius: AppRadius.card,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1445,7 +1841,8 @@ class _FarmGoalResultPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MobileWebImage(
-                imageUrl: ImageAssets.raidAttacks,
+                key: const ValueKey('farm-goal-attacks-icon'),
+                imageUrl: ImageAssets.sword,
                 width: 32,
                 height: 32,
                 fit: BoxFit.contain,
@@ -1570,19 +1967,20 @@ class _AccountSelectorPanel extends StatelessWidget {
     required this.selectedAccount,
     required this.onOpenAccountPicker,
     this.hint,
+    this.showHeading = true,
   });
 
   final List<DamageAccountPreset> accountPresets;
   final DamageAccountPreset? selectedAccount;
   final VoidCallback onOpenAccountPicker;
   final String? hint;
+  final bool showHeading;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
-    return SidePagePanel(
-      radius: AppRadius.card,
+    return CKSectionPanel(
       padding: const EdgeInsets.all(14),
       child: accountPresets.isEmpty
           ? Row(
@@ -1612,28 +2010,30 @@ class _AccountSelectorPanel extends StatelessWidget {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    MobileWebImage(
-                      imageUrl: ImageAssets.defaultProfile,
-                      width: 24,
-                      height: 24,
-                      fit: BoxFit.contain,
-                      errorWidget: (_, _, _) => Icon(
-                        Icons.person_outline_rounded,
-                        color: colorScheme.onSurfaceVariant,
+                if (showHeading) ...[
+                  Row(
+                    children: [
+                      MobileWebImage(
+                        imageUrl: ImageAssets.defaultProfile,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain,
+                        errorWidget: (_, _, _) => Icon(
+                          Icons.person_outline_rounded,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      loc.damageAccountPresetShort,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
+                      const SizedBox(width: 10),
+                      Text(
+                        loc.damageAccountPresetShort,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                ],
                 Material(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(AppRadius.chip),
@@ -1735,7 +2135,6 @@ class _AccountSelectorPanel extends StatelessWidget {
   }
 }
 
-const _noFarmBuilding = '__none__';
 const _accountlessPresetTag = '__accountless__';
 
 class _CalculatorAccountPickerSheet extends StatefulWidget {
@@ -1874,6 +2273,7 @@ class _CalculatorAccountPickerSheetState
 
   Widget _buildCustomTile(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     final selected = widget.selectedTag == null;
     return ListTile(
       selected: selected,
@@ -1881,19 +2281,28 @@ class _CalculatorAccountPickerSheetState
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.chip),
       ),
-      leading: const SizedBox.square(
+      leading: SizedBox.square(
         dimension: 44,
-        child: Icon(Icons.tune_rounded),
+        child: Icon(Icons.tune_rounded, color: colorScheme.onSurfaceVariant),
       ),
-      title: Text(loc.damageQuickSetupCustom),
-      subtitle: Text(loc.damageAccountSelectorHint),
-      trailing: selected ? const Icon(Icons.check_rounded) : null,
+      title: Text(
+        loc.damageQuickSetupCustom,
+        style: TextStyle(color: colorScheme.onSurface),
+      ),
+      subtitle: Text(
+        loc.damageAccountSelectorHint,
+        style: TextStyle(color: colorScheme.onSurfaceVariant),
+      ),
+      trailing: selected
+          ? Icon(Icons.check_rounded, color: colorScheme.primary)
+          : null,
       onTap: () => Navigator.pop(context, _accountlessPresetTag),
     );
   }
 
   Widget _buildAccountTile(BuildContext context, DamageAccountPreset account) {
     final loc = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     final selected = account.tag == widget.selectedTag;
     return ListTile(
       selected: selected,
@@ -1917,6 +2326,7 @@ class _CalculatorAccountPickerSheetState
         '${account.name} · ${loc.gameTownHallShortLevel(account.townHall)}',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: colorScheme.onSurface),
       ),
       subtitle: Text(
         [
@@ -1925,8 +2335,11 @@ class _CalculatorAccountPickerSheetState
         ].join(' · '),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: colorScheme.onSurfaceVariant),
       ),
-      trailing: selected ? const Icon(Icons.check_rounded) : null,
+      trailing: selected
+          ? Icon(Icons.check_rounded, color: colorScheme.primary)
+          : null,
       onTap: () => Navigator.pop(context, account.tag),
     );
   }
@@ -1940,61 +2353,93 @@ class _TargetEmptyPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
-    return SidePagePanel(
-      radius: AppRadius.card,
+    return CKSectionPanel(
       padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MobileWebImage(
-                imageUrl: ImageAssets.townHall(1),
-                width: 42,
-                height: 42,
-                fit: BoxFit.contain,
-                errorWidget: (_, _, _) => Icon(
-                  Icons.gps_fixed_rounded,
-                  color: colorScheme.onSurfaceVariant,
-                ),
+      child: _BuildingEmptyContent(
+        title: loc.damageNoTargetTitle,
+        body: loc.damageNoTargetBody,
+        actionLabel: loc.damageChooseTarget,
+        buttonKey: const ValueKey('choose-building'),
+        onChoose: onChoose,
+      ),
+    );
+  }
+}
+
+class _BuildingEmptyContent extends StatelessWidget {
+  const _BuildingEmptyContent({
+    required this.title,
+    required this.body,
+    required this.actionLabel,
+    required this.buttonKey,
+    required this.onChoose,
+  });
+
+  final String title;
+  final String body;
+  final String actionLabel;
+  final Key buttonKey;
+  final VoidCallback onChoose;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MobileWebImage(
+              imageUrl: ImageAssets.townHall(1),
+              width: 42,
+              height: 42,
+              fit: BoxFit.contain,
+              errorWidget: (_, _, _) => Icon(
+                Icons.gps_fixed_rounded,
+                color: colorScheme.onSurfaceVariant,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.damageNoTargetTitle,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      loc.damageNoTargetBody,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    body,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              key: const ValueKey('choose-building'),
-              onPressed: onChoose,
-              icon: const Icon(Icons.add_rounded),
-              label: Text(loc.damageChooseTarget),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        SizedBox(
+          width: double.infinity,
+          height: 46,
+          child: FilledButton.icon(
+            key: buttonKey,
+            onPressed: onChoose,
+            icon: const Icon(Icons.add_rounded),
+            label: Text(actionLabel),
+            style: FilledButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.control),
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -2010,8 +2455,14 @@ class _AddBuildingButton extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
-      child: OutlinedButton.icon(
+      height: 44,
+      child: FilledButton.tonalIcon(
         key: const ValueKey('add-building'),
+        style: FilledButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.control),
+          ),
+        ),
         onPressed: enabled ? onPressed : null,
         icon: const Icon(Icons.add_rounded),
         label: Text(loc.damageAddBuilding),
@@ -2065,8 +2516,7 @@ class _TargetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final resolvedResult = result;
-    return SidePagePanel(
-      radius: AppRadius.card,
+    return CKSectionPanel(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
       child: Column(
         children: [
@@ -2366,8 +2816,7 @@ class _ZapQuakePanel extends StatelessWidget {
     final lightning = lightningSource.level(lightningSelection.level)!;
     final earthquake = earthquakeSource.level(earthquakeSelection.level)!;
 
-    return SidePagePanel(
-      radius: AppRadius.card,
+    return CKSectionPanel(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2477,16 +2926,32 @@ class _ZapQuakePanel extends StatelessWidget {
   }
 }
 
+class _BuildingPickerSelection {
+  const _BuildingPickerSelection(this.buildingId, {this.trackerTarget});
+
+  final String buildingId;
+  final _FarmTrackerTarget? trackerTarget;
+}
+
+class _TrackerBuildingChoice {
+  const _TrackerBuildingChoice({required this.building, required this.target});
+
+  final BuildingDefinition building;
+  final _FarmTrackerTarget target;
+}
+
 class _BuildingPicker extends StatefulWidget {
   const _BuildingPicker({
     required this.buildings,
     required this.selectedIds,
     required this.townHall,
+    this.trackerTargets = const [],
   });
 
   final List<BuildingDefinition> buildings;
   final Set<String> selectedIds;
   final int townHall;
+  final List<_FarmTrackerTarget> trackerTargets;
 
   @override
   State<_BuildingPicker> createState() => _BuildingPickerState();
@@ -2508,13 +2973,30 @@ class _BuildingPickerState extends State<_BuildingPicker> {
 
   bool get _hasQuery => _normalizedQuery.isNotEmpty;
 
-  List<BuildingDefinition> _commonBuildings() {
+  List<_TrackerBuildingChoice> _trackerChoices() {
+    final buildingsByName = {
+      for (final building in widget.buildings)
+        building.name.trim().toLowerCase(): building,
+    };
+    return widget.trackerTargets
+        .expand((target) {
+          final building =
+              buildingsByName[target.item.name.trim().toLowerCase()];
+          return building == null
+              ? const <_TrackerBuildingChoice>[]
+              : [_TrackerBuildingChoice(building: building, target: target)];
+        })
+        .toList(growable: false);
+  }
+
+  List<BuildingDefinition> _commonBuildings(Set<String> trackerIds) {
     final buildingsByName = {
       for (final building in widget.buildings) building.name: building,
     };
     return _commonBuildingNames
         .map((name) => buildingsByName[name])
         .whereType<BuildingDefinition>()
+        .where((building) => !trackerIds.contains(building.id))
         .toList(growable: false);
   }
 
@@ -2527,10 +3009,14 @@ class _BuildingPickerState extends State<_BuildingPicker> {
 
   List<BuildingDefinition> _remainingBuildings(
     List<BuildingDefinition> commonBuildings,
+    Set<String> trackerIds,
   ) {
-    final commonIds = commonBuildings.map((building) => building.id).toSet();
+    final excludedIds = {
+      ...trackerIds,
+      ...commonBuildings.map((building) => building.id),
+    };
     return widget.buildings
-        .where((building) => !commonIds.contains(building.id))
+        .where((building) => !excludedIds.contains(building.id))
         .toList(growable: false);
   }
 
@@ -2539,12 +3025,18 @@ class _BuildingPickerState extends State<_BuildingPicker> {
     final loc = AppLocalizations.of(context)!;
     final hasQuery = _hasQuery;
     final filtered = hasQuery ? _filteredBuildings() : widget.buildings;
+    final trackerChoices = hasQuery
+        ? const <_TrackerBuildingChoice>[]
+        : _trackerChoices();
+    final trackerIds = trackerChoices
+        .map((choice) => choice.building.id)
+        .toSet();
     final commonBuildings = hasQuery
         ? const <BuildingDefinition>[]
-        : _commonBuildings();
+        : _commonBuildings(trackerIds);
     final remainingBuildings = hasQuery
         ? filtered
-        : _remainingBuildings(commonBuildings);
+        : _remainingBuildings(commonBuildings, trackerIds);
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.82,
@@ -2556,6 +3048,7 @@ class _BuildingPickerState extends State<_BuildingPicker> {
         controller: controller,
         hasQuery: hasQuery,
         filtered: filtered,
+        trackerChoices: trackerChoices,
         commonBuildings: commonBuildings,
         remainingBuildings: remainingBuildings,
       ),
@@ -2568,6 +3061,7 @@ class _BuildingPickerState extends State<_BuildingPicker> {
     required ScrollController controller,
     required bool hasQuery,
     required List<BuildingDefinition> filtered,
+    required List<_TrackerBuildingChoice> trackerChoices,
     required List<BuildingDefinition> commonBuildings,
     required List<BuildingDefinition> remainingBuildings,
   }) {
@@ -2618,6 +3112,7 @@ class _BuildingPickerState extends State<_BuildingPicker> {
                     controller: controller,
                     hasQuery: hasQuery,
                     filtered: filtered,
+                    trackerChoices: trackerChoices,
                     commonBuildings: commonBuildings,
                     remainingBuildings: remainingBuildings,
                   ),
@@ -2633,12 +3128,18 @@ class _BuildingPickerState extends State<_BuildingPicker> {
     required ScrollController controller,
     required bool hasQuery,
     required List<BuildingDefinition> filtered,
+    required List<_TrackerBuildingChoice> trackerChoices,
     required List<BuildingDefinition> commonBuildings,
     required List<BuildingDefinition> remainingBuildings,
   }) {
     return ListView(
       controller: controller,
       children: [
+        if (trackerChoices.isNotEmpty) ...[
+          _PickerSectionLabel(title: loc.farmGoalTrackerNextTitle),
+          for (final choice in trackerChoices)
+            _trackerBuildingTile(context, choice),
+        ],
         if (commonBuildings.isNotEmpty) ...[
           _PickerSectionLabel(title: loc.damageCommonBuildings),
           for (final building in commonBuildings)
@@ -2677,7 +3178,49 @@ class _BuildingPickerState extends State<_BuildingPicker> {
       trailing: selected
           ? const Icon(Icons.check_rounded)
           : const Icon(Icons.add_rounded),
-      onTap: selected ? null : () => Navigator.pop(context, building.id),
+      onTap: selected
+          ? null
+          : () => Navigator.pop(context, _BuildingPickerSelection(building.id)),
+    );
+  }
+
+  Widget _trackerBuildingTile(
+    BuildContext context,
+    _TrackerBuildingChoice choice,
+  ) {
+    final loc = AppLocalizations.of(context)!;
+    final target = choice.target;
+    final targetLevel =
+        target.targetLevel ?? target.item.steps.first.targetLevel;
+    final details = <String>[
+      '${loc.sideLevel(target.item.currentLevel)} → ${loc.sideLevel(targetLevel)}',
+      ...target.costs.map((cost) {
+        final resource =
+            _upgradeResourceLabel(loc, cost.resource) ?? cost.resource;
+        return '${formatSidePageInt(cost.amount.round())} $resource';
+      }),
+    ];
+    return ListTile(
+      key: const ValueKey('farm-goal-tracker-picker-item'),
+      leading: MobileWebImage(
+        imageUrl: target.item.imageUrl.isNotEmpty
+            ? target.item.imageUrl
+            : ImageAssets.getHomeVillageBuildingImage(
+                choice.building.imageName,
+                targetLevel,
+              ),
+        width: 44,
+        height: 44,
+        fit: BoxFit.contain,
+        errorWidget: (_, _, _) => const Icon(Icons.construction_rounded),
+      ),
+      title: Text(_buildingDisplayName(loc, choice.building.name)),
+      subtitle: Text(details.join(' · ')),
+      trailing: const Icon(Icons.arrow_forward_rounded),
+      onTap: () => Navigator.pop(
+        context,
+        _BuildingPickerSelection(choice.building.id, trackerTarget: target),
+      ),
     );
   }
 }
@@ -2824,15 +3367,19 @@ UpgradeCost? _trackerCostForSelection(
             .where((candidate) => candidate.targetLevel == level.level)
             .firstOrNull;
   if (step == null || step.costs.isEmpty) return null;
+  final costs = target?.plannedStep?.targetLevel == level.level
+      ? target!.costs
+      : step.costs;
+  if (costs.isEmpty) return null;
   final selectedResource = level.upgradeResource?.trim().toLowerCase();
-  return step.costs
+  return costs
           .where(
             (cost) =>
                 selectedResource == null ||
                 cost.resource.trim().toLowerCase() == selectedResource,
           )
           .firstOrNull ??
-      step.costs.first;
+      costs.first;
 }
 
 class _FarmLeagueLootEstimate {
@@ -2904,6 +3451,27 @@ int _farmDefaultPerfectLoot(String? resource) =>
         _darkElixirResourceName
     ? 10000
     : _defaultFarmPerfectLoot;
+
+int _farmDefaultVillageLoot({
+  required String? league,
+  required int townHall,
+  required String? resource,
+}) {
+  final fallback = _farmDefaultPerfectLoot(resource);
+  final estimate = _farmLeagueLootEstimate(
+    league: league,
+    townHall: townHall,
+    resource: resource,
+  );
+  final leagueBonus = estimate?.loot;
+  final leagueDefaultTotal = estimate?.starBonus;
+  if (leagueBonus == null || leagueDefaultTotal == null) return fallback;
+
+  // The editable value represents village loot; the calculator adds the
+  // per-attack league bonus separately when it builds the attack estimate.
+  final villageLoot = leagueDefaultTotal - leagueBonus;
+  return villageLoot > 0 ? villageLoot : fallback;
+}
 
 int _parseFarmAmount(String value) =>
     int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;

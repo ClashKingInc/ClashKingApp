@@ -1,6 +1,11 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator_engine.dart';
 
+const _buildingUnavailableFromTownHall = <String, int>{
+  // The Eagle is consumed when Town Hall 17's Inferno Artillery is created.
+  'Eagle Artillery': 17,
+};
+
 class DamageCatalog {
   const DamageCatalog({
     required this.maxTownHall,
@@ -69,7 +74,11 @@ class DamageCatalog {
   }
 
   List<BuildingDefinition> buildingsForTownHall(int townHall) => buildings
-      .where((building) => building.levelsForTownHall(townHall).isNotEmpty)
+      .where((building) {
+        final unavailableFrom = _buildingUnavailableFromTownHall[building.name];
+        return building.levelsForTownHall(townHall).isNotEmpty &&
+            (unavailableFrom == null || townHall < unavailableFrom);
+      })
       .toList(growable: false);
 }
 

@@ -3314,17 +3314,17 @@
   },
   "dashboardUpgradeTrackerWalls": "Walls",
   "dashboardUpgradeTrackerVillage": "Village",
-  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
-  "damageNoStaticDataTitle": "Damage data is unavailable",
-  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
-  "damageTownHall": "Town Hall",
-  "damageVerifiedAccountPrefill": "Verified account preset",
-  "damageOverridesStayLocal": "Changes here do not update the player account.",
-  "damageTargets": "Buildings",
-  "damageAddBuilding": "Add building",
-  "damageRemoveBuilding": "Remove building",
-  "damageNoTargetsBody": "Add at least one building to compare results.",
-  "damageHitpoints": "{hitpoints} HP",
+  "damageCalculatorSubtitle": "Compare une composition d'attaque à plusieurs bâtiments.",
+  "damageNoStaticDataTitle": "Les données de dégâts sont indisponibles",
+  "damageNoStaticDataBody": "Actualise l'application une fois les données du jeu chargées.",
+  "damageTownHall": "Hôtel de ville",
+  "damageVerifiedAccountPrefill": "Préréglage d'un compte vérifié",
+  "damageOverridesStayLocal": "Les changements effectués ici ne modifient pas le compte du joueur.",
+  "damageTargets": "Bâtiments",
+  "damageAddBuilding": "Ajouter un bâtiment",
+  "damageRemoveBuilding": "Retirer le bâtiment",
+  "damageNoTargetsBody": "Ajoute au moins un bâtiment pour comparer les résultats.",
+  "damageHitpoints": "{hitpoints} PV",
   "@damageHitpoints": {
     "placeholders": {
       "hitpoints": {
@@ -3332,13 +3332,13 @@
       }
     }
   },
-  "damageSearchBuildings": "Search buildings",
-  "damageNoBuildingsFound": "No buildings found",
-  "damageTryAnotherSearch": "Try another name or Town Hall level.",
-  "damageAttackStack": "Manual attack stack",
-  "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
-  "damageCount": "Count",
-  "damagePerUse": "{damage} damage per use",
+  "damageSearchBuildings": "Rechercher un bâtiment",
+  "damageNoBuildingsFound": "Aucun bâtiment trouvé",
+  "damageTryAnotherSearch": "Essaie un autre nom ou niveau d'hôtel de ville.",
+  "damageAttackStack": "Composition d'attaque manuelle",
+  "damageNoSourcesForTownHall": "Aucune source de dégâts compatible n'est disponible à cet hôtel de ville.",
+  "damageCount": "Quantité",
+  "damagePerUse": "{damage} dégâts par utilisation",
   "@damagePerUse": {
     "placeholders": {
       "damage": {
@@ -3346,7 +3346,7 @@
       }
     }
   },
-  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "damageEarthquakePercent": "{percent} % des PV max, avec rendement décroissant",
   "@damageEarthquakePercent": {
     "placeholders": {
       "percent": {
@@ -3354,17 +3354,17 @@
       }
     }
   },
-  "damageSourceLightning": "Lightning",
-  "damageSourceEarthquake": "Earthquake",
-  "damageSourceGiantArrow": "Giant Arrow",
-  "damageSourceFireball": "Fireball",
-  "damageSourceFlameFlinger": "Flame Flinger hit",
-  "damageSourceBalloonDeath": "Balloon death damage",
-  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
-  "damageResults": "Results",
-  "damageDestroyed": "Destroyed",
-  "damageSurvives": "Survives",
-  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "damageSourceLightning": "Foudre",
+  "damageSourceEarthquake": "Séisme",
+  "damageSourceGiantArrow": "Flèche géante",
+  "damageSourceFireball": "Boule de feu",
+  "damageSourceFlameFlinger": "Impact du lance-flammes",
+  "damageSourceBalloonDeath": "Dégâts à la destruction du ballon",
+  "damageSourceRocketBalloonDeath": "Dégâts à la destruction du ballon à roquettes",
+  "damageResults": "Résultats",
+  "damageDestroyed": "Détruit",
+  "damageSurvives": "Résiste",
+  "damageResultSummary": "{damage} dégâts · {remaining} PV restants",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -3375,10 +3375,10 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake optimizer",
-  "damageSpellCapacity": "Spell capacity",
-  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
-  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "damageZapQuakeOptimizer": "Optimiseur Foudre + Séisme",
+  "damageSpellCapacity": "Capacité des sorts",
+  "damageZapQuakeUnavailable": "Foudre et Séisme ne sont pas disponibles à cet hôtel de ville.",
+  "damageZapQuakeUsesSelectedLevels": "Utilise Foudre niveau {lightningLevel} et Séisme niveau {earthquakeLevel}.",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -3389,9 +3389,9 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
-  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
-  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "damageZapQuakeIneligible": "Foudre et Séisme ne peuvent pas endommager ce réservoir.",
+  "damageNoValidZapQuake": "Aucune combinaison valide ne respecte la capacité de sorts choisie.",
+  "damageZapQuakeCombination": "{lightning} foudre + {earthquake} séisme · {capacity} places",
   "@damageZapQuakeCombination": {
     "placeholders": {
       "lightning": {
@@ -3983,15 +3983,18 @@
   "farmGoalTargetTitle": "Bâtiment à améliorer",
   "farmGoalTargetBuildingLabel": "Bâtiment",
   "farmGoalChooseBuilding": "Choisir un bâtiment",
+  "farmGoalChangeBuilding": "Changer de bâtiment",
+  "farmGoalNoTargetTitle": "Aucun bâtiment sélectionné",
+  "farmGoalNoTargetBody": "Choisis le bâtiment à améliorer pour estimer les ressources à obtenir.",
   "farmGoalTargetLevelLabel": "Niveau cible",
   "farmGoalUpgradeCostLabel": "Coût de l'amélioration",
   "farmGoalCostUnavailable": "Coût d'amélioration indisponible pour ce niveau.",
   "farmGoalLootTitle": "Butin estimé",
   "farmGoalResourceLabel": "Ressource",
   "farmGoalAmountLabel": "Montant à obtenir",
-  "farmGoalAverageLootLabel": "Butin d'une attaque parfaite",
-  "farmGoalPerfectLootHint": "Point de départ pour une attaque parfaite. Ajuste-le selon ton butin réel.",
-  "farmGoalLeagueEstimate": "Bonus de base de la ligue {league} : {amount} {resource}. Il ne représente pas le butin total d'une attaque.",
+  "farmGoalAverageLootLabel": "Butin disponible dans le village",
+  "farmGoalPerfectLootHint": "Saisis le butin affiché avant l'attaque. Le bonus de ligue ci-dessous est ajouté automatiquement.",
+  "farmGoalLeagueEstimate": "Bonus de la ligue {league} : {amount} {resource}. Il est inclus dans les estimations d'attaque.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -4028,15 +4031,12 @@
   "farmGoalAttackShort": "attaque",
   "farmGoalScenarioHint": "Approximation : le butin varie selon les bâtiments détruits. Les pourcentages s'appliquent à ton estimation d'une attaque parfaite.",
   "farmGoalNoLeagueLoot": "Choisis un compte avec une ligue pour obtenir une suggestion de butin.",
-  "farmGoalTrackerSuggestion": "Le suivi des améliorations suggère {name}.",
-  "@farmGoalTrackerSuggestion": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalUseTrackerTarget": "Utiliser la cible",
+  "farmGoalTrackerNextTitle": "Prochaine étape du plan d'amélioration",
+  "farmGoalTrackerMissingTitle": "Données du suivi requises",
+  "farmGoalTrackerMissingBody": "Importe le fichier JSON d'amélioration de ce compte dans le suivi pour afficher ici le prochain bâtiment planifié et son coût exact.",
+  "farmGoalTrackerPlanComplete": "Aucune amélioration de bâtiment restante n'a été trouvée dans le suivi. Tu peux toujours choisir un bâtiment manuellement.",
+  "farmGoalOpenUpgradeTracker": "Ouvrir le suivi des améliorations",
+  "farmGoalUseTrackerTarget": "Utiliser ce bâtiment",
   "farmGoalMissingTarget": "Choisis un bâtiment et un niveau cible pour calculer le nombre d'attaques nécessaires.",
   "farmGoalMissingValues": "Renseigne une cible et une estimation du butin d'une attaque parfaite pour voir les scénarios.",
   "farmGoalResultTitle": "Attaques nécessaires",

@@ -15,8 +15,10 @@ The philosophy in one line: **one flat surface with rounded rows — never a car
 > **This document covers what DevKit does not**: the app's layout patterns,
 > its local widget catalog, and the known gaps.
 >
-> When the two disagree, **the shipped app wins and the docs get fixed** — not
-> the other way round. This is not hypothetical: `components.md` presents
+> When the two disagree, **DevKit wins and the app or this document gets
+> fixed**. The shipped Player, Clan, and War pages remain the composition
+> references where DevKit does not define app-specific layout. For example,
+> `components.md` presents
 > `CKMetricChip` as *the* answer for "compact label/value stats", but the
 > Player and Clan cards deliberately use a different, quieter shape (see
 > [Two chip roles](#two-chip-roles)). Reading the doc without reading the
