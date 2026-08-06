@@ -1017,7 +1017,7 @@
       }
     }
   },
-  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "warAnalysisCannotLose": "{clanName} 已立于不败之地",
   "@warAnalysisCannotLose": {
     "placeholders": {
       "clanName": {
@@ -1025,9 +1025,9 @@
       }
     }
   },
-  "warAnalysisSecuredBadge": "Secured",
-  "warAnalysisAlreadySecured": "Already secured",
-  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "warAnalysisSecuredBadge": "锁定胜局",
+  "warAnalysisAlreadySecured": "已锁定胜局",
+  "warAnalysisSecureAgainst": "按 {clanName} 用完剩余进攻次数计算目标。",
   "@warAnalysisSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1035,7 +1035,7 @@
       }
     }
   },
-  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "warAnalysisCannotSecureAgainst": "即使 {clanName} 完美发挥剩余进攻，仍无法提前锁定胜局。",
   "@warAnalysisCannotSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1043,8 +1043,8 @@
       }
     }
   },
-  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
-  "warAnalysisStarGoal": "+{stars} star(s)",
+  "warAnalysisNoSecureObjective": "依靠剩余进攻次数无法锁定胜局",
+  "warAnalysisStarGoal": "+{stars} 星",
   "@warAnalysisStarGoal": {
     "placeholders": {
       "stars": {
@@ -1052,7 +1052,7 @@
       }
     }
   },
-  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "warAnalysisRemainingAttempts": "剩余 {attacks} 次进攻",
   "@warAnalysisRemainingAttempts": {
     "placeholders": {
       "attacks": {
@@ -1060,7 +1060,7 @@
       }
     }
   },
-  "warAnalysisNoBetterResult": "No better result is possible",
+  "warAnalysisNoBetterResult": "已无提升空间",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -4017,7 +4017,7 @@
     }
   },
   "farmGoalTitle": "资源目标",
-  "farmGoalFormTitle": "要打的资源",
+  "farmGoalFormTitle": "目标资源",
   "farmGoalAccountTitle": "账号",
   "farmGoalAccountHint": "所选账号提供用于估算的大本营与当前联赛。",
   "farmGoalTargetTitle": "要升级的建筑",
@@ -4029,9 +4029,9 @@
   "farmGoalLootTitle": "预计战利品",
   "farmGoalResourceLabel": "资源",
   "farmGoalAmountLabel": "所需数量",
-  "farmGoalAverageLootLabel": "Loot from a perfect attack",
-  "farmGoalPerfectLootHint": "Starting point for a perfect attack. Adjust it to match your actual loot.",
-  "farmGoalLeagueEstimate": "{league} base league bonus: {amount} {resource}. It is not the total loot from an attack.",
+  "farmGoalAverageLootLabel": "单次完美进攻战利品",
+  "farmGoalPerfectLootHint": "完美进攻的基础收益，可根据实际战利品调整。",
+  "farmGoalLeagueEstimate": "{league} 基础联赛奖励：{amount} {resource}非单次进攻总收益。",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -4045,7 +4045,7 @@
       }
     }
   },
-  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "farmGoalStarBonusEstimate": "胜利之星奖励：打满 5 星可得 {amount} {resource}。不计入所需进攻次数。",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
       "amount": {
@@ -4056,8 +4056,8 @@
       }
     }
   },
-  "farmGoalScenarioPerfect": "Perfect attack · 100%",
-  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "farmGoalScenarioPerfect": "完美进攻 · 100%",
+  "farmGoalScenarioAtPercent": "{percent}% 摧毁率",
   "@farmGoalScenarioAtPercent": {
     "placeholders": {
       "percent": {
@@ -4066,9 +4066,9 @@
     }
   },
   "farmGoalAttackShort": "进攻",
-  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
+  "farmGoalScenarioHint": "近似估算：摧毁不同建筑收益有所差异，百分比基于完美进攻收益计算。",
   "farmGoalNoLeagueLoot": "请选择带有联赛的账号以获取战利品建议。",
-  "farmGoalTrackerSuggestion": "Upgrade Tracker suggests {name}.",
+  "farmGoalTrackerSuggestion": "升级追踪器推荐 {name}。",
   "@farmGoalTrackerSuggestion": {
     "placeholders": {
       "name": {
@@ -4076,12 +4076,12 @@
       }
     }
   },
-  "farmGoalUseTrackerTarget": "Use target",
-  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
-  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
-  "farmGoalResultTitle": "Attacks needed",
-  "farmGoalAttacks": "attacks",
-  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
+  "farmGoalUseTrackerTarget": "使用此目标",
+  "farmGoalMissingTarget": "选择建筑及目标等级以计算所需进攻次数。",
+  "farmGoalMissingValues": "输入目标与完美进攻收益，查看进攻方案。",
+  "farmGoalResultTitle": "所需进攻次数",
+  "farmGoalAttacks": "进攻",
+  "farmGoalResultSummary": "目标 {target} {resource}，单次完美进攻约 {average}。",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
