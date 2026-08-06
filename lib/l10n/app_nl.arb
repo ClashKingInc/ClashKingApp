@@ -310,8 +310,8 @@
   "authAccountAddEmailAuth": "Voeg e-mail- en wachtwoordauthenticatie toe aan je account voor extra beveiliging.",
   "authAccountEmailLinkedSuccess": "E-mailaccount succesvol gekoppeld!",
   "authAccountLinkDiscord": "Discord-account koppelen",
-  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
-  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
+  "authAccountAddDiscordAuth": "Voeg Discord-authenticatie toe aan je account voor synchronisatie tussen platforms en toegang tot de ClashKing-bot.",
+  "authAccountDiscordLinkedSuccess": "Discord-account succesvol gekoppeld!",
   "authEmailVerificationTitle": "Bevestig e-mailadres",
   "authEmailVerificationCheckEmail": "Controleer je e-mail",
   "authEmailVerificationSentTo": "We hebben een verificatie e-mail gestuurd naar:",
@@ -463,11 +463,11 @@
     }
   },
   "gameExpLevel": "Ervaringsniveau",
-  "gameLeague": "League",
+  "gameLeague": "Competitie",
   "gameTrophies": "Trofeeën",
   "gameBuilderBaseTrophies": "BB Trofeeën",
   "gameDonations": "Donaties",
-  "gameDonationsReceived": "Received",
+  "gameDonationsReceived": "Ontvangen",
   "gameDonationsRatio": "Donatieverhouding",
   "gameLevel": "Niveau: {level}/{maxLevel}",
   "@gameLevel": {
@@ -501,11 +501,11 @@
   "clanNone": "Geen clan",
   "clanJoinToUnlock": "Sluit je aan bij een clan om nieuwe functies te ontgrendelen.",
   "clanMembers": "Leden",
-  "clanMembersSearchPlaceholder": "Search members",
+  "clanMembersSearchPlaceholder": "Leden zoeken",
   "clanMembersShowTotals": "Show clan totals",
   "clanMembersHideTotals": "Hide clan totals",
-  "clanMembersReceivedShort": "Received",
-  "clanMembersAverageTh": "Avg TH",
+  "clanMembersReceivedShort": "Ontvangen",
+  "clanMembersAverageTh": "Gem SH",
   "clanMinimumMembers": "Minimum aantal leden",
   "clanMaximumMembers": "Maximum aantal leden",
   "clanLocation": "Locatie",
@@ -861,7 +861,7 @@
   "warLeague": "Oorlog/Divisies",
   "warHistory": "Oorlogsgeschiedenis",
   "warLog": "Oorlogslogboek",
-  "warLogSearchPlaceholder": "Search wars",
+  "warLogSearchPlaceholder": "Zoek oorlogen",
   "warLogClosed": "Het oorlogslogboek van {clan} is gesloten.",
   "@warLogClosed": {
     "placeholders": {
@@ -871,10 +871,10 @@
     }
   },
   "warStats": "Oorlog stats",
-  "warStatsSearchPlaceholder": "Search players",
-  "warStatsCurrentTownHall": "My TH",
-  "warStatsLast50": "Last 50",
-  "warStatsWars": "Wars",
+  "warStatsSearchPlaceholder": "Zoek spelers",
+  "warStatsCurrentTownHall": "Mijn SH",
+  "warStatsLast50": "Laatste 50",
+  "warStatsWars": "Oorlogen",
   "warStatsSelectSeason": "Select war stats season",
   "warOngoing": "Ongoing War",
   "warIsNotInWar": "{clan} is niet in oorlog.",
@@ -986,9 +986,9 @@
       }
     }
   },
-  "warAnalysisToWin": "To win",
-  "warAnalysisToLose": "To lose",
-  "warAnalysisNoAttacksLeft": "No attacks left",
+  "warAnalysisToWin": "Om te winnen",
+  "warAnalysisToLose": "Om te verliezen",
+  "warAnalysisNoAttacksLeft": "Geen aanvallen over",
   "warAnalysisScenario": "{attacks} attacks left -> need {stars} stars / {percent}% per attack",
   "@warAnalysisScenario": {
     "placeholders": {
@@ -1025,9 +1025,9 @@
       }
     }
   },
-  "warAnalysisSecuredBadge": "Secured",
-  "warAnalysisAlreadySecured": "Already secured",
-  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "warAnalysisSecuredBadge": "Beveiligd",
+  "warAnalysisAlreadySecured": "Al beveiligd",
+  "warAnalysisSecureAgainst": "Doel berekend onder de aanname dat {clanName} alle resterende aanvallen gebruikt.",
   "@warAnalysisSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1035,7 +1035,7 @@
       }
     }
   },
-  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "warAnalysisCannotSecureAgainst": "Kan niet wiskundig worden veiliggesteld als {clanName} alle resterende aanvallen optimaal gebruikt.",
   "@warAnalysisCannotSecureAgainst": {
     "placeholders": {
       "clanName": {
