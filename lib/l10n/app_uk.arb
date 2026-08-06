@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Змінити будівлю",
+  "farmGoalNoTargetTitle": "Будівлю не вибрано",
+  "farmGoalNoTargetBody": "Виберіть будівлю для покращення, щоб оцінити необхідну кількість ресурсів.",
+  "farmGoalAverageLootLabel": "Доступна здобич у селі",
+  "farmGoalPerfectLootHint": "Введіть здобич, показану перед атакою. Зазначений нижче бонус ліги додасться автоматично.",
+  "farmGoalLeagueEstimate": "Бонус ліги {league}: {amount} {resource}. Його враховано в розрахунках атак.",
+  "farmGoalTrackerNextTitle": "Наступне в плані відстеження покращень",
+  "farmGoalTrackerMissingTitle": "Потрібні дані відстеження покращень",
+  "farmGoalTrackerMissingBody": "Імпортуйте JSON покращень цього облікового запису у відстеження покращень, щоб побачити тут наступну заплановану будівлю та її точну вартість.",
+  "farmGoalTrackerPlanComplete": "У відстеженні покращень не залишилося покращень будівель. Ви все ще можете вибрати будівлю вручну.",
+  "farmGoalOpenUpgradeTracker": "Відкрити відстеження покращень",
+  "farmGoalUseTrackerTarget": "Використати будівлю"
 }

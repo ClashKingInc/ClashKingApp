@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Épület módosítása",
+  "farmGoalNoTargetTitle": "Nincs kiválasztott épület",
+  "farmGoalNoTargetBody": "Válaszd ki a fejleszteni kívánt épületet a szükséges nyersanyaggyűjtés becsléséhez.",
+  "farmGoalAverageLootLabel": "A faluban elérhető zsákmány",
+  "farmGoalPerfectLootHint": "Add meg a támadás előtt látható zsákmányt. Az alábbi ligabónusz automatikusan hozzáadódik.",
+  "farmGoalLeagueEstimate": "A(z) {league} ligabónusza: {amount} {resource}. Ez szerepel a támadási becslésekben.",
+  "farmGoalTrackerNextTitle": "Következő a Fejlesztéskövető tervében",
+  "farmGoalTrackerMissingTitle": "Fejlesztéskövető-adatok szükségesek",
+  "farmGoalTrackerMissingBody": "Importáld a fiók fejlesztési JSON-fájlját a Fejlesztéskövetőbe, hogy itt megjelenjen a következő tervezett épület és annak pontos költsége.",
+  "farmGoalTrackerPlanComplete": "A Fejlesztéskövetőben nem található további épületfejlesztés. Továbbra is választhatsz kézzel épületet.",
+  "farmGoalOpenUpgradeTracker": "Fejlesztéskövető megnyitása",
+  "farmGoalUseTrackerTarget": "Épület használata"
 }

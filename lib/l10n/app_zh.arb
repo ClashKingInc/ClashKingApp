@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "更换建筑",
+  "farmGoalNoTargetTitle": "未选择建筑",
+  "farmGoalNoTargetBody": "选择要升级的建筑，以估算需要获取的资源。",
+  "farmGoalAverageLootLabel": "村庄中的可用战利品",
+  "farmGoalPerfectLootHint": "输入进攻前显示的战利品。下方的联赛奖励会自动加上。",
+  "farmGoalLeagueEstimate": "{league} 联赛奖励：{amount} {resource}。该奖励已计入进攻次数估算。",
+  "farmGoalTrackerNextTitle": "升级追踪器计划中的下一项",
+  "farmGoalTrackerMissingTitle": "需要升级追踪器数据",
+  "farmGoalTrackerMissingBody": "在升级追踪器中导入此账号的升级 JSON，即可在此显示下一个计划升级的建筑及其准确费用。",
+  "farmGoalTrackerPlanComplete": "升级追踪器中没有剩余的建筑升级。你仍可手动选择建筑。",
+  "farmGoalOpenUpgradeTracker": "打开升级追踪器",
+  "farmGoalUseTrackerTarget": "使用建筑"
 }

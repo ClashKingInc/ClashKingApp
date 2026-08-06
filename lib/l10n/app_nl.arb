@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Gebouw wijzigen",
+  "farmGoalNoTargetTitle": "Geen gebouw geselecteerd",
+  "farmGoalNoTargetBody": "Kies het gebouw dat je wilt upgraden om de benodigde buit te schatten.",
+  "farmGoalAverageLootLabel": "Beschikbare buit in het dorp",
+  "farmGoalPerfectLootHint": "Voer de buit in die vóór de aanval wordt getoond. De ligabonus hieronder wordt automatisch toegevoegd.",
+  "farmGoalLeagueEstimate": "Ligabonus van {league}: {amount} {resource}. Deze is opgenomen in de aanvalsberekeningen.",
+  "farmGoalTrackerNextTitle": "Volgende in het Upgrade Tracker-plan",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker-gegevens vereist",
+  "farmGoalTrackerMissingBody": "Importeer de upgrade-JSON van dit account in Upgrade Tracker om hier het volgende geplande gebouw en de exacte kosten te tonen.",
+  "farmGoalTrackerPlanComplete": "Er zijn geen resterende gebouwupgrades gevonden in Upgrade Tracker. Je kunt nog steeds handmatig een gebouw kiezen.",
+  "farmGoalOpenUpgradeTracker": "Upgrade Tracker openen",
+  "farmGoalUseTrackerTarget": "Gebouw gebruiken"
 }

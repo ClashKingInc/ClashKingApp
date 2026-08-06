@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Alterar edifício",
+  "farmGoalNoTargetTitle": "Nenhum edifício selecionado",
+  "farmGoalNoTargetBody": "Escolhe o edifício que queres melhorar para estimar os recursos necessários.",
+  "farmGoalAverageLootLabel": "Saque disponível na aldeia",
+  "farmGoalPerfectLootHint": "Introduz o saque apresentado antes do ataque. O bónus de liga abaixo é adicionado automaticamente.",
+  "farmGoalLeagueEstimate": "Bónus da liga {league}: {amount} de {resource}. Está incluído nas estimativas de ataques.",
+  "farmGoalTrackerNextTitle": "Seguinte no plano do Rastreador de melhorias",
+  "farmGoalTrackerMissingTitle": "São necessários dados do Rastreador de melhorias",
+  "farmGoalTrackerMissingBody": "Importa o JSON de melhorias desta conta no Rastreador de melhorias para mostrar aqui o próximo edifício planeado e o custo exato.",
+  "farmGoalTrackerPlanComplete": "Não foram encontradas melhorias de edifícios restantes no Rastreador de melhorias. Ainda podes escolher um edifício manualmente.",
+  "farmGoalOpenUpgradeTracker": "Abrir Rastreador de melhorias",
+  "farmGoalUseTrackerTarget": "Usar edifício"
 }

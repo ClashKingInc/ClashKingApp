@@ -427,6 +427,74 @@ void main() {
     );
   });
 
+  testWidgets('shows a tracker target when it is the only picker choice', (
+    tester,
+  ) async {
+    final snapshot = UpgradeTrackerSnapshot(
+      tag: '#FARM',
+      name: 'Farmer',
+      townHallLevel: 12,
+      builderHallLevel: 0,
+      homeBuilderCount: 5,
+      builderBaseBuilderCount: 0,
+      items: const [
+        UpgradeTrackerItem(
+          id: 1,
+          name: 'Town Hall',
+          imageUrl: '',
+          village: UpgradeVillage.home,
+          category: UpgradeCategory.defenses,
+          queue: UpgradeQueue.builders,
+          currentLevel: 1,
+          targetLevel: 2,
+          count: 1,
+          steps: [
+            UpgradeStep(
+              targetLevel: 2,
+              costs: [UpgradeCost('Gold', 1000)],
+              seconds: 86400,
+            ),
+          ],
+          completedUpgradeSeconds: 0,
+          totalUpgradeSeconds: 86400,
+        ),
+      ],
+      collections: const [],
+      boosts: const UpgradeBoosts(),
+      events: const [],
+      capturedAt: DateTime.now(),
+    );
+    await _pump(
+      tester,
+      catalog: _trackerOnlyCatalog,
+      accountPresets: const [
+        DamageAccountPreset(
+          tag: '#FARM',
+          name: 'Farmer',
+          townHall: 12,
+          league: 'Titan League 25',
+        ),
+      ],
+      initialTrackerSnapshot: snapshot,
+    );
+
+    await tester.tap(find.text('Farm goal'));
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const ValueKey('farm-goal-scroll')),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No buildings found'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('farm-goal-tracker-picker-item')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('does not suggest a building already maxed in Upgrade Tracker', (
     tester,
   ) async {
@@ -765,4 +833,33 @@ const _farmGoalCatalog = DamageCatalog(
       ],
     ),
   ],
+);
+
+const _trackerOnlyCatalog = DamageCatalog(
+  maxTownHall: 12,
+  buildings: [
+    BuildingDefinition(
+      id: 'town-hall',
+      name: 'Town Hall',
+      imageName: 'Town Hall',
+      zapQuakeEligible: true,
+      levels: [
+        BuildingLevelDefinition(
+          level: 1,
+          hitpoints: 800,
+          requiredTownHall: 10,
+          upgradeResource: 'Gold',
+          upgradeCost: 0,
+        ),
+        BuildingLevelDefinition(
+          level: 2,
+          hitpoints: 1000,
+          requiredTownHall: 12,
+          upgradeResource: 'Gold',
+          upgradeCost: 1000,
+        ),
+      ],
+    ),
+  ],
+  sources: [],
 );

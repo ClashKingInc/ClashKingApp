@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Binayı değiştir",
+  "farmGoalNoTargetTitle": "Bina seçilmedi",
+  "farmGoalNoTargetBody": "Gerekli kaynak miktarını hesaplamak için yükseltmek istediğin binayı seç.",
+  "farmGoalAverageLootLabel": "Köyde bulunan ganimet",
+  "farmGoalPerfectLootHint": "Saldırıdan önce gösterilen ganimeti gir. Aşağıdaki lig bonusu otomatik olarak eklenir.",
+  "farmGoalLeagueEstimate": "{league} lig bonusu: {amount} {resource}. Saldırı tahminlerine dahildir.",
+  "farmGoalTrackerNextTitle": "Yükseltme Takibi planında sıradaki",
+  "farmGoalTrackerMissingTitle": "Yükseltme Takibi verileri gerekli",
+  "farmGoalTrackerMissingBody": "Sıradaki planlanmış binayı ve tam maliyetini burada göstermek için bu hesabın yükseltme JSON'unu Yükseltme Takibi'ne aktar.",
+  "farmGoalTrackerPlanComplete": "Yükseltme Takibi'nde kalan bina yükseltmesi bulunamadı. Yine de manuel olarak bir bina seçebilirsin.",
+  "farmGoalOpenUpgradeTracker": "Yükseltme Takibini aç",
+  "farmGoalUseTrackerTarget": "Binayı kullan"
 }

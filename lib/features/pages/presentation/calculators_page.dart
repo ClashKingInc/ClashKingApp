@@ -3100,7 +3100,7 @@ class _BuildingPickerState extends State<_BuildingPicker> {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: visibleBuildings.isEmpty
+            child: visibleBuildings.isEmpty && trackerChoices.isEmpty
                 ? AppEmptyState(
                     icon: Icons.search_off_rounded,
                     title: loc.damageNoBuildingsFound,

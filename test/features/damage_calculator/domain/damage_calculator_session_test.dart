@@ -42,7 +42,41 @@ void main() {
     expect(session.addTarget('locked'), isFalse);
     expect(session.targets, hasLength(1));
   });
+
+  test('removes a selected building consumed by a Town Hall merge', () {
+    final session = DamageCalculatorSession(
+      _mergedBuildingCatalog,
+      townHall: 16,
+    );
+
+    expect(session.addTarget('eagle'), isTrue);
+
+    session.setTownHall(17);
+
+    expect(session.targets, isEmpty);
+    expect(session.resolvedTargets(), isEmpty);
+  });
 }
+
+const _mergedBuildingCatalog = DamageCatalog(
+  maxTownHall: 18,
+  buildings: [
+    BuildingDefinition(
+      id: 'eagle',
+      name: 'Eagle Artillery',
+      imageName: 'Eagle Artillery',
+      zapQuakeEligible: true,
+      levels: [
+        BuildingLevelDefinition(
+          level: 7,
+          hitpoints: 6200,
+          requiredTownHall: 16,
+        ),
+      ],
+    ),
+  ],
+  sources: [],
+);
 
 const _catalog = DamageCatalog(
   maxTownHall: 12,

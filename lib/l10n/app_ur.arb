@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "عمارت تبدیل کریں",
+  "farmGoalNoTargetTitle": "کوئی عمارت منتخب نہیں کی گئی",
+  "farmGoalNoTargetBody": "درکار وسائل کا اندازہ لگانے کے لیے وہ عمارت منتخب کریں جسے آپ اپ گریڈ کرنا چاہتے ہیں۔",
+  "farmGoalAverageLootLabel": "گاؤں میں دستیاب لوٹ",
+  "farmGoalPerfectLootHint": "حملے سے پہلے دکھائی جانے والی لوٹ درج کریں۔ نیچے دیا گیا لیگ بونس خودکار طور پر شامل ہو جائے گا۔",
+  "farmGoalLeagueEstimate": "{league} لیگ بونس: {amount} {resource}۔ یہ حملوں کے تخمینے میں شامل ہے۔",
+  "farmGoalTrackerNextTitle": "اپ گریڈ ٹریکر پلان میں اگلا",
+  "farmGoalTrackerMissingTitle": "اپ گریڈ ٹریکر ڈیٹا درکار ہے",
+  "farmGoalTrackerMissingBody": "اگلی منصوبہ بند عمارت اور اس کی درست لاگت یہاں دکھانے کے لیے اس اکاؤنٹ کی اپ گریڈ JSON کو اپ گریڈ ٹریکر میں درآمد کریں۔",
+  "farmGoalTrackerPlanComplete": "اپ گریڈ ٹریکر میں عمارتوں کی کوئی باقی اپ گریڈ نہیں ملی۔ آپ اب بھی عمارت دستی طور پر منتخب کر سکتے ہیں۔",
+  "farmGoalOpenUpgradeTracker": "اپ گریڈ ٹریکر کھولیں",
+  "farmGoalUseTrackerTarget": "عمارت استعمال کریں"
 }

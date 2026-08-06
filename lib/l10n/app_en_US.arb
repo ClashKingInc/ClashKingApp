@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Change building",
+  "farmGoalNoTargetTitle": "No building selected",
+  "farmGoalNoTargetBody": "Choose the building you want to upgrade to estimate the farming required.",
+  "farmGoalAverageLootLabel": "Loot available in the village",
+  "farmGoalPerfectLootHint": "Enter the loot shown before attacking. The league bonus below is added automatically.",
+  "farmGoalLeagueEstimate": "{league} league bonus: {amount} {resource}. It is included in the attack estimates.",
+  "farmGoalTrackerNextTitle": "Next in Upgrade Tracker plan",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker data needed",
+  "farmGoalTrackerMissingBody": "Import this account's upgrade JSON in Upgrade Tracker to show its next planned building and exact cost here.",
+  "farmGoalTrackerPlanComplete": "No remaining building upgrades were found in Upgrade Tracker. You can still choose a building manually.",
+  "farmGoalOpenUpgradeTracker": "Open Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Use building"
 }

@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Đổi công trình",
+  "farmGoalNoTargetTitle": "Chưa chọn công trình",
+  "farmGoalNoTargetBody": "Chọn công trình bạn muốn nâng cấp để ước tính lượng tài nguyên cần kiếm.",
+  "farmGoalAverageLootLabel": "Chiến lợi phẩm có sẵn trong làng",
+  "farmGoalPerfectLootHint": "Nhập lượng chiến lợi phẩm hiển thị trước khi tấn công. Phần thưởng giải đấu bên dưới sẽ được tự động cộng thêm.",
+  "farmGoalLeagueEstimate": "Thưởng giải đấu {league}: {amount} {resource}. Khoản này được tính trong ước lượng số lần tấn công.",
+  "farmGoalTrackerNextTitle": "Mục tiếp theo trong kế hoạch Theo dõi nâng cấp",
+  "farmGoalTrackerMissingTitle": "Cần dữ liệu Theo dõi nâng cấp",
+  "farmGoalTrackerMissingBody": "Nhập JSON nâng cấp của tài khoản này vào Theo dõi nâng cấp để hiển thị công trình dự kiến tiếp theo và chi phí chính xác tại đây.",
+  "farmGoalTrackerPlanComplete": "Không tìm thấy nâng cấp công trình nào còn lại trong Theo dõi nâng cấp. Bạn vẫn có thể chọn công trình theo cách thủ công.",
+  "farmGoalOpenUpgradeTracker": "Mở Theo dõi nâng cấp",
+  "farmGoalUseTrackerTarget": "Dùng công trình"
 }

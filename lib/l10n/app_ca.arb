@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Canvia l'edifici",
+  "farmGoalNoTargetTitle": "No s'ha seleccionat cap edifici",
+  "farmGoalNoTargetBody": "Tria l'edifici que vols millorar per estimar els recursos necessaris.",
+  "farmGoalAverageLootLabel": "Botí disponible al poble",
+  "farmGoalPerfectLootHint": "Introdueix el botí que es mostra abans d'atacar. La bonificació de lliga de sota s'afegeix automàticament.",
+  "farmGoalLeagueEstimate": "Bonificació de la lliga {league}: {amount} {resource}. S'inclou en les estimacions d'atacs.",
+  "farmGoalTrackerNextTitle": "Següent al pla del seguiment de millores",
+  "farmGoalTrackerMissingTitle": "Calen dades del seguiment de millores",
+  "farmGoalTrackerMissingBody": "Importa el JSON de millores d'aquest compte al seguiment de millores per mostrar aquí el següent edifici planificat i el cost exacte.",
+  "farmGoalTrackerPlanComplete": "No s'han trobat millores d'edificis pendents al seguiment de millores. Encara pots triar un edifici manualment.",
+  "farmGoalOpenUpgradeTracker": "Obre el seguiment de millores",
+  "farmGoalUseTrackerTarget": "Utilitza l'edifici"
 }

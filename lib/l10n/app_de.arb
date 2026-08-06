@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Gebäude wechseln",
+  "farmGoalNoTargetTitle": "Kein Gebäude ausgewählt",
+  "farmGoalNoTargetBody": "Wähle das Gebäude aus, das du verbessern möchtest, um den nötigen Ressourcenaufwand zu schätzen.",
+  "farmGoalAverageLootLabel": "Verfügbare Beute im Dorf",
+  "farmGoalPerfectLootHint": "Gib die vor dem Angriff angezeigte Beute ein. Der unten stehende Ligabonus wird automatisch addiert.",
+  "farmGoalLeagueEstimate": "Ligabonus für {league}: {amount} {resource}. Er ist in den Angriffsschätzungen enthalten.",
+  "farmGoalTrackerNextTitle": "Nächstes Ziel im Upgrade-Tracker-Plan",
+  "farmGoalTrackerMissingTitle": "Upgrade-Tracker-Daten erforderlich",
+  "farmGoalTrackerMissingBody": "Importiere die Upgrade-JSON dieses Kontos im Upgrade-Tracker, um hier das nächste geplante Gebäude und die genauen Kosten anzuzeigen.",
+  "farmGoalTrackerPlanComplete": "Im Upgrade-Tracker wurden keine verbleibenden Gebäude-Upgrades gefunden. Du kannst weiterhin manuell ein Gebäude auswählen.",
+  "farmGoalOpenUpgradeTracker": "Upgrade-Tracker öffnen",
+  "farmGoalUseTrackerTarget": "Gebäude verwenden"
 }

@@ -73,12 +73,17 @@ class DamageCatalog {
     return null;
   }
 
+  bool isBuildingAvailableForTownHall(
+    BuildingDefinition building,
+    int townHall,
+  ) {
+    final unavailableFrom = _buildingUnavailableFromTownHall[building.name];
+    return building.levelsForTownHall(townHall).isNotEmpty &&
+        (unavailableFrom == null || townHall < unavailableFrom);
+  }
+
   List<BuildingDefinition> buildingsForTownHall(int townHall) => buildings
-      .where((building) {
-        final unavailableFrom = _buildingUnavailableFromTownHall[building.name];
-        return building.levelsForTownHall(townHall).isNotEmpty &&
-            (unavailableFrom == null || townHall < unavailableFrom);
-      })
+      .where((building) => isBuildingAvailableForTownHall(building, townHall))
       .toList(growable: false);
 }
 

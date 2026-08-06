@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Změnit budovu",
+  "farmGoalNoTargetTitle": "Není vybrána žádná budova",
+  "farmGoalNoTargetBody": "Vyberte budovu, kterou chcete vylepšit, a odhadněte potřebné suroviny.",
+  "farmGoalAverageLootLabel": "Kořist dostupná ve vesnici",
+  "farmGoalPerfectLootHint": "Zadejte kořist zobrazenou před útokem. Níže uvedený ligový bonus se přičte automaticky.",
+  "farmGoalLeagueEstimate": "Ligový bonus {league}: {amount} {resource}. Je zahrnut v odhadech útoků.",
+  "farmGoalTrackerNextTitle": "Další v plánu Sledování vylepšení",
+  "farmGoalTrackerMissingTitle": "Jsou potřeba data Sledování vylepšení",
+  "farmGoalTrackerMissingBody": "Importujte JSON vylepšení tohoto účtu do Sledování vylepšení, aby se zde zobrazila další plánovaná budova a přesná cena.",
+  "farmGoalTrackerPlanComplete": "Ve Sledování vylepšení nebyla nalezena žádná zbývající vylepšení budov. Budovu můžete stále vybrat ručně.",
+  "farmGoalOpenUpgradeTracker": "Otevřít Sledování vylepšení",
+  "farmGoalUseTrackerTarget": "Použít budovu"
 }

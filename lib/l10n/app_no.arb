@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Bytt bygning",
+  "farmGoalNoTargetTitle": "Ingen bygning valgt",
+  "farmGoalNoTargetBody": "Velg bygningen du vil oppgradere for å beregne nødvendig ressursinnsamling.",
+  "farmGoalAverageLootLabel": "Tilgjengelig bytte i landsbyen",
+  "farmGoalPerfectLootHint": "Skriv inn byttet som vises før angrepet. Ligabonusen nedenfor legges til automatisk.",
+  "farmGoalLeagueEstimate": "Ligabonus for {league}: {amount} {resource}. Den er inkludert i angrepsberegningene.",
+  "farmGoalTrackerNextTitle": "Neste i Upgrade Tracker-planen",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker-data kreves",
+  "farmGoalTrackerMissingBody": "Importer oppgraderings-JSON-en for denne kontoen i Upgrade Tracker for å vise neste planlagte bygning og nøyaktig kostnad her.",
+  "farmGoalTrackerPlanComplete": "Ingen gjenværende bygningsoppgraderinger ble funnet i Upgrade Tracker. Du kan fortsatt velge en bygning manuelt.",
+  "farmGoalOpenUpgradeTracker": "Åpne Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Bruk bygning"
 }

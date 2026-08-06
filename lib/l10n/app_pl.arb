@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Zmień budynek",
+  "farmGoalNoTargetTitle": "Nie wybrano budynku",
+  "farmGoalNoTargetBody": "Wybierz budynek, który chcesz ulepszyć, aby oszacować wymagane zasoby.",
+  "farmGoalAverageLootLabel": "Łup dostępny w wiosce",
+  "farmGoalPerfectLootHint": "Wpisz łup widoczny przed atakiem. Poniższa premia ligowa zostanie dodana automatycznie.",
+  "farmGoalLeagueEstimate": "Premia ligi {league}: {amount} {resource}. Jest uwzględniona w szacunkach ataków.",
+  "farmGoalTrackerNextTitle": "Następny w planie Śledzenia ulepszeń",
+  "farmGoalTrackerMissingTitle": "Potrzebne dane Śledzenia ulepszeń",
+  "farmGoalTrackerMissingBody": "Zaimportuj plik JSON ulepszeń tego konta w Śledzeniu ulepszeń, aby wyświetlić tutaj następny zaplanowany budynek i dokładny koszt.",
+  "farmGoalTrackerPlanComplete": "W Śledzeniu ulepszeń nie znaleziono pozostałych ulepszeń budynków. Nadal możesz wybrać budynek ręcznie.",
+  "farmGoalOpenUpgradeTracker": "Otwórz Śledzenie ulepszeń",
+  "farmGoalUseTrackerTarget": "Użyj budynku"
 }

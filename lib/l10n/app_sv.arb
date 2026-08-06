@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "Byt byggnad",
+  "farmGoalNoTargetTitle": "Ingen byggnad vald",
+  "farmGoalNoTargetBody": "Välj byggnaden du vill uppgradera för att uppskatta resurserna som behövs.",
+  "farmGoalAverageLootLabel": "Tillgängligt byte i byn",
+  "farmGoalPerfectLootHint": "Ange bytet som visas före attacken. Ligabonusen nedan läggs till automatiskt.",
+  "farmGoalLeagueEstimate": "Ligabonus för {league}: {amount} {resource}. Den ingår i attackberäkningarna.",
+  "farmGoalTrackerNextTitle": "Nästa i Upgrade Tracker-planen",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker-data behövs",
+  "farmGoalTrackerMissingBody": "Importera kontots uppgraderings-JSON i Upgrade Tracker för att visa nästa planerade byggnad och den exakta kostnaden här.",
+  "farmGoalTrackerPlanComplete": "Inga återstående byggnadsuppgraderingar hittades i Upgrade Tracker. Du kan fortfarande välja en byggnad manuellt.",
+  "farmGoalOpenUpgradeTracker": "Öppna Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Använd byggnad"
 }

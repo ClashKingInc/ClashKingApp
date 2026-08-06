@@ -3951,5 +3951,17 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "farmGoalChangeBuilding": "تغيير المبنى",
+  "farmGoalNoTargetTitle": "لم يتم تحديد مبنى",
+  "farmGoalNoTargetBody": "اختر المبنى الذي تريد ترقيته لتقدير الموارد المطلوبة.",
+  "farmGoalAverageLootLabel": "الغنائم المتاحة في القرية",
+  "farmGoalPerfectLootHint": "أدخل الغنائم المعروضة قبل الهجوم. ستُضاف مكافأة الدوري أدناه تلقائيًا.",
+  "farmGoalLeagueEstimate": "مكافأة دوري {league}: {amount} {resource}. وهي مضمنة في تقديرات الهجمات.",
+  "farmGoalTrackerNextTitle": "التالي في خطة متتبع الترقيات",
+  "farmGoalTrackerMissingTitle": "بيانات متتبع الترقيات مطلوبة",
+  "farmGoalTrackerMissingBody": "استورد ملف JSON الخاص بترقيات هذا الحساب في متتبع الترقيات لعرض المبنى المخطط التالي وتكلفته الدقيقة هنا.",
+  "farmGoalTrackerPlanComplete": "لم يتم العثور على ترقيات مبانٍ متبقية في متتبع الترقيات. لا يزال بإمكانك اختيار مبنى يدويًا.",
+  "farmGoalOpenUpgradeTracker": "فتح متتبع الترقيات",
+  "farmGoalUseTrackerTarget": "استخدام المبنى"
 }
