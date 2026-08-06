@@ -36,7 +36,8 @@ const _flameFlingerSetupId = 'flame-flinger';
 const _townHallBuildingName = 'Town Hall';
 const _lightningSpellName = 'Lightning Spell';
 const _darkElixirResourceName = 'dark elixir';
-const _defaultFarmPerfectLoot = 1000000;
+const _defaultFarmPerfectLoot = 1013000;
+const _defaultFarmDarkElixirLoot = 10250;
 const _calculatorDesktopMaxWidth = 1120.0;
 
 EdgeInsets _calculatorPagePadding(BuildContext context) {
@@ -671,7 +672,12 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
               village: UpgradeVillage.home,
               startsAt: now,
               goldPassPercent: _farmTrackerGoldPassPercent,
-              preferences: _farmTrackerPlanPreferences,
+              preferences: normalizeUpgradePlanPreferencesForQueue(
+                snapshot,
+                _farmTrackerPlanPreferences,
+                UpgradeVillage.home,
+                UpgradeQueue.builders,
+              ),
             )
             .expand((lane) => lane.upgrades)
             .toList()
@@ -809,8 +815,6 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final level = _farmSelectedLevel(levels);
     final resource = level?.upgradeResource ?? 'Gold';
     _farmAverageLootController.text = _farmDefaultVillageLoot(
-      league: farmPreset?.league,
-      townHall: farmTownHall,
       resource: resource,
     ).toString();
   }
@@ -3449,29 +3453,11 @@ String? _farmResourceImage(String? resource) =>
 int _farmDefaultPerfectLoot(String? resource) =>
     resource?.trim().toLowerCase().replaceAll('_', ' ') ==
         _darkElixirResourceName
-    ? 10000
+    ? _defaultFarmDarkElixirLoot
     : _defaultFarmPerfectLoot;
 
-int _farmDefaultVillageLoot({
-  required String? league,
-  required int townHall,
-  required String? resource,
-}) {
-  final fallback = _farmDefaultPerfectLoot(resource);
-  final estimate = _farmLeagueLootEstimate(
-    league: league,
-    townHall: townHall,
-    resource: resource,
-  );
-  final leagueBonus = estimate?.loot;
-  final leagueDefaultTotal = estimate?.starBonus;
-  if (leagueBonus == null || leagueDefaultTotal == null) return fallback;
-
-  // The editable value represents village loot; the calculator adds the
-  // per-attack league bonus separately when it builds the attack estimate.
-  final villageLoot = leagueDefaultTotal - leagueBonus;
-  return villageLoot > 0 ? villageLoot : fallback;
-}
+int _farmDefaultVillageLoot({required String? resource}) =>
+    _farmDefaultPerfectLoot(resource);
 
 int _parseFarmAmount(String value) =>
     int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;

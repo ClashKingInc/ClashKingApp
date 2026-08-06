@@ -252,7 +252,7 @@ void main() {
       ),
       isA<OutlinedButton>(),
     );
-    expect(find.text('550000'), findsOneWidget);
+    expect(find.text('1013000'), findsOneWidget);
     expect(find.text('Gold'), findsOneWidget);
     expect(
       find.textContaining('Titan League 25 league bonus: 350,000 Gold'),
@@ -271,7 +271,7 @@ void main() {
 
     expect(find.byKey(const ValueKey('farm-goal-level')), findsOneWidget);
     expect(find.text('Change building'), findsOneWidget);
-    expect(find.text('550000'), findsOneWidget);
+    expect(find.text('1013000'), findsOneWidget);
     expect(
       find.textContaining('Titan League 25 league bonus: 350,000 Gold'),
       findsOneWidget,
@@ -280,12 +280,7 @@ void main() {
       find.textContaining('Star bonus: 900,000 Gold after 5 stars'),
       findsOneWidget,
     );
-    expect(find.text('900,000 Gold / attack'), findsOneWidget);
-    await tester.enterText(
-      find.byKey(const ValueKey('farm-goal-average-loot')),
-      '1013000',
-    );
-    await tester.pump();
+    expect(find.text('1,363,000 Gold / attack'), findsOneWidget);
 
     final result = find.byKey(const ValueKey('farm-goal-result'));
     expect(result, findsOneWidget);
