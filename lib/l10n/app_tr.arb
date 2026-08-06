@@ -1017,7 +1017,7 @@
       }
     }
   },
-  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "warAnalysisCannotLose": "{clanName} artık kaybedemez",
   "@warAnalysisCannotLose": {
     "placeholders": {
       "clanName": {
@@ -1025,9 +1025,9 @@
       }
     }
   },
-  "warAnalysisSecuredBadge": "Secured",
-  "warAnalysisAlreadySecured": "Already secured",
-  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "warAnalysisSecuredBadge": "Güvenli",
+  "warAnalysisAlreadySecured": "Zaten güvenceye alındı",
+  "warAnalysisSecureAgainst": "Hedef, {clanName}'in kalan tüm saldırılarını kullandığı varsayılarak hesaplanmıştır.",
   "@warAnalysisSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1035,7 +1035,7 @@
       }
     }
   },
-  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "warAnalysisCannotSecureAgainst": "{clanName} kalan tüm saldırılarını en iyi şekilde değerlendirirse matematiksel olarak güvenceye alınamaz.",
   "@warAnalysisCannotSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1043,8 +1043,8 @@
       }
     }
   },
-  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
-  "warAnalysisStarGoal": "+{stars} star(s)",
+  "warAnalysisNoSecureObjective": "Kalan saldırılarla güvence altına alınamaz.",
+  "warAnalysisStarGoal": "+{stars} yıldız",
   "@warAnalysisStarGoal": {
     "placeholders": {
       "stars": {
@@ -1052,7 +1052,7 @@
       }
     }
   },
-  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "warAnalysisRemainingAttempts": "{attacks} saldırı kaldı",
   "@warAnalysisRemainingAttempts": {
     "placeholders": {
       "attacks": {
@@ -1060,7 +1060,7 @@
       }
     }
   },
-  "warAnalysisNoBetterResult": "No better result is possible",
+  "warAnalysisNoBetterResult": "Daha iyi bir sonuç mümkün değil",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -2755,10 +2755,10 @@
   "noLinkedPlayersLoadedBody": "Yükseltme toplamlarını görmek için bağlantılı hesapları ekleyin veya yenileyin.",
   "playerOptionNotificationsTitle": "Bildirimler",
   "playerOptionNotificationsSubtitle": "Bu hesap için bildirim al.",
-  "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
-  "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
-  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
-  "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
+  "playerOptionNotificationsEnableMaster": "Öncelikle Ayarlar'dan bildirimleri açın.",
+  "playerOptionNotificationsVerifyFirst": "Bildirimleri etkinleştirmek için bu hesabı doğrulayın.",
+  "playerOptionNotificationsSubscriptionRequired": "Yer imi bildirimleri için abonelik gereklidir.",
+  "playerOptionNotificationsLimitReached": "Yer imi bildirim limitinize ulaşıldı.",
   "playerOptionShowTodoPageTitle": "Yapılacaklar sayfasında göster",
   "playerOptionShowTodoPageSubtitle": "Bu hesabı yapılacaklar listesine ekleyin.",
   "playerOptionShowTodoPageVerifyFirst": "Bu hesabı doğrulayarak yapılacaklar sayfasında görünmesini sağlayabilirsiniz.",
@@ -2809,10 +2809,10 @@
   "todoMockCaughtUpSubtitle": "BB14 · açık görev yok",
   "todoMockCaughtUpStatus": "Bugün aktif · herhangi bir işlem gerekmiyor",
   "notifChooseAlerts": "Bildirimleri seçin",
-  "notifGroupLegendAttacks": "Legend I attacks",
-  "notifLegendAttacksDescription": "Attack results for notification-enabled bookmarked accounts in Legend I.",
-  "notifGroupLegendDefenses": "Legend I defenses",
-  "notifLegendDefensesDescription": "Defense results for notification-enabled accounts in Legend I.",
+  "notifGroupLegendAttacks": "Efsane I saldırıları",
+  "notifLegendAttacksDescription": "Efsane I seviyesindeki bildirimleri açık olan ve favorilere eklenen hesaplar için saldırı sonuçları.",
+  "notifGroupLegendDefenses": "Efsane I savunmaları",
+  "notifLegendDefensesDescription": "Legend I'de bildirim özelliği etkinleştirilmiş hesaplar için savunma sonuçları.",
   "notifLeagueDefenseDescription": "Saldırgan, yıldız, yüzde ve lig durumunu içeren savunma sonuçları",
   "notifWarAttackOptionsDescription": "Savaş saldırısı sonuçları, savunma uyarıları ve 5v5 saldırı akışı seçenekleri.",
   "notifWarAlertsDescription": "Savaş eşleşti, savaş günü başladı ve savaş bitti.",
@@ -3148,10 +3148,10 @@
     }
   },
   "sideBuildingHp": "Bina İP",
-  "sideLightningLevel": "Lightning level",
-  "sideEarthquakeLevel": "Earthquake level",
-  "sideWithoutEarthquake": "Without earthquake",
-  "sideLightningCount": "{count} lightning",
+  "sideLightningLevel": "Yıldırım seviyesi",
+  "sideEarthquakeLevel": "Deprem seviyesi",
+  "sideWithoutEarthquake": "Deprem olmadan",
+  "sideLightningCount": "{count} yıldırım",
   "@sideLightningCount": {
     "placeholders": {
       "count": {
@@ -3159,9 +3159,9 @@
       }
     }
   },
-  "sideFireballQuakeTitle": "Fireball + 1 quake",
-  "sideAddSupportDamage": "Add support damage",
-  "sideFireballQuakeSubtitle": "{fireballDamage} fireball damage, {hpLeft} HP left after quake",
+  "sideFireballQuakeTitle": "Alev topu + 1 deprem",
+  "sideAddSupportDamage": "Destek hasarı ekleyin",
+  "sideFireballQuakeSubtitle": "{fireballDamage} alev topu hasarı, {hpLeft} depremden sonra kalan İP",
   "@sideFireballQuakeSubtitle": {
     "placeholders": {
       "fireballDamage": {
@@ -3172,9 +3172,9 @@
       }
     }
   },
-  "sideFireballLevel": "Fireball level",
-  "sideQuakePressure": "Quake pressure",
-  "sideQuakeSpellCount": "{count} quake spell(s)",
+  "sideFireballLevel": "Alev topu seviyesi",
+  "sideQuakePressure": "Deprem basıncı",
+  "sideQuakeSpellCount": "{count} deprem büyüsü",
   "@sideQuakeSpellCount": {
     "placeholders": {
       "count": {
@@ -3182,14 +3182,14 @@
       }
     }
   },
-  "sideLocation": "Location",
-  "sideFilter": "Filter",
-  "sideRefresh": "Refresh",
-  "sideOfficialClashLeaderboard": "Official Clash leaderboard",
-  "sideAllTownHallsShort": "All TH",
-  "sideDecrease": "Decrease",
-  "sideIncrease": "Increase",
-  "sideLevel": "Level {level}",
+  "sideLocation": "Konum",
+  "sideFilter": "Filtre",
+  "sideRefresh": "Yenile",
+  "sideOfficialClashLeaderboard": "Resmi Clash sıralaması",
+  "sideAllTownHallsShort": "Tüm BB",
+  "sideDecrease": "Azalt",
+  "sideIncrease": "Arttır",
+  "sideLevel": "Seviye {level}",
   "@sideLevel": {
     "placeholders": {
       "level": {
@@ -3197,21 +3197,21 @@
       }
     }
   },
-  "rankingPlayerTrophies": "Player trophies",
-  "rankingPlayerTrophiesHeading": "Players Trophies Ranking",
-  "rankingPlayerBuilder": "Player builder",
-  "rankingPlayerBuilderHeading": "Players Builder Base Ranking",
-  "rankingClanTrophies": "Clan trophies",
-  "rankingClanTrophiesHeading": "Clans Trophies Ranking",
-  "rankingClanBuilder": "Clan builder",
-  "rankingClanBuilderHeading": "Clans Builder Base Ranking",
-  "rankingClanCapital": "Clan capital",
-  "rankingClanCapitalHeading": "Clan Capital Ranking",
-  "assetFolderEquipment": "Equipment",
-  "assetFolderLeagues": "Leagues",
-  "assetFolderResources": "Resources",
-  "assetFolderStickers": "Stickers",
-  "upgradeSectionHeroes": "Heroes",
+  "rankingPlayerTrophies": "Oyuncu kupaları",
+  "rankingPlayerTrophiesHeading": "Oyuncu Kupa Sıralaması",
+  "rankingPlayerBuilder": "Oyuncu inşaatçı",
+  "rankingPlayerBuilderHeading": "Oyuncu İnşaatçısı Üssü Sıralaması",
+  "rankingClanTrophies": "Klan kupaları",
+  "rankingClanTrophiesHeading": "Klan Kupa Sıralaması",
+  "rankingClanBuilder": "Klan inşaatçı",
+  "rankingClanBuilderHeading": "Klan İnşaatçısı Üssü Sıralaması",
+  "rankingClanCapital": "Klan başkenti",
+  "rankingClanCapitalHeading": "Klan Başkenti Sıralaması",
+  "assetFolderEquipment": "Ekipman",
+  "assetFolderLeagues": "Ligler",
+  "assetFolderResources": "Kaynaklar",
+  "assetFolderStickers": "Etiketler",
+  "upgradeSectionHeroes": "Kahramanlar",
   "upgradeSectionTroops": "Troops",
   "upgradeSectionSpells": "Spells",
   "upgradeSectionPets": "Pets",
