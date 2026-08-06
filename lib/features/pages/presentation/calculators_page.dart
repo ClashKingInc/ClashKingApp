@@ -178,7 +178,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final farmBuildings = _catalog.buildingsForTownHall(farmTownHall);
     final trackerTargets = _farmTrackerTargets(farmBuildings);
     final selectableFarmBuildings = _farmSelectableBuildings(farmBuildings);
-    final farmBuilding = _farmSelectedBuilding(farmBuildings);
+    final farmBuilding = _farmSelectedBuilding(selectableFarmBuildings);
     final farmLevels = _farmTargetLevels(farmBuilding, farmTownHall);
 
     return _CalculatorScaffold(
@@ -516,6 +516,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmTrackerSnapshot = initialSnapshot;
       _farmTrackerSnapshotTag = tag;
       _farmTrackerLoading = false;
+      _repairFarmSelectionAfterTrackerLoad();
       return;
     }
     if (tag == _farmTrackerLoadTag &&
@@ -530,6 +531,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       _farmTrackerSnapshot = cached;
       _farmTrackerSnapshotTag = tag;
       _farmTrackerLoading = false;
+      _repairFarmSelectionAfterTrackerLoad();
       unawaited(_loadFarmTrackerPreferences(tag, cached));
       return;
     }
@@ -560,6 +562,7 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
         _farmTrackerLoadTag = snapshot == null ? null : tag;
         _farmTrackerLoading = false;
         _applyFarmTrackerPreferences(snapshot, draft);
+        _repairFarmSelectionAfterTrackerLoad();
       });
     } catch (_) {
       if (!mounted || tag != _farmAccountTag) return;
@@ -724,6 +727,21 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
           );
         })
         .toList(growable: false);
+  }
+
+  void _repairFarmSelectionAfterTrackerLoad() {
+    final selectedId = _farmBuildingId;
+    if (selectedId == null) return;
+    final townHall = _farmSelectedPreset?.townHall ?? _catalog.maxTownHall;
+    final selectableBuildings = _farmSelectableBuildings(
+      _catalog.buildingsForTownHall(townHall),
+    );
+    if (selectableBuildings.any((building) => building.id == selectedId)) {
+      return;
+    }
+    _farmBuildingId = null;
+    _farmBuildingLevel = null;
+    _setFarmLootSuggestion();
   }
 
   void _useFarmTrackerSuggestion(_FarmTrackerTarget target) {

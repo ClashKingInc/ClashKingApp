@@ -5,12 +5,14 @@ import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator
 import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator_session.dart';
 import 'package:clashkingapp/features/pages/presentation/side_page_components.dart';
 import 'package:clashkingapp/features/pages/presentation/side_tabs_pages.dart';
+import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('starts with an explicit target and attack method flow', (
@@ -557,6 +559,81 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(DraggableScrollableSheet), findsOneWidget);
     expect(find.text('Air Defense'), findsNothing);
+  });
+
+  testWidgets('clears a selected building when tracker data marks it maxed', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    UpgradeTrackerRepository.shared.clearCache();
+    addTearDown(UpgradeTrackerRepository.shared.clearCache);
+    const presets = [
+      DamageAccountPreset(
+        tag: '#FARM',
+        name: 'Farmer',
+        townHall: 12,
+        league: 'Titan League 25',
+      ),
+    ];
+    await _pump(tester, catalog: _farmGoalCatalog, accountPresets: presets);
+
+    await tester.tap(find.text('Farm goal'));
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const ValueKey('farm-goal-scroll')),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Air Defense').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Air Defense · Level 1'), findsOneWidget);
+
+    final snapshot = UpgradeTrackerSnapshot(
+      tag: '#FARM',
+      name: 'Farmer',
+      townHallLevel: 12,
+      builderHallLevel: 0,
+      homeBuilderCount: 5,
+      builderBaseBuilderCount: 0,
+      items: const [
+        UpgradeTrackerItem(
+          id: 2,
+          name: 'Air Defense',
+          imageUrl: '',
+          village: UpgradeVillage.home,
+          category: UpgradeCategory.defenses,
+          queue: UpgradeQueue.builders,
+          currentLevel: 1,
+          targetLevel: 1,
+          count: 1,
+          steps: [],
+          completedUpgradeSeconds: 0,
+          totalUpgradeSeconds: 0,
+        ),
+      ],
+      collections: const [],
+      boosts: const UpgradeBoosts(),
+      events: const [],
+      capturedAt: DateTime.now(),
+    );
+    await UpgradeTrackerRepository.shared.saveRawSnapshot('#FARM', const {
+      'tag': '#FARM',
+      'name': 'Farmer',
+    }, parsedSnapshot: snapshot);
+
+    await _pump(
+      tester,
+      catalog: _farmGoalCatalog,
+      accountPresets: presets,
+      locale: const Locale('en', 'US'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Air Defense · Level 1'), findsNothing);
+    expect(find.text('No building selected'), findsOneWidget);
+    expect(find.byKey(const ValueKey('farm-goal-result')), findsNothing);
   });
 
   testWidgets('updates independent results from the manual stack', (
