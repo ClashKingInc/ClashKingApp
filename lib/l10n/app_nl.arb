@@ -4219,5 +4219,11 @@
   "notifGroupBattles": "Gevechten",
   "notifGroupSupport": "Ondersteuning",
   "rankedLeagueAccountSelector": "Toon account",
-  "rankedLeagueStars": "Sterren"
+  "rankedLeagueStars": "Sterren",
+  "statsLeagueBronze": "Bronze",
+  "statsLeagueChampion": "Champion",
+  "statsLeagueCrystal": "Crystal",
+  "statsLeagueGold": "Gold",
+  "statsLeagueMaster": "Master",
+  "statsLeagueSilver": "Silver"
 }
