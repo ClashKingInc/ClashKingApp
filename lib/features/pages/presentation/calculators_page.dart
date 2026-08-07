@@ -632,40 +632,6 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     final ordered = <_FarmTrackerTarget>[];
     final seen = <String>{};
 
-    void addItem(
-      UpgradeTrackerItem item, {
-      UpgradeStep? step,
-      List<UpgradeCost>? plannedCosts,
-    }) {
-      final name = item.name.trim().toLowerCase();
-      if (item.isComplete || item.steps.isEmpty) {
-        return;
-      }
-      final validSteps = item.steps
-          .where((candidate) => candidate.targetLevel > item.currentLevel)
-          .toList(growable: false);
-      final resolvedStep = step != null && step.targetLevel > item.currentLevel
-          ? step
-          : validSteps.firstOrNull;
-      final building = buildingsByName[name];
-      if (resolvedStep == null ||
-          building == null ||
-          !_farmTargetLevels(
-            building,
-            townHall,
-          ).any((level) => level.level == resolvedStep.targetLevel) ||
-          !seen.add(name)) {
-        return;
-      }
-      ordered.add(
-        _FarmTrackerTarget(
-          item: item,
-          plannedStep: resolvedStep,
-          plannedCosts: identical(resolvedStep, step) ? plannedCosts : null,
-        ),
-      );
-    }
-
     final now = DateTime.now();
     final planned =
         snapshot
@@ -686,7 +652,15 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
             .toList()
           ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
     for (final upgrade in planned) {
-      addItem(upgrade.item, step: upgrade.step, plannedCosts: upgrade.costs);
+      final target = _resolveFarmTrackerTarget(
+        upgrade.item,
+        plannedStep: upgrade.step,
+        plannedCosts: upgrade.costs,
+        buildingsByName: buildingsByName,
+        seen: seen,
+        townHall: townHall,
+      );
+      if (target != null) ordered.add(target);
     }
     for (final item in snapshot.itemsFor(
       village: UpgradeVillage.home,
@@ -694,9 +668,49 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
       remainingOnly: true,
     )) {
       if (snapshot.remainingActiveSeconds(item, now: now) > 0) continue;
-      addItem(item);
+      final target = _resolveFarmTrackerTarget(
+        item,
+        buildingsByName: buildingsByName,
+        seen: seen,
+        townHall: townHall,
+      );
+      if (target != null) ordered.add(target);
     }
     return ordered;
+  }
+
+  _FarmTrackerTarget? _resolveFarmTrackerTarget(
+    UpgradeTrackerItem item, {
+    UpgradeStep? plannedStep,
+    List<UpgradeCost>? plannedCosts,
+    required Map<String, BuildingDefinition> buildingsByName,
+    required Set<String> seen,
+    required int townHall,
+  }) {
+    if (item.isComplete || item.steps.isEmpty) return null;
+    final validSteps = item.steps.where(
+      (candidate) => candidate.targetLevel > item.currentLevel,
+    );
+    final resolvedStep =
+        plannedStep != null && plannedStep.targetLevel > item.currentLevel
+        ? plannedStep
+        : validSteps.firstOrNull;
+    if (resolvedStep == null) return null;
+
+    final name = item.name.trim().toLowerCase();
+    final building = buildingsByName[name];
+    if (building == null) return null;
+    final levelIsAvailable = _farmTargetLevels(
+      building,
+      townHall,
+    ).any((level) => level.level == resolvedStep.targetLevel);
+    if (!levelIsAvailable || !seen.add(name)) return null;
+
+    return _FarmTrackerTarget(
+      item: item,
+      plannedStep: resolvedStep,
+      plannedCosts: identical(resolvedStep, plannedStep) ? plannedCosts : null,
+    );
   }
 
   List<BuildingDefinition> _farmSelectableBuildings(
@@ -1270,6 +1284,26 @@ class _FarmTrackerTarget {
   List<UpgradeCost> get costs => plannedCosts ?? plannedStep?.costs ?? const [];
 }
 
+class _FarmTargetPanelData {
+  const _FarmTargetPanelData({
+    required this.resourceLabel,
+    required this.upgradeCost,
+    required this.trackerSuggestion,
+    required this.trackerLoading,
+    required this.trackerDataMissing,
+    required this.trackerPlanComplete,
+    required this.onOpenUpgradeTracker,
+  });
+
+  final String resourceLabel;
+  final int? upgradeCost;
+  final _FarmTrackerTarget? trackerSuggestion;
+  final bool trackerLoading;
+  final bool trackerDataMissing;
+  final bool trackerPlanComplete;
+  final VoidCallback onOpenUpgradeTracker;
+}
+
 class _FarmGoalView extends StatelessWidget {
   const _FarmGoalView({
     required this.accountPresets,
@@ -1356,15 +1390,17 @@ class _FarmGoalView extends StatelessWidget {
         _buildTargetPanel(
           context,
           loc,
-          resourceLabel: resourceLabel,
-          upgradeCost: upgradeCost,
-          trackerSuggestion: trackerSuggestionIsSelected
-              ? null
-              : trackerSuggestion,
-          trackerLoading: trackerLoading,
-          trackerDataMissing: trackerDataMissing,
-          trackerPlanComplete: trackerPlanComplete,
-          onOpenUpgradeTracker: onOpenUpgradeTracker,
+          _FarmTargetPanelData(
+            resourceLabel: resourceLabel,
+            upgradeCost: upgradeCost,
+            trackerSuggestion: trackerSuggestionIsSelected
+                ? null
+                : trackerSuggestion,
+            trackerLoading: trackerLoading,
+            trackerDataMissing: trackerDataMissing,
+            trackerPlanComplete: trackerPlanComplete,
+            onOpenUpgradeTracker: onOpenUpgradeTracker,
+          ),
         ),
         const SizedBox(height: 22),
         SidePageSectionHeader(title: loc.farmGoalLootTitle),
@@ -1428,22 +1464,17 @@ class _FarmGoalView extends StatelessWidget {
 
   Widget _buildTargetPanel(
     BuildContext context,
-    AppLocalizations loc, {
-    required String resourceLabel,
-    required int? upgradeCost,
-    required _FarmTrackerTarget? trackerSuggestion,
-    required bool trackerLoading,
-    required bool trackerDataMissing,
-    required bool trackerPlanComplete,
-    required VoidCallback onOpenUpgradeTracker,
-  }) {
+    AppLocalizations loc,
+    _FarmTargetPanelData data,
+  ) {
+    final trackerSuggestion = data.trackerSuggestion;
     return CKSectionPanel(
       key: const ValueKey('farm-goal-target'),
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (trackerLoading)
+          if (data.trackerLoading)
             const Padding(
               padding: EdgeInsets.only(bottom: 12),
               child: SkeletonLoader(
@@ -1512,14 +1543,14 @@ class _FarmGoalView extends StatelessWidget {
                 ],
               ),
             ),
-          if (trackerDataMissing)
+          if (data.trackerDataMissing)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: _UpgradeTrackerImportPrompt(
-                onOpenUpgradeTracker: onOpenUpgradeTracker,
+                onOpenUpgradeTracker: data.onOpenUpgradeTracker,
               ),
             ),
-          if (trackerPlanComplete)
+          if (data.trackerPlanComplete)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Row(
@@ -1553,8 +1584,8 @@ class _FarmGoalView extends StatelessWidget {
             _FarmGoalTargetSummary(
               building: selectedBuilding!,
               level: selectedLevel!,
-              upgradeCost: upgradeCost,
-              resourceLabel: resourceLabel,
+              upgradeCost: data.upgradeCost,
+              resourceLabel: data.resourceLabel,
             ),
             const SizedBox(height: 16),
             _FarmGoalLevelSelector(
@@ -2962,6 +2993,25 @@ class _TrackerBuildingChoice {
   final _FarmTrackerTarget target;
 }
 
+class _BuildingPickerSections {
+  const _BuildingPickerSections({
+    required this.hasQuery,
+    required this.filtered,
+    required this.trackerChoices,
+    required this.commonBuildings,
+    required this.remainingBuildings,
+  });
+
+  final bool hasQuery;
+  final List<BuildingDefinition> filtered;
+  final List<_TrackerBuildingChoice> trackerChoices;
+  final List<BuildingDefinition> commonBuildings;
+  final List<BuildingDefinition> remainingBuildings;
+
+  List<BuildingDefinition> get visibleBuildings =>
+      hasQuery ? filtered : [...commonBuildings, ...remainingBuildings];
+}
+
 class _BuildingPicker extends StatefulWidget {
   const _BuildingPicker({
     required this.buildings,
@@ -3059,21 +3109,20 @@ class _BuildingPickerState extends State<_BuildingPicker> {
     final remainingBuildings = hasQuery
         ? filtered
         : _remainingBuildings(commonBuildings, trackerIds);
+    final sections = _BuildingPickerSections(
+      hasQuery: hasQuery,
+      filtered: filtered,
+      trackerChoices: trackerChoices,
+      commonBuildings: commonBuildings,
+      remainingBuildings: remainingBuildings,
+    );
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.82,
       minChildSize: 0.45,
       maxChildSize: 0.95,
-      builder: (context, controller) => _buildSheet(
-        context,
-        loc,
-        controller: controller,
-        hasQuery: hasQuery,
-        filtered: filtered,
-        trackerChoices: trackerChoices,
-        commonBuildings: commonBuildings,
-        remainingBuildings: remainingBuildings,
-      ),
+      builder: (context, controller) =>
+          _buildSheet(context, loc, controller: controller, sections: sections),
     );
   }
 
@@ -3081,16 +3130,8 @@ class _BuildingPickerState extends State<_BuildingPicker> {
     BuildContext context,
     AppLocalizations loc, {
     required ScrollController controller,
-    required bool hasQuery,
-    required List<BuildingDefinition> filtered,
-    required List<_TrackerBuildingChoice> trackerChoices,
-    required List<BuildingDefinition> commonBuildings,
-    required List<BuildingDefinition> remainingBuildings,
+    required _BuildingPickerSections sections,
   }) {
-    final visibleBuildings = hasQuery
-        ? filtered
-        : [...commonBuildings, ...remainingBuildings];
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       child: Column(
@@ -3122,7 +3163,9 @@ class _BuildingPickerState extends State<_BuildingPicker> {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: visibleBuildings.isEmpty && trackerChoices.isEmpty
+            child:
+                sections.visibleBuildings.isEmpty &&
+                    sections.trackerChoices.isEmpty
                 ? AppEmptyState(
                     icon: Icons.search_off_rounded,
                     title: loc.damageNoBuildingsFound,
@@ -3132,11 +3175,7 @@ class _BuildingPickerState extends State<_BuildingPicker> {
                     context,
                     loc,
                     controller: controller,
-                    hasQuery: hasQuery,
-                    filtered: filtered,
-                    trackerChoices: trackerChoices,
-                    commonBuildings: commonBuildings,
-                    remainingBuildings: remainingBuildings,
+                    sections: sections,
                   ),
           ),
         ],
@@ -3148,32 +3187,29 @@ class _BuildingPickerState extends State<_BuildingPicker> {
     BuildContext context,
     AppLocalizations loc, {
     required ScrollController controller,
-    required bool hasQuery,
-    required List<BuildingDefinition> filtered,
-    required List<_TrackerBuildingChoice> trackerChoices,
-    required List<BuildingDefinition> commonBuildings,
-    required List<BuildingDefinition> remainingBuildings,
+    required _BuildingPickerSections sections,
   }) {
     return ListView(
       controller: controller,
       children: [
-        if (trackerChoices.isNotEmpty) ...[
+        if (sections.trackerChoices.isNotEmpty) ...[
           _PickerSectionLabel(title: loc.farmGoalTrackerNextTitle),
-          for (final choice in trackerChoices)
+          for (final choice in sections.trackerChoices)
             _trackerBuildingTile(context, choice),
         ],
-        if (commonBuildings.isNotEmpty) ...[
+        if (sections.commonBuildings.isNotEmpty) ...[
           _PickerSectionLabel(title: loc.damageCommonBuildings),
-          for (final building in commonBuildings)
+          for (final building in sections.commonBuildings)
             _buildingTile(context, building),
         ],
-        if (remainingBuildings.isNotEmpty && !hasQuery) ...[
+        if (sections.remainingBuildings.isNotEmpty && !sections.hasQuery) ...[
           _PickerSectionLabel(title: loc.damageAllBuildings),
-          for (final building in remainingBuildings)
+          for (final building in sections.remainingBuildings)
             _buildingTile(context, building),
         ],
-        if (hasQuery)
-          for (final building in filtered) _buildingTile(context, building),
+        if (sections.hasQuery)
+          for (final building in sections.filtered)
+            _buildingTile(context, building),
       ],
     );
   }
