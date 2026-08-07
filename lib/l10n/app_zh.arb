@@ -4219,5 +4219,11 @@
   "notifGroupBattles": "对战",
   "notifGroupSupport": "支持",
   "rankedLeagueAccountSelector": "显示账号",
-  "rankedLeagueStars": "星"
+  "rankedLeagueStars": "星",
+  "statsLeagueBronze": "Bronze",
+  "statsLeagueChampion": "Champion",
+  "statsLeagueCrystal": "Crystal",
+  "statsLeagueGold": "Gold",
+  "statsLeagueMaster": "Master",
+  "statsLeagueSilver": "Silver"
 }
