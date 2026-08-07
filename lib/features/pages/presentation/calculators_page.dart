@@ -749,6 +749,9 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   ) {
     if (item.isComplete) return false;
     final isActive = snapshot.remainingActiveSeconds(item, now: now) > 0;
+    if (isActive && item.count > 1) {
+      return item.steps.any((step) => step.targetLevel > item.currentLevel);
+    }
     final unpaidSteps = isActive ? item.steps.skip(1) : item.steps;
     return unpaidSteps.any((step) => step.targetLevel > item.currentLevel);
   }
