@@ -8,6 +8,7 @@ import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
+import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/services/platform_http_client.dart';
 
@@ -572,7 +573,7 @@ class ApiService {
       return error.message;
     } else if (error is ApiException) {
       return error.message;
-    } else if (error is SocketException) {
+    } else if (error is SocketException || error is http.ClientException) {
       return _localized(
         'Network connection error.',
         (l10n) => l10n.apiErrorNetworkConnection,
@@ -583,6 +584,11 @@ class ApiService {
       return _localized(
         'Invalid response format.',
         (l10n) => l10n.apiErrorInvalidFormat,
+      );
+    } else if (isNetworkError(error)) {
+      return _localized(
+        'Network connection error.',
+        (l10n) => l10n.apiErrorNetworkConnection,
       );
     } else {
       return error.toString().replaceFirst('Exception: ', '');

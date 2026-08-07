@@ -3951,5 +3951,11 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "statsLeagueBronze": "铜",
+  "statsLeagueSilver": "银",
+  "statsLeagueGold": "金",
+  "statsLeagueCrystal": "水晶",
+  "statsLeagueMaster": "大师",
+  "statsLeagueChampion": "冠军"
 }

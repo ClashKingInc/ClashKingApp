@@ -3951,5 +3951,11 @@
   "widgetLabCostPerk": "{percent}% lab cost perk",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
   "widgetLabTimePerk": "{percent}% lab time perk",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}}
+  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "statsLeagueBronze": "브론즈",
+  "statsLeagueSilver": "실버",
+  "statsLeagueGold": "골드",
+  "statsLeagueCrystal": "크리스탈",
+  "statsLeagueMaster": "마스터",
+  "statsLeagueChampion": "챔피언"
 }

@@ -62,6 +62,20 @@ void main() {
       );
     });
 
+    test('ClientException returns network message on web', () {
+      expect(
+        ApiService.getErrorMessage(http.ClientException('Failed to fetch')),
+        'Network connection error.',
+      );
+    });
+
+    test('browser fetch failure text returns network message', () {
+      expect(
+        ApiService.getErrorMessage(Exception('Failed to fetch, uri=/stats')),
+        'Network connection error.',
+      );
+    });
+
     test('TimeoutException returns timeout message', () {
       expect(
         ApiService.getErrorMessage(TimeoutException('slow')),

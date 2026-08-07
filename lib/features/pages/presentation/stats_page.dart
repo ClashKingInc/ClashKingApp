@@ -1,17 +1,21 @@
 import 'dart:math' as math;
 
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/info_profile_tabs.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
+import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/stats/models/stats_models.dart';
 import 'package:clashkingapp/features/stats/presentation/stats_provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +70,9 @@ class _StatsPageContentState extends State<_StatsPageContent> {
       body: InfoProfileTabScaffold(
         header: _StatsHeader(provider: provider),
         selectedIndex: selectedIndex,
-        alwaysScrollable: true,
+        alwaysScrollable:
+            provider.audience == StatsAudience.battle &&
+            MediaQuery.sizeOf(context).width < 600,
         onTabSelected: (index) => provider.selectSection(sections[index]),
         tabs: [
           for (final section in sections)
@@ -75,35 +81,23 @@ class _StatsPageContentState extends State<_StatsPageContent> {
               imageUrl: _sectionImage(section),
             ),
         ],
-        body: Column(
-          children: [
-            if (provider.audience == StatsAudience.battle)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                child: _DateRangeControl(provider: provider),
-              ),
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: _motionDuration(
-                  context,
-                  const Duration(milliseconds: 180),
-                ),
-                child: KeyedSubtree(
-                  key: ValueKey(provider.section),
-                  child: switch (provider.section) {
-                    StatsSection.overview => const _OverviewSection(),
-                    StatsSection.players => const _PlayersSection(),
-                    StatsSection.clans => const _ClansSection(),
-                    StatsSection.armies => const _ArmiesSection(),
-                    StatsSection.items => const _ItemsSection(),
-                    StatsSection.war => const _WarSection(),
-                    StatsSection.cwl => const _CwlSection(),
-                    StatsSection.ranked => const _RankedSection(),
-                  },
-                ),
-              ),
-            ),
-          ],
+        body: AnimatedSwitcher(
+          duration: CKMotion.durationOf(context, CKMotion.fast),
+          switchInCurve: CKMotion.standardCurve,
+          switchOutCurve: CKMotion.standardCurve,
+          child: KeyedSubtree(
+            key: ValueKey(provider.section),
+            child: switch (provider.section) {
+              StatsSection.overview => const _OverviewSection(),
+              StatsSection.players => const _PlayersSection(),
+              StatsSection.clans => const _ClansSection(),
+              StatsSection.armies => const _ArmiesSection(),
+              StatsSection.items => const _ItemsSection(),
+              StatsSection.war => const _WarSection(),
+              StatsSection.cwl => const _CwlSection(),
+              StatsSection.ranked => const _RankedSection(),
+            },
+          ),
         ),
       ),
     );
@@ -150,6 +144,17 @@ String _sectionImage(StatsSection section) => switch (section) {
   StatsSection.clans => ImageAssets.clanCastle,
 };
 
+String _sectionBackground(StatsSection section) => switch (section) {
+  StatsSection.overview => ImageAssets.homeBaseBackground,
+  StatsSection.players ||
+  StatsSection.ranked => ImageAssets.legendPageBackground,
+  StatsSection.clans => ImageAssets.clanPageBackground,
+  StatsSection.armies => ImageAssets.playerWarStatsPageBackground,
+  StatsSection.items => ImageAssets.playerAchievementPageBackground,
+  StatsSection.war => ImageAssets.warPageBackground,
+  StatsSection.cwl => ImageAssets.cwlPageBackground,
+};
+
 class _StatsHeader extends StatelessWidget {
   const _StatsHeader({required this.provider});
 
@@ -158,12 +163,14 @@ class _StatsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final height = MediaQuery.paddingOf(context).top + 246;
+    final scaledBody = MediaQuery.textScalerOf(context).scale(14);
+    final textScaleAllowance = math.max(0, scaledBody - 14) * 5;
+    final height = MediaQuery.paddingOf(context).top + 246 + textScaleAllowance;
     return Stack(
       children: [
         Positioned.fill(
           child: InfoHeroBackdrop(
-            imageUrl: ImageAssets.playerWarStatsPageBackground,
+            imageUrl: _sectionBackground(provider.section),
             height: height,
           ),
         ),
@@ -171,75 +178,79 @@ class _StatsHeader extends StatelessWidget {
           height: height,
           child: SafeArea(
             bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 14),
-              child: Column(
-                children: [
-                  Row(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1120),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 18),
+                  child: Column(
                     children: [
-                      HeaderIconButton(
-                        icon: Icons.arrow_back_rounded,
-                        iconColor: Colors.white,
-                        tooltip: MaterialLocalizations.of(
-                          context,
-                        ).backButtonTooltip,
-                        onTap: () => Navigator.of(context).pop(),
-                        showBackground: false,
+                      Row(
+                        children: [
+                          HeaderIconButton(
+                            icon: Icons.arrow_back_rounded,
+                            iconColor: Colors.white,
+                            tooltip: MaterialLocalizations.of(
+                              context,
+                            ).backButtonTooltip,
+                            onTap: () => Navigator.of(context).pop(),
+                            showBackground: false,
+                          ),
+                          const Spacer(),
+                          HeaderIconButton(
+                            icon: Icons.refresh_rounded,
+                            iconColor: Colors.white,
+                            tooltip: loc.sideRefresh,
+                            onTap: provider.refresh,
+                            showBackground: false,
+                          ),
+                        ],
                       ),
-                      const Spacer(),
-                      HeaderIconButton(
-                        icon: Icons.refresh_rounded,
-                        iconColor: Colors.white,
-                        tooltip: loc.sideRefresh,
-                        onTap: provider.refresh,
-                        showBackground: false,
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MobileWebImage(
+                              imageUrl: _sectionImage(provider.section),
+                              width: 60,
+                              height: 60,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              loc.sideStatsTitle,
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              _sectionLabel(loc, provider.section),
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 520),
+                        child: AppGlassSegmentedControl<StatsAudience>(
+                          height: 44,
+                          values: StatsAudience.values,
+                          labels: [loc.statsBattle, loc.statsWorld],
+                          selected: provider.audience,
+                          foregroundColor: Colors.white,
+                          onChanged: provider.selectAudience,
+                        ),
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MobileWebImage(
-                          imageUrl: _sectionImage(provider.section),
-                          width: 58,
-                          height: 58,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          loc.sideStatsTitle,
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                              ),
-                        ),
-                        Text(
-                          loc.statsHeaderSubtitle,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.78),
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 520),
-                    child: AppGlassSegmentedControl<StatsAudience>(
-                      height: 46,
-                      values: StatsAudience.values,
-                      labels: [loc.statsBattle, loc.statsWorld],
-                      selected: provider.audience,
-                      foregroundColor: Colors.white,
-                      onChanged: provider.selectAudience,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -249,118 +260,167 @@ class _StatsHeader extends StatelessWidget {
   }
 }
 
-class _DateRangeControl extends StatelessWidget {
-  const _DateRangeControl({required this.provider});
+class _BattleContextBar extends StatelessWidget {
+  const _BattleContextBar({
+    required this.provider,
+    required this.filterSummary,
+    required this.onFilters,
+  });
 
   final StatsProvider provider;
+  final String filterSummary;
+  final VoidCallback onFilters;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final formatter = DateFormat.MMMd(
-      Localizations.localeOf(context).toString(),
-    );
-    final colorScheme = Theme.of(context).colorScheme;
-    return Material(
-      color: colorScheme.surfaceContainerHighest.withValues(
-        alpha: AppOpacity.fillMuted,
-      ),
-      borderRadius: BorderRadius.circular(AppRadius.chip),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        onTap: () => _pick(context),
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 56),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadius.chip),
-            border: Border.all(
-              color: colorScheme.outlineVariant.withValues(
-                alpha: AppOpacity.borderStrong,
-              ),
+    final dateSummary = _statsDateSummary(context, provider.dates);
+    return Row(
+      children: [
+        Expanded(
+          child: Semantics(
+            label: '$dateSummary, $filterSummary',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  dateSummary,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  filterSummary,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            child: Row(
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface.withValues(alpha: 0.72),
-                    shape: BoxShape.circle,
+        ),
+        const SizedBox(width: 10),
+        _ContextIconButton(
+          icon: Icons.tune_rounded,
+          tooltip: loc.generalFilters,
+          onTap: onFilters,
+        ),
+      ],
+    );
+  }
+}
+
+class _ContextIconButton extends StatelessWidget {
+  const _ContextIconButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Tooltip(
+      message: tooltip,
+      child: SizedBox.square(
+        dimension: 44,
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            onTap: onTap,
+            child: Center(
+              child: Container(
+                width: 40,
+                height: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest.withValues(
+                    alpha: AppOpacity.fillMuted,
                   ),
-                  child: SizedBox.square(
-                    dimension: 34,
-                    child: Icon(
-                      Icons.date_range_rounded,
-                      size: 19,
-                      color: colorScheme.primary,
+                  borderRadius: BorderRadius.circular(AppRadius.chip),
+                  border: Border.all(
+                    color: colorScheme.outlineVariant.withValues(
+                      alpha: AppOpacity.borderStrong,
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        loc.statsDateRange,
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${formatter.format(provider.dates.start)} - '
-                        '${formatter.format(provider.dates.end)} '
-                        '- ${loc.statsIndexDays(provider.dates.inclusiveDays)}',
-                        maxLines: 2,
-                        overflow: TextOverflow.fade,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ],
+                child: Icon(icon, size: 18, color: colorScheme.onSurface),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+}
 
-  Future<void> _pick(BuildContext context) async {
-    final today = DateTime.now();
-    final result = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(2024),
-      lastDate: DateTime(today.year, today.month, today.day),
-      initialDateRange: DateTimeRange(
-        start: provider.dates.start,
-        end: provider.dates.end,
+String _statsDateSummary(BuildContext context, StatsDateFilter dates) {
+  final formatter = DateFormat.MMMd(Localizations.localeOf(context).toString());
+  return '${formatter.format(dates.start)} - ${formatter.format(dates.end)} · '
+      '${AppLocalizations.of(context)!.statsIndexDays(dates.inclusiveDays)}';
+}
+
+StatsDateFilter _defaultStatsDates() {
+  final now = DateTime.now();
+  final end = DateTime(now.year, now.month, now.day);
+  return StatsDateFilter(
+    start: end.subtract(const Duration(days: 29)),
+    end: end,
+  );
+}
+
+Future<DateTimeRange?> _pickStatsDateRange(
+  BuildContext context,
+  StatsDateFilter dates,
+) async {
+  final today = DateTime.now();
+  final result = await showDateRangePicker(
+    context: context,
+    firstDate: DateTime(2024),
+    lastDate: DateTime(today.year, today.month, today.day),
+    initialDateRange: DateTimeRange(start: dates.start, end: dates.end),
+    helpText: AppLocalizations.of(context)!.statsDateRangeHint,
+  );
+  if (result == null || !context.mounted) return null;
+  if (StatsDateFilter(start: result.start, end: result.end).inclusiveDays >
+      90) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.statsDateRangeTooLong),
       ),
-      helpText: AppLocalizations.of(context)!.statsDateRangeHint,
     );
-    if (result == null || !context.mounted) return;
-    if (StatsDateFilter(start: result.start, end: result.end).inclusiveDays >
-        90) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.statsDateRangeTooLong),
-        ),
-      );
-      return;
-    }
-    await provider.setDates(result.start, result.end);
+    return null;
+  }
+  return result;
+}
+
+class _StatsPageGutter extends StatelessWidget {
+  const _StatsPageGutter({required this.child, required this.padding});
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        key: const ValueKey('stats-content-bound'),
+        constraints: const BoxConstraints(maxWidth: 1120),
+        child: Padding(padding: padding, child: child),
+      ),
+    );
   }
 }
 
@@ -387,35 +447,60 @@ class _SectionFrame extends StatelessWidget {
 
     if (state.status == StatsLoadStatus.loading && state.data == null) {
       return ListView(
-        padding: sidePagePadding,
+        padding: const EdgeInsets.only(top: 12, bottom: 28),
         children: [
-          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
-          const SidePageLoadingRows(),
+          _StatsPageGutter(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
+                _StatsSectionSkeleton(section: section),
+              ],
+            ),
+          ),
         ],
       );
     }
     if (state.status == StatsLoadStatus.error && state.data == null) {
       return ListView(
-        padding: sidePagePadding,
+        padding: const EdgeInsets.only(top: 12, bottom: 28),
         children: [
-          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
-          SidePageErrorPanel(
-            message: loc.sideStatsLoadError,
-            detail: ApiService.getErrorMessage(state.error),
-            onRetry: provider.refresh,
+          _StatsPageGutter(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
+                AppEmptyState(
+                  icon: Icons.cloud_off_rounded,
+                  title: loc.sideStatsLoadError,
+                  body: ApiService.getErrorMessage(state.error),
+                  actionLabel: loc.generalRetry,
+                  onAction: provider.refresh,
+                  padding: EdgeInsets.zero,
+                  showSticker: false,
+                ),
+              ],
+            ),
           ),
         ],
       );
     }
-    if (state.status == StatsLoadStatus.empty && state.data == null) {
+    if (state.status == StatsLoadStatus.empty) {
       return ListView(
-        padding: sidePagePadding,
+        padding: const EdgeInsets.only(top: 12, bottom: 28),
         children: [
-          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
-          AppEmptyState(
-            icon: Icons.query_stats_rounded,
-            title: emptyTitle ?? loc.statsNoDataTitle,
-            body: emptyBody ?? loc.statsNoDataBody,
+          _StatsPageGutter(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
+                AppEmptyState(
+                  icon: Icons.query_stats_rounded,
+                  title: emptyTitle ?? loc.statsNoDataTitle,
+                  body: emptyBody ?? loc.statsNoDataBody,
+                ),
+              ],
+            ),
           ),
         ],
       );
@@ -425,28 +510,204 @@ class _SectionFrame extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: provider.refresh,
       child: ListView(
-        padding: sidePagePadding,
+        padding: const EdgeInsets.only(top: 12, bottom: 28),
         children: [
-          if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
-          if (state.isRefreshing) const LinearProgressIndicator(minHeight: 2),
-          if (state.error != null && data != null) ...[
-            _InlineNotice(
-              icon: Icons.cloud_off_rounded,
-              text: ApiService.getErrorMessage(state.error),
-              error: true,
+          _StatsPageGutter(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                if (prefix != null) ...[prefix!, const SizedBox(height: 12)],
+                if (state.isRefreshing)
+                  const LinearProgressIndicator(minHeight: 2),
+                if (state.error != null && data != null) ...[
+                  _InlineNotice(
+                    icon: Icons.cloud_off_rounded,
+                    text: ApiService.getErrorMessage(state.error),
+                    error: true,
+                  ),
+                  const SizedBox(height: 10),
+                ],
+                if (data != null) builder(data),
+                if (state.updatedAt != null) ...[
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: _FreshDataChip(label: loc.statsUpdated),
+                  ),
+                ],
+              ],
             ),
-            const SizedBox(height: 10),
-          ],
-          if (data != null) builder(data),
-          if (state.updatedAt != null) ...[
-            const SizedBox(height: 4),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: _FreshDataChip(label: loc.statsUpdated),
-            ),
-          ],
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _StatsSectionSkeleton extends StatelessWidget {
+  const _StatsSectionSkeleton({required this.section});
+
+  final StatsSection section;
+
+  @override
+  Widget build(BuildContext context) {
+    final panels = switch (section) {
+      StatsSection.overview => const [
+        _StatsMetricGridSkeleton(),
+        SizedBox(height: 12),
+        _StatsChartSkeleton(height: 112),
+      ],
+      StatsSection.players || StatsSection.clans => const [
+        _StatsChartSkeleton(),
+        _StatsChartSkeleton(),
+        _StatsChartSkeleton(),
+      ],
+      StatsSection.armies => const [
+        _StatsChartSkeleton(height: 250),
+        _StatsResultSkeleton(),
+        _StatsResultSkeleton(),
+      ],
+      StatsSection.items => const [
+        _StatsResultSkeleton(),
+        _StatsResultSkeleton(),
+      ],
+      StatsSection.ranked || StatsSection.war || StatsSection.cwl => const [
+        _StatsMetricsSkeleton(),
+        _StatsChartSkeleton(height: 176),
+      ],
+    };
+
+    return Semantics(
+      label: AppLocalizations.of(context)!.generalLoading,
+      excludeSemantics: true,
+      child: Column(
+        key: const ValueKey('stats-loading-skeleton'),
+        children: panels,
+      ),
+    );
+  }
+}
+
+class _StatsMetricGridSkeleton extends StatelessWidget {
+  const _StatsMetricGridSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = constraints.maxWidth >= 650 ? 4 : 2;
+        final width = (constraints.maxWidth - (columns - 1) * 10) / columns;
+        return Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: List.generate(
+            8,
+            (_) => SizedBox(
+              width: width,
+              child: const _StatsSkeletonSurface(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SkeletonLoader(width: 84, height: 10),
+                    SizedBox(height: 10),
+                    SkeletonLoader(width: 64, height: 24),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _StatsChartSkeleton extends StatelessWidget {
+  const _StatsChartSkeleton({this.height = 224});
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return _StatsSkeletonSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SkeletonLoader(width: 172, height: 18),
+          const SizedBox(height: 8),
+          const SkeletonLoader(width: 230, height: 11),
+          const SizedBox(height: 18),
+          SkeletonLoader(width: double.infinity, height: height - 71),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatsMetricsSkeleton extends StatelessWidget {
+  const _StatsMetricsSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const _StatsSkeletonSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SkeletonLoader(width: 156, height: 18),
+          SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              SkeletonLoader(width: 116, height: 44),
+              SkeletonLoader(width: 132, height: 44),
+              SkeletonLoader(width: 124, height: 44),
+            ],
+          ),
+          SizedBox(height: 14),
+          SkeletonLoader(width: double.infinity, height: 64),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatsResultSkeleton extends StatelessWidget {
+  const _StatsResultSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const _StatsSkeletonSurface(
+      child: Row(
+        children: [
+          SkeletonLoader(width: 48, height: 48),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SkeletonLoader(width: 180, height: 15),
+                SizedBox(height: 9),
+                SkeletonLoader(width: 126, height: 10),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatsSkeletonSurface extends StatelessWidget {
+  const _StatsSkeletonSurface({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: CKSectionPanel(child: child),
     );
   }
 }
@@ -467,10 +728,9 @@ class _OverviewSection extends StatelessWidget {
             SidePageSectionHeader(title: loc.statsGlobalCounts),
             _CountsGrid(counts: overview.counts),
             const SizedBox(height: 12),
-            _PreviewPanel(
+            _UnavailableDataPanel(
               title: loc.statsWarsOverTime,
-              body: loc.statsWarsOverTimePreview,
-              points: const [42, 51, 48, 62, 71, 69, 76, 84, 79, 91],
+              body: loc.generalComingSoon,
             ),
           ],
         );
@@ -557,16 +817,14 @@ class _PlayersSection extends StatelessWidget {
               color: StatColors.capitalAttack,
             ),
             const SizedBox(height: 12),
-            _PreviewPanel(
+            _UnavailableDataPanel(
               title: loc.statsEquipmentAdoption,
-              body: loc.statsEquipmentAdoptionPreview,
-              points: const [18, 31, 47, 63, 78, 69, 42],
+              body: loc.generalComingSoon,
             ),
             const SizedBox(height: 12),
-            _PreviewPanel(
+            _UnavailableDataPanel(
               title: loc.statsExperienceDistribution,
-              body: loc.statsExperienceDistributionPreview,
-              points: const [8, 19, 38, 72, 56, 29, 12],
+              body: loc.generalComingSoon,
             ),
           ],
         );
@@ -581,6 +839,7 @@ class _ClansSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final cwlLeagues = _localizedCwlLeagues(loc);
     return _SectionFrame(
       section: StatsSection.clans,
       builder: (data) {
@@ -592,7 +851,7 @@ class _ClansSection extends StatelessWidget {
               title: loc.statsCwlLeagueDistribution,
               subtitle: loc.statsTrackedClans,
               values: counts.cwlLeagues,
-              labelBuilder: (id) => _cwlLeagues[id] ?? '${id ?? '?'}',
+              labelBuilder: (id) => cwlLeagues[id] ?? '${id ?? '?'}',
               color: StatColors.loss,
             ),
             const SizedBox(height: 12),
@@ -610,10 +869,9 @@ class _ClansSection extends StatelessWidget {
               subtitle: loc.statsLocationCountHelp,
             ),
             const SizedBox(height: 12),
-            _PreviewPanel(
+            _UnavailableDataPanel(
               title: loc.statsCwlRosterSizes,
-              body: loc.statsCwlRosterSizesPreview,
-              points: const [64, 36],
+              body: loc.generalComingSoon,
             ),
           ],
         );
@@ -693,141 +951,118 @@ class _CountBarChart extends StatelessWidget {
       1,
       (current, item) => math.max(current, item.count),
     );
-    return BarChart(
-      BarChartData(
-        maxY: maxCount * 1.12,
-        alignment: BarChartAlignment.spaceAround,
-        gridData: FlGridData(
-          drawVerticalLine: false,
-          getDrawingHorizontalLine: (_) => FlLine(
-            color: scheme.outlineVariant.withValues(alpha: 0.28),
-            strokeWidth: 1,
+    final semanticSummary = [
+      for (var index = 0; index < values.length; index++)
+        '${labels[index]}: ${values[index].count}',
+    ].join(', ');
+    return Semantics(
+      label: semanticSummary,
+      excludeSemantics: true,
+      child: BarChart(
+        BarChartData(
+          maxY: maxCount * 1.12,
+          alignment: BarChartAlignment.spaceAround,
+          gridData: FlGridData(
+            drawVerticalLine: false,
+            getDrawingHorizontalLine: (_) => FlLine(
+              color: scheme.outlineVariant.withValues(alpha: 0.28),
+              strokeWidth: 1,
+            ),
           ),
-        ),
-        borderData: FlBorderData(show: false),
-        barTouchData: BarTouchData(
-          touchTooltipData: BarTouchTooltipData(
-            getTooltipColor: (_) => scheme.inverseSurface,
-            getTooltipItem: (group, groupIndex, rod, rodIndex) =>
-                BarTooltipItem(
-                  '${labels[groupIndex]}\n${_compact(rod.toY.toInt())}',
-                  TextStyle(
-                    color: scheme.onInverseSurface,
-                    fontWeight: FontWeight.w800,
+          borderData: FlBorderData(show: false),
+          barTouchData: BarTouchData(
+            touchTooltipData: BarTouchTooltipData(
+              getTooltipColor: (_) => scheme.inverseSurface,
+              getTooltipItem: (group, groupIndex, rod, rodIndex) =>
+                  BarTooltipItem(
+                    '${labels[groupIndex]}\n${_compact(rod.toY.toInt())}',
+                    TextStyle(
+                      color: scheme.onInverseSurface,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
+            ),
+          ),
+          titlesData: FlTitlesData(
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 38,
+                getTitlesWidget: (value, meta) => Text(
+                  _compact(value.toInt()),
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
-          ),
-        ),
-        titlesData: FlTitlesData(
-          topTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          rightTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 38,
-              getTitlesWidget: (value, meta) => Text(
-                _compact(value.toInt()),
-                style: Theme.of(context).textTheme.labelSmall,
+              ),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 30,
+                getTitlesWidget: (value, meta) {
+                  final index = value.toInt();
+                  if (index < 0 || index >= labels.length) {
+                    return const SizedBox.shrink();
+                  }
+                  final step = labels.length > 9 ? 2 : 1;
+                  if (index % step != 0 && index != labels.length - 1) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 7),
+                    child: Text(
+                      labels[index],
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  );
+                },
               ),
             ),
           ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 30,
-              getTitlesWidget: (value, meta) {
-                final index = value.toInt();
-                if (index < 0 || index >= labels.length) {
-                  return const SizedBox.shrink();
-                }
-                final step = labels.length > 9 ? 2 : 1;
-                if (index % step != 0 && index != labels.length - 1) {
-                  return const SizedBox.shrink();
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(top: 7),
-                  child: Text(
-                    labels[index],
-                    maxLines: 1,
-                    style: Theme.of(context).textTheme.labelSmall,
+          barGroups: [
+            for (var index = 0; index < values.length; index++)
+              BarChartGroupData(
+                x: index,
+                barRods: [
+                  BarChartRodData(
+                    toY: values[index].count.toDouble(),
+                    width: values.length > 12 ? 8 : 14,
+                    color: color,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(5),
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
+                ],
+              ),
+          ],
         ),
-        barGroups: [
-          for (var index = 0; index < values.length; index++)
-            BarChartGroupData(
-              x: index,
-              barRods: [
-                BarChartRodData(
-                  toY: values[index].count.toDouble(),
-                  width: values.length > 12 ? 8 : 14,
-                  color: color,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(5),
-                  ),
-                ),
-              ],
-            ),
-        ],
+        duration: CKMotion.durationOf(context, CKMotion.slow),
+        curve: CKMotion.standardCurve,
       ),
-      duration: _motionDuration(context, const Duration(milliseconds: 300)),
-      curve: Curves.easeOutCubic,
     );
   }
 }
 
-class _PreviewPanel extends StatelessWidget {
-  const _PreviewPanel({
-    required this.title,
-    required this.body,
-    required this.points,
-  });
+class _UnavailableDataPanel extends StatelessWidget {
+  const _UnavailableDataPanel({required this.title, required this.body});
 
   final String title;
   final String body;
-  final List<double> points;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return _SurfaceCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-              _PreviewBadge(label: AppLocalizations.of(context)!.statsPreview),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            body,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-          ),
-          const SizedBox(height: 14),
-          SizedBox(
-            height: 76,
-            child: _MiniPreviewBars(values: points, color: scheme.primary),
-          ),
-        ],
-      ),
+    return AppEmptyState(
+      icon: Icons.insights_rounded,
+      title: title,
+      body: body,
+      padding: EdgeInsets.zero,
+      showSticker: false,
     );
   }
 }
@@ -895,40 +1130,6 @@ class _PreviewBadge extends StatelessWidget {
   );
 }
 
-class _MiniPreviewBars extends StatelessWidget {
-  const _MiniPreviewBars({required this.values, required this.color});
-
-  final List<double> values;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final maxValue = values.fold<double>(1, math.max);
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        for (final value in values)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: FractionallySizedBox(
-                heightFactor: value / maxValue,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.72),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(AppRadius.control),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
 class _ArmiesSection extends StatefulWidget {
   const _ArmiesSection();
 
@@ -937,26 +1138,46 @@ class _ArmiesSection extends StatefulWidget {
 }
 
 class _ArmiesSectionState extends State<_ArmiesSection> {
+  final searchController = TextEditingController();
   String query = '';
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final provider = context.watch<StatsProvider>();
     return Column(
       children: [
-        Padding(
+        _StatsPageGutter(
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-          child: _SearchAndFilter(
-            hint: loc.statsSearchArmies,
-            onChanged: (value) => setState(() => query = value),
-            onFilter: () => showModalBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              builder: (_) => ChangeNotifierProvider.value(
-                value: context.read<StatsProvider>(),
-                child: const _ArmyFiltersSheet(),
+          child: Column(
+            children: [
+              _BattleContextBar(
+                provider: provider,
+                filterSummary:
+                    '${_townHallSummary(loc, provider.armiesTownHall)} · '
+                    '${loc.statsMinimumSample} ${provider.armiesMinimumSample}',
+                onFilters: () => showDialog<void>(
+                  context: context,
+                  builder: (_) => ChangeNotifierProvider.value(
+                    value: context.read<StatsProvider>(),
+                    child: const _ArmyFiltersDialog(),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 14),
+              _SearchAndFilter(
+                controller: searchController,
+                query: query,
+                hint: loc.statsSearchArmies,
+                onChanged: (value) => setState(() => query = value),
+              ),
+            ],
           ),
         ),
         Expanded(
@@ -1091,6 +1312,19 @@ class _ArmyMetaChart extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final scheme = Theme.of(context).colorScheme;
     final visible = armies.take(30).toList(growable: false);
+    final semanticSummary = visible
+        .take(5)
+        .map((army) {
+          final core = army.armyCounts.entries
+              .take(2)
+              .map((entry) => '${entry.value}× ${entry.key}')
+              .join(', ');
+          return '$core, ${loc.statsUsage}: '
+              '${_percent(army.metrics.usageRate ?? 0)}, '
+              '${loc.statsThreeStarRate}: '
+              '${_percent(army.metrics.threeStarRate)}';
+        })
+        .join('; ');
     return _SurfaceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1108,110 +1342,112 @@ class _ArmyMetaChart extends StatelessWidget {
             ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: 14),
-          SizedBox(
-            height: 220,
-            child: LineChart(
-              LineChartData(
-                minX: 0,
-                maxX: math.max(
-                  1,
-                  visible
-                          .map(
-                            (army) =>
-                                _asPercentValue(army.metrics.usageRate ?? 0),
-                          )
-                          .fold<double>(0, math.max) *
-                      1.12,
-                ),
-                minY: 0,
-                maxY: 100,
-                gridData: FlGridData(
-                  getDrawingHorizontalLine: (_) => FlLine(
-                    color: scheme.outlineVariant.withValues(alpha: 0.28),
+          Semantics(
+            label: '${loc.statsUsageVsThreeStar}. $semanticSummary',
+            excludeSemantics: true,
+            child: SizedBox(
+              height: 220,
+              child: LineChart(
+                LineChartData(
+                  minX: 0,
+                  maxX: math.max(
+                    1,
+                    visible
+                            .map(
+                              (army) =>
+                                  _asPercentValue(army.metrics.usageRate ?? 0),
+                            )
+                            .fold<double>(0, math.max) *
+                        1.12,
                   ),
-                  getDrawingVerticalLine: (_) => FlLine(
-                    color: scheme.outlineVariant.withValues(alpha: 0.2),
-                  ),
-                ),
-                borderData: FlBorderData(show: false),
-                titlesData: FlTitlesData(
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  leftTitles: AxisTitles(
-                    axisNameWidget: Text(loc.statsThreeStarRate),
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 36,
-                      getTitlesWidget: (value, meta) => Text(
-                        '${value.toInt()}%',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
+                  minY: 0,
+                  maxY: 100,
+                  gridData: FlGridData(
+                    getDrawingHorizontalLine: (_) => FlLine(
+                      color: scheme.outlineVariant.withValues(alpha: 0.28),
+                    ),
+                    getDrawingVerticalLine: (_) => FlLine(
+                      color: scheme.outlineVariant.withValues(alpha: 0.2),
                     ),
                   ),
-                  bottomTitles: AxisTitles(
-                    axisNameWidget: Text(loc.statsUsage),
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 30,
-                      getTitlesWidget: (value, meta) => Text(
-                        '${value.toStringAsFixed(0)}%',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
+                  borderData: FlBorderData(show: false),
+                  titlesData: FlTitlesData(
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
                     ),
-                  ),
-                ),
-                lineTouchData: LineTouchData(
-                  touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (_) => scheme.inverseSurface,
-                    getTooltipItems: (spots) => spots.map((spot) {
-                      final army = visible[spot.barIndex];
-                      final core = army.armyCounts.entries
-                          .take(2)
-                          .map((entry) => '${entry.value}× ${entry.key}')
-                          .join(' · ');
-                      return LineTooltipItem(
-                        '$core\n${_percent(spot.x)} usage · ${_percent(spot.y)} 3★',
-                        TextStyle(
-                          color: scheme.onInverseSurface,
-                          fontWeight: FontWeight.w700,
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    leftTitles: AxisTitles(
+                      axisNameWidget: Text(loc.statsThreeStarRate),
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 36,
+                        getTitlesWidget: (value, meta) => Text(
+                          '${value.toInt()}%',
+                          style: Theme.of(context).textTheme.labelSmall,
                         ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                lineBarsData: [
-                  for (final army in visible)
-                    LineChartBarData(
-                      spots: [
-                        FlSpot(
-                          _asPercentValue(army.metrics.usageRate ?? 0),
-                          _asPercentValue(army.metrics.threeStarRate),
-                        ),
-                      ],
-                      color: Colors.transparent,
-                      barWidth: 0,
-                      dotData: FlDotData(
-                        show: true,
-                        getDotPainter: (spot, percent, bar, index) =>
-                            FlDotCirclePainter(
-                              radius: 5,
-                              color: scheme.primary,
-                              strokeWidth: 2,
-                              strokeColor: scheme.surface,
-                            ),
                       ),
                     ),
-                ],
+                    bottomTitles: AxisTitles(
+                      axisNameWidget: Text(loc.statsUsage),
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 30,
+                        getTitlesWidget: (value, meta) => Text(
+                          '${value.toStringAsFixed(0)}%',
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                      ),
+                    ),
+                  ),
+                  lineTouchData: LineTouchData(
+                    touchTooltipData: LineTouchTooltipData(
+                      getTooltipColor: (_) => scheme.inverseSurface,
+                      getTooltipItems: (spots) => spots.map((spot) {
+                        final army = visible[spot.barIndex];
+                        final core = army.armyCounts.entries
+                            .take(2)
+                            .map((entry) => '${entry.value}× ${entry.key}')
+                            .join(' · ');
+                        return LineTooltipItem(
+                          '$core\n${_percent(spot.x)} ${loc.statsUsage} · '
+                          '${_percent(spot.y)} ${loc.statsThreeStarRate}',
+                          TextStyle(
+                            color: scheme.onInverseSurface,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  lineBarsData: [
+                    for (final army in visible)
+                      LineChartBarData(
+                        spots: [
+                          FlSpot(
+                            _asPercentValue(army.metrics.usageRate ?? 0),
+                            _asPercentValue(army.metrics.threeStarRate),
+                          ),
+                        ],
+                        color: Colors.transparent,
+                        barWidth: 0,
+                        dotData: FlDotData(
+                          show: true,
+                          getDotPainter: (spot, percent, bar, index) =>
+                              FlDotCirclePainter(
+                                radius: 5,
+                                color: scheme.primary,
+                                strokeWidth: 2,
+                                strokeColor: scheme.surface,
+                              ),
+                        ),
+                      ),
+                  ],
+                ),
+                duration: CKMotion.durationOf(context, CKMotion.slow),
+                curve: CKMotion.standardCurve,
               ),
-              duration: _motionDuration(
-                context,
-                const Duration(milliseconds: 300),
-              ),
-              curve: Curves.easeOutCubic,
             ),
           ),
         ],
@@ -1303,20 +1539,22 @@ class _ArmyCard extends StatelessWidget {
   }
 }
 
-class _ArmyFiltersSheet extends StatefulWidget {
-  const _ArmyFiltersSheet();
+class _ArmyFiltersDialog extends StatefulWidget {
+  const _ArmyFiltersDialog();
 
   @override
-  State<_ArmyFiltersSheet> createState() => _ArmyFiltersSheetState();
+  State<_ArmyFiltersDialog> createState() => _ArmyFiltersDialogState();
 }
 
-class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
+class _ArmyFiltersDialogState extends State<_ArmyFiltersDialog> {
   late int? townHall;
   late int? leagueTier;
   late int minimumSample;
   late String sortBy;
+  late StatsDateFilter dates;
   late List<StatsItemQuantityFilter> include;
   late final TextEditingController excludeController;
+  late final TextEditingController minimumSampleController;
   final itemController = TextEditingController();
   final minController = TextEditingController();
   final maxController = TextEditingController();
@@ -1329,10 +1567,12 @@ class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
     leagueTier = provider.armiesLeagueTier;
     minimumSample = provider.armiesMinimumSample;
     sortBy = provider.armiesSortBy;
+    dates = provider.dates;
     include = [...provider.armiesInclude];
     excludeController = TextEditingController(
       text: provider.armiesExclude.join(', '),
     );
+    minimumSampleController = TextEditingController(text: '$minimumSample');
   }
 
   @override
@@ -1341,141 +1581,173 @@ class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
     minController.dispose();
     maxController.dispose();
     excludeController.dispose();
+    minimumSampleController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(
-          20,
-          10,
-          20,
-          20 + MediaQuery.viewInsetsOf(context).bottom,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              loc.statsCustomLens,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              loc.statsCustomLensBody,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 14),
-            _TownHallField(
-              value: townHall,
-              onChanged: (v) => setState(() => townHall = v),
-            ),
-            const SizedBox(height: 10),
-            _LeagueTierField(
-              optional: true,
-              value: leagueTier,
-              onChanged: (v) => setState(() => leagueTier = v),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              initialValue: '$minimumSample',
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: loc.statsMinimumSample),
-              onChanged: (value) => minimumSample = int.tryParse(value) ?? 100,
-            ),
-            const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              initialValue: sortBy,
-              decoration: InputDecoration(labelText: loc.statsSortBy),
-              items:
-                  {
-                        'usage_rate': loc.statsUsage,
-                        'three_star_rate': loc.statsThreeStarRate,
-                        'average_stars': loc.statsAverageStars,
-                        'average_destruction': loc.statsAverageDestruction,
-                      }.entries
-                      .map(
-                        (entry) => DropdownMenuItem(
-                          value: entry.key,
-                          child: Text(entry.value),
-                        ),
-                      )
-                      .toList(),
-              onChanged: (value) => sortBy = value ?? sortBy,
-            ),
-            const SizedBox(height: 16),
-            Text(loc.statsIncludeItems),
-            const SizedBox(height: 6),
-            ...include.map(
-              (filter) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(filter.item),
-                subtitle: Text(
-                  '${filter.minQuantity ?? 1}–${filter.maxQuantity ?? '∞'}',
-                ),
-                trailing: IconButton(
-                  tooltip: loc.presetsDelete,
-                  onPressed: () => setState(() => include.remove(filter)),
-                  icon: const Icon(Icons.close_rounded),
-                ),
-              ),
-            ),
-            Row(
+    final sortLabels = <String, String>{
+      'usage_rate': loc.statsUsage,
+      'three_star_rate': loc.statsThreeStarRate,
+      'average_stars': loc.statsAverageStars,
+      'average_destruction': loc.statsAverageDestruction,
+    };
+    return _StatsFilterDialog(
+      dates: dates,
+      onDatesChanged: (value) => setState(() => dates = value),
+      onReset: _reset,
+      onApply: _apply,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _StatsFilterSection(
+            title: loc.filtersTownHall,
+            icon: Icons.other_houses_rounded,
+            summary:
+                '${_townHallSummary(loc, townHall)} · '
+                '${leagueTier == null ? '${loc.statsLeagueTier}: ${loc.generalAll}' : _leagueTierSummary(loc, leagueTier!)}',
+            child: Column(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: TextField(
-                    controller: itemController,
-                    decoration: InputDecoration(labelText: loc.statsItemId),
-                  ),
+                _TownHallField(
+                  value: townHall,
+                  onChanged: (v) => setState(() => townHall = v),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: minController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: loc.generalMinimum),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    controller: maxController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: loc.generalMaximum),
-                  ),
-                ),
-                IconButton(
-                  tooltip: loc.statsAddItem,
-                  onPressed: _addInclude,
-                  icon: const Icon(Icons.add_circle_rounded),
+                const SizedBox(height: 10),
+                _LeagueTierField(
+                  optional: true,
+                  value: leagueTier,
+                  onChanged: (v) => setState(() => leagueTier = v),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: excludeController,
-              decoration: InputDecoration(
-                labelText: loc.statsExcludeItems,
-                hintText: 'u_1, u_2',
-              ),
+          ),
+          _StatsFilterSection(
+            title: loc.filtersPerformance,
+            icon: Icons.query_stats_rounded,
+            summary:
+                '${loc.statsMinimumSample}: $minimumSample · '
+                '${sortLabels[sortBy]}',
+            child: Column(
+              children: [
+                TextField(
+                  controller: minimumSampleController,
+                  keyboardType: TextInputType.number,
+                  decoration: _statsFilterInputDecoration(
+                    label: loc.statsMinimumSample,
+                  ),
+                  onChanged: (value) => setState(
+                    () => minimumSample = int.tryParse(value) ?? 100,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _CompactMenuField<String>(
+                  label: loc.statsSortBy,
+                  icon: Icons.sort_rounded,
+                  value: sortBy,
+                  options: sortLabels,
+                  onChanged: (value) => setState(() => sortBy = value),
+                ),
+              ],
             ),
-            const SizedBox(height: 18),
-            FilledButton.icon(
-              onPressed: _apply,
-              icon: const Icon(Icons.tune_rounded),
-              label: Text(loc.statsApplyFilters),
+          ),
+          _StatsFilterSection(
+            title: loc.filtersAdvanced,
+            icon: Icons.settings_rounded,
+            summary: '${loc.statsItems}: ${include.length}',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _InlineNotice(
+                  icon: Icons.query_stats_outlined,
+                  text: loc.statsCustomLensBody,
+                ),
+                const SizedBox(height: 16),
+                Text(loc.statsIncludeItems),
+                const SizedBox(height: 6),
+                ...include.map(
+                  (filter) => ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(filter.item),
+                    subtitle: Text(
+                      '${filter.minQuantity ?? 1}–${filter.maxQuantity ?? '∞'}',
+                    ),
+                    trailing: IconButton(
+                      tooltip: loc.presetsDelete,
+                      onPressed: () => setState(() => include.remove(filter)),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: TextField(
+                        controller: itemController,
+                        decoration: _statsFilterInputDecoration(
+                          label: loc.statsItemId,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: minController,
+                        keyboardType: TextInputType.number,
+                        decoration: _statsFilterInputDecoration(
+                          label: loc.generalMinimum,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: maxController,
+                        keyboardType: TextInputType.number,
+                        decoration: _statsFilterInputDecoration(
+                          label: loc.generalMaximum,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: loc.statsAddItem,
+                      onPressed: _addInclude,
+                      icon: const Icon(Icons.add_circle_rounded),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: excludeController,
+                  decoration: _statsFilterInputDecoration(
+                    label: loc.statsExcludeItems,
+                    hint: 'u_1, u_2',
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+
+  void _reset() {
+    setState(() {
+      townHall = null;
+      leagueTier = null;
+      minimumSample = 100;
+      sortBy = 'usage_rate';
+      dates = _defaultStatsDates();
+      include = [];
+      minimumSampleController.text = '100';
+      excludeController.clear();
+      itemController.clear();
+      minController.clear();
+      maxController.clear();
+    });
   }
 
   void _addInclude() {
@@ -1495,7 +1767,7 @@ class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
     });
   }
 
-  void _apply() {
+  Future<void> _apply() async {
     final provider = context.read<StatsProvider>();
     provider.updateArmiesFilters(
       townHall: townHall,
@@ -1512,7 +1784,7 @@ class _ArmyFiltersSheetState extends State<_ArmyFiltersSheet> {
           .toList(),
     );
     Navigator.pop(context);
-    provider.load(StatsSection.armies, force: true);
+    await provider.setDates(dates.start, dates.end);
   }
 }
 
@@ -1524,139 +1796,25 @@ class _ItemsSection extends StatefulWidget {
 }
 
 class _ItemsSectionState extends State<_ItemsSection> {
-  final itemController = TextEditingController();
-  StatsItemType type = StatsItemType.troop;
-  String? hero;
-
-  @override
-  void dispose() {
-    itemController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final provider = context.watch<StatsProvider>();
     return Column(
       children: [
-        Padding(
+        _StatsPageGutter(
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-          child: _SurfaceCard(
-            child: Column(
-              children: [
-                _InlineNotice(
-                  icon: Icons.info_outline_rounded,
-                  text:
-                      '${loc.statsNoLevels} ${loc.statsRankedCompositionOnly}',
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: itemController,
-                  onChanged: (_) => setState(() {}),
-                  decoration: InputDecoration(
-                    labelText: loc.statsItemId,
-                    prefixIcon: const Icon(Icons.search_rounded),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<StatsItemType>(
-                        initialValue: type,
-                        decoration: InputDecoration(
-                          labelText: loc.statsItemType,
-                        ),
-                        items: StatsItemType.values
-                            .map(
-                              (value) => DropdownMenuItem(
-                                value: value,
-                                child: Text(_itemTypeLabel(loc, value)),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) => setState(() {
-                          type = value ?? type;
-                          if (type != StatsItemType.equipment) hero = null;
-                        }),
-                      ),
-                    ),
-                    if (type == StatsItemType.equipment) ...[
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          initialValue: hero,
-                          decoration: InputDecoration(
-                            labelText: loc.statsOwningHero,
-                          ),
-                          items: StatsItemSelector.validEquipmentHeroes
-                              .map(
-                                (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) => setState(() => hero = value),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: _canAdd ? _add : null,
-                        icon: const Icon(Icons.add_rounded),
-                        label: Text(loc.statsAddItem),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    IconButton.filledTonal(
-                      tooltip: loc.generalFilters,
-                      onPressed: () => _showItemFilters(context),
-                      icon: const Icon(Icons.tune_rounded),
-                    ),
-                  ],
-                ),
-                if (provider.itemSelectors.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: provider.itemSelectors
-                        .map(
-                          (item) => InputChip(
-                            label: Text(
-                              item.hero == null
-                                  ? item.item
-                                  : '${item.item} · ${item.hero}',
-                            ),
-                            onDeleted: () {
-                              provider.setItemSelectors(
-                                [...provider.itemSelectors]..remove(item),
-                              );
-                            },
-                          ),
-                        )
-                        .toList(),
-                  ),
-                  const SizedBox(height: 10),
-                  FilledButton.icon(
-                    onPressed: () =>
-                        provider.load(StatsSection.items, force: true),
-                    icon: const Icon(Icons.query_stats_rounded),
-                    label: Text(loc.statsAnalyzeItems),
-                  ),
-                ],
-              ],
-            ),
+          child: Column(
+            children: [
+              _BattleContextBar(
+                provider: provider,
+                filterSummary:
+                    '${_townHallSummary(loc, provider.itemsTownHall)} · '
+                    '${provider.itemsLeagueTier == null ? '${loc.statsLeagueTier}: ${loc.generalAll}' : _leagueTierSummary(loc, provider.itemsLeagueTier!)} · '
+                    '${loc.statsItems}: ${provider.itemSelectors.length}',
+                onFilters: _showItemFilters,
+              ),
+            ],
           ),
         ),
         Expanded(
@@ -1678,67 +1836,176 @@ class _ItemsSectionState extends State<_ItemsSection> {
     );
   }
 
-  bool get _canAdd =>
-      itemController.text.trim().isNotEmpty &&
-      (type != StatsItemType.equipment || hero != null);
-
-  void _add() {
-    final provider = context.read<StatsProvider>();
-    provider.setItemSelectors([
-      ...provider.itemSelectors,
-      StatsItemSelector(
-        item: itemController.text.trim(),
-        type: type,
-        hero: hero,
-      ),
-    ]);
-    itemController.clear();
-    setState(() {});
-  }
-
-  Future<void> _showItemFilters(BuildContext context) async {
+  Future<void> _showItemFilters() async {
     final provider = context.read<StatsProvider>();
     var townHall = provider.itemsTownHall;
     var tier = provider.itemsLeagueTier;
-    final apply = await showModalBottomSheet<bool>(
+    var type = StatsItemType.troop;
+    String? hero;
+    var selectors = [...provider.itemSelectors];
+    var draftDates = provider.dates;
+    final itemController = TextEditingController();
+    final apply = await showDialog<bool>(
       context: context,
-      isScrollControlled: true,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setSheetState) => SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _TownHallField(
-                  value: townHall,
-                  onChanged: (value) => setSheetState(() => townHall = value),
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (context, setSheetState) => _StatsFilterDialog(
+          dates: draftDates,
+          onDatesChanged: (value) => setSheetState(() => draftDates = value),
+          onApply: () => Navigator.pop(sheetContext, true),
+          onReset: () => setSheetState(() {
+            townHall = null;
+            tier = null;
+            type = StatsItemType.troop;
+            hero = null;
+            selectors = [];
+            draftDates = _defaultStatsDates();
+            itemController.clear();
+          }),
+          child: Column(
+            children: [
+              _StatsFilterSection(
+                title: AppLocalizations.of(context)!.filtersTownHall,
+                icon: Icons.other_houses_rounded,
+                summary:
+                    '${_townHallSummary(AppLocalizations.of(context)!, townHall)} · '
+                    '${tier == null ? '${AppLocalizations.of(context)!.statsLeagueTier}: ${AppLocalizations.of(context)!.generalAll}' : _leagueTierSummary(AppLocalizations.of(context)!, tier!)}',
+                child: Column(
+                  children: [
+                    _TownHallField(
+                      value: townHall,
+                      onChanged: (value) =>
+                          setSheetState(() => townHall = value),
+                    ),
+                    const SizedBox(height: 10),
+                    _LeagueTierField(
+                      optional: true,
+                      value: tier,
+                      onChanged: (value) => setSheetState(() => tier = value),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
-                _LeagueTierField(
-                  optional: true,
-                  value: tier,
-                  onChanged: (value) => setSheetState(() => tier = value),
+              ),
+              _StatsFilterSection(
+                title: AppLocalizations.of(context)!.statsItems,
+                icon: Icons.category_outlined,
+                summary:
+                    '${_itemTypeLabel(AppLocalizations.of(context)!, type)} · '
+                    '${selectors.length}',
+                child: Column(
+                  children: [
+                    _InlineNotice(
+                      icon: Icons.info_outline_rounded,
+                      text:
+                          '${AppLocalizations.of(context)!.statsNoLevels} '
+                          '${AppLocalizations.of(context)!.statsRankedCompositionOnly}',
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: itemController,
+                      onChanged: (_) => setSheetState(() {}),
+                      decoration: _statsFilterInputDecoration(
+                        label: AppLocalizations.of(context)!.statsItemId,
+                        prefixIcon: const Icon(Icons.search_rounded),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _CompactMenuField<StatsItemType>(
+                      label: AppLocalizations.of(context)!.statsItemType,
+                      icon: Icons.category_outlined,
+                      value: type,
+                      options: {
+                        for (final value in StatsItemType.values)
+                          value: _itemTypeLabel(
+                            AppLocalizations.of(context)!,
+                            value,
+                          ),
+                      },
+                      onChanged: (value) => setSheetState(() {
+                        type = value;
+                        if (type != StatsItemType.equipment) hero = null;
+                      }),
+                    ),
+                    if (type == StatsItemType.equipment) ...[
+                      const SizedBox(height: 10),
+                      _CompactMenuField<String?>(
+                        label: AppLocalizations.of(context)!.statsOwningHero,
+                        icon: Icons.person_outline_rounded,
+                        value: hero,
+                        options: {
+                          null: AppLocalizations.of(context)!.statsOwningHero,
+                          for (final value
+                              in StatsItemSelector.validEquipmentHeroes)
+                            value: value,
+                        },
+                        onChanged: (value) => setSheetState(() => hero = value),
+                      ),
+                    ],
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed:
+                            itemController.text.trim().isNotEmpty &&
+                                (type != StatsItemType.equipment ||
+                                    hero != null)
+                            ? () => setSheetState(() {
+                                selectors = [
+                                  ...selectors,
+                                  StatsItemSelector(
+                                    item: itemController.text.trim(),
+                                    type: type,
+                                    hero: hero,
+                                  ),
+                                ];
+                                itemController.clear();
+                              })
+                            : null,
+                        icon: const Icon(Icons.add_rounded),
+                        label: Text(AppLocalizations.of(context)!.statsAddItem),
+                      ),
+                    ),
+                    if (selectors.isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: selectors
+                              .map(
+                                (item) => _StatsActiveFilterChip(
+                                  label: item.hero == null
+                                      ? item.item
+                                      : '${item.item} · ${item.hero}',
+                                  onDeleted: () => setSheetState(
+                                    () =>
+                                        selectors = [...selectors]
+                                          ..remove(item),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
-                const SizedBox(height: 16),
-                FilledButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(AppLocalizations.of(context)!.statsApplyFilters),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
-    if (apply == true) {
-      provider.updateItemFilters(
-        townHall: townHall,
-        leagueTier: tier,
-        clearTownHall: townHall == null,
-        clearLeagueTier: tier == null,
-      );
-    }
+    itemController.dispose();
+    if (apply != true || !mounted) return;
+    provider.updateItemFilters(
+      townHall: townHall,
+      leagueTier: tier,
+      clearTownHall: townHall == null,
+      clearLeagueTier: tier == null,
+    );
+    provider.setItemSelectors(selectors);
+    await provider.setDates(draftDates.start, draftDates.end);
   }
 }
 
@@ -1821,37 +2088,85 @@ class _WarSectionState extends State<_WarSection> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final provider = context.watch<StatsProvider>();
     return _PerformancePage(
       section: StatsSection.war,
-      controls: _SurfaceCard(
-        child: Column(
-          children: [
-            _InlineNotice(
-              icon: Icons.shield_outlined,
-              text: loc.statsRegularWarOnly,
-            ),
-            const SizedBox(height: 10),
-            _TownHallPair(
-              townHall: townHall,
-              opponentTownHall: opponentTownHall,
-              opponentEnabled: !equalTownHalls,
-              onTownHall: (value) => setState(() => townHall = value),
-              onOpponent: (value) => setState(() => opponentTownHall = value),
-            ),
-            SwitchListTile.adaptive(
-              contentPadding: EdgeInsets.zero,
-              title: Text(loc.statsEqualTownHalls),
-              value: equalTownHalls,
-              onChanged: (value) => setState(() => equalTownHalls = value),
-            ),
-            _FilterApplyButton(onPressed: _apply),
-          ],
-        ),
+      controls: _BattleContextBar(
+        provider: provider,
+        filterSummary:
+            '${_townHallSummary(loc, townHall)} · '
+            '${equalTownHalls ? loc.statsEqualTownHalls : _townHallSummary(loc, opponentTownHall)}',
+        onFilters: _showFilters,
       ),
     );
   }
 
-  void _apply() {
+  Future<void> _showFilters() async {
+    var draftTownHall = townHall;
+    var draftOpponent = opponentTownHall;
+    var draftEqual = equalTownHalls;
+    var draftDates = context.read<StatsProvider>().dates;
+    final apply = await showDialog<bool>(
+      context: context,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (context, setSheetState) => _StatsFilterDialog(
+          dates: draftDates,
+          onDatesChanged: (value) => setSheetState(() => draftDates = value),
+          onApply: () => Navigator.pop(sheetContext, true),
+          onReset: () => setSheetState(() {
+            draftTownHall = null;
+            draftOpponent = null;
+            draftEqual = true;
+            draftDates = _defaultStatsDates();
+          }),
+          child: Column(
+            children: [
+              _StatsFilterSection(
+                title: AppLocalizations.of(context)!.filtersWarSettings,
+                icon: Icons.shield_outlined,
+                summary:
+                    '${_townHallSummary(AppLocalizations.of(context)!, draftTownHall)} · '
+                    '${draftEqual ? AppLocalizations.of(context)!.statsEqualTownHalls : _townHallSummary(AppLocalizations.of(context)!, draftOpponent)}',
+                child: Column(
+                  children: [
+                    _InlineNotice(
+                      icon: Icons.shield_outlined,
+                      text: AppLocalizations.of(context)!.statsRegularWarOnly,
+                    ),
+                    const SizedBox(height: 16),
+                    _TownHallPair(
+                      townHall: draftTownHall,
+                      opponentTownHall: draftOpponent,
+                      opponentEnabled: !draftEqual,
+                      onTownHall: (value) =>
+                          setSheetState(() => draftTownHall = value),
+                      onOpponent: (value) =>
+                          setSheetState(() => draftOpponent = value),
+                    ),
+                    _StatsFilterCheckbox(
+                      label: AppLocalizations.of(context)!.statsEqualTownHalls,
+                      value: draftEqual,
+                      onChanged: (value) =>
+                          setSheetState(() => draftEqual = value),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (apply != true || !mounted) return;
+    setState(() {
+      townHall = draftTownHall;
+      opponentTownHall = draftOpponent;
+      equalTownHalls = draftEqual;
+    });
+    await _apply(draftDates);
+  }
+
+  Future<void> _apply(StatsDateFilter dates) async {
     final provider = context.read<StatsProvider>();
     provider.updateWarFilters(
       townHall: townHall,
@@ -1860,7 +2175,7 @@ class _WarSectionState extends State<_WarSection> {
       clearTownHall: townHall == null,
       clearOpponentTownHall: opponentTownHall == null,
     );
-    provider.load(StatsSection.war, force: true);
+    await provider.setDates(dates.start, dates.end);
   }
 }
 
@@ -1900,48 +2215,123 @@ class _CwlSectionState extends State<_CwlSection> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final provider = context.watch<StatsProvider>();
+    final cwlLeagues = _localizedCwlLeagues(loc);
     return _PerformancePage(
       section: StatsSection.cwl,
-      controls: _SurfaceCard(
-        child: Column(
-          children: [
-            _TownHallPair(
-              townHall: townHall,
-              opponentTownHall: opponentTownHall,
-              opponentEnabled: !equalTownHalls,
-              onTownHall: (value) => setState(() => townHall = value),
-              onOpponent: (value) => setState(() => opponentTownHall = value),
-            ),
-            SwitchListTile.adaptive(
-              contentPadding: EdgeInsets.zero,
-              title: Text(loc.statsEqualTownHalls),
-              value: equalTownHalls,
-              onChanged: (value) => setState(() => equalTownHalls = value),
-            ),
-            _CompactMenuField<int?>(
-              label: loc.statsCwlLeague,
-              icon: Icons.emoji_events_outlined,
-              value: leagueId,
-              options: {null: loc.statsAllCwlLeagues, ..._cwlLeagues},
-              onChanged: (value) => setState(() => leagueId = value),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: seasonsController,
-              decoration: InputDecoration(
-                labelText: loc.statsCwlSeasons,
-                hintText: loc.statsCwlSeasonsHint,
-              ),
-            ),
-            const SizedBox(height: 12),
-            _FilterApplyButton(onPressed: _apply),
-          ],
-        ),
+      controls: _BattleContextBar(
+        provider: provider,
+        filterSummary:
+            '${_townHallSummary(loc, townHall)} · '
+            '${leagueId == null ? loc.statsAllCwlLeagues : cwlLeagues[leagueId]}',
+        onFilters: _showFilters,
       ),
     );
   }
 
-  void _apply() {
+  Future<void> _showFilters() async {
+    var draftTownHall = townHall;
+    var draftOpponent = opponentTownHall;
+    var draftEqual = equalTownHalls;
+    var draftLeague = leagueId;
+    var draftDates = context.read<StatsProvider>().dates;
+    final draftSeasons = TextEditingController(text: seasonsController.text);
+    final apply = await showDialog<bool>(
+      context: context,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (context, setSheetState) => _StatsFilterDialog(
+          dates: draftDates,
+          onDatesChanged: (value) => setSheetState(() => draftDates = value),
+          onApply: () => Navigator.pop(sheetContext, true),
+          onReset: () => setSheetState(() {
+            draftTownHall = null;
+            draftOpponent = null;
+            draftEqual = true;
+            draftLeague = null;
+            draftSeasons.clear();
+            draftDates = _defaultStatsDates();
+          }),
+          child: Column(
+            children: [
+              _StatsFilterSection(
+                title: AppLocalizations.of(context)!.filtersWarSettings,
+                icon: Icons.military_tech_outlined,
+                summary:
+                    '${_townHallSummary(AppLocalizations.of(context)!, draftTownHall)} · '
+                    '${draftEqual ? AppLocalizations.of(context)!.statsEqualTownHalls : _townHallSummary(AppLocalizations.of(context)!, draftOpponent)}',
+                child: Column(
+                  children: [
+                    _TownHallPair(
+                      townHall: draftTownHall,
+                      opponentTownHall: draftOpponent,
+                      opponentEnabled: !draftEqual,
+                      onTownHall: (value) =>
+                          setSheetState(() => draftTownHall = value),
+                      onOpponent: (value) =>
+                          setSheetState(() => draftOpponent = value),
+                    ),
+                    _StatsFilterCheckbox(
+                      label: AppLocalizations.of(context)!.statsEqualTownHalls,
+                      value: draftEqual,
+                      onChanged: (value) =>
+                          setSheetState(() => draftEqual = value),
+                    ),
+                  ],
+                ),
+              ),
+              _StatsFilterSection(
+                title: AppLocalizations.of(context)!.statsCwlLeague,
+                icon: Icons.emoji_events_outlined,
+                summary: draftLeague == null
+                    ? AppLocalizations.of(context)!.statsAllCwlLeagues
+                    : _localizedCwlLeagues(
+                        AppLocalizations.of(context)!,
+                      )[draftLeague]!,
+                child: Column(
+                  children: [
+                    _CompactMenuField<int?>(
+                      label: AppLocalizations.of(context)!.statsCwlLeague,
+                      icon: Icons.emoji_events_outlined,
+                      value: draftLeague,
+                      options: {
+                        null: AppLocalizations.of(context)!.statsAllCwlLeagues,
+                        ..._localizedCwlLeagues(AppLocalizations.of(context)!),
+                      },
+                      onChanged: (value) =>
+                          setSheetState(() => draftLeague = value),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: draftSeasons,
+                      decoration: _statsFilterInputDecoration(
+                        label: AppLocalizations.of(context)!.statsCwlSeasons,
+                        hint: AppLocalizations.of(context)!.statsCwlSeasonsHint,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (apply != true || !mounted) {
+      draftSeasons.dispose();
+      return;
+    }
+    setState(() {
+      townHall = draftTownHall;
+      opponentTownHall = draftOpponent;
+      equalTownHalls = draftEqual;
+      leagueId = draftLeague;
+      seasonsController.text = draftSeasons.text;
+    });
+    draftSeasons.dispose();
+    await _apply(draftDates);
+  }
+
+  Future<void> _apply(StatsDateFilter dates) async {
     final provider = context.read<StatsProvider>();
     provider.updateCwlFilters(
       townHall: townHall,
@@ -1957,7 +2347,7 @@ class _CwlSectionState extends State<_CwlSection> {
           .where((value) => RegExp(r'^\d{4}-\d{2}$').hasMatch(value))
           .toList(),
     );
-    provider.load(StatsSection.cwl, force: true);
+    await provider.setDates(dates.start, dates.end);
   }
 }
 
@@ -1983,41 +2373,77 @@ class _RankedSectionState extends State<_RankedSection> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final provider = context.watch<StatsProvider>();
     return _PerformancePage(
       section: StatsSection.ranked,
-      controls: _SurfaceCard(
-        child: Column(
-          children: [
-            _InlineNotice(
-              icon: Icons.workspace_premium_outlined,
-              text: loc.statsRankedRequired,
-            ),
-            const SizedBox(height: 10),
-            _TownHallField(
-              allowAll: false,
-              value: townHall,
-              onChanged: (value) => setState(() => townHall = value ?? 18),
-            ),
-            const SizedBox(height: 10),
-            _LeagueTierField(
-              value: leagueTier,
-              onChanged: (value) => setState(() => leagueTier = value ?? 1),
-            ),
-            const SizedBox(height: 12),
-            _FilterApplyButton(
-              onPressed: () {
-                final provider = context.read<StatsProvider>();
-                provider.updateRankedFilters(
-                  townHall: townHall,
-                  leagueTier: leagueTier,
-                );
-                provider.load(StatsSection.ranked, force: true);
-              },
-            ),
-          ],
+      controls: _BattleContextBar(
+        provider: provider,
+        filterSummary: 'TH$townHall · ${_leagueTierSummary(loc, leagueTier)}',
+        onFilters: _showFilters,
+      ),
+    );
+  }
+
+  Future<void> _showFilters() async {
+    var draftTownHall = townHall;
+    var draftLeagueTier = leagueTier;
+    var draftDates = context.read<StatsProvider>().dates;
+    final apply = await showDialog<bool>(
+      context: context,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (context, setSheetState) => _StatsFilterDialog(
+          dates: draftDates,
+          onDatesChanged: (value) => setSheetState(() => draftDates = value),
+          onApply: () => Navigator.pop(sheetContext, true),
+          onReset: () => setSheetState(() {
+            draftTownHall = 18;
+            draftLeagueTier = 1;
+            draftDates = _defaultStatsDates();
+          }),
+          child: Column(
+            children: [
+              _StatsFilterSection(
+                title: AppLocalizations.of(context)!.filtersPerformance,
+                icon: Icons.workspace_premium_outlined,
+                summary:
+                    'TH$draftTownHall · ${_leagueTierSummary(AppLocalizations.of(context)!, draftLeagueTier)}',
+                child: Column(
+                  children: [
+                    _InlineNotice(
+                      icon: Icons.workspace_premium_outlined,
+                      text: AppLocalizations.of(context)!.statsRankedRequired,
+                    ),
+                    const SizedBox(height: 16),
+                    _TownHallField(
+                      allowAll: false,
+                      value: draftTownHall,
+                      onChanged: (value) => setSheetState(
+                        () => draftTownHall = value ?? draftTownHall,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _LeagueTierField(
+                      value: draftLeagueTier,
+                      onChanged: (value) => setSheetState(
+                        () => draftLeagueTier = value ?? draftLeagueTier,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+    if (apply != true || !mounted) return;
+    setState(() {
+      townHall = draftTownHall;
+      leagueTier = draftLeagueTier;
+    });
+    final provider = context.read<StatsProvider>();
+    provider.updateRankedFilters(townHall: townHall, leagueTier: leagueTier);
+    await provider.setDates(draftDates.start, draftDates.end);
   }
 }
 
@@ -2233,10 +2659,14 @@ class _TrendChart extends StatelessWidget {
       for (var index = 0; index < points.length; index++)
         FlSpot(index.toDouble(), _asPercentValue(points[index].threeStarRate)),
     ];
+    final first = points.first;
+    final last = points.last;
     return Semantics(
       label:
           '${AppLocalizations.of(context)!.statsDailyTrend}: '
-          '${points.length}',
+          '${first.date}, ${_percent(first.threeStarRate)}; '
+          '${last.date}, ${_percent(last.threeStarRate)}',
+      excludeSemantics: true,
       child: SizedBox(
         height: 150,
         width: double.infinity,
@@ -2328,8 +2758,8 @@ class _TrendChart extends StatelessWidget {
               ),
             ],
           ),
-          duration: _motionDuration(context, const Duration(milliseconds: 300)),
-          curve: Curves.easeOutCubic,
+          duration: CKMotion.durationOf(context, CKMotion.slow),
+          curve: CKMotion.standardCurve,
         ),
       ),
     );
@@ -2338,34 +2768,28 @@ class _TrendChart extends StatelessWidget {
 
 class _SearchAndFilter extends StatelessWidget {
   const _SearchAndFilter({
+    required this.controller,
+    required this.query,
     required this.hint,
     required this.onChanged,
-    required this.onFilter,
   });
 
+  final TextEditingController controller;
+  final String query;
   final String hint;
   final ValueChanged<String> onChanged;
-  final VoidCallback onFilter;
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
-          child: TextField(
+          child: AppSearchField(
+            controller: controller,
+            query: query,
+            hintText: hint,
             onChanged: onChanged,
-            decoration: InputDecoration(
-              hintText: hint,
-              prefixIcon: const Icon(Icons.search_rounded),
-            ),
           ),
-        ),
-        const SizedBox(width: 8),
-        IconButton.filledTonal(
-          tooltip: loc.statsCustomLens,
-          onPressed: onFilter,
-          icon: const Icon(Icons.tune_rounded),
         ),
       ],
     );
@@ -2416,6 +2840,54 @@ class _TownHallPair extends StatelessWidget {
       },
     );
   }
+}
+
+class _StatsFilterCheckbox extends StatelessWidget {
+  const _StatsFilterCheckbox({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String label;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => onChanged(!value),
+      child: Row(
+        children: [
+          Checkbox(value: value, onChanged: (next) => onChanged(next ?? false)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+              softWrap: true,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+InputDecoration _statsFilterInputDecoration({
+  required String label,
+  String? hint,
+  Widget? prefixIcon,
+}) {
+  return InputDecoration(
+    labelText: label,
+    hintText: hint,
+    prefixIcon: prefixIcon,
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  );
 }
 
 class _TownHallField extends StatelessWidget {
@@ -2516,7 +2988,7 @@ class _CompactMenuField<T> extends StatelessWidget {
         for (var index = 0; index < entries.length; index++)
           PopupMenuItem<int>(
             value: index,
-            height: 42,
+            height: 44,
             child: Row(
               children: [
                 Expanded(
@@ -2552,61 +3024,42 @@ class _CompactFilterTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      constraints: const BoxConstraints(minHeight: 58),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.34),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        border: Border.all(
-          color: scheme.outlineVariant.withValues(
-            alpha: AppOpacity.borderStrong,
-          ),
-        ),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: scheme.outline.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: scheme.surface.withValues(alpha: 0.72),
-              shape: BoxShape.circle,
-            ),
-            child: SizedBox.square(
-              dimension: 32,
-              child: Icon(icon, size: 18, color: scheme.primary),
-            ),
-          ),
-          const SizedBox(width: 10),
+          Icon(icon, size: 20, color: scheme.primary),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: scheme.onSurface.withValues(alpha: 0.8),
                   ),
                 ),
-                const SizedBox(height: 1),
+                const SizedBox(height: 4),
                 Text(
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(
                     context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w900),
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
           Icon(
-            Icons.keyboard_arrow_down_rounded,
-            size: 20,
-            color: scheme.onSurfaceVariant,
+            Icons.arrow_drop_down,
+            color: scheme.onSurface.withValues(alpha: 0.7),
           ),
         ],
       ),
@@ -2614,19 +3067,381 @@ class _CompactFilterTile extends StatelessWidget {
   }
 }
 
-class _FilterApplyButton extends StatelessWidget {
-  const _FilterApplyButton({required this.onPressed});
+class _StatsFilterDialog extends StatelessWidget {
+  const _StatsFilterDialog({
+    required this.child,
+    required this.onApply,
+    required this.onReset,
+    required this.dates,
+    required this.onDatesChanged,
+  });
 
-  final VoidCallback onPressed;
+  final Widget child;
+  final VoidCallback onApply;
+  final VoidCallback onReset;
+  final StatsDateFilter dates;
+  final ValueChanged<StatsDateFilter> onDatesChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: AlignmentDirectional.centerEnd,
-      child: FilledButton.icon(
-        onPressed: onPressed,
-        icon: const Icon(Icons.tune_rounded, size: 18),
-        label: Text(AppLocalizations.of(context)!.statsApplyFilters),
+    final loc = AppLocalizations.of(context)!;
+    final scheme = Theme.of(context).colorScheme;
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      child: Container(
+        width: MediaQuery.sizeOf(context).width * 0.9,
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(context).height * 0.8,
+          maxWidth: 600,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: scheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: scheme.outline.withValues(alpha: 0.2),
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.tune, color: scheme.primary, size: 24),
+                  const SizedBox(width: 12),
+                  Text(
+                    loc.generalFilters,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: scheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).closeButtonTooltip,
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close, color: scheme.onSurface),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.flash_on, size: 16, color: scheme.primary),
+                        const SizedBox(width: 4),
+                        Text(
+                          loc.filtersQuickFilters,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: scheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: _StatsPresetChip(
+                        label: loc.filtersLast30Days,
+                        icon: Icons.schedule,
+                        selected: dates.inclusiveDays == 30,
+                        onTap: () => onDatesChanged(_defaultStatsDates()),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _StatsFilterSection(
+                      title: loc.filtersTimeFilters,
+                      icon: Icons.schedule,
+                      summary: _statsDateSummary(context, dates),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(AppRadius.chip),
+                        onTap: () async {
+                          final range = await _pickStatsDateRange(
+                            context,
+                            dates,
+                          );
+                          if (range != null) {
+                            onDatesChanged(
+                              StatsDateFilter(
+                                start: range.start,
+                                end: range.end,
+                              ),
+                            );
+                          }
+                        },
+                        child: _CompactFilterTile(
+                          label: loc.filtersDateRange,
+                          value: _statsDateSummary(context, dates),
+                          icon: Icons.date_range_rounded,
+                        ),
+                      ),
+                    ),
+                    child,
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: scheme.surface,
+                border: Border(
+                  top: BorderSide(color: scheme.outline.withValues(alpha: 0.2)),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      OutlinedButton.icon(
+                        onPressed: onReset,
+                        icon: const Icon(Icons.refresh, size: 18),
+                        label: Text(loc.generalReset),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(loc.generalCancel),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton.icon(
+                        onPressed: onApply,
+                        icon: const Icon(Icons.check, size: 18),
+                        label: Text(loc.generalApply),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StatsFilterSection extends StatefulWidget {
+  const _StatsFilterSection({
+    required this.title,
+    required this.icon,
+    required this.summary,
+    required this.child,
+  });
+
+  final String title;
+  final IconData icon;
+  final String summary;
+  final Widget child;
+
+  @override
+  State<_StatsFilterSection> createState() => _StatsFilterSectionState();
+}
+
+class _StatsPresetChip extends StatelessWidget {
+  const _StatsPresetChip({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onTap();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: selected ? scheme.primary : scheme.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: scheme.outline.withValues(alpha: 0.3)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: selected ? scheme.onPrimary : scheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontWeight: selected ? FontWeight.bold : FontWeight.w500,
+                  color: selected ? scheme.onPrimary : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StatsActiveFilterChip extends StatelessWidget {
+  const _StatsActiveFilterChip({required this.label, required this.onDeleted});
+
+  final String label;
+  final VoidCallback onDeleted;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: scheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 200),
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: scheme.onSecondaryContainer,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 3),
+          InkWell(
+            onTap: onDeleted,
+            child: Icon(
+              Icons.close,
+              size: 12,
+              color: scheme.onSecondaryContainer,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatsFilterSectionState extends State<_StatsFilterSection> {
+  bool expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(AppRadius.control),
+              onTap: () {
+                HapticFeedback.lightImpact();
+                setState(() => expanded = !expanded);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Icon(widget.icon, size: 20, color: scheme.primary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          if (!expanded) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              widget.summary,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: scheme.onSurface.withValues(
+                                      alpha: 0.6,
+                                    ),
+                                  ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    AnimatedRotation(
+                      turns: expanded ? 0.5 : 0,
+                      duration: CKMotion.durationOf(
+                        context,
+                        const Duration(milliseconds: 200),
+                      ),
+                      child: Icon(Icons.expand_more, color: scheme.primary),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          AnimatedSize(
+            duration: CKMotion.durationOf(
+              context,
+              const Duration(milliseconds: 300),
+            ),
+            curve: Curves.easeInOut,
+            child: expanded
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: widget.child,
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ],
       ),
     );
   }
@@ -2643,11 +3458,7 @@ class _SurfaceCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: SizedBox(
         width: double.infinity,
-        child: SidePagePanel(
-          radius: AppRadius.card,
-          padding: const EdgeInsets.all(16),
-          child: child,
-        ),
+        child: CKSectionPanel(child: child),
       ),
     );
   }
@@ -2753,24 +3564,28 @@ class _InlineNotice extends StatelessWidget {
     final accent = error ? scheme.error : scheme.primary;
     final foreground = error ? scheme.onErrorContainer : scheme.onSurface;
     final fill = error
-        ? scheme.errorContainer.withValues(alpha: 0.46)
-        : scheme.surfaceContainerHighest.withValues(alpha: 0.34);
+        ? scheme.errorContainer.withValues(alpha: 0.8)
+        : scheme.surfaceContainerHighest.withValues(alpha: 0.8);
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: fill,
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-        border: Border.all(
-          color: accent.withValues(alpha: AppOpacity.borderStrong),
-        ),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: accent.withValues(alpha: 0.5)),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 19, color: accent),
+          Icon(icon, size: 20, color: accent),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(text, style: TextStyle(color: foreground)),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: foreground,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ],
       ),
@@ -2817,8 +3632,13 @@ class _FreshDataChip extends StatelessWidget {
   }
 }
 
-Duration _motionDuration(BuildContext context, Duration duration) =>
-    MediaQuery.disableAnimationsOf(context) ? Duration.zero : duration;
+String _townHallSummary(AppLocalizations loc, int? townHall) =>
+    townHall == null ? loc.statsAllTownHalls : 'TH$townHall';
+
+String _leagueTierSummary(AppLocalizations loc, int leagueTier) =>
+    leagueTier == 1
+    ? loc.statsLegendLeagueOne
+    : '${loc.statsLeagueTier} $leagueTier';
 
 String _percent(double value) {
   final normalized = _asPercentValue(value);
@@ -2848,23 +3668,23 @@ String _itemTypeLabel(AppLocalizations loc, StatsItemType type) =>
       StatsItemType.equipment => loc.statsEquipment,
     };
 
-const _cwlLeagues = <int, String>{
-  48000000: 'Bronze III',
-  48000001: 'Bronze II',
-  48000002: 'Bronze I',
-  48000003: 'Silver III',
-  48000004: 'Silver II',
-  48000005: 'Silver I',
-  48000006: 'Gold III',
-  48000007: 'Gold II',
-  48000008: 'Gold I',
-  48000009: 'Crystal III',
-  48000010: 'Crystal II',
-  48000011: 'Crystal I',
-  48000012: 'Master III',
-  48000013: 'Master II',
-  48000014: 'Master I',
-  48000015: 'Champion III',
-  48000016: 'Champion II',
-  48000017: 'Champion I',
+Map<int, String> _localizedCwlLeagues(AppLocalizations loc) => {
+  48000000: '${loc.statsLeagueBronze} III',
+  48000001: '${loc.statsLeagueBronze} II',
+  48000002: '${loc.statsLeagueBronze} I',
+  48000003: '${loc.statsLeagueSilver} III',
+  48000004: '${loc.statsLeagueSilver} II',
+  48000005: '${loc.statsLeagueSilver} I',
+  48000006: '${loc.statsLeagueGold} III',
+  48000007: '${loc.statsLeagueGold} II',
+  48000008: '${loc.statsLeagueGold} I',
+  48000009: '${loc.statsLeagueCrystal} III',
+  48000010: '${loc.statsLeagueCrystal} II',
+  48000011: '${loc.statsLeagueCrystal} I',
+  48000012: '${loc.statsLeagueMaster} III',
+  48000013: '${loc.statsLeagueMaster} II',
+  48000014: '${loc.statsLeagueMaster} I',
+  48000015: '${loc.statsLeagueChampion} III',
+  48000016: '${loc.statsLeagueChampion} II',
+  48000017: '${loc.statsLeagueChampion} I',
 };
