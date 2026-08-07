@@ -783,6 +783,58 @@ void main() {
     expect(find.byKey(const ValueKey('farm-goal-result')), findsNothing);
   });
 
+  testWidgets('refreshes cached tracker data after returning from import', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    UpgradeTrackerRepository.shared.clearCache();
+    addTearDown(UpgradeTrackerRepository.shared.clearCache);
+    final snapshot = _activeTownHallSnapshot(hasLaterStep: true);
+
+    await _pump(
+      tester,
+      catalog: _farmGoalCatalog,
+      accountPresets: const [
+        DamageAccountPreset(
+          tag: '#FARM',
+          name: 'Farmer',
+          townHall: 13,
+          league: 'Titan League 25',
+        ),
+      ],
+      upgradeTrackerPageBuilder: (context) => Scaffold(
+        body: TextButton(
+          onPressed: () async {
+            await UpgradeTrackerRepository.shared.saveRawSnapshot(
+              '#FARM',
+              const {'tag': '#FARM', 'name': 'Farmer'},
+              parsedSnapshot: snapshot,
+            );
+            if (context.mounted) Navigator.of(context).pop();
+          },
+          child: const Text('Import tracker data'),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Farm goal'));
+    await tester.pumpAndSettle();
+    expect(find.text('Upgrade Tracker data needed'), findsOneWidget);
+
+    final openTracker = find.byKey(
+      const ValueKey('farm-goal-open-upgrade-tracker'),
+    );
+    await tester.ensureVisible(openTracker);
+    await tester.pumpAndSettle();
+    await tester.tap(openTracker);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Import tracker data'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Upgrade Tracker data needed'), findsNothing);
+    expect(find.byType(CKUpgradeRow), findsOneWidget);
+  });
+
   testWidgets('updates independent results from the manual stack', (
     tester,
   ) async {
@@ -981,6 +1033,7 @@ Future<void> _pump(
   DamageCatalog catalog = _catalog,
   List<DamageAccountPreset> accountPresets = const [],
   UpgradeTrackerSnapshot? initialTrackerSnapshot,
+  WidgetBuilder? upgradeTrackerPageBuilder,
   TextScaler textScaler = TextScaler.noScaling,
   Locale locale = const Locale('en'),
 }) async {
@@ -1002,6 +1055,7 @@ Future<void> _pump(
         catalog: catalog,
         accountPresets: accountPresets,
         initialTrackerSnapshot: initialTrackerSnapshot,
+        upgradeTrackerPageBuilder: upgradeTrackerPageBuilder,
       ),
     ),
   );

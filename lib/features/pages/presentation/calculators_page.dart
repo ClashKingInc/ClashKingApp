@@ -67,11 +67,13 @@ class CalculatorsPage extends StatefulWidget {
     this.catalog,
     this.accountPresets,
     this.initialTrackerSnapshot,
+    this.upgradeTrackerPageBuilder,
   });
 
   final DamageCatalog? catalog;
   final List<DamageAccountPreset>? accountPresets;
   final UpgradeTrackerSnapshot? initialTrackerSnapshot;
+  final WidgetBuilder? upgradeTrackerPageBuilder;
 
   @override
   State<CalculatorsPage> createState() => _CalculatorsPageState();
@@ -812,11 +814,17 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
   Future<void> _openUpgradeTracker() async {
     final tag = _farmAccountTag;
     await Navigator.of(context).push<void>(
-      MaterialPageRoute(builder: (_) => UpgradeTrackerPage(initialTag: tag)),
+      MaterialPageRoute(
+        builder:
+            widget.upgradeTrackerPageBuilder ??
+            (_) => UpgradeTrackerPage(initialTag: tag),
+      ),
     );
     if (!mounted) return;
-    _farmTrackerLoadTag = null;
-    _startFarmTrackerLoad(tag);
+    setState(() {
+      _farmTrackerLoadTag = null;
+      _startFarmTrackerLoad(tag);
+    });
   }
 
   Future<void> _showAccountPicker({required bool forFarmGoal}) async {
