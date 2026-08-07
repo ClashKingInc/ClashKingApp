@@ -735,9 +735,23 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
           final matching =
               trackerItemsByName[building.name.trim().toLowerCase()];
           if (matching == null || matching.isEmpty) return true;
-          return matching.any(
+          final hasUnpaidUpgrade = matching.any(
             (item) => _hasUnpaidFarmUpgrade(snapshot, item, now),
           );
+          if (hasUnpaidUpgrade) return true;
+          if (building.name != _townHallBuildingName ||
+              !matching.every((item) => item.isComplete)) {
+            return false;
+          }
+          final completedLevel = matching.fold<int>(
+            0,
+            (highest, item) =>
+                item.currentLevel > highest ? item.currentLevel : highest,
+          );
+          return _farmTargetLevels(
+            building,
+            snapshot.townHallLevel,
+          ).any((level) => level.level > completedLevel);
         })
         .toList(growable: false);
   }

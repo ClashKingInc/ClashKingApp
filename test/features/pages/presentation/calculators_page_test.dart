@@ -561,6 +561,41 @@ void main() {
     expect(find.text('Air Defense'), findsNothing);
   });
 
+  testWidgets('keeps the next Town Hall available after the current one', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      catalog: _farmGoalCatalog,
+      accountPresets: const [
+        DamageAccountPreset(
+          tag: '#FARM',
+          name: 'Farmer',
+          townHall: 12,
+          league: 'Titan League 25',
+        ),
+      ],
+      initialTrackerSnapshot: _completedTownHallSnapshot(),
+    );
+
+    await tester.tap(find.text('Farm goal'));
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const ValueKey('farm-goal-scroll')),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
+    await tester.pumpAndSettle();
+
+    final picker = find.byType(DraggableScrollableSheet);
+    expect(picker, findsOneWidget);
+    expect(
+      find.descendant(of: picker, matching: find.text('Town Hall')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('does not offer a tracker upgrade whose final step is active', (
     tester,
   ) async {
@@ -901,6 +936,37 @@ UpgradeTrackerSnapshot _activeTownHallSnapshot({
         completedUpgradeSeconds: 0,
         totalUpgradeSeconds: steps.fold(0, (sum, step) => sum + step.seconds),
         activeSeconds: 3600,
+      ),
+    ],
+    collections: const [],
+    boosts: const UpgradeBoosts(),
+    events: const [],
+    capturedAt: DateTime.now(),
+  );
+}
+
+UpgradeTrackerSnapshot _completedTownHallSnapshot() {
+  return UpgradeTrackerSnapshot(
+    tag: '#FARM',
+    name: 'Farmer',
+    townHallLevel: 12,
+    builderHallLevel: 0,
+    homeBuilderCount: 5,
+    builderBaseBuilderCount: 0,
+    items: const [
+      UpgradeTrackerItem(
+        id: 1,
+        name: 'Town Hall',
+        imageUrl: '',
+        village: UpgradeVillage.home,
+        category: UpgradeCategory.defenses,
+        queue: UpgradeQueue.builders,
+        currentLevel: 2,
+        targetLevel: 2,
+        count: 1,
+        steps: [],
+        completedUpgradeSeconds: 0,
+        totalUpgradeSeconds: 0,
       ),
     ],
     collections: const [],
