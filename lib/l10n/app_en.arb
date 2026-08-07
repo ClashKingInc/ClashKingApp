@@ -4189,5 +4189,11 @@
   "notifGroupBattles": "Battles",
   "notifGroupSupport": "Support",
   "rankedLeagueAccountSelector": "Shown account",
-  "rankedLeagueStars": "Stars"
+  "rankedLeagueStars": "Stars",
+  "statsLeagueBronze": "Bronze",
+  "statsLeagueChampion": "Champion",
+  "statsLeagueCrystal": "Crystal",
+  "statsLeagueGold": "Gold",
+  "statsLeagueMaster": "Master",
+  "statsLeagueSilver": "Silver"
 }
