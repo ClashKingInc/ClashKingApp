@@ -835,6 +835,57 @@ void main() {
     expect(find.byType(CKUpgradeRow), findsOneWidget);
   });
 
+  testWidgets('advances a selected paid level after tracker data loads', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    UpgradeTrackerRepository.shared.clearCache();
+    addTearDown(UpgradeTrackerRepository.shared.clearCache);
+    const presets = [
+      DamageAccountPreset(
+        tag: '#FARM',
+        name: 'Farmer',
+        townHall: 13,
+        league: 'Titan League 25',
+      ),
+    ];
+    await _pump(tester, catalog: _farmGoalCatalog, accountPresets: presets);
+
+    await tester.tap(find.text('Farm goal'));
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const ValueKey('farm-goal-scroll')),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Town Hall').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('farm-goal-level')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Level 2').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Town Hall · Level 2'), findsOneWidget);
+
+    final snapshot = _activeTownHallSnapshot(hasLaterStep: true);
+    await UpgradeTrackerRepository.shared.saveRawSnapshot('#FARM', const {
+      'tag': '#FARM',
+      'name': 'Farmer',
+    }, parsedSnapshot: snapshot);
+    await _pump(
+      tester,
+      catalog: _farmGoalCatalog,
+      accountPresets: presets,
+      locale: const Locale('en', 'US'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Town Hall · Level 2'), findsNothing);
+    expect(find.text('Town Hall · Level 3'), findsOneWidget);
+    expect(find.text('Upgrade cost: 25,000,000 Gold'), findsOneWidget);
+  });
+
   testWidgets('updates independent results from the manual stack', (
     tester,
   ) async {

@@ -772,14 +772,77 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
     return unpaidSteps.any((step) => step.targetLevel > item.currentLevel);
   }
 
+  Set<int>? _farmUnpaidTargetLevels(BuildingDefinition building, int townHall) {
+    final snapshot = _farmTrackerSnapshot;
+    if (snapshot == null || _farmTrackerSnapshotTag != _farmAccountTag) {
+      return null;
+    }
+    final normalizedName = building.name.trim().toLowerCase();
+    final matching = snapshot
+        .itemsFor(village: UpgradeVillage.home, queue: UpgradeQueue.builders)
+        .where((item) => item.name.trim().toLowerCase() == normalizedName)
+        .toList(growable: false);
+    if (matching.isEmpty) return null;
+
+    final now = DateTime.now();
+    final levels = <int>{};
+    for (final item in matching.where((item) => !item.isComplete)) {
+      final isActive = snapshot.remainingActiveSeconds(item, now: now) > 0;
+      final unpaidSteps = isActive && item.count == 1
+          ? item.steps.skip(1)
+          : item.steps;
+      levels.addAll(
+        unpaidSteps
+            .where((step) => step.targetLevel > item.currentLevel)
+            .map((step) => step.targetLevel),
+      );
+    }
+    if (building.name == _townHallBuildingName &&
+        matching.every((item) => item.isComplete)) {
+      final completedLevel = matching.fold<int>(
+        0,
+        (highest, item) =>
+            item.currentLevel > highest ? item.currentLevel : highest,
+      );
+      levels.addAll(
+        _farmTargetLevels(building, townHall)
+            .where((level) => level.level > completedLevel)
+            .map((level) => level.level),
+      );
+    }
+    return levels;
+  }
+
   void _repairFarmSelectionAfterTrackerLoad() {
     final selectedId = _farmBuildingId;
     if (selectedId == null) return;
     final townHall = _farmSelectedPreset?.townHall ?? _catalog.maxTownHall;
-    final selectableBuildings = _farmSelectableBuildings(
-      _catalog.buildingsForTownHall(townHall),
-    );
-    if (selectableBuildings.any((building) => building.id == selectedId)) {
+    final buildings = _catalog.buildingsForTownHall(townHall);
+    final selectableBuildings = _farmSelectableBuildings(buildings);
+    final selectedBuilding = selectableBuildings
+        .where((building) => building.id == selectedId)
+        .firstOrNull;
+    if (selectedBuilding != null) {
+      final selectedLevel = _farmBuildingLevel;
+      final unpaidLevels = _farmUnpaidTargetLevels(selectedBuilding, townHall);
+      if (unpaidLevels == null ||
+          selectedLevel == null ||
+          unpaidLevels.contains(selectedLevel)) {
+        return;
+      }
+      final trackerTarget = _farmTrackerTargets(buildings)
+          .where(
+            (target) =>
+                target.item.name.trim().toLowerCase() ==
+                selectedBuilding.name.trim().toLowerCase(),
+          )
+          .firstOrNull;
+      final replacementLevel =
+          trackerTarget?.targetLevel ??
+          (unpaidLevels.toList()..sort()).firstOrNull;
+      if (replacementLevel == null) return;
+      _farmBuildingLevel = replacementLevel;
+      _setFarmLootSuggestion();
       return;
     }
     _farmBuildingId = null;
