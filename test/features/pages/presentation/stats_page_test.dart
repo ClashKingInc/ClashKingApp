@@ -256,6 +256,22 @@ void main() {
     expect(find.text('Apply'), findsOneWidget);
   });
 
+  testWidgets('Items uses no-data copy after an empty filtered query', (
+    tester,
+  ) async {
+    final provider = StatsProvider(repository: _EmptyItemsStatsRepository());
+    provider.setItemSelectors(const [
+      StatsItemSelector(item: 'Barbarian', type: StatsItemType.troop),
+    ]);
+    provider.selectSection(StatsSection.items);
+
+    await tester.pumpWidget(_StatsTestApp(provider: provider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('No battle data yet'), findsOneWidget);
+    expect(find.text('Choose items to analyze'), findsNothing);
+  });
+
   testWidgets('Stats loading state uses section-shaped skeletons', (
     tester,
   ) async {
@@ -448,6 +464,16 @@ class _EmptyStatsRepository extends StatsRepository {
         dateRange: StatsDateRange(start: null, end: null),
         metrics: _emptyMetrics,
         breakdowns: [],
+      );
+}
+
+class _EmptyItemsStatsRepository extends _WidgetStatsRepository {
+  @override
+  Future<StatsItemsResponse> loadItems(StatsItemsQuery request) async =>
+      const StatsItemsResponse(
+        dateRange: StatsDateRange(start: null, end: null),
+        items: [],
+        count: 0,
       );
 }
 

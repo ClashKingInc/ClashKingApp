@@ -1800,6 +1800,7 @@ class _ItemsSectionState extends State<_ItemsSection> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final provider = context.watch<StatsProvider>();
+    final hasItemSelectors = provider.itemSelectors.isNotEmpty;
     return Column(
       children: [
         _StatsPageGutter(
@@ -1820,8 +1821,8 @@ class _ItemsSectionState extends State<_ItemsSection> {
         Expanded(
           child: _SectionFrame(
             section: StatsSection.items,
-            emptyTitle: loc.statsAddItemsTitle,
-            emptyBody: loc.statsAddItemsBody,
+            emptyTitle: hasItemSelectors ? null : loc.statsAddItemsTitle,
+            emptyBody: hasItemSelectors ? null : loc.statsAddItemsBody,
             builder: (data) {
               final response = data as StatsItemsResponse;
               return Column(
