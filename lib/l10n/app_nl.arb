@@ -3008,9 +3008,9 @@
   "statsItems": "Items",
   "statsWar": "Oorlog",
   "statsCwl": "CWL",
-  "statsRanked": "Ranked",
-  "statsDateRange": "Date range",
-  "statsDateRangeHint": "Choose up to 90 days",
+  "statsRanked": "Gerangschikt",
+  "statsDateRange": "Datumbereik",
+  "statsDateRangeHint": "Kies tot 90 dagen",
   "statsDateRangeTooLong": "Choose a date range of 90 days or less.",
   "statsUpdated": "Fresh data",
   "statsNoDataTitle": "No battle data yet",
@@ -3984,7 +3984,7 @@
   "widgetResearchBoostShort": "Research",
   "widgetPetBoostShort": "Pet",
   "widgetClockBoostShort": "Clock",
-  "widgetBuilderCostPerk": "{percent}% builder cost perk",
+  "widgetBuilderCostPerk": "{percent}% korting op bouwkosten",
   "@widgetBuilderCostPerk": {
     "placeholders": {
       "percent": {
@@ -3992,7 +3992,7 @@
       }
     }
   },
-  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "widgetBuilderTimePerk": "{percent}% kortere bouwtijd",
   "@widgetBuilderTimePerk": {
     "placeholders": {
       "percent": {
@@ -4000,7 +4000,7 @@
       }
     }
   },
-  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "widgetLabCostPerk": "{percent}% korting op laboratoriumkosten",
   "@widgetLabCostPerk": {
     "placeholders": {
       "percent": {
@@ -4008,7 +4008,7 @@
       }
     }
   },
-  "widgetLabTimePerk": "{percent}% lab time perk",
+  "widgetLabTimePerk": "{percent}% kortere onderzoekstijd",
   "@widgetLabTimePerk": {
     "placeholders": {
       "percent": {
@@ -4016,22 +4016,22 @@
       }
     }
   },
-  "farmGoalTitle": "Farm goal",
-  "farmGoalFormTitle": "Resources to farm",
+  "farmGoalTitle": "Farmdoel",
+  "farmGoalFormTitle": "Te farmen grondstoffen",
   "farmGoalAccountTitle": "Account",
-  "farmGoalAccountHint": "The selected account provides the Town Hall and current league used for the estimate.",
-  "farmGoalTargetTitle": "Building to upgrade",
-  "farmGoalTargetBuildingLabel": "Building",
-  "farmGoalChooseBuilding": "Choose a building",
-  "farmGoalTargetLevelLabel": "Target level",
-  "farmGoalUpgradeCostLabel": "Upgrade cost",
+  "farmGoalAccountHint": "Het geselecteerde account bepaalt het stadhuisniveau en de huidige divisie die voor de schatting worden gebruikt.",
+  "farmGoalTargetTitle": "Gebouw om te upgraden",
+  "farmGoalTargetBuildingLabel": "Gebouw",
+  "farmGoalChooseBuilding": "Kies een gebouw",
+  "farmGoalTargetLevelLabel": "Doelniveau",
+  "farmGoalUpgradeCostLabel": "Upgradekosten",
   "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
-  "farmGoalLootTitle": "Estimated loot",
-  "farmGoalResourceLabel": "Resource",
-  "farmGoalAmountLabel": "Amount to farm",
-  "farmGoalAverageLootLabel": "Loot from a perfect attack",
-  "farmGoalPerfectLootHint": "Starting point for a perfect attack. Adjust it to match your actual loot.",
-  "farmGoalLeagueEstimate": "{league} base league bonus: {amount} {resource}. It is not the total loot from an attack.",
+  "farmGoalLootTitle": "Geschatte buit",
+  "farmGoalResourceLabel": "Grondstof",
+  "farmGoalAmountLabel": "Te farmen hoeveelheid",
+  "farmGoalAverageLootLabel": "Buit van een perfecte aanval",
+  "farmGoalPerfectLootHint": "Uitgangspunt voor een perfecte aanval. Pas dit aan zodat het overeenkomt met je daadwerkelijke buit.",
+  "farmGoalLeagueEstimate": "Basisdivisiebonus van de {league}-divisie: {amount} {resource}. Dit is niet de totale buit van een aanval.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -4045,7 +4045,7 @@
       }
     }
   },
-  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "farmGoalStarBonusEstimate": "Sterbonus: {amount} {resource} na 5 sterren. Deze wordt niet meegerekend bij het aantal benodigde aanvallen.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
       "amount": {
@@ -4056,8 +4056,8 @@
       }
     }
   },
-  "farmGoalScenarioPerfect": "Perfect attack · 100%",
-  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "farmGoalScenarioPerfect": "Perfecte aanval · 100%",
+  "farmGoalScenarioAtPercent": "{percent}% vernietiging",
   "@farmGoalScenarioAtPercent": {
     "placeholders": {
       "percent": {
@@ -4065,8 +4065,8 @@
       }
     }
   },
-  "farmGoalAttackShort": "attack",
-  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
+  "farmGoalAttackShort": "aanval",
+  "farmGoalScenarioHint": "Benadering: de hoeveelheid buit hangt af van welke gebouwen worden vernietigd. De percentages worden toegepast op je schatting van een perfecte aanval.",
   "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
   "farmGoalTrackerSuggestion": "Upgrade Tracker suggests {name}.",
   "@farmGoalTrackerSuggestion": {
@@ -4190,34 +4190,34 @@
     }
   },
   "damageNoActiveSources": "Choose a method to show the damage sources to adjust.",
-  "damageOtherSources": "Other sources",
-  "damageShowAllSources": "Add another source",
-  "damageShowFewerSources": "Hide other sources",
-  "searchCancel": "Cancel",
-  "todoRaidAttacks": "Raid attacks",
+  "damageOtherSources": "Andere bronnen",
+  "damageShowAllSources": "Nog een bron toevoegen",
+  "damageShowFewerSources": "Andere bronnen verbergen",
+  "searchCancel": "Annuleren",
+  "todoRaidAttacks": "Raidaanvallen",
   "todoMockRaid4Left": "4 left",
   "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
   "todoMockRaid1Left": "1 left",
-  "gameAssetsCategoryBuildings": "Buildings",
-  "gameAssetsCategoryCapitalBase": "Capital Base",
-  "gameAssetsCategoryCapitalHouseParts": "Capital House Parts",
-  "gameAssetsCategoryChests": "Chests",
-  "gameAssetsCategoryClanLabels": "Clan Labels",
-  "gameAssetsCategoryCountryFlags": "Country Flags",
-  "gameAssetsCategoryDecorations": "Decorations",
-  "gameAssetsCategoryEquipment": "Equipment",
-  "gameAssetsCategoryGuardians": "Guardians",
-  "gameAssetsCategoryHeroes": "Heroes",
-  "gameAssetsCategoryPets": "Pets",
+  "gameAssetsCategoryBuildings": "Gebouwen",
+  "gameAssetsCategoryCapitalBase": "Hoofdstad basis",
+  "gameAssetsCategoryCapitalHouseParts": "Hoofdstadhuisonderdelen",
+  "gameAssetsCategoryChests": "Kisten",
+  "gameAssetsCategoryClanLabels": "Clan labels",
+  "gameAssetsCategoryCountryFlags": "Landenvlaggen",
+  "gameAssetsCategoryDecorations": "Decoraties",
+  "gameAssetsCategoryEquipment": "Uitrusting",
+  "gameAssetsCategoryGuardians": "Bewakers",
+  "gameAssetsCategoryHeroes": "Helden",
+  "gameAssetsCategoryPets": "Huisdieren",
   "gameAssetsCategorySkins": "Skins",
-  "gameAssetsCategorySpells": "Spells",
-  "gameAssetsCategoryTroops": "Troops",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "endpointStateWins": "Wins",
-  "notifGroupBattles": "Battles",
-  "notifGroupSupport": "Support",
-  "rankedLeagueAccountSelector": "Shown account",
-  "rankedLeagueStars": "Stars"
+  "gameAssetsCategorySpells": "Spreuken",
+  "gameAssetsCategoryTroops": "Troepen",
+  "assetFolderTroops": "Troepen",
+  "assetFolderSpells": "Spreuken",
+  "assetFolderHeroes": "Helden",
+  "endpointStateWins": "Overwinningen",
+  "notifGroupBattles": "Gevechten",
+  "notifGroupSupport": "Ondersteuning",
+  "rankedLeagueAccountSelector": "Toon account",
+  "rankedLeagueStars": "Sterren"
 }
