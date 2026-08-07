@@ -1839,174 +1839,260 @@ class _ItemsSectionState extends State<_ItemsSection> {
 
   Future<void> _showItemFilters() async {
     final provider = context.read<StatsProvider>();
-    var townHall = provider.itemsTownHall;
-    var tier = provider.itemsLeagueTier;
-    var type = StatsItemType.troop;
-    String? hero;
-    var selectors = [...provider.itemSelectors];
-    var draftDates = provider.dates;
-    final itemController = TextEditingController();
-    final apply = await showDialog<bool>(
+    final result = await showDialog<_ItemFiltersResult>(
       context: context,
-      builder: (sheetContext) => StatefulBuilder(
-        builder: (context, setSheetState) => _StatsFilterDialog(
-          dates: draftDates,
-          onDatesChanged: (value) => setSheetState(() => draftDates = value),
-          onApply: () => Navigator.pop(sheetContext, true),
-          onReset: () => setSheetState(() {
-            townHall = null;
-            tier = null;
-            type = StatsItemType.troop;
-            hero = null;
-            selectors = [];
-            draftDates = _defaultStatsDates();
-            itemController.clear();
-          }),
-          child: Column(
-            children: [
-              _StatsFilterSection(
-                title: AppLocalizations.of(context)!.filtersTownHall,
-                icon: Icons.other_houses_rounded,
-                summary:
-                    '${_townHallSummary(AppLocalizations.of(context)!, townHall)} · '
-                    '${tier == null ? '${AppLocalizations.of(context)!.statsLeagueTier}: ${AppLocalizations.of(context)!.generalAll}' : _leagueTierSummary(AppLocalizations.of(context)!, tier!)}',
-                child: Column(
-                  children: [
-                    _TownHallField(
-                      value: townHall,
-                      onChanged: (value) =>
-                          setSheetState(() => townHall = value),
-                    ),
-                    const SizedBox(height: 10),
-                    _LeagueTierField(
-                      optional: true,
-                      value: tier,
-                      onChanged: (value) => setSheetState(() => tier = value),
-                    ),
-                  ],
-                ),
-              ),
-              _StatsFilterSection(
-                title: AppLocalizations.of(context)!.statsItems,
-                icon: Icons.category_outlined,
-                summary:
-                    '${_itemTypeLabel(AppLocalizations.of(context)!, type)} · '
-                    '${selectors.length}',
-                child: Column(
-                  children: [
-                    _InlineNotice(
-                      icon: Icons.info_outline_rounded,
-                      text:
-                          '${AppLocalizations.of(context)!.statsNoLevels} '
-                          '${AppLocalizations.of(context)!.statsRankedCompositionOnly}',
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: itemController,
-                      onChanged: (_) => setSheetState(() {}),
-                      decoration: _statsFilterInputDecoration(
-                        label: AppLocalizations.of(context)!.statsItemId,
-                        prefixIcon: const Icon(Icons.search_rounded),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    _CompactMenuField<StatsItemType>(
-                      label: AppLocalizations.of(context)!.statsItemType,
-                      icon: Icons.category_outlined,
-                      value: type,
-                      options: {
-                        for (final value in StatsItemType.values)
-                          value: _itemTypeLabel(
-                            AppLocalizations.of(context)!,
-                            value,
-                          ),
-                      },
-                      onChanged: (value) => setSheetState(() {
-                        type = value;
-                        if (type != StatsItemType.equipment) hero = null;
-                      }),
-                    ),
-                    if (type == StatsItemType.equipment) ...[
-                      const SizedBox(height: 10),
-                      _CompactMenuField<String?>(
-                        label: AppLocalizations.of(context)!.statsOwningHero,
-                        icon: Icons.person_outline_rounded,
-                        value: hero,
-                        options: {
-                          null: AppLocalizations.of(context)!.statsOwningHero,
-                          for (final value
-                              in StatsItemSelector.validEquipmentHeroes)
-                            value: value,
-                        },
-                        onChanged: (value) => setSheetState(() => hero = value),
-                      ),
-                    ],
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed:
-                            itemController.text.trim().isNotEmpty &&
-                                (type != StatsItemType.equipment ||
-                                    hero != null)
-                            ? () => setSheetState(() {
-                                selectors = [
-                                  ...selectors,
-                                  StatsItemSelector(
-                                    item: itemController.text.trim(),
-                                    type: type,
-                                    hero: hero,
-                                  ),
-                                ];
-                                itemController.clear();
-                              })
-                            : null,
-                        icon: const Icon(Icons.add_rounded),
-                        label: Text(AppLocalizations.of(context)!.statsAddItem),
-                      ),
-                    ),
-                    if (selectors.isNotEmpty) ...[
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
-                          children: selectors
-                              .map(
-                                (item) => _StatsActiveFilterChip(
-                                  label: item.hero == null
-                                      ? item.item
-                                      : '${item.item} · ${item.hero}',
-                                  onDeleted: () => setSheetState(
-                                    () =>
-                                        selectors = [...selectors]
-                                          ..remove(item),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+      builder: (_) => _ItemsFilterDialog(
+        initialTownHall: provider.itemsTownHall,
+        initialLeagueTier: provider.itemsLeagueTier,
+        initialSelectors: provider.itemSelectors,
+        initialDates: provider.dates,
       ),
     );
-    itemController.dispose();
-    if (apply != true || !mounted) return;
+    if (result == null || !mounted) return;
     provider.updateItemFilters(
-      townHall: townHall,
-      leagueTier: tier,
-      clearTownHall: townHall == null,
-      clearLeagueTier: tier == null,
+      townHall: result.townHall,
+      leagueTier: result.leagueTier,
+      clearTownHall: result.townHall == null,
+      clearLeagueTier: result.leagueTier == null,
     );
-    provider.setItemSelectors(selectors);
-    await provider.setDates(draftDates.start, draftDates.end);
+    provider.setItemSelectors(result.selectors);
+    await provider.setDates(result.dates.start, result.dates.end);
+  }
+}
+
+class _ItemFiltersResult {
+  const _ItemFiltersResult({
+    required this.townHall,
+    required this.leagueTier,
+    required this.selectors,
+    required this.dates,
+  });
+
+  final int? townHall;
+  final int? leagueTier;
+  final List<StatsItemSelector> selectors;
+  final StatsDateFilter dates;
+}
+
+class _ItemsFilterDialog extends StatefulWidget {
+  const _ItemsFilterDialog({
+    required this.initialTownHall,
+    required this.initialLeagueTier,
+    required this.initialSelectors,
+    required this.initialDates,
+  });
+
+  final int? initialTownHall;
+  final int? initialLeagueTier;
+  final List<StatsItemSelector> initialSelectors;
+  final StatsDateFilter initialDates;
+
+  @override
+  State<_ItemsFilterDialog> createState() => _ItemsFilterDialogState();
+}
+
+class _ItemsFilterDialogState extends State<_ItemsFilterDialog> {
+  final itemController = TextEditingController();
+  late int? townHall;
+  late int? leagueTier;
+  late StatsItemType type;
+  String? hero;
+  late List<StatsItemSelector> selectors;
+  late StatsDateFilter dates;
+
+  @override
+  void initState() {
+    super.initState();
+    townHall = widget.initialTownHall;
+    leagueTier = widget.initialLeagueTier;
+    type = StatsItemType.troop;
+    selectors = [...widget.initialSelectors];
+    dates = widget.initialDates;
+  }
+
+  @override
+  void dispose() {
+    itemController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return _StatsFilterDialog(
+      dates: dates,
+      onDatesChanged: (value) => setState(() => dates = value),
+      onApply: _apply,
+      onReset: _reset,
+      child: Column(
+        children: [_buildTownHallSection(loc), _buildItemsSection(loc)],
+      ),
+    );
+  }
+
+  Widget _buildTownHallSection(AppLocalizations loc) {
+    final leagueSummary = leagueTier == null
+        ? '${loc.statsLeagueTier}: ${loc.generalAll}'
+        : _leagueTierSummary(loc, leagueTier!);
+    return _StatsFilterSection(
+      title: loc.filtersTownHall,
+      icon: Icons.other_houses_rounded,
+      summary: '${_townHallSummary(loc, townHall)} · $leagueSummary',
+      child: Column(
+        children: [
+          _TownHallField(
+            value: townHall,
+            onChanged: (value) => setState(() => townHall = value),
+          ),
+          const SizedBox(height: 10),
+          _LeagueTierField(
+            optional: true,
+            value: leagueTier,
+            onChanged: (value) => setState(() => leagueTier = value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemsSection(AppLocalizations loc) {
+    return _StatsFilterSection(
+      title: loc.statsItems,
+      icon: Icons.category_outlined,
+      summary: '${_itemTypeLabel(loc, type)} · ${selectors.length}',
+      child: Column(
+        children: [
+          _InlineNotice(
+            icon: Icons.info_outline_rounded,
+            text: '${loc.statsNoLevels} ${loc.statsRankedCompositionOnly}',
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: itemController,
+            onChanged: (_) => setState(() {}),
+            decoration: _statsFilterInputDecoration(
+              label: loc.statsItemId,
+              prefixIcon: const Icon(Icons.search_rounded),
+            ),
+          ),
+          const SizedBox(height: 10),
+          _buildItemTypeField(loc),
+          if (type == StatsItemType.equipment) ...[
+            const SizedBox(height: 10),
+            _buildHeroField(loc),
+          ],
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _canAddItem ? _addItem : null,
+              icon: const Icon(Icons.add_rounded),
+              label: Text(loc.statsAddItem),
+            ),
+          ),
+          if (selectors.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            _buildSelectorChips(),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItemTypeField(AppLocalizations loc) {
+    return _CompactMenuField<StatsItemType>(
+      label: loc.statsItemType,
+      icon: Icons.category_outlined,
+      value: type,
+      options: {
+        for (final value in StatsItemType.values)
+          value: _itemTypeLabel(loc, value),
+      },
+      onChanged: (value) => setState(() {
+        type = value;
+        if (type != StatsItemType.equipment) hero = null;
+      }),
+    );
+  }
+
+  Widget _buildHeroField(AppLocalizations loc) {
+    return _CompactMenuField<String?>(
+      label: loc.statsOwningHero,
+      icon: Icons.person_outline_rounded,
+      value: hero,
+      options: {
+        null: loc.statsOwningHero,
+        for (final value in StatsItemSelector.validEquipmentHeroes)
+          value: value,
+      },
+      onChanged: (value) => setState(() => hero = value),
+    );
+  }
+
+  Widget _buildSelectorChips() {
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: selectors
+            .map(
+              (item) => _StatsActiveFilterChip(
+                label: item.hero == null
+                    ? item.item
+                    : '${item.item} · ${item.hero}',
+                onDeleted: () => _removeItem(item),
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  bool get _canAddItem =>
+      itemController.text.trim().isNotEmpty &&
+      (type != StatsItemType.equipment || hero != null);
+
+  void _addItem() {
+    setState(() {
+      selectors = [
+        ...selectors,
+        StatsItemSelector(
+          item: itemController.text.trim(),
+          type: type,
+          hero: hero,
+        ),
+      ];
+      itemController.clear();
+    });
+  }
+
+  void _removeItem(StatsItemSelector item) {
+    setState(() => selectors = [...selectors]..remove(item));
+  }
+
+  void _reset() {
+    setState(() {
+      townHall = null;
+      leagueTier = null;
+      type = StatsItemType.troop;
+      hero = null;
+      selectors = [];
+      dates = _defaultStatsDates();
+      itemController.clear();
+    });
+  }
+
+  void _apply() {
+    Navigator.pop(
+      context,
+      _ItemFiltersResult(
+        townHall: townHall,
+        leagueTier: leagueTier,
+        selectors: selectors,
+        dates: dates,
+      ),
+    );
   }
 }
 
