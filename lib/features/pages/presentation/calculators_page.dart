@@ -729,18 +729,28 @@ class _CalculatorsPageState extends State<CalculatorsPage> {
           .putIfAbsent(item.name.trim().toLowerCase(), () => [])
           .add(item);
     }
+    final now = DateTime.now();
     return buildings
         .where((building) {
           final matching =
               trackerItemsByName[building.name.trim().toLowerCase()];
           if (matching == null || matching.isEmpty) return true;
           return matching.any(
-            (item) =>
-                !item.isComplete &&
-                item.steps.any((step) => step.targetLevel > item.currentLevel),
+            (item) => _hasUnpaidFarmUpgrade(snapshot, item, now),
           );
         })
         .toList(growable: false);
+  }
+
+  bool _hasUnpaidFarmUpgrade(
+    UpgradeTrackerSnapshot snapshot,
+    UpgradeTrackerItem item,
+    DateTime now,
+  ) {
+    if (item.isComplete) return false;
+    final isActive = snapshot.remainingActiveSeconds(item, now: now) > 0;
+    final unpaidSteps = isActive ? item.steps.skip(1) : item.steps;
+    return unpaidSteps.any((step) => step.targetLevel > item.currentLevel);
   }
 
   void _repairFarmSelectionAfterTrackerLoad() {

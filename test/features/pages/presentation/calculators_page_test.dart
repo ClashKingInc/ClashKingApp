@@ -561,6 +561,78 @@ void main() {
     expect(find.text('Air Defense'), findsNothing);
   });
 
+  testWidgets('does not offer a tracker upgrade whose final step is active', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      catalog: _farmGoalCatalog,
+      accountPresets: const [
+        DamageAccountPreset(
+          tag: '#FARM',
+          name: 'Farmer',
+          townHall: 12,
+          league: 'Titan League 25',
+        ),
+      ],
+      initialTrackerSnapshot: _activeTownHallSnapshot(hasLaterStep: false),
+    );
+
+    await tester.tap(find.text('Farm goal'));
+    await tester.pumpAndSettle();
+    expect(find.byType(CKUpgradeRow), findsNothing);
+
+    await tester.drag(
+      find.byKey(const ValueKey('farm-goal-scroll')),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
+    await tester.pumpAndSettle();
+
+    final picker = find.byType(DraggableScrollableSheet);
+    expect(picker, findsOneWidget);
+    expect(
+      find.descendant(of: picker, matching: find.text('Town Hall')),
+      findsNothing,
+    );
+  });
+
+  testWidgets('offers the unpaid level after an active tracker step', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      catalog: _farmGoalCatalog,
+      accountPresets: const [
+        DamageAccountPreset(
+          tag: '#FARM',
+          name: 'Farmer',
+          townHall: 13,
+          league: 'Titan League 25',
+        ),
+      ],
+      initialTrackerSnapshot: _activeTownHallSnapshot(hasLaterStep: true),
+    );
+
+    await tester.tap(find.text('Farm goal'));
+    await tester.pumpAndSettle();
+    expect(find.byType(CKUpgradeRow), findsOneWidget);
+
+    await tester.drag(
+      find.byKey(const ValueKey('farm-goal-scroll')),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('farm-goal-building')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('farm-goal-tracker-picker-item')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('clears a selected building when tracker data marks it maxed', (
     tester,
   ) async {
@@ -749,6 +821,51 @@ final Finder _damageScrollable = find.descendant(
   of: find.byKey(const ValueKey('damage-calculator-scroll')),
   matching: find.byType(Scrollable),
 );
+
+UpgradeTrackerSnapshot _activeTownHallSnapshot({required bool hasLaterStep}) {
+  final steps = [
+    const UpgradeStep(
+      targetLevel: 2,
+      costs: [UpgradeCost('Gold', 1000)],
+      seconds: 7200,
+    ),
+    if (hasLaterStep)
+      const UpgradeStep(
+        targetLevel: 3,
+        costs: [UpgradeCost('Gold', 25000000)],
+        seconds: 86400,
+      ),
+  ];
+  return UpgradeTrackerSnapshot(
+    tag: '#FARM',
+    name: 'Farmer',
+    townHallLevel: hasLaterStep ? 13 : 12,
+    builderHallLevel: 0,
+    homeBuilderCount: 5,
+    builderBaseBuilderCount: 0,
+    items: [
+      UpgradeTrackerItem(
+        id: 1,
+        name: 'Town Hall',
+        imageUrl: '',
+        village: UpgradeVillage.home,
+        category: UpgradeCategory.defenses,
+        queue: UpgradeQueue.builders,
+        currentLevel: 1,
+        targetLevel: hasLaterStep ? 3 : 2,
+        count: 1,
+        steps: steps,
+        completedUpgradeSeconds: 0,
+        totalUpgradeSeconds: steps.fold(0, (sum, step) => sum + step.seconds),
+        activeSeconds: 3600,
+      ),
+    ],
+    collections: const [],
+    boosts: const UpgradeBoosts(),
+    events: const [],
+    capturedAt: DateTime.now(),
+  );
+}
 
 Future<void> _pump(
   WidgetTester tester, {
