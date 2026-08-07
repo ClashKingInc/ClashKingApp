@@ -1,19 +1,47 @@
 import 'dart:async';
 import 'package:universal_html/html.dart' as html;
 
-Future<String?> getDiscordAuthCodeWeb(Uri url) async {
-  final completer = Completer<String?>();
+const _discordCodeKey = 'ck-discord-auth-code';
+const _discordVerifierKey = 'ck-discord-auth-code-verifier';
+const _discordCompleteParameter = 'discord_auth';
+const _discordCompleteValue = 'complete';
 
-  void listener(html.Event event) {
-    final data = (event as html.MessageEvent).data;
-    if (data is Map && data['type'] == 'discord-auth') {
-      completer.complete(data['code']);
-      html.window.removeEventListener('message', listener);
-    }
+bool hasPendingDiscordAuthResultWeb() {
+  return Uri.base.queryParameters[_discordCompleteParameter] ==
+          _discordCompleteValue ||
+      html.window.sessionStorage[_discordCodeKey] != null;
+}
+
+Map<String, String>? consumeDiscordAuthResultWeb() {
+  final code = html.window.sessionStorage.remove(_discordCodeKey);
+  final verifier = html.window.sessionStorage.remove(_discordVerifierKey);
+
+  final currentUri = Uri.base;
+  if (currentUri.queryParameters.containsKey(_discordCompleteParameter)) {
+    final cleanedParameters = Map<String, String>.from(
+      currentUri.queryParameters,
+    )..remove(_discordCompleteParameter);
+    final cleanedUri = currentUri.replace(
+      queryParameters: cleanedParameters.isEmpty ? null : cleanedParameters,
+    );
+    html.window.history.replaceState(
+      null,
+      html.document.title,
+      cleanedUri.toString(),
+    );
   }
 
-  html.window.addEventListener('message', listener);
-  html.window.open(url.toString(), 'discordLogin');
+  if (code == null || verifier == null) return null;
+  return {'code': code, 'code_verifier': verifier};
+}
 
-  return completer.future;
+Future<void> startDiscordAuthRedirectWeb(Uri url, String codeVerifier) async {
+  html.window.sessionStorage[_discordVerifierKey] = codeVerifier;
+  html.window.location.assign(url.toString());
+
+  // A successful navigation unloads this page before the delay completes. If
+  // an embedded browser blocks the redirect, fail instead of leaving the login
+  // button in a permanent loading state.
+  await Future<void>.delayed(const Duration(seconds: 10));
+  throw StateError('Discord authentication redirect was blocked.');
 }
