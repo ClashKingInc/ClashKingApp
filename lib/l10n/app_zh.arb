@@ -3059,6 +3059,12 @@
   "statsLeagueTier": "联赛段位",
   "statsLegendLeagueOne": "传奇联赛 1",
   "statsCwlLeague": "部落联赛等级",
+  "statsLeagueBronze": "Bronze",
+  "statsLeagueSilver": "Silver",
+  "statsLeagueGold": "Gold",
+  "statsLeagueCrystal": "Crystal",
+  "statsLeagueMaster": "Master",
+  "statsLeagueChampion": "Champion",
   "statsAllCwlLeagues": "所有部落联赛等级",
   "statsCwlSeasons": "部落联赛赛季",
   "statsCwlSeasonsHint": "YYYY-MM，以逗号分隔",
@@ -4023,15 +4029,18 @@
   "farmGoalTargetTitle": "要升级的建筑",
   "farmGoalTargetBuildingLabel": "建筑",
   "farmGoalChooseBuilding": "选择建筑",
+  "farmGoalChangeBuilding": "Change building",
+  "farmGoalNoTargetTitle": "No building selected",
+  "farmGoalNoTargetBody": "Choose the building you want to upgrade to estimate the farming required.",
   "farmGoalTargetLevelLabel": "目标等级",
   "farmGoalUpgradeCostLabel": "升级花费",
   "farmGoalCostUnavailable": "该等级升级花费不可用。",
   "farmGoalLootTitle": "预计战利品",
   "farmGoalResourceLabel": "资源",
   "farmGoalAmountLabel": "所需数量",
-  "farmGoalAverageLootLabel": "单次完美进攻战利品",
-  "farmGoalPerfectLootHint": "完美进攻的基础收益，可根据实际战利品调整。",
-  "farmGoalLeagueEstimate": "{league} 基础联赛奖励：{amount} {resource}非单次进攻总收益。",
+  "farmGoalAverageLootLabel": "Loot available in the village",
+  "farmGoalPerfectLootHint": "Enter the loot shown before attacking. The league bonus below is added automatically.",
+  "farmGoalLeagueEstimate": "{league} league bonus: {amount} {resource}. It is included in the attack estimates.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -4068,15 +4077,12 @@
   "farmGoalAttackShort": "进攻",
   "farmGoalScenarioHint": "近似估算：摧毁不同建筑收益有所差异，百分比基于完美进攻收益计算。",
   "farmGoalNoLeagueLoot": "请选择带有联赛的账号以获取战利品建议。",
-  "farmGoalTrackerSuggestion": "升级追踪器推荐 {name}。",
-  "@farmGoalTrackerSuggestion": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalUseTrackerTarget": "使用此目标",
+  "farmGoalTrackerNextTitle": "Next in Upgrade Tracker plan",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker data needed",
+  "farmGoalTrackerMissingBody": "Import this account's upgrade JSON in Upgrade Tracker to show its next planned building and exact cost here.",
+  "farmGoalTrackerPlanComplete": "No remaining building upgrades were found in Upgrade Tracker. You can still choose a building manually.",
+  "farmGoalOpenUpgradeTracker": "Open Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Use building",
   "farmGoalMissingTarget": "选择建筑及目标等级以计算所需进攻次数。",
   "farmGoalMissingValues": "输入目标与完美进攻收益，查看进攻方案。",
   "farmGoalResultTitle": "所需进攻次数",
@@ -4219,11 +4225,5 @@
   "notifGroupBattles": "对战",
   "notifGroupSupport": "支持",
   "rankedLeagueAccountSelector": "显示账号",
-  "rankedLeagueStars": "星",
-  "statsLeagueBronze": "Bronze",
-  "statsLeagueChampion": "Champion",
-  "statsLeagueCrystal": "Crystal",
-  "statsLeagueGold": "Gold",
-  "statsLeagueMaster": "Master",
-  "statsLeagueSilver": "Silver"
+  "rankedLeagueStars": "星"
 }
