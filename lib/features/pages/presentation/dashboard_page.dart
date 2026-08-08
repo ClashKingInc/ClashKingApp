@@ -377,6 +377,7 @@ class DashboardPage extends StatelessWidget {
         : HomeRankedCard(
             players: rankedPlayers,
             refreshGeneration: refreshGeneration,
+            desktopLayoutOverride: isDesktopWeb,
           );
     final upgradeCard = upgradePlayers.isEmpty
         ? null
@@ -384,6 +385,7 @@ class DashboardPage extends StatelessWidget {
             players: upgradePlayers,
             linkedPlayersForWidgetSync: linkedPlayers,
             refreshGeneration: refreshGeneration,
+            desktopLayoutOverride: isDesktopWeb,
           );
 
     if (isDesktopWeb) {
@@ -481,43 +483,82 @@ class _HomeDesktopRecapGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const gap = 16.0;
-    final secondaryCards = <Widget>[?rankedCard, ?upgradeCard];
-
-    return LayoutBuilder(
-      builder: (context, constraints) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ?todoCard,
-          if (todoCard != null && secondaryCards.isNotEmpty)
-            const SizedBox(height: gap),
-          if (secondaryCards.length == 2 && constraints.maxWidth >= 840)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: secondaryCards[0]),
-                const SizedBox(width: gap),
-                Expanded(child: secondaryCards[1]),
-              ],
-            )
-          else if (secondaryCards.length == 2)
-            Column(
-              children: [
-                secondaryCards[0],
-                const SizedBox(height: gap),
-                secondaryCards[1],
-              ],
-            )
-          else if (secondaryCards.length == 1)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 552),
-                child: secondaryCards.single,
-              ),
-            ),
+    final cards = <Widget>[?todoCard, ?rankedCard, ?upgradeCard];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var index = 0; index < cards.length; index++) ...[
+          if (index > 0) const SizedBox(height: 16),
+          cards[index],
         ],
-      ),
+      ],
+    );
+  }
+}
+
+class _HomeDesktopCardHeader extends StatelessWidget {
+  const _HomeDesktopCardHeader({
+    required this.imageUrl,
+    required this.fallbackIcon,
+    required this.title,
+    required this.subtitle,
+    this.trailing,
+  });
+
+  final String imageUrl;
+  final IconData fallbackIcon;
+  final String title;
+  final String subtitle;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Row(
+      children: [
+        SizedBox.square(
+          dimension: 54,
+          child: MobileWebImage(
+            imageUrl: imageUrl,
+            fit: BoxFit.contain,
+            errorWidget: (_, _, _) => Icon(
+              fallbackIcon,
+              size: 30,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (trailing case final trailing?) ...[
+          const SizedBox(width: 10),
+          trailing,
+        ],
+      ],
     );
   }
 }
@@ -830,10 +871,9 @@ class _HomeRankedCardState extends State<HomeRankedCard>
   }) {
     final loc = AppLocalizations.of(context)!;
     final isSummaryPage = hasSummaryPage && index == 0;
-    final accountOffset = hasSummaryPage ? 1 : 0;
     final account = isSummaryPage
         ? null
-        : summary.accounts[index - accountOffset];
+        : summary.accounts[index - (hasSummaryPage ? 1 : 0)];
     return _HomeCardTappablePanel(
       onTap: account == null ? null : () => _openRankedLeague(account.player),
       child: Column(
@@ -844,10 +884,10 @@ class _HomeRankedCardState extends State<HomeRankedCard>
                 ? account!.tierIconUrl
                 : ImageAssets.shieldWithArrow,
             fallbackIcon: Icons.emoji_events_rounded,
-            title: isSummaryPage ? loc.todoAllAccounts : account!.name,
-            subtitle: isSummaryPage
-                ? loc.todoAccountsNumber(summary.accounts.length)
-                : account!.player.clan?.name ?? account.player.tag,
+            title: loc.rankedLeagueTitle,
+            subtitle:
+                account?.name ??
+                loc.todoAccountsNumber(summary.accounts.length),
           ),
           const SizedBox(height: 8),
           _buildPage(summary, index, hasSummaryPage),
@@ -1708,14 +1748,12 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
                 : account?.hallImageUrl ??
                       ImageAssets.townHall(missing!.townHallLevel),
             fallbackIcon: Icons.construction_rounded,
-            title: isSummaryPage
-                ? loc.todoAllAccounts
-                : account?.name ?? missing!.name,
+            title: loc.drawerUpgradeTracker,
             subtitle: isSummaryPage
                 ? loc.todoAccountsNumber(
                     summary.accounts.length + summary.missingAccounts.length,
                   )
-                : missing?.clan?.name ?? account?.tag ?? missing!.tag,
+                : account?.name ?? missing!.name,
             trailing: _UpgradeProgressRing(
               value: completion,
               label: '${(completion * 100).round()}%',

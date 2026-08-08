@@ -257,9 +257,9 @@ class _HomeTodoCardState extends State<HomeTodoCard>
         widget.desktopLayoutOverride ?? _usesDesktopHomePager(context);
 
     if (useDesktopGrid) {
-      return _HomeTodoDesktopGrid(
+      return HomeAccountComparisonGrid(
         itemCount: itemCount,
-        hasSummaryPage: hasSummaryPage,
+        hasSummaryItem: hasSummaryPage,
         itemHeight: height,
         itemBuilder: (context, index) => _buildTodoPanel(
           context,
@@ -454,64 +454,6 @@ class _HomeTodoCardState extends State<HomeTodoCard>
           memberPresenceMap: memberPresenceMap,
         ),
       ),
-    );
-  }
-}
-
-class _HomeTodoDesktopGrid extends StatelessWidget {
-  const _HomeTodoDesktopGrid({
-    required this.itemCount,
-    required this.hasSummaryPage,
-    required this.itemHeight,
-    required this.itemBuilder,
-  });
-
-  final int itemCount;
-  final bool hasSummaryPage;
-  final double itemHeight;
-  final IndexedWidgetBuilder itemBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    const gap = 12.0;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final firstGridIndex = hasSummaryPage ? 1 : 0;
-        final gridCount = itemCount - firstGridIndex;
-        final columns = constraints.maxWidth >= 1040 && gridCount >= 3
-            ? 3
-            : constraints.maxWidth >= 760 && gridCount >= 2
-            ? 2
-            : 1;
-        final cardWidth =
-            (constraints.maxWidth - gap * (columns - 1)) / columns;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (hasSummaryPage)
-              SizedBox(
-                height: itemHeight,
-                width: constraints.maxWidth,
-                child: itemBuilder(context, 0),
-              ),
-            if (hasSummaryPage && gridCount > 0) const SizedBox(height: gap),
-            if (gridCount > 0)
-              Wrap(
-                spacing: gap,
-                runSpacing: gap,
-                children: [
-                  for (var index = firstGridIndex; index < itemCount; index++)
-                    SizedBox(
-                      width: cardWidth,
-                      height: itemHeight,
-                      child: itemBuilder(context, index),
-                    ),
-                ],
-              ),
-          ],
-        );
-      },
     );
   }
 }
