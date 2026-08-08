@@ -53,6 +53,49 @@ void main() {
     expect(catalog.source(DamageSourceKind.balloonDeath), isNull);
     expect(catalog.source(DamageSourceKind.rocketBalloonDeath), isNull);
   });
+
+  test('removes buildings consumed by a later Town Hall merge', () {
+    const catalog = DamageCatalog(
+      maxTownHall: 18,
+      buildings: [
+        BuildingDefinition(
+          id: 'eagle',
+          name: 'Eagle Artillery',
+          imageName: 'Eagle Artillery',
+          zapQuakeEligible: true,
+          levels: [
+            BuildingLevelDefinition(
+              level: 7,
+              hitpoints: 6200,
+              requiredTownHall: 16,
+            ),
+          ],
+        ),
+        BuildingDefinition(
+          id: 'x-bow',
+          name: 'X-Bow',
+          imageName: 'X-Bow',
+          zapQuakeEligible: true,
+          levels: [
+            BuildingLevelDefinition(
+              level: 13,
+              hitpoints: 5000,
+              requiredTownHall: 18,
+            ),
+          ],
+        ),
+      ],
+      sources: [],
+    );
+
+    expect(catalog.buildingsForTownHall(16).map((item) => item.name), [
+      'Eagle Artillery',
+    ]);
+    expect(catalog.buildingsForTownHall(17), isEmpty);
+    expect(catalog.buildingsForTownHall(18).map((item) => item.name), [
+      'X-Bow',
+    ]);
+  });
 }
 
 final _bundle = <String, dynamic>{

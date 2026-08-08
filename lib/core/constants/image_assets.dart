@@ -224,6 +224,8 @@ class ImageAssets {
       "$baseUrl/magic_items/builder_potion.webp";
   static const String hammerOfBuilding =
       "$baseUrl/magic_items/hammer_of_building.webp";
+  static const String lootCart =
+      "$baseUrl/obstacles/home-village/loot_cart.webp";
   static const String researchPotion =
       "$baseUrl/magic_items/research_potion.webp";
   static const String petPotion = "$baseUrl/magic_items/pet_potion.webp";
