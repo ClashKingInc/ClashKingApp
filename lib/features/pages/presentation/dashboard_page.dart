@@ -437,12 +437,12 @@ class DashboardPage extends StatelessWidget {
       tag.replaceAll('#', '').trim().toUpperCase();
 }
 
-/// Gives the recap area a bounded desktop canvas without stretching the
-/// compact cards to the full dashboard width.
+/// Keeps the three recap cards in one readable visual family on wide web.
 ///
 /// Announcements can use the full dashboard canvas because they form an
-/// intentional event grid. The account recaps use their desktop composition
-/// inside this narrower canvas while mobile keeps the vertical feed.
+/// intentional event grid. The account recaps remain a centered column: each
+/// card uses the same account rail and pager instead of stretching its compact
+/// mobile anatomy across the entire desktop workspace.
 class _HomeRecapColumn extends StatelessWidget {
   const _HomeRecapColumn({
     required this.constrainWidth,
@@ -460,120 +460,12 @@ class _HomeRecapColumn extends StatelessWidget {
     );
     if (!constrainWidth) return content;
 
-    final maxWidth = MediaQuery.sizeOf(context).width >= 1600 ? 1560.0 : 1120.0;
     return Center(
       child: ConstrainedBox(
         key: const ValueKey('home-recap-column'),
-        constraints: BoxConstraints(maxWidth: maxWidth),
+        constraints: const BoxConstraints(maxWidth: 840),
         child: content,
       ),
-    );
-  }
-}
-
-class _HomeDesktopRecapGrid extends StatelessWidget {
-  const _HomeDesktopRecapGrid({
-    required this.todoCard,
-    required this.rankedCard,
-    required this.upgradeCard,
-  });
-
-  final Widget? todoCard;
-  final Widget? rankedCard;
-  final Widget? upgradeCard;
-
-  @override
-  Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    final cards = <({String title, Widget child})>[
-      if (todoCard case final card?) (title: loc.todoTitle, child: card),
-      if (rankedCard case final card?)
-        (title: loc.rankedLeagueTitle, child: card),
-      if (upgradeCard case final card?)
-        (title: loc.drawerUpgradeTracker, child: card),
-    ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (var index = 0; index < cards.length; index++) ...[
-          if (index > 0) const SizedBox(height: CKSpacing.lg),
-          Text(
-            cards[index].title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
-          ),
-          const SizedBox(height: CKSpacing.sm),
-          cards[index].child,
-        ],
-      ],
-    );
-  }
-}
-
-class _HomeDesktopCardHeader extends StatelessWidget {
-  const _HomeDesktopCardHeader({
-    required this.imageUrl,
-    required this.fallbackIcon,
-    required this.title,
-    required this.subtitle,
-    this.trailing,
-  });
-
-  final String imageUrl;
-  final IconData fallbackIcon;
-  final String title;
-  final String subtitle;
-  final Widget? trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      children: [
-        SizedBox.square(
-          dimension: 54,
-          child: MobileWebImage(
-            imageUrl: imageUrl,
-            fit: BoxFit.contain,
-            errorWidget: (_, _, _) => Icon(
-              fallbackIcon,
-              size: 30,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-        if (trailing case final trailing?) ...[
-          const SizedBox(width: 10),
-          trailing,
-        ],
-      ],
     );
   }
 }
