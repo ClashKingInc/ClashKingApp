@@ -3059,6 +3059,12 @@
   "statsLeagueTier": "League tier",
   "statsLegendLeagueOne": "Legend League 1",
   "statsCwlLeague": "CWL league",
+  "statsLeagueBronze": "Bronze",
+  "statsLeagueSilver": "Silver",
+  "statsLeagueGold": "Gold",
+  "statsLeagueCrystal": "Crystal",
+  "statsLeagueMaster": "Master",
+  "statsLeagueChampion": "Champion",
   "statsAllCwlLeagues": "All CWL leagues",
   "statsCwlSeasons": "CWL seasons",
   "statsCwlSeasonsHint": "YYYY-MM, separated by commas",
@@ -4023,15 +4029,18 @@
   "farmGoalTargetTitle": "Gebouw om te upgraden",
   "farmGoalTargetBuildingLabel": "Gebouw",
   "farmGoalChooseBuilding": "Kies een gebouw",
+  "farmGoalChangeBuilding": "Change building",
+  "farmGoalNoTargetTitle": "No building selected",
+  "farmGoalNoTargetBody": "Choose the building you want to upgrade to estimate the farming required.",
   "farmGoalTargetLevelLabel": "Doelniveau",
   "farmGoalUpgradeCostLabel": "Upgradekosten",
   "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
   "farmGoalLootTitle": "Geschatte buit",
   "farmGoalResourceLabel": "Grondstof",
   "farmGoalAmountLabel": "Te farmen hoeveelheid",
-  "farmGoalAverageLootLabel": "Buit van een perfecte aanval",
-  "farmGoalPerfectLootHint": "Uitgangspunt voor een perfecte aanval. Pas dit aan zodat het overeenkomt met je daadwerkelijke buit.",
-  "farmGoalLeagueEstimate": "Basisdivisiebonus van de {league}-divisie: {amount} {resource}. Dit is niet de totale buit van een aanval.",
+  "farmGoalAverageLootLabel": "Loot available in the village",
+  "farmGoalPerfectLootHint": "Enter the loot shown before attacking. The league bonus below is added automatically.",
+  "farmGoalLeagueEstimate": "{league} league bonus: {amount} {resource}. It is included in the attack estimates.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -4068,15 +4077,12 @@
   "farmGoalAttackShort": "aanval",
   "farmGoalScenarioHint": "Benadering: de hoeveelheid buit hangt af van welke gebouwen worden vernietigd. De percentages worden toegepast op je schatting van een perfecte aanval.",
   "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
-  "farmGoalTrackerSuggestion": "Upgrade Tracker suggests {name}.",
-  "@farmGoalTrackerSuggestion": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalUseTrackerTarget": "Use target",
+  "farmGoalTrackerNextTitle": "Next in Upgrade Tracker plan",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker data needed",
+  "farmGoalTrackerMissingBody": "Import this account's upgrade JSON in Upgrade Tracker to show its next planned building and exact cost here.",
+  "farmGoalTrackerPlanComplete": "No remaining building upgrades were found in Upgrade Tracker. You can still choose a building manually.",
+  "farmGoalOpenUpgradeTracker": "Open Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Use building",
   "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
   "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
   "farmGoalResultTitle": "Attacks needed",
@@ -4219,11 +4225,5 @@
   "notifGroupBattles": "Gevechten",
   "notifGroupSupport": "Ondersteuning",
   "rankedLeagueAccountSelector": "Toon account",
-  "rankedLeagueStars": "Sterren",
-  "statsLeagueBronze": "Bronze",
-  "statsLeagueChampion": "Champion",
-  "statsLeagueCrystal": "Crystal",
-  "statsLeagueGold": "Gold",
-  "statsLeagueMaster": "Master",
-  "statsLeagueSilver": "Silver"
+  "rankedLeagueStars": "Sterren"
 }
