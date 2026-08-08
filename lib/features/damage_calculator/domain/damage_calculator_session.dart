@@ -77,7 +77,7 @@ class DamageCalculatorSession {
 
   bool addTarget(String buildingId) {
     if (targets.any((target) => target.buildingId == buildingId)) return false;
-    final building = _building(buildingId);
+    final building = _availableBuilding(buildingId);
     if (building == null) return false;
     final levels = building.levelsForTownHall(townHall);
     if (levels.isEmpty) return false;
@@ -92,7 +92,7 @@ class DamageCalculatorSession {
   }
 
   void setTargetLevel(String buildingId, int level) {
-    final building = _building(buildingId);
+    final building = _availableBuilding(buildingId);
     if (building == null) return;
     final valid = building.levelsForTownHall(townHall);
     if (!valid.any((candidate) => candidate.level == level)) return;
@@ -144,7 +144,7 @@ class DamageCalculatorSession {
   List<DamageTarget> resolvedTargets() {
     final resolved = <DamageTarget>[];
     for (final selected in targets) {
-      final building = _building(selected.buildingId);
+      final building = _availableBuilding(selected.buildingId);
       final level = building?.level(selected.level);
       if (building != null && level != null) {
         resolved.add(DamageTarget(building: building, level: level));
@@ -174,7 +174,7 @@ class DamageCalculatorSession {
   void _repairTargets() {
     for (var index = targets.length - 1; index >= 0; index--) {
       final selected = targets[index];
-      final building = _building(selected.buildingId);
+      final building = _availableBuilding(selected.buildingId);
       final valid = building?.levelsForTownHall(townHall) ?? const [];
       if (valid.isEmpty) {
         targets.removeAt(index);
@@ -204,8 +204,8 @@ class DamageCalculatorSession {
     sources.removeWhere((kind, _) => !validKinds.contains(kind));
   }
 
-  BuildingDefinition? _building(String id) {
-    for (final building in catalog.buildings) {
+  BuildingDefinition? _availableBuilding(String id) {
+    for (final building in availableBuildings) {
       if (building.id == id) return building;
     }
     return null;

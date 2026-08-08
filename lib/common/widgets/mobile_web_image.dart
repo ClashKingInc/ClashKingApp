@@ -221,19 +221,39 @@ class MobileWebImage extends StatelessWidget {
     final resolved = _resolvedImages[resolutionKey];
     final retryBefore = DateTime.now().subtract(_failureTtl);
     for (final rawCandidate in [?resolved, requested, ...fallbacks]) {
-      final candidate = ApiService.cocAssetsProxyUrl(rawCandidate);
-      final failedAt = _failedImages[candidate];
-      if (failedAt != null && failedAt.isBefore(retryBefore)) {
-        _failedImages.remove(candidate);
+      final proxiedCandidate = ApiService.cocAssetsProxyUrl(rawCandidate);
+      for (final candidate in _candidateVariants(proxiedCandidate)) {
+        final failedAt = _failedImages[candidate];
+        if (failedAt != null && failedAt.isBefore(retryBefore)) {
+          _failedImages.remove(candidate);
+        }
+        if (candidate.isEmpty ||
+            _failedImages.containsKey(candidate) ||
+            candidates.contains(candidate)) {
+          continue;
+        }
+        candidates.add(candidate);
       }
-      if (candidate.isEmpty ||
-          _failedImages.containsKey(candidate) ||
-          candidates.contains(candidate)) {
-        continue;
-      }
-      candidates.add(candidate);
     }
     return candidates;
+  }
+
+  static Iterable<String> _candidateVariants(String candidate) sync* {
+    if (candidate.isEmpty) return;
+    yield candidate;
+
+    final uri = Uri.tryParse(candidate);
+    final assetHost = Uri.parse(ImageAssets.baseUrl).host;
+    if (uri == null || uri.host != assetHost) return;
+
+    // A newly published asset can replace a cached 404 in the browser or CDN.
+    // Give first-party assets one stable alternate cache key before showing the
+    // terminal fallback, while still allowing the successful URL to be reused.
+    yield uri
+        .replace(
+          queryParameters: {...uri.queryParameters, '_ck_image_retry': '1'},
+        )
+        .toString();
   }
 
   static void _rememberResolved(String resolutionKey, String resolvedUrl) {

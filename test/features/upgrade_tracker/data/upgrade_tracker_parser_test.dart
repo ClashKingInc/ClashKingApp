@@ -383,6 +383,90 @@ void main() {
       ['Long:1', 'Short:1', 'Long:2', 'Short:2'],
     );
   });
+
+  test('normalizes planner preferences to the selected queue', () {
+    UpgradeTrackerItem item({
+      required int id,
+      required UpgradeCategory category,
+      required UpgradeQueue queue,
+    }) => UpgradeTrackerItem(
+      id: id,
+      name: category.name,
+      imageUrl: '',
+      village: UpgradeVillage.home,
+      category: category,
+      queue: queue,
+      currentLevel: 0,
+      targetLevel: 1,
+      count: 1,
+      steps: const [
+        UpgradeStep(
+          targetLevel: 1,
+          costs: [UpgradeCost('gold', 1)],
+          seconds: 1,
+        ),
+      ],
+      completedUpgradeSeconds: 0,
+      totalUpgradeSeconds: 1,
+    );
+
+    final snapshot = UpgradeTrackerSnapshot(
+      tag: '#TEST',
+      name: 'Chief',
+      townHallLevel: 18,
+      builderHallLevel: 0,
+      homeBuilderCount: 1,
+      builderBaseBuilderCount: 1,
+      items: [
+        item(
+          id: 1,
+          category: UpgradeCategory.defenses,
+          queue: UpgradeQueue.builders,
+        ),
+        item(
+          id: 2,
+          category: UpgradeCategory.troops,
+          queue: UpgradeQueue.laboratory,
+        ),
+        item(
+          id: 3,
+          category: UpgradeCategory.resources,
+          queue: UpgradeQueue.builders,
+        ),
+      ],
+      collections: const [],
+      boosts: const UpgradeBoosts(),
+      events: const [],
+      capturedAt: DateTime.utc(2026, 7, 11),
+    );
+    const preferences = UpgradePlanPreferences(
+      homeCategoryOrder: [
+        UpgradeCategory.defenses,
+        UpgradeCategory.troops,
+        UpgradeCategory.resources,
+      ],
+      homeCategoryShares: {
+        UpgradeCategory.defenses: 50,
+        UpgradeCategory.resources: 50,
+      },
+    );
+
+    final normalized = normalizeUpgradePlanPreferencesForQueue(
+      snapshot,
+      preferences,
+      UpgradeVillage.home,
+      UpgradeQueue.builders,
+    );
+
+    expect(normalized.homeCategoryOrder, [
+      UpgradeCategory.defenses,
+      UpgradeCategory.resources,
+    ]);
+    expect(
+      normalized.priorityTierFor(UpgradeCategory.defenses),
+      normalized.priorityTierFor(UpgradeCategory.resources),
+    );
+  });
 }
 
 final _bundle = <String, dynamic>{
