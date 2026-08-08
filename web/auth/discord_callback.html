@@ -8,9 +8,16 @@
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
 
-        if (window.opener && code) {
-            window.opener.postMessage({ type: "discord-auth", code: code }, window.location.origin);
-            window.close();
+        if (code) {
+            if (window.opener) {
+                window.opener.postMessage({ type: "discord-auth", code: code }, window.location.origin);
+                window.close();
+            } else {
+                window.sessionStorage.setItem('ck-discord-auth-code', code);
+                window.location.replace('/?discord_auth=complete');
+            }
+        } else {
+            window.location.replace('/?discord_auth=complete');
         }
     </script>
 </head>

@@ -189,7 +189,10 @@ class MyHomePageState extends State<MyHomePage> {
     if (_redirectingToVerification) return;
     _redirectingToVerification = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
+      if (!mounted || !context.read<AuthService>().canUseApp) {
+        _redirectingToVerification = false;
+        return;
+      }
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
           builder: (_) => const AddCocAccountPage(refreshOnExit: false),
@@ -200,7 +203,14 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!context.watch<CocAccountService>().hasVerifiedAccounts) {
+    final canUseApp = context.watch<AuthService>().canUseApp;
+    final hasVerifiedAccounts = context
+        .watch<CocAccountService>()
+        .hasVerifiedAccounts;
+    if (!canUseApp) {
+      return const Scaffold(body: SafeArea(child: SkeletonPage(itemCount: 3)));
+    }
+    if (!hasVerifiedAccounts) {
       _redirectToAccountVerification();
       return const Scaffold(body: SafeArea(child: SkeletonPage(itemCount: 3)));
     }
