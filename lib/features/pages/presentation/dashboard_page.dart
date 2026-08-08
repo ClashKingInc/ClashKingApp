@@ -377,7 +377,6 @@ class DashboardPage extends StatelessWidget {
         : HomeRankedCard(
             players: rankedPlayers,
             refreshGeneration: refreshGeneration,
-            desktopLayoutOverride: isDesktopWeb,
           );
     final upgradeCard = upgradePlayers.isEmpty
         ? null
@@ -385,7 +384,6 @@ class DashboardPage extends StatelessWidget {
             players: upgradePlayers,
             linkedPlayersForWidgetSync: linkedPlayers,
             refreshGeneration: refreshGeneration,
-            desktopLayoutOverride: isDesktopWeb,
           );
 
     if (isDesktopWeb) {
@@ -437,12 +435,12 @@ class DashboardPage extends StatelessWidget {
       tag.replaceAll('#', '').trim().toUpperCase();
 }
 
-/// Keeps the three recap cards in one readable visual family on wide web.
+/// Gives the recap area a bounded desktop canvas without stretching the
+/// compact cards to the full dashboard width.
 ///
 /// Announcements can use the full dashboard canvas because they form an
-/// intentional event grid. The account recaps remain a centered column: each
-/// card uses the same account rail and pager instead of stretching its compact
-/// mobile anatomy across the entire desktop workspace.
+/// intentional event grid. The account recaps use their desktop composition
+/// inside this narrower canvas while mobile keeps the vertical feed.
 class _HomeRecapColumn extends StatelessWidget {
   const _HomeRecapColumn({
     required this.constrainWidth,
@@ -463,8 +461,62 @@ class _HomeRecapColumn extends StatelessWidget {
     return Center(
       child: ConstrainedBox(
         key: const ValueKey('home-recap-column'),
-        constraints: const BoxConstraints(maxWidth: 840),
+        constraints: const BoxConstraints(maxWidth: 1120),
         child: content,
+      ),
+    );
+  }
+}
+
+class _HomeDesktopRecapGrid extends StatelessWidget {
+  const _HomeDesktopRecapGrid({
+    required this.todoCard,
+    required this.rankedCard,
+    required this.upgradeCard,
+  });
+
+  final Widget? todoCard;
+  final Widget? rankedCard;
+  final Widget? upgradeCard;
+
+  @override
+  Widget build(BuildContext context) {
+    const gap = 16.0;
+    final secondaryCards = <Widget>[?rankedCard, ?upgradeCard];
+
+    return LayoutBuilder(
+      builder: (context, constraints) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ?todoCard,
+          if (todoCard != null && secondaryCards.isNotEmpty)
+            const SizedBox(height: gap),
+          if (secondaryCards.length == 2 && constraints.maxWidth >= 840)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: secondaryCards[0]),
+                const SizedBox(width: gap),
+                Expanded(child: secondaryCards[1]),
+              ],
+            )
+          else if (secondaryCards.length == 2)
+            Column(
+              children: [
+                secondaryCards[0],
+                const SizedBox(height: gap),
+                secondaryCards[1],
+              ],
+            )
+          else if (secondaryCards.length == 1)
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 552),
+                child: secondaryCards.single,
+              ),
+            ),
+        ],
       ),
     );
   }
