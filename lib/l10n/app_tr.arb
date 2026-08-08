@@ -3059,6 +3059,12 @@
   "statsLeagueTier": "Lig seviyesi",
   "statsLegendLeagueOne": "Efsane Ligi 1",
   "statsCwlLeague": "KSL ligi",
+  "statsLeagueBronze": "Bronze",
+  "statsLeagueSilver": "Silver",
+  "statsLeagueGold": "Gold",
+  "statsLeagueCrystal": "Crystal",
+  "statsLeagueMaster": "Master",
+  "statsLeagueChampion": "Champion",
   "statsAllCwlLeagues": "Tüm KSL ligleri",
   "statsCwlSeasons": "KSL sezonları",
   "statsCwlSeasonsHint": "YYYY-AA, virgülle ayrılmış",
@@ -4023,15 +4029,18 @@
   "farmGoalTargetTitle": "Building to upgrade",
   "farmGoalTargetBuildingLabel": "Building",
   "farmGoalChooseBuilding": "Choose a building",
+  "farmGoalChangeBuilding": "Change building",
+  "farmGoalNoTargetTitle": "No building selected",
+  "farmGoalNoTargetBody": "Choose the building you want to upgrade to estimate the farming required.",
   "farmGoalTargetLevelLabel": "Target level",
   "farmGoalUpgradeCostLabel": "Upgrade cost",
   "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
   "farmGoalLootTitle": "Estimated loot",
   "farmGoalResourceLabel": "Resource",
   "farmGoalAmountLabel": "Amount to farm",
-  "farmGoalAverageLootLabel": "Loot from a perfect attack",
-  "farmGoalPerfectLootHint": "Starting point for a perfect attack. Adjust it to match your actual loot.",
-  "farmGoalLeagueEstimate": "{league} base league bonus: {amount} {resource}. It is not the total loot from an attack.",
+  "farmGoalAverageLootLabel": "Loot available in the village",
+  "farmGoalPerfectLootHint": "Enter the loot shown before attacking. The league bonus below is added automatically.",
+  "farmGoalLeagueEstimate": "{league} league bonus: {amount} {resource}. It is included in the attack estimates.",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -4068,15 +4077,12 @@
   "farmGoalAttackShort": "attack",
   "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
   "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
-  "farmGoalTrackerSuggestion": "Upgrade Tracker suggests {name}.",
-  "@farmGoalTrackerSuggestion": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalUseTrackerTarget": "Use target",
+  "farmGoalTrackerNextTitle": "Next in Upgrade Tracker plan",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker data needed",
+  "farmGoalTrackerMissingBody": "Import this account's upgrade JSON in Upgrade Tracker to show its next planned building and exact cost here.",
+  "farmGoalTrackerPlanComplete": "No remaining building upgrades were found in Upgrade Tracker. You can still choose a building manually.",
+  "farmGoalOpenUpgradeTracker": "Open Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Use building",
   "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
   "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
   "farmGoalResultTitle": "Attacks needed",
@@ -4219,11 +4225,5 @@
   "notifGroupBattles": "Battles",
   "notifGroupSupport": "Support",
   "rankedLeagueAccountSelector": "Shown account",
-  "rankedLeagueStars": "Stars",
-  "statsLeagueBronze": "Bronze",
-  "statsLeagueChampion": "Champion",
-  "statsLeagueCrystal": "Crystal",
-  "statsLeagueGold": "Gold",
-  "statsLeagueMaster": "Master",
-  "statsLeagueSilver": "Silver"
+  "rankedLeagueStars": "Stars"
 }
