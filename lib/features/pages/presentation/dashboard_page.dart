@@ -275,15 +275,18 @@ class DashboardPage extends StatelessWidget {
                   const SizedBox(height: 12),
                   const HomeEventBanner(),
                   SizedBox(height: isDesktopWeb ? 24 : 16),
-                  ..._buildBody(
-                    context,
-                    isLoading: playerService.isLoading,
-                    linkedPlayers: linkedPlayers,
-                    todoPlayers: todoPlayers,
-                    rankedPlayers: rankedPlayers,
-                    upgradePlayers: upgradePlayers,
-                    isDesktopWeb: isDesktopWeb,
-                    refreshGeneration: homeRefreshGeneration,
+                  _HomeRecapColumn(
+                    constrainWidth: isDesktopWeb,
+                    children: _buildBody(
+                      context,
+                      isLoading: playerService.isLoading,
+                      linkedPlayers: linkedPlayers,
+                      todoPlayers: todoPlayers,
+                      rankedPlayers: rankedPlayers,
+                      upgradePlayers: upgradePlayers,
+                      isDesktopWeb: isDesktopWeb,
+                      refreshGeneration: homeRefreshGeneration,
+                    ),
                   ),
                 ],
               ),
@@ -333,6 +336,7 @@ class DashboardPage extends StatelessWidget {
     if (isLoading && linkedPlayers.isEmpty) {
       return const [
         _HomeCardFrame(child: _RankedHomeSkeleton()),
+        SizedBox(height: 16),
         _HomeCardFrame(child: _UpgradeHomeSkeleton()),
       ];
     }
@@ -410,6 +414,39 @@ class DashboardPage extends StatelessWidget {
 
   static String _normalizeTag(String tag) =>
       tag.replaceAll('#', '').trim().toUpperCase();
+}
+
+/// Keeps the three recap cards in one readable visual family on wide web.
+///
+/// Announcements can use the full dashboard canvas because they form an
+/// intentional event grid. The account recaps remain a centered column: each
+/// card uses the same account rail and pager instead of stretching its compact
+/// mobile anatomy across the entire desktop workspace.
+class _HomeRecapColumn extends StatelessWidget {
+  const _HomeRecapColumn({
+    required this.constrainWidth,
+    required this.children,
+  });
+
+  final bool constrainWidth;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
+    );
+    if (!constrainWidth) return content;
+
+    return Center(
+      child: ConstrainedBox(
+        key: const ValueKey('home-recap-column'),
+        constraints: const BoxConstraints(maxWidth: 840),
+        child: content,
+      ),
+    );
+  }
 }
 
 class HomeRankedCard extends StatefulWidget {

@@ -28,6 +28,9 @@ const double _homePagerDesktopBreakpoint = 900;
 bool _usesDesktopHomePager(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= _homePagerDesktopBreakpoint;
 
+double _homeTodoRingSize(BuildContext context) =>
+    _usesDesktopHomePager(context) ? 54 : 46;
+
 class HomeEventBanner extends StatefulWidget {
   const HomeEventBanner({super.key});
 
@@ -247,24 +250,6 @@ class _HomeTodoCardState extends State<HomeTodoCard>
     // header can't silently overflow the card again.
     final headerHeight = math.max(46.0, 19 + 4 + HomeAccountRail.height);
     final height = 14 + headerHeight + 8 + _bodyHeight(barsHeight) + 14;
-    final useDesktopPager = _usesDesktopHomePager(context);
-
-    if (useDesktopPager) {
-      return _HomeTodoDesktopGrid(
-        itemCount: itemCount,
-        hasSummaryPage: hasSummaryPage,
-        itemHeight: height,
-        itemBuilder: (context, index) => _buildTodoPanel(
-          context,
-          index,
-          mockups,
-          hasSummaryPage,
-          summaries,
-          warCwlService,
-        ),
-      );
-    }
-
     if (_showTodoMockups) {
       return SizedBox(
         height: height,
@@ -341,7 +326,7 @@ class _HomeTodoCardState extends State<HomeTodoCard>
                       summaries: summaries,
                     ),
                   ),
-                  _TodoRing(summary: summary, size: 46),
+                  _TodoRing(summary: summary, size: _homeTodoRingSize(context)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -375,40 +360,6 @@ class _HomeTodoCardState extends State<HomeTodoCard>
   /// The status row is as tall as its chevron (22), not as its text: budgeting
   /// for the text is what overflowed the card by 4px.
   static double _bodyHeight(double barsHeight) => 22 + 10 + barsHeight;
-
-  Widget _buildTodoPanel(
-    BuildContext context,
-    int index,
-    List<_TodoPreview> mockups,
-    bool hasSummaryPage,
-    List<_TodoSummary> summaries,
-    WarCwlService? warCwlService,
-  ) {
-    if (_showTodoMockups) {
-      return _TodoPreviewPanel(preview: mockups[index]);
-    }
-
-    if (hasSummaryPage && index == 0) {
-      return _AllAccountsPanel(
-        accountCount: widget.players.length,
-        summary: summaries[index],
-        status: _todoAllAccountsStatus(
-          context,
-          widget.players,
-          summaries.sublist(1),
-        ),
-        onTap: () => _openTodo(context, warCwlService!),
-      );
-    }
-
-    final player = widget.players[index - (hasSummaryPage ? 1 : 0)];
-
-    return _AccountTodoPanel(
-      player: player,
-      summary: summaries[index],
-      onTap: () => _openTodo(context, warCwlService!),
-    );
-  }
 
   WarMemberPresence _memberPresence(
     Player player,
@@ -448,67 +399,6 @@ class _HomeTodoCardState extends State<HomeTodoCard>
           memberPresenceMap: memberPresenceMap,
         ),
       ),
-    );
-  }
-}
-
-class _HomeTodoDesktopGrid extends StatelessWidget {
-  const _HomeTodoDesktopGrid({
-    required this.itemCount,
-    required this.hasSummaryPage,
-    required this.itemHeight,
-    required this.itemBuilder,
-  });
-
-  final int itemCount;
-  final bool hasSummaryPage;
-  final double itemHeight;
-  final IndexedWidgetBuilder itemBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    const gap = 12.0;
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final firstGridIndex = hasSummaryPage ? 1 : 0;
-        final gridCount = itemCount - firstGridIndex;
-        final columns = constraints.maxWidth >= 1240 && gridCount >= 3
-            ? 3
-            : constraints.maxWidth >= 760 && gridCount >= 2
-            ? 2
-            : 1;
-        final cardWidth =
-            (constraints.maxWidth - gap * (columns - 1)) / columns;
-
-        final children = <Widget>[
-          if (hasSummaryPage)
-            SizedBox(
-              height: itemHeight,
-              width: constraints.maxWidth,
-              child: itemBuilder(context, 0),
-            ),
-          if (hasSummaryPage && gridCount > 0) const SizedBox(height: gap),
-          if (gridCount > 0)
-            Wrap(
-              spacing: gap,
-              runSpacing: gap,
-              children: [
-                for (var index = firstGridIndex; index < itemCount; index++)
-                  SizedBox(
-                    width: cardWidth,
-                    height: itemHeight,
-                    child: itemBuilder(context, index),
-                  ),
-              ],
-            ),
-        ];
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        );
-      },
     );
   }
 }
@@ -696,83 +586,6 @@ class _TodoPreviewPanel extends StatelessWidget {
   }
 }
 
-class _AccountTodoPanel extends StatelessWidget {
-  const _AccountTodoPanel({
-    required this.player,
-    required this.summary,
-    required this.onTap,
-  });
-
-  final Player player;
-  final _TodoSummary summary;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDesktop = _usesDesktopHomePager(context);
-    final ringSize = isDesktop ? 54.0 : 46.0;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 1),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(28),
-          child: Ink(
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(
-                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-              ),
-            ),
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: isDesktop
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: _AccountHeader(player: player)),
-                    _TodoRing(summary: summary, size: ringSize),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        summary.lastActiveText(context),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      size: 22,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                _MetricBars(metrics: summary.metrics),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 /// Names the accounts that still have tasks left today, falling back to a
 /// generic combined label once every account is caught up.
 String _todoAllAccountsStatus(
@@ -798,193 +611,6 @@ String _todoAllAccountsStatus(
       ? loc.todoAccountsNumber(incomplete.length)
       : '${visibleNames.join(', ')}$suffix';
   return loc.todoAccountsHaveTasksLeft(subject, incomplete.length);
-}
-
-/// Leading page when several accounts are pinned: combined progress and
-/// per-category totals across all of them.
-class _AllAccountsPanel extends StatelessWidget {
-  const _AllAccountsPanel({
-    required this.accountCount,
-    required this.summary,
-    required this.status,
-    required this.onTap,
-  });
-
-  final int accountCount;
-  final _TodoSummary summary;
-  final String status;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 54.0 : 46.0;
-    final ringSize = isDesktop ? 54.0 : 46.0;
-
-    final header = Row(
-      children: [
-        SizedBox.square(
-          dimension: iconSize,
-          child: MobileWebImage(
-            imageUrl: ImageAssets.iconBuilderPotion,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => Icon(
-              Icons.checklist_rounded,
-              size: isDesktop ? 30 : 24,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ),
-        SizedBox(width: isDesktop ? 12 : 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.todoTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
-              ),
-              Text(
-                AppLocalizations.of(context)!.todoAccountsNumber(accountCount),
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 1),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(28),
-          child: Ink(
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(
-                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
-              ),
-            ),
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: isDesktop
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: header),
-                    _TodoRing(summary: summary, size: ringSize),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        status,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      size: 22,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                _MetricBars(metrics: summary.metrics),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _AccountHeader extends StatelessWidget {
-  const _AccountHeader({required this.player});
-
-  final Player player;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 54.0 : 46.0;
-
-    return Row(
-      children: [
-        SizedBox.square(
-          dimension: iconSize,
-          child: MobileWebImage(
-            imageUrl: player.townHallPic,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => DecoratedBox(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  '${player.townHallLevel}',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontSize: isDesktop ? 14 : null,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: isDesktop ? 12 : 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.todoTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
-              ),
-              Text(
-                player.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 class _PreviewHeader extends StatelessWidget {
