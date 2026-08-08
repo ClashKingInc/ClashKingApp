@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/home_account_rail.dart';
+import 'package:clashkingapp/common/widgets/home_account_comparison_grid.dart';
 import 'package:clashkingapp/common/widgets/home_metric_pill.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/app/my_app_state.dart';
@@ -374,6 +375,7 @@ class DashboardPage extends StatelessWidget {
         : HomeRankedCard(
             players: rankedPlayers,
             refreshGeneration: refreshGeneration,
+            desktopLayoutOverride: isDesktopWeb,
           );
     final upgradeCard = upgradePlayers.isEmpty
         ? null
@@ -381,6 +383,7 @@ class DashboardPage extends StatelessWidget {
             players: upgradePlayers,
             linkedPlayersForWidgetSync: linkedPlayers,
             refreshGeneration: refreshGeneration,
+            desktopLayoutOverride: isDesktopWeb,
           );
 
     if (isDesktopWeb) {
@@ -478,43 +481,82 @@ class _HomeDesktopRecapGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const gap = 16.0;
-    final secondaryCards = <Widget>[?rankedCard, ?upgradeCard];
-
-    return LayoutBuilder(
-      builder: (context, constraints) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ?todoCard,
-          if (todoCard != null && secondaryCards.isNotEmpty)
-            const SizedBox(height: gap),
-          if (secondaryCards.length == 2 && constraints.maxWidth >= 840)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: secondaryCards[0]),
-                const SizedBox(width: gap),
-                Expanded(child: secondaryCards[1]),
-              ],
-            )
-          else if (secondaryCards.length == 2)
-            Column(
-              children: [
-                secondaryCards[0],
-                const SizedBox(height: gap),
-                secondaryCards[1],
-              ],
-            )
-          else if (secondaryCards.length == 1)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 552),
-                child: secondaryCards.single,
-              ),
-            ),
+    final cards = <Widget>[?todoCard, ?rankedCard, ?upgradeCard];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var index = 0; index < cards.length; index++) ...[
+          if (index > 0) const SizedBox(height: 16),
+          cards[index],
         ],
-      ),
+      ],
+    );
+  }
+}
+
+class _HomeDesktopCardHeader extends StatelessWidget {
+  const _HomeDesktopCardHeader({
+    required this.imageUrl,
+    required this.fallbackIcon,
+    required this.title,
+    required this.subtitle,
+    this.trailing,
+  });
+
+  final String imageUrl;
+  final IconData fallbackIcon;
+  final String title;
+  final String subtitle;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Row(
+      children: [
+        SizedBox.square(
+          dimension: 54,
+          child: MobileWebImage(
+            imageUrl: imageUrl,
+            fit: BoxFit.contain,
+            errorWidget: (_, _, _) => Icon(
+              fallbackIcon,
+              size: 30,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (trailing case final trailing?) ...[
+          const SizedBox(width: 10),
+          trailing,
+        ],
+      ],
     );
   }
 }
@@ -524,10 +566,12 @@ class HomeRankedCard extends StatefulWidget {
     super.key,
     required this.players,
     required this.refreshGeneration,
+    this.desktopLayoutOverride,
   });
 
   final List<Player> players;
   final int refreshGeneration;
+  final bool? desktopLayoutOverride;
 
   @override
   State<HomeRankedCard> createState() => _HomeRankedCardState();
@@ -679,6 +723,8 @@ class _HomeRankedCardState extends State<HomeRankedCard>
     return FutureBuilder<_RankedHomeSummary>(
       future: _load,
       builder: (context, snapshot) {
+        final useDesktopGrid =
+            widget.desktopLayoutOverride ?? _usesDesktopHomeComparison(context);
         final summary = snapshot.data;
         final loading = snapshot.connectionState == ConnectionState.waiting;
         if (loading && summary == null) {
@@ -694,6 +740,19 @@ class _HomeRankedCardState extends State<HomeRankedCard>
         // pinned, matching the home to-do card's pattern.
         final hasSummaryPage = summary.accounts.length > 1;
         final itemCount = summary.accounts.length + (hasSummaryPage ? 1 : 0);
+        if (useDesktopGrid) {
+          return HomeAccountComparisonGrid(
+            itemCount: itemCount,
+            hasSummaryItem: hasSummaryPage,
+            itemHeight:
+                2 + 14 + 54 + 8 + 30 + 10 + HomeMetricPill.gridHeight(1) + 14,
+            itemBuilder: (context, index) => _buildDesktopPanel(
+              summary,
+              index,
+              hasSummaryPage: hasSummaryPage,
+            ),
+          );
+        }
         _clampIndex(itemCount);
 
         final loc = AppLocalizations.of(context)!;
@@ -801,6 +860,38 @@ class _HomeRankedCardState extends State<HomeRankedCard>
     }
     final account = summary.accounts[index - (hasSummaryPage ? 1 : 0)];
     return _RankedAccountPanel(account: account);
+  }
+
+  Widget _buildDesktopPanel(
+    _RankedHomeSummary summary,
+    int index, {
+    required bool hasSummaryPage,
+  }) {
+    final loc = AppLocalizations.of(context)!;
+    final isSummaryPage = hasSummaryPage && index == 0;
+    final account = isSummaryPage
+        ? null
+        : summary.accounts[index - (hasSummaryPage ? 1 : 0)];
+    return _HomeCardTappablePanel(
+      onTap: account == null ? null : () => _openRankedLeague(account.player),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _HomeDesktopCardHeader(
+            imageUrl: account?.tierIconUrl.isNotEmpty == true
+                ? account!.tierIconUrl
+                : ImageAssets.shieldWithArrow,
+            fallbackIcon: Icons.emoji_events_rounded,
+            title: loc.rankedLeagueTitle,
+            subtitle:
+                account?.name ??
+                loc.todoAccountsNumber(summary.accounts.length),
+          ),
+          const SizedBox(height: 8),
+          _buildPage(summary, index, hasSummaryPage),
+        ],
+      ),
+    );
   }
 }
 
@@ -1235,11 +1326,13 @@ class HomeUpgradeTrackerCard extends StatefulWidget {
     required this.players,
     required this.linkedPlayersForWidgetSync,
     required this.refreshGeneration,
+    this.desktopLayoutOverride,
   });
 
   final List<Player> players;
   final List<Player> linkedPlayersForWidgetSync;
   final int refreshGeneration;
+  final bool? desktopLayoutOverride;
 
   @override
   State<HomeUpgradeTrackerCard> createState() => _HomeUpgradeTrackerCardState();
@@ -1444,6 +1537,8 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
     return FutureBuilder<_UpgradeHomeSummary>(
       future: _load,
       builder: (context, snapshot) {
+        final useDesktopGrid =
+            widget.desktopLayoutOverride ?? _usesDesktopHomeComparison(context);
         final summary = snapshot.data;
         final loading = snapshot.connectionState == ConnectionState.waiting;
         if (loading && summary == null) {
@@ -1455,19 +1550,34 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
           );
         }
 
-        // A combined "all accounts" page leads when several accounts have
-        // imported data, matching the home to-do card's pattern. Accounts
-        // without imported data still get their own page, prompting import
-        // instead of silently disappearing from the pager.
-        final hasSummaryPage = summary.accounts.length > 1;
+        // A combined "all accounts" page leads whenever several accounts are
+        // pinned, matching the other Home recaps. Accounts without imported
+        // data still get their own page, prompting import instead of silently
+        // disappearing from the comparison.
         final accountCount = summary.accounts.length;
         final missingCount = summary.missingAccounts.length;
+        final hasSummaryPage = accountCount + missingCount > 1;
         final itemCount =
             accountCount + missingCount + (hasSummaryPage ? 1 : 0);
         final offset = hasSummaryPage ? 1 : 0;
         if (itemCount == 0) {
           return _HomeCardFrame(
             child: _UpgradeHomeEmpty(configuredCount: widget.players.length),
+          );
+        }
+        if (useDesktopGrid) {
+          return HomeAccountComparisonGrid(
+            itemCount: itemCount,
+            hasSummaryItem: hasSummaryPage,
+            itemHeight:
+                2 + 14 + 54 + 8 + 22 + 8 + HomeMetricPill.gridHeight(2) + 14,
+            itemBuilder: (context, index) => _buildDesktopPanel(
+              summary,
+              index,
+              hasSummaryPage: hasSummaryPage,
+              accountCount: accountCount,
+              offset: offset,
+            ),
           );
         }
         _clampIndex(itemCount);
@@ -1601,6 +1711,63 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
     }
     return _UpgradeMissingDataPanel(
       player: summary.missingAccounts[localIndex - accountCount],
+    );
+  }
+
+  Widget _buildDesktopPanel(
+    _UpgradeHomeSummary summary,
+    int index, {
+    required bool hasSummaryPage,
+    required int accountCount,
+    required int offset,
+  }) {
+    final loc = AppLocalizations.of(context)!;
+    final isSummaryPage = hasSummaryPage && index == 0;
+    final localIndex = index - offset;
+    final account = !isSummaryPage && localIndex < accountCount
+        ? summary.accounts[localIndex]
+        : null;
+    final missing = !isSummaryPage && localIndex >= accountCount
+        ? summary.missingAccounts[localIndex - accountCount]
+        : null;
+    final completion = isSummaryPage
+        ? summary.completion
+        : account?.completion ?? 0;
+    return _HomeCardTappablePanel(
+      onTap: isSummaryPage
+          ? null
+          : () => _openTracker(account?.tag ?? missing!.tag),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _HomeDesktopCardHeader(
+            imageUrl: isSummaryPage
+                ? ImageAssets.builderWave
+                : account?.hallImageUrl ??
+                      ImageAssets.townHall(missing!.townHallLevel),
+            fallbackIcon: Icons.construction_rounded,
+            title: loc.drawerUpgradeTracker,
+            subtitle: isSummaryPage
+                ? loc.todoAccountsNumber(
+                    summary.accounts.length + summary.missingAccounts.length,
+                  )
+                : account?.name ?? missing!.name,
+            trailing: _UpgradeProgressRing(
+              value: completion,
+              label: '${(completion * 100).round()}%',
+              size: 54,
+            ),
+          ),
+          const SizedBox(height: 8),
+          _buildPage(
+            summary,
+            index,
+            hasSummaryPage: hasSummaryPage,
+            accountCount: accountCount,
+            offset: offset,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -2050,6 +2217,9 @@ class _UpgradeProgressRing extends StatelessWidget {
 
 double _homeDashboardRingSize(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= 900 ? 54 : 46;
+
+bool _usesDesktopHomeComparison(BuildContext context) =>
+    kIsWeb && MediaQuery.sizeOf(context).width >= 900;
 
 class _UpgradeHomeSummary {
   const _UpgradeHomeSummary({
