@@ -326,8 +326,8 @@ class _RankingsHeader extends StatelessWidget {
                       children: [
                         MobileWebImage(
                           imageUrl: provider.board.iconUrl,
-                          width: 58,
-                          height: 58,
+                          width: isDesktop ? 44 : 58,
+                          height: isDesktop ? 44 : 58,
                         ),
                         const SizedBox(height: 4),
                         Text(
