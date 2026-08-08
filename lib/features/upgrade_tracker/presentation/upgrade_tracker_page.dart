@@ -3075,7 +3075,7 @@ _TrackerPlanData _buildTrackerPlanData(
           village: group.village,
           startsAt: startsAt,
           goldPassPercent: goldPassPercent,
-          preferences: _preferencesForQueue(
+          preferences: normalizeUpgradePlanPreferencesForQueue(
             snapshot,
             preferences,
             group.village,
@@ -6924,35 +6924,6 @@ class _AccountPickerSheetState extends State<_AccountPickerSheet> {
   }
 }
 
-UpgradePlanPreferences _preferencesForQueue(
-  UpgradeTrackerSnapshot snapshot,
-  UpgradePlanPreferences source,
-  UpgradeVillage village,
-  UpgradeQueue queue,
-) {
-  final available = snapshot
-      .itemsFor(village: village, queue: queue)
-      .map((item) => item.category)
-      .toSet();
-  final savedOrder = source.orderFor(village);
-  final order = [
-    ...savedOrder.where(available.contains),
-    ...UpgradeCategory.values.where(
-      (category) =>
-          available.contains(category) && !savedOrder.contains(category),
-    ),
-  ];
-  return _copyPlanPreferences(
-    source,
-    homeCategoryOrder: village == UpgradeVillage.home
-        ? order
-        : source.homeCategoryOrder,
-    builderBaseCategoryOrder: village == UpgradeVillage.builderBase
-        ? order
-        : source.builderBaseCategoryOrder,
-  );
-}
-
 int _plannerLaneCapacity(
   UpgradeTrackerSnapshot snapshot,
   UpgradeQueue queue,
@@ -8408,7 +8379,12 @@ void _showVillageUpgradeSummary(
       village: village,
       startsAt: startsAt,
       goldPassPercent: goldPassPercent,
-      preferences: _preferencesForQueue(snapshot, preferences, village, queue),
+      preferences: normalizeUpgradePlanPreferencesForQueue(
+        snapshot,
+        preferences,
+        village,
+        queue,
+      ),
       includedItemKeys: items.map((item) => item.planKey).toSet(),
     );
     final finish = lanes

@@ -399,6 +399,45 @@ class UpgradePlanPreferences {
   }
 }
 
+UpgradePlanPreferences normalizeUpgradePlanPreferencesForQueue(
+  UpgradeTrackerSnapshot snapshot,
+  UpgradePlanPreferences source,
+  UpgradeVillage village,
+  UpgradeQueue queue,
+) {
+  final available = snapshot
+      .itemsFor(village: village, queue: queue)
+      .map((item) => item.category)
+      .toSet();
+  final savedOrder = source.orderFor(village);
+  final order = [
+    ...savedOrder.where(available.contains),
+    ...UpgradeCategory.values.where(
+      (category) =>
+          available.contains(category) && !savedOrder.contains(category),
+    ),
+  ];
+  return UpgradePlanPreferences(
+    homeGoal: source.homeGoal,
+    builderBaseGoal: source.builderBaseGoal,
+    homeCategoryOrder: village == UpgradeVillage.home
+        ? order
+        : source.homeCategoryOrder,
+    builderBaseCategoryOrder: village == UpgradeVillage.builderBase
+        ? order
+        : source.builderBaseCategoryOrder,
+    homeCategoryTargets: source.homeCategoryTargets,
+    builderBaseCategoryTargets: source.builderBaseCategoryTargets,
+    homeCategoryShares: source.homeCategoryShares,
+    builderBaseCategoryShares: source.builderBaseCategoryShares,
+    prioritizeUnbuiltBuilders: source.prioritizeUnbuiltBuilders,
+    prioritizeUnbuiltLaboratory: source.prioritizeUnbuiltLaboratory,
+    prioritizeUnbuiltPets: source.prioritizeUnbuiltPets,
+    wallResourcePreference: source.wallResourcePreference,
+    wallsPerWeek: source.wallsPerWeek,
+  );
+}
+
 const _defaultPlanningOrder = [
   UpgradeCategory.defenses,
   UpgradeCategory.craftedDefenses,
