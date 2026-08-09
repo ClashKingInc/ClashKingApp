@@ -7,6 +7,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('wide web header fits without vertical overflow', (tester) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final provider = RankingsProvider(
+      service: _WidgetRankingsService(),
+      leagueOptions: const [
+        RankingLeagueOption.legendTwo,
+        RankingLeagueOption.legendThree,
+      ],
+      clock: () => DateTime(2026, 7, 20),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: RankingsPage(provider: provider),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('location picker is opaque, searchable, and pins Worldwide', (
     tester,
   ) async {

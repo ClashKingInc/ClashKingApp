@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/home_account_rail.dart';
+import 'package:clashkingapp/common/widgets/home_account_comparison_grid.dart';
 import 'package:clashkingapp/common/widgets/home_metric_pill.dart';
 import 'package:clashkingapp/common/widgets/indicators/progress_ring_painter.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -27,6 +28,9 @@ const double _homePagerDesktopBreakpoint = 900;
 
 bool _usesDesktopHomePager(BuildContext context) =>
     kIsWeb && MediaQuery.sizeOf(context).width >= _homePagerDesktopBreakpoint;
+
+double _homeTodoRingSize(BuildContext context) =>
+    _usesDesktopHomePager(context) ? 54 : 46;
 
 class HomeEventBanner extends StatefulWidget {
   const HomeEventBanner({super.key});
@@ -155,10 +159,12 @@ class HomeTodoCard extends StatefulWidget {
     super.key,
     required this.players,
     required this.allPlayers,
+    this.desktopLayoutOverride,
   });
 
   final List<Player> players;
   final List<Player> allPlayers;
+  final bool? desktopLayoutOverride;
 
   @override
   State<HomeTodoCard> createState() => _HomeTodoCardState();
@@ -247,12 +253,13 @@ class _HomeTodoCardState extends State<HomeTodoCard>
     // header can't silently overflow the card again.
     final headerHeight = math.max(46.0, 19 + 4 + HomeAccountRail.height);
     final height = 14 + headerHeight + 8 + _bodyHeight(barsHeight) + 14;
-    final useDesktopPager = _usesDesktopHomePager(context);
+    final useDesktopGrid =
+        widget.desktopLayoutOverride ?? _usesDesktopHomePager(context);
 
-    if (useDesktopPager) {
-      return _HomeTodoDesktopGrid(
+    if (useDesktopGrid) {
+      return HomeAccountComparisonGrid(
         itemCount: itemCount,
-        hasSummaryPage: hasSummaryPage,
+        hasSummaryItem: hasSummaryPage,
         itemHeight: height,
         itemBuilder: (context, index) => _buildTodoPanel(
           context,
@@ -341,7 +348,7 @@ class _HomeTodoCardState extends State<HomeTodoCard>
                       summaries: summaries,
                     ),
                   ),
-                  _TodoRing(summary: summary, size: 46),
+                  _TodoRing(summary: summary, size: _homeTodoRingSize(context)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -370,12 +377,6 @@ class _HomeTodoCardState extends State<HomeTodoCard>
     );
   }
 
-  /// Status row + its gap + the metric pills — everything inside the pager.
-  ///
-  /// The status row is as tall as its chevron (22), not as its text: budgeting
-  /// for the text is what overflowed the card by 4px.
-  static double _bodyHeight(double barsHeight) => 22 + 10 + barsHeight;
-
   Widget _buildTodoPanel(
     BuildContext context,
     int index,
@@ -402,13 +403,18 @@ class _HomeTodoCardState extends State<HomeTodoCard>
     }
 
     final player = widget.players[index - (hasSummaryPage ? 1 : 0)];
-
     return _AccountTodoPanel(
       player: player,
       summary: summaries[index],
       onTap: () => _openTodo(context, warCwlService!),
     );
   }
+
+  /// Status row + its gap + the metric pills — everything inside the pager.
+  ///
+  /// The status row is as tall as its chevron (22), not as its text: budgeting
+  /// for the text is what overflowed the card by 4px.
+  static double _bodyHeight(double barsHeight) => 22 + 10 + barsHeight;
 
   WarMemberPresence _memberPresence(
     Player player,
@@ -448,67 +454,6 @@ class _HomeTodoCardState extends State<HomeTodoCard>
           memberPresenceMap: memberPresenceMap,
         ),
       ),
-    );
-  }
-}
-
-class _HomeTodoDesktopGrid extends StatelessWidget {
-  const _HomeTodoDesktopGrid({
-    required this.itemCount,
-    required this.hasSummaryPage,
-    required this.itemHeight,
-    required this.itemBuilder,
-  });
-
-  final int itemCount;
-  final bool hasSummaryPage;
-  final double itemHeight;
-  final IndexedWidgetBuilder itemBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    const gap = 12.0;
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final firstGridIndex = hasSummaryPage ? 1 : 0;
-        final gridCount = itemCount - firstGridIndex;
-        final columns = constraints.maxWidth >= 1240 && gridCount >= 3
-            ? 3
-            : constraints.maxWidth >= 760 && gridCount >= 2
-            ? 2
-            : 1;
-        final cardWidth =
-            (constraints.maxWidth - gap * (columns - 1)) / columns;
-
-        final children = <Widget>[
-          if (hasSummaryPage)
-            SizedBox(
-              height: itemHeight,
-              width: constraints.maxWidth,
-              child: itemBuilder(context, 0),
-            ),
-          if (hasSummaryPage && gridCount > 0) const SizedBox(height: gap),
-          if (gridCount > 0)
-            Wrap(
-              spacing: gap,
-              runSpacing: gap,
-              children: [
-                for (var index = firstGridIndex; index < itemCount; index++)
-                  SizedBox(
-                    width: cardWidth,
-                    height: itemHeight,
-                    child: itemBuilder(context, index),
-                  ),
-              ],
-            ),
-        ];
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        );
-      },
     );
   }
 }
@@ -709,10 +654,34 @@ class _AccountTodoPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDesktop = _usesDesktopHomePager(context);
-    final ringSize = isDesktop ? 54.0 : 46.0;
+    final scheme = Theme.of(context).colorScheme;
+    return _DesktopTodoPanel(
+      onTap: onTap,
+      header: _AccountHeader(player: player),
+      summary: summary,
+      status: summary.lastActiveText(context),
+      scheme: scheme,
+    );
+  }
+}
 
+class _DesktopTodoPanel extends StatelessWidget {
+  const _DesktopTodoPanel({
+    required this.onTap,
+    required this.header,
+    required this.summary,
+    required this.status,
+    required this.scheme,
+  });
+
+  final VoidCallback onTap;
+  final Widget header;
+  final _TodoSummary summary;
+  final String status;
+  final ColorScheme scheme;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1),
       child: Material(
@@ -721,24 +690,22 @@ class _AccountTodoPanel extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(28),
           child: Ink(
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: colorScheme.surface,
+              color: scheme.surface,
               borderRadius: BorderRadius.circular(28),
               border: Border.all(
-                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+                color: scheme.outlineVariant.withValues(alpha: 0.32),
               ),
             ),
-            padding: const EdgeInsets.all(14),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: isDesktop
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Expanded(child: _AccountHeader(player: player)),
-                    _TodoRing(summary: summary, size: ringSize),
+                    Expanded(child: header),
+                    _TodoRing(summary: summary, size: 54),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -746,11 +713,11 @@ class _AccountTodoPanel extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        summary.lastActiveText(context),
+                        status,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
+                          color: scheme.onSurfaceVariant,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -758,7 +725,7 @@ class _AccountTodoPanel extends StatelessWidget {
                     Icon(
                       Icons.chevron_right_rounded,
                       size: 22,
-                      color: colorScheme.onSurfaceVariant,
+                      color: scheme.onSurfaceVariant,
                     ),
                   ],
                 ),
@@ -800,8 +767,6 @@ String _todoAllAccountsStatus(
   return loc.todoAccountsHaveTasksLeft(subject, incomplete.length);
 }
 
-/// Leading page when several accounts are pinned: combined progress and
-/// per-category totals across all of them.
 class _AllAccountsPanel extends StatelessWidget {
   const _AllAccountsPanel({
     required this.accountCount,
@@ -817,106 +782,51 @@ class _AllAccountsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 54.0 : 46.0;
-    final ringSize = isDesktop ? 54.0 : 46.0;
-
-    final header = Row(
-      children: [
-        SizedBox.square(
-          dimension: iconSize,
-          child: MobileWebImage(
-            imageUrl: ImageAssets.iconBuilderPotion,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => Icon(
-              Icons.checklist_rounded,
-              size: isDesktop ? 30 : 24,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ),
-        SizedBox(width: isDesktop ? 12 : 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.todoTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
-              ),
-              Text(
-                AppLocalizations.of(context)!.todoAccountsNumber(accountCount),
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 1),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(28),
-          child: Ink(
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(
-                color: colorScheme.outlineVariant.withValues(alpha: 0.32),
+    final scheme = Theme.of(context).colorScheme;
+    final loc = AppLocalizations.of(context)!;
+    return _DesktopTodoPanel(
+      onTap: onTap,
+      summary: summary,
+      status: status,
+      scheme: scheme,
+      header: Row(
+        children: [
+          SizedBox.square(
+            dimension: 54,
+            child: MobileWebImage(
+              imageUrl: ImageAssets.iconBuilderPotion,
+              fit: BoxFit.contain,
+              errorWidget: (context, url, error) => Icon(
+                Icons.checklist_rounded,
+                size: 30,
+                color: scheme.onSurfaceVariant,
               ),
             ),
-            padding: const EdgeInsets.all(14),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: isDesktop
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(child: header),
-                    _TodoRing(summary: summary, size: ringSize),
-                  ],
+                Text(
+                  loc.todoAllAccounts,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        status,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      size: 22,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ],
+                Text(
+                  loc.todoAccountsNumber(accountCount),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const SizedBox(height: 10),
-                _MetricBars(metrics: summary.metrics),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -929,27 +839,24 @@ class _AccountHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isDesktop = _usesDesktopHomePager(context);
-    final iconSize = isDesktop ? 54.0 : 46.0;
-
+    final scheme = Theme.of(context).colorScheme;
     return Row(
       children: [
         SizedBox.square(
-          dimension: iconSize,
+          dimension: 54,
           child: MobileWebImage(
             imageUrl: player.townHallPic,
             fit: BoxFit.contain,
             errorWidget: (context, url, error) => DecoratedBox(
               decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
+                color: scheme.surfaceContainerHighest,
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Text(
                   '${player.townHallLevel}',
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontSize: isDesktop ? 14 : null,
+                    fontSize: 14,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -957,13 +864,13 @@ class _AccountHeader extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: isDesktop ? 12 : 10),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppLocalizations.of(context)!.todoTitle,
+                player.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(
@@ -971,11 +878,11 @@ class _AccountHeader extends StatelessWidget {
                 ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
               ),
               Text(
-                player.name,
+                player.clan?.name ?? player.tag,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
+                  color: scheme.onSurfaceVariant,
                   fontWeight: FontWeight.w700,
                 ),
               ),
