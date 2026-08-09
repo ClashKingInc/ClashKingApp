@@ -3059,12 +3059,12 @@
   "statsLeagueTier": "Lig seviyesi",
   "statsLegendLeagueOne": "Efsane Ligi 1",
   "statsCwlLeague": "KSL ligi",
-  "statsLeagueBronze": "Bronze",
-  "statsLeagueSilver": "Silver",
-  "statsLeagueGold": "Gold",
-  "statsLeagueCrystal": "Crystal",
-  "statsLeagueMaster": "Master",
-  "statsLeagueChampion": "Champion",
+  "statsLeagueBronze": "Bronz",
+  "statsLeagueSilver": "Gümüş",
+  "statsLeagueGold": "Altın",
+  "statsLeagueCrystal": "Kristal",
+  "statsLeagueMaster": "Usta",
+  "statsLeagueChampion": "Şampiyon",
   "statsAllCwlLeagues": "Tüm KSL ligleri",
   "statsCwlSeasons": "KSL sezonları",
   "statsCwlSeasonsHint": "YYYY-AA, virgülle ayrılmış",
@@ -3218,34 +3218,34 @@
   "assetFolderResources": "Kaynaklar",
   "assetFolderStickers": "Etiketler",
   "upgradeSectionHeroes": "Kahramanlar",
-  "upgradeSectionTroops": "Troops",
-  "upgradeSectionSpells": "Spells",
-  "upgradeSectionPets": "Pets",
-  "upgradeSectionEquipment": "Equipment",
-  "sideMockupSource": "Source",
-  "sideMockupMode": "Mode",
-  "sideMockupPreview": "Preview",
-  "sideMockupRows": "Rows",
-  "sideMockupRowsValue": "5 mockups",
-  "endpointLeagueTop200": "League top 200",
-  "endpointLeagueTop200Preview": "Legend League · 5,742 trophies",
-  "endpointTownhallTop200": "Townhall top 200",
-  "endpointTownhallTop200Preview": "TH17 · Global player board",
-  "endpointClanDonations": "Clan donations",
-  "endpointClanDonationsPreview": "United States · weekly clan totals",
-  "endpointClanWarWins": "Clan war wins",
-  "endpointClanWarWinsPreview": "International · all-time war wins",
-  "endpointTop200ArmyUsage": "Top 200 army usage",
-  "endpointTop200ArmyUsagePreview": "Battle logs · troop and spell usage",
-  "endpointStateTop200": "Top 200",
-  "endpointStateWeekly": "Weekly",
-  "endpointStateUsage": "Usage",
-  "notifGroupReminders": "Reminders",
-  "notifGroupProgress": "Progress",
-  "notifLeagueDefense": "League defense",
-  "notifLeagueDefenseResult": "League defense result",
-  "notifLeagueTriple": "League triple",
-  "notifLeagueAttackBody": "Lord Clasher attacked {player} • {percent}% • {stars} stars • {league}",
+  "upgradeSectionTroops": "Birlikler",
+  "upgradeSectionSpells": "Büyüler",
+  "upgradeSectionPets": "Evcil Hayvanlar",
+  "upgradeSectionEquipment": "Ekipman",
+  "sideMockupSource": "Kaynak",
+  "sideMockupMode": "Mod",
+  "sideMockupPreview": "Önizleme",
+  "sideMockupRows": "Satırlar",
+  "sideMockupRowsValue": "5 taslaklar",
+  "endpointLeagueTop200": "Lig ilk 200",
+  "endpointLeagueTop200Preview": "Efsane Ligi · 5.742 kupa",
+  "endpointTownhallTop200": "Belediye binası ilk 200",
+  "endpointTownhallTop200Preview": "BB17 · Global oyuncu panosu",
+  "endpointClanDonations": "Klan bağışları",
+  "endpointClanDonationsPreview": "Amerika Birleşik Devletleri · haftalık klan toplamı",
+  "endpointClanWarWins": "Klan savaşı zaferleri",
+  "endpointClanWarWinsPreview": "Uluslararası · tüm zamanların savaş zaferleri",
+  "endpointTop200ArmyUsage": "İlk 200 ordu kullanımı",
+  "endpointTop200ArmyUsagePreview": "Savaş kayıtları · birlik ve büyü kullanımı",
+  "endpointStateTop200": "İlk 200",
+  "endpointStateWeekly": "Haftalık",
+  "endpointStateUsage": "Kullanım",
+  "notifGroupReminders": "Hatırlatmalar",
+  "notifGroupProgress": "İlerleme",
+  "notifLeagueDefense": "Lig savunması",
+  "notifLeagueDefenseResult": "Lig savunma sonucu",
+  "notifLeagueTriple": "Lig üçlükleri",
+  "notifLeagueAttackBody": "Lord Clasher, {player}'a saldırdı • {percent}% • {stars} yıldız • {league}",
   "@notifLeagueAttackBody": {
     "placeholders": {
       "player": {
@@ -3262,8 +3262,8 @@
       }
     }
   },
-  "notifWarDefense": "War defense",
-  "notifWarAttackOnTh": "War attack on TH{th}",
+  "notifWarDefense": "Savaş savunması",
+  "notifWarAttackOnTh": "BB{th}'e savaş saldırısı",
   "@notifWarAttackOnTh": {
     "placeholders": {
       "th": {
@@ -3271,7 +3271,7 @@
       }
     }
   },
-  "notifWarDefenseBody": "{opponentClan} attacked {player} • {percent}% • {stars} stars • {clan} defense",
+  "notifWarDefenseBody": "{opponentClan}, {player}'a saldırdı • {percent}% • {stars} yıldız • {clan} savunması",
   "@notifWarDefenseBody": {
     "placeholders": {
       "opponentClan": {
@@ -3291,9 +3291,9 @@
       }
     }
   },
-  "notifWarFeed5v5": "5v5 war feed",
-  "notifWarAttackResult": "War attack result",
-  "notifWarAttackResultBody": "{clan} attacked Pine Riders TH{th} • 100% • 3 stars",
+  "notifWarFeed5v5": "5v5 savaş akışı",
+  "notifWarAttackResult": "Savaş saldırısı sonucu",
+  "notifWarAttackResultBody": "{clan} Pine Riders BB{th}'e saldırdı • %100 • 3 yıldız",
   "@notifWarAttackResultBody": {
     "placeholders": {
       "clan": {
@@ -3304,8 +3304,8 @@
       }
     }
   },
-  "notifWarMatched": "War matched",
-  "notifWarMatchedBody": "{clan} matched with Pine Riders. Preparation day started.",
+  "notifWarMatched": "Savaş eşleşti",
+  "notifWarMatchedBody": "{clan}, Pine Riders ile eşleşti. Hazırlık günü başladı.",
   "@notifWarMatchedBody": {
     "placeholders": {
       "clan": {
@@ -3313,9 +3313,9 @@
       }
     }
   },
-  "notifWarStarted": "War started",
-  "notifBattleDayStarted": "Battle day started",
-  "notifWarStartedBody": "{clan} vs Pine Riders is live. Good luck.",
+  "notifWarStarted": "Savaş başladı",
+  "notifBattleDayStarted": "Savaş günü başladı",
+  "notifWarStartedBody": "{clan} ile Pine Riders arasındaki maç başladı. Bol şans.",
   "@notifWarStartedBody": {
     "placeholders": {
       "clan": {
@@ -3323,8 +3323,8 @@
       }
     }
   },
-  "notifWarEnded": "War ended",
-  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final results are available.",
+  "notifWarEnded": "Savaş sona erdi.",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Nihai sonuçlar mevcuttur.",
   "@notifWarEndedBody": {
     "placeholders": {
       "clan": {
@@ -3332,9 +3332,9 @@
       }
     }
   },
-  "notifWarReminder1h": "War reminder: 1h",
-  "notifWarReminder30m": "War reminder: 30m",
-  "notifWarReminder15m": "War reminder: 15m",
+  "notifWarReminder1h": "Savaş hatırlatıcısı: 1sa",
+  "notifWarReminder30m": "Savaş hatırlatıcısı: 30dk",
+  "notifWarReminder15m": "Savaş hatırlatıcısı: 15dk",
   "notifOneHourLeft": "1 hour left",
   "notifThirtyMinutesLeft": "30 minutes left",
   "notifFifteenMinutesLeft": "15 minutes left",
