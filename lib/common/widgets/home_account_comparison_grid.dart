@@ -35,7 +35,7 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
   static const double _overflowCardWidth = 240;
   static const double _maximumCardWidth = 360;
   static const double _singleCardMaxWidth = 552;
-  static const double _navigationSpace = 96;
+  static const double _navigationSpace = 88;
   static const double _scrollTolerance = 1;
 
   final ScrollController _controller = ScrollController();
@@ -279,6 +279,13 @@ class _AccountRail extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (showsNavigation)
+          _RailButton(
+            key: const ValueKey('home-comparison-previous'),
+            tooltip: MaterialLocalizations.of(context).previousPageTooltip,
+            icon: Icons.chevron_left_rounded,
+            onPressed: hasOverflow && canScrollBack ? onPrevious : null,
+          ),
         Expanded(
           child: ClipRect(
             child: Listener(
@@ -311,72 +318,14 @@ class _AccountRail extends StatelessWidget {
             ),
           ),
         ),
-        if (showsNavigation) ...[
-          const SizedBox(width: CKSpacing.xs),
-          _RailNavigation(
-            visible: hasOverflow,
-            canScrollBack: canScrollBack,
-            canScrollForward: canScrollForward,
-            onPrevious: onPrevious,
-            onNext: onNext,
+        if (showsNavigation)
+          _RailButton(
+            key: const ValueKey('home-comparison-next'),
+            tooltip: MaterialLocalizations.of(context).nextPageTooltip,
+            icon: Icons.chevron_right_rounded,
+            onPressed: hasOverflow && canScrollForward ? onNext : null,
           ),
-        ],
       ],
-    );
-  }
-}
-
-class _RailNavigation extends StatelessWidget {
-  const _RailNavigation({
-    required this.visible,
-    required this.canScrollBack,
-    required this.canScrollForward,
-    required this.onPrevious,
-    required this.onNext,
-  });
-
-  final bool visible;
-  final bool canScrollBack;
-  final bool canScrollForward;
-  final VoidCallback onPrevious;
-  final VoidCallback onNext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 88,
-      child: Align(
-        alignment: Alignment.center,
-        child: visible
-            ? Material(
-                color: Theme.of(
-                  context,
-                ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.96),
-                borderRadius: BorderRadius.circular(CKRadius.pill),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _RailButton(
-                      key: const ValueKey('home-comparison-previous'),
-                      tooltip: MaterialLocalizations.of(
-                        context,
-                      ).previousPageTooltip,
-                      icon: Icons.chevron_left_rounded,
-                      onPressed: canScrollBack ? onPrevious : null,
-                    ),
-                    _RailButton(
-                      key: const ValueKey('home-comparison-next'),
-                      tooltip: MaterialLocalizations.of(
-                        context,
-                      ).nextPageTooltip,
-                      icon: Icons.chevron_right_rounded,
-                      onPressed: canScrollForward ? onNext : null,
-                    ),
-                  ],
-                ),
-              )
-            : const SizedBox.shrink(),
-      ),
     );
   }
 }
