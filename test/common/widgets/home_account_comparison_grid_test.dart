@@ -198,6 +198,85 @@ void main() {
     expect(pageController.offset, 0);
   });
 
+  testWidgets('lets the surrounding page scroll at both rail edges', (
+    tester,
+  ) async {
+    configureView(tester);
+    final pageController = ScrollController();
+    addTearDown(pageController.dispose);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            controller: pageController,
+            child: Column(
+              children: [
+                const SizedBox(height: 200),
+                SizedBox(
+                  width: 920,
+                  child: HomeAccountComparisonGrid(
+                    itemCount: 5,
+                    hasSummaryItem: true,
+                    itemHeight: 100,
+                    itemBuilder: (_, index) => ColoredBox(
+                      key: ValueKey('comparison-item-$index'),
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 1200),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    pageController.jumpTo(100);
+    await tester.pump();
+    var railCenter = tester.getCenter(
+      find.byKey(const ValueKey('home-comparison-account-rail')),
+    );
+    await tester.sendEventToBinding(
+      PointerScrollEvent(
+        position: railCenter,
+        scrollDelta: const Offset(0, -50),
+        kind: PointerDeviceKind.mouse,
+      ),
+    );
+    await tester.pump();
+    expect(pageController.offset, lessThan(100));
+
+    pageController.jumpTo(0);
+    await tester.pump();
+    railCenter = tester.getCenter(
+      find.byKey(const ValueKey('home-comparison-account-rail')),
+    );
+    await tester.sendEventToBinding(
+      PointerScrollEvent(
+        position: railCenter,
+        scrollDelta: const Offset(0, 10000),
+        kind: PointerDeviceKind.mouse,
+      ),
+    );
+    await tester.pump();
+    expect(pageController.offset, 0);
+
+    railCenter = tester.getCenter(
+      find.byKey(const ValueKey('home-comparison-account-rail')),
+    );
+    await tester.sendEventToBinding(
+      PointerScrollEvent(
+        position: railCenter,
+        scrollDelta: const Offset(0, 100),
+        kind: PointerDeviceKind.mouse,
+      ),
+    );
+    await tester.pump();
+    expect(pageController.offset, greaterThan(0));
+  });
+
   testWidgets('bounds a lone account card instead of stretching it', (
     tester,
   ) async {

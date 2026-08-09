@@ -228,22 +228,22 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
         !_controller.hasClients) {
       return;
     }
+    final delta = event.scrollDelta.dx.abs() > event.scrollDelta.dy.abs()
+        ? event.scrollDelta.dx
+        : event.scrollDelta.dy;
+    if (delta == 0) return;
+    final target = (_controller.offset + delta).clamp(
+      _controller.position.minScrollExtent,
+      _controller.position.maxScrollExtent,
+    );
+    if (target == _controller.offset) return;
+
     GestureBinding.instance.pointerSignalResolver.register(event, (
       resolvedEvent,
     ) {
       if (resolvedEvent is! PointerScrollEvent || !_controller.hasClients) {
         return;
       }
-      final delta =
-          resolvedEvent.scrollDelta.dx.abs() >
-              resolvedEvent.scrollDelta.dy.abs()
-          ? resolvedEvent.scrollDelta.dx
-          : resolvedEvent.scrollDelta.dy;
-      if (delta == 0) return;
-      final target = (_controller.offset + delta).clamp(
-        _controller.position.minScrollExtent,
-        _controller.position.maxScrollExtent,
-      );
       _controller.jumpTo(target);
     });
   }

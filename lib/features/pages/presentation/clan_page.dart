@@ -125,6 +125,7 @@ class _ClanPageState extends State<ClanPage> {
                       ? SliverToBoxAdapter(
                           child: ResponsiveCardGrid(
                             itemCount: clans.length,
+                            alignment: WrapAlignment.center,
                             itemBuilder: (context, index) {
                               final item = clans[index];
                               return _ClanCard(

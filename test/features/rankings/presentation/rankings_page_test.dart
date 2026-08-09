@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('wide web header fits without vertical overflow', (tester) async {
-    tester.view.physicalSize = const Size(1440, 900);
+  testWidgets('wide web content uses its local pane width', (tester) async {
+    tester.view.physicalSize = const Size(1600, 900);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -26,12 +26,19 @@ void main() {
       MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: RankingsPage(provider: provider),
+        home: Align(
+          alignment: Alignment.centerRight,
+          child: SizedBox(width: 1335, child: RankingsPage(provider: provider)),
+        ),
       ),
     );
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
+    expect(
+      tester.getSize(find.byType(RankingRow).first).width,
+      closeTo(1120, 0.1),
+    );
   });
 
   testWidgets('location picker is opaque, searchable, and pins Worldwide', (

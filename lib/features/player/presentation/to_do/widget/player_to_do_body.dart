@@ -2,6 +2,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_body_card.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 
@@ -24,20 +25,24 @@ class PlayerToDoBody extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        children: [
-          if (visiblePlayers.isEmpty)
-            _EmptyTodoCard(text: emptyText)
-          else
-            ...visiblePlayers.map(
-              (player) => PlayerToDoBodyCard(
-                player: player,
-                member:
-                    memberPresenceMap[player.tag] ?? WarMemberPresence.empty(),
-              ),
+      child: visiblePlayers.isEmpty
+          ? _EmptyTodoCard(text: emptyText)
+          : ResponsiveCardGrid(
+              itemCount: visiblePlayers.length,
+              minItemWidth: 330,
+              maxColumns: 3,
+              spacing: 12,
+              alignment: WrapAlignment.center,
+              itemBuilder: (context, index) {
+                final player = visiblePlayers[index];
+                return PlayerToDoBodyCard(
+                  player: player,
+                  member:
+                      memberPresenceMap[player.tag] ??
+                      WarMemberPresence.empty(),
+                );
+              },
             ),
-        ],
-      ),
     );
   }
 }
