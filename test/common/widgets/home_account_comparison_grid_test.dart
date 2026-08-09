@@ -29,16 +29,21 @@ void main() {
     );
   }
 
-  testWidgets('shows a full-width summary above three account columns', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(1200, 900);
+  void configureView(WidgetTester tester) {
+    tester.view.physicalSize = const Size(1400, 900);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
+  }
+
+  testWidgets('keeps the summary beside same-sized account cards', (
+    tester,
+  ) async {
+    configureView(tester);
     await tester.pumpWidget(
       buildGrid(width: 1120, itemCount: 4, hasSummaryItem: true),
     );
+    await tester.pump();
 
     final summary = tester.getRect(
       find.byKey(const ValueKey('comparison-item-0')),
@@ -53,20 +58,55 @@ void main() {
       find.byKey(const ValueKey('comparison-item-3')),
     );
 
-    expect(summary.width, 1120);
-    expect(first.top, greaterThan(summary.bottom));
-    expect(first.top, second.top);
-    expect(second.top, third.top);
-    expect(first.width, closeTo((1120 - 24) / 3, 0.01));
+    expect(first.left, greaterThan(summary.right));
+    expect(first.top, summary.top);
+    expect(second.top, summary.top);
+    expect(third.top, summary.top);
+    expect(first.width, summary.width);
+    expect(second.width, summary.width);
+    expect(third.width, summary.width);
+    expect(find.byKey(const ValueKey('home-comparison-next')), findsNothing);
+  });
+
+  testWidgets('pins the summary while account arrows move the rail', (
+    tester,
+  ) async {
+    configureView(tester);
+    await tester.pumpWidget(
+      buildGrid(width: 920, itemCount: 5, hasSummaryItem: true),
+    );
+    await tester.pump();
+
+    final summaryBefore = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-0')),
+    );
+    final firstBefore = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-1')),
+    );
+    final next = find.byKey(const ValueKey('home-comparison-next'));
+    final previous = find.byKey(const ValueKey('home-comparison-previous'));
+
+    expect(next, findsOneWidget);
+    expect(previous, findsNothing);
+
+    await tester.tap(next);
+    await tester.pumpAndSettle();
+
+    final summaryAfter = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-0')),
+    );
+    final firstAfter = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-1')),
+    );
+    expect(summaryAfter, summaryBefore);
+    expect(firstAfter.left, lessThan(firstBefore.left));
+    expect(previous, findsOneWidget);
   });
 
   testWidgets('bounds a lone account card instead of stretching it', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(1200, 900);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
+    configureView(tester);
     await tester.pumpWidget(
       buildGrid(width: 1120, itemCount: 1, hasSummaryItem: false),
     );
