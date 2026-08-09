@@ -825,12 +825,14 @@ class _GameAssetCategoryPageState extends State<GameAssetCategoryPage> {
         if (hasCategoryOptions) ...[
           Expanded(
             flex: 3,
-            child: FilterDropdown(
-              sortBy: widget.selectedCategoryId ?? widget.category.id,
-              updateSortBy: _selectCategory,
-              sortByOptions: _categoryOptions(loc, buildImage),
-              height: 44,
-              maxWidth: double.infinity,
+            child: LayoutBuilder(
+              builder: (context, constraints) => FilterDropdown(
+                sortBy: widget.selectedCategoryId ?? widget.category.id,
+                updateSortBy: _selectCategory,
+                sortByOptions: _categoryOptions(loc, buildImage),
+                height: 44,
+                maxWidth: constraints.maxWidth,
+              ),
             ),
           ),
           const SizedBox(width: 8),

@@ -107,6 +107,11 @@ void main() {
         0.1,
       ),
     );
+
+    await tester.tap(find.byType(FilterDropdown).first);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.text('Troops'), findsOneWidget);
   });
 
   testWidgets('short web pane uses compact horizontal controls', (
