@@ -871,9 +871,10 @@ class _HomeRankedCardState extends State<HomeRankedCard>
   }) {
     final loc = AppLocalizations.of(context)!;
     final isSummaryPage = hasSummaryPage && index == 0;
+    final accountOffset = hasSummaryPage ? 1 : 0;
     final account = isSummaryPage
         ? null
-        : summary.accounts[index - (hasSummaryPage ? 1 : 0)];
+        : summary.accounts[index - accountOffset];
     return _HomeCardTappablePanel(
       onTap: account == null ? null : () => _openRankedLeague(account.player),
       child: Column(
