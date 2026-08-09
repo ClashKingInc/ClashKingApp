@@ -83,11 +83,25 @@ void main() {
     final firstBefore = tester.getRect(
       find.byKey(const ValueKey('comparison-item-1')),
     );
+    final secondBefore = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-2')),
+    );
     final next = find.byKey(const ValueKey('home-comparison-next'));
     final previous = find.byKey(const ValueKey('home-comparison-previous'));
 
     expect(next, findsOneWidget);
-    expect(previous, findsNothing);
+    expect(previous, findsOneWidget);
+    expect(firstBefore.width, summaryBefore.width);
+    expect(tester.getRect(previous).right, lessThanOrEqualTo(firstBefore.left));
+    expect(tester.getRect(next).left, greaterThanOrEqualTo(secondBefore.right));
+    expect(
+      tester
+          .widget<IconButton>(
+            find.descendant(of: previous, matching: find.byType(IconButton)),
+          )
+          .onPressed,
+      isNull,
+    );
 
     await tester.tap(next);
     await tester.pumpAndSettle();
@@ -100,7 +114,14 @@ void main() {
     );
     expect(summaryAfter, summaryBefore);
     expect(firstAfter.left, lessThan(firstBefore.left));
-    expect(previous, findsOneWidget);
+    expect(
+      tester
+          .widget<IconButton>(
+            find.descendant(of: previous, matching: find.byType(IconButton)),
+          )
+          .onPressed,
+      isNotNull,
+    );
   });
 
   testWidgets('bounds a lone account card instead of stretching it', (

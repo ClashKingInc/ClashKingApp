@@ -32,8 +32,10 @@ class HomeAccountComparisonGrid extends StatefulWidget {
 class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
   static const double _gap = CKSpacing.md;
   static const double _minimumCardWidth = 270;
+  static const double _overflowCardWidth = 240;
   static const double _maximumCardWidth = 360;
   static const double _singleCardMaxWidth = 552;
+  static const double _navigationSpace = 96;
   static const double _scrollTolerance = 1;
 
   final ScrollController _controller = ScrollController();
@@ -75,15 +77,15 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
         final availableWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth
             : _singleCardMaxWidth;
-        final cardWidth = _cardWidthFor(availableWidth);
-        _cardStride = cardWidth + _gap;
+        final layout = _layoutFor(availableWidth);
+        _cardStride = layout.cardWidth + _gap;
         _scheduleMetricsUpdate();
 
         if (widget.itemCount == 1) {
           return Align(
             alignment: Alignment.topLeft,
             child: SizedBox(
-              width: cardWidth,
+              width: layout.cardWidth,
               height: widget.itemHeight,
               child: widget.itemBuilder(context, 0),
             ),
@@ -99,7 +101,7 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
             children: [
               if (widget.hasSummaryItem) ...[
                 SizedBox(
-                  width: cardWidth,
+                  width: layout.cardWidth,
                   child: widget.itemBuilder(context, 0),
                 ),
                 const SizedBox(width: _gap),
@@ -110,12 +112,13 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
                     controller: _controller,
                     itemCount: accountCount,
                     firstItemIndex: firstAccountIndex,
-                    cardWidth: cardWidth,
+                    cardWidth: layout.cardWidth,
                     itemHeight: widget.itemHeight,
                     itemBuilder: widget.itemBuilder,
                     hasOverflow: _hasOverflow,
                     canScrollBack: _canScrollBack,
                     canScrollForward: _canScrollForward,
+                    reservesNavigation: layout.reservesNavigation,
                     onPrevious: () => _scrollBy(-_cardStride),
                     onNext: () => _scrollBy(_cardStride),
                     onPointerSignal: _handlePointerSignal,
@@ -128,20 +131,42 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
     );
   }
 
-  double _cardWidthFor(double availableWidth) {
+  _ComparisonLayout _layoutFor(double availableWidth) {
     if (widget.itemCount == 1) {
-      return math.min(availableWidth, _singleCardMaxWidth);
+      return _ComparisonLayout(
+        cardWidth: math.min(availableWidth, _singleCardMaxWidth),
+        reservesNavigation: false,
+      );
     }
 
-    var visibleSlots = ((availableWidth + _gap) / (_minimumCardWidth + _gap))
-        .floor()
-        .clamp(1, widget.itemCount);
+    final slotsWithoutNavigation = _visibleSlotCount(
+      availableWidth,
+      minimumWidth: _minimumCardWidth,
+    );
+    final reservesNavigation = widget.itemCount > slotsWithoutNavigation;
+    final cardsWidth = math.max(
+      0.0,
+      availableWidth - (reservesNavigation ? _navigationSpace : 0),
+    );
+    var visibleSlots = _visibleSlotCount(
+      cardsWidth,
+      minimumWidth: reservesNavigation ? _overflowCardWidth : _minimumCardWidth,
+    );
     if (widget.hasSummaryItem && widget.itemCount > 1) {
       visibleSlots = math.max(2, visibleSlots);
     }
-    final width = (availableWidth - _gap * (visibleSlots - 1)) / visibleSlots;
-    return width.clamp(0, _maximumCardWidth).toDouble();
+    final cardWidth = (cardsWidth - _gap * (visibleSlots - 1)) / visibleSlots;
+    return _ComparisonLayout(
+      cardWidth: cardWidth.clamp(0, _maximumCardWidth).toDouble(),
+      reservesNavigation: reservesNavigation,
+    );
   }
+
+  int _visibleSlotCount(double width, {required double minimumWidth}) =>
+      ((width + _gap) / (minimumWidth + _gap)).floor().clamp(
+        1,
+        widget.itemCount,
+      );
 
   void _scheduleMetricsUpdate() {
     if (_metricsUpdateScheduled) return;
@@ -208,6 +233,16 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
   }
 }
 
+class _ComparisonLayout {
+  const _ComparisonLayout({
+    required this.cardWidth,
+    required this.reservesNavigation,
+  });
+
+  final double cardWidth;
+  final bool reservesNavigation;
+}
+
 class _AccountRail extends StatelessWidget {
   const _AccountRail({
     required this.controller,
@@ -219,6 +254,7 @@ class _AccountRail extends StatelessWidget {
     required this.hasOverflow,
     required this.canScrollBack,
     required this.canScrollForward,
+    required this.reservesNavigation,
     required this.onPrevious,
     required this.onNext,
     required this.onPointerSignal,
@@ -233,63 +269,90 @@ class _AccountRail extends StatelessWidget {
   final bool hasOverflow;
   final bool canScrollBack;
   final bool canScrollForward;
+  final bool reservesNavigation;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
   final void Function(PointerSignalEvent) onPointerSignal;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.hardEdge,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Listener(
-          onPointerSignal: onPointerSignal,
-          child: SingleChildScrollView(
-            key: const ValueKey('home-comparison-account-rail'),
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            physics: const ClampingScrollPhysics(),
-            child: Row(
-              children: [
-                for (
-                  var localIndex = 0;
-                  localIndex < itemCount;
-                  localIndex++
-                ) ...[
-                  if (localIndex > 0) const SizedBox(width: CKSpacing.md),
-                  SizedBox(
-                    width: cardWidth,
-                    height: itemHeight,
-                    child: itemBuilder(context, firstItemIndex + localIndex),
-                  ),
-                ],
-              ],
+        if (reservesNavigation)
+          _NavigationGutter(
+            child: hasOverflow
+                ? _RailButton(
+                    key: const ValueKey('home-comparison-previous'),
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).previousPageTooltip,
+                    icon: Icons.chevron_left_rounded,
+                    onPressed: canScrollBack ? onPrevious : null,
+                  )
+                : null,
+          ),
+        Expanded(
+          child: ClipRect(
+            child: Listener(
+              onPointerSignal: onPointerSignal,
+              child: SingleChildScrollView(
+                key: const ValueKey('home-comparison-account-rail'),
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                physics: const ClampingScrollPhysics(),
+                child: Row(
+                  children: [
+                    for (
+                      var localIndex = 0;
+                      localIndex < itemCount;
+                      localIndex++
+                    ) ...[
+                      if (localIndex > 0) const SizedBox(width: CKSpacing.md),
+                      SizedBox(
+                        width: cardWidth,
+                        height: itemHeight,
+                        child: itemBuilder(
+                          context,
+                          firstItemIndex + localIndex,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-        if (hasOverflow && canScrollBack)
-          Positioned(
-            left: CKSpacing.sm,
-            top: (itemHeight - 48) / 2,
-            child: _RailButton(
-              key: const ValueKey('home-comparison-previous'),
-              tooltip: MaterialLocalizations.of(context).previousPageTooltip,
-              icon: Icons.chevron_left_rounded,
-              onPressed: onPrevious,
-            ),
-          ),
-        if (hasOverflow && canScrollForward)
-          Positioned(
-            right: CKSpacing.sm,
-            top: (itemHeight - 48) / 2,
-            child: _RailButton(
-              key: const ValueKey('home-comparison-next'),
-              tooltip: MaterialLocalizations.of(context).nextPageTooltip,
-              icon: Icons.chevron_right_rounded,
-              onPressed: onNext,
-            ),
+        if (reservesNavigation)
+          _NavigationGutter(
+            child: hasOverflow
+                ? _RailButton(
+                    key: const ValueKey('home-comparison-next'),
+                    tooltip: MaterialLocalizations.of(context).nextPageTooltip,
+                    icon: Icons.chevron_right_rounded,
+                    onPressed: canScrollForward ? onNext : null,
+                  )
+                : null,
           ),
       ],
+    );
+  }
+}
+
+class _NavigationGutter extends StatelessWidget {
+  const _NavigationGutter({required this.child});
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 48,
+      child: Align(
+        alignment: Alignment.center,
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
   }
 }
