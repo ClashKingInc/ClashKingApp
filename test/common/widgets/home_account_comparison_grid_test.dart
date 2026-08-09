@@ -94,13 +94,10 @@ void main() {
     expect(firstBefore.width, summaryBefore.width);
     expect(
       tester.getRect(previous).left,
-      greaterThanOrEqualTo(secondBefore.right),
+      greaterThanOrEqualTo(summaryBefore.right),
     );
+    expect(tester.getRect(previous).right, lessThanOrEqualTo(firstBefore.left));
     expect(tester.getRect(next).left, greaterThanOrEqualTo(secondBefore.right));
-    expect(
-      tester.getRect(previous).right,
-      lessThanOrEqualTo(tester.getRect(next).left),
-    );
     expect(
       tester
           .widget<IconButton>(
