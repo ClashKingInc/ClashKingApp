@@ -104,6 +104,7 @@ class WarCwlService extends ChangeNotifier {
 
     final response = await client.getResponse(
       '/war/$encodedTag/previous?timestamp_end=$endTime&include_cwl=true&limit=1',
+      requiresAuth: true,
     );
     if (response.statusCode == 200) {
       String body = ApiService.decodeResponseBody(response);

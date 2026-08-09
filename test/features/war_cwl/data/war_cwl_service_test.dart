@@ -15,6 +15,28 @@ Map<String, dynamic> _minimalWarCwl(String tag) => {
   'war_league_infos': [],
 };
 
+class _RecordingApiService extends FakeApiService {
+  bool? lastGetRequiresAuth;
+
+  @override
+  Future<http.Response> getResponse(
+    String endpoint, {
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) {
+    lastGetRequiresAuth = requiresAuth;
+    return super.getResponse(
+      endpoint,
+      requiresAuth: requiresAuth,
+      url: url,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+}
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -170,7 +192,7 @@ void main() {
 
   group('WarCwlService — fetchWarDataFromTime', () {
     test('uses the v2 previous-war endpoint and parses its first item', () async {
-      final fakeApi = FakeApiService();
+      final fakeApi = _RecordingApiService();
       final end = DateTime.utc(2026, 8, 9, 12, 34, 56);
       final timestamp = end.millisecondsSinceEpoch ~/ 1000;
       final endpoint =
@@ -191,6 +213,7 @@ void main() {
       );
 
       expect(fakeApi.getCallCounts[endpoint], 1);
+      expect(fakeApi.lastGetRequiresAuth, isTrue);
       expect(result?.tag, '#WAR1');
       expect(result?.state, 'warEnded');
     });
