@@ -223,6 +223,7 @@ class _WarCwlPageState extends State<WarCwlPage> {
                       ? SliverToBoxAdapter(
                           child: ResponsiveCardGrid(
                             itemCount: items.length,
+                            alignment: WrapAlignment.center,
                             itemBuilder: (context, index) =>
                                 _WarListCard(item: items[index]),
                           ),

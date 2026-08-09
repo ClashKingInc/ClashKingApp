@@ -8,6 +8,7 @@ class ResponsiveCardGrid extends StatelessWidget {
     this.minItemWidth = 420,
     this.maxColumns = 3,
     this.spacing = 12,
+    this.alignment = WrapAlignment.start,
   });
 
   final int itemCount;
@@ -15,6 +16,7 @@ class ResponsiveCardGrid extends StatelessWidget {
   final double minItemWidth;
   final int maxColumns;
   final double spacing;
+  final WrapAlignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +29,19 @@ class ResponsiveCardGrid extends StatelessWidget {
         final itemWidth =
             (availableWidth - (spacing * (columns - 1))) / columns;
 
-        return Wrap(
-          spacing: spacing,
-          runSpacing: spacing,
-          children: List.generate(
-            itemCount,
-            (index) =>
-                SizedBox(width: itemWidth, child: itemBuilder(context, index)),
+        return SizedBox(
+          width: availableWidth,
+          child: Wrap(
+            alignment: alignment,
+            spacing: spacing,
+            runSpacing: spacing,
+            children: List.generate(
+              itemCount,
+              (index) => SizedBox(
+                width: itemWidth,
+                child: itemBuilder(context, index),
+              ),
+            ),
           ),
         );
       },
