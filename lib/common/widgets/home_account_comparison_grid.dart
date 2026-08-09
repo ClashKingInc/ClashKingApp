@@ -35,7 +35,7 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
   static const double _overflowCardWidth = 240;
   static const double _maximumCardWidth = 360;
   static const double _singleCardMaxWidth = 552;
-  static const double _navigationSpace = 96;
+  static const double _navigationSpace = 48;
   static const double _scrollTolerance = 1;
 
   final ScrollController _controller = ScrollController();
@@ -118,7 +118,7 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
                     hasOverflow: _hasOverflow,
                     canScrollBack: _canScrollBack,
                     canScrollForward: _canScrollForward,
-                    reservesNavigation: layout.reservesNavigation,
+                    showsNavigation: layout.reservesNavigation,
                     onPrevious: () => _scrollBy(-_cardStride),
                     onNext: () => _scrollBy(_cardStride),
                     onPointerSignal: _handlePointerSignal,
@@ -254,7 +254,7 @@ class _AccountRail extends StatelessWidget {
     required this.hasOverflow,
     required this.canScrollBack,
     required this.canScrollForward,
-    required this.reservesNavigation,
+    required this.showsNavigation,
     required this.onPrevious,
     required this.onNext,
     required this.onPointerSignal,
@@ -269,7 +269,7 @@ class _AccountRail extends StatelessWidget {
   final bool hasOverflow;
   final bool canScrollBack;
   final bool canScrollForward;
-  final bool reservesNavigation;
+  final bool showsNavigation;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
   final void Function(PointerSignalEvent) onPointerSignal;
@@ -279,19 +279,16 @@ class _AccountRail extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (reservesNavigation)
-          _NavigationGutter(
-            child: hasOverflow
-                ? _RailButton(
-                    key: const ValueKey('home-comparison-previous'),
-                    tooltip: MaterialLocalizations.of(
-                      context,
-                    ).previousPageTooltip,
-                    icon: Icons.chevron_left_rounded,
-                    onPressed: canScrollBack ? onPrevious : null,
-                  )
-                : null,
+        if (showsNavigation) ...[
+          _RailNavigation(
+            visible: hasOverflow,
+            canScrollBack: canScrollBack,
+            canScrollForward: canScrollForward,
+            onPrevious: onPrevious,
+            onNext: onNext,
           ),
+          const SizedBox(width: CKSpacing.xs),
+        ],
         Expanded(
           child: ClipRect(
             child: Listener(
@@ -324,34 +321,61 @@ class _AccountRail extends StatelessWidget {
             ),
           ),
         ),
-        if (reservesNavigation)
-          _NavigationGutter(
-            child: hasOverflow
-                ? _RailButton(
-                    key: const ValueKey('home-comparison-next'),
-                    tooltip: MaterialLocalizations.of(context).nextPageTooltip,
-                    icon: Icons.chevron_right_rounded,
-                    onPressed: canScrollForward ? onNext : null,
-                  )
-                : null,
-          ),
       ],
     );
   }
 }
 
-class _NavigationGutter extends StatelessWidget {
-  const _NavigationGutter({required this.child});
+class _RailNavigation extends StatelessWidget {
+  const _RailNavigation({
+    required this.visible,
+    required this.canScrollBack,
+    required this.canScrollForward,
+    required this.onPrevious,
+    required this.onNext,
+  });
 
-  final Widget? child;
+  final bool visible;
+  final bool canScrollBack;
+  final bool canScrollForward;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 48,
+      width: 40,
       child: Align(
         alignment: Alignment.center,
-        child: child ?? const SizedBox.shrink(),
+        child: visible
+            ? Material(
+                color: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.96),
+                borderRadius: BorderRadius.circular(CKRadius.pill),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _RailButton(
+                      key: const ValueKey('home-comparison-previous'),
+                      tooltip: MaterialLocalizations.of(
+                        context,
+                      ).previousPageTooltip,
+                      icon: Icons.keyboard_arrow_up_rounded,
+                      onPressed: canScrollBack ? onPrevious : null,
+                    ),
+                    _RailButton(
+                      key: const ValueKey('home-comparison-next'),
+                      tooltip: MaterialLocalizations.of(
+                        context,
+                      ).nextPageTooltip,
+                      icon: Icons.keyboard_arrow_down_rounded,
+                      onPressed: canScrollForward ? onNext : null,
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }
@@ -371,23 +395,13 @@ class _RailButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Material(
-      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.96),
-      shape: CircleBorder(
-        side: BorderSide(
-          color: colorScheme.outlineVariant.withValues(
-            alpha: CKOpacity.borderStrong,
-          ),
-        ),
-      ),
-      elevation: 2,
-      child: IconButton(
-        tooltip: tooltip,
-        onPressed: onPressed,
-        constraints: const BoxConstraints.tightFor(width: 48, height: 48),
-        icon: Icon(icon),
-      ),
+    return IconButton(
+      tooltip: tooltip,
+      onPressed: onPressed,
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+      iconSize: 22,
+      icon: Icon(icon),
     );
   }
 }
