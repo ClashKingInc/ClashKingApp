@@ -2707,7 +2707,7 @@
   "damageResults": "Resultaten",
   "damageDestroyed": "Vernietigd",
   "damageSurvives": "Overleeft",
-  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "damageResultSummary": "{damage} schade · {remaining} HP resterend",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -2718,10 +2718,10 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake optimizer",
-  "damageSpellCapacity": "Spell capacity",
-  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
-  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "damageZapQuakeOptimizer": "Zap Quake-optimalisatie",
+  "damageSpellCapacity": "Spreuk capaciteit",
+  "damageZapQuakeUnavailable": "Bliksem en aardbeving zijn niet beschikbaar op dit stadhuisniveau.",
+  "damageZapQuakeUsesSelectedLevels": "Met bliksem niveau {lightningLevel} en aardbeving niveau {earthquakeLevel}.",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -2732,7 +2732,7 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
+  "damageZapQuakeIneligible": "Bliksem en aardbeving kunnen deze opslag niet beschadigen.",
   "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
   "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
   "@damageZapQuakeCombination": {
