@@ -989,7 +989,7 @@
   "warAnalysisToWin": "Om te winnen",
   "warAnalysisToLose": "Om te verliezen",
   "warAnalysisNoAttacksLeft": "Geen aanvallen over",
-  "warAnalysisScenario": "{attacks} attacks left -> need {stars} stars / {percent}% per attack",
+  "warAnalysisScenario": "Nog {attacks} aanvallen → {stars} sterren / {percent}% per aanval nodig",
   "@warAnalysisScenario": {
     "placeholders": {
       "attacks": {
@@ -1003,7 +1003,7 @@
       }
     }
   },
-  "warAnalysisImpossibleScenario": "{attacks} attacks left -> impossible ({stars} stars / {percent}% per attack)",
+  "warAnalysisImpossibleScenario": "Nog {attacks} aanvallen → onmogelijk ({stars} sterren / {percent}% per aanval)",
   "@warAnalysisImpossibleScenario": {
     "placeholders": {
       "attacks": {
@@ -1017,7 +1017,7 @@
       }
     }
   },
-  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "warAnalysisCannotLose": "{clanName} kan niet meer verliezen",
   "@warAnalysisCannotLose": {
     "placeholders": {
       "clanName": {
@@ -1043,8 +1043,8 @@
       }
     }
   },
-  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
-  "warAnalysisStarGoal": "+{stars} star(s)",
+  "warAnalysisNoSecureObjective": "Kan niet meer worden veiliggesteld met de resterende aanvallen",
+  "warAnalysisStarGoal": "+{stars} ster(ren)",
   "@warAnalysisStarGoal": {
     "placeholders": {
       "stars": {
@@ -1052,7 +1052,7 @@
       }
     }
   },
-  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "warAnalysisRemainingAttempts": "Nog {attacks} aanval(len)",
   "@warAnalysisRemainingAttempts": {
     "placeholders": {
       "attacks": {
@@ -1060,7 +1060,7 @@
       }
     }
   },
-  "warAnalysisNoBetterResult": "No better result is possible",
+  "warAnalysisNoBetterResult": "Een beter resultaat is niet mogelijk",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -1081,8 +1081,8 @@
   "warCalculatorNeededOverall": "% Nodig in totaal",
   "warCalculatorCalculate": "Berekenen",
   "warAttacksTitle": "Aanvallen",
-  "warAttacksSuccessful": "Successful attacks",
-  "warAttacksFailed": "Failed attacks",
+  "warAttacksSuccessful": "Succesvolle aanvallen",
+  "warAttacksFailed": "Mislukte aanvallen",
   "warAttacksNone": "Nog geen aanval",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -1090,7 +1090,7 @@
   "warAttacksBest": "Beste aanvallen",
   "warAttacksCount": "Aantal aanvallen",
   "warAttacksMissed": "Gemiste aanvallen",
-  "warAttacksMissedShort": "Missed",
+  "warAttacksMissedShort": "Gemist",
   "warAttacksNumber": "Je hebt {number_time} keer aangevallen tijdens de laatste {number_war} oorlogen.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1317,7 +1317,7 @@
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "Clanoorlogsdivisie",
   "cwlOngoing": "Lopende CWL",
-  "cwlHistoryTitle": "CWL History",
+  "cwlHistoryTitle": "CWL geschiedenis",
   "clanJoinLeaveTab": "Aansluiten/Verlaten",
   "clanRankingsTab": "Ranglijsten",
   "clanRankingsSeason": "Seizoen",
@@ -1335,22 +1335,22 @@
       }
     }
   },
-  "cwlHistoryEmptyTitle": "No CWL history yet",
-  "cwlHistoryEmptyBody": "This clan hasn't taken part in a Clan War League season yet.",
+  "cwlHistoryEmptyTitle": "Nog geen CWL-geschiedenis",
+  "cwlHistoryEmptyBody": "Deze clan heeft nog niet deelgenomen aan een CWL-seizoen.",
   "cwlRankTitle": "Rang",
   "cwlWarsPlayedTitle": "Oorlogen gespeeld",
   "playerWarStarsTitle": "Oorlogssterren",
-  "playerWarPreferenceTitle": "War pref.",
+  "playerWarPreferenceTitle": "Oorlogsvoorkeur",
   "playerDonatedTitle": "Gedoneerd",
   "playerReceivedTitle": "Ontvangen",
   "playerCapitalTitle": "Hoofdstad",
-  "playerExpLevelTitle": "Exp. level",
-  "clanWarWinsTitle": "War wins",
-  "clanWinStreakTitle": "Win streak",
-  "clanBuilderBaseTitle": "Builder base",
+  "playerExpLevelTitle": "Ervaringsniveau",
+  "clanWarWinsTitle": "Oorlogsoverwinningen",
+  "clanWinStreakTitle": "Overwinningsreeks",
+  "clanBuilderBaseTitle": "Bouwerbasis",
   "clanTypeTitle": "Type",
-  "clanMinTownHallTitle": "Min. TH",
-  "clanMinTrophiesTitle": "Min. trophies",
+  "clanMinTownHallTitle": "Min. SH",
+  "clanMinTrophiesTitle": "Min. trofeeën",
   "clanCapitalHallTitle": "Kapitaalhal",
   "clanDistrictsTitle": "Districten",
   "legendsCountryTitle": "Land",
@@ -1518,9 +1518,9 @@
   "raidsOngoing": "Lopende raids",
   "raidsDistrictsDestroyed": "Districten vernietigd",
   "raidsCompleted": "Raids voltooid",
-  "capitalRaidStatusOngoing": "Ongoing",
+  "capitalRaidStatusOngoing": "Lopende",
   "capitalRaidStatusEnded": "Afgelopen",
-  "capitalRaidLoot": "Loot",
+  "capitalRaidLoot": "Buit",
   "capitalRaidRewards": "Beloningen",
   "capitalRaidPreviousWeek": "Vorige week",
   "capitalRaidNextWeek": "Volgende week",
@@ -1591,14 +1591,14 @@
   "faqTrackingDown": "Tracking tijdelijk niet beschikbaar",
   "faqTrackingDownAnswer": "Tracking kan tijdelijk niet werken, waardoor er gegevens kunnen ontbreken.",
   "faqApiLimitation": "Clash of Clans API limitatie",
-  "faqApiLimitationAnswer": "Some data comes from the official Clash of Clans API. It can lag or group updates. In Ranked League, trophy changes may appear late when several battles happen close together. Building levels are not part of regular player profiles; upgrade data comes from the manual Upgrade Tracker snapshot provided by the user.",
+  "faqApiLimitationAnswer": "Sommige gegevens komen uit de officiële Clash of Clans API en kunnen daardoor met vertraging worden bijgewerkt of meerdere updates tegelijk tonen. In de gerangschikte divisie kunnen veranderingen in trofeeën later zichtbaar worden als meerdere gevechten kort na elkaar plaatsvinden. Gebouwniveaus staan niet in het standaard spelersprofiel. Upgradegegevens zijn daarom gebaseerd op de handmatige momentopname uit het upgradeoverzicht van de gebruiker.",
   "faqSupportWork": "Hoe kan ik de ClashKing ondersteunen?",
   "faqSupportWorkAnswer": "Er zijn verschillende manieren om ons te ondersteunen:",
   "faqUseCodeClashKing": "Makerscode: ClashKing",
   "faqSupportUsOnPatreon": "Steun ons op Patreon",
   "faqRateTheApp": "Beoordeel de app in de store",
   "faqWhatCanBotDo": "Wat kan de ClashKing Discord bot doen?",
-  "faqWhatCanBotDoAnswer": "The ClashKing Discord bot helps you manage your clan from Discord. It adds tracking, alerts, and quick commands for leaders and members:",
+  "faqWhatCanBotDoAnswer": "Met de ClashKing Discord-bot kun je jouw clan eenvoudig beheren vanuit Discord. De bot biedt tracking, meldingen en handige commando's voor leiders en leden:",
   "faqInviteBotToServer": "Nodig de Discord bot uit",
   "faqBotFeatureTracking": "Speler & clan tracking",
   "faqBotFeatureTrackingDesc": "Voeg meerdere clans en spelers toe en houd ze in de gaten met realtime updates",
@@ -1608,35 +1608,35 @@
   "faqBotFeatureNotificationsDesc": "Krijg waarschuwingen voor donaties, oorlogsaanvallen en belangrijke clan evenementen",
   "faqBotFeatureCommands": "Krachtige commando's",
   "faqBotFeatureCommandsDesc": "Gebruik slashcommando's om snel spelerstatistieken, oorlogsinfo en meer te bekijken",
-  "faqNeedHelp": "I need help or want to make a suggestion. How can I contact you?",
-  "faqNeedHelpAnswer": "You can join our Discord server to ask for help or share feedback, or you can email us at devs@clashk.ing. Please write in English or French only.",
-  "faqPrivacyDataTitle": "Can I manage or delete my personal data?",
-  "faqPrivacyDataAnswer": "Yes. In Settings > Privacy Policy, you can open the privacy policy, prepare an export of your ClashKing account data, ask for corrections or restrictions, and start account deletion. Some requests may still use the support email fallback while backend privacy services roll out. ClashKing can act on data stored in your ClashKing account; Clash of Clans data may also come from Supercell APIs or public clan and player data.",
+  "faqNeedHelp": "Ik heb hulp nodig of wil een suggestie doen. Hoe kan ik contact opnemen?",
+  "faqNeedHelpAnswer": "Je kunt lid worden van onze Discord-server voor hulp of om feedback te delen. Je kunt ons ook mailen via devs@clashk.ing. Neem alleen in het Engels of Frans contact met ons op.",
+  "faqPrivacyDataTitle": "Kan ik mijn persoonlijke gegevens beheren of verwijderen?",
+  "faqPrivacyDataAnswer": "Ja. Via Instellingen > Privacybeleid, kun je het privacybeleid bekijken, een export van je ClashKing-accountgegevens aanvragen, gegevens laten corrigeren of het gebruik ervan beperken en je account laten verwijderen. Voor sommige verzoeken kan het nog nodig zijn om contact op te nemen via het support-e-mailadres, zolang de privacyfuncties nog verder worden uitgerold. ClashKing kan alleen gegevens aanpassen of verwijderen die in je ClashKing-account zijn opgeslagen. Gegevens uit Clash of Clans kunnen ook afkomstig zijn van de API's van Supercell of uit openbare clan- en spelergegevens.",
   "faqSendEmail": "Stuur een e-mail",
-  "faqJoinDiscord": "Join our Discord server",
-  "faqCannotOpenMailClient": "For some reason, we can't open your mail client. We copied the email address for you. You can write an email and paste the address in the recipient field.",
+  "faqJoinDiscord": "Word lid van onze Discord-server",
+  "faqCannotOpenMailClient": "We kunnen je e-mailapp helaas niet openen. Daarom hebben we het e-mailadres voor je gekopieerd. Open je e-mailapp, maak een nieuw bericht en plak het adres in het ontvangersveld.",
   "faqTroubleshooting": "Problemen oplossen",
   "faqTroubleshootingDataTitle": "Waarom synchroniseren mijn gegevens niet?",
   "faqTroubleshootingDataDescription": "Speler- of clangegevens lijken verouderd",
   "faqTroubleshootingDataSolution1": "Trek omlaag om de pagina te vernieuwen",
   "faqTroubleshootingDataSolution2": "Controleer of je clan wordt gevolgd (zie hierboven)",
-  "faqTroubleshootingDataSolution3": "Wait a few minutes and try again: the API can take some time to update",
+  "faqTroubleshootingDataSolution3": "Wacht een paar minuten en probeer het opnieuw. Het kan even duren voordat de API is bijgewerkt.",
   "faqTroubleshootingCrashTitle": "Waarom crasht de app?",
   "faqTroubleshootingCrashDescription": "App sluit onverwachts af of loopt vast",
   "faqTroubleshootingCrashSolution1": "Sluit de app af en start deze opnieuw op",
   "faqTroubleshootingCrashSolution2": "Werk de app bij naar de nieuwste versie",
   "faqTroubleshootingCrashSolution3": "Wis de cache en gegevens van de app (Android) of installeer de app opnieuw",
   "faqTroubleshootingCrashSolution4": "Maak opslagruimte vrij op je apparaat",
-  "faqContactSupport": "Contact support if the problem persists (see the last section)",
+  "faqContactSupport": "Neem contact op met de ondersteuning als het probleem blijft bestaan (zie de laatste sectie)",
   "faqTroubleshootingAccountTitle": "Waarom kan ik mijn account niet verifiëren?",
   "faqTroubleshootingAccountDescription": "Problemen met het koppelen van je Clash of Clans account",
   "faqTroubleshootingAccountSolution1": "Zorg ervoor dat je de juiste spelerstag gebruikt die begint met een #",
   "faqTroubleshootingAccountSolution2": "Als het account al gekoppeld lijkt te zijn, gebruik dan de API-token uit de instellingen van Clash of Clans",
   "faqTroubleshootingSolutions": "Oplossingen:",
   "faqWhatIsClashKingProject": "Wat is het ClashKing project?",
-  "faqWhatIsClashKingProjectAnswer": "ClashKing is an open-source Clash of Clans stats and clan management project. It is mainly maintained by two developers, with occasional help from contributors. We keep improving it as our time allows, with one goal: helping players and clans follow their progress more easily. The app, Discord bot, and free API work together.",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing is een opensourceproject voor Clash of Clans-statistieken en clanbeheer. Het project wordt voornamelijk onderhouden door twee ontwikkelaars, met af en toe hulp van andere bijdragers. We blijven ClashKing verbeteren wanneer we daar tijd voor hebben, met één doel: het voor spelers en clans makkelijker maken om hun voortgang bij te houden. De app, Discord-bot en gratis API werken daarbij samen.",
   "faqViewOnGitHub": "Bekijk op GitHub",
-  "faqFeaturesGuide": "What can the ClashKing app do?",
+  "faqFeaturesGuide": "Wat kun je met de ClashKing-app?",
   "faqFeaturesGuideDescription": "ClashKing biedt snelle toegang op je telefoon tot spelerstatistieken, clangegevens, oorlogen, CWL, Gerangschikt en accounthulpmiddelen. De app is ook handig als je geen Discord gebruikt:",
   "faqAppDevelopmentNotice": "De app wordt voortdurend verbeterd. Jouw feedback helpt bepalen wat er hierna komt.",
   "faqFeaturesPlayerTitle": "Spelerstatistieken",
