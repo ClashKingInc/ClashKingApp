@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/home_account_comparison_grid.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -142,6 +143,59 @@ void main() {
           .onPressed,
       isNotNull,
     );
+  });
+
+  testWidgets('claims wheel scrolling from the surrounding page', (
+    tester,
+  ) async {
+    configureView(tester);
+    final pageController = ScrollController();
+    addTearDown(pageController.dispose);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            controller: pageController,
+            child: Column(
+              children: [
+                SizedBox(
+                  width: 920,
+                  child: HomeAccountComparisonGrid(
+                    itemCount: 5,
+                    hasSummaryItem: true,
+                    itemHeight: 100,
+                    itemBuilder: (_, index) => ColoredBox(
+                      key: ValueKey('comparison-item-$index'),
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 1200),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final firstBefore = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-1')),
+    );
+    await tester.sendEventToBinding(
+      PointerScrollEvent(
+        position: firstBefore.center,
+        scrollDelta: const Offset(0, 100),
+        kind: PointerDeviceKind.mouse,
+      ),
+    );
+    await tester.pump();
+
+    final firstAfter = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-1')),
+    );
+    expect(firstAfter.left, lessThan(firstBefore.left));
+    expect(pageController.offset, 0);
   });
 
   testWidgets('bounds a lone account card instead of stretching it', (
