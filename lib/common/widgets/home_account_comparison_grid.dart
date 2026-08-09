@@ -35,7 +35,7 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
   static const double _overflowCardWidth = 240;
   static const double _maximumCardWidth = 360;
   static const double _singleCardMaxWidth = 552;
-  static const double _navigationSpace = 48;
+  static const double _navigationSpace = 96;
   static const double _scrollTolerance = 1;
 
   final ScrollController _controller = ScrollController();
@@ -279,16 +279,6 @@ class _AccountRail extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (showsNavigation) ...[
-          _RailNavigation(
-            visible: hasOverflow,
-            canScrollBack: canScrollBack,
-            canScrollForward: canScrollForward,
-            onPrevious: onPrevious,
-            onNext: onNext,
-          ),
-          const SizedBox(width: CKSpacing.xs),
-        ],
         Expanded(
           child: ClipRect(
             child: Listener(
@@ -321,6 +311,16 @@ class _AccountRail extends StatelessWidget {
             ),
           ),
         ),
+        if (showsNavigation) ...[
+          const SizedBox(width: CKSpacing.xs),
+          _RailNavigation(
+            visible: hasOverflow,
+            canScrollBack: canScrollBack,
+            canScrollForward: canScrollForward,
+            onPrevious: onPrevious,
+            onNext: onNext,
+          ),
+        ],
       ],
     );
   }
@@ -344,7 +344,7 @@ class _RailNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 40,
+      width: 88,
       child: Align(
         alignment: Alignment.center,
         child: visible
@@ -353,7 +353,7 @@ class _RailNavigation extends StatelessWidget {
                   context,
                 ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.96),
                 borderRadius: BorderRadius.circular(CKRadius.pill),
-                child: Column(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _RailButton(
@@ -361,7 +361,7 @@ class _RailNavigation extends StatelessWidget {
                       tooltip: MaterialLocalizations.of(
                         context,
                       ).previousPageTooltip,
-                      icon: Icons.keyboard_arrow_up_rounded,
+                      icon: Icons.chevron_left_rounded,
                       onPressed: canScrollBack ? onPrevious : null,
                     ),
                     _RailButton(
@@ -369,7 +369,7 @@ class _RailNavigation extends StatelessWidget {
                       tooltip: MaterialLocalizations.of(
                         context,
                       ).nextPageTooltip,
-                      icon: Icons.keyboard_arrow_down_rounded,
+                      icon: Icons.chevron_right_rounded,
                       onPressed: canScrollForward ? onNext : null,
                     ),
                   ],
@@ -399,7 +399,10 @@ class _RailButton extends StatelessWidget {
       tooltip: tooltip,
       onPressed: onPressed,
       padding: EdgeInsets.zero,
-      constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+      constraints: const BoxConstraints.tightFor(width: 44, height: 44),
+      style: IconButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
       iconSize: 22,
       icon: Icon(icon),
     );
