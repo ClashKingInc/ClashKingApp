@@ -467,7 +467,7 @@
   "gameTrophies": "Trophies",
   "gameBuilderBaseTrophies": "BB Trophies",
   "gameDonations": "Donations",
-  "gameDonationsReceived": "Received",
+  "gameDonationsReceived": "Donations Received",
   "gameDonationsRatio": "Donation Ratio",
   "gameLevel": "Level: {level}/{maxLevel}",
   "@gameLevel": {
@@ -776,7 +776,7 @@
   "todoExplanationCwl": "Weight of 1 point per account, 1 attack = 1 point. CWL cannot be tracked if the player is not in their league clan.",
   "todoExplanationPassAndGamesTitle": "Season Pass & Clan Games:",
   "todoExplanationPassAndGames": "Weight of 2 points each per account. The ratio is based on the number of days remaining (1 month for the pass and 6 days for the games). Green = on track to complete the pass or games, red = behind schedule.",
-  "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions.",
+  "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
   "todoAccountsNumber": "{number} accounts",
   "@todoAccountsNumber": {
     "placeholders": {
@@ -876,7 +876,7 @@
   "warStatsLast50": "Last 50",
   "warStatsWars": "Wars",
   "warStatsSelectSeason": "Select war stats season",
-  "warOngoing": "Ongoing War",
+  "warOngoing": "Ongoing war",
   "warIsNotInWar": "{clan} is not in war.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -2654,7 +2654,7 @@
   "tooltipHidePassword": "Hide password",
   "tooltipRemoveAccount": "Remove account",
   "calculatorsTitle": "Calculators",
-  "calculatorsSubtitle": "Plan damage against current building levels.",
+  "calculatorsSubtitle": "Zap quake and fireball quake.",
   "calculatorZapQuake": "Zap quake",
   "calculatorFireball": "Fireball",
   "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
@@ -2959,7 +2959,7 @@
   "announcementAnimeFurySubtitle": "Tap through the June 2026 update",
   "sideRankingsTitle": "Rankings",
   "sideRankingsSubtitle": "Rankings of the Top Players & Clans",
-  "sideRankingsLoadError": "Could not load rankings.",
+  "sideRankingsLoadError": "Could not load official rankings.",
   "sideRankingsEmptyTitle": "No rankings returned",
   "sideRankingsEmptyBody": "Try another leaderboard or location.",
   "sideRankingsMockups": "ClashKing mockups",
@@ -3879,19 +3879,19 @@
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
-  "notifScopeAllLinkedAccounts": "Automatically add verified accounts",
+  "notifScopeAllLinkedAccounts": "All linked accounts",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
-  "notifScopeSelectedAccounts": "Choose accounts manually",
+  "notifScopeSelectedAccounts": "Selected accounts",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
-  "notifAudienceSheetDescription": "These account choices apply across all of your devices.",
+  "notifAudienceSheetDescription": "Choose which accounts can receive notifications on this device.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
-  "notifAudienceAllSubtitle": "{count} eligible account(s). Newly verified accounts are added automatically.",
+  "notifAudienceAllSubtitle": "{count} current account(s). Future linked accounts are included automatically.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3913,7 +3913,7 @@
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
-  "notifAudienceAllInlineNote": "Verified accounts are added when you enable this setting and whenever you verify another account.",
+  "notifAudienceAllInlineNote": "Anything you link later will be included without changing this setting.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
