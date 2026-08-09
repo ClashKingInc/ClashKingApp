@@ -392,6 +392,7 @@ class _RankingsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entries = provider.result?.entries ?? const <RankingEntry>[];
+    final horizontalPadding = _rankingsHorizontalPadding(context);
     final hasFilters =
         provider.board.supportsLocation ||
         provider.board.supportsHistory ||
@@ -402,7 +403,12 @@ class _RankingsBody extends StatelessWidget {
       slivers: [
         if (hasFilters)
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding,
+              14,
+              horizontalPadding,
+              10,
+            ),
             sliver: SliverToBoxAdapter(
               child: _RankingControls(
                 provider: provider,
@@ -419,7 +425,12 @@ class _RankingsBody extends StatelessWidget {
           ),
         if (provider.error != null)
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding,
+              14,
+              horizontalPadding,
+              28,
+            ),
             sliver: SliverToBoxAdapter(
               child: SidePageErrorPanel(
                 message: AppLocalizations.of(context)!.sideRankingsLoadError,
@@ -431,14 +442,19 @@ class _RankingsBody extends StatelessWidget {
         else if (!provider.isLoading && entries.isEmpty)
           SliverFillRemaining(
             hasScrollBody: false,
-            child: _RankingEmptyState(provider: provider),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1120),
+                child: _RankingEmptyState(provider: provider),
+              ),
+            ),
           )
         else ...[
           SliverPadding(
             padding: EdgeInsets.fromLTRB(
-              16,
+              horizontalPadding,
               hasFilters ? 0 : 14,
-              16,
+              horizontalPadding,
               24 + MediaQuery.paddingOf(context).bottom,
             ),
             sliver: SliverList.builder(
@@ -454,6 +470,11 @@ class _RankingsBody extends StatelessWidget {
       ],
     );
   }
+}
+
+double _rankingsHorizontalPadding(BuildContext context) {
+  final width = MediaQuery.sizeOf(context).width;
+  return ((width - 1120) / 2).clamp(16.0, double.infinity);
 }
 
 class _RankingControls extends StatelessWidget {

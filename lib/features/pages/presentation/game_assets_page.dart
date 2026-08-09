@@ -738,7 +738,24 @@ class _GameAssetCategoryPageState extends State<GameAssetCategoryPage> {
       ],
     );
 
-    if (widget.embedded) return content;
+    if (widget.embedded) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final width = constraints.maxWidth > 1120
+              ? 1120.0
+              : constraints.maxWidth;
+          return Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              key: const ValueKey('game-assets-content-bound'),
+              width: width,
+              height: constraints.maxHeight,
+              child: content,
+            ),
+          );
+        },
+      );
+    }
     return SidePageScaffold(
       title: categoryName,
       subtitle: formatGameAssetImageCount(

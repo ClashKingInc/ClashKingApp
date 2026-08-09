@@ -35,7 +35,7 @@ class PlayerToDoBodyCard extends StatelessWidget {
     );
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.zero,
       child: InkWell(
         borderRadius: BorderRadius.circular(28),
         onTap: () => Navigator.push(

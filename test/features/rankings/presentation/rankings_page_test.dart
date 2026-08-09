@@ -32,6 +32,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
+    expect(
+      tester.getSize(find.byType(RankingRow).first).width,
+      lessThanOrEqualTo(1120),
+    );
   });
 
   testWidgets('location picker is opaque, searchable, and pins Worldwide', (

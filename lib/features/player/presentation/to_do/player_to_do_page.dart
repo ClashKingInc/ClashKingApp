@@ -113,30 +113,37 @@ class PlayerToDoScreenState extends State<PlayerToDoScreen> {
             players: searchedPlayers,
             memberPresenceMap: widget.memberPresenceMap,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-            child: Column(
-              children: [
-                _TodoControls(
-                  controller: _searchController,
-                  query: _query,
-                  filter: _filter,
-                  counts: filterCounts,
-                  onQueryChanged: (value) => setState(() => _query = value),
-                  onClearQuery: _query.isEmpty
-                      ? null
-                      : () {
-                          _searchController.clear();
-                          setState(() => _query = '');
-                        },
-                  onFilterChanged: (value) => setState(() => _filter = value),
+          Center(
+            child: ConstrainedBox(
+              key: const ValueKey('todo-content-bound'),
+              constraints: const BoxConstraints(maxWidth: 1120),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: Column(
+                  children: [
+                    _TodoControls(
+                      controller: _searchController,
+                      query: _query,
+                      filter: _filter,
+                      counts: filterCounts,
+                      onQueryChanged: (value) => setState(() => _query = value),
+                      onClearQuery: _query.isEmpty
+                          ? null
+                          : () {
+                              _searchController.clear();
+                              setState(() => _query = '');
+                            },
+                      onFilterChanged: (value) =>
+                          setState(() => _filter = value),
+                    ),
+                    PlayerToDoBody(
+                      players: filteredPlayers,
+                      memberPresenceMap: widget.memberPresenceMap,
+                      emptyText: _emptyText(),
+                    ),
+                  ],
                 ),
-                PlayerToDoBody(
-                  players: filteredPlayers,
-                  memberPresenceMap: widget.memberPresenceMap,
-                  emptyText: _emptyText(),
-                ),
-              ],
+              ),
             ),
           ),
         ],

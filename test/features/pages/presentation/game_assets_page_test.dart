@@ -69,6 +69,35 @@ void main() {
     expect(find.text('Wizard'), findsOneWidget);
   });
 
+  testWidgets('wide web content stays inside the desktop reading width', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1600, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final repository = _FakeRepository([_manifest]);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: GameAssetsPage(
+          repository: repository,
+          imageBuilder: (_, _, _) => const SizedBox.expand(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      tester
+          .getSize(find.byKey(const ValueKey('game-assets-content-bound')))
+          .width,
+      1120,
+    );
+  });
+
   testWidgets('error retry and empty manifest states are visible', (
     tester,
   ) async {
