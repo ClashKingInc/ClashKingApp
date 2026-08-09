@@ -2234,12 +2234,10 @@ class _UpgradeHomeSummary {
   final List<Player> missingAccounts;
 
   double get completion {
-    if (accounts.isEmpty) return 0;
-    final total = accounts.fold<double>(
-      0,
-      (sum, account) => sum + account.completion,
+    return calculateUpgradeSummaryCompletion(
+      importedCompletions: accounts.map((account) => account.completion),
+      missingCount: missingAccounts.length,
     );
-    return (total / accounts.length).clamp(0.0, 1.0);
   }
 
   int get projectedSeconds => accounts.fold(
@@ -2288,6 +2286,18 @@ class _UpgradeHomeSummary {
   DateTime get oldestCapturedAt => accounts
       .map((account) => account.capturedAt)
       .reduce((a, b) => a.isBefore(b) ? a : b);
+}
+
+@visibleForTesting
+double calculateUpgradeSummaryCompletion({
+  required Iterable<double> importedCompletions,
+  required int missingCount,
+}) {
+  final completions = importedCompletions.toList(growable: false);
+  final accountCount = completions.length + missingCount;
+  if (accountCount == 0) return 0;
+  final total = completions.fold<double>(0, (sum, value) => sum + value);
+  return (total / accountCount).clamp(0.0, 1.0);
 }
 
 class _UpgradeHomeAccount {
