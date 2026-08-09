@@ -36,14 +36,14 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
-  testWidgets('keeps the summary beside same-sized account cards', (
+  testWidgets('caps a regular desktop row at summary plus two accounts', (
     tester,
   ) async {
     configureView(tester);
     await tester.pumpWidget(
       buildGrid(width: 1120, itemCount: 4, hasSummaryItem: true),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     final summary = tester.getRect(
       find.byKey(const ValueKey('comparison-item-0')),
@@ -54,17 +54,33 @@ void main() {
     final second = tester.getRect(
       find.byKey(const ValueKey('comparison-item-2')),
     );
-    final third = tester.getRect(
-      find.byKey(const ValueKey('comparison-item-3')),
-    );
-
     expect(first.left, greaterThan(summary.right));
     expect(first.top, summary.top);
     expect(second.top, summary.top);
-    expect(third.top, summary.top);
     expect(first.width, summary.width);
     expect(second.width, summary.width);
-    expect(third.width, summary.width);
+    expect(find.byKey(const ValueKey('home-comparison-next')), findsOneWidget);
+  });
+
+  testWidgets('uses the wider canvas to show every account', (tester) async {
+    configureView(tester);
+    tester.view.physicalSize = const Size(1800, 900);
+    await tester.pumpWidget(
+      buildGrid(width: 1560, itemCount: 4, hasSummaryItem: true),
+    );
+    await tester.pump();
+
+    final summary = tester.getRect(
+      find.byKey(const ValueKey('comparison-item-0')),
+    );
+    for (var index = 1; index < 4; index++) {
+      final card = tester.getRect(
+        find.byKey(ValueKey('comparison-item-$index')),
+      );
+      expect(card.width, summary.width);
+      expect(card.top, summary.top);
+    }
+    expect(summary.width, 360);
     expect(find.byKey(const ValueKey('home-comparison-next')), findsNothing);
   });
 

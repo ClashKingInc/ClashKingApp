@@ -36,6 +36,7 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
   static const double _maximumCardWidth = 360;
   static const double _singleCardMaxWidth = 552;
   static const double _navigationSpace = 88;
+  static const double _extraWideThreshold = 1400;
   static const double _scrollTolerance = 1;
 
   final ScrollController _controller = ScrollController();
@@ -143,7 +144,10 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
       availableWidth,
       minimumWidth: _minimumCardWidth,
     );
-    final reservesNavigation = widget.itemCount > slotsWithoutNavigation;
+    final regularDesktopSlots = availableWidth < _extraWideThreshold
+        ? math.min(3, slotsWithoutNavigation)
+        : slotsWithoutNavigation;
+    final reservesNavigation = widget.itemCount > regularDesktopSlots;
     final cardsWidth = math.max(
       0.0,
       availableWidth - (reservesNavigation ? _navigationSpace : 0),
@@ -152,6 +156,9 @@ class _HomeAccountComparisonGridState extends State<HomeAccountComparisonGrid> {
       cardsWidth,
       minimumWidth: reservesNavigation ? _overflowCardWidth : _minimumCardWidth,
     );
+    if (reservesNavigation) {
+      visibleSlots = math.min(3, visibleSlots);
+    }
     if (widget.hasSummaryItem && widget.itemCount > 1) {
       visibleSlots = math.max(2, visibleSlots);
     }
