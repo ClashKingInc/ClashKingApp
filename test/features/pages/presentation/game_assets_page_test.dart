@@ -96,6 +96,52 @@ void main() {
           .width,
       1120,
     );
+    expect(
+      find.byKey(const ValueKey('game-assets-desktop-toolbar')),
+      findsOneWidget,
+    );
+    expect(
+      tester.getCenter(find.byType(FilterDropdown).first).dy,
+      closeTo(
+        tester.getCenter(find.byKey(const ValueKey('game-assets-search'))).dy,
+        0.1,
+      ),
+    );
+  });
+
+  testWidgets('short web pane uses compact horizontal controls', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(665, 360);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final repository = _FakeRepository([_manifest]);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: GameAssetsPage(
+          repository: repository,
+          imageBuilder: (_, _, _) => const SizedBox.expand(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getSize(find.byKey(const ValueKey('game-assets-header'))).height,
+      144,
+    );
+    expect(
+      find.byKey(const ValueKey('game-assets-compact-header-image')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('game-assets-desktop-toolbar')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('error retry and empty manifest states are visible', (
