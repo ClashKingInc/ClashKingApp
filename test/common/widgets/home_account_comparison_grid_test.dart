@@ -83,17 +83,26 @@ void main() {
     final firstBefore = tester.getRect(
       find.byKey(const ValueKey('comparison-item-1')),
     );
-    final secondBefore = tester.getRect(
-      find.byKey(const ValueKey('comparison-item-2')),
-    );
     final next = find.byKey(const ValueKey('home-comparison-next'));
     final previous = find.byKey(const ValueKey('home-comparison-previous'));
 
     expect(next, findsOneWidget);
     expect(previous, findsOneWidget);
     expect(firstBefore.width, summaryBefore.width);
+    expect(
+      tester.getRect(previous).left,
+      greaterThanOrEqualTo(summaryBefore.right),
+    );
     expect(tester.getRect(previous).right, lessThanOrEqualTo(firstBefore.left));
-    expect(tester.getRect(next).left, greaterThanOrEqualTo(secondBefore.right));
+    expect(
+      tester.getRect(next).left,
+      greaterThanOrEqualTo(summaryBefore.right),
+    );
+    expect(tester.getRect(next).right, lessThanOrEqualTo(firstBefore.left));
+    expect(
+      tester.getRect(previous).bottom,
+      lessThanOrEqualTo(tester.getRect(next).top),
+    );
     expect(
       tester
           .widget<IconButton>(
