@@ -47,4 +47,28 @@ void main() {
     expect(fourth.left, first.left);
     expect(fourth.top, greaterThan(first.top));
   });
+
+  testWidgets('can center a sparse final row', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1400, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ResponsiveCardGrid(
+            itemCount: 2,
+            alignment: WrapAlignment.center,
+            itemBuilder: (context, index) =>
+                SizedBox(key: ValueKey('card-$index'), height: 100),
+          ),
+        ),
+      ),
+    );
+
+    final first = tester.getRect(find.byKey(const ValueKey('card-0')));
+    final second = tester.getRect(find.byKey(const ValueKey('card-1')));
+
+    expect(first.left, greaterThan(0));
+    expect(1400 - second.right, closeTo(first.left, 0.1));
+  });
 }

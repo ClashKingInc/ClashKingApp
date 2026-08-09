@@ -294,20 +294,24 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
               ),
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
               children: [
-                _CurrentPeriodTab(
-                  data: data,
-                  period: selectedPeriod,
-                  onOlderSeason: selectedSeason < periods.length - 1
-                      ? () =>
-                            setState(() => _selectedSeason = selectedSeason + 1)
-                      : null,
-                  onNewerSeason: selectedSeason > 0
-                      ? () =>
-                            setState(() => _selectedSeason = selectedSeason - 1)
-                      : null,
-                  showRanking: _showCurrentRanking,
-                  onViewChanged: (showRanking) =>
-                      setState(() => _showCurrentRanking = showRanking),
+                _RankedContentBound(
+                  child: _CurrentPeriodTab(
+                    data: data,
+                    period: selectedPeriod,
+                    onOlderSeason: selectedSeason < periods.length - 1
+                        ? () => setState(
+                            () => _selectedSeason = selectedSeason + 1,
+                          )
+                        : null,
+                    onNewerSeason: selectedSeason > 0
+                        ? () => setState(
+                            () => _selectedSeason = selectedSeason - 1,
+                          )
+                        : null,
+                    showRanking: _showCurrentRanking,
+                    onViewChanged: (showRanking) =>
+                        setState(() => _showCurrentRanking = showRanking),
+                  ),
                 ),
               ],
             ),
@@ -319,16 +323,35 @@ class _PlayerRankedLeagueScreenState extends State<PlayerRankedLeagueScreen> {
               ),
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
               children: [
-                _HistoryTab(
-                  data: data,
-                  showTable: _showHistoryTable,
-                  onToggleView: () =>
-                      setState(() => _showHistoryTable = !_showHistoryTable),
+                _RankedContentBound(
+                  child: _HistoryTab(
+                    data: data,
+                    showTable: _showHistoryTable,
+                    onToggleView: () =>
+                        setState(() => _showHistoryTable = !_showHistoryTable),
+                  ),
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _RankedContentBound extends StatelessWidget {
+  const _RankedContentBound({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        key: const ValueKey('ranked-content-bound'),
+        constraints: const BoxConstraints(maxWidth: 1120),
+        child: child,
       ),
     );
   }
