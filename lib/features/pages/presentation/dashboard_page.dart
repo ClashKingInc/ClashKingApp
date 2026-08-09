@@ -460,10 +460,11 @@ class _HomeRecapColumn extends StatelessWidget {
     );
     if (!constrainWidth) return content;
 
+    final maxWidth = MediaQuery.sizeOf(context).width >= 1600 ? 1560.0 : 1120.0;
     return Center(
       child: ConstrainedBox(
         key: const ValueKey('home-recap-column'),
-        constraints: const BoxConstraints(maxWidth: 1120),
+        constraints: BoxConstraints(maxWidth: maxWidth),
         child: content,
       ),
     );
@@ -483,13 +484,27 @@ class _HomeDesktopRecapGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cards = <Widget>[?todoCard, ?rankedCard, ?upgradeCard];
+    final loc = AppLocalizations.of(context)!;
+    final cards = <({String title, Widget child})>[
+      if (todoCard case final card?) (title: loc.todoTitle, child: card),
+      if (rankedCard case final card?)
+        (title: loc.rankedLeagueTitle, child: card),
+      if (upgradeCard case final card?)
+        (title: loc.drawerUpgradeTracker, child: card),
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (var index = 0; index < cards.length; index++) ...[
-          if (index > 0) const SizedBox(height: 16),
-          cards[index],
+          if (index > 0) const SizedBox(height: CKSpacing.lg),
+          Text(
+            cards[index].title,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: CKSpacing.sm),
+          cards[index].child,
         ],
       ],
     );
@@ -885,10 +900,10 @@ class _HomeRankedCardState extends State<HomeRankedCard>
                 ? account!.tierIconUrl
                 : ImageAssets.shieldWithArrow,
             fallbackIcon: Icons.emoji_events_rounded,
-            title: loc.rankedLeagueTitle,
-            subtitle:
-                account?.name ??
-                loc.todoAccountsNumber(summary.accounts.length),
+            title: isSummaryPage ? loc.todoAllAccounts : account!.name,
+            subtitle: isSummaryPage
+                ? loc.todoAccountsNumber(summary.accounts.length)
+                : account!.player.clan?.name ?? account.player.tag,
           ),
           const SizedBox(height: 8),
           _buildPage(summary, index, hasSummaryPage),
@@ -1749,12 +1764,14 @@ class _HomeUpgradeTrackerCardState extends State<HomeUpgradeTrackerCard>
                 : account?.hallImageUrl ??
                       ImageAssets.townHall(missing!.townHallLevel),
             fallbackIcon: Icons.construction_rounded,
-            title: loc.drawerUpgradeTracker,
+            title: isSummaryPage
+                ? loc.todoAllAccounts
+                : account?.name ?? missing!.name,
             subtitle: isSummaryPage
                 ? loc.todoAccountsNumber(
                     summary.accounts.length + summary.missingAccounts.length,
                   )
-                : account?.name ?? missing!.name,
+                : missing?.clan?.name ?? account?.tag ?? missing!.tag,
             trailing: _UpgradeProgressRing(
               value: completion,
               label: '${(completion * 100).round()}%',
