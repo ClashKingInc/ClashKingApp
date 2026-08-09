@@ -604,7 +604,6 @@ class _GameAssetCategoryPageState extends State<GameAssetCategoryPage> {
       loc,
       widget.category.id,
     );
-    final hasCategoryOptions = widget.categories.isNotEmpty;
     final buildImage =
         widget.imageBuilder ??
         (context, asset, fit) => GameAssetImage(asset: asset, fit: fit);
@@ -613,8 +612,29 @@ class _GameAssetCategoryPageState extends State<GameAssetCategoryPage> {
       query: _query,
       extension: _extension,
     );
+    final content = _buildContent(loc, buildImage, filteredAssets);
 
-    final content = Column(
+    if (widget.embedded) {
+      return _buildEmbeddedContent(content);
+    }
+    return SidePageScaffold(
+      title: categoryName,
+      subtitle: formatGameAssetImageCount(
+        loc,
+        widget.category.count,
+        Localizations.localeOf(context),
+      ),
+      child: content,
+    );
+  }
+
+  Widget _buildContent(
+    AppLocalizations loc,
+    GameAssetImageBuilder buildImage,
+    List<GameAsset> filteredAssets,
+  ) {
+    final hasCategoryOptions = widget.categories.isNotEmpty;
+    return Column(
       children: [
         if (hasCategoryOptions)
           Padding(
@@ -737,33 +757,24 @@ class _GameAssetCategoryPageState extends State<GameAssetCategoryPage> {
         ),
       ],
     );
+  }
 
-    if (widget.embedded) {
-      return LayoutBuilder(
-        builder: (context, constraints) {
-          final width = constraints.maxWidth > 1120
-              ? 1120.0
-              : constraints.maxWidth;
-          return Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              key: const ValueKey('game-assets-content-bound'),
-              width: width,
-              height: constraints.maxHeight,
-              child: content,
-            ),
-          );
-        },
-      );
-    }
-    return SidePageScaffold(
-      title: categoryName,
-      subtitle: formatGameAssetImageCount(
-        loc,
-        widget.category.count,
-        Localizations.localeOf(context),
-      ),
-      child: content,
+  Widget _buildEmbeddedContent(Widget content) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth > 1120
+            ? 1120.0
+            : constraints.maxWidth;
+        return Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            key: const ValueKey('game-assets-content-bound'),
+            width: width,
+            height: constraints.maxHeight,
+            child: content,
+          ),
+        );
+      },
     );
   }
 }

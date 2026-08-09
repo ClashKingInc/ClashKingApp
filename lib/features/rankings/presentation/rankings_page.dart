@@ -392,88 +392,97 @@ class _RankingsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entries = provider.result?.entries ?? const <RankingEntry>[];
-    final horizontalPadding = _rankingsHorizontalPadding(context);
     final hasFilters =
         provider.board.supportsLocation ||
         provider.board.supportsHistory ||
         provider.board == RankingBoard.playerTownHall ||
         provider.board == RankingBoard.playerRanked;
-    return CustomScrollView(
-      key: PageStorageKey(provider.board),
-      slivers: [
-        if (hasFilters)
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(
-              horizontalPadding,
-              14,
-              horizontalPadding,
-              10,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: _RankingControls(
-                provider: provider,
-                onOpenLocationPicker: onOpenLocationPicker,
-                onOpenTownHallPicker: onOpenTownHallPicker,
-                onOpenLeaguePicker: onOpenLeaguePicker,
-                onOpenHistoryDatePicker: onOpenHistoryDatePicker,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final horizontalPadding = _rankingsHorizontalPadding(
+          constraints.maxWidth,
+        );
+        return CustomScrollView(
+          key: PageStorageKey(provider.board),
+          slivers: [
+            if (hasFilters)
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  14,
+                  horizontalPadding,
+                  10,
+                ),
+                sliver: SliverToBoxAdapter(
+                  child: _RankingControls(
+                    provider: provider,
+                    onOpenLocationPicker: onOpenLocationPicker,
+                    onOpenTownHallPicker: onOpenTownHallPicker,
+                    onOpenLeaguePicker: onOpenLeaguePicker,
+                    onOpenHistoryDatePicker: onOpenHistoryDatePicker,
+                  ),
+                ),
               ),
-            ),
-          ),
-        if (provider.isLoading)
-          const SliverToBoxAdapter(
-            child: LinearProgressIndicator(minHeight: 2),
-          ),
-        if (provider.error != null)
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(
-              horizontalPadding,
-              14,
-              horizontalPadding,
-              28,
-            ),
-            sliver: SliverToBoxAdapter(
-              child: SidePageErrorPanel(
-                message: AppLocalizations.of(context)!.sideRankingsLoadError,
-                detail: provider.error.toString(),
-                onRetry: provider.reload,
+            if (provider.isLoading)
+              const SliverToBoxAdapter(
+                child: LinearProgressIndicator(minHeight: 2),
               ),
-            ),
-          )
-        else if (!provider.isLoading && entries.isEmpty)
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 1120),
-                child: _RankingEmptyState(provider: provider),
+            if (provider.error != null)
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  14,
+                  horizontalPadding,
+                  28,
+                ),
+                sliver: SliverToBoxAdapter(
+                  child: SidePageErrorPanel(
+                    message: AppLocalizations.of(
+                      context,
+                    )!.sideRankingsLoadError,
+                    detail: provider.error.toString(),
+                    onRetry: provider.reload,
+                  ),
+                ),
+              )
+            else if (!provider.isLoading && entries.isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1120),
+                    child: _RankingEmptyState(provider: provider),
+                  ),
+                ),
+              )
+            else ...[
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  hasFilters ? 0 : 14,
+                  horizontalPadding,
+                  24 + MediaQuery.paddingOf(context).bottom,
+                ),
+                sliver: SliverList.builder(
+                  itemCount: entries.length,
+                  itemBuilder: (context, index) => RankingRow(
+                    key: ValueKey(
+                      '${provider.board.name}-${entries[index].tag}',
+                    ),
+                    entry: entries[index],
+                    onTap: () => onOpenEntry(entries[index]),
+                  ),
+                ),
               ),
-            ),
-          )
-        else ...[
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(
-              horizontalPadding,
-              hasFilters ? 0 : 14,
-              horizontalPadding,
-              24 + MediaQuery.paddingOf(context).bottom,
-            ),
-            sliver: SliverList.builder(
-              itemCount: entries.length,
-              itemBuilder: (context, index) => RankingRow(
-                key: ValueKey('${provider.board.name}-${entries[index].tag}'),
-                entry: entries[index],
-                onTap: () => onOpenEntry(entries[index]),
-              ),
-            ),
-          ),
-        ],
-      ],
+            ],
+          ],
+        );
+      },
     );
   }
 }
 
-double _rankingsHorizontalPadding(BuildContext context) {
-  final width = MediaQuery.sizeOf(context).width;
+double _rankingsHorizontalPadding(double width) {
   return ((width - 1120) / 2).clamp(16.0, double.infinity);
 }
 
