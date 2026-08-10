@@ -573,12 +573,15 @@ class LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ForgotPasswordPage(),
+                          builder: (context) => const ForgotPasswordPage(),
                         ),
                       );
                     },
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
                     ),
                     child: Text(
                       AppLocalizations.of(context)!.authPasswordForgot,
