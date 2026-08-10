@@ -15,6 +15,28 @@ Map<String, dynamic> _minimalWarCwl(String tag) => {
   'war_league_infos': [],
 };
 
+class _RecordingApiService extends FakeApiService {
+  bool? lastGetRequiresAuth;
+
+  @override
+  Future<http.Response> getResponse(
+    String endpoint, {
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) {
+    lastGetRequiresAuth = requiresAuth;
+    return super.getResponse(
+      endpoint,
+      requiresAuth: requiresAuth,
+      url: url,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
+}
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -165,6 +187,52 @@ void main() {
         ),
         throwsA(isA<Exception>()),
       );
+    });
+  });
+
+  group('WarCwlService — fetchWarDataFromTime', () {
+    test('uses the v2 previous-war endpoint and parses its first item', () async {
+      final fakeApi = _RecordingApiService();
+      final end = DateTime.utc(2026, 8, 9, 12, 34, 56);
+      final timestamp = end.millisecondsSinceEpoch ~/ 1000;
+      final endpoint =
+          '/war/%23ABC123/previous?timestamp_end=$timestamp&include_cwl=true&limit=1';
+      fakeApi.getStubs[endpoint] = http.Response(
+        jsonEncode({
+          'items': [
+            {'war_tag': '#WAR1', 'state': 'warEnded', 'type': 'regular'},
+          ],
+        }),
+        200,
+      );
+
+      final result = await WarCwlService.fetchWarDataFromTime(
+        '#ABC123',
+        end,
+        apiService: fakeApi,
+      );
+
+      expect(fakeApi.getCallCounts[endpoint], 1);
+      expect(fakeApi.lastGetRequiresAuth, isTrue);
+      expect(result?.tag, '#WAR1');
+      expect(result?.state, 'warEnded');
+    });
+
+    test('returns null when the v2 response has no historical wars', () async {
+      final fakeApi = FakeApiService();
+      final end = DateTime.utc(2026, 8, 9);
+      final timestamp = end.millisecondsSinceEpoch ~/ 1000;
+      final endpoint =
+          '/war/%23EMPTY/previous?timestamp_end=$timestamp&include_cwl=true&limit=1';
+      fakeApi.getStubs[endpoint] = http.Response('{"items":[]}', 200);
+
+      final result = await WarCwlService.fetchWarDataFromTime(
+        '#EMPTY',
+        end,
+        apiService: fakeApi,
+      );
+
+      expect(result, isNull);
     });
   });
 }

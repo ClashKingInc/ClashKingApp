@@ -93,21 +93,29 @@ class WarCwlService extends ChangeNotifier {
     notifyListeners();
   }
 
-  static Future<WarInfo?> fetchWarDataFromTime(String tag, DateTime end) async {
-    final apiService = ApiService.shared;
-    String endTime = end.toIso8601String();
-    endTime = endTime.replaceAll('-', '').replaceAll(':', '');
+  static Future<WarInfo?> fetchWarDataFromTime(
+    String tag,
+    DateTime end, {
+    ApiService? apiService,
+  }) async {
+    final client = apiService ?? ApiService.shared;
+    final encodedTag = Uri.encodeComponent(tag);
+    final endTime = end.millisecondsSinceEpoch ~/ 1000;
 
-    final response = await apiService.getResponse(
-      '',
-      url: "${ApiService.apiUrlV1}/war/${tag.substring(1)}/previous/$endTime",
+    final response = await client.getResponse(
+      '/war/$encodedTag/previous?timestamp_end=$endTime&include_cwl=true&limit=1',
+      requiresAuth: true,
     );
     if (response.statusCode == 200) {
       String body = ApiService.decodeResponseBody(response);
       Map<String, dynamic> jsonBody = json.decode(body);
-      return WarInfo.fromJson(jsonBody);
+      final items = jsonBody['items'];
+      if (items is List && items.isNotEmpty && items.first is Map) {
+        return WarInfo.fromJson(Map<String, dynamic>.from(items.first as Map));
+      }
     } else {
       return null;
     }
+    return null;
   }
 }
