@@ -282,13 +282,13 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
             const SizedBox(height: 8),
 
             // Dynamic password requirements checklist
-                            AuthPasswordRequirements(
-                              hasMinLength: _pwHasMinLength,
-                              hasUppercase: _pwHasUppercase,
-                              hasLowercase: _pwHasLowercase,
-                              hasNumber: _pwHasNumber,
-                              hasSpecial: _pwHasSpecial,
-                            ),
+            AuthPasswordRequirements(
+              hasMinLength: _pwHasMinLength,
+              hasUppercase: _pwHasUppercase,
+              hasLowercase: _pwHasLowercase,
+              hasNumber: _pwHasNumber,
+              hasSpecial: _pwHasSpecial,
+            ),
 
             const SizedBox(height: CKSpacing.lg),
 
