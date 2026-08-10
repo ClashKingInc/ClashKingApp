@@ -61,6 +61,17 @@ ensure_port_free() {
   fi
 }
 
+wait_for_port_release() {
+  local attempt
+  for attempt in {1..40}; do
+    if ! ss -H -ltn "sport = :$PORT" | grep -q .; then
+      return
+    fi
+    sleep 0.25
+  done
+  fail "port $PORT did not release after stopping $SESSION"
+}
+
 remember_worktree() {
   mkdir -p "$STATE_DIR"
   printf '%s\n' "$1" >"$STATE_FILE"
@@ -101,6 +112,7 @@ start_worktree() {
 stop_session() {
   if session_exists; then
     tmux kill-session -t "$SESSION"
+    wait_for_port_release
     printf 'Stopped tmux session %s\n' "$SESSION"
   else
     printf 'No dev app is running\n'
