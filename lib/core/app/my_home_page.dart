@@ -13,6 +13,7 @@ import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/models/subscription_status.dart';
 import 'package:clashkingapp/core/services/subscription_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/achievements/presentation/achievements_page.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
@@ -706,6 +707,15 @@ class _DesktopSidebar extends StatelessWidget {
                         onTap: () => openUtility(
                           l10n.rankedLeagueTitle,
                           (_) => const _RankedLeagueAccountsPage(),
+                        ),
+                      ),
+                      _DesktopUtilityButton(
+                        icon: Icons.military_tech_outlined,
+                        label: l10n.achievementsTitle,
+                        selected: selectedUtility == l10n.achievementsTitle,
+                        onTap: () => openUtility(
+                          l10n.achievementsTitle,
+                          (_) => const AchievementsPage(),
                         ),
                       ),
                       if (appState.isFeatureEnabled(
@@ -1498,6 +1508,16 @@ class _AccountMenuDrawer extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) =>
                               const _RankedLeagueAccountsPage(),
+                        ),
+                      ),
+                    ),
+                    _DrawerMenuItem(
+                      icon: Icons.military_tech_outlined,
+                      label: l10n.achievementsTitle,
+                      onTap: () => _pushAndClose(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AchievementsPage(),
                         ),
                       ),
                     ),
