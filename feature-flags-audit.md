@@ -28,7 +28,6 @@ Audit date: 2026-07-15. Scope: Flutter navigation, startup services, remote cont
 | `cwl_history_preview` | Clan detail CWL history tab | off | Seasons and results are currently fabricated previews |
 | `account_connections` | Discord/email connect-disconnect settings | off | Actions currently display placeholders only |
 | `war_widgets` | Widget settings and background integration entry point | on | Platform-specific operational risk |
-| `feature_requests` | Embedded external request portal | on | Third-party WebView dependency |
 
 ## Reviewed but intentionally not flagged
 

@@ -15,7 +15,6 @@ abstract final class AppFeatureFlags {
   static const gameAssets = 'game_assets';
   static const accountConnections = 'account_connections';
   static const warWidgets = 'war_widgets';
-  static const featureRequests = 'feature_requests';
 
   static const Map<String, bool> defaults = {
     notifications: true,
@@ -30,7 +29,6 @@ abstract final class AppFeatureFlags {
     gameAssets: true,
     accountConnections: false,
     warWidgets: true,
-    featureRequests: true,
   };
 
   static bool defaultValue(String key) => defaults[key] ?? true;
