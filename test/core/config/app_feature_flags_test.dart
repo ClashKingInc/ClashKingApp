@@ -44,6 +44,7 @@ void main() {
     });
 
     test('removed features are absent from the app flag registry', () {
+      expect(AppFeatureFlags.defaults, isNot(contains('feature_requests')));
       expect(AppFeatureFlags.defaults, isNot(contains('popular_insights')));
       expect(AppFeatureFlags.defaults, isNot(contains('leaderboard_previews')));
       expect(

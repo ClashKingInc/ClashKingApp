@@ -19,7 +19,6 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/settings/presentation/faq_page.dart';
-import 'package:clashkingapp/features/settings/presentation/features_vote.dart';
 import 'package:clashkingapp/features/settings/presentation/notification_settings_page.dart';
 import 'package:clashkingapp/features/settings/presentation/privacy_controls_page.dart';
 import 'package:clashkingapp/features/settings/presentation/translation_page.dart';
@@ -184,18 +183,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                     );
                   },
                 ),
-                if (appState.isFeatureEnabled(AppFeatureFlags.featureRequests))
-                  _SettingsTile(
-                    icon: Icons.featured_play_list_outlined,
-                    title: l10n.translationSuggestFeatures,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => FeatureRequests(),
-                        ),
-                      );
-                    },
-                  ),
                 _SettingsTile(
                   icon: Icons.discord,
                   title: l10n.faqJoinDiscord,
