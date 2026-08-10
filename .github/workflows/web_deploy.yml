@@ -49,66 +49,6 @@ jobs:
           directory: build/web
           branch: ${{ github.head_ref || github.ref_name }}
 
-      - name: Configure staging custom domain
-        if: github.ref == 'refs/heads/staging'
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          set -euo pipefail
-
-          api="https://api.cloudflare.com/client/v4"
-          auth_header="Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
-          domain="dev-app.clashk.ing"
-          branch_target="staging.clashkingapp.pages.dev"
-
-          domain_response="$(curl --silent --show-error \
-            --request POST \
-            --header "$auth_header" \
-            --header "Content-Type: application/json" \
-            --data "{\"name\":\"${domain}\"}" \
-            "${api}/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/clashkingapp/domains")"
-          if ! jq -e '.success == true or any(.errors[]?; .code == 8000008)' <<<"$domain_response" >/dev/null; then
-            jq '{success, errors, messages}' <<<"$domain_response"
-            exit 1
-          fi
-
-          zone_response="$(curl --silent --show-error \
-            --header "$auth_header" \
-            "${api}/zones?name=clashk.ing")"
-          zone_id="$(jq -r '.result[0].id // empty' <<<"$zone_response")"
-          if [[ -z "$zone_id" ]]; then
-            jq '{success, errors, messages}' <<<"$zone_response"
-            exit 1
-          fi
-
-          records_response="$(curl --silent --show-error \
-            --header "$auth_header" \
-            "${api}/zones/${zone_id}/dns_records?name=${domain}")"
-          record_id="$(jq -r '.result[0].id // empty' <<<"$records_response")"
-          record_data="{\"type\":\"CNAME\",\"name\":\"${domain}\",\"content\":\"${branch_target}\",\"proxied\":true,\"ttl\":1}"
-
-          if [[ -n "$record_id" ]]; then
-            dns_response="$(curl --silent --show-error \
-              --request PUT \
-              --header "$auth_header" \
-              --header "Content-Type: application/json" \
-              --data "$record_data" \
-              "${api}/zones/${zone_id}/dns_records/${record_id}")"
-          else
-            dns_response="$(curl --silent --show-error \
-              --request POST \
-              --header "$auth_header" \
-              --header "Content-Type: application/json" \
-              --data "$record_data" \
-              "${api}/zones/${zone_id}/dns_records")"
-          fi
-
-          if ! jq -e '.success == true' <<<"$dns_response" >/dev/null; then
-            jq '{success, errors, messages}' <<<"$dns_response"
-            exit 1
-          fi
-
   e2e:
     needs: build-and-deploy
     if: github.event_name == 'pull_request'
