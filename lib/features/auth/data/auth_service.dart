@@ -14,6 +14,8 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthService extends ChangeNotifier {
+  static const _authMePath = '/auth/me';
+
   AuthService({
     ApiService? apiService,
     TokenService? tokenService,
@@ -51,7 +53,7 @@ class AuthService extends ChangeNotifier {
 
   Future<void> _refreshAccountSummary() async {
     try {
-      final response = await _apiService.get('/auth/me');
+      final response = await _apiService.get(_authMePath);
       if (!_isAuthenticated ||
           response['user_id']?.toString() != _currentUser?.userId) {
         return;
@@ -90,7 +92,7 @@ class AuthService extends ChangeNotifier {
     await deletePrefs('auth_local_mode');
 
     if (_environment == ApiEnvironment.local) {
-      final response = await _apiService.get('/auth/me', requiresAuth: false);
+      final response = await _apiService.get(_authMePath, requiresAuth: false);
       _applyCurrentUserResponse(response);
       _accessToken = null;
       _isAuthenticated = true;
@@ -102,7 +104,7 @@ class AuthService extends ChangeNotifier {
     _accessToken = await _tokenService.getAccessToken();
     if (_accessToken != null) {
       try {
-        final response = await _apiService.get('/auth/me');
+        final response = await _apiService.get(_authMePath);
         _applyCurrentUserResponse(response);
         await ObservabilityService.setAuthenticatedUser(_currentUser);
         _isAuthenticated = true;
@@ -342,7 +344,7 @@ class AuthService extends ChangeNotifier {
 
   Future<void> deleteAccount() async {
     final response = await _apiService.deleteResponse(
-      '/auth/me',
+      _authMePath,
       requiresAuth: true,
     );
     if (response.statusCode < 200 || response.statusCode >= 300) {
