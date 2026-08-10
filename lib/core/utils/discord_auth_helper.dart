@@ -13,6 +13,9 @@ import 'discord_auth_helper_web.dart'
 class DiscordAuthHelper {
   static const String discordClientId = "824653933347209227";
   static const String callbackUrlScheme = "clashking";
+  static const String _webDiscordRedirectUri = String.fromEnvironment(
+    'CK_WEB_DISCORD_REDIRECT_URI',
+  );
 
   static Future<Map<String, String>?> getDiscordAuthCode() async {
     final codeVerifier = _generateCodeVerifier();
@@ -74,6 +77,7 @@ class DiscordAuthHelper {
       final host = Uri.base.host;
       final isLocalHost = host == 'localhost' || host == '127.0.0.1';
       if (isLocalHost) return "$origin/auth/callback";
+      if (_webDiscordRedirectUri.isNotEmpty) return _webDiscordRedirectUri;
       return kReleaseMode
           ? "https://app.clashk.ing/auth/discord_callback.html"
           : "$origin/auth/discord_callback.html";
