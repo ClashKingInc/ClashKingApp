@@ -32,6 +32,30 @@ Future<CocAccountService> serviceWithAccounts(
   return service;
 }
 
+PlayerService testPlayerService() {
+  final api = FakeApiService();
+  api.postStubs['/players'] = http.Response(
+    jsonEncode({
+      'items': [
+        {
+          'tag': '#P1',
+          'name': 'Test Player',
+          'trophies': 1000,
+          'townHallLevel': 14,
+          'clan': {
+            'tag': '',
+            'name': '',
+            'clanLevel': 0,
+            'badgeUrls': {'small': '', 'medium': '', 'large': ''},
+          },
+        },
+      ],
+    }),
+    200,
+  );
+  return PlayerService(apiService: api);
+}
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -544,7 +568,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('CocAccountService — refreshPageData', () {
-    PlayerService makePlayer() => PlayerService(apiService: FakeApiService());
+    PlayerService makePlayer() => testPlayerService();
     ClanService makeClan() => ClanService(apiService: FakeApiService());
     WarCwlService makeWar() => WarCwlService(apiService: FakeApiService());
 
@@ -608,7 +632,7 @@ void main() {
 
     test('sets lastRefresh after player refresh', () async {
       final fakeApi = FakeApiService();
-      final playerService = PlayerService(apiService: FakeApiService());
+      final playerService = testPlayerService();
       final service = CocAccountService(
         apiService: fakeApi,
         currentUserId: testUserId,
@@ -1023,7 +1047,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('CocAccountService — loadApiData', () {
-    PlayerService makePlayer() => PlayerService(apiService: FakeApiService());
+    PlayerService makePlayer() => testPlayerService();
     ClanService makeClan() => ClanService(apiService: FakeApiService());
     WarCwlService makeWar() => WarCwlService(apiService: FakeApiService());
 

@@ -17,6 +17,7 @@ class DiscordAuthHelper {
   static Future<Map<String, String>?> getDiscordAuthCode() async {
     final codeVerifier = _generateCodeVerifier();
     final codeChallenge = _generateCodeChallenge(codeVerifier);
+    final state = _generateState();
     final redirectUri = getRedirectUri();
 
     DebugUtils.debugInfo("🔄 Redirect URI: $redirectUri");
@@ -28,18 +29,32 @@ class DiscordAuthHelper {
       'redirect_uri': redirectUri,
       'code_challenge': codeChallenge,
       'code_challenge_method': 'S256',
+      'state': state,
     });
 
     DebugUtils.debugInfo("🔄 Discord auth URL: $url");
 
     try {
       if (kIsWeb) {
-        final code = await getDiscordAuthCodeWeb(url);
+        final result = await getDiscordAuthCodeWeb(url, state);
+        final code = result?['code'];
         return code != null
             ? {'code': code, 'code_verifier': codeVerifier}
             : null;
       } else {
         final result = await _launchDiscordAuth(url);
+        if (result.queryParameters['state'] != state) {
+          throw StateError('Discord OAuth state did not match this login.');
+        }
+        final oauthError = result.queryParameters['error'];
+        if (oauthError == 'access_denied') {
+          return null;
+        }
+        if (oauthError != null) {
+          throw StateError(
+            result.queryParameters['error_description'] ?? oauthError,
+          );
+        }
         final code = result.queryParameters['code'];
         return code != null
             ? {'code': code, 'code_verifier': codeVerifier}
@@ -47,8 +62,17 @@ class DiscordAuthHelper {
       }
     } catch (e) {
       DebugUtils.debugError(' Error getting Discord auth code: $e');
-      return null;
+      rethrow;
     }
+  }
+
+  static String _generateState() {
+    const charset =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    return List.generate(
+      64,
+      (_) => charset[Random.secure().nextInt(charset.length)],
+    ).join();
   }
 
   static String _generateCodeVerifier() {

@@ -231,15 +231,16 @@ List<DamageSourceDefinition>? _equipmentSource(
 List<DamageSourceDefinition>? _flameFlingerSource(dynamic rawSources) {
   final source = _findNamed(rawSources, 'Flame Flinger');
   if (source == null) return null;
-  final attackSpeed = _double(source['attack_speed']);
-  if (attackSpeed <= 0) return null;
+  final attackSpeedMilliseconds = _double(source['attack_speed']);
+  if (attackSpeedMilliseconds <= 0) return null;
+  final attackSpeedSeconds = attackSpeedMilliseconds / 1000;
   final levels = _levels(source['levels'], (raw) {
     final dps = _double(raw['dps']);
     if (dps <= 0) return null;
     return DamageLevel(
       level: _int(raw['level']),
       requiredTownHall: _int(raw['required_townhall'], fallback: 1),
-      damage: dps * attackSpeed,
+      damage: dps * attackSpeedSeconds,
     );
   });
   if (levels.isEmpty) return null;
