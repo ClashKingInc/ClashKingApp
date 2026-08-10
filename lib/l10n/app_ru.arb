@@ -237,7 +237,7 @@
   "authDiscordSignIn": "Вход через Discord",
   "authDiscordContinue": "Продолжить с Discord",
   "authDiscordDescription": "Синхронизируйте свои данные с ClashKing Bot и раскройте весь потенциал ClashKing!",
-  "authEmail": "Email",
+  "authEmail": "Адрес электронной почты",
   "authEmailHint": "Введите адрес электронной почты",
   "authEmailDescription": "Используйте электронную почту, если вы не можете получить доступ к Discord или предпочитаете функции только приложения",
   "authEmailRequired": "Пожалуйста, введите ваш email",
@@ -450,7 +450,7 @@
   "gameTrophies": "Трофеи",
   "gameBuilderBaseTrophies": "Трофеи ДС",
   "gameDonations": "Пожертвования",
-  "gameDonationsReceived": "Donations Received",
+  "gameDonationsReceived": "Получено",
   "gameDonationsRatio": "Соотношение пожертвований",
   "gameLevel": "Уровень: {level}/{maxLevel}",
   "@gameLevel": {
@@ -616,7 +616,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Легендарная лига",
   "legendsNotInLeague": "Не в Легендарной лиге",
   "legendsNoDataToday": "Вы не в Легендарной лиге, но прошлые сезоны доступны.",
   "legendsStartDescription": "Вы начали день с {trophies} трофеями.",
@@ -754,7 +754,7 @@
   "todoExplanationCwl": "Вес 1 очко на аккаунт, 1 атака = 1 очко. CWL нельзя отслеживать, если игрок не находится в своём клане лиги.",
   "todoExplanationPassAndGamesTitle": "Сезонный пропуск и Клановые игры:",
   "todoExplanationPassAndGames": "Вес 2 очка за каждое на аккаунт. Соотношение основано на числе оставшихся дней (1 месяц для пропуска и 6 дней для игр). Зелёный = успеваете завершить пропуск или игры, красный = отстаёте от графика.",
-  "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
+  "todoExplanationConclusion": "Итоговый процент рассчитывается делением числа действий, выполненных во время текущих событий, на общее число необходимых действий.",
   "todoAccountsNumber": "{number} аккаунтов",
   "@todoAccountsNumber": {
     "placeholders": {
@@ -848,7 +848,7 @@
     }
   },
   "warStats": "Статистика войны",
-  "warOngoing": "Ongoing war",
+  "warOngoing": "Идёт война",
   "warIsNotInWar": "{clan} не участвует в войне.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -958,20 +958,20 @@
       }
     }
   },
-  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "warAnalysisCannotLose": "Поражение {clanName} уже невозможно",
   "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
-  "warAnalysisSecuredBadge": "Secured",
-  "warAnalysisAlreadySecured": "Already secured",
-  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "warAnalysisSecuredBadge": "Гарантировано",
+  "warAnalysisAlreadySecured": "Уже гарантировано",
+  "warAnalysisSecureAgainst": "Расчёт цели предполагает, что {clanName} проведёт все оставшиеся атаки.",
   "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
-  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "warAnalysisCannotSecureAgainst": "Математически гарантировать результат нельзя, если {clanName} оптимально проведёт все оставшиеся атаки.",
   "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
-  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
-  "warAnalysisStarGoal": "+{stars} star(s)",
+  "warAnalysisNoSecureObjective": "Оставшихся атак недостаточно, чтобы гарантировать результат",
+  "warAnalysisStarGoal": "+{stars} зв.",
   "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
-  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "warAnalysisRemainingAttempts": "Доступно атак: {attacks}",
   "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
-  "warAnalysisNoBetterResult": "No better result is possible",
+  "warAnalysisNoBetterResult": "Улучшить результат уже невозможно",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -1222,7 +1222,7 @@
   "@warAbbreviationAvgPercentage": {
     "description": "Abbreviation for average percentage"
   },
-  "cwlTitle": "CWL",
+  "cwlTitle": "Лига войн кланов",
   "cwlClanWarLeague": "Лига войн кланов",
   "cwlOngoing": "Текущая CWL",
   "cwlRounds": "Раунды",
@@ -1234,7 +1234,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Текущий раунд (раунд {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1949,7 +1949,7 @@
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
-  "generalError": "Error",
+  "generalError": "Произошла ошибка",
   "generalSuccess": "Успешно",
   "generalFailed": "Не удалось",
   "generalMinimum": "Минимум",
@@ -2317,7 +2317,7 @@
   "tooltipHidePassword": "Скрыть пароль",
   "tooltipRemoveAccount": "Удалить аккаунт",
   "calculatorsTitle": "Калькуляторы",
-  "calculatorsSubtitle": "Zap quake and fireball quake.",
+  "calculatorsSubtitle": "Рассчитайте урон с учётом текущих уровней зданий.",
   "calculatorZapQuake": "Землетрясение",
   "calculatorFireball": "Огненный шар",
   "upgradeTrackerTitle": "Обновление трекера",
@@ -2436,7 +2436,7 @@
   "resourceDarkElixir": "Тёмный эликсир",
   "resourceBuilderElixir": "Эликсир строителя",
   "resourceBuilderGold": "Золото строителя",
-  "resourceElixir": "Elixir",
+  "resourceElixir": "Единицы эликсира",
   "resourceGold": "Золото",
   "resourceGlowyOre": "Сияющая руда",
   "resourceStarryOre": "Звёздная руда",
@@ -2519,7 +2519,7 @@
   "sideRankingsEmptyBody": "Попробуйте другую таблицу лидеров или локацию.",
   "sideRankingsMockups": "Макеты ClashKing",
   "sideStatsTitle": "Статистика",
-  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsSubtitle": "Статистика таблиц лидеров из официальных поверхностей Clash API.",
   "sideStatsLoadError": "Не удалось загрузить боевую информацию.",
   "sideTopScore": "Лучший результат",
   "sideTop200Avg": "Среднее топ-200",
@@ -2870,7 +2870,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "Ратуша {level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -2896,18 +2896,18 @@
   "notifGroupAppAnnouncements": "Объявления приложения",
   "notifGroupUpgradeFinishes": "Завершенные улучшения",
   "notifGroupMonthlySupport": "Ежемесячная поддержка",
-  "postsTitle": "Posts",
-  "postsDescription": "ClashKing news, update stories, and previous announcements.",
-  "postsEmpty": "No published posts yet.",
-  "postsLoadFailed": "Posts could not be loaded.",
-  "postsLoadMore": "Load more",
-  "postsCurrent": "Current",
-  "postsPast": "Past",
-  "postsStory": "Interactive story",
-  "postsPinned": "Featured",
-  "authAccountLinkDiscord": "Link Discord Account",
-  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
-  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
+  "postsTitle": "Публикации",
+  "postsDescription": "Новости ClashKing, материалы об обновлениях и прошлые объявления.",
+  "postsEmpty": "Пока нет опубликованных материалов.",
+  "postsLoadFailed": "Не удалось загрузить публикации.",
+  "postsLoadMore": "Показать ещё",
+  "postsCurrent": "Актуальные",
+  "postsPast": "Архив",
+  "postsStory": "История с интерактивом",
+  "postsPinned": "Избранное",
+  "authAccountLinkDiscord": "Подключить учётную запись Discord",
+  "authAccountAddDiscordAuth": "Подключите вход через Discord, чтобы синхронизировать данные между платформами и пользоваться ботом ClashKing.",
+  "authAccountDiscordLinkedSuccess": "Учётная запись Discord подключена!",
   "@warAnalysisScenario": {
     "placeholders": {
       "attacks": {
@@ -2942,50 +2942,50 @@
       }
     }
   },
-  "faqFeaturesTodoTitle": "To-do checklist",
-  "faqFeaturesTodoDescription": "See which accounts still need Ranked attacks, raids, war attacks, Clan Games, or pass actions",
-  "faqFeaturesUpgradeTrackerTitle": "Upgrade Tracker",
-  "faqFeaturesUpgradeTrackerDescription": "Use a manual account snapshot provided by the user to see remaining upgrades, resources, builders, lab time, and progress",
-  "faqFeaturesNotificationsTitle": "Push notifications",
-  "faqFeaturesNotificationsDescription": "Choose which accounts should receive alerts for supported ClashKing events",
-  "faqFeaturesWidgetsTitle": "War widgets",
-  "faqFeaturesWidgetsDescription": "Keep current war status visible on your home screen where widgets are supported",
-  "faqSectionAccountsAlertsWidgets": "Accounts, alerts & widgets",
-  "faqLinkedAccountsTitle": "How do linked accounts and verification work?",
-  "faqLinkedAccountsAnswer": "Your ClashKing profile can include several Clash of Clans accounts. Adding a tag shows public data. Verifying with the Clash of Clans API token proves the account is yours and unlocks account-specific features.",
-  "faqLinkedAccountsSolution1": "Manage, reorder, hide, or remove accounts from account management.",
-  "faqLinkedAccountsSolution2": "Find the API token in Clash of Clans under Settings > More Settings > API Token.",
-  "faqLinkedAccountsSolution3": "You can sign in with Discord or email. When account connections are available, manage them from Settings.",
-  "faqNotificationsTitle": "How do notifications work?",
-  "faqNotificationsAnswer": "Notifications are optional. When enabled, ClashKing registers this device. You can choose which linked accounts each alert targets.",
-  "faqNotificationsSolution1": "Allow notifications on your device and in ClashKing settings.",
-  "faqNotificationsSolution2": "Each alert can target different accounts. Check the selected accounts if an alert is missing.",
-  "faqNotificationsSolution3": "Some alerts depend on tracked clan or war data. Delays can happen while external data updates.",
-  "faqWidgetsTitle": "How do war widgets work?",
-  "faqWidgetsAnswer": "War widgets show a quick summary on supported devices. They use your selected or linked accounts, cached ClashKing data, and background refreshes when the platform allows them.",
-  "faqWidgetsSolution1": "Open the app after changing accounts or clans so the widget can sync.",
-  "faqWidgetsSolution2": "If a widget looks stale, refresh the app first. Android and iOS limit background updates.",
-  "faqWidgetsSolution3": "The clan needs accessible war data to show useful status.",
+  "faqFeaturesTodoTitle": "Список задач",
+  "faqFeaturesTodoDescription": "Проверяйте, каким аккаунтам ещё нужны рейтинговые атаки, рейды, атаки на войне, Игры кланов или действия сезонного пропуска",
+  "faqFeaturesUpgradeTrackerTitle": "Отслеживание улучшений",
+  "faqFeaturesUpgradeTrackerDescription": "Загрузите предоставленный пользователем снимок аккаунта, чтобы увидеть оставшиеся улучшения и ресурсы, занятость строителей и лаборатории, а также общий прогресс",
+  "faqFeaturesNotificationsTitle": "Мгновенные уведомления",
+  "faqFeaturesNotificationsDescription": "Укажите аккаунты, для которых нужно получать оповещения о поддерживаемых событиях ClashKing",
+  "faqFeaturesWidgetsTitle": "Военные виджеты",
+  "faqFeaturesWidgetsDescription": "Следите за текущим состоянием войны прямо на главном экране устройств, поддерживающих виджеты",
+  "faqSectionAccountsAlertsWidgets": "Аккаунты, уведомления и виджеты",
+  "faqLinkedAccountsTitle": "Как устроены привязка и подтверждение аккаунтов?",
+  "faqLinkedAccountsAnswer": "К профилю ClashKing можно добавить несколько аккаунтов Clash of Clans. После добавления тега становятся видны общедоступные данные. Подтверждение токеном API Clash of Clans доказывает, что аккаунт принадлежит вам, и открывает персональные функции.",
+  "faqLinkedAccountsSolution1": "В разделе управления аккаунтами их можно упорядочивать, скрывать и удалять.",
+  "faqLinkedAccountsSolution2": "Токен API находится в Clash of Clans: «Настройки» > «Дополнительные настройки» > «Токен API».",
+  "faqLinkedAccountsSolution3": "Войти можно через Discord или электронную почту. Доступные привязки аккаунта настраиваются в разделе «Настройки».",
+  "faqNotificationsTitle": "Как устроены уведомления?",
+  "faqNotificationsAnswer": "Уведомления можно не включать. После включения ClashKing регистрирует это устройство, а вы выбираете связанные аккаунты для каждого типа оповещений.",
+  "faqNotificationsSolution1": "Разрешите уведомления и в настройках устройства, и в настройках ClashKing.",
+  "faqNotificationsSolution2": "Для разных оповещений можно выбрать разные аккаунты. Если оповещение не приходит, проверьте выбранные аккаунты.",
+  "faqNotificationsSolution3": "Некоторые оповещения используют отслеживаемые сведения о клане или войне, поэтому при обновлении внешних данных возможна задержка.",
+  "faqWidgetsTitle": "Как устроены виджеты войны?",
+  "faqWidgetsAnswer": "На поддерживаемых устройствах военный виджет показывает краткую сводку. Он использует выбранные или связанные аккаунты, кэш ClashKing и фоновое обновление, когда система его разрешает.",
+  "faqWidgetsSolution1": "После смены аккаунта или клана откройте приложение, чтобы синхронизировать виджет.",
+  "faqWidgetsSolution2": "Если данные виджета устарели, сначала обновите приложение. Android и iOS ограничивают частоту фоновых обновлений.",
+  "faqWidgetsSolution3": "Чтобы виджет показывал состояние войны, приложению нужен доступ к военным данным клана.",
   "@warAttacksDetailsDuration": {
     "description": "Label for attack duration in attack details"
   },
-  "gameItemWardenWeight": "Warden weight",
+  "gameItemWardenWeight": "Вес Стража",
   "@gameItemWardenWeight": {
     "description": "Grand Warden follow-priority weight for a game item"
   },
-  "gameItemWardenWeightTooltip": "Warden weight can override housing space and determines how strongly the Grand Warden prioritizes following a unit group.",
+  "gameItemWardenWeightTooltip": "Вес определяет, насколько охотно Великий Страж следует за группой бойцов, и может иметь приоритет над занимаемым местом.",
   "@gameItemWardenWeightTooltip": {
     "description": "Explains how Warden weight affects Grand Warden follow priority"
   },
-  "gameItemHealerWeight": "Healer weight",
+  "gameItemHealerWeight": "Приоритет Целительницы",
   "@gameItemHealerWeight": {
     "description": "Healer targeting-priority weight for a game item"
   },
-  "gameItemHealerWeightTooltip": "Healer weight can override housing space when Healers decide which units to prioritize.",
+  "gameItemHealerWeightTooltip": "При выборе цели Целительницы могут учитывать этот вес раньше, чем занимаемое бойцами место.",
   "@gameItemHealerWeightTooltip": {
     "description": "Explains how Healer weight affects targeting priority"
   },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 боец для порога следования} other{{count} бойцов для порога следования}}",
   "@gameItemWardenThresholdCopies": {
     "description": "Number of copies needed to reach the Grand Warden follow threshold",
     "placeholders": {
@@ -2994,7 +2994,7 @@
       }
     }
   },
-  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "gameItemWardenNoThresholdContribution": "Не учитывается при расчёте порога следования",
   "@gameItemWardenNoThresholdContribution": {
     "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
   },
@@ -3149,10 +3149,10 @@
   "@searchErrorClanLoadFailed": {
     "description": "Error when clan data fails to load from search"
   },
-  "dashboardTodoHiddenTitle": "No accounts shown here",
-  "dashboardTodoHiddenBody": "Turn on one of the home card options (to-do, Upgrade Tracker, Ranked) for an account in the Players tab to see it here.",
-  "dashboardUpgradeTrackerNoData": "Open the tracker to import or refresh upgrade data.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {needs an update} other {need an update}}",
+  "dashboardTodoHiddenTitle": "Нет аккаунтов для показа",
+  "dashboardTodoHiddenBody": "Чтобы аккаунт появился здесь, включите для него на вкладке «Игроки» одну из карточек главного экрана: задачи, улучшения или рейтинг.",
+  "dashboardUpgradeTrackerNoData": "Откройте раздел улучшений, чтобы импортировать или обновить сведения.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {нужно обновить данные} other {нужно обновить данные}}",
   "@dashboardUpgradeTrackerNeedsUpdate": {
     "placeholders": {
       "subject": {
@@ -3163,7 +3163,7 @@
       }
     }
   },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {has tasks left} other {have tasks left}}",
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {есть невыполненные задачи} other {есть невыполненные задачи}}",
   "@todoAccountsHaveTasksLeft": {
     "placeholders": {
       "subject": {
@@ -3174,7 +3174,7 @@
       }
     }
   },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {has attacks left} other {have attacks left}}",
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {доступны оставшиеся атаки} other {доступны оставшиеся атаки}}",
   "@dashboardRankedAccountsHaveAttacksLeft": {
     "placeholders": {
       "subject": {
@@ -3185,14 +3185,14 @@
       }
     }
   },
-  "dashboardUpgradeTrackerTimeLeft": "Projected",
-  "dashboardUpgradeTrackerBuilders": "Builders",
-  "dashboardUpgradeTrackerLab": "Lab",
-  "dashboardUpgradeTrackerPets": "Pets",
-  "dashboardUpgradeTrackerWalls": "Walls",
-  "dashboardUpgradeTrackerVillage": "Village",
-  "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
-  "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerTimeLeft": "Расчётный срок",
+  "dashboardUpgradeTrackerBuilders": "Строители сейчас",
+  "dashboardUpgradeTrackerLab": "Исследования",
+  "dashboardUpgradeTrackerPets": "Питомцы",
+  "dashboardUpgradeTrackerWalls": "Улучшение стен",
+  "dashboardUpgradeTrackerVillage": "Поселение",
+  "dashboardRankedNoData": "Откройте рейтинговую лигу, чтобы посмотреть положение этого аккаунта.",
+  "dashboardRankedAccounts": "Отслеживается аккаунтов: {loaded}/{total}",
   "@dashboardRankedAccounts": {
     "placeholders": {
       "loaded": {
@@ -3203,17 +3203,17 @@
       }
     }
   },
-  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
-  "damageNoStaticDataTitle": "Damage data is unavailable",
-  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
-  "damageTownHall": "Town Hall",
-  "damageVerifiedAccountPrefill": "Verified account preset",
-  "damageOverridesStayLocal": "Changes here do not update the player account.",
-  "damageTargets": "Buildings",
-  "damageAddBuilding": "Add building",
-  "damageRemoveBuilding": "Remove building",
-  "damageNoTargetsBody": "Add at least one building to compare results.",
-  "damageHitpoints": "{hitpoints} HP",
+  "damageCalculatorSubtitle": "Сопоставьте набор средств атаки сразу с несколькими зданиями.",
+  "damageNoStaticDataTitle": "Сведения об уроне недоступны",
+  "damageNoStaticDataBody": "Обновите приложение после окончания загрузки статических данных игры.",
+  "damageTownHall": "Уровень ратуши",
+  "damageVerifiedAccountPrefill": "Набор из подтверждённого аккаунта",
+  "damageOverridesStayLocal": "Эти изменения не повлияют на аккаунт игрока.",
+  "damageTargets": "Целевые здания",
+  "damageAddBuilding": "Добавить цель",
+  "damageRemoveBuilding": "Убрать здание",
+  "damageNoTargetsBody": "Для сравнения добавьте хотя бы одно здание.",
+  "damageHitpoints": "Запас здоровья: {hitpoints}",
   "@damageHitpoints": {
     "placeholders": {
       "hitpoints": {
@@ -3221,13 +3221,13 @@
       }
     }
   },
-  "damageSearchBuildings": "Search buildings",
-  "damageNoBuildingsFound": "No buildings found",
-  "damageTryAnotherSearch": "Try another name or Town Hall level.",
-  "damageAttackStack": "Manual attack stack",
-  "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
-  "damageCount": "Count",
-  "damagePerUse": "{damage} damage per use",
+  "damageSearchBuildings": "Найти здание",
+  "damageNoBuildingsFound": "Подходящих зданий нет",
+  "damageTryAnotherSearch": "Введите другое название или выберите иной уровень ратуши.",
+  "damageAttackStack": "Состав атаки вручную",
+  "damageNoSourcesForTownHall": "На этом уровне ратуши нет доступных источников урона.",
+  "damageCount": "Количество",
+  "damagePerUse": "Урон за применение: {damage}",
   "@damagePerUse": {
     "placeholders": {
       "damage": {
@@ -3235,7 +3235,7 @@
       }
     }
   },
-  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "damageEarthquakePercent": "{percent}% максимального здоровья; эффект ослабевает при повторном применении",
   "@damageEarthquakePercent": {
     "placeholders": {
       "percent": {
@@ -3243,17 +3243,17 @@
       }
     }
   },
-  "damageSourceLightning": "Lightning",
-  "damageSourceEarthquake": "Earthquake",
-  "damageSourceGiantArrow": "Giant Arrow",
-  "damageSourceFireball": "Fireball",
-  "damageSourceFlameFlinger": "Flame Flinger hit",
-  "damageSourceBalloonDeath": "Balloon death damage",
-  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
-  "damageResults": "Results",
-  "damageDestroyed": "Destroyed",
-  "damageSurvives": "Survives",
-  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "damageSourceLightning": "Заклинание Молнии",
+  "damageSourceEarthquake": "Заклинание Землетрясения",
+  "damageSourceGiantArrow": "Гигантская Стрела",
+  "damageSourceFireball": "Огненный Шар",
+  "damageSourceFlameFlinger": "Попадание Огнемётчика",
+  "damageSourceBalloonDeath": "Урон при гибели Шара",
+  "damageSourceRocketBalloonDeath": "Урон при гибели Ракетного Шара",
+  "damageResults": "Итог",
+  "damageDestroyed": "Уничтожено",
+  "damageSurvives": "Уцелеет",
+  "damageResultSummary": "Урон: {damage} · останется здоровья: {remaining}",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -3264,10 +3264,10 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake optimizer",
-  "damageSpellCapacity": "Spell capacity",
-  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
-  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "damageZapQuakeOptimizer": "Подбор Молний и Землетрясений",
+  "damageSpellCapacity": "Вместимость заклинаний",
+  "damageZapQuakeUnavailable": "На этом уровне ратуши заклинания Молнии и Землетрясения недоступны.",
+  "damageZapQuakeUsesSelectedLevels": "Расчёт для Молнии {lightningLevel}-го уровня и Землетрясения {earthquakeLevel}-го уровня.",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -3278,9 +3278,9 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
-  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
-  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "damageZapQuakeIneligible": "Молния и Землетрясение не наносят урон этому хранилищу.",
+  "damageNoValidZapQuake": "В выбранную вместимость не помещается ни одна подходящая комбинация.",
+  "damageZapQuakeCombination": "Молнии: {lightning} + Землетрясения: {earthquake} · мест: {capacity}",
   "@damageZapQuakeCombination": {
     "placeholders": {
       "lightning": {
@@ -3294,34 +3294,34 @@
       }
     }
   },
-  "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Show Upgrade Tracker on Home",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Pin this account's upgrade summary on Home.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verify this account to show upgrade progress on Home.",
-  "playerOptionShowRankedHomeTitle": "Show Ranked on Home",
-  "playerOptionShowRankedHomeSubtitle": "Pin this account's Ranked League summary on Home.",
-  "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
-  "dashboardRankedCombinedAcrossAccounts": "Combined ranking across your accounts",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Combined upgrade tracking across your accounts",
-  "rankingsHomeVillage": "Home Village",
-  "rankingsBuilderBase": "Builder Base",
-  "rankingsTownHall": "Town Hall",
-  "rankingsRankedLeague": "Ranked League",
-  "rankingsClanCapital": "Clan Capital",
-  "rankingsDonations": "Donations",
-  "rankingsWarWins": "War Wins",
-  "rankingsWinStreak": "Win Streak",
-  "rankingsCurrent": "Current",
-  "rankingsWorldwide": "Worldwide",
-  "rankingsSelectLocation": "Select a location",
-  "rankingsSearchLocations": "Search locations or country codes",
-  "rankingsWorldwideUnavailable": "Choose a region or country for this leaderboard.",
-  "rankingsLocationsLoadFailed": "The full location list could not be loaded. Worldwide is still available where supported.",
-  "rankingsSnapshotDate": "Snapshot date",
-  "rankingsSource": "Source",
-  "rankingsOfficialSource": "Official Clash API",
-  "rankingsResults": "Results",
-  "rankingsTopCount": "Top {count}",
+  "playerOptionShowTodoPageVerifyFirst": "Подтвердите аккаунт, чтобы показывать его в списке задач.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Показывать улучшения на главном экране",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Закрепить на главном экране сводку улучшений этого аккаунта.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Подтвердите аккаунт, чтобы видеть прогресс улучшений на главном экране.",
+  "playerOptionShowRankedHomeTitle": "Показывать рейтинг на главном экране",
+  "playerOptionShowRankedHomeSubtitle": "Закрепить на главном экране сводку рейтинговой лиги этого аккаунта.",
+  "playerOptionShowRankedHomeVerifyFirst": "Подтвердите аккаунт, чтобы видеть сводку рейтинговой лиги на главном экране.",
+  "dashboardRankedCombinedAcrossAccounts": "Общий рейтинг ваших аккаунтов",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Общий прогресс улучшений ваших аккаунтов",
+  "rankingsHomeVillage": "Основная деревня",
+  "rankingsBuilderBase": "База строителя",
+  "rankingsTownHall": "Уровень ратуши",
+  "rankingsRankedLeague": "Лига рейтинговых боёв",
+  "rankingsClanCapital": "Рейтинг столицы клана",
+  "rankingsDonations": "По пожертвованиям",
+  "rankingsWarWins": "Победы в войнах",
+  "rankingsWinStreak": "Серия побед",
+  "rankingsCurrent": "Сейчас",
+  "rankingsWorldwide": "Весь мир",
+  "rankingsSelectLocation": "Выбрать регион",
+  "rankingsSearchLocations": "Поиск по названию или коду страны",
+  "rankingsWorldwideUnavailable": "Для этой таблицы выберите страну или регион.",
+  "rankingsLocationsLoadFailed": "Полный перечень регионов загрузить не удалось. Глобальный рейтинг остаётся доступен там, где он поддерживается.",
+  "rankingsSnapshotDate": "Дата сохранения",
+  "rankingsSource": "Источник данных",
+  "rankingsOfficialSource": "Официальные данные Clash API",
+  "rankingsResults": "Места в рейтинге",
+  "rankingsTopCount": "Первые {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3329,8 +3329,8 @@
       }
     }
   },
-  "rankingsNoSnapshotTitle": "No stored snapshot",
-  "rankingsNoSnapshotBody": "No ranking snapshot is stored for {date}. Choose another date or return to Current.",
+  "rankingsNoSnapshotTitle": "Снимок не сохранён",
+  "rankingsNoSnapshotBody": "На дату {date} сохранённого рейтинга нет. Выберите другую дату или вернитесь к текущим данным.",
   "@rankingsNoSnapshotBody": {
     "placeholders": {
       "date": {
@@ -3338,15 +3338,15 @@
       }
     }
   },
-  "rankingsPlayerLoadFailed": "Failed to load this player.",
-  "rankingsClanLoadFailed": "Failed to load this clan.",
+  "rankingsPlayerLoadFailed": "Данные игрока загрузить не удалось.",
+  "rankingsClanLoadFailed": "Данные клана загрузить не удалось.",
   "statsOverview": "Обзор",
   "statsArmies": "Армии",
   "statsItems": "Предметы",
   "statsWar": "Войны",
-  "statsCwl": "CWL",
-  "statsRanked": "Ranked",
-  "statsDateRange": "Date range",
+  "statsCwl": "Лиги войн кланов",
+  "statsRanked": "Рейтинговые бои",
+  "statsDateRange": "Период",
   "statsDateRangeHint": "Выберите до 90 дней",
   "statsDateRangeTooLong": "Выберите диапазон дат 90 дней или меньше.",
   "statsUpdated": "Свежие данные",
@@ -3406,15 +3406,15 @@
   "statsCwlSeasons": "Сезоны CWL",
   "statsCwlSeasonsHint": "ГГГГ-ММ, разделенные запятыми",
   "statsApplyFilters": "Применить фильтры",
-  "statsRefresh": "Refresh data",
+  "statsRefresh": "Обновить статистику",
   "statsRegularWarOnly": "Только обычные войны; Дружественные войны и CWL исключены.",
   "statsRankedRequired": "Требуются Ратуша и один уровень лиги.",
   "statsSeasonBreakdown": "Разбивка по сезонам",
-  "gameAssetsLoadError": "Could not load game assets",
-  "gameAssetsEmptyTitle": "No game assets available",
-  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
-  "gameAssetsOneImage": "1 image",
-  "gameAssetsImageCount": "{count} images",
+  "gameAssetsLoadError": "Ошибка загрузки игровых материалов",
+  "gameAssetsEmptyTitle": "Игровые материалы отсутствуют",
+  "gameAssetsEmptyBody": "В опубликованном манифесте нет изображений поддерживаемого формата.",
+  "gameAssetsOneImage": "Изображений: 1",
+  "gameAssetsImageCount": "Изображений: {count}",
   "@gameAssetsImageCount": {
     "placeholders": {
       "count": {
@@ -3422,10 +3422,10 @@
       }
     }
   },
-  "gameAssetsSearchHint": "Search this category",
-  "gameAssetsAllFormats": "All formats",
-  "gameAssetsOneResult": "1 result",
-  "gameAssetsResultCount": "{count} results",
+  "gameAssetsSearchHint": "Поиск по категории",
+  "gameAssetsAllFormats": "Любой формат",
+  "gameAssetsOneResult": "Найдено: 1",
+  "gameAssetsResultCount": "Найдено: {count}",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3433,20 +3433,20 @@
       }
     }
   },
-  "gameAssetsNoResultsTitle": "No matching images",
-  "gameAssetsNoResultsBody": "Try another search or file format.",
-  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
-  "gameAssetsCopyUrl": "Copy URL",
-  "gameAssetsCopyPath": "Copy path",
-  "gameAssetsUrlCopied": "Asset URL copied",
-  "gameAssetsPathCopied": "Asset path copied",
-  "gameAssetsCopyError": "Could not copy the asset details.",
-  "gameAssetsShare": "Share",
-  "gameAssetsShareError": "Could not share this asset.",
-  "gameAssetsSave": "Save",
-  "gameAssetsSaving": "Saving...",
-  "gameAssetsSaved": "Asset saved.",
-  "gameAssetsSavedTo": "Asset saved to {path}",
+  "gameAssetsNoResultsTitle": "Изображения не найдены",
+  "gameAssetsNoResultsBody": "Измените запрос или выберите другой формат.",
+  "gameAssetsLongPressHint": "Удерживайте, чтобы скопировать URL размещённого файла",
+  "gameAssetsCopyUrl": "Скопировать ссылку",
+  "gameAssetsCopyPath": "Скопировать расположение",
+  "gameAssetsUrlCopied": "Ссылка на материал скопирована.",
+  "gameAssetsPathCopied": "Путь к материалу скопирован.",
+  "gameAssetsCopyError": "Не получилось скопировать сведения о материале.",
+  "gameAssetsShare": "Отправить",
+  "gameAssetsShareError": "Этим материалом не получилось поделиться.",
+  "gameAssetsSave": "Скачать",
+  "gameAssetsSaving": "Идёт сохранение…",
+  "gameAssetsSaved": "Материал сохранён.",
+  "gameAssetsSavedTo": "Материал сохранён: {path}",
   "@gameAssetsSavedTo": {
     "placeholders": {
       "path": {
@@ -3454,12 +3454,12 @@
       }
     }
   },
-  "gameAssetsSaveError": "Could not save this asset.",
-  "upgradeTrackerPlan": "Plan",
-  "upgradeTrackerUpgrades": "Upgrades",
-  "upgradeTrackerCollection": "Collection",
-  "upgradeTrackerChooseAccount": "Choose account",
-  "upgradeTrackerSwitchAccount": "Switch account, {account}",
+  "gameAssetsSaveError": "Не получилось сохранить материал.",
+  "upgradeTrackerPlan": "Планирование",
+  "upgradeTrackerUpgrades": "Улучшения в деревне",
+  "upgradeTrackerCollection": "Собранное",
+  "upgradeTrackerChooseAccount": "Выбрать учётную запись",
+  "upgradeTrackerSwitchAccount": "Перейти к аккаунту {account}",
   "@upgradeTrackerSwitchAccount": {
     "placeholders": {
       "account": {
@@ -3467,14 +3467,14 @@
       }
     }
   },
-  "upgradeTrackerShare": "Share tracker",
-  "upgradeTrackerPasteJson": "Paste account JSON",
-  "upgradeTrackerImportTitle": "Import account data",
-  "upgradeTrackerImportDescription": "Paste the raw account JSON. It stays on this device.",
-  "upgradeTrackerAccountJson": "Account JSON",
-  "upgradeTrackerPasteClipboard": "Paste clipboard",
-  "upgradeTrackerImportAction": "Import account",
-  "upgradeTrackerImportSuccess": "{player} was imported on this device.",
+  "upgradeTrackerShare": "Поделиться прогрессом",
+  "upgradeTrackerPasteJson": "Вставить JSON с данными аккаунта",
+  "upgradeTrackerImportTitle": "Загрузка данных аккаунта",
+  "upgradeTrackerImportDescription": "Вставьте исходный JSON аккаунта. Данные останутся только на устройстве.",
+  "upgradeTrackerAccountJson": "Данные аккаунта в JSON",
+  "upgradeTrackerPasteClipboard": "Вставить из буфера",
+  "upgradeTrackerImportAction": "Загрузить аккаунт",
+  "upgradeTrackerImportSuccess": "Данные игрока {player} импортированы на это устройство.",
   "@upgradeTrackerImportSuccess": {
     "placeholders": {
       "player": {
@@ -3482,7 +3482,7 @@
       }
     }
   },
-  "upgradeTrackerImportFailed": "Could not import account data: {error}",
+  "upgradeTrackerImportFailed": "Ошибка импорта данных аккаунта: {error}",
   "@upgradeTrackerImportFailed": {
     "placeholders": {
       "error": {
@@ -3490,15 +3490,15 @@
       }
     }
   },
-  "upgradeTrackerSnapshotUnreadable": "Account data could not be read",
-  "upgradeTrackerTryAgain": "Try again",
-  "upgradeTrackerNoDataTitle": "Bring your village progress into ClashKing",
-  "upgradeTrackerNoDataBody": "Copy your Account Data JSON from Clash of Clans, then paste it from your clipboard. Your data stays on this device.",
-  "upgradeTrackerNoDataLocation": "In Clash of Clans, open Settings > More Settings. Account Data JSON is directly below the API Token section.",
-  "upgradeTrackerOpenMoreSettings": "Open More Settings in Clash of Clans",
-  "upgradeTrackerNoLinkedAccount": "Link a Clash of Clans account before importing its account data.",
-  "upgradeTrackerUpdatedJustNow": "Updated just now",
-  "upgradeTrackerUpdatedMinutesAgo": "Updated {count} minutes ago",
+  "upgradeTrackerSnapshotUnreadable": "Не удалось прочитать сведения об аккаунте",
+  "upgradeTrackerTryAgain": "Повторить попытку",
+  "upgradeTrackerNoDataTitle": "Перенесите сведения о деревне в ClashKing",
+  "upgradeTrackerNoDataBody": "Скопируйте JSON «Данные аккаунта» в Clash of Clans и вставьте его из буфера обмена. Всё останется на этом устройстве.",
+  "upgradeTrackerNoDataLocation": "В Clash of Clans откройте «Настройки» > «Дополнительные настройки». Пункт с JSON данных аккаунта расположен сразу под токеном API.",
+  "upgradeTrackerOpenMoreSettings": "Открыть дополнительные настройки Clash of Clans",
+  "upgradeTrackerNoLinkedAccount": "Перед импортом данных привяжите аккаунт Clash of Clans.",
+  "upgradeTrackerUpdatedJustNow": "Обновлено сейчас",
+  "upgradeTrackerUpdatedMinutesAgo": "Обновлено минут назад: {count}",
   "@upgradeTrackerUpdatedMinutesAgo": {
     "placeholders": {
       "count": {
@@ -3506,7 +3506,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedHoursAgo": "Updated {count} hours ago",
+  "upgradeTrackerUpdatedHoursAgo": "Обновлено часов назад: {count}",
   "@upgradeTrackerUpdatedHoursAgo": {
     "placeholders": {
       "count": {
@@ -3514,7 +3514,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedOn": "Updated {date}",
+  "upgradeTrackerUpdatedOn": "Дата обновления: {date}",
   "@upgradeTrackerUpdatedOn": {
     "placeholders": {
       "date": {
@@ -3522,18 +3522,18 @@
       }
     }
   },
-  "upgradeTrackerSearchUpgrades": "Search upgrades",
-  "upgradeTrackerSearchCollection": "Search collection",
-  "upgradeTrackerShowFilters": "Show filters",
-  "upgradeTrackerHideFilters": "Hide filters",
-  "upgradeTrackerFilterAll": "All",
-  "upgradeTrackerFilterOwned": "Owned",
-  "upgradeTrackerFilterMissing": "Missing",
-  "upgradeTrackerAllVillages": "All villages",
-  "upgradeTrackerHomeVillage": "Home Village",
-  "upgradeTrackerBuilderBase": "Builder Base",
-  "upgradeTrackerNoMatchingItems": "No matching items",
-  "upgradeTrackerOwnedCount": "{owned} of {total} owned",
+  "upgradeTrackerSearchUpgrades": "Найти улучшение",
+  "upgradeTrackerSearchCollection": "Найти в собрании",
+  "upgradeTrackerShowFilters": "Открыть фильтры",
+  "upgradeTrackerHideFilters": "Закрыть фильтры",
+  "upgradeTrackerFilterAll": "Все варианты",
+  "upgradeTrackerFilterOwned": "Получено",
+  "upgradeTrackerFilterMissing": "Не получено",
+  "upgradeTrackerAllVillages": "Обе деревни",
+  "upgradeTrackerHomeVillage": "Основная деревня",
+  "upgradeTrackerBuilderBase": "База строителя",
+  "upgradeTrackerNoMatchingItems": "Ничего подходящего не найдено",
+  "upgradeTrackerOwnedCount": "Получено: {owned} из {total}",
   "@upgradeTrackerOwnedCount": {
     "placeholders": {
       "owned": {
@@ -3544,7 +3544,7 @@
       }
     }
   },
-  "upgradeTrackerLevelsLeft": "{count} levels left",
+  "upgradeTrackerLevelsLeft": "Осталось уровней: {count}",
   "@upgradeTrackerLevelsLeft": {
     "placeholders": {
       "count": {
@@ -3552,7 +3552,7 @@
       }
     }
   },
-  "upgradeTrackerItemCount": "{count} items",
+  "upgradeTrackerItemCount": "Предметов: {count}",
   "@upgradeTrackerItemCount": {
     "placeholders": {
       "count": {
@@ -3560,10 +3560,10 @@
       }
     }
   },
-  "upgradeTrackerCollected": "collected",
-  "upgradeTrackerMissing": "missing",
-  "upgradeTrackerDataAge": "Account data",
-  "upgradeTrackerBuildersCount": "{count} builders",
+  "upgradeTrackerCollected": "получено",
+  "upgradeTrackerMissing": "не получено",
+  "upgradeTrackerDataAge": "Сведения об аккаунте",
+  "upgradeTrackerBuildersCount": "Строителей: {count}",
   "@upgradeTrackerBuildersCount": {
     "placeholders": {
       "count": {
@@ -3571,11 +3571,11 @@
       }
     }
   },
-  "upgradeTrackerLaboratory": "Laboratory",
-  "upgradeTrackerPets": "Pets",
-  "upgradeTrackerWalls": "Walls",
-  "upgradeTrackerEquipment": "Equipment",
-  "upgradeTrackerLevelsRemaining": "{count} levels remaining",
+  "upgradeTrackerLaboratory": "Исследования в лаборатории",
+  "upgradeTrackerPets": "Улучшения питомцев",
+  "upgradeTrackerWalls": "Улучшения стен",
+  "upgradeTrackerEquipment": "Снаряжение героев",
+  "upgradeTrackerLevelsRemaining": "Уровней до завершения: {count}",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
       "count": {
@@ -3583,7 +3583,7 @@
       }
     }
   },
-  "upgradeTrackerCompletesOn": "Completes {date} · {duration}",
+  "upgradeTrackerCompletesOn": "Готово {date} · осталось {duration}",
   "@upgradeTrackerCompletesOn": {
     "placeholders": {
       "date": {
@@ -3594,33 +3594,33 @@
       }
     }
   },
-  "upgradeTrackerHeaderComplete": "Complete",
-  "upgradeTrackerHeaderLevelsLeft": "Levels left",
-  "upgradeTrackerHeaderActive": "Active",
-  "upgradeTrackerHeaderFinishes": "Finishes",
-  "upgradeTrackerHeaderOwned": "Owned",
-  "upgradeTrackerHeaderUpdated": "Updated",
-  "homeCouldNotLoadTitle": "Home could not load",
-  "homeVerifiedAccountRequiredTitle": "Verify a linked account",
-  "homeVerifiedAccountRequiredBody": "Home needs at least one verified Clash account. Link an account or verify an existing link to continue.",
-  "homeVerifyAccountAction": "Link or verify account",
-  "playerOptionVerifyAccountBody": "This account isn't verified yet. Verify it to unlock the to-do, Ranked, and Upgrade Tracker options below.",
-  "homeUpcomingTitle": "Upcoming",
-  "homeUpcomingSubtitle": "The next deadlines and upgrade completions across your accounts.",
-  "homeCollapseSection": "Collapse section",
-  "homeExpandSection": "Expand section",
-  "homeUpcomingEmpty": "No tracked deadlines are coming up. Pull to refresh if this account was just linked.",
-  "homeRecentlyCompleted": "Completed",
-  "homeTodoTitle": "To do",
-  "homeTodoSubtitle": "Actionable account details, ordered by urgency.",
-  "homeTodoEmpty": "No verified account needs attention right now.",
-  "homeClanless": "No clan",
-  "homeNeedsAttention": "Needs attention",
-  "homeCaughtUp": "Caught up",
-  "homeTrackingDataPending": "This verified player is newly tracked or inactive, so actionable details are not available yet.",
-  "homeUpgradeUnavailable": "Upgrade data could not be loaded. Your other account data is still current.",
-  "homeUpgradeNotImported": "No upgrade data yet. Import this verified account's JSON in Upgrade tracker.",
-  "homeUpgradeActiveCount": "{count} active upgrades",
+  "upgradeTrackerHeaderComplete": "Выполнено",
+  "upgradeTrackerHeaderLevelsLeft": "Осталось уровней",
+  "upgradeTrackerHeaderActive": "В процессе",
+  "upgradeTrackerHeaderFinishes": "Завершение",
+  "upgradeTrackerHeaderOwned": "В наличии",
+  "upgradeTrackerHeaderUpdated": "Последнее обновление",
+  "homeCouldNotLoadTitle": "Главный экран не загрузился",
+  "homeVerifiedAccountRequiredTitle": "Подтвердите привязанный аккаунт",
+  "homeVerifiedAccountRequiredBody": "Для главного экрана нужен хотя бы один подтверждённый аккаунт Clash. Привяжите новый аккаунт или подтвердите уже добавленный.",
+  "homeVerifyAccountAction": "Привязать или подтвердить",
+  "playerOptionVerifyAccountBody": "Этот аккаунт пока не подтверждён. Подтвердите его, чтобы открыть ниже задачи, рейтинговую лигу и отслеживание улучшений.",
+  "homeUpcomingTitle": "Ближайшие события",
+  "homeUpcomingSubtitle": "Ближайшие сроки и окончания улучшений во всех ваших аккаунтах.",
+  "homeCollapseSection": "Скрыть содержимое раздела",
+  "homeExpandSection": "Показать содержимое раздела",
+  "homeUpcomingEmpty": "Ближайших отслеживаемых событий нет. Если аккаунт привязан недавно, потяните экран для обновления.",
+  "homeRecentlyCompleted": "Недавно завершено",
+  "homeTodoTitle": "Задачи",
+  "homeTodoSubtitle": "Требующие действий сведения об аккаунтах, сначала самые срочные.",
+  "homeTodoEmpty": "Сейчас ни один подтверждённый аккаунт не требует действий.",
+  "homeClanless": "Не состоит в клане",
+  "homeNeedsAttention": "Нужно проверить",
+  "homeCaughtUp": "Всё выполнено",
+  "homeTrackingDataPending": "Этот подтверждённый игрок отслеживается недавно или давно неактивен, поэтому полезные сведения ещё не появились.",
+  "homeUpgradeUnavailable": "Сведения об улучшениях загрузить не удалось, но остальные данные аккаунта по-прежнему актуальны.",
+  "homeUpgradeNotImported": "Сведения об улучшениях ещё не добавлены. Импортируйте JSON подтверждённого аккаунта в разделе улучшений.",
+  "homeUpgradeActiveCount": "Улучшений в процессе: {count}",
   "@homeUpgradeActiveCount": {
     "placeholders": {
       "count": {
@@ -3628,9 +3628,9 @@
       }
     }
   },
-  "homeUpgradeIdle": "No active upgrade timers were found; builders may be idle.",
-  "homeDone": "Done",
-  "homeRemainingCount": "{count} left",
+  "homeUpgradeIdle": "Активных таймеров улучшений нет — возможно, строители свободны.",
+  "homeDone": "Завершено",
+  "homeRemainingCount": "Ещё {count}",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -3638,10 +3638,10 @@
       }
     }
   },
-  "homeVerifiedPlayerDataMissing": "This link is verified, but its player profile is unavailable. Pull to refresh or wait for tracking to begin.",
-  "homeSinceAwayTitle": "Since away",
-  "homeSinceAwayFirstVisit": "This is the first tracked Home visit, so older activity is not marked new.",
-  "homeSinceAwaySubtitle": "New markers compare with your previous Home open at {time}.",
+  "homeVerifiedPlayerDataMissing": "Привязка подтверждена, но профиль игрока недоступен. Потяните экран для обновления или дождитесь начала отслеживания.",
+  "homeSinceAwayTitle": "Пока вас не было",
+  "homeSinceAwayFirstVisit": "Это первое отслеживаемое открытие главного экрана, поэтому прежняя активность не отмечена как новая.",
+  "homeSinceAwaySubtitle": "Новые отметки определяются относительно прошлого открытия главного экрана в {time}.",
   "@homeSinceAwaySubtitle": {
     "placeholders": {
       "time": {
@@ -3649,17 +3649,17 @@
       }
     }
   },
-  "homeSinceAwayEmpty": "No join, leave, or player-history activity is available for these verified players and clans.",
-  "homeNewMarker": "New",
-  "homePulseTitle": "Your pulse",
-  "homePulseSubtitle": "Personal 30-day war and CWL form, ranked play, and available global rankings.",
-  "homePulseEmpty": "Performance history or rankings are not available yet. Newly tracked and inactive accounts will fill in as data arrives.",
-  "homeToday": "Today",
-  "homeYesterday": "Yesterday",
-  "homeEarlier": "Earlier",
-  "homeRankedAttacks": "Ranked attacks",
-  "homeSeasonPass": "Season pass",
-  "homeUpcomingAccountDetail": "{player} has {count} remaining.",
+  "homeSinceAwayEmpty": "Для этих подтверждённых игроков и кланов нет сведений о вступлениях, выходах или истории игроков.",
+  "homeNewMarker": "Новое",
+  "homePulseTitle": "Ваши показатели",
+  "homePulseSubtitle": "Личные результаты за 30 дней в войнах и ЛВК, рейтинговые бои и доступные места в мировых таблицах.",
+  "homePulseEmpty": "Истории результатов или рейтингов пока нет. Данные новых и неактивных аккаунтов появятся по мере отслеживания.",
+  "homeToday": "За сегодня",
+  "homeYesterday": "За вчера",
+  "homeEarlier": "До этого",
+  "homeRankedAttacks": "Атаки в рейтинге",
+  "homeSeasonPass": "Пропуск сезона",
+  "homeUpcomingAccountDetail": "Игроку {player} осталось: {count}.",
   "@homeUpcomingAccountDetail": {
     "placeholders": {
       "player": {
@@ -3670,8 +3670,8 @@
       }
     }
   },
-  "homeUpgradeDataNeeded": "Add upgrade data",
-  "homeUpgradeDataNeededDetail": "Import {player}'s account JSON to track upgrade timers and idle builders.",
+  "homeUpgradeDataNeeded": "Загрузить сведения об улучшениях",
+  "homeUpgradeDataNeededDetail": "Импортируйте JSON аккаунта {player}, чтобы отслеживать таймеры улучшений и свободных строителей.",
   "@homeUpgradeDataNeededDetail": {
     "placeholders": {
       "player": {
@@ -3679,8 +3679,8 @@
       }
     }
   },
-  "homeUpgradeIdleTitle": "Builders may be idle",
-  "homeUpgradeIdleDetail": "{player} has upgrade data, but no active timers were found.",
+  "homeUpgradeIdleTitle": "Возможно, есть свободные строители",
+  "homeUpgradeIdleDetail": "Для {player} загружены улучшения, но активных таймеров среди них нет.",
   "@homeUpgradeIdleDetail": {
     "placeholders": {
       "player": {
@@ -3688,7 +3688,7 @@
       }
     }
   },
-  "homeUpgradeAccountDetail": "Upgrade timer for {player}.",
+  "homeUpgradeAccountDetail": "Таймер улучшения игрока {player}.",
   "@homeUpgradeAccountDetail": {
     "placeholders": {
       "player": {
@@ -3696,10 +3696,10 @@
       }
     }
   },
-  "homePulseWarAverage": "30-day war average",
-  "homePulseCwlAverage": "30-day CWL average",
-  "homePulseRankedToday": "30-day ranked",
-  "homePulseRankedValue": "{count} attacks · {trophies} trophies",
+  "homePulseWarAverage": "Средний результат в войнах за 30 дней",
+  "homePulseCwlAverage": "Средний результат в ЛВК за 30 дней",
+  "homePulseRankedToday": "Рейтинг за последние 30 дней",
+  "homePulseRankedValue": "Атак: {count} · трофеев: {trophies}",
   "@homePulseRankedValue": {
     "placeholders": {
       "count": {
@@ -3710,14 +3710,14 @@
       }
     }
   },
-  "homePulseBestGlobalRank": "Best global player rank",
-  "homeActivityJoined": "joined",
-  "homeActivityLeft": "left",
-  "homeActivityAClan": "a clan",
+  "homePulseBestGlobalRank": "Лучшее место игрока в мире",
+  "homeActivityJoined": "вступил(а) в",
+  "homeActivityLeft": "покинул(а)",
+  "homeActivityAClan": "какой-либо клан",
   "statsMeta": "Мета",
   "statsBattle": "Битва",
   "statsWorld": "Мир",
-  "statsHeaderSubtitle": "Explore battle performance and the world we track.",
+  "statsHeaderSubtitle": "Изучайте результаты боёв и статистику отслеживаемого игрового мира.",
   "statsPreview": "Предварительный просмотр",
   "statsTownHallDistribution": "Распределение ратуши",
   "statsBuilderHallDistribution": "Распределение Залов Строителей",
@@ -3737,13 +3737,13 @@
     }
   },
   "statsEquipmentAdoption": "Принятие оборудования по уровням",
-  "statsEquipmentAdoptionPreview": "Mock layout until aggregated ownership and level counts are available.",
+  "statsEquipmentAdoptionPreview": "Временный макет до появления сводных данных о владельцах снаряжения и его уровнях.",
   "statsExperienceDistribution": "Распределение опыта игрока",
-  "statsExperienceDistributionPreview": "Mock layout until XP histogram buckets are available.",
+  "statsExperienceDistributionPreview": "Временный макет до появления интервалов гистограммы опыта.",
   "statsCwlRosterSizes": "Размеры составов CWL",
-  "statsCwlRosterSizesPreview": "Mock 15v15 / 30v30 split until group-size counts are available.",
+  "statsCwlRosterSizesPreview": "Временное соотношение составов 15 на 15 и 30 на 30 до появления данных о размерах групп.",
   "statsWarsOverTime": "Войны с течением времени",
-  "statsWarsOverTimePreview": "Mock daily trend until the canonical counts endpoint is connected.",
+  "statsWarsOverTimePreview": "Временный дневной график до подключения основного источника количества войн.",
   "statsStrategyLenses": "Стратегические линзы",
   "statsStrategyLensesBody": "Именованные стратегии используют перекрывающиеся, версионные правила. Точные параметры снаряжения остаются отдельными, поэтому лейбл никогда не претендует на то, чтобы доказать намерение сражаться.",
   "statsQueenCharge": "Queen Charge",
@@ -3758,14 +3758,14 @@
   "statsExactLoadouts": "Точное снаряжение",
   "statsCustomLens": "Пользовательский объектив",
   "statsCustomLensBody": "Выберите необходимое количество, исключения, ратушу, лигу, этаж выборки и порядок сортировки. Это соответствует реальным загрузкам, но еще не сохранено.",
-  "rankedLeagueTitle": "Ranked League",
-  "rankedLeagueAbout": "About Ranked League",
-  "rankedLeagueAboutBody": "This page uses the official weekly Ranked League group, battle logs and period history. Current results can change until the period ends.",
-  "rankedLeagueOverview": "Overview",
-  "rankedLeagueRanking": "Ranking",
-  "rankedLeagueGroupRank": "Group rank",
-  "rankedLeagueTrophies": "Trophies",
-  "rankedLeaguePlayers": "{count} players",
+  "rankedLeagueTitle": "Рейтинговая лига Clash",
+  "rankedLeagueAbout": "О лиге рейтинговых боёв",
+  "rankedLeagueAboutBody": "Здесь используются официальная еженедельная группа рейтинговой лиги, журналы боёв и история периодов. До конца периода текущие результаты могут измениться.",
+  "rankedLeagueOverview": "Сводка",
+  "rankedLeagueRanking": "Турнирная таблица",
+  "rankedLeagueGroupRank": "Место в группе",
+  "rankedLeagueTrophies": "Количество трофеев",
+  "rankedLeaguePlayers": "Игроков: {count}",
   "@rankedLeaguePlayers": {
     "placeholders": {
       "count": {
@@ -3773,7 +3773,7 @@
       }
     }
   },
-  "rankedLeagueBest": "Best: {value}",
+  "rankedLeagueBest": "Лучший результат: {value}",
   "@rankedLeagueBest": {
     "placeholders": {
       "value": {
@@ -3781,15 +3781,15 @@
       }
     }
   },
-  "rankedLeagueNoGroup": "No active group",
-  "rankedLeagueCurrentPeriod": "Current period",
-  "rankedLeagueLiveGroupSubtitle": "Live results from the player's official Ranked League group.",
-  "rankedLeagueBattles": "Battles",
-  "rankedLeagueAttacksPlayed": "attacks played",
-  "rankedLeagueAttackRecord": "Attack record",
-  "rankedLeagueDefenseRecord": "Defense record",
-  "rankedLeagueWinsLosses": "wins - losses",
-  "rankedLeagueDefensesLogged": "{count} defenses logged",
+  "rankedLeagueNoGroup": "Активной группы нет",
+  "rankedLeagueCurrentPeriod": "Этот период",
+  "rankedLeagueLiveGroupSubtitle": "Актуальные результаты официальной группы игрока в рейтинговой лиге.",
+  "rankedLeagueBattles": "Проведённые бои",
+  "rankedLeagueAttacksPlayed": "проведено атак",
+  "rankedLeagueAttackRecord": "Итоги атак",
+  "rankedLeagueDefenseRecord": "Итоги защит",
+  "rankedLeagueWinsLosses": "побед и поражений",
+  "rankedLeagueDefensesLogged": "Учтено защит: {count}",
   "@rankedLeagueDefensesLogged": {
     "placeholders": {
       "count": {
@@ -3797,25 +3797,25 @@
       }
     }
   },
-  "rankedLeagueRecentBattles": "Recent battles",
-  "rankedLeagueRecentBattlesSubtitle": "Detailed results available for the active weekly group.",
-  "rankedLeagueAttacks": "Attacks",
-  "rankedLeagueDefenses": "Defenses",
-  "rankedLeagueNoBattles": "No battle recorded yet.",
-  "rankedLeagueGroupRanking": "Group ranking",
-  "rankedLeagueRankingSubtitle": "Live standings for the current group. Your player is highlighted.",
-  "rankedLeagueJumpToMyRank": "Jump to my rank",
-  "rankedLeagueLastPeriod": "Last Period",
-  "rankedLeagueBestGroupRank": "Best Rank",
-  "rankedLeaguePeriodHistory": "Period history",
-  "rankedLeagueHistorySubtitle": "Official summaries for completed weekly periods.",
-  "rankedLeagueBestRankedResults": "Best Ranked results",
-  "rankedLeagueAllRankedResults": "All Ranked results",
-  "rankedLeaguePeriods": "Periods",
-  "rankedLeaguePeriodStats": "Period statistics",
-  "rankedLeagueTrophyProgress": "Trophy progress by battle",
-  "rankedLeagueTrophiesByPeriod": "Trophies by period",
-  "rankedLeagueBattleCount": "{count} battles",
+  "rankedLeagueRecentBattles": "Последние бои",
+  "rankedLeagueRecentBattlesSubtitle": "Подробные итоги доступны для действующей недельной группы.",
+  "rankedLeagueAttacks": "Наступления",
+  "rankedLeagueDefenses": "Обороны",
+  "rankedLeagueNoBattles": "Записей о боях пока нет.",
+  "rankedLeagueGroupRanking": "Таблица группы",
+  "rankedLeagueRankingSubtitle": "Актуальные места в текущей группе. Ваш игрок выделен.",
+  "rankedLeagueJumpToMyRank": "Показать моё место",
+  "rankedLeagueLastPeriod": "Прошлый период",
+  "rankedLeagueBestGroupRank": "Лучшее место",
+  "rankedLeaguePeriodHistory": "История периодов",
+  "rankedLeagueHistorySubtitle": "Официальные итоги завершённых недельных периодов.",
+  "rankedLeagueBestRankedResults": "Лучшие результаты рейтинговых боёв",
+  "rankedLeagueAllRankedResults": "Все результаты рейтинговых боёв",
+  "rankedLeaguePeriods": "Игровые периоды",
+  "rankedLeaguePeriodStats": "Показатели периода",
+  "rankedLeagueTrophyProgress": "Изменение трофеев после каждого боя",
+  "rankedLeagueTrophiesByPeriod": "Трофеи за каждый период",
+  "rankedLeagueBattleCount": "Боёв: {count}",
   "@rankedLeagueBattleCount": {
     "placeholders": {
       "count": {
@@ -3823,7 +3823,7 @@
       }
     }
   },
-  "rankedLeagueBattleProgress": "{count} / {max} battles",
+  "rankedLeagueBattleProgress": "Проведено боёв: {count} из {max}",
   "@rankedLeagueBattleProgress": {
     "placeholders": {
       "count": {
@@ -3834,7 +3834,7 @@
       }
     }
   },
-  "rankedLeagueTrophyAverage": "{trophies} trophies · {average} avg.",
+  "rankedLeagueTrophyAverage": "Трофеев: {trophies} · в среднем: {average}",
   "@rankedLeagueTrophyAverage": {
     "placeholders": {
       "trophies": {
@@ -3845,15 +3845,15 @@
       }
     }
   },
-  "rankedLeagueByPeriod": "By period",
-  "rankedLeaguePeriodTab": "Period",
-  "rankedLeagueAverage": "Average",
-  "rankedLeagueRemaining": "Remaining",
-  "rankedLeagueSevenDayPeriod": "7-day Ranked League period",
-  "rankedLeagueEquipmentUnavailable": "Army and equipment are not included in the official Ranked League battle logs yet.",
-  "rankedLeagueBattleDetailsUnavailable": "Detailed battle logs are not available for this period.",
-  "rankedLeagueHistoricalDetailsUnavailable": "Only the official period summary is available for this older period.",
-  "rankedLeagueStarBreakdownUnavailable": "The API provides the star total, but not the detailed star distribution for this period.",
+  "rankedLeagueByPeriod": "По игровым периодам",
+  "rankedLeaguePeriodTab": "Игровой период",
+  "rankedLeagueAverage": "Среднее значение",
+  "rankedLeagueRemaining": "Оставшееся",
+  "rankedLeagueSevenDayPeriod": "Семидневный период рейтинговой лиги",
+  "rankedLeagueEquipmentUnavailable": "Официальные журналы рейтинговой лиги пока не содержат состав армии и снаряжение.",
+  "rankedLeagueBattleDetailsUnavailable": "Для этого периода подробные журналы сражений недоступны.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Для этого давнего периода сохранилась только официальная итоговая сводка.",
+  "rankedLeagueStarBreakdownUnavailable": "API сообщает общее число звёзд, но не их подробное распределение за этот период.",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
@@ -3915,48 +3915,48 @@
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
-  "widgetUpgradeProgressTitle": "Upgrade Progress",
-  "widgetHomeVillage": "HOME VILLAGE",
-  "widgetVillage": "VILLAGE",
-  "widgetLaboratory": "LAB",
-  "widgetPets": "PETS",
-  "widgetBuilderBase": "BUILDER BASE",
-  "widgetResearch": "RESEARCH",
-  "widgetActive": "ACTIVE",
-  "widgetIdle": "IDLE",
-  "widgetLocked": "LOCKED",
-  "widgetMaxed": "MAXED",
-  "widgetNotUnlocked": "Not unlocked",
-  "widgetFullyUpgraded": "Fully upgraded",
-  "widgetNoActiveUpgrades": "No active upgrades",
-  "widgetNoActiveResearch": "No active research",
-  "widgetDataStale": "Update needed",
-  "widgetMoreUpgrade": "more upgrade",
-  "widgetMoreUpgrades": "more upgrades",
-  "widgetLevelShort": "Lv",
-  "widgetReady": "Ready",
-  "widgetReadyIn": "Ready in",
-  "widgetHelping": "Helping",
-  "widgetApprenticeShort": "Apprentice",
-  "widgetAssistantShort": "Assistant",
-  "widgetAlchemistShort": "Alchemist",
-  "widgetBuilderPotion": "Builder Potion",
-  "widgetResearchPotion": "Research Potion",
-  "widgetPetPotion": "Pet Potion",
-  "widgetClockTower": "Clock Tower",
-  "widgetTownHallBuilderBoost": "Town Hall builder boost",
-  "widgetTownHallLabBoost": "Town Hall lab boost",
-  "widgetBuilderBoostShort": "Builder",
-  "widgetResearchBoostShort": "Research",
-  "widgetPetBoostShort": "Pet",
-  "widgetClockBoostShort": "Clock",
-  "widgetBuilderCostPerk": "{percent}% builder cost perk",
+  "widgetUpgradeProgressTitle": "Ход улучшений",
+  "widgetHomeVillage": "ОСНОВНАЯ ДЕРЕВНЯ",
+  "widgetVillage": "ПОСЕЛЕНИЕ",
+  "widgetLaboratory": "ЛАБОРАТОРНЫЕ РАБОТЫ",
+  "widgetPets": "ПИТОМЦЫ",
+  "widgetBuilderBase": "БАЗА СТРОИТЕЛЯ",
+  "widgetResearch": "ИССЛЕДОВАНИЕ",
+  "widgetActive": "В ПРОЦЕССЕ",
+  "widgetIdle": "СВОБОДНО",
+  "widgetLocked": "НЕДОСТУПНО",
+  "widgetMaxed": "МАКС. УРОВЕНЬ",
+  "widgetNotUnlocked": "Ещё не открыто",
+  "widgetFullyUpgraded": "Улучшено полностью",
+  "widgetNoActiveUpgrades": "Улучшения сейчас не выполняются",
+  "widgetNoActiveResearch": "Исследования сейчас не выполняются",
+  "widgetDataStale": "Обновите данные",
+  "widgetMoreUpgrade": "ещё одно улучшение",
+  "widgetMoreUpgrades": "другие улучшения",
+  "widgetLevelShort": "ур.",
+  "widgetReady": "Доступно",
+  "widgetReadyIn": "Будет готово через",
+  "widgetHelping": "Работает",
+  "widgetApprenticeShort": "Подмастерье",
+  "widgetAssistantShort": "Помощник",
+  "widgetAlchemistShort": "Алхимик сейчас",
+  "widgetBuilderPotion": "Зелье Строителя",
+  "widgetResearchPotion": "Зелье Исследований",
+  "widgetPetPotion": "Зелье Питомцев",
+  "widgetClockTower": "Часовая Башня",
+  "widgetTownHallBuilderBoost": "Ускорение строителей от ратуши",
+  "widgetTownHallLabBoost": "Ускорение лаборатории от ратуши",
+  "widgetBuilderBoostShort": "Строительство",
+  "widgetResearchBoostShort": "Лаборатория",
+  "widgetPetBoostShort": "Ускорение питомцев",
+  "widgetClockBoostShort": "Башня",
+  "widgetBuilderCostPerk": "Скидка {percent}% на строительство",
   "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
-  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "widgetBuilderTimePerk": "Строительство быстрее на {percent}%",
   "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
-  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "widgetLabCostPerk": "Скидка {percent}% на исследования",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
-  "widgetLabTimePerk": "{percent}% lab time perk",
+  "widgetLabTimePerk": "Исследования быстрее на {percent}%",
   "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
   "farmGoalChangeBuilding": "Сменить здание",
   "farmGoalNoTargetTitle": "Здание не выбрано",
@@ -3969,5 +3969,207 @@
   "farmGoalTrackerMissingBody": "Импортируйте JSON улучшений этого аккаунта в отслеживание улучшений, чтобы увидеть здесь следующее запланированное здание и его точную стоимость.",
   "farmGoalTrackerPlanComplete": "В отслеживании улучшений не осталось улучшений зданий. Вы всё ещё можете выбрать здание вручную.",
   "farmGoalOpenUpgradeTracker": "Открыть отслеживание улучшений",
-  "farmGoalUseTrackerTarget": "Использовать здание"
+  "farmGoalUseTrackerTarget": "Использовать здание",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "ТХ{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Код Создателя: ClashKing",
+  "clanWarFrequencyTitle": "Войны",
+  "notifScopeAllAccounts": "Все аккаунты",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "notifSelectedAccounts": "Выбранные аккаунты",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Фильтры",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
+  "searchCancel": "Отмена",
+  "assetFolderTroops": "Войска",
+  "assetFolderSpells": "Заклинания",
+  "assetFolderHeroes": "Герои",
+  "endpointStateWins": "Победы",
+  "notifGroupBattles": "Битвы",
+  "notifGroupSupport": "Поддержка",
+  "gameAssetsCategoryHeroes": "Изображения героев",
+  "gameAssetsCategorySpells": "Изображения заклинаний",
+  "rankedLeagueStars": "Полученные звёзды",
+  "farmGoalUpgradeCostLabel": "Цена следующего улучшения",
+  "farmGoalAccountTitle": "Игровой аккаунт",
+  "damageAccountPresetShort": "Данные аккаунта",
+  "damageClearStack": "Очистить набор",
+  "todoMockRaid1Left": "1 остался",
+  "farmGoalResourceLabel": "Вид ресурса",
+  "notifChooseAccountsManually": "Указать аккаунты вручную",
+  "notifAudienceAcrossDevicesDescription": "Этот выбор аккаунтов действует на всех ваших устройствах.",
+  "damageNoTargetTitle": "Цель не указана",
+  "farmGoalMissingTarget": "Выберите здание и целевой уровень, чтобы рассчитать необходимое число атак.",
+  "farmGoalResultTitle": "Необходимые атаки",
+  "farmGoalResultSummary": "{target} {resource}, примерно по {average} за идеальную атаку.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalMissingValues": "Укажите цель и расчётную добычу за идеальную атаку, чтобы увидеть сценарии атак.",
+  "settingsLiveActivityStart": "Начать тестовую деятельность",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "todoExplanationRaidsTitle": "Рейды:",
+  "settingsLiveActivityUpdate": "Обновить счет",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityEndSubtitle": "Удаляет локальный предварительный просмотр.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "Завершить тестовое действие",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "todoExplanationRaids": "Вес 5 очков на аккаунт (или 6, если последняя атака разблокирована), 1 атака = 1 очко.",
+  "settingsLiveActivityTest": "Тест на живую активность",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStartSubtitle": "Показывает предварительный просмотр локальной войны кланов.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdateSubtitle": "Увеличивает счет фальшивой войны.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "todoMockWarAltStatus": "Активен 18 м назад · война и рейды требуют внимания",
+  "todoRaidAttacks": "Рейдовые атаки",
+  "todoMockRaid4Left": "4 осталось",
+  "gameAssetsCategoryChests": "Изображения сундуков",
+  "gameAssetsCategoryClanLabels": "Метки кланов",
+  "farmGoalScenarioHint": "Расчёт приблизительный: добыча зависит от разрушенных зданий. Процент применяется к оценке идеальной атаки.",
+  "gameAssetsCategoryCapitalBase": "База столицы",
+  "damageQuickSetupZapQuake": "Молнии и Землетрясения",
+  "rankedLeagueAccountSelector": "Отображаемый аккаунт",
+  "notifGroupLegendAttacks": "Атаки в Легенде I",
+  "damageChooseAccount": "Укажите аккаунт",
+  "gameAssetsCategoryCapitalHouseParts": "Детали домов столицы",
+  "gameAssetsCategoryTroops": "Изображения бойцов",
+  "farmGoalCostUnavailable": "Для этого уровня неизвестна цена улучшения.",
+  "gameAssetsCategoryGuardians": "Изображения хранителей",
+  "farmGoalStarBonusEstimate": "Звёздный бонус после 5 звёзд: {amount} {resource}. Он не учитывается в нужном числе атак.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsCategoryDecorations": "Изображения декораций",
+  "farmGoalScenarioPerfect": "Полное уничтожение · 100%",
+  "damageAccountSelectorHint": "Уровни берутся из выбранного аккаунта.",
+  "damageAllBuildings": "Любое здание",
+  "farmGoalAccountHint": "Ратуша и текущая лига для расчёта берутся из выбранного аккаунта.",
+  "damageSelectedSourcesCount": "Выбрано источников: {count}",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameAssetsCategoryPets": "Изображения питомцев",
+  "gameAssetsCategorySkins": "Облики героев",
+  "damageQuickSetupGiantArrow": "Снаряжение «Гигантская Стрела»",
+  "farmGoalTargetTitle": "Планируемое улучшение",
+  "damageTargetLevelLabel": "Уровень цели",
+  "damageCommonBuildings": "Популярные цели",
+  "damageNoDamageSelected": "Урон не выбран",
+  "gameAssetsCategoryEquipment": "Снаряжение героев",
+  "damageNoTargetBody": "Укажите здание, чтобы рассчитать, какой урон оно выдержит.",
+  "gameAssetsCategoryCountryFlags": "Флаги государств",
+  "farmGoalLootTitle": "Расчётная добыча",
+  "damageShowAllSources": "Добавить источник урона",
+  "damageNoActiveSources": "Выберите способ атаки, чтобы настроить его источники урона.",
+  "farmGoalAttacks": "атак",
+  "farmGoalNoLeagueLoot": "Для подсказки по добыче выберите аккаунт, состоящий в лиге.",
+  "calculatorsModeDamage": "Расчёт урона",
+  "farmGoalScenarioAtPercent": "Уничтожение на {percent}%",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalFormTitle": "Сколько ресурсов нужно добыть",
+  "farmGoalTitle": "Цель по добыче",
+  "damageQuickSetupFireballQuake": "Огненный Шар и Землетрясения",
+  "playerOptionNotificationsEnableMaster": "Сначала разрешите уведомления в настройках.",
+  "playerOptionNotificationsSubscriptionRequired": "Уведомления для закладок доступны по подписке.",
+  "notifGroupLegendDefenses": "Защиты в Легенде I",
+  "damageTargetSectionTitle": "Цель для уничтожения",
+  "notifLegendAttacksDescription": "Результаты атак в Легенде I для добавленных в закладки аккаунтов с разрешёнными уведомлениями.",
+  "damageOtherSources": "Дополнительные источники",
+  "dashboardUpgradeTrackerAccounts": "Аккаунтов с отслеживанием: {loaded}/{total}",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoAccountsAvailable": "Нет доступных подтверждённых аккаунтов",
+  "farmGoalAttackShort": "атака",
+  "damageShowFewerSources": "Скрыть дополнительные источники",
+  "farmGoalTargetLevelLabel": "Уровень улучшения",
+  "damageSwitchAccount": "Выбрать другой аккаунт",
+  "playerOptionNotificationsLimitReached": "Вы использовали все доступные уведомления для закладок.",
+  "calculatorsModeFarmGoal": "План добычи",
+  "damageQuickSetupFlameFlinger": "Осадная машина «Огнемётчик»",
+  "farmGoalTargetBuildingLabel": "Улучшаемое здание",
+  "damageQuickSetups": "Выберите способ атаки",
+  "farmGoalAmountLabel": "Требуемая добыча",
+  "damageQuickSetupCustom": "Свой набор",
+  "farmGoalChooseBuilding": "Указать здание",
+  "notifLegendDefensesDescription": "Результаты защит в Легенде I для аккаунтов с разрешёнными уведомлениями.",
+  "damageCalculatorTitle": "Расчётчик урона",
+  "playerOptionNotificationsVerifyFirst": "Чтобы включить уведомления, подтвердите этот аккаунт.",
+  "gameAssetsCategoryBuildings": "Изображения зданий",
+  "damageChooseTarget": "Указать целевое здание"
 }

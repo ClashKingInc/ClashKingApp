@@ -3969,5 +3969,207 @@
   "farmGoalTrackerMissingBody": "Import this account's upgrade JSON in Upgrade Tracker to show its next planned building and exact cost here.",
   "farmGoalTrackerPlanComplete": "No remaining building upgrades were found in Upgrade Tracker. You can still choose a building manually.",
   "farmGoalOpenUpgradeTracker": "Open Upgrade Tracker",
-  "farmGoalUseTrackerTarget": "Use building"
+  "farmGoalUseTrackerTarget": "Use building",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
+  "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
+  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
+  "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
+  "notifGroupLegendAttacks": "Legend I attacks",
+  "notifLegendAttacksDescription": "Attack results for notification-enabled bookmarked accounts in Legend I.",
+  "notifGroupLegendDefenses": "Legend I defenses",
+  "notifLegendDefensesDescription": "Defense results for notification-enabled accounts in Legend I.",
+  "notifChooseAccountsManually": "Choose accounts manually",
+  "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
+  "farmGoalTitle": "Farm goal",
+  "farmGoalFormTitle": "Resources to farm",
+  "farmGoalAccountTitle": "Account",
+  "farmGoalAccountHint": "The selected account provides the Town Hall and current league used for the estimate.",
+  "farmGoalTargetTitle": "Building to upgrade",
+  "farmGoalTargetBuildingLabel": "Building",
+  "farmGoalChooseBuilding": "Choose a building",
+  "farmGoalTargetLevelLabel": "Target level",
+  "farmGoalUpgradeCostLabel": "Upgrade cost",
+  "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
+  "farmGoalLootTitle": "Estimated loot",
+  "farmGoalResourceLabel": "Resource",
+  "farmGoalAmountLabel": "Amount to farm",
+  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Perfect attack · 100%",
+  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "attack",
+  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
+  "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
+  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
+  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
+  "farmGoalResultTitle": "Attacks needed",
+  "farmGoalAttacks": "attacks",
+  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "TH{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Creator Code: ClashKing",
+  "todoExplanationRaidsTitle": "Raids:",
+  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
+  "clanWarFrequencyTitle": "Wars",
+  "notifScopeAllAccounts": "All accounts",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "settingsLiveActivityTest": "Live Activity Test",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "Start test activity",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "settingsLiveActivityStartSubtitle": "Shows a local clan-war preview.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "Update score",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityUpdateSubtitle": "Advances the fake war score.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "End test activity",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityEndSubtitle": "Removes the local preview.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "notifSelectedAccounts": "Selected accounts",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Filters",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts tracked",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "calculatorsModeDamage": "Damage",
+  "calculatorsModeFarmGoal": "Farm goal",
+  "damageCalculatorTitle": "Damage Calculator",
+  "damageAccountPresetShort": "Account",
+  "damageChooseAccount": "Choose an account",
+  "damageSwitchAccount": "Switch account",
+  "damageAccountSelectorHint": "The levels used follow the selected account.",
+  "damageNoAccountsAvailable": "No verified account available",
+  "damageTargetSectionTitle": "Building to destroy",
+  "damageChooseTarget": "Choose a building",
+  "damageNoTargetTitle": "No building selected",
+  "damageNoTargetBody": "Choose a building to see how much damage it can take.",
+  "damageTargetLevelLabel": "Target level",
+  "damageCommonBuildings": "Most commonly chosen",
+  "damageAllBuildings": "All buildings",
+  "damageQuickSetups": "Choose a method",
+  "damageQuickSetupZapQuake": "Zap + quake",
+  "damageQuickSetupFireballQuake": "Fireball + quake",
+  "damageQuickSetupGiantArrow": "Giant Arrow",
+  "damageQuickSetupFlameFlinger": "Flame Flinger",
+  "damageQuickSetupCustom": "Custom",
+  "damageClearStack": "Clear",
+  "damageNoDamageSelected": "No damage",
+  "damageSelectedSourcesCount": "{count} source(s)",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Choose a method to show the damage sources to adjust.",
+  "damageOtherSources": "Other sources",
+  "damageShowAllSources": "Add another source",
+  "damageShowFewerSources": "Hide other sources",
+  "searchCancel": "Cancel",
+  "todoRaidAttacks": "Raid attacks",
+  "todoMockRaid4Left": "4 left",
+  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
+  "todoMockRaid1Left": "1 left",
+  "gameAssetsCategoryBuildings": "Buildings",
+  "gameAssetsCategoryCapitalBase": "Capital Base",
+  "gameAssetsCategoryCapitalHouseParts": "Capital House Parts",
+  "gameAssetsCategoryChests": "Chests",
+  "gameAssetsCategoryClanLabels": "Clan Labels",
+  "gameAssetsCategoryCountryFlags": "Country Flags",
+  "gameAssetsCategoryDecorations": "Decorations",
+  "gameAssetsCategoryEquipment": "Equipment",
+  "gameAssetsCategoryGuardians": "Guardians",
+  "gameAssetsCategoryHeroes": "Heroes",
+  "gameAssetsCategoryPets": "Pets",
+  "gameAssetsCategorySkins": "Skins",
+  "gameAssetsCategorySpells": "Spells",
+  "gameAssetsCategoryTroops": "Troops",
+  "assetFolderTroops": "Troops",
+  "assetFolderSpells": "Spells",
+  "assetFolderHeroes": "Heroes",
+  "endpointStateWins": "Wins",
+  "notifGroupBattles": "Battles",
+  "notifGroupSupport": "Support",
+  "rankedLeagueAccountSelector": "Shown account",
+  "rankedLeagueStars": "Stars"
 }

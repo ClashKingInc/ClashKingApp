@@ -616,7 +616,7 @@
       }
     }
   },
-  "legendsTitle": "Veri yanlış mı?",
+  "legendsTitle": "Efsane Ligi",
   "legendsNotInLeague": "Efsane ligde değil",
   "legendsNoDataToday": "Efsane Liginde değilsin, ancak geçmiş sezonlar mevcut.",
   "legendsStartDescription": "Güne {trophies} kupayla başladın.",
@@ -754,7 +754,7 @@
   "todoExplanationCwl": "Hesap başına 1 puan ağırlığı, 1 saldırı = 1 puan. Oyuncu lig klanında değilse KSL takip edilemez.",
   "todoExplanationPassAndGamesTitle": "Sezon Bileti & Klan Oyunları:",
   "todoExplanationPassAndGames": "Hesap başına 2 puanlık ağırlık. Oran, kalan gün sayısına (Bilet için 1 ay ve klan oyunları için 6 gün) dayanmaktadır. Yeşil = Bileti veya oyunları tamamlama yolunda, kırmızı = programın gerisinde.",
-  "todoExplanationConclusion": "Son yüzde, devam eden olaylar sırasında tamamlanan toplam eylemlerin toplam gerekli eylemlere bölünmesiyle hesaplanır. 14 günden uzun süredir etkin olmayan hesaplar hesaplamadan hariç tutulur.",
+  "todoExplanationConclusion": "Son yüzde, devam eden etkinliklerde tamamlanan toplam eylem sayısının gerekli toplam eylem sayısına bölünmesiyle hesaplanır.",
   "todoAccountsNumber": "{number} hesaplar",
   "@todoAccountsNumber": {
     "placeholders": {
@@ -958,20 +958,20 @@
       }
     }
   },
-  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "warAnalysisCannotLose": "{clanName} artık kaybedemez",
   "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
-  "warAnalysisSecuredBadge": "Secured",
-  "warAnalysisAlreadySecured": "Already secured",
-  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "warAnalysisSecuredBadge": "Güvenli",
+  "warAnalysisAlreadySecured": "Zaten güvenceye alındı",
+  "warAnalysisSecureAgainst": "Hedef, {clanName}'in kalan tüm saldırılarını kullandığı varsayılarak hesaplanmıştır.",
   "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
-  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "warAnalysisCannotSecureAgainst": "{clanName} kalan tüm saldırılarını en iyi şekilde değerlendirirse matematiksel olarak güvenceye alınamaz.",
   "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
-  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
-  "warAnalysisStarGoal": "+{stars} star(s)",
+  "warAnalysisNoSecureObjective": "Kalan saldırılarla güvence altına alınamaz.",
+  "warAnalysisStarGoal": "+{stars} yıldız",
   "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
-  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "warAnalysisRemainingAttempts": "{attacks} saldırı kaldı",
   "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
-  "warAnalysisNoBetterResult": "No better result is possible",
+  "warAnalysisNoBetterResult": "Daha iyi bir sonuç mümkün değil",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -1234,7 +1234,7 @@
       }
     }
   },
-  "cwlCurrentRound": "Şu anda tur {round}.",
+  "cwlCurrentRound": "Mevcut tur (Tur {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -2317,7 +2317,7 @@
   "tooltipHidePassword": "Şifreyi gizle",
   "tooltipRemoveAccount": "Hesabı kaldır",
   "calculatorsTitle": "Hesap makineleri",
-  "calculatorsSubtitle": "Zap quake and fireball quake.",
+  "calculatorsSubtitle": "Mevcut bina seviyelerine göre hasarı planlayın.",
   "calculatorZapQuake": "Zap depremi",
   "calculatorFireball": "Ateş topu",
   "upgradeTrackerTitle": "Yükseltme Takipçisi",
@@ -2337,7 +2337,7 @@
   "warWidgetNoData": "Savaş verisi yok",
   "warWidgetLastUpdated": "Son güncelleme: {time}",
   "todoEventClanGames": "Klan Oyunları",
-  "todoEventCwl": "CWL",
+  "todoEventCwl": "KSL",
   "todoEventSeasonEnds": "Sezon biter",
   "todoEventLeagueReset": "Lig sıfırlama",
   "todoEventRaidWeekend": "Baskın Hafta Sonu",
@@ -2390,7 +2390,7 @@
   "warFiltersFriendlyWars": "Dostluk savaşları",
   "warType": "Savaş türü",
   "warFiltersAnyTownHall": "Herhangi bir BB",
-  "gameTownHallLevelShort": "TH{level}",
+  "gameTownHallLevelShort": "BB {level}",
   "warAttackerTownHall": "Saldıran BB",
   "warDefenderTownHall": "Savunan BB",
   "warStatsFilterSameTownHallOnly": "Yalnızca aynı Belediye Binası",
@@ -2436,7 +2436,7 @@
   "resourceDarkElixir": "Kara İksir",
   "resourceBuilderElixir": "İnşaatçı İksiri",
   "resourceBuilderGold": "İnşaatçı Altını",
-  "resourceElixir": "Elixir",
+  "resourceElixir": "İksir",
   "resourceGold": "Altın",
   "resourceGlowyOre": "Parlak cevher",
   "resourceStarryOre": "Yıldızlı cevher",
@@ -2510,7 +2510,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Kalan yükseltme maliyeti ve süresi için dokun",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Anime Öfkesi",
   "announcementAnimeFurySubtitle": "Haziran 2026 güncellemesine göz at",
   "sideRankingsTitle": "Sıralamalar",
   "sideRankingsSubtitle": "Resmi lider tabloları ve ClashKing endpointleri.",
@@ -2519,7 +2519,7 @@
   "sideRankingsEmptyBody": "Başka bir lider tablosu veya konum dene.",
   "sideRankingsMockups": "ClashKing mockup’ları",
   "sideStatsTitle": "İstatistikler",
-  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsSubtitle": "Toplanmış savaş kayıtlarından elde edilen savaş bilgileri.",
   "sideStatsLoadError": "Savaş istihbaratı yüklenemedi.",
   "sideTopScore": "En yüksek skor",
   "sideTop200Avg": "Top 200 ort.",
@@ -2640,7 +2640,7 @@
   "endpointClanWarWinsPreview": "Uluslararası · tüm zamanların savaş galibiyetleri",
   "endpointTop200ArmyUsage": "Top 200 ordu kullanımı",
   "endpointTop200ArmyUsagePreview": "Savaş kayıtları · birlik ve büyü kullanımı",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "İlk 200",
   "endpointStateWeekly": "Haftalık",
   "endpointStateUsage": "Kullanım",
   "notifGroupReminders": "Hatırlatmalar",
@@ -2870,7 +2870,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "BB {level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -2896,18 +2896,18 @@
   "notifGroupAppAnnouncements": "Uygulama duyuruları",
   "notifGroupUpgradeFinishes": "Tamamlanan yükseltmeler",
   "notifGroupMonthlySupport": "Aylık destek",
-  "postsTitle": "Posts",
-  "postsDescription": "ClashKing news, update stories, and previous announcements.",
-  "postsEmpty": "No published posts yet.",
-  "postsLoadFailed": "Posts could not be loaded.",
-  "postsLoadMore": "Load more",
-  "postsCurrent": "Current",
-  "postsPast": "Past",
-  "postsStory": "Interactive story",
-  "postsPinned": "Featured",
-  "authAccountLinkDiscord": "Link Discord Account",
-  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
-  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
+  "postsTitle": "Gönderiler",
+  "postsDescription": "ClashKing haberleri, güncellemeler ve önceki duyurular.",
+  "postsEmpty": "Henüz yayınlanmış gönderi yok.",
+  "postsLoadFailed": "Gönderiler yüklenemedi.",
+  "postsLoadMore": "Daha fazla yükle",
+  "postsCurrent": "Mevcut",
+  "postsPast": "Geçmiş",
+  "postsStory": "Etkileşimli hikaye",
+  "postsPinned": "Öne Çıkanlar",
+  "authAccountLinkDiscord": "Discord Hesabı Bağla",
+  "authAccountAddDiscordAuth": "Platformlar arası senkronizasyon ve ClashKing Bot erişimi için hesabınıza Discord kimlik doğrulamasını ekleyin.",
+  "authAccountDiscordLinkedSuccess": "Discord hesabı başarıyla bağlandı!",
   "@warAnalysisScenario": {
     "placeholders": {
       "attacks": {
@@ -2942,50 +2942,50 @@
       }
     }
   },
-  "faqFeaturesTodoTitle": "To-do checklist",
-  "faqFeaturesTodoDescription": "See which accounts still need Ranked attacks, raids, war attacks, Clan Games, or pass actions",
-  "faqFeaturesUpgradeTrackerTitle": "Upgrade Tracker",
-  "faqFeaturesUpgradeTrackerDescription": "Use a manual account snapshot provided by the user to see remaining upgrades, resources, builders, lab time, and progress",
-  "faqFeaturesNotificationsTitle": "Push notifications",
-  "faqFeaturesNotificationsDescription": "Choose which accounts should receive alerts for supported ClashKing events",
-  "faqFeaturesWidgetsTitle": "War widgets",
-  "faqFeaturesWidgetsDescription": "Keep current war status visible on your home screen where widgets are supported",
-  "faqSectionAccountsAlertsWidgets": "Accounts, alerts & widgets",
-  "faqLinkedAccountsTitle": "How do linked accounts and verification work?",
-  "faqLinkedAccountsAnswer": "Your ClashKing profile can include several Clash of Clans accounts. Adding a tag shows public data. Verifying with the Clash of Clans API token proves the account is yours and unlocks account-specific features.",
-  "faqLinkedAccountsSolution1": "Manage, reorder, hide, or remove accounts from account management.",
-  "faqLinkedAccountsSolution2": "Find the API token in Clash of Clans under Settings > More Settings > API Token.",
-  "faqLinkedAccountsSolution3": "You can sign in with Discord or email. When account connections are available, manage them from Settings.",
-  "faqNotificationsTitle": "How do notifications work?",
-  "faqNotificationsAnswer": "Notifications are optional. When enabled, ClashKing registers this device. You can choose which linked accounts each alert targets.",
-  "faqNotificationsSolution1": "Allow notifications on your device and in ClashKing settings.",
-  "faqNotificationsSolution2": "Each alert can target different accounts. Check the selected accounts if an alert is missing.",
-  "faqNotificationsSolution3": "Some alerts depend on tracked clan or war data. Delays can happen while external data updates.",
-  "faqWidgetsTitle": "How do war widgets work?",
-  "faqWidgetsAnswer": "War widgets show a quick summary on supported devices. They use your selected or linked accounts, cached ClashKing data, and background refreshes when the platform allows them.",
-  "faqWidgetsSolution1": "Open the app after changing accounts or clans so the widget can sync.",
-  "faqWidgetsSolution2": "If a widget looks stale, refresh the app first. Android and iOS limit background updates.",
-  "faqWidgetsSolution3": "The clan needs accessible war data to show useful status.",
+  "faqFeaturesTodoTitle": "Yapılacaklar listesi",
+  "faqFeaturesTodoDescription": "Hangi hesapların hala Dereceli saldırılara, baskınlara, savaş saldırılarına, Klan Oyunlarına veya bilet işlemlerine ihtiyacı olduğunu görün",
+  "faqFeaturesUpgradeTrackerTitle": "Yükseltme Takipçisi",
+  "faqFeaturesUpgradeTrackerDescription": "Kalan yükseltmeleri, kaynakları, inşaatçıları, laboratuvar süresini ve ilerlemeyi görmek için kullanıcının sağladığı manuel hesap anlık görüntüsünü kullanın",
+  "faqFeaturesNotificationsTitle": "Anlık bildirimler",
+  "faqFeaturesNotificationsDescription": "Desteklenen ClashKing etkinlikleri için hangi hesapların bildirim alacağını seçin",
+  "faqFeaturesWidgetsTitle": "Savaş ekran araçları",
+  "faqFeaturesWidgetsDescription": "Ekran araçlarının desteklendiği ana ekranınızda mevcut savaş durumunu görünür tutun",
+  "faqSectionAccountsAlertsWidgets": "Hesaplar, uyarılar & ekran araçları",
+  "faqLinkedAccountsTitle": "Bağlı hesaplar ve doğrulama nasıl çalışır?",
+  "faqLinkedAccountsAnswer": "ClashKing profilinize birden fazla Clash of Clans hesabı ekleyebilirsiniz. Etiket eklemek herkese açık verileri gösterir. Clash of Clans API belirteciyle doğrulama, hesabın size ait olduğunu kanıtlar ve hesaba özgü özellikleri etkinleştirir.",
+  "faqLinkedAccountsSolution1": "Hesap yönetimi bölümünden hesapları yönetebilir, sıralarını değiştirebilir, gizleyebilir veya silebilirsiniz.",
+  "faqLinkedAccountsSolution2": "Clash of Clans'te API belirtecinizi Ayarlar > Daha Fazla Ayar > API Belirteci bölümünde bulabilirsiniz.",
+  "faqLinkedAccountsSolution3": "Discord veya e-posta ile giriş yapabilirsiniz. Hesap bağlantıları mevcut olduğunda, bunları Ayarlar'dan yönetebilirsiniz.",
+  "faqNotificationsTitle": "Bildirimler nasıl çalışır?",
+  "faqNotificationsAnswer": "Bildirimler isteğe bağlıdır. Etkinleştirildiğinde, ClashKing bu cihazı kaydeder. Her uyarının hangi bağlantılı hesapları hedefleyeceğini seçebilirsiniz.",
+  "faqNotificationsSolution1": "Cihazınızda ve ClashKing ayarlarında bildirimlere izin verin.",
+  "faqNotificationsSolution2": "Her uyarı farklı hesapları hedefleyebilir. Bir uyarı eksikse, seçili hesapları kontrol edin.",
+  "faqNotificationsSolution3": "Bazı uyarılar, takip edilen klan veya savaş verilerine bağlıdır. Harici veri güncellemeleri sırasında gecikmeler yaşanabilir.",
+  "faqWidgetsTitle": "Savaş ekran araçları nasıl çalışır?",
+  "faqWidgetsAnswer": "Savaş ekran araçları, desteklenen cihazlarda hızlı bir özet gösterir. Seçtiğiniz veya bağlantılı hesaplarınızı, önbelleğe alınmış ClashKing verilerini kullanır ve platform izin verdiğinde arka planda yenileme yapar.",
+  "faqWidgetsSolution1": "Hesap veya klan değiştirdikten sonra ekran aracının senkronize olabilmesi için uygulamayı açın.",
+  "faqWidgetsSolution2": "Bir ekran aracı güncel görünmüyorsa, önce uygulamayı yenileyin. Android ve iOS, arka plan güncellemelerini sınırlandırır.",
+  "faqWidgetsSolution3": "Klanın durumunu faydalı bir şekilde gösterebilmesi için erişilebilir savaş verilerine ihtiyacı var.",
   "@warAttacksDetailsDuration": {
     "description": "Label for attack duration in attack details"
   },
-  "gameItemWardenWeight": "Warden weight",
+  "gameItemWardenWeight": "Büyük koruyucu ağırlığı",
   "@gameItemWardenWeight": {
     "description": "Grand Warden follow-priority weight for a game item"
   },
-  "gameItemWardenWeightTooltip": "Warden weight can override housing space and determines how strongly the Grand Warden prioritizes following a unit group.",
+  "gameItemWardenWeightTooltip": "Büyük koruyucunun ağırlığı, barınma alanını geçersiz kılabilir ve Büyük Koruyucunun birlik grubunu ne kadar öncelikli olarak takip edeceğini belirler.",
   "@gameItemWardenWeightTooltip": {
     "description": "Explains how Warden weight affects Grand Warden follow priority"
   },
-  "gameItemHealerWeight": "Healer weight",
+  "gameItemHealerWeight": "Şifacı ağırlığı",
   "@gameItemHealerWeight": {
     "description": "Healer targeting-priority weight for a game item"
   },
-  "gameItemHealerWeightTooltip": "Healer weight can override housing space when Healers decide which units to prioritize.",
+  "gameItemHealerWeightTooltip": "Şifacıların hangi birimlere öncelik vereceklerine karar verirken, şifacının ağırlığı konut alanının önüne geçebilir.",
   "@gameItemHealerWeightTooltip": {
     "description": "Explains how Healer weight affects targeting priority"
   },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "gameItemWardenThresholdCopies": "{count, plural,=1{eşik değerini takip etmek için 1 asker} other{{count} takip eşiği için birlikler}}",
   "@gameItemWardenThresholdCopies": {
     "description": "Number of copies needed to reach the Grand Warden follow threshold",
     "placeholders": {
@@ -2994,7 +2994,7 @@
       }
     }
   },
-  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "gameItemWardenNoThresholdContribution": "Eşik değerine uyulmasına katkıda bulunmaz",
   "@gameItemWardenNoThresholdContribution": {
     "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
   },
@@ -3149,10 +3149,10 @@
   "@searchErrorClanLoadFailed": {
     "description": "Error when clan data fails to load from search"
   },
-  "dashboardTodoHiddenTitle": "No accounts shown here",
-  "dashboardTodoHiddenBody": "Turn on one of the home card options (to-do, Upgrade Tracker, Ranked) for an account in the Players tab to see it here.",
-  "dashboardUpgradeTrackerNoData": "Open the tracker to import or refresh upgrade data.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {needs an update} other {need an update}}",
+  "dashboardTodoHiddenTitle": "Burada hiçbir hesap gösterilmiyor",
+  "dashboardTodoHiddenBody": "Oyuncular sekmesinde bir hesap için ana sayfa kart seçeneklerinden birini (Yapılacaklar, Yükseltme Takipçisi, Dereceli) etkinleştirerek burada görüntüleyebilirsiniz.",
+  "dashboardUpgradeTrackerNoData": "Yükseltme verilerini içe aktarmak veya yenilemek için takip cihazını açın.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject}{count, plural,one {güncelleme gerekli}other {güncelleme gerekli}}",
   "@dashboardUpgradeTrackerNeedsUpdate": {
     "placeholders": {
       "subject": {
@@ -3163,7 +3163,7 @@
       }
     }
   },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {has tasks left} other {have tasks left}}",
+  "todoAccountsHaveTasksLeft": "{subject}{count, plural,one {yapılacak işleri var}other {yapılacak işleri var}}",
   "@todoAccountsHaveTasksLeft": {
     "placeholders": {
       "subject": {
@@ -3174,7 +3174,7 @@
       }
     }
   },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {has attacks left} other {have attacks left}}",
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject}{count, plural,one {saldırıları kaldı} other {saldırıları kaldı}}",
   "@dashboardRankedAccountsHaveAttacksLeft": {
     "placeholders": {
       "subject": {
@@ -3185,14 +3185,14 @@
       }
     }
   },
-  "dashboardUpgradeTrackerTimeLeft": "Projected",
-  "dashboardUpgradeTrackerBuilders": "Builders",
-  "dashboardUpgradeTrackerLab": "Lab",
-  "dashboardUpgradeTrackerPets": "Pets",
-  "dashboardUpgradeTrackerWalls": "Walls",
-  "dashboardUpgradeTrackerVillage": "Village",
-  "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
-  "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerTimeLeft": "Tahmini",
+  "dashboardUpgradeTrackerBuilders": "İnşaatçılar",
+  "dashboardUpgradeTrackerLab": "Laboratuvar",
+  "dashboardUpgradeTrackerPets": "Evcil Hayvanlar",
+  "dashboardUpgradeTrackerWalls": "Duvarlar",
+  "dashboardUpgradeTrackerVillage": "Köy",
+  "dashboardRankedNoData": "Bu hesabın sıralamasını görmek için Dereceli Lig'i açın.",
+  "dashboardRankedAccounts": "{loaded}/{total} takip edilen hesap",
   "@dashboardRankedAccounts": {
     "placeholders": {
       "loaded": {
@@ -3203,17 +3203,17 @@
       }
     }
   },
-  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
-  "damageNoStaticDataTitle": "Damage data is unavailable",
-  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
-  "damageTownHall": "Town Hall",
-  "damageVerifiedAccountPrefill": "Verified account preset",
-  "damageOverridesStayLocal": "Changes here do not update the player account.",
-  "damageTargets": "Buildings",
-  "damageAddBuilding": "Add building",
-  "damageRemoveBuilding": "Remove building",
-  "damageNoTargetsBody": "Add at least one building to compare results.",
-  "damageHitpoints": "{hitpoints} HP",
+  "damageCalculatorSubtitle": "Bir saldırı grubunu birden fazla binaya karşı karşılaştırın.",
+  "damageNoStaticDataTitle": "Hasar verileri mevcut değil",
+  "damageNoStaticDataBody": "Statik oyun verileri yüklendikten sonra uygulamayı yenileyin.",
+  "damageTownHall": "Belediye Binası",
+  "damageVerifiedAccountPrefill": "Doğrulanmış hesap ön ayarı",
+  "damageOverridesStayLocal": "Burada yapılan değişiklikler oyuncu hesabını güncellemez.",
+  "damageTargets": "Binalar",
+  "damageAddBuilding": "Bina ekle",
+  "damageRemoveBuilding": "Binayı kaldır",
+  "damageNoTargetsBody": "Sonuçları karşılaştırmak için en az bir bina ekleyin.",
+  "damageHitpoints": "{hitpoints} İP",
   "@damageHitpoints": {
     "placeholders": {
       "hitpoints": {
@@ -3221,13 +3221,13 @@
       }
     }
   },
-  "damageSearchBuildings": "Search buildings",
-  "damageNoBuildingsFound": "No buildings found",
-  "damageTryAnotherSearch": "Try another name or Town Hall level.",
-  "damageAttackStack": "Manual attack stack",
-  "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
-  "damageCount": "Count",
-  "damagePerUse": "{damage} damage per use",
+  "damageSearchBuildings": "Binaları ara",
+  "damageNoBuildingsFound": "Hiçbir bina bulunamadı",
+  "damageTryAnotherSearch": "Başka bir isim veya Belediye Binası seviyesi deneyin.",
+  "damageAttackStack": "Manuel saldırı yığını",
+  "damageNoSourcesForTownHall": "Bu Belediye Binasında desteklenen herhangi bir hasar kaynağı bulunmamaktadır.",
+  "damageCount": "Miktar",
+  "damagePerUse": "{damage} kullanım başına hasar",
   "@damagePerUse": {
     "placeholders": {
       "damage": {
@@ -3235,7 +3235,7 @@
       }
     }
   },
-  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "damageEarthquakePercent": "Maksimum İP'nın % {percent}'i, üst üste bindirildiğinde azalır",
   "@damageEarthquakePercent": {
     "placeholders": {
       "percent": {
@@ -3243,17 +3243,17 @@
       }
     }
   },
-  "damageSourceLightning": "Lightning",
-  "damageSourceEarthquake": "Earthquake",
-  "damageSourceGiantArrow": "Giant Arrow",
-  "damageSourceFireball": "Fireball",
-  "damageSourceFlameFlinger": "Flame Flinger hit",
-  "damageSourceBalloonDeath": "Balloon death damage",
-  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
-  "damageResults": "Results",
-  "damageDestroyed": "Destroyed",
-  "damageSurvives": "Survives",
-  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "damageSourceLightning": "Yıldırım",
+  "damageSourceEarthquake": "Deprem",
+  "damageSourceGiantArrow": "Dev Ok",
+  "damageSourceFireball": "Ateş topu",
+  "damageSourceFlameFlinger": "Alev Fırlatıcı vuruşu",
+  "damageSourceBalloonDeath": "Balon ölüm hasarı",
+  "damageSourceRocketBalloonDeath": "Roket Balon ölüm hasarı",
+  "damageResults": "Sonuçlar",
+  "damageDestroyed": "Yok edildi",
+  "damageSurvives": "Hayatta kalır",
+  "damageResultSummary": "{damage} hasar · {remaining} kalan İP",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -3264,10 +3264,10 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake optimizer",
-  "damageSpellCapacity": "Spell capacity",
-  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
-  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "damageZapQuakeOptimizer": "Yıldırım Deprem optimizasyon aracı",
+  "damageSpellCapacity": "Büyü kapasitesi",
+  "damageZapQuakeUnavailable": "Bu belediye binasında Yıldırım ve Deprem bulunmamaktadır.",
+  "damageZapQuakeUsesSelectedLevels": "Yıldırım seviyesi {lightningLevel} ve Deprem seviyesi {earthquakeLevel} kullanılarak.",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -3278,9 +3278,9 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
-  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
-  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "damageZapQuakeIneligible": "Yıldırım ve deprem bu depoya zarar veremez.",
+  "damageNoValidZapQuake": "Seçilen büyü kapasitesine uygun geçerli bir kombinasyon bulunamadı.",
+  "damageZapQuakeCombination": "{lightning} yıldırım + {earthquake} deprem · {capacity} alan",
   "@damageZapQuakeCombination": {
     "placeholders": {
       "lightning": {
@@ -3294,34 +3294,34 @@
       }
     }
   },
-  "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Show Upgrade Tracker on Home",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Pin this account's upgrade summary on Home.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verify this account to show upgrade progress on Home.",
-  "playerOptionShowRankedHomeTitle": "Show Ranked on Home",
-  "playerOptionShowRankedHomeSubtitle": "Pin this account's Ranked League summary on Home.",
-  "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
-  "dashboardRankedCombinedAcrossAccounts": "Combined ranking across your accounts",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Combined upgrade tracking across your accounts",
-  "rankingsHomeVillage": "Home Village",
-  "rankingsBuilderBase": "Builder Base",
-  "rankingsTownHall": "Town Hall",
-  "rankingsRankedLeague": "Ranked League",
-  "rankingsClanCapital": "Clan Capital",
-  "rankingsDonations": "Donations",
-  "rankingsWarWins": "War Wins",
-  "rankingsWinStreak": "Win Streak",
-  "rankingsCurrent": "Current",
-  "rankingsWorldwide": "Worldwide",
-  "rankingsSelectLocation": "Select a location",
-  "rankingsSearchLocations": "Search locations or country codes",
-  "rankingsWorldwideUnavailable": "Choose a region or country for this leaderboard.",
-  "rankingsLocationsLoadFailed": "The full location list could not be loaded. Worldwide is still available where supported.",
-  "rankingsSnapshotDate": "Snapshot date",
-  "rankingsSource": "Source",
-  "rankingsOfficialSource": "Official Clash API",
-  "rankingsResults": "Results",
-  "rankingsTopCount": "Top {count}",
+  "playerOptionShowTodoPageVerifyFirst": "Bu hesabı doğrulayarak yapılacaklar sayfasında görünmesini sağlayabilirsiniz.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Ana sayfada Yükseltme Takipçisini Göster",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Bu hesabın yükseltme özetini Ana Sayfaya sabitleyin.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Ana sayfada yükseltme ilerlemesini görmek için bu hesabı doğrulayın.",
+  "playerOptionShowRankedHomeTitle": "Ana Sayfada Dereceliyi Göster",
+  "playerOptionShowRankedHomeSubtitle": "Bu hesabın Dereceli Lig özetini Ana Sayfaya sabitleyin.",
+  "playerOptionShowRankedHomeVerifyFirst": "Bu hesabı doğrulayarak Ana Sayfada Dereceli Lig özetini görüntüleyebilirsiniz.",
+  "dashboardRankedCombinedAcrossAccounts": "Hesaplarınızdaki genel sıralama birleştirildi",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Hesaplarınızdaki yükseltme takibi birleştirildi",
+  "rankingsHomeVillage": "Ana Köy",
+  "rankingsBuilderBase": "İnşaatçı Üssü",
+  "rankingsTownHall": "Belediye Binası",
+  "rankingsRankedLeague": "Dereceli Lig",
+  "rankingsClanCapital": "Klan Başkenti",
+  "rankingsDonations": "Bağışlar",
+  "rankingsWarWins": "Kazanılan Savaşlar",
+  "rankingsWinStreak": "Galibiyet Serisi",
+  "rankingsCurrent": "Mevcut",
+  "rankingsWorldwide": "Dünya çapında",
+  "rankingsSelectLocation": "Bir konum seçin",
+  "rankingsSearchLocations": "Konum veya ülke kodlarını arayın",
+  "rankingsWorldwideUnavailable": "Bu sıralama tablosu için bir bölge veya ülke seçin.",
+  "rankingsLocationsLoadFailed": "Konum listesinin tamamı yüklenemedi. Dünya genelinde desteklendiği yerlerde hizmet hala mevcuttur.",
+  "rankingsSnapshotDate": "Anlık görüntü tarihi",
+  "rankingsSource": "Kaynak",
+  "rankingsOfficialSource": "Resmi Clash API'si",
+  "rankingsResults": "Sonuçlar",
+  "rankingsTopCount": "En üst {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3329,8 +3329,8 @@
       }
     }
   },
-  "rankingsNoSnapshotTitle": "No stored snapshot",
-  "rankingsNoSnapshotBody": "No ranking snapshot is stored for {date}. Choose another date or return to Current.",
+  "rankingsNoSnapshotTitle": "Kaydedilmiş anlık görüntü yok",
+  "rankingsNoSnapshotBody": "{date} tarihi için sıralama anlık görüntüsü kaydedilmemiştir. Başka bir tarih seçin veya Mevcut tarihe dönün.",
   "@rankingsNoSnapshotBody": {
     "placeholders": {
       "date": {
@@ -3338,15 +3338,15 @@
       }
     }
   },
-  "rankingsPlayerLoadFailed": "Failed to load this player.",
-  "rankingsClanLoadFailed": "Failed to load this clan.",
+  "rankingsPlayerLoadFailed": "Bu oyuncu yüklenemedi.",
+  "rankingsClanLoadFailed": "Bu klan yüklenemedi.",
   "statsOverview": "Genel Bakış",
   "statsArmies": "Ordular",
   "statsItems": "Öğeler",
   "statsWar": "Savaş",
-  "statsCwl": "CWL",
-  "statsRanked": "Ranked",
-  "statsDateRange": "Date range",
+  "statsCwl": "KSL",
+  "statsRanked": "Dereceli",
+  "statsDateRange": "Tarih aralığı",
   "statsDateRangeHint": "90 güne kadar seçin",
   "statsDateRangeTooLong": "90 gün veya daha kısa bir tarih aralığı seçin.",
   "statsUpdated": "Yeni veriler",
@@ -3406,15 +3406,15 @@
   "statsCwlSeasons": "CWL sezonları",
   "statsCwlSeasonsHint": "YYYY-AA, virgüllerle ayrılmış",
   "statsApplyFilters": "Filtreleri uygulayın",
-  "statsRefresh": "Refresh data",
+  "statsRefresh": "Verileri yenile",
   "statsRegularWarOnly": "Yalnızca normal savaşlar; dost savaşları ve CWL hariçtir.",
   "statsRankedRequired": "Belediye Binası ve bir lig kademesi gereklidir.",
   "statsSeasonBreakdown": "Sezon dökümü",
-  "gameAssetsLoadError": "Could not load game assets",
-  "gameAssetsEmptyTitle": "No game assets available",
-  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
-  "gameAssetsOneImage": "1 image",
-  "gameAssetsImageCount": "{count} images",
+  "gameAssetsLoadError": "Oyun verileri yüklenemedi",
+  "gameAssetsEmptyTitle": "Kullanılabilir oyun verisi yok",
+  "gameAssetsEmptyBody": "Barındırılan bildirim dosyası desteklenen herhangi bir görsel içermiyordu.",
+  "gameAssetsOneImage": "1 resim",
+  "gameAssetsImageCount": "{count} resim",
   "@gameAssetsImageCount": {
     "placeholders": {
       "count": {
@@ -3422,10 +3422,10 @@
       }
     }
   },
-  "gameAssetsSearchHint": "Search this category",
-  "gameAssetsAllFormats": "All formats",
-  "gameAssetsOneResult": "1 result",
-  "gameAssetsResultCount": "{count} results",
+  "gameAssetsSearchHint": "Bu kategoride ara",
+  "gameAssetsAllFormats": "Tüm biçimler",
+  "gameAssetsOneResult": "1 sonuç",
+  "gameAssetsResultCount": "{count} sonuç",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3433,20 +3433,20 @@
       }
     }
   },
-  "gameAssetsNoResultsTitle": "No matching images",
-  "gameAssetsNoResultsBody": "Try another search or file format.",
-  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
-  "gameAssetsCopyUrl": "Copy URL",
-  "gameAssetsCopyPath": "Copy path",
-  "gameAssetsUrlCopied": "Asset URL copied",
-  "gameAssetsPathCopied": "Asset path copied",
-  "gameAssetsCopyError": "Could not copy the asset details.",
-  "gameAssetsShare": "Share",
-  "gameAssetsShareError": "Could not share this asset.",
-  "gameAssetsSave": "Save",
-  "gameAssetsSaving": "Saving...",
-  "gameAssetsSaved": "Asset saved.",
-  "gameAssetsSavedTo": "Asset saved to {path}",
+  "gameAssetsNoResultsTitle": "Eşleşen görsel bulunamadı",
+  "gameAssetsNoResultsBody": "Başka bir arama veya dosya formatı deneyin.",
+  "gameAssetsLongPressHint": "Barındırılan URL'yi kopyalamak için uzun süre basılı tutun",
+  "gameAssetsCopyUrl": "URL'yi kopyala",
+  "gameAssetsCopyPath": "Yolu kopyala",
+  "gameAssetsUrlCopied": "Veri URL'si kopyalandı",
+  "gameAssetsPathCopied": "Veri yolu kopyalandı",
+  "gameAssetsCopyError": "Veri detayları kopyalanamadı.",
+  "gameAssetsShare": "Paylaş",
+  "gameAssetsShareError": "Bu veri paylaşılamadı.",
+  "gameAssetsSave": "Kaydet",
+  "gameAssetsSaving": "Kaydediliyor...",
+  "gameAssetsSaved": "Veri kaydedildi.",
+  "gameAssetsSavedTo": "Veri {path} konumuna kaydedildi",
   "@gameAssetsSavedTo": {
     "placeholders": {
       "path": {
@@ -3454,12 +3454,12 @@
       }
     }
   },
-  "gameAssetsSaveError": "Could not save this asset.",
+  "gameAssetsSaveError": "Bu veri kaydedilemedi.",
   "upgradeTrackerPlan": "Plan",
-  "upgradeTrackerUpgrades": "Upgrades",
-  "upgradeTrackerCollection": "Collection",
-  "upgradeTrackerChooseAccount": "Choose account",
-  "upgradeTrackerSwitchAccount": "Switch account, {account}",
+  "upgradeTrackerUpgrades": "Yükseltmeler",
+  "upgradeTrackerCollection": "Koleksiyon",
+  "upgradeTrackerChooseAccount": "Hesap seç",
+  "upgradeTrackerSwitchAccount": "Hesap değiştir, {account}",
   "@upgradeTrackerSwitchAccount": {
     "placeholders": {
       "account": {
@@ -3467,14 +3467,14 @@
       }
     }
   },
-  "upgradeTrackerShare": "Share tracker",
-  "upgradeTrackerPasteJson": "Paste account JSON",
-  "upgradeTrackerImportTitle": "Import account data",
-  "upgradeTrackerImportDescription": "Paste the raw account JSON. It stays on this device.",
-  "upgradeTrackerAccountJson": "Account JSON",
-  "upgradeTrackerPasteClipboard": "Paste clipboard",
-  "upgradeTrackerImportAction": "Import account",
-  "upgradeTrackerImportSuccess": "{player} was imported on this device.",
+  "upgradeTrackerShare": "Takipçiyi paylaş",
+  "upgradeTrackerPasteJson": "Hesap JSON'unu yapıştır",
+  "upgradeTrackerImportTitle": "Hesap verilerini içe aktar",
+  "upgradeTrackerImportDescription": "Ham hesap JSON'unu yapıştır. Veriler bu cihazda kalır.",
+  "upgradeTrackerAccountJson": "Hesap JSON'u",
+  "upgradeTrackerPasteClipboard": "Panodan yapıştır",
+  "upgradeTrackerImportAction": "Hesabı içe aktar",
+  "upgradeTrackerImportSuccess": "{player} bu cihaza aktarıldı.",
   "@upgradeTrackerImportSuccess": {
     "placeholders": {
       "player": {
@@ -3482,7 +3482,7 @@
       }
     }
   },
-  "upgradeTrackerImportFailed": "Could not import account data: {error}",
+  "upgradeTrackerImportFailed": "Hesap verileri içe aktarılamadı: {error}",
   "@upgradeTrackerImportFailed": {
     "placeholders": {
       "error": {
@@ -3490,15 +3490,15 @@
       }
     }
   },
-  "upgradeTrackerSnapshotUnreadable": "Account data could not be read",
-  "upgradeTrackerTryAgain": "Try again",
-  "upgradeTrackerNoDataTitle": "Bring your village progress into ClashKing",
-  "upgradeTrackerNoDataBody": "Copy your Account Data JSON from Clash of Clans, then paste it from your clipboard. Your data stays on this device.",
-  "upgradeTrackerNoDataLocation": "In Clash of Clans, open Settings > More Settings. Account Data JSON is directly below the API Token section.",
-  "upgradeTrackerOpenMoreSettings": "Open More Settings in Clash of Clans",
-  "upgradeTrackerNoLinkedAccount": "Link a Clash of Clans account before importing its account data.",
-  "upgradeTrackerUpdatedJustNow": "Updated just now",
-  "upgradeTrackerUpdatedMinutesAgo": "Updated {count} minutes ago",
+  "upgradeTrackerSnapshotUnreadable": "Hesap verileri okunamadı",
+  "upgradeTrackerTryAgain": "Tekrar dene",
+  "upgradeTrackerNoDataTitle": "Köy ilerlemeni ClashKing'e aktar",
+  "upgradeTrackerNoDataBody": "Clash of Clans'tan Hesap Verileri JSON'unu kopyalayıp panodan yapıştır. Verilerin bu cihazda kalır.",
+  "upgradeTrackerNoDataLocation": "Clash of Clans'ta Ayarlar > Diğer Ayarlar'ı aç. Hesap Verileri JSON'u, API Jetonu bölümünün hemen altındadır.",
+  "upgradeTrackerOpenMoreSettings": "Clash of Clans'ta Diğer Ayarlar'ı aç",
+  "upgradeTrackerNoLinkedAccount": "Hesap verilerini içe aktarmadan önce bir Clash of Clans hesabı bağla.",
+  "upgradeTrackerUpdatedJustNow": "Az önce güncellendi",
+  "upgradeTrackerUpdatedMinutesAgo": "{count} dakika önce güncellendi",
   "@upgradeTrackerUpdatedMinutesAgo": {
     "placeholders": {
       "count": {
@@ -3506,7 +3506,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedHoursAgo": "Updated {count} hours ago",
+  "upgradeTrackerUpdatedHoursAgo": "{count} saat önce güncellendi",
   "@upgradeTrackerUpdatedHoursAgo": {
     "placeholders": {
       "count": {
@@ -3514,7 +3514,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedOn": "Updated {date}",
+  "upgradeTrackerUpdatedOn": "{date} tarihinde güncellendi",
   "@upgradeTrackerUpdatedOn": {
     "placeholders": {
       "date": {
@@ -3522,18 +3522,18 @@
       }
     }
   },
-  "upgradeTrackerSearchUpgrades": "Search upgrades",
-  "upgradeTrackerSearchCollection": "Search collection",
-  "upgradeTrackerShowFilters": "Show filters",
-  "upgradeTrackerHideFilters": "Hide filters",
-  "upgradeTrackerFilterAll": "All",
-  "upgradeTrackerFilterOwned": "Owned",
-  "upgradeTrackerFilterMissing": "Missing",
-  "upgradeTrackerAllVillages": "All villages",
-  "upgradeTrackerHomeVillage": "Home Village",
-  "upgradeTrackerBuilderBase": "Builder Base",
-  "upgradeTrackerNoMatchingItems": "No matching items",
-  "upgradeTrackerOwnedCount": "{owned} of {total} owned",
+  "upgradeTrackerSearchUpgrades": "Yükseltmelerde ara",
+  "upgradeTrackerSearchCollection": "Koleksiyonda ara",
+  "upgradeTrackerShowFilters": "Filtreleri göster",
+  "upgradeTrackerHideFilters": "Filtreleri gizle",
+  "upgradeTrackerFilterAll": "Tümü",
+  "upgradeTrackerFilterOwned": "Sahip olunan",
+  "upgradeTrackerFilterMissing": "Eksik",
+  "upgradeTrackerAllVillages": "Tüm köyler",
+  "upgradeTrackerHomeVillage": "Ana Köy",
+  "upgradeTrackerBuilderBase": "İnşaatçı Üssü",
+  "upgradeTrackerNoMatchingItems": "Eşleşen öğe yok",
+  "upgradeTrackerOwnedCount": "{total} öğeden {owned} tanesine sahip",
   "@upgradeTrackerOwnedCount": {
     "placeholders": {
       "owned": {
@@ -3544,7 +3544,7 @@
       }
     }
   },
-  "upgradeTrackerLevelsLeft": "{count} levels left",
+  "upgradeTrackerLevelsLeft": "{count} seviye kaldı",
   "@upgradeTrackerLevelsLeft": {
     "placeholders": {
       "count": {
@@ -3552,7 +3552,7 @@
       }
     }
   },
-  "upgradeTrackerItemCount": "{count} items",
+  "upgradeTrackerItemCount": "{count} öğe",
   "@upgradeTrackerItemCount": {
     "placeholders": {
       "count": {
@@ -3560,10 +3560,10 @@
       }
     }
   },
-  "upgradeTrackerCollected": "collected",
-  "upgradeTrackerMissing": "missing",
-  "upgradeTrackerDataAge": "Account data",
-  "upgradeTrackerBuildersCount": "{count} builders",
+  "upgradeTrackerCollected": "toplandı",
+  "upgradeTrackerMissing": "eksik",
+  "upgradeTrackerDataAge": "Hesap verileri",
+  "upgradeTrackerBuildersCount": "{count} inşaatçı",
   "@upgradeTrackerBuildersCount": {
     "placeholders": {
       "count": {
@@ -3571,11 +3571,11 @@
       }
     }
   },
-  "upgradeTrackerLaboratory": "Laboratory",
-  "upgradeTrackerPets": "Pets",
-  "upgradeTrackerWalls": "Walls",
-  "upgradeTrackerEquipment": "Equipment",
-  "upgradeTrackerLevelsRemaining": "{count} levels remaining",
+  "upgradeTrackerLaboratory": "Laboratuvar",
+  "upgradeTrackerPets": "Hayvanlar",
+  "upgradeTrackerWalls": "Duvarlar",
+  "upgradeTrackerEquipment": "Ekipman",
+  "upgradeTrackerLevelsRemaining": "{count} seviye kaldı",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
       "count": {
@@ -3583,7 +3583,7 @@
       }
     }
   },
-  "upgradeTrackerCompletesOn": "Completes {date} · {duration}",
+  "upgradeTrackerCompletesOn": "{date} tarihinde tamamlanır · {duration}",
   "@upgradeTrackerCompletesOn": {
     "placeholders": {
       "date": {
@@ -3594,33 +3594,33 @@
       }
     }
   },
-  "upgradeTrackerHeaderComplete": "Complete",
-  "upgradeTrackerHeaderLevelsLeft": "Levels left",
-  "upgradeTrackerHeaderActive": "Active",
-  "upgradeTrackerHeaderFinishes": "Finishes",
-  "upgradeTrackerHeaderOwned": "Owned",
-  "upgradeTrackerHeaderUpdated": "Updated",
-  "homeCouldNotLoadTitle": "Home could not load",
-  "homeVerifiedAccountRequiredTitle": "Verify a linked account",
-  "homeVerifiedAccountRequiredBody": "Home needs at least one verified Clash account. Link an account or verify an existing link to continue.",
-  "homeVerifyAccountAction": "Link or verify account",
-  "playerOptionVerifyAccountBody": "This account isn't verified yet. Verify it to unlock the to-do, Ranked, and Upgrade Tracker options below.",
-  "homeUpcomingTitle": "Upcoming",
-  "homeUpcomingSubtitle": "The next deadlines and upgrade completions across your accounts.",
-  "homeCollapseSection": "Collapse section",
-  "homeExpandSection": "Expand section",
-  "homeUpcomingEmpty": "No tracked deadlines are coming up. Pull to refresh if this account was just linked.",
-  "homeRecentlyCompleted": "Completed",
-  "homeTodoTitle": "To do",
-  "homeTodoSubtitle": "Actionable account details, ordered by urgency.",
-  "homeTodoEmpty": "No verified account needs attention right now.",
-  "homeClanless": "No clan",
-  "homeNeedsAttention": "Needs attention",
-  "homeCaughtUp": "Caught up",
-  "homeTrackingDataPending": "This verified player is newly tracked or inactive, so actionable details are not available yet.",
-  "homeUpgradeUnavailable": "Upgrade data could not be loaded. Your other account data is still current.",
-  "homeUpgradeNotImported": "No upgrade data yet. Import this verified account's JSON in Upgrade tracker.",
-  "homeUpgradeActiveCount": "{count} active upgrades",
+  "upgradeTrackerHeaderComplete": "Tamamlandı",
+  "upgradeTrackerHeaderLevelsLeft": "Kalan seviyeler",
+  "upgradeTrackerHeaderActive": "Aktif",
+  "upgradeTrackerHeaderFinishes": "Bitiş",
+  "upgradeTrackerHeaderOwned": "Sahip olunan",
+  "upgradeTrackerHeaderUpdated": "Güncellendi",
+  "homeCouldNotLoadTitle": "Ana sayfa yüklenemedi",
+  "homeVerifiedAccountRequiredTitle": "Bağlı bir hesabı doğrula",
+  "homeVerifiedAccountRequiredBody": "Ana sayfa için en az bir doğrulanmış Clash hesabı gerekir. Devam etmek için bir hesap bağla veya mevcut bağlantıyı doğrula.",
+  "homeVerifyAccountAction": "Hesap bağla veya doğrula",
+  "playerOptionVerifyAccountBody": "Bu hesap henüz doğrulanmadı. Aşağıdaki yapılacaklar, Dereceli Lig ve Yükseltme Takipçisi seçeneklerini açmak için hesabı doğrula.",
+  "homeUpcomingTitle": "Yaklaşan",
+  "homeUpcomingSubtitle": "Hesaplarındaki sıradaki son tarihler ve tamamlanacak yükseltmeler.",
+  "homeCollapseSection": "Bölümü daralt",
+  "homeExpandSection": "Bölümü genişlet",
+  "homeUpcomingEmpty": "Yaklaşan takipli bir son tarih yok. Bu hesap yeni bağlandıysa yenilemek için aşağı çek.",
+  "homeRecentlyCompleted": "Tamamlandı",
+  "homeTodoTitle": "Yapılacaklar",
+  "homeTodoSubtitle": "Aciliyet sırasına göre işlem gerektiren hesap ayrıntıları.",
+  "homeTodoEmpty": "Şu anda ilgilenilmesi gereken doğrulanmış hesap yok.",
+  "homeClanless": "Klan yok",
+  "homeNeedsAttention": "İlgilenmen gerekiyor",
+  "homeCaughtUp": "Güncel",
+  "homeTrackingDataPending": "Bu doğrulanmış oyuncu yeni takip ediliyor veya etkin değil, bu nedenle işlem yapılabilir ayrıntılar henüz mevcut değil.",
+  "homeUpgradeUnavailable": "Yükseltme verileri yüklenemedi. Diğer hesap verilerin güncel kalmaya devam ediyor.",
+  "homeUpgradeNotImported": "Henüz yükseltme verisi yok. Bu doğrulanmış hesabın JSON'unu Yükseltme Takipçisi'ne aktar.",
+  "homeUpgradeActiveCount": "{count} etkin yükseltme",
   "@homeUpgradeActiveCount": {
     "placeholders": {
       "count": {
@@ -3628,9 +3628,9 @@
       }
     }
   },
-  "homeUpgradeIdle": "No active upgrade timers were found; builders may be idle.",
-  "homeDone": "Done",
-  "homeRemainingCount": "{count} left",
+  "homeUpgradeIdle": "Etkin yükseltme zamanlayıcısı bulunamadı; inşaatçılar boşta olabilir.",
+  "homeDone": "Bitti",
+  "homeRemainingCount": "{count} kaldı",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -3638,10 +3638,10 @@
       }
     }
   },
-  "homeVerifiedPlayerDataMissing": "This link is verified, but its player profile is unavailable. Pull to refresh or wait for tracking to begin.",
-  "homeSinceAwayTitle": "Since away",
-  "homeSinceAwayFirstVisit": "This is the first tracked Home visit, so older activity is not marked new.",
-  "homeSinceAwaySubtitle": "New markers compare with your previous Home open at {time}.",
+  "homeVerifiedPlayerDataMissing": "Bu bağlantı doğrulandı ancak oyuncu profili kullanılamıyor. Yenilemek için aşağı çek veya takibin başlamasını bekle.",
+  "homeSinceAwayTitle": "Sen yokken",
+  "homeSinceAwayFirstVisit": "Bu, takip edilen ilk Ana sayfa ziyareti olduğu için eski etkinlikler yeni olarak işaretlenmedi.",
+  "homeSinceAwaySubtitle": "Yeni işaretleri, Ana sayfayı önceki açışın olan {time} ile karşılaştırır.",
   "@homeSinceAwaySubtitle": {
     "placeholders": {
       "time": {
@@ -3649,17 +3649,17 @@
       }
     }
   },
-  "homeSinceAwayEmpty": "No join, leave, or player-history activity is available for these verified players and clans.",
-  "homeNewMarker": "New",
-  "homePulseTitle": "Your pulse",
-  "homePulseSubtitle": "Personal 30-day war and CWL form, ranked play, and available global rankings.",
-  "homePulseEmpty": "Performance history or rankings are not available yet. Newly tracked and inactive accounts will fill in as data arrives.",
-  "homeToday": "Today",
-  "homeYesterday": "Yesterday",
-  "homeEarlier": "Earlier",
-  "homeRankedAttacks": "Ranked attacks",
-  "homeSeasonPass": "Season pass",
-  "homeUpcomingAccountDetail": "{player} has {count} remaining.",
+  "homeSinceAwayEmpty": "Bu doğrulanmış oyuncular ve klanlar için katılma, ayrılma veya oyuncu geçmişi etkinliği yok.",
+  "homeNewMarker": "Yeni",
+  "homePulseTitle": "Performansın",
+  "homePulseSubtitle": "Kişisel 30 günlük savaş ve KSL formun, dereceli oyunların ve mevcut küresel sıralamaların.",
+  "homePulseEmpty": "Performans geçmişi veya sıralamalar henüz mevcut değil. Yeni takip edilen ve etkin olmayan hesaplar, veriler geldikçe doldurulacak.",
+  "homeToday": "Bugün",
+  "homeYesterday": "Dün",
+  "homeEarlier": "Daha önce",
+  "homeRankedAttacks": "Dereceli saldırılar",
+  "homeSeasonPass": "Sezon bileti",
+  "homeUpcomingAccountDetail": "{player} için {count} kaldı.",
   "@homeUpcomingAccountDetail": {
     "placeholders": {
       "player": {
@@ -3670,8 +3670,8 @@
       }
     }
   },
-  "homeUpgradeDataNeeded": "Add upgrade data",
-  "homeUpgradeDataNeededDetail": "Import {player}'s account JSON to track upgrade timers and idle builders.",
+  "homeUpgradeDataNeeded": "Yükseltme verisi ekle",
+  "homeUpgradeDataNeededDetail": "Yükseltme zamanlayıcılarını ve boşta olan inşaatçıları takip etmek için {player} hesabının JSON'unu içe aktar.",
   "@homeUpgradeDataNeededDetail": {
     "placeholders": {
       "player": {
@@ -3679,8 +3679,8 @@
       }
     }
   },
-  "homeUpgradeIdleTitle": "Builders may be idle",
-  "homeUpgradeIdleDetail": "{player} has upgrade data, but no active timers were found.",
+  "homeUpgradeIdleTitle": "İnşaatçılar boşta olabilir",
+  "homeUpgradeIdleDetail": "{player} için yükseltme verileri var ancak etkin zamanlayıcı bulunamadı.",
   "@homeUpgradeIdleDetail": {
     "placeholders": {
       "player": {
@@ -3688,7 +3688,7 @@
       }
     }
   },
-  "homeUpgradeAccountDetail": "Upgrade timer for {player}.",
+  "homeUpgradeAccountDetail": "{player} için yükseltme zamanlayıcısı.",
   "@homeUpgradeAccountDetail": {
     "placeholders": {
       "player": {
@@ -3696,10 +3696,10 @@
       }
     }
   },
-  "homePulseWarAverage": "30-day war average",
-  "homePulseCwlAverage": "30-day CWL average",
-  "homePulseRankedToday": "30-day ranked",
-  "homePulseRankedValue": "{count} attacks · {trophies} trophies",
+  "homePulseWarAverage": "30 günlük savaş ortalaması",
+  "homePulseCwlAverage": "30 günlük KSL ortalaması",
+  "homePulseRankedToday": "30 günlük dereceli",
+  "homePulseRankedValue": "{count} saldırı · {trophies} kupa",
   "@homePulseRankedValue": {
     "placeholders": {
       "count": {
@@ -3710,14 +3710,14 @@
       }
     }
   },
-  "homePulseBestGlobalRank": "Best global player rank",
-  "homeActivityJoined": "joined",
-  "homeActivityLeft": "left",
-  "homeActivityAClan": "a clan",
+  "homePulseBestGlobalRank": "En iyi küresel oyuncu sırası",
+  "homeActivityJoined": "katıldı",
+  "homeActivityLeft": "ayrıldı",
+  "homeActivityAClan": "bir klana",
   "statsMeta": "Meta",
   "statsBattle": "Savaş",
   "statsWorld": "Dünya",
-  "statsHeaderSubtitle": "Explore battle performance and the world we track.",
+  "statsHeaderSubtitle": "Savaş performansını ve takip ettiğimiz dünyayı keşfet.",
   "statsPreview": "Önizleme",
   "statsTownHallDistribution": "Belediye Binası dağıtımı",
   "statsBuilderHallDistribution": "İnşaat Salonu dağıtımı",
@@ -3737,13 +3737,13 @@
     }
   },
   "statsEquipmentAdoption": "Seviyeye göre ekipman benimsemesi",
-  "statsEquipmentAdoptionPreview": "Mock layout until aggregated ownership and level counts are available.",
+  "statsEquipmentAdoptionPreview": "Toplu sahiplik ve seviye sayıları kullanılabilir olana kadar örnek düzen.",
   "statsExperienceDistribution": "Oyuncu XP dağıtımı",
-  "statsExperienceDistributionPreview": "Mock layout until XP histogram buckets are available.",
+  "statsExperienceDistributionPreview": "XP histogram aralıkları kullanılabilir olana kadar örnek düzen.",
   "statsCwlRosterSizes": "CWL kadro boyutları",
-  "statsCwlRosterSizesPreview": "Mock 15v15 / 30v30 split until group-size counts are available.",
+  "statsCwlRosterSizesPreview": "Grup boyutu sayıları kullanılabilir olana kadar örnek 15'e 15 / 30'a 30 dağılımı.",
   "statsWarsOverTime": "Zaman içindeki savaşlar",
-  "statsWarsOverTimePreview": "Mock daily trend until the canonical counts endpoint is connected.",
+  "statsWarsOverTimePreview": "Standart sayı uç noktası bağlanana kadar örnek günlük eğilim.",
   "statsStrategyLenses": "Strateji mercekleri",
   "statsStrategyLensesBody": "Adlandırılmış stratejiler örtüşen, versiyonlandırılmış kurallar kullanır. Tam teçhizatlar ayrı kaldığı için etiket asla savaş amacını kanıtlıyormuş gibi davranmaz.",
   "statsQueenCharge": "Kraliçe Saldırısı",
@@ -3758,14 +3758,14 @@
   "statsExactLoadouts": "Tam teçhizatlar",
   "statsCustomLens": "Özel mercek",
   "statsCustomLensBody": "Gerekli miktarları, istisnaları, Belediye Binası'nı, ligi, örnek katı ve sıralama düzenini seçin. Bu, gerçek donanımlarla çalışır ancak henüz kaydedilmez.",
-  "rankedLeagueTitle": "Ranked League",
-  "rankedLeagueAbout": "About Ranked League",
-  "rankedLeagueAboutBody": "This page uses the official weekly Ranked League group, battle logs and period history. Current results can change until the period ends.",
-  "rankedLeagueOverview": "Overview",
-  "rankedLeagueRanking": "Ranking",
-  "rankedLeagueGroupRank": "Group rank",
-  "rankedLeagueTrophies": "Trophies",
-  "rankedLeaguePlayers": "{count} players",
+  "rankedLeagueTitle": "Dereceli Lig",
+  "rankedLeagueAbout": "Dereceli Lig hakkında",
+  "rankedLeagueAboutBody": "Bu sayfa resmî haftalık Dereceli Lig grubunu, savaş günlüklerini ve dönem geçmişini kullanır. Mevcut sonuçlar dönem bitene kadar değişebilir.",
+  "rankedLeagueOverview": "Genel Bakış",
+  "rankedLeagueRanking": "Sıralama",
+  "rankedLeagueGroupRank": "Grup sırası",
+  "rankedLeagueTrophies": "Kupalar",
+  "rankedLeaguePlayers": "{count} oyuncu",
   "@rankedLeaguePlayers": {
     "placeholders": {
       "count": {
@@ -3773,7 +3773,7 @@
       }
     }
   },
-  "rankedLeagueBest": "Best: {value}",
+  "rankedLeagueBest": "En iyi: {value}",
   "@rankedLeagueBest": {
     "placeholders": {
       "value": {
@@ -3781,15 +3781,15 @@
       }
     }
   },
-  "rankedLeagueNoGroup": "No active group",
-  "rankedLeagueCurrentPeriod": "Current period",
-  "rankedLeagueLiveGroupSubtitle": "Live results from the player's official Ranked League group.",
-  "rankedLeagueBattles": "Battles",
-  "rankedLeagueAttacksPlayed": "attacks played",
-  "rankedLeagueAttackRecord": "Attack record",
-  "rankedLeagueDefenseRecord": "Defense record",
-  "rankedLeagueWinsLosses": "wins - losses",
-  "rankedLeagueDefensesLogged": "{count} defenses logged",
+  "rankedLeagueNoGroup": "Etkin grup yok",
+  "rankedLeagueCurrentPeriod": "Mevcut dönem",
+  "rankedLeagueLiveGroupSubtitle": "Oyuncunun resmî Dereceli Lig grubundan canlı sonuçlar.",
+  "rankedLeagueBattles": "Savaşlar",
+  "rankedLeagueAttacksPlayed": "oynanan saldırı",
+  "rankedLeagueAttackRecord": "Saldırı kaydı",
+  "rankedLeagueDefenseRecord": "Savunma kaydı",
+  "rankedLeagueWinsLosses": "galibiyet - mağlubiyet",
+  "rankedLeagueDefensesLogged": "{count} savunma kaydedildi",
   "@rankedLeagueDefensesLogged": {
     "placeholders": {
       "count": {
@@ -3797,25 +3797,25 @@
       }
     }
   },
-  "rankedLeagueRecentBattles": "Recent battles",
-  "rankedLeagueRecentBattlesSubtitle": "Detailed results available for the active weekly group.",
-  "rankedLeagueAttacks": "Attacks",
-  "rankedLeagueDefenses": "Defenses",
-  "rankedLeagueNoBattles": "No battle recorded yet.",
-  "rankedLeagueGroupRanking": "Group ranking",
-  "rankedLeagueRankingSubtitle": "Live standings for the current group. Your player is highlighted.",
-  "rankedLeagueJumpToMyRank": "Jump to my rank",
-  "rankedLeagueLastPeriod": "Last Period",
-  "rankedLeagueBestGroupRank": "Best Rank",
-  "rankedLeaguePeriodHistory": "Period history",
-  "rankedLeagueHistorySubtitle": "Official summaries for completed weekly periods.",
-  "rankedLeagueBestRankedResults": "Best Ranked results",
-  "rankedLeagueAllRankedResults": "All Ranked results",
-  "rankedLeaguePeriods": "Periods",
-  "rankedLeaguePeriodStats": "Period statistics",
-  "rankedLeagueTrophyProgress": "Trophy progress by battle",
-  "rankedLeagueTrophiesByPeriod": "Trophies by period",
-  "rankedLeagueBattleCount": "{count} battles",
+  "rankedLeagueRecentBattles": "Son savaşlar",
+  "rankedLeagueRecentBattlesSubtitle": "Etkin haftalık grup için ayrıntılı sonuçlar.",
+  "rankedLeagueAttacks": "Saldırılar",
+  "rankedLeagueDefenses": "Savunmalar",
+  "rankedLeagueNoBattles": "Henüz savaş kaydedilmedi.",
+  "rankedLeagueGroupRanking": "Grup sıralaması",
+  "rankedLeagueRankingSubtitle": "Mevcut grubun canlı sıralaması. Oyuncun vurgulanır.",
+  "rankedLeagueJumpToMyRank": "Sırama git",
+  "rankedLeagueLastPeriod": "Son dönem",
+  "rankedLeagueBestGroupRank": "En iyi sıra",
+  "rankedLeaguePeriodHistory": "Dönem geçmişi",
+  "rankedLeagueHistorySubtitle": "Tamamlanan haftalık dönemlerin resmî özetleri.",
+  "rankedLeagueBestRankedResults": "En iyi Dereceli sonuçlar",
+  "rankedLeagueAllRankedResults": "Tüm Dereceli sonuçlar",
+  "rankedLeaguePeriods": "Dönemler",
+  "rankedLeaguePeriodStats": "Dönem istatistikleri",
+  "rankedLeagueTrophyProgress": "Savaşa göre kupa ilerlemesi",
+  "rankedLeagueTrophiesByPeriod": "Döneme göre kupalar",
+  "rankedLeagueBattleCount": "{count} savaş",
   "@rankedLeagueBattleCount": {
     "placeholders": {
       "count": {
@@ -3823,7 +3823,7 @@
       }
     }
   },
-  "rankedLeagueBattleProgress": "{count} / {max} battles",
+  "rankedLeagueBattleProgress": "{count} / {max} savaş",
   "@rankedLeagueBattleProgress": {
     "placeholders": {
       "count": {
@@ -3834,7 +3834,7 @@
       }
     }
   },
-  "rankedLeagueTrophyAverage": "{trophies} trophies · {average} avg.",
+  "rankedLeagueTrophyAverage": "{trophies} kupa · ort. {average}",
   "@rankedLeagueTrophyAverage": {
     "placeholders": {
       "trophies": {
@@ -3845,15 +3845,15 @@
       }
     }
   },
-  "rankedLeagueByPeriod": "By period",
-  "rankedLeaguePeriodTab": "Period",
-  "rankedLeagueAverage": "Average",
-  "rankedLeagueRemaining": "Remaining",
-  "rankedLeagueSevenDayPeriod": "7-day Ranked League period",
-  "rankedLeagueEquipmentUnavailable": "Army and equipment are not included in the official Ranked League battle logs yet.",
-  "rankedLeagueBattleDetailsUnavailable": "Detailed battle logs are not available for this period.",
-  "rankedLeagueHistoricalDetailsUnavailable": "Only the official period summary is available for this older period.",
-  "rankedLeagueStarBreakdownUnavailable": "The API provides the star total, but not the detailed star distribution for this period.",
+  "rankedLeagueByPeriod": "Döneme göre",
+  "rankedLeaguePeriodTab": "Dönem",
+  "rankedLeagueAverage": "Ortalama",
+  "rankedLeagueRemaining": "Kalan",
+  "rankedLeagueSevenDayPeriod": "7 günlük Dereceli Lig dönemi",
+  "rankedLeagueEquipmentUnavailable": "Ordu ve ekipmanlar henüz resmî Dereceli Lig savaş günlüklerine dahil değil.",
+  "rankedLeagueBattleDetailsUnavailable": "Bu dönem için ayrıntılı savaş günlükleri mevcut değil.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Bu eski dönem için yalnızca resmî dönem özeti mevcut.",
+  "rankedLeagueStarBreakdownUnavailable": "API toplam yıldız sayısını sağlar ancak bu dönemin ayrıntılı yıldız dağılımını sağlamaz.",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
@@ -3915,48 +3915,48 @@
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
-  "widgetUpgradeProgressTitle": "Upgrade Progress",
-  "widgetHomeVillage": "HOME VILLAGE",
-  "widgetVillage": "VILLAGE",
-  "widgetLaboratory": "LAB",
-  "widgetPets": "PETS",
-  "widgetBuilderBase": "BUILDER BASE",
-  "widgetResearch": "RESEARCH",
-  "widgetActive": "ACTIVE",
-  "widgetIdle": "IDLE",
-  "widgetLocked": "LOCKED",
-  "widgetMaxed": "MAXED",
-  "widgetNotUnlocked": "Not unlocked",
-  "widgetFullyUpgraded": "Fully upgraded",
-  "widgetNoActiveUpgrades": "No active upgrades",
-  "widgetNoActiveResearch": "No active research",
-  "widgetDataStale": "Update needed",
-  "widgetMoreUpgrade": "more upgrade",
-  "widgetMoreUpgrades": "more upgrades",
-  "widgetLevelShort": "Lv",
-  "widgetReady": "Ready",
-  "widgetReadyIn": "Ready in",
-  "widgetHelping": "Helping",
-  "widgetApprenticeShort": "Apprentice",
-  "widgetAssistantShort": "Assistant",
-  "widgetAlchemistShort": "Alchemist",
-  "widgetBuilderPotion": "Builder Potion",
-  "widgetResearchPotion": "Research Potion",
-  "widgetPetPotion": "Pet Potion",
-  "widgetClockTower": "Clock Tower",
-  "widgetTownHallBuilderBoost": "Town Hall builder boost",
-  "widgetTownHallLabBoost": "Town Hall lab boost",
-  "widgetBuilderBoostShort": "Builder",
-  "widgetResearchBoostShort": "Research",
-  "widgetPetBoostShort": "Pet",
-  "widgetClockBoostShort": "Clock",
-  "widgetBuilderCostPerk": "{percent}% builder cost perk",
+  "widgetUpgradeProgressTitle": "Yükseltme İlerlemesi",
+  "widgetHomeVillage": "ANA KÖY",
+  "widgetVillage": "KÖY",
+  "widgetLaboratory": "LABORATUVAR",
+  "widgetPets": "HAYVANLAR",
+  "widgetBuilderBase": "İNŞAATÇI ÜSSÜ",
+  "widgetResearch": "ARAŞTIRMA",
+  "widgetActive": "ETKİN",
+  "widgetIdle": "BOŞTA",
+  "widgetLocked": "KİLİTLİ",
+  "widgetMaxed": "MAKSİMUM",
+  "widgetNotUnlocked": "Kilidi açılmadı",
+  "widgetFullyUpgraded": "Tamamen yükseltildi",
+  "widgetNoActiveUpgrades": "Etkin yükseltme yok",
+  "widgetNoActiveResearch": "Etkin araştırma yok",
+  "widgetDataStale": "Güncelleme gerekiyor",
+  "widgetMoreUpgrade": "yükseltme daha",
+  "widgetMoreUpgrades": "yükseltme daha",
+  "widgetLevelShort": "Sv",
+  "widgetReady": "Hazır",
+  "widgetReadyIn": "Hazır olmasına",
+  "widgetHelping": "Yardım ediyor",
+  "widgetApprenticeShort": "Çırak",
+  "widgetAssistantShort": "Asistan",
+  "widgetAlchemistShort": "Simyacı",
+  "widgetBuilderPotion": "İnşaatçı İksiri",
+  "widgetResearchPotion": "Araştırma İksiri",
+  "widgetPetPotion": "Hayvan İksiri",
+  "widgetClockTower": "Saat Kulesi",
+  "widgetTownHallBuilderBoost": "Belediye Binası inşaatçı desteği",
+  "widgetTownHallLabBoost": "Belediye Binası laboratuvar desteği",
+  "widgetBuilderBoostShort": "İnşaatçı",
+  "widgetResearchBoostShort": "Araştırma",
+  "widgetPetBoostShort": "Evcil Hayvan",
+  "widgetClockBoostShort": "Saat",
+  "widgetBuilderCostPerk": "%{percent} inşaatçı maliyeti avantajı",
   "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
-  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "widgetBuilderTimePerk": "%{percent} inşaatçı süresi avantajı",
   "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
-  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "widgetLabCostPerk": "%{percent} laboratuvar maliyeti avantajı",
   "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
-  "widgetLabTimePerk": "{percent}% lab time perk",
+  "widgetLabTimePerk": "%{percent} laboratuvar süresi avantajı",
   "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
   "farmGoalChangeBuilding": "Binayı değiştir",
   "farmGoalNoTargetTitle": "Bina seçilmedi",
@@ -3969,5 +3969,207 @@
   "farmGoalTrackerMissingBody": "Sıradaki planlanmış binayı ve tam maliyetini burada göstermek için bu hesabın yükseltme JSON'unu Yükseltme Takibi'ne aktar.",
   "farmGoalTrackerPlanComplete": "Yükseltme Takibi'nde kalan bina yükseltmesi bulunamadı. Yine de manuel olarak bir bina seçebilirsin.",
   "farmGoalOpenUpgradeTracker": "Yükseltme Takibini aç",
-  "farmGoalUseTrackerTarget": "Binayı kullan"
+  "farmGoalUseTrackerTarget": "Binayı kullan",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "BB {level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "İçerik Üretici Kodu: ClashKing",
+  "clanWarFrequencyTitle": "Savaşlar",
+  "notifScopeAllAccounts": "Tüm hesaplar",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "notifSelectedAccounts": "Seçilen hesaplar",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Filtreler",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
+  "searchCancel": "İptal etmek",
+  "assetFolderTroops": "Birlikler",
+  "assetFolderSpells": "Büyüler",
+  "assetFolderHeroes": "Kahramanlar",
+  "endpointStateWins": "Galibiyetler",
+  "notifGroupBattles": "Savaşlar",
+  "notifGroupSupport": "Destek",
+  "gameAssetsCategoryHeroes": "Kahramanlar",
+  "gameAssetsCategoryTroops": "Birlikler",
+  "gameAssetsCategorySpells": "Büyüler",
+  "rankedLeagueStars": "Yıldızlar",
+  "farmGoalUpgradeCostLabel": "Yükseltme maliyeti",
+  "farmGoalAccountTitle": "Hesap",
+  "damageAccountPresetShort": "Hesap",
+  "damageClearStack": "Temizlemek",
+  "todoMockRaid1Left": "1 tane kaldı",
+  "farmGoalResourceLabel": "Kaynak",
+  "gameAssetsCategoryEquipment": "Ekipman",
+  "notifChooseAccountsManually": "Seçili hesaplar",
+  "notifAudienceAcrossDevicesDescription": "Bu cihazda hangi hesapların bildirim alabileceğini seç.",
+  "damageNoTargetTitle": "Bina seçilmedi",
+  "playerOptionNotificationsEnableMaster": "Öncelikle Ayarlar'dan bildirimleri açın.",
+  "playerOptionNotificationsVerifyFirst": "Bildirimleri etkinleştirmek için bu hesabı doğrulayın.",
+  "playerOptionNotificationsSubscriptionRequired": "Yer imi bildirimleri için abonelik gereklidir.",
+  "playerOptionNotificationsLimitReached": "Yer imi bildirim limitinize ulaşıldı.",
+  "notifGroupLegendAttacks": "Efsane I saldırıları",
+  "notifLegendAttacksDescription": "Efsane I seviyesindeki bildirimleri açık olan ve favorilere eklenen hesaplar için saldırı sonuçları.",
+  "notifGroupLegendDefenses": "Efsane I savunmaları",
+  "notifLegendDefensesDescription": "Legend I'de bildirim özelliği etkinleştirilmiş hesaplar için savunma sonuçları.",
+  "farmGoalMissingTarget": "Gerekli saldırı sayısını hesaplamak için bir bina ve hedef seviye seçin.",
+  "farmGoalResultTitle": "Gerekli saldırılar",
+  "farmGoalResultSummary": "{target} {resource}; kusursuz saldırı başına yaklaşık {average}.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalMissingValues": "Saldırı senaryolarını görmek için bir hedef ve kusursuz saldırı ganimet tahmini girin.",
+  "todoExplanationRaids": "Hesap başına 5 puan (veya son saldırı açılmışsa 6) ağırlığı, 1 saldırı = 1 puan.",
+  "settingsLiveActivityTest": "Canlı Etkinlik Testi",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityEndSubtitle": "Yerel önizlemeyi kaldırır.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "settingsLiveActivityStartSubtitle": "Yerel klan savaşı önizlemesini gösterir.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "Test etkinliğini sonlandır",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityStart": "Test etkinliğini başlat",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "todoExplanationRaidsTitle": "Baskınlar:",
+  "settingsLiveActivityUpdateSubtitle": "Sahte savaş puanını yükseltir.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "Puanı güncelle",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "todoRaidAttacks": "Baskın saldırıları",
+  "todoMockWarAltStatus": "18 dakika önce etkindi · savaş ve baskınlarla ilgilenilmesi gerekiyor",
+  "todoMockRaid4Left": "4 kaldı",
+  "farmGoalTitle": "Kaynak toplama hedefi",
+  "farmGoalFormTitle": "Toplanacak kaynaklar",
+  "farmGoalAccountHint": "Seçilen hesap, tahmin için kullanılan Belediye Binası ve mevcut ligi sağlar.",
+  "farmGoalTargetTitle": "Yükseltilecek bina",
+  "farmGoalTargetBuildingLabel": "Bina",
+  "farmGoalChooseBuilding": "Bir bina seç",
+  "farmGoalTargetLevelLabel": "Hedef seviye",
+  "farmGoalCostUnavailable": "Bu seviye için yükseltme maliyeti mevcut değil.",
+  "farmGoalLootTitle": "Tahmini ganimet",
+  "farmGoalAmountLabel": "Toplanacak miktar",
+  "farmGoalStarBonusEstimate": "Yıldız bonusu: 5 yıldızdan sonra {amount} {resource}. Gereken saldırı sayısına dahil değildir.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Kusursuz saldırı · %100",
+  "farmGoalScenarioAtPercent": "%{percent} yıkım",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "saldırı",
+  "farmGoalScenarioHint": "Yaklaşık değer: Ganimet, yıkılan binalara göre değişir. Yüzdeler kusursuz saldırı tahminine uygulanır.",
+  "farmGoalNoLeagueLoot": "Ganimet önerisi almak için ligi olan bir hesap seç.",
+  "farmGoalAttacks": "saldırı",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} hesap takip ediliyor",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "calculatorsModeDamage": "Hasar",
+  "calculatorsModeFarmGoal": "Kaynak toplama hedefi",
+  "damageCalculatorTitle": "Hasar Hesaplayıcı",
+  "damageChooseAccount": "Bir hesap seç",
+  "damageSwitchAccount": "Hesap değiştir",
+  "damageAccountSelectorHint": "Kullanılan seviyeler seçilen hesaba göre belirlenir.",
+  "damageNoAccountsAvailable": "Doğrulanmış hesap yok",
+  "damageTargetSectionTitle": "Yıkılacak bina",
+  "damageChooseTarget": "Bir bina seç",
+  "damageNoTargetBody": "Ne kadar hasar alabileceğini görmek için bir bina seç.",
+  "damageTargetLevelLabel": "Hedef seviye",
+  "damageCommonBuildings": "En sık seçilenler",
+  "damageAllBuildings": "Tüm binalar",
+  "damageQuickSetups": "Bir yöntem seç",
+  "damageQuickSetupZapQuake": "Yıldırım + deprem",
+  "damageQuickSetupFireballQuake": "Ateş Topu + deprem",
+  "damageQuickSetupGiantArrow": "Dev Ok",
+  "damageQuickSetupFlameFlinger": "Alev Fırlatıcı",
+  "damageQuickSetupCustom": "Özel",
+  "damageNoDamageSelected": "Hasar yok",
+  "damageSelectedSourcesCount": "{count} kaynak",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Ayarlanacak hasar kaynaklarını göstermek için bir yöntem seç.",
+  "damageOtherSources": "Diğer kaynaklar",
+  "damageShowAllSources": "Başka bir kaynak ekle",
+  "damageShowFewerSources": "Diğer kaynakları gizle",
+  "gameAssetsCategoryBuildings": "Binalar",
+  "gameAssetsCategoryCapitalBase": "Başkent Üssü",
+  "gameAssetsCategoryCapitalHouseParts": "Başkent Evi Parçaları",
+  "gameAssetsCategoryChests": "Sandıklar",
+  "gameAssetsCategoryClanLabels": "Klan Etiketleri",
+  "gameAssetsCategoryCountryFlags": "Ülke Bayrakları",
+  "gameAssetsCategoryDecorations": "Dekorasyonlar",
+  "gameAssetsCategoryGuardians": "Muhafızlar",
+  "gameAssetsCategoryPets": "Hayvanlar",
+  "gameAssetsCategorySkins": "Görünümler",
+  "rankedLeagueAccountSelector": "Gösterilen hesap"
 }

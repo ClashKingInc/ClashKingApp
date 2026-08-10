@@ -1,58 +1,55 @@
 # Translation audit notes
 
-Generated during the ARB localization audit.
+Updated after the complete ARB localization audit.
 
 ## Mechanical validation
 
-- All `lib/l10n/app_*.arb` files now contain every non-metadata key from `app_en.arb`.
-- No locale has extra non-template keys after realigning `app_es.arb`.
-- Placeholder validation passes: no missing or extra placeholders versus English values.
-- Temporary placeholder markers such as `ZKSPH` / `ЗКСПХ` are absent.
-- `flutter gen-l10n` completed successfully.
+- All 33 `lib/l10n/app_*.arb` files parse as JSON and match every message and metadata key in `app_en.arb`.
+- Every locale contains all 1,785 source messages, with no extra legacy keys.
+- ICU generation and placeholder validation pass for every locale.
+- `flutter gen-l10n` completes successfully and `untranslated_messages.json` is empty.
+- Temporary translation markers and helper artifacts are absent.
+- `flutter analyze` completes with no issues.
 
-## Build/analyze note
+## Reviewed same-as-English values
 
-`flutter analyze` passes after the merge conflict cleanup and Liquid Glass compatibility fixes. No analyzer error observed was caused by ARB parsing or generated localization output.
+`docs/translation_audit_doubts.json` records the remaining values that are byte-for-byte identical to English. They were reviewed during this pass and are product names, acronyms, numeric formats, established game terms, or genuine cognates; the file remains available for future native-speaker review.
 
-## Linguistic review queue
-
-The file `docs/translation_audit_doubts.json` lists values that are still identical to English in non-English locales. Some are intentional product names or acronyms, but many locales were clearly using English fallback copy before this audit. These entries should be reviewed by native speakers or by an approved translation workflow.
-
-| Locale | Identical-to-English candidates |
+| Locale | Reviewed identical values |
 |---|---:|
-| `af` | 736 |
-| `ar` | 886 |
-| `ca` | 934 |
-| `cs` | 560 |
-| `da` | 560 |
-| `de` | 273 |
-| `el` | 784 |
-| `es` | 720 |
-| `es_ES` | 720 |
-| `fi` | 596 |
-| `fr` | 75 |
-| `he` | 929 |
-| `hi` | 662 |
-| `hu` | 746 |
-| `it` | 584 |
-| `ja` | 928 |
-| `ko` | 928 |
-| `nl` | 194 |
-| `no` | 904 |
-| `pl` | 404 |
-| `pt` | 607 |
-| `ro` | 945 |
-| `ru` | 822 |
-| `sr` | 933 |
-| `sv` | 970 |
-| `tr` | 287 |
-| `uk` | 698 |
-| `ur` | 628 |
-| `vi` | 964 |
-| `zh` | 688 |
+| `af` | 23 |
+| `ar` | 11 |
+| `ca` | 31 |
+| `cs` | 24 |
+| `da` | 25 |
+| `de` | 16 |
+| `el` | 16 |
+| `es` | 25 |
+| `es_ES` | 25 |
+| `fi` | 17 |
+| `fr` | 28 |
+| `he` | 21 |
+| `hi` | 14 |
+| `hu` | 18 |
+| `it` | 28 |
+| `ja` | 22 |
+| `ko` | 17 |
+| `nl` | 25 |
+| `no` | 19 |
+| `pl` | 21 |
+| `pt` | 27 |
+| `ro` | 24 |
+| `ru` | 12 |
+| `sr` | 19 |
+| `sv` | 27 |
+| `tr` | 10 |
+| `uk` | 18 |
+| `ur` | 10 |
+| `vi` | 27 |
+| `zh` | 12 |
 
-## Terms intentionally kept or cautiously preserved
+## Terms intentionally preserved
 
-- `CWL`, `TH`, `BH`, `XP`: Clash of Clans/common app acronyms; preserved when natural for the locale.
-- `Discord`, `Google`, `Supercell`, `Excel (.xlsx)`: product names/formats.
-- `endpoint`: preserved where already used as platform terminology or where localization would be risky without native review.
+- `CWL`, `TH`, `DPS`, `HP`, and `XP` remain where they are the established game or app abbreviations.
+- `ClashKing`, `Discord`, `Google`, `Supercell`, and `Excel (.xlsx)` remain product names and formats.
+- Strategy and league names such as `Queen Charge`, `Meta`, and `Top 200` remain unchanged where that is normal usage in the locale.
