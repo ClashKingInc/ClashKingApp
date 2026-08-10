@@ -31,20 +31,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 
-const bool _discordSignInEnabledByBuild = bool.fromEnvironment(
-  'CK_DISCORD_SIGN_IN_ENABLED',
-  defaultValue: true,
-);
-
 class LoginPage extends StatefulWidget {
   final String? prefillEmail;
-  final bool discordSignInEnabled;
 
-  const LoginPage({
-    super.key,
-    this.prefillEmail,
-    this.discordSignInEnabled = _discordSignInEnabledByBuild,
-  });
+  const LoginPage({super.key, this.prefillEmail});
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -238,7 +228,6 @@ class LoginPageState extends State<LoginPage> {
     String textLogoUrl,
   ) {
     final colorScheme = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -318,17 +307,13 @@ class LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          widget.discordSignInEnabled
-                              ? l10n.authDiscordSignIn
-                              : l10n.authLogin,
+                          AppLocalizations.of(context)!.authDiscordSignIn,
                           style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.w800),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          widget.discordSignInEnabled
-                              ? l10n.authDiscordDescription
-                              : l10n.authEmailDescription,
+                          AppLocalizations.of(context)!.authDiscordDescription,
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: colorScheme.onSurfaceVariant),
                         ),
@@ -368,23 +353,21 @@ class LoginPageState extends State<LoginPage> {
         ),
         child: Column(
           children: [
-            if (widget.discordSignInEnabled)
-              Padding(
-                key: const ValueKey('login-auth-mode-selector'),
-                padding: const EdgeInsets.all(8),
-                child: AppGlassSegmentedControl<int>(
-                  values: const [0, 1],
-                  labels: [
-                    AppLocalizations.of(context)!.authDiscordTitle,
-                    AppLocalizations.of(context)!.authEmail,
-                  ],
-                  selected: _selectedAuthTab,
-                  height: 44,
-                  onChanged: (index) {
-                    setState(() => _selectedAuthTab = index);
-                  },
-                ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: AppGlassSegmentedControl<int>(
+                values: const [0, 1],
+                labels: [
+                  AppLocalizations.of(context)!.authDiscordTitle,
+                  AppLocalizations.of(context)!.authEmail,
+                ],
+                selected: _selectedAuthTab,
+                height: 44,
+                onChanged: (index) {
+                  setState(() => _selectedAuthTab = index);
+                },
               ),
+            ),
             AnimatedSize(
               duration: animationDuration,
               curve: Curves.easeOutCubic,
@@ -392,7 +375,7 @@ class LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                 child: AnimatedSwitcher(
                   duration: animationDuration,
-                  child: widget.discordSignInEnabled && _selectedAuthTab == 0
+                  child: _selectedAuthTab == 0
                       ? KeyedSubtree(
                           key: const ValueKey('discord-auth'),
                           child: _buildDiscordTab(),
@@ -432,7 +415,7 @@ class LoginPageState extends State<LoginPage> {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -566,16 +549,11 @@ class LoginPageState extends State<LoginPage> {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPage(),
-                        ),
+                        MaterialPageRoute(builder: (context) => RegisterPage()),
                       );
                     },
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 2,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     ),
                     child: Text(
                       AppLocalizations.of(context)!.authSignUp,
@@ -590,15 +568,12 @@ class LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const ForgotPasswordPage(),
+                          builder: (context) => ForgotPasswordPage(),
                         ),
                       );
                     },
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 2,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     ),
                     child: Text(
                       AppLocalizations.of(context)!.authPasswordForgot,

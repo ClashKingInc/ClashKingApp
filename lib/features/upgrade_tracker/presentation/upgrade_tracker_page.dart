@@ -25,7 +25,6 @@ import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repos
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_widget_sync_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
@@ -552,9 +551,6 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         allowedTags: linkedNames.keys.toSet(),
       );
       if (!mounted) return;
-      // Prevent a load started before the import from overwriting the newly
-      // persisted snapshot when its repository request completes later.
-      _selectionGeneration++;
       setState(() {
         _snapshot = snapshot;
         _selectedTag = snapshot.tag;
@@ -764,10 +760,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         imageUrl: ImageAssets.townHall(snapshot.townHallLevel),
       ),
       InfoProfileTabData(
-        label: l10n.gameName(
-          'TID_CLAN_TAG_BUILDER_BASE',
-          l10n.upgradeTrackerBuilderBase,
-        ),
+        label: l10n.upgradeTrackerBuilderBase,
         imageUrl: ImageAssets.builderHall(snapshot.builderHallLevel),
       ),
       InfoProfileTabData(label: 'Calendar', imageUrl: ImageAssets.iconClock),
@@ -801,10 +794,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                       : UpgradeVillage.home;
                   final title = village == UpgradeVillage.home
                       ? l10n.upgradeTrackerHomeVillage
-                      : l10n.gameName(
-                          'TID_CLAN_TAG_BUILDER_BASE',
-                          l10n.upgradeTrackerBuilderBase,
-                        );
+                      : l10n.upgradeTrackerBuilderBase;
                   _showUpgradeSectionSummary(
                     context,
                     title,
@@ -4037,7 +4027,6 @@ class _PlanTimelineBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final horizonEnd = firstDay.add(Duration(days: days));
     if (!upgrade.endsAt.isAfter(firstDay) ||
         !upgrade.startsAt.isBefore(horizonEnd)) {
@@ -4058,9 +4047,7 @@ class _PlanTimelineBlock extends StatelessWidget {
     final iconOnly = blockWidth < 78;
     final showMetadata = blockWidth >= 168;
     final durationLabel = upgrade.isOngoing
-        ? l10n.upgradeTrackerTimelineRemainingDuration(
-            _duration(upgrade.endsAt.difference(DateTime.now()).inSeconds),
-          )
+        ? '${_duration(upgrade.endsAt.difference(DateTime.now()).inSeconds)} left'
         : _duration(upgrade.endsAt.difference(upgrade.startsAt).inSeconds);
     final scheme = Theme.of(context).colorScheme;
     final blockColor = Color.alphaBlend(
@@ -4120,11 +4107,7 @@ class _PlanTimelineBlock extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            upgrade.isOngoing
-                                                ? l10n.upgradeTrackerTimelineOngoingTitle(
-                                                    upgrade.item.name,
-                                                  )
-                                                : upgrade.item.name,
+                                            '${upgrade.isOngoing ? 'Now · ' : ''}${upgrade.item.name}',
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: Theme.of(context)
@@ -4139,10 +4122,7 @@ class _PlanTimelineBlock extends StatelessWidget {
                                           if (showMetadata) ...[
                                             const SizedBox(height: 3),
                                             Text(
-                                              l10n.upgradeTrackerTimelineMetadata(
-                                                upgrade.step.targetLevel,
-                                                durationLabel,
-                                              ),
+                                              'Lv ${upgrade.step.targetLevel} · $durationLabel',
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)
@@ -4172,12 +4152,8 @@ class _PlanTimelineBlock extends StatelessWidget {
     );
     final interactiveBlock = showTooltip
         ? Tooltip(
-            message: l10n.upgradeTrackerTimelineTooltip(
-              upgrade.item.name,
-              upgrade.step.targetLevel,
-              _timelineDateTimeLabel(upgrade.startsAt),
-              _timelineDateTimeLabel(upgrade.endsAt),
-            ),
+            message:
+                '${upgrade.item.name} · Lv ${upgrade.step.targetLevel}\n${_timelineDateTimeLabel(upgrade.startsAt)} - ${_timelineDateTimeLabel(upgrade.endsAt)}',
             child: block,
           )
         : block;
@@ -4185,12 +4161,8 @@ class _PlanTimelineBlock extends StatelessWidget {
     final blockChild = includeSemantics
         ? Semantics(
             button: true,
-            label: l10n.upgradeTrackerTimelineSemanticLabel(
-              upgrade.item.name,
-              upgrade.step.targetLevel,
-              _timelineDateTimeLabel(upgrade.startsAt),
-              _timelineDateTimeLabel(upgrade.endsAt),
-            ),
+            label:
+                '${upgrade.item.name}, level ${upgrade.step.targetLevel}, ${_timelineDateTimeLabel(upgrade.startsAt)} to ${_timelineDateTimeLabel(upgrade.endsAt)}',
             child: interactiveBlock,
           )
         : interactiveBlock;
@@ -8547,7 +8519,7 @@ void _showVillageUpgradeSummary(
       preferredImageName: "Builder's Hut",
     ),
     timedSection(
-      l10n.gameName('TID_BUILDING_LABORATORY', l10n.upgradeTrackerLaboratory),
+      l10n.upgradeTrackerLaboratory,
       UpgradeQueue.laboratory,
       preferredImageName: village == UpgradeVillage.home
           ? 'Laboratory'

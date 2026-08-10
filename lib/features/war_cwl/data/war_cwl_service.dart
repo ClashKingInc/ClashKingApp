@@ -67,9 +67,30 @@ class WarCwlService extends ChangeNotifier {
       final end = proposedEnd < clanTags.length ? proposedEnd : clanTags.length;
       final batch = clanTags.sublist(start, end);
       try {
-        final parsedSummaries = await _loadWarBatch(batch);
-        changed =
-            _applyWarBatch(parsedSummaries, requestId: requestId) || changed;
+        final response = await _apiService.postResponse(
+          '/war/war-summary',
+          body: {"clan_tags": batch},
+          requiresAuth: true,
+        );
+        if (response.statusCode != 200) {
+          throw Exception("Failed to load war data (${response.statusCode})");
+        }
+
+        final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+        final items = decoded is Map ? decoded['items'] : null;
+        if (items is! List) {
+          throw const FormatException('War summary response has no items');
+        }
+
+        final requestedTags = batch.toSet();
+        for (final item in items) {
+          final parsed = _parseWarSummary(item, requestedTags);
+          if (parsed == null) continue;
+          if (_latestRequestByTag[parsed.tag] != requestId) continue;
+          summaries[parsed.tag] = parsed;
+          changed = true;
+          DebugUtils.debugSuccess("Loaded war data for clan: ${parsed.tag}");
+        }
       } catch (error) {
         errors.add(error);
         Sentry.captureException(error);
@@ -78,42 +99,6 @@ class WarCwlService extends ChangeNotifier {
     }
 
     return _WarLoadOutcome(changed: changed, errors: errors);
-  }
-
-  Future<List<WarCwl>> _loadWarBatch(List<String> batch) async {
-    final response = await _apiService.postResponse(
-      '/war/war-summary',
-      body: {"clan_tags": batch},
-      requiresAuth: true,
-    );
-    if (response.statusCode != 200) {
-      throw Exception("Failed to load war data (${response.statusCode})");
-    }
-
-    final decoded = jsonDecode(ApiService.decodeResponseBody(response));
-    final items = decoded is Map ? decoded['items'] : null;
-    if (items is! List) {
-      throw const FormatException('War summary response has no items');
-    }
-
-    final requestedTags = batch.toSet();
-    final parsedSummaries = <WarCwl>[];
-    for (final item in items) {
-      final parsed = _parseWarSummary(item, requestedTags);
-      if (parsed != null) parsedSummaries.add(parsed);
-    }
-    return parsedSummaries;
-  }
-
-  bool _applyWarBatch(List<WarCwl> parsedSummaries, {required int requestId}) {
-    var changed = false;
-    for (final parsed in parsedSummaries) {
-      if (_latestRequestByTag[parsed.tag] != requestId) continue;
-      summaries[parsed.tag] = parsed;
-      changed = true;
-      DebugUtils.debugSuccess("Loaded war data for clan: ${parsed.tag}");
-    }
-    return changed;
   }
 
   Future<void> _applyErrorPolicy(
@@ -221,8 +206,7 @@ WarCwl? _parseWarSummary(dynamic item, [Set<String>? requestedTags]) {
         (requestedTags != null && !requestedTags.contains(tag))) {
       return null;
     }
-    final warInfo = json['war_info'];
-    if ((warInfo != null && warInfo is! Map) ||
+    if (json['war_info'] is! Map ||
         (json['war_league_infos'] != null &&
             json['war_league_infos'] is! List)) {
       return null;

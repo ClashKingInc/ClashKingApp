@@ -1,11 +1,11 @@
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
-import 'package:clashkingapp/features/auth/presentation/widgets/auth_page_shell.dart';
-import 'package:clashkingapp/features/auth/presentation/widgets/auth_password_requirements.dart';
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:provider/provider.dart';
 
@@ -162,222 +162,432 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context)!;
-    return AuthPageShell(
-      formKey: _formKey,
-      title: l10n.authPasswordReset,
-      description: l10n.authPasswordResetDescription,
-      child: CKSectionPanel(
-        padding: const EdgeInsets.all(CKSpacing.lg),
-        child: Column(
-          children: [
-            // Email input
-            TextFormField(
-              controller: _emailController,
-              autofillHints: const [AutofillHints.email],
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              enabled: !_isLoading,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.authEmail,
-                hintText: AppLocalizations.of(context)!.authEmailHint,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(CKRadius.control),
-                ),
-                prefixIcon: const Icon(Icons.email),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.authEmailRequired;
-                }
-                if (!RegExp(
-                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                ).hasMatch(value)) {
-                  return AppLocalizations.of(context)!.authEmailInvalid;
-                }
-                return null;
-              },
+    final isDarkMode = theme.brightness == Brightness.dark;
+    final logoUrl = (isDarkMode
+        ? ImageAssets.darkModeLogo
+        : ImageAssets.lightModeLogo);
+
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+      ),
+      body: SafeArea(
+        top: false,
+        child: LayoutBuilder(
+          builder: (context, viewport) => SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.fromLTRB(
+              CKSpacing.lg,
+              CKSpacing.sm,
+              CKSpacing.lg,
+              CKSpacing.xl,
             ),
-
-            const SizedBox(height: CKSpacing.lg),
-
-            // Reset code input
-            TextFormField(
-              controller: _codeController,
-              autofillHints: const [AutofillHints.oneTimeCode],
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              enabled: !_isLoading,
-              maxLength: 6,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.authPasswordResetCode,
-                hintText: AppLocalizations.of(
-                  context,
-                )!.authPasswordResetCodeHint,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(CKRadius.control),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: 560,
+                  minHeight: viewport.maxHeight > CKSpacing.xxl
+                      ? viewport.maxHeight - CKSpacing.xxl
+                      : 0,
                 ),
-                prefixIcon: const Icon(Icons.security),
-                counterText: '', // Hide character counter
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(
-                    context,
-                  )!.authPasswordResetCodeRequired;
-                }
-                if (value.length != 6 || !RegExp(r'^[0-9]+$').hasMatch(value)) {
-                  return AppLocalizations.of(
-                    context,
-                  )!.authPasswordResetCodeInvalid;
-                }
-                return null;
-              },
-            ),
-
-            const SizedBox(height: CKSpacing.lg),
-
-            // Password input
-            TextFormField(
-              controller: _passwordController,
-              autofillHints: const [AutofillHints.newPassword],
-              obscureText: _obscurePassword,
-              textInputAction: TextInputAction.next,
-              enabled: !_isLoading,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.authPasswordNew,
-                hintText: AppLocalizations.of(context)!.authPasswordHint,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(CKRadius.control),
-                ),
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  tooltip: _obscurePassword
-                      ? AppLocalizations.of(context)!.tooltipShowPassword
-                      : AppLocalizations.of(context)!.tooltipHidePassword,
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
-                ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.authPasswordRequired;
-                }
-                if (!RegExp(
-                  r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]',
-                ).hasMatch(value)) {
-                  return AppLocalizations.of(context)!.authPasswordInvalid;
-                }
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 8),
-
-            // Dynamic password requirements checklist
-            AuthPasswordRequirements(
-              hasMinLength: _pwHasMinLength,
-              hasUppercase: _pwHasUppercase,
-              hasLowercase: _pwHasLowercase,
-              hasNumber: _pwHasNumber,
-              hasSpecial: _pwHasSpecial,
-            ),
-
-            const SizedBox(height: CKSpacing.lg),
-
-            // Confirm Password input
-            TextFormField(
-              controller: _confirmPasswordController,
-              autofillHints: const [AutofillHints.newPassword],
-              obscureText: _obscureConfirmPassword,
-              textInputAction: TextInputAction.done,
-              enabled: !_isLoading,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.authPasswordConfirm,
-                hintText: AppLocalizations.of(context)!.authPasswordConfirmHint,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(CKRadius.control),
-                ),
-                prefixIcon: const Icon(Icons.lock_outline),
-                suffixIcon: IconButton(
-                  tooltip: _obscureConfirmPassword
-                      ? AppLocalizations.of(context)!.tooltipShowPassword
-                      : AppLocalizations.of(context)!.tooltipHidePassword,
-                  icon: Icon(
-                    _obscureConfirmPassword
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureConfirmPassword = !_obscureConfirmPassword;
-                    });
-                  },
-                ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(
-                    context,
-                  )!.authPasswordConfirmRequired;
-                }
-                if (value != _passwordController.text) {
-                  return AppLocalizations.of(context)!.authPasswordMismatch;
-                }
-                return null;
-              },
-              onFieldSubmitted: (_) => _resetPassword(),
-            ),
-
-            const SizedBox(height: CKSpacing.xl),
-
-            // Reset button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _resetPassword,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(
-                    CKControlDensity.standard.minimumHeight,
-                  ),
-                  elevation: 0,
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colorScheme.onPrimary,
-                ),
-                child: _isLoading
-                    ? const SkeletonActionIndicator(width: 24, height: 8)
-                    : Text(
-                        AppLocalizations.of(context)!.authPasswordReset,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // ClashKing logo
+                      Semantics(
+                        image: true,
+                        label: l10n.appTitle,
+                        child: Center(
+                          child: SizedBox.square(
+                            dimension: 80,
+                            child: MobileWebImage(
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.shield_outlined,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                              imageUrl: logoUrl,
+                            ),
+                          ),
                         ),
                       ),
-              ),
-            ),
 
-            const SizedBox(height: 16),
+                      const SizedBox(height: CKSpacing.xl),
 
-            // Back to login link
-            Center(
-              child: TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(
-                  AppLocalizations.of(context)!.authBackToLogin,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
+                      // Title
+                      Text(
+                        l10n.authPasswordReset,
+                        style: CKTypography.of(
+                          context,
+                          CKTextRole.screenTitle,
+                        ).copyWith(color: colorScheme.onSurface),
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: CKSpacing.sm),
+
+                      // Description
+                      Text(
+                        l10n.authPasswordResetDescription,
+                        style: CKTypography.of(
+                          context,
+                          CKTextRole.body,
+                        ).copyWith(color: colorScheme.onSurfaceVariant),
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: CKSpacing.xl),
+
+                      // Combined form card
+                      CKSectionPanel(
+                        padding: const EdgeInsets.all(CKSpacing.lg),
+                        child: Column(
+                          children: [
+                            // Email input
+                            TextFormField(
+                              controller: _emailController,
+                              autofillHints: const [AutofillHints.email],
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              enabled: !_isLoading,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(
+                                  context,
+                                )!.authEmail,
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.authEmailHint,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    CKRadius.control,
+                                  ),
+                                ),
+                                prefixIcon: const Icon(Icons.email),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authEmailRequired;
+                                }
+                                if (!RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                ).hasMatch(value)) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authEmailInvalid;
+                                }
+                                return null;
+                              },
+                            ),
+
+                            const SizedBox(height: CKSpacing.lg),
+
+                            // Reset code input
+                            TextFormField(
+                              controller: _codeController,
+                              autofillHints: const [AutofillHints.oneTimeCode],
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                              enabled: !_isLoading,
+                              maxLength: 6,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(
+                                  context,
+                                )!.authPasswordResetCode,
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.authPasswordResetCodeHint,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    CKRadius.control,
+                                  ),
+                                ),
+                                prefixIcon: const Icon(Icons.security),
+                                counterText: '', // Hide character counter
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authPasswordResetCodeRequired;
+                                }
+                                if (value.length != 6 ||
+                                    !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authPasswordResetCodeInvalid;
+                                }
+                                return null;
+                              },
+                            ),
+
+                            const SizedBox(height: CKSpacing.lg),
+
+                            // Password input
+                            TextFormField(
+                              controller: _passwordController,
+                              autofillHints: const [AutofillHints.newPassword],
+                              obscureText: _obscurePassword,
+                              textInputAction: TextInputAction.next,
+                              enabled: !_isLoading,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(
+                                  context,
+                                )!.authPasswordNew,
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.authPasswordHint,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    CKRadius.control,
+                                  ),
+                                ),
+                                prefixIcon: const Icon(Icons.lock),
+                                suffixIcon: IconButton(
+                                  tooltip: _obscurePassword
+                                      ? AppLocalizations.of(
+                                          context,
+                                        )!.tooltipShowPassword
+                                      : AppLocalizations.of(
+                                          context,
+                                        )!.tooltipHidePassword,
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authPasswordRequired;
+                                }
+                                if (!RegExp(
+                                  r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]',
+                                ).hasMatch(value)) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authPasswordInvalid;
+                                }
+                                return null;
+                              },
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            // Dynamic password requirements checklist (same as registration)
+                            Builder(
+                              builder: (context) {
+                                final header = AppLocalizations.of(
+                                  context,
+                                )!.authPasswordHeader;
+                                final labelUpper = AppLocalizations.of(
+                                  context,
+                                )!.authPasswordUppercase;
+                                final labelLower = AppLocalizations.of(
+                                  context,
+                                )!.authPasswordLowercase;
+                                final labelNumber = AppLocalizations.of(
+                                  context,
+                                )!.authPasswordNumber;
+                                final labelSpecial = AppLocalizations.of(
+                                  context,
+                                )!.authPasswordSpecial;
+                                final labelLength = AppLocalizations.of(
+                                  context,
+                                )!.authPasswordTooShort;
+
+                                Widget criteriaRow(bool met, String label) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 6.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          met
+                                              ? Icons.check_circle
+                                              : Icons.radio_button_unchecked,
+                                          size: 16,
+                                          color: met
+                                              ? colorScheme.secondary
+                                              : colorScheme.onSurfaceVariant,
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            label,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  color: colorScheme
+                                                      .onSurfaceVariant,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 6.0),
+                                      child: Text(
+                                        header,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color:
+                                                  colorScheme.onSurfaceVariant,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                    ),
+                                    criteriaRow(_pwHasMinLength, labelLength),
+                                    criteriaRow(_pwHasUppercase, labelUpper),
+                                    criteriaRow(_pwHasLowercase, labelLower),
+                                    criteriaRow(_pwHasNumber, labelNumber),
+                                    criteriaRow(_pwHasSpecial, labelSpecial),
+                                  ],
+                                );
+                              },
+                            ),
+
+                            const SizedBox(height: CKSpacing.lg),
+
+                            // Confirm Password input
+                            TextFormField(
+                              controller: _confirmPasswordController,
+                              autofillHints: const [AutofillHints.newPassword],
+                              obscureText: _obscureConfirmPassword,
+                              textInputAction: TextInputAction.done,
+                              enabled: !_isLoading,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(
+                                  context,
+                                )!.authPasswordConfirm,
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.authPasswordConfirmHint,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    CKRadius.control,
+                                  ),
+                                ),
+                                prefixIcon: const Icon(Icons.lock_outline),
+                                suffixIcon: IconButton(
+                                  tooltip: _obscureConfirmPassword
+                                      ? AppLocalizations.of(
+                                          context,
+                                        )!.tooltipShowPassword
+                                      : AppLocalizations.of(
+                                          context,
+                                        )!.tooltipHidePassword,
+                                  icon: Icon(
+                                    _obscureConfirmPassword
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureConfirmPassword =
+                                          !_obscureConfirmPassword;
+                                    });
+                                  },
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authPasswordConfirmRequired;
+                                }
+                                if (value != _passwordController.text) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.authPasswordMismatch;
+                                }
+                                return null;
+                              },
+                              onFieldSubmitted: (_) => _resetPassword(),
+                            ),
+
+                            const SizedBox(height: CKSpacing.xl),
+
+                            // Reset button
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _isLoading ? null : _resetPassword,
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: Size.fromHeight(
+                                    CKControlDensity.standard.minimumHeight,
+                                  ),
+                                  elevation: 0,
+                                  backgroundColor: colorScheme.primary,
+                                  foregroundColor: colorScheme.onPrimary,
+                                ),
+                                child: _isLoading
+                                    ? const SkeletonActionIndicator(
+                                        width: 24,
+                                        height: 8,
+                                      )
+                                    : Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.authPasswordReset,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            // Back to login link
+                            Center(
+                              child: TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text(
+                                  AppLocalizations.of(context)!.authBackToLogin,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

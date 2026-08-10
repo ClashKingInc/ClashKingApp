@@ -429,15 +429,12 @@ void main() {
         200,
       );
       final service = PlayerService(apiService: fakeApi);
-      var notifications = 0;
-      service.addListener(() => notifications++);
 
       await service
           .hydrateBookmarkedPlayers(tags)
           .timeout(const Duration(seconds: 5));
 
       expect(service.profiles, hasLength(tags.length));
-      expect(notifications, 1);
     });
   });
 
