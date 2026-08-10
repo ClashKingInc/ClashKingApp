@@ -18,7 +18,7 @@ jobs:
       CK_API_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
       CK_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://v2-api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
       CK_PUSH_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://v2-api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
-      CK_WEB_DISCORD_REDIRECT_URI: ${{ github.ref == 'refs/heads/main' && 'https://app.clashk.ing/auth/discord_callback.html' || 'https://dev-app.clashk.ing/auth/discord_callback.html' }}
+      CK_WEB_DISCORD_REDIRECT_URI: ${{ github.ref == 'refs/heads/main' && 'https://app.clashk.ing/auth/discord_callback.html' || 'https://staging-app.clashk.ing/auth/discord_callback.html' }}
     outputs:
       deployment-url: ${{ steps.deploy.outputs.url }}
 
