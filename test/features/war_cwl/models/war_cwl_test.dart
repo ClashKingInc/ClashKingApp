@@ -106,6 +106,7 @@ void main() {
       expect(warCwl.warLeagueInfos, hasLength(1));
       expect(warCwl.teamSize, 15);
       expect(warCwl.warLeagueInfos.single.clan?.badgeUrls.large, isEmpty);
+      expect(warCwl.leagueInfo?.getCurrentRounds(), isNull);
     });
   });
 
@@ -124,6 +125,32 @@ void main() {
         warLeagueInfos: [],
       );
       expect(cwl.teamSize, 20);
+    });
+
+    test('uses the first positive CWL war size', () {
+      final cwl = _warCwl([
+        WarInfo(state: 'unknown', teamSize: 0),
+        WarInfo(state: 'warEnded', teamSize: 30),
+      ]);
+
+      expect(cwl.teamSize, 30);
+    });
+
+    test('derives a known team size from the local war lineup', () {
+      final cwl = _warCwl([
+        _war(
+          'inWar',
+          '#CLAN',
+          '#OTHER',
+          clanMembers: List.generate(15, (index) => _member('#P$index')),
+        ),
+      ]);
+
+      expect(cwl.teamSize, 15);
+    });
+
+    test('does not assume 15 when no team size or lineup is known', () {
+      expect(_warCwl([WarInfo(state: 'unknown')]).teamSize, 0);
     });
   });
 

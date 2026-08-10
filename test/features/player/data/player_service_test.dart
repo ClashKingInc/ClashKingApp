@@ -418,6 +418,26 @@ void main() {
     });
   });
 
+  group('PlayerService — hydrateBookmarkedPlayers', () {
+    test('completes for more tags than the shared concurrency cap', () async {
+      final tags = List.generate(30, (index) => '#P$index');
+      final fakeApi = FakeApiService();
+      fakeApi.postStubs['/players'] = http.Response(
+        jsonEncode({
+          'items': [for (final tag in tags) _playerBasicJson(tag, name: tag)],
+        }),
+        200,
+      );
+      final service = PlayerService(apiService: fakeApi);
+
+      await service
+          .hydrateBookmarkedPlayers(tags)
+          .timeout(const Duration(seconds: 5));
+
+      expect(service.profiles, hasLength(tags.length));
+    });
+  });
+
   // ---------------------------------------------------------------------------
   // loadPlayerData (200 success path)
   // ---------------------------------------------------------------------------
@@ -445,8 +465,8 @@ void main() {
       fakeApi.postStubs['/players'] = http.Response(jsonEncode({}), 200);
       final service = PlayerService(apiService: fakeApi);
       await expectLater(
-        () => service.loadPlayerData(['#P1'], {}),
-        returnsNormally,
+        service.loadPlayerData(['#P1'], {}),
+        completes,
       );
       expect(service.isLoading, isFalse);
     });

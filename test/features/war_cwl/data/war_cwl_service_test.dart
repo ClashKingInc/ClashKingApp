@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -34,6 +35,47 @@ class _RecordingApiService extends FakeApiService {
       timeout: timeout,
       extraHeaders: extraHeaders,
     );
+  }
+}
+
+class _BatchingApiService extends FakeApiService {
+  final List<List<String>> batches = [];
+
+  @override
+  Future<http.Response> postResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) async {
+    final tags = List<String>.from((body! as Map)['clan_tags'] as List);
+    batches.add(tags);
+    return http.Response(
+      jsonEncode({'items': tags.map(_minimalWarCwl).toList()}),
+      200,
+    );
+  }
+}
+
+class _QueuedApiService extends FakeApiService {
+  final List<Completer<http.Response>> responses = [];
+  int postCalls = 0;
+
+  @override
+  Future<http.Response> postResponse(
+    String endpoint, {
+    Object? body,
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) {
+    postCalls++;
+    final response = Completer<http.Response>();
+    responses.add(response);
+    return response.future;
   }
 }
 
@@ -140,6 +182,151 @@ void main() {
       await service.loadAllWarData(['#C1', '#C2'], notify: false);
       expect(service.summaries, hasLength(2));
     });
+
+    test('normalizes, deduplicates, and batches at 100 tags', () async {
+      final fakeApi = _BatchingApiService();
+      final service = WarCwlService(apiService: fakeApi);
+      final tags = [
+        for (var index = 0; index < 205; index++) ' clan$index ',
+        'CLAN0',
+      ];
+
+      await service.loadAllWarData(tags, notify: false);
+
+      expect(fakeApi.batches.map((batch) => batch.length), [100, 100, 5]);
+      expect(service.summaries, hasLength(205));
+      expect(service.getWarCwlByTag('clan0')?.tag, '#CLAN0');
+    });
+
+    test('coalesces identical in-flight loads', () async {
+      final fakeApi = _QueuedApiService();
+      final service = WarCwlService(apiService: fakeApi);
+
+      final first = service.loadAllWarData(['#CLAN'], notify: false);
+      final second = service.loadAllWarData(['clan'], notify: false);
+      expect(fakeApi.postCalls, 1);
+
+      fakeApi.responses.single.complete(
+        http.Response(
+          jsonEncode({
+            'items': [_minimalWarCwl('#CLAN')],
+          }),
+          200,
+        ),
+      );
+      await Future.wait([first, second]);
+      expect(service.summaries, hasLength(1));
+    });
+
+    test('honors notify when a later coalesced caller requests it', () async {
+      final fakeApi = _QueuedApiService();
+      final service = WarCwlService(apiService: fakeApi);
+      var notifications = 0;
+      service.addListener(() => notifications++);
+
+      final quiet = service.loadAllWarData(['#CLAN'], notify: false);
+      final notifying = service.loadAllWarData(['#CLAN'], notify: true);
+      expect(fakeApi.postCalls, 1);
+
+      fakeApi.responses.single.complete(
+        http.Response(
+          jsonEncode({
+            'items': [_minimalWarCwl('#CLAN')],
+          }),
+          200,
+        ),
+      );
+      await Future.wait([quiet, notifying]);
+
+      expect(notifications, 1);
+    });
+
+    test('applies error policy per coalesced caller', () async {
+      final fakeApi = _QueuedApiService();
+      final service = WarCwlService(apiService: fakeApi);
+
+      final bestEffort = service.loadAllWarData(['#CLAN'], notify: false);
+      final strict = service.loadAllWarData(
+        ['#CLAN'],
+        notify: false,
+        throwOnError: true,
+      );
+      expect(fakeApi.postCalls, 1);
+
+      final strictExpectation = expectLater(strict, throwsA(isA<Exception>()));
+      fakeApi.responses.single.complete(http.Response('error', 503));
+
+      await expectLater(bestEffort, completes);
+      await strictExpectation;
+    });
+
+    test(
+      'prevents an older overlapping response replacing newer data',
+      () async {
+        final fakeApi = _QueuedApiService();
+        final service = WarCwlService(apiService: fakeApi);
+
+        final older = service.loadAllWarData(['#CLAN'], notify: false);
+        final newer = service.loadAllWarData([
+          '#CLAN',
+          '#OTHER',
+        ], notify: false);
+        expect(fakeApi.postCalls, 2);
+
+        fakeApi.responses[1].complete(
+          http.Response(
+            jsonEncode({
+              'items': [
+                {..._minimalWarCwl('#CLAN'), 'isInWar': true},
+                _minimalWarCwl('#OTHER'),
+              ],
+            }),
+            200,
+          ),
+        );
+        await newer;
+        fakeApi.responses[0].complete(
+          http.Response(
+            jsonEncode({
+              'items': [_minimalWarCwl('#CLAN')],
+            }),
+            200,
+          ),
+        );
+        await older;
+
+        expect(service.summaries['#CLAN']?.isInWar, isTrue);
+        expect(service.summaries['#OTHER'], isNotNull);
+      },
+    );
+
+    test(
+      'keeps good state while accepting valid items from a partial response',
+      () async {
+        final fakeApi = FakeApiService();
+        final service = WarCwlService(apiService: fakeApi);
+        service.processBulkWarData([_minimalWarCwl('#OLD')], notify: false);
+        final previous = service.summaries['#OLD'];
+        var notifications = 0;
+        service.addListener(() => notifications++);
+        fakeApi.postStubs['/war/war-summary'] = http.Response(
+          jsonEncode({
+            'items': [
+              _minimalWarCwl('#NEW'),
+              {'clan_tag': '#OLD', 'war_info': 'invalid'},
+              'invalid',
+            ],
+          }),
+          200,
+        );
+
+        await service.loadAllWarData(['#OLD', '#NEW']);
+
+        expect(service.summaries['#OLD'], same(previous));
+        expect(service.summaries['#NEW'], isNotNull);
+        expect(notifications, 1);
+      },
+    );
 
     test('does not throw on server error by default', () async {
       final fakeApi = FakeApiService();
