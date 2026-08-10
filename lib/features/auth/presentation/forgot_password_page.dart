@@ -1,10 +1,9 @@
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
-import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/reset_password_page.dart';
+import 'package:clashkingapp/features/auth/presentation/widgets/auth_page_shell.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:provider/provider.dart';
@@ -63,83 +62,17 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final l10n = AppLocalizations.of(context)!;
-    final isDarkMode = theme.brightness == Brightness.dark;
-    final logoUrl = (isDarkMode
-        ? ImageAssets.darkModeLogo
-        : ImageAssets.lightModeLogo);
-
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-      ),
-      body: SafeArea(
-        top: false,
-        child: LayoutBuilder(
-          builder: (context, viewport) => SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: const EdgeInsets.fromLTRB(
-              CKSpacing.lg,
-              CKSpacing.sm,
-              CKSpacing.lg,
-              CKSpacing.xl,
-            ),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: 520,
-                  minHeight: viewport.maxHeight > CKSpacing.xxl
-                      ? viewport.maxHeight - CKSpacing.xxl
-                      : 0,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Semantics(
-                        image: true,
-                        label: l10n.appTitle,
-                        child: Center(
-                          child: SizedBox.square(
-                            dimension: 80,
-                            child: MobileWebImage(
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.shield_outlined,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                              imageUrl: logoUrl,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: CKSpacing.xl),
-                      AnimatedSwitcher(
-                        duration: CKMotion.durationOf(
-                          context,
-                          CKMotion.standard,
-                        ),
-                        switchInCurve: CKMotion.standardCurve,
-                        switchOutCurve: CKMotion.standardCurve,
-                        child: _emailSent
-                            ? _buildSuccessState(context)
-                            : _buildRequestState(context),
-                      ),
-                      const SizedBox(height: CKSpacing.xl),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+    return AuthPageShell(
+      formKey: _formKey,
+      maxWidth: 520,
+      centerContent: true,
+      child: AnimatedSwitcher(
+        duration: CKMotion.durationOf(context, CKMotion.standard),
+        switchInCurve: CKMotion.standardCurve,
+        switchOutCurve: CKMotion.standardCurve,
+        child: _emailSent
+            ? _buildSuccessState(context)
+            : _buildRequestState(context),
       ),
     );
   }
