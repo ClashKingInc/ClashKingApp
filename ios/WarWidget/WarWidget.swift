@@ -1,9 +1,14 @@
 import AppIntents
+import Darwin
+import Security
 import SwiftUI
 import UIKit
 import WidgetKit
 
 private let appGroupIdentifier = "group.com.clashking.apps"
+private let keychainAccessGroup = "MZYXD43RX5.group.com.clashking.apps"
+private let sharedAuthSessionKey = "shared_auth_session_v1"
+private let sharedAuthKeychainService = "flutter_secure_storage_service"
 
 struct WarWidgetEntry: TimelineEntry {
   let date: Date
@@ -211,6 +216,204 @@ struct WarTimelineProvider: AppIntentTimelineProvider {
   }
 }
 
+private struct SharedAuthSession: Codable {
+  let accessToken: String
+  let refreshToken: String
+  let deviceId: String
+
+  enum CodingKeys: String, CodingKey {
+    case accessToken = "access_token"
+    case refreshToken = "refresh_token"
+    case deviceId = "device_id"
+  }
+}
+
+private enum SharedAuthKeychain {
+  static func read() throws -> SharedAuthSession? {
+    var query = baseQuery()
+    query[kSecReturnData] = true
+    query[kSecMatchLimit] = kSecMatchLimitOne
+
+    var item: CFTypeRef?
+    let status = SecItemCopyMatching(query as CFDictionary, &item)
+    if status == errSecItemNotFound { return nil }
+    guard status == errSecSuccess, let data = item as? Data else {
+      throw SharedAuthError.keychain(status)
+    }
+    return try JSONDecoder().decode(SharedAuthSession.self, from: data)
+  }
+
+  static func write(_ session: SharedAuthSession) throws {
+    let data = try JSONEncoder().encode(session)
+    let query = baseQuery()
+    let updates: [CFString: Any] = [
+      kSecValueData: data,
+      kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
+    ]
+    let updateStatus = SecItemUpdate(query as CFDictionary, updates as CFDictionary)
+    if updateStatus == errSecSuccess { return }
+    guard updateStatus == errSecItemNotFound else {
+      throw SharedAuthError.keychain(updateStatus)
+    }
+
+    var attributes = query
+    attributes[kSecValueData] = data
+    attributes[kSecAttrAccessible] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+    let addStatus = SecItemAdd(attributes as CFDictionary, nil)
+    guard addStatus == errSecSuccess else {
+      throw SharedAuthError.keychain(addStatus)
+    }
+  }
+
+  private static func baseQuery() -> [CFString: Any] {
+    [
+      kSecClass: kSecClassGenericPassword,
+      kSecAttrAccount: sharedAuthSessionKey,
+      kSecAttrService: sharedAuthKeychainService,
+      kSecAttrAccessGroup: keychainAccessGroup,
+    ]
+  }
+}
+
+private struct SharedAuthRefreshLock {
+  let descriptor: Int32
+
+  static func acquire(timeout: TimeInterval = 12) async throws -> SharedAuthRefreshLock {
+    try await withCheckedThrowingContinuation { continuation in
+      DispatchQueue.global(qos: .userInitiated).async {
+        guard let container = FileManager.default.containerURL(
+          forSecurityApplicationGroupIdentifier: appGroupIdentifier
+        ) else {
+          continuation.resume(throwing: SharedAuthError.appGroupUnavailable)
+          return
+        }
+
+        let path = container.appendingPathComponent("auth-refresh.lock").path
+        let descriptor = open(path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)
+        guard descriptor >= 0 else {
+          continuation.resume(throwing: SharedAuthError.lock(errno))
+          return
+        }
+
+        let deadline = Date().addingTimeInterval(timeout)
+        while Darwin.flock(descriptor, LOCK_EX | LOCK_NB) != 0 {
+          let lockError = errno
+          if lockError != EWOULDBLOCK && lockError != EAGAIN {
+            close(descriptor)
+            continuation.resume(throwing: SharedAuthError.lock(lockError))
+            return
+          }
+          if Date() >= deadline {
+            close(descriptor)
+            continuation.resume(throwing: SharedAuthError.lockTimeout)
+            return
+          }
+          usleep(50_000)
+        }
+
+        continuation.resume(returning: SharedAuthRefreshLock(descriptor: descriptor))
+      }
+    }
+  }
+
+  func release() {
+    Darwin.flock(descriptor, LOCK_UN)
+    close(descriptor)
+  }
+}
+
+private enum SharedAuthError: Error {
+  case appGroupUnavailable
+  case keychain(OSStatus)
+  case lock(Int32)
+  case lockTimeout
+  case invalidRefreshResponse
+}
+
+private struct WidgetAuthSessionProvider {
+  private let expirySkew: TimeInterval = 60
+
+  func validAccessToken(defaults: UserDefaults) async -> String? {
+    do {
+      if let session = try SharedAuthKeychain.read(), !isExpired(session.accessToken) {
+        return session.accessToken
+      }
+
+      let lock = try await SharedAuthRefreshLock.acquire()
+      defer { lock.release() }
+
+      // Runner may have completed a rotation while this extension waited.
+      guard let session = try SharedAuthKeychain.read() else { return nil }
+      if !isExpired(session.accessToken) { return session.accessToken }
+
+      return try await refresh(session, defaults: defaults)
+    } catch {
+      return nil
+    }
+  }
+
+  private func refresh(_ session: SharedAuthSession, defaults: UserDefaults) async throws -> String {
+    let baseUrl = defaults.string(forKey: "warWidgetApiV2Url") ?? "https://v2-api.clashk.ing/v2"
+    guard let url = URL(string: "\(baseUrl)/auth/refresh") else {
+      throw SharedAuthError.invalidRefreshResponse
+    }
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.timeoutInterval = 8
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.httpBody = try JSONSerialization.data(withJSONObject: [
+      "refresh_token": session.refreshToken,
+      "device_id": session.deviceId,
+    ])
+
+    let (data, response) = try await URLSession.shared.data(for: request)
+    guard
+      let httpResponse = response as? HTTPURLResponse,
+      httpResponse.statusCode == 200,
+      let payload = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+      let accessToken = payload["access_token"] as? String,
+      !accessToken.isEmpty,
+      let refreshToken = payload["refresh_token"] as? String,
+      !refreshToken.isEmpty
+    else {
+      throw SharedAuthError.invalidRefreshResponse
+    }
+
+    try SharedAuthKeychain.write(
+      SharedAuthSession(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        deviceId: session.deviceId
+      )
+    )
+    return accessToken
+  }
+
+  private func isExpired(_ token: String) -> Bool {
+    let parts = token.split(separator: ".", omittingEmptySubsequences: false)
+    guard parts.count == 3 else { return true }
+
+    var payload = String(parts[1])
+      .replacingOccurrences(of: "-", with: "+")
+      .replacingOccurrences(of: "_", with: "/")
+    let remainder = payload.count % 4
+    if remainder != 0 {
+      payload.append(String(repeating: "=", count: 4 - remainder))
+    }
+
+    guard
+      let data = Data(base64Encoded: payload),
+      let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+      let expiration = (json["exp"] as? NSNumber)?.doubleValue
+    else {
+      return true
+    }
+
+    return Date().timeIntervalSince1970 >= expiration - expirySkew
+  }
+}
+
 private struct WarWidgetFreshFetcher {
   func fetch(clanTag: String?) async -> WarWidgetData? {
     guard
@@ -233,9 +436,10 @@ private struct WarWidgetFreshFetcher {
     var request = URLRequest(url: url)
     request.timeoutInterval = 10
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    if let token = defaults.string(forKey: "warWidgetAuthToken"), !token.isEmpty {
-      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    guard let token = await WidgetAuthSessionProvider().validAccessToken(defaults: defaults) else {
+      return nil
     }
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
     do {
       let (data, response) = try await URLSession.shared.data(for: request)
