@@ -13,6 +13,7 @@ import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/achievements/data/achievements_repository.dart';
 import 'package:clashkingapp/core/services/token_service.dart';
 import 'package:clashkingapp/features/auth/data/user_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -230,6 +231,7 @@ Future<void> _startClashKingApp() async {
           ChangeNotifierProvider(create: (_) => BookmarkService()),
           ChangeNotifierProvider(create: (_) => PlayerCardPreferencesService()),
           ChangeNotifierProvider(create: (_) => StatsProvider()),
+          ChangeNotifierProvider(create: (_) => AchievementsRepository()),
           Provider.value(value: ApiService.shared),
           Provider(create: (_) => UserService()),
           Provider.value(value: TokenService.shared),
