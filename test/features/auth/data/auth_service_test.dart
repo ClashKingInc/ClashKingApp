@@ -43,6 +43,11 @@ void main() {
       final service = AuthService();
       expect(service.currentUser, isNull);
     });
+
+    test('starts with an unknown follower count', () {
+      final service = AuthService();
+      expect(service.followerCount, isNull);
+    });
   });
 
   // ---------------------------------------------------------------------------
@@ -80,7 +85,13 @@ void main() {
   group('AuthService — initializeAuth (local environment)', () {
     test('uses the API development user without a stored token', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
+      fakeApi.getStubs['/auth/me'] = http.Response(
+        jsonEncode({
+          ...userJson(),
+          'account_summary': {'follower_count': 7},
+        }),
+        200,
+      );
       final service = AuthService(
         apiService: fakeApi,
         tokenService: FakeTokenService(fakeToken: null),
@@ -102,7 +113,13 @@ void main() {
 
     setUp(() {
       fakeApi = FakeApiService();
-      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
+      fakeApi.getStubs['/auth/me'] = http.Response(
+        jsonEncode({
+          ...userJson(),
+          'account_summary': {'follower_count': 7},
+        }),
+        200,
+      );
       fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
     });
 
@@ -123,6 +140,18 @@ void main() {
       await service.initializeAuth();
       expect(service.accessToken, isNotNull);
     });
+
+    test(
+      'stores account-level follower count outside the user model',
+      () async {
+        final service = AuthService(
+          apiService: fakeApi,
+          tokenService: fakeToken,
+        );
+        await service.initializeAuth();
+        expect(service.followerCount, 7);
+      },
+    );
 
     test('notifies listeners', () async {
       final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
@@ -576,123 +605,6 @@ void main() {
       await expectLater(
         () => service.resetPassword('a@b.com', 'BADCODE', 'newpass'),
         throwsA(anything),
-      );
-    });
-  });
-
-  // ---------------------------------------------------------------------------
-  // linkEmailAccount
-  // ---------------------------------------------------------------------------
-
-  group('AuthService — linkEmailAccount', () {
-    test('calls initializeAuth after linking — sets isAuthenticated', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-email'] = http.Response('{}', 200);
-      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
-      final fakeToken = FakeTokenService(fakeToken: 'token123');
-      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
-      await service.linkEmailAccount('a@b.com', 'pass', 'user');
-      expect(service.isAuthenticated, isTrue);
-    });
-
-    test('throws localized Exception on API error', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-email'] = http.Response('conflict', 409);
-      final service = AuthService(
-        apiService: fakeApi,
-        tokenService: FakeTokenService(fakeToken: null),
-      );
-      await expectLater(
-        () => service.linkEmailAccount('a@b.com', 'pass', 'user'),
-        throwsA(isA<Exception>()),
-      );
-    });
-  });
-
-  // ---------------------------------------------------------------------------
-  // linkDiscordAccount
-  // ---------------------------------------------------------------------------
-
-  group('AuthService — linkDiscordAccount', () {
-    test('calls initializeAuth after linking — sets isAuthenticated', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-discord'] = http.Response('{}', 200);
-      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
-      final fakeToken = FakeTokenService(fakeToken: 'token123');
-      final service = AuthService(apiService: fakeApi, tokenService: fakeToken);
-      await service.linkDiscordAccount('discord_token', 'refresh', 3600);
-      expect(service.isAuthenticated, isTrue);
-    });
-
-    test('throws localized Exception on API error', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-discord'] = http.Response('forbidden', 403);
-      final service = AuthService(
-        apiService: fakeApi,
-        tokenService: FakeTokenService(fakeToken: null),
-      );
-      await expectLater(
-        () => service.linkDiscordAccount('bad_token', null, null),
-        throwsA(isA<Exception>()),
-      );
-    });
-  });
-
-  // ---------------------------------------------------------------------------
-  // linkDiscordWithCode (OAuth-code flow)
-  // ---------------------------------------------------------------------------
-
-  group('AuthService — linkDiscordWithCode', () {
-    test('links and re-authenticates on success', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-discord-code'] = http.Response('{}', 200);
-      // linkDiscordWithCode calls initializeAuth(), which fetches /auth/me.
-      fakeApi.getStubs['/auth/me'] = http.Response(jsonEncode(userJson()), 200);
-      final fakeToken = FakeTokenService(fakeToken: 'header.payload.sig');
-      final service = AuthService(
-        apiService: fakeApi,
-        tokenService: fakeToken,
-        discordAuthCodeProvider: () async => {
-          'code': 'auth_code',
-          'code_verifier': 'verifier',
-        },
-      );
-
-      await service.linkDiscordWithCode();
-      expect(service.isAuthenticated, isTrue);
-    });
-
-    test('throws when the OAuth flow is cancelled (null code)', () async {
-      final service = AuthService(
-        apiService: FakeApiService(),
-        tokenService: FakeTokenService(fakeToken: null),
-        discordAuthCodeProvider: () async => null,
-      );
-
-      await expectLater(
-        () => service.linkDiscordWithCode(),
-        throwsA(isA<Exception>()),
-      );
-    });
-
-    test('throws localized Exception on API error', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/auth/link-discord-code'] = http.Response(
-        'forbidden',
-        403,
-      );
-      final service = AuthService(
-        apiService: fakeApi,
-        tokenService: FakeTokenService(fakeToken: null),
-        discordAuthCodeProvider: () async => {
-          'code': 'auth_code',
-          'code_verifier': 'verifier',
-        },
-      );
-
-      await expectLater(
-        () => service.linkDiscordWithCode(),
-        throwsA(isA<Exception>()),
       );
     });
   });

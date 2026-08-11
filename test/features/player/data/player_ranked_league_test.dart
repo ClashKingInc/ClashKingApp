@@ -173,4 +173,32 @@ void main() {
     expect(data.currentRank, isNull);
     expect(data.currentTier?.name, 'Dragon League 28');
   });
+
+  test('coalesces ranked loads and caches global league tiers', () async {
+    final api = FakeApiService();
+    for (final tag in const ['%23ONE', '%23TWO']) {
+      api.getStubs['/players/$tag'] = http.Response(
+        jsonEncode({'tag': Uri.decodeComponent(tag), 'name': tag}),
+        200,
+      );
+      api.getStubs['/players/$tag/leaguehistory'] = http.Response(
+        jsonEncode({'items': <Object>[]}),
+        200,
+      );
+    }
+    api.getStubs['/leaguetiers'] = http.Response(
+      jsonEncode({'items': <Object>[]}),
+      200,
+    );
+    final service = PlayerService(apiService: api);
+
+    await Future.wait([
+      service.loadRankedLeagueData('one'),
+      service.loadRankedLeagueData('#ONE'),
+      service.loadRankedLeagueData('#TWO'),
+    ]);
+
+    expect(api.getCallCounts['/players/%23ONE'], 1);
+    expect(api.getCallCounts['/leaguetiers'], 1);
+  });
 }

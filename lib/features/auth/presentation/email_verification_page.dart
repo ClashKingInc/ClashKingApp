@@ -254,159 +254,177 @@ class EmailVerificationPageState extends State<EmailVerificationPage> {
             SizedBox(height: 24),
 
             // Verification card
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.authEmailVerificationCodeInstructions,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-
-                    SizedBox(height: 32),
-
-                    // 6-digit code input
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(6, (index) {
-                        return SizedBox(
-                          width: 45,
-                          height: 56,
-                          child: TextFormField(
-                            controller: _codeControllers[index],
-                            focusNode: _focusNodes[index],
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            enabled: !_isLoading,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(1),
-                            ],
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 560),
+                child: Card(
+                  elevation: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.authEmailVerificationCodeInstructions,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                              counterText: '',
-                            ),
-                            onChanged: (value) => _onCodeChanged(value, index),
-                          ),
-                        );
-                      }),
-                    ),
-
-                    SizedBox(height: 32),
-
-                    // Show loading when verifying
-                    if (_isLoading) ...[
-                      Column(
-                        children: [
-                          const SkeletonActionIndicator(width: 48, height: 10),
-                          SizedBox(height: 16),
-                          Text(
-                            AppLocalizations.of(
-                              context,
-                            )!.authEmailVerificationVerifying,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ] else ...[
-                      // Verify button (manual verification)
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          onPressed: _verificationCode.length == 6
-                              ? _verifyEmailWithCode
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            foregroundColor: Theme.of(
-                              context,
-                            ).colorScheme.onPrimary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: Text(
-                            AppLocalizations.of(
-                              context,
-                            )!.authEmailVerificationVerify,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
 
-                      SizedBox(height: 20),
+                        SizedBox(height: 32),
 
-                      // Resend email button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          onPressed: _resendVerificationEmail,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            foregroundColor: Theme.of(
-                              context,
-                            ).colorScheme.onPrimary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: Text(
-                            AppLocalizations.of(
-                              context,
-                            )!.authEmailVerificationResend,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 16),
-
-                      // Back to login
-                      Center(
-                        child: TextButton(
-                          onPressed: () {
-                            // Navigate back to login page specifically
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) => LoginPage(),
-                              ),
-                              (route) => false,
+                        // 6-digit code input
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final fieldWidth = ((constraints.maxWidth - 40) / 6)
+                                .clamp(36.0, 48.0);
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: List.generate(6, (index) {
+                                return SizedBox(
+                                  width: fieldWidth,
+                                  height: 56,
+                                  child: TextFormField(
+                                    controller: _codeControllers[index],
+                                    focusNode: _focusNodes[index],
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.number,
+                                    enabled: !_isLoading,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(1),
+                                    ],
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      counterText: '',
+                                    ),
+                                    onChanged: (value) =>
+                                        _onCodeChanged(value, index),
+                                  ),
+                                );
+                              }),
                             );
                           },
-                          child: Text(
-                            AppLocalizations.of(context)!.authBackToLogin,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w500,
+                        ),
+
+                        SizedBox(height: 32),
+
+                        // Show loading when verifying
+                        if (_isLoading) ...[
+                          Column(
+                            children: [
+                              const SkeletonActionIndicator(
+                                width: 48,
+                                height: 10,
+                              ),
+                              SizedBox(height: 16),
+                              Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.authEmailVerificationVerifying,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ] else ...[
+                          // Verify button (manual verification)
+                          SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: ElevatedButton(
+                              onPressed: _verificationCode.length == 6
+                                  ? _verifyEmailWithCode
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                                foregroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.authEmailVerificationVerify,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ],
+
+                          SizedBox(height: 20),
+
+                          // Resend email button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: ElevatedButton(
+                              onPressed: _resendVerificationEmail,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                                foregroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.onPrimary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.authEmailVerificationResend,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 16),
+
+                          // Back to login
+                          Center(
+                            child: TextButton(
+                              onPressed: () {
+                                // Navigate back to login page specifically
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginPage(),
+                                  ),
+                                  (route) => false,
+                                );
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.authBackToLogin,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
