@@ -37,6 +37,7 @@ dependencies:
   http: ^1.6.0
   crypto: ^3.0.7
   clipboard: ^3.0.8
+  lucide_icons_flutter: ^3.1.14+1
   fl_chart: ^1.1.1
   dropdown_button2: ^3.1.0
   home_widget: ^0.9.3
