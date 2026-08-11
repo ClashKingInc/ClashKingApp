@@ -8,6 +8,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  const achievements = <Achievement>[
+    Achievement(
+      id: AchievementId.townhall18,
+      modelUrl:
+          'https://assets.clashk.ing/achievements/town-hall-18-achievement-badge.glb',
+      earnedCount: 1,
+      isRepeatable: true,
+    ),
+    Achievement(
+      id: AchievementId.warWarrior,
+      modelUrl:
+          'https://assets.clashk.ing/achievements/war-champion-achievement-badge.glb',
+      earnedCount: 0,
+      isRepeatable: true,
+    ),
+    Achievement(
+      id: AchievementId.mrLegend,
+      modelUrl:
+          'https://assets.clashk.ing/achievements/perfect-legends-day-achievement-badge.glb',
+      earnedCount: 4,
+      isRepeatable: true,
+    ),
+    Achievement(
+      id: AchievementId.defenseDoesntMatter,
+      modelUrl:
+          'https://assets.clashk.ing/achievements/bad-legends-achievement-badge.glb',
+      earnedCount: 2,
+      isRepeatable: true,
+    ),
+  ];
+
   Future<List<AchievementModelRequest>> pumpPage(
     WidgetTester tester, {
     Size size = const Size(390, 844),
@@ -29,16 +60,13 @@ void main() {
             disableAnimations: disableAnimations,
           ),
           child: AchievementsPage(
-            profileOverride: const AchievementProfile(
-              name: 'Chief Test',
-              avatarUrl: '',
-            ),
+            achievements: achievements,
             modelBuilder: (context, request) {
               requests.add(request);
               return ColoredBox(
                 key: ValueKey(
                   '${request.achievement.id.name}-'
-                  '${request.interactive}-${request.playUnlockAnimation}',
+                  '${request.interactive}-${request.enableIdleRotation}',
                 ),
                 color: Colors.transparent,
               );
@@ -51,20 +79,22 @@ void main() {
     return requests;
   }
 
-  testWidgets('shows the mocked profile and responsive badge states', (
+  testWidgets('shows the completion header and responsive badge states', (
     tester,
   ) async {
     await pumpPage(tester);
 
-    expect(find.text('Chief Test'), findsOneWidget);
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.text('Achievements'), findsOneWidget);
     expect(find.text('3/4 completed'), findsOneWidget);
-    expect(find.text('Downhill 18'), findsOneWidget);
+    expect(find.text('Townhall 18'), findsOneWidget);
     expect(find.text('War Warrior'), findsOneWidget);
     expect(find.text('Mr. Legend'), findsOneWidget);
     expect(find.text('Defense Doesn’t Matter'), findsOneWidget);
     expect(find.text('LOCKED'), findsOneWidget);
-    expect(find.text('4× · Repeatable'), findsOneWidget);
-    expect(find.text('2× · Repeatable'), findsOneWidget);
+    expect(find.text('×1'), findsOneWidget);
+    expect(find.text('×4'), findsOneWidget);
+    expect(find.text('×2'), findsOneWidget);
     expect(find.byIcon(Icons.lock_rounded), findsOneWidget);
 
     final mobileGrid = tester.widget<SliverGrid>(
@@ -91,12 +121,12 @@ void main() {
       4,
     );
     expect(
-      tester.getSize(find.byKey(const ValueKey('achievements-profile'))).width,
+      tester.getSize(find.byKey(const ValueKey('achievements-header'))).width,
       1120,
     );
   });
 
-  testWidgets('detail exposes requirement, status, count, and model controls', (
+  testWidgets('detail uses one copy block with a plain earned count below', (
     tester,
   ) async {
     final requests = await pumpPage(tester);
@@ -106,36 +136,61 @@ void main() {
 
     expect(
       find.text('Built an elite record one war star at a time.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Reach 5,000 war stars.'), findsOneWidget);
-    expect(find.text('Requirement'), findsOneWidget);
-    expect(find.text('Status'), findsOneWidget);
-    expect(find.text('Earned'), findsOneWidget);
-    expect(find.text('0×'), findsOneWidget);
+    expect(find.text('Requirement'), findsNothing);
+    expect(find.text('Earned ×0'), findsOneWidget);
+    expect(find.text('Status'), findsNothing);
+    expect(find.text('Unlocked'), findsNothing);
+    expect(find.text('Repeatable'), findsNothing);
+    expect(find.textContaining('Drag to rotate'), findsNothing);
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.byType(DraggableScrollableSheet), findsNothing);
+    expect(
+      find.byKey(const ValueKey('achievement-detail-sheet')),
+      findsOneWidget,
+    );
+    final detailScroll = tester.widget<SingleChildScrollView>(
+      find.descendant(
+        of: find.byKey(const ValueKey('achievement-detail-sheet')),
+        matching: find.byType(SingleChildScrollView),
+      ),
+    );
+    expect(detailScroll.physics, isA<ClampingScrollPhysics>());
+    expect(
+      find.byKey(const ValueKey('achievement-earned-count')),
+      findsNothing,
+    );
     expect(
       requests.any(
         (request) =>
             request.achievement.id == AchievementId.warWarrior &&
             request.interactive &&
-            !request.playUnlockAnimation,
+            request.enableIdleRotation,
       ),
       isTrue,
     );
   });
 
-  testWidgets('unlocked detail spins once unless reduced motion is enabled', (
-    tester,
-  ) async {
+  testWidgets('detail idle rotation respects reduced motion', (tester) async {
     var requests = await pumpPage(tester);
     await tester.tap(find.byKey(const ValueKey('achievement-mrLegend')));
     await tester.pumpAndSettle();
+    expect(
+      find.text('Completed a flawless Legend League attack day.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Complete a perfect +320 Legend League day.'),
+      findsNothing,
+    );
     expect(
       requests.any(
         (request) =>
             request.achievement.id == AchievementId.mrLegend &&
             request.interactive &&
-            request.playUnlockAnimation,
+            request.enableIdleRotation,
       ),
       isTrue,
     );
@@ -149,16 +204,36 @@ void main() {
         (request) =>
             request.achievement.id == AchievementId.mrLegend &&
             request.interactive &&
-            request.playUnlockAnimation,
+            !request.enableIdleRotation,
       ),
-      isFalse,
+      isTrue,
     );
   });
 
-  test('mock catalog keeps the requested models and mixed states', () {
-    expect(mockAchievements, hasLength(4));
+  testWidgets('defense detail keeps only its description and earned count', (
+    tester,
+  ) async {
+    await pumpPage(tester);
+    await tester.tap(
+      find.byKey(const ValueKey('achievement-defenseDoesntMatter')),
+    );
+    await tester.pumpAndSettle();
+
     expect(
-      mockAchievements.map((item) => item.modelUrl),
+      find.text('Survived a perfect Legend League defense day.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Receive a perfect -320 Legend League defense day.'),
+      findsNothing,
+    );
+    expect(find.text('Earned ×2'), findsOneWidget);
+  });
+
+  test('catalog fallback keeps every requested model locked', () {
+    expect(achievementCatalogFallback, hasLength(4));
+    expect(
+      achievementCatalogFallback.map((item) => item.modelUrl),
       containsAll(<String>[
         'https://assets.clashk.ing/achievements/town-hall-18-achievement-badge.glb',
         'https://assets.clashk.ing/achievements/war-champion-achievement-badge.glb',
@@ -166,37 +241,25 @@ void main() {
         'https://assets.clashk.ing/achievements/bad-legends-achievement-badge.glb',
       ]),
     );
-    expect(mockAchievements.any((item) => item.isUnlocked), isTrue);
-    expect(mockAchievements.any((item) => !item.isUnlocked), isTrue);
+    expect(achievementCatalogFallback.any((item) => item.isUnlocked), isFalse);
     expect(
-      mockAchievements
-          .where((item) => item.isRepeatable)
-          .map((item) => item.earnedCount),
-      containsAll(<int>[4, 2]),
+      achievementCatalogFallback.every((item) => item.isRepeatable),
+      isTrue,
     );
   });
 
   test('every ARB locale contains the complete achievement copy', () {
     const keys = <String>{
       'achievementsTitle',
-      'achievementUnlocked',
-      'achievementRepeatable',
-      'achievementRequirementLabel',
-      'achievementStatusLabel',
       'achievementEarnedLabel',
-      'achievementRotateHint',
-      'achievementDownhill18Name',
-      'achievementDownhill18Description',
-      'achievementDownhill18Requirement',
+      'achievementTownhall18Name',
+      'achievementTownhall18Requirement',
       'achievementWarWarriorName',
-      'achievementWarWarriorDescription',
       'achievementWarWarriorRequirement',
       'achievementMrLegendName',
       'achievementMrLegendDescription',
-      'achievementMrLegendRequirement',
       'achievementDefenseDoesntMatterName',
       'achievementDefenseDoesntMatterDescription',
-      'achievementDefenseDoesntMatterRequirement',
     };
     final localeFiles = Directory('lib/l10n')
         .listSync()
@@ -218,6 +281,20 @@ void main() {
         );
       }
     }
+  });
+
+  test('model interaction is transparent, horizontal, and inertial', () {
+    final source = File(
+      'lib/features/achievements/presentation/achievement_model_viewer.dart',
+    ).readAsStringSync();
+    expect(source, contains('backgroundColor: Colors.transparent'));
+    expect(source, contains("minCameraOrbit: interactive ? 'auto 75deg 105%'"));
+    expect(source, contains("maxCameraOrbit: interactive ? 'auto 75deg 105%'"));
+    expect(source, contains('interpolationDecay: interactive ? 200 : null'));
+    expect(source, contains('autoRotate: interactive && enableIdleRotation'));
+    expect(source, contains('autoRotateDelay: 3000'));
+    expect(source, contains("rotationPerSecond: '18deg'"));
+    expect(source, isNot(contains('relatedJs:')));
   });
 
   test('mobile drawer and desktop sidebar both route to Achievements', () {
