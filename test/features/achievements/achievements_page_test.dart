@@ -323,6 +323,7 @@ void main() {
     final source = File('lib/core/app/my_home_page.dart').readAsStringSync();
     for (final icon in <String>[
       'podium',
+      'chartPie',
       'calculator',
       'listChecks',
       'circleFadingArrowUp',
