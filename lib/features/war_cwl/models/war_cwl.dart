@@ -21,9 +21,18 @@ class WarCwl {
     required this.warLeagueInfos,
   });
 
-  int get teamSize => warLeagueInfos.isNotEmpty
-      ? warLeagueInfos[0].teamSize ?? 0
-      : warInfo.teamSize ?? 0;
+  int get teamSize {
+    for (final war in warLeagueInfos) {
+      if ((war.teamSize ?? 0) > 0) return war.teamSize!;
+    }
+    if ((warInfo.teamSize ?? 0) > 0) return warInfo.teamSize!;
+
+    for (final war in [...warLeagueInfos, warInfo]) {
+      final localLineup = _lineupSizeForClan(war, tag);
+      if (localLineup > 0) return localLineup;
+    }
+    return 0;
+  }
 
   factory WarCwl.fromJson(Map<String, dynamic> json, String? tag) {
     try {
@@ -255,6 +264,23 @@ class WarCwl {
       return null;
     }
   }
+}
+
+int _lineupSizeForClan(WarInfo war, String clanTag) {
+  final normalizedTag = _normalizeTag(clanTag);
+  if (_normalizeTag(war.clan?.tag) == normalizedTag) {
+    return war.clan?.members.length ?? 0;
+  }
+  if (_normalizeTag(war.opponent?.tag) == normalizedTag) {
+    return war.opponent?.members.length ?? 0;
+  }
+  return 0;
+}
+
+String _normalizeTag(String? tag) {
+  final value = tag?.trim().toUpperCase() ?? '';
+  if (value.isEmpty) return '';
+  return value.startsWith('#') ? value : '#$value';
 }
 
 Map<String, dynamic>? _asMap(dynamic value) {

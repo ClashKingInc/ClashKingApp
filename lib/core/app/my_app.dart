@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:clashkingapp/core/constants/global_keys.dart';
 import 'package:clashkingapp/features/auth/presentation/startup_widget.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: const Color(0xFF030304),
-    scrollbarTheme: _hiddenScrollbarTheme,
+    scrollbarTheme: _platformScrollbarTheme,
     datePickerTheme: DatePickerThemeData(
       backgroundColor: const Color(0xFF0B0B0C),
       surfaceTintColor: Colors.transparent,
@@ -186,7 +187,7 @@ class MyApp extends StatelessWidget {
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: const Color.fromARGB(255, 244, 244, 244),
-    scrollbarTheme: _hiddenScrollbarTheme,
+    scrollbarTheme: _platformScrollbarTheme,
     datePickerTheme: DatePickerThemeData(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
@@ -309,12 +310,20 @@ class MyApp extends StatelessWidget {
     ),
   );
 
-  static final ScrollbarThemeData _hiddenScrollbarTheme = ScrollbarThemeData(
-    thumbVisibility: WidgetStateProperty.all(false),
-    trackVisibility: WidgetStateProperty.all(false),
-    thickness: WidgetStateProperty.all(0),
-    radius: Radius.zero,
-  );
+  static final ScrollbarThemeData _platformScrollbarTheme = kIsWeb
+      ? ScrollbarThemeData(
+          thickness: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.hovered) ? 8 : 5,
+          ),
+          radius: const Radius.circular(8),
+          interactive: true,
+        )
+      : ScrollbarThemeData(
+          thumbVisibility: WidgetStateProperty.all(false),
+          trackVisibility: WidgetStateProperty.all(false),
+          thickness: WidgetStateProperty.all(0),
+          radius: Radius.zero,
+        );
 
   @override
   Widget build(BuildContext context) {

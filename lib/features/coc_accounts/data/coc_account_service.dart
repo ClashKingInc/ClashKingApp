@@ -14,6 +14,7 @@ import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/widgets/war_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/utils/bounded_concurrency.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
 import 'package:clashkingapp/features/coc_accounts/models/coc_account_link.dart';
 
@@ -619,11 +620,17 @@ class CocAccountService extends ChangeNotifier {
     PlayerService playerService, {
     required bool forceRefresh,
   }) async {
-    final snapshotResults = await Future.wait<Object?>([
-      playerService
-          .prefetchRankedLeagueData(playerTags, forceRefresh: forceRefresh)
-          .then<Object?>((_) => null),
-      ...playerTags.map<Future<Object?>>((tag) async {
+    final normalizedTags = playerTags
+        .map(UpgradeTrackerRepository.normalizeTag)
+        .where((tag) => tag.isNotEmpty)
+        .toSet();
+    final rankedWarmup = playerService.prefetchRankedLeagueData(
+      normalizedTags,
+      forceRefresh: forceRefresh,
+    );
+    final snapshotResults = await mapWithConcurrencyLimit<String, Object?>(
+      normalizedTags,
+      (tag) async {
         try {
           return await UpgradeTrackerRepository.shared.load(
             tag,
@@ -633,8 +640,9 @@ class CocAccountService extends ChangeNotifier {
           // Best-effort warm-up only; card-level loads surface their own errors.
           return null;
         }
-      }),
-    ]);
+      },
+    );
+    await rankedWarmup;
     final snapshots = snapshotResults
         .whereType<UpgradeTrackerSnapshot>()
         .toList(growable: false);

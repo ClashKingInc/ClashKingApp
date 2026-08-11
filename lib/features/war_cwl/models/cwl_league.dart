@@ -103,7 +103,8 @@ class CwlLeague {
         .toList();
   }
 
-  CwlLeagueRound getCurrentRounds() {
+  CwlLeagueRound? getCurrentRounds() {
+    if (rounds.isEmpty) return null;
     if (rounds.length == 1) {
       return rounds.first;
     } else if (rounds.length <= 6) {
