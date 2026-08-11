@@ -313,9 +313,30 @@ void main() {
       RegExp(r'const AchievementsPage\(\)').allMatches(source),
       hasLength(2),
     );
-    expect(RegExp(r'Icons\.stars_rounded').allMatches(source), hasLength(2));
+    expect(RegExp(r'LucideIcons\.goal').allMatches(source), hasLength(2));
     expect(source, contains('achievementsTooltip: l10n.achievementsTitle'));
     expect(source, contains('tooltip: l10n.achievementsTitle'));
     expect(source, isNot(contains('label: l10n.achievementsTitle')));
+  });
+
+  test('utility navigation uses the requested Lucide icon set', () {
+    final source = File('lib/core/app/my_home_page.dart').readAsStringSync();
+    for (final icon in <String>[
+      'podium',
+      'calculator',
+      'listChecks',
+      'circleFadingArrowUp',
+      'images',
+    ]) {
+      expect(
+        RegExp('LucideIcons\\.$icon').allMatches(source),
+        hasLength(2),
+        reason: icon,
+      );
+    }
+    expect(RegExp(r'LucideIcons\.handCoins').allMatches(source), hasLength(1));
+    expect(source, contains('iconColor: CKColors.secondaryBlue'));
+    expect(source, contains('iconColor: CKColors.donationGreen'));
+    expect(source, contains('iconColor: CKColors.builderBlue'));
   });
 }
