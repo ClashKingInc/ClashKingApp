@@ -3465,7 +3465,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "BB{level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -3475,10 +3475,10 @@
   },
   "faqSupercellFanContentPolicyLink": "Supercell Hayran İçeriği Politikası",
   "upgradeTrackerPlan": "Plan",
-  "upgradeTrackerUpgrades": "Upgrades",
-  "upgradeTrackerCollection": "Collection",
-  "upgradeTrackerChooseAccount": "Choose account",
-  "upgradeTrackerSwitchAccount": "Switch account, {account}",
+  "upgradeTrackerUpgrades": "Yükseltmeler",
+  "upgradeTrackerCollection": "Koleksiyon",
+  "upgradeTrackerChooseAccount": "Hesap seçin",
+  "upgradeTrackerSwitchAccount": "Hesap değiştir, {account}",
   "@upgradeTrackerSwitchAccount": {
     "placeholders": {
       "account": {
@@ -3486,14 +3486,14 @@
       }
     }
   },
-  "upgradeTrackerShare": "Share tracker",
-  "upgradeTrackerPasteJson": "Paste account JSON",
-  "upgradeTrackerImportTitle": "Import account data",
-  "upgradeTrackerImportDescription": "Paste the raw account JSON. It stays on this device.",
-  "upgradeTrackerAccountJson": "Account JSON",
-  "upgradeTrackerPasteClipboard": "Paste clipboard",
-  "upgradeTrackerImportAction": "Import account",
-  "upgradeTrackerImportSuccess": "{player} was imported on this device.",
+  "upgradeTrackerShare": "Takip linkini paylaş",
+  "upgradeTrackerPasteJson": "Hesap JSON dosyasını yapıştırın",
+  "upgradeTrackerImportTitle": "Hesap verilerini içe aktarın",
+  "upgradeTrackerImportDescription": "Ham hesap JSON verilerini yapıştırın. Bu veriler bu cihazda kalacaktır.",
+  "upgradeTrackerAccountJson": "Hesap JSON'u",
+  "upgradeTrackerPasteClipboard": "Panodan yapıştır",
+  "upgradeTrackerImportAction": "Hesabı içe aktar",
+  "upgradeTrackerImportSuccess": "{player} bu cihaza aktarıldı.",
   "@upgradeTrackerImportSuccess": {
     "placeholders": {
       "player": {
@@ -3501,7 +3501,7 @@
       }
     }
   },
-  "upgradeTrackerImportFailed": "Could not import account data: {error}",
+  "upgradeTrackerImportFailed": "Hesap verileri içe aktarılamadı: {error}",
   "@upgradeTrackerImportFailed": {
     "placeholders": {
       "error": {
@@ -3509,15 +3509,15 @@
       }
     }
   },
-  "upgradeTrackerSnapshotUnreadable": "Account data could not be read",
-  "upgradeTrackerTryAgain": "Try again",
-  "upgradeTrackerNoDataTitle": "Bring your village progress into ClashKing",
-  "upgradeTrackerNoDataBody": "Copy your Account Data JSON from Clash of Clans, then paste it from your clipboard. Your data stays on this device.",
-  "upgradeTrackerNoDataLocation": "In Clash of Clans, open Settings > More Settings. Account Data JSON is directly below the API Token section.",
-  "upgradeTrackerOpenMoreSettings": "Open More Settings in Clash of Clans",
-  "upgradeTrackerNoLinkedAccount": "Link a Clash of Clans account before importing its account data.",
-  "upgradeTrackerUpdatedJustNow": "Updated just now",
-  "upgradeTrackerUpdatedMinutesAgo": "Updated {count} minutes ago",
+  "upgradeTrackerSnapshotUnreadable": "Hesap verileri okunamadı",
+  "upgradeTrackerTryAgain": "Tekrar dene",
+  "upgradeTrackerNoDataTitle": "Köyünüzün gelişimini ClashKing'e taşıyın",
+  "upgradeTrackerNoDataBody": "Hesap Verileri JSON'unuzu Clash of Clans'tan kopyalayın ve ardından panonuzdan yapıştırın. Verileriniz bu cihazda kalır.",
+  "upgradeTrackerNoDataLocation": "Clash of Clans'ta Ayarlar > Daha Fazla Ayar'ı açın. Hesap Verileri JSON'u, API Token bölümünün hemen altında yer alır.",
+  "upgradeTrackerOpenMoreSettings": "Clash of Clans'ta Daha Fazla Ayar Aç",
+  "upgradeTrackerNoLinkedAccount": "Hesap verilerini içe aktarmadan önce bir Clash of Clans hesabını bağlayın.",
+  "upgradeTrackerUpdatedJustNow": "Az önce güncellendi",
+  "upgradeTrackerUpdatedMinutesAgo": "{count} dakika önce güncellendi",
   "@upgradeTrackerUpdatedMinutesAgo": {
     "placeholders": {
       "count": {
@@ -3525,7 +3525,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedHoursAgo": "Updated {count} hours ago",
+  "upgradeTrackerUpdatedHoursAgo": "{count} saat önce güncellendi",
   "@upgradeTrackerUpdatedHoursAgo": {
     "placeholders": {
       "count": {
@@ -3533,7 +3533,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedOn": "Updated {date}",
+  "upgradeTrackerUpdatedOn": "Güncellendi: {date}",
   "@upgradeTrackerUpdatedOn": {
     "placeholders": {
       "date": {
@@ -3541,18 +3541,18 @@
       }
     }
   },
-  "upgradeTrackerSearchUpgrades": "Search upgrades",
-  "upgradeTrackerSearchCollection": "Search collection",
-  "upgradeTrackerShowFilters": "Show filters",
-  "upgradeTrackerHideFilters": "Hide filters",
-  "upgradeTrackerFilterAll": "All",
-  "upgradeTrackerFilterOwned": "Owned",
-  "upgradeTrackerFilterMissing": "Missing",
-  "upgradeTrackerAllVillages": "All villages",
-  "upgradeTrackerHomeVillage": "Home Village",
-  "upgradeTrackerBuilderBase": "Builder Base",
-  "upgradeTrackerNoMatchingItems": "No matching items",
-  "upgradeTrackerOwnedCount": "{owned} of {total} owned",
+  "upgradeTrackerSearchUpgrades": "Yükseltmeleri ara",
+  "upgradeTrackerSearchCollection": "Koleksiyon ara",
+  "upgradeTrackerShowFilters": "Filtreleri göster",
+  "upgradeTrackerHideFilters": "Filtreleri gizle",
+  "upgradeTrackerFilterAll": "Tümü",
+  "upgradeTrackerFilterOwned": "Mevcut",
+  "upgradeTrackerFilterMissing": "Eksik",
+  "upgradeTrackerAllVillages": "Tüm köyler",
+  "upgradeTrackerHomeVillage": "Ana Köy",
+  "upgradeTrackerBuilderBase": "İnşaatçı Üssü",
+  "upgradeTrackerNoMatchingItems": "Eşleşen öğe bulunamadı",
+  "upgradeTrackerOwnedCount": "{owned} / {total} mevcut",
   "@upgradeTrackerOwnedCount": {
     "placeholders": {
       "owned": {
@@ -3563,7 +3563,7 @@
       }
     }
   },
-  "upgradeTrackerLevelsLeft": "{count} levels left",
+  "upgradeTrackerLevelsLeft": "{count} seviye kaldı",
   "@upgradeTrackerLevelsLeft": {
     "placeholders": {
       "count": {
@@ -3571,7 +3571,7 @@
       }
     }
   },
-  "upgradeTrackerItemCount": "{count} items",
+  "upgradeTrackerItemCount": "{count} öğe",
   "@upgradeTrackerItemCount": {
     "placeholders": {
       "count": {
@@ -3579,10 +3579,10 @@
       }
     }
   },
-  "upgradeTrackerCollected": "collected",
-  "upgradeTrackerMissing": "missing",
-  "upgradeTrackerDataAge": "Account data",
-  "upgradeTrackerBuildersCount": "{count} builders",
+  "upgradeTrackerCollected": "toplandı",
+  "upgradeTrackerMissing": "eksik",
+  "upgradeTrackerDataAge": "Hesap verisi",
+  "upgradeTrackerBuildersCount": "{count} inşaatçı",
   "@upgradeTrackerBuildersCount": {
     "placeholders": {
       "count": {
@@ -3590,11 +3590,11 @@
       }
     }
   },
-  "upgradeTrackerLaboratory": "Laboratory",
-  "upgradeTrackerPets": "Pets",
-  "upgradeTrackerWalls": "Walls",
-  "upgradeTrackerEquipment": "Equipment",
-  "upgradeTrackerLevelsRemaining": "{count} levels remaining",
+  "upgradeTrackerLaboratory": "Laboratuvar",
+  "upgradeTrackerPets": "Evcil Hayvanlar",
+  "upgradeTrackerWalls": "Duvarlar",
+  "upgradeTrackerEquipment": "Ekipman",
+  "upgradeTrackerLevelsRemaining": "{count} seviye kaldı",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
       "count": {
@@ -3602,7 +3602,7 @@
       }
     }
   },
-  "upgradeTrackerCompletesOn": "Completes {date} · {duration}",
+  "upgradeTrackerCompletesOn": "{date} tarihinde tamamlanır · {duration}",
   "@upgradeTrackerCompletesOn": {
     "placeholders": {
       "date": {
