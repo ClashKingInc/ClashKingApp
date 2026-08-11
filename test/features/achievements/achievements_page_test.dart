@@ -151,13 +151,13 @@ void main() {
       find.byKey(const ValueKey('achievement-detail-sheet')),
       findsOneWidget,
     );
-    final detailScroll = tester.widget<SingleChildScrollView>(
+    expect(
       find.descendant(
         of: find.byKey(const ValueKey('achievement-detail-sheet')),
-        matching: find.byType(SingleChildScrollView),
+        matching: find.byType(Scrollable),
       ),
+      findsNothing,
     );
-    expect(detailScroll.physics, isA<ClampingScrollPhysics>());
     expect(
       find.byKey(const ValueKey('achievement-earned-count')),
       findsNothing,
@@ -288,24 +288,34 @@ void main() {
       'lib/features/achievements/presentation/achievement_model_viewer.dart',
     ).readAsStringSync();
     expect(source, contains('backgroundColor: Colors.transparent'));
-    expect(source, contains("minCameraOrbit: interactive ? 'auto 75deg 105%'"));
-    expect(source, contains("maxCameraOrbit: interactive ? 'auto 75deg 105%'"));
-    expect(source, contains('interpolationDecay: interactive ? 200 : null'));
-    expect(source, contains('autoRotate: interactive && enableIdleRotation'));
+    expect(
+      source,
+      contains("minCameraOrbit: widget.interactive ? 'auto 75deg 105%'"),
+    );
+    expect(
+      source,
+      contains("maxCameraOrbit: widget.interactive ? 'auto 75deg 105%'"),
+    );
+    expect(
+      source,
+      contains('interpolationDecay: widget.interactive ? 200 : null'),
+    );
+    expect(source, contains('touchAction: TouchAction.none'));
+    expect(source, contains('widget.interactive && widget.enableIdleRotation'));
     expect(source, contains('autoRotateDelay: 3000'));
     expect(source, contains("rotationPerSecond: '18deg'"));
     expect(source, isNot(contains('relatedJs:')));
   });
 
-  test('mobile drawer and desktop sidebar both route to Achievements', () {
+  test('Achievements uses compact actions instead of utility menu rows', () {
     final source = File('lib/core/app/my_home_page.dart').readAsStringSync();
     expect(
       RegExp(r'const AchievementsPage\(\)').allMatches(source),
       hasLength(2),
     );
-    expect(
-      RegExp(r'label: l10n\.achievementsTitle').allMatches(source),
-      hasLength(2),
-    );
+    expect(RegExp(r'Icons\.stars_rounded').allMatches(source), hasLength(2));
+    expect(source, contains('achievementsTooltip: l10n.achievementsTitle'));
+    expect(source, contains('tooltip: l10n.achievementsTitle'));
+    expect(source, isNot(contains('label: l10n.achievementsTitle')));
   });
 }

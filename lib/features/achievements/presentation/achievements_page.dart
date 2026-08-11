@@ -314,8 +314,7 @@ class _AchievementDetail extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: sheetRadius,
-          child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
+          child: Padding(
             padding: EdgeInsets.fromLTRB(
               CKSpacing.lg,
               CKSpacing.sm,
@@ -341,8 +340,7 @@ class _AchievementDetail extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 320,
+                    Expanded(
                       child: modelBuilder(
                         context,
                         AchievementModelRequest(

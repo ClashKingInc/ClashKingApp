@@ -323,6 +323,11 @@ class _DesktopWebHomeShell extends StatelessWidget {
                     title: pageTitles[selectedIndex],
                     searchHint: l10n.searchGlobalHint,
                     onSearchTap: onSearchTap,
+                    achievementsTooltip: l10n.achievementsTitle,
+                    onAchievementsTap: () => openDesktopPage(
+                      l10n.achievementsTitle,
+                      (_) => const AchievementsPage(),
+                    ),
                     manageAccountsTooltip: l10n.drawerManageAccounts,
                     onManageAccountsTap: () => openDesktopPage(
                       l10n.drawerManageAccounts,
@@ -402,6 +407,8 @@ class _DesktopHeader extends StatelessWidget {
     required this.title,
     required this.searchHint,
     required this.onSearchTap,
+    required this.achievementsTooltip,
+    required this.onAchievementsTap,
     required this.manageAccountsTooltip,
     required this.onManageAccountsTap,
   });
@@ -409,6 +416,8 @@ class _DesktopHeader extends StatelessWidget {
   final String title;
   final String searchHint;
   final VoidCallback onSearchTap;
+  final String achievementsTooltip;
+  final VoidCallback onAchievementsTap;
   final String manageAccountsTooltip;
   final VoidCallback onManageAccountsTap;
 
@@ -422,6 +431,12 @@ class _DesktopHeader extends StatelessWidget {
           child: _DesktopSearchButton(hint: searchHint, onTap: onSearchTap),
         ),
         const SizedBox(width: 12),
+        _DesktopQuickAction(
+          tooltip: achievementsTooltip,
+          icon: Icons.stars_rounded,
+          onTap: onAchievementsTap,
+        ),
+        const SizedBox(width: 8),
         _DesktopQuickAction(
           tooltip: manageAccountsTooltip,
           icon: Icons.person_add_alt_1_outlined,
@@ -668,15 +683,6 @@ class _DesktopSidebar extends StatelessWidget {
                         onTap: () => openUtility(
                           l10n.rankedLeagueTitle,
                           (_) => const _RankedLeagueAccountsPage(),
-                        ),
-                      ),
-                      _DesktopUtilityButton(
-                        icon: Icons.military_tech_outlined,
-                        label: l10n.achievementsTitle,
-                        selected: selectedUtility == l10n.achievementsTitle,
-                        onTap: () => openUtility(
-                          l10n.achievementsTitle,
-                          (_) => const AchievementsPage(),
                         ),
                       ),
                       if (appState.isFeatureEnabled(
@@ -1334,6 +1340,16 @@ class _AccountMenuDrawer extends StatelessWidget {
                         _DrawerAvatar(imageUrl: user?.avatarUrl ?? ''),
                         const Spacer(),
                         IconButton(
+                          tooltip: l10n.achievementsTitle,
+                          onPressed: () => _pushAndClose(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AchievementsPage(),
+                            ),
+                          ),
+                          icon: const Icon(Icons.stars_rounded, size: 22),
+                        ),
+                        IconButton(
                           tooltip: l10n.accountsAdd,
                           onPressed: () => _pushAndClose(
                             context,
@@ -1469,16 +1485,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) =>
                               const _RankedLeagueAccountsPage(),
-                        ),
-                      ),
-                    ),
-                    _DrawerMenuItem(
-                      icon: Icons.military_tech_outlined,
-                      label: l10n.achievementsTitle,
-                      onTap: () => _pushAndClose(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AchievementsPage(),
                         ),
                       ),
                     ),
