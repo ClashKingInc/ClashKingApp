@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
@@ -80,6 +81,22 @@ void main() {
       expect(history.single.roundsLost, 1);
       expect(fakeApi.getCallCounts['/cwl/%23CLAN/ranking-history'], isNull);
     });
+
+    test('keeps an empty successful history distinct from errors', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/cwl/%23EMPTY/seasons'] = http.Response(
+        '{"items":[]}',
+        200,
+      );
+      fakeApi.getStubs['/cwl/%23ERROR/seasons'] = http.Response('error', 503);
+      final service = ClanService(apiService: fakeApi);
+
+      expect(await service.getCwlRankingHistory('#EMPTY'), isEmpty);
+      await expectLater(
+        service.getCwlRankingHistory('#ERROR'),
+        throwsA(isA<HttpException>()),
+      );
+    });
   });
 
   // ---------------------------------------------------------------------------
@@ -121,6 +138,14 @@ void main() {
       await service.loadAllClanData(['#CLAN1', '#CLAN2']);
       expect(service.clans.containsKey('#CLAN1'), isTrue);
       expect(service.getClanByTag('#CLAN2')?.name, 'Bravo');
+    });
+
+    test('normalizes and deduplicates tags before loading', () async {
+      await service.loadAllClanData([' clan1 ', '#CLAN1', 'CLAN2']);
+
+      expect(fakeApi.getCallCounts['/clans/%23CLAN1'], 1);
+      expect(fakeApi.getCallCounts['/clans/%23CLAN2'], 1);
+      expect(service.getClanByTag('clan1')?.name, 'Alpha');
     });
 
     test('sets isLoading to false', () async {

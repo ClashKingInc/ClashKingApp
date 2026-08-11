@@ -26,6 +26,7 @@ class UpgradeTrackerRepository {
   final UpgradeTrackerParser _parser;
   final ApiService _apiService;
   final Map<String, UpgradeTrackerSnapshot> _snapshotCache = {};
+  final Map<String, Future<UpgradeTrackerSnapshot?>> _snapshotLoads = {};
   String? _remoteAccountId;
   Set<String> _verifiedRemoteTags = const {};
   int _cacheGeneration = 0;
@@ -54,6 +55,7 @@ class UpgradeTrackerRepository {
   /// resolves.
   void clearCache() {
     _snapshotCache.clear();
+    _snapshotLoads.clear();
     _remoteAccountId = null;
     _verifiedRemoteTags = const {};
     _cacheGeneration++;
@@ -73,11 +75,28 @@ class UpgradeTrackerRepository {
   }) async {
     await _ensureStaticData();
     final normalized = normalizeTag(playerTag);
-    final generation = _cacheGeneration;
     if (!forceRefresh) {
       final cached = _snapshotCache[normalized];
       if (cached != null) return cached;
     }
+    final existing = _snapshotLoads[normalized];
+    if (existing != null) return existing;
+    final generation = _cacheGeneration;
+    final load = _loadOnce(normalized, generation);
+    _snapshotLoads[normalized] = load;
+    try {
+      return await load;
+    } finally {
+      if (identical(_snapshotLoads[normalized], load)) {
+        _snapshotLoads.remove(normalized);
+      }
+    }
+  }
+
+  Future<UpgradeTrackerSnapshot?> _loadOnce(
+    String normalized,
+    int generation,
+  ) async {
     final remote = await _tryLoadRemoteSnapshot(normalized, generation);
     if (remote != null) return remote;
     final cached = _snapshotCache[normalized];

@@ -14,6 +14,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/services/error_reporter.dart';
+import 'package:clashkingapp/core/utils/bounded_concurrency.dart';
 
 class PlayerService extends ChangeNotifier {
   PlayerService({ApiService? apiService})
@@ -80,33 +81,32 @@ class PlayerService extends ChangeNotifier {
     StackTrace? firstLoadStackTrace;
 
     try {
-      final loadedProfiles = await Future.wait(
-        playerTags.map((rawTag) async {
-          final playerTag = _canonicalTag(rawTag);
-          if (playerTag.isEmpty) return null;
-          try {
-            final player = await _fetchOfficialPlayer(
-              playerTag,
-              extraHeaders: extraHeaders,
-            );
-            final clanTag = player.clanOverview.tag;
-            if (clanTag.isNotEmpty) {
-              clanTagsByPlayer[player.tag] = clanTag;
-              await storePrefs('player_${player.tag}_clan_tag', clanTag);
-            }
-            return player;
-          } catch (e, stackTrace) {
-            DebugUtils.debugWarning(
-              "⚠️ Failed to load official player profile for $playerTag: $e",
-            );
-            if (throwOnError) {
-              firstLoadError ??= e;
-              firstLoadStackTrace ??= stackTrace;
-            }
-            return null;
+      final normalizedTags = _uniqueCanonicalTags(playerTags);
+      final loadedProfiles = await mapWithConcurrencyLimit(normalizedTags, (
+        playerTag,
+      ) async {
+        try {
+          final player = await _fetchOfficialPlayer(
+            playerTag,
+            extraHeaders: extraHeaders,
+          );
+          final clanTag = player.clanOverview.tag;
+          if (clanTag.isNotEmpty) {
+            clanTagsByPlayer[player.tag] = clanTag;
+            await storePrefs('player_${player.tag}_clan_tag', clanTag);
           }
-        }),
-      );
+          return player;
+        } catch (e, stackTrace) {
+          DebugUtils.debugWarning(
+            "⚠️ Failed to load official player profile for $playerTag: $e",
+          );
+          if (throwOnError) {
+            firstLoadError ??= e;
+            firstLoadStackTrace ??= stackTrace;
+          }
+          return null;
+        }
+      });
 
       final profiles = loadedProfiles.whereType<Player>().toList();
       final loadedTags = profiles.map((player) => player.tag).toSet();
@@ -178,6 +178,14 @@ class PlayerService extends ChangeNotifier {
     final data =
         jsonDecode(ApiService.decodeResponseBody(response))
             as Map<String, dynamic>;
+    final responseTag = data['tag']?.toString();
+    if (responseTag == null ||
+        responseTag.isEmpty ||
+        _canonicalTag(responseTag) != _canonicalTag(playerTag)) {
+      throw const FormatException(
+        'Official player response omitted or mismatched the player tag.',
+      );
+    }
     return Player.fromJson(data);
   }
 
@@ -188,6 +196,12 @@ class PlayerService extends ChangeNotifier {
     }
     return '#$normalized';
   }
+
+  static List<String> _uniqueCanonicalTags(Iterable<String> tags) => tags
+      .map(_canonicalTag)
+      .where((tag) => tag.isNotEmpty)
+      .toSet()
+      .toList(growable: false);
 
   Future<PlayerJoinLeavePage> loadPlayerJoinLeave(
     String rawPlayerTag, {
@@ -299,6 +313,9 @@ class PlayerService extends ChangeNotifier {
   }
 
   final Map<String, RankedLeagueData> _rankedLeagueCache = {};
+  final Map<String, Future<RankedLeagueData>> _rankedLeagueLoads = {};
+  Future<Map<int, RankedLeagueTier>>? _leagueTiersLoad;
+  Map<int, RankedLeagueTier>? _leagueTiersCache;
   int _rankedLeagueCacheGeneration = 0;
 
   /// Drops the in-memory Ranked League cache — called on sign-out so a
@@ -310,6 +327,7 @@ class PlayerService extends ChangeNotifier {
   /// back into the cache once it resolves.
   void clearRankedLeagueCache() {
     _rankedLeagueCache.clear();
+    _rankedLeagueLoads.clear();
     _rankedLeagueCacheGeneration++;
   }
 
@@ -322,15 +340,15 @@ class PlayerService extends ChangeNotifier {
     Iterable<String> playerTags, {
     bool forceRefresh = false,
   }) async {
-    await Future.wait(
-      playerTags.map((tag) async {
-        try {
-          await loadRankedLeagueData(tag, forceRefresh: forceRefresh);
-        } catch (_) {
-          // Best-effort warm-up only; the real load surfaces its own errors.
-        }
-      }),
-    );
+    await mapWithConcurrencyLimit(_uniqueCanonicalTags(playerTags), (
+      tag,
+    ) async {
+      try {
+        await loadRankedLeagueData(tag, forceRefresh: forceRefresh);
+      } catch (_) {
+        // Best-effort warm-up only; the real load surfaces its own errors.
+      }
+    });
   }
 
   Future<RankedLeagueData> loadRankedLeagueData(
@@ -342,12 +360,22 @@ class PlayerService extends ChangeNotifier {
       final cached = _rankedLeagueCache[playerTag];
       if (cached != null) return cached;
     }
+    final existing = _rankedLeagueLoads[playerTag];
+    if (existing != null) return existing;
     final generation = _rankedLeagueCacheGeneration;
-    final data = await _fetchRankedLeagueData(playerTag);
-    if (generation == _rankedLeagueCacheGeneration) {
-      _rankedLeagueCache[playerTag] = data;
+    final load = _fetchRankedLeagueData(playerTag);
+    _rankedLeagueLoads[playerTag] = load;
+    try {
+      final data = await load;
+      if (generation == _rankedLeagueCacheGeneration) {
+        _rankedLeagueCache[playerTag] = data;
+      }
+      return data;
+    } finally {
+      if (identical(_rankedLeagueLoads[playerTag], load)) {
+        _rankedLeagueLoads.remove(playerTag);
+      }
     }
-    return data;
   }
 
   Future<RankedLeagueData> _fetchRankedLeagueData(String playerTag) async {
@@ -373,9 +401,9 @@ class PlayerService extends ChangeNotifier {
     final previousGroupTag = playerJson['previousLeagueGroupTag'] as String?;
     final previousSeasonId = _jsonInt(playerJson['previousLeagueSeasonId']);
 
+    final tiersLoad = _loadLeagueTiers();
     final responses = await Future.wait([
       _apiService.proxyGet('/players/$encodedPlayerTag/leaguehistory'),
-      _apiService.proxyGet('/leaguetiers'),
       if (currentGroupTag != null && currentSeasonId > 0)
         _apiService.proxyGet(
           '/leaguegroup/${Uri.encodeComponent(currentGroupTag)}/$currentSeasonId'
@@ -391,12 +419,9 @@ class PlayerService extends ChangeNotifier {
     final historyJson = responses[0].statusCode == 200
         ? _decodeMap(responses[0])
         : const <String, dynamic>{};
-    final tiersJson = responses[1].statusCode == 200
-        ? _decodeMap(responses[1])
-        : const <String, dynamic>{};
-    final tiers = _parseLeagueTiers(tiersJson);
+    final tiers = await tiersLoad;
 
-    var responseIndex = 2;
+    var responseIndex = 1;
     final currentGroup = _decodeLeagueGroup(
       responses,
       currentGroupTag != null && currentSeasonId > 0 ? responseIndex : null,
@@ -427,6 +452,31 @@ class PlayerService extends ChangeNotifier {
       history: history,
       currentGroup: currentGroup,
       previousGroup: previousGroup,
+    );
+  }
+
+  Future<Map<int, RankedLeagueTier>> _loadLeagueTiers() async {
+    final cached = _leagueTiersCache;
+    if (cached != null) return cached;
+    final existing = _leagueTiersLoad;
+    if (existing != null) return existing;
+
+    final load = _fetchLeagueTiers();
+    _leagueTiersLoad = load;
+    try {
+      final tiers = await load;
+      _leagueTiersCache = tiers;
+      return tiers;
+    } finally {
+      if (identical(_leagueTiersLoad, load)) _leagueTiersLoad = null;
+    }
+  }
+
+  Future<Map<int, RankedLeagueTier>> _fetchLeagueTiers() async {
+    final response = await _apiService.proxyGet('/leaguetiers');
+    if (response.statusCode != 200) return const {};
+    return Map<int, RankedLeagueTier>.unmodifiable(
+      _parseLeagueTiers(_decodeMap(response)),
     );
   }
 
@@ -496,15 +546,10 @@ class PlayerService extends ChangeNotifier {
   /// failure is swallowed independently so one bad tag doesn't block the
   /// rest - the local bookmark snapshot stays visible for it instead).
   Future<void> hydrateBookmarkedPlayers(List<String> tags) async {
-    await Future.wait(
-      tags.map((tag) async {
-        try {
-          await getPlayerAndClanData(tag);
-        } catch (_) {
-          // Keep the local bookmark snapshot visible if the full profile
-          // cannot load.
-        }
-      }),
+    await loadOfficialPlayerData(
+      _uniqueCanonicalTags(tags),
+      notify: false,
+      throwOnError: false,
     );
   }
 

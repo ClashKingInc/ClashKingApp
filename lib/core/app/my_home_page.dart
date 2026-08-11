@@ -52,14 +52,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  static const _mainPages = <Widget>[
-    DashboardPage(),
-    PlayersPage(),
-    ClanPage(),
-    WarCwlPage(),
+  static final _mainPageBuilders = <WidgetBuilder>[
+    (_) => const DashboardPage(),
+    (_) => const PlayersPage(),
+    (_) => const ClanPage(),
+    (_) => const WarCwlPage(),
   ];
 
   int _selectedIndex = 0;
+  late final List<Widget?> _mainPages;
   late PageController _pageController;
   late final AnnouncementService _announcementService;
   late final AnnouncementPresentationService _announcementPresentationService;
@@ -72,6 +73,8 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _mainPages = List<Widget?>.filled(_mainPageBuilders.length, null);
+    _mainPageAt(_selectedIndex);
     _pageController = PageController(initialPage: _selectedIndex);
     _announcementService = AnnouncementService();
     _announcementPresentationService = AnnouncementPresentationService();
@@ -121,6 +124,7 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   void _onPageChanged(int index) {
+    _mainPageAt(index);
     setState(() => _selectedIndex = index);
   }
 
@@ -129,6 +133,7 @@ class MyHomePageState extends State<MyHomePage> {
       (route) => route.isFirst,
     );
     if (_selectedIndex != index) {
+      _mainPageAt(index);
       setState(() => _selectedIndex = index);
     }
 
@@ -143,6 +148,12 @@ class MyHomePageState extends State<MyHomePage> {
         curve: CKMotion.standardCurve,
       );
     }
+  }
+
+  Widget _mainPageAt(int index) {
+    return _mainPages[index] ??= _RetainedMainPage(
+      builder: _mainPageBuilders[index],
+    );
   }
 
   void _schedulePageControllerSync() {
@@ -211,6 +222,7 @@ class MyHomePageState extends State<MyHomePage> {
       return _DesktopWebHomeShell(
         selectedIndex: _selectedIndex,
         pageController: _pageController,
+        mainPageAt: _mainPageAt,
         contentNavigatorKey: _desktopContentNavigatorKey,
         onItemTapped: _onItemTapped,
         onPageChanged: _onPageChanged,
@@ -234,11 +246,19 @@ class MyHomePageState extends State<MyHomePage> {
         onProfileTap: () => _scaffoldKey.currentState?.openDrawer(),
       ),
       body: kIsWeb
-          ? IndexedStack(index: _selectedIndex, children: _mainPages)
-          : PageView(
+          ? IndexedStack(
+              index: _selectedIndex,
+              children: List.generate(
+                _mainPages.length,
+                (index) => _mainPages[index] ?? const SizedBox.shrink(),
+              ),
+            )
+          : PageView.builder(
               controller: _pageController,
               onPageChanged: _onPageChanged,
-              children: _mainPages,
+              physics: const PageScrollPhysics(parent: ClampingScrollPhysics()),
+              itemCount: _mainPageBuilders.length,
+              itemBuilder: (context, index) => _mainPageAt(index),
             ),
       bottomNavigationBar: usesNativeGlassPlatform
           ? _NativeIOSTabBar(
@@ -250,6 +270,27 @@ class MyHomePageState extends State<MyHomePage> {
               onItemTapped: _onItemTapped,
             ),
     );
+  }
+}
+
+class _RetainedMainPage extends StatefulWidget {
+  const _RetainedMainPage({required this.builder});
+
+  final WidgetBuilder builder;
+
+  @override
+  State<_RetainedMainPage> createState() => _RetainedMainPageState();
+}
+
+class _RetainedMainPageState extends State<_RetainedMainPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.builder(context);
   }
 }
 
@@ -268,6 +309,7 @@ class _DesktopWebHomeShell extends StatelessWidget {
   const _DesktopWebHomeShell({
     required this.selectedIndex,
     required this.pageController,
+    required this.mainPageAt,
     required this.contentNavigatorKey,
     required this.onItemTapped,
     required this.onPageChanged,
@@ -276,6 +318,7 @@ class _DesktopWebHomeShell extends StatelessWidget {
 
   final int selectedIndex;
   final PageController pageController;
+  final Widget Function(int index) mainPageAt;
   final GlobalKey<NavigatorState> contentNavigatorKey;
   final ValueChanged<int> onItemTapped;
   final ValueChanged<int> onPageChanged;
@@ -339,16 +382,12 @@ class _DesktopWebHomeShell extends StatelessWidget {
                     child: Navigator(
                       key: contentNavigatorKey,
                       onGenerateRoute: (_) => _instantDesktopRoute(
-                        (_) => PageView(
+                        (_) => PageView.builder(
                           controller: pageController,
                           onPageChanged: onPageChanged,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: const [
-                            DashboardPage(),
-                            PlayersPage(),
-                            ClanPage(),
-                            WarCwlPage(),
-                          ],
+                          itemCount: 4,
+                          itemBuilder: (context, index) => mainPageAt(index),
                         ),
                       ),
                     ),
@@ -1311,7 +1350,7 @@ class _AccountMenuDrawer extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final user = authService.currentUser;
     final displayName = user?.username ?? 'ClashKing';
-    final followerCount = user == null ? 0 : 49;
+    final followerCount = authService.followerCount;
 
     return Drawer(
       width: math.min(MediaQuery.sizeOf(context).width * 0.82, 330),
@@ -1600,7 +1639,7 @@ class _DrawerAvatar extends StatelessWidget {
 class _DrawerCount extends StatelessWidget {
   const _DrawerCount({required this.value, required this.label});
 
-  final int value;
+  final int? value;
   final String label;
 
   @override
@@ -1613,7 +1652,7 @@ class _DrawerCount extends StatelessWidget {
         ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
         children: [
           TextSpan(
-            text: value.toString(),
+            text: value?.toString() ?? '—',
             style: TextStyle(
               color: colorScheme.onSurface,
               fontWeight: FontWeight.w800,

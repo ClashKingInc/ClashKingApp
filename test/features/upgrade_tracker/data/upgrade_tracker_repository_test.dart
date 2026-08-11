@@ -120,6 +120,35 @@ void main() {
     expect(api.lastPutBodies[endpoint], {'data': snapshot});
   });
 
+  test('coalesces concurrent normalized remote snapshot loads', () async {
+    final api = FakeApiService();
+    const endpoint = '/links/user-1/%23TEST/upgrades';
+    api.getStubs[endpoint] = http.Response(
+      jsonEncode({
+        'data': {
+          'tag': '#TEST',
+          'buildings': [
+            {'data': 1, 'lvl': 18},
+          ],
+        },
+      }),
+      200,
+    );
+    final repository = UpgradeTrackerRepository(apiService: api);
+    repository.configureRemote(
+      accountId: 'user-1',
+      verifiedPlayerTags: const {'#TEST'},
+    );
+
+    final snapshots = await Future.wait([
+      repository.load('test', forceRefresh: true),
+      repository.load('#TEST', forceRefresh: true),
+    ]);
+
+    expect(snapshots, everyElement(isNotNull));
+    expect(api.getCallCounts[endpoint], 1);
+  });
+
   test(
     'patches whole preference object for verified remote accounts',
     () async {

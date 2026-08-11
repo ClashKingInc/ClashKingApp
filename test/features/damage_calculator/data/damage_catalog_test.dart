@@ -3,7 +3,7 @@ import 'package:clashkingapp/features/damage_calculator/domain/damage_calculator
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('parses current static fields and Town Hall constraints', () {
+  test('parses millisecond attack speed and Town Hall constraints', () {
     final catalog = DamageCatalog.fromBundle(_bundle);
 
     expect(catalog.maxTownHall, 12);
@@ -170,7 +170,7 @@ final _bundle = <String, dynamic>{
   'troops': [
     {
       'name': 'Flame Flinger',
-      'attack_speed': 5,
+      'attack_speed': 5000,
       'levels': [
         {'level': 1, 'dps': 127, 'required_townhall': 11},
       ],
