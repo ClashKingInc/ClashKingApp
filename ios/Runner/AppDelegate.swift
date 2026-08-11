@@ -1,12 +1,18 @@
 import UIKit
 import Flutter
+import Darwin
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+  private let sharedAuthRefreshLock = SharedAuthRefreshLock()
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    UserDefaults(suiteName: "group.com.clashking.apps")?.removeObject(
+      forKey: "warWidgetAuthToken"
+    )
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
@@ -17,6 +23,46 @@ import Flutter
     }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "AppIconChannel") {
       registerAppIconChannel(with: registrar.messenger())
+    }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "SharedAuthRefreshLock") {
+      registerSharedAuthRefreshLockChannel(with: registrar.messenger())
+    }
+  }
+
+  private func registerSharedAuthRefreshLockChannel(with messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(
+      name: "clashking/shared_auth_lock",
+      binaryMessenger: messenger
+    )
+
+    channel.setMethodCallHandler { [weak self] call, result in
+      guard let self else {
+        result(FlutterError(code: "unavailable", message: "Refresh lock is unavailable.", details: nil))
+        return
+      }
+
+      switch call.method {
+      case "acquire":
+        DispatchQueue.global(qos: .userInitiated).async {
+          do {
+            try self.sharedAuthRefreshLock.acquire(timeout: 12)
+            DispatchQueue.main.async { result(nil) }
+          } catch {
+            DispatchQueue.main.async {
+              result(FlutterError(
+                code: "lock_failed",
+                message: error.localizedDescription,
+                details: nil
+              ))
+            }
+          }
+        }
+      case "release":
+        self.sharedAuthRefreshLock.release()
+        result(nil)
+      default:
+        result(FlutterMethodNotImplemented)
+      }
     }
   }
 
@@ -102,6 +148,87 @@ import Flutter
           result(FlutterMethodNotImplemented)
         }
       }
+    }
+  }
+}
+
+private final class SharedAuthRefreshLock {
+  private let stateLock = NSLock()
+  private var descriptor: Int32?
+
+  func acquire(timeout: TimeInterval) throws {
+    let container = FileManager.default.containerURL(
+      forSecurityApplicationGroupIdentifier: "group.com.clashking.apps"
+    )
+    guard let container else {
+      throw SharedAuthRefreshLockError.appGroupUnavailable
+    }
+
+    let path = container.appendingPathComponent("auth-refresh.lock").path
+    let fileDescriptor = open(path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)
+    guard fileDescriptor >= 0 else {
+      throw SharedAuthRefreshLockError.openFailed(errno)
+    }
+
+    let deadline = Date().addingTimeInterval(timeout)
+    while Darwin.flock(fileDescriptor, LOCK_EX | LOCK_NB) != 0 {
+      let lockError = errno
+      if lockError != EWOULDBLOCK && lockError != EAGAIN {
+        close(fileDescriptor)
+        throw SharedAuthRefreshLockError.acquireFailed(lockError)
+      }
+      if Date() >= deadline {
+        close(fileDescriptor)
+        throw SharedAuthRefreshLockError.timedOut
+      }
+      usleep(50_000)
+    }
+
+    stateLock.lock()
+    defer { stateLock.unlock() }
+    guard descriptor == nil else {
+      Darwin.flock(fileDescriptor, LOCK_UN)
+      close(fileDescriptor)
+      throw SharedAuthRefreshLockError.alreadyHeld
+    }
+    descriptor = fileDescriptor
+  }
+
+  func release() {
+    stateLock.lock()
+    let fileDescriptor = descriptor
+    descriptor = nil
+    stateLock.unlock()
+
+    guard let fileDescriptor else { return }
+    Darwin.flock(fileDescriptor, LOCK_UN)
+    close(fileDescriptor)
+  }
+
+  deinit {
+    release()
+  }
+}
+
+private enum SharedAuthRefreshLockError: LocalizedError {
+  case appGroupUnavailable
+  case openFailed(Int32)
+  case acquireFailed(Int32)
+  case timedOut
+  case alreadyHeld
+
+  var errorDescription: String? {
+    switch self {
+    case .appGroupUnavailable:
+      return "The shared App Group container is unavailable."
+    case .openFailed(let code):
+      return "Could not open the refresh lock file (errno \(code))."
+    case .acquireFailed(let code):
+      return "Could not acquire the refresh lock (errno \(code))."
+    case .timedOut:
+      return "Timed out waiting for another token refresh to finish."
+    case .alreadyHeld:
+      return "This process already holds the token refresh lock."
     }
   }
 }
