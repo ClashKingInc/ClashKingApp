@@ -3996,7 +3996,7 @@
       }
     }
   },
-  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "widgetBuilderTimePerk": "%{percent} inşaatçı süre avantajı",
   "@widgetBuilderTimePerk": {
     "placeholders": {
       "percent": {
@@ -4004,7 +4004,7 @@
       }
     }
   },
-  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "widgetLabCostPerk": "%{percent} laboratuvar maliyet avantajı",
   "@widgetLabCostPerk": {
     "placeholders": {
       "percent": {
@@ -4012,7 +4012,7 @@
       }
     }
   },
-  "widgetLabTimePerk": "{percent}% lab time perk",
+  "widgetLabTimePerk": "%{percent} laboratuvar süre avantajı",
   "@widgetLabTimePerk": {
     "placeholders": {
       "percent": {
@@ -4020,22 +4020,22 @@
       }
     }
   },
-  "farmGoalTitle": "Farm goal",
-  "farmGoalFormTitle": "Resources to farm",
-  "farmGoalAccountTitle": "Account",
-  "farmGoalAccountHint": "The selected account provides the Town Hall and current league used for the estimate.",
-  "farmGoalTargetTitle": "Building to upgrade",
-  "farmGoalTargetBuildingLabel": "Building",
-  "farmGoalChooseBuilding": "Choose a building",
+  "farmGoalTitle": "Ganimet hedefi",
+  "farmGoalFormTitle": "Toplanacak ganimetler",
+  "farmGoalAccountTitle": "Hesap",
+  "farmGoalAccountHint": "Seçilen hesap, hesaplama için gerekli olan Belediye Binası seviyesini ve mevcut ligi sağlar.",
+  "farmGoalTargetTitle": "Yükseltilecek bina",
+  "farmGoalTargetBuildingLabel": "Bina",
+  "farmGoalChooseBuilding": "Bir bina seçin",
   "farmGoalChangeBuilding": "Binayı değiştir",
   "farmGoalNoTargetTitle": "Bina seçilmedi",
   "farmGoalNoTargetBody": "Gerekli kaynak miktarını hesaplamak için yükseltmek istediğin binayı seç.",
-  "farmGoalTargetLevelLabel": "Target level",
-  "farmGoalUpgradeCostLabel": "Upgrade cost",
-  "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
-  "farmGoalLootTitle": "Estimated loot",
-  "farmGoalResourceLabel": "Resource",
-  "farmGoalAmountLabel": "Amount to farm",
+  "farmGoalTargetLevelLabel": "Hedef seviye",
+  "farmGoalUpgradeCostLabel": "Yükseltme maliyeti",
+  "farmGoalCostUnavailable": "Bu seviye için yükseltme maliyeti mevcut değil.",
+  "farmGoalLootTitle": "Tahmini ganimet",
+  "farmGoalResourceLabel": "Kaynak",
+  "farmGoalAmountLabel": "Toplanacak miktar",
   "farmGoalAverageLootLabel": "Köyde bulunan ganimet",
   "farmGoalPerfectLootHint": "Saldırıdan önce gösterilen ganimeti gir. Aşağıdaki lig bonusu otomatik olarak eklenir.",
   "farmGoalLeagueEstimate": "{league} lig bonusu: {amount} {resource}. Saldırı tahminlerine dahildir.",
@@ -4052,7 +4052,7 @@
       }
     }
   },
-  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "farmGoalStarBonusEstimate": "Yıldız bonusu: 5 yıldızdan sonra {amount} {resource}. Gereken saldırı sayısına dahil değildir.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
       "amount": {
@@ -4063,8 +4063,8 @@
       }
     }
   },
-  "farmGoalScenarioPerfect": "Perfect attack · 100%",
-  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "farmGoalScenarioPerfect": "Kusursuz saldırı · %100",
+  "farmGoalScenarioAtPercent": "%{percent} hasar",
   "@farmGoalScenarioAtPercent": {
     "placeholders": {
       "percent": {
@@ -4072,20 +4072,20 @@
       }
     }
   },
-  "farmGoalAttackShort": "attack",
-  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
-  "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
+  "farmGoalAttackShort": "saldırı",
+  "farmGoalScenarioHint": "Yaklaşık değer: Ganimet, yıkılan binaya göre değişir. Yüzdeler, kusursuz saldırı tahmininiz için geçerlidir.",
+  "farmGoalNoLeagueLoot": "Ganimet önerisi almak için ligi olan bir hesap seçin.",
   "farmGoalTrackerNextTitle": "Yükseltme Takibi planında sıradaki",
   "farmGoalTrackerMissingTitle": "Yükseltme Takibi verileri gerekli",
   "farmGoalTrackerMissingBody": "Sıradaki planlanmış binayı ve tam maliyetini burada göstermek için bu hesabın yükseltme JSON'unu Yükseltme Takibi'ne aktar.",
   "farmGoalTrackerPlanComplete": "Yükseltme Takibi'nde kalan bina yükseltmesi bulunamadı. Yine de manuel olarak bir bina seçebilirsin.",
   "farmGoalOpenUpgradeTracker": "Yükseltme Takibini aç",
   "farmGoalUseTrackerTarget": "Binayı kullan",
-  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
-  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
-  "farmGoalResultTitle": "Attacks needed",
-  "farmGoalAttacks": "attacks",
-  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
+  "farmGoalMissingTarget": "Gereken saldırıları hesaplamak için bir bina ve hedef seviye seçin.",
+  "farmGoalMissingValues": "Saldırı senaryolarını görmek için bir hedef ve kusursuz saldırı ganimet tahmini girin.",
+  "farmGoalResultTitle": "Gereken saldırı sayısı",
+  "farmGoalAttacks": "saldırılar",
+  "farmGoalResultSummary": "Kusursuz saldırı başına yaklaşık {average} ile {target} {resource}.",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
@@ -4099,7 +4099,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "BB{level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -4107,51 +4107,51 @@
       }
     }
   },
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "clanWarFrequencyTitle": "Wars",
-  "notifScopeAllAccounts": "All accounts",
+  "gameCreatorCode": "İçerik Üretici Kodu: ClashKing",
+  "todoExplanationRaidsTitle": "Baskınlar:",
+  "todoExplanationRaids": "Hesap başına 5 puan ağırlık (veya son saldırı açıldıysa 6 puan), 1 saldırı = 1 puan.",
+  "clanWarFrequencyTitle": "Savaşlar",
+  "notifScopeAllAccounts": "Tüm hesaplar",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
-  "settingsLiveActivityTest": "Live Activity Test",
+  "settingsLiveActivityTest": "Canlı Etkinlik Testi",
   "@settingsLiveActivityTest": {
     "description": "Settings section: live activity test (debug only)"
   },
-  "settingsLiveActivityStart": "Start test activity",
+  "settingsLiveActivityStart": "Test etkinliğini başlat",
   "@settingsLiveActivityStart": {
     "description": "Settings tile: start live activity test"
   },
-  "settingsLiveActivityStartSubtitle": "Shows a local clan-war preview.",
+  "settingsLiveActivityStartSubtitle": "Yerel bir klan savaşı önizlemesi gösterir.",
   "@settingsLiveActivityStartSubtitle": {
     "description": "Settings tile: start live activity subtitle"
   },
-  "settingsLiveActivityUpdate": "Update score",
+  "settingsLiveActivityUpdate": "Skoru güncelle",
   "@settingsLiveActivityUpdate": {
     "description": "Settings tile: update live activity score"
   },
-  "settingsLiveActivityUpdateSubtitle": "Advances the fake war score.",
+  "settingsLiveActivityUpdateSubtitle": "Sahte savaş skorunu ilerletir.",
   "@settingsLiveActivityUpdateSubtitle": {
     "description": "Settings tile: update live activity subtitle"
   },
-  "settingsLiveActivityEnd": "End test activity",
+  "settingsLiveActivityEnd": "Test etkinliğini sonlandır",
   "@settingsLiveActivityEnd": {
     "description": "Settings tile: end live activity test"
   },
-  "settingsLiveActivityEndSubtitle": "Removes the local preview.",
+  "settingsLiveActivityEndSubtitle": "Yerel önizlemeyi kaldırır.",
   "@settingsLiveActivityEndSubtitle": {
     "description": "Settings tile: end live activity subtitle"
   },
-  "notifSelectedAccounts": "Selected accounts",
+  "notifSelectedAccounts": "Seçilen hesaplar",
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "Filters",
+  "searchFilters": "Filtreler",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} takip edilen hesap",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
       "loaded": {
@@ -4162,30 +4162,30 @@
       }
     }
   },
-  "calculatorsModeDamage": "Damage",
-  "calculatorsModeFarmGoal": "Farm goal",
-  "damageCalculatorTitle": "Damage Calculator",
-  "damageAccountPresetShort": "Account",
-  "damageChooseAccount": "Choose an account",
-  "damageSwitchAccount": "Switch account",
-  "damageAccountSelectorHint": "The levels used follow the selected account.",
-  "damageNoAccountsAvailable": "No verified account available",
-  "damageTargetSectionTitle": "Building to destroy",
-  "damageChooseTarget": "Choose a building",
-  "damageNoTargetTitle": "No building selected",
-  "damageNoTargetBody": "Choose a building to see how much damage it can take.",
-  "damageTargetLevelLabel": "Target level",
-  "damageCommonBuildings": "Most commonly chosen",
-  "damageAllBuildings": "All buildings",
-  "damageQuickSetups": "Choose a method",
-  "damageQuickSetupZapQuake": "Zap + quake",
-  "damageQuickSetupFireballQuake": "Fireball + quake",
-  "damageQuickSetupGiantArrow": "Giant Arrow",
-  "damageQuickSetupFlameFlinger": "Flame Flinger",
-  "damageQuickSetupCustom": "Custom",
-  "damageClearStack": "Clear",
-  "damageNoDamageSelected": "No damage",
-  "damageSelectedSourcesCount": "{count} source(s)",
+  "calculatorsModeDamage": "Hasar",
+  "calculatorsModeFarmGoal": "Ganimet hedefi",
+  "damageCalculatorTitle": "Hasar Hesaplayıcı",
+  "damageAccountPresetShort": "Hesap",
+  "damageChooseAccount": "Bir hesap seçin",
+  "damageSwitchAccount": "Hesabı değiştir",
+  "damageAccountSelectorHint": "Kullanılan seviyeler seçilen hesaba göre belirlenir.",
+  "damageNoAccountsAvailable": "Kullanılabilir doğrulanmış hesap yok",
+  "damageTargetSectionTitle": "Yıkılacak bina",
+  "damageChooseTarget": "Bir bina seçin",
+  "damageNoTargetTitle": "Bina seçilmedi",
+  "damageNoTargetBody": "Ne kadar hasar alabileceğini görmek için bir bina seçin.",
+  "damageTargetLevelLabel": "Hedef seviye",
+  "damageCommonBuildings": "En sık seçilenler",
+  "damageAllBuildings": "Tüm binalar",
+  "damageQuickSetups": "Bir yöntem seçin",
+  "damageQuickSetupZapQuake": "Yıldırım + deprem",
+  "damageQuickSetupFireballQuake": "Alev Topu + deprem",
+  "damageQuickSetupGiantArrow": "Dev Ok",
+  "damageQuickSetupFlameFlinger": "Alev Fırlatıcı",
+  "damageQuickSetupCustom": "Özel",
+  "damageClearStack": "Temizle",
+  "damageNoDamageSelected": "Hasar yok",
+  "damageSelectedSourcesCount": "{count} kaynak",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {
@@ -4193,35 +4193,35 @@
       }
     }
   },
-  "damageNoActiveSources": "Choose a method to show the damage sources to adjust.",
-  "damageOtherSources": "Other sources",
-  "damageShowAllSources": "Add another source",
-  "damageShowFewerSources": "Hide other sources",
-  "searchCancel": "Cancel",
-  "todoRaidAttacks": "Raid attacks",
-  "todoMockRaid4Left": "4 left",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
-  "todoMockRaid1Left": "1 left",
-  "gameAssetsCategoryBuildings": "Buildings",
-  "gameAssetsCategoryCapitalBase": "Capital Base",
-  "gameAssetsCategoryCapitalHouseParts": "Capital House Parts",
-  "gameAssetsCategoryChests": "Chests",
-  "gameAssetsCategoryClanLabels": "Clan Labels",
-  "gameAssetsCategoryCountryFlags": "Country Flags",
-  "gameAssetsCategoryDecorations": "Decorations",
-  "gameAssetsCategoryEquipment": "Equipment",
-  "gameAssetsCategoryGuardians": "Guardians",
-  "gameAssetsCategoryHeroes": "Heroes",
-  "gameAssetsCategoryPets": "Pets",
-  "gameAssetsCategorySkins": "Skins",
-  "gameAssetsCategorySpells": "Spells",
-  "gameAssetsCategoryTroops": "Troops",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "endpointStateWins": "Wins",
-  "notifGroupBattles": "Battles",
-  "notifGroupSupport": "Support",
-  "rankedLeagueAccountSelector": "Shown account",
-  "rankedLeagueStars": "Stars"
+  "damageNoActiveSources": "Ayarlanacak hasar kaynaklarını görmek için bir yöntem seçin.",
+  "damageOtherSources": "Diğer kaynaklar",
+  "damageShowAllSources": "Başka kaynak ekle",
+  "damageShowFewerSources": "Diğer kaynakları gizle",
+  "searchCancel": "İptal",
+  "todoRaidAttacks": "Baskın saldırıları",
+  "todoMockRaid4Left": "4 tane kaldı",
+  "todoMockWarAltStatus": "18 dk. önce aktifti · savaş ve baskınlarla ilgilenilmesi gerekiyor",
+  "todoMockRaid1Left": "1 tane kaldı",
+  "gameAssetsCategoryBuildings": "Binalar",
+  "gameAssetsCategoryCapitalBase": "Başkent Düzeni",
+  "gameAssetsCategoryCapitalHouseParts": "Başkent Evi Parçaları",
+  "gameAssetsCategoryChests": "Sandıklar",
+  "gameAssetsCategoryClanLabels": "Klan Etiketleri",
+  "gameAssetsCategoryCountryFlags": "Ülke Bayrakları",
+  "gameAssetsCategoryDecorations": "Dekorasyonlar",
+  "gameAssetsCategoryEquipment": "Ekipman",
+  "gameAssetsCategoryGuardians": "Muhafızlar",
+  "gameAssetsCategoryHeroes": "Kahramanlar",
+  "gameAssetsCategoryPets": "Evcil Hayvanlar",
+  "gameAssetsCategorySkins": "Kostümler",
+  "gameAssetsCategorySpells": "Büyüler",
+  "gameAssetsCategoryTroops": "Birlikler",
+  "assetFolderTroops": "Birlikler",
+  "assetFolderSpells": "Büyüler",
+  "assetFolderHeroes": "Kahramanlar",
+  "endpointStateWins": "Galibiyetler",
+  "notifGroupBattles": "Savaşlar",
+  "notifGroupSupport": "Destek",
+  "rankedLeagueAccountSelector": "Gösterilen hesap",
+  "rankedLeagueStars": "Yıldızlar"
 }
