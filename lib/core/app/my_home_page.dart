@@ -667,9 +667,8 @@ class _DesktopSidebar extends StatelessWidget {
                         AppFeatureFlags.leaderboards,
                       ))
                         _DesktopUtilityButton(
-                          icon: Icons.leaderboard_outlined,
-                          assetUrl: ImageAssets.podium,
-                          assetScale: 1.2,
+                          icon: LucideIcons.podium,
+                          iconColor: CKColors.warGold,
                           label: l10n.clanRankingsTab,
                           selected: selectedUtility == l10n.clanRankingsTab,
                           onTap: () => openUtility(
@@ -681,7 +680,7 @@ class _DesktopSidebar extends StatelessWidget {
                         AppFeatureFlags.globalStats,
                       ))
                         _DesktopUtilityButton(
-                          icon: LucideIcons.podium,
+                          icon: LucideIcons.chartPie,
                           iconColor: CKColors.secondaryBlue,
                           label: l10n.generalStats,
                           selected: selectedUtility == l10n.generalStats,
@@ -1451,9 +1450,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.leaderboards))
                       _DrawerMenuItem(
-                        icon: Icons.leaderboard_outlined,
-                        assetUrl: ImageAssets.podium,
-                        assetScale: 1.2,
+                        icon: LucideIcons.podium,
+                        iconColor: CKColors.warGold,
                         label: l10n.clanRankingsTab,
                         onTap: () => _pushAndClose(
                           context,
@@ -1464,7 +1462,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.globalStats))
                       _DrawerMenuItem(
-                        icon: LucideIcons.podium,
+                        icon: LucideIcons.chartPie,
                         iconColor: CKColors.secondaryBlue,
                         label: l10n.generalStats,
                         onTap: () => _pushAndClose(
