@@ -15,15 +15,15 @@
   "accountVerificationSuccess": "Ο λογαριασμός επαληθεύτηκε με επιτυχία!",
   "generalRetry": "Επανάληψη",
   "generalRetrying": "Νέα προσπάθεια...",
-  "postsTitle": "Posts",
-  "postsDescription": "ClashKing news, update stories, and previous announcements.",
-  "postsEmpty": "No published posts yet.",
-  "postsLoadFailed": "Posts could not be loaded.",
-  "postsLoadMore": "Load more",
-  "postsCurrent": "Current",
-  "postsPast": "Past",
-  "postsStory": "Interactive story",
-  "postsPinned": "Featured",
+  "postsTitle": "Δημοσιεύσεις",
+  "postsDescription": "Ειδήσεις ClashKing, ενημερώσεις ιστοριών και προηγούμενες ανακοινώσεις.",
+  "postsEmpty": "Δεν υπάρχουν ακόμη δημοσιευμένες αναρτήσεις.",
+  "postsLoadFailed": "Δεν ήταν δυνατή η φόρτωση των αναρτήσεων.",
+  "postsLoadMore": "Φόρτωσε περισσότερα",
+  "postsCurrent": "Ρεύμα",
+  "postsPast": "Παρελθόν",
+  "postsStory": "Διαδραστική ιστορία",
+  "postsPinned": "Προτεινόμενα",
   "generalTryAgain": "Δοκιμάστε ξανά",
   "generalReset": "Επαναφορά",
   "generalCancel": "Ακύρωση",
@@ -250,12 +250,12 @@
   "authDiscordSignIn": "Είσοδος με Discord",
   "authDiscordContinue": "Συνέχεια με Discord",
   "authDiscordDescription": "Συγχρόνισε τα δεδομένα σου με το ClashKing Bot και ξεκλείδωσε όλες τις δυνατότητες του ClashKing!",
-  "authEmail": "Email",
+  "authEmail": "Ηλεκτρονικό ταχυδρομείο",
   "authEmailHint": "Πληκτρολόγησε τη διεύθυνση email σου",
   "authEmailDescription": "Χρησιμοποίησε email αν δεν έχεις πρόσβαση στο Discord ή προτιμάς λειτουργίες μόνο στην εφαρμογή",
   "authEmailRequired": "Παρακαλώ πληκτρολόγησε το email σου",
   "authEmailInvalid": "Παρακαλώ πληκτρολόγησε έγκυρο email",
-  "authPasswordLabel": "Password",
+  "authPasswordLabel": "Κωδικός πρόσβασης",
   "authPasswordHint": "Πληκτρολόγησε τον κωδικό πρόσβασής σου",
   "authPasswordConfirm": "Επιβεβαίωση κωδικού πρόσβασης",
   "authPasswordRequired": "Παρακαλώ πληκτρολόγησε τον κωδικό πρόσβασής σου",
@@ -309,9 +309,9 @@
   "authAccountLinkEmail": "Σύνδεση λογαριασμού email",
   "authAccountAddEmailAuth": "Πρόσθεσε πιστοποίηση email και κωδικού πρόσβασης στον λογαριασμό σου για πρόσθετη ασφάλεια.",
   "authAccountEmailLinkedSuccess": "Ο λογαριασμός email συνδέθηκε με επιτυχία!",
-  "authAccountLinkDiscord": "Link Discord Account",
-  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
-  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
+  "authAccountLinkDiscord": "Σύνδεση λογαριασμού Discord",
+  "authAccountAddDiscordAuth": "Προσθέστε έλεγχο ταυτότητας Discord στον λογαριασμό σας για συγχρονισμό μεταξύ πλατφορμών και πρόσβαση στο ClashKing Bot.",
+  "authAccountDiscordLinkedSuccess": "Ο λογαριασμός Discord συνδέθηκε με επιτυχία!",
   "authEmailVerificationTitle": "Επαλήθευση email",
   "authEmailVerificationCheckEmail": "Έλεγξε το email σου",
   "authEmailVerificationSentTo": "Στείλαμε email επαλήθευσης στο:",
@@ -467,7 +467,7 @@
   "gameTrophies": "Τρόπαια",
   "gameBuilderBaseTrophies": "Τρόπαια Βάσης Κατασκευαστή",
   "gameDonations": "Δωρεές",
-  "gameDonationsReceived": "Donations Received",
+  "gameDonationsReceived": "Ληφθέντα",
   "gameDonationsRatio": "Αναλογία δωρεών",
   "gameLevel": "Επίπεδο: {level}/{maxLevel}",
   "@gameLevel": {
@@ -638,7 +638,7 @@
       }
     }
   },
-  "legendsTitle": "Ανακριβή δεδομένα;",
+  "legendsTitle": "Λίγκα Θρύλων",
   "legendsNotInLeague": "Εκτός επιπέδου Θρύλου",
   "legendsNoDataToday": "Δεν είσαι στη Legend League, αλλά υπάρχουν διαθέσιμες προηγούμενες σεζόν.",
   "legendsStartDescription": "Ξεκινήσατε τη μέρα με {trophies} τρόπαια.",
@@ -776,7 +776,7 @@
   "todoExplanationCwl": "Βάρος έως και 1 πόντο για κάθε λογαριασμό, 1 επίθεση = 1 πόντος. Το «CWL» δεν μπορεί να καταγραφεί εάν ο παίχτης δεν βρίσκεται μέσα στην ομάδα του πρωταθλήματος.",
   "todoExplanationPassAndGamesTitle": "Πάσο σεζόν & Παιχνίδια Φυλής:",
   "todoExplanationPassAndGames": "Βάρος έως και 2 πόντους για κάθε λογαριασμό. Η αναλογία βασίζεται στον αριθμό ημερών που απομένουν (1 μήνα για το πάσο σεζόν και 6 ημέρες για τα παιχνίδια). Πράσινο = σε τροχιά να ολοκληρωθεί το πάσο ή τα παιχνίδια, κόκκινο = πίσω από το πρόγραμμα.",
-  "todoExplanationConclusion": "Το τελικό ποσοστό υπολογίζεται διαιρώντας το σύνολο των ολοκληρωμένων ενεργειών στο χρόνο διάρκειας των «events» με το σύνολο των απαιτούμενων ενεργειών. Ανενεργού λογαριασμοί για περισσότερο από 14 ημέρες εξαιρούνται από τον υπολογισμό.",
+  "todoExplanationConclusion": "Το τελικό ποσοστό υπολογίζεται διαιρώντας το σύνολο των ολοκληρωμένων ενεργειών κατά τη διάρκεια των τρεχόντων συμβάντων με το σύνολο των απαιτούμενων ενεργειών.",
   "todoAccountsNumber": "{number} λογαριασμοί",
   "@todoAccountsNumber": {
     "placeholders": {
@@ -876,7 +876,7 @@
   "warStatsLast50": "Τελευταία 50",
   "warStatsWars": "Πόλεμοι",
   "warStatsSelectSeason": "Επιλέξτε σεζόν στατιστικών πολέμου",
-  "warOngoing": "Ongoing war",
+  "warOngoing": "Πόλεμος σε εξέλιξη",
   "warIsNotInWar": "Το {clan} δεν βρίσκεται σε πόλεμο.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -1017,7 +1017,7 @@
       }
     }
   },
-  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "warAnalysisCannotLose": "{clanName} δεν μπορεί πλέον να χάσει",
   "@warAnalysisCannotLose": {
     "placeholders": {
       "clanName": {
@@ -1025,9 +1025,9 @@
       }
     }
   },
-  "warAnalysisSecuredBadge": "Secured",
-  "warAnalysisAlreadySecured": "Already secured",
-  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "warAnalysisSecuredBadge": "Ασφαλής",
+  "warAnalysisAlreadySecured": "Ήδη εξασφαλισμένο",
+  "warAnalysisSecureAgainst": "Στόχος υπολογιζόμενος με την παραδοχή {clanName} χρησιμοποιεί όλες τις υπόλοιπες επιθέσεις.",
   "@warAnalysisSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1035,7 +1035,7 @@
       }
     }
   },
-  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "warAnalysisCannotSecureAgainst": "Δεν μπορεί να διασφαλιστεί μαθηματικά εάν {clanName} βελτιστοποιεί όλες τις υπόλοιπες επιθέσεις.",
   "@warAnalysisCannotSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1043,8 +1043,8 @@
       }
     }
   },
-  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
-  "warAnalysisStarGoal": "+{stars} star(s)",
+  "warAnalysisNoSecureObjective": "Δεν μπορεί να ασφαλιστεί με τις υπόλοιπες επιθέσεις",
+  "warAnalysisStarGoal": "+{stars} αστέρι(α)",
   "@warAnalysisStarGoal": {
     "placeholders": {
       "stars": {
@@ -1052,7 +1052,7 @@
       }
     }
   },
-  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "warAnalysisRemainingAttempts": "{attacks} Επίθεση (ες) αριστερά",
   "@warAnalysisRemainingAttempts": {
     "placeholders": {
       "attacks": {
@@ -1060,7 +1060,7 @@
       }
     }
   },
-  "warAnalysisNoBetterResult": "No better result is possible",
+  "warAnalysisNoBetterResult": "Δεν είναι δυνατό καλύτερο αποτέλεσμα",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -1368,7 +1368,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Τρέχων γύρος (Γύρος {round})",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1649,33 +1649,33 @@
   "faqFeaturesLegendsDescription": "Καθημερινή παρακολούθηση τροπαίων και στατιστικά τέλους σεζόν",
   "faqFeaturesCwlTitle": "Αναλυτικά CWL",
   "faqFeaturesCwlDescription": "Απόδοση Clan War League και συνεισφορές μελών",
-  "faqFeaturesTodoTitle": "To-do checklist",
-  "faqFeaturesTodoDescription": "See which accounts still need Ranked attacks, raids, war attacks, Clan Games, or pass actions",
-  "faqFeaturesUpgradeTrackerTitle": "Upgrade Tracker",
-  "faqFeaturesUpgradeTrackerDescription": "Use a manual account snapshot provided by the user to see remaining upgrades, resources, builders, lab time, and progress",
-  "faqFeaturesNotificationsTitle": "Push notifications",
-  "faqFeaturesNotificationsDescription": "Choose which accounts should receive alerts for supported ClashKing events",
-  "faqFeaturesWidgetsTitle": "War widgets",
-  "faqFeaturesWidgetsDescription": "Keep current war status visible on your home screen where widgets are supported",
+  "faqFeaturesTodoTitle": "Λίστα ελέγχου υποχρεώσεων",
+  "faqFeaturesTodoDescription": "Δείτε ποιοι λογαριασμοί χρειάζονται ακόμα επιθέσεις κατάταξης, επιδρομές, πολεμικές επιθέσεις, παιχνίδια φυλής ή ενέργειες πάσας",
+  "faqFeaturesUpgradeTrackerTitle": "Αναβάθμιση Tracker",
+  "faqFeaturesUpgradeTrackerDescription": "Χρησιμοποιήστε ένα μη αυτόματο στιγμιότυπο λογαριασμού που παρέχεται από τον χρήστη για να δείτε τις υπόλοιπες αναβαθμίσεις, τους πόρους, τα προγράμματα δημιουργίας, τον χρόνο εργαστηρίου και την πρόοδο",
+  "faqFeaturesNotificationsTitle": "Ειδοποιήσεις push",
+  "faqFeaturesNotificationsDescription": "Επιλέξτε ποιοι λογαριασμοί θα λαμβάνουν ειδοποιήσεις για υποστηριζόμενες εκδηλώσεις ClashKing",
+  "faqFeaturesWidgetsTitle": "Γραφικά στοιχεία πολέμου",
+  "faqFeaturesWidgetsDescription": "Διατηρήστε την τρέχουσα κατάσταση πολέμου ορατή στην αρχική οθόνη σας όπου υποστηρίζονται γραφικά στοιχεία",
   "faqSearchHint": "Αναζήτηση στις συχνές ερωτήσεις...",
   "faqSectionGettingStarted": "Ξεκίνημα & πληροφορίες",
-  "faqSectionAccountsAlertsWidgets": "Accounts, alerts & widgets",
+  "faqSectionAccountsAlertsWidgets": "Λογαριασμοί, ειδοποιήσεις και γραφικά στοιχεία",
   "faqSectionSupportAndContact": "Υποστήριξη & επικοινωνία",
-  "faqLinkedAccountsTitle": "How do linked accounts and verification work?",
-  "faqLinkedAccountsAnswer": "Your ClashKing profile can include several Clash of Clans accounts. Adding a tag shows public data. Verifying with the Clash of Clans API token proves the account is yours and unlocks account-specific features.",
-  "faqLinkedAccountsSolution1": "Manage, reorder, hide, or remove accounts from account management.",
-  "faqLinkedAccountsSolution2": "Find the API token in Clash of Clans under Settings > More Settings > API Token.",
-  "faqLinkedAccountsSolution3": "You can sign in with Discord or email. When account connections are available, manage them from Settings.",
-  "faqNotificationsTitle": "How do notifications work?",
-  "faqNotificationsAnswer": "Notifications are optional. When enabled, ClashKing registers this device. You can choose which linked accounts each alert targets.",
-  "faqNotificationsSolution1": "Allow notifications on your device and in ClashKing settings.",
-  "faqNotificationsSolution2": "Each alert can target different accounts. Check the selected accounts if an alert is missing.",
-  "faqNotificationsSolution3": "Some alerts depend on tracked clan or war data. Delays can happen while external data updates.",
-  "faqWidgetsTitle": "How do war widgets work?",
-  "faqWidgetsAnswer": "War widgets show a quick summary on supported devices. They use your selected or linked accounts, cached ClashKing data, and background refreshes when the platform allows them.",
-  "faqWidgetsSolution1": "Open the app after changing accounts or clans so the widget can sync.",
-  "faqWidgetsSolution2": "If a widget looks stale, refresh the app first. Android and iOS limit background updates.",
-  "faqWidgetsSolution3": "The clan needs accessible war data to show useful status.",
+  "faqLinkedAccountsTitle": "Πώς λειτουργούν οι συνδεδεμένοι λογαριασμοί και η επαλήθευση;",
+  "faqLinkedAccountsAnswer": "Το προφίλ σας στο ClashKing μπορεί να περιλαμβάνει πολλούς λογαριασμούς Clash of Clans. Η προσθήκη μιας ετικέτας εμφανίζει δημόσια δεδομένα. Η επαλήθευση με το διακριτικό API Clash of Clans αποδεικνύει ότι ο λογαριασμός είναι δικός σας και ξεκλειδώνει λειτουργίες που αφορούν τον λογαριασμό.",
+  "faqLinkedAccountsSolution1": "Διαχειριστείτε, αναδιατάξετε, αποκρύψτε ή καταργήστε λογαριασμούς από τη διαχείριση λογαριασμών.",
+  "faqLinkedAccountsSolution2": "Βρείτε το διακριτικό API στο Clash of Clans στις Ρυθμίσεις > Περισσότερες ρυθμίσεις > διακριτικό API.",
+  "faqLinkedAccountsSolution3": "Μπορείτε να συνδεθείτε με Discord ή email. Όταν είναι διαθέσιμες οι συνδέσεις λογαριασμών, διαχειριστείτε τις από τις Ρυθμίσεις.",
+  "faqNotificationsTitle": "Πώς λειτουργούν οι ειδοποιήσεις;",
+  "faqNotificationsAnswer": "Οι ειδοποιήσεις είναι προαιρετικές. Όταν είναι ενεργοποιημένο, το ClashKing καταχωρεί αυτήν τη συσκευή. Μπορείτε να επιλέξετε ποιους συνδεδεμένους λογαριασμούς στοχεύει κάθε ειδοποίηση.",
+  "faqNotificationsSolution1": "Επιτρέψτε τις ειδοποιήσεις στη συσκευή σας και στις ρυθμίσεις του ClashKing.",
+  "faqNotificationsSolution2": "Κάθε ειδοποίηση μπορεί να στοχεύει διαφορετικούς λογαριασμούς. Ελέγξτε τους επιλεγμένους λογαριασμούς εάν λείπει μια ειδοποίηση.",
+  "faqNotificationsSolution3": "Ορισμένες ειδοποιήσεις εξαρτώνται από δεδομένα φυλής ή πολέμου που παρακολουθούνται. Καθυστερήσεις μπορεί να συμβούν κατά την ενημέρωση εξωτερικών δεδομένων.",
+  "faqWidgetsTitle": "Πώς λειτουργούν τα γραφικά στοιχεία πολέμου;",
+  "faqWidgetsAnswer": "Τα γραφικά στοιχεία πολέμου εμφανίζουν μια γρήγορη σύνοψη σε υποστηριζόμενες συσκευές. Χρησιμοποιούν τους επιλεγμένους ή συνδεδεμένους λογαριασμούς σας, τα αποθηκευμένα δεδομένα ClashKing και τις ανανεώσεις φόντου όταν το επιτρέπει η πλατφόρμα.",
+  "faqWidgetsSolution1": "Ανοίξτε την εφαρμογή αφού αλλάξετε λογαριασμούς ή φυλές, ώστε το γραφικό στοιχείο να μπορεί να συγχρονιστεί.",
+  "faqWidgetsSolution2": "Εάν ένα γραφικό στοιχείο φαίνεται παλιό, ανανεώστε πρώτα την εφαρμογή. Το Android και το iOS περιορίζουν τις ενημερώσεις παρασκηνίου.",
+  "faqWidgetsSolution3": "Η φυλή χρειάζεται προσβάσιμα δεδομένα πολέμου για να δείξει χρήσιμη κατάσταση.",
   "faqTranslationIssue": "Λείπει ή είναι λάθος κάποια μετάφραση;",
   "faqTranslationIssueAnswer": "Οι μεταφράσεις ξεκινούν με εργαλεία παραγωγής και AI και στη συνέχεια ελέγχονται και βελτιώνονται με τον χρόνο. Αν είσαι φυσικός ομιλητής και κάτι ακούγεται περίεργο, μπορείς να προτείνεις διόρθωση στο Crowdin ή να επικοινωνήσεις μαζί μας στο Discord ή μέσω email.",
   "faqWaysToSupport": "Τρόποι να μας στηρίξεις:",
@@ -2141,7 +2141,7 @@
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
-  "generalError": "Error",
+  "generalError": "Λάθος",
   "generalSuccess": "Επιτυχία",
   "generalFailed": "Απέτυχε",
   "generalMinimum": "Ελάχιστο",
@@ -2319,23 +2319,23 @@
   "gameItemAttackSpeed": "Ταχύτητα επίθεσης",
   "gameItemAttackRange": "Εμβέλεια επίθεσης",
   "gameItemMovementSpeed": "Ταχύτητα κίνησης",
-  "gameItemWardenWeight": "Warden weight",
+  "gameItemWardenWeight": "Βάρος φύλακα",
   "@gameItemWardenWeight": {
     "description": "Grand Warden follow-priority weight for a game item"
   },
-  "gameItemWardenWeightTooltip": "Warden weight can override housing space and determines how strongly the Grand Warden prioritizes following a unit group.",
+  "gameItemWardenWeightTooltip": "Το βάρος του Warden μπορεί να παρακάμψει τον χώρο στέγασης και καθορίζει πόσο έντονα δίνει προτεραιότητα ο Grand Warden ακολουθώντας μια ομάδα μονάδων.",
   "@gameItemWardenWeightTooltip": {
     "description": "Explains how Warden weight affects Grand Warden follow priority"
   },
-  "gameItemHealerWeight": "Healer weight",
+  "gameItemHealerWeight": "Βάρος θεραπευτή",
   "@gameItemHealerWeight": {
     "description": "Healer targeting-priority weight for a game item"
   },
-  "gameItemHealerWeightTooltip": "Healer weight can override housing space when Healers decide which units to prioritize.",
+  "gameItemHealerWeightTooltip": "Το βάρος του Θεραπευτή μπορεί να παρακάμψει τον χώρο στέγασης όταν οι Θεραπευτές αποφασίσουν σε ποιες μονάδες θα δώσουν προτεραιότητα.",
   "@gameItemHealerWeightTooltip": {
     "description": "Explains how Healer weight affects targeting priority"
   },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 στρατός για να ακολουθήσει το κατώφλι} other{{count} στρατεύματα για να ακολουθήσουν το κατώφλι}}",
   "@gameItemWardenThresholdCopies": {
     "description": "Number of copies needed to reach the Grand Warden follow threshold",
     "placeholders": {
@@ -2344,7 +2344,7 @@
       }
     }
   },
-  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "gameItemWardenNoThresholdContribution": "Δεν συμβάλλει στην τήρηση του ορίου",
   "@gameItemWardenNoThresholdContribution": {
     "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
   },
@@ -2569,10 +2569,10 @@
   "capitalRaidMembersNoIndividualData": "Δεν υπάρχει λίστα παικτών ή μεμονωμένες επιθέσεις για αυτήν την επιδρομή.",
   "dashboardNoLinkedAccountsTitle": "Δεν υπάρχουν συνδεδεμένοι λογαριασμοί",
   "dashboardNoLinkedAccountsBody": "Συνδέστε έναν λογαριασμό Clash για να δείτε επιθέσεις, συμβάντα και δραστηριότητα εδώ.",
-  "dashboardTodoHiddenTitle": "No accounts shown here",
-  "dashboardTodoHiddenBody": "Turn on one of the home card options (to-do, Upgrade Tracker, Ranked) for an account in the Players tab to see it here.",
-  "dashboardUpgradeTrackerNoData": "Open the tracker to import or refresh upgrade data.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {needs an update} other {need an update}}",
+  "dashboardTodoHiddenTitle": "Δεν εμφανίζονται λογαριασμοί εδώ",
+  "dashboardTodoHiddenBody": "Ενεργοποιήστε μία από τις επιλογές αρχικής κάρτας (εκκρεμότητες, Παρακολούθηση αναβάθμισης, Κατάταξη) για έναν λογαριασμό στην καρτέλα Παίκτες για να τη δείτε εδώ.",
+  "dashboardUpgradeTrackerNoData": "Ανοίξτε το πρόγραμμα παρακολούθησης για να εισαγάγετε ή να ανανεώσετε δεδομένα αναβάθμισης.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject}  {count, plural, one {χρειάζεται ενημέρωση} other {Χρειάζομαι ενημέρωση}}",
   "@dashboardUpgradeTrackerNeedsUpdate": {
     "placeholders": {
       "subject": {
@@ -2583,7 +2583,7 @@
       }
     }
   },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {has tasks left} other {have tasks left}}",
+  "todoAccountsHaveTasksLeft": "{subject}  {count, plural, one {Έχει απομείνει εργασίες} other {έχουν απομείνει εργασίες}}",
   "@todoAccountsHaveTasksLeft": {
     "placeholders": {
       "subject": {
@@ -2594,7 +2594,7 @@
       }
     }
   },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {has attacks left} other {have attacks left}}",
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject}  {count, plural, one {έχει απομείνει επιθέσεις} other {έχουν απομείνει επιθέσεις}}",
   "@dashboardRankedAccountsHaveAttacksLeft": {
     "placeholders": {
       "subject": {
@@ -2605,14 +2605,14 @@
       }
     }
   },
-  "dashboardUpgradeTrackerTimeLeft": "Projected",
-  "dashboardUpgradeTrackerBuilders": "Builders",
-  "dashboardUpgradeTrackerLab": "Lab",
-  "dashboardUpgradeTrackerPets": "Pets",
-  "dashboardUpgradeTrackerWalls": "Walls",
-  "dashboardUpgradeTrackerVillage": "Village",
-  "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
-  "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerTimeLeft": "Προβλεπόμενα",
+  "dashboardUpgradeTrackerBuilders": "Οικοδόμοι",
+  "dashboardUpgradeTrackerLab": "Εργαστήριο",
+  "dashboardUpgradeTrackerPets": "Κατοικίδια",
+  "dashboardUpgradeTrackerWalls": "Τοίχοι",
+  "dashboardUpgradeTrackerVillage": "Χωριό",
+  "dashboardRankedNoData": "Ανοίξτε το Ranked League για να δείτε την κατάσταση αυτού του λογαριασμού.",
+  "dashboardRankedAccounts": "{loaded}/{total} Λογαριασμοί που παρακολουθούνται",
   "@dashboardRankedAccounts": {
     "placeholders": {
       "loaded": {
@@ -2653,20 +2653,20 @@
   "tooltipHidePassword": "Απόκρυψη κωδικού πρόσβασης",
   "tooltipRemoveAccount": "Κατάργηση λογαριασμού",
   "calculatorsTitle": "Αριθμομηχανές",
-  "calculatorsSubtitle": "Zap quake and fireball quake.",
+  "calculatorsSubtitle": "Σχεδιάστε τη ζημιά με βάση τα τρέχοντα επίπεδα κτιρίων.",
   "calculatorZapQuake": "Ζαπ σεισμός",
   "calculatorFireball": "βολίδα",
-  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
-  "damageNoStaticDataTitle": "Damage data is unavailable",
-  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
-  "damageTownHall": "Town Hall",
-  "damageVerifiedAccountPrefill": "Verified account preset",
-  "damageOverridesStayLocal": "Changes here do not update the player account.",
-  "damageTargets": "Buildings",
-  "damageAddBuilding": "Add building",
-  "damageRemoveBuilding": "Remove building",
-  "damageNoTargetsBody": "Add at least one building to compare results.",
-  "damageHitpoints": "{hitpoints} HP",
+  "damageCalculatorSubtitle": "Συγκρίνετε μια στοίβα επίθεσης με πολλά κτίρια.",
+  "damageNoStaticDataTitle": "Τα δεδομένα ζημιών δεν είναι διαθέσιμα",
+  "damageNoStaticDataBody": "Ανανεώστε την εφαρμογή μετά την ολοκλήρωση της φόρτωσης στατικών δεδομένων παιχνιδιού.",
+  "damageTownHall": "Δημαρχείο",
+  "damageVerifiedAccountPrefill": "Προεπιλογή επαληθευμένου λογαριασμού",
+  "damageOverridesStayLocal": "Οι αλλαγές εδώ δεν ενημερώνουν τον λογαριασμό παίκτη.",
+  "damageTargets": "Κτίρια",
+  "damageAddBuilding": "Προσθήκη κτιρίου",
+  "damageRemoveBuilding": "Αφαίρεση κτιρίου",
+  "damageNoTargetsBody": "Προσθέστε τουλάχιστον ένα κτίριο για να συγκρίνετε τα αποτελέσματα.",
+  "damageHitpoints": "{hitpoints} Η HP",
   "@damageHitpoints": {
     "placeholders": {
       "hitpoints": {
@@ -2674,13 +2674,13 @@
       }
     }
   },
-  "damageSearchBuildings": "Search buildings",
-  "damageNoBuildingsFound": "No buildings found",
-  "damageTryAnotherSearch": "Try another name or Town Hall level.",
-  "damageAttackStack": "Manual attack stack",
-  "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
-  "damageCount": "Count",
-  "damagePerUse": "{damage} damage per use",
+  "damageSearchBuildings": "Αναζήτηση κτιρίων",
+  "damageNoBuildingsFound": "Δεν βρέθηκαν κτίρια",
+  "damageTryAnotherSearch": "Δοκιμάστε άλλο όνομα ή επίπεδο Δημαρχείου.",
+  "damageAttackStack": "Στοίβα χειροκίνητης επίθεσης",
+  "damageNoSourcesForTownHall": "Δεν υπάρχουν υποστηριζόμενες πηγές ζημιών σε αυτό το Δημαρχείο.",
+  "damageCount": "Καταμέτρηση",
+  "damagePerUse": "{damage} Ζημιά ανά χρήση",
   "@damagePerUse": {
     "placeholders": {
       "damage": {
@@ -2688,7 +2688,7 @@
       }
     }
   },
-  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "damageEarthquakePercent": "{percent}% της μέγιστης Ζωής, που μειώνεται όταν συσσωρεύεται",
   "@damageEarthquakePercent": {
     "placeholders": {
       "percent": {
@@ -2696,17 +2696,17 @@
       }
     }
   },
-  "damageSourceLightning": "Lightning",
-  "damageSourceEarthquake": "Earthquake",
-  "damageSourceGiantArrow": "Giant Arrow",
-  "damageSourceFireball": "Fireball",
-  "damageSourceFlameFlinger": "Flame Flinger hit",
-  "damageSourceBalloonDeath": "Balloon death damage",
-  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
-  "damageResults": "Results",
-  "damageDestroyed": "Destroyed",
-  "damageSurvives": "Survives",
-  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "damageSourceLightning": "Αστραπή",
+  "damageSourceEarthquake": "Σεισμός",
+  "damageSourceGiantArrow": "Γιγαντιαίο βέλος",
+  "damageSourceFireball": "βολίδα",
+  "damageSourceFlameFlinger": "Χτύπημα Φλογο Φτερού",
+  "damageSourceBalloonDeath": "Ζημιά θανάτου από μπαλόνι",
+  "damageSourceRocketBalloonDeath": "Ζημιά θανάτου από μπαλόνι πυραύλων",
+  "damageResults": "Αποτελέσματα",
+  "damageDestroyed": "Καταστράφηκε",
+  "damageSurvives": "Επιβιώνει",
+  "damageResultSummary": "{damage} ζημιά · {remaining} HP που απομένουν",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -2717,10 +2717,10 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake optimizer",
-  "damageSpellCapacity": "Spell capacity",
-  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
-  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "damageZapQuakeOptimizer": "Βελτιστοποίηση Zap Quake",
+  "damageSpellCapacity": "Ικανότητα ορθογραφίας",
+  "damageZapQuakeUnavailable": "Ο κεραυνός και ο σεισμός δεν είναι διαθέσιμοι σε αυτό το Δημαρχείο.",
+  "damageZapQuakeUsesSelectedLevels": "Χρήση επιπέδου Lightning {lightningLevel} και Επίπεδο σεισμού {earthquakeLevel}.",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -2731,9 +2731,9 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
-  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
-  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "damageZapQuakeIneligible": "Ο κεραυνός και ο σεισμός δεν μπορούν να βλάψουν αυτόν τον αποθηκευτικό χώρο.",
+  "damageNoValidZapQuake": "Κανένας έγκυρος συνδυασμός δεν ταιριάζει στην επιλεγμένη χωρητικότητα ξορκιού.",
+  "damageZapQuakeCombination": "{lightning} ΖΑΠ + {earthquake} σεισμός · {capacity} Χώρος",
   "@damageZapQuakeCombination": {
     "placeholders": {
       "lightning": {
@@ -2754,19 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Προσθέστε ή ανανεώστε τους συνδεδεμένους λογαριασμούς για να δείτε τα σύνολα αναβάθμισης.",
   "playerOptionNotificationsTitle": "Ειδοποιήσεις",
   "playerOptionNotificationsSubtitle": "Λάβετε ειδοποιήσεις για αυτόν τον λογαριασμό.",
-  "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
-  "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
-  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
-  "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
+  "playerOptionNotificationsEnableMaster": "Ενεργοποιήστε πρώτα τις ειδοποιήσεις στις Ρυθμίσεις.",
+  "playerOptionNotificationsVerifyFirst": "Επαληθεύστε αυτόν τον λογαριασμό για να ενεργοποιήσετε τις ειδοποιήσεις.",
+  "playerOptionNotificationsSubscriptionRequired": "Απαιτείται συνδρομή για ειδοποιήσεις σελιδοδεικτών.",
+  "playerOptionNotificationsLimitReached": "Το όριο ειδοποιήσεων σελιδοδεικτών σας έχει συμπληρωθεί.",
   "playerOptionShowTodoPageTitle": "Εμφάνιση στη σελίδα υποχρεώσεων",
   "playerOptionShowTodoPageSubtitle": "Συμπεριλάβετε αυτόν τον λογαριασμό στην πλήρη λίστα υποχρεώσεων.",
-  "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Show Upgrade Tracker on Home",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Pin this account's upgrade summary on Home.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verify this account to show upgrade progress on Home.",
-  "playerOptionShowRankedHomeTitle": "Show Ranked on Home",
-  "playerOptionShowRankedHomeSubtitle": "Pin this account's Ranked League summary on Home.",
-  "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
+  "playerOptionShowTodoPageVerifyFirst": "Επαληθεύστε αυτόν τον λογαριασμό για να τον εμφανίσετε στη σελίδα υποχρεώσεων.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Εμφάνιση παρακολούθησης αναβάθμισης στην αρχική σελίδα",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Καρφιτσώστε τη σύνοψη αναβάθμισης αυτού του λογαριασμού στην Αρχική σελίδα.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Επαληθεύστε αυτόν τον λογαριασμό για να εμφανίσετε την πρόοδο αναβάθμισης στην Αρχική σελίδα.",
+  "playerOptionShowRankedHomeTitle": "Εμφάνιση Κατάταξης στην Αρχική Σελίδα",
+  "playerOptionShowRankedHomeSubtitle": "Καρφιτσώστε τη σύνοψη του Ranked League αυτού του λογαριασμού στην Αρχική σελίδα.",
+  "playerOptionShowRankedHomeVerifyFirst": "Επαληθεύστε αυτόν τον λογαριασμό για να εμφανίσετε τη σύνοψη του Ranked League στην Αρχική σελίδα.",
   "playerOptionShowWarTabTitle": "Εμφάνιση στην καρτέλα War",
   "playerOptionShowWarTabSubtitle": "Συμπεριλάβετε τη φυλή αυτού του λογαριασμού στην καρτέλα War.",
   "bookmarkPlayerLoadFailed": "Η φόρτωση της συσκευής αναπαραγωγής με σελιδοδείκτη απέτυχε.",
@@ -2808,10 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · δεν υπάρχουν ανοιχτές εργασίες",
   "todoMockCaughtUpStatus": "Ενεργός σήμερα · δεν χρειάζεται καμία ενέργεια",
   "notifChooseAlerts": "Επιλέξτε ειδοποιήσεις",
-  "notifGroupLegendAttacks": "Legend I attacks",
-  "notifLegendAttacksDescription": "Attack results for notification-enabled bookmarked accounts in Legend I.",
-  "notifGroupLegendDefenses": "Legend I defenses",
-  "notifLegendDefensesDescription": "Defense results for notification-enabled accounts in Legend I.",
+  "notifGroupLegendAttacks": "Ο Θρύλος Ι επιτίθεται",
+  "notifLegendAttacksDescription": "Αποτελέσματα επίθεσης για λογαριασμούς με σελιδοδείκτες με δυνατότητα ειδοποίησης στο Υπόμνημα I.",
+  "notifGroupLegendDefenses": "Άμυνες Legend I",
+  "notifLegendDefensesDescription": "Αποτελέσματα άμυνας για λογαριασμούς με δυνατότητα ειδοποίησης στο Υπόμνημα I.",
   "notifLeagueDefenseDescription": "Αποτελέσματα άμυνας με επιθετικό, αστέρια, ποσοστό και πλαίσιο πρωταθλήματος.",
   "notifWarAttackOptionsDescription": "Αποτελέσματα επίθεσης πολέμου, ειδοποιήσεις άμυνας και επιλογές τροφοδοσίας επίθεσης 5v5.",
   "notifWarAlertsDescription": "Ο πόλεμος ταίριαξε, η μέρα της μάχης ξεκίνησε και ο πόλεμος τελείωσε.",
@@ -2832,7 +2832,7 @@
   "warFiltersFriendlyWars": "Φιλικοί Πόλεμοι",
   "warType": "Τύπος πολέμου",
   "warFiltersAnyTownHall": "Οποιοδήποτε TH",
-  "gameTownHallLevelShort": "TH{level}",
+  "gameTownHallLevelShort": "Θ{level}",
   "warAttackerTownHall": "Επιτιθέμενος Θ",
   "warDefenderTownHall": "Συνήγορος Θ",
   "warStatsFilterSameTownHallOnly": "Μόνο το ίδιο Δημαρχείο",
@@ -2877,7 +2877,7 @@
   "resourceDarkElixir": "Σκοτεινό ελιξίριο",
   "resourceBuilderElixir": "Ελιξίριο Κατασκευαστή",
   "resourceBuilderGold": "Χρυσός Κατασκευαστή",
-  "resourceElixir": "Elixir",
+  "resourceElixir": "Ελιξίριο",
   "resourceGold": "Χρυσός",
   "resourceGlowyOre": "Glowy ore",
   "resourceStarryOre": "Starry ore",
@@ -2906,8 +2906,8 @@
   "clanCapitalPoints": "Πόντοι Πρωτεύουσας",
   "todoAllAccounts": "Όλοι οι λογαριασμοί",
   "todoCombinedAcrossAccounts": "Συνδυασμένο to-do σε όλους τους λογαριασμούς σου",
-  "dashboardRankedCombinedAcrossAccounts": "Combined ranking across your accounts",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Combined upgrade tracking across your accounts",
+  "dashboardRankedCombinedAcrossAccounts": "Συνδυασμένη κατάταξη στους λογαριασμούς σας",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Συνδυασμένη παρακολούθηση αναβάθμισης στους λογαριασμούς σας",
   "todoPreviewAccount": "Προεπισκόπηση λογαριασμού",
   "todoLastActiveUnavailable": "Η τελευταία δραστηριότητα δεν είναι διαθέσιμη",
   "todoActiveRelative": "Ενεργό {time}",
@@ -2961,25 +2961,25 @@
   "sideRankingsEmptyTitle": "Δεν επιστράφηκαν κατατάξεις",
   "sideRankingsEmptyBody": "Δοκίμασε άλλο πίνακα κατάταξης ή τοποθεσία.",
   "sideRankingsMockups": "Mockups ClashKing",
-  "rankingsHomeVillage": "Home Village",
-  "rankingsBuilderBase": "Builder Base",
-  "rankingsTownHall": "Town Hall",
-  "rankingsRankedLeague": "Ranked League",
-  "rankingsClanCapital": "Clan Capital",
-  "rankingsDonations": "Donations",
-  "rankingsWarWins": "War Wins",
-  "rankingsWinStreak": "Win Streak",
-  "rankingsCurrent": "Current",
-  "rankingsWorldwide": "Worldwide",
-  "rankingsSelectLocation": "Select a location",
-  "rankingsSearchLocations": "Search locations or country codes",
-  "rankingsWorldwideUnavailable": "Choose a region or country for this leaderboard.",
-  "rankingsLocationsLoadFailed": "The full location list could not be loaded. Worldwide is still available where supported.",
-  "rankingsSnapshotDate": "Snapshot date",
-  "rankingsSource": "Source",
-  "rankingsOfficialSource": "Official Clash API",
-  "rankingsResults": "Results",
-  "rankingsTopCount": "Top {count}",
+  "rankingsHomeVillage": "Αρχική Χωριό",
+  "rankingsBuilderBase": "Βάση Χτίστη",
+  "rankingsTownHall": "Δημαρχείο",
+  "rankingsRankedLeague": "Πρωτάθλημα Κατάταξης",
+  "rankingsClanCapital": "Πρωτεύουσα Φυλής",
+  "rankingsDonations": "Δωρεές",
+  "rankingsWarWins": "Ο πόλεμος κερδίζει",
+  "rankingsWinStreak": "Σερί νικών",
+  "rankingsCurrent": "Ρεύμα",
+  "rankingsWorldwide": "Σε όλο τον κόσμο",
+  "rankingsSelectLocation": "Επιλέξτε μια τοποθεσία",
+  "rankingsSearchLocations": "Αναζήτηση τοποθεσιών ή κωδικών χωρών",
+  "rankingsWorldwideUnavailable": "Επιλέξτε μια περιοχή ή μια χώρα για αυτόν τον πίνακα κορυφαίων παικτών.",
+  "rankingsLocationsLoadFailed": "Δεν ήταν δυνατή η φόρτωση της πλήρους λίστας τοποθεσιών. Σε όλο τον κόσμο εξακολουθεί να είναι διαθέσιμο όπου υποστηρίζεται.",
+  "rankingsSnapshotDate": "Ημερομηνία στιγμιότυπου",
+  "rankingsSource": "Πηγή",
+  "rankingsOfficialSource": "Επίσημο API του Clash",
+  "rankingsResults": "Αποτελέσματα",
+  "rankingsTopCount": "Πάνω {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -2987,8 +2987,8 @@
       }
     }
   },
-  "rankingsNoSnapshotTitle": "No stored snapshot",
-  "rankingsNoSnapshotBody": "No ranking snapshot is stored for {date}. Choose another date or return to Current.",
+  "rankingsNoSnapshotTitle": "Δεν υπάρχει αποθηκευμένο στιγμιότυπο",
+  "rankingsNoSnapshotBody": "Δεν αποθηκεύεται στιγμιότυπο κατάταξης για {date}. Επιλέξτε άλλη ημερομηνία ή επιστρέψτε στην επιλογή Τρέχουσα.",
   "@rankingsNoSnapshotBody": {
     "placeholders": {
       "date": {
@@ -2996,18 +2996,18 @@
       }
     }
   },
-  "rankingsPlayerLoadFailed": "Failed to load this player.",
-  "rankingsClanLoadFailed": "Failed to load this clan.",
+  "rankingsPlayerLoadFailed": "Αποτυχία φόρτωσης αυτού του προγράμματος αναπαραγωγής.",
+  "rankingsClanLoadFailed": "Αποτυχία φόρτωσης αυτής της φυλής.",
   "sideStatsTitle": "Στατιστικά",
-  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsSubtitle": "Στατιστικά πινάκων κατάταξης από επίσημες επιφάνειες του Clash API.",
   "sideStatsLoadError": "Δεν ήταν δυνατή η φόρτωση πληροφοριών μάχης.",
   "statsOverview": "Επισκόπηση",
   "statsArmies": "Στρατοί",
   "statsItems": "Είδη",
   "statsWar": "Πόλεμος",
   "statsCwl": "CWL",
-  "statsRanked": "Ranked",
-  "statsDateRange": "Date range",
+  "statsRanked": "Αγώνες Κατάταξης",
+  "statsDateRange": "Εύρος ημερομηνιών",
   "statsDateRangeHint": "Επιλέξτε έως και 90 ημέρες",
   "statsDateRangeTooLong": "Επιλέξτε ένα εύρος ημερομηνιών 90 ημερών ή λιγότερο.",
   "statsUpdated": "Νέα δεδομένα",
@@ -3025,7 +3025,7 @@
   "statsThreeStarRate": "Τιμή τριών αστέρων",
   "statsDailyTrend": "Καθημερινή τάση",
   "statsPlayers": "Παίκτες",
-  "statsClans": "Clans",
+  "statsClans": "Clan",
   "statsPlayersInWar": "Παίκτες στον πόλεμο",
   "statsClansInWar": "Φυλές σε πόλεμο",
   "statsPlayersInLegends": "Παίκτες στο Legends",
@@ -3043,7 +3043,7 @@
   "statsTroop": "Στρατός",
   "statsSpell": "Ξόρκι",
   "statsHero": "Ήρωας",
-  "statsPet": "Pet",
+  "statsPet": "Κατοικίδιο",
   "statsEquipment": "Εξοπλισμός",
   "statsOwningHero": "Ιδιοκτήτης ήρωας",
   "statsAddItem": "Προσθήκη στοιχείου",
@@ -3067,7 +3067,7 @@
   "statsCwlSeasons": "Εποχές CWL",
   "statsCwlSeasonsHint": "ΕΕΕΕ-ΜΜ, διαχωρισμένα με κόμμα",
   "statsApplyFilters": "Εφαρμόστε φίλτρα",
-  "statsRefresh": "Refresh data",
+  "statsRefresh": "Ανανέωση δεδομένων",
   "statsRegularWarOnly": "Μόνο τακτικοί πόλεμοι. εξαιρούνται οι φιλικοί πόλεμοι και το CWL.",
   "statsRankedRequired": "Απαιτείται Δημαρχείο και μία βαθμίδα πρωταθλήματος.",
   "statsSeasonBreakdown": "Ανάλυση σεζόν",
@@ -3087,11 +3087,11 @@
   "sideArmyLinksBody": "Σύνθεση, ξόρκια, siege, σημειώσεις και σύνδεσμος κοινοποίησης.",
   "sideGameAssetsTitle": "Assets παιχνιδιού",
   "sideGameAssetsSubtitle": "Φιλοξενούμενα assets του ClashKing, ομαδοποιημένα ανά φάκελο.",
-  "gameAssetsLoadError": "Could not load game assets",
-  "gameAssetsEmptyTitle": "No game assets available",
-  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
-  "gameAssetsOneImage": "1 image",
-  "gameAssetsImageCount": "{count} images",
+  "gameAssetsLoadError": "Δεν ήταν δυνατή η φόρτωση των στοιχείων του παιχνιδιού",
+  "gameAssetsEmptyTitle": "Δεν υπάρχουν διαθέσιμα στοιχεία παιχνιδιού",
+  "gameAssetsEmptyBody": "Η φιλοξενούμενη διακήρυξη δεν περιείχε υποστηριζόμενες εικόνες.",
+  "gameAssetsOneImage": "1 εικόνα",
+  "gameAssetsImageCount": "{count} εικόνες",
   "@gameAssetsImageCount": {
     "placeholders": {
       "count": {
@@ -3099,10 +3099,10 @@
       }
     }
   },
-  "gameAssetsSearchHint": "Search this category",
-  "gameAssetsAllFormats": "All formats",
-  "gameAssetsOneResult": "1 result",
-  "gameAssetsResultCount": "{count} results",
+  "gameAssetsSearchHint": "Αναζήτηση σε αυτήν την κατηγορία",
+  "gameAssetsAllFormats": "Όλες οι μορφές",
+  "gameAssetsOneResult": "1 αποτέλεσμα",
+  "gameAssetsResultCount": "Αποτελέσματα {count}",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3110,20 +3110,20 @@
       }
     }
   },
-  "gameAssetsNoResultsTitle": "No matching images",
-  "gameAssetsNoResultsBody": "Try another search or file format.",
-  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
-  "gameAssetsCopyUrl": "Copy URL",
-  "gameAssetsCopyPath": "Copy path",
-  "gameAssetsUrlCopied": "Asset URL copied",
-  "gameAssetsPathCopied": "Asset path copied",
-  "gameAssetsCopyError": "Could not copy the asset details.",
-  "gameAssetsShare": "Share",
-  "gameAssetsShareError": "Could not share this asset.",
-  "gameAssetsSave": "Save",
-  "gameAssetsSaving": "Saving...",
-  "gameAssetsSaved": "Asset saved.",
-  "gameAssetsSavedTo": "Asset saved to {path}",
+  "gameAssetsNoResultsTitle": "Δεν υπάρχουν αντίστοιχες εικόνες",
+  "gameAssetsNoResultsBody": "Δοκιμάστε άλλη μορφή αναζήτησης ή αρχείου.",
+  "gameAssetsLongPressHint": "Πατήστε παρατεταμένα για να αντιγράψετε τη φιλοξενούμενη διεύθυνση URL",
+  "gameAssetsCopyUrl": "Αντιγραφή διεύθυνσης URL",
+  "gameAssetsCopyPath": "Αντιγραφή διαδρομής",
+  "gameAssetsUrlCopied": "Αντιγράφηκε η διεύθυνση URL στοιχείου",
+  "gameAssetsPathCopied": "Αντιγράφηκε η διαδρομή του στοιχείου",
+  "gameAssetsCopyError": "Δεν ήταν δυνατή η αντιγραφή των στοιχείων του στοιχείου.",
+  "gameAssetsShare": "Κοινοποίηση",
+  "gameAssetsShareError": "Δεν ήταν δυνατή η κοινή χρήση αυτού του περιουσιακού στοιχείου.",
+  "gameAssetsSave": "Αποθήκευση",
+  "gameAssetsSaving": "Οικονομία...",
+  "gameAssetsSaved": "Το περιουσιακό στοιχείο αποθηκεύτηκε.",
+  "gameAssetsSavedTo": "Αποθηκευμένο στοιχείο σε {path}",
   "@gameAssetsSavedTo": {
     "placeholders": {
       "path": {
@@ -3131,7 +3131,7 @@
       }
     }
   },
-  "gameAssetsSaveError": "Could not save this asset.",
+  "gameAssetsSaveError": "Δεν ήταν δυνατή η αποθήκευση αυτού του περιουσιακού στοιχείου.",
   "sideZapQuakeTitle": "{zaps} αστραπές + 1 σεισμός",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -3465,7 +3465,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "Θ{level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -3474,11 +3474,11 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Πολιτική Fan Content της Supercell",
-  "upgradeTrackerPlan": "Plan",
-  "upgradeTrackerUpgrades": "Upgrades",
-  "upgradeTrackerCollection": "Collection",
-  "upgradeTrackerChooseAccount": "Choose account",
-  "upgradeTrackerSwitchAccount": "Switch account, {account}",
+  "upgradeTrackerPlan": "Σχέδιο",
+  "upgradeTrackerUpgrades": "Αναβαθμίσεις",
+  "upgradeTrackerCollection": "Συλλογή",
+  "upgradeTrackerChooseAccount": "Επιλέξτε λογαριασμό",
+  "upgradeTrackerSwitchAccount": "Εναλλαγή λογαριασμού, {account}",
   "@upgradeTrackerSwitchAccount": {
     "placeholders": {
       "account": {
@@ -3486,14 +3486,14 @@
       }
     }
   },
-  "upgradeTrackerShare": "Share tracker",
-  "upgradeTrackerPasteJson": "Paste account JSON",
-  "upgradeTrackerImportTitle": "Import account data",
-  "upgradeTrackerImportDescription": "Paste the raw account JSON. It stays on this device.",
-  "upgradeTrackerAccountJson": "Account JSON",
-  "upgradeTrackerPasteClipboard": "Paste clipboard",
-  "upgradeTrackerImportAction": "Import account",
-  "upgradeTrackerImportSuccess": "{player} was imported on this device.",
+  "upgradeTrackerShare": "Κοινή χρήση ιχνηλάτη",
+  "upgradeTrackerPasteJson": "Επικόλληση λογαριασμού JSON",
+  "upgradeTrackerImportTitle": "Εισαγωγή δεδομένων λογαριασμού",
+  "upgradeTrackerImportDescription": "Επικολλήστε τον ακατέργαστο λογαριασμό JSON. Παραμένει σε αυτήν τη συσκευή.",
+  "upgradeTrackerAccountJson": "JSON λογαριασμού",
+  "upgradeTrackerPasteClipboard": "Επικόλληση προχείρου",
+  "upgradeTrackerImportAction": "Εισαγωγή λογαριασμού",
+  "upgradeTrackerImportSuccess": "{player} εισήχθη σε αυτήν τη συσκευή.",
   "@upgradeTrackerImportSuccess": {
     "placeholders": {
       "player": {
@@ -3501,7 +3501,7 @@
       }
     }
   },
-  "upgradeTrackerImportFailed": "Could not import account data: {error}",
+  "upgradeTrackerImportFailed": "Δεν ήταν δυνατή η εισαγωγή δεδομένων λογαριασμού: {error}",
   "@upgradeTrackerImportFailed": {
     "placeholders": {
       "error": {
@@ -3509,15 +3509,15 @@
       }
     }
   },
-  "upgradeTrackerSnapshotUnreadable": "Account data could not be read",
-  "upgradeTrackerTryAgain": "Try again",
-  "upgradeTrackerNoDataTitle": "Bring your village progress into ClashKing",
-  "upgradeTrackerNoDataBody": "Copy your Account Data JSON from Clash of Clans, then paste it from your clipboard. Your data stays on this device.",
-  "upgradeTrackerNoDataLocation": "In Clash of Clans, open Settings > More Settings. Account Data JSON is directly below the API Token section.",
-  "upgradeTrackerOpenMoreSettings": "Open More Settings in Clash of Clans",
-  "upgradeTrackerNoLinkedAccount": "Link a Clash of Clans account before importing its account data.",
-  "upgradeTrackerUpdatedJustNow": "Updated just now",
-  "upgradeTrackerUpdatedMinutesAgo": "Updated {count} minutes ago",
+  "upgradeTrackerSnapshotUnreadable": "Δεν ήταν δυνατή η ανάγνωση των δεδομένων λογαριασμού",
+  "upgradeTrackerTryAgain": "Δοκιμάστε ξανά",
+  "upgradeTrackerNoDataTitle": "Φέρτε την πρόοδο του χωριού σας στο ClashKing",
+  "upgradeTrackerNoDataBody": "Αντιγράψτε τα δεδομένα του λογαριασμού σας JSON από το Clash of Clans και, στη συνέχεια, επικολλήστε τα από το πρόχειρό σας. Τα δεδομένα σας παραμένουν σε αυτήν τη συσκευή.",
+  "upgradeTrackerNoDataLocation": "Στο Clash of Clans, ανοίξτε τις Ρυθμίσεις > Περισσότερες ρυθμίσεις. Το JSON δεδομένων λογαριασμού βρίσκεται ακριβώς κάτω από την ενότητα Διακριτικό API.",
+  "upgradeTrackerOpenMoreSettings": "Άνοιγμα περισσότερων ρυθμίσεων στο Clash of Clans",
+  "upgradeTrackerNoLinkedAccount": "Συνδέστε έναν λογαριασμό Clash of Clans πριν εισαγάγετε τα δεδομένα του λογαριασμού του.",
+  "upgradeTrackerUpdatedJustNow": "Ενημερώθηκε μόλις τώρα",
+  "upgradeTrackerUpdatedMinutesAgo": "ΕΠΙΚΑΙΡΟΠΟΙΗΜΕΝΟ {count} πριν από λεπτά",
   "@upgradeTrackerUpdatedMinutesAgo": {
     "placeholders": {
       "count": {
@@ -3525,7 +3525,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedHoursAgo": "Updated {count} hours ago",
+  "upgradeTrackerUpdatedHoursAgo": "ΕΠΙΚΑΙΡΟΠΟΙΗΜΕΝΟ {count} ώρες πριν",
   "@upgradeTrackerUpdatedHoursAgo": {
     "placeholders": {
       "count": {
@@ -3533,7 +3533,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedOn": "Updated {date}",
+  "upgradeTrackerUpdatedOn": "ΕΠΙΚΑΙΡΟΠΟΙΗΜΕΝΟ {date}",
   "@upgradeTrackerUpdatedOn": {
     "placeholders": {
       "date": {
@@ -3541,18 +3541,18 @@
       }
     }
   },
-  "upgradeTrackerSearchUpgrades": "Search upgrades",
-  "upgradeTrackerSearchCollection": "Search collection",
-  "upgradeTrackerShowFilters": "Show filters",
-  "upgradeTrackerHideFilters": "Hide filters",
-  "upgradeTrackerFilterAll": "All",
-  "upgradeTrackerFilterOwned": "Owned",
-  "upgradeTrackerFilterMissing": "Missing",
-  "upgradeTrackerAllVillages": "All villages",
-  "upgradeTrackerHomeVillage": "Home Village",
-  "upgradeTrackerBuilderBase": "Builder Base",
-  "upgradeTrackerNoMatchingItems": "No matching items",
-  "upgradeTrackerOwnedCount": "{owned} of {total} owned",
+  "upgradeTrackerSearchUpgrades": "Αναζήτηση αναβαθμίσεων",
+  "upgradeTrackerSearchCollection": "Συλλογή αναζήτησης",
+  "upgradeTrackerShowFilters": "Εμφάνιση φίλτρων",
+  "upgradeTrackerHideFilters": "Απόκρυψη φίλτρων",
+  "upgradeTrackerFilterAll": "Όλα",
+  "upgradeTrackerFilterOwned": "Ιδιόκτητο",
+  "upgradeTrackerFilterMissing": "Λείπει",
+  "upgradeTrackerAllVillages": "Όλα τα χωριά",
+  "upgradeTrackerHomeVillage": "Αρχική Χωριό",
+  "upgradeTrackerBuilderBase": "Βάση Χτίστη",
+  "upgradeTrackerNoMatchingItems": "Δεν υπάρχουν στοιχεία που να ταιριάζουν",
+  "upgradeTrackerOwnedCount": "{owned} της {total} ιδιόκτητο",
   "@upgradeTrackerOwnedCount": {
     "placeholders": {
       "owned": {
@@ -3563,7 +3563,7 @@
       }
     }
   },
-  "upgradeTrackerLevelsLeft": "{count} levels left",
+  "upgradeTrackerLevelsLeft": "{count} Επίπεδα αριστερά",
   "@upgradeTrackerLevelsLeft": {
     "placeholders": {
       "count": {
@@ -3571,7 +3571,7 @@
       }
     }
   },
-  "upgradeTrackerItemCount": "{count} items",
+  "upgradeTrackerItemCount": "{count} Είδη",
   "@upgradeTrackerItemCount": {
     "placeholders": {
       "count": {
@@ -3579,10 +3579,10 @@
       }
     }
   },
-  "upgradeTrackerCollected": "collected",
-  "upgradeTrackerMissing": "missing",
-  "upgradeTrackerDataAge": "Account data",
-  "upgradeTrackerBuildersCount": "{count} builders",
+  "upgradeTrackerCollected": "συλλέχθηκαν",
+  "upgradeTrackerMissing": "λείπει",
+  "upgradeTrackerDataAge": "Δεδομένα λογαριασμού",
+  "upgradeTrackerBuildersCount": "{count} Οικοδόμοι",
   "@upgradeTrackerBuildersCount": {
     "placeholders": {
       "count": {
@@ -3590,11 +3590,11 @@
       }
     }
   },
-  "upgradeTrackerLaboratory": "Laboratory",
-  "upgradeTrackerPets": "Pets",
-  "upgradeTrackerWalls": "Walls",
-  "upgradeTrackerEquipment": "Equipment",
-  "upgradeTrackerLevelsRemaining": "{count} levels remaining",
+  "upgradeTrackerLaboratory": "Εργαστήριο",
+  "upgradeTrackerPets": "Κατοικίδια",
+  "upgradeTrackerWalls": "Τοίχοι",
+  "upgradeTrackerEquipment": "Εξοπλισμός",
+  "upgradeTrackerLevelsRemaining": "{count} επίπεδα που απομένουν",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
       "count": {
@@ -3602,7 +3602,7 @@
       }
     }
   },
-  "upgradeTrackerCompletesOn": "Completes {date} · {duration}",
+  "upgradeTrackerCompletesOn": "Ολοκληρώνει {date} · {duration}",
   "@upgradeTrackerCompletesOn": {
     "placeholders": {
       "date": {
@@ -3613,33 +3613,33 @@
       }
     }
   },
-  "upgradeTrackerHeaderComplete": "Complete",
-  "upgradeTrackerHeaderLevelsLeft": "Levels left",
-  "upgradeTrackerHeaderActive": "Active",
-  "upgradeTrackerHeaderFinishes": "Finishes",
-  "upgradeTrackerHeaderOwned": "Owned",
-  "upgradeTrackerHeaderUpdated": "Updated",
-  "homeCouldNotLoadTitle": "Home could not load",
-  "homeVerifiedAccountRequiredTitle": "Verify a linked account",
-  "homeVerifiedAccountRequiredBody": "Home needs at least one verified Clash account. Link an account or verify an existing link to continue.",
-  "homeVerifyAccountAction": "Link or verify account",
-  "playerOptionVerifyAccountBody": "This account isn't verified yet. Verify it to unlock the to-do, Ranked, and Upgrade Tracker options below.",
-  "homeUpcomingTitle": "Upcoming",
-  "homeUpcomingSubtitle": "The next deadlines and upgrade completions across your accounts.",
-  "homeCollapseSection": "Collapse section",
-  "homeExpandSection": "Expand section",
-  "homeUpcomingEmpty": "No tracked deadlines are coming up. Pull to refresh if this account was just linked.",
-  "homeRecentlyCompleted": "Completed",
-  "homeTodoTitle": "To do",
-  "homeTodoSubtitle": "Actionable account details, ordered by urgency.",
-  "homeTodoEmpty": "No verified account needs attention right now.",
-  "homeClanless": "No clan",
-  "homeNeedsAttention": "Needs attention",
-  "homeCaughtUp": "Caught up",
-  "homeTrackingDataPending": "This verified player is newly tracked or inactive, so actionable details are not available yet.",
-  "homeUpgradeUnavailable": "Upgrade data could not be loaded. Your other account data is still current.",
-  "homeUpgradeNotImported": "No upgrade data yet. Import this verified account's JSON in Upgrade tracker.",
-  "homeUpgradeActiveCount": "{count} active upgrades",
+  "upgradeTrackerHeaderComplete": "Πλήρης",
+  "upgradeTrackerHeaderLevelsLeft": "Επίπεδα που απομένουν",
+  "upgradeTrackerHeaderActive": "Ενεργό",
+  "upgradeTrackerHeaderFinishes": "Φινιρίσματα",
+  "upgradeTrackerHeaderOwned": "Ιδιόκτητο",
+  "upgradeTrackerHeaderUpdated": "ΕΠΙΚΑΙΡΟΠΟΙΗΜΕΝΟ",
+  "homeCouldNotLoadTitle": "Δεν ήταν δυνατή η φόρτωση στο σπίτι",
+  "homeVerifiedAccountRequiredTitle": "Επαλήθευση συνδεδεμένου λογαριασμού",
+  "homeVerifiedAccountRequiredBody": "Η Οικία χρειάζεται τουλάχιστον έναν επαληθευμένο λογαριασμό Clash. Συνδέστε έναν λογαριασμό ή επαληθεύστε έναν υπάρχοντα σύνδεσμο για να συνεχίσετε.",
+  "homeVerifyAccountAction": "Σύνδεση ή επαλήθευση λογαριασμού",
+  "playerOptionVerifyAccountBody": "Αυτός ο λογαριασμός δεν έχει επαληθευτεί ακόμα. Επαληθεύστε το για να ξεκλειδώσετε τις παρακάτω επιλογές to-do, Ranked και Upgrade Tracker.",
+  "homeUpcomingTitle": "Προσεχώς",
+  "homeUpcomingSubtitle": "Οι επόμενες προθεσμίες και ολοκληρώσεις αναβάθμισης στους λογαριασμούς σας.",
+  "homeCollapseSection": "Σύμπτυξη ενότητας",
+  "homeExpandSection": "Ανάπτυξη ενότητας",
+  "homeUpcomingEmpty": "Δεν έρχονται προθεσμίες. Τραβήξτε για ανανέωση εάν αυτός ο λογαριασμός ήταν απλώς συνδεδεμένος.",
+  "homeRecentlyCompleted": "Ολοκληρώθηκε",
+  "homeTodoTitle": "Να κάνω",
+  "homeTodoSubtitle": "Στοιχεία λογαριασμού με δυνατότητα δράσης, ταξινομημένα με επείγουσα ανάγκη.",
+  "homeTodoEmpty": "Κανένας επαληθευμένος λογαριασμός δεν χρειάζεται προσοχή αυτήν τη στιγμή.",
+  "homeClanless": "Κανένα clan",
+  "homeNeedsAttention": "Χρειάζεται προσοχή",
+  "homeCaughtUp": "Προλάβαμε",
+  "homeTrackingDataPending": "Αυτό το επαληθευμένο πρόγραμμα αναπαραγωγής παρακολουθείται πρόσφατα ή είναι ανενεργό, επομένως οι λεπτομέρειες που μπορούν να χρησιμοποιηθούν δεν είναι ακόμη διαθέσιμες.",
+  "homeUpgradeUnavailable": "Δεν ήταν δυνατή η φόρτωση δεδομένων αναβάθμισης. Τα άλλα δεδομένα του λογαριασμού σας εξακολουθούν να ισχύουν.",
+  "homeUpgradeNotImported": "Δεν υπάρχουν ακόμη δεδομένα αναβάθμισης. Εισαγάγετε το JSON αυτού του επαληθευμένου λογαριασμού στο πρόγραμμα παρακολούθησης αναβάθμισης.",
+  "homeUpgradeActiveCount": "{count} ενεργές αναβαθμίσεις",
   "@homeUpgradeActiveCount": {
     "placeholders": {
       "count": {
@@ -3647,9 +3647,9 @@
       }
     }
   },
-  "homeUpgradeIdle": "No active upgrade timers were found; builders may be idle.",
-  "homeDone": "Done",
-  "homeRemainingCount": "{count} left",
+  "homeUpgradeIdle": "Δεν βρέθηκαν ενεργά χρονόμετρα αναβάθμισης. Οι οικοδόμοι μπορεί να είναι αδρανείς.",
+  "homeDone": "Έτοιμο",
+  "homeRemainingCount": "{count} απομένουν",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -3657,10 +3657,10 @@
       }
     }
   },
-  "homeVerifiedPlayerDataMissing": "This link is verified, but its player profile is unavailable. Pull to refresh or wait for tracking to begin.",
-  "homeSinceAwayTitle": "Since away",
-  "homeSinceAwayFirstVisit": "This is the first tracked Home visit, so older activity is not marked new.",
-  "homeSinceAwaySubtitle": "New markers compare with your previous Home open at {time}.",
+  "homeVerifiedPlayerDataMissing": "Αυτός ο σύνδεσμος έχει επαληθευτεί, αλλά το προφίλ παίκτη του δεν είναι διαθέσιμο. Τραβήξτε για ανανέωση ή περιμένετε να ξεκινήσει η παρακολούθηση.",
+  "homeSinceAwayTitle": "Από μακριά",
+  "homeSinceAwayFirstVisit": "Αυτή είναι η πρώτη επίσκεψη στο σπίτι που παρακολουθείται, επομένως η παλαιότερη δραστηριότητα δεν επισημαίνεται ως νέα.",
+  "homeSinceAwaySubtitle": "Οι νέοι δείκτες συγκρίνονται με το προηγούμενο Home open στο {time}.",
   "@homeSinceAwaySubtitle": {
     "placeholders": {
       "time": {
@@ -3668,17 +3668,17 @@
       }
     }
   },
-  "homeSinceAwayEmpty": "No join, leave, or player-history activity is available for these verified players and clans.",
-  "homeNewMarker": "New",
-  "homePulseTitle": "Your pulse",
-  "homePulseSubtitle": "Personal 30-day war and CWL form, ranked play, and available global rankings.",
-  "homePulseEmpty": "Performance history or rankings are not available yet. Newly tracked and inactive accounts will fill in as data arrives.",
-  "homeToday": "Today",
-  "homeYesterday": "Yesterday",
-  "homeEarlier": "Earlier",
-  "homeRankedAttacks": "Ranked attacks",
-  "homeSeasonPass": "Season pass",
-  "homeUpcomingAccountDetail": "{player} has {count} remaining.",
+  "homeSinceAwayEmpty": "Δεν υπάρχει διαθέσιμη δραστηριότητα συμμετοχής, αποχώρησης ή ιστορικού παίκτη για αυτούς τους επαληθευμένους παίκτες και φυλές.",
+  "homeNewMarker": "Νέο",
+  "homePulseTitle": "Ο σφυγμός σας",
+  "homePulseSubtitle": "Προσωπικός πόλεμος 30 ημερών και φόρμα CWL, παιχνίδι κατάταξης και διαθέσιμες παγκόσμιες κατατάξεις.",
+  "homePulseEmpty": "Το ιστορικό απόδοσης ή οι κατατάξεις δεν είναι ακόμη διαθέσιμα. Οι λογαριασμοί που παρακολουθούνται πρόσφατα και οι ανενεργοί λογαριασμοί θα συμπληρωθούν καθώς φτάνουν τα δεδομένα.",
+  "homeToday": "Σήμερα",
+  "homeYesterday": "Χθες",
+  "homeEarlier": "Νωρίτερα",
+  "homeRankedAttacks": "Επιθέσεις Κατάταξης",
+  "homeSeasonPass": "Πάσο σεζόν",
+  "homeUpcomingAccountDetail": "{player} έχει {count} απομένουν.",
   "@homeUpcomingAccountDetail": {
     "placeholders": {
       "player": {
@@ -3689,8 +3689,8 @@
       }
     }
   },
-  "homeUpgradeDataNeeded": "Add upgrade data",
-  "homeUpgradeDataNeededDetail": "Import {player}'s account JSON to track upgrade timers and idle builders.",
+  "homeUpgradeDataNeeded": "Προσθήκη δεδομένων αναβάθμισης",
+  "homeUpgradeDataNeededDetail": "Εισαγωγή {player}JSON για την παρακολούθηση χρονομετρητών αναβάθμισης και αδρανών δημιουργών.",
   "@homeUpgradeDataNeededDetail": {
     "placeholders": {
       "player": {
@@ -3698,8 +3698,8 @@
       }
     }
   },
-  "homeUpgradeIdleTitle": "Builders may be idle",
-  "homeUpgradeIdleDetail": "{player} has upgrade data, but no active timers were found.",
+  "homeUpgradeIdleTitle": "Οι οικοδόμοι μπορεί να είναι αδρανείς",
+  "homeUpgradeIdleDetail": "{player} έχει δεδομένα αναβάθμισης, αλλά δεν βρέθηκαν ενεργά χρονόμετρα.",
   "@homeUpgradeIdleDetail": {
     "placeholders": {
       "player": {
@@ -3707,7 +3707,7 @@
       }
     }
   },
-  "homeUpgradeAccountDetail": "Upgrade timer for {player}.",
+  "homeUpgradeAccountDetail": "Αναβάθμιση χρονοδιακόπτη για {player}.",
   "@homeUpgradeAccountDetail": {
     "placeholders": {
       "player": {
@@ -3715,10 +3715,10 @@
       }
     }
   },
-  "homePulseWarAverage": "30-day war average",
-  "homePulseCwlAverage": "30-day CWL average",
-  "homePulseRankedToday": "30-day ranked",
-  "homePulseRankedValue": "{count} attacks · {trophies} trophies",
+  "homePulseWarAverage": "Μέσος όρος πολέμου 30 ημερών",
+  "homePulseCwlAverage": "Μέσος όρος CWL 30 ημερών",
+  "homePulseRankedToday": "Κατάταξη 30 ημερών",
+  "homePulseRankedValue": "{count} επιθέσεις · {trophies} Τρόπαια",
   "@homePulseRankedValue": {
     "placeholders": {
       "count": {
@@ -3729,14 +3729,14 @@
       }
     }
   },
-  "homePulseBestGlobalRank": "Best global player rank",
-  "homeActivityJoined": "joined",
-  "homeActivityLeft": "left",
-  "homeActivityAClan": "a clan",
+  "homePulseBestGlobalRank": "Καλύτερη παγκόσμια κατάταξη παίκτη",
+  "homeActivityJoined": "προσχώρησε",
+  "homeActivityLeft": "αριστερά",
+  "homeActivityAClan": "μια φυλή",
   "statsMeta": "Μετα",
   "statsBattle": "Μάχη",
   "statsWorld": "Κόσμος",
-  "statsHeaderSubtitle": "Explore battle performance and the world we track.",
+  "statsHeaderSubtitle": "Εξερευνήστε την απόδοση μάχης και τον κόσμο που παρακολουθούμε.",
   "statsPreview": "Προεπισκόπηση",
   "statsTownHallDistribution": "Διανομή Δημαρχείου",
   "statsBuilderHallDistribution": "Διανομή Builder Hall",
@@ -3756,13 +3756,13 @@
     }
   },
   "statsEquipmentAdoption": "Υιοθέτηση εξοπλισμού ανά επίπεδο",
-  "statsEquipmentAdoptionPreview": "Mock layout until aggregated ownership and level counts are available.",
+  "statsEquipmentAdoptionPreview": "Εικονική διάταξη μέχρι να είναι διαθέσιμες οι συγκεντρωτικές μετρήσεις ιδιοκτησίας και επιπέδων.",
   "statsExperienceDistribution": "Διανομή XP παίκτη",
-  "statsExperienceDistributionPreview": "Mock layout until XP histogram buckets are available.",
+  "statsExperienceDistributionPreview": "Εικονική διάταξη μέχρι να είναι διαθέσιμοι οι κάδοι ιστογράμματος XP.",
   "statsCwlRosterSizes": "Μεγέθη ρόστερ CWL",
-  "statsCwlRosterSizesPreview": "Mock 15v15 / 30v30 split until group-size counts are available.",
+  "statsCwlRosterSizesPreview": "Διαχωρίστε εικονικά 15v15 / 30v30 μέχρι να είναι διαθέσιμες οι μετρήσεις μεγέθους ομάδας.",
   "statsWarsOverTime": "Πόλεμοι στο πέρασμα του χρόνου",
-  "statsWarsOverTimePreview": "Mock daily trend until the canonical counts endpoint is connected.",
+  "statsWarsOverTimePreview": "Εικονική ημερήσια τάση μέχρι να συνδεθεί το τελικό σημείο κανονικών μετρήσεων.",
   "statsStrategyLenses": "Φακοί στρατηγικής",
   "statsStrategyLensesBody": "Οι επώνυμες στρατηγικές χρησιμοποιούν επικαλυπτόμενους, εκδιδόμενους κανόνες. Οι ακριβείς φορτώσεις παραμένουν ξεχωριστές, ώστε η ετικέτα να μην προσποιείται ποτέ ότι αποδεικνύει την πρόθεση μάχης.",
   "statsQueenCharge": "Queen Charge",
@@ -3777,14 +3777,14 @@
   "statsExactLoadouts": "Ακριβείς φορτίσεις",
   "statsCustomLens": "Προσαρμοσμένος φακός",
   "statsCustomLensBody": "Επιλέξτε απαιτούμενες ποσότητες, εξαιρέσεις, Δημαρχείο, πρωτάθλημα, όροφο δείγματος και σειρά ταξινόμησης. Αυτό εκτελείται έναντι πραγματικών φορτώσεων, αλλά δεν έχει αποθηκευτεί ακόμα.",
-  "rankedLeagueTitle": "Ranked League",
-  "rankedLeagueAbout": "About Ranked League",
-  "rankedLeagueAboutBody": "This page uses the official weekly Ranked League group, battle logs and period history. Current results can change until the period ends.",
-  "rankedLeagueOverview": "Overview",
-  "rankedLeagueRanking": "Ranking",
-  "rankedLeagueGroupRank": "Group rank",
-  "rankedLeagueTrophies": "Trophies",
-  "rankedLeaguePlayers": "{count} players",
+  "rankedLeagueTitle": "Πρωτάθλημα Κατάταξης",
+  "rankedLeagueAbout": "Πληροφορίες για το Ranked League",
+  "rankedLeagueAboutBody": "Αυτή η σελίδα χρησιμοποιεί την επίσημη εβδομαδιαία ομάδα Ranked League, τα αρχεία μάχης και το ιστορικό περιόδου. Τα τρέχοντα αποτελέσματα μπορούν να αλλάξουν μέχρι τη λήξη της περιόδου.",
+  "rankedLeagueOverview": "Επισκόπηση",
+  "rankedLeagueRanking": "Σειρά κατάταξης",
+  "rankedLeagueGroupRank": "Κατάταξη ομίλου",
+  "rankedLeagueTrophies": "Τρόπαια",
+  "rankedLeaguePlayers": "{count} Παίκτες",
   "@rankedLeaguePlayers": {
     "placeholders": {
       "count": {
@@ -3792,7 +3792,7 @@
       }
     }
   },
-  "rankedLeagueBest": "Best: {value}",
+  "rankedLeagueBest": "Καλύτερο: {value}",
   "@rankedLeagueBest": {
     "placeholders": {
       "value": {
@@ -3800,15 +3800,15 @@
       }
     }
   },
-  "rankedLeagueNoGroup": "No active group",
-  "rankedLeagueCurrentPeriod": "Current period",
-  "rankedLeagueLiveGroupSubtitle": "Live results from the player's official Ranked League group.",
-  "rankedLeagueBattles": "Battles",
-  "rankedLeagueAttacksPlayed": "attacks played",
-  "rankedLeagueAttackRecord": "Attack record",
-  "rankedLeagueDefenseRecord": "Defense record",
-  "rankedLeagueWinsLosses": "wins - losses",
-  "rankedLeagueDefensesLogged": "{count} defenses logged",
+  "rankedLeagueNoGroup": "Δεν υπάρχει ενεργή ομάδα",
+  "rankedLeagueCurrentPeriod": "Τρέχουσα περίοδος",
+  "rankedLeagueLiveGroupSubtitle": "Ζωντανά αποτελέσματα από τον επίσημο όμιλο του παίκτη στο Ranked League.",
+  "rankedLeagueBattles": "Μάχες",
+  "rankedLeagueAttacksPlayed": "επιθέσεις που παίζονται",
+  "rankedLeagueAttackRecord": "Ρεκόρ επίθεσης",
+  "rankedLeagueDefenseRecord": "Ιστορικό υπεράσπισης",
+  "rankedLeagueWinsLosses": "Νίκες - Ήττες",
+  "rankedLeagueDefensesLogged": "{count} Καταγεγραμμένες άμυνες",
   "@rankedLeagueDefensesLogged": {
     "placeholders": {
       "count": {
@@ -3816,25 +3816,25 @@
       }
     }
   },
-  "rankedLeagueRecentBattles": "Recent battles",
-  "rankedLeagueRecentBattlesSubtitle": "Detailed results available for the active weekly group.",
-  "rankedLeagueAttacks": "Attacks",
-  "rankedLeagueDefenses": "Defenses",
-  "rankedLeagueNoBattles": "No battle recorded yet.",
-  "rankedLeagueGroupRanking": "Group ranking",
-  "rankedLeagueRankingSubtitle": "Live standings for the current group. Your player is highlighted.",
-  "rankedLeagueJumpToMyRank": "Jump to my rank",
-  "rankedLeagueLastPeriod": "Last Period",
-  "rankedLeagueBestGroupRank": "Best Rank",
-  "rankedLeaguePeriodHistory": "Period history",
-  "rankedLeagueHistorySubtitle": "Official summaries for completed weekly periods.",
-  "rankedLeagueBestRankedResults": "Best Ranked results",
-  "rankedLeagueAllRankedResults": "All Ranked results",
-  "rankedLeaguePeriods": "Periods",
-  "rankedLeaguePeriodStats": "Period statistics",
-  "rankedLeagueTrophyProgress": "Trophy progress by battle",
-  "rankedLeagueTrophiesByPeriod": "Trophies by period",
-  "rankedLeagueBattleCount": "{count} battles",
+  "rankedLeagueRecentBattles": "Πρόσφατες μάχες",
+  "rankedLeagueRecentBattlesSubtitle": "Λεπτομερή αποτελέσματα διαθέσιμα για την ενεργή εβδομαδιαία ομάδα.",
+  "rankedLeagueAttacks": "Επιθέσεις",
+  "rankedLeagueDefenses": "Άμυνες",
+  "rankedLeagueNoBattles": "Δεν έχει καταγραφεί ακόμη μάχη.",
+  "rankedLeagueGroupRanking": "Κατάταξη ομίλου",
+  "rankedLeagueRankingSubtitle": "Ζωντανή βαθμολογία για τον τρέχοντα όμιλο. Ο παίκτης σας επισημαίνεται.",
+  "rankedLeagueJumpToMyRank": "Μετάβαση στην κατάταξή μου",
+  "rankedLeagueLastPeriod": "Τελευταία περίοδος",
+  "rankedLeagueBestGroupRank": "Καλύτερη κατάταξη",
+  "rankedLeaguePeriodHistory": "Ιστορικό περιόδου",
+  "rankedLeagueHistorySubtitle": "Επίσημες περιλήψεις για συμπληρωμένες εβδομαδιαίες περιόδους.",
+  "rankedLeagueBestRankedResults": "Αποτελέσματα με την καλύτερη κατάταξη",
+  "rankedLeagueAllRankedResults": "Όλα τα αποτελέσματα κατάταξης",
+  "rankedLeaguePeriods": "Περίοδοι",
+  "rankedLeaguePeriodStats": "Στατιστικά περιόδου",
+  "rankedLeagueTrophyProgress": "Πρόοδος τροπαίων ανά μάχη",
+  "rankedLeagueTrophiesByPeriod": "Τρόπαια ανά περίοδο",
+  "rankedLeagueBattleCount": "{count} μάχες",
   "@rankedLeagueBattleCount": {
     "placeholders": {
       "count": {
@@ -3842,7 +3842,7 @@
       }
     }
   },
-  "rankedLeagueBattleProgress": "{count} / {max} battles",
+  "rankedLeagueBattleProgress": "{count} / {max} μάχες",
   "@rankedLeagueBattleProgress": {
     "placeholders": {
       "count": {
@@ -3853,7 +3853,7 @@
       }
     }
   },
-  "rankedLeagueTrophyAverage": "{trophies} trophies · {average} avg.",
+  "rankedLeagueTrophyAverage": "{trophies} τρόπαια · {average} Μέσος όρος.",
   "@rankedLeagueTrophyAverage": {
     "placeholders": {
       "trophies": {
@@ -3864,15 +3864,15 @@
       }
     }
   },
-  "rankedLeagueByPeriod": "By period",
-  "rankedLeaguePeriodTab": "Period",
-  "rankedLeagueAverage": "Average",
-  "rankedLeagueRemaining": "Remaining",
-  "rankedLeagueSevenDayPeriod": "7-day Ranked League period",
-  "rankedLeagueEquipmentUnavailable": "Army and equipment are not included in the official Ranked League battle logs yet.",
-  "rankedLeagueBattleDetailsUnavailable": "Detailed battle logs are not available for this period.",
-  "rankedLeagueHistoricalDetailsUnavailable": "Only the official period summary is available for this older period.",
-  "rankedLeagueStarBreakdownUnavailable": "The API provides the star total, but not the detailed star distribution for this period.",
+  "rankedLeagueByPeriod": "Ανά περίοδο",
+  "rankedLeaguePeriodTab": "Περίοδος",
+  "rankedLeagueAverage": "Μέσος όρος",
+  "rankedLeagueRemaining": "Απομένει",
+  "rankedLeagueSevenDayPeriod": "Περίοδος 7 ημερών Ranked League",
+  "rankedLeagueEquipmentUnavailable": "Ο στρατός και ο εξοπλισμός δεν περιλαμβάνονται ακόμη στα επίσημα αρχεία μάχης του Ranked League.",
+  "rankedLeagueBattleDetailsUnavailable": "Λεπτομερή αρχεία καταγραφής μάχης δεν είναι διαθέσιμα για αυτήν την περίοδο.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Μόνο η επίσημη περίληψη της περιόδου είναι διαθέσιμη για αυτήν την παλαιότερη περίοδο.",
+  "rankedLeagueStarBreakdownUnavailable": "Το API παρέχει το σύνολο των αστεριών, αλλά όχι τη λεπτομερή κατανομή αστεριών για αυτήν την περίοδο.",
   "notifAudienceSectionTitle": "Κοινό ειδοποιήσεων",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
@@ -3915,8 +3915,8 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Choose accounts manually",
-  "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
+  "notifChooseAccountsManually": "Επιλεγμένοι λογαριασμοί",
+  "notifAudienceAcrossDevicesDescription": "Επίλεξε ποιοι λογαριασμοί μπορούν να λαμβάνουν ειδοποιήσεις σε αυτήν τη συσκευή.",
   "notifAccountBookmarked": "Αποθηκευμένος",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
@@ -3953,42 +3953,42 @@
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
-  "widgetUpgradeProgressTitle": "Upgrade Progress",
-  "widgetHomeVillage": "HOME VILLAGE",
-  "widgetVillage": "VILLAGE",
-  "widgetLaboratory": "LAB",
-  "widgetPets": "PETS",
-  "widgetBuilderBase": "BUILDER BASE",
-  "widgetResearch": "RESEARCH",
-  "widgetActive": "ACTIVE",
-  "widgetIdle": "IDLE",
-  "widgetLocked": "LOCKED",
-  "widgetMaxed": "MAXED",
-  "widgetNotUnlocked": "Not unlocked",
-  "widgetFullyUpgraded": "Fully upgraded",
-  "widgetNoActiveUpgrades": "No active upgrades",
-  "widgetNoActiveResearch": "No active research",
-  "widgetDataStale": "Update needed",
-  "widgetMoreUpgrade": "more upgrade",
-  "widgetMoreUpgrades": "more upgrades",
-  "widgetLevelShort": "Lv",
-  "widgetReady": "Ready",
-  "widgetReadyIn": "Ready in",
-  "widgetHelping": "Helping",
-  "widgetApprenticeShort": "Apprentice",
-  "widgetAssistantShort": "Assistant",
-  "widgetAlchemistShort": "Alchemist",
-  "widgetBuilderPotion": "Builder Potion",
-  "widgetResearchPotion": "Research Potion",
-  "widgetPetPotion": "Pet Potion",
-  "widgetClockTower": "Clock Tower",
-  "widgetTownHallBuilderBoost": "Town Hall builder boost",
-  "widgetTownHallLabBoost": "Town Hall lab boost",
-  "widgetBuilderBoostShort": "Builder",
-  "widgetResearchBoostShort": "Research",
-  "widgetPetBoostShort": "Pet",
-  "widgetClockBoostShort": "Clock",
-  "widgetBuilderCostPerk": "{percent}% builder cost perk",
+  "widgetUpgradeProgressTitle": "Πρόοδος αναβάθμισης",
+  "widgetHomeVillage": "ΑΡΧΙΚΟ ΧΩΡΙΟ",
+  "widgetVillage": "ΧΩΡΙΟ",
+  "widgetLaboratory": "ΕΡΓΑΣΤΗΡΙΟ",
+  "widgetPets": "ΚΑΤΟΙΚΙΔΙΑ",
+  "widgetBuilderBase": "ΒΑΣΗ BUILDER",
+  "widgetResearch": "ΕΡΕΥΝΑ",
+  "widgetActive": "ΕΝΕΡΓΟΣ",
+  "widgetIdle": "ΑΔΡΑΝΗΣ",
+  "widgetLocked": "ΚΛΕΙΔΩΜΈΝΟ",
+  "widgetMaxed": "ΜΕΓΙΣΤΟ",
+  "widgetNotUnlocked": "Δεν είναι ξεκλείδωτο",
+  "widgetFullyUpgraded": "Πλήρως αναβαθμισμένο",
+  "widgetNoActiveUpgrades": "Δεν υπάρχουν ενεργές αναβαθμίσεις",
+  "widgetNoActiveResearch": "Δεν υπάρχει ενεργή έρευνα",
+  "widgetDataStale": "Απαιτείται ενημέρωση",
+  "widgetMoreUpgrade": "Περισσότερη αναβάθμιση",
+  "widgetMoreUpgrades": "Περισσότερες αναβαθμίσεις",
+  "widgetLevelShort": "LV",
+  "widgetReady": "Ετοιμος",
+  "widgetReadyIn": "Έτοιμο",
+  "widgetHelping": "Βοηθώντας",
+  "widgetApprenticeShort": "Μαθητευόμενος",
+  "widgetAssistantShort": "Βοηθός",
+  "widgetAlchemistShort": "Αλχημιστής",
+  "widgetBuilderPotion": "Φίλτρο οικοδόμου",
+  "widgetResearchPotion": "Ερευνητικό φίλτρο",
+  "widgetPetPotion": "Φίλτρο για κατοικίδια",
+  "widgetClockTower": "Πύργος του Ρολογιού",
+  "widgetTownHallBuilderBoost": "Ενίσχυση οικοδόμου Δημαρχείου",
+  "widgetTownHallLabBoost": "Ενίσχυση εργαστηρίου Δημαρχείου",
+  "widgetBuilderBoostShort": "Οικοδόμος",
+  "widgetResearchBoostShort": "Έρευνα",
+  "widgetPetBoostShort": "Κατοικίδιο",
+  "widgetClockBoostShort": "Ρολόι",
+  "widgetBuilderCostPerk": "{percent}% προνόμιο κόστους οικοδόμου",
   "@widgetBuilderCostPerk": {
     "placeholders": {
       "percent": {
@@ -3996,7 +3996,7 @@
       }
     }
   },
-  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "widgetBuilderTimePerk": "{percent}% προνόμιο χρόνου οικοδόμου",
   "@widgetBuilderTimePerk": {
     "placeholders": {
       "percent": {
@@ -4004,7 +4004,7 @@
       }
     }
   },
-  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "widgetLabCostPerk": "{percent}% προνόμιο κόστους εργαστηρίου",
   "@widgetLabCostPerk": {
     "placeholders": {
       "percent": {
@@ -4012,7 +4012,7 @@
       }
     }
   },
-  "widgetLabTimePerk": "{percent}% lab time perk",
+  "widgetLabTimePerk": "{percent}% προνόμιο εργαστηριακού χρόνου",
   "@widgetLabTimePerk": {
     "placeholders": {
       "percent": {
@@ -4020,22 +4020,22 @@
       }
     }
   },
-  "farmGoalTitle": "Farm goal",
-  "farmGoalFormTitle": "Resources to farm",
-  "farmGoalAccountTitle": "Account",
-  "farmGoalAccountHint": "The selected account provides the Town Hall and current league used for the estimate.",
-  "farmGoalTargetTitle": "Building to upgrade",
-  "farmGoalTargetBuildingLabel": "Building",
-  "farmGoalChooseBuilding": "Choose a building",
+  "farmGoalTitle": "Στόχος αγροκτήματος",
+  "farmGoalFormTitle": "Πόροι για τη γεωργία",
+  "farmGoalAccountTitle": "Λογαριασμός",
+  "farmGoalAccountHint": "Ο επιλεγμένος λογαριασμός παρέχει το Δημαρχείο και το τρέχον πρωτάθλημα που χρησιμοποιείται για την εκτίμηση.",
+  "farmGoalTargetTitle": "Κτίριο για αναβάθμιση",
+  "farmGoalTargetBuildingLabel": "Κτίριο",
+  "farmGoalChooseBuilding": "Επιλέξτε ένα κτίριο",
   "farmGoalChangeBuilding": "Αλλαγή κτιρίου",
   "farmGoalNoTargetTitle": "Δεν επιλέχθηκε κτίριο",
   "farmGoalNoTargetBody": "Επίλεξε το κτίριο που θέλεις να αναβαθμίσεις για να υπολογίσεις τους απαιτούμενους πόρους.",
-  "farmGoalTargetLevelLabel": "Target level",
-  "farmGoalUpgradeCostLabel": "Upgrade cost",
-  "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
-  "farmGoalLootTitle": "Estimated loot",
-  "farmGoalResourceLabel": "Resource",
-  "farmGoalAmountLabel": "Amount to farm",
+  "farmGoalTargetLevelLabel": "Επίπεδο-στόχος",
+  "farmGoalUpgradeCostLabel": "Κόστος αναβάθμισης",
+  "farmGoalCostUnavailable": "Το κόστος αναβάθμισης δεν είναι διαθέσιμο για αυτό το επίπεδο.",
+  "farmGoalLootTitle": "Εκτιμώμενα λάφυρα",
+  "farmGoalResourceLabel": "Πόρος",
+  "farmGoalAmountLabel": "Ποσό προς εκμετάλλευση",
   "farmGoalAverageLootLabel": "Διαθέσιμη λεία στο χωριό",
   "farmGoalPerfectLootHint": "Εισαγάγε τη λεία που εμφανίζεται πριν από την επίθεση. Το μπόνους πρωταθλήματος παρακάτω προστίθεται αυτόματα.",
   "farmGoalLeagueEstimate": "Μπόνους πρωταθλήματος {league}: {amount} {resource}. Περιλαμβάνεται στις εκτιμήσεις επιθέσεων.",
@@ -4052,7 +4052,7 @@
       }
     }
   },
-  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "farmGoalStarBonusEstimate": "Μπόνους αστεριών: {amount}  {resource} μετά από 5 αστέρια. Δεν περιλαμβάνεται στις επιθέσεις που απαιτούνται.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
       "amount": {
@@ -4063,8 +4063,8 @@
       }
     }
   },
-  "farmGoalScenarioPerfect": "Perfect attack · 100%",
-  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "farmGoalScenarioPerfect": "Τέλεια επίθεση · 100%",
+  "farmGoalScenarioAtPercent": "{percent}% καταστροφής",
   "@farmGoalScenarioAtPercent": {
     "placeholders": {
       "percent": {
@@ -4072,20 +4072,20 @@
       }
     }
   },
-  "farmGoalAttackShort": "attack",
-  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
-  "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
+  "farmGoalAttackShort": "επίθεση",
+  "farmGoalScenarioHint": "Προσέγγιση: Τα λάφυρα ποικίλλουν ανάλογα με το κτίριο που καταστρέφεται. Τα ποσοστά ισχύουν για την εκτίμηση της τέλειας επίθεσης.",
+  "farmGoalNoLeagueLoot": "Επιλέξτε έναν λογαριασμό σε ένα πρωτάθλημα για να λάβετε μια πρόταση για λάφυρα.",
   "farmGoalTrackerNextTitle": "Επόμενο στο πλάνο Παρακολούθησης αναβαθμίσεων",
   "farmGoalTrackerMissingTitle": "Απαιτούνται δεδομένα Παρακολούθησης αναβαθμίσεων",
   "farmGoalTrackerMissingBody": "Εισαγάγε το JSON αναβαθμίσεων αυτού του λογαριασμού στην Παρακολούθηση αναβαθμίσεων για να εμφανιστούν εδώ το επόμενο προγραμματισμένο κτίριο και το ακριβές κόστος.",
   "farmGoalTrackerPlanComplete": "Δεν βρέθηκαν άλλες αναβαθμίσεις κτιρίων στην Παρακολούθηση αναβαθμίσεων. Μπορείς ακόμα να επιλέξεις κτίριο χειροκίνητα.",
   "farmGoalOpenUpgradeTracker": "Άνοιγμα Παρακολούθησης αναβαθμίσεων",
   "farmGoalUseTrackerTarget": "Χρήση κτιρίου",
-  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
-  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
-  "farmGoalResultTitle": "Attacks needed",
-  "farmGoalAttacks": "attacks",
-  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
+  "farmGoalMissingTarget": "Επιλέξτε κτίριο και επίπεδο-στόχο για να υπολογίσετε τις απαιτούμενες επιθέσεις.",
+  "farmGoalMissingValues": "Ορίστε στόχο και εκτίμηση λείας για τέλεια επίθεση, ώστε να δείτε τα σενάρια επιθέσεων.",
+  "farmGoalResultTitle": "Απαιτούμενες επιθέσεις",
+  "farmGoalAttacks": "Επιθέσεις",
+  "farmGoalResultSummary": "{target} {resource} με περίπου {average} ανά τέλεια επίθεση.",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
@@ -4099,7 +4099,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "Θ{level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -4107,51 +4107,51 @@
       }
     }
   },
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "clanWarFrequencyTitle": "Wars",
-  "notifScopeAllAccounts": "All accounts",
+  "gameCreatorCode": "Κωδικός Δημιουργού: ClashKing",
+  "todoExplanationRaidsTitle": "Επιδρομές:",
+  "todoExplanationRaids": "Βάρος έως και 5 πόντους για κάθε λογαριασμό (ή έως και 6 εάν η τελευταία επίθεση έχει ξεκλειδωθεί), 1 επίθεση = 1 πόντος.",
+  "clanWarFrequencyTitle": "Πόλεμοι",
+  "notifScopeAllAccounts": "Όλοι οι λογαριασμοί",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
-  "settingsLiveActivityTest": "Live Activity Test",
+  "settingsLiveActivityTest": "Ζωντανή δοκιμή δραστηριότητας",
   "@settingsLiveActivityTest": {
     "description": "Settings section: live activity test (debug only)"
   },
-  "settingsLiveActivityStart": "Start test activity",
+  "settingsLiveActivityStart": "Έναρξη δοκιμαστικής δραστηριότητας",
   "@settingsLiveActivityStart": {
     "description": "Settings tile: start live activity test"
   },
-  "settingsLiveActivityStartSubtitle": "Shows a local clan-war preview.",
+  "settingsLiveActivityStartSubtitle": "Εμφανίζει μια προεπισκόπηση τοπικού πολέμου φυλών.",
   "@settingsLiveActivityStartSubtitle": {
     "description": "Settings tile: start live activity subtitle"
   },
-  "settingsLiveActivityUpdate": "Update score",
+  "settingsLiveActivityUpdate": "Ενημέρωση βαθμολογίας",
   "@settingsLiveActivityUpdate": {
     "description": "Settings tile: update live activity score"
   },
-  "settingsLiveActivityUpdateSubtitle": "Advances the fake war score.",
+  "settingsLiveActivityUpdateSubtitle": "Προωθεί το ψεύτικο σκορ πολέμου.",
   "@settingsLiveActivityUpdateSubtitle": {
     "description": "Settings tile: update live activity subtitle"
   },
-  "settingsLiveActivityEnd": "End test activity",
+  "settingsLiveActivityEnd": "Τερματισμός δοκιμαστικής δραστηριότητας",
   "@settingsLiveActivityEnd": {
     "description": "Settings tile: end live activity test"
   },
-  "settingsLiveActivityEndSubtitle": "Removes the local preview.",
+  "settingsLiveActivityEndSubtitle": "Καταργεί την τοπική προεπισκόπηση.",
   "@settingsLiveActivityEndSubtitle": {
     "description": "Settings tile: end live activity subtitle"
   },
-  "notifSelectedAccounts": "Selected accounts",
+  "notifSelectedAccounts": "Επιλεγμένοι λογαριασμοί",
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "Filters",
+  "searchFilters": "Φίλτρα",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} Λογαριασμοί που παρακολουθούνται",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
       "loaded": {
@@ -4162,30 +4162,30 @@
       }
     }
   },
-  "calculatorsModeDamage": "Damage",
-  "calculatorsModeFarmGoal": "Farm goal",
-  "damageCalculatorTitle": "Damage Calculator",
-  "damageAccountPresetShort": "Account",
-  "damageChooseAccount": "Choose an account",
-  "damageSwitchAccount": "Switch account",
-  "damageAccountSelectorHint": "The levels used follow the selected account.",
-  "damageNoAccountsAvailable": "No verified account available",
-  "damageTargetSectionTitle": "Building to destroy",
-  "damageChooseTarget": "Choose a building",
-  "damageNoTargetTitle": "No building selected",
-  "damageNoTargetBody": "Choose a building to see how much damage it can take.",
-  "damageTargetLevelLabel": "Target level",
-  "damageCommonBuildings": "Most commonly chosen",
-  "damageAllBuildings": "All buildings",
-  "damageQuickSetups": "Choose a method",
-  "damageQuickSetupZapQuake": "Zap + quake",
-  "damageQuickSetupFireballQuake": "Fireball + quake",
-  "damageQuickSetupGiantArrow": "Giant Arrow",
-  "damageQuickSetupFlameFlinger": "Flame Flinger",
-  "damageQuickSetupCustom": "Custom",
-  "damageClearStack": "Clear",
-  "damageNoDamageSelected": "No damage",
-  "damageSelectedSourcesCount": "{count} source(s)",
+  "calculatorsModeDamage": "Ζημιά",
+  "calculatorsModeFarmGoal": "Στόχος αγροκτήματος",
+  "damageCalculatorTitle": "Υπολογιστής ζημιών",
+  "damageAccountPresetShort": "Λογαριασμός",
+  "damageChooseAccount": "Επιλέξτε έναν λογαριασμό",
+  "damageSwitchAccount": "Εναλλαγή λογαριασμού",
+  "damageAccountSelectorHint": "Τα επίπεδα που χρησιμοποιούνται ακολουθούν τον επιλεγμένο λογαριασμό.",
+  "damageNoAccountsAvailable": "Δεν υπάρχει διαθέσιμος επαληθευμένος λογαριασμός",
+  "damageTargetSectionTitle": "Κτίριο για καταστροφή",
+  "damageChooseTarget": "Επιλέξτε ένα κτίριο",
+  "damageNoTargetTitle": "Δεν επιλέχθηκε κτίριο",
+  "damageNoTargetBody": "Επιλέξτε ένα κτίριο για να δείτε πόση ζημιά μπορεί να υποστεί.",
+  "damageTargetLevelLabel": "Επίπεδο-στόχος",
+  "damageCommonBuildings": "Πιο συχνά επιλεγμένο",
+  "damageAllBuildings": "Όλα τα κτίρια",
+  "damageQuickSetups": "Επιλέξτε μια μέθοδο",
+  "damageQuickSetupZapQuake": "Zap + σεισμός",
+  "damageQuickSetupFireballQuake": "Βολίδα + σεισμός",
+  "damageQuickSetupGiantArrow": "Γιγαντιαίο βέλος",
+  "damageQuickSetupFlameFlinger": "Φλογο",
+  "damageQuickSetupCustom": "Εθιμο",
+  "damageClearStack": "Σαφής",
+  "damageNoDamageSelected": "Καμία ζημιά",
+  "damageSelectedSourcesCount": "{count} Πηγή(-ες)",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {
@@ -4193,35 +4193,35 @@
       }
     }
   },
-  "damageNoActiveSources": "Choose a method to show the damage sources to adjust.",
-  "damageOtherSources": "Other sources",
-  "damageShowAllSources": "Add another source",
-  "damageShowFewerSources": "Hide other sources",
-  "searchCancel": "Cancel",
-  "todoRaidAttacks": "Raid attacks",
-  "todoMockRaid4Left": "4 left",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
-  "todoMockRaid1Left": "1 left",
-  "gameAssetsCategoryBuildings": "Buildings",
-  "gameAssetsCategoryCapitalBase": "Capital Base",
-  "gameAssetsCategoryCapitalHouseParts": "Capital House Parts",
-  "gameAssetsCategoryChests": "Chests",
-  "gameAssetsCategoryClanLabels": "Clan Labels",
-  "gameAssetsCategoryCountryFlags": "Country Flags",
-  "gameAssetsCategoryDecorations": "Decorations",
-  "gameAssetsCategoryEquipment": "Equipment",
-  "gameAssetsCategoryGuardians": "Guardians",
-  "gameAssetsCategoryHeroes": "Heroes",
-  "gameAssetsCategoryPets": "Pets",
-  "gameAssetsCategorySkins": "Skins",
-  "gameAssetsCategorySpells": "Spells",
-  "gameAssetsCategoryTroops": "Troops",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "endpointStateWins": "Wins",
-  "notifGroupBattles": "Battles",
-  "notifGroupSupport": "Support",
-  "rankedLeagueAccountSelector": "Shown account",
-  "rankedLeagueStars": "Stars"
+  "damageNoActiveSources": "Επιλέξτε μια μέθοδο για να εμφανίσετε τις πηγές ζημιάς που θέλετε να προσαρμόσετε.",
+  "damageOtherSources": "Άλλες πηγές",
+  "damageShowAllSources": "Προσθήκη άλλης πηγής",
+  "damageShowFewerSources": "Απόκρυψη άλλων πηγών",
+  "searchCancel": "Ματαίωση",
+  "todoRaidAttacks": "Επιθέσεις επιδρομών",
+  "todoMockRaid4Left": "4 έμειναν",
+  "todoMockWarAltStatus": "Ενεργός πριν από 18 μέτρα · ο πόλεμος και οι επιδρομές χρειάζονται προσοχή",
+  "todoMockRaid1Left": "1 αριστερά",
+  "gameAssetsCategoryBuildings": "Κτίρια",
+  "gameAssetsCategoryCapitalBase": "Κεφαλαιακή Βάση",
+  "gameAssetsCategoryCapitalHouseParts": "Μέρη Capital House",
+  "gameAssetsCategoryChests": "Σεντούκια",
+  "gameAssetsCategoryClanLabels": "Ετικέτες φυλών",
+  "gameAssetsCategoryCountryFlags": "Σημαίες χωρών",
+  "gameAssetsCategoryDecorations": "Διακοσμήσεις",
+  "gameAssetsCategoryEquipment": "Εξοπλισμός",
+  "gameAssetsCategoryGuardians": "Φύλακες",
+  "gameAssetsCategoryHeroes": "Ήρωες",
+  "gameAssetsCategoryPets": "Κατοικίδια",
+  "gameAssetsCategorySkins": "Δέρματα",
+  "gameAssetsCategorySpells": "Ξόρκια",
+  "gameAssetsCategoryTroops": "Στρατεύματα",
+  "assetFolderTroops": "Στρατεύματα",
+  "assetFolderSpells": "Ξόρκια",
+  "assetFolderHeroes": "Ήρωες",
+  "endpointStateWins": "Νίκες",
+  "notifGroupBattles": "Μάχες",
+  "notifGroupSupport": "Υποστήριξη",
+  "rankedLeagueAccountSelector": "Εμφανιζόμενος λογαριασμός",
+  "rankedLeagueStars": "Αστέρια"
 }
