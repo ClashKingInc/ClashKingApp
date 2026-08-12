@@ -16,12 +16,12 @@
   "generalRetry": "Opnieuw proberen",
   "generalRetrying": "Opnieuw proberen...",
   "postsTitle": "Berichten",
-  "postsDescription": "ClashKing-nieuws, updateverhalen en eerdere aankondigingen.",
+  "postsDescription": "Nieuws van ClashKing, updateverhalen en eerdere aankondigingen.",
   "postsEmpty": "Nog geen berichten gepubliceerd.",
   "postsLoadFailed": "Berichten konden niet worden geladen.",
   "postsLoadMore": "Meer laden",
-  "postsCurrent": "Huidige",
-  "postsPast": "Vorige",
+  "postsCurrent": "Actueel",
+  "postsPast": "Eerder",
   "postsStory": "Interactief verhaal",
   "postsPinned": "Uitgelicht",
   "generalTryAgain": "Probeer het opnieuw",
@@ -1025,9 +1025,9 @@
       }
     }
   },
-  "warAnalysisSecuredBadge": "Beveiligd",
-  "warAnalysisAlreadySecured": "Al beveiligd",
-  "warAnalysisSecureAgainst": "Doel berekend onder de aanname dat {clanName} alle resterende aanvallen gebruikt.",
+  "warAnalysisSecuredBadge": "Veiliggesteld",
+  "warAnalysisAlreadySecured": "Al veiliggesteld",
+  "warAnalysisSecureAgainst": "Doel berekend in de veronderstelling dat {clanName} alle resterende aanvallen gebruikt.",
   "@warAnalysisSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1035,7 +1035,7 @@
       }
     }
   },
-  "warAnalysisCannotSecureAgainst": "Kan niet wiskundig worden veiliggesteld als {clanName} alle resterende aanvallen optimaal gebruikt.",
+  "warAnalysisCannotSecureAgainst": "Kan wiskundig niet worden veiliggesteld als {clanName} alle resterende aanvallen optimaliseert.",
   "@warAnalysisCannotSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1043,7 +1043,7 @@
       }
     }
   },
-  "warAnalysisNoSecureObjective": "Kan niet meer worden veiliggesteld met de resterende aanvallen",
+  "warAnalysisNoSecureObjective": "Kan met de resterende aanvallen niet worden veiliggesteld",
   "warAnalysisStarGoal": "+{stars} ster(ren)",
   "@warAnalysisStarGoal": {
     "placeholders": {
@@ -1650,32 +1650,32 @@
   "faqFeaturesCwlTitle": "CWL analyses",
   "faqFeaturesCwlDescription": "Clan War League prestaties en bijdragen van leden",
   "faqFeaturesTodoTitle": "Takenlijst",
-  "faqFeaturesTodoDescription": "See which accounts still need Ranked attacks, raids, war attacks, Clan Games, or pass actions",
-  "faqFeaturesUpgradeTrackerTitle": "Upgradeoverzicht",
-  "faqFeaturesUpgradeTrackerDescription": "Use a manual account snapshot provided by the user to see remaining upgrades, resources, builders, lab time, and progress",
+  "faqFeaturesTodoDescription": "Bekijk welke accounts nog aanvallen in de Klassementsdivisie, overvallen, oorlogsaanvallen, Clanspelen of pasacties moeten uitvoeren",
+  "faqFeaturesUpgradeTrackerTitle": "Upgradetracker",
+  "faqFeaturesUpgradeTrackerDescription": "Gebruik een handmatige accountsnapshot van de gebruiker om resterende upgrades, grondstoffen, bouwers, laboratoriumtijd en voortgang te bekijken",
   "faqFeaturesNotificationsTitle": "Pushmeldingen",
-  "faqFeaturesNotificationsDescription": "Choose which accounts should receive alerts for supported ClashKing events",
-  "faqFeaturesWidgetsTitle": "War widgets",
-  "faqFeaturesWidgetsDescription": "Keep current war status visible on your home screen where widgets are supported",
+  "faqFeaturesNotificationsDescription": "Kies welke accounts waarschuwingen moeten ontvangen voor ondersteunde ClashKing-gebeurtenissen",
+  "faqFeaturesWidgetsTitle": "Oorlogswidgets",
+  "faqFeaturesWidgetsDescription": "Houd de huidige oorlogsstatus zichtbaar op je startscherm als widgets worden ondersteund",
   "faqSearchHint": "Zoek in de FAQ...",
   "faqSectionGettingStarted": "Aan de slag & Over ons",
-  "faqSectionAccountsAlertsWidgets": "Accounts, alerts & widgets",
+  "faqSectionAccountsAlertsWidgets": "Accounts, waarschuwingen en widgets",
   "faqSectionSupportAndContact": "Ondersteuning & contact",
-  "faqLinkedAccountsTitle": "How do linked accounts and verification work?",
-  "faqLinkedAccountsAnswer": "Your ClashKing profile can include several Clash of Clans accounts. Adding a tag shows public data. Verifying with the Clash of Clans API token proves the account is yours and unlocks account-specific features.",
-  "faqLinkedAccountsSolution1": "Manage, reorder, hide, or remove accounts from account management.",
-  "faqLinkedAccountsSolution2": "Find the API token in Clash of Clans under Settings > More Settings > API Token.",
-  "faqLinkedAccountsSolution3": "You can sign in with Discord or email. When account connections are available, manage them from Settings.",
+  "faqLinkedAccountsTitle": "Hoe werken gekoppelde accounts en verificatie?",
+  "faqLinkedAccountsAnswer": "Je ClashKing-profiel kan meerdere Clash of Clans-accounts bevatten. Door een tag toe te voegen, worden openbare gegevens getoond. Verificatie met het API-token van Clash of Clans bewijst dat het account van jou is en ontgrendelt accountspecifieke functies.",
+  "faqLinkedAccountsSolution1": "Beheer, herschik, verberg of verwijder accounts via accountbeheer.",
+  "faqLinkedAccountsSolution2": "Je vindt het API-token in Clash of Clans onder Instellingen > Meer instellingen > API-token.",
+  "faqLinkedAccountsSolution3": "Je kunt inloggen met Discord of e-mail. Wanneer accountkoppelingen beschikbaar zijn, beheer je ze via Instellingen.",
   "faqNotificationsTitle": "Hoe werken meldingen?",
-  "faqNotificationsAnswer": "Meldingen zijn optioneel. Wanneer je ze inschakelt, registreert ClashKing dit apparaat. Je kunt kiezen voor welke gekoppelde accounts elke melding geldt.",
+  "faqNotificationsAnswer": "Meldingen zijn optioneel. Wanneer ze zijn ingeschakeld, registreert ClashKing dit apparaat. Je kunt per waarschuwing kiezen op welke gekoppelde accounts deze betrekking heeft.",
   "faqNotificationsSolution1": "Sta meldingen toe op je apparaat en in de instellingen van ClashKing.",
-  "faqNotificationsSolution2": "Elke melding kan aan andere accounts worden gekoppeld. Controleer de geselecteerde accounts als je een melding mist.",
-  "faqNotificationsSolution3": "Sommige meldingen zijn afhankelijk van bijgehouden clan- of oorlogsgegevens. Vertragingen kunnen optreden terwijl externe gegevens worden bijgewerkt.",
+  "faqNotificationsSolution2": "Elke waarschuwing kan op andere accounts zijn gericht. Controleer de geselecteerde accounts als een waarschuwing ontbreekt.",
+  "faqNotificationsSolution3": "Sommige waarschuwingen zijn afhankelijk van gevolgde clan- of oorlogsgegevens. Er kunnen vertragingen optreden terwijl externe gegevens worden bijgewerkt.",
   "faqWidgetsTitle": "Hoe werken oorlogswidgets?",
-  "faqWidgetsAnswer": "Oorlogswidgets geven op ondersteunde apparaten een snel overzicht. Ze gebruiken je geselecteerde of gekoppelde accounts, opgeslagen ClashKing-gegevens en worden op de achtergrond bijgewerkt wanneer het platform dit ondersteunt.",
-  "faqWidgetsSolution1": "Open de app nadat je van account of clan bent gewisseld, zodat de widget kan synchroniseren.",
-  "faqWidgetsSolution2": "Als een widget niet up-to-date lijkt, open of vernieuw dan eerst de app. Android en iOS beperken hoe vaak widgets op de achtergrond kunnen worden bijgewerkt.",
-  "faqWidgetsSolution3": "De clan moet toegankelijke oorlogsgegevens hebben om een bruikbare status te kunnen tonen.",
+  "faqWidgetsAnswer": "Oorlogswidgets tonen een kort overzicht op ondersteunde apparaten. Ze gebruiken je geselecteerde of gekoppelde accounts, gegevens in de cache van ClashKing en achtergrondverversing wanneer het platform dit toestaat.",
+  "faqWidgetsSolution1": "Open de app nadat je accounts of clans hebt gewijzigd, zodat de widget kan synchroniseren.",
+  "faqWidgetsSolution2": "Als een widget verouderd lijkt, vernieuw dan eerst de app. Android en iOS beperken updates op de achtergrond.",
+  "faqWidgetsSolution3": "De clan moet toegankelijke oorlogsgegevens hebben om een nuttige status te tonen.",
   "faqTranslationIssue": "Ontbreekt er een vertaling of is deze onjuist?",
   "faqTranslationIssueAnswer": "Vertalingen worden eerst opgesteld met generatie- en AI-tools en daarna na verloop van tijd nagekeken en verbeterd. Als je moedertaalspreker bent en iets onnatuurlijk klinkt, kun je een correctie voorstellen op Crowdin of contact opnemen via Discord of e-mail.",
   "faqWaysToSupport": "Manieren om ons te steunen:",
@@ -2319,23 +2319,23 @@
   "gameItemAttackSpeed": "Aanvalssnelheid",
   "gameItemAttackRange": "Aanvalsbereik",
   "gameItemMovementSpeed": "Bewegingssnelheid",
-  "gameItemWardenWeight": "Warden-gewicht",
+  "gameItemWardenWeight": "Wachtergewicht",
   "@gameItemWardenWeight": {
     "description": "Grand Warden follow-priority weight for a game item"
   },
-  "gameItemWardenWeightTooltip": "Het gewicht van de nobele wachter kan de huisvestingsruimte negeren en bepaalt hoe sterk de nobele wachter prioriteit geeft aan het volgen van een groep eenheden.",
+  "gameItemWardenWeightTooltip": "Wachtergewicht kan de woonruimte overschrijven en bepaalt hoe sterk de Grote Wachter prioriteit geeft aan het volgen van een groep eenheden.",
   "@gameItemWardenWeightTooltip": {
     "description": "Explains how Warden weight affects Grand Warden follow priority"
   },
-  "gameItemHealerWeight": "Heler gewicht",
+  "gameItemHealerWeight": "Genezergewicht",
   "@gameItemHealerWeight": {
     "description": "Healer targeting-priority weight for a game item"
   },
-  "gameItemHealerWeightTooltip": "Het gewicht van de heler kan de huisvestingsruimte negeren wanneer helers bepalen aan welke eenheden ze prioriteit geven.",
+  "gameItemHealerWeightTooltip": "Genezergewicht kan de woonruimte overschrijven wanneer Genezers bepalen welke eenheden prioriteit krijgen.",
   "@gameItemHealerWeightTooltip": {
     "description": "Explains how Healer weight affects targeting priority"
   },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troep voor de volgdrempel} other{{count} troepen voor de volgdrempel}}",
   "@gameItemWardenThresholdCopies": {
     "description": "Number of copies needed to reach the Grand Warden follow threshold",
     "placeholders": {
@@ -2344,15 +2344,15 @@
       }
     }
   },
-  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "gameItemWardenNoThresholdContribution": "Draagt niet bij aan de volgdrempel",
   "@gameItemWardenNoThresholdContribution": {
     "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
   },
   "gameItemUpgradeResource": "Upgradegrondstof",
   "gameItemRarity": "Zeldzaamheid",
   "gameItemHero": "Held",
-  "gameItemDps": "DPS",
-  "gameItemHitpoints": "HP",
+  "gameItemDps": "Schade per seconde",
+  "gameItemHitpoints": "Levenspunten",
   "gameItemHealOnActivation": "Genezing",
   "gameItemTargets": "Doelen",
   "gameItemTargetsGround": "Grond",
@@ -2569,9 +2569,9 @@
   "capitalRaidMembersNoIndividualData": "Geen spelerslijst of individuele aanvallen beschikbaar voor deze raid.",
   "dashboardNoLinkedAccountsTitle": "Geen gekoppelde accounts",
   "dashboardNoLinkedAccountsBody": "Koppel een Clash-account om aanvallen, evenementen en activiteit hier te zien.",
-  "dashboardTodoHiddenTitle": "Hier worden geen accounts weergegeven",
-  "dashboardTodoHiddenBody": "Schakel in het tabblad Spelers voor een account een van de opties voor de startpagina in (Takenlijst, Upgradeoverzicht of Gerangschikt) om het hier weer te geven.",
-  "dashboardUpgradeTrackerNoData": "Open het upgradeoverzicht om upgradegegevens te importeren of bij te werken.",
+  "dashboardTodoHiddenTitle": "Hier worden geen accounts getoond",
+  "dashboardTodoHiddenBody": "Schakel in het tabblad Spelers voor een account een van de opties voor startkaarten in (taken, Upgradetracker, Klassement) om het hier te zien.",
+  "dashboardUpgradeTrackerNoData": "Open de tracker om upgradegegevens te importeren of te vernieuwen.",
   "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {moet worden bijgewerkt} other {moeten worden bijgewerkt}}",
   "@dashboardUpgradeTrackerNeedsUpdate": {
     "placeholders": {
@@ -2583,7 +2583,7 @@
       }
     }
   },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {heeft nog taken openstaan} other {hebben nog taken openstaan}}",
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {heeft nog taken} other {hebben nog taken}}",
   "@todoAccountsHaveTasksLeft": {
     "placeholders": {
       "subject": {
@@ -2594,7 +2594,7 @@
       }
     }
   },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {has attacks left} other {have attacks left}}",
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {heeft nog aanvallen} other {hebben nog aanvallen}}",
   "@dashboardRankedAccountsHaveAttacksLeft": {
     "placeholders": {
       "subject": {
@@ -2607,11 +2607,11 @@
   },
   "dashboardUpgradeTrackerTimeLeft": "Verwacht",
   "dashboardUpgradeTrackerBuilders": "Bouwers",
-  "dashboardUpgradeTrackerLab": "Lab",
+  "dashboardUpgradeTrackerLab": "Laboratorium",
   "dashboardUpgradeTrackerPets": "Huisdieren",
   "dashboardUpgradeTrackerWalls": "Muren",
   "dashboardUpgradeTrackerVillage": "Dorp",
-  "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
+  "dashboardRankedNoData": "Open de Klassementsdivisie om de positie van dit account te bekijken.",
   "dashboardRankedAccounts": "{loaded}/{total} accounts gevolgd",
   "@dashboardRankedAccounts": {
     "placeholders": {
@@ -2653,20 +2653,20 @@
   "tooltipHidePassword": "Wachtwoord verbergen",
   "tooltipRemoveAccount": "Account verwijderen",
   "calculatorsTitle": "Rekenhulpen",
-  "calculatorsSubtitle": "Zap quake and fireball quake.",
+  "calculatorsSubtitle": "Plan schade tegen de huidige gebouwniveaus.",
   "calculatorZapQuake": "Bliksem + aardbeving",
   "calculatorFireball": "Vuurbal",
-  "damageCalculatorSubtitle": "Vergelijk één aanvalscombinatie tegen meerdere gebouwen.",
+  "damageCalculatorSubtitle": "Vergelijk één aanvalscombinatie met meerdere gebouwen.",
   "damageNoStaticDataTitle": "Schadegegevens zijn niet beschikbaar",
-  "damageNoStaticDataBody": "Vernieuw de app nadat de statische spelgegevens volledig zijn geladen.",
+  "damageNoStaticDataBody": "Vernieuw de app nadat de statische spelgegevens zijn geladen.",
   "damageTownHall": "Stadhuis",
-  "damageVerifiedAccountPrefill": "Voorinstelling voor geverifieerde accounts",
-  "damageOverridesStayLocal": "Wijzigingen die je hier aanbrengt, worden niet toegepast op het spelersaccount.",
+  "damageVerifiedAccountPrefill": "Voorinstelling van geverifieerd account",
+  "damageOverridesStayLocal": "Wijzigingen hier werken het spelersaccount niet bij.",
   "damageTargets": "Gebouwen",
   "damageAddBuilding": "Gebouw toevoegen",
   "damageRemoveBuilding": "Gebouw verwijderen",
-  "damageNoTargetsBody": "Voeg ten minste één gebouw toe om resultaten te vergelijken.",
-  "damageHitpoints": "{hitpoints} HP",
+  "damageNoTargetsBody": "Voeg minstens één gebouw toe om resultaten te vergelijken.",
+  "damageHitpoints": "{hitpoints} levenspunten",
   "@damageHitpoints": {
     "placeholders": {
       "hitpoints": {
@@ -2678,7 +2678,7 @@
   "damageNoBuildingsFound": "Geen gebouwen gevonden",
   "damageTryAnotherSearch": "Probeer een andere naam of een ander stadhuisniveau.",
   "damageAttackStack": "Handmatige aanvalscombinatie",
-  "damageNoSourcesForTownHall": "Er zijn geen ondersteunde schadebronnen beschikbaar voor dit stadhuisniveau.",
+  "damageNoSourcesForTownHall": "Er zijn op dit stadhuis geen ondersteunde schadebronnen beschikbaar.",
   "damageCount": "Aantal",
   "damagePerUse": "{damage} schade per gebruik",
   "@damagePerUse": {
@@ -2688,7 +2688,7 @@
       }
     }
   },
-  "damageEarthquakePercent": "{percent}% van max. HP, neemt af bij stapelen",
+  "damageEarthquakePercent": "{percent}% van de maximale levenspunten, afnemend bij stapelen",
   "@damageEarthquakePercent": {
     "placeholders": {
       "percent": {
@@ -2700,13 +2700,13 @@
   "damageSourceEarthquake": "Aardbeving",
   "damageSourceGiantArrow": "Reuzenpijl",
   "damageSourceFireball": "Vuurbal",
-  "damageSourceFlameFlinger": "Vlammenverspreider raakt",
-  "damageSourceBalloonDeath": "Ballon-doodsschade",
-  "damageSourceRocketBalloonDeath": "Raketballon-doodsschade",
+  "damageSourceFlameFlinger": "Treffer van de Vlammenwerper",
+  "damageSourceBalloonDeath": "Doodsschade van Ballon",
+  "damageSourceRocketBalloonDeath": "Doodsschade van Raketballon",
   "damageResults": "Resultaten",
   "damageDestroyed": "Vernietigd",
   "damageSurvives": "Overleeft",
-  "damageResultSummary": "{damage} schade · {remaining} HP resterend",
+  "damageResultSummary": "{damage} schade · {remaining} levenspunten over",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -2717,10 +2717,10 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake-optimalisatie",
-  "damageSpellCapacity": "Spreuk capaciteit",
-  "damageZapQuakeUnavailable": "Bliksem en aardbeving zijn niet beschikbaar op dit stadhuisniveau.",
-  "damageZapQuakeUsesSelectedLevels": "Met bliksem niveau {lightningLevel} en aardbeving niveau {earthquakeLevel}.",
+  "damageZapQuakeOptimizer": "Bliksem-aardbevingoptimalisatie",
+  "damageSpellCapacity": "Spreukcapaciteit",
+  "damageZapQuakeUnavailable": "Bliksem en Aardbeving zijn niet beschikbaar op dit stadhuis.",
+  "damageZapQuakeUsesSelectedLevels": "Gebruikt Bliksem niveau {lightningLevel} en Aardbeving niveau {earthquakeLevel}.",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -2731,9 +2731,9 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Bliksem en aardbeving kunnen deze opslag niet beschadigen.",
-  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
-  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "damageZapQuakeIneligible": "Bliksem en Aardbeving kunnen deze opslag niet beschadigen.",
+  "damageNoValidZapQuake": "Geen geldige combinatie past binnen de geselecteerde spreukcapaciteit.",
+  "damageZapQuakeCombination": "{lightning} bliksem + {earthquake} aardbeving · {capacity} ruimte",
   "@damageZapQuakeCombination": {
     "placeholders": {
       "lightning": {
@@ -2754,19 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Voeg gekoppelde accounts toe of vernieuw ze om upgradetotalen te zien.",
   "playerOptionNotificationsTitle": "Meldingen",
   "playerOptionNotificationsSubtitle": "Ontvang meldingen voor dit account.",
-  "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
-  "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
-  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
-  "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
+  "playerOptionNotificationsEnableMaster": "Schakel eerst meldingen in via Instellingen.",
+  "playerOptionNotificationsVerifyFirst": "Verifieer dit account om meldingen in te schakelen.",
+  "playerOptionNotificationsSubscriptionRequired": "Voor bladwijzermeldingen is een abonnement vereist.",
+  "playerOptionNotificationsLimitReached": "Je limiet voor bladwijzermeldingen is bereikt.",
   "playerOptionShowTodoPageTitle": "Tonen op To Do-pagina",
   "playerOptionShowTodoPageSubtitle": "Neem dit account op in de volledige To Do-lijst.",
-  "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Show Upgrade Tracker on Home",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Pin this account's upgrade summary on Home.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verify this account to show upgrade progress on Home.",
-  "playerOptionShowRankedHomeTitle": "Show Ranked on Home",
-  "playerOptionShowRankedHomeSubtitle": "Pin this account's Ranked League summary on Home.",
-  "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
+  "playerOptionShowTodoPageVerifyFirst": "Verifieer dit account om het op de takenpagina te tonen.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Upgradetracker op Start tonen",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Zet het upgradeoverzicht van dit account vast op Start.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verifieer dit account om de upgradevoortgang op Start te tonen.",
+  "playerOptionShowRankedHomeTitle": "Klassement op Start tonen",
+  "playerOptionShowRankedHomeSubtitle": "Zet het Klassementsdivisie-overzicht van dit account vast op Start.",
+  "playerOptionShowRankedHomeVerifyFirst": "Verifieer dit account om het Klassementsdivisie-overzicht op Start te tonen.",
   "playerOptionShowWarTabTitle": "Tonen in War-tab",
   "playerOptionShowWarTabSubtitle": "Neem de clan van dit account op in het War-tabblad.",
   "bookmarkPlayerLoadFailed": "Favoriete speler laden mislukt.",
@@ -2808,10 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · geen open taken",
   "todoMockCaughtUpStatus": "Vandaag actief · geen actie nodig",
   "notifChooseAlerts": "Meldingen kiezen",
-  "notifGroupLegendAttacks": "Legend I attacks",
-  "notifLegendAttacksDescription": "Attack results for notification-enabled bookmarked accounts in Legend I.",
-  "notifGroupLegendDefenses": "Legend I defenses",
-  "notifLegendDefensesDescription": "Defense results for notification-enabled accounts in Legend I.",
+  "notifGroupLegendAttacks": "Legende I-aanvallen",
+  "notifLegendAttacksDescription": "Aanvalsresultaten voor accounts met ingeschakelde meldingen die als bladwijzer zijn opgeslagen in Legende I.",
+  "notifGroupLegendDefenses": "Legende I-verdedigingen",
+  "notifLegendDefensesDescription": "Verdedigingsresultaten voor accounts met ingeschakelde meldingen in Legende I.",
   "notifLeagueDefenseDescription": "Verdedigingsresultaten met aanvaller, sterren, percentage en league-context.",
   "notifWarAttackOptionsDescription": "War-aanvalsresultaten, verdedigingsmeldingen en opties voor de 5v5-aanvalsfeed.",
   "notifWarAlertsDescription": "War gematcht, battle day gestart en war geëindigd.",
@@ -2906,8 +2906,8 @@
   "clanCapitalPoints": "Hoofdstadpunten",
   "todoAllAccounts": "Alle accounts",
   "todoCombinedAcrossAccounts": "Gecombineerde to-do voor je accounts",
-  "dashboardRankedCombinedAcrossAccounts": "Gecombineerde rangschikking van al je accounts",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Gecombineerd upgradeoverzicht van al je accounts",
+  "dashboardRankedCombinedAcrossAccounts": "Gecombineerd klassement van je accounts",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Gecombineerde upgradetracking van je accounts",
   "todoPreviewAccount": "Voorbeeldaccount",
   "todoLastActiveUnavailable": "Laatste activiteit niet beschikbaar",
   "todoActiveRelative": "Actief {time}",
@@ -2953,7 +2953,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Tik voor resterende upgradekosten en -tijd",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Animewoede",
   "announcementAnimeFurySubtitle": "Bekijk de update van juni 2026",
   "sideRankingsTitle": "Ranglijsten",
   "sideRankingsSubtitle": "Officiële ranglijsten plus ClashKing-endpoints.",
@@ -2961,24 +2961,24 @@
   "sideRankingsEmptyTitle": "Geen ranglijsten teruggegeven",
   "sideRankingsEmptyBody": "Probeer een ander klassement of een andere locatie.",
   "sideRankingsMockups": "ClashKing-mockups",
-  "rankingsHomeVillage": "Home Village",
-  "rankingsBuilderBase": "Builder Base",
-  "rankingsTownHall": "Town Hall",
-  "rankingsRankedLeague": "Ranked League",
-  "rankingsClanCapital": "Clan Capital",
-  "rankingsDonations": "Donations",
-  "rankingsWarWins": "War Wins",
-  "rankingsWinStreak": "Win Streak",
-  "rankingsCurrent": "Current",
+  "rankingsHomeVillage": "Thuisdorp",
+  "rankingsBuilderBase": "Bouwersbasis",
+  "rankingsTownHall": "Stadhuis",
+  "rankingsRankedLeague": "Klassementsdivisie",
+  "rankingsClanCapital": "Clanhoofdstad",
+  "rankingsDonations": "Donaties",
+  "rankingsWarWins": "Oorlogsoverwinningen",
+  "rankingsWinStreak": "Overwinningsreeks",
+  "rankingsCurrent": "Actueel",
   "rankingsWorldwide": "Wereldwijd",
   "rankingsSelectLocation": "Selecteer een locatie",
-  "rankingsSearchLocations": "Zoek op locaties of landcodes",
-  "rankingsWorldwideUnavailable": "Kies een regio of land voor deze ranglijst.",
-  "rankingsLocationsLoadFailed": "The full location list could not be loaded. Worldwide is still available where supported.",
-  "rankingsSnapshotDate": "Snapshot date",
-  "rankingsSource": "Source",
-  "rankingsOfficialSource": "Official Clash API",
-  "rankingsResults": "Results",
+  "rankingsSearchLocations": "Zoek locaties of landcodes",
+  "rankingsWorldwideUnavailable": "Kies een regio of land voor dit klassement.",
+  "rankingsLocationsLoadFailed": "De volledige locatielijst kon niet worden geladen. Wereldwijd blijft beschikbaar waar dit wordt ondersteund.",
+  "rankingsSnapshotDate": "Momentopnamedatum",
+  "rankingsSource": "Bron",
+  "rankingsOfficialSource": "Officiële Clash-API",
+  "rankingsResults": "Resultaten",
   "rankingsTopCount": "Top {count}",
   "@rankingsTopCount": {
     "placeholders": {
@@ -2987,8 +2987,8 @@
       }
     }
   },
-  "rankingsNoSnapshotTitle": "No stored snapshot",
-  "rankingsNoSnapshotBody": "No ranking snapshot is stored for {date}. Choose another date or return to Current.",
+  "rankingsNoSnapshotTitle": "Geen opgeslagen momentopname",
+  "rankingsNoSnapshotBody": "Er is geen klassementsmomentopname opgeslagen voor {date}. Kies een andere datum of ga terug naar Actueel.",
   "@rankingsNoSnapshotBody": {
     "placeholders": {
       "date": {
@@ -2999,14 +2999,14 @@
   "rankingsPlayerLoadFailed": "Deze speler kon niet worden geladen.",
   "rankingsClanLoadFailed": "Deze clan kon niet worden geladen.",
   "sideStatsTitle": "Statistieken",
-  "sideStatsSubtitle": "Gevechtsinzichten op basis van samengevoegde gevechtslogboeken.",
+  "sideStatsSubtitle": "Gevechtsinformatie uit samengevoegde gevechtslogboeken.",
   "sideStatsLoadError": "Kan gevechtsinformatie niet laden.",
   "statsOverview": "Overzicht",
   "statsArmies": "Legers",
   "statsItems": "Items",
   "statsWar": "Oorlog",
   "statsCwl": "CWL",
-  "statsRanked": "Gerangschikt",
+  "statsRanked": "Klassement",
   "statsDateRange": "Datumbereik",
   "statsDateRangeHint": "Kies maximaal 90 dagen",
   "statsDateRangeTooLong": "Kies een datumbereik van 90 dagen of minder.",
@@ -3067,7 +3067,7 @@
   "statsCwlSeasons": "CWL-seizoenen",
   "statsCwlSeasonsHint": "JJJJ-MM, gescheiden door komma's",
   "statsApplyFilters": "Pas filters toe",
-  "statsRefresh": "Refresh data",
+  "statsRefresh": "Gegevens vernieuwen",
   "statsRegularWarOnly": "Alleen reguliere oorlogen; vriendschappelijke oorlogen en CWL zijn uitgesloten.",
   "statsRankedRequired": "Stadhuis en één competitieniveau zijn vereist.",
   "statsSeasonBreakdown": "Seizoensindeling",
@@ -3087,11 +3087,11 @@
   "sideArmyLinksBody": "Samenstelling, spreuken, belegering, notities en deellink.",
   "sideGameAssetsTitle": "Game-assets",
   "sideGameAssetsSubtitle": "Gehoste ClashKing-assets, gegroepeerd per map.",
-  "gameAssetsLoadError": "Could not load game assets",
-  "gameAssetsEmptyTitle": "No game assets available",
-  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
-  "gameAssetsOneImage": "1 image",
-  "gameAssetsImageCount": "{count} images",
+  "gameAssetsLoadError": "Spelassets konden niet worden geladen",
+  "gameAssetsEmptyTitle": "Geen spelassets beschikbaar",
+  "gameAssetsEmptyBody": "Het gehoste manifest bevatte geen ondersteunde afbeeldingen.",
+  "gameAssetsOneImage": "1 afbeelding",
+  "gameAssetsImageCount": "{count} afbeeldingen",
   "@gameAssetsImageCount": {
     "placeholders": {
       "count": {
@@ -3099,10 +3099,10 @@
       }
     }
   },
-  "gameAssetsSearchHint": "Search this category",
-  "gameAssetsAllFormats": "All formats",
-  "gameAssetsOneResult": "1 result",
-  "gameAssetsResultCount": "{count} results",
+  "gameAssetsSearchHint": "Zoek in deze categorie",
+  "gameAssetsAllFormats": "Alle indelingen",
+  "gameAssetsOneResult": "1 resultaat",
+  "gameAssetsResultCount": "{count} resultaten",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3110,20 +3110,20 @@
       }
     }
   },
-  "gameAssetsNoResultsTitle": "No matching images",
-  "gameAssetsNoResultsBody": "Try another search or file format.",
-  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
-  "gameAssetsCopyUrl": "Copy URL",
-  "gameAssetsCopyPath": "Copy path",
-  "gameAssetsUrlCopied": "Asset URL copied",
-  "gameAssetsPathCopied": "Asset path copied",
-  "gameAssetsCopyError": "Could not copy the asset details.",
-  "gameAssetsShare": "Share",
-  "gameAssetsShareError": "Could not share this asset.",
-  "gameAssetsSave": "Save",
-  "gameAssetsSaving": "Saving...",
-  "gameAssetsSaved": "Asset saved.",
-  "gameAssetsSavedTo": "Asset saved to {path}",
+  "gameAssetsNoResultsTitle": "Geen overeenkomende afbeeldingen",
+  "gameAssetsNoResultsBody": "Probeer een andere zoekopdracht of bestandsindeling.",
+  "gameAssetsLongPressHint": "Houd ingedrukt om de gehoste URL te kopiëren",
+  "gameAssetsCopyUrl": "URL kopiëren",
+  "gameAssetsCopyPath": "Pad kopiëren",
+  "gameAssetsUrlCopied": "Asset-URL gekopieerd",
+  "gameAssetsPathCopied": "Assetpad gekopieerd",
+  "gameAssetsCopyError": "De assetgegevens konden niet worden gekopieerd.",
+  "gameAssetsShare": "Delen",
+  "gameAssetsShareError": "Deze asset kon niet worden gedeeld.",
+  "gameAssetsSave": "Opslaan",
+  "gameAssetsSaving": "Opslaan...",
+  "gameAssetsSaved": "Asset opgeslagen.",
+  "gameAssetsSavedTo": "Asset opgeslagen in {path}",
   "@gameAssetsSavedTo": {
     "placeholders": {
       "path": {
@@ -3131,7 +3131,7 @@
       }
     }
   },
-  "gameAssetsSaveError": "Could not save this asset.",
+  "gameAssetsSaveError": "Deze asset kon niet worden opgeslagen.",
   "sideZapQuakeTitle": "{zaps} bliksem + 1 aardbeving",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -3465,7 +3465,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "SH{level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -3476,9 +3476,9 @@
   "faqSupercellFanContentPolicyLink": "Supercell-beleid voor fancontent",
   "upgradeTrackerPlan": "Plan",
   "upgradeTrackerUpgrades": "Upgrades",
-  "upgradeTrackerCollection": "Collection",
-  "upgradeTrackerChooseAccount": "Choose account",
-  "upgradeTrackerSwitchAccount": "Switch account, {account}",
+  "upgradeTrackerCollection": "Verzameling",
+  "upgradeTrackerChooseAccount": "Kies een account",
+  "upgradeTrackerSwitchAccount": "Van account wisselen, {account}",
   "@upgradeTrackerSwitchAccount": {
     "placeholders": {
       "account": {
@@ -3486,14 +3486,14 @@
       }
     }
   },
-  "upgradeTrackerShare": "Share tracker",
-  "upgradeTrackerPasteJson": "Paste account JSON",
-  "upgradeTrackerImportTitle": "Import account data",
-  "upgradeTrackerImportDescription": "Paste the raw account JSON. It stays on this device.",
-  "upgradeTrackerAccountJson": "Account JSON",
-  "upgradeTrackerPasteClipboard": "Paste clipboard",
-  "upgradeTrackerImportAction": "Import account",
-  "upgradeTrackerImportSuccess": "{player} was imported on this device.",
+  "upgradeTrackerShare": "Tracker delen",
+  "upgradeTrackerPasteJson": "Account-JSON plakken",
+  "upgradeTrackerImportTitle": "Accountgegevens importeren",
+  "upgradeTrackerImportDescription": "Plak de onbewerkte account-JSON. Deze blijft op dit apparaat.",
+  "upgradeTrackerAccountJson": "Account-JSON",
+  "upgradeTrackerPasteClipboard": "Klembord plakken",
+  "upgradeTrackerImportAction": "Account importeren",
+  "upgradeTrackerImportSuccess": "{player} is op dit apparaat geïmporteerd.",
   "@upgradeTrackerImportSuccess": {
     "placeholders": {
       "player": {
@@ -3501,7 +3501,7 @@
       }
     }
   },
-  "upgradeTrackerImportFailed": "Could not import account data: {error}",
+  "upgradeTrackerImportFailed": "Accountgegevens konden niet worden geïmporteerd: {error}",
   "@upgradeTrackerImportFailed": {
     "placeholders": {
       "error": {
@@ -3509,15 +3509,15 @@
       }
     }
   },
-  "upgradeTrackerSnapshotUnreadable": "Account data could not be read",
-  "upgradeTrackerTryAgain": "Try again",
-  "upgradeTrackerNoDataTitle": "Bring your village progress into ClashKing",
-  "upgradeTrackerNoDataBody": "Copy your Account Data JSON from Clash of Clans, then paste it from your clipboard. Your data stays on this device.",
-  "upgradeTrackerNoDataLocation": "In Clash of Clans, open Settings > More Settings. Account Data JSON is directly below the API Token section.",
-  "upgradeTrackerOpenMoreSettings": "Open More Settings in Clash of Clans",
-  "upgradeTrackerNoLinkedAccount": "Link a Clash of Clans account before importing its account data.",
-  "upgradeTrackerUpdatedJustNow": "Updated just now",
-  "upgradeTrackerUpdatedMinutesAgo": "Updated {count} minutes ago",
+  "upgradeTrackerSnapshotUnreadable": "Accountgegevens konden niet worden gelezen",
+  "upgradeTrackerTryAgain": "Opnieuw proberen",
+  "upgradeTrackerNoDataTitle": "Breng de voortgang van je dorp naar ClashKing",
+  "upgradeTrackerNoDataBody": "Kopieer de JSON met accountgegevens uit Clash of Clans en plak deze vanaf je klembord. Je gegevens blijven op dit apparaat.",
+  "upgradeTrackerNoDataLocation": "Open in Clash of Clans Instellingen > Meer instellingen. De JSON met accountgegevens staat direct onder het gedeelte API-token.",
+  "upgradeTrackerOpenMoreSettings": "Meer instellingen openen in Clash of Clans",
+  "upgradeTrackerNoLinkedAccount": "Koppel een Clash of Clans-account voordat je de accountgegevens importeert.",
+  "upgradeTrackerUpdatedJustNow": "Zojuist bijgewerkt",
+  "upgradeTrackerUpdatedMinutesAgo": "{count} minuten geleden bijgewerkt",
   "@upgradeTrackerUpdatedMinutesAgo": {
     "placeholders": {
       "count": {
@@ -3525,7 +3525,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedHoursAgo": "Updated {count} hours ago",
+  "upgradeTrackerUpdatedHoursAgo": "{count} uur geleden bijgewerkt",
   "@upgradeTrackerUpdatedHoursAgo": {
     "placeholders": {
       "count": {
@@ -3533,7 +3533,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedOn": "Updated {date}",
+  "upgradeTrackerUpdatedOn": "Bijgewerkt op {date}",
   "@upgradeTrackerUpdatedOn": {
     "placeholders": {
       "date": {
@@ -3541,18 +3541,18 @@
       }
     }
   },
-  "upgradeTrackerSearchUpgrades": "Search upgrades",
-  "upgradeTrackerSearchCollection": "Search collection",
-  "upgradeTrackerShowFilters": "Show filters",
-  "upgradeTrackerHideFilters": "Hide filters",
-  "upgradeTrackerFilterAll": "All",
-  "upgradeTrackerFilterOwned": "Owned",
-  "upgradeTrackerFilterMissing": "Missing",
-  "upgradeTrackerAllVillages": "All villages",
-  "upgradeTrackerHomeVillage": "Home Village",
-  "upgradeTrackerBuilderBase": "Builder Base",
-  "upgradeTrackerNoMatchingItems": "No matching items",
-  "upgradeTrackerOwnedCount": "{owned} of {total} owned",
+  "upgradeTrackerSearchUpgrades": "Upgrades zoeken",
+  "upgradeTrackerSearchCollection": "Verzameling doorzoeken",
+  "upgradeTrackerShowFilters": "Filters tonen",
+  "upgradeTrackerHideFilters": "Filters verbergen",
+  "upgradeTrackerFilterAll": "Alle",
+  "upgradeTrackerFilterOwned": "In bezit",
+  "upgradeTrackerFilterMissing": "Ontbrekend",
+  "upgradeTrackerAllVillages": "Alle dorpen",
+  "upgradeTrackerHomeVillage": "Thuisdorp",
+  "upgradeTrackerBuilderBase": "Bouwersbasis",
+  "upgradeTrackerNoMatchingItems": "Geen overeenkomende items",
+  "upgradeTrackerOwnedCount": "{owned} van {total} in bezit",
   "@upgradeTrackerOwnedCount": {
     "placeholders": {
       "owned": {
@@ -3563,7 +3563,7 @@
       }
     }
   },
-  "upgradeTrackerLevelsLeft": "{count} levels left",
+  "upgradeTrackerLevelsLeft": "Nog {count} niveaus",
   "@upgradeTrackerLevelsLeft": {
     "placeholders": {
       "count": {
@@ -3579,10 +3579,10 @@
       }
     }
   },
-  "upgradeTrackerCollected": "collected",
-  "upgradeTrackerMissing": "missing",
-  "upgradeTrackerDataAge": "Account data",
-  "upgradeTrackerBuildersCount": "{count} builders",
+  "upgradeTrackerCollected": "verzameld",
+  "upgradeTrackerMissing": "ontbrekend",
+  "upgradeTrackerDataAge": "Accountgegevens",
+  "upgradeTrackerBuildersCount": "{count} bouwers",
   "@upgradeTrackerBuildersCount": {
     "placeholders": {
       "count": {
@@ -3590,11 +3590,11 @@
       }
     }
   },
-  "upgradeTrackerLaboratory": "Laboratory",
-  "upgradeTrackerPets": "Pets",
-  "upgradeTrackerWalls": "Walls",
-  "upgradeTrackerEquipment": "Equipment",
-  "upgradeTrackerLevelsRemaining": "{count} levels remaining",
+  "upgradeTrackerLaboratory": "Laboratorium",
+  "upgradeTrackerPets": "Huisdieren",
+  "upgradeTrackerWalls": "Muren",
+  "upgradeTrackerEquipment": "Uitrusting",
+  "upgradeTrackerLevelsRemaining": "{count} resterende niveaus",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
       "count": {
@@ -3602,7 +3602,7 @@
       }
     }
   },
-  "upgradeTrackerCompletesOn": "Completes {date} · {duration}",
+  "upgradeTrackerCompletesOn": "Klaar op {date} · {duration}",
   "@upgradeTrackerCompletesOn": {
     "placeholders": {
       "date": {
@@ -3613,33 +3613,33 @@
       }
     }
   },
-  "upgradeTrackerHeaderComplete": "Complete",
-  "upgradeTrackerHeaderLevelsLeft": "Levels left",
-  "upgradeTrackerHeaderActive": "Active",
-  "upgradeTrackerHeaderFinishes": "Finishes",
-  "upgradeTrackerHeaderOwned": "Owned",
-  "upgradeTrackerHeaderUpdated": "Updated",
-  "homeCouldNotLoadTitle": "Home could not load",
-  "homeVerifiedAccountRequiredTitle": "Verify a linked account",
-  "homeVerifiedAccountRequiredBody": "Home needs at least one verified Clash account. Link an account or verify an existing link to continue.",
-  "homeVerifyAccountAction": "Link or verify account",
-  "playerOptionVerifyAccountBody": "This account isn't verified yet. Verify it to unlock the to-do, Ranked, and Upgrade Tracker options below.",
-  "homeUpcomingTitle": "Upcoming",
-  "homeUpcomingSubtitle": "The next deadlines and upgrade completions across your accounts.",
-  "homeCollapseSection": "Collapse section",
-  "homeExpandSection": "Expand section",
-  "homeUpcomingEmpty": "No tracked deadlines are coming up. Pull to refresh if this account was just linked.",
-  "homeRecentlyCompleted": "Completed",
-  "homeTodoTitle": "To do",
-  "homeTodoSubtitle": "Actionable account details, ordered by urgency.",
-  "homeTodoEmpty": "No verified account needs attention right now.",
-  "homeClanless": "No clan",
-  "homeNeedsAttention": "Needs attention",
-  "homeCaughtUp": "Caught up",
-  "homeTrackingDataPending": "This verified player is newly tracked or inactive, so actionable details are not available yet.",
-  "homeUpgradeUnavailable": "Upgrade data could not be loaded. Your other account data is still current.",
-  "homeUpgradeNotImported": "No upgrade data yet. Import this verified account's JSON in Upgrade tracker.",
-  "homeUpgradeActiveCount": "{count} active upgrades",
+  "upgradeTrackerHeaderComplete": "Voltooid",
+  "upgradeTrackerHeaderLevelsLeft": "Niveaus over",
+  "upgradeTrackerHeaderActive": "Actief",
+  "upgradeTrackerHeaderFinishes": "Klaar",
+  "upgradeTrackerHeaderOwned": "In bezit",
+  "upgradeTrackerHeaderUpdated": "Bijgewerkt",
+  "homeCouldNotLoadTitle": "Start kon niet worden geladen",
+  "homeVerifiedAccountRequiredTitle": "Verifieer een gekoppeld account",
+  "homeVerifiedAccountRequiredBody": "Voor Start is minstens één geverifieerd Clash-account nodig. Koppel een account of verifieer een bestaande koppeling om door te gaan.",
+  "homeVerifyAccountAction": "Account koppelen of verifiëren",
+  "playerOptionVerifyAccountBody": "Dit account is nog niet geverifieerd. Verifieer het om de opties Taken, Klassement en Upgradetracker hieronder te ontgrendelen.",
+  "homeUpcomingTitle": "Binnenkort",
+  "homeUpcomingSubtitle": "De volgende deadlines en voltooide upgrades voor al je accounts.",
+  "homeCollapseSection": "Sectie inklappen",
+  "homeExpandSection": "Sectie uitklappen",
+  "homeUpcomingEmpty": "Er komen geen gevolgde deadlines aan. Trek om te vernieuwen als dit account zojuist is gekoppeld.",
+  "homeRecentlyCompleted": "Voltooid",
+  "homeTodoTitle": "Te doen",
+  "homeTodoSubtitle": "Uitvoerbare accountgegevens, gesorteerd op urgentie.",
+  "homeTodoEmpty": "Geen geverifieerd account vereist nu aandacht.",
+  "homeClanless": "Geen clan",
+  "homeNeedsAttention": "Vereist aandacht",
+  "homeCaughtUp": "Helemaal bijgewerkt",
+  "homeTrackingDataPending": "Deze geverifieerde speler wordt pas sinds kort gevolgd of is inactief, dus uitvoerbare gegevens zijn nog niet beschikbaar.",
+  "homeUpgradeUnavailable": "Upgradegegevens konden niet worden geladen. Je andere accountgegevens zijn nog actueel.",
+  "homeUpgradeNotImported": "Nog geen upgradegegevens. Importeer de JSON van dit geverifieerde account in de Upgradetracker.",
+  "homeUpgradeActiveCount": "{count} actieve upgrades",
   "@homeUpgradeActiveCount": {
     "placeholders": {
       "count": {
@@ -3647,9 +3647,9 @@
       }
     }
   },
-  "homeUpgradeIdle": "No active upgrade timers were found; builders may be idle.",
-  "homeDone": "Done",
-  "homeRemainingCount": "{count} left",
+  "homeUpgradeIdle": "Er zijn geen actieve upgradetimers gevonden; mogelijk zijn er bouwers inactief.",
+  "homeDone": "Klaar",
+  "homeRemainingCount": "Nog {count}",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -3657,10 +3657,10 @@
       }
     }
   },
-  "homeVerifiedPlayerDataMissing": "This link is verified, but its player profile is unavailable. Pull to refresh or wait for tracking to begin.",
-  "homeSinceAwayTitle": "Since away",
-  "homeSinceAwayFirstVisit": "This is the first tracked Home visit, so older activity is not marked new.",
-  "homeSinceAwaySubtitle": "New markers compare with your previous Home open at {time}.",
+  "homeVerifiedPlayerDataMissing": "Deze koppeling is geverifieerd, maar het spelersprofiel is niet beschikbaar. Trek om te vernieuwen of wacht tot het volgen begint.",
+  "homeSinceAwayTitle": "Sinds je vertrek",
+  "homeSinceAwayFirstVisit": "Dit is het eerste gevolgde bezoek aan Start, dus oudere activiteit wordt niet als nieuw gemarkeerd.",
+  "homeSinceAwaySubtitle": "Nieuwe markeringen worden vergeleken met de vorige keer dat je Start opende om {time}.",
   "@homeSinceAwaySubtitle": {
     "placeholders": {
       "time": {
@@ -3668,17 +3668,17 @@
       }
     }
   },
-  "homeSinceAwayEmpty": "No join, leave, or player-history activity is available for these verified players and clans.",
-  "homeNewMarker": "New",
-  "homePulseTitle": "Your pulse",
-  "homePulseSubtitle": "Personal 30-day war and CWL form, ranked play, and available global rankings.",
-  "homePulseEmpty": "Performance history or rankings are not available yet. Newly tracked and inactive accounts will fill in as data arrives.",
-  "homeToday": "Today",
-  "homeYesterday": "Yesterday",
-  "homeEarlier": "Earlier",
-  "homeRankedAttacks": "Ranked attacks",
-  "homeSeasonPass": "Season pass",
-  "homeUpcomingAccountDetail": "{player} has {count} remaining.",
+  "homeSinceAwayEmpty": "Er is geen activiteit rond toetreden, vertrekken of spelersgeschiedenis beschikbaar voor deze geverifieerde spelers en clans.",
+  "homeNewMarker": "Nieuw",
+  "homePulseTitle": "Jouw overzicht",
+  "homePulseSubtitle": "Je persoonlijke prestaties van de afgelopen 30 dagen in oorlogen, CWL en het klassement, plus beschikbare wereldranglijsten.",
+  "homePulseEmpty": "Prestatiegeschiedenis of ranglijsten zijn nog niet beschikbaar. Voor pas gevolgde en inactieve accounts worden deze gevuld zodra gegevens binnenkomen.",
+  "homeToday": "Vandaag",
+  "homeYesterday": "Gisteren",
+  "homeEarlier": "Eerder",
+  "homeRankedAttacks": "Klassementsaanvallen",
+  "homeSeasonPass": "Seizoenspas",
+  "homeUpcomingAccountDetail": "{player} heeft er nog {count}.",
   "@homeUpcomingAccountDetail": {
     "placeholders": {
       "player": {
@@ -3689,8 +3689,8 @@
       }
     }
   },
-  "homeUpgradeDataNeeded": "Add upgrade data",
-  "homeUpgradeDataNeededDetail": "Import {player}'s account JSON to track upgrade timers and idle builders.",
+  "homeUpgradeDataNeeded": "Upgradegegevens toevoegen",
+  "homeUpgradeDataNeededDetail": "Importeer de account-JSON van {player} om upgradetimers en inactieve bouwers te volgen.",
   "@homeUpgradeDataNeededDetail": {
     "placeholders": {
       "player": {
@@ -3698,8 +3698,8 @@
       }
     }
   },
-  "homeUpgradeIdleTitle": "Builders may be idle",
-  "homeUpgradeIdleDetail": "{player} has upgrade data, but no active timers were found.",
+  "homeUpgradeIdleTitle": "Mogelijk zijn er bouwers inactief",
+  "homeUpgradeIdleDetail": "{player} heeft upgradegegevens, maar er zijn geen actieve timers gevonden.",
   "@homeUpgradeIdleDetail": {
     "placeholders": {
       "player": {
@@ -3707,7 +3707,7 @@
       }
     }
   },
-  "homeUpgradeAccountDetail": "Upgrade timer for {player}.",
+  "homeUpgradeAccountDetail": "Upgradetimer voor {player}.",
   "@homeUpgradeAccountDetail": {
     "placeholders": {
       "player": {
@@ -3715,10 +3715,10 @@
       }
     }
   },
-  "homePulseWarAverage": "30-day war average",
-  "homePulseCwlAverage": "30-day CWL average",
-  "homePulseRankedToday": "30-day ranked",
-  "homePulseRankedValue": "{count} attacks · {trophies} trophies",
+  "homePulseWarAverage": "Oorlogsgemiddelde over 30 dagen",
+  "homePulseCwlAverage": "CWL-gemiddelde over 30 dagen",
+  "homePulseRankedToday": "Klassement over 30 dagen",
+  "homePulseRankedValue": "{count} aanvallen · {trophies} trofeeën",
   "@homePulseRankedValue": {
     "placeholders": {
       "count": {
@@ -3729,14 +3729,14 @@
       }
     }
   },
-  "homePulseBestGlobalRank": "Best global player rank",
-  "homeActivityJoined": "joined",
-  "homeActivityLeft": "left",
-  "homeActivityAClan": "a clan",
+  "homePulseBestGlobalRank": "Beste wereldwijde spelersrang",
+  "homeActivityJoined": "trad toe tot",
+  "homeActivityLeft": "verliet",
+  "homeActivityAClan": "een clan",
   "statsMeta": "Meta",
   "statsBattle": "Gevecht",
   "statsWorld": "Wereld",
-  "statsHeaderSubtitle": "Explore battle performance and the world we track.",
+  "statsHeaderSubtitle": "Ontdek gevechtsprestaties en de wereld die we volgen.",
   "statsPreview": "Voorbeeld",
   "statsTownHallDistribution": "Stadhuisdistributie",
   "statsBuilderHallDistribution": "Verdeling bouwzaal",
@@ -3756,13 +3756,13 @@
     }
   },
   "statsEquipmentAdoption": "Aanneming van uitrusting per niveau",
-  "statsEquipmentAdoptionPreview": "Mock layout until aggregated ownership and level counts are available.",
+  "statsEquipmentAdoptionPreview": "Voorbeeldindeling totdat samengevoegde aantallen voor bezit en niveaus beschikbaar zijn.",
   "statsExperienceDistribution": "Speler XP-distributie",
-  "statsExperienceDistributionPreview": "Mock layout until XP histogram buckets are available.",
+  "statsExperienceDistributionPreview": "Voorbeeldindeling totdat de XP-histogramgroepen beschikbaar zijn.",
   "statsCwlRosterSizes": "CWL-roostergroottes",
-  "statsCwlRosterSizesPreview": "Mock 15v15 / 30v30 split until group-size counts are available.",
+  "statsCwlRosterSizesPreview": "Voorbeeldverdeling 15 tegen 15 / 30 tegen 30 totdat aantallen per groepsgrootte beschikbaar zijn.",
   "statsWarsOverTime": "Oorlogen in de loop van de tijd",
-  "statsWarsOverTimePreview": "Mock daily trend until the canonical counts endpoint is connected.",
+  "statsWarsOverTimePreview": "Voorbeeld van de dagelijkse trend totdat het definitieve eindpunt voor aantallen is gekoppeld.",
   "statsStrategyLenses": "Strategische lenzen",
   "statsStrategyLensesBody": "Benoemde strategieën gebruiken overlappende regels met versiebeheer. Exacte uitrustingen blijven gescheiden, zodat het label nooit pretendeert de strijdintentie te bewijzen.",
   "statsQueenCharge": "Koningin Charge",
@@ -3777,14 +3777,14 @@
   "statsExactLoadouts": "Exacte uitrustingen",
   "statsCustomLens": "Aangepaste lens",
   "statsCustomLensBody": "Kies de gewenste hoeveelheden, uitsluitingen, stadhuis, competitie, voorbeeldvloer en sorteervolgorde. Dit geldt voor echte uitrustingen, maar is nog niet opgeslagen.",
-  "rankedLeagueTitle": "Ranked League",
-  "rankedLeagueAbout": "About Ranked League",
-  "rankedLeagueAboutBody": "This page uses the official weekly Ranked League group, battle logs and period history. Current results can change until the period ends.",
-  "rankedLeagueOverview": "Overview",
-  "rankedLeagueRanking": "Ranking",
-  "rankedLeagueGroupRank": "Group rank",
-  "rankedLeagueTrophies": "Trophies",
-  "rankedLeaguePlayers": "{count} players",
+  "rankedLeagueTitle": "Klassementsdivisie",
+  "rankedLeagueAbout": "Over de Klassementsdivisie",
+  "rankedLeagueAboutBody": "Deze pagina gebruikt de officiële wekelijkse Klassementsdivisiegroep, gevechtslogboeken en periodegeschiedenis. De huidige resultaten kunnen veranderen totdat de periode eindigt.",
+  "rankedLeagueOverview": "Overzicht",
+  "rankedLeagueRanking": "Klassement",
+  "rankedLeagueGroupRank": "Groepsrang",
+  "rankedLeagueTrophies": "Trofeeën",
+  "rankedLeaguePlayers": "{count} spelers",
   "@rankedLeaguePlayers": {
     "placeholders": {
       "count": {
@@ -3792,7 +3792,7 @@
       }
     }
   },
-  "rankedLeagueBest": "Best: {value}",
+  "rankedLeagueBest": "Beste: {value}",
   "@rankedLeagueBest": {
     "placeholders": {
       "value": {
@@ -3800,15 +3800,15 @@
       }
     }
   },
-  "rankedLeagueNoGroup": "No active group",
-  "rankedLeagueCurrentPeriod": "Current period",
-  "rankedLeagueLiveGroupSubtitle": "Live results from the player's official Ranked League group.",
-  "rankedLeagueBattles": "Battles",
-  "rankedLeagueAttacksPlayed": "attacks played",
-  "rankedLeagueAttackRecord": "Attack record",
-  "rankedLeagueDefenseRecord": "Defense record",
-  "rankedLeagueWinsLosses": "wins - losses",
-  "rankedLeagueDefensesLogged": "{count} defenses logged",
+  "rankedLeagueNoGroup": "Geen actieve groep",
+  "rankedLeagueCurrentPeriod": "Huidige periode",
+  "rankedLeagueLiveGroupSubtitle": "Live resultaten uit de officiële Klassementsdivisiegroep van de speler.",
+  "rankedLeagueBattles": "Gevechten",
+  "rankedLeagueAttacksPlayed": "gespeelde aanvallen",
+  "rankedLeagueAttackRecord": "Aanvalsresultaat",
+  "rankedLeagueDefenseRecord": "Verdedigingsresultaat",
+  "rankedLeagueWinsLosses": "overwinningen - nederlagen",
+  "rankedLeagueDefensesLogged": "{count} verdedigingen geregistreerd",
   "@rankedLeagueDefensesLogged": {
     "placeholders": {
       "count": {
@@ -3816,25 +3816,25 @@
       }
     }
   },
-  "rankedLeagueRecentBattles": "Recent battles",
-  "rankedLeagueRecentBattlesSubtitle": "Detailed results available for the active weekly group.",
-  "rankedLeagueAttacks": "Attacks",
-  "rankedLeagueDefenses": "Defenses",
-  "rankedLeagueNoBattles": "No battle recorded yet.",
-  "rankedLeagueGroupRanking": "Group ranking",
-  "rankedLeagueRankingSubtitle": "Live standings for the current group. Your player is highlighted.",
-  "rankedLeagueJumpToMyRank": "Jump to my rank",
-  "rankedLeagueLastPeriod": "Last Period",
-  "rankedLeagueBestGroupRank": "Best Rank",
-  "rankedLeaguePeriodHistory": "Period history",
-  "rankedLeagueHistorySubtitle": "Official summaries for completed weekly periods.",
-  "rankedLeagueBestRankedResults": "Best Ranked results",
-  "rankedLeagueAllRankedResults": "All Ranked results",
-  "rankedLeaguePeriods": "Periods",
-  "rankedLeaguePeriodStats": "Period statistics",
-  "rankedLeagueTrophyProgress": "Trophy progress by battle",
-  "rankedLeagueTrophiesByPeriod": "Trophies by period",
-  "rankedLeagueBattleCount": "{count} battles",
+  "rankedLeagueRecentBattles": "Recente gevechten",
+  "rankedLeagueRecentBattlesSubtitle": "Gedetailleerde resultaten zijn beschikbaar voor de actieve wekelijkse groep.",
+  "rankedLeagueAttacks": "Aanvallen",
+  "rankedLeagueDefenses": "Verdedigingen",
+  "rankedLeagueNoBattles": "Nog geen gevecht geregistreerd.",
+  "rankedLeagueGroupRanking": "Groepsklassement",
+  "rankedLeagueRankingSubtitle": "Live stand voor de huidige groep. Jouw speler is gemarkeerd.",
+  "rankedLeagueJumpToMyRank": "Naar mijn rang",
+  "rankedLeagueLastPeriod": "Vorige periode",
+  "rankedLeagueBestGroupRank": "Beste rang",
+  "rankedLeaguePeriodHistory": "Periodegeschiedenis",
+  "rankedLeagueHistorySubtitle": "Officiële samenvattingen van voltooide wekelijkse perioden.",
+  "rankedLeagueBestRankedResults": "Beste klassementsresultaten",
+  "rankedLeagueAllRankedResults": "Alle klassementsresultaten",
+  "rankedLeaguePeriods": "Perioden",
+  "rankedLeaguePeriodStats": "Periodestatistieken",
+  "rankedLeagueTrophyProgress": "Trofeevoortgang per gevecht",
+  "rankedLeagueTrophiesByPeriod": "Trofeeën per periode",
+  "rankedLeagueBattleCount": "{count} gevechten",
   "@rankedLeagueBattleCount": {
     "placeholders": {
       "count": {
@@ -3842,7 +3842,7 @@
       }
     }
   },
-  "rankedLeagueBattleProgress": "{count} / {max} battles",
+  "rankedLeagueBattleProgress": "{count} / {max} gevechten",
   "@rankedLeagueBattleProgress": {
     "placeholders": {
       "count": {
@@ -3853,7 +3853,7 @@
       }
     }
   },
-  "rankedLeagueTrophyAverage": "{trophies} trophies · {average} avg.",
+  "rankedLeagueTrophyAverage": "{trophies} trofeeën · gem. {average}",
   "@rankedLeagueTrophyAverage": {
     "placeholders": {
       "trophies": {
@@ -3864,15 +3864,15 @@
       }
     }
   },
-  "rankedLeagueByPeriod": "By period",
-  "rankedLeaguePeriodTab": "Period",
-  "rankedLeagueAverage": "Average",
-  "rankedLeagueRemaining": "Remaining",
-  "rankedLeagueSevenDayPeriod": "7-day Ranked League period",
-  "rankedLeagueEquipmentUnavailable": "Army and equipment are not included in the official Ranked League battle logs yet.",
-  "rankedLeagueBattleDetailsUnavailable": "Detailed battle logs are not available for this period.",
-  "rankedLeagueHistoricalDetailsUnavailable": "Only the official period summary is available for this older period.",
-  "rankedLeagueStarBreakdownUnavailable": "The API provides the star total, but not the detailed star distribution for this period.",
+  "rankedLeagueByPeriod": "Per periode",
+  "rankedLeaguePeriodTab": "Periode",
+  "rankedLeagueAverage": "Gemiddelde",
+  "rankedLeagueRemaining": "Resterend",
+  "rankedLeagueSevenDayPeriod": "7-daagse Klassementsdivisieperiode",
+  "rankedLeagueEquipmentUnavailable": "Leger en uitrusting zijn nog niet opgenomen in de officiële gevechtslogboeken van de Klassementsdivisie.",
+  "rankedLeagueBattleDetailsUnavailable": "Gedetailleerde gevechtslogboeken zijn voor deze periode niet beschikbaar.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Voor deze oudere periode is alleen de officiële periodesamenvatting beschikbaar.",
+  "rankedLeagueStarBreakdownUnavailable": "De API levert het totale aantal sterren, maar niet de gedetailleerde sterrenverdeling voor deze periode.",
   "notifAudienceSectionTitle": "Meldingspubliek",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
@@ -3915,8 +3915,8 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Choose accounts manually",
-  "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
+  "notifChooseAccountsManually": "Accounts handmatig kiezen",
+  "notifAudienceAcrossDevicesDescription": "Deze accountkeuzes gelden op al je apparaten.",
   "notifAccountBookmarked": "Opgeslagen",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
@@ -3953,42 +3953,42 @@
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
-  "widgetUpgradeProgressTitle": "Upgrade Progress",
-  "widgetHomeVillage": "HOME VILLAGE",
-  "widgetVillage": "VILLAGE",
-  "widgetLaboratory": "LAB",
-  "widgetPets": "PETS",
-  "widgetBuilderBase": "BUILDER BASE",
-  "widgetResearch": "RESEARCH",
-  "widgetActive": "ACTIVE",
-  "widgetIdle": "IDLE",
-  "widgetLocked": "LOCKED",
-  "widgetMaxed": "MAXED",
-  "widgetNotUnlocked": "Not unlocked",
-  "widgetFullyUpgraded": "Fully upgraded",
-  "widgetNoActiveUpgrades": "No active upgrades",
-  "widgetNoActiveResearch": "No active research",
-  "widgetDataStale": "Update needed",
-  "widgetMoreUpgrade": "more upgrade",
-  "widgetMoreUpgrades": "more upgrades",
-  "widgetLevelShort": "Lv",
-  "widgetReady": "Ready",
-  "widgetReadyIn": "Ready in",
-  "widgetHelping": "Helping",
-  "widgetApprenticeShort": "Apprentice",
-  "widgetAssistantShort": "Assistant",
+  "widgetUpgradeProgressTitle": "Upgradevoortgang",
+  "widgetHomeVillage": "THUISDORP",
+  "widgetVillage": "DORP",
+  "widgetLaboratory": "LABORATORIUM",
+  "widgetPets": "HUISDIEREN",
+  "widgetBuilderBase": "BOUWERSBASIS",
+  "widgetResearch": "ONDERZOEK",
+  "widgetActive": "ACTIEF",
+  "widgetIdle": "INACTIEF",
+  "widgetLocked": "VERGRENDELD",
+  "widgetMaxed": "MAXIMAAL",
+  "widgetNotUnlocked": "Niet ontgrendeld",
+  "widgetFullyUpgraded": "Volledig geüpgraded",
+  "widgetNoActiveUpgrades": "Geen actieve upgrades",
+  "widgetNoActiveResearch": "Geen actief onderzoek",
+  "widgetDataStale": "Update vereist",
+  "widgetMoreUpgrade": "upgrade meer",
+  "widgetMoreUpgrades": "upgrades meer",
+  "widgetLevelShort": "Niv.",
+  "widgetReady": "Klaar",
+  "widgetReadyIn": "Klaar over",
+  "widgetHelping": "Helpt",
+  "widgetApprenticeShort": "Leerling",
+  "widgetAssistantShort": "Assistent",
   "widgetAlchemistShort": "Alchemist",
-  "widgetBuilderPotion": "Builder Potion",
-  "widgetResearchPotion": "Research Potion",
-  "widgetPetPotion": "Pet Potion",
-  "widgetClockTower": "Clock Tower",
-  "widgetTownHallBuilderBoost": "Town Hall builder boost",
-  "widgetTownHallLabBoost": "Town Hall lab boost",
-  "widgetBuilderBoostShort": "Builder",
-  "widgetResearchBoostShort": "Research",
-  "widgetPetBoostShort": "Pet",
-  "widgetClockBoostShort": "Clock",
-  "widgetBuilderCostPerk": "{percent}% korting op bouwkosten",
+  "widgetBuilderPotion": "Bouwersdrank",
+  "widgetResearchPotion": "Onderzoeksdrank",
+  "widgetPetPotion": "Huisdierendrank",
+  "widgetClockTower": "Klokkentoren",
+  "widgetTownHallBuilderBoost": "Stadhuisboost voor bouwers",
+  "widgetTownHallLabBoost": "Stadhuisboost voor laboratorium",
+  "widgetBuilderBoostShort": "Bouwer",
+  "widgetResearchBoostShort": "Onderzoek",
+  "widgetPetBoostShort": "Huisdier",
+  "widgetClockBoostShort": "Klok",
+  "widgetBuilderCostPerk": "{percent}% voordeel op bouwerskosten",
   "@widgetBuilderCostPerk": {
     "placeholders": {
       "percent": {
@@ -3996,7 +3996,7 @@
       }
     }
   },
-  "widgetBuilderTimePerk": "{percent}% kortere bouwtijd",
+  "widgetBuilderTimePerk": "{percent}% voordeel op bouwtijd",
   "@widgetBuilderTimePerk": {
     "placeholders": {
       "percent": {
@@ -4004,7 +4004,7 @@
       }
     }
   },
-  "widgetLabCostPerk": "{percent}% korting op laboratoriumkosten",
+  "widgetLabCostPerk": "{percent}% voordeel op laboratoriumkosten",
   "@widgetLabCostPerk": {
     "placeholders": {
       "percent": {
@@ -4012,7 +4012,7 @@
       }
     }
   },
-  "widgetLabTimePerk": "{percent}% kortere onderzoekstijd",
+  "widgetLabTimePerk": "{percent}% voordeel op laboratoriumtijd",
   "@widgetLabTimePerk": {
     "placeholders": {
       "percent": {
@@ -4023,7 +4023,7 @@
   "farmGoalTitle": "Farmdoel",
   "farmGoalFormTitle": "Te farmen grondstoffen",
   "farmGoalAccountTitle": "Account",
-  "farmGoalAccountHint": "Het geselecteerde account bepaalt het stadhuisniveau en de huidige divisie die voor de schatting worden gebruikt.",
+  "farmGoalAccountHint": "Het geselecteerde account levert het stadhuis en de huidige divisie voor de schatting.",
   "farmGoalTargetTitle": "Gebouw om te upgraden",
   "farmGoalTargetBuildingLabel": "Gebouw",
   "farmGoalChooseBuilding": "Kies een gebouw",
@@ -4032,7 +4032,7 @@
   "farmGoalNoTargetBody": "Kies het gebouw dat je wilt upgraden om de benodigde buit te schatten.",
   "farmGoalTargetLevelLabel": "Doelniveau",
   "farmGoalUpgradeCostLabel": "Upgradekosten",
-  "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
+  "farmGoalCostUnavailable": "De upgradekosten voor dit niveau zijn niet beschikbaar.",
   "farmGoalLootTitle": "Geschatte buit",
   "farmGoalResourceLabel": "Grondstof",
   "farmGoalAmountLabel": "Te farmen hoeveelheid",
@@ -4052,7 +4052,7 @@
       }
     }
   },
-  "farmGoalStarBonusEstimate": "Sterbonus: {amount} {resource} na 5 sterren. Deze wordt niet meegerekend bij het aantal benodigde aanvallen.",
+  "farmGoalStarBonusEstimate": "Sterrenbonus: {amount} {resource} na 5 sterren. Deze telt niet mee voor het benodigde aantal aanvallen.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
       "amount": {
@@ -4073,19 +4073,19 @@
     }
   },
   "farmGoalAttackShort": "aanval",
-  "farmGoalScenarioHint": "Benadering: de hoeveelheid buit hangt af van welke gebouwen worden vernietigd. De percentages worden toegepast op je schatting van een perfecte aanval.",
-  "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
+  "farmGoalScenarioHint": "Benadering: de buit varieert per vernietigd gebouw. Percentages worden toegepast op de schatting voor een perfecte aanval.",
+  "farmGoalNoLeagueLoot": "Kies een account met een divisie voor een buitsuggestie.",
   "farmGoalTrackerNextTitle": "Volgende in het Upgrade Tracker-plan",
   "farmGoalTrackerMissingTitle": "Upgrade Tracker-gegevens vereist",
   "farmGoalTrackerMissingBody": "Importeer de upgrade-JSON van dit account in Upgrade Tracker om hier het volgende geplande gebouw en de exacte kosten te tonen.",
   "farmGoalTrackerPlanComplete": "Er zijn geen resterende gebouwupgrades gevonden in Upgrade Tracker. Je kunt nog steeds handmatig een gebouw kiezen.",
   "farmGoalOpenUpgradeTracker": "Upgrade Tracker openen",
   "farmGoalUseTrackerTarget": "Gebouw gebruiken",
-  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
-  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
-  "farmGoalResultTitle": "Attacks needed",
-  "farmGoalAttacks": "attacks",
-  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
+  "farmGoalMissingTarget": "Kies een gebouw en doelniveau om het benodigde aantal aanvallen te berekenen.",
+  "farmGoalMissingValues": "Vul een doel en een geschatte buit voor een perfecte aanval in om de aanvalsscenario's te bekijken.",
+  "farmGoalResultTitle": "Benodigde aanvallen",
+  "farmGoalAttacks": "aanvallen",
+  "farmGoalResultSummary": "{target} {resource} met ongeveer {average} per perfecte aanval.",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
@@ -4099,7 +4099,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "SH{level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -4107,51 +4107,51 @@
       }
     }
   },
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "clanWarFrequencyTitle": "Wars",
-  "notifScopeAllAccounts": "All accounts",
+  "gameCreatorCode": "Creatorcode: ClashKing",
+  "todoExplanationRaidsTitle": "Overvallen:",
+  "todoExplanationRaids": "Gewicht van 5 punten per account (of 6 als de laatste aanval is ontgrendeld), 1 aanval = 1 punt.",
+  "clanWarFrequencyTitle": "Oorlogen",
+  "notifScopeAllAccounts": "Alle accounts",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
-  "settingsLiveActivityTest": "Live Activity Test",
+  "settingsLiveActivityTest": "Liveactiviteit testen",
   "@settingsLiveActivityTest": {
     "description": "Settings section: live activity test (debug only)"
   },
-  "settingsLiveActivityStart": "Start test activity",
+  "settingsLiveActivityStart": "Testactiviteit starten",
   "@settingsLiveActivityStart": {
     "description": "Settings tile: start live activity test"
   },
-  "settingsLiveActivityStartSubtitle": "Shows a local clan-war preview.",
+  "settingsLiveActivityStartSubtitle": "Toont een lokale voorvertoning van een clanoorlog.",
   "@settingsLiveActivityStartSubtitle": {
     "description": "Settings tile: start live activity subtitle"
   },
-  "settingsLiveActivityUpdate": "Update score",
+  "settingsLiveActivityUpdate": "Score bijwerken",
   "@settingsLiveActivityUpdate": {
     "description": "Settings tile: update live activity score"
   },
-  "settingsLiveActivityUpdateSubtitle": "Advances the fake war score.",
+  "settingsLiveActivityUpdateSubtitle": "Verhoogt de score van de nep-oorlog.",
   "@settingsLiveActivityUpdateSubtitle": {
     "description": "Settings tile: update live activity subtitle"
   },
-  "settingsLiveActivityEnd": "End test activity",
+  "settingsLiveActivityEnd": "Testactiviteit beëindigen",
   "@settingsLiveActivityEnd": {
     "description": "Settings tile: end live activity test"
   },
-  "settingsLiveActivityEndSubtitle": "Removes the local preview.",
+  "settingsLiveActivityEndSubtitle": "Verwijdert de lokale voorvertoning.",
   "@settingsLiveActivityEndSubtitle": {
     "description": "Settings tile: end live activity subtitle"
   },
-  "notifSelectedAccounts": "Selected accounts",
+  "notifSelectedAccounts": "Geselecteerde accounts",
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "Filters",
+  "searchFilters": "Filteropties",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts gevolgd",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
       "loaded": {
@@ -4162,30 +4162,30 @@
       }
     }
   },
-  "calculatorsModeDamage": "Damage",
-  "calculatorsModeFarmGoal": "Farm goal",
-  "damageCalculatorTitle": "Damage Calculator",
-  "damageAccountPresetShort": "Account",
-  "damageChooseAccount": "Choose an account",
-  "damageSwitchAccount": "Switch account",
-  "damageAccountSelectorHint": "The levels used follow the selected account.",
-  "damageNoAccountsAvailable": "No verified account available",
-  "damageTargetSectionTitle": "Building to destroy",
-  "damageChooseTarget": "Choose a building",
-  "damageNoTargetTitle": "No building selected",
-  "damageNoTargetBody": "Choose a building to see how much damage it can take.",
-  "damageTargetLevelLabel": "Target level",
-  "damageCommonBuildings": "Most commonly chosen",
-  "damageAllBuildings": "All buildings",
-  "damageQuickSetups": "Choose a method",
-  "damageQuickSetupZapQuake": "Zap + quake",
-  "damageQuickSetupFireballQuake": "Fireball + quake",
-  "damageQuickSetupGiantArrow": "Giant Arrow",
-  "damageQuickSetupFlameFlinger": "Flame Flinger",
-  "damageQuickSetupCustom": "Custom",
-  "damageClearStack": "Clear",
-  "damageNoDamageSelected": "No damage",
-  "damageSelectedSourcesCount": "{count} source(s)",
+  "calculatorsModeDamage": "Schade",
+  "calculatorsModeFarmGoal": "Farmdoel",
+  "damageCalculatorTitle": "Schadecalculator",
+  "damageAccountPresetShort": "Gebruikersaccount",
+  "damageChooseAccount": "Kies een account",
+  "damageSwitchAccount": "Van account wisselen",
+  "damageAccountSelectorHint": "De gebruikte niveaus volgen het geselecteerde account.",
+  "damageNoAccountsAvailable": "Geen geverifieerd account beschikbaar",
+  "damageTargetSectionTitle": "Te vernietigen gebouw",
+  "damageChooseTarget": "Kies een gebouw",
+  "damageNoTargetTitle": "Geen gebouw geselecteerd",
+  "damageNoTargetBody": "Kies een gebouw om te zien hoeveel schade het kan verdragen.",
+  "damageTargetLevelLabel": "Doelniveau",
+  "damageCommonBuildings": "Meest gekozen",
+  "damageAllBuildings": "Alle gebouwen",
+  "damageQuickSetups": "Kies een methode",
+  "damageQuickSetupZapQuake": "Bliksem + aardbeving",
+  "damageQuickSetupFireballQuake": "Vuurbal + aardbeving",
+  "damageQuickSetupGiantArrow": "Reuzenpijl",
+  "damageQuickSetupFlameFlinger": "Vlammenwerper",
+  "damageQuickSetupCustom": "Aangepast",
+  "damageClearStack": "Wissen",
+  "damageNoDamageSelected": "Geen schade",
+  "damageSelectedSourcesCount": "{count} bron(nen)",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {
@@ -4193,20 +4193,20 @@
       }
     }
   },
-  "damageNoActiveSources": "Choose a method to show the damage sources to adjust.",
+  "damageNoActiveSources": "Kies een methode om de aan te passen schadebronnen te tonen.",
   "damageOtherSources": "Andere bronnen",
   "damageShowAllSources": "Nog een bron toevoegen",
   "damageShowFewerSources": "Andere bronnen verbergen",
   "searchCancel": "Annuleren",
-  "todoRaidAttacks": "Raidaanvallen",
-  "todoMockRaid4Left": "4 left",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
-  "todoMockRaid1Left": "1 left",
+  "todoRaidAttacks": "Overvalaanvallen",
+  "todoMockRaid4Left": "Nog 4",
+  "todoMockWarAltStatus": "18 m geleden actief · oorlog en overvallen vereisen aandacht",
+  "todoMockRaid1Left": "Nog 1",
   "gameAssetsCategoryBuildings": "Gebouwen",
-  "gameAssetsCategoryCapitalBase": "Hoofdstad basis",
+  "gameAssetsCategoryCapitalBase": "Hoofdstadbasis",
   "gameAssetsCategoryCapitalHouseParts": "Hoofdstadhuisonderdelen",
   "gameAssetsCategoryChests": "Kisten",
-  "gameAssetsCategoryClanLabels": "Clan labels",
+  "gameAssetsCategoryClanLabels": "Clanlabels",
   "gameAssetsCategoryCountryFlags": "Landenvlaggen",
   "gameAssetsCategoryDecorations": "Decoraties",
   "gameAssetsCategoryEquipment": "Uitrusting",
@@ -4222,6 +4222,6 @@
   "endpointStateWins": "Overwinningen",
   "notifGroupBattles": "Gevechten",
   "notifGroupSupport": "Ondersteuning",
-  "rankedLeagueAccountSelector": "Toon account",
+  "rankedLeagueAccountSelector": "Getoond account",
   "rankedLeagueStars": "Sterren"
 }
