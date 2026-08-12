@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Нажмите, чтобы увидеть оставшуюся стоимость и время улучшения",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Аниме-ярость",
   "announcementAnimeFurySubtitle": "Пролистайте обновление июня 2026",
   "sideRankingsTitle": "Рейтинги",
   "sideRankingsSubtitle": "Официальные таблицы лидеров и эндпоинты ClashKing.",
@@ -3744,7 +3744,7 @@
   "statsWarsOverTimePreview": "Временный дневной график до подключения основного источника количества войн.",
   "statsStrategyLenses": "Стратегические линзы",
   "statsStrategyLensesBody": "Именованные стратегии используют перекрывающиеся, версионные правила. Точные параметры снаряжения остаются отдельными, поэтому лейбл никогда не претендует на то, чтобы доказать намерение сражаться.",
-  "statsQueenCharge": "Queen Charge",
+  "statsQueenCharge": "Атака Королевы",
   "statsQueenChargeRule": "Archer Queen + минимум 5 целителей",
   "statsSuperBowlerCore": "Ядро супербоулера",
   "statsSuperBowlerRule": "По крайней мере 4 супербоулера",

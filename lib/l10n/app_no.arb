@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Trykk for gjenværende oppgraderingskostnad og tid",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Anime-raseri",
   "announcementAnimeFurySubtitle": "Trykk deg gjennom juni 2026-oppdateringen",
   "sideRankingsTitle": "Rangeringer",
   "sideRankingsSubtitle": "Offisielle ledertavler pluss ClashKing-endepunkter.",
@@ -2638,7 +2638,7 @@
   "endpointClanWarWinsPreview": "Internasjonalt · krigsseire gjennom tidene",
   "endpointTop200ArmyUsage": "Hærbruk topp 200",
   "endpointTop200ArmyUsagePreview": "Kamp logger · bruk av tropper og magier",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "Beste 200",
   "endpointStateWeekly": "Ukentlig",
   "endpointStateUsage": "Bruk",
   "notifGroupReminders": "Påminnelser",
@@ -3319,7 +3319,7 @@
   "rankingsSource": "Kilde",
   "rankingsOfficialSource": "Officiel Clash API",
   "rankingsResults": "Resultater",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "Beste {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3453,7 +3453,7 @@
     }
   },
   "gameAssetsSaveError": "Kunne ikke redde dette aktiv.",
-  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerPlan": "Oppgraderingsplan",
   "upgradeTrackerUpgrades": "Oppgraderinger",
   "upgradeTrackerCollection": "Samling",
   "upgradeTrackerChooseAccount": "Velg konto",
@@ -3712,7 +3712,7 @@
   "homeActivityJoined": "Sluttede sig til",
   "homeActivityLeft": "Venstre",
   "homeActivityAClan": "En klan",
-  "statsMeta": "Meta",
+  "statsMeta": "Metaspill",
   "statsBattle": "Slag",
   "statsWorld": "Verden",
   "statsHeaderSubtitle": "Utforsk kampprestasjoner og verdenen vi følger.",
@@ -3931,7 +3931,7 @@
   "widgetDataStale": "Oppdatering nødvendig",
   "widgetMoreUpgrade": "Mere oppgradering",
   "widgetMoreUpgrades": "Flere oppgraderinger",
-  "widgetLevelShort": "Lv",
+  "widgetLevelShort": "Niv.",
   "widgetReady": "Klar",
   "widgetReadyIn": "Klar ind",
   "widgetHelping": "Hjelper",

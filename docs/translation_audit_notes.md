@@ -5,7 +5,7 @@ Updated after the complete ARB localization audit.
 ## Mechanical validation
 
 - All 33 `lib/l10n/app_*.arb` files parse as JSON and match every message and metadata key in `app_en.arb`.
-- Every locale contains all 1,785 source messages, with no extra legacy keys.
+- Every locale contains all 1,783 source messages, with no extra legacy keys.
 - ICU generation and placeholder validation pass for every locale.
 - `flutter gen-l10n` completes successfully and `untranslated_messages.json` is empty.
 - Temporary translation markers and helper artifacts are absent.
@@ -17,39 +17,39 @@ Updated after the complete ARB localization audit.
 
 | Locale | Reviewed identical values |
 |---|---:|
-| `af` | 23 |
+| `af` | 17 |
 | `ar` | 11 |
-| `ca` | 31 |
-| `cs` | 24 |
-| `da` | 25 |
-| `de` | 16 |
-| `el` | 16 |
-| `es` | 25 |
-| `es_ES` | 25 |
-| `fi` | 17 |
-| `fr` | 28 |
-| `he` | 21 |
-| `hi` | 14 |
-| `hu` | 18 |
-| `it` | 28 |
-| `ja` | 22 |
+| `ca` | 26 |
+| `cs` | 20 |
+| `da` | 19 |
+| `de` | 13 |
+| `el` | 14 |
+| `es` | 22 |
+| `es_ES` | 22 |
+| `fi` | 13 |
+| `fr` | 18 |
+| `he` | 19 |
+| `hi` | 12 |
+| `hu` | 14 |
+| `it` | 25 |
+| `ja` | 20 |
 | `ko` | 17 |
-| `nl` | 25 |
-| `no` | 19 |
-| `pl` | 21 |
-| `pt` | 27 |
-| `ro` | 24 |
-| `ru` | 12 |
-| `sr` | 19 |
-| `sv` | 27 |
-| `tr` | 10 |
-| `uk` | 18 |
-| `ur` | 10 |
-| `vi` | 27 |
-| `zh` | 12 |
+| `nl` | 14 |
+| `no` | 13 |
+| `pl` | 18 |
+| `pt` | 22 |
+| `ro` | 19 |
+| `ru` | 10 |
+| `sr` | 17 |
+| `sv` | 20 |
+| `tr` | 8 |
+| `uk` | 15 |
+| `ur` | 8 |
+| `vi` | 20 |
+| `zh` | 9 |
 
 ## Terms intentionally preserved
 
 - `CWL`, `TH`, `DPS`, `HP`, and `XP` remain where they are the established game or app abbreviations.
 - `ClashKing`, `Discord`, `Google`, `Supercell`, and `Excel (.xlsx)` remain product names and formats.
-- Strategy and league names such as `Queen Charge`, `Meta`, and `Top 200` remain unchanged where that is normal usage in the locale.
+- Genuine cognates and established loanwords remain unchanged where the localized spelling is naturally identical, including French `Village`, Spanish `Error`, German `Gold`, and Italian `Password`.

@@ -244,7 +244,7 @@
   "authDiscordSignIn": "Connexion avec Discord",
   "authDiscordContinue": "Continuer avec Discord",
   "authDiscordDescription": "Synchronise tes données avec le Bot ClashKing et débloque le plein potentiel de ClashKing !",
-  "authEmail": "Email",
+  "authEmail": "E-mail",
   "authEmailHint": "Saisis ton adresse email",
   "authEmailDescription": "Utilise ton adresse email si tu ne peux pas accéder à Discord ou que tu veux utiliser l'application seulement",
   "authEmailRequired": "Veuillez saisir un email",
@@ -2600,7 +2600,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Toucher pour voir le coût et le temps d’amélioration restants",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Furie anime",
   "announcementAnimeFurySubtitle": "Découvre la mise à jour de juin 2026",
   "sideRankingsTitle": "Classements",
   "sideRankingsSubtitle": "Classements officiels et endpoints ClashKing.",
@@ -2730,7 +2730,7 @@
   "endpointClanWarWinsPreview": "International · victoires de guerre totales",
   "endpointTop200ArmyUsage": "Top 200 utilisation armées",
   "endpointTop200ArmyUsagePreview": "Journaux de combat · utilisation des troupes et sorts",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "200 meilleurs",
   "endpointStateWeekly": "Hebdo",
   "endpointStateUsage": "Utilisation",
   "notifGroupReminders": "Rappels",
@@ -3418,10 +3418,10 @@
   "rankingsWorldwideUnavailable": "Choisis une région ou un pays pour ce classement.",
   "rankingsLocationsLoadFailed": "Impossible de charger la liste complète des lieux. Le classement mondial reste disponible lorsqu’il est pris en charge.",
   "rankingsSnapshotDate": "Date de l’instantané",
-  "rankingsSource": "Source",
+  "rankingsSource": "Origine",
   "rankingsOfficialSource": "API Clash officielle",
   "rankingsResults": "Résultats",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "{count} meilleurs",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3455,7 +3455,7 @@
   "statsAddItemsTitle": "Choisir les objets à analyser",
   "statsAddItemsBody": "Ajoutez des troupes, des sorts, des héros, des familiers ou de l’équipement, puis lancez l’analyse.",
   "statsGlobalCounts": "Totaux globaux",
-  "statsPerformance": "Performance",
+  "statsPerformance": "Résultats",
   "statsSamples": "Échantillons",
   "statsUsage": "Utilisation",
   "statsAverageStars": "Étoiles moyennes",
@@ -3555,9 +3555,9 @@
     }
   },
   "gameAssetsSaveError": "Impossible d’enregistrer cette ressource.",
-  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerPlan": "Planification",
   "upgradeTrackerUpgrades": "Améliorations",
-  "upgradeTrackerCollection": "Collection",
+  "upgradeTrackerCollection": "Inventaire",
   "upgradeTrackerChooseAccount": "Choisir un compte",
   "upgradeTrackerSwitchAccount": "Changer de compte, {account}",
   "@upgradeTrackerSwitchAccount": {
@@ -3840,7 +3840,7 @@
   "statsWarsOverTimePreview": "Tendance quotidienne simulée en attendant la connexion du point de terminaison des totaux de référence.",
   "statsStrategyLenses": "Analyses stratégiques",
   "statsStrategyLensesBody": "Les stratégies nommées utilisent des règles versionnées qui peuvent se chevaucher. Les compositions exactes restent séparées afin qu’un libellé ne prétende jamais prouver l’intention du joueur.",
-  "statsQueenCharge": "Queen Charge",
+  "statsQueenCharge": "Charge de la reine",
   "statsQueenChargeRule": "Reine des archers + au moins 5 guérisseuses",
   "statsSuperBowlerCore": "Composition de Super boulistes",
   "statsSuperBowlerRule": "Au moins 4 Super boulistes",
@@ -4142,7 +4142,7 @@
   "damageQuickSetupCustom": "Personnalisée",
   "damageClearStack": "Effacer",
   "damageNoDamageSelected": "Aucun dégât",
-  "damageSelectedSourcesCount": "{count} source(s)",
+  "damageSelectedSourcesCount": "Sources sélectionnées : {count}",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {

@@ -3453,7 +3453,7 @@
     }
   },
   "gameAssetsSaveError": "Bu veri kaydedilemedi.",
-  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerPlan": "Planlama",
   "upgradeTrackerUpgrades": "Yükseltmeler",
   "upgradeTrackerCollection": "Koleksiyon",
   "upgradeTrackerChooseAccount": "Hesap seç",
@@ -3712,7 +3712,7 @@
   "homeActivityJoined": "katıldı",
   "homeActivityLeft": "ayrıldı",
   "homeActivityAClan": "bir klana",
-  "statsMeta": "Meta",
+  "statsMeta": "Meta oyun",
   "statsBattle": "Savaş",
   "statsWorld": "Dünya",
   "statsHeaderSubtitle": "Savaş performansını ve takip ettiğimiz dünyayı keşfet.",

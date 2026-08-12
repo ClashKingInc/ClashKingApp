@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Atinge pentru costul și timpul de îmbunătățire rămase",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Furie anime",
   "announcementAnimeFurySubtitle": "Atinge pentru a parcurge actualizarea din iunie 2026",
   "sideRankingsTitle": "Clasamente",
   "sideRankingsSubtitle": "Clasamente oficiale plus endpoint-uri ClashKing.",
@@ -2638,7 +2638,7 @@
   "endpointClanWarWinsPreview": "Internațional · victorii de război all-time",
   "endpointTop200ArmyUsage": "Utilizare armate Top 200",
   "endpointTop200ArmyUsagePreview": "Jurnale de luptă · utilizare trupe și vrăji",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "Cei mai buni 200",
   "endpointStateWeekly": "Săptămânal",
   "endpointStateUsage": "Utilizare",
   "notifGroupReminders": "Mementouri",
@@ -3319,7 +3319,7 @@
   "rankingsSource": "Sursă",
   "rankingsOfficialSource": "API Clash oficial",
   "rankingsResults": "Rezultate",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "Cei mai buni {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3453,7 +3453,7 @@
     }
   },
   "gameAssetsSaveError": "Această resursă nu a putut fi salvată.",
-  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerPlan": "Planificare",
   "upgradeTrackerUpgrades": "Îmbunătățiri",
   "upgradeTrackerCollection": "Colecție",
   "upgradeTrackerChooseAccount": "Alege contul",
@@ -3712,7 +3712,7 @@
   "homeActivityJoined": "s-a alăturat",
   "homeActivityLeft": "a plecat",
   "homeActivityAClan": "unui clan",
-  "statsMeta": "Meta",
+  "statsMeta": "Metajoc",
   "statsBattle": "Bătălie",
   "statsWorld": "Lume",
   "statsHeaderSubtitle": "Explorează performanța în lupte și lumea pe care o urmărim.",

@@ -2150,7 +2150,7 @@
   "clanMembersAverageTh": "Gem. TH",
   "warLogSearchPlaceholder": "Soek oorloë",
   "warStatsSearchPlaceholder": "Soek spelers",
-  "warStatsCurrentTownHall": "My TH",
+  "warStatsCurrentTownHall": "My stadsaal",
   "warStatsLast50": "Laaste 50",
   "warStatsWars": "Oorloë",
   "warStatsSelectSeason": "Kies oorlogstatistiekseisoen",
@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Tik vir oorblywende opgraderingskoste en -tyd",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Anime-woede",
   "announcementAnimeFurySubtitle": "Tik deur die Junie 2026-opdatering",
   "sideRankingsTitle": "Ranglyste",
   "sideRankingsSubtitle": "Amptelike ranglyste plus ClashKing-eindpunte.",
@@ -3319,7 +3319,7 @@
   "rankingsSource": "Bron",
   "rankingsOfficialSource": "Amptelike Clash API",
   "rankingsResults": "Uitslae",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "Beste {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3340,7 +3340,7 @@
   "rankingsClanLoadFailed": "Kon nie hierdie stam laai nie.",
   "statsOverview": "Oorsig",
   "statsArmies": "Leërs",
-  "statsItems": "Items",
+  "statsItems": "Voorwerpe",
   "statsWar": "Oorlog",
   "statsCwl": "CWL",
   "statsRanked": "Gerangskik",
@@ -3453,7 +3453,7 @@
     }
   },
   "gameAssetsSaveError": "Kon nie hierdie bate stoor nie.",
-  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerPlan": "Beplanning",
   "upgradeTrackerUpgrades": "Opgraderings",
   "upgradeTrackerCollection": "Versameling",
   "upgradeTrackerChooseAccount": "Kies rekening",
@@ -3550,7 +3550,7 @@
       }
     }
   },
-  "upgradeTrackerItemCount": "{count} items",
+  "upgradeTrackerItemCount": "{count} voorwerpe",
   "@upgradeTrackerItemCount": {
     "placeholders": {
       "count": {

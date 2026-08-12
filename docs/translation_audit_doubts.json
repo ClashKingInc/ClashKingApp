@@ -21,10 +21,6 @@
       "value": "h"
     },
     {
-      "key": "warStatsCurrentTownHall",
-      "value": "My TH"
-    },
-    {
       "key": "warCalculatorHintPercent",
       "value": "50.00"
     },
@@ -69,28 +65,8 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
-      "key": "statsItems",
-      "value": "Items"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "upgradeTrackerItemCount",
-      "value": "{count} items"
     }
   ],
   "ar": [
@@ -221,10 +197,6 @@
       "value": "Elixir"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
@@ -233,28 +205,12 @@
       "value": "Bronze"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
     },
     {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
-    },
-    {
       "key": "widgetLaboratory",
       "value": "LAB"
-    },
-    {
-      "key": "widgetLevelShort",
-      "value": "Lv"
     },
     {
       "key": "gameTHLevel",
@@ -335,28 +291,12 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
     },
     {
       "key": "gameTHLevel",
@@ -417,14 +357,6 @@
       "value": "{stars} ⭐"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
@@ -433,28 +365,12 @@
       "value": "Bronze"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
     },
     {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
       "key": "widgetLaboratory",
       "value": "LAB"
-    },
-    {
-      "key": "widgetLevelShort",
-      "value": "Lv"
     },
     {
       "key": "gameTHLevel",
@@ -503,24 +419,12 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsLeagueBronze",
       "value": "Bronze"
     },
     {
       "key": "statsLeagueGold",
       "value": "Gold"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
     },
     {
       "key": "widgetAlchemistShort",
@@ -585,16 +489,8 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
     }
   ],
   "es": [
@@ -675,24 +571,12 @@
       "value": "Elixir"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
     },
     {
       "key": "gameTHLevel",
@@ -777,24 +661,12 @@
       "value": "Elixir"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
     },
     {
       "key": "gameTHLevel",
@@ -851,24 +723,8 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
     }
   ],
   "fr": [
@@ -883,10 +739,6 @@
     {
       "key": "authDiscordTitle",
       "value": "Discord"
-    },
-    {
-      "key": "authEmail",
-      "value": "Email"
     },
     {
       "key": "timeHourIndicator",
@@ -925,24 +777,8 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "rankingsSource",
-      "value": "Source"
-    },
-    {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
-    },
-    {
-      "key": "statsPerformance",
-      "value": "Performance"
     },
     {
       "key": "statsClans",
@@ -957,32 +793,12 @@
       "value": "Champion"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "upgradeTrackerCollection",
-      "value": "Collection"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
-    },
-    {
       "key": "widgetVillage",
       "value": "VILLAGE"
     },
     {
       "key": "widgetAssistantShort",
       "value": "Assistant"
-    },
-    {
-      "key": "damageSelectedSourcesCount",
-      "value": "{count} source(s)"
     }
   ],
   "he": [
@@ -1051,16 +867,8 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
     },
     {
       "key": "gameTownHallShortLevel",
@@ -1111,14 +919,6 @@
     {
       "key": "generalDiscord",
       "value": "Discord"
-    },
-    {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
     },
     {
       "key": "gameTownHallShortLevel",
@@ -1183,24 +983,8 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
     }
   ],
   "it": [
@@ -1285,24 +1069,12 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
     },
     {
       "key": "farmGoalAccountTitle",
@@ -1383,16 +1155,8 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
     },
     {
       "key": "gameTownHallShortLevel",
@@ -1523,14 +1287,6 @@
       "value": "Elixir"
     },
     {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
-      "key": "statsItems",
-      "value": "Items"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
@@ -1539,44 +1295,8 @@
       "value": "Clans"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "upgradeTrackerUpgrades",
-      "value": "Upgrades"
-    },
-    {
-      "key": "upgradeTrackerItemCount",
-      "value": "{count} items"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
       "key": "widgetAlchemistShort",
       "value": "Alchemist"
-    },
-    {
-      "key": "farmGoalAccountTitle",
-      "value": "Account"
-    },
-    {
-      "key": "searchFilters",
-      "value": "Filters"
-    },
-    {
-      "key": "damageAccountPresetShort",
-      "value": "Account"
-    },
-    {
-      "key": "gameAssetsCategorySkins",
-      "value": "Skins"
     }
   ],
   "no": [
@@ -1625,36 +1345,12 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
       "key": "widgetLaboratory",
       "value": "LAB"
-    },
-    {
-      "key": "widgetLevelShort",
-      "value": "Lv"
     }
   ],
   "pl": [
@@ -1715,24 +1411,12 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
     },
     {
       "key": "widgetLaboratory",
@@ -1817,14 +1501,6 @@
       "value": "Elixir"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
@@ -1833,20 +1509,8 @@
       "value": "Bronze"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
     },
     {
       "key": "gameTHLevel",
@@ -1923,32 +1587,12 @@
       "value": "Elixir"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
     }
   ],
   "ru": [
@@ -1991,14 +1635,6 @@
     {
       "key": "generalDiscord",
       "value": "Discord"
-    },
-    {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
     }
   ],
   "sr": [
@@ -2063,14 +1699,6 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
     },
@@ -2091,10 +1719,6 @@
     {
       "key": "authDiscordTitle",
       "value": "Discord"
-    },
-    {
-      "key": "authEmail",
-      "value": "Email"
     },
     {
       "key": "gameTownHall",
@@ -2149,10 +1773,6 @@
       "value": "Elixir"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
@@ -2165,28 +1785,8 @@
       "value": "Champion"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
-    },
-    {
       "key": "rankedLeaguePeriodTab",
       "value": "Period"
-    },
-    {
-      "key": "farmGoalAttackShort",
-      "value": "attack"
     }
   ],
   "tr": [
@@ -2221,14 +1821,6 @@
     {
       "key": "generalDiscord",
       "value": "Discord"
-    },
-    {
-      "key": "upgradeTrackerPlan",
-      "value": "Plan"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
     }
   ],
   "uk": [
@@ -2281,24 +1873,12 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
     },
     {
       "key": "gameTHLevel",
@@ -2337,14 +1917,6 @@
     {
       "key": "generalDiscord",
       "value": "Discord"
-    },
-    {
-      "key": "resourceElixir",
-      "value": "Elixir"
-    },
-    {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
     }
   ],
   "vi": [
@@ -2359,10 +1931,6 @@
     {
       "key": "authDiscordTitle",
       "value": "Discord"
-    },
-    {
-      "key": "authEmail",
-      "value": "Email"
     },
     {
       "key": "gameTownHall",
@@ -2421,36 +1989,12 @@
       "value": "Discord"
     },
     {
-      "key": "announcementAnimeFuryTitle",
-      "value": "Anime Fury"
-    },
-    {
-      "key": "rankingsTopCount",
-      "value": "Top {count}"
-    },
-    {
       "key": "statsCwl",
       "value": "CWL"
     },
     {
-      "key": "endpointStateTop200",
-      "value": "Top 200"
-    },
-    {
       "key": "gameTownHallShortLevel",
       "value": "TH{level}"
-    },
-    {
-      "key": "statsMeta",
-      "value": "Meta"
-    },
-    {
-      "key": "statsQueenCharge",
-      "value": "Queen Charge"
-    },
-    {
-      "key": "statsRootRiderCore",
-      "value": "Root Rider core"
     },
     {
       "key": "gameTHLevel",
@@ -2467,24 +2011,12 @@
       "value": "Discord"
     },
     {
-      "key": "authEmail",
-      "value": "Email"
-    },
-    {
       "key": "warCalculatorHintPercent",
       "value": "50.00"
     },
     {
       "key": "betaLabel",
       "value": "BETA"
-    },
-    {
-      "key": "faqTitle",
-      "value": "FAQ"
-    },
-    {
-      "key": "chartsNoData",
-      "value": "N/A"
     },
     {
       "key": "gameItemDps",

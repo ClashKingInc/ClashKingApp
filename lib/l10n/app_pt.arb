@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Toca para ver o custo e o tempo restantes da melhoria",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Fúria anime",
   "announcementAnimeFurySubtitle": "Toca para percorrer a atualização de junho de 2026",
   "sideRankingsTitle": "Classificações",
   "sideRankingsSubtitle": "Classificações oficiais mais endpoints ClashKing.",
@@ -2638,7 +2638,7 @@
   "endpointClanWarWinsPreview": "Internacional · vitórias de guerra de todos os tempos",
   "endpointTop200ArmyUsage": "Uso de armadas no Top 200",
   "endpointTop200ArmyUsagePreview": "Registos de batalha · uso de tropas e feitiços",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "200 melhores",
   "endpointStateWeekly": "Semanal",
   "endpointStateUsage": "Uso",
   "notifGroupReminders": "Lembretes",
@@ -3319,7 +3319,7 @@
   "rankingsSource": "Fonte",
   "rankingsOfficialSource": "API oficial do Clash",
   "rankingsResults": "Resultados",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "Melhores {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3712,7 +3712,7 @@
   "homeActivityJoined": "entrou",
   "homeActivityLeft": "saiu",
   "homeActivityAClan": "um clã",
-  "statsMeta": "Meta",
+  "statsMeta": "Metajogo",
   "statsBattle": "Batalha",
   "statsWorld": "Mundo",
   "statsHeaderSubtitle": "Explore o desempenho em batalha e o mundo que monitorizamos.",
@@ -3744,7 +3744,7 @@
   "statsWarsOverTimePreview": "Tendência diária simulada até ser associado o endpoint de contagens canónico.",
   "statsStrategyLenses": "Lentes estratégicas",
   "statsStrategyLensesBody": "Estratégias nomeadas usam regras sobrepostas e versionadas. Os carregamentos exatos permanecem separados para que o rótulo nunca finja provar a intenção da batalha.",
-  "statsQueenCharge": "Queen Charge",
+  "statsQueenCharge": "Ataque da Rainha",
   "statsQueenChargeRule": "Archer Queen + pelo menos 5 curandeiros",
   "statsSuperBowlerCore": "Núcleo do Super Bowler",
   "statsSuperBowlerRule": "Pelo menos 4 Super Bowlers",

@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Tryk for resterende opgraderingspris og tid",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Anime-raseri",
   "announcementAnimeFurySubtitle": "Tryk dig gennem juni 2026-opdateringen",
   "sideRankingsTitle": "Ranglister",
   "sideRankingsSubtitle": "Officielle ranglister plus ClashKing-endpoints.",
@@ -2638,7 +2638,7 @@
   "endpointClanWarWinsPreview": "International · alle tiders krigssejre",
   "endpointTop200ArmyUsage": "Top 200 hærbrug",
   "endpointTop200ArmyUsagePreview": "Kamplogs · troppe- og besværgelsesbrug",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "Bedste 200",
   "endpointStateWeekly": "Ugentlig",
   "endpointStateUsage": "Brug",
   "notifGroupReminders": "Påmindelser",
@@ -3319,7 +3319,7 @@
   "rankingsSource": "Kilde",
   "rankingsOfficialSource": "Officiel Clash API",
   "rankingsResults": "Resultater",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "Bedste {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3453,7 +3453,7 @@
     }
   },
   "gameAssetsSaveError": "Kunne ikke redde dette aktiv.",
-  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerPlan": "Opgraderingsplan",
   "upgradeTrackerUpgrades": "Opgraderinger",
   "upgradeTrackerCollection": "Samling",
   "upgradeTrackerChooseAccount": "Vælg konto",
@@ -3712,7 +3712,7 @@
   "homeActivityJoined": "Sluttede sig til",
   "homeActivityLeft": "Venstre",
   "homeActivityAClan": "En klan",
-  "statsMeta": "Meta",
+  "statsMeta": "Metaspil",
   "statsBattle": "Slag",
   "statsWorld": "Verden",
   "statsHeaderSubtitle": "Udforsk kamppræstationer og den verden, vi følger.",
@@ -3931,7 +3931,7 @@
   "widgetDataStale": "Opdatering nødvendig",
   "widgetMoreUpgrade": "Mere opgradering",
   "widgetMoreUpgrades": "Flere opgraderinger",
-  "widgetLevelShort": "Lv",
+  "widgetLevelShort": "Niv.",
   "widgetReady": "Klar",
   "widgetReadyIn": "Klar ind",
   "widgetHelping": "Hjælper",

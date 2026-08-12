@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Toca para ver el coste y tiempo de mejora restantes",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Furia anime",
   "announcementAnimeFurySubtitle": "Toca para recorrer la actualización de junio de 2026",
   "sideRankingsTitle": "Clasificaciones",
   "sideRankingsSubtitle": "Clasificaciones oficiales más endpoints de ClashKing.",
@@ -2638,7 +2638,7 @@
   "endpointClanWarWinsPreview": "Internacional · victorias de guerra históricas",
   "endpointTop200ArmyUsage": "Uso de ejército Top 200",
   "endpointTop200ArmyUsagePreview": "Registros de batalla · uso de tropas y hechizos",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "Los 200 mejores",
   "endpointStateWeekly": "Semanal",
   "endpointStateUsage": "Uso",
   "notifGroupReminders": "Recordatorios",
@@ -3453,7 +3453,7 @@
     }
   },
   "gameAssetsSaveError": "No se pudo guardar este recurso.",
-  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerPlan": "Planificación",
   "upgradeTrackerUpgrades": "Mejoras",
   "upgradeTrackerCollection": "Colección",
   "upgradeTrackerChooseAccount": "Elegir cuenta",

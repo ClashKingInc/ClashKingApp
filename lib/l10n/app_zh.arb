@@ -237,7 +237,7 @@
   "authDiscordSignIn": "使用Discord登录",
   "authDiscordContinue": "使用 Discord 继续",
   "authDiscordDescription": "与 ClashKing 机器人同步你的数据，解锁 ClashKing 的全部潜力！",
-  "authEmail": "Email",
+  "authEmail": "电子邮箱",
   "authEmailHint": "输入你的电子邮箱地址",
   "authEmailDescription": "如果你无法访问 Discord，或只想使用应用内功能，请使用电子邮箱",
   "authEmailRequired": "请输入你的电子邮箱",
@@ -1416,7 +1416,7 @@
   "settingsLanguage": "语言",
   "settingsSelectLanguage": "搜索语言",
   "settingsToggleTheme": "切换主题",
-  "faqTitle": "FAQ",
+  "faqTitle": "常见问题",
   "faqSubtitle": "常见问题回答",
   "faqIsThisFromSupercell": "这个应用程序是Supercell的吗？",
   "faqFanContentPolicy": "此材料是非官方的，未得到Supercell的认可。有关更多信息，请参阅Supercell的粉丝内容政策：www.Supercell.com/Fan-Content-Policy",
@@ -1638,7 +1638,7 @@
   "@chartsExcellent": {
     "description": "Excellent performance legend label"
   },
-  "chartsNoData": "N/A",
+  "chartsNoData": "无数据",
   "@chartsNoData": {
     "description": "No data available indicator"
   },

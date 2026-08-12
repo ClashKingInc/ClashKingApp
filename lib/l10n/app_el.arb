@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "Πάτησε για το υπόλοιπο κόστος και χρόνο αναβάθμισης",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "Οργή Anime",
   "announcementAnimeFurySubtitle": "Πάτησε για να δεις την ενημέρωση Ιουνίου 2026",
   "sideRankingsTitle": "Κατατάξεις",
   "sideRankingsSubtitle": "Επίσημοι πίνακες κατάταξης μαζί με endpoints του ClashKing.",
@@ -3744,7 +3744,7 @@
   "statsWarsOverTimePreview": "Εικονική ημερήσια τάση μέχρι να συνδεθεί το τελικό σημείο κανονικών μετρήσεων.",
   "statsStrategyLenses": "Φακοί στρατηγικής",
   "statsStrategyLensesBody": "Οι επώνυμες στρατηγικές χρησιμοποιούν επικαλυπτόμενους, εκδιδόμενους κανόνες. Οι ακριβείς φορτώσεις παραμένουν ξεχωριστές, ώστε η ετικέτα να μην προσποιείται ποτέ ότι αποδεικνύει την πρόθεση μάχης.",
-  "statsQueenCharge": "Queen Charge",
+  "statsQueenCharge": "Επίθεση Βασίλισσας",
   "statsQueenChargeRule": "Archer Queen + τουλάχιστον 5 Healers",
   "statsSuperBowlerCore": "Πυρήνας Super Bowler",
   "statsSuperBowlerRule": "Τουλάχιστον 4 Super Bowlers",

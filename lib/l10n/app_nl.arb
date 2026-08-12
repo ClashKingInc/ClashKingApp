@@ -2638,7 +2638,7 @@
   "endpointClanWarWinsPreview": "Internationaal · oorlogsoverwinningen aller tijden",
   "endpointTop200ArmyUsage": "Legergebruik top 200",
   "endpointTop200ArmyUsagePreview": "Gevechtslogs · troepen- en spreukgebruik",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "Beste 200",
   "endpointStateWeekly": "Wekelijks",
   "endpointStateUsage": "Gebruik",
   "notifGroupReminders": "Herinneringen",
@@ -3319,7 +3319,7 @@
   "rankingsSource": "Bron",
   "rankingsOfficialSource": "Officiële Clash-API",
   "rankingsResults": "Resultaten",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "Beste {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3340,7 +3340,7 @@
   "rankingsClanLoadFailed": "Deze clan kon niet worden geladen.",
   "statsOverview": "Overzicht",
   "statsArmies": "Legers",
-  "statsItems": "Items",
+  "statsItems": "Voorwerpen",
   "statsWar": "Oorlog",
   "statsCwl": "CWL",
   "statsRanked": "Klassement",
@@ -3453,8 +3453,8 @@
     }
   },
   "gameAssetsSaveError": "Deze asset kon niet worden opgeslagen.",
-  "upgradeTrackerPlan": "Plan",
-  "upgradeTrackerUpgrades": "Upgrades",
+  "upgradeTrackerPlan": "Planning",
+  "upgradeTrackerUpgrades": "Verbeteringen",
   "upgradeTrackerCollection": "Verzameling",
   "upgradeTrackerChooseAccount": "Kies een account",
   "upgradeTrackerSwitchAccount": "Van account wisselen, {account}",
@@ -3550,7 +3550,7 @@
       }
     }
   },
-  "upgradeTrackerItemCount": "{count} items",
+  "upgradeTrackerItemCount": "{count} voorwerpen",
   "@upgradeTrackerItemCount": {
     "placeholders": {
       "count": {
@@ -3712,7 +3712,7 @@
   "homeActivityJoined": "trad toe tot",
   "homeActivityLeft": "verliet",
   "homeActivityAClan": "een clan",
-  "statsMeta": "Meta",
+  "statsMeta": "Metagame",
   "statsBattle": "Gevecht",
   "statsWorld": "Wereld",
   "statsHeaderSubtitle": "Ontdek gevechtsprestaties en de wereld die we volgen.",
@@ -3993,7 +3993,7 @@
   "notifAudienceAcrossDevicesDescription": "Deze accountkeuzes gelden op al je apparaten.",
   "farmGoalTitle": "Farmdoel",
   "farmGoalFormTitle": "Te farmen grondstoffen",
-  "farmGoalAccountTitle": "Account",
+  "farmGoalAccountTitle": "Gebruikersaccount",
   "farmGoalAccountHint": "Het geselecteerde account levert het stadhuis en de huidige divisie voor de schatting.",
   "farmGoalTargetTitle": "Gebouw om te upgraden",
   "farmGoalTargetBuildingLabel": "Gebouw",
@@ -4093,7 +4093,7 @@
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "Filters",
+  "searchFilters": "Filteropties",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
@@ -4111,7 +4111,7 @@
   "calculatorsModeDamage": "Schade",
   "calculatorsModeFarmGoal": "Farmdoel",
   "damageCalculatorTitle": "Schadecalculator",
-  "damageAccountPresetShort": "Account",
+  "damageAccountPresetShort": "Gebruikersaccount",
   "damageChooseAccount": "Kies een account",
   "damageSwitchAccount": "Van account wisselen",
   "damageAccountSelectorHint": "De gebruikte niveaus volgen het geselecteerde account.",
@@ -4159,7 +4159,7 @@
   "gameAssetsCategoryGuardians": "Bewakers",
   "gameAssetsCategoryHeroes": "Helden",
   "gameAssetsCategoryPets": "Huisdieren",
-  "gameAssetsCategorySkins": "Skins",
+  "gameAssetsCategorySkins": "Uiterlijken",
   "gameAssetsCategorySpells": "Spreuken",
   "gameAssetsCategoryTroops": "Troepen",
   "assetFolderTroops": "Troepen",

@@ -2508,7 +2508,7 @@
     }
   },
   "todoRemainingUpgradeTooltip": "タップして残りのアップグレード費用と時間を表示",
-  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFuryTitle": "アニメフューリー",
   "announcementAnimeFurySubtitle": "タップして2026年6月アップデートを見る",
   "sideRankingsTitle": "ランキング",
   "sideRankingsSubtitle": "公式リーダーボードとClashKingエンドポイント。",
@@ -2638,7 +2638,7 @@
   "endpointClanWarWinsPreview": "インターナショナル · 全期間の対戦勝利",
   "endpointTop200ArmyUsage": "Top 200編成使用率",
   "endpointTop200ArmyUsagePreview": "バトルログ · ユニットと呪文の使用率",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "上位200",
   "endpointStateWeekly": "週間",
   "endpointStateUsage": "使用率",
   "notifGroupReminders": "リマインダー",
