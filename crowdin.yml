@@ -4,7 +4,7 @@ files:
     update_option: update_as_unapproved
     languages_mapping:
       two_letters_code:
-        en: en_US
+        en-US: en_US
         en-GB: en_GB
         es-ES: es
         fr: fr
