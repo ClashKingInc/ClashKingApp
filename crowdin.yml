@@ -1,12 +1,3 @@
 files:
   - source: /lib/l10n/app_en.arb
     translation: /lib/l10n/app_%two_letters_code%.arb
-    update_option: update_as_unapproved
-    languages_mapping:
-      two_letters_code:
-        en-US: en_US
-        en-GB: en_GB
-        es-ES: es
-        pt-PT: pt
-        sv-SE: sv
-        zh-CN: zh
