@@ -15,15 +15,15 @@
   "accountVerificationSuccess": "A fiók ellenőrzése sikeres!",
   "generalRetry": "Újrapróbálás",
   "generalRetrying": "Újrapróbálkozás...",
-  "postsTitle": "Posts",
-  "postsDescription": "ClashKing news, update stories, and previous announcements.",
-  "postsEmpty": "No published posts yet.",
-  "postsLoadFailed": "Posts could not be loaded.",
-  "postsLoadMore": "Load more",
-  "postsCurrent": "Current",
-  "postsPast": "Past",
-  "postsStory": "Interactive story",
-  "postsPinned": "Featured",
+  "postsTitle": "Bejegyzések",
+  "postsDescription": "ClashKing-hírek, frissítési történetek és korábbi közlemények.",
+  "postsEmpty": "Még nincs közzétett bejegyzés.",
+  "postsLoadFailed": "A bejegyzéseket nem sikerült betölteni.",
+  "postsLoadMore": "Továbbiak betöltése",
+  "postsCurrent": "Aktuális",
+  "postsPast": "Korábbi",
+  "postsStory": "Interaktív történet",
+  "postsPinned": "Kiemelt",
   "generalTryAgain": "Próbáld újra",
   "generalReset": "Visszaállítás",
   "generalCancel": "Mégse",
@@ -250,7 +250,7 @@
   "authDiscordSignIn": "Bejelentkezés Discord-dal",
   "authDiscordContinue": "Folytatás Discord-dal",
   "authDiscordDescription": "Szinkronizáld az adataidat a ClashKing Bot-tal és oldja fel a ClashKing teljes potenciálját!",
-  "authEmail": "Email",
+  "authEmail": "E-mail",
   "authEmailHint": "Add meg az e-mail címed",
   "authEmailDescription": "Használj e-mailt, ha nem férsz hozzá a Discord-hoz, vagy inkább csak az alkalmazás funkcióit szeretnéd",
   "authEmailRequired": "Kérjük, add meg az e-mail címedet",
@@ -309,9 +309,9 @@
   "authAccountLinkEmail": "E-mail fiók csatlakoztatása",
   "authAccountAddEmailAuth": "Adj hozzá e-mail és jelszó hitelesítést a fiókodhoz a további biztonság érdekében.",
   "authAccountEmailLinkedSuccess": "E-mail fiók sikeresen csatlakoztatva!",
-  "authAccountLinkDiscord": "Link Discord Account",
-  "authAccountAddDiscordAuth": "Add Discord authentication to your account for cross-platform sync and ClashKing Bot access.",
-  "authAccountDiscordLinkedSuccess": "Discord account successfully linked!",
+  "authAccountLinkDiscord": "Discord-fiók összekapcsolása",
+  "authAccountAddDiscordAuth": "Adj Discord-hitelesítést a fiókodhoz a platformok közötti szinkronizáláshoz és a ClashKing Bot eléréséhez.",
+  "authAccountDiscordLinkedSuccess": "A Discord-fiók sikeresen összekapcsolva!",
   "authEmailVerificationTitle": "E-mail ellenőrzése",
   "authEmailVerificationCheckEmail": "Ellenőrizd az e-mailjeidet",
   "authEmailVerificationSentTo": "Ellenőrző e-mailt küldtünk ide:",
@@ -467,7 +467,7 @@
   "gameTrophies": "Kupák",
   "gameBuilderBaseTrophies": "BB kupák",
   "gameDonations": "Adományok",
-  "gameDonationsReceived": "Adományok Fogadva",
+  "gameDonationsReceived": "Kapott",
   "gameDonationsRatio": "Adományok aránya",
   "gameLevel": "Szint: {level}/{maxLevel}",
   "@gameLevel": {
@@ -638,7 +638,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legendák Ligája",
   "legendsNotInLeague": "Nem vagy Legenda Ligában",
   "legendsNoDataToday": "Nem vagy Legenda Ligában, de a korábbi szezonok elérhetők.",
   "legendsStartDescription": "A napot {trophies} trófeával kezdted.",
@@ -776,7 +776,7 @@
   "todoExplanationCwl": "Fiókonként 1 pontos súly, 1 támadás = 1 pont. A CWL nem követhető, ha a játékos nincs a ligaklánjában.",
   "todoExplanationPassAndGamesTitle": "Szezonbérlet és Klánjátékok:",
   "todoExplanationPassAndGames": "Fiókonként egyenként 2 pontos súly. Az arány a hátralévő napok számán alapul (1 hónap a bérlethez és 6 nap a játékokhoz). Zöld = jó úton haladsz a bérlet vagy játékok teljesítéséhez, piros = lemaradásban vagy.",
-  "todoExplanationConclusion": "The final percentage is calculated by dividing the total actions completed during ongoing events by the total required actions. Accounts inactive for more than 14 days are excluded from the calculation.",
+  "todoExplanationConclusion": "A végső százalékot a folyamatban lévő események során elvégzett műveletek számának és az összes szükséges művelet számának hányadosa adja.",
   "todoAccountsNumber": "{number} fiók",
   "@todoAccountsNumber": {
     "placeholders": {
@@ -876,7 +876,7 @@
   "warStatsLast50": "Utolsó 50",
   "warStatsWars": "Háborúk",
   "warStatsSelectSeason": "Válassza ki a háborús statisztikák szezonját",
-  "warOngoing": "Ongoing war",
+  "warOngoing": "Folyamatban lévő háború",
   "warIsNotInWar": "A(z) {clan} nincs háborúban.",
   "@warIsNotInWar": {
     "placeholders": {
@@ -1017,7 +1017,7 @@
       }
     }
   },
-  "warAnalysisCannotLose": "{clanName} can no longer lose",
+  "warAnalysisCannotLose": "{clanName} már nem veszíthet",
   "@warAnalysisCannotLose": {
     "placeholders": {
       "clanName": {
@@ -1025,9 +1025,9 @@
       }
     }
   },
-  "warAnalysisSecuredBadge": "Secured",
-  "warAnalysisAlreadySecured": "Already secured",
-  "warAnalysisSecureAgainst": "Objective calculated assuming {clanName} uses all remaining attacks.",
+  "warAnalysisSecuredBadge": "Biztosítva",
+  "warAnalysisAlreadySecured": "Már biztosítva",
+  "warAnalysisSecureAgainst": "A cél kiszámítása feltételezi, hogy {clanName} minden hátralévő támadást felhasznál.",
   "@warAnalysisSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1035,7 +1035,7 @@
       }
     }
   },
-  "warAnalysisCannotSecureAgainst": "Cannot be mathematically secured if {clanName} optimizes all remaining attacks.",
+  "warAnalysisCannotSecureAgainst": "Matematikailag nem biztosítható, ha {clanName} optimálisan használja fel az összes hátralévő támadást.",
   "@warAnalysisCannotSecureAgainst": {
     "placeholders": {
       "clanName": {
@@ -1043,8 +1043,8 @@
       }
     }
   },
-  "warAnalysisNoSecureObjective": "Cannot be secured with the remaining attacks",
-  "warAnalysisStarGoal": "+{stars} star(s)",
+  "warAnalysisNoSecureObjective": "A hátralévő támadásokkal nem biztosítható",
+  "warAnalysisStarGoal": "+{stars} csillag",
   "@warAnalysisStarGoal": {
     "placeholders": {
       "stars": {
@@ -1052,7 +1052,7 @@
       }
     }
   },
-  "warAnalysisRemainingAttempts": "{attacks} attack(s) left",
+  "warAnalysisRemainingAttempts": "{attacks} támadás maradt",
   "@warAnalysisRemainingAttempts": {
     "placeholders": {
       "attacks": {
@@ -1060,7 +1060,7 @@
       }
     }
   },
-  "warAnalysisNoBetterResult": "No better result is possible",
+  "warAnalysisNoBetterResult": "Jobb eredmény nem érhető el",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
     "description": "Hint text for percentage input in war calculator"
@@ -1368,7 +1368,7 @@
       }
     }
   },
-  "cwlCurrentRound": "It's currently round {round}.",
+  "cwlCurrentRound": "Jelenlegi forduló ({round}. forduló)",
   "@cwlCurrentRound": {
     "placeholders": {
       "round": {
@@ -1649,33 +1649,33 @@
   "faqFeaturesLegendsDescription": "Napi trófeakövetés és szezonvégi statisztikák",
   "faqFeaturesCwlTitle": "CWL elemzések",
   "faqFeaturesCwlDescription": "Klánháborús Liga teljesítmény és tagi hozzájárulások",
-  "faqFeaturesTodoTitle": "To-do checklist",
-  "faqFeaturesTodoDescription": "See which accounts still need Ranked attacks, raids, war attacks, Clan Games, or pass actions",
-  "faqFeaturesUpgradeTrackerTitle": "Upgrade Tracker",
-  "faqFeaturesUpgradeTrackerDescription": "Use a manual account snapshot provided by the user to see remaining upgrades, resources, builders, lab time, and progress",
-  "faqFeaturesNotificationsTitle": "Push notifications",
-  "faqFeaturesNotificationsDescription": "Choose which accounts should receive alerts for supported ClashKing events",
-  "faqFeaturesWidgetsTitle": "War widgets",
-  "faqFeaturesWidgetsDescription": "Keep current war status visible on your home screen where widgets are supported",
+  "faqFeaturesTodoTitle": "Teendőlista",
+  "faqFeaturesTodoDescription": "Nézd meg, mely fiókoknak maradt Rangsorolt támadása, rajtaütése, háborús támadása, Klánjáték- vagy bérletfeladata",
+  "faqFeaturesUpgradeTrackerTitle": "Frissítse a Trackert",
+  "faqFeaturesUpgradeTrackerDescription": "A felhasználó által megadott kézi fiókpillanatképpel megtekintheted a hátralévő fejlesztéseket, nyersanyagokat, építőket, laboridőt és haladást",
+  "faqFeaturesNotificationsTitle": "Leküldéses értesítések",
+  "faqFeaturesNotificationsDescription": "Válaszd ki, mely fiókok kapjanak riasztást a támogatott ClashKing-eseményekről",
+  "faqFeaturesWidgetsTitle": "Háborús widgetek",
+  "faqFeaturesWidgetsDescription": "Tartsd láthatóan az aktuális háború állapotát a kezdőképernyőn, ahol a widgetek támogatottak",
   "faqSearchHint": "FAQ keresése...",
   "faqSectionGettingStarted": "Kezdés és névjegy",
-  "faqSectionAccountsAlertsWidgets": "Accounts, alerts & widgets",
+  "faqSectionAccountsAlertsWidgets": "Fiókok, riasztások és widgetek",
   "faqSectionSupportAndContact": "Támogatás és kapcsolat",
-  "faqLinkedAccountsTitle": "How do linked accounts and verification work?",
-  "faqLinkedAccountsAnswer": "Your ClashKing profile can include several Clash of Clans accounts. Adding a tag shows public data. Verifying with the Clash of Clans API token proves the account is yours and unlocks account-specific features.",
-  "faqLinkedAccountsSolution1": "Manage, reorder, hide, or remove accounts from account management.",
-  "faqLinkedAccountsSolution2": "Find the API token in Clash of Clans under Settings > More Settings > API Token.",
-  "faqLinkedAccountsSolution3": "You can sign in with Discord or email. When account connections are available, manage them from Settings.",
-  "faqNotificationsTitle": "How do notifications work?",
-  "faqNotificationsAnswer": "Notifications are optional. When enabled, ClashKing registers this device. You can choose which linked accounts each alert targets.",
-  "faqNotificationsSolution1": "Allow notifications on your device and in ClashKing settings.",
-  "faqNotificationsSolution2": "Each alert can target different accounts. Check the selected accounts if an alert is missing.",
-  "faqNotificationsSolution3": "Some alerts depend on tracked clan or war data. Delays can happen while external data updates.",
-  "faqWidgetsTitle": "How do war widgets work?",
-  "faqWidgetsAnswer": "War widgets show a quick summary on supported devices. They use your selected or linked accounts, cached ClashKing data, and background refreshes when the platform allows them.",
-  "faqWidgetsSolution1": "Open the app after changing accounts or clans so the widget can sync.",
-  "faqWidgetsSolution2": "If a widget looks stale, refresh the app first. Android and iOS limit background updates.",
-  "faqWidgetsSolution3": "The clan needs accessible war data to show useful status.",
+  "faqLinkedAccountsTitle": "Hogyan működnek az összekapcsolt fiókok és az igazolás?",
+  "faqLinkedAccountsAnswer": "A ClashKing-profilod több Clash of Clans-fiókot is tartalmazhat. Egy címke hozzáadásával megjelennek a nyilvános adatok. A Clash of Clans API-tokenjével végzett igazolás bizonyítja, hogy a fiók a tiéd, és feloldja a fiókhoz kötött funkciókat.",
+  "faqLinkedAccountsSolution1": "A fiókkezelésben kezelheted, átrendezheted, elrejtheted vagy eltávolíthatod a fiókokat.",
+  "faqLinkedAccountsSolution2": "Az API-tokent a Clash of Clans Beállítások > További beállítások > API-token menüpontjában találod.",
+  "faqLinkedAccountsSolution3": "Discorddal vagy e-maillel jelentkezhetsz be. Ha elérhetők a fiókkapcsolatok, a Beállításokban kezelheted őket.",
+  "faqNotificationsTitle": "Hogyan működnek az értesítések?",
+  "faqNotificationsAnswer": "Az értesítések opcionálisak. Bekapcsolásukkor a ClashKing regisztrálja ezt az eszközt. Kiválaszthatod, hogy az egyes riasztások mely összekapcsolt fiókokra vonatkozzanak.",
+  "faqNotificationsSolution1": "Engedélyezd az értesítéseket az eszközön és a ClashKing beállításaiban is.",
+  "faqNotificationsSolution2": "Minden riasztás más fiókokra vonatkozhat. Ha hiányzik egy riasztás, ellenőrizd a kiválasztott fiókokat.",
+  "faqNotificationsSolution3": "Egyes riasztások a követett klán- vagy háborús adatoktól függenek. A külső adatok frissítése közben késés fordulhat elő.",
+  "faqWidgetsTitle": "Hogyan működnek a háborús widgetek?",
+  "faqWidgetsAnswer": "A háborús widgetek gyors összefoglalót mutatnak a támogatott eszközökön. A kiválasztott vagy összekapcsolt fiókokat, a gyorsítótárazott ClashKing-adatokat és a platform által engedélyezett háttérfrissítéseket használják.",
+  "faqWidgetsSolution1": "Fiók- vagy klánváltás után nyisd meg az alkalmazást, hogy a widget szinkronizálódjon.",
+  "faqWidgetsSolution2": "Ha a widget adatai elavultnak tűnnek, először frissítsd az alkalmazást. Az Android és az iOS korlátozza a háttérfrissítéseket.",
+  "faqWidgetsSolution3": "A klánnak hozzáférhető háborús adatokkal kell rendelkeznie ahhoz, hogy hasznos állapot jelenjen meg.",
   "faqTranslationIssue": "Hiányzik vagy hibás a fordítás?",
   "faqTranslationIssueAnswer": "A fordítások először generáló és AI-eszközökkel készülnek, majd idővel ellenőrizzük és javítjuk őket. Ha anyanyelvi beszélő vagy, és valami furcsán hangzik, javasolhatsz javítást a Crowdinon, vagy kapcsolatba léphetsz velünk Discordon vagy e-mailben.",
   "faqWaysToSupport": "Így támogathatsz minket:",
@@ -2141,7 +2141,7 @@
   "@presetSuggestionRecentFilter": {
     "description": "Default recent filter suggestion"
   },
-  "generalError": "Error",
+  "generalError": "Hiba",
   "generalSuccess": "Siker",
   "generalFailed": "Sikertelen",
   "generalMinimum": "Minimális érték",
@@ -2319,23 +2319,23 @@
   "gameItemAttackSpeed": "Támadási sebesség",
   "gameItemAttackRange": "Támadási hatótáv",
   "gameItemMovementSpeed": "Mozgási sebesség",
-  "gameItemWardenWeight": "Warden weight",
+  "gameItemWardenWeight": "Őrzősúly",
   "@gameItemWardenWeight": {
     "description": "Grand Warden follow-priority weight for a game item"
   },
-  "gameItemWardenWeightTooltip": "Warden weight can override housing space and determines how strongly the Grand Warden prioritizes following a unit group.",
+  "gameItemWardenWeightTooltip": "Az őrzősúly felülírhatja a férőhelyet, és meghatározza, mennyire részesíti előnyben a Nagy Őrző egy egységcsoport követését.",
   "@gameItemWardenWeightTooltip": {
     "description": "Explains how Warden weight affects Grand Warden follow priority"
   },
-  "gameItemHealerWeight": "Healer weight",
+  "gameItemHealerWeight": "Gyógyítósúly",
   "@gameItemHealerWeight": {
     "description": "Healer targeting-priority weight for a game item"
   },
-  "gameItemHealerWeightTooltip": "Healer weight can override housing space when Healers decide which units to prioritize.",
+  "gameItemHealerWeightTooltip": "A gyógyítósúly felülírhatja a férőhelyet, amikor a Gyógyítók eldöntik, mely egységeket részesítsék előnyben.",
   "@gameItemHealerWeightTooltip": {
     "description": "Explains how Healer weight affects targeting priority"
   },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 egység a követési küszöbhöz} other{{count} egység a követési küszöbhöz}}",
   "@gameItemWardenThresholdCopies": {
     "description": "Number of copies needed to reach the Grand Warden follow threshold",
     "placeholders": {
@@ -2344,7 +2344,7 @@
       }
     }
   },
-  "gameItemWardenNoThresholdContribution": "Does not contribute to follow threshold",
+  "gameItemWardenNoThresholdContribution": "Nem számít bele a követési küszöbbe",
   "@gameItemWardenNoThresholdContribution": {
     "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
   },
@@ -2569,10 +2569,10 @@
   "capitalRaidMembersNoIndividualData": "Ehhez a raidhez nem áll rendelkezésre játékoslista vagy egyéni támadás.",
   "dashboardNoLinkedAccountsTitle": "Nincsenek összekapcsolt fiókok",
   "dashboardNoLinkedAccountsBody": "Kapcsoljon össze egy Clash-fiókot a támadások, események és tevékenységek megtekintéséhez.",
-  "dashboardTodoHiddenTitle": "No accounts shown here",
-  "dashboardTodoHiddenBody": "Turn on one of the home card options (to-do, Upgrade Tracker, Ranked) for an account in the Players tab to see it here.",
-  "dashboardUpgradeTrackerNoData": "Open the tracker to import or refresh upgrade data.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {needs an update} other {need an update}}",
+  "dashboardTodoHiddenTitle": "Itt egyetlen fiók sem látható",
+  "dashboardTodoHiddenBody": "Kapcsold be az egyik kezdőlapkártyát (teendők, Fejlesztéskövető, Rangsorolt) a fiókhoz a Játékosok lapon, hogy itt megjelenjen.",
+  "dashboardUpgradeTrackerNoData": "Nyisd meg a követőt a fejlesztési adatok importálásához vagy frissítéséhez.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {frissítést igényel} other {frissítést igényelnek}}",
   "@dashboardUpgradeTrackerNeedsUpdate": {
     "placeholders": {
       "subject": {
@@ -2583,7 +2583,7 @@
       }
     }
   },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {has tasks left} other {have tasks left}}",
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {fióknak maradt feladata} other {fióknak maradtak feladatai}}",
   "@todoAccountsHaveTasksLeft": {
     "placeholders": {
       "subject": {
@@ -2594,7 +2594,7 @@
       }
     }
   },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {has attacks left} other {have attacks left}}",
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {fióknak maradt támadása} other {fióknak maradtak támadásai}}",
   "@dashboardRankedAccountsHaveAttacksLeft": {
     "placeholders": {
       "subject": {
@@ -2605,14 +2605,14 @@
       }
     }
   },
-  "dashboardUpgradeTrackerTimeLeft": "Projected",
-  "dashboardUpgradeTrackerBuilders": "Builders",
-  "dashboardUpgradeTrackerLab": "Lab",
-  "dashboardUpgradeTrackerPets": "Pets",
-  "dashboardUpgradeTrackerWalls": "Walls",
-  "dashboardUpgradeTrackerVillage": "Village",
-  "dashboardRankedNoData": "Open Ranked League to see this account's standing.",
-  "dashboardRankedAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerTimeLeft": "Becsült",
+  "dashboardUpgradeTrackerBuilders": "Építők",
+  "dashboardUpgradeTrackerLab": "Labor",
+  "dashboardUpgradeTrackerPets": "Hősállatok",
+  "dashboardUpgradeTrackerWalls": "Falak",
+  "dashboardUpgradeTrackerVillage": "Falu",
+  "dashboardRankedNoData": "Nyisd meg a Rangsorolt Ligát a fiók helyezésének megtekintéséhez.",
+  "dashboardRankedAccounts": "Követett fiókok: {loaded}/{total}",
   "@dashboardRankedAccounts": {
     "placeholders": {
       "loaded": {
@@ -2653,20 +2653,20 @@
   "tooltipHidePassword": "Jelszó elrejtése",
   "tooltipRemoveAccount": "Fiók eltávolítása",
   "calculatorsTitle": "Számológépek",
-  "calculatorsSubtitle": "Zap quake and fireball quake.",
+  "calculatorsSubtitle": "Tervezd meg a sebzést az épületek jelenlegi szintjeihez.",
   "calculatorZapQuake": "Zap rengés",
   "calculatorFireball": "Tűzgömb",
-  "damageCalculatorSubtitle": "Compare one attack stack against multiple buildings.",
-  "damageNoStaticDataTitle": "Damage data is unavailable",
-  "damageNoStaticDataBody": "Refresh the app after static game data finishes loading.",
-  "damageTownHall": "Town Hall",
-  "damageVerifiedAccountPrefill": "Verified account preset",
-  "damageOverridesStayLocal": "Changes here do not update the player account.",
-  "damageTargets": "Buildings",
-  "damageAddBuilding": "Add building",
-  "damageRemoveBuilding": "Remove building",
-  "damageNoTargetsBody": "Add at least one building to compare results.",
-  "damageHitpoints": "{hitpoints} HP",
+  "damageCalculatorSubtitle": "Hasonlíts össze egy támadó-összeállítást több épülettel.",
+  "damageNoStaticDataTitle": "A sebzési adatok nem érhetők el",
+  "damageNoStaticDataBody": "Frissítsd az alkalmazást, miután a statikus játékadatok betöltődtek.",
+  "damageTownHall": "Városháza",
+  "damageVerifiedAccountPrefill": "Igazolt fiók előbeállítása",
+  "damageOverridesStayLocal": "Az itt végzett módosítások nem frissítik a játékos fiókját.",
+  "damageTargets": "Épületek",
+  "damageAddBuilding": "Épület hozzáadása",
+  "damageRemoveBuilding": "Épület eltávolítása",
+  "damageNoTargetsBody": "Az eredmények összehasonlításához adj hozzá legalább egy épületet.",
+  "damageHitpoints": "{hitpoints} életerő",
   "@damageHitpoints": {
     "placeholders": {
       "hitpoints": {
@@ -2674,13 +2674,13 @@
       }
     }
   },
-  "damageSearchBuildings": "Search buildings",
-  "damageNoBuildingsFound": "No buildings found",
-  "damageTryAnotherSearch": "Try another name or Town Hall level.",
-  "damageAttackStack": "Manual attack stack",
-  "damageNoSourcesForTownHall": "No supported damage sources are available at this Town Hall.",
-  "damageCount": "Count",
-  "damagePerUse": "{damage} damage per use",
+  "damageSearchBuildings": "Épületek keresése",
+  "damageNoBuildingsFound": "Nem található épület",
+  "damageTryAnotherSearch": "Próbálj másik nevet vagy Városháza-szintet.",
+  "damageAttackStack": "Kézi támadó-összeállítás",
+  "damageNoSourcesForTownHall": "Ehhez a Városházához nem érhető el támogatott sebzésforrás.",
+  "damageCount": "Darabszám",
+  "damagePerUse": "{damage} sebzés használatonként",
   "@damagePerUse": {
     "placeholders": {
       "damage": {
@@ -2688,7 +2688,7 @@
       }
     }
   },
-  "damageEarthquakePercent": "{percent}% of max HP, diminishing when stacked",
+  "damageEarthquakePercent": "A maximális életerő {percent}%-a, halmozáskor csökken",
   "@damageEarthquakePercent": {
     "placeholders": {
       "percent": {
@@ -2696,17 +2696,17 @@
       }
     }
   },
-  "damageSourceLightning": "Lightning",
-  "damageSourceEarthquake": "Earthquake",
-  "damageSourceGiantArrow": "Giant Arrow",
-  "damageSourceFireball": "Fireball",
-  "damageSourceFlameFlinger": "Flame Flinger hit",
-  "damageSourceBalloonDeath": "Balloon death damage",
-  "damageSourceRocketBalloonDeath": "Rocket Balloon death damage",
-  "damageResults": "Results",
-  "damageDestroyed": "Destroyed",
-  "damageSurvives": "Survives",
-  "damageResultSummary": "{damage} damage · {remaining} HP remaining",
+  "damageSourceLightning": "Villám",
+  "damageSourceEarthquake": "Földrengés",
+  "damageSourceGiantArrow": "Óriásnyíl",
+  "damageSourceFireball": "Tűzgömb",
+  "damageSourceFlameFlinger": "Lángvető találata",
+  "damageSourceBalloonDeath": "Léggömb pusztulási sebzése",
+  "damageSourceRocketBalloonDeath": "Rakétás Léggömb pusztulási sebzése",
+  "damageResults": "Eredmények",
+  "damageDestroyed": "Elpusztult",
+  "damageSurvives": "Túléli",
+  "damageResultSummary": "{damage} sebzés · {remaining} életerő maradt",
   "@damageResultSummary": {
     "placeholders": {
       "damage": {
@@ -2717,10 +2717,10 @@
       }
     }
   },
-  "damageZapQuakeOptimizer": "Zap Quake optimizer",
-  "damageSpellCapacity": "Spell capacity",
-  "damageZapQuakeUnavailable": "Lightning and Earthquake are not available at this Town Hall.",
-  "damageZapQuakeUsesSelectedLevels": "Using Lightning level {lightningLevel} and Earthquake level {earthquakeLevel}.",
+  "damageZapQuakeOptimizer": "Villám–Földrengés optimalizáló",
+  "damageSpellCapacity": "Varázslatkapacitás",
+  "damageZapQuakeUnavailable": "A Villám és a Földrengés nem érhető el ezen a Városháza-szinten.",
+  "damageZapQuakeUsesSelectedLevels": "{lightningLevel}. szintű Villám és {earthquakeLevel}. szintű Földrengés használata.",
   "@damageZapQuakeUsesSelectedLevels": {
     "placeholders": {
       "lightningLevel": {
@@ -2731,9 +2731,9 @@
       }
     }
   },
-  "damageZapQuakeIneligible": "Lightning and Earthquake cannot damage this storage.",
-  "damageNoValidZapQuake": "No valid combination fits the selected spell capacity.",
-  "damageZapQuakeCombination": "{lightning} zap + {earthquake} quake · {capacity} space",
+  "damageZapQuakeIneligible": "A Villám és a Földrengés nem sebezheti ezt a raktárt.",
+  "damageNoValidZapQuake": "Egyetlen érvényes kombináció sem fér el a kiválasztott varázslatkapacitásban.",
+  "damageZapQuakeCombination": "{lightning} villám + {earthquake} földrengés · {capacity} hely",
   "@damageZapQuakeCombination": {
     "placeholders": {
       "lightning": {
@@ -2754,19 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Adjon hozzá vagy frissítsen összekapcsolt fiókokat a frissítések összegének megtekintéséhez.",
   "playerOptionNotificationsTitle": "Értesítések",
   "playerOptionNotificationsSubtitle": "Értesítések kérése ehhez a fiókhoz.",
-  "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
-  "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
-  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
-  "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
+  "playerOptionNotificationsEnableMaster": "Kapcsold be az értesítéseket a fiók riasztásainak beállításához.",
+  "playerOptionNotificationsVerifyFirst": "Az értesítések bekapcsolásához igazold ezt a fiókot.",
+  "playerOptionNotificationsSubscriptionRequired": "A fiók értesítéseihez aktív előfizetés szükséges.",
+  "playerOptionNotificationsLimitReached": "Elérted az előfizetésedben értesítésekhez engedélyezett fiókok számát.",
   "playerOptionShowTodoPageTitle": "Megjelenítés a teendők oldalon",
   "playerOptionShowTodoPageSubtitle": "Vegye fel ezt a fiókot a teljes feladatlistába.",
-  "playerOptionShowTodoPageVerifyFirst": "Verify this account to show it on the to-do page.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Show Upgrade Tracker on Home",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Pin this account's upgrade summary on Home.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verify this account to show upgrade progress on Home.",
-  "playerOptionShowRankedHomeTitle": "Show Ranked on Home",
-  "playerOptionShowRankedHomeSubtitle": "Pin this account's Ranked League summary on Home.",
-  "playerOptionShowRankedHomeVerifyFirst": "Verify this account to show its Ranked League summary on Home.",
+  "playerOptionShowTodoPageVerifyFirst": "Igazold ezt a fiókot, hogy megjelenjen a teendők oldalán.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Fejlesztéskövető megjelenítése a Kezdőlapon",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Rögzítsd a fiók fejlesztési összefoglalóját a Kezdőlapon.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Igazold ezt a fiókot, hogy a fejlesztési haladása megjelenjen a Kezdőlapon.",
+  "playerOptionShowRankedHomeTitle": "Rangsorolt adatok megjelenítése a Kezdőlapon",
+  "playerOptionShowRankedHomeSubtitle": "Rögzítsd a fiók Rangsorolt Liga-összefoglalóját a Kezdőlapon.",
+  "playerOptionShowRankedHomeVerifyFirst": "Igazold ezt a fiókot, hogy a Rangsorolt Liga-összefoglalója megjelenjen a Kezdőlapon.",
   "playerOptionShowWarTabTitle": "Megjelenítés a Háború lapon",
   "playerOptionShowWarTabSubtitle": "Vegye fel ennek a fióknak a klánját a Háború lapra.",
   "bookmarkPlayerLoadFailed": "Nem sikerült betölteni a könyvjelzővel ellátott lejátszót.",
@@ -2808,10 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · nincsenek nyitott feladatok",
   "todoMockCaughtUpStatus": "Ma aktív · nincs szükség teendőre",
   "notifChooseAlerts": "Válassza ki a figyelmeztetéseket",
-  "notifGroupLegendAttacks": "Legend I attacks",
-  "notifLegendAttacksDescription": "Attack results for notification-enabled bookmarked accounts in Legend I.",
-  "notifGroupLegendDefenses": "Legend I defenses",
-  "notifLegendDefensesDescription": "Defense results for notification-enabled accounts in Legend I.",
+  "notifGroupLegendAttacks": "Legend Liga-támadások",
+  "notifLegendAttacksDescription": "Értesít, ha még maradt Legend Liga-támadásod.",
+  "notifGroupLegendDefenses": "Legend Liga-védések",
+  "notifLegendDefensesDescription": "Értesít az új Legend Liga-védésekről.",
   "notifLeagueDefenseDescription": "Védelmi eredmények támadókkal, csillagokkal, százalékos arányokkal és bajnoki kontextussal.",
   "notifWarAttackOptionsDescription": "Háborús támadások eredményei, védelmi riasztások és 5v5 támadási feed opciók.",
   "notifWarAlertsDescription": "A háború megegyezett, megkezdődött a csata napja, és a háború véget ért.",
@@ -2832,7 +2832,7 @@
   "warFiltersFriendlyWars": "Barátságos háborúk",
   "warType": "Háborús típus",
   "warFiltersAnyTownHall": "Bármilyen TH",
-  "gameTownHallLevelShort": "TH{level}",
+  "gameTownHallLevelShort": "{level}. TH",
   "warAttackerTownHall": "Támadó TH",
   "warDefenderTownHall": "Védő TH",
   "warStatsFilterSameTownHallOnly": "Csak ugyanaz a városháza",
@@ -2877,7 +2877,7 @@
   "resourceDarkElixir": "Sötét elixír",
   "resourceBuilderElixir": "Építő elixír",
   "resourceBuilderGold": "Építő arany",
-  "resourceElixir": "Elixir",
+  "resourceElixir": "Elixír",
   "resourceGold": "Arany",
   "resourceGlowyOre": "Ragyogó érc",
   "resourceStarryOre": "Csillagos érc",
@@ -2906,8 +2906,8 @@
   "clanCapitalPoints": "Fővárospontok",
   "todoAllAccounts": "Minden fiók",
   "todoCombinedAcrossAccounts": "Összesített teendők a fiókjaidon",
-  "dashboardRankedCombinedAcrossAccounts": "Combined ranking across your accounts",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Combined upgrade tracking across your accounts",
+  "dashboardRankedCombinedAcrossAccounts": "Fiókjaid összesített rangsora",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Fiókjaid összesített fejlesztéskövetése",
   "todoPreviewAccount": "Előnézeti fiók",
   "todoLastActiveUnavailable": "Utolsó aktivitás nem elérhető",
   "todoActiveRelative": "Aktív {time}",
@@ -2961,25 +2961,25 @@
   "sideRankingsEmptyTitle": "Nem érkezett ranglista",
   "sideRankingsEmptyBody": "Próbálj másik ranglistát vagy helyet.",
   "sideRankingsMockups": "ClashKing makettek",
-  "rankingsHomeVillage": "Home Village",
-  "rankingsBuilderBase": "Builder Base",
-  "rankingsTownHall": "Town Hall",
-  "rankingsRankedLeague": "Ranked League",
-  "rankingsClanCapital": "Clan Capital",
-  "rankingsDonations": "Donations",
-  "rankingsWarWins": "War Wins",
-  "rankingsWinStreak": "Win Streak",
-  "rankingsCurrent": "Current",
-  "rankingsWorldwide": "Worldwide",
-  "rankingsSelectLocation": "Select a location",
-  "rankingsSearchLocations": "Search locations or country codes",
-  "rankingsWorldwideUnavailable": "Choose a region or country for this leaderboard.",
-  "rankingsLocationsLoadFailed": "The full location list could not be loaded. Worldwide is still available where supported.",
-  "rankingsSnapshotDate": "Snapshot date",
-  "rankingsSource": "Source",
-  "rankingsOfficialSource": "Official Clash API",
-  "rankingsResults": "Results",
-  "rankingsTopCount": "Top {count}",
+  "rankingsHomeVillage": "Otthoni falu",
+  "rankingsBuilderBase": "Építő Bázis",
+  "rankingsTownHall": "Városháza",
+  "rankingsRankedLeague": "Rangsorolt Liga",
+  "rankingsClanCapital": "Klán Főváros",
+  "rankingsDonations": "Adományok",
+  "rankingsWarWins": "Háborús győzelmek",
+  "rankingsWinStreak": "Győzelmi sorozat",
+  "rankingsCurrent": "Aktuális",
+  "rankingsWorldwide": "Világszerte",
+  "rankingsSelectLocation": "Hely kiválasztása",
+  "rankingsSearchLocations": "Helyek vagy országkódok keresése",
+  "rankingsWorldwideUnavailable": "Válassz régiót vagy országot ehhez a ranglistához.",
+  "rankingsLocationsLoadFailed": "A teljes helylista nem tölthető be. A világszintű nézet továbbra is elérhető, ahol támogatott.",
+  "rankingsSnapshotDate": "Pillanatkép dátuma",
+  "rankingsSource": "Forrás",
+  "rankingsOfficialSource": "Hivatalos Clash API",
+  "rankingsResults": "Eredmények",
+  "rankingsTopCount": "Legjobb {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -2987,8 +2987,8 @@
       }
     }
   },
-  "rankingsNoSnapshotTitle": "No stored snapshot",
-  "rankingsNoSnapshotBody": "No ranking snapshot is stored for {date}. Choose another date or return to Current.",
+  "rankingsNoSnapshotTitle": "Nincs tárolt pillanatkép",
+  "rankingsNoSnapshotBody": "Nincs tárolt ranglistapillanatkép ehhez a dátumhoz: {date}. Válassz másik dátumot, vagy térj vissza az Aktuális nézethez.",
   "@rankingsNoSnapshotBody": {
     "placeholders": {
       "date": {
@@ -2996,18 +2996,18 @@
       }
     }
   },
-  "rankingsPlayerLoadFailed": "Failed to load this player.",
-  "rankingsClanLoadFailed": "Failed to load this clan.",
+  "rankingsPlayerLoadFailed": "A játékost nem sikerült betölteni.",
+  "rankingsClanLoadFailed": "A klánt nem sikerült betölteni.",
   "sideStatsTitle": "Statisztikák",
-  "sideStatsSubtitle": "Battle Intelligence from aggregated battlelogs.",
+  "sideStatsSubtitle": "Ranglista-statisztikák a hivatalos Clash API felületekről.",
   "sideStatsLoadError": "Nem sikerült betölteni a harci intelligenciát.",
   "statsOverview": "Áttekintés",
   "statsArmies": "Seregek",
   "statsItems": "Tételek",
   "statsWar": "Háború",
   "statsCwl": "CWL",
-  "statsRanked": "Ranked",
-  "statsDateRange": "Date range",
+  "statsRanked": "Rangsorolt",
+  "statsDateRange": "Dátumtartomány",
   "statsDateRangeHint": "Válasszon legfeljebb 90 napot",
   "statsDateRangeTooLong": "Válasszon 90 napos vagy rövidebb dátumtartományt.",
   "statsUpdated": "Friss adatok",
@@ -3041,7 +3041,7 @@
   "statsItemId": "Elemazonosító vagy tárolt név",
   "statsItemType": "Elem típusa",
   "statsTroop": "Csoport",
-  "statsSpell": "Spell",
+  "statsSpell": "Varázslat",
   "statsHero": "Hős",
   "statsPet": "Kisállat",
   "statsEquipment": "Eszközök",
@@ -3067,7 +3067,7 @@
   "statsCwlSeasons": "CWL szezonok",
   "statsCwlSeasonsHint": "ÉÉÉÉ-HH, vesszővel elválasztva",
   "statsApplyFilters": "Szűrők alkalmazása",
-  "statsRefresh": "Refresh data",
+  "statsRefresh": "Adatok frissítése",
   "statsRegularWarOnly": "Csak a szokásos háborúk; a barátságos háborúk és a CWL kizárva.",
   "statsRankedRequired": "Városháza és egy ligaszint szükséges.",
   "statsSeasonBreakdown": "Évad szerinti lebontás",
@@ -3087,11 +3087,11 @@
   "sideArmyLinksBody": "Összeállítás, varázslatok, ostromgép, jegyzetek és megosztási link.",
   "sideGameAssetsTitle": "Játékeszközök",
   "sideGameAssetsSubtitle": "Hostolt ClashKing eszközök mappák szerint csoportosítva.",
-  "gameAssetsLoadError": "Could not load game assets",
-  "gameAssetsEmptyTitle": "No game assets available",
-  "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
-  "gameAssetsOneImage": "1 image",
-  "gameAssetsImageCount": "{count} images",
+  "gameAssetsLoadError": "A játékbeli elemek nem tölthetők be",
+  "gameAssetsEmptyTitle": "Nincs elérhető játékbeli elem",
+  "gameAssetsEmptyBody": "A tárolt jegyzék nem tartalmazott támogatott képeket.",
+  "gameAssetsOneImage": "1 kép",
+  "gameAssetsImageCount": "{count} kép",
   "@gameAssetsImageCount": {
     "placeholders": {
       "count": {
@@ -3099,10 +3099,10 @@
       }
     }
   },
-  "gameAssetsSearchHint": "Search this category",
-  "gameAssetsAllFormats": "All formats",
-  "gameAssetsOneResult": "1 result",
-  "gameAssetsResultCount": "{count} results",
+  "gameAssetsSearchHint": "Keresés ebben a kategóriában",
+  "gameAssetsAllFormats": "Minden formátum",
+  "gameAssetsOneResult": "1 találat",
+  "gameAssetsResultCount": "{count} eredmények",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3110,20 +3110,20 @@
       }
     }
   },
-  "gameAssetsNoResultsTitle": "No matching images",
-  "gameAssetsNoResultsBody": "Try another search or file format.",
-  "gameAssetsLongPressHint": "Long press to copy the hosted URL",
-  "gameAssetsCopyUrl": "Copy URL",
-  "gameAssetsCopyPath": "Copy path",
-  "gameAssetsUrlCopied": "Asset URL copied",
-  "gameAssetsPathCopied": "Asset path copied",
-  "gameAssetsCopyError": "Could not copy the asset details.",
-  "gameAssetsShare": "Share",
-  "gameAssetsShareError": "Could not share this asset.",
-  "gameAssetsSave": "Save",
-  "gameAssetsSaving": "Saving...",
-  "gameAssetsSaved": "Asset saved.",
-  "gameAssetsSavedTo": "Asset saved to {path}",
+  "gameAssetsNoResultsTitle": "Nincs egyező kép",
+  "gameAssetsNoResultsBody": "Próbálj másik keresést vagy fájlformátumot.",
+  "gameAssetsLongPressHint": "Hosszan nyomva másolhatod a tárolt URL-t",
+  "gameAssetsCopyUrl": "URL másolása",
+  "gameAssetsCopyPath": "Elérési út másolása",
+  "gameAssetsUrlCopied": "Az elem URL-je másolva",
+  "gameAssetsPathCopied": "Az elem elérési útja másolva",
+  "gameAssetsCopyError": "Az elem adatait nem sikerült másolni.",
+  "gameAssetsShare": "Megosztás",
+  "gameAssetsShareError": "Az elem nem osztható meg.",
+  "gameAssetsSave": "Mentés",
+  "gameAssetsSaving": "Mentés...",
+  "gameAssetsSaved": "Az elem mentve.",
+  "gameAssetsSavedTo": "Az elem ide lett mentve: {path}",
   "@gameAssetsSavedTo": {
     "placeholders": {
       "path": {
@@ -3131,7 +3131,7 @@
       }
     }
   },
-  "gameAssetsSaveError": "Could not save this asset.",
+  "gameAssetsSaveError": "Az elem nem menthető.",
   "sideZapQuakeTitle": "{zaps} villám + 1 földrengés",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -3465,7 +3465,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "TH{level}",
+  "gameTownHallShortLevel": "{level}. TH",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -3474,11 +3474,11 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Supercell rajongói tartalom irányelvek",
-  "upgradeTrackerPlan": "Plan",
-  "upgradeTrackerUpgrades": "Upgrades",
-  "upgradeTrackerCollection": "Collection",
-  "upgradeTrackerChooseAccount": "Choose account",
-  "upgradeTrackerSwitchAccount": "Switch account, {account}",
+  "upgradeTrackerPlan": "Terv",
+  "upgradeTrackerUpgrades": "Fejlesztések",
+  "upgradeTrackerCollection": "Gyűjtemény",
+  "upgradeTrackerChooseAccount": "Válassz fiókot",
+  "upgradeTrackerSwitchAccount": "Fiókváltás: {account}",
   "@upgradeTrackerSwitchAccount": {
     "placeholders": {
       "account": {
@@ -3486,14 +3486,14 @@
       }
     }
   },
-  "upgradeTrackerShare": "Share tracker",
-  "upgradeTrackerPasteJson": "Paste account JSON",
-  "upgradeTrackerImportTitle": "Import account data",
-  "upgradeTrackerImportDescription": "Paste the raw account JSON. It stays on this device.",
-  "upgradeTrackerAccountJson": "Account JSON",
-  "upgradeTrackerPasteClipboard": "Paste clipboard",
-  "upgradeTrackerImportAction": "Import account",
-  "upgradeTrackerImportSuccess": "{player} was imported on this device.",
+  "upgradeTrackerShare": "Követő megosztása",
+  "upgradeTrackerPasteJson": "Fiók-JSON beillesztése",
+  "upgradeTrackerImportTitle": "Fiókadatok importálása",
+  "upgradeTrackerImportDescription": "Illeszd be a nyers fiók-JSON-t. Az adatok ezen az eszközön maradnak.",
+  "upgradeTrackerAccountJson": "Fiók-JSON",
+  "upgradeTrackerPasteClipboard": "Beillesztés a vágólapról",
+  "upgradeTrackerImportAction": "Fiók importálása",
+  "upgradeTrackerImportSuccess": "{player} importálva lett erre az eszközre.",
   "@upgradeTrackerImportSuccess": {
     "placeholders": {
       "player": {
@@ -3501,7 +3501,7 @@
       }
     }
   },
-  "upgradeTrackerImportFailed": "Could not import account data: {error}",
+  "upgradeTrackerImportFailed": "A fiókadatok importálása sikertelen: {error}",
   "@upgradeTrackerImportFailed": {
     "placeholders": {
       "error": {
@@ -3509,15 +3509,15 @@
       }
     }
   },
-  "upgradeTrackerSnapshotUnreadable": "Account data could not be read",
-  "upgradeTrackerTryAgain": "Try again",
-  "upgradeTrackerNoDataTitle": "Bring your village progress into ClashKing",
-  "upgradeTrackerNoDataBody": "Copy your Account Data JSON from Clash of Clans, then paste it from your clipboard. Your data stays on this device.",
-  "upgradeTrackerNoDataLocation": "In Clash of Clans, open Settings > More Settings. Account Data JSON is directly below the API Token section.",
-  "upgradeTrackerOpenMoreSettings": "Open More Settings in Clash of Clans",
-  "upgradeTrackerNoLinkedAccount": "Link a Clash of Clans account before importing its account data.",
-  "upgradeTrackerUpdatedJustNow": "Updated just now",
-  "upgradeTrackerUpdatedMinutesAgo": "Updated {count} minutes ago",
+  "upgradeTrackerSnapshotUnreadable": "A fiókadatok nem olvashatók",
+  "upgradeTrackerTryAgain": "Próbáld újra",
+  "upgradeTrackerNoDataTitle": "Hozd be falud haladását a ClashKingbe",
+  "upgradeTrackerNoDataBody": "Másold ki a Fiókadatok JSON-ját a Clash of Clansból, majd illeszd be a vágólapról. Az adatok ezen az eszközön maradnak.",
+  "upgradeTrackerNoDataLocation": "A Clash of Clansban nyisd meg a Beállítások > További beállítások menüt. A Fiókadatok JSON-ja közvetlenül az API-token szakasz alatt található.",
+  "upgradeTrackerOpenMoreSettings": "További beállítások megnyitása a Clash of Clansban",
+  "upgradeTrackerNoLinkedAccount": "A fiókadatok importálása előtt kapcsolj össze egy Clash of Clans-fiókot.",
+  "upgradeTrackerUpdatedJustNow": "Éppen most frissítve",
+  "upgradeTrackerUpdatedMinutesAgo": "Frissítve {count} perce",
   "@upgradeTrackerUpdatedMinutesAgo": {
     "placeholders": {
       "count": {
@@ -3525,7 +3525,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedHoursAgo": "Updated {count} hours ago",
+  "upgradeTrackerUpdatedHoursAgo": "Frissítve {count} órája",
   "@upgradeTrackerUpdatedHoursAgo": {
     "placeholders": {
       "count": {
@@ -3533,7 +3533,7 @@
       }
     }
   },
-  "upgradeTrackerUpdatedOn": "Updated {date}",
+  "upgradeTrackerUpdatedOn": "Frissítve: {date}",
   "@upgradeTrackerUpdatedOn": {
     "placeholders": {
       "date": {
@@ -3541,18 +3541,18 @@
       }
     }
   },
-  "upgradeTrackerSearchUpgrades": "Search upgrades",
-  "upgradeTrackerSearchCollection": "Search collection",
-  "upgradeTrackerShowFilters": "Show filters",
-  "upgradeTrackerHideFilters": "Hide filters",
-  "upgradeTrackerFilterAll": "All",
-  "upgradeTrackerFilterOwned": "Owned",
-  "upgradeTrackerFilterMissing": "Missing",
-  "upgradeTrackerAllVillages": "All villages",
-  "upgradeTrackerHomeVillage": "Home Village",
-  "upgradeTrackerBuilderBase": "Builder Base",
-  "upgradeTrackerNoMatchingItems": "No matching items",
-  "upgradeTrackerOwnedCount": "{owned} of {total} owned",
+  "upgradeTrackerSearchUpgrades": "Fejlesztések keresése",
+  "upgradeTrackerSearchCollection": "Keresés a gyűjteményben",
+  "upgradeTrackerShowFilters": "Szűrők megjelenítése",
+  "upgradeTrackerHideFilters": "Szűrők elrejtése",
+  "upgradeTrackerFilterAll": "Összes",
+  "upgradeTrackerFilterOwned": "Meglévő",
+  "upgradeTrackerFilterMissing": "Hiányzó",
+  "upgradeTrackerAllVillages": "Minden falu",
+  "upgradeTrackerHomeVillage": "Otthoni falu",
+  "upgradeTrackerBuilderBase": "Építő Bázis",
+  "upgradeTrackerNoMatchingItems": "Nincs egyező elem",
+  "upgradeTrackerOwnedCount": "{owned} / {total} megszerezve",
   "@upgradeTrackerOwnedCount": {
     "placeholders": {
       "owned": {
@@ -3563,7 +3563,7 @@
       }
     }
   },
-  "upgradeTrackerLevelsLeft": "{count} levels left",
+  "upgradeTrackerLevelsLeft": "{count} szint maradt",
   "@upgradeTrackerLevelsLeft": {
     "placeholders": {
       "count": {
@@ -3571,7 +3571,7 @@
       }
     }
   },
-  "upgradeTrackerItemCount": "{count} items",
+  "upgradeTrackerItemCount": "{count} elem",
   "@upgradeTrackerItemCount": {
     "placeholders": {
       "count": {
@@ -3579,10 +3579,10 @@
       }
     }
   },
-  "upgradeTrackerCollected": "collected",
-  "upgradeTrackerMissing": "missing",
-  "upgradeTrackerDataAge": "Account data",
-  "upgradeTrackerBuildersCount": "{count} builders",
+  "upgradeTrackerCollected": "megszerezve",
+  "upgradeTrackerMissing": "hiányzik",
+  "upgradeTrackerDataAge": "Fiókadatok",
+  "upgradeTrackerBuildersCount": "{count} építő",
   "@upgradeTrackerBuildersCount": {
     "placeholders": {
       "count": {
@@ -3590,11 +3590,11 @@
       }
     }
   },
-  "upgradeTrackerLaboratory": "Laboratory",
-  "upgradeTrackerPets": "Pets",
-  "upgradeTrackerWalls": "Walls",
-  "upgradeTrackerEquipment": "Equipment",
-  "upgradeTrackerLevelsRemaining": "{count} levels remaining",
+  "upgradeTrackerLaboratory": "Laboratórium",
+  "upgradeTrackerPets": "Hősállatok",
+  "upgradeTrackerWalls": "Falak",
+  "upgradeTrackerEquipment": "Felszerelés",
+  "upgradeTrackerLevelsRemaining": "{count} hátralévő szint",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
       "count": {
@@ -3602,7 +3602,7 @@
       }
     }
   },
-  "upgradeTrackerCompletesOn": "Completes {date} · {duration}",
+  "upgradeTrackerCompletesOn": "Elkészül: {date} · {duration}",
   "@upgradeTrackerCompletesOn": {
     "placeholders": {
       "date": {
@@ -3613,33 +3613,33 @@
       }
     }
   },
-  "upgradeTrackerHeaderComplete": "Complete",
-  "upgradeTrackerHeaderLevelsLeft": "Levels left",
-  "upgradeTrackerHeaderActive": "Active",
-  "upgradeTrackerHeaderFinishes": "Finishes",
-  "upgradeTrackerHeaderOwned": "Owned",
-  "upgradeTrackerHeaderUpdated": "Updated",
-  "homeCouldNotLoadTitle": "Home could not load",
-  "homeVerifiedAccountRequiredTitle": "Verify a linked account",
-  "homeVerifiedAccountRequiredBody": "Home needs at least one verified Clash account. Link an account or verify an existing link to continue.",
-  "homeVerifyAccountAction": "Link or verify account",
-  "playerOptionVerifyAccountBody": "This account isn't verified yet. Verify it to unlock the to-do, Ranked, and Upgrade Tracker options below.",
-  "homeUpcomingTitle": "Upcoming",
-  "homeUpcomingSubtitle": "The next deadlines and upgrade completions across your accounts.",
-  "homeCollapseSection": "Collapse section",
-  "homeExpandSection": "Expand section",
-  "homeUpcomingEmpty": "No tracked deadlines are coming up. Pull to refresh if this account was just linked.",
-  "homeRecentlyCompleted": "Completed",
-  "homeTodoTitle": "To do",
-  "homeTodoSubtitle": "Actionable account details, ordered by urgency.",
-  "homeTodoEmpty": "No verified account needs attention right now.",
-  "homeClanless": "No clan",
-  "homeNeedsAttention": "Needs attention",
-  "homeCaughtUp": "Caught up",
-  "homeTrackingDataPending": "This verified player is newly tracked or inactive, so actionable details are not available yet.",
-  "homeUpgradeUnavailable": "Upgrade data could not be loaded. Your other account data is still current.",
-  "homeUpgradeNotImported": "No upgrade data yet. Import this verified account's JSON in Upgrade tracker.",
-  "homeUpgradeActiveCount": "{count} active upgrades",
+  "upgradeTrackerHeaderComplete": "Kész",
+  "upgradeTrackerHeaderLevelsLeft": "Hátralévő szintek",
+  "upgradeTrackerHeaderActive": "Aktív",
+  "upgradeTrackerHeaderFinishes": "Befejezés",
+  "upgradeTrackerHeaderOwned": "Meglévő",
+  "upgradeTrackerHeaderUpdated": "Frissítve",
+  "homeCouldNotLoadTitle": "A Kezdőlap nem tölthető be",
+  "homeVerifiedAccountRequiredTitle": "Igazolj egy összekapcsolt fiókot",
+  "homeVerifiedAccountRequiredBody": "A Kezdőlaphoz legalább egy igazolt Clash-fiók szükséges. A folytatáshoz kapcsolj össze egy fiókot, vagy igazolj egy meglévő kapcsolatot.",
+  "homeVerifyAccountAction": "Fiók összekapcsolása vagy igazolása",
+  "playerOptionVerifyAccountBody": "Ez a fiók még nincs igazolva. Igazold az alábbi Teendők, Rangsorolt és Fejlesztéskövető lehetőségek feloldásához.",
+  "homeUpcomingTitle": "Közelgő",
+  "homeUpcomingSubtitle": "A következő határidők és befejeződő fejlesztések a fiókjaidban.",
+  "homeCollapseSection": "Szakasz összecsukása",
+  "homeExpandSection": "Szakasz kibontása",
+  "homeUpcomingEmpty": "Nem közeleg követett határidő. Ha a fiókot éppen most kapcsoltad össze, húzd le a frissítéshez.",
+  "homeRecentlyCompleted": "Befejezve",
+  "homeTodoTitle": "Teendők",
+  "homeTodoSubtitle": "Beavatkozást igénylő fiókadatok sürgősség szerint rendezve.",
+  "homeTodoEmpty": "Jelenleg egyetlen igazolt fiók sem igényel figyelmet.",
+  "homeClanless": "Nincs klán",
+  "homeNeedsAttention": "Figyelmet igényel",
+  "homeCaughtUp": "Minden kész",
+  "homeTrackingDataPending": "Ez az igazolt játékos újonnan követett vagy inaktív, ezért a teendőkhöz szükséges adatok még nem érhetők el.",
+  "homeUpgradeUnavailable": "A fejlesztési adatok nem tölthetők be. A többi fiókadat továbbra is naprakész.",
+  "homeUpgradeNotImported": "Még nincs fejlesztési adat. Importáld az igazolt fiók JSON-ját a Fejlesztéskövetőben.",
+  "homeUpgradeActiveCount": "{count} aktív fejlesztés",
   "@homeUpgradeActiveCount": {
     "placeholders": {
       "count": {
@@ -3647,9 +3647,9 @@
       }
     }
   },
-  "homeUpgradeIdle": "No active upgrade timers were found; builders may be idle.",
-  "homeDone": "Done",
-  "homeRemainingCount": "{count} left",
+  "homeUpgradeIdle": "Nem található aktív fejlesztési időzítő; lehet, hogy az építők tétlenek.",
+  "homeDone": "Kész",
+  "homeRemainingCount": "{count} maradt",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -3657,10 +3657,10 @@
       }
     }
   },
-  "homeVerifiedPlayerDataMissing": "This link is verified, but its player profile is unavailable. Pull to refresh or wait for tracking to begin.",
-  "homeSinceAwayTitle": "Since away",
-  "homeSinceAwayFirstVisit": "This is the first tracked Home visit, so older activity is not marked new.",
-  "homeSinceAwaySubtitle": "New markers compare with your previous Home open at {time}.",
+  "homeVerifiedPlayerDataMissing": "A kapcsolat igazolt, de a játékos profilja nem érhető el. Húzd le a frissítéshez, vagy várd meg a követés kezdetét.",
+  "homeSinceAwayTitle": "Távolléted óta",
+  "homeSinceAwayFirstVisit": "Ez az első követett Kezdőlap-látogatás, ezért a régebbi tevékenység nincs újként megjelölve.",
+  "homeSinceAwaySubtitle": "Az új jelölések a Kezdőlap előző, {time} időpontban történt megnyitásához viszonyítanak.",
   "@homeSinceAwaySubtitle": {
     "placeholders": {
       "time": {
@@ -3668,17 +3668,17 @@
       }
     }
   },
-  "homeSinceAwayEmpty": "No join, leave, or player-history activity is available for these verified players and clans.",
-  "homeNewMarker": "New",
-  "homePulseTitle": "Your pulse",
-  "homePulseSubtitle": "Personal 30-day war and CWL form, ranked play, and available global rankings.",
-  "homePulseEmpty": "Performance history or rankings are not available yet. Newly tracked and inactive accounts will fill in as data arrives.",
-  "homeToday": "Today",
-  "homeYesterday": "Yesterday",
-  "homeEarlier": "Earlier",
-  "homeRankedAttacks": "Ranked attacks",
-  "homeSeasonPass": "Season pass",
-  "homeUpcomingAccountDetail": "{player} has {count} remaining.",
+  "homeSinceAwayEmpty": "Ezekhez az igazolt játékosokhoz és klánokhoz nincs elérhető csatlakozási, távozási vagy játékostörténeti tevékenység.",
+  "homeNewMarker": "Új",
+  "homePulseTitle": "Saját áttekintés",
+  "homePulseSubtitle": "Személyes 30 napos háborús és CWL-forma, rangsorolt játék és elérhető globális ranglisták.",
+  "homePulseEmpty": "A teljesítménytörténet vagy a ranglisták még nem érhetők el. Az újonnan követett és inaktív fiókok az adatok érkezésével töltődnek fel.",
+  "homeToday": "Ma",
+  "homeYesterday": "Tegnap",
+  "homeEarlier": "Korábban",
+  "homeRankedAttacks": "Rangsorolt támadások",
+  "homeSeasonPass": "Szezonbérlet",
+  "homeUpcomingAccountDetail": "{player} fennmaradó mennyisége: {count}.",
   "@homeUpcomingAccountDetail": {
     "placeholders": {
       "player": {
@@ -3689,8 +3689,8 @@
       }
     }
   },
-  "homeUpgradeDataNeeded": "Add upgrade data",
-  "homeUpgradeDataNeededDetail": "Import {player}'s account JSON to track upgrade timers and idle builders.",
+  "homeUpgradeDataNeeded": "Fejlesztési adatok hozzáadása",
+  "homeUpgradeDataNeededDetail": "Importáld {player} fiók-JSON-ját a fejlesztési időzítők és a tétlen építők követéséhez.",
   "@homeUpgradeDataNeededDetail": {
     "placeholders": {
       "player": {
@@ -3698,8 +3698,8 @@
       }
     }
   },
-  "homeUpgradeIdleTitle": "Builders may be idle",
-  "homeUpgradeIdleDetail": "{player} has upgrade data, but no active timers were found.",
+  "homeUpgradeIdleTitle": "Az építők tétlenek lehetnek",
+  "homeUpgradeIdleDetail": "{player} rendelkezik fejlesztési adatokkal, de nem található aktív időzítő.",
   "@homeUpgradeIdleDetail": {
     "placeholders": {
       "player": {
@@ -3707,7 +3707,7 @@
       }
     }
   },
-  "homeUpgradeAccountDetail": "Upgrade timer for {player}.",
+  "homeUpgradeAccountDetail": "{player} fejlesztési időzítője.",
   "@homeUpgradeAccountDetail": {
     "placeholders": {
       "player": {
@@ -3715,10 +3715,10 @@
       }
     }
   },
-  "homePulseWarAverage": "30-day war average",
-  "homePulseCwlAverage": "30-day CWL average",
-  "homePulseRankedToday": "30-day ranked",
-  "homePulseRankedValue": "{count} attacks · {trophies} trophies",
+  "homePulseWarAverage": "30 napos háborús átlag",
+  "homePulseCwlAverage": "30 napos CWL-átlag",
+  "homePulseRankedToday": "30 napos rangsorolt",
+  "homePulseRankedValue": "{count} támadás · {trophies} trófea",
   "@homePulseRankedValue": {
     "placeholders": {
       "count": {
@@ -3729,14 +3729,14 @@
       }
     }
   },
-  "homePulseBestGlobalRank": "Best global player rank",
-  "homeActivityJoined": "joined",
-  "homeActivityLeft": "left",
-  "homeActivityAClan": "a clan",
+  "homePulseBestGlobalRank": "Legjobb globális játékoshelyezés",
+  "homeActivityJoined": "csatlakozott",
+  "homeActivityLeft": "kilépett",
+  "homeActivityAClan": "egy klánhoz",
   "statsMeta": "Meta",
   "statsBattle": "Csata",
   "statsWorld": "Világ",
-  "statsHeaderSubtitle": "Explore battle performance and the world we track.",
+  "statsHeaderSubtitle": "Fedezd fel a harci teljesítményt és az általunk követett világot.",
   "statsPreview": "Előnézet",
   "statsTownHallDistribution": "Városháza megoszlása",
   "statsBuilderHallDistribution": "Builder Hall elosztása",
@@ -3756,13 +3756,13 @@
     }
   },
   "statsEquipmentAdoption": "Eszközök átvétele szintek szerint",
-  "statsEquipmentAdoptionPreview": "Mock layout until aggregated ownership and level counts are available.",
+  "statsEquipmentAdoptionPreview": "Mintaelrendezés, amíg az összesített birtoklási és szintadatok elérhetővé nem válnak.",
   "statsExperienceDistribution": "Player XP disztribúció",
-  "statsExperienceDistributionPreview": "Mock layout until XP histogram buckets are available.",
+  "statsExperienceDistributionPreview": "Mintaelrendezés, amíg az XP-hisztogram tartományai elérhetővé nem válnak.",
   "statsCwlRosterSizes": "CWL névsorméretek",
-  "statsCwlRosterSizesPreview": "Mock 15v15 / 30v30 split until group-size counts are available.",
+  "statsCwlRosterSizesPreview": "Minta 15v15 / 30v30 megoszlás, amíg a csoportméretek számai elérhetővé nem válnak.",
   "statsWarsOverTime": "Háborúk az idő múlásával",
-  "statsWarsOverTimePreview": "Mock daily trend until the canonical counts endpoint is connected.",
+  "statsWarsOverTimePreview": "Minta napi trend, amíg a hivatalos számláló végpont csatlakoztatva nem lesz.",
   "statsStrategyLenses": "Stratégiai objektívek",
   "statsStrategyLensesBody": "A megnevezett stratégiák átfedő, verziószámmal ellátott szabályokat használnak. A pontos betöltések külön maradnak, így a címke soha nem állítja a harci szándékot.",
   "statsQueenCharge": "Queen Charge",
@@ -3777,14 +3777,14 @@
   "statsExactLoadouts": "Pontos betöltések",
   "statsCustomLens": "Egyedi objektív",
   "statsCustomLensBody": "Válassza ki a szükséges mennyiségeket, kizárásokat, városházát, bajnokságot, mintaszintet és rendezési sorrendet. Ez valós betöltésekkel fut, de még nincs mentve.",
-  "rankedLeagueTitle": "Ranked League",
-  "rankedLeagueAbout": "About Ranked League",
-  "rankedLeagueAboutBody": "This page uses the official weekly Ranked League group, battle logs and period history. Current results can change until the period ends.",
-  "rankedLeagueOverview": "Overview",
-  "rankedLeagueRanking": "Ranking",
-  "rankedLeagueGroupRank": "Group rank",
-  "rankedLeagueTrophies": "Trophies",
-  "rankedLeaguePlayers": "{count} players",
+  "rankedLeagueTitle": "Rangsorolt Liga",
+  "rankedLeagueAbout": "A Rangsorolt Ligáról",
+  "rankedLeagueAboutBody": "Ez az oldal a hivatalos heti Rangsorolt Liga-csoportot, csatanaplókat és időszakelőzményeket használja. Az aktuális eredmények az időszak végéig változhatnak.",
+  "rankedLeagueOverview": "Áttekintés",
+  "rankedLeagueRanking": "Rangsor",
+  "rankedLeagueGroupRank": "Csoporthelyezés",
+  "rankedLeagueTrophies": "Kupák",
+  "rankedLeaguePlayers": "{count} játékos",
   "@rankedLeaguePlayers": {
     "placeholders": {
       "count": {
@@ -3792,7 +3792,7 @@
       }
     }
   },
-  "rankedLeagueBest": "Best: {value}",
+  "rankedLeagueBest": "Legjobb: {value}",
   "@rankedLeagueBest": {
     "placeholders": {
       "value": {
@@ -3800,15 +3800,15 @@
       }
     }
   },
-  "rankedLeagueNoGroup": "No active group",
-  "rankedLeagueCurrentPeriod": "Current period",
-  "rankedLeagueLiveGroupSubtitle": "Live results from the player's official Ranked League group.",
-  "rankedLeagueBattles": "Battles",
-  "rankedLeagueAttacksPlayed": "attacks played",
-  "rankedLeagueAttackRecord": "Attack record",
-  "rankedLeagueDefenseRecord": "Defense record",
-  "rankedLeagueWinsLosses": "wins - losses",
-  "rankedLeagueDefensesLogged": "{count} defenses logged",
+  "rankedLeagueNoGroup": "Nincs aktív csoport",
+  "rankedLeagueCurrentPeriod": "Aktuális időszak",
+  "rankedLeagueLiveGroupSubtitle": "Élő eredmények a játékos hivatalos Rangsorolt Liga-csoportjából.",
+  "rankedLeagueBattles": "Csaták",
+  "rankedLeagueAttacksPlayed": "lejátszott támadás",
+  "rankedLeagueAttackRecord": "Támadási mérleg",
+  "rankedLeagueDefenseRecord": "Védelmi mérleg",
+  "rankedLeagueWinsLosses": "győzelem – vereség",
+  "rankedLeagueDefensesLogged": "{count} rögzített védelem",
   "@rankedLeagueDefensesLogged": {
     "placeholders": {
       "count": {
@@ -3816,25 +3816,25 @@
       }
     }
   },
-  "rankedLeagueRecentBattles": "Recent battles",
-  "rankedLeagueRecentBattlesSubtitle": "Detailed results available for the active weekly group.",
-  "rankedLeagueAttacks": "Attacks",
-  "rankedLeagueDefenses": "Defenses",
-  "rankedLeagueNoBattles": "No battle recorded yet.",
-  "rankedLeagueGroupRanking": "Group ranking",
-  "rankedLeagueRankingSubtitle": "Live standings for the current group. Your player is highlighted.",
-  "rankedLeagueJumpToMyRank": "Jump to my rank",
-  "rankedLeagueLastPeriod": "Last Period",
-  "rankedLeagueBestGroupRank": "Best Rank",
-  "rankedLeaguePeriodHistory": "Period history",
-  "rankedLeagueHistorySubtitle": "Official summaries for completed weekly periods.",
-  "rankedLeagueBestRankedResults": "Best Ranked results",
-  "rankedLeagueAllRankedResults": "All Ranked results",
-  "rankedLeaguePeriods": "Periods",
-  "rankedLeaguePeriodStats": "Period statistics",
-  "rankedLeagueTrophyProgress": "Trophy progress by battle",
-  "rankedLeagueTrophiesByPeriod": "Trophies by period",
-  "rankedLeagueBattleCount": "{count} battles",
+  "rankedLeagueRecentBattles": "Legutóbbi csaták",
+  "rankedLeagueRecentBattlesSubtitle": "Részletes eredmények az aktív heti csoporthoz.",
+  "rankedLeagueAttacks": "Támadások",
+  "rankedLeagueDefenses": "Védekezések",
+  "rankedLeagueNoBattles": "Még nincs rögzített csata.",
+  "rankedLeagueGroupRanking": "Csoportrangsor",
+  "rankedLeagueRankingSubtitle": "Az aktuális csoport élő állása. A játékosod ki van emelve.",
+  "rankedLeagueJumpToMyRank": "Ugrás a helyezésemhez",
+  "rankedLeagueLastPeriod": "Előző időszak",
+  "rankedLeagueBestGroupRank": "Legjobb helyezés",
+  "rankedLeaguePeriodHistory": "Időszakelőzmények",
+  "rankedLeagueHistorySubtitle": "Hivatalos összefoglalók a lezárt heti időszakokról.",
+  "rankedLeagueBestRankedResults": "Legjobb rangsorolt eredmények",
+  "rankedLeagueAllRankedResults": "Minden rangsorolt eredmény",
+  "rankedLeaguePeriods": "Időszakok",
+  "rankedLeaguePeriodStats": "Időszak statisztikái",
+  "rankedLeagueTrophyProgress": "Trófeák alakulása csatánként",
+  "rankedLeagueTrophiesByPeriod": "Trófeák időszakonként",
+  "rankedLeagueBattleCount": "{count} csata",
   "@rankedLeagueBattleCount": {
     "placeholders": {
       "count": {
@@ -3842,7 +3842,7 @@
       }
     }
   },
-  "rankedLeagueBattleProgress": "{count} / {max} battles",
+  "rankedLeagueBattleProgress": "{count} / {max} csata",
   "@rankedLeagueBattleProgress": {
     "placeholders": {
       "count": {
@@ -3853,7 +3853,7 @@
       }
     }
   },
-  "rankedLeagueTrophyAverage": "{trophies} trophies · {average} avg.",
+  "rankedLeagueTrophyAverage": "{trophies} trófea · {average} átlag",
   "@rankedLeagueTrophyAverage": {
     "placeholders": {
       "trophies": {
@@ -3864,15 +3864,15 @@
       }
     }
   },
-  "rankedLeagueByPeriod": "By period",
-  "rankedLeaguePeriodTab": "Period",
-  "rankedLeagueAverage": "Average",
-  "rankedLeagueRemaining": "Remaining",
-  "rankedLeagueSevenDayPeriod": "7-day Ranked League period",
-  "rankedLeagueEquipmentUnavailable": "Army and equipment are not included in the official Ranked League battle logs yet.",
-  "rankedLeagueBattleDetailsUnavailable": "Detailed battle logs are not available for this period.",
-  "rankedLeagueHistoricalDetailsUnavailable": "Only the official period summary is available for this older period.",
-  "rankedLeagueStarBreakdownUnavailable": "The API provides the star total, but not the detailed star distribution for this period.",
+  "rankedLeagueByPeriod": "Időszakonként",
+  "rankedLeaguePeriodTab": "Időszak",
+  "rankedLeagueAverage": "Átlag",
+  "rankedLeagueRemaining": "Hátralévő idő",
+  "rankedLeagueSevenDayPeriod": "7 napos Rangsorolt Liga-időszak",
+  "rankedLeagueEquipmentUnavailable": "A sereg és a felszerelés még nem szerepel a hivatalos Rangsorolt Liga-csatanaplókban.",
+  "rankedLeagueBattleDetailsUnavailable": "Ehhez az időszakhoz nem érhető el részletes csatanapló.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Ehhez a régebbi időszakhoz csak a hivatalos időszak-összefoglaló érhető el.",
+  "rankedLeagueStarBreakdownUnavailable": "Az API megadja a csillagok összegét, de az időszak részletes csillageloszlását nem.",
   "notifAudienceSectionTitle": "Értesítések címzettjei",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
@@ -3915,8 +3915,8 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Choose accounts manually",
-  "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
+  "notifChooseAccountsManually": "Kiválasztott fiókok",
+  "notifAudienceAcrossDevicesDescription": "Válaszd ki, mely fiókok kaphatnak értesítéseket ezen az eszközön.",
   "notifAccountBookmarked": "Mentett",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
@@ -3953,42 +3953,42 @@
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
-  "widgetUpgradeProgressTitle": "Upgrade Progress",
-  "widgetHomeVillage": "HOME VILLAGE",
-  "widgetVillage": "VILLAGE",
-  "widgetLaboratory": "LAB",
-  "widgetPets": "PETS",
-  "widgetBuilderBase": "BUILDER BASE",
-  "widgetResearch": "RESEARCH",
-  "widgetActive": "ACTIVE",
-  "widgetIdle": "IDLE",
-  "widgetLocked": "LOCKED",
-  "widgetMaxed": "MAXED",
-  "widgetNotUnlocked": "Not unlocked",
-  "widgetFullyUpgraded": "Fully upgraded",
-  "widgetNoActiveUpgrades": "No active upgrades",
-  "widgetNoActiveResearch": "No active research",
-  "widgetDataStale": "Update needed",
-  "widgetMoreUpgrade": "more upgrade",
-  "widgetMoreUpgrades": "more upgrades",
-  "widgetLevelShort": "Lv",
-  "widgetReady": "Ready",
-  "widgetReadyIn": "Ready in",
-  "widgetHelping": "Helping",
-  "widgetApprenticeShort": "Apprentice",
-  "widgetAssistantShort": "Assistant",
-  "widgetAlchemistShort": "Alchemist",
-  "widgetBuilderPotion": "Builder Potion",
-  "widgetResearchPotion": "Research Potion",
-  "widgetPetPotion": "Pet Potion",
-  "widgetClockTower": "Clock Tower",
-  "widgetTownHallBuilderBoost": "Town Hall builder boost",
-  "widgetTownHallLabBoost": "Town Hall lab boost",
-  "widgetBuilderBoostShort": "Builder",
-  "widgetResearchBoostShort": "Research",
-  "widgetPetBoostShort": "Pet",
-  "widgetClockBoostShort": "Clock",
-  "widgetBuilderCostPerk": "{percent}% builder cost perk",
+  "widgetUpgradeProgressTitle": "Fejlesztési haladás",
+  "widgetHomeVillage": "OTTHONI FALU",
+  "widgetVillage": "FALU",
+  "widgetLaboratory": "LABORATÓRIUM",
+  "widgetPets": "HŐSÁLLATOK",
+  "widgetBuilderBase": "ÉPÍTŐBÁZIS",
+  "widgetResearch": "KUTATÁS",
+  "widgetActive": "AKTÍV",
+  "widgetIdle": "TÉTLEN",
+  "widgetLocked": "ZÁROLVA",
+  "widgetMaxed": "MAXIMÁLIS",
+  "widgetNotUnlocked": "Nincs feloldva",
+  "widgetFullyUpgraded": "Teljesen kifejlesztve",
+  "widgetNoActiveUpgrades": "Nincs aktív fejlesztés",
+  "widgetNoActiveResearch": "Nincs aktív kutatás",
+  "widgetDataStale": "Frissítés szükséges",
+  "widgetMoreUpgrade": "további fejlesztés",
+  "widgetMoreUpgrades": "további fejlesztés",
+  "widgetLevelShort": "Sz.",
+  "widgetReady": "Kész",
+  "widgetReadyIn": "Elkészül ennyi idő múlva",
+  "widgetHelping": "Segít",
+  "widgetApprenticeShort": "Tanonc",
+  "widgetAssistantShort": "Segéd",
+  "widgetAlchemistShort": "Alkimista",
+  "widgetBuilderPotion": "Építőital",
+  "widgetResearchPotion": "Kutatóital",
+  "widgetPetPotion": "Hősállatital",
+  "widgetClockTower": "Óratorony",
+  "widgetTownHallBuilderBoost": "Városházi építőgyorsítás",
+  "widgetTownHallLabBoost": "Városházi laborgyorsítás",
+  "widgetBuilderBoostShort": "Építő",
+  "widgetResearchBoostShort": "Kutatás",
+  "widgetPetBoostShort": "Kisállat",
+  "widgetClockBoostShort": "Óra",
+  "widgetBuilderCostPerk": "{percent}% építési költségkedvezmény",
   "@widgetBuilderCostPerk": {
     "placeholders": {
       "percent": {
@@ -3996,7 +3996,7 @@
       }
     }
   },
-  "widgetBuilderTimePerk": "{percent}% builder time perk",
+  "widgetBuilderTimePerk": "{percent}% építési időkedvezmény",
   "@widgetBuilderTimePerk": {
     "placeholders": {
       "percent": {
@@ -4004,7 +4004,7 @@
       }
     }
   },
-  "widgetLabCostPerk": "{percent}% lab cost perk",
+  "widgetLabCostPerk": "{percent}% laborköltség-kedvezmény",
   "@widgetLabCostPerk": {
     "placeholders": {
       "percent": {
@@ -4012,7 +4012,7 @@
       }
     }
   },
-  "widgetLabTimePerk": "{percent}% lab time perk",
+  "widgetLabTimePerk": "{percent}% laboridő-kedvezmény",
   "@widgetLabTimePerk": {
     "placeholders": {
       "percent": {
@@ -4020,22 +4020,22 @@
       }
     }
   },
-  "farmGoalTitle": "Farm goal",
-  "farmGoalFormTitle": "Resources to farm",
-  "farmGoalAccountTitle": "Account",
-  "farmGoalAccountHint": "The selected account provides the Town Hall and current league used for the estimate.",
-  "farmGoalTargetTitle": "Building to upgrade",
-  "farmGoalTargetBuildingLabel": "Building",
-  "farmGoalChooseBuilding": "Choose a building",
+  "farmGoalTitle": "Farmolási cél",
+  "farmGoalFormTitle": "Farmolási cél tervezése",
+  "farmGoalAccountTitle": "fiók",
+  "farmGoalAccountHint": "A zsákmány becsléséhez opcionálisan használd egy összekapcsolt fiók ligáját.",
+  "farmGoalTargetTitle": "Célfejlesztés",
+  "farmGoalTargetBuildingLabel": "Épület vagy egység",
+  "farmGoalChooseBuilding": "Válassz épületet vagy egységet",
   "farmGoalChangeBuilding": "Épület módosítása",
   "farmGoalNoTargetTitle": "Nincs kiválasztott épület",
   "farmGoalNoTargetBody": "Válaszd ki a fejleszteni kívánt épületet a szükséges nyersanyaggyűjtés becsléséhez.",
-  "farmGoalTargetLevelLabel": "Target level",
-  "farmGoalUpgradeCostLabel": "Upgrade cost",
-  "farmGoalCostUnavailable": "Upgrade cost unavailable for this level.",
-  "farmGoalLootTitle": "Estimated loot",
-  "farmGoalResourceLabel": "Resource",
-  "farmGoalAmountLabel": "Amount to farm",
+  "farmGoalTargetLevelLabel": "Célszint",
+  "farmGoalUpgradeCostLabel": "Fejlesztési költség",
+  "farmGoalCostUnavailable": "Ehhez a fejlesztéshez nem érhető el költségadat.",
+  "farmGoalLootTitle": "Zsákmány támadásonként",
+  "farmGoalResourceLabel": "Erőforrás",
+  "farmGoalAmountLabel": "Mennyiség",
   "farmGoalAverageLootLabel": "A faluban elérhető zsákmány",
   "farmGoalPerfectLootHint": "Add meg a támadás előtt látható zsákmányt. Az alábbi ligabónusz automatikusan hozzáadódik.",
   "farmGoalLeagueEstimate": "A(z) {league} ligabónusza: {amount} {resource}. Ez szerepel a támadási becslésekben.",
@@ -4052,7 +4052,7 @@
       }
     }
   },
-  "farmGoalStarBonusEstimate": "Star bonus: {amount} {resource} after 5 stars. It is not included in attacks needed.",
+  "farmGoalStarBonusEstimate": "Csillagbónusz: {amount} {resource} 5 csillag után. Nem számít bele a szükséges támadásokba.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
       "amount": {
@@ -4063,8 +4063,8 @@
       }
     }
   },
-  "farmGoalScenarioPerfect": "Perfect attack · 100%",
-  "farmGoalScenarioAtPercent": "{percent}% destruction",
+  "farmGoalScenarioPerfect": "Az elérhető zsákmány 100%-a",
+  "farmGoalScenarioAtPercent": "Az elérhető zsákmány {percent}%-a",
   "@farmGoalScenarioAtPercent": {
     "placeholders": {
       "percent": {
@@ -4072,20 +4072,20 @@
       }
     }
   },
-  "farmGoalAttackShort": "attack",
-  "farmGoalScenarioHint": "Approximation: loot varies by building destroyed. Percentages apply to your perfect-attack estimate.",
-  "farmGoalNoLeagueLoot": "Choose an account with a league to get a loot suggestion.",
+  "farmGoalAttackShort": "támadás",
+  "farmGoalScenarioHint": "A becslés feltételezi, hogy minden támadásban megszerzed az elérhető zsákmány kiválasztott százalékát.",
+  "farmGoalNoLeagueLoot": "Ehhez a ligához nem érhetők el zsákmányadatok.",
   "farmGoalTrackerNextTitle": "Következő a Fejlesztéskövető tervében",
   "farmGoalTrackerMissingTitle": "Fejlesztéskövető-adatok szükségesek",
   "farmGoalTrackerMissingBody": "Importáld a fiók fejlesztési JSON-fájlját a Fejlesztéskövetőbe, hogy itt megjelenjen a következő tervezett épület és annak pontos költsége.",
   "farmGoalTrackerPlanComplete": "A Fejlesztéskövetőben nem található további épületfejlesztés. Továbbra is választhatsz kézzel épületet.",
   "farmGoalOpenUpgradeTracker": "Fejlesztéskövető megnyitása",
   "farmGoalUseTrackerTarget": "Épület használata",
-  "farmGoalMissingTarget": "Choose a building and target level to calculate the required attacks.",
-  "farmGoalMissingValues": "Enter a target and a perfect-attack loot estimate to see the attack scenarios.",
-  "farmGoalResultTitle": "Attacks needed",
-  "farmGoalAttacks": "attacks",
-  "farmGoalResultSummary": "{target} {resource} with about {average} per perfect attack.",
+  "farmGoalMissingTarget": "Válassz egy épületet és célszintet a szükséges támadások kiszámításához.",
+  "farmGoalMissingValues": "Adj meg egy célt és a tökéletes támadás becsült zsákmányát a támadási forgatókönyvek megtekintéséhez.",
+  "farmGoalResultTitle": "Szükséges támadások",
+  "farmGoalAttacks": "Becsült támadások",
+  "farmGoalResultSummary": "{target} {resource}, tökéletes támadásonként körülbelül {average}.",
   "@farmGoalResultSummary": {
     "placeholders": {
       "target": {
@@ -4099,7 +4099,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "{level}. TH",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -4107,51 +4107,51 @@
       }
     }
   },
-  "gameCreatorCode": "Creator Code: ClashKing",
-  "todoExplanationRaidsTitle": "Raids:",
-  "todoExplanationRaids": "Weight of 5 points per account (or 6 if the last attack has been unlocked), 1 attack = 1 point.",
-  "clanWarFrequencyTitle": "Wars",
-  "notifScopeAllAccounts": "All accounts",
+  "gameCreatorCode": "Alkotói kód: ClashKing",
+  "todoExplanationRaidsTitle": "Rajtaütések:",
+  "todoExplanationRaids": "Fiókonként 5 pontos súly (vagy 6, ha az utolsó támadás feloldódott), 1 támadás = 1 pont.",
+  "clanWarFrequencyTitle": "Háborúk",
+  "notifScopeAllAccounts": "Minden fiók",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
-  "settingsLiveActivityTest": "Live Activity Test",
+  "settingsLiveActivityTest": "Élő tevékenység teszt",
   "@settingsLiveActivityTest": {
     "description": "Settings section: live activity test (debug only)"
   },
-  "settingsLiveActivityStart": "Start test activity",
+  "settingsLiveActivityStart": "Indítsa el a teszt tevékenységet",
   "@settingsLiveActivityStart": {
     "description": "Settings tile: start live activity test"
   },
-  "settingsLiveActivityStartSubtitle": "Shows a local clan-war preview.",
+  "settingsLiveActivityStartSubtitle": "Megmutat egy helyi klánháború előzetest.",
   "@settingsLiveActivityStartSubtitle": {
     "description": "Settings tile: start live activity subtitle"
   },
-  "settingsLiveActivityUpdate": "Update score",
+  "settingsLiveActivityUpdate": "Pontszám frissítése",
   "@settingsLiveActivityUpdate": {
     "description": "Settings tile: update live activity score"
   },
-  "settingsLiveActivityUpdateSubtitle": "Advances the fake war score.",
+  "settingsLiveActivityUpdateSubtitle": "Előrehozza a hamis háborús pontszámot.",
   "@settingsLiveActivityUpdateSubtitle": {
     "description": "Settings tile: update live activity subtitle"
   },
-  "settingsLiveActivityEnd": "End test activity",
+  "settingsLiveActivityEnd": "Teszt tevékenység befejezése",
   "@settingsLiveActivityEnd": {
     "description": "Settings tile: end live activity test"
   },
-  "settingsLiveActivityEndSubtitle": "Removes the local preview.",
+  "settingsLiveActivityEndSubtitle": "Eltávolítja a helyi előnézetet.",
   "@settingsLiveActivityEndSubtitle": {
     "description": "Settings tile: end live activity subtitle"
   },
-  "notifSelectedAccounts": "Selected accounts",
+  "notifSelectedAccounts": "Kiválasztott fiókok",
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "Filters",
+  "searchFilters": "Szűrők",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} accounts tracked",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} követett fiók",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
       "loaded": {
@@ -4162,30 +4162,30 @@
       }
     }
   },
-  "calculatorsModeDamage": "Damage",
-  "calculatorsModeFarmGoal": "Farm goal",
-  "damageCalculatorTitle": "Damage Calculator",
-  "damageAccountPresetShort": "Account",
-  "damageChooseAccount": "Choose an account",
-  "damageSwitchAccount": "Switch account",
-  "damageAccountSelectorHint": "The levels used follow the selected account.",
-  "damageNoAccountsAvailable": "No verified account available",
-  "damageTargetSectionTitle": "Building to destroy",
-  "damageChooseTarget": "Choose a building",
-  "damageNoTargetTitle": "No building selected",
-  "damageNoTargetBody": "Choose a building to see how much damage it can take.",
-  "damageTargetLevelLabel": "Target level",
-  "damageCommonBuildings": "Most commonly chosen",
-  "damageAllBuildings": "All buildings",
-  "damageQuickSetups": "Choose a method",
-  "damageQuickSetupZapQuake": "Zap + quake",
-  "damageQuickSetupFireballQuake": "Fireball + quake",
-  "damageQuickSetupGiantArrow": "Giant Arrow",
-  "damageQuickSetupFlameFlinger": "Flame Flinger",
-  "damageQuickSetupCustom": "Custom",
-  "damageClearStack": "Clear",
-  "damageNoDamageSelected": "No damage",
-  "damageSelectedSourcesCount": "{count} source(s)",
+  "calculatorsModeDamage": "Sebzés",
+  "calculatorsModeFarmGoal": "Farmolási cél",
+  "damageCalculatorTitle": "Sebzéskalkulátor",
+  "damageAccountPresetShort": "fiók",
+  "damageChooseAccount": "Válassz fiókot",
+  "damageSwitchAccount": "Fiókváltás",
+  "damageAccountSelectorHint": "Használd egy igazolt fiók egységszintjeit, vagy állíts be mindent kézzel.",
+  "damageNoAccountsAvailable": "Nincs elérhető igazolt fiók. A sebzési szinteket kézzel is beállíthatod.",
+  "damageTargetSectionTitle": "Célépület",
+  "damageChooseTarget": "Válassz célt",
+  "damageNoTargetTitle": "Nincs kiválasztott épület",
+  "damageNoTargetBody": "Válassz egy épületet az ellenállásának teszteléséhez.",
+  "damageTargetLevelLabel": "Cél szintje",
+  "damageCommonBuildings": "Gyakori épületek",
+  "damageAllBuildings": "Minden épület",
+  "damageQuickSetups": "Gyorsbeállítások",
+  "damageQuickSetupZapQuake": "Villám + Földrengés",
+  "damageQuickSetupFireballQuake": "Tűzgolyó + Földrengés",
+  "damageQuickSetupGiantArrow": "Óriásnyíl",
+  "damageQuickSetupFlameFlinger": "Lángvető",
+  "damageQuickSetupCustom": "Egyéni",
+  "damageClearStack": "Világos",
+  "damageNoDamageSelected": "Adj hozzá sebzésforrást az eredmények megtekintéséhez.",
+  "damageSelectedSourcesCount": "Kiválasztott források ({count})",
   "@damageSelectedSourcesCount": {
     "placeholders": {
       "count": {
@@ -4193,35 +4193,35 @@
       }
     }
   },
-  "damageNoActiveSources": "Choose a method to show the damage sources to adjust.",
-  "damageOtherSources": "Other sources",
-  "damageShowAllSources": "Add another source",
-  "damageShowFewerSources": "Hide other sources",
-  "searchCancel": "Cancel",
-  "todoRaidAttacks": "Raid attacks",
-  "todoMockRaid4Left": "4 left",
-  "todoMockWarAltStatus": "Active 18m ago · war and raids need attention",
-  "todoMockRaid1Left": "1 left",
-  "gameAssetsCategoryBuildings": "Buildings",
-  "gameAssetsCategoryCapitalBase": "Capital Base",
-  "gameAssetsCategoryCapitalHouseParts": "Capital House Parts",
-  "gameAssetsCategoryChests": "Chests",
-  "gameAssetsCategoryClanLabels": "Clan Labels",
-  "gameAssetsCategoryCountryFlags": "Country Flags",
-  "gameAssetsCategoryDecorations": "Decorations",
-  "gameAssetsCategoryEquipment": "Equipment",
-  "gameAssetsCategoryGuardians": "Guardians",
-  "gameAssetsCategoryHeroes": "Heroes",
-  "gameAssetsCategoryPets": "Pets",
-  "gameAssetsCategorySkins": "Skins",
-  "gameAssetsCategorySpells": "Spells",
-  "gameAssetsCategoryTroops": "Troops",
-  "assetFolderTroops": "Troops",
-  "assetFolderSpells": "Spells",
-  "assetFolderHeroes": "Heroes",
-  "endpointStateWins": "Wins",
-  "notifGroupBattles": "Battles",
-  "notifGroupSupport": "Support",
-  "rankedLeagueAccountSelector": "Shown account",
-  "rankedLeagueStars": "Stars"
+  "damageNoActiveSources": "Nincs kiválasztva sebzésforrás.",
+  "damageOtherSources": "További források",
+  "damageShowAllSources": "Összes forrás megjelenítése",
+  "damageShowFewerSources": "Kevesebb forrás megjelenítése",
+  "searchCancel": "Mégsem",
+  "todoRaidAttacks": "Raid támadások",
+  "todoMockRaid4Left": "4 maradt",
+  "todoMockWarAltStatus": "Aktív 18 perce · A háború és a rajtaütések figyelmet igényelnek",
+  "todoMockRaid1Left": "1 maradt",
+  "gameAssetsCategoryBuildings": "Épületek",
+  "gameAssetsCategoryCapitalBase": "Klánfőváros",
+  "gameAssetsCategoryCapitalHouseParts": "Fővárosi házelemek",
+  "gameAssetsCategoryChests": "Ládák",
+  "gameAssetsCategoryClanLabels": "Kláncímkék",
+  "gameAssetsCategoryCountryFlags": "Országzászlók",
+  "gameAssetsCategoryDecorations": "Díszek",
+  "gameAssetsCategoryEquipment": "Felszerelések",
+  "gameAssetsCategoryGuardians": "Őrzők",
+  "gameAssetsCategoryHeroes": "Hősök",
+  "gameAssetsCategoryPets": "Hősállatok",
+  "gameAssetsCategorySkins": "Kinézetek",
+  "gameAssetsCategorySpells": "Varázslatok",
+  "gameAssetsCategoryTroops": "Csapatok",
+  "assetFolderTroops": "Csapatok",
+  "assetFolderSpells": "Varázslatok",
+  "assetFolderHeroes": "Hősök",
+  "endpointStateWins": "Győzelmek",
+  "notifGroupBattles": "Csaták",
+  "notifGroupSupport": "Támogatás",
+  "rankedLeagueAccountSelector": "Rangsorolt ligás fiók",
+  "rankedLeagueStars": "Csillagok"
 }
