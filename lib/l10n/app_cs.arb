@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "Účet byl úspěšně ověřen!",
   "generalRetry": "Opakovat",
   "generalRetrying": "Opakuji pokus...",
+  "postsTitle": "Příspěvky",
+  "postsDescription": "Novinky ClashKing, příběhy aktualizací a předchozí oznámení.",
+  "postsEmpty": "Zatím nebyly zveřejněny žádné příspěvky.",
+  "postsLoadFailed": "Příspěvky se nepodařilo načíst.",
+  "postsLoadMore": "Načíst další",
+  "postsCurrent": "Aktuální",
+  "postsPast": "Minulé",
+  "postsStory": "Interaktivní příběh",
+  "postsPinned": "Doporučené",
   "generalTryAgain": "Zkusit znovu",
   "generalReset": "Resetovat",
   "generalCancel": "Zrušit",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "Filtry",
+  "generalExpand": "Rozšířit",
+  "generalCollapse": "Kolaps",
   "generalNotSet": "Nenastaveno",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "Záložka",
+  "generalRemoveBookmark": "Odebrat záložku",
   "generalClearFilters": "Vymazat filtry",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "Propojit e-mailový účet",
   "authAccountAddEmailAuth": "Přidejte do svého účtu e-mail a heslo pro další zabezpečení.",
   "authAccountEmailLinkedSuccess": "E-mailový účet byl úspěšně propojen!",
+  "authAccountLinkDiscord": "Propojit účet Discord",
+  "authAccountAddDiscordAuth": "Přidejte k účtu ověřování přes Discord pro synchronizaci mezi platformami a přístup k botovi ClashKing.",
+  "authAccountDiscordLinkedSuccess": "Účet Discord byl úspěšně propojen!",
   "authEmailVerificationTitle": "Ověřit e-mail",
   "authEmailVerificationCheckEmail": "Zkontroluj e-mail",
   "authEmailVerificationSentTo": "Ověřovací e-mail jsme poslali na:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "Úroveň zkušenosti",
+  "gameLeague": "Liga",
   "gameTrophies": "Trofeje",
   "gameBuilderBaseTrophies": "BB trofeje",
   "gameDonations": "Příspěvky",
@@ -484,6 +501,11 @@
   "clanNone": "Bez klanu",
   "clanJoinToUnlock": "Připojte se k klanu a odemkněte nové funkce.",
   "clanMembers": "Členové",
+  "clanMembersSearchPlaceholder": "Hledat členy",
+  "clanMembersShowTotals": "Zobrazit klanové součty",
+  "clanMembersHideTotals": "Skrýt klanové součty",
+  "clanMembersReceivedShort": "Přijato",
+  "clanMembersAverageTh": "Prům. TH",
   "clanMinimumMembers": "Minimální počet členů",
   "clanMaximumMembers": "Maximální počet členů",
   "clanLocation": "Poloha",
@@ -839,6 +861,7 @@
   "warLeague": "Válka/Liga",
   "warHistory": "Válečná historie",
   "warLog": "Válečný deník",
+  "warLogSearchPlaceholder": "Hledání válek",
   "warLogClosed": "Protokol války {clan}je uzavřen.",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "Válečné statistiky",
+  "warStatsSearchPlaceholder": "Hledat hráče",
+  "warStatsCurrentTownHall": "Moje TH",
+  "warStatsLast50": "Posledních 50",
+  "warStatsWars": "války",
+  "warStatsSelectSeason": "Vyberte sezónu válečných statistik",
   "warOngoing": "Probíhající válka",
   "warIsNotInWar": "{clan} není ve válce.",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "Vyhrát",
+  "warAnalysisToLose": "Prohrát",
+  "warAnalysisNoAttacksLeft": "Nezůstaly žádné útoky",
+  "warAnalysisScenario": "{attacks} útoky zbývají -> potřeba {stars} hvězdiček / {percent}% na útok",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} útoky zbývají -> nemožné ({stars} hvězd / {percent} % na útok)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "{clanName} už nemůže prohrát",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "Zajištěno",
   "warAnalysisAlreadySecured": "Již zajištěno",
   "warAnalysisSecureAgainst": "Cíl je vypočítán za předpokladu, že {clanName} využije všechny zbývající útoky.",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "Nelze matematicky zajistit, pokud {clanName} optimálně využije všechny zbývající útoky.",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "Se zbývajícími útoky nelze zajistit",
   "warAnalysisStarGoal": "+{stars} hvězd",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "Zbývá útoků: {attacks}",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "Lepší výsledek není možný",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "% potřeba celkem",
   "warCalculatorCalculate": "Vypočítat",
   "warAttacksTitle": "Útoky",
+  "warAttacksSuccessful": "Úspěšné útoky",
+  "warAttacksFailed": "Neúspěšné útoky",
   "warAttacksNone": "Zatím žádný útok",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "Nejlepší útoky",
   "warAttacksCount": "Počet útoků",
   "warAttacksMissed": "Zmeškané útoky",
+  "warAttacksMissedShort": "Zmeškaný",
   "warAttacksNumber": "Během posledních válek {number_war} jsi napadl {number_time} krát.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "Válečná liga klanu",
   "cwlOngoing": "Probíhající CWL",
+  "cwlHistoryTitle": "Historie CWL",
+  "clanJoinLeaveTab": "Připojit/Odejít",
+  "clanRankingsTab": "Žebříčky",
+  "clanRankingsSeason": "Sezóna",
+  "clanRankingsSelectSeason": "Vyberte sezonu hodnocení",
+  "clanRankingsFilterActivity": "Aktivita",
+  "clanRankingsFilterWar": "Válka",
+  "clanRankingsFilterPoints": "Body",
+  "cwlHistoryPreviewBadge": "Náhled",
+  "cwlHistoryPreviewSubtitle": "Maketa {clan}, dokud nebude opraven koncový bod CWL",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Zatím žádná historie CWL",
+  "cwlHistoryEmptyBody": "Tento klan se ještě nezúčastnil sezóny Clan War League.",
+  "cwlRankTitle": "Pořadí",
+  "cwlWarsPlayedTitle": "Hrály se války",
+  "playerWarStarsTitle": "Válečné hvězdy",
+  "playerWarPreferenceTitle": "Válečný pref.",
+  "playerDonatedTitle": "Darováno",
+  "playerReceivedTitle": "Přijato",
+  "playerCapitalTitle": "Kapitál",
+  "playerExpLevelTitle": "Exp. úroveň",
+  "clanWarWinsTitle": "Válka vítězí",
+  "clanWinStreakTitle": "Vítězná série",
+  "clanBuilderBaseTitle": "Stavitelská základna",
+  "clanTypeTitle": "Typ",
+  "clanMinTownHallTitle": "Min. radnice",
+  "clanMinTrophiesTitle": "Min. trofeje",
+  "clanCapitalHallTitle": "Hlavní sál",
+  "clanDistrictsTitle": "Okresy",
+  "legendsCountryTitle": "Země",
+  "legendsLocalRankTitle": "Místní hodnost",
+  "legendsGlobalRankTitle": "Globální hodnost",
+  "warWinsTitle": "Vyhrává",
+  "warLossesTitle": "Ztráty",
+  "warDrawsTitle": "Kreslí",
   "cwlRounds": "Kola",
   "cwlRoundNumber": "Kolo {number}",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "Probíhající srážky",
   "raidsDistrictsDestroyed": "Okresy zničeny",
   "raidsCompleted": "Plnění nájezdů",
+  "capitalRaidStatusOngoing": "Pokračující",
+  "capitalRaidStatusEnded": "Skončilo",
+  "capitalRaidLoot": "Kořist",
+  "capitalRaidRewards": "Odměny",
+  "capitalRaidPreviousWeek": "Předchozí týden",
+  "capitalRaidNextWeek": "Příští týden",
+  "capitalRaidFilterAttacked": "Napaden",
+  "capitalRaidFilterNotAttacked": "Nenapaden",
+  "capitalRaidFilterLinked": "Propojené účty",
+  "capitalRaidEmptyTitle": "Žádná data o kapitálových nájezdech",
+  "capitalRaidEmptyBody": "Historie nájezdů se zde objeví, jakmile budou sledovány víkendy hlavních nájezdů tohoto klanu.",
+  "capitalRaidEstimated": "Odhadovaný",
+  "capitalRaidEstimatedTooltip": "Zatím neoficiální: odhadováno z deníků útoku a obrany z tohoto týdne. Jakmile nájezd skončí, Supercell zveřejní skutečný počet medailí.",
+  "capitalRaidTrophyPrediction": "Předpokládané trofeje",
+  "capitalRaidTrophyPredictionTooltip": "Odhadované trofeje Capital League po tomto nájezdu na základě dosavadního výkonu z tohoto týdne. Ne oficiální.",
+  "capitalRaidProjectedLoot": "Předpokládaná kořist",
+  "capitalRaidOneshots": "Na jednu ránu",
+  "capitalRaidFails": "Selže",
+  "capitalDetailsOffense": "Útok",
+  "capitalDetailsDefense": "Obrana",
+  "capitalDistrictsSection": "Okresy",
+  "capitalOpponentsSection": "Odpůrci",
+  "capitalAvgAttacksPerDistrict": "Prům. útoky/okres",
+  "capitalAvgLootPerAttack": "Průměrná kořist/útok",
+  "capitalHistorySection": "Historie nájezdů",
+  "capitalHistoryWeeksTracked": "Sledované týdny",
+  "capitalAvgLootPerWeek": "Průměrná kořist/týden",
+  "capitalAvgAttacksPerWeek": "Průměr útoků/týden",
+  "capitalBestRaid": "Nejlepší nájezd",
+  "capitalWorstRaid": "Nejhorší nájezd",
+  "capitalHistoryChartTitle": "Týdenní trend",
   "searchNoResult": "Bez výsledku.",
   "maintenanceTitle": "Údržba",
   "maintenanceDescription": "Stlačení Clans je v současné době v údržbě, takže nemůžeme přistupovat k API. Zkuste to prosím později.",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "Denní sledování trofejí a statistiky konce sezóny",
   "faqFeaturesCwlTitle": "CWL analytika",
   "faqFeaturesCwlDescription": "Výkon v Clan War League a příspěvky členů",
+  "faqFeaturesTodoTitle": "Seznam úkolů",
+  "faqFeaturesTodoDescription": "Zjistěte, které účty ještě čekají útoky v hodnocené lize, nájezdy, válečné útoky, Klanové hry nebo úkoly z průkazu",
+  "faqFeaturesUpgradeTrackerTitle": "Sledování vylepšení",
+  "faqFeaturesUpgradeTrackerDescription": "Pomocí ručně poskytnutého snímku účtu zobrazíte zbývající vylepšení, suroviny, stavitele, čas laboratoře a postup",
+  "faqFeaturesNotificationsTitle": "Push oznámení",
+  "faqFeaturesNotificationsDescription": "Vyberte účty, které mají dostávat upozornění na podporované události ClashKing",
+  "faqFeaturesWidgetsTitle": "Válečné widgety",
+  "faqFeaturesWidgetsDescription": "Mějte aktuální stav války na domovské obrazovce zařízení, která podporují widgety",
   "faqSearchHint": "Hledat ve FAQ...",
   "faqSectionGettingStarted": "Začínáme a informace",
+  "faqSectionAccountsAlertsWidgets": "Účty, upozornění a widgety",
   "faqSectionSupportAndContact": "Podpora a kontakt",
+  "faqLinkedAccountsTitle": "Jak fungují propojené účty a ověření?",
+  "faqLinkedAccountsAnswer": "Váš profil ClashKing může obsahovat několik účtů Clash of Clans. Přidáním tagu zobrazíte veřejná data. Ověření pomocí API tokenu Clash of Clans prokáže, že účet patří vám, a odemkne funkce účtu.",
+  "faqLinkedAccountsSolution1": "Účty můžete spravovat, měnit jejich pořadí, skrýt je nebo odebrat ve správě účtů.",
+  "faqLinkedAccountsSolution2": "API token najdete v Clash of Clans v Nastavení > Další nastavení > API token.",
+  "faqLinkedAccountsSolution3": "Přihlásit se můžete přes Discord nebo e-mail. Dostupná propojení účtů spravujete v Nastavení.",
+  "faqNotificationsTitle": "Jak fungují oznámení?",
+  "faqNotificationsAnswer": "Oznámení jsou volitelná. Po zapnutí ClashKing zaregistruje toto zařízení. U každého upozornění můžete vybrat cílové propojené účty.",
+  "faqNotificationsSolution1": "Povolte oznámení v zařízení i v nastavení ClashKing.",
+  "faqNotificationsSolution2": "Každé upozornění může cílit na jiné účty. Pokud upozornění chybí, zkontrolujte vybrané účty.",
+  "faqNotificationsSolution3": "Některá upozornění závisí na sledovaných datech klanu nebo války. Při aktualizaci externích dat může dojít ke zpoždění.",
+  "faqWidgetsTitle": "Jak fungují válečné widgety?",
+  "faqWidgetsAnswer": "Válečné widgety zobrazují rychlý přehled na podporovaných zařízeních. Používají vybrané nebo propojené účty, data ClashKing v mezipaměti a aktualizace na pozadí, pokud je platforma dovolí.",
+  "faqWidgetsSolution1": "Po změně účtů nebo klanů otevřete aplikaci, aby se widget synchronizoval.",
+  "faqWidgetsSolution2": "Pokud jsou údaje widgetu zastaralé, nejprve obnovte aplikaci. Android a iOS omezují aktualizace na pozadí.",
+  "faqWidgetsSolution3": "Klan musí mít přístupná válečná data, aby widget mohl zobrazit užitečný stav.",
   "faqTranslationIssue": "Chybí překlad nebo je nesprávný?",
   "faqTranslationIssueAnswer": "Překlady se nejdřív připravují pomocí generativních a AI nástrojů, potom se postupně kontrolují a vylepšují. Pokud jsi rodilý mluvčí a něco zní divně, můžeš navrhnout opravu na Crowdin nebo nás kontaktovat na Discordu či e-mailem.",
   "faqWaysToSupport": "Způsoby, jak nás podpořit:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "Pořadí útoku",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Trvání",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "Útočník",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "Rychlost útoku",
   "gameItemAttackRange": "Dosah útoku",
   "gameItemMovementSpeed": "Rychlost pohybu",
+  "gameItemWardenWeight": "Váha Strážce",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Váha Strážce může převážit nad místem v obydlí a určuje, jak silně Velký strážce upřednostňuje následování skupiny jednotek.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Váha léčitelky",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "Váha léčitelky může převážit nad místem v obydlí, když léčitelky rozhodují, kterým jednotkám dát přednost.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 jednotka pro práh následování} other{{count} jednotek pro práh následování}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Nepřispívá k prahu následování",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "Surovina pro vylepšení",
   "gameItemRarity": "Vzácnost",
   "gameItemHero": "Hrdina",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "Létající",
   "gameItemUpgradeCost": "Cena vylepšení",
   "gameItemUpgradeTime": "Doba vylepšení",
-  "generalExpand": "Rozšířit",
-  "generalCollapse": "Kolaps",
-  "generalBookmark": "Záložka",
-  "generalRemoveBookmark": "Odebrat záložku",
-  "gameLeague": "Liga",
-  "clanMembersSearchPlaceholder": "Hledat členy",
-  "clanMembersShowTotals": "Zobrazit klanové součty",
-  "clanMembersHideTotals": "Skrýt klanové součty",
-  "clanMembersReceivedShort": "Přijato",
-  "clanMembersAverageTh": "Prům. TH",
-  "warLogSearchPlaceholder": "Hledání válek",
-  "warStatsSearchPlaceholder": "Hledat hráče",
-  "warStatsCurrentTownHall": "Moje TH",
-  "warStatsLast50": "Posledních 50",
-  "warStatsWars": "války",
-  "warStatsSelectSeason": "Vyberte sezónu válečných statistik",
-  "warAnalysisToWin": "Vyhrát",
-  "warAnalysisToLose": "Prohrát",
-  "warAnalysisNoAttacksLeft": "Nezůstaly žádné útoky",
-  "warAnalysisScenario": "{attacks} útoky zbývají -> potřeba {stars} hvězdiček / {percent}% na útok",
-  "warAnalysisImpossibleScenario": "{attacks} útoky zbývají -> nemožné ({stars} hvězd / {percent} % na útok)",
-  "warAttacksSuccessful": "Úspěšné útoky",
-  "warAttacksFailed": "Neúspěšné útoky",
-  "warAttacksMissedShort": "Zmeškaný",
-  "cwlHistoryTitle": "Historie CWL",
-  "clanJoinLeaveTab": "Připojit/Odejít",
-  "clanRankingsTab": "Žebříčky",
-  "clanRankingsSeason": "Sezóna",
-  "clanRankingsSelectSeason": "Vyberte sezonu hodnocení",
-  "clanRankingsFilterActivity": "Aktivita",
-  "clanRankingsFilterWar": "Válka",
-  "clanRankingsFilterPoints": "Body",
-  "cwlHistoryPreviewBadge": "Náhled",
-  "cwlHistoryPreviewSubtitle": "Maketa {clan}, dokud nebude opraven koncový bod CWL",
-  "cwlHistoryEmptyTitle": "Zatím žádná historie CWL",
-  "cwlHistoryEmptyBody": "Tento klan se ještě nezúčastnil sezóny Clan War League.",
-  "cwlRankTitle": "Pořadí",
-  "cwlWarsPlayedTitle": "Hrály se války",
-  "playerWarStarsTitle": "Válečné hvězdy",
-  "playerWarPreferenceTitle": "Válečný pref.",
-  "playerDonatedTitle": "Darováno",
-  "playerReceivedTitle": "Přijato",
-  "playerCapitalTitle": "Kapitál",
-  "playerExpLevelTitle": "Exp. úroveň",
-  "clanWarWinsTitle": "Válka vítězí",
-  "clanWinStreakTitle": "Vítězná série",
-  "clanBuilderBaseTitle": "Stavitelská základna",
-  "clanTypeTitle": "Typ",
-  "clanMinTownHallTitle": "Min. radnice",
-  "clanMinTrophiesTitle": "Min. trofeje",
-  "clanCapitalHallTitle": "Hlavní sál",
-  "clanDistrictsTitle": "Okresy",
-  "legendsCountryTitle": "Země",
-  "legendsLocalRankTitle": "Místní hodnost",
-  "legendsGlobalRankTitle": "Globální hodnost",
-  "warWinsTitle": "Vyhrává",
-  "warLossesTitle": "Ztráty",
-  "warDrawsTitle": "Kreslí",
-  "capitalRaidStatusOngoing": "Pokračující",
-  "capitalRaidStatusEnded": "Skončilo",
-  "capitalRaidLoot": "Kořist",
-  "capitalRaidRewards": "Odměny",
-  "capitalRaidPreviousWeek": "Předchozí týden",
-  "capitalRaidNextWeek": "Příští týden",
-  "capitalRaidFilterAttacked": "Napaden",
-  "capitalRaidFilterNotAttacked": "Nenapaden",
-  "capitalRaidFilterLinked": "Propojené účty",
-  "capitalRaidEmptyTitle": "Žádná data o kapitálových nájezdech",
-  "capitalRaidEmptyBody": "Historie nájezdů se zde objeví, jakmile budou sledovány víkendy hlavních nájezdů tohoto klanu.",
-  "capitalRaidEstimated": "Odhadovaný",
-  "capitalRaidEstimatedTooltip": "Zatím neoficiální: odhadováno z deníků útoku a obrany z tohoto týdne. Jakmile nájezd skončí, Supercell zveřejní skutečný počet medailí.",
-  "capitalRaidTrophyPrediction": "Předpokládané trofeje",
-  "capitalRaidTrophyPredictionTooltip": "Odhadované trofeje Capital League po tomto nájezdu na základě dosavadního výkonu z tohoto týdne. Ne oficiální.",
-  "capitalRaidProjectedLoot": "Předpokládaná kořist",
-  "capitalRaidOneshots": "Na jednu ránu",
-  "capitalRaidFails": "Selže",
-  "capitalDetailsOffense": "Útok",
-  "capitalDetailsDefense": "Obrana",
-  "capitalDistrictsSection": "Okresy",
-  "capitalOpponentsSection": "Odpůrci",
-  "capitalAvgAttacksPerDistrict": "Prům. útoky/okres",
-  "capitalAvgLootPerAttack": "Průměrná kořist/útok",
-  "capitalHistorySection": "Historie nájezdů",
-  "capitalHistoryWeeksTracked": "Sledované týdny",
-  "capitalAvgLootPerWeek": "Průměrná kořist/týden",
-  "capitalAvgAttacksPerWeek": "Průměr útoků/týden",
-  "capitalBestRaid": "Nejlepší nájezd",
-  "capitalWorstRaid": "Nejhorší nájezd",
-  "capitalHistoryChartTitle": "Týdenní trend",
-  "warAttacksDetailsDuration": "Trvání",
   "gameItemRemainingToTownHallMax": "Do TH max",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "Do globálního max",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "{count} úroveň(y) zbývá",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "Přehled",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "Statistiky",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "Další upgrade",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "Plán upgradu",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "Data upgradu nejsou k dispozici",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "Vybraný",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Předvolby",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Oznámení",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Vyberte si upozornění a odešlete místní náhledy testů.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "Podpora",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "O",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Účet",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Přihlášeno",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Vzhled",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Systém",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Přizpůsobte toto zařízení",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Světlo",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Tmavý",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Vybraný",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Dosud nebyly načteny žádné propojené účty.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Nejsou vybrány žádné účty",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "Vybrány účty {count}",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "Nedávné",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Hráči",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Klany",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "Jasný",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Data byla úspěšně obnovena",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Obnovení dat se nezdařilo: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "Nepodařilo se načíst filtrovaná data: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "Export se nezdařil: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "Hráč",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "Formát",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "Zahrnuje",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "Statistiky, útoky, TH analýza",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "Nejsou k dispozici žádná uživatelská data",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "Účty",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "Nepodařilo se načíst data hráče.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "Nepodařilo se načíst data klanu.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "Žádné odpovídající účty",
   "todoNoConfiguredAccounts": "Nejsou nakonfigurovány žádné účty úkolů",
   "todoNoLinkedAccounts": "Žádné propojené účty",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "Pro tento raid není k dispozici žádný seznam hráčů ani jednotlivé útoky.",
   "dashboardNoLinkedAccountsTitle": "Žádné propojené účty",
   "dashboardNoLinkedAccountsBody": "Propojte si účet Clash, abyste zde viděli útoky, události a aktivitu.",
+  "dashboardTodoHiddenTitle": "Nejsou zde zobrazeny žádné účty",
+  "dashboardTodoHiddenBody": "U účtu na kartě Hráči zapněte některou možnost domovské karty (úkoly, Sledování vylepšení nebo Hodnocená liga), aby se zde zobrazil.",
+  "dashboardUpgradeTrackerNoData": "Otevřete sledování a importujte nebo obnovte data vylepšení.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {potřebuje aktualizaci} other {potřebují aktualizaci}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {má zbývající úkoly} other {mají zbývající úkoly}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {má zbývající útoky} other {mají zbývající útoky}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Odhad",
+  "dashboardUpgradeTrackerBuilders": "Stavitelé",
+  "dashboardUpgradeTrackerLab": "Laboratoř",
+  "dashboardUpgradeTrackerPets": "Mazlíčci",
+  "dashboardUpgradeTrackerWalls": "Zdi",
+  "dashboardUpgradeTrackerVillage": "Vesnice",
+  "dashboardRankedNoData": "Otevřete Hodnocenou ligu a zobrazte umístění tohoto účtu.",
+  "dashboardRankedAccounts": "Sledované účty: {loaded}/{total}",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "Zatím žádní hráči v záložkách",
   "playersNoBookmarkedBody": "Otevřete profil hráče a uložte jej na později.",
   "playersNoLinkedBody": "Spravujte účty z obrazovky nastavení účtu.",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "Naplánujte poškození proti aktuálním úrovním budov.",
   "calculatorZapQuake": "Zap zemětřesení",
   "calculatorFireball": "Ohnivá koule",
+  "damageCalculatorSubtitle": "Porovnejte jednu útočnou sestavu s více budovami.",
+  "damageNoStaticDataTitle": "Data poškození nejsou dostupná",
+  "damageNoStaticDataBody": "Po dokončení načítání statických herních dat aplikaci obnovte.",
+  "damageTownHall": "Radnice",
+  "damageVerifiedAccountPrefill": "Předvolba ověřeného účtu",
+  "damageOverridesStayLocal": "Zde provedené změny neaktualizují účet hráče.",
+  "damageTargets": "Budovy",
+  "damageAddBuilding": "Přidat budovu",
+  "damageRemoveBuilding": "Odebrat budovu",
+  "damageNoTargetsBody": "Pro porovnání výsledků přidejte alespoň jednu budovu.",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Hledat budovy",
+  "damageNoBuildingsFound": "Nebyly nalezeny žádné budovy",
+  "damageTryAnotherSearch": "Zkuste jiný název nebo úroveň radnice.",
+  "damageAttackStack": "Ruční útočná sestava",
+  "damageNoSourcesForTownHall": "Pro tuto radnici nejsou k dispozici žádné podporované zdroje poškození.",
+  "damageCount": "Počet",
+  "damagePerUse": "{damage} poškození na použití",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent} % maximálních HP, při skládání klesá",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Blesk",
+  "damageSourceEarthquake": "Zemětřesení",
+  "damageSourceGiantArrow": "Obří šíp",
+  "damageSourceFireball": "Ohnivá koule",
+  "damageSourceFlameFlinger": "Zásah Plamenometu",
+  "damageSourceBalloonDeath": "Poškození při zničení Balónu",
+  "damageSourceRocketBalloonDeath": "Poškození při zničení Raketového balónu",
+  "damageResults": "Výsledky",
+  "damageDestroyed": "Zničeno",
+  "damageSurvives": "Přežije",
+  "damageResultSummary": "{damage} poškození · zbývá {remaining} HP",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Optimalizace blesků a zemětřesení",
+  "damageSpellCapacity": "Kapacita kouzel",
+  "damageZapQuakeUnavailable": "Blesk a Zemětřesení nejsou na této úrovni radnice dostupné.",
+  "damageZapQuakeUsesSelectedLevels": "Používá Blesk úrovně {lightningLevel} a Zemětřesení úrovně {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Blesk a Zemětřesení nemohou poškodit tento sklad.",
+  "damageNoValidZapQuake": "Do vybrané kapacity kouzel se nevejde žádná platná kombinace.",
+  "damageZapQuakeCombination": "{lightning} blesků + {earthquake} zemětřesení · {capacity} místa",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "Sledování vylepšení",
   "upgradeTrackerSubtitle": "Zbývající náklady na upgrade a čas.",
   "linkedAccountLabel": "Propojený účet",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Přidejte nebo obnovte propojené účty, abyste viděli celkové počty upgradů.",
   "playerOptionNotificationsTitle": "Oznámení",
   "playerOptionNotificationsSubtitle": "Získejte upozornění pro tento účet.",
+  "playerOptionNotificationsEnableMaster": "Zapněte oznámení, chcete-li upravit upozornění pro tento účet.",
+  "playerOptionNotificationsVerifyFirst": "Ověřte tento účet, chcete-li zapnout jeho oznámení.",
+  "playerOptionNotificationsSubscriptionRequired": "Pro oznámení tohoto účtu je vyžadováno aktivní předplatné.",
+  "playerOptionNotificationsLimitReached": "Dosáhli jste limitu účtů s oznámeními pro své předplatné.",
   "playerOptionShowTodoPageTitle": "Zobrazit na stránce úkolů",
   "playerOptionShowTodoPageSubtitle": "Zahrnout tento účet do úplného seznamu úkolů.",
+  "playerOptionShowTodoPageVerifyFirst": "Ověřte tento účet, aby se zobrazil na stránce úkolů.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Zobrazit Sledování vylepšení na domovské stránce",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Připnout přehled vylepšení tohoto účtu na domovskou stránku.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Ověřte tento účet, aby se postup vylepšení zobrazil na domovské stránce.",
+  "playerOptionShowRankedHomeTitle": "Zobrazit Hodnocenou ligu na domovské stránce",
+  "playerOptionShowRankedHomeSubtitle": "Připnout přehled Hodnocené ligy tohoto účtu na domovskou stránku.",
+  "playerOptionShowRankedHomeVerifyFirst": "Ověřte tento účet, aby se přehled Hodnocené ligy zobrazil na domovské stránce.",
   "playerOptionShowWarTabTitle": "Zobrazit na kartě Válka",
   "playerOptionShowWarTabSubtitle": "Zahrnout klan tohoto účtu na kartu Válka.",
   "bookmarkPlayerLoadFailed": "Přehrávač se záložkou se nepodařilo načíst.",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · žádné otevřené úkoly",
   "todoMockCaughtUpStatus": "Aktivní dnes · není potřeba žádná akce",
   "notifChooseAlerts": "Vyberte upozornění",
+  "notifGroupLegendAttacks": "Útoky v legendární lize",
+  "notifLegendAttacksDescription": "Upozorní vás, když v legendární lize zbývají útoky.",
+  "notifGroupLegendDefenses": "Obrany v legendární lize",
+  "notifLegendDefensesDescription": "Upozorní vás na nové obrany v legendární lize.",
   "notifLeagueDefenseDescription": "Výsledky obrany s útočníkem, hvězdičkami, procenty a kontextem ligy.",
   "notifWarAttackOptionsDescription": "Výsledky válečných útoků, výstrahy obrany a možnosti zdroje útoku 5v5.",
   "notifWarAlertsDescription": "Válka se shodovala, den bitvy začal a válka skončila.",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "Body kapitálu",
   "todoAllAccounts": "Všechny účty",
   "todoCombinedAcrossAccounts": "Kombinovaný to-do napříč tvými účty",
+  "dashboardRankedCombinedAcrossAccounts": "Společné hodnocení vašich účtů",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Společné sledování vylepšení vašich účtů",
   "todoPreviewAccount": "Náhledový účet",
   "todoLastActiveUnavailable": "Poslední aktivita není dostupná",
   "todoActiveRelative": "Aktivní {time}",
@@ -2516,9 +2961,116 @@
   "sideRankingsEmptyTitle": "Žádné žebříčky nebyly vráceny",
   "sideRankingsEmptyBody": "Zkus jiný žebříček nebo lokaci.",
   "sideRankingsMockups": "Mockupy ClashKing",
+  "rankingsHomeVillage": "Domovská vesnice",
+  "rankingsBuilderBase": "Stavitelská základna",
+  "rankingsTownHall": "Radnice",
+  "rankingsRankedLeague": "Hodnocená liga",
+  "rankingsClanCapital": "Kapitál klanu",
+  "rankingsDonations": "Příspěvky",
+  "rankingsWarWins": "Vítězství ve válkách",
+  "rankingsWinStreak": "Série vítězství",
+  "rankingsCurrent": "Aktuální",
+  "rankingsWorldwide": "Celosvětově",
+  "rankingsSelectLocation": "Vyberte oblast",
+  "rankingsSearchLocations": "Hledat oblasti nebo kódy zemí",
+  "rankingsWorldwideUnavailable": "Pro tento žebříček vyberte oblast nebo zemi.",
+  "rankingsLocationsLoadFailed": "Úplný seznam oblastí se nepodařilo načíst. Celosvětové výsledky zůstávají dostupné tam, kde jsou podporovány.",
+  "rankingsSnapshotDate": "Datum snímku",
+  "rankingsSource": "Zdroj",
+  "rankingsOfficialSource": "Oficiální Clash API",
+  "rankingsResults": "Výsledky",
+  "rankingsTopCount": "Nejlepších {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Žádný uložený snímek",
+  "rankingsNoSnapshotBody": "Pro datum {date} není uložen žádný snímek žebříčku. Vyberte jiné datum nebo se vraťte na Aktuální.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Hráče se nepodařilo načíst.",
+  "rankingsClanLoadFailed": "Klan se nepodařilo načíst.",
   "sideStatsTitle": "Statistiky",
   "sideStatsSubtitle": "Statistiky žebříčků z oficiálních rozhraní Clash API.",
   "sideStatsLoadError": "Nelze načíst bitevní zpravodajské informace.",
+  "statsOverview": "Přehled",
+  "statsArmies": "Armády",
+  "statsItems": "Položky",
+  "statsWar": "Válka",
+  "statsCwl": "CWL",
+  "statsRanked": "Hodnocené",
+  "statsDateRange": "Rozsah dat",
+  "statsDateRangeHint": "Vyberte si až 90 dní",
+  "statsDateRangeTooLong": "Vyberte časové období 90 dní nebo méně.",
+  "statsUpdated": "Čerstvé údaje",
+  "statsNoDataTitle": "Zatím žádné bitevní údaje",
+  "statsNoDataBody": "Zkuste širší časové období nebo méně omezující filtry.",
+  "statsAddItemsTitle": "Vyberte položky k analýze",
+  "statsAddItemsBody": "Přidejte jednotky, kouzla, hrdiny, mazlíčky nebo vybavení a poté spusťte dotaz.",
+  "statsGlobalCounts": "Globální počty",
+  "statsPerformance": "Výkon",
+  "statsSamples": "Vzorky",
+  "statsUsage": "Použití",
+  "statsAverageStars": "Průměrné hvězdičky",
+  "statsAverageDestruction": "Průměrné zničení",
+  "statsStarRates": "Hvězdičkové sazby",
+  "statsThreeStarRate": "Tříhvězdičková sazba",
+  "statsDailyTrend": "Denní trend",
+  "statsPlayers": "Hráči",
+  "statsClans": "Klany",
+  "statsPlayersInWar": "Hráči ve válce",
+  "statsClansInWar": "Klany ve válce",
+  "statsPlayersInLegends": "Hráči v Legends",
+  "statsWarsStored": "Války uloženy",
+  "statsJoinLeaves": "Připojte se k událostem / opusťte je",
+  "statsSearchArmies": "Vyhledejte přesné kompozice",
+  "statsExactComposition": "Přesné složení",
+  "statsArmyShareCode": "Kód armádního podílu",
+  "statsMinimumSample": "Minimální vzorek",
+  "statsSortBy": "Seřadit podle",
+  "statsIncludeItems": "Zahrnout položky",
+  "statsExcludeItems": "Vyloučit položky",
+  "statsItemId": "ID položky nebo uložený název",
+  "statsItemType": "Typ položky",
+  "statsTroop": "Vojsko",
+  "statsSpell": "Kouzlo",
+  "statsHero": "Hrdina",
+  "statsPet": "Domácí mazlíček",
+  "statsEquipment": "Vybavení",
+  "statsOwningHero": "Vlastnit hrdinu",
+  "statsAddItem": "Přidat položku",
+  "statsAnalyzeItems": "Analyzujte položky",
+  "statsCompositionShare": "Podíl na složení",
+  "statsNoLevels": "Armádní záznamy neobsahují úrovně položek.",
+  "statsRankedCompositionOnly": "Údaje o složení pocházejí z hodnocených battlelogů; Válečné a CWL představení zůstávají oddělené.",
+  "statsTownHall": "Radnice",
+  "statsOpponentTownHall": "Radnice soupeře",
+  "statsEqualTownHalls": "Rovné radnice",
+  "statsLeagueTier": "Úroveň ligy",
+  "statsLegendLeagueOne": "Liga legend 1",
+  "statsCwlLeague": "Liga CWL",
+  "statsLeagueBronze": "Bronz",
+  "statsLeagueSilver": "Stříbro",
+  "statsLeagueGold": "Zlato",
+  "statsLeagueCrystal": "Křišťálová",
+  "statsLeagueMaster": "Mistr",
+  "statsLeagueChampion": "Šampion",
+  "statsAllCwlLeagues": "Všechny ligy CWL",
+  "statsCwlSeasons": "Sezóny CWL",
+  "statsCwlSeasonsHint": "RRRR-MM, oddělené čárkami",
+  "statsApplyFilters": "Použijte filtry",
+  "statsRefresh": "Obnovit data",
+  "statsRegularWarOnly": "Pouze pravidelné války; přátelské války a CWL jsou vyloučeny.",
+  "statsRankedRequired": "Vyžaduje se radnice a jedna ligová úroveň.",
+  "statsSeasonBreakdown": "Rozpis sezóny",
   "sideTopScore": "Nejvyšší skóre",
   "sideTop200Avg": "Průměr Top 200",
   "sideBasesArmiesTitle": "Základny a armády",
@@ -2535,6 +3087,51 @@
   "sideArmyLinksBody": "Složení, kouzla, obléhací stroj, poznámky a odkaz ke sdílení.",
   "sideGameAssetsTitle": "Herní assety",
   "sideGameAssetsSubtitle": "Hostované assety ClashKing seskupené podle složek.",
+  "gameAssetsLoadError": "Herní podklady se nepodařilo načíst",
+  "gameAssetsEmptyTitle": "Nejsou k dispozici žádné herní podklady",
+  "gameAssetsEmptyBody": "Hostovaný manifest neobsahoval žádné podporované obrázky.",
+  "gameAssetsOneImage": "1 obrázek",
+  "gameAssetsImageCount": "Počet obrázků: {count}",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Hledat v této kategorii",
+  "gameAssetsAllFormats": "Všechny formáty",
+  "gameAssetsOneResult": "1 výsledek",
+  "gameAssetsResultCount": "Výsledky {count}",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Žádné odpovídající obrázky",
+  "gameAssetsNoResultsBody": "Zkuste jiné hledání nebo formát souboru.",
+  "gameAssetsLongPressHint": "Dlouhým stisknutím zkopírujete hostovanou adresu URL",
+  "gameAssetsCopyUrl": "Kopírovat adresu URL",
+  "gameAssetsCopyPath": "Kopírovat cestu",
+  "gameAssetsUrlCopied": "Adresa URL podkladu byla zkopírována",
+  "gameAssetsPathCopied": "Cesta k podkladu byla zkopírována",
+  "gameAssetsCopyError": "Podrobnosti podkladu se nepodařilo zkopírovat.",
+  "gameAssetsShare": "Sdílet",
+  "gameAssetsShareError": "Podklad se nepodařilo sdílet.",
+  "gameAssetsSave": "Uložit",
+  "gameAssetsSaving": "Ukládání...",
+  "gameAssetsSaved": "Podklad byl uložen.",
+  "gameAssetsSavedTo": "Podklad byl uložen do {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Podklad se nepodařilo uložit.",
   "sideZapQuakeTitle": "{zaps} blesků + 1 zemětřesení",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3474,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Zásady Supercell pro fanouškovský obsah",
-  "notifAudienceSectionTitle": "Příjemci oznámení",
-  "notifScopeAllLinkedAccounts": "Všechny propojené účty",
-  "notifScopeSelectedAccounts": "Vybrané účty",
-  "notifAudienceSheetDescription": "Vyber, které účty mohou na tomto zařízení dostávat oznámení.",
-  "notifAudienceAllSubtitle": "{count} aktuálních účtů. Budoucí propojené účty budou zahrnuty automaticky.",
-  "notifAudienceSelectedSubtitle": "{count} vybráno pro oznámení.",
-  "notifAudienceSelectedEmpty": "Vyber přesně, které účty mají dostávat oznámení.",
-  "notifAudienceAllInlineNote": "Vše, co propojíš později, bude zahrnuto bez změny tohoto nastavení.",
-  "notifAccountBookmarked": "Uloženo",
-  "notifGroupLeagueBattles": "Ligové bitvy",
-  "notifGroupWarAttacks": "Válečné útoky",
-  "notifGroupWarState": "Stav války",
-  "notifGroupWarReminders": "Připomenutí války",
-  "notifGroupEvents": "Události",
-  "notifGroupAppAnnouncements": "Oznámení aplikace",
-  "notifGroupUpgradeFinishes": "Dokončená vylepšení",
-  "notifGroupMonthlySupport": "Měsíční podpora",
-  "postsTitle": "Příspěvky",
-  "postsDescription": "Novinky ClashKing, příběhy aktualizací a předchozí oznámení.",
-  "postsEmpty": "Zatím nebyly zveřejněny žádné příspěvky.",
-  "postsLoadFailed": "Příspěvky se nepodařilo načíst.",
-  "postsLoadMore": "Načíst další",
-  "postsCurrent": "Aktuální",
-  "postsPast": "Minulé",
-  "postsStory": "Interaktivní příběh",
-  "postsPinned": "Doporučené",
-  "authAccountLinkDiscord": "Propojit účet Discord",
-  "authAccountAddDiscordAuth": "Přidejte k účtu ověřování přes Discord pro synchronizaci mezi platformami a přístup k botovi ClashKing.",
-  "authAccountDiscordLinkedSuccess": "Účet Discord byl úspěšně propojen!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "Seznam úkolů",
-  "faqFeaturesTodoDescription": "Zjistěte, které účty ještě čekají útoky v hodnocené lize, nájezdy, válečné útoky, Klanové hry nebo úkoly z průkazu",
-  "faqFeaturesUpgradeTrackerTitle": "Sledování vylepšení",
-  "faqFeaturesUpgradeTrackerDescription": "Pomocí ručně poskytnutého snímku účtu zobrazíte zbývající vylepšení, suroviny, stavitele, čas laboratoře a postup",
-  "faqFeaturesNotificationsTitle": "Push oznámení",
-  "faqFeaturesNotificationsDescription": "Vyberte účty, které mají dostávat upozornění na podporované události ClashKing",
-  "faqFeaturesWidgetsTitle": "Válečné widgety",
-  "faqFeaturesWidgetsDescription": "Mějte aktuální stav války na domovské obrazovce zařízení, která podporují widgety",
-  "faqSectionAccountsAlertsWidgets": "Účty, upozornění a widgety",
-  "faqLinkedAccountsTitle": "Jak fungují propojené účty a ověření?",
-  "faqLinkedAccountsAnswer": "Váš profil ClashKing může obsahovat několik účtů Clash of Clans. Přidáním tagu zobrazíte veřejná data. Ověření pomocí API tokenu Clash of Clans prokáže, že účet patří vám, a odemkne funkce účtu.",
-  "faqLinkedAccountsSolution1": "Účty můžete spravovat, měnit jejich pořadí, skrýt je nebo odebrat ve správě účtů.",
-  "faqLinkedAccountsSolution2": "API token najdete v Clash of Clans v Nastavení > Další nastavení > API token.",
-  "faqLinkedAccountsSolution3": "Přihlásit se můžete přes Discord nebo e-mail. Dostupná propojení účtů spravujete v Nastavení.",
-  "faqNotificationsTitle": "Jak fungují oznámení?",
-  "faqNotificationsAnswer": "Oznámení jsou volitelná. Po zapnutí ClashKing zaregistruje toto zařízení. U každého upozornění můžete vybrat cílové propojené účty.",
-  "faqNotificationsSolution1": "Povolte oznámení v zařízení i v nastavení ClashKing.",
-  "faqNotificationsSolution2": "Každé upozornění může cílit na jiné účty. Pokud upozornění chybí, zkontrolujte vybrané účty.",
-  "faqNotificationsSolution3": "Některá upozornění závisí na sledovaných datech klanu nebo války. Při aktualizaci externích dat může dojít ke zpoždění.",
-  "faqWidgetsTitle": "Jak fungují válečné widgety?",
-  "faqWidgetsAnswer": "Válečné widgety zobrazují rychlý přehled na podporovaných zařízeních. Používají vybrané nebo propojené účty, data ClashKing v mezipaměti a aktualizace na pozadí, pokud je platforma dovolí.",
-  "faqWidgetsSolution1": "Po změně účtů nebo klanů otevřete aplikaci, aby se widget synchronizoval.",
-  "faqWidgetsSolution2": "Pokud jsou údaje widgetu zastaralé, nejprve obnovte aplikaci. Android a iOS omezují aktualizace na pozadí.",
-  "faqWidgetsSolution3": "Klan musí mít přístupná válečná data, aby widget mohl zobrazit užitečný stav.",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "Váha Strážce",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "Váha Strážce může převážit nad místem v obydlí a určuje, jak silně Velký strážce upřednostňuje následování skupiny jednotek.",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "Váha léčitelky",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "Váha léčitelky může převážit nad místem v obydlí, když léčitelky rozhodují, kterým jednotkám dát přednost.",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 jednotka pro práh následování} other{{count} jednotek pro práh následování}}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "Nepřispívá k prahu následování",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "Nejsou zde zobrazeny žádné účty",
-  "dashboardTodoHiddenBody": "U účtu na kartě Hráči zapněte některou možnost domovské karty (úkoly, Sledování vylepšení nebo Hodnocená liga), aby se zde zobrazil.",
-  "dashboardUpgradeTrackerNoData": "Otevřete sledování a importujte nebo obnovte data vylepšení.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {potřebuje aktualizaci} other {potřebují aktualizaci}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {má zbývající úkoly} other {mají zbývající úkoly}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {má zbývající útoky} other {mají zbývající útoky}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "Odhad",
-  "dashboardUpgradeTrackerBuilders": "Stavitelé",
-  "dashboardUpgradeTrackerLab": "Laboratoř",
-  "dashboardUpgradeTrackerPets": "Mazlíčci",
-  "dashboardUpgradeTrackerWalls": "Zdi",
-  "dashboardUpgradeTrackerVillage": "Vesnice",
-  "dashboardRankedNoData": "Otevřete Hodnocenou ligu a zobrazte umístění tohoto účtu.",
-  "dashboardRankedAccounts": "Sledované účty: {loaded}/{total}",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "Porovnejte jednu útočnou sestavu s více budovami.",
-  "damageNoStaticDataTitle": "Data poškození nejsou dostupná",
-  "damageNoStaticDataBody": "Po dokončení načítání statických herních dat aplikaci obnovte.",
-  "damageTownHall": "Radnice",
-  "damageVerifiedAccountPrefill": "Předvolba ověřeného účtu",
-  "damageOverridesStayLocal": "Zde provedené změny neaktualizují účet hráče.",
-  "damageTargets": "Budovy",
-  "damageAddBuilding": "Přidat budovu",
-  "damageRemoveBuilding": "Odebrat budovu",
-  "damageNoTargetsBody": "Pro porovnání výsledků přidejte alespoň jednu budovu.",
-  "damageHitpoints": "{hitpoints} HP",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "Hledat budovy",
-  "damageNoBuildingsFound": "Nebyly nalezeny žádné budovy",
-  "damageTryAnotherSearch": "Zkuste jiný název nebo úroveň radnice.",
-  "damageAttackStack": "Ruční útočná sestava",
-  "damageNoSourcesForTownHall": "Pro tuto radnici nejsou k dispozici žádné podporované zdroje poškození.",
-  "damageCount": "Počet",
-  "damagePerUse": "{damage} poškození na použití",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "{percent} % maximálních HP, při skládání klesá",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "Blesk",
-  "damageSourceEarthquake": "Zemětřesení",
-  "damageSourceGiantArrow": "Obří šíp",
-  "damageSourceFireball": "Ohnivá koule",
-  "damageSourceFlameFlinger": "Zásah Plamenometu",
-  "damageSourceBalloonDeath": "Poškození při zničení Balónu",
-  "damageSourceRocketBalloonDeath": "Poškození při zničení Raketového balónu",
-  "damageResults": "Výsledky",
-  "damageDestroyed": "Zničeno",
-  "damageSurvives": "Přežije",
-  "damageResultSummary": "{damage} poškození · zbývá {remaining} HP",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "Optimalizace blesků a zemětřesení",
-  "damageSpellCapacity": "Kapacita kouzel",
-  "damageZapQuakeUnavailable": "Blesk a Zemětřesení nejsou na této úrovni radnice dostupné.",
-  "damageZapQuakeUsesSelectedLevels": "Používá Blesk úrovně {lightningLevel} a Zemětřesení úrovně {earthquakeLevel}.",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "Blesk a Zemětřesení nemohou poškodit tento sklad.",
-  "damageNoValidZapQuake": "Do vybrané kapacity kouzel se nevejde žádná platná kombinace.",
-  "damageZapQuakeCombination": "{lightning} blesků + {earthquake} zemětřesení · {capacity} místa",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "Ověřte tento účet, aby se zobrazil na stránce úkolů.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Zobrazit Sledování vylepšení na domovské stránce",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Připnout přehled vylepšení tohoto účtu na domovskou stránku.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Ověřte tento účet, aby se postup vylepšení zobrazil na domovské stránce.",
-  "playerOptionShowRankedHomeTitle": "Zobrazit Hodnocenou ligu na domovské stránce",
-  "playerOptionShowRankedHomeSubtitle": "Připnout přehled Hodnocené ligy tohoto účtu na domovskou stránku.",
-  "playerOptionShowRankedHomeVerifyFirst": "Ověřte tento účet, aby se přehled Hodnocené ligy zobrazil na domovské stránce.",
-  "dashboardRankedCombinedAcrossAccounts": "Společné hodnocení vašich účtů",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Společné sledování vylepšení vašich účtů",
-  "rankingsHomeVillage": "Domovská vesnice",
-  "rankingsBuilderBase": "Stavitelská základna",
-  "rankingsTownHall": "Radnice",
-  "rankingsRankedLeague": "Hodnocená liga",
-  "rankingsClanCapital": "Kapitál klanu",
-  "rankingsDonations": "Příspěvky",
-  "rankingsWarWins": "Vítězství ve válkách",
-  "rankingsWinStreak": "Série vítězství",
-  "rankingsCurrent": "Aktuální",
-  "rankingsWorldwide": "Celosvětově",
-  "rankingsSelectLocation": "Vyberte oblast",
-  "rankingsSearchLocations": "Hledat oblasti nebo kódy zemí",
-  "rankingsWorldwideUnavailable": "Pro tento žebříček vyberte oblast nebo zemi.",
-  "rankingsLocationsLoadFailed": "Úplný seznam oblastí se nepodařilo načíst. Celosvětové výsledky zůstávají dostupné tam, kde jsou podporovány.",
-  "rankingsSnapshotDate": "Datum snímku",
-  "rankingsSource": "Zdroj",
-  "rankingsOfficialSource": "Oficiální Clash API",
-  "rankingsResults": "Výsledky",
-  "rankingsTopCount": "Nejlepších {count}",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "Žádný uložený snímek",
-  "rankingsNoSnapshotBody": "Pro datum {date} není uložen žádný snímek žebříčku. Vyberte jiné datum nebo se vraťte na Aktuální.",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "Hráče se nepodařilo načíst.",
-  "rankingsClanLoadFailed": "Klan se nepodařilo načíst.",
-  "statsOverview": "Přehled",
-  "statsArmies": "Armády",
-  "statsItems": "Položky",
-  "statsWar": "Válka",
-  "statsCwl": "CWL",
-  "statsRanked": "Hodnocené",
-  "statsDateRange": "Rozsah dat",
-  "statsDateRangeHint": "Vyberte si až 90 dní",
-  "statsDateRangeTooLong": "Vyberte časové období 90 dní nebo méně.",
-  "statsUpdated": "Čerstvé údaje",
-  "statsNoDataTitle": "Zatím žádné bitevní údaje",
-  "statsNoDataBody": "Zkuste širší časové období nebo méně omezující filtry.",
-  "statsAddItemsTitle": "Vyberte položky k analýze",
-  "statsAddItemsBody": "Přidejte jednotky, kouzla, hrdiny, mazlíčky nebo vybavení a poté spusťte dotaz.",
-  "statsGlobalCounts": "Globální počty",
-  "statsPerformance": "Výkon",
-  "statsSamples": "Vzorky",
-  "statsUsage": "Použití",
-  "statsAverageStars": "Průměrné hvězdičky",
-  "statsAverageDestruction": "Průměrné zničení",
-  "statsStarRates": "Hvězdičkové sazby",
-  "statsThreeStarRate": "Tříhvězdičková sazba",
-  "statsDailyTrend": "Denní trend",
-  "statsPlayers": "Hráči",
-  "statsClans": "Klany",
-  "statsPlayersInWar": "Hráči ve válce",
-  "statsClansInWar": "Klany ve válce",
-  "statsPlayersInLegends": "Hráči v Legends",
-  "statsWarsStored": "Války uloženy",
-  "statsJoinLeaves": "Připojte se k událostem / opusťte je",
-  "statsSearchArmies": "Vyhledejte přesné kompozice",
-  "statsExactComposition": "Přesné složení",
-  "statsArmyShareCode": "Kód armádního podílu",
-  "statsMinimumSample": "Minimální vzorek",
-  "statsSortBy": "Seřadit podle",
-  "statsIncludeItems": "Zahrnout položky",
-  "statsExcludeItems": "Vyloučit položky",
-  "statsItemId": "ID položky nebo uložený název",
-  "statsItemType": "Typ položky",
-  "statsTroop": "Vojsko",
-  "statsSpell": "Kouzlo",
-  "statsHero": "Hrdina",
-  "statsPet": "Domácí mazlíček",
-  "statsEquipment": "Vybavení",
-  "statsOwningHero": "Vlastnit hrdinu",
-  "statsAddItem": "Přidat položku",
-  "statsAnalyzeItems": "Analyzujte položky",
-  "statsCompositionShare": "Podíl na složení",
-  "statsNoLevels": "Armádní záznamy neobsahují úrovně položek.",
-  "statsRankedCompositionOnly": "Údaje o složení pocházejí z hodnocených battlelogů; Válečné a CWL představení zůstávají oddělené.",
-  "statsTownHall": "Radnice",
-  "statsOpponentTownHall": "Radnice soupeře",
-  "statsEqualTownHalls": "Rovné radnice",
-  "statsLeagueTier": "Úroveň ligy",
-  "statsLegendLeagueOne": "Liga legend 1",
-  "statsCwlLeague": "Liga CWL",
-  "statsLeagueBronze": "Bronz",
-  "statsLeagueSilver": "Stříbro",
-  "statsLeagueGold": "Zlato",
-  "statsLeagueCrystal": "Křišťálová",
-  "statsLeagueMaster": "Mistr",
-  "statsLeagueChampion": "Šampion",
-  "statsAllCwlLeagues": "Všechny ligy CWL",
-  "statsCwlSeasons": "Sezóny CWL",
-  "statsCwlSeasonsHint": "RRRR-MM, oddělené čárkami",
-  "statsApplyFilters": "Použijte filtry",
-  "statsRefresh": "Obnovit data",
-  "statsRegularWarOnly": "Pouze pravidelné války; přátelské války a CWL jsou vyloučeny.",
-  "statsRankedRequired": "Vyžaduje se radnice a jedna ligová úroveň.",
-  "statsSeasonBreakdown": "Rozpis sezóny",
-  "gameAssetsLoadError": "Herní podklady se nepodařilo načíst",
-  "gameAssetsEmptyTitle": "Nejsou k dispozici žádné herní podklady",
-  "gameAssetsEmptyBody": "Hostovaný manifest neobsahoval žádné podporované obrázky.",
-  "gameAssetsOneImage": "1 obrázek",
-  "gameAssetsImageCount": "Počet obrázků: {count}",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "Hledat v této kategorii",
-  "gameAssetsAllFormats": "Všechny formáty",
-  "gameAssetsOneResult": "1 výsledek",
-  "gameAssetsResultCount": "Výsledky {count}",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "Žádné odpovídající obrázky",
-  "gameAssetsNoResultsBody": "Zkuste jiné hledání nebo formát souboru.",
-  "gameAssetsLongPressHint": "Dlouhým stisknutím zkopírujete hostovanou adresu URL",
-  "gameAssetsCopyUrl": "Kopírovat adresu URL",
-  "gameAssetsCopyPath": "Kopírovat cestu",
-  "gameAssetsUrlCopied": "Adresa URL podkladu byla zkopírována",
-  "gameAssetsPathCopied": "Cesta k podkladu byla zkopírována",
-  "gameAssetsCopyError": "Podrobnosti podkladu se nepodařilo zkopírovat.",
-  "gameAssetsShare": "Sdílet",
-  "gameAssetsShareError": "Podklad se nepodařilo sdílet.",
-  "gameAssetsSave": "Uložit",
-  "gameAssetsSaving": "Ukládání...",
-  "gameAssetsSaved": "Podklad byl uložen.",
-  "gameAssetsSavedTo": "Podklad byl uložen do {path}",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "Podklad se nepodařilo uložit.",
   "upgradeTrackerPlan": "Plán",
   "upgradeTrackerUpgrades": "Vylepšení",
   "upgradeTrackerCollection": "Sbírka",
@@ -3852,18 +3873,23 @@
   "rankedLeagueBattleDetailsUnavailable": "Podrobné záznamy bitev nejsou pro toto období dostupné.",
   "rankedLeagueHistoricalDetailsUnavailable": "Pro toto starší období je dostupný pouze oficiální souhrn období.",
   "rankedLeagueStarBreakdownUnavailable": "API poskytuje celkový počet hvězd, ale ne jejich podrobné rozdělení za toto období.",
+  "notifAudienceSectionTitle": "Příjemci oznámení",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "Všechny propojené účty",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "Vybrané účty",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "Vyber, které účty mohou na tomto zařízení dostávat oznámení.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "{count} aktuálních účtů. Budoucí propojené účty budou zahrnuty automaticky.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3898,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "{count} vybráno pro oznámení.",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,36 +3907,49 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "Vyber přesně, které účty mají dostávat oznámení.",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "Vše, co propojíš později, bude zahrnuto bez změny tohoto nastavení.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "Vybrané účty",
+  "notifAudienceAcrossDevicesDescription": "Vyber, které účty mohou na tomto zařízení dostávat oznámení.",
+  "notifAccountBookmarked": "Uloženo",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "Ligové bitvy",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "Válečné útoky",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "Stav války",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "Připomenutí války",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "Události",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "Oznámení aplikace",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "Dokončená vylepšení",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "Měsíční podpora",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
@@ -3949,25 +3989,56 @@
   "widgetPetBoostShort": "Domácí mazlíček",
   "widgetClockBoostShort": "Hodiny",
   "widgetBuilderCostPerk": "{percent}% výhoda ceny stavitelů",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "{percent}% výhoda času stavitelů",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "{percent}% výhoda ceny laboratoře",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "{percent}% výhoda času laboratoře",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Cíl farmaření",
+  "farmGoalFormTitle": "Naplánujte cíl farmaření",
+  "farmGoalAccountTitle": "Účet",
+  "farmGoalAccountHint": "Volitelně použijte ligu propojeného účtu pro odhad kořisti.",
+  "farmGoalTargetTitle": "Cílové vylepšení",
+  "farmGoalTargetBuildingLabel": "Budova nebo jednotka",
+  "farmGoalChooseBuilding": "Vyberte budovu nebo jednotku",
   "farmGoalChangeBuilding": "Změnit budovu",
   "farmGoalNoTargetTitle": "Není vybrána žádná budova",
   "farmGoalNoTargetBody": "Vyberte budovu, kterou chcete vylepšit, a odhadněte potřebné suroviny.",
+  "farmGoalTargetLevelLabel": "Cílová úroveň",
+  "farmGoalUpgradeCostLabel": "Cena vylepšení",
+  "farmGoalCostUnavailable": "Cena tohoto vylepšení není k dispozici.",
+  "farmGoalLootTitle": "Kořist za útok",
+  "farmGoalResourceLabel": "Surovina",
+  "farmGoalAmountLabel": "Množství",
   "farmGoalAverageLootLabel": "Kořist dostupná ve vesnici",
   "farmGoalPerfectLootHint": "Zadejte kořist zobrazenou před útokem. Níže uvedený ligový bonus se přičte automaticky.",
   "farmGoalLeagueEstimate": "Ligový bonus {league}: {amount} {resource}. Je zahrnut v odhadech útoků.",
-  "farmGoalTrackerNextTitle": "Další v plánu Sledování vylepšení",
-  "farmGoalTrackerMissingTitle": "Jsou potřeba data Sledování vylepšení",
-  "farmGoalTrackerMissingBody": "Importujte JSON vylepšení tohoto účtu do Sledování vylepšení, aby se zde zobrazila další plánovaná budova a přesná cena.",
-  "farmGoalTrackerPlanComplete": "Ve Sledování vylepšení nebyla nalezena žádná zbývající vylepšení budov. Budovu můžete stále vybrat ručně.",
-  "farmGoalOpenUpgradeTracker": "Otevřít Sledování vylepšení",
-  "farmGoalUseTrackerTarget": "Použít budovu",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,108 +4052,6 @@
       }
     }
   },
-  "gameCreatorCode": "Kód tvůrce: ClashKing",
-  "clanWarFrequencyTitle": "války",
-  "notifScopeAllAccounts": "Všechny účty",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
-  },
-  "notifSelectedAccounts": "Vybrané účty",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
-  "searchFilters": "Filtry",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
-  },
-  "searchCancel": "Zrušit",
-  "assetFolderTroops": "Jednotky",
-  "assetFolderSpells": "Kouzla",
-  "assetFolderHeroes": "Hrdinové",
-  "endpointStateWins": "Vítězství",
-  "notifGroupBattles": "Bitvy",
-  "notifGroupSupport": "Podpora",
-  "gameAssetsCategoryHeroes": "Hrdinové",
-  "gameAssetsCategorySpells": "Kouzla",
-  "rankedLeagueStars": "Hvězdy",
-  "farmGoalUpgradeCostLabel": "Cena vylepšení",
-  "farmGoalAccountTitle": "Účet",
-  "damageAccountPresetShort": "Účet",
-  "damageClearStack": "Jasný",
-  "todoMockRaid1Left": "Zbývá 1",
-  "farmGoalResourceLabel": "Surovina",
-  "gameAssetsCategoryEquipment": "Vybavení",
-  "notifChooseAccountsManually": "Vybrané účty",
-  "notifAudienceAcrossDevicesDescription": "Vyber, které účty mohou na tomto zařízení dostávat oznámení.",
-  "damageNoTargetTitle": "Není vybrána žádná budova",
-  "farmGoalMissingTarget": "Vyberte budovu a cílovou úroveň pro výpočet potřebného počtu útoků.",
-  "farmGoalResultTitle": "Potřebné útoky",
-  "farmGoalResultSummary": "{target} {resource} s přibližně {average} za dokonalý útok.",
-  "@farmGoalResultSummary": {
-    "placeholders": {
-      "target": {
-        "type": "String"
-      },
-      "resource": {
-        "type": "String"
-      },
-      "average": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalMissingValues": "Zadejte cíl a odhad kořisti z dokonalého útoku, abyste zobrazili scénáře útoků.",
-  "settingsLiveActivityStart": "Spusťte testovací činnost",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "todoExplanationRaidsTitle": "Náklady:",
-  "settingsLiveActivityUpdate": "Aktualizovat skóre",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityEndSubtitle": "Odebere místní náhled.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Ukončete testovací činnost",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "todoExplanationRaids": "Váha 5 bodů na účet (nebo 6, pokud byl odblokován poslední útok), 1 útok = 1 bod.",
-  "settingsLiveActivityTest": "Živý test aktivity",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStartSubtitle": "Zobrazí náhled místní klanové války.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdateSubtitle": "Zvyšuje falešné válečné skóre.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "todoMockWarAltStatus": "Aktivní před 18 miliony · válka a nájezdy vyžadují pozornost",
-  "todoRaidAttacks": "Raid útoky",
-  "todoMockRaid4Left": "Zbývají 4",
-  "playerOptionNotificationsEnableMaster": "Zapněte oznámení, chcete-li upravit upozornění pro tento účet.",
-  "playerOptionNotificationsVerifyFirst": "Ověřte tento účet, chcete-li zapnout jeho oznámení.",
-  "playerOptionNotificationsSubscriptionRequired": "Pro oznámení tohoto účtu je vyžadováno aktivní předplatné.",
-  "playerOptionNotificationsLimitReached": "Dosáhli jste limitu účtů s oznámeními pro své předplatné.",
-  "notifGroupLegendAttacks": "Útoky v legendární lize",
-  "notifLegendAttacksDescription": "Upozorní vás, když v legendární lize zbývají útoky.",
-  "notifGroupLegendDefenses": "Obrany v legendární lize",
-  "notifLegendDefensesDescription": "Upozorní vás na nové obrany v legendární lize.",
-  "farmGoalTitle": "Cíl farmaření",
-  "farmGoalFormTitle": "Naplánujte cíl farmaření",
-  "farmGoalAccountHint": "Volitelně použijte ligu propojeného účtu pro odhad kořisti.",
-  "farmGoalTargetTitle": "Cílové vylepšení",
-  "farmGoalTargetBuildingLabel": "Budova nebo jednotka",
-  "farmGoalChooseBuilding": "Vyberte budovu nebo jednotku",
-  "farmGoalTargetLevelLabel": "Cílová úroveň",
-  "farmGoalCostUnavailable": "Cena tohoto vylepšení není k dispozici.",
-  "farmGoalLootTitle": "Kořist za útok",
-  "farmGoalAmountLabel": "Množství",
   "farmGoalStarBonusEstimate": "Hvězdný bonus: {amount} {resource} po 5 hvězdách. Nezapočítává se do potřebných útoků.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
@@ -4106,7 +4075,30 @@
   "farmGoalAttackShort": "útok",
   "farmGoalScenarioHint": "Odhady předpokládají, že z každého útoku získáte zvolené procento dostupné kořisti.",
   "farmGoalNoLeagueLoot": "Pro tuto ligu nejsou k dispozici údaje o kořisti.",
+  "farmGoalTrackerNextTitle": "Další v plánu Sledování vylepšení",
+  "farmGoalTrackerMissingTitle": "Jsou potřeba data Sledování vylepšení",
+  "farmGoalTrackerMissingBody": "Importujte JSON vylepšení tohoto účtu do Sledování vylepšení, aby se zde zobrazila další plánovaná budova a přesná cena.",
+  "farmGoalTrackerPlanComplete": "Ve Sledování vylepšení nebyla nalezena žádná zbývající vylepšení budov. Budovu můžete stále vybrat ručně.",
+  "farmGoalOpenUpgradeTracker": "Otevřít Sledování vylepšení",
+  "farmGoalUseTrackerTarget": "Použít budovu",
+  "farmGoalMissingTarget": "Vyberte budovu a cílovou úroveň pro výpočet potřebného počtu útoků.",
+  "farmGoalMissingValues": "Zadejte cíl a odhad kořisti z dokonalého útoku, abyste zobrazili scénáře útoků.",
+  "farmGoalResultTitle": "Potřebné útoky",
   "farmGoalAttacks": "Odhadované útoky",
+  "farmGoalResultSummary": "{target} {resource} s přibližně {average} za dokonalý útok.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
     "placeholders": {
@@ -4114,6 +4106,50 @@
         "type": "int"
       }
     }
+  },
+  "gameCreatorCode": "Kód tvůrce: ClashKing",
+  "todoExplanationRaidsTitle": "Náklady:",
+  "todoExplanationRaids": "Váha 5 bodů na účet (nebo 6, pokud byl odblokován poslední útok), 1 útok = 1 bod.",
+  "clanWarFrequencyTitle": "války",
+  "notifScopeAllAccounts": "Všechny účty",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "settingsLiveActivityTest": "Živý test aktivity",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "Spusťte testovací činnost",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "settingsLiveActivityStartSubtitle": "Zobrazí náhled místní klanové války.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "Aktualizovat skóre",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityUpdateSubtitle": "Zvyšuje falešné válečné skóre.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "Ukončete testovací činnost",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityEndSubtitle": "Odebere místní náhled.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "notifSelectedAccounts": "Vybrané účty",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Filtry",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
   },
   "dashboardUpgradeTrackerAccounts": "{loaded}/{total} sledovaných účtů",
   "@dashboardUpgradeTrackerAccounts": {
@@ -4129,12 +4165,14 @@
   "calculatorsModeDamage": "Poškození",
   "calculatorsModeFarmGoal": "Cíl farmaření",
   "damageCalculatorTitle": "Kalkulačka poškození",
+  "damageAccountPresetShort": "Účet",
   "damageChooseAccount": "Vyberte účet",
   "damageSwitchAccount": "Přepnout účet",
   "damageAccountSelectorHint": "Použijte úrovně jednotek z ověřeného účtu nebo vše nastavte ručně.",
   "damageNoAccountsAvailable": "Nejsou k dispozici žádné ověřené účty. Úrovně poškození můžete nastavit ručně.",
   "damageTargetSectionTitle": "Cílová budova",
   "damageChooseTarget": "Vyberte cíl",
+  "damageNoTargetTitle": "Není vybrána žádná budova",
   "damageNoTargetBody": "Vyberte budovu, jejíž odolnost chcete otestovat.",
   "damageTargetLevelLabel": "Úroveň cíle",
   "damageCommonBuildings": "Běžné budovy",
@@ -4145,6 +4183,7 @@
   "damageQuickSetupGiantArrow": "Obří šíp",
   "damageQuickSetupFlameFlinger": "Plamenomet",
   "damageQuickSetupCustom": "Vlastní",
+  "damageClearStack": "Jasný",
   "damageNoDamageSelected": "Přidejte zdroj poškození a zobrazte výsledek.",
   "damageSelectedSourcesCount": "Vybrané zdroje ({count})",
   "@damageSelectedSourcesCount": {
@@ -4158,6 +4197,11 @@
   "damageOtherSources": "Další zdroje",
   "damageShowAllSources": "Zobrazit všechny zdroje",
   "damageShowFewerSources": "Zobrazit méně zdrojů",
+  "searchCancel": "Zrušit",
+  "todoRaidAttacks": "Raid útoky",
+  "todoMockRaid4Left": "Zbývají 4",
+  "todoMockWarAltStatus": "Aktivní před 18 miliony · válka a nájezdy vyžadují pozornost",
+  "todoMockRaid1Left": "Zbývá 1",
   "gameAssetsCategoryBuildings": "Budovy",
   "gameAssetsCategoryCapitalBase": "Hlavní město klanu",
   "gameAssetsCategoryCapitalHouseParts": "Části domu v hlavním městě",
@@ -4165,9 +4209,19 @@
   "gameAssetsCategoryClanLabels": "Štítky klanu",
   "gameAssetsCategoryCountryFlags": "Vlajky zemí",
   "gameAssetsCategoryDecorations": "Dekorace",
+  "gameAssetsCategoryEquipment": "Vybavení",
   "gameAssetsCategoryGuardians": "Strážci",
+  "gameAssetsCategoryHeroes": "Hrdinové",
   "gameAssetsCategoryPets": "Mazlíčci",
   "gameAssetsCategorySkins": "Vzhledy",
+  "gameAssetsCategorySpells": "Kouzla",
   "gameAssetsCategoryTroops": "Jednotky",
-  "rankedLeagueAccountSelector": "Účet pro hodnocenou ligu"
+  "assetFolderTroops": "Jednotky",
+  "assetFolderSpells": "Kouzla",
+  "assetFolderHeroes": "Hrdinové",
+  "endpointStateWins": "Vítězství",
+  "notifGroupBattles": "Bitvy",
+  "notifGroupSupport": "Podpora",
+  "rankedLeagueAccountSelector": "Účet pro hodnocenou ligu",
+  "rankedLeagueStars": "Hvězdy"
 }
