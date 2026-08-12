@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "계정이 성공적으로 인증되었습니다!",
   "generalRetry": "다시 시도",
   "generalRetrying": "다시 시도 중...",
+  "postsTitle": "소식",
+  "postsDescription": "ClashKing 소식, 업데이트 이야기 및 이전 공지입니다.",
+  "postsEmpty": "아직 게시된 소식이 없습니다.",
+  "postsLoadFailed": "소식을 불러오지 못했습니다.",
+  "postsLoadMore": "더 불러오기",
+  "postsCurrent": "현재",
+  "postsPast": "이전",
+  "postsStory": "인터랙티브 스토리",
+  "postsPinned": "추천",
   "generalTryAgain": "다시 시도하기",
   "generalReset": "초기화",
   "generalCancel": "취소",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "필터",
+  "generalExpand": "확장하다",
+  "generalCollapse": "무너지다",
   "generalNotSet": "설정되지 않음",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "서표",
+  "generalRemoveBookmark": "북마크 삭제",
   "generalClearFilters": "필터 지우기",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "이메일 계정 연결",
   "authAccountAddEmailAuth": "추가 보안을 위해 계정에 이메일 및 비밀번호 인증을 추가하세요.",
   "authAccountEmailLinkedSuccess": "이메일 계정이 성공적으로 연결되었습니다!",
+  "authAccountLinkDiscord": "Discord 계정 연결",
+  "authAccountAddDiscordAuth": "플랫폼 간 동기화와 ClashKing 봇 이용을 위해 계정에 Discord 인증을 추가하세요.",
+  "authAccountDiscordLinkedSuccess": "Discord 계정이 연결되었습니다!",
   "authEmailVerificationTitle": "이메일 인증",
   "authEmailVerificationCheckEmail": "이메일을 확인하세요",
   "authEmailVerificationSentTo": "인증 이메일을 다음 주소로 보냈습니다:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "경험치 레벨",
+  "gameLeague": "리그",
   "gameTrophies": "트로피",
   "gameBuilderBaseTrophies": "장인 기지 트로피",
   "gameDonations": "지원",
@@ -484,6 +501,11 @@
   "clanNone": "클랜 없음",
   "clanJoinToUnlock": "새 기능을 잠금 해제하려면 클랜에 가입하세요.",
   "clanMembers": "멤버",
+  "clanMembersSearchPlaceholder": "회원 검색",
+  "clanMembersShowTotals": "클랜 총계 표시",
+  "clanMembersHideTotals": "클랜 총계 숨기기",
+  "clanMembersReceivedShort": "받았다",
+  "clanMembersAverageTh": "평균 TH",
   "clanMinimumMembers": "최소 멤버 수",
   "clanMaximumMembers": "최대 멤버 수",
   "clanLocation": "위치",
@@ -839,6 +861,7 @@
   "warLeague": "전쟁/리그",
   "warHistory": "전쟁 기록",
   "warLog": "전쟁 로그",
+  "warLogSearchPlaceholder": "검색 전쟁",
   "warLogClosed": "{clan}의 전쟁 기록이 비공개입니다.",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "전쟁 통계",
+  "warStatsSearchPlaceholder": "플레이어 검색",
+  "warStatsCurrentTownHall": "신화",
+  "warStatsLast50": "지난 50",
+  "warStatsWars": "전쟁",
+  "warStatsSelectSeason": "전쟁 통계 시즌 선택",
   "warOngoing": "진행 중인 클랜전",
   "warIsNotInWar": "{clan}은(는) 전쟁 중이 아닙니다.",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "승리하려면",
+  "warAnalysisToLose": "잃다",
+  "warAnalysisNoAttacksLeft": "남은 공격 없음",
+  "warAnalysisScenario": "{attacks} 공격 왼쪽 -> 공격당 {stars} 별 / {percent}% 필요",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} 공격 왼쪽 -> 불가능({stars}성 / 공격당 {percent}%)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "{clanName} 클랜은 더 이상 패배할 수 없습니다",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "확정",
   "warAnalysisAlreadySecured": "이미 확정됨",
   "warAnalysisSecureAgainst": "{clanName} 클랜이 남은 공격을 모두 사용한다고 가정하여 목표를 계산했습니다.",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "{clanName} 클랜이 남은 공격을 최적으로 사용하면 수학적으로 확정할 수 없습니다.",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "남은 공격으로는 확정할 수 없습니다",
   "warAnalysisStarGoal": "+{stars}별",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "남은 공격: {attacks}회",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "더 나은 결과는 불가능합니다",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "전체 필요 %",
   "warCalculatorCalculate": "계산",
   "warAttacksTitle": "공격",
+  "warAttacksSuccessful": "성공적인 공격",
+  "warAttacksFailed": "실패한 공격",
   "warAttacksNone": "아직 공격 없음",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "최고 공격",
   "warAttacksCount": "공격 횟수",
   "warAttacksMissed": "놓친 공격",
+  "warAttacksMissedShort": "놓친",
   "warAttacksNumber": "최근 {number_war}번의 전쟁 동안 {number_time}회 공격했습니다.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "클랜전 리그",
   "cwlOngoing": "진행 중인 CWL",
+  "cwlHistoryTitle": "CWL 연혁",
+  "clanJoinLeaveTab": "가입/탈퇴",
+  "clanRankingsTab": "순위",
+  "clanRankingsSeason": "계절",
+  "clanRankingsSelectSeason": "랭킹 시즌 선택",
+  "clanRankingsFilterActivity": "활동",
+  "clanRankingsFilterWar": "전쟁",
+  "clanRankingsFilterPoints": "전철기",
+  "cwlHistoryPreviewBadge": "시사",
+  "cwlHistoryPreviewSubtitle": "CWL 끝점이 수정될 때까지 {clan} 모형",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "아직 CWL 기록이 없습니다.",
+  "cwlHistoryEmptyBody": "이 클랜은 아직 클랜전 리그 시즌에 참여하지 않았습니다.",
+  "cwlRankTitle": "계급",
+  "cwlWarsPlayedTitle": "전쟁이 진행됨",
+  "playerWarStarsTitle": "전쟁 별",
+  "playerWarPreferenceTitle": "전쟁 준비",
+  "playerDonatedTitle": "기부됨",
+  "playerReceivedTitle": "받았다",
+  "playerCapitalTitle": "수도",
+  "playerExpLevelTitle": "특급. 수준",
+  "clanWarWinsTitle": "전쟁 승리",
+  "clanWinStreakTitle": "연승",
+  "clanBuilderBaseTitle": "빌더 베이스",
+  "clanTypeTitle": "유형",
+  "clanMinTownHallTitle": "최소 일",
+  "clanMinTrophiesTitle": "최소 트로피",
+  "clanCapitalHallTitle": "캐피탈 홀",
+  "clanDistrictsTitle": "지구",
+  "legendsCountryTitle": "국가",
+  "legendsLocalRankTitle": "지역 순위",
+  "legendsGlobalRankTitle": "글로벌 순위",
+  "warWinsTitle": "승리",
+  "warLossesTitle": "사상자 수",
+  "warDrawsTitle": "무승부",
   "cwlRounds": "라운드",
   "cwlRoundNumber": "{number}라운드",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "진행 중인 습격",
   "raidsDistrictsDestroyed": "파괴된 구역",
   "raidsCompleted": "완료된 습격",
+  "capitalRaidStatusOngoing": "전진",
+  "capitalRaidStatusEnded": "종료됨",
+  "capitalRaidLoot": "전리품",
+  "capitalRaidRewards": "보상",
+  "capitalRaidPreviousWeek": "지난주",
+  "capitalRaidNextWeek": "다음 주",
+  "capitalRaidFilterAttacked": "공격을 받음",
+  "capitalRaidFilterNotAttacked": "공격받지 않음",
+  "capitalRaidFilterLinked": "연결된 계정",
+  "capitalRaidEmptyTitle": "자본 습격 데이터 없음",
+  "capitalRaidEmptyBody": "이 클랜의 수도 레이드 주말이 추적되면 여기에 레이드 내역이 표시됩니다.",
+  "capitalRaidEstimated": "추정된",
+  "capitalRaidEstimatedTooltip": "아직 공식적이지 않음: 이번 주의 공격 및 방어 로그를 바탕으로 추정됩니다. Supercell은 레이드가 종료되면 실제 메달 수를 공개합니다.",
+  "capitalRaidTrophyPrediction": "예상 트로피",
+  "capitalRaidTrophyPredictionTooltip": "이번 주 현재까지의 성과를 바탕으로 이번 레이드 이후 예상되는 캐피털 리그 트로피입니다. 공식적이지 않습니다.",
+  "capitalRaidProjectedLoot": "예상 전리품",
+  "capitalRaidOneshots": "원샷",
+  "capitalRaidFails": "실패",
+  "capitalDetailsOffense": "위반",
+  "capitalDetailsDefense": "방어",
+  "capitalDistrictsSection": "지구",
+  "capitalOpponentsSection": "반대자",
+  "capitalAvgAttacksPerDistrict": "평균 공격/구역",
+  "capitalAvgLootPerAttack": "평균 전리품/공격",
+  "capitalHistorySection": "레이드 이력",
+  "capitalHistoryWeeksTracked": "추적된 주",
+  "capitalAvgLootPerWeek": "주당 평균 전리품",
+  "capitalAvgAttacksPerWeek": "주당 평균 공격",
+  "capitalBestRaid": "최고의 레이드",
+  "capitalWorstRaid": "최악의 습격",
+  "capitalHistoryChartTitle": "주간 추세",
   "searchNoResult": "결과 없음.",
   "maintenanceTitle": "점검",
   "maintenanceDescription": "현재 Clash of Clans가 점검 중이라 API에 접근할 수 없습니다. 나중에 다시 확인해 주세요.",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "일일 트로피 추적 및 시즌 종료 통계",
   "faqFeaturesCwlTitle": "CWL 분석",
   "faqFeaturesCwlDescription": "클랜전 리그 성과와 멤버 기여도",
+  "faqFeaturesTodoTitle": "할 일 목록",
+  "faqFeaturesTodoDescription": "랭크 공격, 습격, 클랜전 공격, 클랜 게임 또는 패스 활동이 남은 계정을 확인하세요",
+  "faqFeaturesUpgradeTrackerTitle": "업그레이드 추적기",
+  "faqFeaturesUpgradeTrackerDescription": "사용자가 직접 제공한 계정 스냅샷으로 남은 업그레이드, 자원, 장인, 연구소 시간과 진행도를 확인하세요",
+  "faqFeaturesNotificationsTitle": "푸시 알림",
+  "faqFeaturesNotificationsDescription": "지원되는 ClashKing 이벤트 알림을 받을 계정을 선택하세요",
+  "faqFeaturesWidgetsTitle": "클랜전 위젯",
+  "faqFeaturesWidgetsDescription": "위젯을 지원하는 기기의 홈 화면에서 현재 클랜전 상태를 확인하세요",
   "faqSearchHint": "FAQ 검색...",
   "faqSectionGettingStarted": "시작하기 및 소개",
+  "faqSectionAccountsAlertsWidgets": "계정, 알림 및 위젯",
   "faqSectionSupportAndContact": "지원 및 연락",
+  "faqLinkedAccountsTitle": "연결된 계정과 인증은 어떻게 작동하나요?",
+  "faqLinkedAccountsAnswer": "ClashKing 프로필에는 여러 Clash of Clans 계정을 추가할 수 있습니다. 태그를 추가하면 공개 데이터가 표시됩니다. Clash of Clans API 토큰으로 인증하면 계정 소유권이 확인되고 계정별 기능이 잠금 해제됩니다.",
+  "faqLinkedAccountsSolution1": "계정 관리에서 계정을 관리하거나 순서를 바꾸고, 숨기거나 삭제할 수 있습니다.",
+  "faqLinkedAccountsSolution2": "Clash of Clans의 설정 > 추가 설정 > API 토큰에서 토큰을 찾을 수 있습니다.",
+  "faqLinkedAccountsSolution3": "Discord 또는 이메일로 로그인할 수 있습니다. 계정 연결 기능은 설정에서 관리하세요.",
+  "faqNotificationsTitle": "알림은 어떻게 작동하나요?",
+  "faqNotificationsAnswer": "알림은 선택 사항입니다. 알림을 켜면 ClashKing이 이 기기를 등록합니다. 각 알림을 받을 연결 계정을 선택할 수 있습니다.",
+  "faqNotificationsSolution1": "기기와 ClashKing 설정에서 알림을 허용하세요.",
+  "faqNotificationsSolution2": "알림마다 다른 계정을 지정할 수 있습니다. 알림이 오지 않으면 선택한 계정을 확인하세요.",
+  "faqNotificationsSolution3": "일부 알림은 추적 중인 클랜 또는 클랜전 데이터에 따라 달라집니다. 외부 데이터가 갱신되는 동안 지연될 수 있습니다.",
+  "faqWidgetsTitle": "클랜전 위젯은 어떻게 작동하나요?",
+  "faqWidgetsAnswer": "클랜전 위젯은 지원되는 기기에 간단한 요약을 표시합니다. 선택하거나 연결한 계정, 캐시된 ClashKing 데이터와 플랫폼이 허용하는 백그라운드 새로고침을 사용합니다.",
+  "faqWidgetsSolution1": "계정이나 클랜을 변경한 뒤 앱을 열어 위젯을 동기화하세요.",
+  "faqWidgetsSolution2": "위젯 정보가 오래되었다면 먼저 앱을 새로고침하세요. Android와 iOS는 백그라운드 업데이트를 제한합니다.",
+  "faqWidgetsSolution3": "유용한 상태를 표시하려면 클랜전 데이터에 접근할 수 있어야 합니다.",
   "faqTranslationIssue": "번역이 누락되었거나 잘못되었나요?",
   "faqTranslationIssueAnswer": "번역은 먼저 생성 도구와 AI 도구로 초안을 만들고, 이후 시간이 지나며 검토하고 개선합니다. 원어민으로서 어색한 문장을 발견하면 Crowdin에서 수정을 제안하거나 Discord 또는 이메일로 연락해 주세요.",
   "faqWaysToSupport": "저희를 지원하는 방법:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "공격 순서",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "지속",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "공격자",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "공격 속도",
   "gameItemAttackRange": "공격 사거리",
   "gameItemMovementSpeed": "이동 속도",
+  "gameItemWardenWeight": "워든 가중치",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "워든 가중치는 인구수보다 우선할 수 있으며, 그랜드 워든이 유닛 무리를 따라가는 우선순위를 결정합니다.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "힐러 가중치",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "힐러가 우선할 유닛을 결정할 때 힐러 가중치가 인구수보다 우선할 수 있습니다.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{추종 기준에 필요한 유닛 1기} other{추종 기준에 필요한 유닛 {count}기}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "추종 기준에 포함되지 않음",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "업그레이드 자원",
   "gameItemRarity": "희귀도",
   "gameItemHero": "영웅",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "비행",
   "gameItemUpgradeCost": "업그레이드 비용",
   "gameItemUpgradeTime": "업그레이드 시간",
-  "generalExpand": "확장하다",
-  "generalCollapse": "무너지다",
-  "generalBookmark": "서표",
-  "generalRemoveBookmark": "북마크 삭제",
-  "gameLeague": "리그",
-  "clanMembersSearchPlaceholder": "회원 검색",
-  "clanMembersShowTotals": "클랜 총계 표시",
-  "clanMembersHideTotals": "클랜 총계 숨기기",
-  "clanMembersReceivedShort": "받았다",
-  "clanMembersAverageTh": "평균 TH",
-  "warLogSearchPlaceholder": "검색 전쟁",
-  "warStatsSearchPlaceholder": "플레이어 검색",
-  "warStatsCurrentTownHall": "신화",
-  "warStatsLast50": "지난 50",
-  "warStatsWars": "전쟁",
-  "warStatsSelectSeason": "전쟁 통계 시즌 선택",
-  "warAnalysisToWin": "승리하려면",
-  "warAnalysisToLose": "잃다",
-  "warAnalysisNoAttacksLeft": "남은 공격 없음",
-  "warAnalysisScenario": "{attacks} 공격 왼쪽 -> 공격당 {stars} 별 / {percent}% 필요",
-  "warAnalysisImpossibleScenario": "{attacks} 공격 왼쪽 -> 불가능({stars}성 / 공격당 {percent}%)",
-  "warAttacksSuccessful": "성공적인 공격",
-  "warAttacksFailed": "실패한 공격",
-  "warAttacksMissedShort": "놓친",
-  "cwlHistoryTitle": "CWL 연혁",
-  "clanJoinLeaveTab": "가입/탈퇴",
-  "clanRankingsTab": "순위",
-  "clanRankingsSeason": "계절",
-  "clanRankingsSelectSeason": "랭킹 시즌 선택",
-  "clanRankingsFilterActivity": "활동",
-  "clanRankingsFilterWar": "전쟁",
-  "clanRankingsFilterPoints": "전철기",
-  "cwlHistoryPreviewBadge": "시사",
-  "cwlHistoryPreviewSubtitle": "CWL 끝점이 수정될 때까지 {clan} 모형",
-  "cwlHistoryEmptyTitle": "아직 CWL 기록이 없습니다.",
-  "cwlHistoryEmptyBody": "이 클랜은 아직 클랜전 리그 시즌에 참여하지 않았습니다.",
-  "cwlRankTitle": "계급",
-  "cwlWarsPlayedTitle": "전쟁이 진행됨",
-  "playerWarStarsTitle": "전쟁 별",
-  "playerWarPreferenceTitle": "전쟁 준비",
-  "playerDonatedTitle": "기부됨",
-  "playerReceivedTitle": "받았다",
-  "playerCapitalTitle": "수도",
-  "playerExpLevelTitle": "특급. 수준",
-  "clanWarWinsTitle": "전쟁 승리",
-  "clanWinStreakTitle": "연승",
-  "clanBuilderBaseTitle": "빌더 베이스",
-  "clanTypeTitle": "유형",
-  "clanMinTownHallTitle": "최소 일",
-  "clanMinTrophiesTitle": "최소 트로피",
-  "clanCapitalHallTitle": "캐피탈 홀",
-  "clanDistrictsTitle": "지구",
-  "legendsCountryTitle": "국가",
-  "legendsLocalRankTitle": "지역 순위",
-  "legendsGlobalRankTitle": "글로벌 순위",
-  "warWinsTitle": "승리",
-  "warLossesTitle": "사상자 수",
-  "warDrawsTitle": "무승부",
-  "capitalRaidStatusOngoing": "전진",
-  "capitalRaidStatusEnded": "종료됨",
-  "capitalRaidLoot": "전리품",
-  "capitalRaidRewards": "보상",
-  "capitalRaidPreviousWeek": "지난주",
-  "capitalRaidNextWeek": "다음 주",
-  "capitalRaidFilterAttacked": "공격을 받음",
-  "capitalRaidFilterNotAttacked": "공격받지 않음",
-  "capitalRaidFilterLinked": "연결된 계정",
-  "capitalRaidEmptyTitle": "자본 습격 데이터 없음",
-  "capitalRaidEmptyBody": "이 클랜의 수도 레이드 주말이 추적되면 여기에 레이드 내역이 표시됩니다.",
-  "capitalRaidEstimated": "추정된",
-  "capitalRaidEstimatedTooltip": "아직 공식적이지 않음: 이번 주의 공격 및 방어 로그를 바탕으로 추정됩니다. Supercell은 레이드가 종료되면 실제 메달 수를 공개합니다.",
-  "capitalRaidTrophyPrediction": "예상 트로피",
-  "capitalRaidTrophyPredictionTooltip": "이번 주 현재까지의 성과를 바탕으로 이번 레이드 이후 예상되는 캐피털 리그 트로피입니다. 공식적이지 않습니다.",
-  "capitalRaidProjectedLoot": "예상 전리품",
-  "capitalRaidOneshots": "원샷",
-  "capitalRaidFails": "실패",
-  "capitalDetailsOffense": "위반",
-  "capitalDetailsDefense": "방어",
-  "capitalDistrictsSection": "지구",
-  "capitalOpponentsSection": "반대자",
-  "capitalAvgAttacksPerDistrict": "평균 공격/구역",
-  "capitalAvgLootPerAttack": "평균 전리품/공격",
-  "capitalHistorySection": "레이드 이력",
-  "capitalHistoryWeeksTracked": "추적된 주",
-  "capitalAvgLootPerWeek": "주당 평균 전리품",
-  "capitalAvgAttacksPerWeek": "주당 평균 공격",
-  "capitalBestRaid": "최고의 레이드",
-  "capitalWorstRaid": "최악의 습격",
-  "capitalHistoryChartTitle": "주간 추세",
-  "warAttacksDetailsDuration": "지속",
   "gameItemRemainingToTownHallMax": "최대 TH까지",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "글로벌 최대로",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "{count} 레벨 왼쪽",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "개요",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "통계",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "다음 업그레이드",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "업그레이드 계획",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "업그레이드 데이터를 사용할 수 없습니다.",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "선택된",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "환경설정",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "알림",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "알림을 선택하고 로컬 테스트 미리보기를 보내세요.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "지원하다",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "에 대한",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "계정",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "로그인됨",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "모습",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "체계",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "이 장치와 일치",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "빛",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "어두운",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "선택된",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "아직 연결된 계정이 로드되지 않았습니다.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "선택한 계정이 없습니다.",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "{count} 계정이 선택됨",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "최근의",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "플레이어",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "클랜",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "분명한",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "데이터가 새로 고쳐졌습니다.",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "데이터 새로고침 실패: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "필터링된 데이터를 로드하지 못했습니다: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "내보내기 실패: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "플레이어",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "체재",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "엑셀(.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "포함",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "통계, 공격, TH 분석",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "사용 가능한 사용자 데이터가 없습니다.",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "계정",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "플레이어 데이터를 로드하지 못했습니다.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "클랜 데이터를 로드하지 못했습니다.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "일치하는 계정이 없습니다.",
   "todoNoConfiguredAccounts": "구성된 할 일 계정이 없습니다.",
   "todoNoLinkedAccounts": "연결된 계정 없음",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "이 공격대에서는 플레이어 목록이나 개별 공격을 사용할 수 없습니다.",
   "dashboardNoLinkedAccountsTitle": "연결된 계정 없음",
   "dashboardNoLinkedAccountsBody": "여기에서 공격, 이벤트, 활동을 보려면 Clash 계정을 연결하세요.",
+  "dashboardTodoHiddenTitle": "표시할 계정이 없습니다",
+  "dashboardTodoHiddenBody": "플레이어 탭에서 계정의 홈 카드 옵션(할 일, 업그레이드 추적기, 랭크)을 켜면 여기에 표시됩니다.",
+  "dashboardUpgradeTrackerNoData": "추적기를 열어 업그레이드 데이터를 가져오거나 새로고침하세요.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one{업데이트가 필요합니다} other{업데이트가 필요합니다}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one{할 일이 남았습니다} other{할 일이 남았습니다}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one{공격이 남았습니다} other{공격이 남았습니다}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "예상 완료",
+  "dashboardUpgradeTrackerBuilders": "장인",
+  "dashboardUpgradeTrackerLab": "연구소",
+  "dashboardUpgradeTrackerPets": "펫",
+  "dashboardUpgradeTrackerWalls": "장벽",
+  "dashboardUpgradeTrackerVillage": "마을",
+  "dashboardRankedNoData": "랭크 리그를 열어 이 계정의 순위를 확인하세요.",
+  "dashboardRankedAccounts": "추적 중인 계정 {loaded}/{total}개",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "아직 북마크된 플레이어가 없습니다.",
   "playersNoBookmarkedBody": "플레이어 프로필을 열고 나중에 저장하세요.",
   "playersNoLinkedBody": "계정 설정 화면에서 계정을 관리하세요.",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "현재 건물 레벨을 기준으로 피해량을 계획하세요.",
   "calculatorZapQuake": "잽 지진",
   "calculatorFireball": "화구",
+  "damageCalculatorSubtitle": "하나의 공격 조합을 여러 건물과 비교하세요.",
+  "damageNoStaticDataTitle": "피해량 데이터를 사용할 수 없습니다",
+  "damageNoStaticDataBody": "정적 게임 데이터 로딩이 끝난 뒤 앱을 새로고침하세요.",
+  "damageTownHall": "마을회관",
+  "damageVerifiedAccountPrefill": "인증 계정 사전 설정",
+  "damageOverridesStayLocal": "여기에서 변경한 내용은 플레이어 계정에 반영되지 않습니다.",
+  "damageTargets": "건물",
+  "damageAddBuilding": "건물 추가",
+  "damageRemoveBuilding": "건물 삭제",
+  "damageNoTargetsBody": "결과를 비교하려면 건물을 하나 이상 추가하세요.",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "건물 검색",
+  "damageNoBuildingsFound": "건물을 찾지 못했습니다",
+  "damageTryAnotherSearch": "다른 이름이나 마을회관 레벨을 입력해 보세요.",
+  "damageAttackStack": "수동 공격 조합",
+  "damageNoSourcesForTownHall": "이 마을회관에서 지원되는 피해원이 없습니다.",
+  "damageCount": "개수",
+  "damagePerUse": "사용당 피해량 {damage}",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "최대 HP의 {percent}%, 중첩할수록 감소",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "번개 마법",
+  "damageSourceEarthquake": "지진 마법",
+  "damageSourceGiantArrow": "자이언트 애로우",
+  "damageSourceFireball": "화구",
+  "damageSourceFlameFlinger": "플레임 플링어 명중",
+  "damageSourceBalloonDeath": "해골 비행선 파괴 피해",
+  "damageSourceRocketBalloonDeath": "로켓 비행선 파괴 피해",
+  "damageResults": "결과",
+  "damageDestroyed": "파괴됨",
+  "damageSurvives": "생존",
+  "damageResultSummary": "피해량 {damage} · 남은 HP {remaining}",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "번개·지진 최적화",
+  "damageSpellCapacity": "마법 수용량",
+  "damageZapQuakeUnavailable": "이 마을회관에서는 번개와 지진 마법을 사용할 수 없습니다.",
+  "damageZapQuakeUsesSelectedLevels": "번개 {lightningLevel}레벨과 지진 {earthquakeLevel}레벨을 사용합니다.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "번개와 지진 마법은 이 저장소에 피해를 줄 수 없습니다.",
+  "damageNoValidZapQuake": "선택한 마법 수용량에 맞는 유효한 조합이 없습니다.",
+  "damageZapQuakeCombination": "번개 {lightning}개 + 지진 {earthquake}개 · 공간 {capacity}",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "업그레이드 추적기",
   "upgradeTrackerSubtitle": "남은 업그레이드 비용과 시간.",
   "linkedAccountLabel": "연결된 계정",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "업그레이드 총계를 보려면 연결된 계정을 추가하거나 새로 고치세요.",
   "playerOptionNotificationsTitle": "알림",
   "playerOptionNotificationsSubtitle": "이 계정에 대한 알림을 받으세요.",
+  "playerOptionNotificationsEnableMaster": "먼저 설정에서 알림을 켜세요.",
+  "playerOptionNotificationsVerifyFirst": "알림을 사용하려면 이 계정을 인증하세요.",
+  "playerOptionNotificationsSubscriptionRequired": "북마크 알림을 사용하려면 구독이 필요합니다.",
+  "playerOptionNotificationsLimitReached": "북마크 알림 한도에 도달했습니다.",
   "playerOptionShowTodoPageTitle": "할 일 페이지에 표시",
   "playerOptionShowTodoPageSubtitle": "전체 할 일 목록에 이 계정을 포함하세요.",
+  "playerOptionShowTodoPageVerifyFirst": "할 일 페이지에 표시하려면 이 계정을 인증하세요.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "홈에 업그레이드 추적기 표시",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "이 계정의 업그레이드 요약을 홈에 고정합니다.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "홈에 업그레이드 진행도를 표시하려면 이 계정을 인증하세요.",
+  "playerOptionShowRankedHomeTitle": "홈에 랭크 표시",
+  "playerOptionShowRankedHomeSubtitle": "이 계정의 랭크 리그 요약을 홈에 고정합니다.",
+  "playerOptionShowRankedHomeVerifyFirst": "홈에 랭크 리그 요약을 표시하려면 이 계정을 인증하세요.",
   "playerOptionShowWarTabTitle": "전쟁 탭에 표시",
   "playerOptionShowWarTabSubtitle": "전쟁 탭에 이 계정의 클랜을 포함하세요.",
   "bookmarkPlayerLoadFailed": "북마크된 플레이어를 로드하지 못했습니다.",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · 진행 중인 작업 없음",
   "todoMockCaughtUpStatus": "오늘 활성 상태입니다. 조치가 필요하지 않습니다.",
   "notifChooseAlerts": "알림 선택",
+  "notifGroupLegendAttacks": "전설 I 공격",
+  "notifLegendAttacksDescription": "전설 I에서 알림이 활성화된 북마크 계정의 공격 결과입니다.",
+  "notifGroupLegendDefenses": "전설 I 방어",
+  "notifLegendDefensesDescription": "전설 I에서 알림이 활성화된 계정의 방어 결과입니다.",
   "notifLeagueDefenseDescription": "공격자, 스타, 비율, 리그 컨텍스트를 통한 방어 결과입니다.",
   "notifWarAttackOptionsDescription": "전쟁 공격 결과, 방어 경고, 5v5 공격 피드 옵션.",
   "notifWarAlertsDescription": "전쟁이 일치하고, 전투의 날이 시작되고, 전쟁이 끝났습니다.",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "수도 점수",
   "todoAllAccounts": "모든 계정",
   "todoCombinedAcrossAccounts": "계정 전체 통합 할 일",
+  "dashboardRankedCombinedAcrossAccounts": "계정 통합 순위",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "계정 통합 업그레이드 추적",
   "todoPreviewAccount": "계정 미리보기",
   "todoLastActiveUnavailable": "마지막 활동 정보 없음",
   "todoActiveRelative": "{time} 활동",
@@ -2516,9 +2961,116 @@
   "sideRankingsEmptyTitle": "반환된 순위가 없습니다",
   "sideRankingsEmptyBody": "다른 리더보드나 위치를 시도하세요.",
   "sideRankingsMockups": "ClashKing 목업",
+  "rankingsHomeVillage": "본 마을",
+  "rankingsBuilderBase": "장인 기지",
+  "rankingsTownHall": "마을회관",
+  "rankingsRankedLeague": "랭크 리그",
+  "rankingsClanCapital": "클랜 수도",
+  "rankingsDonations": "지원",
+  "rankingsWarWins": "클랜전 승리",
+  "rankingsWinStreak": "연승",
+  "rankingsCurrent": "현재",
+  "rankingsWorldwide": "전 세계",
+  "rankingsSelectLocation": "지역 선택",
+  "rankingsSearchLocations": "지역 또는 국가 코드 검색",
+  "rankingsWorldwideUnavailable": "이 순위표에 사용할 지역이나 국가를 선택하세요.",
+  "rankingsLocationsLoadFailed": "전체 지역 목록을 불러오지 못했습니다. 지원되는 경우 전 세계 보기는 계속 사용할 수 있습니다.",
+  "rankingsSnapshotDate": "스냅샷 날짜",
+  "rankingsSource": "소스",
+  "rankingsOfficialSource": "공식 Clash API",
+  "rankingsResults": "순위 결과",
+  "rankingsTopCount": "상위 {count}위",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "저장된 스냅샷 없음",
+  "rankingsNoSnapshotBody": "{date}의 순위 스냅샷이 없습니다. 다른 날짜를 선택하거나 현재 보기로 돌아가세요.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "플레이어를 불러오지 못했습니다.",
+  "rankingsClanLoadFailed": "클랜을 불러오지 못했습니다.",
   "sideStatsTitle": "통계",
   "sideStatsSubtitle": "공식 Clash API 화면의 리더보드 통계.",
   "sideStatsLoadError": "전투 정보를 로드할 수 없습니다.",
+  "statsOverview": "개요",
+  "statsArmies": "군대",
+  "statsItems": "아이템",
+  "statsWar": "전쟁",
+  "statsCwl": "CWL",
+  "statsRanked": "랭크",
+  "statsDateRange": "날짜 범위",
+  "statsDateRangeHint": "최대 90일 선택",
+  "statsDateRangeTooLong": "90일 이하의 날짜 범위를 선택하세요.",
+  "statsUpdated": "새로운 데이터",
+  "statsNoDataTitle": "아직 전투 데이터가 없습니다.",
+  "statsNoDataBody": "더 넓은 날짜 범위 또는 덜 제한적인 필터를 사용해 보십시오.",
+  "statsAddItemsTitle": "분석할 항목을 선택하십시오.",
+  "statsAddItemsBody": "군대, 주문, 영웅, 애완동물 또는 장비를 추가한 다음 쿼리를 실행하십시오.",
+  "statsGlobalCounts": "전역 개수",
+  "statsPerformance": "성능",
+  "statsSamples": "샘플",
+  "statsUsage": "사용",
+  "statsAverageStars": "평균 별",
+  "statsAverageDestruction": "평균 파괴",
+  "statsStarRates": "별표",
+  "statsThreeStarRate": "별 3개 비율",
+  "statsDailyTrend": "일별 추세",
+  "statsPlayers": "플레이어",
+  "statsClans": "클랜",
+  "statsPlayersInWar": "전쟁 플레이어",
+  "statsClansInWar": "전쟁 중인 클랜",
+  "statsPlayersInLegends": "레전드 플레이어",
+  "statsWarsStored": "저장된 전쟁",
+  "statsJoinLeaves": "참여/탈퇴 이벤트",
+  "statsSearchArmies": "정확한 구성 검색",
+  "statsExactComposition": "정확한 구성",
+  "statsArmyShareCode": "육군 공유 코드",
+  "statsMinimumSample": "최소 샘플",
+  "statsSortBy": "정렬 기준",
+  "statsIncludeItems": "아이템 포함",
+  "statsExcludeItems": "아이템 제외",
+  "statsItemId": "아이템 ID 또는 저장된 이름",
+  "statsItemType": "아이템 유형",
+  "statsTroop": "부대",
+  "statsSpell": "주문",
+  "statsHero": "영웅",
+  "statsPet": "애완동물",
+  "statsEquipment": "장비",
+  "statsOwningHero": "소유 영웅",
+  "statsAddItem": "항목 추가",
+  "statsAnalyzeItems": "항목 분석",
+  "statsCompositionShare": "구성 공유",
+  "statsNoLevels": "군 기록에는 아이템 레벨이 포함되어 있지 않습니다.",
+  "statsRankedCompositionOnly": "구성 데이터는 순위가 매겨진 전투 로그에서 나옵니다. 전쟁과 CWL 성능은 별도로 유지됩니다.",
+  "statsTownHall": "시청",
+  "statsOpponentTownHall": "상대 시청",
+  "statsEqualTownHalls": "평등한 마을회관",
+  "statsLeagueTier": "리그 등급",
+  "statsLegendLeagueOne": "레전드 리그 1",
+  "statsCwlLeague": "CWL 리그",
+  "statsLeagueBronze": "브론즈",
+  "statsLeagueSilver": "실버",
+  "statsLeagueGold": "골드",
+  "statsLeagueCrystal": "크리스탈",
+  "statsLeagueMaster": "마스터",
+  "statsLeagueChampion": "챔피언",
+  "statsAllCwlLeagues": "모든 CWL 리그",
+  "statsCwlSeasons": "CWL 시즌",
+  "statsCwlSeasonsHint": "YYYY-MM, 쉼표로 구분",
+  "statsApplyFilters": "필터 적용",
+  "statsRefresh": "데이터 새로고침",
+  "statsRegularWarOnly": "일반 전쟁에만 해당됩니다. 우호전 및 CWL은 제외됩니다.",
+  "statsRankedRequired": "마을회관과 하나의 리그 등급이 필요합니다.",
+  "statsSeasonBreakdown": "시즌 분석",
   "sideTopScore": "최고 점수",
   "sideTop200Avg": "상위 200 평균",
   "sideBasesArmiesTitle": "기지 및 군대",
@@ -2535,6 +3087,51 @@
   "sideArmyLinksBody": "구성, 마법, 시즈, 메모, 공유 링크.",
   "sideGameAssetsTitle": "게임 에셋",
   "sideGameAssetsSubtitle": "폴더별로 묶인 호스팅 ClashKing 에셋.",
+  "gameAssetsLoadError": "게임 에셋을 불러오지 못했습니다",
+  "gameAssetsEmptyTitle": "사용 가능한 게임 에셋이 없습니다",
+  "gameAssetsEmptyBody": "호스팅된 매니페스트에 지원되는 이미지가 없습니다.",
+  "gameAssetsOneImage": "이미지 1개",
+  "gameAssetsImageCount": "이미지 {count}개",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "이 카테고리 검색",
+  "gameAssetsAllFormats": "모든 형식",
+  "gameAssetsOneResult": "결과 1개",
+  "gameAssetsResultCount": "{count} 결과",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "일치하는 이미지가 없습니다",
+  "gameAssetsNoResultsBody": "다른 검색어나 파일 형식을 사용해 보세요.",
+  "gameAssetsLongPressHint": "길게 눌러 호스팅 URL 복사",
+  "gameAssetsCopyUrl": "URL 복사",
+  "gameAssetsCopyPath": "경로 복사",
+  "gameAssetsUrlCopied": "에셋 URL을 복사했습니다",
+  "gameAssetsPathCopied": "에셋 경로를 복사했습니다",
+  "gameAssetsCopyError": "에셋 정보를 복사하지 못했습니다.",
+  "gameAssetsShare": "공유",
+  "gameAssetsShareError": "이 에셋을 공유하지 못했습니다.",
+  "gameAssetsSave": "저장",
+  "gameAssetsSaving": "저장 중...",
+  "gameAssetsSaved": "에셋을 저장했습니다.",
+  "gameAssetsSavedTo": "에셋을 {path}에 저장했습니다",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "이 에셋을 저장하지 못했습니다.",
   "sideZapQuakeTitle": "번개 {zaps}개 + 지진 1개",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3474,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Supercell 팬 콘텐츠 정책",
-  "notifAudienceSectionTitle": "알림 대상",
-  "notifScopeAllLinkedAccounts": "연결된 모든 계정",
-  "notifScopeSelectedAccounts": "선택한 계정",
-  "notifAudienceSheetDescription": "이 기기에서 알림을 받을 계정을 선택하세요.",
-  "notifAudienceAllSubtitle": "현재 계정 {count}개. 앞으로 연결되는 계정도 자동으로 포함됩니다.",
-  "notifAudienceSelectedSubtitle": "알림 대상으로 {count}개 선택됨.",
-  "notifAudienceSelectedEmpty": "알림을 받을 계정을 정확히 선택하세요.",
-  "notifAudienceAllInlineNote": "나중에 연결하는 계정도 이 설정을 바꾸지 않아도 포함됩니다.",
-  "notifAccountBookmarked": "저장됨",
-  "notifGroupLeagueBattles": "리그 전투",
-  "notifGroupWarAttacks": "클랜전 공격",
-  "notifGroupWarState": "클랜전 상태",
-  "notifGroupWarReminders": "클랜전 알림",
-  "notifGroupEvents": "이벤트",
-  "notifGroupAppAnnouncements": "앱 공지",
-  "notifGroupUpgradeFinishes": "업그레이드 완료",
-  "notifGroupMonthlySupport": "월간 지원",
-  "postsTitle": "소식",
-  "postsDescription": "ClashKing 소식, 업데이트 이야기 및 이전 공지입니다.",
-  "postsEmpty": "아직 게시된 소식이 없습니다.",
-  "postsLoadFailed": "소식을 불러오지 못했습니다.",
-  "postsLoadMore": "더 불러오기",
-  "postsCurrent": "현재",
-  "postsPast": "이전",
-  "postsStory": "인터랙티브 스토리",
-  "postsPinned": "추천",
-  "authAccountLinkDiscord": "Discord 계정 연결",
-  "authAccountAddDiscordAuth": "플랫폼 간 동기화와 ClashKing 봇 이용을 위해 계정에 Discord 인증을 추가하세요.",
-  "authAccountDiscordLinkedSuccess": "Discord 계정이 연결되었습니다!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "할 일 목록",
-  "faqFeaturesTodoDescription": "랭크 공격, 습격, 클랜전 공격, 클랜 게임 또는 패스 활동이 남은 계정을 확인하세요",
-  "faqFeaturesUpgradeTrackerTitle": "업그레이드 추적기",
-  "faqFeaturesUpgradeTrackerDescription": "사용자가 직접 제공한 계정 스냅샷으로 남은 업그레이드, 자원, 장인, 연구소 시간과 진행도를 확인하세요",
-  "faqFeaturesNotificationsTitle": "푸시 알림",
-  "faqFeaturesNotificationsDescription": "지원되는 ClashKing 이벤트 알림을 받을 계정을 선택하세요",
-  "faqFeaturesWidgetsTitle": "클랜전 위젯",
-  "faqFeaturesWidgetsDescription": "위젯을 지원하는 기기의 홈 화면에서 현재 클랜전 상태를 확인하세요",
-  "faqSectionAccountsAlertsWidgets": "계정, 알림 및 위젯",
-  "faqLinkedAccountsTitle": "연결된 계정과 인증은 어떻게 작동하나요?",
-  "faqLinkedAccountsAnswer": "ClashKing 프로필에는 여러 Clash of Clans 계정을 추가할 수 있습니다. 태그를 추가하면 공개 데이터가 표시됩니다. Clash of Clans API 토큰으로 인증하면 계정 소유권이 확인되고 계정별 기능이 잠금 해제됩니다.",
-  "faqLinkedAccountsSolution1": "계정 관리에서 계정을 관리하거나 순서를 바꾸고, 숨기거나 삭제할 수 있습니다.",
-  "faqLinkedAccountsSolution2": "Clash of Clans의 설정 > 추가 설정 > API 토큰에서 토큰을 찾을 수 있습니다.",
-  "faqLinkedAccountsSolution3": "Discord 또는 이메일로 로그인할 수 있습니다. 계정 연결 기능은 설정에서 관리하세요.",
-  "faqNotificationsTitle": "알림은 어떻게 작동하나요?",
-  "faqNotificationsAnswer": "알림은 선택 사항입니다. 알림을 켜면 ClashKing이 이 기기를 등록합니다. 각 알림을 받을 연결 계정을 선택할 수 있습니다.",
-  "faqNotificationsSolution1": "기기와 ClashKing 설정에서 알림을 허용하세요.",
-  "faqNotificationsSolution2": "알림마다 다른 계정을 지정할 수 있습니다. 알림이 오지 않으면 선택한 계정을 확인하세요.",
-  "faqNotificationsSolution3": "일부 알림은 추적 중인 클랜 또는 클랜전 데이터에 따라 달라집니다. 외부 데이터가 갱신되는 동안 지연될 수 있습니다.",
-  "faqWidgetsTitle": "클랜전 위젯은 어떻게 작동하나요?",
-  "faqWidgetsAnswer": "클랜전 위젯은 지원되는 기기에 간단한 요약을 표시합니다. 선택하거나 연결한 계정, 캐시된 ClashKing 데이터와 플랫폼이 허용하는 백그라운드 새로고침을 사용합니다.",
-  "faqWidgetsSolution1": "계정이나 클랜을 변경한 뒤 앱을 열어 위젯을 동기화하세요.",
-  "faqWidgetsSolution2": "위젯 정보가 오래되었다면 먼저 앱을 새로고침하세요. Android와 iOS는 백그라운드 업데이트를 제한합니다.",
-  "faqWidgetsSolution3": "유용한 상태를 표시하려면 클랜전 데이터에 접근할 수 있어야 합니다.",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "워든 가중치",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "워든 가중치는 인구수보다 우선할 수 있으며, 그랜드 워든이 유닛 무리를 따라가는 우선순위를 결정합니다.",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "힐러 가중치",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "힐러가 우선할 유닛을 결정할 때 힐러 가중치가 인구수보다 우선할 수 있습니다.",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{추종 기준에 필요한 유닛 1기} other{추종 기준에 필요한 유닛 {count}기}}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "추종 기준에 포함되지 않음",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "표시할 계정이 없습니다",
-  "dashboardTodoHiddenBody": "플레이어 탭에서 계정의 홈 카드 옵션(할 일, 업그레이드 추적기, 랭크)을 켜면 여기에 표시됩니다.",
-  "dashboardUpgradeTrackerNoData": "추적기를 열어 업그레이드 데이터를 가져오거나 새로고침하세요.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one{업데이트가 필요합니다} other{업데이트가 필요합니다}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one{할 일이 남았습니다} other{할 일이 남았습니다}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one{공격이 남았습니다} other{공격이 남았습니다}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "예상 완료",
-  "dashboardUpgradeTrackerBuilders": "장인",
-  "dashboardUpgradeTrackerLab": "연구소",
-  "dashboardUpgradeTrackerPets": "펫",
-  "dashboardUpgradeTrackerWalls": "장벽",
-  "dashboardUpgradeTrackerVillage": "마을",
-  "dashboardRankedNoData": "랭크 리그를 열어 이 계정의 순위를 확인하세요.",
-  "dashboardRankedAccounts": "추적 중인 계정 {loaded}/{total}개",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "하나의 공격 조합을 여러 건물과 비교하세요.",
-  "damageNoStaticDataTitle": "피해량 데이터를 사용할 수 없습니다",
-  "damageNoStaticDataBody": "정적 게임 데이터 로딩이 끝난 뒤 앱을 새로고침하세요.",
-  "damageTownHall": "마을회관",
-  "damageVerifiedAccountPrefill": "인증 계정 사전 설정",
-  "damageOverridesStayLocal": "여기에서 변경한 내용은 플레이어 계정에 반영되지 않습니다.",
-  "damageTargets": "건물",
-  "damageAddBuilding": "건물 추가",
-  "damageRemoveBuilding": "건물 삭제",
-  "damageNoTargetsBody": "결과를 비교하려면 건물을 하나 이상 추가하세요.",
-  "damageHitpoints": "{hitpoints} HP",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "건물 검색",
-  "damageNoBuildingsFound": "건물을 찾지 못했습니다",
-  "damageTryAnotherSearch": "다른 이름이나 마을회관 레벨을 입력해 보세요.",
-  "damageAttackStack": "수동 공격 조합",
-  "damageNoSourcesForTownHall": "이 마을회관에서 지원되는 피해원이 없습니다.",
-  "damageCount": "개수",
-  "damagePerUse": "사용당 피해량 {damage}",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "최대 HP의 {percent}%, 중첩할수록 감소",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "번개 마법",
-  "damageSourceEarthquake": "지진 마법",
-  "damageSourceGiantArrow": "자이언트 애로우",
-  "damageSourceFireball": "화구",
-  "damageSourceFlameFlinger": "플레임 플링어 명중",
-  "damageSourceBalloonDeath": "해골 비행선 파괴 피해",
-  "damageSourceRocketBalloonDeath": "로켓 비행선 파괴 피해",
-  "damageResults": "결과",
-  "damageDestroyed": "파괴됨",
-  "damageSurvives": "생존",
-  "damageResultSummary": "피해량 {damage} · 남은 HP {remaining}",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "번개·지진 최적화",
-  "damageSpellCapacity": "마법 수용량",
-  "damageZapQuakeUnavailable": "이 마을회관에서는 번개와 지진 마법을 사용할 수 없습니다.",
-  "damageZapQuakeUsesSelectedLevels": "번개 {lightningLevel}레벨과 지진 {earthquakeLevel}레벨을 사용합니다.",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "번개와 지진 마법은 이 저장소에 피해를 줄 수 없습니다.",
-  "damageNoValidZapQuake": "선택한 마법 수용량에 맞는 유효한 조합이 없습니다.",
-  "damageZapQuakeCombination": "번개 {lightning}개 + 지진 {earthquake}개 · 공간 {capacity}",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "할 일 페이지에 표시하려면 이 계정을 인증하세요.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "홈에 업그레이드 추적기 표시",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "이 계정의 업그레이드 요약을 홈에 고정합니다.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "홈에 업그레이드 진행도를 표시하려면 이 계정을 인증하세요.",
-  "playerOptionShowRankedHomeTitle": "홈에 랭크 표시",
-  "playerOptionShowRankedHomeSubtitle": "이 계정의 랭크 리그 요약을 홈에 고정합니다.",
-  "playerOptionShowRankedHomeVerifyFirst": "홈에 랭크 리그 요약을 표시하려면 이 계정을 인증하세요.",
-  "dashboardRankedCombinedAcrossAccounts": "계정 통합 순위",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "계정 통합 업그레이드 추적",
-  "rankingsHomeVillage": "본 마을",
-  "rankingsBuilderBase": "장인 기지",
-  "rankingsTownHall": "마을회관",
-  "rankingsRankedLeague": "랭크 리그",
-  "rankingsClanCapital": "클랜 수도",
-  "rankingsDonations": "지원",
-  "rankingsWarWins": "클랜전 승리",
-  "rankingsWinStreak": "연승",
-  "rankingsCurrent": "현재",
-  "rankingsWorldwide": "전 세계",
-  "rankingsSelectLocation": "지역 선택",
-  "rankingsSearchLocations": "지역 또는 국가 코드 검색",
-  "rankingsWorldwideUnavailable": "이 순위표에 사용할 지역이나 국가를 선택하세요.",
-  "rankingsLocationsLoadFailed": "전체 지역 목록을 불러오지 못했습니다. 지원되는 경우 전 세계 보기는 계속 사용할 수 있습니다.",
-  "rankingsSnapshotDate": "스냅샷 날짜",
-  "rankingsSource": "소스",
-  "rankingsOfficialSource": "공식 Clash API",
-  "rankingsResults": "순위 결과",
-  "rankingsTopCount": "상위 {count}위",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "저장된 스냅샷 없음",
-  "rankingsNoSnapshotBody": "{date}의 순위 스냅샷이 없습니다. 다른 날짜를 선택하거나 현재 보기로 돌아가세요.",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "플레이어를 불러오지 못했습니다.",
-  "rankingsClanLoadFailed": "클랜을 불러오지 못했습니다.",
-  "statsOverview": "개요",
-  "statsArmies": "군대",
-  "statsItems": "아이템",
-  "statsWar": "전쟁",
-  "statsCwl": "CWL",
-  "statsRanked": "랭크",
-  "statsDateRange": "날짜 범위",
-  "statsDateRangeHint": "최대 90일 선택",
-  "statsDateRangeTooLong": "90일 이하의 날짜 범위를 선택하세요.",
-  "statsUpdated": "새로운 데이터",
-  "statsNoDataTitle": "아직 전투 데이터가 없습니다.",
-  "statsNoDataBody": "더 넓은 날짜 범위 또는 덜 제한적인 필터를 사용해 보십시오.",
-  "statsAddItemsTitle": "분석할 항목을 선택하십시오.",
-  "statsAddItemsBody": "군대, 주문, 영웅, 애완동물 또는 장비를 추가한 다음 쿼리를 실행하십시오.",
-  "statsGlobalCounts": "전역 개수",
-  "statsPerformance": "성능",
-  "statsSamples": "샘플",
-  "statsUsage": "사용",
-  "statsAverageStars": "평균 별",
-  "statsAverageDestruction": "평균 파괴",
-  "statsStarRates": "별표",
-  "statsThreeStarRate": "별 3개 비율",
-  "statsDailyTrend": "일별 추세",
-  "statsPlayers": "플레이어",
-  "statsClans": "클랜",
-  "statsPlayersInWar": "전쟁 플레이어",
-  "statsClansInWar": "전쟁 중인 클랜",
-  "statsPlayersInLegends": "레전드 플레이어",
-  "statsWarsStored": "저장된 전쟁",
-  "statsJoinLeaves": "참여/탈퇴 이벤트",
-  "statsSearchArmies": "정확한 구성 검색",
-  "statsExactComposition": "정확한 구성",
-  "statsArmyShareCode": "육군 공유 코드",
-  "statsMinimumSample": "최소 샘플",
-  "statsSortBy": "정렬 기준",
-  "statsIncludeItems": "아이템 포함",
-  "statsExcludeItems": "아이템 제외",
-  "statsItemId": "아이템 ID 또는 저장된 이름",
-  "statsItemType": "아이템 유형",
-  "statsTroop": "부대",
-  "statsSpell": "주문",
-  "statsHero": "영웅",
-  "statsPet": "애완동물",
-  "statsEquipment": "장비",
-  "statsOwningHero": "소유 영웅",
-  "statsAddItem": "항목 추가",
-  "statsAnalyzeItems": "항목 분석",
-  "statsCompositionShare": "구성 공유",
-  "statsNoLevels": "군 기록에는 아이템 레벨이 포함되어 있지 않습니다.",
-  "statsRankedCompositionOnly": "구성 데이터는 순위가 매겨진 전투 로그에서 나옵니다. 전쟁과 CWL 성능은 별도로 유지됩니다.",
-  "statsTownHall": "시청",
-  "statsOpponentTownHall": "상대 시청",
-  "statsEqualTownHalls": "평등한 마을회관",
-  "statsLeagueTier": "리그 등급",
-  "statsLegendLeagueOne": "레전드 리그 1",
-  "statsCwlLeague": "CWL 리그",
-  "statsLeagueBronze": "브론즈",
-  "statsLeagueSilver": "실버",
-  "statsLeagueGold": "골드",
-  "statsLeagueCrystal": "크리스탈",
-  "statsLeagueMaster": "마스터",
-  "statsLeagueChampion": "챔피언",
-  "statsAllCwlLeagues": "모든 CWL 리그",
-  "statsCwlSeasons": "CWL 시즌",
-  "statsCwlSeasonsHint": "YYYY-MM, 쉼표로 구분",
-  "statsApplyFilters": "필터 적용",
-  "statsRefresh": "데이터 새로고침",
-  "statsRegularWarOnly": "일반 전쟁에만 해당됩니다. 우호전 및 CWL은 제외됩니다.",
-  "statsRankedRequired": "마을회관과 하나의 리그 등급이 필요합니다.",
-  "statsSeasonBreakdown": "시즌 분석",
-  "gameAssetsLoadError": "게임 에셋을 불러오지 못했습니다",
-  "gameAssetsEmptyTitle": "사용 가능한 게임 에셋이 없습니다",
-  "gameAssetsEmptyBody": "호스팅된 매니페스트에 지원되는 이미지가 없습니다.",
-  "gameAssetsOneImage": "이미지 1개",
-  "gameAssetsImageCount": "이미지 {count}개",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "이 카테고리 검색",
-  "gameAssetsAllFormats": "모든 형식",
-  "gameAssetsOneResult": "결과 1개",
-  "gameAssetsResultCount": "{count} 결과",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "일치하는 이미지가 없습니다",
-  "gameAssetsNoResultsBody": "다른 검색어나 파일 형식을 사용해 보세요.",
-  "gameAssetsLongPressHint": "길게 눌러 호스팅 URL 복사",
-  "gameAssetsCopyUrl": "URL 복사",
-  "gameAssetsCopyPath": "경로 복사",
-  "gameAssetsUrlCopied": "에셋 URL을 복사했습니다",
-  "gameAssetsPathCopied": "에셋 경로를 복사했습니다",
-  "gameAssetsCopyError": "에셋 정보를 복사하지 못했습니다.",
-  "gameAssetsShare": "공유",
-  "gameAssetsShareError": "이 에셋을 공유하지 못했습니다.",
-  "gameAssetsSave": "저장",
-  "gameAssetsSaving": "저장 중...",
-  "gameAssetsSaved": "에셋을 저장했습니다.",
-  "gameAssetsSavedTo": "에셋을 {path}에 저장했습니다",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "이 에셋을 저장하지 못했습니다.",
   "upgradeTrackerPlan": "계획",
   "upgradeTrackerUpgrades": "업그레이드",
   "upgradeTrackerCollection": "컬렉션",
@@ -3852,18 +3873,23 @@
   "rankedLeagueBattleDetailsUnavailable": "이 기간의 상세 전투 기록은 제공되지 않습니다.",
   "rankedLeagueHistoricalDetailsUnavailable": "이전 기간에는 공식 기간 요약만 제공됩니다.",
   "rankedLeagueStarBreakdownUnavailable": "API는 총 별 수만 제공하며 이 기간의 상세 별 분포는 제공하지 않습니다.",
+  "notifAudienceSectionTitle": "알림 대상",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "연결된 모든 계정",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "선택한 계정",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "이 기기에서 알림을 받을 계정을 선택하세요.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "현재 계정 {count}개. 앞으로 연결되는 계정도 자동으로 포함됩니다.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3898,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "알림 대상으로 {count}개 선택됨.",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,36 +3907,49 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "알림을 받을 계정을 정확히 선택하세요.",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "나중에 연결하는 계정도 이 설정을 바꾸지 않아도 포함됩니다.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "선택한 계정",
+  "notifAudienceAcrossDevicesDescription": "이 기기에서 알림을 받을 계정을 선택하세요.",
+  "notifAccountBookmarked": "저장됨",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "리그 전투",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "클랜전 공격",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "클랜전 상태",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "클랜전 알림",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "이벤트",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "앱 공지",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "업그레이드 완료",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "월간 지원",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
@@ -3949,25 +3989,56 @@
   "widgetPetBoostShort": "애완동물",
   "widgetClockBoostShort": "시계",
   "widgetBuilderCostPerk": "장인 비용 혜택 {percent}%",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "장인 시간 혜택 {percent}%",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "연구소 비용 혜택 {percent}%",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "연구소 시간 혜택 {percent}%",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "파밍 목표",
+  "farmGoalFormTitle": "파밍할 자원",
+  "farmGoalAccountTitle": "계정",
+  "farmGoalAccountHint": "선택한 계정의 마을회관과 현재 리그를 기준으로 예상합니다.",
+  "farmGoalTargetTitle": "업그레이드할 건물",
+  "farmGoalTargetBuildingLabel": "건물",
+  "farmGoalChooseBuilding": "건물 선택",
   "farmGoalChangeBuilding": "건물 변경",
   "farmGoalNoTargetTitle": "선택한 건물 없음",
   "farmGoalNoTargetBody": "필요한 자원 파밍을 계산하려면 업그레이드할 건물을 선택하세요.",
+  "farmGoalTargetLevelLabel": "목표 레벨",
+  "farmGoalUpgradeCostLabel": "업그레이드 비용",
+  "farmGoalCostUnavailable": "이 레벨의 업그레이드 비용을 확인할 수 없습니다.",
+  "farmGoalLootTitle": "예상 전리품",
+  "farmGoalResourceLabel": "자원",
+  "farmGoalAmountLabel": "파밍할 양",
   "farmGoalAverageLootLabel": "마을에서 획득 가능한 전리품",
   "farmGoalPerfectLootHint": "공격 전에 표시되는 전리품을 입력하세요. 아래의 리그 보너스는 자동으로 추가됩니다.",
   "farmGoalLeagueEstimate": "{league} 리그 보너스: {amount} {resource}. 공격 횟수 계산에 포함됩니다.",
-  "farmGoalTrackerNextTitle": "업그레이드 추적기 계획의 다음 항목",
-  "farmGoalTrackerMissingTitle": "업그레이드 추적기 데이터 필요",
-  "farmGoalTrackerMissingBody": "다음 계획 건물과 정확한 비용을 여기에 표시하려면 이 계정의 업그레이드 JSON을 업그레이드 추적기로 가져오세요.",
-  "farmGoalTrackerPlanComplete": "업그레이드 추적기에 남은 건물 업그레이드가 없습니다. 건물을 직접 선택할 수도 있습니다.",
-  "farmGoalOpenUpgradeTracker": "업그레이드 추적기 열기",
-  "farmGoalUseTrackerTarget": "건물 사용",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,118 +4052,6 @@
       }
     }
   },
-  "gameTHLevel": "마을회관 {level}",
-  "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameCreatorCode": "크리에이터 코드: ClashKing",
-  "clanWarFrequencyTitle": "전쟁",
-  "notifScopeAllAccounts": "모든 계정",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
-  },
-  "notifSelectedAccounts": "선택한 계정",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
-  "searchFilters": "필터",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
-  },
-  "searchCancel": "취소",
-  "assetFolderTroops": "유닛",
-  "assetFolderSpells": "마법",
-  "assetFolderHeroes": "영웅",
-  "endpointStateWins": "승리",
-  "notifGroupBattles": "전투",
-  "notifGroupSupport": "후원",
-  "gameAssetsCategoryHeroes": "영웅",
-  "gameAssetsCategoryTroops": "유닛",
-  "gameAssetsCategoryPets": "펫",
-  "gameAssetsCategorySpells": "마법",
-  "rankedLeagueStars": "별",
-  "farmGoalUpgradeCostLabel": "업그레이드 비용",
-  "farmGoalAccountTitle": "계정",
-  "damageAccountPresetShort": "계정",
-  "damageClearStack": "분명한",
-  "todoMockRaid1Left": "1개 남음",
-  "farmGoalResourceLabel": "자원",
-  "gameAssetsCategoryEquipment": "장비",
-  "notifChooseAccountsManually": "선택한 계정",
-  "notifAudienceAcrossDevicesDescription": "이 기기에서 알림을 받을 계정을 선택하세요.",
-  "damageNoTargetTitle": "선택한 건물 없음",
-  "farmGoalMissingTarget": "필요한 공격 횟수를 계산하려면 건물과 목표 레벨을 선택하세요.",
-  "farmGoalResultTitle": "필요한 공격 횟수",
-  "farmGoalResultSummary": "완파 공격당 약 {average}을 획득할 때 {target} {resource}.",
-  "@farmGoalResultSummary": {
-    "placeholders": {
-      "target": {
-        "type": "String"
-      },
-      "resource": {
-        "type": "String"
-      },
-      "average": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalMissingValues": "공격 시나리오를 보려면 목표와 완파 공격의 예상 전리품을 입력하세요.",
-  "settingsLiveActivityStart": "테스트 활동 시작",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "todoExplanationRaidsTitle": "습격:",
-  "settingsLiveActivityUpdate": "점수 업데이트",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityEndSubtitle": "로컬 미리보기를 제거합니다.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "테스트 활동 종료",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "todoExplanationRaids": "계정당 5점 가중치(마지막 공격이 해제된 경우 6점), 공격 1회 = 1점.",
-  "settingsLiveActivityTest": "실시간 활동 테스트",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStartSubtitle": "지역 클랜 전쟁 미리보기를 표시합니다.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdateSubtitle": "가짜 전쟁 점수를 향상시킵니다.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "todoMockWarAltStatus": "18분 전 활성 · 전쟁 및 습격에 주의가 필요함",
-  "todoRaidAttacks": "습격 공격",
-  "todoMockRaid4Left": "4개 남음",
-  "playerOptionNotificationsEnableMaster": "먼저 설정에서 알림을 켜세요.",
-  "playerOptionNotificationsVerifyFirst": "알림을 사용하려면 이 계정을 인증하세요.",
-  "playerOptionNotificationsSubscriptionRequired": "북마크 알림을 사용하려면 구독이 필요합니다.",
-  "playerOptionNotificationsLimitReached": "북마크 알림 한도에 도달했습니다.",
-  "notifGroupLegendAttacks": "전설 I 공격",
-  "notifLegendAttacksDescription": "전설 I에서 알림이 활성화된 북마크 계정의 공격 결과입니다.",
-  "notifGroupLegendDefenses": "전설 I 방어",
-  "notifLegendDefensesDescription": "전설 I에서 알림이 활성화된 계정의 방어 결과입니다.",
-  "farmGoalTitle": "파밍 목표",
-  "farmGoalFormTitle": "파밍할 자원",
-  "farmGoalAccountHint": "선택한 계정의 마을회관과 현재 리그를 기준으로 예상합니다.",
-  "farmGoalTargetTitle": "업그레이드할 건물",
-  "farmGoalTargetBuildingLabel": "건물",
-  "farmGoalChooseBuilding": "건물 선택",
-  "farmGoalTargetLevelLabel": "목표 레벨",
-  "farmGoalCostUnavailable": "이 레벨의 업그레이드 비용을 확인할 수 없습니다.",
-  "farmGoalLootTitle": "예상 전리품",
-  "farmGoalAmountLabel": "파밍할 양",
   "farmGoalStarBonusEstimate": "별 보너스: 별 5개 획득 후 {amount} {resource}. 필요한 공격 횟수에는 포함되지 않습니다.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
@@ -4116,7 +4075,82 @@
   "farmGoalAttackShort": "공격",
   "farmGoalScenarioHint": "예상치: 전리품은 파괴한 건물에 따라 달라집니다. 백분율은 완벽한 공격 예상치에 적용됩니다.",
   "farmGoalNoLeagueLoot": "전리품 추천을 받으려면 리그가 있는 계정을 선택하세요.",
+  "farmGoalTrackerNextTitle": "업그레이드 추적기 계획의 다음 항목",
+  "farmGoalTrackerMissingTitle": "업그레이드 추적기 데이터 필요",
+  "farmGoalTrackerMissingBody": "다음 계획 건물과 정확한 비용을 여기에 표시하려면 이 계정의 업그레이드 JSON을 업그레이드 추적기로 가져오세요.",
+  "farmGoalTrackerPlanComplete": "업그레이드 추적기에 남은 건물 업그레이드가 없습니다. 건물을 직접 선택할 수도 있습니다.",
+  "farmGoalOpenUpgradeTracker": "업그레이드 추적기 열기",
+  "farmGoalUseTrackerTarget": "건물 사용",
+  "farmGoalMissingTarget": "필요한 공격 횟수를 계산하려면 건물과 목표 레벨을 선택하세요.",
+  "farmGoalMissingValues": "공격 시나리오를 보려면 목표와 완파 공격의 예상 전리품을 입력하세요.",
+  "farmGoalResultTitle": "필요한 공격 횟수",
   "farmGoalAttacks": "공격",
+  "farmGoalResultSummary": "완파 공격당 약 {average}을 획득할 때 {target} {resource}.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "마을회관 {level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "크리에이터 코드: ClashKing",
+  "todoExplanationRaidsTitle": "습격:",
+  "todoExplanationRaids": "계정당 5점 가중치(마지막 공격이 해제된 경우 6점), 공격 1회 = 1점.",
+  "clanWarFrequencyTitle": "전쟁",
+  "notifScopeAllAccounts": "모든 계정",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "settingsLiveActivityTest": "실시간 활동 테스트",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "테스트 활동 시작",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "settingsLiveActivityStartSubtitle": "지역 클랜 전쟁 미리보기를 표시합니다.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "점수 업데이트",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityUpdateSubtitle": "가짜 전쟁 점수를 향상시킵니다.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "테스트 활동 종료",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityEndSubtitle": "로컬 미리보기를 제거합니다.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "notifSelectedAccounts": "선택한 계정",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "필터",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "dashboardUpgradeTrackerAccounts": "{loaded}/{total}개 계정 추적 중",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
@@ -4131,12 +4165,14 @@
   "calculatorsModeDamage": "피해량",
   "calculatorsModeFarmGoal": "파밍 목표",
   "damageCalculatorTitle": "피해량 계산기",
+  "damageAccountPresetShort": "계정",
   "damageChooseAccount": "계정 선택",
   "damageSwitchAccount": "계정 전환",
   "damageAccountSelectorHint": "사용되는 레벨은 선택한 계정을 따릅니다.",
   "damageNoAccountsAvailable": "사용 가능한 인증 계정 없음",
   "damageTargetSectionTitle": "파괴할 건물",
   "damageChooseTarget": "건물 선택",
+  "damageNoTargetTitle": "선택한 건물 없음",
   "damageNoTargetBody": "건물을 선택하면 견딜 수 있는 피해량을 확인할 수 있습니다.",
   "damageTargetLevelLabel": "목표 레벨",
   "damageCommonBuildings": "가장 많이 선택됨",
@@ -4147,6 +4183,7 @@
   "damageQuickSetupGiantArrow": "자이언트 애로우",
   "damageQuickSetupFlameFlinger": "플레임 플링거",
   "damageQuickSetupCustom": "사용자 지정",
+  "damageClearStack": "분명한",
   "damageNoDamageSelected": "피해 없음",
   "damageSelectedSourcesCount": "피해원 {count}개",
   "@damageSelectedSourcesCount": {
@@ -4160,6 +4197,11 @@
   "damageOtherSources": "기타 피해원",
   "damageShowAllSources": "다른 피해원 추가",
   "damageShowFewerSources": "기타 피해원 숨기기",
+  "searchCancel": "취소",
+  "todoRaidAttacks": "습격 공격",
+  "todoMockRaid4Left": "4개 남음",
+  "todoMockWarAltStatus": "18분 전 활성 · 전쟁 및 습격에 주의가 필요함",
+  "todoMockRaid1Left": "1개 남음",
   "gameAssetsCategoryBuildings": "건물",
   "gameAssetsCategoryCapitalBase": "캐피탈 기지",
   "gameAssetsCategoryCapitalHouseParts": "캐피탈 하우스 부품",
@@ -4167,7 +4209,19 @@
   "gameAssetsCategoryClanLabels": "클랜 라벨",
   "gameAssetsCategoryCountryFlags": "국기",
   "gameAssetsCategoryDecorations": "장식품",
+  "gameAssetsCategoryEquipment": "장비",
   "gameAssetsCategoryGuardians": "가디언",
+  "gameAssetsCategoryHeroes": "영웅",
+  "gameAssetsCategoryPets": "펫",
   "gameAssetsCategorySkins": "스킨",
-  "rankedLeagueAccountSelector": "표시된 계정"
+  "gameAssetsCategorySpells": "마법",
+  "gameAssetsCategoryTroops": "유닛",
+  "assetFolderTroops": "유닛",
+  "assetFolderSpells": "마법",
+  "assetFolderHeroes": "영웅",
+  "endpointStateWins": "승리",
+  "notifGroupBattles": "전투",
+  "notifGroupSupport": "후원",
+  "rankedLeagueAccountSelector": "표시된 계정",
+  "rankedLeagueStars": "별"
 }
