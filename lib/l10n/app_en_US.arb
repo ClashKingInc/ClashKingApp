@@ -504,7 +504,7 @@
   "clanMembersSearchPlaceholder": "Search members",
   "clanMembersShowTotals": "Show clan totals",
   "clanMembersHideTotals": "Hide clan totals",
-  "clanMembersReceivedShort": "Received",
+  "clanMembersReceivedShort": "Donations Received",
   "clanMembersAverageTh": "Avg TH",
   "clanMinimumMembers": "Minimum members",
   "clanMaximumMembers": "Maximum members",
@@ -1342,7 +1342,7 @@
   "playerWarStarsTitle": "War stars",
   "playerWarPreferenceTitle": "War pref.",
   "playerDonatedTitle": "Donated",
-  "playerReceivedTitle": "Received",
+  "playerReceivedTitle": "Donations Received",
   "playerCapitalTitle": "Capital",
   "playerExpLevelTitle": "Exp. level",
   "clanWarWinsTitle": "War wins",
@@ -3915,8 +3915,8 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Choose accounts manually",
-  "notifAudienceAcrossDevicesDescription": "These account choices apply across all of your devices.",
+  "notifChooseAccountsManually": "Selected accounts",
+  "notifAudienceAcrossDevicesDescription": "Choose which accounts can receive notifications on this device.",
   "notifAccountBookmarked": "Bookmarked",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
