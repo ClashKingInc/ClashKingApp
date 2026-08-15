@@ -47,7 +47,7 @@ If `CK_SENTRY_DSN` is empty, the built-in Better Stack DSN is used.
 | Define | Default | Notes |
 |--------|---------|-------|
 | `CK_SENTRY_DSN` | built-in Better Stack DSN | Optional override for local/staging/rotation. |
-| `CK_API_ENV` | `prod` | Also drives the Better Stack environment: `prod`/`production` -> `production`, `stage`/`staging` -> `staging`, `local`/`dev`/`development` -> `development`. |
+| `CK_API_ENV` | `prod` | Also drives the Better Stack environment: `production` -> `production`, `staging` -> `staging`, and `local`/`development` -> `development`. |
 | `CK_SENTRY_TRACES_SAMPLE_RATE_PERCENT` | `0` | Use a low value in production, for example `1` to `5`. |
 | `CK_SENTRY_REPLAY_SESSION_SAMPLE_RATE_PERCENT` | `0` | Keep disabled for Better Stack; debug symbols/replay support is not equivalent to Sentry. |
 | `CK_SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE_PERCENT` | `0` | Keep disabled unless we intentionally test replay support. |
