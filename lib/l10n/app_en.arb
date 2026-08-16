@@ -2786,6 +2786,8 @@
   "notifWarAttackOptionsDescription": "War attack results, defense alerts, and 5v5 attack feed options.",
   "notifWarAlertsDescription": "War matched, battle day started, and war ended.",
   "notifWarRemindersDescription": "Custom reminders before war ends.",
+  "notifGroupRaidReminders": "Raid Weekend reminders",
+  "notifRaidRemindersDescription": "Get one alert for attacks remaining across your verified accounts in the same clan.",
   "notifDefensesAgainstYourBase": "Defenses against your base",
   "notifDefensesAgainstYourBaseDescription": "Only hits where this account is defending.",
   "notifAllAttacks": "All attacks",

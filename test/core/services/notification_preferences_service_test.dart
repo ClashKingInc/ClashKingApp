@@ -14,18 +14,17 @@ void main() {
     'deviceId': 'device-1',
     'environment': 'sandbox',
     'notificationsEnabled': true,
-    'legendAttacksEnabled': true,
-    'legendDefensesEnabled': false,
     'warAttacksEnabled': false,
     'warStateEnabled': true,
     'warRemindersEnabled': true,
+    'raidRemindersEnabled': true,
     'eventsEnabled': true,
     'announcementsEnabled': false,
     'monthlySupportEnabled': false,
     'reminderTimings': [15, 30, 60],
+    'raidReminderTimings': [60, 180],
     'accounts': [
       {'playerTag': '#VERIFIED', 'source': 'verified', 'active': true},
-      {'playerTag': '#BOOKMARK', 'source': 'bookmarked', 'active': false},
     ],
   };
 
@@ -53,7 +52,6 @@ void main() {
       expect(settings.reminderTimings, [15, 30, 60]);
       expect(settings.accounts.map((account) => account.source), [
         NotificationAccountSource.verified,
-        NotificationAccountSource.bookmarked,
       ]);
       final preferences = await SharedPreferences.getInstance();
       expect(
@@ -79,8 +77,6 @@ void main() {
     final settings = NotificationPreferences.fromJson({
       ...responseBody,
       'notificationsEnabled': true,
-      'legendAttacksEnabled': true,
-      'legendDefensesEnabled': false,
     });
 
     await service.save(settings);
@@ -89,8 +85,6 @@ void main() {
       'deviceId': 'device-1',
       'environment': 'sandbox',
       'notificationsEnabled': true,
-      'legendAttacksEnabled': true,
-      'legendDefensesEnabled': false,
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,
@@ -164,8 +158,6 @@ void main() {
       'deviceId': 'device-1',
       'environment': 'sandbox',
       'notificationsEnabled': true,
-      'legendAttacksEnabled': true,
-      'legendDefensesEnabled': false,
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,
@@ -183,21 +175,21 @@ void main() {
 
   test('account toggle uses the dedicated per-player endpoint', () async {
     final api = FakeApiService();
-    const endpoint = '/notifications/accounts/%23BOOKMARK';
+    const endpoint = '/notifications/accounts/%23VERIFIED';
     api.putStubs[endpoint] = http.Response(
       jsonEncode({
-        'playerTag': '#BOOKMARK',
-        'source': 'bookmarked',
+        'playerTag': '#VERIFIED',
+        'source': 'verified',
         'active': true,
       }),
       200,
     );
     final service = NotificationPreferencesService(apiService: api);
 
-    final account = await service.setAccountEnabled('#BOOKMARK', true);
+    final account = await service.setAccountEnabled('#VERIFIED', true);
 
     expect(account.active, isTrue);
-    expect(account.source, NotificationAccountSource.bookmarked);
+    expect(account.source, NotificationAccountSource.verified);
     expect(api.lastPutBodies[endpoint], {'enabled': true});
   });
 

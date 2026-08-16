@@ -1,21 +1,18 @@
 enum NotificationCategory {
-  legendAttacks,
-  legendDefenses,
   warAttacks,
   warState,
   warReminders,
+  raidReminders,
   events,
   announcements,
   monthlySupport,
 }
 
 enum NotificationAccountSource {
-  verified,
-  bookmarked;
+  verified;
 
   static NotificationAccountSource fromWire(String value) => switch (value) {
     'verified' => NotificationAccountSource.verified,
-    'bookmarked' => NotificationAccountSource.bookmarked,
     _ => throw FormatException('Unsupported notification account source'),
   };
 }
@@ -51,30 +48,30 @@ class NotificationPreferences {
     this.deviceId = '',
     this.environment = 'production',
     this.notificationsEnabled = false,
-    this.legendAttacks = false,
-    this.legendDefenses = false,
     this.warAttacks = false,
     this.warState = false,
     this.warReminders = false,
+    this.raidReminders = false,
     this.events = false,
     this.announcements = false,
     this.monthlySupport = false,
     this.reminderTimings = const [],
+    this.raidReminderTimings = const [],
     this.accounts = const [],
   });
 
   final String deviceId;
   final String environment;
   final bool notificationsEnabled;
-  final bool legendAttacks;
-  final bool legendDefenses;
   final bool warAttacks;
   final bool warState;
   final bool warReminders;
+  final bool raidReminders;
   final bool events;
   final bool announcements;
   final bool monthlySupport;
   final List<int> reminderTimings;
+  final List<int> raidReminderTimings;
   final List<NotificationAccount> accounts;
 
   factory NotificationPreferences.fromJson(Map<String, dynamic> json) {
@@ -89,10 +86,12 @@ class NotificationPreferences {
     final deviceId = json['deviceId'];
     final environment = json['environment'];
     final reminderTimings = json['reminderTimings'];
+    final raidReminderTimings = json['raidReminderTimings'];
     final accounts = json['accounts'];
     if (deviceId is! String ||
         environment is! String ||
         reminderTimings is! List ||
+        raidReminderTimings is! List ||
         accounts is! List) {
       throw const FormatException('Invalid notification preferences');
     }
@@ -118,20 +117,35 @@ class NotificationPreferences {
           return NotificationAccount.fromJson(Map<String, dynamic>.from(value));
         })
         .toList(growable: false);
+    final raidMinutes = raidReminderTimings
+        .map((value) {
+          if (value is! num || value.toInt() != value) {
+            throw const FormatException('Invalid Raid Weekend reminder timing');
+          }
+          return value.toInt();
+        })
+        .toList(growable: false);
+    if (raidMinutes.length > 3 ||
+        raidMinutes.any(
+          (value) => value < 1 || value > 4320 || value % 15 != 0,
+        ) ||
+        raidMinutes.toSet().length != raidMinutes.length) {
+      throw const FormatException('Invalid Raid Weekend reminder timings');
+    }
 
     return NotificationPreferences(
       deviceId: deviceId,
       environment: environment,
       notificationsEnabled: readBool('notificationsEnabled'),
-      legendAttacks: readBool('legendAttacksEnabled'),
-      legendDefenses: readBool('legendDefensesEnabled'),
       warAttacks: readBool('warAttacksEnabled'),
       warState: readBool('warStateEnabled'),
       warReminders: readBool('warRemindersEnabled'),
+      raidReminders: readBool('raidRemindersEnabled'),
       events: readBool('eventsEnabled'),
       announcements: readBool('announcementsEnabled'),
       monthlySupport: readBool('monthlySupportEnabled'),
       reminderTimings: minutes,
+      raidReminderTimings: raidMinutes,
       accounts: parsedAccounts,
     );
   }
@@ -144,15 +158,15 @@ class NotificationPreferences {
       'deviceId': deviceId,
       'environment': environment,
       'notificationsEnabled': notificationsEnabled,
-      'legendAttacksEnabled': legendAttacks,
-      'legendDefensesEnabled': legendDefenses,
       'warAttacksEnabled': warAttacks,
       'warStateEnabled': warState,
       'warRemindersEnabled': warReminders,
+      'raidRemindersEnabled': raidReminders,
       'eventsEnabled': events,
       'announcementsEnabled': announcements,
       'monthlySupportEnabled': monthlySupport,
       'reminderTimings': reminderTimings,
+      'raidReminderTimings': raidReminderTimings,
     };
   }
 
@@ -172,11 +186,10 @@ class NotificationPreferences {
   }
 
   bool enabled(NotificationCategory category) => switch (category) {
-    NotificationCategory.legendAttacks => legendAttacks,
-    NotificationCategory.legendDefenses => legendDefenses,
     NotificationCategory.warAttacks => warAttacks,
     NotificationCategory.warState => warState,
     NotificationCategory.warReminders => warReminders,
+    NotificationCategory.raidReminders => raidReminders,
     NotificationCategory.events => events,
     NotificationCategory.announcements => announcements,
     NotificationCategory.monthlySupport => monthlySupport,
@@ -186,11 +199,10 @@ class NotificationPreferences {
     NotificationCategory category,
     bool enabled,
   ) => switch (category) {
-    NotificationCategory.legendAttacks => copyWith(legendAttacks: enabled),
-    NotificationCategory.legendDefenses => copyWith(legendDefenses: enabled),
     NotificationCategory.warAttacks => copyWith(warAttacks: enabled),
     NotificationCategory.warState => copyWith(warState: enabled),
     NotificationCategory.warReminders => copyWith(warReminders: enabled),
+    NotificationCategory.raidReminders => copyWith(raidReminders: enabled),
     NotificationCategory.events => copyWith(events: enabled),
     NotificationCategory.announcements => copyWith(announcements: enabled),
     NotificationCategory.monthlySupport => copyWith(monthlySupport: enabled),
@@ -200,30 +212,30 @@ class NotificationPreferences {
     String? deviceId,
     String? environment,
     bool? notificationsEnabled,
-    bool? legendAttacks,
-    bool? legendDefenses,
     bool? warAttacks,
     bool? warState,
     bool? warReminders,
+    bool? raidReminders,
     bool? events,
     bool? announcements,
     bool? monthlySupport,
     List<int>? reminderTimings,
+    List<int>? raidReminderTimings,
     List<NotificationAccount>? accounts,
   }) {
     return NotificationPreferences(
       deviceId: deviceId ?? this.deviceId,
       environment: environment ?? this.environment,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
-      legendAttacks: legendAttacks ?? this.legendAttacks,
-      legendDefenses: legendDefenses ?? this.legendDefenses,
       warAttacks: warAttacks ?? this.warAttacks,
       warState: warState ?? this.warState,
       warReminders: warReminders ?? this.warReminders,
+      raidReminders: raidReminders ?? this.raidReminders,
       events: events ?? this.events,
       announcements: announcements ?? this.announcements,
       monthlySupport: monthlySupport ?? this.monthlySupport,
       reminderTimings: reminderTimings ?? this.reminderTimings,
+      raidReminderTimings: raidReminderTimings ?? this.raidReminderTimings,
       accounts: accounts ?? this.accounts,
     );
   }

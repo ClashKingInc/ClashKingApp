@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/services/observability_service.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repository.dart';
@@ -466,6 +467,19 @@ class CocAccountService extends ChangeNotifier {
       DebugUtils.debugApi("Startup phase: fetch CoC accounts");
       await fetchCocAccounts();
       spanFetchAccounts.finish();
+      unawaited(
+        NotificationPreferencesService()
+            .refreshVerifiedPlayerTracking(
+              verifiedAccounts.map(
+                (account) => account['player_tag']?.toString() ?? '',
+              ),
+            )
+            .catchError((Object error) {
+              DebugUtils.debugWarning(
+                'Could not refresh verified player tracking: $error',
+              );
+            }),
+      );
 
       if (cocAccounts.isEmpty) {
         transaction.finish(status: SpanStatus.ok());
@@ -850,6 +864,19 @@ class CocAccountService extends ChangeNotifier {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         updateAccountVerificationStatus(playerTag, true);
+        unawaited(
+          NotificationPreferencesService()
+              .refreshVerifiedPlayerTracking(
+                verifiedAccounts.map(
+                  (account) => account['player_tag']?.toString() ?? '',
+                ),
+              )
+              .catchError((Object error) {
+                DebugUtils.debugWarning(
+                  'Could not refresh verified player tracking: $error',
+                );
+              }),
+        );
         return true;
       } else if (response.statusCode == 403) {
         updateErrorMessage("Invalid API token for this account");

@@ -160,6 +160,11 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     await _save(_settings.copyWith(reminderTimings: normalized));
   }
 
+  Future<void> _setRaidReminderTimings(Set<int> values) async {
+    final normalized = values.toList()..sort((a, b) => b.compareTo(a));
+    await _save(_settings.copyWith(raidReminderTimings: normalized));
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -198,22 +203,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     title: AppLocalizations.of(context)!.notifChooseAlerts,
                     children: [
                       _categoryRow(
-                        NotificationCategory.legendAttacks,
-                        LucideIcons.swords,
-                        AppLocalizations.of(context)!.notifGroupLegendAttacks,
-                        AppLocalizations.of(
-                          context,
-                        )!.notifLegendAttacksDescription,
-                      ),
-                      _categoryRow(
-                        NotificationCategory.legendDefenses,
-                        LucideIcons.shield,
-                        AppLocalizations.of(context)!.notifGroupLegendDefenses,
-                        AppLocalizations.of(
-                          context,
-                        )!.notifLegendDefensesDescription,
-                      ),
-                      _categoryRow(
                         NotificationCategory.warAttacks,
                         LucideIcons.swords,
                         AppLocalizations.of(context)!.notifGroupWarAttacks,
@@ -227,7 +216,14 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         AppLocalizations.of(context)!.notifGroupWarState,
                         AppLocalizations.of(context)!.notifWarAlertsDescription,
                       ),
-                      _WarReminderRow(
+                      _ReminderRow(
+                        title: AppLocalizations.of(
+                          context,
+                        )!.notifGroupWarReminders,
+                        description: AppLocalizations.of(
+                          context,
+                        )!.notifWarRemindersDescription,
+                        icon: Icons.alarm_rounded,
                         enabled: _settings.warReminders,
                         selectedTimings: _settings.reminderTimings.toSet(),
                         onEnabledChanged: (enabled) => _setCategory(
@@ -235,6 +231,22 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                           enabled,
                         ),
                         onTimingsChanged: _setReminderTimings,
+                      ),
+                      _ReminderRow(
+                        title: AppLocalizations.of(
+                          context,
+                        )!.notifGroupRaidReminders,
+                        description: AppLocalizations.of(
+                          context,
+                        )!.notifRaidRemindersDescription,
+                        icon: Icons.fort_rounded,
+                        enabled: _settings.raidReminders,
+                        selectedTimings: _settings.raidReminderTimings.toSet(),
+                        onEnabledChanged: (enabled) => _setCategory(
+                          NotificationCategory.raidReminders,
+                          enabled,
+                        ),
+                        onTimingsChanged: _setRaidReminderTimings,
                       ),
                       _categoryRow(
                         NotificationCategory.events,
@@ -515,24 +527,30 @@ class _NotificationToggleRow extends StatelessWidget {
   }
 }
 
-class _WarReminderRow extends StatefulWidget {
-  const _WarReminderRow({
+class _ReminderRow extends StatefulWidget {
+  const _ReminderRow({
+    required this.title,
+    required this.description,
+    required this.icon,
     required this.enabled,
     required this.selectedTimings,
     required this.onEnabledChanged,
     required this.onTimingsChanged,
   });
 
+  final String title;
+  final String description;
+  final IconData icon;
   final bool enabled;
   final Set<int> selectedTimings;
   final ValueChanged<bool> onEnabledChanged;
   final ValueChanged<Set<int>> onTimingsChanged;
 
   @override
-  State<_WarReminderRow> createState() => _WarReminderRowState();
+  State<_ReminderRow> createState() => _ReminderRowState();
 }
 
-class _WarReminderRowState extends State<_WarReminderRow> {
+class _ReminderRowState extends State<_ReminderRow> {
   var _expanded = false;
 
   @override
@@ -547,26 +565,21 @@ class _WarReminderRowState extends State<_WarReminderRow> {
             padding: const EdgeInsets.fromLTRB(14, 10, 10, 10),
             child: Row(
               children: [
-                const SizedBox(
-                  width: 30,
-                  child: Icon(LucideIcons.alarmClock, size: 22),
-                ),
+                const SizedBox(width: 30, child: Icon(widget.icon, size: 22)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.notifGroupWarReminders,
+                        widget.title,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.notifWarRemindersDescription,
+                        widget.description,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),

@@ -127,26 +127,6 @@ class _PlayersPageState extends State<PlayersPage> {
     return l10n.playerOptionNotificationsSubtitle;
   }
 
-  String _bookmarkNotificationSubtitle(
-    BuildContext context, {
-    required bool enabled,
-    required int activeCount,
-  }) {
-    final l10n = AppLocalizations.of(context)!;
-    if (_notificationPreferences?.notificationsEnabled != true) {
-      return l10n.playerOptionNotificationsEnableMaster;
-    }
-    if (!_subscriptionStatus.active ||
-        _subscriptionStatus.bookmarkNotificationsLimit <= 0) {
-      return l10n.playerOptionNotificationsSubscriptionRequired;
-    }
-    if (!enabled &&
-        activeCount >= _subscriptionStatus.bookmarkNotificationsLimit) {
-      return l10n.playerOptionNotificationsLimitReached;
-    }
-    return l10n.playerOptionNotificationsSubtitle;
-  }
-
   @override
   Widget build(BuildContext context) {
     final playerService = context.watch<PlayerService>();
@@ -241,24 +221,6 @@ class _PlayersPageState extends State<PlayersPage> {
       }
 
       final bookmark = bookmarkedPlayers[index];
-      final notificationAccount = _notificationAccount(bookmark.tag);
-      final activeBookmarkCount =
-          _notificationPreferences?.accounts
-              .where(
-                (account) =>
-                    account.source == NotificationAccountSource.bookmarked &&
-                    account.active,
-              )
-              .length ??
-          0;
-      final bookmarkEnabled = notificationAccount?.active == true;
-      final bookmarkNotificationsAvailable =
-          _notificationPreferences?.notificationsEnabled == true &&
-          _subscriptionStatus.active &&
-          _subscriptionStatus.bookmarkNotificationsLimit > 0 &&
-          (bookmarkEnabled ||
-              activeBookmarkCount <
-                  _subscriptionStatus.bookmarkNotificationsLimit);
       final hydratedPlayer = profilesByTag[_normalizeTag(bookmark.tag)];
       if (hydratedPlayer != null) {
         return _PlayerDataCard(
@@ -267,18 +229,11 @@ class _PlayersPageState extends State<PlayersPage> {
           statusIcon: Icons.bookmark_rounded,
           statusColor: Theme.of(context).colorScheme.onSurfaceVariant,
           bookmarked: true,
-          notificationEnabled: bookmarkEnabled,
-          notificationAvailable: bookmarkNotificationsAvailable,
-          notificationUpdating: _updatingNotificationTags.contains(
-            _normalizeTag(bookmark.tag),
-          ),
-          notificationSubtitle: _bookmarkNotificationSubtitle(
-            context,
-            enabled: bookmarkEnabled,
-            activeCount: activeBookmarkCount,
-          ),
-          onNotificationChanged: (enabled) =>
-              _setAccountNotifications(bookmark.tag, enabled),
+          notificationEnabled: false,
+          notificationAvailable: false,
+          notificationUpdating: false,
+          notificationSubtitle: '',
+          onNotificationChanged: (_) {},
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -291,18 +246,11 @@ class _PlayersPageState extends State<PlayersPage> {
 
       return _BookmarkedPlayerCard(
         player: bookmark,
-        notificationEnabled: bookmarkEnabled,
-        notificationAvailable: bookmarkNotificationsAvailable,
-        notificationUpdating: _updatingNotificationTags.contains(
-          _normalizeTag(bookmark.tag),
-        ),
-        notificationSubtitle: _bookmarkNotificationSubtitle(
-          context,
-          enabled: bookmarkEnabled,
-          activeCount: activeBookmarkCount,
-        ),
-        onNotificationChanged: (enabled) =>
-            _setAccountNotifications(bookmark.tag, enabled),
+        notificationEnabled: false,
+        notificationAvailable: false,
+        notificationUpdating: false,
+        notificationSubtitle: '',
+        onNotificationChanged: (_) {},
         onTap: () =>
             _openBookmarkedPlayer(context, playerService, bookmark.tag),
       );
@@ -575,6 +523,7 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
       footer: _PlayerCardOptionsFooter(
         tag: player.tag,
         bookmarked: widget.bookmarked,
+        showNotification: !widget.bookmarked,
         isVerified: widget.isVerified,
         hidden: widget.hidden,
         updatingVisibility: _updatingVisibility,
@@ -651,6 +600,7 @@ class _BookmarkedPlayerCardState extends State<_BookmarkedPlayerCard> {
       footer: _PlayerCardOptionsFooter(
         tag: player.tag,
         bookmarked: true,
+        showNotification: false,
         notificationEnabled: widget.notificationEnabled,
         notificationAvailable: widget.notificationAvailable,
         notificationUpdating: widget.notificationUpdating,
@@ -846,6 +796,7 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
   const _PlayerCardOptionsFooter({
     required this.tag,
     this.bookmarked = false,
+    this.showNotification = true,
     this.isVerified,
     this.hidden,
     required this.updatingVisibility,
@@ -862,6 +813,7 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
 
   final String tag;
   final bool bookmarked;
+  final bool showNotification;
   final bool? isVerified;
   final bool? hidden;
   final bool updatingVisibility;
@@ -932,17 +884,18 @@ class _PlayerCardOptionsFooter extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                     child: Column(
                       children: [
-                        _PlayerOptionSwitch(
-                          icon: Icons.notifications_outlined,
-                          title: AppLocalizations.of(
-                            context,
-                          )!.playerOptionNotificationsTitle,
-                          subtitle: notificationSubtitle,
-                          value: notificationEnabled,
-                          enabled:
-                              notificationAvailable && !notificationUpdating,
-                          onChanged: onNotificationChanged,
-                        ),
+                        if (showNotification)
+                          _PlayerOptionSwitch(
+                            icon: Icons.notifications_outlined,
+                            title: AppLocalizations.of(
+                              context,
+                            )!.playerOptionNotificationsTitle,
+                            subtitle: notificationSubtitle,
+                            value: notificationEnabled,
+                            enabled:
+                                notificationAvailable && !notificationUpdating,
+                            onChanged: onNotificationChanged,
+                          ),
                         if (isVerified == false && onVerifyAccount != null)
                           _PlayerOptionAction(
                             icon: Icons.warning_amber_rounded,
