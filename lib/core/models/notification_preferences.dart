@@ -150,6 +150,22 @@ class NotificationPreferences {
     );
   }
 
+  factory NotificationPreferences.fromLocalJson(Map<String, dynamic> json) {
+    final accounts = json['accounts'];
+    return NotificationPreferences.fromJson({
+      ...json,
+      'raidRemindersEnabled': json['raidRemindersEnabled'] ?? false,
+      'raidReminderTimings': json['raidReminderTimings'] ?? const <int>[],
+      if (accounts is List)
+        'accounts': accounts
+            .where(
+              (account) =>
+                  account is Map && account['source']?.toString() == 'verified',
+            )
+            .toList(growable: false),
+    });
+  }
+
   Map<String, dynamic> toPutJson({
     required String deviceId,
     required String environment,

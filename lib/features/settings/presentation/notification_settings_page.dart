@@ -217,6 +217,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         AppLocalizations.of(context)!.notifWarAlertsDescription,
                       ),
                       _ReminderRow(
+                        preferenceKey: 'warReminders',
                         title: AppLocalizations.of(
                           context,
                         )!.notifGroupWarReminders,
@@ -224,6 +225,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                           context,
                         )!.notifWarRemindersDescription,
                         icon: Icons.alarm_rounded,
+                        maxHours: 47,
                         enabled: _settings.warReminders,
                         selectedTimings: _settings.reminderTimings.toSet(),
                         onEnabledChanged: (enabled) => _setCategory(
@@ -233,6 +235,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         onTimingsChanged: _setReminderTimings,
                       ),
                       _ReminderRow(
+                        preferenceKey: 'raidReminders',
                         title: AppLocalizations.of(
                           context,
                         )!.notifGroupRaidReminders,
@@ -240,6 +243,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                           context,
                         )!.notifRaidRemindersDescription,
                         icon: Icons.fort_rounded,
+                        maxHours: 72,
                         enabled: _settings.raidReminders,
                         selectedTimings: _settings.raidReminderTimings.toSet(),
                         onEnabledChanged: (enabled) => _setCategory(
@@ -529,18 +533,22 @@ class _NotificationToggleRow extends StatelessWidget {
 
 class _ReminderRow extends StatefulWidget {
   const _ReminderRow({
+    required this.preferenceKey,
     required this.title,
     required this.description,
     required this.icon,
+    required this.maxHours,
     required this.enabled,
     required this.selectedTimings,
     required this.onEnabledChanged,
     required this.onTimingsChanged,
   });
 
+  final String preferenceKey;
   final String title;
   final String description;
   final IconData icon;
+  final int maxHours;
   final bool enabled;
   final Set<int> selectedTimings;
   final ValueChanged<bool> onEnabledChanged;
@@ -565,7 +573,7 @@ class _ReminderRowState extends State<_ReminderRow> {
             padding: const EdgeInsets.fromLTRB(14, 10, 10, 10),
             child: Row(
               children: [
-                const SizedBox(width: 30, child: Icon(widget.icon, size: 22)),
+                SizedBox(width: 30, child: Icon(widget.icon, size: 22)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -592,7 +600,7 @@ class _ReminderRowState extends State<_ReminderRow> {
                 ),
                 const SizedBox(width: 6),
                 Switch.adaptive(
-                  key: const ValueKey('notification-warReminders'),
+                  key: ValueKey('notification-${widget.preferenceKey}'),
                   value: widget.enabled,
                   onChanged: widget.onEnabledChanged,
                 ),
@@ -602,6 +610,8 @@ class _ReminderRowState extends State<_ReminderRow> {
         ),
         if (widget.enabled && _expanded)
           _ReminderTimingPicker(
+            reminderTitle: widget.title,
+            maxHours: widget.maxHours,
             selectedTimings: widget.selectedTimings,
             onChanged: widget.onTimingsChanged,
           ),
@@ -612,10 +622,14 @@ class _ReminderRowState extends State<_ReminderRow> {
 
 class _ReminderTimingPicker extends StatelessWidget {
   const _ReminderTimingPicker({
+    required this.reminderTitle,
+    required this.maxHours,
     required this.selectedTimings,
     required this.onChanged,
   });
 
+  final String reminderTitle;
+  final int maxHours;
   final Set<int> selectedTimings;
   final ValueChanged<Set<int>> onChanged;
 
@@ -654,6 +668,8 @@ class _ReminderTimingPicker extends StatelessWidget {
                         context: context,
                         showDragHandle: true,
                         builder: (_) => _ReminderTimingSheet(
+                          reminderTitle: reminderTitle,
+                          maxHours: maxHours,
                           selectedTimings: selectedTimings,
                         ),
                       );
@@ -676,8 +692,14 @@ class _ReminderTimingPicker extends StatelessWidget {
 }
 
 class _ReminderTimingSheet extends StatefulWidget {
-  const _ReminderTimingSheet({required this.selectedTimings});
+  const _ReminderTimingSheet({
+    required this.reminderTitle,
+    required this.maxHours,
+    required this.selectedTimings,
+  });
 
+  final String reminderTitle;
+  final int maxHours;
   final Set<int> selectedTimings;
 
   @override
@@ -708,7 +730,7 @@ class _ReminderTimingSheetState extends State<_ReminderTimingSheet> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
         children: [
           Text(
-            'Add war reminder',
+            'Add ${widget.reminderTitle}',
             style: Theme.of(
               context,
             ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
@@ -722,7 +744,7 @@ class _ReminderTimingSheetState extends State<_ReminderTimingSheet> {
               onSelectedItemChanged: (index) =>
                   setState(() => _selectedHour = index + 1),
               children: [
-                for (var hour = 1; hour <= 47; hour++)
+                for (var hour = 1; hour <= widget.maxHours; hour++)
                   Center(child: Text(hour == 1 ? '1 hour' : '$hour hours')),
               ],
             ),

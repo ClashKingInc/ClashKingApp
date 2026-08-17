@@ -151,7 +151,7 @@ class NotificationPreferencesService {
     if (decoded is! Map<String, dynamic>) {
       throw const FormatException('Invalid local notification preferences');
     }
-    return NotificationPreferences.fromJson(decoded);
+    return NotificationPreferences.fromLocalJson(decoded);
   }
 
   NotificationPreferences _decode(dynamic response) {

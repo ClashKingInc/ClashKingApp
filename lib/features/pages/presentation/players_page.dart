@@ -8,11 +8,9 @@ import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/models/notification_preferences.dart';
-import 'package:clashkingapp/core/models/subscription_status.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/core/services/player_card_preferences_service.dart';
-import 'package:clashkingapp/core/services/subscription_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
@@ -44,10 +42,8 @@ class _PlayersPageState extends State<PlayersPage> {
   final Set<String> _requestedBookmarkPlayerTags = {};
   final NotificationPreferencesService _notificationService =
       NotificationPreferencesService();
-  final SubscriptionService _subscriptionService = SubscriptionService();
   final Set<String> _updatingNotificationTags = {};
   NotificationPreferences? _notificationPreferences;
-  SubscriptionStatus _subscriptionStatus = const SubscriptionStatus();
 
   @override
   void initState() {
@@ -57,22 +53,13 @@ class _PlayersPageState extends State<PlayersPage> {
 
   Future<void> _loadNotificationState() async {
     NotificationPreferences? preferences;
-    SubscriptionStatus subscription = const SubscriptionStatus();
     try {
       preferences = await _notificationService.load();
     } catch (_) {
       // Controls stay unavailable until authenticated preferences can load.
     }
-    try {
-      subscription = await _subscriptionService.load();
-    } catch (_) {
-      // Never expose paid controls without a confirmed entitlement.
-    }
     if (!mounted) return;
-    setState(() {
-      _notificationPreferences = preferences;
-      _subscriptionStatus = subscription;
-    });
+    setState(() => _notificationPreferences = preferences);
   }
 
   NotificationAccount? _notificationAccount(String tag) {
