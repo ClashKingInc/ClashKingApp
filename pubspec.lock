@@ -182,7 +182,7 @@ packages:
     description:
       path: "design/packages/flutter"
       ref: "agent/game-item-tile"
-      resolved-ref: d5419df369d5bba4bd4aa0ebab52291457adb611
+      resolved-ref: b5a1e98ca154f5c73a4adb652a8e527b21560402
       url: "https://github.com/ClashKingInc/DevKit.git"
     source: git
     version: "0.2.0"

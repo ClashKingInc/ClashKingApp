@@ -1,6 +1,7 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
@@ -26,8 +27,11 @@ class PlayerBattlelogTab extends StatefulWidget {
   State<PlayerBattlelogTab> createState() => _PlayerBattlelogTabState();
 }
 
+enum _BattleDirection { all, attacks, defenses }
+
 class _PlayerBattlelogTabState extends State<PlayerBattlelogTab> {
   PlayerBattlelogMode _mode = PlayerBattlelogMode.ranked;
+  _BattleDirection _direction = _BattleDirection.all;
   late Future<PlayerBattlelogData> _load;
 
   @override
@@ -91,7 +95,10 @@ class _PlayerBattlelogTabState extends State<PlayerBattlelogTab> {
                   child: _BattlelogContent(
                     data: data,
                     mode: _mode,
+                    direction: _direction,
                     onModeChanged: (mode) => setState(() => _mode = mode),
+                    onDirectionChanged: (direction) =>
+                        setState(() => _direction = direction),
                   ),
                 ),
               ),
@@ -107,17 +114,33 @@ class _BattlelogContent extends StatelessWidget {
   const _BattlelogContent({
     required this.data,
     required this.mode,
+    required this.direction,
     required this.onModeChanged,
+    required this.onDirectionChanged,
   });
 
   final PlayerBattlelogData data;
   final PlayerBattlelogMode mode;
+  final _BattleDirection direction;
   final ValueChanged<PlayerBattlelogMode> onModeChanged;
+  final ValueChanged<_BattleDirection> onDirectionChanged;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final battles = data.forMode(mode);
+    final visibleBattles = switch (direction) {
+      _BattleDirection.all => battles,
+      _BattleDirection.attacks =>
+        battles.where((battle) => battle.attack).toList(growable: false),
+      _BattleDirection.defenses =>
+        battles.where((battle) => !battle.attack).toList(growable: false),
+    };
+    final directionOptions = <String, String>{
+      loc.generalAll: _BattleDirection.all.name,
+      loc.warAttacksTitle: _BattleDirection.attacks.name,
+      loc.warDefensesTitle: _BattleDirection.defenses.name,
+    };
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -142,9 +165,26 @@ class _BattlelogContent extends StatelessWidget {
         const SizedBox(height: CKSpacing.md),
         _BattleSummary(data: data, mode: mode, battles: battles),
         const SizedBox(height: CKSpacing.lg),
-        Text(
-          loc.playerBattlelogRecentBattles,
-          style: CKTypography.of(context, CKTextRole.sectionTitle),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                loc.playerBattlelogRecentBattles,
+                style: CKTypography.of(context, CKTextRole.sectionTitle),
+              ),
+            ),
+            const SizedBox(width: CKSpacing.sm),
+            FilterDropdown(
+              key: const ValueKey('battle-direction-filter'),
+              sortBy: direction.name,
+              updateSortBy: (value) =>
+                  onDirectionChanged(_BattleDirection.values.byName(value)),
+              sortByOptions: directionOptions,
+              maxWidth: 132,
+              height: 40,
+              leadingIcon: Icons.filter_list_rounded,
+            ),
+          ],
         ),
         const SizedBox(height: CKSpacing.sm),
         if (battles.isEmpty)
@@ -154,13 +194,21 @@ class _BattlelogContent extends StatelessWidget {
             body: loc.playerBattlelogNoBattlesBody,
             padding: EdgeInsets.zero,
           )
+        else if (visibleBattles.isEmpty)
+          AppEmptyState(
+            icon: Icons.filter_alt_off_rounded,
+            title: loc.generalNoFilteredResults,
+            body: loc.generalAdjustFilters,
+            padding: EdgeInsets.zero,
+          )
         else
           ResponsiveCardGrid(
-            itemCount: battles.length,
+            itemCount: visibleBattles.length,
             minItemWidth: 430,
             maxColumns: 2,
             spacing: CKSpacing.md,
-            itemBuilder: (_, index) => _BattleRow(battle: battles[index]),
+            itemBuilder: (_, index) =>
+                _BattleRow(battle: visibleBattles[index]),
           ),
       ],
     );
@@ -225,58 +273,92 @@ class _BattleSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final attacks = battles.where((battle) => battle.attack).toList();
-    final averageDestruction = _average(
+    final defenses = battles.where((battle) => !battle.attack).toList();
+    final attackAverageDestruction = _average(
       attacks.map((battle) => battle.destructionPercentage),
     );
-    final averageStars = _average(attacks.map((battle) => battle.stars));
-    final tripleRate = attacks.isEmpty
+    final attackAverageStars = _average(attacks.map((battle) => battle.stars));
+    final attackTripleRate = attacks.isEmpty
         ? 0.0
         : attacks.where((battle) => battle.stars == 3).length / attacks.length;
     final averageLoot = _average(attacks.map((battle) => battle.totalLoot));
+    final defenseAverageDestruction = _average(
+      defenses.map((battle) => battle.destructionPercentage),
+    );
+    final defenseAverageStars = _average(
+      defenses.map((battle) => battle.stars),
+    );
+    final defenseTripleRate = defenses.isEmpty
+        ? 0.0
+        : defenses.where((battle) => battle.stars == 3).length /
+              defenses.length;
     final popular = data.popularTroops(mode);
     final formatter = NumberFormat.compact(
       locale: Localizations.localeOf(context).toString(),
     );
-    final metrics = mode == PlayerBattlelogMode.farming
+    final attackMetrics = mode == PlayerBattlelogMode.farming
         ? <(String, String, String)>[
             (
               ImageAssets.attacksNoShield,
-              loc.playerBattlelogAttacks,
+              loc.generalTotal,
               '${attacks.length}',
             ),
             (
+              ImageAssets.attackStar,
+              loc.warAbbreviationAvg,
+              attackAverageStars.toStringAsFixed(2),
+            ),
+            (
               ImageAssets.hitrate,
-              loc.playerBattlelogAverageDestruction,
-              '${averageDestruction.toStringAsFixed(1)}%',
+              loc.warAbbreviationAvgPercentage,
+              '${attackAverageDestruction.toStringAsFixed(1)}%',
             ),
             (
               ImageAssets.lootCart,
-              loc.playerBattlelogAverageLoot,
+              loc.generalAverage,
               formatter.format(averageLoot.round()),
             ),
           ]
         : <(String, String, String)>[
             (
               ImageAssets.attacksNoShield,
-              loc.playerBattlelogAttacks,
+              loc.generalTotal,
               '${attacks.length}',
             ),
             (
               ImageAssets.attackStar,
-              loc.playerBattlelogAverageStars,
-              averageStars.toStringAsFixed(2),
+              loc.warAbbreviationAvg,
+              attackAverageStars.toStringAsFixed(2),
             ),
             (
               ImageAssets.hitrate,
-              loc.playerBattlelogAverageDestruction,
-              '${averageDestruction.toStringAsFixed(1)}%',
+              loc.warAbbreviationAvgPercentage,
+              '${attackAverageDestruction.toStringAsFixed(1)}%',
             ),
             (
               ImageAssets.attackStar,
-              loc.playerBattlelogTripleRate,
-              '${(tripleRate * 100).toStringAsFixed(1)}%',
+              loc.warStarsThree,
+              '${(attackTripleRate * 100).toStringAsFixed(1)}%',
             ),
           ];
+    final defenseMetrics = <(String, String, String)>[
+      (ImageAssets.shieldWithArrow, loc.generalTotal, '${defenses.length}'),
+      (
+        ImageAssets.attackStar,
+        loc.warAbbreviationAvg,
+        defenseAverageStars.toStringAsFixed(2),
+      ),
+      (
+        ImageAssets.hitrate,
+        loc.warAbbreviationAvgPercentage,
+        '${defenseAverageDestruction.toStringAsFixed(1)}%',
+      ),
+      (
+        ImageAssets.attackStar,
+        loc.warStarsThree,
+        '${(defenseTripleRate * 100).toStringAsFixed(1)}%',
+      ),
+    ];
 
     return CKSectionPanel(
       key: const ValueKey('player-battle-summary'),
@@ -304,25 +386,16 @@ class _BattleSummary extends StatelessWidget {
             ],
           ),
           const SizedBox(height: CKSpacing.md),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final width = (constraints.maxWidth - CKSpacing.md) / 2;
-              return Wrap(
-                spacing: CKSpacing.md,
-                runSpacing: CKSpacing.lg,
-                children: [
-                  for (final metric in metrics)
-                    SizedBox(
-                      width: width,
-                      child: _SummaryMetric(
-                        imageUrl: metric.$1,
-                        label: metric.$2,
-                        value: metric.$3,
-                      ),
-                    ),
-                ],
-              );
-            },
+          _BattleStatsBand(
+            title: loc.warAttacksTitle,
+            imageUrl: ImageAssets.sword,
+            metrics: attackMetrics,
+          ),
+          const SizedBox(height: CKSpacing.md),
+          _BattleStatsBand(
+            title: loc.warDefensesTitle,
+            imageUrl: ImageAssets.shieldWithArrow,
+            metrics: defenseMetrics,
           ),
           if (popular.isNotEmpty) ...[
             const SizedBox(height: CKSpacing.md),
@@ -352,52 +425,50 @@ double _average(Iterable<int> values) {
   return values.reduce((a, b) => a + b) / values.length;
 }
 
-class _SummaryMetric extends StatelessWidget {
-  const _SummaryMetric({
+class _BattleStatsBand extends StatelessWidget {
+  const _BattleStatsBand({
+    required this.title,
     required this.imageUrl,
-    required this.label,
-    required this.value,
+    required this.metrics,
   });
 
+  final String title;
   final String imageUrl;
-  final String label;
-  final String value;
+  final List<(String, String, String)> metrics;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Semantics(
-      label: '$label: $value',
-      excludeSemantics: true,
-      child: Row(
-        children: [
-          SizedBox.square(
-            dimension: 28,
-            child: MobileWebImage(imageUrl: imageUrl),
-          ),
-          const SizedBox(width: CKSpacing.sm),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: CKTypography.of(context, CKTextRole.rowTitle),
-                ),
-                Text(
-                  label,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: CKTypography.of(
-                    context,
-                    CKTextRole.metadata,
-                  ).copyWith(color: scheme.onSurfaceVariant),
-                ),
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            MobileWebImage(imageUrl: imageUrl, width: 18, height: 18),
+            const SizedBox(width: CKSpacing.xs),
+            Text(
+              title,
+              style: CKTypography.of(context, CKTextRole.compactLabel),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+        const SizedBox(height: CKSpacing.sm),
+        Wrap(
+          spacing: CKSpacing.sm,
+          runSpacing: CKSpacing.sm,
+          children: [
+            for (final metric in metrics)
+              CKStatTile(
+                label: metric.$2,
+                value: metric.$3,
+                icon: MobileWebImage(
+                  imageUrl: metric.$1,
+                  width: 16,
+                  height: 16,
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -482,13 +553,21 @@ class _BattleRow extends StatelessWidget {
         children: [
           Row(
             children: [
-              MobileWebImage(
-                imageUrl: battle.attack
-                    ? ImageAssets.attacks
-                    : ImageAssets.shield,
-                width: 34,
-                height: 34,
-              ),
+              if (battle.opponentTownHall > 0)
+                MobileWebImage(
+                  key: ValueKey('battle-townhall-${battle.mergeKey}'),
+                  imageUrl: ImageAssets.townHall(battle.opponentTownHall),
+                  width: 42,
+                  height: 42,
+                )
+              else
+                MobileWebImage(
+                  imageUrl: battle.attack
+                      ? ImageAssets.attacks
+                      : ImageAssets.shield,
+                  width: 34,
+                  height: 34,
+                ),
               const SizedBox(width: CKSpacing.sm),
               Expanded(
                 child: Column(
@@ -504,29 +583,40 @@ class _BattleRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: CKTypography.of(context, CKTextRole.rowTitle),
                     ),
-                    Text(
-                      [
-                        battle.attack
-                            ? loc.playerBattlelogAttack
-                            : loc.playerBattlelogDefense,
-                        if (time.isNotEmpty) time,
-                      ].join(' · '),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: CKTypography.of(
-                        context,
-                        CKTextRole.metadata,
-                      ).copyWith(color: scheme.onSurfaceVariant),
+                    Row(
+                      children: [
+                        MobileWebImage(
+                          key: ValueKey(
+                            'battle-direction-icon-${battle.mergeKey}',
+                          ),
+                          imageUrl: battle.attack
+                              ? ImageAssets.sword
+                              : ImageAssets.shieldWithArrow,
+                          width: 15,
+                          height: 15,
+                        ),
+                        const SizedBox(width: CKSpacing.xs),
+                        Expanded(
+                          child: Text(
+                            [
+                              battle.attack
+                                  ? loc.playerBattlelogAttack
+                                  : loc.playerBattlelogDefense,
+                              if (time.isNotEmpty) time,
+                            ].join(' · '),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: CKTypography.of(
+                              context,
+                              CKTextRole.metadata,
+                            ).copyWith(color: scheme.onSurfaceVariant),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              if (battle.opponentTownHall > 0)
-                MobileWebImage(
-                  imageUrl: ImageAssets.townHall(battle.opponentTownHall),
-                  width: 38,
-                  height: 38,
-                ),
             ],
           ),
           const SizedBox(height: CKSpacing.sm),
@@ -600,6 +690,8 @@ class _BattleRow extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                       badge: '×${entry.value}',
+                      badgeDensity: CKGameItemBadgeDensity.compact,
+                      badgeColor: scheme.scrim.withValues(alpha: 0.88),
                       semanticLabel: '${entry.value} ${item.name}',
                       borderColor: scheme.onSurface.withValues(alpha: 0.82),
                     ),

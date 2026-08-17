@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:clashking_design_system/clashking_design_system.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_battlelog_tab.dart';
@@ -58,6 +60,13 @@ void main() {
                   timestamp: '2026-08-15T12:00:00Z',
                   army: {'u_5': 4},
                 ),
+                _rankedBattle(
+                  id: 'four',
+                  opponent: '#FOUR',
+                  timestamp: '2026-08-14T12:00:00Z',
+                  army: const {},
+                  attack: false,
+                ),
               ],
             }),
             200,
@@ -80,7 +89,11 @@ void main() {
 
       final summary = find.byKey(const ValueKey('player-battle-summary'));
       expect(summary, findsOneWidget);
-      expect(tester.getSize(summary).height, lessThan(300));
+      expect(tester.getSize(summary).height, lessThan(390));
+      expect(
+        find.descendant(of: summary, matching: find.byType(CKStatTile)),
+        findsNWidgets(8),
+      );
 
       final popularTiles = find.byWidgetPredicate(
         (widget) =>
@@ -99,6 +112,39 @@ void main() {
       expect(battleRow, findsOneWidget);
       expect(tester.getSize(battleRow).height, lessThan(170));
       expect(find.text('×8'), findsOneWidget);
+
+      final townHall = tester.widget<MobileWebImage>(
+        find.descendant(
+          of: battleRow,
+          matching: find.byKey(
+            const ValueKey('battle-townhall-1|#ONE|1786968000000'),
+          ),
+        ),
+      );
+      expect(townHall.imageUrl, ImageAssets.townHall(17));
+      final directionIcon = tester.widget<MobileWebImage>(
+        find.descendant(
+          of: battleRow,
+          matching: find.byKey(
+            const ValueKey('battle-direction-icon-1|#ONE|1786968000000'),
+          ),
+        ),
+      );
+      expect(directionIcon.imageUrl, ImageAssets.sword);
+      expect(directionIcon.width, 15);
+
+      final armyTile = tester.widget<CKGameItemTile>(
+        find.byKey(const ValueKey('battle-army-1|#ONE|1786968000000-u_5')),
+      );
+      expect(armyTile.badgeDensity, CKGameItemBadgeDensity.compact);
+
+      await tester.tap(find.byKey(const ValueKey('battle-direction-filter')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Defenses').last);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const ValueKey('player-battle-one')), findsNothing);
+      expect(find.byKey(const ValueKey('player-battle-four')), findsOneWidget);
     },
   );
 }
@@ -108,10 +154,11 @@ Map<String, dynamic> _rankedBattle({
   required String opponent,
   required String timestamp,
   required Map<String, int> army,
+  bool attack = true,
 }) => {
   'battle_id': id,
   'battle_type': 'ranked',
-  'attack': true,
+  'attack': attack,
   'opponent_tag': opponent,
   'opponent_name': opponent.substring(1),
   'opponent_townhall': 17,
