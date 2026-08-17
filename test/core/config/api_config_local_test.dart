@@ -38,10 +38,10 @@ void main() {
     );
   });
 
-  test('production API environment targets the public v2 API', () {
+  test('production API environment targets the dev v2 API', () {
     expect(
       ApiConfig.defaultApiV2UrlFor(ApiEnvironment.production),
-      'https://v2-api.clashk.ing/v2',
+      'https://dev-api.clashk.ing/v2',
     );
     expect(
       ApiConfig.defaultProxyUrlFor(ApiEnvironment.production),

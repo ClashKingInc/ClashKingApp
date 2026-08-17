@@ -85,7 +85,7 @@ class ApiConfig {
   static String _defaultApiV2UrlFor(ApiEnvironment target) => switch (target) {
     ApiEnvironment.local => '${defaultApiBaseUrlFor(target)}/v2',
     ApiEnvironment.staging => '${defaultApiBaseUrlFor(target)}/v2',
-    ApiEnvironment.production => 'https://v2-api.clashk.ing/v2',
+    ApiEnvironment.production => 'https://dev-api.clashk.ing/v2',
   };
 
   static String defaultProxyUrlFor(ApiEnvironment target) => switch (target) {
