@@ -5,6 +5,8 @@ import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/models/player_join_leave.dart';
+import 'package:clashkingapp/features/player/models/player_activity.dart';
+import 'package:clashkingapp/features/player/models/player_battlelog.dart';
 import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
@@ -36,6 +38,8 @@ class PlayerService extends ChangeNotifier {
   List<Player> _profiles = [];
   final List<Map<String, dynamic>> _clans = [];
   final Map<String, Future<Player>> _officialPlayerLoads = {};
+  final Map<String, PlayerBattlelogData> _battlelogCache = {};
+  final Map<String, PlayerActivityFeed> _activityCache = {};
 
   bool get isLoading => _isLoading;
   List<Player> get profiles => _profiles;
@@ -187,6 +191,114 @@ class PlayerService extends ChangeNotifier {
       return normalized;
     }
     return '#$normalized';
+  }
+
+  Future<PlayerBattlelogData> loadPlayerBattlelog(
+    String rawPlayerTag, {
+    bool forceRefresh = false,
+  }) async {
+    final playerTag = _canonicalTag(rawPlayerTag);
+    if (!forceRefresh) {
+      final cached = _battlelogCache[playerTag];
+      if (cached != null) return cached;
+    }
+
+    final encodedTag = Uri.encodeComponent(playerTag);
+    var official = <PlayerBattlelogEntry>[];
+    var history = <PlayerBattlelogEntry>[];
+    Object? officialError;
+    Object? historyError;
+
+    await Future.wait([
+      () async {
+        try {
+          final response = await _apiService.proxyGet(
+            '/players/$encodedTag/battlelog',
+          );
+          if (response.statusCode != 200) {
+            throw HttpException(
+              'Failed to fetch the official battle log '
+              '(${response.statusCode})',
+              uri: response.request?.url,
+            );
+          }
+          final json = _decodeMap(response);
+          official = (json['items'] as List<dynamic>? ?? const [])
+              .whereType<Map<String, dynamic>>()
+              .map(PlayerBattlelogEntry.fromOfficial)
+              .toList(growable: false);
+        } catch (error, stackTrace) {
+          officialError = error;
+          ErrorReporter.captureException(
+            error,
+            stackTrace: stackTrace,
+            operation: 'player.load_official_battlelog',
+          );
+        }
+      }(),
+      () async {
+        try {
+          final response = await _apiService.getResponse(
+            '/player/$encodedTag/battlelog/history?limit=100&days=30',
+          );
+          if (response.statusCode != 200) {
+            throw HttpException(
+              'Failed to fetch historical battle logs '
+              '(${response.statusCode})',
+              uri: response.request?.url,
+            );
+          }
+          final json = _decodeMap(response);
+          history = (json['items'] as List<dynamic>? ?? const [])
+              .whereType<Map<String, dynamic>>()
+              .map(PlayerBattlelogEntry.fromHistory)
+              .toList(growable: false);
+        } catch (error, stackTrace) {
+          historyError = error;
+          ErrorReporter.captureException(
+            error,
+            stackTrace: stackTrace,
+            operation: 'player.load_historical_battlelog',
+          );
+        }
+      }(),
+    ]);
+
+    if (officialError != null && historyError != null) {
+      throw officialError!;
+    }
+    final result = PlayerBattlelogData.merge(
+      official: official,
+      history: history,
+      officialAvailable: officialError == null,
+      historyAvailable: historyError == null,
+    );
+    _battlelogCache[playerTag] = result;
+    return result;
+  }
+
+  Future<PlayerActivityFeed> loadPlayerActivity(
+    String rawPlayerTag, {
+    bool forceRefresh = false,
+  }) async {
+    final playerTag = _canonicalTag(rawPlayerTag);
+    if (!forceRefresh) {
+      final cached = _activityCache[playerTag];
+      if (cached != null) return cached;
+    }
+    final encodedTag = Uri.encodeComponent(playerTag);
+    final response = await _apiService.getResponse(
+      '/player/$encodedTag/changes?limit=100',
+    );
+    if (response.statusCode != 200) {
+      throw HttpException(
+        'Failed to fetch player activity (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+    final result = PlayerActivityFeed.fromJson(_decodeMap(response));
+    _activityCache[playerTag] = result;
+    return result;
   }
 
   Future<PlayerJoinLeavePage> loadPlayerJoinLeave(

@@ -4169,5 +4169,96 @@
   "gameAssetsCategoryPets": "Mazlíčci",
   "gameAssetsCategorySkins": "Vzhledy",
   "gameAssetsCategoryTroops": "Jednotky",
-  "rankedLeagueAccountSelector": "Účet pro hodnocenou ligu"
+  "rankedLeagueAccountSelector": "Účet pro hodnocenou ligu",
+  "playerBattlelogTab": "Battles",
+  "playerActivityTab": "Activity",
+  "playerBattlelogFarming": "Farming",
+  "playerBattlelogRanked": "Ranked",
+  "playerBattlelogFarmingOverview": "Farming overview",
+  "playerBattlelogRankedOverview": "Ranked overview",
+  "playerBattlelogRecentBattles": "Recent battles",
+  "playerBattlelogBattleCount": "{count} battles",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "playerBattlelogAttacks": "Attacks",
+  "playerBattlelogAverageDestruction": "Average destruction",
+  "playerBattlelogAverageStars": "Average stars",
+  "playerBattlelogTripleRate": "Three-star rate",
+  "playerBattlelogAverageLoot": "Average loot",
+  "playerBattlelogPopularTroops": "Most-used troops",
+  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "playerBattlelogAttack": "Attack",
+  "playerBattlelogDefense": "Defense",
+  "playerBattlelogOpponent": "Against {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "No battles found",
+  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
+  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
+  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
+  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
+  "playerActivityTrackingActive": "Currently tracked",
+  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
+  "playerActivityTrackingUnknown": "Tracking not confirmed",
+  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
+  "playerActivityNoEventsTitle": "No tracked activity yet",
+  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
+  "playerActivityLoadError": "Player activity couldn't be loaded",
+  "playerActivityTownHallUpgraded": "Town Hall upgraded",
+  "playerActivityItemUpgraded": "{name} upgraded",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "playerActivityItemUnlocked": "{name} unlocked",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "playerActivityNameChanged": "Name changed",
+  "playerActivityLevelChange": "Level {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {"type": "int"},
+      "to": {"type": "int"}
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {"type": "int"}
+    }
+  },
+  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {"type": "int"}
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {"type": "String"},
+      "to": {"type": "String"}
+    }
+  }
 }

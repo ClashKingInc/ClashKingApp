@@ -343,6 +343,49 @@ void main() {
       expect(selected, 1);
     },
   );
+
+  testWidgets('profile dropdown selects a destination', (tester) async {
+    var selected = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: InfoProfileDestinationPicker(
+            selectedIndex: selected,
+            onTabSelected: (value) => selected = value,
+            tabs: const [
+              InfoProfileTabData(label: 'Home', icon: Icons.home_rounded),
+              InfoProfileTabData(
+                label: 'Activity',
+                icon: Icons.history_rounded,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Activity').last);
+    await tester.pumpAndSettle();
+
+    expect(selected, 1);
+  });
+
+  testWidgets('dropdown profile navigation ignores horizontal swipes', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: _DropdownNavigationHarness()),
+    );
+    await tester.fling(find.byType(TabBarView), const Offset(-600, 0), 1200);
+    await tester.pumpAndSettle();
+
+    expect(find.text('First dropdown page'), findsOneWidget);
+    expect(find.text('Second dropdown page'), findsNothing);
+  });
 }
 
 void _ignoreSelection(int _) {}
@@ -475,6 +518,40 @@ class _SelectedBodyHarnessState extends State<_SelectedBodyHarness> {
             SizedBox(height: 1000, child: Text('Body $selectedIndex top')),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _DropdownNavigationHarness extends StatefulWidget {
+  const _DropdownNavigationHarness();
+
+  @override
+  State<_DropdownNavigationHarness> createState() =>
+      _DropdownNavigationHarnessState();
+}
+
+class _DropdownNavigationHarnessState
+    extends State<_DropdownNavigationHarness> {
+  var selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: InfoProfileTabScaffold(
+        header: const SizedBox(height: 240),
+        selectedIndex: selectedIndex,
+        onTabSelected: (index) => setState(() => selectedIndex = index),
+        navigationStyle: InfoProfileNavigationStyle.dropdown,
+        enableSwipeNavigation: false,
+        tabs: const [
+          InfoProfileTabData(label: 'First', icon: Icons.looks_one_rounded),
+          InfoProfileTabData(label: 'Second', icon: Icons.looks_two_rounded),
+        ],
+        pages: const [
+          Center(child: Text('First dropdown page')),
+          Center(child: Text('Second dropdown page')),
+        ],
       ),
     );
   }

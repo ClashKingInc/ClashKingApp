@@ -89,7 +89,8 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
         tabsTopSpacing: 10,
         selectedIndex: activeIndex,
         onTabSelected: (index) => _selectTab(index, visibleTabs.length),
-        alwaysScrollable: true,
+        navigationStyle: InfoProfileNavigationStyle.dropdown,
+        enableSwipeNavigation: false,
         tabs: visibleTabs
             .map((tab) => tab.data(AppLocalizations.of(context)!))
             .toList(growable: false),
