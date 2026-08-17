@@ -165,14 +165,12 @@ class _BattlelogContent extends StatelessWidget {
           ),
         ],
         const SizedBox(height: CKSpacing.md),
-        _BattleSummary(mode: mode, battles: battles),
-        if (popularAttacks.isNotEmpty || popularDefenses.isNotEmpty) ...[
-          const SizedBox(height: CKSpacing.lg),
-          _PopularTroopsSection(
-            attacks: popularAttacks,
-            defenses: popularDefenses,
-          ),
-        ],
+        _BattleSummary(
+          mode: mode,
+          battles: battles,
+          popularAttacks: popularAttacks,
+          popularDefenses: popularDefenses,
+        ),
         const SizedBox(height: CKSpacing.lg),
         Row(
           children: [
@@ -268,10 +266,17 @@ class _AvailabilityNotice extends StatelessWidget {
 }
 
 class _BattleSummary extends StatelessWidget {
-  const _BattleSummary({required this.mode, required this.battles});
+  const _BattleSummary({
+    required this.mode,
+    required this.battles,
+    required this.popularAttacks,
+    required this.popularDefenses,
+  });
 
   final PlayerBattlelogMode mode;
   final List<PlayerBattlelogEntry> battles;
+  final List<PlayerPopularArmyItem> popularAttacks;
+  final List<PlayerPopularArmyItem> popularDefenses;
 
   @override
   Widget build(BuildContext context) {
@@ -389,16 +394,30 @@ class _BattleSummary extends StatelessWidget {
             ],
           ),
           const SizedBox(height: CKSpacing.md),
-          _BattleStatsBand(
+          _BattleOverviewBand(
+            direction: _BattleDirection.attacks,
             title: loc.warAttacksTitle,
             imageUrl: ImageAssets.sword,
             metrics: attackMetrics,
+            popularTroopsLabel: loc.playerBattlelogPopularTroops,
+            popularTroops: popularAttacks,
           ),
-          const SizedBox(height: CKSpacing.md),
-          _BattleStatsBand(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: CKSpacing.md),
+            child: Divider(
+              height: 1,
+              color: Theme.of(
+                context,
+              ).colorScheme.outlineVariant.withValues(alpha: 0.36),
+            ),
+          ),
+          _BattleOverviewBand(
+            direction: _BattleDirection.defenses,
             title: loc.warDefensesTitle,
             imageUrl: ImageAssets.shieldWithArrow,
             metrics: defenseMetrics,
+            popularTroopsLabel: loc.playerBattlelogPopularTroops,
+            popularTroops: popularDefenses,
           ),
         ],
       ),
@@ -411,16 +430,22 @@ double _average(Iterable<int> values) {
   return values.reduce((a, b) => a + b) / values.length;
 }
 
-class _BattleStatsBand extends StatelessWidget {
-  const _BattleStatsBand({
+class _BattleOverviewBand extends StatelessWidget {
+  const _BattleOverviewBand({
+    required this.direction,
     required this.title,
     required this.imageUrl,
     required this.metrics,
+    required this.popularTroopsLabel,
+    required this.popularTroops,
   });
 
+  final _BattleDirection direction;
   final String title;
   final String imageUrl;
   final List<(String, String, String)> metrics;
+  final String popularTroopsLabel;
+  final List<PlayerPopularArmyItem> popularTroops;
 
   @override
   Widget build(BuildContext context) {
@@ -451,50 +476,20 @@ class _BattleStatsBand extends StatelessWidget {
               ),
           ],
         ),
-      ],
-    );
-  }
-}
-
-class _PopularTroopsSection extends StatelessWidget {
-  const _PopularTroopsSection({required this.attacks, required this.defenses});
-
-  final List<PlayerPopularArmyItem> attacks;
-  final List<PlayerPopularArmyItem> defenses;
-
-  @override
-  Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    return CKSectionPanel(
-      key: const ValueKey('player-popular-troops'),
-      padding: const EdgeInsets.all(CKSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        if (popularTroops.isNotEmpty) ...[
+          const SizedBox(height: CKSpacing.sm),
           Text(
-            loc.playerBattlelogPopularTroops,
-            style: CKTypography.of(context, CKTextRole.rowTitle),
+            popularTroopsLabel,
+            textAlign: TextAlign.center,
+            style: CKTypography.of(
+              context,
+              CKTextRole.compactLabel,
+            ).copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
-          if (attacks.isNotEmpty) ...[
-            const SizedBox(height: CKSpacing.sm),
-            _PopularTroopBand(
-              direction: _BattleDirection.attacks,
-              title: loc.warAttacksTitle,
-              imageUrl: ImageAssets.sword,
-              items: attacks,
-            ),
-          ],
-          if (defenses.isNotEmpty) ...[
-            const SizedBox(height: CKSpacing.md),
-            _PopularTroopBand(
-              direction: _BattleDirection.defenses,
-              title: loc.warDefensesTitle,
-              imageUrl: ImageAssets.shieldWithArrow,
-              items: defenses,
-            ),
-          ],
+          const SizedBox(height: CKSpacing.xs),
+          _PopularTroopRow(direction: direction, items: popularTroops),
         ],
-      ),
+      ],
     );
   }
 }
@@ -545,53 +540,25 @@ class _BattleSummaryStat extends StatelessWidget {
   }
 }
 
-class _PopularTroopBand extends StatelessWidget {
-  const _PopularTroopBand({
-    required this.direction,
-    required this.title,
-    required this.imageUrl,
-    required this.items,
-  });
+class _PopularTroopRow extends StatelessWidget {
+  const _PopularTroopRow({required this.direction, required this.items});
 
   final _BattleDirection direction;
-  final String title;
-  final String imageUrl;
   final List<PlayerPopularArmyItem> items;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       container: true,
-      label: title,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MobileWebImage(imageUrl: imageUrl, width: 16, height: 16),
-              const SizedBox(width: CKSpacing.xs),
-              Text(
-                title,
-                style: CKTypography.of(context, CKTextRole.compactLabel),
-              ),
-            ],
-          ),
-          const SizedBox(height: CKSpacing.sm),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var index = 0; index < items.length; index++) ...[
-                if (index > 0) const SizedBox(width: CKSpacing.xs),
-                Expanded(
-                  child: _PopularTroop(
-                    direction: direction,
-                    item: items[index],
-                  ),
-                ),
-              ],
-            ],
-          ),
+          for (var index = 0; index < items.length; index++) ...[
+            if (index > 0) const SizedBox(width: CKSpacing.xs),
+            Expanded(
+              child: _PopularTroop(direction: direction, item: items[index]),
+            ),
+          ],
         ],
       ),
     );

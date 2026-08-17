@@ -91,7 +91,7 @@ void main() {
 
       final summary = find.byKey(const ValueKey('player-battle-summary'));
       expect(summary, findsOneWidget);
-      expect(tester.getSize(summary).height, lessThan(260));
+      expect(tester.getSize(summary).height, lessThan(470));
       expect(
         find.descendant(of: summary, matching: find.byType(CKStatTile)),
         findsNothing,
@@ -105,11 +105,12 @@ void main() {
               'popular-troop-',
             ),
       );
-      expect(
-        find.byKey(const ValueKey('player-popular-troops')),
-        findsOneWidget,
-      );
+      expect(find.byKey(const ValueKey('player-popular-troops')), findsNothing);
       expect(popularTiles, findsNWidgets(10));
+      expect(
+        find.descendant(of: summary, matching: popularTiles),
+        findsNWidgets(10),
+      );
       final attackTop = tester.getTopLeft(popularTiles.first).dy;
       for (var index = 1; index < 5; index++) {
         expect(tester.getTopLeft(popularTiles.at(index)).dy, attackTop);
