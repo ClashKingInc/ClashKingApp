@@ -85,31 +85,35 @@ void main() {
   test(
     'calculates popular troops by battle usage and resolves static names',
     () {
-      PlayerBattlelogEntry battle(String id, Map<String, int> army) =>
-          PlayerBattlelogEntry(
-            id: id,
-            mode: PlayerBattlelogMode.farming,
-            source: PlayerBattlelogSource.history,
-            attack: true,
-            opponentTag: '#$id',
-            opponentName: id,
-            opponentTownHall: 17,
-            stars: 3,
-            destructionPercentage: 100,
-            gold: 0,
-            elixir: 0,
-            darkElixir: 0,
-            timestamp: DateTime.utc(2026, 8, 16),
-            duration: 120,
-            armyShareCode: '',
-            armyCounts: army,
-          );
+      PlayerBattlelogEntry battle(
+        String id,
+        Map<String, int> army, {
+        bool attack = true,
+      }) => PlayerBattlelogEntry(
+        id: id,
+        mode: PlayerBattlelogMode.farming,
+        source: PlayerBattlelogSource.history,
+        attack: attack,
+        opponentTag: '#$id',
+        opponentName: id,
+        opponentTownHall: 17,
+        stars: 3,
+        destructionPercentage: 100,
+        gold: 0,
+        elixir: 0,
+        darkElixir: 0,
+        timestamp: DateTime.utc(2026, 8, 16),
+        duration: 120,
+        armyShareCode: '',
+        armyCounts: army,
+      );
 
       final data = PlayerBattlelogData.merge(
         official: const [],
         history: [
           battle('A', {'u_5': 8, 'u_7': 4, 's_1': 2}),
           battle('B', {'u_5': 2}),
+          battle('C', {'u_7': 3}, attack: false),
         ],
         officialAvailable: true,
         historyAvailable: true,
@@ -120,6 +124,14 @@ void main() {
       expect(popular.first.uses, 2);
       expect(popular[1].item.name, 'Wizard');
       expect(popular.map((item) => item.item.code), isNot(contains('s_1')));
+
+      final popularDefenses = data.popularTroops(
+        PlayerBattlelogMode.farming,
+        attack: false,
+      );
+      expect(popularDefenses, hasLength(1));
+      expect(popularDefenses.single.item.name, 'Wizard');
+      expect(popularDefenses.single.uses, 1);
     },
   );
 

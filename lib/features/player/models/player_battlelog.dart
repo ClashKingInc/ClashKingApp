@@ -152,10 +152,11 @@ class PlayerBattlelogData {
   List<PlayerPopularArmyItem> popularTroops(
     PlayerBattlelogMode mode, {
     int limit = 3,
+    bool attack = true,
   }) {
     final uses = <String, int>{};
     for (final battle in items.where(
-      (item) => item.mode == mode && item.attack,
+      (item) => item.mode == mode && item.attack == attack,
     )) {
       for (final code in battle.armyCounts.keys.where(
         (code) => code.startsWith('u_') || code.startsWith('i_'),

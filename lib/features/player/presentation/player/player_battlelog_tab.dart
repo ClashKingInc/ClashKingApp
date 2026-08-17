@@ -129,6 +129,8 @@ class _BattlelogContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final battles = data.forMode(mode);
+    final popularAttacks = data.popularTroops(mode, limit: 5);
+    final popularDefenses = data.popularTroops(mode, limit: 5, attack: false);
     final visibleBattles = switch (direction) {
       _BattleDirection.all => battles,
       _BattleDirection.attacks =>
@@ -163,7 +165,14 @@ class _BattlelogContent extends StatelessWidget {
           ),
         ],
         const SizedBox(height: CKSpacing.md),
-        _BattleSummary(data: data, mode: mode, battles: battles),
+        _BattleSummary(mode: mode, battles: battles),
+        if (popularAttacks.isNotEmpty || popularDefenses.isNotEmpty) ...[
+          const SizedBox(height: CKSpacing.lg),
+          _PopularTroopsSection(
+            attacks: popularAttacks,
+            defenses: popularDefenses,
+          ),
+        ],
         const SizedBox(height: CKSpacing.lg),
         Row(
           children: [
@@ -259,13 +268,8 @@ class _AvailabilityNotice extends StatelessWidget {
 }
 
 class _BattleSummary extends StatelessWidget {
-  const _BattleSummary({
-    required this.data,
-    required this.mode,
-    required this.battles,
-  });
+  const _BattleSummary({required this.mode, required this.battles});
 
-  final PlayerBattlelogData data;
   final PlayerBattlelogMode mode;
   final List<PlayerBattlelogEntry> battles;
 
@@ -292,7 +296,6 @@ class _BattleSummary extends StatelessWidget {
         ? 0.0
         : defenses.where((battle) => battle.stars == 3).length /
               defenses.length;
-    final popular = data.popularTroops(mode);
     final formatter = NumberFormat.compact(
       locale: Localizations.localeOf(context).toString(),
     );
@@ -397,23 +400,6 @@ class _BattleSummary extends StatelessWidget {
             imageUrl: ImageAssets.shieldWithArrow,
             metrics: defenseMetrics,
           ),
-          if (popular.isNotEmpty) ...[
-            const SizedBox(height: CKSpacing.md),
-            Text(
-              loc.playerBattlelogPopularTroops,
-              style: CKTypography.of(context, CKTextRole.rowTitle),
-            ),
-            const SizedBox(height: CKSpacing.sm),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var index = 0; index < popular.length; index++) ...[
-                  if (index > 0) const SizedBox(width: CKSpacing.sm),
-                  Expanded(child: _PopularTroop(item: popular[index])),
-                ],
-              ],
-            ),
-          ],
         ],
       ),
     );
@@ -439,9 +425,10 @@ class _BattleStatsBand extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MobileWebImage(imageUrl: imageUrl, width: 18, height: 18),
             const SizedBox(width: CKSpacing.xs),
@@ -452,18 +439,14 @@ class _BattleStatsBand extends StatelessWidget {
           ],
         ),
         const SizedBox(height: CKSpacing.sm),
-        Wrap(
-          spacing: CKSpacing.sm,
-          runSpacing: CKSpacing.sm,
+        Row(
           children: [
             for (final metric in metrics)
-              CKStatTile(
-                label: metric.$2,
-                value: metric.$3,
-                icon: MobileWebImage(
+              Expanded(
+                child: _BattleSummaryStat(
                   imageUrl: metric.$1,
-                  width: 16,
-                  height: 16,
+                  label: metric.$2,
+                  value: metric.$3,
                 ),
               ),
           ],
@@ -473,25 +456,168 @@ class _BattleStatsBand extends StatelessWidget {
   }
 }
 
-class _PopularTroop extends StatelessWidget {
-  const _PopularTroop({required this.item});
+class _PopularTroopsSection extends StatelessWidget {
+  const _PopularTroopsSection({required this.attacks, required this.defenses});
 
-  final PlayerPopularArmyItem item;
+  final List<PlayerPopularArmyItem> attacks;
+  final List<PlayerPopularArmyItem> defenses;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    return CKSectionPanel(
+      key: const ValueKey('player-popular-troops'),
+      padding: const EdgeInsets.all(CKSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            loc.playerBattlelogPopularTroops,
+            style: CKTypography.of(context, CKTextRole.rowTitle),
+          ),
+          if (attacks.isNotEmpty) ...[
+            const SizedBox(height: CKSpacing.sm),
+            _PopularTroopBand(
+              direction: _BattleDirection.attacks,
+              title: loc.warAttacksTitle,
+              imageUrl: ImageAssets.sword,
+              items: attacks,
+            ),
+          ],
+          if (defenses.isNotEmpty) ...[
+            const SizedBox(height: CKSpacing.md),
+            _PopularTroopBand(
+              direction: _BattleDirection.defenses,
+              title: loc.warDefensesTitle,
+              imageUrl: ImageAssets.shieldWithArrow,
+              items: defenses,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _BattleSummaryStat extends StatelessWidget {
+  const _BattleSummaryStat({
+    required this.imageUrl,
+    required this.label,
+    required this.value,
+  });
+
+  final String imageUrl;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Semantics(
-      label:
-          '${item.item.name}, ${loc.playerBattlelogUsedInAttacks(item.uses)}',
+      label: '$label: $value',
+      excludeSemantics: true,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MobileWebImage(imageUrl: imageUrl, width: 20, height: 20),
+          const SizedBox(height: CKSpacing.xs),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: CKTypography.of(
+              context,
+              CKTextRole.compactLabel,
+            ).copyWith(color: scheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: CKTypography.of(context, CKTextRole.rowTitle),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PopularTroopBand extends StatelessWidget {
+  const _PopularTroopBand({
+    required this.direction,
+    required this.title,
+    required this.imageUrl,
+    required this.items,
+  });
+
+  final _BattleDirection direction;
+  final String title;
+  final String imageUrl;
+  final List<PlayerPopularArmyItem> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      container: true,
+      label: title,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MobileWebImage(imageUrl: imageUrl, width: 16, height: 16),
+              const SizedBox(width: CKSpacing.xs),
+              Text(
+                title,
+                style: CKTypography.of(context, CKTextRole.compactLabel),
+              ),
+            ],
+          ),
+          const SizedBox(height: CKSpacing.sm),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var index = 0; index < items.length; index++) ...[
+                if (index > 0) const SizedBox(width: CKSpacing.xs),
+                Expanded(
+                  child: _PopularTroop(
+                    direction: direction,
+                    item: items[index],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PopularTroop extends StatelessWidget {
+  const _PopularTroop({required this.direction, required this.item});
+
+  final _BattleDirection direction;
+  final PlayerPopularArmyItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Semantics(
+      label: '${item.item.name}, ×${item.uses}',
       excludeSemantics: true,
       child: Column(
         children: [
           SizedBox.square(
             dimension: 48,
             child: CKGameItemTile(
-              key: ValueKey('popular-troop-${item.item.code}'),
+              key: ValueKey(
+                'popular-troop-${direction.name}-${item.item.code}',
+              ),
               artwork: MobileWebImage(
                 imageUrl: item.item.imageUrl,
                 fit: BoxFit.cover,
@@ -509,13 +635,13 @@ class _PopularTroop extends StatelessWidget {
             style: CKTypography.of(context, CKTextRole.compactLabel),
           ),
           Text(
-            loc.playerBattlelogUsedInAttacks(item.uses),
+            '×${item.uses}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: CKTypography.of(
               context,
-              CKTextRole.metadata,
+              CKTextRole.compactLabel,
             ).copyWith(color: scheme.onSurfaceVariant),
           ),
         ],
@@ -574,48 +700,34 @@ class _BattleRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      loc.playerBattlelogOpponent(
-                        battle.opponentName.isEmpty
-                            ? battle.opponentTag
-                            : battle.opponentName,
-                      ),
+                      battle.opponentName.isEmpty
+                          ? battle.opponentTag
+                          : battle.opponentName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: CKTypography.of(context, CKTextRole.rowTitle),
                     ),
-                    Row(
-                      children: [
-                        MobileWebImage(
-                          key: ValueKey(
-                            'battle-direction-icon-${battle.mergeKey}',
-                          ),
-                          imageUrl: battle.attack
-                              ? ImageAssets.sword
-                              : ImageAssets.shieldWithArrow,
-                          width: 15,
-                          height: 15,
-                        ),
-                        const SizedBox(width: CKSpacing.xs),
-                        Expanded(
-                          child: Text(
-                            [
-                              battle.attack
-                                  ? loc.playerBattlelogAttack
-                                  : loc.playerBattlelogDefense,
-                              if (time.isNotEmpty) time,
-                            ].join(' · '),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: CKTypography.of(
-                              context,
-                              CKTextRole.metadata,
-                            ).copyWith(color: scheme.onSurfaceVariant),
-                          ),
-                        ),
-                      ],
-                    ),
+                    if (time.isNotEmpty)
+                      Text(
+                        time,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: CKTypography.of(
+                          context,
+                          CKTextRole.metadata,
+                        ).copyWith(color: scheme.onSurfaceVariant),
+                      ),
                   ],
                 ),
+              ),
+              const SizedBox(width: CKSpacing.sm),
+              MobileWebImage(
+                key: ValueKey('battle-direction-icon-${battle.mergeKey}'),
+                imageUrl: battle.attack
+                    ? ImageAssets.sword
+                    : ImageAssets.shieldWithArrow,
+                width: 20,
+                height: 20,
               ),
             ],
           ),
