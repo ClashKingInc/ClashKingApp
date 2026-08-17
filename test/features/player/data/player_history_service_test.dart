@@ -64,8 +64,9 @@ void main() {
       jsonEncode({
         'items': [
           {
-            'battleType': 'RANKED',
+            'battleType': 'homeVillage',
             'attack': true,
+            'armyShareCode': 'u8x5-4x7s2x1',
             'opponentPlayerTag': '#OPP',
             'opponentName': 'Opponent',
             'opponentTownHallLevel': 17,
@@ -85,7 +86,8 @@ void main() {
     ).loadPlayerBattlelog('#P1');
 
     expect(data.items, hasLength(1));
-    expect(data.forMode(PlayerBattlelogMode.ranked), hasLength(1));
+    expect(data.forMode(PlayerBattlelogMode.farming), hasLength(1));
+    expect(data.items.single.armyCounts['u_5'], 8);
     expect(data.officialAvailable, isTrue);
     expect(data.historyAvailable, isFalse);
   });

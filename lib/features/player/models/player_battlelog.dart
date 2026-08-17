@@ -1,7 +1,7 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 
-enum PlayerBattlelogMode { farming, ranked }
+enum PlayerBattlelogMode { ranked, farming }
 
 enum PlayerBattlelogSource { official, history }
 
@@ -51,14 +51,12 @@ class PlayerBattlelogEntry {
       final name = resource['name']?.toString().toLowerCase() ?? '';
       resources[name] = _int(resource['amount']);
     }
-    final type = json['battleType']?.toString().toUpperCase() ?? '';
+    final armyShareCode = json['armyShareCode']?.toString() ?? '';
     final timestamp = _parseBattleTime(json['battleTimestamp']);
     final opponentTag = json['opponentPlayerTag']?.toString() ?? '';
     return PlayerBattlelogEntry(
       id: '',
-      mode: type == 'HOME_VILLAGE'
-          ? PlayerBattlelogMode.farming
-          : PlayerBattlelogMode.ranked,
+      mode: _battlelogMode(json['battleType']),
       source: PlayerBattlelogSource.official,
       attack: json['attack'] == true,
       opponentTag: opponentTag,
@@ -68,22 +66,22 @@ class PlayerBattlelogEntry {
       destructionPercentage: _int(json['destructionPercentage']),
       gold: resources['gold'] ?? 0,
       elixir: resources['elixir'] ?? 0,
-      darkElixir:
-          resources['darkelixir'] ?? resources['dark_elixir'] ?? 0,
+      darkElixir: resources['darkelixir'] ?? resources['dark_elixir'] ?? 0,
       timestamp: timestamp,
       duration: _int(json['battleTime']),
-      armyShareCode: json['armyShareCode']?.toString() ?? '',
-      armyCounts: const {},
+      armyShareCode: armyShareCode,
+      armyCounts: _parseArmyCounts(armyShareCode),
     );
   }
 
   factory PlayerBattlelogEntry.fromHistory(Map<String, dynamic> json) {
-    final type = json['battle_type']?.toString().toLowerCase() ?? '';
+    final armyShareCode = json['army_share_code']?.toString() ?? '';
+    final storedArmyCounts = _map(
+      json['army_counts'],
+    ).map((key, value) => MapEntry(key, _int(value)));
     return PlayerBattlelogEntry(
       id: json['battle_id']?.toString() ?? '',
-      mode: type == 'farming' || type == 'home_village'
-          ? PlayerBattlelogMode.farming
-          : PlayerBattlelogMode.ranked,
+      mode: _battlelogMode(json['battle_type']),
       source: PlayerBattlelogSource.history,
       attack: json['attack'] == true,
       opponentTag: json['opponent_tag']?.toString() ?? '',
@@ -96,10 +94,10 @@ class PlayerBattlelogEntry {
       darkElixir: _int(json['dark_elixir']),
       timestamp: _parseBattleTime(json['timestamp']),
       duration: _int(json['duration']),
-      armyShareCode: json['army_share_code']?.toString() ?? '',
-      armyCounts: _map(
-        json['army_counts'],
-      ).map((key, value) => MapEntry(key, _int(value))),
+      armyShareCode: armyShareCode,
+      armyCounts: storedArmyCounts.isEmpty
+          ? _parseArmyCounts(armyShareCode)
+          : storedArmyCounts,
     );
   }
 
@@ -120,9 +118,8 @@ class PlayerBattlelogData {
   final bool officialAvailable;
   final bool historyAvailable;
 
-  List<PlayerBattlelogEntry> forMode(PlayerBattlelogMode mode) => items
-      .where((item) => item.mode == mode)
-      .toList(growable: false);
+  List<PlayerBattlelogEntry> forMode(PlayerBattlelogMode mode) =>
+      items.where((item) => item.mode == mode).toList(growable: false);
 
   static PlayerBattlelogData merge({
     required Iterable<PlayerBattlelogEntry> official,
@@ -161,23 +158,24 @@ class PlayerBattlelogData {
       (item) => item.mode == mode && item.attack,
     )) {
       for (final code in battle.armyCounts.keys.where(
-        (code) => code.startsWith('u_') || code.startsWith('s_'),
+        (code) => code.startsWith('u_') || code.startsWith('i_'),
       )) {
         uses.update(code, (count) => count + 1, ifAbsent: () => 1);
       }
     }
-    final popular = uses.entries
-        .map(
-          (entry) => PlayerPopularArmyItem(
-            item: PlayerBattlelogArmyCatalog.resolve(entry.key),
-            uses: entry.value,
-          ),
-        )
-        .toList()
-      ..sort((a, b) {
-        final byUses = b.uses.compareTo(a.uses);
-        return byUses != 0 ? byUses : a.item.name.compareTo(b.item.name);
-      });
+    final popular =
+        uses.entries
+            .map(
+              (entry) => PlayerPopularArmyItem(
+                item: PlayerBattlelogArmyCatalog.resolve(entry.key),
+                uses: entry.value,
+              ),
+            )
+            .toList()
+          ..sort((a, b) {
+            final byUses = b.uses.compareTo(a.uses);
+            return byUses != 0 ? byUses : a.item.name.compareTo(b.item.name);
+          });
     return popular.take(limit).toList(growable: false);
   }
 }
@@ -212,7 +210,7 @@ class PlayerBattlelogArmyCatalog {
     final name = GameDataService.localizedNameForItem(item).trim();
     final resolvedName = name.isEmpty ? code : name;
     final imageUrl = switch (prefix) {
-      'i' => ImageAssets.getSpellImage(resolvedName),
+      's' || 'd' => ImageAssets.getSpellImage(resolvedName),
       'h' => ImageAssets.getHeroImage(resolvedName),
       'p' => ImageAssets.getPetImage(resolvedName),
       'e' => ImageAssets.getGearImage(resolvedName),
@@ -227,7 +225,7 @@ class PlayerBattlelogArmyCatalog {
 
   static Map<String, dynamic>? _findItem(String prefix, int itemID) {
     final sectionName = switch (prefix) {
-      'i' => 'spells',
+      's' || 'd' => 'spells',
       'h' => 'heroes',
       'p' => 'pets',
       'e' => 'equipment',
@@ -266,6 +264,40 @@ class PlayerBattlelogArmyCatalog {
   }
 }
 
+PlayerBattlelogMode _battlelogMode(Object? value) {
+  final normalized = value?.toString().trim().toLowerCase().replaceAll(
+    RegExp(r'[^a-z]'),
+    '',
+  );
+  return switch (normalized) {
+    'ranked' || 'legend' => PlayerBattlelogMode.ranked,
+    'homevillage' || 'farming' => PlayerBattlelogMode.farming,
+    _ => PlayerBattlelogMode.farming,
+  };
+}
+
+Map<String, int> _parseArmyCounts(String shareCode) {
+  final payload = Uri.tryParse(shareCode)?.queryParameters['army'] ?? shareCode;
+  final counts = <String, int>{};
+  for (final section in RegExp(r'([hidsu])([^hidsu]*)').allMatches(payload)) {
+    final prefix = section.group(1)!;
+    if (prefix == 'h') continue;
+    for (final rawItem in section.group(2)!.split('-')) {
+      final match = RegExp(r'^(\d+)x(\d+)$').firstMatch(rawItem);
+      if (match == null) continue;
+      final quantity = int.tryParse(match.group(1)!);
+      final itemID = int.tryParse(match.group(2)!);
+      if (quantity == null || quantity <= 0 || itemID == null) continue;
+      counts.update(
+        '${prefix}_$itemID',
+        (current) => current + quantity,
+        ifAbsent: () => quantity,
+      );
+    }
+  }
+  return counts;
+}
+
 DateTime? _parseBattleTime(Object? value) {
   final raw = value?.toString().trim() ?? '';
   if (raw.isEmpty) return null;
@@ -287,12 +319,10 @@ DateTime? _parseBattleTime(Object? value) {
   );
 }
 
-Map<String, dynamic> _map(Object? value) => value is Map
-    ? Map<String, dynamic>.from(value)
-    : const <String, dynamic>{};
+Map<String, dynamic> _map(Object? value) =>
+    value is Map ? Map<String, dynamic>.from(value) : const <String, dynamic>{};
 
 List<dynamic> _list(Object? value) => value is List ? value : const [];
 
-int _int(Object? value) => value is num
-    ? value.toInt()
-    : int.tryParse(value?.toString() ?? '') ?? 0;
+int _int(Object? value) =>
+    value is num ? value.toInt() : int.tryParse(value?.toString() ?? '') ?? 0;

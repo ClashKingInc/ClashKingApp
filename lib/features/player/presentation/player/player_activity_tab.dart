@@ -1,5 +1,4 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
-import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -112,10 +111,7 @@ String _normalizeTag(String tag) =>
     tag.replaceAll('#', '').trim().toUpperCase();
 
 class _ActivityContent extends StatelessWidget {
-  const _ActivityContent({
-    required this.feed,
-    required this.verifiedTracking,
-  });
+  const _ActivityContent({required this.feed, required this.verifiedTracking});
 
   final PlayerActivityFeed feed;
   final bool verifiedTracking;
@@ -157,7 +153,6 @@ class _TrackingCoverage extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final scheme = Theme.of(context).colorScheme;
-    final color = verifiedTracking ? StatColors.win : CKColors.capitalOrange;
     final title = verifiedTracking
         ? loc.playerActivityTrackingActive
         : loc.playerActivityTrackingUnknown;
@@ -171,19 +166,12 @@ class _TrackingCoverage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.14),
-                shape: BoxShape.circle,
-              ),
-              child: SizedBox.square(
-                dimension: 42,
-                child: Icon(
-                  verifiedTracking
-                      ? Icons.radar_rounded
-                      : Icons.info_outline_rounded,
-                  color: color,
-                ),
+            SizedBox.square(
+              dimension: 44,
+              child: MobileWebImage(
+                imageUrl: verifiedTracking
+                    ? ImageAssets.activeDailyLabel
+                    : ImageAssets.thinkingBuilder,
               ),
             ),
             const SizedBox(width: CKSpacing.md),
@@ -226,10 +214,12 @@ class _ActivityRow extends StatelessWidget {
     final date = DateFormat.yMMMd(locale).add_jm().format(event.time.toLocal());
     final title = switch (event.kind) {
       PlayerActivityKind.townHallUpgrade => loc.playerActivityTownHallUpgraded,
-      PlayerActivityKind.superTroopBoost =>
-        loc.playerActivitySuperTroopBoosted(event.name),
-      PlayerActivityKind.itemUnlocked =>
-        loc.playerActivityItemUnlocked(event.name),
+      PlayerActivityKind.superTroopBoost => loc.playerActivitySuperTroopBoosted(
+        event.name,
+      ),
+      PlayerActivityKind.itemUnlocked => loc.playerActivityItemUnlocked(
+        event.name,
+      ),
       PlayerActivityKind.nameChange => loc.playerActivityNameChanged,
       _ => loc.playerActivityItemUpgraded(event.name),
     };
@@ -260,15 +250,7 @@ class _ActivityRow extends StatelessWidget {
           children: [
             SizedBox.square(
               dimension: 48,
-              child: artwork == null
-                  ? DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: accent.withValues(alpha: 0.14),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.edit_rounded, color: accent),
-                    )
-                  : MobileWebImage(imageUrl: artwork),
+              child: MobileWebImage(imageUrl: artwork),
             ),
             const SizedBox(width: CKSpacing.md),
             Expanded(
@@ -308,14 +290,15 @@ class _ActivityRow extends StatelessWidget {
     );
   }
 
-  String? _eventArtwork(PlayerActivityEvent event) => switch (event.itemType) {
-    PlayerActivityItemType.townHall =>
-      ImageAssets.townHall(event.currentLevel ?? 1),
+  String _eventArtwork(PlayerActivityEvent event) => switch (event.itemType) {
+    PlayerActivityItemType.townHall => ImageAssets.townHall(
+      event.currentLevel ?? 1,
+    ),
     PlayerActivityItemType.troop => ImageAssets.getTroopImage(event.name),
     PlayerActivityItemType.hero => ImageAssets.getHeroImage(event.name),
     PlayerActivityItemType.spell => ImageAssets.getSpellImage(event.name),
     PlayerActivityItemType.equipment => ImageAssets.getGearImage(event.name),
-    PlayerActivityItemType.profile => null,
+    PlayerActivityItemType.profile => ImageAssets.defaultProfile,
   };
 
   Color _eventAccent(PlayerActivityEvent event) => switch (event.kind) {

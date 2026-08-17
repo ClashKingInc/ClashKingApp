@@ -9,12 +9,41 @@ void main() {
         {'_id': 4000005, 'name': 'Balloon', 'levels': const []},
         {'_id': 4000007, 'name': 'Wizard', 'levels': const []},
       ],
+      'spells': [
+        {'_id': 26000001, 'name': 'Lightning Spell', 'levels': const []},
+      ],
+    });
+  });
+
+  test('keeps Ranked first in the battle mode order', () {
+    expect(PlayerBattlelogMode.values, [
+      PlayerBattlelogMode.ranked,
+      PlayerBattlelogMode.farming,
+    ]);
+  });
+
+  test('parses live homeVillage values and official army share codes', () {
+    final battle = PlayerBattlelogEntry.fromOfficial({
+      'battleType': 'homeVillage',
+      'attack': true,
+      'armyShareCode': 'h0p4e8_14i1x7d1x1u8x5-4x7s2x1',
+      'opponentPlayerTag': '#OPP',
+      'battleTimestamp': '20260817T120000.000Z',
+    });
+
+    expect(battle.mode, PlayerBattlelogMode.farming);
+    expect(battle.armyCounts, {
+      'i_7': 1,
+      'd_1': 1,
+      'u_5': 8,
+      'u_7': 4,
+      's_1': 2,
     });
   });
 
   test('merges official and historical battles and preserves army data', () {
     final official = PlayerBattlelogEntry.fromOfficial({
-      'battleType': 'HOME_VILLAGE',
+      'battleType': 'homeVillage',
       'attack': true,
       'opponentPlayerTag': '#OPP',
       'opponentName': 'Opponent',
@@ -79,7 +108,7 @@ void main() {
       final data = PlayerBattlelogData.merge(
         official: const [],
         history: [
-          battle('A', {'u_5': 8, 'u_7': 4}),
+          battle('A', {'u_5': 8, 'u_7': 4, 's_1': 2}),
           battle('B', {'u_5': 2}),
         ],
         officialAvailable: true,
@@ -90,6 +119,17 @@ void main() {
       expect(popular.first.item.name, 'Balloon');
       expect(popular.first.uses, 2);
       expect(popular[1].item.name, 'Wizard');
+      expect(popular.map((item) => item.item.code), isNot(contains('s_1')));
     },
   );
+
+  test('resolves troop and spell army prefixes to ClashKing assets', () {
+    final troop = PlayerBattlelogArmyCatalog.resolve('i_7');
+    final spell = PlayerBattlelogArmyCatalog.resolve('s_1');
+
+    expect(troop.name, 'Wizard');
+    expect(troop.imageUrl, endsWith('/troops/wizard/icon.webp'));
+    expect(spell.name, 'Lightning Spell');
+    expect(spell.imageUrl, endsWith('/spells/lightning_spell.webp'));
+  });
 }
