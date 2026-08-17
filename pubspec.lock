@@ -181,8 +181,8 @@ packages:
     dependency: "direct main"
     description:
       path: "design/packages/flutter"
-      ref: "codex/shared-devkit-controls"
-      resolved-ref: "27d984dd1c5c7894b93f26b3062c4ded66680be2"
+      ref: "agent/game-item-tile"
+      resolved-ref: d5419df369d5bba4bd4aa0ebab52291457adb611
       url: "https://github.com/ClashKingInc/DevKit.git"
     source: git
     version: "0.2.0"

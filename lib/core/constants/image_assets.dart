@@ -187,9 +187,6 @@ class ImageAssets {
       "$baseUrl/buildings/home-village/clan_castle/level_1.webp";
   static const String cwlSwordsNoBorder =
       "$baseUrl/icons/Icon_DC_CWL_No_Border.png";
-  static const String farmingLabel = "$baseUrl/player_labels/farming.webp";
-  static const String competitiveLabel =
-      "$baseUrl/player_labels/competitive.webp";
   static const String activeDailyLabel =
       "$baseUrl/player_labels/active_daily.webp";
 

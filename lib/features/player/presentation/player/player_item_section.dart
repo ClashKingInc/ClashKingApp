@@ -1,6 +1,7 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/collapsible_item_section.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/models/player_item.dart';
@@ -142,78 +143,29 @@ class _PlayerItemSectionState extends State<PlayerItemSection> {
 
     final containerBackground = isLocked ? Colors.grey[850] : backgroundColor;
 
-    return GestureDetector(
-      onTap: () => _showItemDialog(context, item),
-      child: AnimatedContainer(
-        width: size,
-        height: size,
-        duration: const Duration(milliseconds: 180),
-        curve: Curves.easeOutCubic,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: borderColor,
-            width: isHighlightedMax ? 2.5 : 2,
-          ),
-          borderRadius: BorderRadius.circular(8),
-          color: containerBackground,
-          boxShadow: isHighlightedMax
-              ? [
-                  BoxShadow(
-                    color: borderColor.withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : null,
+    final showLevel = item is! PlayerSuperTroop && !isLocked && item.level > 0;
+    final levelLabel = AppLocalizations.of(
+      context,
+    )!.gameLevel(item.level, item.maxLevel);
+    return SizedBox.square(
+      dimension: size,
+      child: CKGameItemTile(
+        artwork: MobileWebImage(
+          imageUrl: item.imageUrl,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
         ),
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: ColorFiltered(
-                colorFilter: isLocked || item.level == 0
-                    ? const ColorFilter.mode(Colors.grey, BlendMode.saturation)
-                    : const ColorFilter.mode(
-                        Colors.transparent,
-                        BlendMode.multiply,
-                      ),
-                child: MobileWebImage(
-                  imageUrl: item.imageUrl,
-                  width: size,
-                  height: size,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            if (item is! PlayerSuperTroop && !isLocked && item.level > 0)
-              Positioned(
-                right: 1,
-                bottom: 1,
-                child: Container(
-                  constraints: const BoxConstraints(minWidth: 24),
-                  height: 18,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: isHighlightedMax
-                        ? borderColor
-                        : Colors.black.withValues(alpha: 0.86),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      item.level.toString(),
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: isGlobalMax ? Colors.black : Colors.white,
-                        height: 1,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
+        semanticLabel: showLevel ? '${item.name}, $levelLabel' : item.name,
+        badge: showLevel ? item.level.toString() : null,
+        borderColor: borderColor,
+        backgroundColor: containerBackground,
+        badgeColor: isHighlightedMax
+            ? borderColor
+            : Colors.black.withValues(alpha: 0.86),
+        muted: isLocked || item.level == 0,
+        emphasized: isHighlightedMax,
+        onTap: () => _showItemDialog(context, item),
       ),
     );
   }
