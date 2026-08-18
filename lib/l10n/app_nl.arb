@@ -2979,7 +2979,7 @@
   "rankingsSource": "Bron",
   "rankingsOfficialSource": "Officiële Clash-API",
   "rankingsResults": "Resultaten",
-  "rankingsTopCount": "Top {count}",
+  "rankingsTopCount": "Beste {count}",
   "@rankingsTopCount": {
     "placeholders": {
       "count": {
@@ -3235,7 +3235,7 @@
   "endpointClanWarWinsPreview": "Internationaal · oorlogsoverwinningen aller tijden",
   "endpointTop200ArmyUsage": "Legergebruik top 200",
   "endpointTop200ArmyUsagePreview": "Gevechtslogs · troepen- en spreukgebruik",
-  "endpointStateTop200": "Top 200",
+  "endpointStateTop200": "Beste 200",
   "endpointStateWeekly": "Wekelijks",
   "endpointStateUsage": "Gebruik",
   "notifGroupReminders": "Herinneringen",
