@@ -781,6 +781,20 @@ class GameDataService {
   static Map<String, dynamic> get gearsData => _gearsData;
   static Map<String, dynamic> get leagueData => _leagueData;
   static Map<String, dynamic> get warLeagueData => _warLeagueData;
+  static Map<int, Map<String, dynamic>> get warLeaguesByApiId {
+    final leagues = _warLeagueData['leagues'];
+    if (leagues is! Map) return {};
+
+    return {
+      for (final rawLeague in leagues.values)
+        if (rawLeague is Map && rawLeague['_id'] is num)
+          // The game-data table is one-based relative to the public API IDs.
+          (rawLeague['_id'] as num).toInt() - 1: Map<String, dynamic>.from(
+            rawLeague,
+          ),
+    };
+  }
+
   static Map<String, dynamic> get playerLeagueData => _playerLeagueData;
   static Map<String, dynamic> get gameData => _gameData;
   static Map<String, dynamic> get bundleData => _bundleData;

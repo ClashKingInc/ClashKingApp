@@ -3755,30 +3755,9 @@ String _itemTypeLabel(AppLocalizations loc, StatsItemType type) =>
       StatsItemType.equipment => loc.statsEquipment,
     };
 
-const _cwlLeagueNamesByApiId = <int, String>{
-  48000000: 'Bronze League III',
-  48000001: 'Bronze League II',
-  48000002: 'Bronze League I',
-  48000003: 'Silver League III',
-  48000004: 'Silver League II',
-  48000005: 'Silver League I',
-  48000006: 'Gold League III',
-  48000007: 'Gold League II',
-  48000008: 'Gold League I',
-  48000009: 'Crystal League III',
-  48000010: 'Crystal League II',
-  48000011: 'Crystal League I',
-  48000012: 'Master League III',
-  48000013: 'Master League II',
-  48000014: 'Master League I',
-  48000015: 'Champion League III',
-  48000016: 'Champion League II',
-  48000017: 'Champion League I',
-};
-
 Map<int, String> _localizedCwlLeagues(BuildContext context) {
   final loc = AppLocalizations.of(context)!;
-  final staticLeagues = GameDataService.warLeagueData['leagues'];
+  final staticLeagues = GameDataService.warLeaguesByApiId;
   final fallbacks = <int, String>{
     48000000: '${loc.statsLeagueBronze} III',
     48000001: '${loc.statsLeagueBronze} II',
@@ -3801,12 +3780,12 @@ Map<int, String> _localizedCwlLeagues(BuildContext context) {
   };
 
   return {
-    for (final entry in _cwlLeagueNamesByApiId.entries)
+    for (final entry in staticLeagues.entries)
       entry.key: loc.gameItemName(
-        staticLeagues is Map && staticLeagues[entry.value] is Map
-            ? Map<String, dynamic>.from(staticLeagues[entry.value] as Map)
-            : null,
-        fallbacks[entry.key]!,
+        entry.value,
+        fallbacks[entry.key] ??
+            entry.value['name']?.toString() ??
+            '${entry.key}',
       ),
   };
 }

@@ -38,6 +38,7 @@ void main() {
       GameDataService.loadFromBundleForTesting({
         'war_leagues': [
           {
+            '_id': 48000007,
             'name': 'Gold League III',
             'TID': {'name': 'TID_LEAGUE_GOLD3'},
           },
@@ -66,6 +67,32 @@ void main() {
           fallback: 'Goldvorrat',
         ),
         'Gold',
+      );
+    });
+
+    test('indexes war leagues by their public API IDs', () {
+      GameDataService.loadFromBundleForTesting({
+        'war_leagues': [
+          {
+            '_id': 48000007,
+            'name': 'Gold League III',
+            'TID': {'name': 'TID_LEAGUE_GOLD3'},
+          },
+          {
+            '_id': 48000019,
+            'name': 'Titan League III',
+            'TID': {'name': 'TID_LEAGUE_HERO3'},
+          },
+        ],
+      });
+
+      expect(
+        GameDataService.warLeaguesByApiId[48000006]?['name'],
+        'Gold League III',
+      );
+      expect(
+        GameDataService.warLeaguesByApiId[48000018]?['name'],
+        'Titan League III',
       );
     });
 
