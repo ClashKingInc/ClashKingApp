@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "कोई रैंकिंग वापस नहीं आई",
   "sideRankingsEmptyBody": "दूसरा लीडरबोर्ड या स्थान आज़माएँ।",
   "sideRankingsMockups": "ClashKing मॉकअप",
-  "rankingsHomeVillage": "मुख्य गाँव",
   "rankingsBuilderBase": "बिल्डर बेस",
   "rankingsTownHall": "टाउन हॉल",
   "rankingsRankedLeague": "रैंक्ड लीग",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "अपग्रेड प्रगति",
-  "widgetHomeVillage": "मुख्य गाँव",
-  "widgetVillage": "गाँव",
   "widgetLaboratory": "प्रयोगशाला",
   "widgetPets": "पालतू जीव",
   "widgetBuilderBase": "बिल्डर बेस",
