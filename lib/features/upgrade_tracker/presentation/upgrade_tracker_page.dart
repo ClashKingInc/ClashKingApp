@@ -552,6 +552,9 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         allowedTags: linkedNames.keys.toSet(),
       );
       if (!mounted) return;
+      // Prevent a load started before the import from overwriting the newly
+      // persisted snapshot when its repository request completes later.
+      _selectionGeneration++;
       setState(() {
         _snapshot = snapshot;
         _selectedTag = snapshot.tag;
