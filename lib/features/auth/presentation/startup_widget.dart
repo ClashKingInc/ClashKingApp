@@ -13,6 +13,7 @@ import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/achievements/data/achievements_repository.dart';
 import 'package:clashkingapp/features/auth/presentation/login_page.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
@@ -76,6 +77,7 @@ class StartupWidgetState extends State<StartupWidget> {
       final clanService = context.read<ClanService>();
       final warService = context.read<WarCwlService>();
       final bookmarkService = context.read<BookmarkService>();
+      final achievementsRepository = context.read<AchievementsRepository>();
       try {
         await _accountBootstrap.initialize(
           userId: authService.currentUser?.userId,
@@ -84,6 +86,19 @@ class StartupWidgetState extends State<StartupWidget> {
           players: playerService,
           clans: clanService,
           wars: warService,
+        );
+        unawaited(
+          achievementsRepository.check().catchError((
+            Object error,
+            StackTrace stackTrace,
+          ) {
+            ErrorReporter.captureException(
+              error,
+              stackTrace: stackTrace,
+              operation: 'startup.achievements',
+            );
+            DebugUtils.debugError(' Achievement check failed: $error');
+          }),
         );
         if (shouldHandlePushNotifications) {
           final pushResult = await PushNotificationService.instance
