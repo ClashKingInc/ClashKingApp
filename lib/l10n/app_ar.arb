@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "لم يتم إرجاع أي تصنيفات",
   "sideRankingsEmptyBody": "جرّب لوحة صدارة أو موقعًا آخر.",
   "sideRankingsMockups": "نماذج ClashKing",
-  "rankingsHomeVillage": "القرية الرئيسية",
   "rankingsBuilderBase": "قاعدة البنّاء",
   "rankingsTownHall": "قاعة المدينة",
   "rankingsRankedLeague": "الدوري المصنف",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "تقدم الترقيات",
-  "widgetHomeVillage": "القرية الرئيسية",
-  "widgetVillage": "القرية",
   "widgetLaboratory": "المختبر",
   "widgetPets": "الحيوانات الأليفة",
   "widgetBuilderBase": "قاعدة البنّاء",
