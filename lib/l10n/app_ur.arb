@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "کوئی رینکنگ واپس نہیں آئی",
   "sideRankingsEmptyBody": "کوئی دوسرا لیڈر بورڈ یا مقام آزمائیں۔",
   "sideRankingsMockups": "ClashKing موک اَپس",
-  "rankingsHomeVillage": "آبائی گاؤں",
   "rankingsBuilderBase": "بلڈر بیس",
   "rankingsTownHall": "ٹاؤن ہال",
   "rankingsRankedLeague": "رینکڈ لیگ",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "اپ گریڈ پیش رفت",
-  "widgetHomeVillage": "آبائی گاؤں",
-  "widgetVillage": "گاؤں",
   "widgetLaboratory": "لیبارٹری",
   "widgetPets": "پالتو جانور",
   "widgetBuilderBase": "بلڈر بیس",
