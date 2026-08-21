@@ -125,6 +125,20 @@ void main() {
       expect(service.summaries, isEmpty);
     });
 
+    test('keeps clan summaries when war_info is null or missing', () {
+      final service = WarCwlService();
+      final missingWarInfo = _minimalWarCwl('#MISSING')..remove('war_info');
+
+      service.processBulkWarData([
+        {..._minimalWarCwl('#NULL'), 'war_info': null},
+        missingWarInfo,
+      ], notify: false);
+
+      expect(service.summaries, hasLength(2));
+      expect(service.summaries['#NULL']?.warInfo.state, 'notInWar');
+      expect(service.summaries['#MISSING']?.warInfo.state, 'notInWar');
+    });
+
     test('overwrites existing entry for same tag', () {
       final service = WarCwlService();
       service.processBulkWarData([_minimalWarCwl('#CLAN1')], notify: false);
