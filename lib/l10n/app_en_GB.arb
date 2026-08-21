@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "No rankings returned",
   "sideRankingsEmptyBody": "Try another leaderboard or location.",
   "sideRankingsMockups": "ClashKing mockups",
-  "rankingsHomeVillage": "Home Village",
   "rankingsBuilderBase": "Builder Base",
   "rankingsTownHall": "Town Hall",
   "rankingsRankedLeague": "Ranked League",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Upgrade Progress",
-  "widgetHomeVillage": "HOME VILLAGE",
-  "widgetVillage": "VILLAGE",
   "widgetLaboratory": "LAB",
   "widgetPets": "PETS",
   "widgetBuilderBase": "BUILDER BASE",
