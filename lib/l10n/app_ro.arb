@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Nu s-a returnat niciun clasament",
   "sideRankingsEmptyBody": "Încearcă alt clasament sau altă locație.",
   "sideRankingsMockups": "Mockup-uri ClashKing",
-  "rankingsHomeVillage": "Satul principal",
   "rankingsBuilderBase": "Baza Constructorului",
   "rankingsTownHall": "Primărie",
   "rankingsRankedLeague": "Liga Clasată",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Progresul îmbunătățirilor",
-  "widgetHomeVillage": "SATUL PRINCIPAL",
-  "widgetVillage": "SAT",
   "widgetLaboratory": "LABORATOR",
   "widgetPets": "ANIMALE",
   "widgetBuilderBase": "BAZA CONSTRUCTORULUI",

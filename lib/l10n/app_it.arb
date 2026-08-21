@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Nessuna classifica restituita",
   "sideRankingsEmptyBody": "Prova un’altra classifica o località.",
   "sideRankingsMockups": "Mockup ClashKing",
-  "rankingsHomeVillage": "Villaggio principale",
   "rankingsBuilderBase": "Base del costruttore",
   "rankingsTownHall": "Municipio",
   "rankingsRankedLeague": "Lega classificata",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Avanzamento dei miglioramenti",
-  "widgetHomeVillage": "VILLAGGIO PRINCIPALE",
-  "widgetVillage": "VILLAGGIO",
   "widgetLaboratory": "LABORATORIO",
   "widgetPets": "ANIMALI",
   "widgetBuilderBase": "BASE DEL COSTRUTTORE",

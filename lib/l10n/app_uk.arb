@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Рейтинги не повернулися",
   "sideRankingsEmptyBody": "Спробуйте іншу таблицю лідерів або локацію.",
   "sideRankingsMockups": "Макети ClashKing",
-  "rankingsHomeVillage": "Головне Селище",
   "rankingsBuilderBase": "База Будівельника",
   "rankingsTownHall": "Ратуша",
   "rankingsRankedLeague": "Рейтингова Ліга",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Прогрес покращень",
-  "widgetHomeVillage": "ГОЛОВНЕ СЕЛИЩЕ",
-  "widgetVillage": "СЕЛИЩЕ",
   "widgetLaboratory": "ЛАБОРАТОРІЯ",
   "widgetPets": "УЛЮБЛЕНЦІ",
   "widgetBuilderBase": "БАЗА БУДІВЕЛЬНИКА",

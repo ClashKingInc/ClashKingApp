@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Geen ranglyste teruggestuur nie",
   "sideRankingsEmptyBody": "Probeer ’n ander ranglys of ligging.",
   "sideRankingsMockups": "ClashKing-modelle",
-  "rankingsHomeVillage": "Tuisdorp",
   "rankingsBuilderBase": "Bouerbasis",
   "rankingsTownHall": "Stadsaal",
   "rankingsRankedLeague": "Gerangskikte Liga",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Opgraderingsvordering",
-  "widgetHomeVillage": "TUISDORP",
-  "widgetVillage": "DORP",
   "widgetLaboratory": "LABORATORIUM",
   "widgetPets": "TROETELDIERE",
   "widgetBuilderBase": "BOUERSBASIS",

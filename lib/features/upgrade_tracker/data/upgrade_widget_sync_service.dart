@@ -6,6 +6,7 @@ import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 
@@ -468,7 +469,7 @@ class UpgradeWidgetSyncService {
           0)
         timed(
           'builderPotion',
-          l10n.widgetBuilderPotion,
+          l10n.gameName('TID_BOOSTER_BUILDERS', l10n.widgetBuilderPotion),
           l10n.widgetBuilderBoostShort,
           boosts.builderConsumableSeconds,
           ImageAssets.builderPotion,
@@ -476,7 +477,7 @@ class UpgradeWidgetSyncService {
       if (snapshot.remainingCapturedSeconds(boosts.labConsumableSeconds) > 0)
         timed(
           'researchPotion',
-          l10n.widgetResearchPotion,
+          l10n.gameName('TID_BOOSTER_LAB_POTION', l10n.widgetResearchPotion),
           l10n.widgetResearchBoostShort,
           boosts.labConsumableSeconds,
           ImageAssets.researchPotion,
@@ -484,7 +485,7 @@ class UpgradeWidgetSyncService {
       if (snapshot.remainingCapturedSeconds(boosts.petConsumableSeconds) > 0)
         timed(
           'petPotion',
-          l10n.widgetPetPotion,
+          l10n.gameName('TID_BOOSTER_PET_POTION', l10n.widgetPetPotion),
           l10n.widgetPetBoostShort,
           boosts.petConsumableSeconds,
           ImageAssets.petPotion,
@@ -492,7 +493,7 @@ class UpgradeWidgetSyncService {
       if (snapshot.remainingCapturedSeconds(boosts.clockTowerBoostSeconds) > 0)
         timed(
           'clockTower',
-          l10n.widgetClockTower,
+          l10n.gameName('TID_BUILDING_CLOCK_TOWER', l10n.widgetClockTower),
           l10n.widgetClockBoostShort,
           boosts.clockTowerBoostSeconds,
           ImageAssets.clockTowerPotion,
@@ -592,8 +593,8 @@ class UpgradeWidgetSyncService {
 
   static Map<String, String> _labels(AppLocalizations l10n) => {
     'title': l10n.widgetUpgradeProgressTitle,
-    'homeVillage': l10n.widgetHomeVillage,
-    'village': l10n.widgetVillage,
+    'homeVillage': l10n.upgradeTrackerHomeVillage.toUpperCase(),
+    'village': l10n.dashboardUpgradeTrackerVillage.toUpperCase(),
     'laboratory': l10n.widgetLaboratory,
     'pets': l10n.widgetPets,
     'builderBase': l10n.widgetBuilderBase,
@@ -622,7 +623,12 @@ class UpgradeWidgetSyncService {
     final lower = name.toLowerCase();
     if (lower.contains('apprentice')) return l10n.widgetApprenticeShort;
     if (lower.contains('assistant')) return l10n.widgetAssistantShort;
-    if (lower.contains('alchemist')) return l10n.widgetAlchemistShort;
+    if (lower.contains('alchemist')) {
+      return l10n.gameName(
+        'TID_ALCHEMIST_APPRENTICE',
+        l10n.widgetAlchemistShort,
+      );
+    }
     return name;
   }
 

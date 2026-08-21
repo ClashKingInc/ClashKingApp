@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "לא הוחזרו דירוגים",
   "sideRankingsEmptyBody": "נסה לוח דירוג או מיקום אחר.",
   "sideRankingsMockups": "מוקאפ ClashKing",
-  "rankingsHomeVillage": "כפר הבית",
   "rankingsBuilderBase": "בסיס הבנאי",
   "rankingsTownHall": "בית העירייה",
   "rankingsRankedLeague": "ליגה מדורגת",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "התקדמות שדרוג",
-  "widgetHomeVillage": "כפר הבית",
-  "widgetVillage": "כפר",
   "widgetLaboratory": "מעבדה",
   "widgetPets": "חיות מחמד",
   "widgetBuilderBase": "בסיס הבנאי",

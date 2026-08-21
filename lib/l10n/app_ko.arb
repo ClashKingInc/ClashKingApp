@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "반환된 순위가 없습니다",
   "sideRankingsEmptyBody": "다른 리더보드나 위치를 시도하세요.",
   "sideRankingsMockups": "ClashKing 목업",
-  "rankingsHomeVillage": "본 마을",
   "rankingsBuilderBase": "장인 기지",
   "rankingsTownHall": "마을회관",
   "rankingsRankedLeague": "랭크 리그",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "업그레이드 진행도",
-  "widgetHomeVillage": "본 마을",
-  "widgetVillage": "마을",
   "widgetLaboratory": "연구소",
   "widgetPets": "펫",
   "widgetBuilderBase": "장인 기지",

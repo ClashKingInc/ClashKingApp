@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Nema vraćenih rang lista",
   "sideRankingsEmptyBody": "Probaj drugu rang listu ili lokaciju.",
   "sideRankingsMockups": "ClashKing makete",
-  "rankingsHomeVillage": "Матично село",
   "rankingsBuilderBase": "Graditeljska baza",
   "rankingsTownHall": "Градска кућа",
   "rankingsRankedLeague": "Рангирана лига",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Напредак надоградње",
-  "widgetHomeVillage": "МАТИЧНО СЕЛО",
-  "widgetVillage": "СЕЛО",
   "widgetLaboratory": "ЛАБОРАТОРИЈА",
   "widgetPets": "ЉУБИМЦИ",
   "widgetBuilderBase": "ГРАДИТЕЉСКА БАЗА",

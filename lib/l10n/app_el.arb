@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Δεν επιστράφηκαν κατατάξεις",
   "sideRankingsEmptyBody": "Δοκίμασε άλλο πίνακα κατάταξης ή τοποθεσία.",
   "sideRankingsMockups": "Mockups ClashKing",
-  "rankingsHomeVillage": "Αρχική Χωριό",
   "rankingsBuilderBase": "Βάση Χτίστη",
   "rankingsTownHall": "Δημαρχείο",
   "rankingsRankedLeague": "Πρωτάθλημα Κατάταξης",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Πρόοδος αναβάθμισης",
-  "widgetHomeVillage": "ΑΡΧΙΚΟ ΧΩΡΙΟ",
-  "widgetVillage": "ΧΩΡΙΟ",
   "widgetLaboratory": "ΕΡΓΑΣΤΗΡΙΟ",
   "widgetPets": "ΚΑΤΟΙΚΙΔΙΑ",
   "widgetBuilderBase": "ΒΑΣΗ BUILDER",
