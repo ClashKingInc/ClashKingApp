@@ -1062,7 +1062,7 @@ Future<RankingLocation?> showRankingLocationPicker(
 extension RankingBoardLabels on RankingBoard {
   String labelOf(AppLocalizations l10n) => switch (this) {
     RankingBoard.playerHome ||
-    RankingBoard.clanHome => l10n.rankingsHomeVillage,
+    RankingBoard.clanHome => l10n.upgradeTrackerHomeVillage,
     RankingBoard.playerBuilder ||
     RankingBoard.clanBuilder => l10n.rankingsBuilderBase,
     RankingBoard.playerTownHall => l10n.rankingsTownHall,

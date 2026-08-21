@@ -11,9 +11,11 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/search_sort_bar.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/stats/models/stats_models.dart';
 import 'package:clashkingapp/features/stats/presentation/stats_provider.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -839,7 +841,7 @@ class _ClansSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final cwlLeagues = _localizedCwlLeagues(loc);
+    final cwlLeagues = _localizedCwlLeagues(context);
     return _SectionFrame(
       section: StatsSection.clans,
       builder: (data) {
@@ -2303,7 +2305,7 @@ class _CwlSectionState extends State<_CwlSection> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final provider = context.watch<StatsProvider>();
-    final cwlLeagues = _localizedCwlLeagues(loc);
+    final cwlLeagues = _localizedCwlLeagues(context);
     return _PerformancePage(
       section: StatsSection.cwl,
       controls: _BattleContextBar(
@@ -2371,9 +2373,7 @@ class _CwlSectionState extends State<_CwlSection> {
                 icon: Icons.emoji_events_outlined,
                 summary: draftLeague == null
                     ? AppLocalizations.of(context)!.statsAllCwlLeagues
-                    : _localizedCwlLeagues(
-                        AppLocalizations.of(context)!,
-                      )[draftLeague]!,
+                    : _localizedCwlLeagues(context)[draftLeague]!,
                 child: Column(
                   children: [
                     _CompactMenuField<int?>(
@@ -2382,7 +2382,7 @@ class _CwlSectionState extends State<_CwlSection> {
                       value: draftLeague,
                       options: {
                         null: AppLocalizations.of(context)!.statsAllCwlLeagues,
-                        ..._localizedCwlLeagues(AppLocalizations.of(context)!),
+                        ..._localizedCwlLeagues(context),
                       },
                       onChanged: (value) =>
                           setSheetState(() => draftLeague = value),
@@ -3755,23 +3755,58 @@ String _itemTypeLabel(AppLocalizations loc, StatsItemType type) =>
       StatsItemType.equipment => loc.statsEquipment,
     };
 
-Map<int, String> _localizedCwlLeagues(AppLocalizations loc) => {
-  48000000: '${loc.statsLeagueBronze} III',
-  48000001: '${loc.statsLeagueBronze} II',
-  48000002: '${loc.statsLeagueBronze} I',
-  48000003: '${loc.statsLeagueSilver} III',
-  48000004: '${loc.statsLeagueSilver} II',
-  48000005: '${loc.statsLeagueSilver} I',
-  48000006: '${loc.statsLeagueGold} III',
-  48000007: '${loc.statsLeagueGold} II',
-  48000008: '${loc.statsLeagueGold} I',
-  48000009: '${loc.statsLeagueCrystal} III',
-  48000010: '${loc.statsLeagueCrystal} II',
-  48000011: '${loc.statsLeagueCrystal} I',
-  48000012: '${loc.statsLeagueMaster} III',
-  48000013: '${loc.statsLeagueMaster} II',
-  48000014: '${loc.statsLeagueMaster} I',
-  48000015: '${loc.statsLeagueChampion} III',
-  48000016: '${loc.statsLeagueChampion} II',
-  48000017: '${loc.statsLeagueChampion} I',
+const _cwlLeagueNamesByApiId = <int, String>{
+  48000000: 'Bronze League III',
+  48000001: 'Bronze League II',
+  48000002: 'Bronze League I',
+  48000003: 'Silver League III',
+  48000004: 'Silver League II',
+  48000005: 'Silver League I',
+  48000006: 'Gold League III',
+  48000007: 'Gold League II',
+  48000008: 'Gold League I',
+  48000009: 'Crystal League III',
+  48000010: 'Crystal League II',
+  48000011: 'Crystal League I',
+  48000012: 'Master League III',
+  48000013: 'Master League II',
+  48000014: 'Master League I',
+  48000015: 'Champion League III',
+  48000016: 'Champion League II',
+  48000017: 'Champion League I',
 };
+
+Map<int, String> _localizedCwlLeagues(BuildContext context) {
+  final loc = AppLocalizations.of(context)!;
+  final staticLeagues = GameDataService.warLeagueData['leagues'];
+  final fallbacks = <int, String>{
+    48000000: '${loc.statsLeagueBronze} III',
+    48000001: '${loc.statsLeagueBronze} II',
+    48000002: '${loc.statsLeagueBronze} I',
+    48000003: '${loc.statsLeagueSilver} III',
+    48000004: '${loc.statsLeagueSilver} II',
+    48000005: '${loc.statsLeagueSilver} I',
+    48000006: '${loc.statsLeagueGold} III',
+    48000007: '${loc.statsLeagueGold} II',
+    48000008: '${loc.statsLeagueGold} I',
+    48000009: '${loc.statsLeagueCrystal} III',
+    48000010: '${loc.statsLeagueCrystal} II',
+    48000011: '${loc.statsLeagueCrystal} I',
+    48000012: '${loc.statsLeagueMaster} III',
+    48000013: '${loc.statsLeagueMaster} II',
+    48000014: '${loc.statsLeagueMaster} I',
+    48000015: '${loc.statsLeagueChampion} III',
+    48000016: '${loc.statsLeagueChampion} II',
+    48000017: '${loc.statsLeagueChampion} I',
+  };
+
+  return {
+    for (final entry in _cwlLeagueNamesByApiId.entries)
+      entry.key: loc.gameItemName(
+        staticLeagues is Map && staticLeagues[entry.value] is Map
+            ? Map<String, dynamic>.from(staticLeagues[entry.value] as Map)
+            : null,
+        fallbacks[entry.key]!,
+      ),
+  };
+}

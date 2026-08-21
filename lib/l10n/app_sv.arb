@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Inga rankningar returnerades",
   "sideRankingsEmptyBody": "Prova en annan topplista eller plats.",
   "sideRankingsMockups": "ClashKing-mockups",
-  "rankingsHomeVillage": "Hemby",
   "rankingsBuilderBase": "Byggmästarbas",
   "rankingsTownHall": "Rådhus",
   "rankingsRankedLeague": "Rankad liga",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Uppgraderingsförlopp",
-  "widgetHomeVillage": "HEMBY",
-  "widgetVillage": "BY",
   "widgetLaboratory": "LABORATORIUM",
   "widgetPets": "HUSDJUR",
   "widgetBuilderBase": "BYGGARBAS",

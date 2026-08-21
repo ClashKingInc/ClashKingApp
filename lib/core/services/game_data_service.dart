@@ -350,11 +350,17 @@ class GameDataService {
   }
 
   static String clashyLocaleCodeForAppLocale(Locale locale) {
+    return _exactClashyLocaleCode(locale) ?? 'EN';
+  }
+
+  static String? _exactClashyLocaleCode(Locale locale) {
     switch (locale.languageCode.toLowerCase()) {
       case 'ar':
         return 'AR';
       case 'de':
         return 'DE';
+      case 'en':
+        return 'EN';
       case 'es':
         return 'ES';
       case 'fi':
@@ -384,9 +390,16 @@ class GameDataService {
       case 'zh':
         return 'CN';
       default:
-        return 'EN';
+        return null;
     }
   }
+
+  /// Whether Clash's translation catalog contains the requested app locale.
+  ///
+  /// Unsupported app locales still load English for dynamic game data, but UI
+  /// adapters should retain their ARB fallback instead of displaying English.
+  static bool hasTranslationsForLocale(Locale locale) =>
+      _exactClashyLocaleCode(locale) != null;
 
   static Future<void> loadTranslationsForLocale(Locale locale) async {
     final clashyLocale = clashyLocaleCodeForAppLocale(locale);
@@ -449,6 +462,14 @@ class GameDataService {
   @visibleForTesting
   static void loadFromBundleForTesting(Map<String, dynamic> rawBundle) {
     _applyBundle(rawBundle);
+  }
+
+  @visibleForTesting
+  static void loadTranslationsForTesting(
+    Map<String, dynamic> translations, {
+    required Locale locale,
+  }) {
+    _applyTranslations(translations, clashyLocaleCodeForAppLocale(locale));
   }
 
   static Map<String, dynamic> _normalizeBundle(Map<String, dynamic> rawBundle) {
@@ -710,6 +731,38 @@ class GameDataService {
           (item?['name']?.toString() ?? '');
     }
     return item?['name']?.toString() ?? '';
+  }
+
+  /// Resolves a game-owned UI label through its static-data TID when the
+  /// selected locale is present and loaded, otherwise preserving the app's
+  /// localized fallback.
+  static String localizedNameForItemOrFallback(
+    Map<String, dynamic>? item, {
+    required Locale locale,
+    required String fallback,
+  }) {
+    final tid = item?['TID'];
+    if (tid is! Map || tid['name'] is! String) return fallback;
+    return localizedNameForTidOrFallback(
+      tid['name'] as String,
+      locale: locale,
+      fallback: fallback,
+    );
+  }
+
+  static String localizedNameForTidOrFallback(
+    String tid, {
+    required Locale locale,
+    required String fallback,
+  }) {
+    final clashyLocale = _exactClashyLocaleCode(locale);
+    if (clashyLocale == null ||
+        _translationLocale != clashyLocale ||
+        _translationsData.isEmpty) {
+      return fallback;
+    }
+    final translated = translationForTid(tid)?.trim() ?? '';
+    return translated.isEmpty ? fallback : translated;
   }
 
   static String localizedInfoForItem(Map<String, dynamic>? item) {

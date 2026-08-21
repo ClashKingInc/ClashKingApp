@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Рейтинги не вернулись",
   "sideRankingsEmptyBody": "Попробуйте другую таблицу лидеров или локацию.",
   "sideRankingsMockups": "Макеты ClashKing",
-  "rankingsHomeVillage": "Основная деревня",
   "rankingsBuilderBase": "База строителя",
   "rankingsTownHall": "Уровень ратуши",
   "rankingsRankedLeague": "Лига рейтинговых боёв",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Ход улучшений",
-  "widgetHomeVillage": "ОСНОВНАЯ ДЕРЕВНЯ",
-  "widgetVillage": "ПОСЕЛЕНИЕ",
   "widgetLaboratory": "ЛАБОРАТОРНЫЕ РАБОТЫ",
   "widgetPets": "ПИТОМЦЫ",
   "widgetBuilderBase": "БАЗА СТРОИТЕЛЯ",

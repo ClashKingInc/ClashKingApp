@@ -18,6 +18,7 @@ import 'package:clashkingapp/features/player/presentation/to_do/player_to_do_pag
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -1831,7 +1832,7 @@ String _todoMetricDisplayLabel(String label, AppLocalizations loc) {
     'legend_attacks' => loc.todoLegendAttacks,
     'war_attacks' => loc.todoWarAttacks,
     'cwl_attacks' => loc.todoCwlAttacks,
-    'clan_games' => loc.gameClanGames,
+    'clan_games' => loc.gameName('TID_CLAN_TAG_CLAN_GAMES', loc.gameClanGames),
     'season_pass' => loc.gameSeasonPassShort,
     _ => label,
   };
@@ -1887,7 +1888,7 @@ class _TodoPreview {
           fallbackIcon: Icons.military_tech_rounded,
         ),
         _TodoMetric(
-          label: loc.gameClanGames,
+          label: loc.gameName('TID_CLAN_TAG_CLAN_GAMES', loc.gameClanGames),
           detail: loc.todoMockClanGames2700Left,
           done: 1300,
           total: 4000,
@@ -1922,7 +1923,7 @@ class _TodoPreview {
           fallbackIcon: Icons.local_fire_department_rounded,
         ),
         _TodoMetric(
-          label: loc.gameClanGames,
+          label: loc.gameName('TID_CLAN_TAG_CLAN_GAMES', loc.gameClanGames),
           detail: loc.todoMockClanGames900Left,
           done: 3100,
           total: 4000,
@@ -2005,7 +2006,7 @@ class _BannerItem {
     final events = [
       _eventItem(
         now: now,
-        title: loc.todoEventClanGames,
+        title: loc.gameName('TID_CLAN_TAG_CLAN_GAMES', loc.todoEventClanGames),
         imageUrl: ImageAssets.clanGamesMedals,
         fallbackIcon: Icons.emoji_events_rounded,
         color: CKColors.donationGreen,

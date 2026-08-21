@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Nenhuma classificação devolvida",
   "sideRankingsEmptyBody": "Experimenta outra classificação ou localização.",
   "sideRankingsMockups": "Mockups ClashKing",
-  "rankingsHomeVillage": "Aldeia Principal",
   "rankingsBuilderBase": "Base do Construtor",
   "rankingsTownHall": "Centro da Vila",
   "rankingsRankedLeague": "Liga Classificada",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Progresso das melhorias",
-  "widgetHomeVillage": "ALDEIA PRINCIPAL",
-  "widgetVillage": "ALDEIA",
   "widgetLaboratory": "LABORATÓRIO",
   "widgetPets": "ANIMAIS",
   "widgetBuilderBase": "BASE DO CONSTRUTOR",

@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "No s'ha retornat cap classificació",
   "sideRankingsEmptyBody": "Prova una altra classificació o ubicació.",
   "sideRankingsMockups": "Maquetes de ClashKing",
-  "rankingsHomeVillage": "Poble d'origen",
   "rankingsBuilderBase": "Base del Constructor",
   "rankingsTownHall": "Ajuntament",
   "rankingsRankedLeague": "Lliga classificada",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Progrés d'actualització",
-  "widgetHomeVillage": "POBLE NATAL",
-  "widgetVillage": "POBLE",
   "widgetLaboratory": "LAB",
   "widgetPets": "MASCOTES",
   "widgetBuilderBase": "BASE DE CONSTRUCTORS",

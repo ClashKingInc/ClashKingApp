@@ -19,6 +19,7 @@ import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repos
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -3499,9 +3500,12 @@ String _buildingDisplayName(AppLocalizations loc, String name) {
 String? _upgradeResourceLabel(AppLocalizations loc, String? resource) {
   final normalized = resource?.trim().toLowerCase().replaceAll('_', ' ');
   return switch (normalized) {
-    'gold' => loc.resourceGold,
-    'elixir' => loc.resourceElixir,
-    _darkElixirResourceName => loc.resourceDarkElixir,
+    'gold' => loc.gameName('TID_GOLD', loc.resourceGold),
+    'elixir' => loc.gameName('TID_ELIXIR', loc.resourceElixir),
+    _darkElixirResourceName => loc.gameName(
+      'TID_DARK_ELIXIR',
+      loc.resourceDarkElixir,
+    ),
     final value when value != null && value.isNotEmpty => resource,
     _ => null,
   };
@@ -3617,8 +3621,14 @@ int _parseFarmAmount(String value) =>
 String _quickSetupLabel(AppLocalizations loc, String id) => switch (id) {
   _zapQuakeSetupId => loc.damageQuickSetupZapQuake,
   _fireballQuakeSetupId => loc.damageQuickSetupFireballQuake,
-  _giantArrowSetupId => loc.damageQuickSetupGiantArrow,
-  _flameFlingerSetupId => loc.damageQuickSetupFlameFlinger,
+  _giantArrowSetupId => loc.gameName(
+    'TID_GEAR_PIERCING_ARROW',
+    loc.damageQuickSetupGiantArrow,
+  ),
+  _flameFlingerSetupId => loc.gameName(
+    'TID_CHARACTER_SIEGE_MACHINE_CATAPULT',
+    loc.damageQuickSetupFlameFlinger,
+  ),
   _ => loc.damageQuickSetupCustom,
 };
 
@@ -3634,8 +3644,14 @@ String _sourceLabel(AppLocalizations loc, DamageSourceDefinition source) =>
     switch (source.kind) {
       DamageSourceKind.lightning => loc.damageSourceLightning,
       DamageSourceKind.earthquake => loc.damageSourceEarthquake,
-      DamageSourceKind.giantArrow => loc.damageSourceGiantArrow,
-      DamageSourceKind.fireball => loc.damageSourceFireball,
+      DamageSourceKind.giantArrow => loc.gameName(
+        'TID_GEAR_PIERCING_ARROW',
+        loc.damageSourceGiantArrow,
+      ),
+      DamageSourceKind.fireball => loc.gameName(
+        'TID_GEAR_FIRE_IN_A_CAN',
+        loc.damageSourceFireball,
+      ),
       DamageSourceKind.flameFlinger => loc.damageSourceFlameFlinger,
       DamageSourceKind.balloonDeath => loc.damageSourceBalloonDeath,
       DamageSourceKind.rocketBalloonDeath => loc.damageSourceRocketBalloonDeath,

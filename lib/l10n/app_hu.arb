@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Nem érkezett ranglista",
   "sideRankingsEmptyBody": "Próbálj másik ranglistát vagy helyet.",
   "sideRankingsMockups": "ClashKing makettek",
-  "rankingsHomeVillage": "Otthoni falu",
   "rankingsBuilderBase": "Építő Bázis",
   "rankingsTownHall": "Városháza",
   "rankingsRankedLeague": "Rangsorolt Liga",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Fejlesztési haladás",
-  "widgetHomeVillage": "OTTHONI FALU",
-  "widgetVillage": "FALU",
   "widgetLaboratory": "LABORATÓRIUM",
   "widgetPets": "HŐSÁLLATOK",
   "widgetBuilderBase": "ÉPÍTŐBÁZIS",
