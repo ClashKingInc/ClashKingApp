@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Không có bảng xếp hạng trả về",
   "sideRankingsEmptyBody": "Thử bảng xếp hạng hoặc vị trí khác.",
   "sideRankingsMockups": "Mockup ClashKing",
-  "rankingsHomeVillage": "Làng Chính",
   "rankingsBuilderBase": "Căn cứ Thợ Xây",
   "rankingsTownHall": "Nhà Chính",
   "rankingsRankedLeague": "Giải đấu Xếp hạng",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Tiến độ nâng cấp",
-  "widgetHomeVillage": "LÀNG CHÍNH",
-  "widgetVillage": "LÀNG",
   "widgetLaboratory": "PHÒNG THÍ NGHIỆM",
   "widgetPets": "THÚ CƯNG",
   "widgetBuilderBase": "CĂN CỨ THỢ XÂY",
