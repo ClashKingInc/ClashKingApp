@@ -352,6 +352,20 @@ void main() {
     expect(find.textContaining('Gold III'), findsNothing);
   });
 
+  testWidgets('CWL stats keep ARB league fallbacks without static data', (
+    tester,
+  ) async {
+    GameDataService.loadFromBundleForTesting({});
+    final provider = StatsProvider(repository: _WidgetStatsRepository());
+    provider.selectSection(StatsSection.clans);
+
+    await tester.pumpWidget(_StatsTestApp(provider: provider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Champion I'), findsOneWidget);
+    expect(find.text('48000017'), findsNothing);
+  });
+
   testWidgets('Stats header remains stable with large text', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;

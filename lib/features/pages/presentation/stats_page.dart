@@ -3780,12 +3780,13 @@ Map<int, String> _localizedCwlLeagues(BuildContext context) {
   };
 
   return {
+    for (final entry in fallbacks.entries)
+      entry.key: loc.gameItemName(staticLeagues[entry.key], entry.value),
     for (final entry in staticLeagues.entries)
-      entry.key: loc.gameItemName(
-        entry.value,
-        fallbacks[entry.key] ??
-            entry.value['name']?.toString() ??
-            '${entry.key}',
-      ),
+      if (!fallbacks.containsKey(entry.key))
+        entry.key: loc.gameItemName(
+          entry.value,
+          entry.value['name']?.toString() ?? '${entry.key}',
+        ),
   };
 }
