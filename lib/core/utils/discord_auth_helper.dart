@@ -102,9 +102,7 @@ class DiscordAuthHelper {
       final isLocalHost = host == 'localhost' || host == '127.0.0.1';
       if (isLocalHost) return "$origin/auth/callback";
       if (_webDiscordRedirectUri.isNotEmpty) return _webDiscordRedirectUri;
-      return kReleaseMode
-          ? "https://app.clashk.ing/auth/discord_callback.html"
-          : "$origin/auth/discord_callback.html";
+      return "$origin/auth/discord_callback.html";
     } else {
       return "clashking://com.clashking.clashkingapp/oauth";
     }
