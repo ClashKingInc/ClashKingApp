@@ -366,6 +366,40 @@ void main() {
     expect(find.text('48000017'), findsNothing);
   });
 
+  testWidgets('CWL labels refresh when static data finishes loading', (
+    tester,
+  ) async {
+    GameDataService.loadFromBundleForTesting({});
+    GameDataService.loadTranslationsForTesting({
+      'TID_LEAGUE_GOLD3': {'EN': 'Gold League III'},
+    }, locale: const Locale('en'));
+    addTearDown(() {
+      GameDataService.loadFromBundleForTesting({});
+      GameDataService.translationsData.clear();
+    });
+    final provider = StatsProvider(repository: _WidgetStatsRepository());
+    provider.updateCwlFilters(leagueId: 48000006);
+    provider.selectSection(StatsSection.cwl);
+
+    await tester.pumpWidget(_StatsTestApp(provider: provider));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Gold III'), findsOneWidget);
+
+    GameDataService.loadFromBundleForTesting({
+      'war_leagues': [
+        {
+          '_id': 48000007,
+          'name': 'Gold League III',
+          'TID': {'name': 'TID_LEAGUE_GOLD3'},
+        },
+      ],
+    });
+    await tester.pump();
+
+    expect(find.textContaining('Gold League III'), findsOneWidget);
+    expect(find.textContaining('Gold III'), findsNothing);
+  });
+
   testWidgets('Stats header remains stable with large text', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;

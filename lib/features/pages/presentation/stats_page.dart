@@ -841,41 +841,48 @@ class _ClansSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final cwlLeagues = _localizedCwlLeagues(context);
-    return _SectionFrame(
-      section: StatsSection.clans,
-      builder: (data) {
-        final counts = data as StatsClanCountsResponse;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _DistributionCard(
-              title: loc.statsCwlLeagueDistribution,
-              subtitle: loc.statsTrackedClans,
-              values: counts.cwlLeagues,
-              labelBuilder: (id) => cwlLeagues[id] ?? '${id ?? '?'}',
-              color: StatColors.loss,
-            ),
-            const SizedBox(height: 12),
-            _DistributionCard(
-              title: loc.statsCapitalLeagueDistribution,
-              subtitle: loc.statsTrackedClans,
-              values: counts.capitalLeagues,
-              labelBuilder: (id) => loc.statsLeagueId(id ?? 0),
-              color: StatColors.capitalDistrict,
-            ),
-            const SizedBox(height: 12),
-            _CountsSummaryCard(
-              title: loc.statsTrackedLocations,
-              value: counts.locations.where((item) => item.id != null).length,
-              subtitle: loc.statsLocationCountHelp,
-            ),
-            const SizedBox(height: 12),
-            _UnavailableDataPanel(
-              title: loc.statsCwlRosterSizes,
-              body: loc.generalComingSoon,
-            ),
-          ],
+    return ValueListenableBuilder<int>(
+      valueListenable: GameDataService.staticDataRevision,
+      builder: (context, _, _) {
+        final cwlLeagues = _localizedCwlLeagues(context);
+        return _SectionFrame(
+          section: StatsSection.clans,
+          builder: (data) {
+            final counts = data as StatsClanCountsResponse;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _DistributionCard(
+                  title: loc.statsCwlLeagueDistribution,
+                  subtitle: loc.statsTrackedClans,
+                  values: counts.cwlLeagues,
+                  labelBuilder: (id) => cwlLeagues[id] ?? '${id ?? '?'}',
+                  color: StatColors.loss,
+                ),
+                const SizedBox(height: 12),
+                _DistributionCard(
+                  title: loc.statsCapitalLeagueDistribution,
+                  subtitle: loc.statsTrackedClans,
+                  values: counts.capitalLeagues,
+                  labelBuilder: (id) => loc.statsLeagueId(id ?? 0),
+                  color: StatColors.capitalDistrict,
+                ),
+                const SizedBox(height: 12),
+                _CountsSummaryCard(
+                  title: loc.statsTrackedLocations,
+                  value: counts.locations
+                      .where((item) => item.id != null)
+                      .length,
+                  subtitle: loc.statsLocationCountHelp,
+                ),
+                const SizedBox(height: 12),
+                _UnavailableDataPanel(
+                  title: loc.statsCwlRosterSizes,
+                  body: loc.generalComingSoon,
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -2305,16 +2312,21 @@ class _CwlSectionState extends State<_CwlSection> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final provider = context.watch<StatsProvider>();
-    final cwlLeagues = _localizedCwlLeagues(context);
-    return _PerformancePage(
-      section: StatsSection.cwl,
-      controls: _BattleContextBar(
-        provider: provider,
-        filterSummary:
-            '${_townHallSummary(loc, townHall)} · '
-            '${leagueId == null ? loc.statsAllCwlLeagues : cwlLeagues[leagueId]}',
-        onFilters: _showFilters,
-      ),
+    return ValueListenableBuilder<int>(
+      valueListenable: GameDataService.staticDataRevision,
+      builder: (context, _, _) {
+        final cwlLeagues = _localizedCwlLeagues(context);
+        return _PerformancePage(
+          section: StatsSection.cwl,
+          controls: _BattleContextBar(
+            provider: provider,
+            filterSummary:
+                '${_townHallSummary(loc, townHall)} · '
+                '${leagueId == null ? loc.statsAllCwlLeagues : cwlLeagues[leagueId]}',
+            onFilters: _showFilters,
+          ),
+        );
+      },
     );
   }
 

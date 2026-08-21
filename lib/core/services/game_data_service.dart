@@ -42,6 +42,7 @@ class GameDataService {
   static final Map<String, dynamic> _gameData = {};
   static final Map<String, dynamic> _bundleData = {};
   static final Map<String, String> _translationsData = {};
+  static final ValueNotifier<int> _staticDataRevision = ValueNotifier(0);
   static String _translationLocale = 'EN';
   static Future<void>? _bundleLoad;
   static Future<void>? _staticRefresh;
@@ -457,6 +458,7 @@ class GameDataService {
     _replaceSection(_warLeagueData, bundle['war_leagues_data']);
     _replaceSection(_playerLeagueData, bundle['player_league_data']);
     _replaceSection(_gameData, bundle['game_data']);
+    _staticDataRevision.value++;
   }
 
   @visibleForTesting
@@ -799,6 +801,7 @@ class GameDataService {
   static Map<String, dynamic> get gameData => _gameData;
   static Map<String, dynamic> get bundleData => _bundleData;
   static Map<String, String> get translationsData => _translationsData;
+  static ValueListenable<int> get staticDataRevision => _staticDataRevision;
   static String get translationLocale => _translationLocale;
 }
 
