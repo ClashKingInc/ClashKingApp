@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Ingen ranglister returneret",
   "sideRankingsEmptyBody": "Prøv en anden rangliste eller placering.",
   "sideRankingsMockups": "ClashKing-mockups",
-  "rankingsHomeVillage": "Hjembyen",
   "rankingsBuilderBase": "Byggerbase",
   "rankingsTownHall": "Rådhus",
   "rankingsRankedLeague": "Rangeret liga",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Opgraderingsfremskridt",
-  "widgetHomeVillage": "HJEMLANDSBY",
-  "widgetVillage": "LANDSBY",
   "widgetLaboratory": "LAB",
   "widgetPets": "KÆLEDYR",
   "widgetBuilderBase": "BYGGERBASE",
