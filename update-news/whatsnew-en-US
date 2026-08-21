@@ -1,5 +1,6 @@
 - Localized Upgrade Tracker planner timeline labels and accessibility details.
 - Imported Upgrade Tracker snapshots now stay visible when an older refresh finishes later.
+- Bookmarked player details now appear as soon as background hydration finishes.
 - Fixed Ranked League tier names and icons staying unavailable after a temporary API error.
 - To Do header stats now sit directly on the hero image and match the compact quick-stat style used by other headers.
 - To Do account cards now use the same metric chips as the Home to-do card.

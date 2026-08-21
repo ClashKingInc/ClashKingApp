@@ -551,6 +551,7 @@ class PlayerService extends ChangeNotifier {
       notify: false,
       throwOnError: false,
     );
+    _safeNotify();
   }
 
   void linkClansToPlayer(List<Player> players, List<Clan> clans) {
