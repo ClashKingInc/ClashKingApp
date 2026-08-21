@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Žádné žebříčky nebyly vráceny",
   "sideRankingsEmptyBody": "Zkus jiný žebříček nebo lokaci.",
   "sideRankingsMockups": "Mockupy ClashKing",
-  "rankingsHomeVillage": "Domovská vesnice",
   "rankingsBuilderBase": "Stavitelská základna",
   "rankingsTownHall": "Radnice",
   "rankingsRankedLeague": "Hodnocená liga",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Postup vylepšení",
-  "widgetHomeVillage": "DOMOVSKÁ VESNICE",
-  "widgetVillage": "VESNICE",
   "widgetLaboratory": "LABORATOŘ",
   "widgetPets": "MAZLÍČCI",
   "widgetBuilderBase": "STAVITELSKÁ ZÁKLADNA",
