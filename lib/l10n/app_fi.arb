@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Sijoituksia ei palautettu",
   "sideRankingsEmptyBody": "Kokeile toista tulostaulukkoa tai sijaintia.",
   "sideRankingsMockups": "ClashKing-mockupit",
-  "rankingsHomeVillage": "Kotikylä",
   "rankingsBuilderBase": "Rakentajan Pohja",
   "rankingsTownHall": "Kaupungintalo",
   "rankingsRankedLeague": "Sijoitusliiga",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Parannusten edistyminen",
-  "widgetHomeVillage": "KOTIKYLÄ",
-  "widgetVillage": "KYLÄ",
   "widgetLaboratory": "LABORATORIO",
   "widgetPets": "LEMMIKIT",
   "widgetBuilderBase": "RAKENTAJAN TUKIKOHTA",
